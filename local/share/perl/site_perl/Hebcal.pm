@@ -645,8 +645,8 @@ sub cache_begin($)
     $script_name =~ s/\./_/g;
 
     my $qs = $ENV{'QUERY_STRING'};
-    $qs =~ s/[&;]?tag=[^&;]+//g;
-    $qs =~ s/[&;]?\.from=[^&;]+//g;
+    $qs =~ s/[&;]?(tag|set)=[^&;]+//g;
+    $qs =~ s/[&;]?\.(from|cgifields|s)=[^&;]+//g;
     $qs =~ s/[&;]/,/g;
     $qs =~ s/\./_/g;
     $qs =~ s/\//-/g;
@@ -880,7 +880,7 @@ sub start_html($$$$$)
     $head = [] unless defined $head;
 
     my $script_name = $q->script_name();
-    $script_name =~ s,/(index|shabbat|yahrzeit).cgi$,/,;
+    $script_name =~ s,/(index|shabbat|yahrzeit|hebcal)\.cgi$,/,;
 
     my $base = "http://" . $q->virtual_host() . $script_name;
 
@@ -1133,7 +1133,7 @@ sub self_url($$)
     my($q,$override) = @_;
 
     my($script_name) = $q->script_name();
-    $script_name =~ s,/index.cgi$,/,;
+    $script_name =~ s,/\w+\.cgi$,/,;
 
     my($url) = $script_name;
     my($sep) = '?';
@@ -1164,11 +1164,16 @@ sub download_href
 {
     my($q,$filename,$ext) = @_;
 
-    my($script_name) = $q->script_name();
-    $script_name =~ s,/index.cgi$,/,;
+    my $cgi;
+    my $script_name = $q->script_name();
+    if ($script_name =~ /(\w+\.cgi)$/)
+    {
+	$cgi = $1;
+	$script_name =~ s,/\w+\.cgi$,/,;
+    }
 
-    my($href) = $script_name;
-    $href .= "index.cgi" if $q->script_name() =~ m,/index.cgi$,;
+    my $href = $script_name;
+    $href .= $cgi if $cgi;
     $href .= "/$filename.$ext?dl=1";
     foreach my $key ($q->param())
     {
