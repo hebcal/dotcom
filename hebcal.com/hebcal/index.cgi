@@ -6,7 +6,7 @@
 # are calculated from your latitude and longitude (which can be
 # determined by your zip code or closest city).
 #
-# Copyright (c) 2001  Michael John Radwin.  All rights reserved.
+# Copyright (c) 2001  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ use Time::Local;
 use Hebcal;
 use strict;
 
-my($author) = 'michael@radwin.org';
+my($author) = 'webmaster@hebcal.com';
 my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
 my($this_mon,$this_year) = (localtime)[4,5];
@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Apr 17 17:07:25 PDT 2001
+Last modified: Tue Apr 17 17:38:13 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -51,7 +51,8 @@ $hhmts =~ s/Last modified: /Software last updated:\n/g;
 my($html_footer) = "<hr
 noshade size=\"1\"><small>$hhmts
 (<a href=\"../dist/ChangeLog.txt\">$rcsrev</a>)<br><br>Copyright
-&copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
+&copy; $this_year <a
+href=\"http://www.radwin.org/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved. - <a
 href=\"../help/\">Frequently
 asked questions about this service.</a></small></body></html>
@@ -470,7 +471,7 @@ JSCRIPT_END
 		   -head => [
 			     "<script language=\"JavaScript\" type=\"text/javascript\"><!--\n$JSCRIPT// --></script>",
 			     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">",
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'SCHEMA.dc',
 				     -href => 'http://purl.org/metadata/dublin_core_elements'}),
 			   $q->Link({-rel => 'stylesheet',
@@ -911,7 +912,7 @@ sub results_page
 		   -target=>'_top',
 		   -head => [
 			   "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">",
-			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'stylesheet',
 				     -href => '/style.css',
 				     -type => 'text/css'}),
