@@ -139,6 +139,10 @@ elsif ($q->path_info() =~ /[^\/]+.dba$/)
 {
     &dba_display();
 }
+elsif (defined $q->param('cfg') && $q->param('cfg') eq 'e')
+{
+    &javascript_events();
+}
 else
 {
     &results_page();
@@ -146,6 +150,40 @@ else
 
 close(STDOUT);
 exit(0);
+
+sub javascript_events() {
+    my($loc) = (defined $city_descr && $city_descr ne '') ?
+	"in $city_descr" : '';
+    $loc =~ s/\s*&nbsp;\s*/ /g;
+
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
+    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    print $q->header(-type => "application/x-javascript",
+		     -last_modified => &Hebcal::http_date($time));
+
+    for (my $i = 0; $i < @events; $i++)
+    {
+	my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+
+	my($min) = $events[$i]->[$Hebcal::EVT_IDX_MIN];
+	my($hour) = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
+	$hour -= 12 if $hour > 12;
+
+	my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+	my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+
+	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
+	$subj .= sprintf(": %d:%02d", $hour, $min)
+	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+	printf("DefineEvent(%04d%02d%02d, \"%s\", '', '', 0, 0);\015\012",
+	       $year, $mon, $mday, $subj);
+    }
+}
+
 
 sub dba_display() {
     my($loc) = (defined $city_descr && $city_descr ne '') ?
