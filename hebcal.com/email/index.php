@@ -7,7 +7,7 @@ $sender = "webmaster@hebcal.com";
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
-<head><title>Hebcal 1-Click Shabbat by Email</title>
+<head><title>Hebcal Shabbat Candle Lighting Times by Email</title>
 <base href="http://www.hebcal.com/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
@@ -19,7 +19,7 @@ href="/">hebcal.com</a></strong>
 Email</small></td><td align="right"><small><a
 href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
-</td></tr></table><h1>1-Click Shabbat by Email</h1>
+</td></tr></table><h1>Shabbat Candle Lighting Times by Email</h1>
 <?php
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
@@ -280,8 +280,9 @@ function form($param, $message = "", $help = "") {
     }
 
 ?>
-<p>Fill out the form to subscribe to email weekly Shabbat candle
-lighting times.  Email is sent out every week on Thursday morning.</p>
+<p>Fill out the form to subscribe to weekly Shabbat candle
+lighting times and Torah portion.
+<br>Email is sent out every week on Thursday morning.</p>
 
 <form name="f1" id="f1" action="/email/" method="post">
 
