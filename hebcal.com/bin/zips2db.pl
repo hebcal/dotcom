@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 ########################################################################
 # zips2db.pl - generate zips.db file from Gazeteer zips.txt
@@ -90,6 +90,7 @@ while(<IN>)
     $lat_min *= -1 if $lat_deg < 0;
     $lat_min = sprintf("%.0f", $lat_min);
 
+    warn "$zip exists, replacing" if defined $DB{$zip};
     $DB{$zip} = pack('ncnc',$long_deg,$long_min,$lat_deg,$lat_min) .
 	$city . "\0" . $state;
     $count++;
