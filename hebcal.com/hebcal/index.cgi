@@ -265,18 +265,8 @@ sub macintosh_datebook_display {
 
     my(@events) = Hebcal::invoke_hebcal($cmd, '',
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
-    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    my($path_info) = $q->path_info();
-    $path_info =~ s,^.*/,,;
-    print $q->header(-type =>
-		     "text/tab-separated-values; filename=\"$path_info\"",
-		     -content_disposition =>
-		     "filename=$path_info",
-		     -last_modified => Hebcal::http_date($time));
-
-    Hebcal::macintosh_datebook(\@events, "\015");
+    Hebcal::macintosh_datebook($q, \@events);
 }
 
 sub vcalendar_display() {
@@ -286,25 +276,8 @@ sub vcalendar_display() {
 
     my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
-    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    my($path_info) = $q->path_info();
-    $path_info =~ s,^.*/,,;
-    print $q->header(-type => "text/x-vCalendar; filename=\"$path_info\"",
-		     -content_disposition =>
-		     "inline; filename=$path_info",
-		     -last_modified => Hebcal::http_date($time));
-
-    my($endl) = "\012";			# default Netscape and others
-    if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
-    {
-	$endl = "\015\012"
-	    if $q->user_agent() =~ /Microsoft Internet Explorer/;
-	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
-    }
-
-    Hebcal::vcalendar_write_contents(\@events, $endl);
+    Hebcal::vcalendar_write_contents($q, \@events);
 }
 
 sub dba_display() {
@@ -314,16 +287,6 @@ sub dba_display() {
 
     my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
-    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-
-    my($path_info) = $q->path_info();
-    $path_info =~ s,^.*/,,;
-    print $q->header(-type =>
-		     "application/x-palm-dba; filename=\"$path_info\"",
-		     -content_disposition =>
-		     "inline; filename=$path_info",
-		     -last_modified => Hebcal::http_date($time));
 
     my($dst) = 0;
 
@@ -338,6 +301,10 @@ sub dba_display() {
 	$dst = 1;
     }
 
+    Hebcal::export_http_header($q, 'application/x-palm-dba');
+
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
     &Palm::DBA::write_header($path_info);
     &Palm::DBA::write_contents(\@events, $q->param('tz'), $dst);
 }
@@ -349,25 +316,8 @@ sub csv_display() {
 
     my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
-    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    my($path_info) = $q->path_info();
-    $path_info =~ s,^.*/,,;
-    print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
-		     -content_disposition =>
-		     "inline; filename=$path_info",
-		     -last_modified => Hebcal::http_date($time));
-
-    my($endl) = "\012";			# default Netscape and others
-    if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
-    {
-	$endl = "\015\012"
-	    if $q->user_agent() =~ /Microsoft Internet Explorer/;
-	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
-    }
-
-    Hebcal::csv_write_contents(\@events, $endl);
+    Hebcal::csv_write_contents($q, \@events);
 }
 
 sub form($$)
@@ -917,40 +867,6 @@ sub results_page()
     # toggle month/full year and event list/calendar grid
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
 
-    # download links
-    my($download) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export calendar</h3>\n};
-
-    $download .= qq{<p>By clicking the links below, you can download 
-Jewish Calendar events into your desktop software.</p>};
-
-    $download .= "<h4>Microsoft Outlook</h4>\n<ol><li><a href=\"" .
-	download_href($filename, 'csv') .
-	"\">Export Outlook CSV file from Hebcal</a>\n";
-
-    $download .= qq{<li><a href="/help/#csv">Import CSV file into Outlook</a></ol>};
-
-    # only offer DBA export when we know timegm() will work
-    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
-    {
-	$download .= "<h4>Palm Desktop for Windows</h4>\n<ol><li><a href=\"" .
-	    download_href($filename, 'dba') .
-	    "\">Export Palm Date Book Archive (.DBA) from Hebcal</a>\n";
-	$download .= qq{<li><a href="/help/#dba">Import DBA file into Palm Desktop</a></ol>};
-    }
-
-    $download .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li><a href=\"" .
-	download_href($filename, 'tsv') .
-	    "\">Export Mac Palm Calendar from Hebcal</a>\n";
-    $download .= "<li>(this feature is currently experimental)</ol>\n";
-
-    $download .= "<h4>vCalendar</h4>\n<ol><li><a href=\"" .
-	download_href($filename, 'vcs') .
-	    "\">Export vCalendar (.VCS) from Hebcal</a>\n";
-    $download .= "<li>(this feature is currently experimental)</ol>\n";
-
-    $download .= "</div>\n";
-
     my($goto) = "<small>change view: [ ";
 
     if ($q->param('vis'))
@@ -1146,7 +1062,9 @@ Jewish Calendar events into your desktop software.</p>};
 
     print STDOUT "</p>" unless $q->param('vis');
     print STDOUT $goto_prefix, $goto, "</p>";
-    print STDOUT $download if ($numEntries > 0);
+    if ($numEntries > 0) {
+	print STDOUT Hebcal::download_html($q, $filename, \@events);
+    }
     print STDOUT Hebcal::html_footer($q,$rcsrev);
 
     1;
