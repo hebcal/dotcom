@@ -77,7 +77,7 @@ else
     display_html($items);
 }
 
-Hebcal::cache_end();
+Hebcal::cache_end() if $cache;
 exit(0);
 
 sub format_items
@@ -392,45 +392,6 @@ sub process_args
 
     $cmd .= ' -s -c';
 
-    # only set expiry if there are CGI arguments
-    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
-    {
-	print "Expires: ", Hebcal::http_date($saturday), "\015\012";
-    }
-
-    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/ &&
-	! defined $cfg)
-    {
-	my($cookie_to_set);
-
-	my($C_cookie) = (defined $cookies->{'C'}) ?
-	    'C=' . $cookies->{'C'} : '';
-	if (! $C_cookie)
-	{
-	    $cookie_to_set = Hebcal::gen_cookie($q)
-		unless $q->param('noset');
-	}
-	else
-	{
-	    my($newcookie) = Hebcal::gen_cookie($q);
-	    my($cmp1) = $newcookie;
-	    my($cmp2) = $C_cookie;
-
-	    $cmp1 =~ s/^C=t=\d+\&//;
-	    $cmp2 =~ s/^C=t=\d+\&//;
-
-	    $cookie_to_set = $newcookie 
-		if ($cmp2 ne 'opt_out' &&
-		    $cmp1 ne $cmp2 && ! $q->param('noset'));
-	}
-
-	my $expires_date = "Tue, 02-Jun-2037 20:00:00 GMT";
-
-	print "Cache-Control: private\015\012", "Set-Cookie: ", $cookie_to_set,
-	"; path=/; expires=",  $expires_date, "\015\012"
-	    if $cookie_to_set;
-    }
-
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
 
@@ -443,10 +404,6 @@ sub process_args
     
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
-
-    # private cache only if we're tailoring results by cookie
-    print "Cache-Control: private\015\012"
-	unless $ENV{'QUERY_STRING'};
 
     (\@events,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty);
 }
