@@ -87,10 +87,12 @@ foreach my $key ($q->param())
 &form('') unless $q->param('v');
 
 if (defined $q->param('year') && $q->param('year') eq 'now' &&
-    defined $q->param('month') && $q->param('month') eq 'now')
+    defined $q->param('month') && 
+    ($q->param('month') eq 'now') || ($q->param('month') eq 'x'))
 {
     $q->param('year', $this_year);
-    $q->param('month', $this_mon);
+    $q->param('month', $this_mon)
+	if $q->param('month') eq 'now';
 
     my($end_day) = &Date::Calc::Days_in_Month($this_year, $this_mon);
     my($end_of_month) =
