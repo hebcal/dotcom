@@ -185,23 +185,31 @@ EOD;
     return $val;
 }
 
-function write_staging_info($param)
+function write_staging_info($param, $old_encoded)
 {
     global $HTTP_SERVER_VARS;
 
-    $now = time();
-    $rand = pack("V", $now);
-
-    if ($HTTP_SERVER_VARS["REMOTE_ADDR"]) {
-	list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
-	$rand .= pack("CCCC", $p1, $p2, $p3, $p4);
+    if ($old_encoded)
+    {
+	$encoded = $old_encoded;
     }
+    else
+    {
+	$now = time();
+	$rand = pack("V", $now);
 
-    # As of PHP 4.2.0, there is no need to seed the random 
-    # number generator as this is now done automatically.
-    $rand .= pack("V", rand());
+	if ($HTTP_SERVER_VARS["REMOTE_ADDR"])
+	{
+	    list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
+	    $rand .= pack("CCCC", $p1, $p2, $p3, $p4);
+	}
 
-    $encoded = bin2hex($rand);
+	# As of PHP 4.2.0, there is no need to seed the random 
+	# number generator as this is now done automatically.
+	$rand .= pack("V", rand());
+
+	$encoded = bin2hex($rand);
+    }
 
     $db = my_open_db();
 
@@ -511,7 +519,16 @@ EOD
 	return true;
     }
 
-    $encoded = write_staging_info($param);
+    if (isset($info['status']) && $info['status'] == 'pending' && isset($info['id']))
+    {
+	$old_encoded = $info['id'];
+    }
+    else
+    {
+	$old_encoded = null;
+    }
+
+    $encoded = write_staging_info($param, $old_encoded);
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-subscribe-$encoded@$site";
