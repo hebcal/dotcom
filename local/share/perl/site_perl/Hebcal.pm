@@ -415,7 +415,7 @@ sub get_holiday_anchor($$$)
 
 	    $hebrew .= $sedrot->val($sedra, 'hebrew');
 	    $memo = "Torah: " . $sedrot->val($sedra, 'verse') .
-		" -- Haftarah: ";
+		" / Haftarah: ";
 	    
 	    if ($want_sephardic &&
 		defined $sedrot->val($sedra, 'haft_seph'))
@@ -445,32 +445,34 @@ sub get_holiday_anchor($$$)
 	    }
 
 	    $hebrew .= $sedrot->val($p1, 'hebrew');
+
+	    die "sedrot.ini missing $p2!"
+		unless (defined $sedrot->Parameters($p2));
+
+	    # hypenate hebrew reading
+	    # '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
+	    $hebrew .= "\xD6\xBE" . $sedrot->val($p2, 'hebrew');
+
+	    # second part of torah reading
+	    my($torah_end) = $sedrot->val($p2, 'verse');
+	    $torah_end =~ s/^.+\s+(\d+:\d+)\s*$/$1/;
+
 	    $memo = "Torah: " . $sedrot->val($p1, 'verse');
+	    $memo =~ s/\s+\d+:\d+\s*$/ $torah_end/;
 
-	    if (defined $sedrot->Parameters($p2))
+	    # on doubled parshiot, read only the second Haftarah
+	    $haftarah_href = $sedrot->val($p2, 'torah');
+	    $haftarah_href =~ s/.shtml$/_haft.shtml/;
+
+	    $memo .= " / Haftarah: ";
+	    if ($want_sephardic &&
+		defined $sedrot->val($p2, 'haft_seph'))
 	    {
-		# hypenate hebrew reading
-
-		# '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
-		$hebrew .= "\xD6\xBE" . $sedrot->val($p2, 'hebrew');
-
-		# second part of torah reading
-		$memo .= '; ' . $sedrot->val($p2, 'verse');
-
-		# on doubled parshiot, read only the second Haftarah
-		$haftarah_href = $sedrot->val($p2, 'torah');
-		$haftarah_href =~ s/.shtml$/_haft.shtml/;
-
-		$memo .= " -- Haftarah: ";
-		if ($want_sephardic &&
-		    defined $sedrot->val($p2, 'haft_seph'))
-		{
-		    $memo .= $sedrot->val($p2, 'haft_seph');
-		}
-		else
-		{
-		    $memo .= $sedrot->val($p2, 'haft_ashk');
-		}
+		$memo .= $sedrot->val($p2, 'haft_seph');
+	    }
+	    else
+	    {
+		$memo .= $sedrot->val($p2, 'haft_ashk');
 	    }
 	}
 
