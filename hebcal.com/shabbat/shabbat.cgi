@@ -353,8 +353,6 @@ sub process_args
     }
     elsif (defined $q->param('zip') && $q->param('zip') ne '')
     {
-	$q->param('dst','usa')
-	    unless $q->param('dst');
 	$q->param('geo','zip');
 	$q->delete('city');
 	$q->delete('i');
@@ -1005,7 +1003,6 @@ sub form($$$$)
 			-default => 'usa',
 			-labels =>
 			{'usa' => "\nUSA (except AZ, HI, and IN) ",
-			 'israel' => "\nIsrael ",
 			 'none' => "\nnone ", }));
     }
     
