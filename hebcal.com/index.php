@@ -71,12 +71,16 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/holidays/rosh-hashana.html">Rosh&nbsp;Hashana&nbsp;5765</a></b><br>15
+September 2004<br>at sundown
+<br><br>   
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br>
 <br><span class="sm-grey">&gt;</span>&nbsp;<b>Major&nbsp;Holidays</b><br>for
 <a href="/hebcal/?v=1;year=2004;month=x;nh=on">2004</a> |
-<a href="/hebcal/?v=1;year=5764;yt=H;month=x;nh=on">5764</a><br>
+<a href="/hebcal/?v=1;year=5765;yt=H;month=x;nh=on">5765</a><br>
 <br><hr noshade size="1">
 <form action="/shabbat/"><span
 class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
