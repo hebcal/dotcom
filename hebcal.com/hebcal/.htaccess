@@ -1,0 +1,12 @@
+# deny person who is crawling this site
+Deny from 208.46.162.254
+
+SetHandler cgi-script
+
+Redirect /hebcal/hebcal.html http://www.radwin.org/hebcal/
+Redirect /hebcal/hebcal.htm http://www.radwin.org/hebcal/
+Redirect /hebcal/hebcal.pl http://www.radwin.org/hebcal/
+Redirect /hebcal/hebcal.cgi http://www.radwin.org/hebcal/
+Redirect /hebcal/index.cgi http://www.radwin.org/hebcal/
+Redirect /hebcal/index.pl http://www.radwin.org/hebcal/
+Redirect /hebcal/hebcal http://www.radwin.org/hebcal
