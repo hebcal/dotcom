@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Dec 28 15:58:14 PST 1999
+Last modified: Tue Dec 28 16:08:24 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1438,7 +1438,7 @@ sub writePString {
 
     if ($len > 64) { $len = 64; }
     &writeByte($len);
-    print STDOUT substr($_[0], 0, 64);
+    print STDOUT substr($_[0], 0, $len);
 }
 
 sub dba_header {
@@ -1448,13 +1448,13 @@ sub dba_header {
     &writeInt(8);
     &writeInt(0);
 
-    # magic OLE graph table stuff
+    # magic OLE graph table
     &writeInt(0x36);
-    &writeInt(0x0f);
+    &writeInt(0x0F);
     &writeInt(0x00);
     &writeInt(0x01);
     &writeInt(0x02);
-    &writeInt(0x1000f);
+    &writeInt(0x1000F);
     &writeInt(0x10001);
     &writeInt(0x10003);
     &writeInt(0x10005);
@@ -1462,7 +1462,6 @@ sub dba_header {
     &writeInt(0x10006);
     &writeInt(0x10006);
     &writeInt(0x80001);
-    # end OLE stuff
 
     1;
 }
@@ -1531,7 +1530,7 @@ sub dba_contents {
 	&writeInt(1);		# status
 
 	&writeInt($PALM_DBA_INTEGER);
-	&writeInt(2147483647);	# position
+	&writeInt(0x7FFFFFFF);	# position
 
 	&writeInt($PALM_DBA_DATE);
 	&writeInt($startTime);
