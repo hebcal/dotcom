@@ -43,10 +43,21 @@ open(OUT,">$outfile") || die;
 print OUT "$hdate\n";
 close(OUT);
 
-$outfile = '/home/mradwin/web/hebcal.com/etc/hdate.js';
+$outfile = '/home/mradwin/web/hebcal.com/etc/hdate-en.js';
 open(OUT,">$outfile") || die;
 print OUT "document.write(\"$hdate\");\n";
 close(OUT);
+
+if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
+{
+    my($hm,$hd,$hy) = ($2,$1,$3);
+    my $hebrew = Hebcal::build_hebrew_date($hm,$hd,$hy);
+
+    $outfile = '/home/mradwin/web/hebcal.com/etc/hdate-he.js';
+    open(OUT,">$outfile") || die;
+    print OUT "document.write(\"$hebrew\");\n";
+    close(OUT);
+}
 
 $outfile = '/home/mradwin/web/hebcal.com/holiday.inc';
 $line = `/home/mradwin/web/hebcal.com/bin/hebcal -t | grep -v ' of '`;
