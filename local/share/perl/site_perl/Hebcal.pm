@@ -331,7 +331,7 @@ my(%holidays) =
      'Rosh Chodesh Sivan'	=>
      ['rc_sivan', 0, 'רֹאשׁ חֹדֶשׁ סִיוָן'],
      'Rosh Chodesh Tamuz'	=>
-     ['rc_tamuz	', 0, 'רֹאשׁ חֹדֶשׁ תָּמוּז'],
+     ['rc_tamuz', 0, 'רֹאשׁ חֹדֶשׁ תָּמוּז'],
      'Rosh Chodesh Av'	=>
      ['rc_av', 0, 'רֹאשׁ חֹדֶשׁ אָב'],
      'Rosh Chodesh Elul'	=>
