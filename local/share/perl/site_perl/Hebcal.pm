@@ -66,6 +66,7 @@ $Hebcal::PALM_DBA_BOOL       = 6;
 $Hebcal::PALM_DBA_REPEAT     = 7;
 $Hebcal::PALM_DBA_MAXENTRIES = 2500;
 
+$Hebcal::havdalah_min = 72;
 @Hebcal::DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 @Hebcal::MoY_short =
     ('Jan','Feb','Mar','Apr','May','Jun',
