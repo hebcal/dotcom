@@ -98,7 +98,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Aug 17 12:15:58 PDT 1999
+Last modified: Tue Aug 17 14:36:27 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -386,6 +386,8 @@ else
 print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"$endl";
 
 $prev = '';
+local($loc) = defined $in{'city'} ? "in $in{'city'}" :
+    defined $in{'zip'} ? "in $in{'zip'}" : '';
 while(<HEBCAL>)
 {
     next if $_ eq $prev;
@@ -397,7 +399,7 @@ while(<HEBCAL>)
 	= &parse_date_descr($date,$descr);
 
     print STDOUT "\"$subj\",\"$date\",$start_time,$end_date,$end_time,$all_day,";
-    print STDOUT "\"\"$endl";
+    print STDOUT "\"", ($start_time eq '' ? '' : $loc), "\"$endl";
 }
 close(HEBCAL);
 close(STDOUT);
@@ -837,8 +839,11 @@ open.</small></p>
 	    $ST  = sprintf("%04d%02d%02d", $year, $month, $day);
 	    if ($hr >= 0 && $min >= 0)
 	    {
+	        local($loc) = defined $in{'city'} ? $in{'city'} :
+	                      defined $in{'zip'} ? $in{'zip'} : '';
 		$hr += 12 if $hr < 12 && $hr > 0;
 		$ST .= sprintf("T%02d%02d00", $hr, $min);
+		$ST .= "&amp;DESC=" . &url_escape("in $loc");
 	    }
 
 	    print STDOUT
