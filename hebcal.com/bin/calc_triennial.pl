@@ -50,13 +50,13 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
-use Hebcal;
-use Date::Calc;
-use Getopt::Std;
-use XML::Simple;
-use Time::Local;
-use POSIX qw(strftime);
 use strict;
+use Hebcal ();
+use Date::Calc ();
+use Getopt::Std ();
+use XML::Simple ();
+use Time::Local ();
+use POSIX qw(strftime);
 
 $0 =~ s,.*/,,;  # basename
 
@@ -68,7 +68,7 @@ my($usage) = "usage: $0 [-h] [-H <year>] aliyah.xml festival.xml output-dir
 ";
 
 my(%opts);
-getopts('hH:c:t:f:', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hH:c:t:f:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 3) || die "$usage";
 
@@ -84,8 +84,8 @@ $| = 1;
 print "Loading XML...";
 
 ## load aliyah.xml data to get parshiot
-my $axml = XMLin($aliyah_in);
-my $fxml = XMLin($festival_in);
+my $axml = XML::Simple::XMLin($aliyah_in);
+my $fxml = XML::Simple::XMLin($festival_in);
 
 my %triennial_aliyot;
 read_aliyot_metadata($axml, \%triennial_aliyot);
