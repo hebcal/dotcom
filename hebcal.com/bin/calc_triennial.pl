@@ -151,6 +151,13 @@ foreach my $h (reverse @all_inorder)
     $h2 = $h;
 }
 
+foreach my $parsha (@combined)
+{
+    my($p1,$p2) = split(/-/, $parsha);
+    $next{$parsha} = $next{$p2};
+    $prev{$parsha} = $prev{$p1};
+}
+
 # determine triennial year patterns
 my(%pattern);
 for (my $i = $bereshit_idx; $i < @events; $i++)
