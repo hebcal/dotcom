@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar  5 19:44:32 PST 2001
+Last modified: Tue Mar 20 10:57:28 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -877,42 +877,18 @@ sub results_page
 	    $ny = $py = $q->param('year');
 	}
 
-	$prev_url = $script_name . "?year=" . $py . "&amp;month=" . $pm;
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $prev_url .= "&amp;$key=" . &Hebcal::url_escape($val)
-		unless $key eq 'year' || $key eq 'month';
-	}
+	$prev_url = &self_url($q, {'year' => $py, 'month' => $pm});
 	$prev_title = $Hebcal::MoY_short[$pm-1] . " " . $py;
 
-	$next_url = $script_name . "?year=" . $ny . "&amp;month=" . $nm;
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $next_url .= "&amp;$key=" . &Hebcal::url_escape($val)
-		unless $key eq 'year' || $key eq 'month';
-	}
+	$next_url = &self_url($q, {'year' => $ny, 'month' => $nm});
 	$next_title = $Hebcal::MoY_short[$nm-1] . " " . $ny;
     }
     else
     {
-	$prev_url = $script_name . "?year=" . ($q->param('year') - 1);
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $prev_url .= "&amp;$key=" . &Hebcal::url_escape($val)
-		unless $key eq 'year';
-	}
+	$prev_url = &self_url($q, {'year' => ($q->param('year') - 1)});
 	$prev_title = ($q->param('year') - 1);
 
-	$next_url = $script_name . "?year=" . ($q->param('year') + 1);
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $next_url .= "&amp;$key=" . &Hebcal::url_escape($val)
-		unless $key eq 'year';
-	}
+	$next_url = &self_url($q, {'year' => ($q->param('year') + 1)});
 	$next_title = ($q->param('year') + 1);
     }
 
@@ -942,14 +918,7 @@ sub results_page
 	"<tr><td><small>",
 	"<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
 	"<tt>-&gt;</tt>\n",
-	"<a href=\"", $script_name, "?v=0";
-
-    foreach my $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	print STDOUT "&amp;$key=", &Hebcal::url_escape($val)
-	    unless $key eq 'v';
-    }
+	"<a href=\"", &self_url($q, {'v' => '0'});
 
     print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt>\n$date</small></td>",
     "<td align=\"right\"><small><a\n",
@@ -1013,28 +982,14 @@ so you can keep this window open.
     if ($date !~ /^\d+$/)
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month view | " .
-	    "<a\nhref=\"$script_name?year=" . $q->param('year') .
-	    "&amp;month=x";
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $goto .= "&amp;$key=" . &Hebcal::url_escape($val)
-		unless $key eq 'year' || $key eq 'month';
-	}
-	$goto .= "\">year\nview</a> ]</small>";
+	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
+	    "\">year\nview</a> ]</small>";
     }
     else
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
-	    "<a\nhref=\"$script_name?year=" . $q->param('year') .
-	    "&amp;month=1";
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $goto .= "&amp;$key=" . &Hebcal::url_escape($val)
-		unless $key eq 'year' || $key eq 'month';
-	}
-	$goto .= "\">month\nview</a> | year view ]</small>";
+	    "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
+	    "\">month\nview</a> | year view ]</small>";
     }
 
     $goto .= "</p>\n";
@@ -1184,12 +1139,7 @@ so you can keep this window open.
 
     if ($ycal == 0)
     {
-	print STDOUT "\n- <a href=\"", $script_name, "?y=1";
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
-	}
+	print STDOUT "\n- <a href=\"", &self_url($q, {}), '&amp;y=1';
 	print STDOUT "\">Show&nbsp;Yahoo!&nbsp;Calendar&nbsp;links</a>";
     }
     print STDOUT "\n]</small></p>\n";
@@ -1197,4 +1147,21 @@ so you can keep this window open.
     print STDOUT  $html_footer;
 
     1;
+}
+
+sub self_url
+{
+    my($q,$override) = @_;
+    my($url) = $script_name;
+    my($sep) = '?';
+
+    foreach my $key ($q->param())
+    {
+	my($val) = defined $override->{$key} ?
+	    $override->{$key} : $q->param($key);
+	$url .= "$sep$key=" . &Hebcal::url_escape($val);
+	$sep = '&amp;' if $sep eq '?';
+    }
+
+    $url;
 }
