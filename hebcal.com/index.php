@@ -41,6 +41,10 @@ href="/converter/">Hebrew Date
 Converter</a></big></strong></dt>
 <dd>convert between Hebrew and Gregorian dates.</dd>
 <dt><br><strong><big><a
+href="/sedrot/">Torah
+Readings</a></big></strong></dt>
+<dd>aliyah-by-aliyah breakdown for weekly parshiyot</dd>
+<dt><br><strong><big><a
 href="/help/">Help</a></big></strong></dt>
 <dt><br><strong><big><a
 href="/privacy/">Privacy Policy</a></big></strong></dt>
@@ -61,7 +65,7 @@ for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Thu May 31 07:58:19 PDT 2001
+Last modified: Mon Jul  9 12:19:18 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
