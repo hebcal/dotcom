@@ -1,25 +1,34 @@
-all: ../hebcal/holidays.db ../sedrot/bereshit.html ../hebcal/sedrot.db
+XMLDIR = ../dist
+CSVDIR = ../dist
+SEDROT = ../sedrot
+DBDIR = ../hebcal
+HOLIDAYS = ../holidays
 
-holidays: ../holidays/purim.html
+all: sedrot holidays
 
-../hebcal/sedrot.db: sedrot_db.pl ../dist/aliyah.xml
-	./sedrot_db.pl ../dist/aliyah.xml $@
+holidays: $(HOLIDAYS)/purim.html $(DBDIR)/holidays.db
 
-../hebcal/holidays.db: gen_holidays.pl holidays.ini
+sedrot: $(SEDROT)/bereshit.html $(DBDIR)/sedrot.db
+
+$(DBDIR)/sedrot.db: sedrot_db.pl $(XMLDIR)/aliyah.xml
+	./sedrot_db.pl $(XMLDIR)/aliyah.xml $@
+
+$(DBDIR)/holidays.db: gen_holidays.pl holidays.ini
 	./gen_holidays.pl holidays.ini /dev/null $@
 
-../sedrot/bereshit.html: calc_triennial.pl ../dist/aliyah.xml ../dist/festival.xml
-	mkdir -p ../sedrot
-	./calc_triennial.pl -f ../dist/fullkriyah.csv -t../dist/triennial.csv \
-		 ../dist/aliyah.xml ../dist/festival.xml ../sedrot/
-	rm -f ../dist/fullkriyah.csv.gz ../dist/triennial.csv.gz
-	gzip -9 ../dist/fullkriyah.csv ../dist/triennial.csv
+$(SEDROT)/bereshit.html: calc_triennial.pl $(XMLDIR)/aliyah.xml $(XMLDIR)/festival.xml
+	mkdir -p $(SEDROT)
+	./calc_triennial.pl -f $(CSVDIR)/fullkriyah.csv \
+		-t $(CSVDIR)/triennial.csv \
+		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)
+	rm -f $(CSVDIR)/fullkriyah.csv.gz $(CSVDIR)/triennial.csv.gz
+	gzip -9 $(CSVDIR)/fullkriyah.csv $(CSVDIR)/triennial.csv
 
-../holidays/purim.html: gen_festival.pl ../dist/festival.xml
-	mkdir -p ../holidays
-	./gen_festival.pl ../dist/festival.xml ../holidays/
+$(HOLIDAYS)/purim.html: gen_festival.pl $(XMLDIR)/festival.xml
+	mkdir -p $(HOLIDAYS)
+	./gen_festival.pl $(XMLDIR)/festival.xml $(HOLIDAYS)
 
-../hebcal/zips99.db: zips2db.pl zip99/zipnov99.csv zip99/c_01au03.csv
+$(DBDIR)/zips99.db: zips2db.pl zip99/zipnov99.csv zip99/c_01au03.csv
 	rm -f zip99new.db
 	./zips2db.pl zip99new.db zip99/zipnov99.csv zip99/c_01au03.csv
 	mv zip99new.db $@
