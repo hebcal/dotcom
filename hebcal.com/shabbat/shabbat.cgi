@@ -499,6 +499,23 @@ for ($i = 0; $i < $numEntries; $i++)
 &Hebcal::out_html($cfg,"\n</dl>\n")
     unless (defined $cfg && $cfg =~ /^[rw]$/);
 
+if (!$cfg && $q->param('zip'))
+{
+    my($self_url) = join('', "http://", $q->virtual_host(), "/email/",
+			 "?geo=", $q->param('geo'));
+
+    $self_url .= ";zip=" . $q->param('zip');
+    $self_url .= ";dst=" . $q->param('dst')
+	if $q->param('dst');
+    $self_url .= ";tz=" . $q->param('tz')
+	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
+    $self_url .= ";m=" . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+    &Hebcal::out_html($cfg,"<p><b>NEW: <a href=\"$self_url\">Get\n",
+		      "1-Click Shabbat by email</a>.</b></p>\n");
+}
+
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
     if ($cfg eq 'i')
