@@ -364,7 +364,7 @@ Include candle lighting times</label><br>
 ";
 	print STDOUT &city_select_html();
 	print STDOUT "
-&nbsp;&nbsp;(select by <a href=\"$cgipath\">Zip</a> or
+&nbsp;&nbsp;(or select by <a href=\"$cgipath\">Zip</a> or
 <a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
 <br>
 ";
@@ -402,7 +402,7 @@ Include candle lighting times</label><br>
 </select></nobr><br>
 </td>
 <td>
-(select by <a href=\"$cgipath\">Zip</a> or
+(or select by <a href=\"$cgipath\">Zip</a> or
 <a href=\"${cgipath}?geo=city\">City</a>)
 </td></tr>
 </table>
@@ -413,7 +413,7 @@ Include candle lighting times</label><br>
 	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
 id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\">
-&nbsp;&nbsp;(select by <a href=\"${cgipath}?geo=city\">City</a>
+&nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">City</a>
 or <a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
 <br>
 ";
