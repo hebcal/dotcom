@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Jan 16 21:45:34 PST 2001
+Last modified: Wed Jan 17 09:45:41 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -304,7 +304,9 @@ if (defined $q->param('cfg'))
 	&out_html("<link>http://" . $q->server_name() . $script_name .
 		  "?zip=" . $q->param('zip') . "&amp;dst=" . $q->param('dst'));
 	&out_html("&amp;tz=" . $q->param('tz'))
-	    if $q->param('tz') ne 'auto';
+	    if (defined $q->param('tz') && $q->param('tz') ne 'auto');
+	&out_html("&amp;m=" . $q->param('m'))
+	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n" .
 		  "times for $city_descr</description>\n" .
 		  "<language>en-us</language>\n");
@@ -374,12 +376,18 @@ for ($i = 0; $i < $numEntries; $i++)
     {
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 	{
+	    my($link) = &ycal($subj,$year,$mon,$mday,$min,$hour,
+			      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
+			      $events[$i]->[$Hebcal::EVT_IDX_DUR]);
+
 	    &out_html("<item>\n");
-	    &out_html(qq{<title>$subj for }, 
-		  strftime("%A, %d %B", localtime($time)));
-	    &out_html(sprintf(" is at %d:%02d PM</title>\n",
-			      $hour, $min));
-	    &out_html("<link>http://www.jewfaq.org/shabbat.htm</link>\n</item>\n");
+	    &out_html(sprintf("<title>%s: %d:%02d PM</title>\n",
+			      $subj, $hour, $min));
+	    &out_html("<link>$link</link>\n");
+	    &out_html("<description>",
+		      strftime("%A, %d %B", localtime($time)),
+		      "</description>\n");
+	    &out_html("</item>\n");
 	}
 	else
 	{
@@ -454,6 +462,13 @@ if (defined $q->param('cfg'))
     }
     elsif ($q->param('cfg') eq 'r')
     {
+	&out_html("<textinput>
+<title>Shabbat</title>
+<description>Get Shabbat Times for another zip code</description>
+<name>zip</name>
+");
+	&out_html("<link>http://" . $q->server_name() . $script_name .
+		  "</link>\n</textinput>\n");
 	&out_html("</channel>\n</rss>\n");
     }
 }
@@ -465,6 +480,40 @@ else
 
 close(STDOUT);
 exit(0);
+
+sub ycal
+{
+    my($subj,$year,$mon,$mday,$min,$hour,$untimed,$dur) = @_;
+
+    my($ST) = sprintf("%04d%02d%02d", $year, $mon, $mday);
+    if ($untimed == 0)
+    {
+	my($loc) = (defined $city_descr && $city_descr ne '') ?
+	    "in $city_descr" : '';
+	$loc =~ s/\s*&nbsp;\s*/ /g;
+
+	$ST .= sprintf("T%02d%02d00",
+		       ($hour < 12 && $hour > 0) ? $hour + 12 : $hour,
+		       $min);
+
+	if ($q->param('tz') ne '')
+	{
+	    $abstz = ($q->param('tz') >= 0) ?
+		$q->param('tz') : -$q->param('tz');
+	    $signtz = ($q->param('tz') < 0) ? '-' : '';
+
+	    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
+	}
+
+	$ST .= "&amp;DUR=00" . $dur;
+
+	$ST .= "&amp;DESC=" . &url_escape($loc)
+	    if $loc ne '';
+    }
+
+    "http://calendar.yahoo.com/?v=60&amp;TITLE=" .
+	&url_escape($subj) . "&amp;TYPE=16&amp;ST=" . $ST;
+}
 
 sub out_html
 {
