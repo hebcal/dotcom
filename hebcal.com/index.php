@@ -56,13 +56,12 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <br><a href="/donations/">Donate</a>
 <br><a href="/contact/">Contact Information</a>
 </td>
-<td valign="top" bgcolor="#eeeeee">
+<td valign="top" bgcolor="#ffddaa">
 <h4>Quick Links</h4>
 <hr noshade size="1">
-<b><i>Happy Chanukah!</i></b><br><!--#include file="holiday.inc" -->
-<br><span class="sm-grey">&gt;</span>&nbsp;<b><a
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current
-Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="current.inc" --><br><br><span
+Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br><br><span
 class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <div><form action="/shabbat/">
 <label for="zip">Zip code:</label>
@@ -82,8 +81,6 @@ src="http://www.paypal.com/images/x-click-but04.gif"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
 <!-- End PayPal Logo --></div>
-<a href="http://www.jafi.org.il/top10/index45.htm"><img border="0"
-src="/i/jafi-award.jpg" alt="JAFI top site" align="left"></a>
 </td></tr></table>
 <p>
 <hr noshade size="1">
@@ -97,7 +94,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Wed Nov 27 18:06:28 EST 2002
+Last modified: Fri Nov 29 12:21:20 EST 2002
 <!-- hhmts end -->
 </span>
 </body></html>
