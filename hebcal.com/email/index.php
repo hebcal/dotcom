@@ -44,26 +44,26 @@ foreach($_REQUEST as $key => $value) {
     $param[$key] = $value;
 }
 
-if (isset($param['e']))
+if (isset($param["e"]))
 {
-    $param['em'] = base64_decode($param['e']);
-    $info = get_sub_info($param['em']);
-    if (isset($info['status']) && $info['status'] == 'active') {
+    $param["em"] = base64_decode($param["e"]);
+    $info = get_sub_info($param["em"]);
+    if (isset($info["status"]) && $info["status"] == "active") {
 	foreach ($info as $k => $v) {
-	    if ($k == 'upd') {
-		$param[$k] = ($v == '1') ? 'on' : '';
+	    if ($k == "upd") {
+		$param[$k] = ($v == "1") ? "on" : "";
 	    } else {
 		$param[$k] = $v;
 	    }
 	}
-	if (isset($param['city'])) {
-	    $param['geo'] = 'city';
+	if (isset($param["city"])) {
+	    $param["geo"] = "city";
 	}
 	$is_update = true;
     }
 }
 
-if ($param['v'])
+if ($param["v"])
 {
     $email = $param["em"];
     if (!$email)
@@ -82,17 +82,17 @@ if ($param['v'])
     // email is OK, write canonicalized version
     $email = $to_addr;
     
-    $param['em'] = strtolower($email);
+    $param["em"] = strtolower($email);
 }
 else
 {
     form($param);
 }
 
-if ($param['submit_modify']) {
+if ($param["submit_modify"]) {
     subscribe($param);
 }
-elseif ($param['submit_unsubscribe']) {
+elseif ($param["submit_unsubscribe"]) {
     unsubscribe($param);
 }
 else {
@@ -107,7 +107,7 @@ function get_password() {
 }
 
 function my_open_db() {
-    $db = mysql_pconnect('mysql.hebcal.com', 'mradwin_hebcal', get_password())
+    $db = mysql_pconnect("mysql.hebcal.com", "mradwin_hebcal", get_password())
 	or die("Could not connect: " . mysql_error());
     return $db;
 }
@@ -115,16 +115,16 @@ function my_open_db() {
 function write_sub_info($param) {
     $db = my_open_db();
 
-    if ($param['geo'] == 'zip')
+    if ($param["geo"] == "zip")
     {
 	$geo_sql = "email_candles_zipcode='$param[zip]',email_candles_city=NULL";
     }
-    else if ($param['geo'] == 'city')
+    else if ($param["geo"] == "city")
     {
 	$geo_sql = "email_candles_city='$param[city]',email_candles_zipcode=NULL";
     }
 
-    $optin_announce = $param['upd'] ? 1 : 0;
+    $optin_announce = $param["upd"] ? 1 : 0;
 
     $sql = <<<EOD
 UPDATE hebcal1.hebcal_shabbat_email
@@ -159,16 +159,16 @@ EOD;
 	 $havdalah,$optin_announce) = mysql_fetch_row($result);
 
     $val = array(
-	'id' => $id,
-	'status' => $status,
-	'em' => $address,
-	'm' => $havdalah,
-	'upd' => $optin_announce,
-	'zip' => $zip,
-	'tz' => $timezone,
-	'dst' => $dst,
-	'city' => $city,
-	't' => $created,
+	"id" => $id,
+	"status" => $status,
+	"em" => $address,
+	"m" => $havdalah,
+	"upd" => $optin_announce,
+	"zip" => $zip,
+	"tz" => $timezone,
+	"dst" => $dst,
+	"city" => $city,
+	"t" => $created,
 	);
 
     return $val;
@@ -187,7 +187,7 @@ function write_staging_info($param, $old_encoded)
 
 	if ($_SERVER["REMOTE_ADDR"])
 	{
-	    list($p1,$p2,$p3,$p4) = explode('.', $_SERVER["REMOTE_ADDR"]);
+	    list($p1,$p2,$p3,$p4) = explode(".", $_SERVER["REMOTE_ADDR"]);
 	    $rand .= pack("CCCC", $p1, $p2, $p3, $p4);
 	}
 
@@ -200,18 +200,18 @@ function write_staging_info($param, $old_encoded)
 
     $db = my_open_db();
 
-    if ($param['geo'] == 'zip')
+    if ($param["geo"] == "zip")
     {
-	$location_name = 'email_candles_zipcode';
-	$location_value = $param['zip'];
+	$location_name = "email_candles_zipcode";
+	$location_value = $param["zip"];
     }
-    else if ($param['geo'] == 'city')
+    else if ($param["geo"] == "city")
     {
-	$location_name = 'email_candles_city';
-	$location_value = $param['city'];
+	$location_name = "email_candles_city";
+	$location_value = $param["city"];
     }
 
-    $optin_announce = $param['upd'] ? 1 : 0;
+    $optin_announce = $param["upd"] ? 1 : 0;
 
     $sql = <<<EOD
 REPLACE INTO hebcal1.hebcal_shabbat_email
@@ -260,23 +260,23 @@ EOD
     exit();
 }
 
-function form($param, $message = '', $help = '') {
-    if ($message != '') {
+function form($param, $message = "", $help = "") {
+    if ($message != "") {
 	$message = '<hr noshade size="1"><p><font' . "\n" .
-	    'color="#ff0000">' .  $message . '</font></p>' . $help . 
+	    'color="#ff0000">' .  $message . "</font></p>" . $help . 
 	    '<hr noshade size="1">';
     }
 
     echo $message;
 
-    if (!$param['dst']) {
-	$param['dst'] = 'usa';
+    if (!$param["dst"]) {
+	$param["dst"] = "usa";
     }
-    if (!$param['tz']) {
-	$param['tz'] = 'auto';
+    if (!$param["tz"]) {
+	$param["tz"] = "auto";
     }
-    if (!isset($param['m'])) {
-	$param['m'] = 72;
+    if (!isset($param["m"])) {
+	$param["m"] = 72;
     }
 
 ?>
@@ -285,7 +285,7 @@ lighting times.  Email is sent out every week on Thursday morning.</p>
 
 <form name="f1" id="f1" action="/email/" method="post">
 
-<?php if (isset($param['geo']) && $param['geo'] == 'city') { ?>
+<?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
 <input type="hidden" name="geo" value="city">
 <label for="city">Closest City:</label>
 <?php
@@ -294,12 +294,12 @@ $entries = array();
 foreach ($hebcal_city_tz as $k => $v) {
     $entries[$k] = $k;
 }
-if ($param['city']) {
-    $geo_city = htmlspecialchars($param['city']);
+if ($param["city"]) {
+    $geo_city = htmlspecialchars($param["city"]);
 }
-echo HTML_Form::returnSelect('city', $entries,
-			     $geo_city ? $geo_city : 'Jerusalem', 1,
-			     '', false, 'id="city"');
+echo HTML_Form::returnSelect("city", $entries,
+			     $geo_city ? $geo_city : "Jerusalem", 1,
+			     "", false, 'id="city"');
 ?>
 &nbsp;&nbsp;<small>(or select by <a
 href="/email/?geo=zip">zip code</a></small>)
@@ -307,24 +307,24 @@ href="/email/?geo=zip">zip code</a></small>)
 <input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
-value="<?php echo htmlspecialchars($param['zip']) ?>"></label>
+value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
 href="/email/?geo=city">closest city</a></small>)
 <?php } ?>
 
 <br><label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
-  echo htmlspecialchars($param['m']) ?>" size="3" maxlength="3" id="m1">
+  echo htmlspecialchars($param["m"]) ?>" size="3" maxlength="3" id="m1">
 </label>
 
 <br><label for="em">E-mail address:
 <input type="text" name="em" size="30"
-value="<?php echo htmlspecialchars($param['em']) ?>" id="em">
+value="<?php echo htmlspecialchars($param["em"]) ?>" id="em">
 </label>
 
 <br><label for="upd">
 <input type="checkbox" name="upd" value="on" <?php
-  if ($param['upd'] == 'on') { echo 'checked'; } ?> id="upd">
+  if ($param["upd"] == "on") { echo "checked"; } ?> id="upd">
 Contact me occasionally about changes to the hebcal.com website.
 </label>
 
@@ -354,50 +354,50 @@ href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.
 
 function subscribe($param) {
     global $sender, $VER;
-    if (preg_match('/\@hebcal.com$/', $param['em']))
+    if (preg_match('/\@hebcal.com$/', $param["em"]))
     {
 	form($param,
 	     "Sorry, can't use a <b>hebcal.com</b> email address.");
     }
 
-    if ($param['geo'] == 'zip')
+    if ($param["geo"] == "zip")
     {
-	if (!$param['zip'])
+	if (!$param["zip"])
 	{
 	    form($param,
 	    "Please enter your zip code for candle lighting times.");
 	}
 
-	if (!$param['dst']) {
-	    $param['dst'] = 'usa';
+	if (!$param["dst"]) {
+	    $param["dst"] = "usa";
 	}
-	if (!$param['tz']) {
-	    $param['tz'] = 'auto';
+	if (!$param["tz"]) {
+	    $param["tz"] = "auto";
 	}
 
-	if (!preg_match('/^\d{5}$/', $param['zip']))
+	if (!preg_match('/^\d{5}$/', $param["zip"]))
 	{
 	    form($param,
-	    "Sorry, <b>" . $param['zip'] . "</b> does\n" .
+	    "Sorry, <b>" . $param["zip"] . "</b> does\n" .
 	    "not appear to be a 5-digit zip code.");
 	}
 
 	$password = get_password();
 	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    hebcal_get_zipcode_fields($param['zip'], $password);
+	    hebcal_get_zipcode_fields($param["zip"], $password);
 
 	if (!$state)
 	{
 	    form($param,
-	    "Sorry, can't find\n".  "<b>" . $param['zip'] .
+	    "Sorry, can't find\n".  "<b>" . $param["zip"] .
 	    "</b> in the zip code database.\n",
 	    "<ul><li>Please try a nearby zip code</li></ul>");
 	}
 
-	$city_descr = "$city, $state " . $param['zip'];
+	$city_descr = "$city, $state " . $param["zip"];
 
 	// handle timezone == "auto"
-	if ($tz == '?' || $tz == '0')
+	if ($tz == "?" || $tz == "0")
 	{
 	    form($param,
 	    "Sorry, can't auto-detect\n" .
@@ -406,75 +406,76 @@ function subscribe($param) {
 	}
 
 	global $hebcal_tz_names;
-	$param['tz'] = $tz;
-	$tz_descr = "Time zone: " . $hebcal_tz_names['tz_' . $tz];
+	$param["tz"] = $tz;
+	$tz_descr = "Time zone: " . $hebcal_tz_names["tz_" . $tz];
 
 	if ($dst) {
-	    $param['dst'] = 'usa';
+	    $param["dst"] = "usa";
 	} else {
-	    $param['dst'] = 'none';
+	    $param["dst"] = "none";
 	}
 
-	$dst_descr = "Daylight Saving Time: " . $param['dst'];
+	$dst_descr = "Daylight Saving Time: " . $param["dst"];
 
-	unset($param['city']);
+	unset($param["city"]);
     }
-    else if ($param['geo'] == 'city')
+    else if ($param["geo"] == "city")
     {
-	if (!$param['city'])
+	if (!$param["city"])
 	{
 	    form($param,
 	    "Please select a city for candle lighting times.");
 	}
 
 	global $hebcal_city_tz;
-	if (!isset($hebcal_city_tz[$param['city']]))
+	if (!isset($hebcal_city_tz[$param["city"]]))
 	{
 	    form($param,
-	    "Sorry, <b>" . htmlspecialchars($param['city']) . "</b> is\n" .
+	    "Sorry, <b>" . htmlspecialchars($param["city"]) . "</b> is\n" .
 	    "not a recoginized city.");
 	}
 
-	$city_descr = $param['city'];
+	$city_descr = $param["city"];
 	global $hebcal_tz_names;
 	$tz_descr = "Time zone: " .
-	     $hebcal_tz_names['tz_' . $hebcal_city_tz[$param['city']]];
-	$dst_descr = '';
+	     $hebcal_tz_names["tz_" . $hebcal_city_tz[$param["city"]]];
+	$dst_descr = "";
 
-	unset($param['zip']);
+	unset($param["zip"]);
     }
     else
     {
-	$param['geo'] = 'zip';
+	$param["geo"] = "zip";
 	form($param, "Sorry, missing zip or city field.");
     }
 
     # check if email address already verified
-    $info = get_sub_info($param['em']);
-    if (isset($info['status']) && $info['status'] == 'active')
+    $info = get_sub_info($param["em"]);
+    if (isset($info["status"]) && $info["status"] == "active")
     {
 	write_sub_info($param);
 
 	$from_name = "Hebcal Subscription Notification";
     	$from_addr = "shabbat-owner@hebcal.com";
-	$return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@hebcal.com";
+	$return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
+	    "@hebcal.com";
 	$subject = "Your subscription is updated";
 
 	$ip = $_SERVER["REMOTE_ADDR"];
 
-	$headers = array('From' => "\"$from_name\" <$from_addr>",
-			 'To' => $param['em'],
-			 'Reply-To' => $from_addr,
-			 'List-Unsubscribe' =>
+	$headers = array("From" => "\"$from_name\" <$from_addr>",
+			 "To" => $param["em"],
+			 "Reply-To" => $from_addr,
+			 "List-Unsubscribe" =>
 			 "<mailto:shabbat-unsubscribe@hebcal.com>",
-			 'MIME-Version' => '1.0',
-			 'Content-Type' => 'text/plain',
-			 'X-Sender' => $sender,
-			 'X-Mailer' => "hebcal web v$VER",
-			 'Message-ID' =>
+			 "MIME-Version" => "1.0",
+			 "Content-Type" => "text/plain",
+			 "X-Sender" => $sender,
+			 "X-Mailer" => "hebcal web v$VER",
+			 "Message-ID" =>
 			 "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
-			 'X-Originating-IP' => "[$ip]",
-			 'Subject' => $subject);
+			 "X-Originating-IP" => "[$ip]",
+			 "Subject" => $subject);
 
 	$body = <<<EOD
 Hello,
@@ -489,7 +490,7 @@ To unsubscribe from this list, send an email to:
 shabbat-unsubscribe@hebcal.com
 EOD;
 
-	$err = smtp_send($return_path, $param['em'], $headers, $body);
+	$err = smtp_send($return_path, $param["em"], $headers, $body);
 
 	$html = <<<EOD
 <h2>Subscription Updated</h2>
@@ -506,9 +507,10 @@ EOD
 	return true;
     }
 
-    if (isset($info['status']) && $info['status'] == 'pending' && isset($info['id']))
+    if (isset($info["status"]) && $info["status"] == "pending" &&
+	isset($info["id"]))
     {
-	$old_encoded = $info['id'];
+	$old_encoded = $info["id"];
     }
     else
     {
@@ -519,22 +521,23 @@ EOD
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-subscribe-$encoded@hebcal.com";
-    $return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@hebcal.com";
+    $return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
+	"@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
     $ip = $_SERVER["REMOTE_ADDR"];
 
-    $headers = array('From' => "\"$from_name\" <$from_addr>",
-		     'To' => $param['em'],
-		     'Reply-To' => $from_addr,
-		     'MIME-Version' => '1.0',
-		     'Content-Type' => 'text/plain',
-		     'X-Sender' => $sender,
-		     'X-Mailer' => "hebcal web v$VER",
-		     'Message-ID' =>
+    $headers = array("From" => "\"$from_name\" <$from_addr>",
+		     "To" => $param["em"],
+		     "Reply-To" => $from_addr,
+		     "MIME-Version" => "1.0",
+		     "Content-Type" => "text/plain",
+		     "X-Sender" => $sender,
+		     "X-Mailer" => "hebcal web v$VER",
+		     "Message-ID" =>
 		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
-		     'X-Originating-IP' => "[$ip]",
-		     'Subject' => $subject);
+		     "X-Originating-IP" => "[$ip]",
+		     "Subject" => $subject);
 
     $body = <<<EOD
 Hello,
@@ -553,8 +556,8 @@ Regards,
 hebcal.com
 EOD;
 
-    $err = smtp_send($return_path, $param['em'], $headers, $body);
-    $html_email = htmlentities($param['em']);
+    $err = smtp_send($return_path, $param["em"], $headers, $body);
+    $html_email = htmlentities($param["em"]);
 
     if ($err === true)
     {
@@ -595,10 +598,10 @@ EOD
 
 function unsubscribe($param) {
     global $sender, $VER;
-    $html_email = htmlentities($param['em']);
-    $info = get_sub_info($param['em']);
+    $html_email = htmlentities($param["em"]);
+    $info = get_sub_info($param["em"]);
 
-    if (isset($info['status']) && $info['status'] == 'unsubscribed') {
+    if (isset($info["status"]) && $info["status"] == "unsubscribed") {
 	$html = <<<EOD
 <h2>Already Unsubscribed</h2>
 <p><b>$html_email</b>
@@ -633,22 +636,23 @@ EOD
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-owner@hebcal.com";
-    $return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@hebcal.com";
+    $return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
+	"@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";
 
     $ip = $_SERVER["REMOTE_ADDR"];
 
-    $headers = array('From' => "\"$from_name\" <$from_addr>",
-		     'To' => $param['em'],
-		     'Reply-To' => $from_addr,
-		     'MIME-Version' => '1.0',
-		     'Content-Type' => 'text/plain',
-		     'X-Sender' => $sender,
-		     'X-Mailer' => "hebcal web v$VER",
-		     'Message-ID' =>
+    $headers = array("From" => "\"$from_name\" <$from_addr>",
+		     "To" => $param["em"],
+		     "Reply-To" => $from_addr,
+		     "MIME-Version" => "1.0",
+		     "Content-Type" => "text/plain",
+		     "X-Sender" => $sender,
+		     "X-Mailer" => "hebcal web v$VER",
+		     "Message-ID" =>
 		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
-		     'X-Originating-IP' => "[$ip]",
-		     'Subject' => $subject);
+		     "X-Originating-IP" => "[$ip]",
+		     "Subject" => $subject);
 
     $body = <<<EOD
 Hello,
@@ -660,7 +664,7 @@ Regards,
 hebcal.com
 EOD;
 
-    $err = smtp_send($return_path, $param['em'], $headers, $body);
+    $err = smtp_send($return_path, $param["em"], $headers, $body);
 
     $html = <<<EOD
 <h2>Unsubscribed</h2>
