@@ -1034,10 +1034,17 @@ sub yahoo_calendar_link($$)
 	&url_escape($subj) . "&amp;VIEW=d";
 }
 
+$Hebcal::mac_format = '';
+format STDOUT =
+^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
+$Hebcal::mac_format
+.
+
 sub macintosh_datebook($)
 {
     my($events) = @_;
     my($numEntries) = scalar(@{$events});
+
     for (my $i = 0; $i < $numEntries; $i++)
     {
 	my $date = 
@@ -1077,7 +1084,7 @@ sub macintosh_datebook($)
 	# Hanukkah<B8>December 14, 1998<B8>December 14, 1998<B8><B8><B8>Jewish Holiday<B8><9B>
 	# Doc group mtg<B8>August 21, 2002<B8><B8>2:00 PM<B8>3:00 PM<B8><B8><9B>
 
-	print STDOUT join("\xB8",
+	$Hebcal::mac_format .= join("\xB8",
 			  $events->[$i]->[$Hebcal::EVT_IDX_SUBJ],
 			  $date, $end_date,
 			  $start_time, $end_time,
@@ -1085,7 +1092,7 @@ sub macintosh_datebook($)
 			  "\x9B");
     }
 
-    print STDOUT "\n";
+    write;
 
     1;
 }
