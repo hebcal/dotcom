@@ -2,9 +2,10 @@
 
 ########################################################################
 # zips2db.pl - generate zips.db file from Gazeteer zips.txt
-# part of the Hebcal Interactive Jewish Calendar
+# part of the Hebcal Interactive Jewish Calendar, www.hebcal.com
+# $Id$
 #
-# Copyright (c) 2000  Michael John Radwin.  All rights reserved.
+# Copyright (c) 2001  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,15 +23,34 @@
 ########################################################################
 
 use DB_File;
+use Getopt::Std;
+use strict;
 
-$dbmfile = 'zips.db';
+$0 =~ s,.*/,,;  # basename
+
+my($usage) = "usage: $0 [-h] zips.txt
+    -h        Display usage information.
+";
+
+my(%opts);
+&getopts('h', \%opts) || die "$usage\n";
+$opts{'h'} && die "$usage\n";
+(@ARGV == 1) || die "$usage";
+
+open(IN, $ARGV[0]) || die "$ARGV[0]: $!\n";
+
+my $dbmfile = 'zips.db';
+my %DB;
 tie(%DB, 'DB_File', $dbmfile, O_RDWR|O_CREAT, 0644, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 
-while(<>)
+print "reading from $ARGV[0], writing to zips.db\n";
+
+my $count = 0;
+while(<IN>)
 {
     chop;
-    ($fips,$zip,$state,$city,$long,$lat,$pop,$alloc) =
+    my($fips,$zip,$state,$city,$long,$lat,$pop,$alloc) =
 	/^"(\d+)","(\d+)","([^\"]+)","([^\"]+)",([^,]+),([^,]+),([^,]+),([^,]+)$/;
 
     if (! defined $alloc)
@@ -41,8 +61,8 @@ while(<>)
 
     die if $city =~ /,/;
 
-    ($long_deg,$long_min) = split(/\./, $long, 2);
-    ($lat_deg,$lat_min) = split(/\./, $lat, 2);
+    my($long_deg,$long_min) = split(/\./, $long, 2);
+    my($lat_deg,$lat_min) = split(/\./, $lat, 2);
 
     if (defined $long_min && $long_min ne '')
     {
@@ -72,12 +92,11 @@ while(<>)
 
     $DB{$zip} = pack('ncnc',$long_deg,$long_min,$lat_deg,$lat_min) .
 	$city . "\0" . $state;
+    $count++;
 }
+close(IN);
 untie(%DB);
 
-if ($^W)
-{
-    $pop = $alloc = $fips;	# touch variables to avoid warning
-}
+print "inserted $count zips from $ARGV[0] into zips.db\n";
 
 exit(0);
