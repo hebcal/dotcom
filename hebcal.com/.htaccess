@@ -52,6 +52,7 @@ Redirect /HEBCAL http://www.hebcal.com/hebcal
 Redirect /cgi-bin/hebcal http://www.hebcal.com/hebcal
 Redirect /hebcal.html http://www.hebcal.com/hebcal/
 Redirect /shabbat.html http://www.hebcal.com/shabbat/
+Redirect /help/defaults.html http://www.hebcal.com/help/holidays.html
 
 Redirect /michael/hebcal http://www.hebcal.com/hebcal
 Redirect /michael/projects/hebcal.pl http://www.hebcal.com/dist/hebcal.pl
