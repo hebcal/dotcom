@@ -697,9 +697,9 @@ sub navbar2($$$$$)
 	"</td></tr></table>";
 }
 
-sub start_html($$$$)
+sub start_html()
 {
-    my($q,$title,$head,$meta) = @_;
+    my($q,$title,$head,$meta,$target) = @_;
 
     $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
 		    "\t\"http://www.w3.org/TR/html4/loose.dtd");
@@ -712,12 +712,13 @@ sub start_html($$$$)
     $author =~ s/^www\.//;
     $author = "webmaster\@$author";
 
+    $target = '_top' unless defined $target;
     return $q->start_html
 	(
 	 -dir => 'ltr',
 	 -lang => 'en',
 	 -title => $title,
-	 -target => '_top',
+	 -target => $target,
 	 -head => [
 		   $q->Link({-rel => 'stylesheet',
 			     -href => '/style.css',
