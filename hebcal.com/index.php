@@ -3,10 +3,11 @@
 <!-- $Id$ -->
 <html lang="en">
 <head>
-<title>hebcal.com: Hebrew Calendar Tools</title>
+<title>hebcal.com: Hebcal Interactive Jewish Calendar and
+1-Click Shabbat</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
-<meta name="keywords" content="hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff">
+<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit">
 <meta name="author" content="Michael J. Radwin">
 <link rev="made" href="mailto:webmaster@hebcal.com">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
@@ -44,6 +45,10 @@ Calendar</a></big></strong></dt>
 <dd>generates a list of Yahrzeit (memorial) and Yizkor dates, or
 Birthdays and Anniversaries.</dd>
 <dt><br><strong><big><a
+href="/converter/">Hebrew Date
+Converter</a></big></strong></dt>
+<dd>convert between Hebrew and Gregorian dates.</dd>
+<dt><br><strong><big><a
 href="/help/">Help</a></big></strong></dt>
 <dt><br><strong><big><a
 href="/privacy/">Privacy Policy</a></big></strong></dt>
@@ -63,7 +68,7 @@ href="http://www.sadinoff.com/">Danny Sadinoff</a>.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Thu Apr 19 16:21:59 PDT 2001
+Last modified: Sun Apr 22 13:57:49 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
