@@ -970,6 +970,8 @@ sub get_cookies($)
 	foreach (split(/[;,\s]/, $raw))
 	{
 	    my($key,$val) = split(/=/, $_, 2);
+	    next unless $key;
+	    $val = '' unless defined($val);
 	    $cookies{$key} = $val;
 	}
     }
@@ -1007,7 +1009,7 @@ sub process_cookie($$)
 	    $q->param('c','on');
 	    $q->delete('tz');
 	    $q->delete('dst');
-	    if (defined $Hebcal::city_dst{$q->param('city')} ||
+	    if (defined $Hebcal::city_dst{$q->param('city')} &&
 		$Hebcal::city_dst{$q->param('city')} eq 'israel')
 	    {
 		$q->param('i','on');
@@ -1333,6 +1335,8 @@ sub vcalendar_write_contents($$$$)
     my $endl = get_browser_endl($q->user_agent());
 
     my $tzid;
+    $tz = 0 unless defined $tz;
+
     if ($path_info =~ /\.ics$/) {
     if (defined $state) {
 	if ($state eq 'AK') {
@@ -1402,7 +1406,7 @@ sub vcalendar_write_contents($$$$)
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
 	{
-	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)$\s*/)
+	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)\s*$/)
 	    {
 		print STDOUT qq{LOCATION:$1$endl};
 	    }
