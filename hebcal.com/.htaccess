@@ -6,7 +6,7 @@ ReadmeName README.html
 #ServerName www.hebcal.com
 
 Header append P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\""
-Header append P3P "CP=\"NON CUSo PSAo PSDo OUR IND PRE\""
+Header append P3P "CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
 
 Header append PICS-Label "(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true r (n 0 s 0 v 0 l 0))"
 
