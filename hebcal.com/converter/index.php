@@ -251,7 +251,7 @@ function form($head, $message, $help = "") {
 	    $message, "</p>", $help, "<hr noshade size=\"1\">";
     }
 ?>
-<form name="f1" id="f1" action="/converter/foo.php">
+<form name="f1" id="f1" action="/converter/">
 <center><table cellpadding="4">
 <tr align="center"><td class="box"><table>
 <tr><td colspan="3">Gregorian to Hebrew</td></tr>
@@ -282,12 +282,15 @@ type="submit" value="Compute Gregorian Date"></td>
 </tr></table>
 </td></tr>
 </table>
+<?php if (false) {
+?>
 <label for="heb">
 <input type="checkbox" name="heb" value="on"
 <?php if ($_GET["heb"]) { echo " checked "; } ?>
 id="heb">
 Show date in Hebrew font</label>
 <br><small>(requires minimum of IE 4 or Netscape 6)</small>
+<?php } ?>
 </center>
 </form>
 <?php
