@@ -532,13 +532,13 @@ my(%sedrot) = (
 		    'I Kings 5:26 - 6:13', '',
 		    ],
  "Tetzaveh"	=> [
-		    '/5760/tetsavveh.shtml', 'Exodus 27:20 - 30:10',
+		    '/5761/tetsavveh.shtml', 'Exodus 27:20 - 30:10',
 		    '/jpstext/tetsavveh.shtml',
 		    'תְּצַוֶּה',
 		    'Ezekiel 43:10 - 43:27', '',
 		    ],
  "Ki Tisa"	=> [
-		    '/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
+		    '/5761/kitissa.shtml', 'Exodus 30:11 - 34:35',
 		    '/jpstext/kitissa.shtml',
 		    'כִּי תִשָּׂא',
 		    'I Kings 18:1 - 18:39', 'I Kings 18:20 - 18:39',
@@ -556,13 +556,13 @@ my(%sedrot) = (
 		    'I Kings 7:51 - 8:21', 'I Kings 7:40 - 7:50',
 		    ],
  "Vayikra"	=> [
-		    '/5760/vayikra.shtml', 'Leviticus 1:1 - 5:26',
+		    '/5761/vayikra.shtml', 'Leviticus 1:1 - 5:26',
 		    '/jpstext/vayikra.shtml',
 		    'וַיִּקְרָא',
 		    'Isaiah 43:21 - 44:23', '',
 		    ],
  "Tzav"		=> [
-		    '/5760/tsav.shtml', 'Leviticus 6:1 - 8:36',
+		    '/5761/tsav.shtml', 'Leviticus 6:1 - 8:36',
 		    '/jpstext/tsav.shtml',
 		    'צַו',
 		    'Jeremiah 7:21 - 8:3; 9:22 - 9:23', '',
