@@ -114,7 +114,7 @@ print OUT "\n<h2>Rosh Chodesh</h2>\n";
 
 my($mtime) = (stat($infile))[9];
 my($hhmts) = "Last modified:\n" . localtime($mtime);
-my($copyright) = Hebcal::html_copyright2('',0);
+my($copyright) = Hebcal::html_copyright2('',0,undef);
 
 print OUT <<EOHTML;
 
