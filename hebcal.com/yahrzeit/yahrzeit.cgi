@@ -133,7 +133,7 @@ sub macintosh_datebook_display {
 sub vcalendar_display() {
     my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
-    Hebcal::vcalendar_write_contents($q, \@events);
+    Hebcal::vcalendar_write_contents($q, \@events, undef, undef);
 }
 
 sub dba_display
