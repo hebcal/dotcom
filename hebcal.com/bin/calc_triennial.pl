@@ -1350,8 +1350,16 @@ sub get_saturday
     my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
 	localtime($now);
 
+    my $sat =
     ($wday == 6) ? $now + (60 * 60 * 24) :
 	$now + ((6 - $wday) * 60 * 60 * 24);
+
+    # don't bump parsha forward until Wednesday
+    if ($wday < 3) {
+	$sat -= (7 * 24 * 60 * 60);
+    }
+
+    $sat;
 }
 
 sub html_footer
