@@ -127,14 +127,14 @@ sub format_items
 	for (my $j = 0; $j < $third; $j++)
 	{
 	    my $k = $j + ($third * $i);
-	    Hebcal::out_html($cfg, $items[$k]);
+	    Hebcal::out_html($cfg, $items[$k]) if $items[$k];
 	}
 
 	if ($i == 2)
 	{
 	    for (my $k = ($third * 3); $k < scalar(@items); $k++)
 	    {
-		Hebcal::out_html($cfg, $items[$k]);
+		Hebcal::out_html($cfg, $items[$k]) if $items[$k];
 	    }
 	}
 	Hebcal::out_html($cfg,"</td>\n");
