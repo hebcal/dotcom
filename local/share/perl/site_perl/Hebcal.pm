@@ -1239,18 +1239,34 @@ sub vcalendar_write_contents($$)
     export_http_header($q, 'text/x-vCalendar');
     my $endl = get_browser_endl($q->user_agent());
 
+    my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
+
     print STDOUT qq{BEGIN:VCALENDAR$endl}, qq{VERSION:1.0$endl},
-    qq{PRODID:Hebcal Generated$endl};
+    qq{METHOD:PUBLISH$endl};
 
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
     {
 	print STDOUT qq{BEGIN:VEVENT$endl};
+	print STDOUT qq{DTSTAMP:$dtstamp$endl};
+
+	print STDOUT qq{CATEGORIES:HOLIDAY$endl}, qq{CLASS:PUBLIC$endl};
 
 	print STDOUT qq{SUMMARY:},
 	    $events->[$i]->[$Hebcal::EVT_IDX_SUBJ], $endl;
-	print STDOUT qq{DESCRIPTION:},
-	    $events->[$i]->[$Hebcal::EVT_IDX_MEMO], $endl;
+
+	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
+	{
+	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)$\s*/)
+	    {
+		print STDOUT qq{LOCATION:$1$endl};
+	    }
+	    else
+	    {
+		print STDOUT qq{DESCRIPTION:},
+		$events->[$i]->[$Hebcal::EVT_IDX_MEMO], $endl;
+	    }
+	}
 
 	my($date) = sprintf("%04d%02d%02d",
 			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR],
@@ -1276,11 +1292,25 @@ sub vcalendar_write_contents($$)
 
 	    $end_date .= sprintf("T%02d%02d00", $hour, $min);
 	}
+	else
+	{
+	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
+		($events->[$i]->[$Hebcal::EVT_IDX_YEAR],
+		 $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
+		 $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+		 1);
+	    $end_date = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 
-	print STDOUT qq{DTSTART:$date$endl}, qq{DTEND:$end_date$endl},
-	qq{CATEGORIES:HOLIDAY$endl};
+	    $date .= "T000000";
+	    $end_date .= "T000000";
+	}
 
-	print STDOUT qq{END:VEVENT$endl$endl};
+	print STDOUT qq{DTSTART:$date$endl}, qq{DTEND:$end_date$endl};
+
+	my $uid = $dtstamp . '-' . $i . '@hebcal.com';
+	print STDOUT qq{UID:$uid$endl};
+
+	print STDOUT qq{END:VEVENT$endl};
     }
 
     print STDOUT qq{END:VCALENDAR$endl};
