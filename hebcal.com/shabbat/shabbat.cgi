@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 20:01:13 PDT 2001
+Last modified: Mon May  7 20:11:26 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -321,7 +321,7 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 	    if (defined $q->param('tz') && $q->param('tz') ne 'auto');
 	&out_html("&amp;m=", $q->param('m'))
 	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n",
+	&out_html("</link>\n<description>Weekly Shabbat candle lighting ",
 		  "times for $city_descr</description>\n",
 		  "<language>en-us</language>\n",
 		  "<copyright>Copyright &copy; $this_year Michael J. Radwin.",
