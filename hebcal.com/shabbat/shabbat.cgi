@@ -416,7 +416,9 @@ sub process_args
     # only set expiry if there are CGI arguments
     if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
     {
-	print "Expires: ", &Hebcal::http_date($saturday), "\015\012";
+	unless (defined $cfg && $cfg eq 'v') {
+	    print "Expires: ", &Hebcal::http_date($saturday), "\015\012";
+	}
 
 	my($cookie_to_set);
 
