@@ -876,14 +876,14 @@ sub readings_for_current_year
 			    $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
 	$current->{$h}->[$yr] = $stime;
-	next unless $yr == 0;
 
 	$parsha_time->{$h} = Time::Local::timelocal
 	    (1,0,0,
 	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 	     $events[$i]->[$Hebcal::EVT_IDX_MON],
 	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-	     '','','');
+	     '','','')
+		if $yr == 0;
 
 	next unless $opts{'f'};
 
@@ -908,6 +908,8 @@ sub readings_for_current_year
 		$aliyah->{'end'},
 		$aliyah->{'numverses'};
 	}
+
+	print CSV "\015\012";
     }
     }
 }
