@@ -35,10 +35,6 @@ $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
 
-my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu May 10 09:43:38 PDT 2001
-<!-- hhmts end -->";
-
 # process form params
 my($q) = new CGI;
 
@@ -365,7 +361,11 @@ sub form
     $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n};
 
-    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     exit(0);
 }
+
+# local variables:
+# mode: perl
+# end:
