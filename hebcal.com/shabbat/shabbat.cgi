@@ -415,10 +415,8 @@ for ($i = 0; $i < $numEntries; $i++)
 	$rss{'title'} = sprintf("%s: %d:%02d PM", $subj, $hour, $min);
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 	{
-	    $rss{'link'} = &ycal($subj,$year,$mon,$mday,$min,$hour,
-			      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
-			      $events[$i]->[$Hebcal::EVT_IDX_DUR]);
-
+	    $rss{'link'} =
+		&Hebcal::yahoo_calendar_link($events[$i], $city_descr);
 	    &out_rss(\%rss);
 	}
 	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
@@ -550,40 +548,6 @@ sub out_rss
 
     print STDOUT
 	"</item>\n";
-}
-
-sub ycal
-{
-    my($subj,$year,$mon,$mday,$min,$hour,$untimed,$dur) = @_;
-
-    my($ST) = sprintf("%04d%02d%02d", $year, $mon, $mday);
-    if ($untimed == 0)
-    {
-	my($loc) = (defined $city_descr && $city_descr ne '') ?
-	    "in $city_descr" : '';
-	$loc =~ s/\s*&nbsp;\s*/ /g;
-
-	$ST .= sprintf("T%02d%02d00",
-		       ($hour < 12 && $hour > 0) ? $hour + 12 : $hour,
-		       $min);
-
-	if ($q->param('tz') ne '')
-	{
-	    my($abstz) = ($q->param('tz') >= 0) ?
-		$q->param('tz') : -$q->param('tz');
-	    my($signtz) = ($q->param('tz') < 0) ? '-' : '';
-
-	    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
-	}
-
-	$ST .= "&amp;DUR=00" . $dur;
-
-	$ST .= "&amp;DESC=" . &Hebcal::url_escape($loc)
-	    if $loc ne '';
-    }
-
-    "http://calendar.yahoo.com/?v=60&amp;TITLE=" .
-	&Hebcal::url_escape($subj) . "&amp;TYPE=16&amp;ST=" . $ST;
 }
 
 sub out_html
