@@ -51,6 +51,7 @@ use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
 use Hebcal;
+use Date::Calc;
 use Getopt::Std;
 use XML::Simple;
 use Time::Local;
@@ -84,9 +85,9 @@ my($hebrew_year);
 if ($opts{'H'}) {
     $hebrew_year = $opts{'H'};
 } else {
-    $hebrew_year = `./hebcal -t -x -h | grep -v Omer`;
-    chomp($hebrew_year);
-    $hebrew_year =~ s/^.+, (\d\d\d\d)/$1/;
+    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
+    $hebrew_year = $hebdate->{'yy'};
 }
 
 # year I in triennial cycle was 5756
