@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu May 11 09:52:22 PDT 2000
+Last modified: Fri May 12 09:11:09 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -635,6 +635,8 @@ sub dba_display {
 
     print $q->header(-type =>
 		     "application/x-palm-dba; filename=$PALM_DBA_FILENAME",
+		     -content_disposition =>
+		     "inline; filename=$PALM_DBA_FILENAME",
 		     -last_modified => &http_date($time));
 
     &dba_contents(@events);
@@ -648,6 +650,8 @@ sub csv_display {
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
     print $q->header(-type => 'text/x-csv; filename=' . $path_info,
+		     -content_disposition =>
+		     "inline; filename=$path_info",
 		     -last_modified => &http_date($time));
 
     $endl = "\012";			# default Netscape and others
@@ -1043,6 +1047,30 @@ sub results_page
 
     $filename .= '.csv';
 
+    # process cookie, delete before we generate next/prev URLS
+    if ($q->param('set')) {
+	$newcookie = &gen_cookie();
+	if (! defined $q->raw_cookie())
+	{
+	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	    $expires_date, "; path=/\015\012";
+	}
+	else
+	{
+	    my($cmp1) = $newcookie;
+	    my($cmp2) = $q->raw_cookie();
+
+	    $cmp1 =~ s/\bC=t=\d+\&//;
+	    $cmp2 =~ s/\bC=t=\d+\&//;
+
+	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	    $expires_date, "; path=/\015\012"
+		if $cmp1 ne $cmp2;
+	}
+	    
+	$q->delete('set');
+    }
+
     # next and prev urls
     if ($q->param('month') =~ /^\d+$/ &&
 	$q->param('month') >= 1 && $q->param('month') <= 12)
@@ -1107,16 +1135,6 @@ sub results_page
 		unless $key eq 'year';
 	}
 	$next_title = ($q->param('year') + 1);
-    }
-
-    if ($q->param('set')) {
-	$newcookie = &gen_cookie();
-	if (! defined $q->raw_cookie() || $q->raw_cookie() ne $newcookie)
-	{
-	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_date, "; path=/\015\012";
-	}
-	$q->delete('set');
     }
 
     print STDOUT $q->header(-expires => $expires_date),
@@ -1191,6 +1209,7 @@ sub results_page
 	$val = $q->param($key);
 	print STDOUT "&amp;$key=", &url_escape($val);
     }
+    print STDOUT "&amp;filename=$filename";
     print STDOUT "\">Download\nOutlook CSV file</a>";
 
     # only offer DBA export when we know timegm() will work
@@ -1204,6 +1223,7 @@ sub results_page
 	    $val = $q->param($key);
 	    print STDOUT "&amp;$key=", &url_escape($val);
 	}
+	print STDOUT "&amp;filename=$PALM_DBA_FILENAME";
 	print STDOUT "\">Download\nPalm Date Book Archive (.DBA)</a>";
     }
 
