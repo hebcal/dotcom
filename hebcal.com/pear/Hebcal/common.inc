@@ -46,8 +46,18 @@ function hebcal_gen_cookie()
     if (isset($_COOKIE["C"])) {
 	parse_str($_COOKIE["C"], $param);
     }
-    foreach ($_REQUEST as $k => $v) {
-	$param[$k] = $v;
+
+    # can't use $_REQUEST or $_GET because we use ";" as string delim
+    # if we controlled our own ini file, we'd set
+    # arg_separator.input = "&;"
+    $qs = $_SERVER["QUERY_STRING"];
+    if ($qs) {
+	$kvs = split('[&;]', $qs);
+	foreach ($kvs as $kv) {
+	    $parts = explode("=", $kv, 2);
+	    $param[strip_tags(urldecode($parts[0]))] =
+		strip_tags(urldecode($parts[1]));
+	}
     }
 
     $retval = "C=t=" . time();
