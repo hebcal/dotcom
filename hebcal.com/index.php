@@ -67,6 +67,11 @@ Special Torah Readings for Jewish Holidays
 <hr noshade size="1">
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br><br>
+<!-- Begin temp Chanukah -->
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/holidays/chanukah.html">Chanukah</a></b>
+<br>19 December 2003<br><br>
+<!-- End temp Chanukah -->
 <form action="/shabbat/"><span
 class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <br><label for="zip">Zip code:</label>
