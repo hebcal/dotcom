@@ -876,12 +876,6 @@ sub display_html
 		      "1-Click Shabbat candle-lighting times to your\n",
 		      "web site</a></p>\n");
  
-    &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
-qq{<span class="hl"><b>NEW!</b></span> Automated candle lighting times by Phone:
-Call Tellme at <b>1-800-555-TELL</b>.
-Dial <b>1-00613</b>.</p>
-});
-
     form($cfg,0,'','');
 
     exit(0);
