@@ -24,6 +24,7 @@ use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local;
 use Hebcal;
+use Palm::DBA;
 use POSIX;
 use strict;
 
@@ -114,8 +115,8 @@ sub dba_display
 		     "inline; filename=$path_info",
 		     -last_modified => &Hebcal::http_date($time));
 
-    &Hebcal::dba_write_header($path_info);
-    &Hebcal::dba_write_contents(\@events, 0, 0);
+    &Palm::DBA::write_header($path_info);
+    &Palm::DBA::write_contents(\@events, 0, 0);
 }
 
 sub csv_display
