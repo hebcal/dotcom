@@ -486,6 +486,28 @@ sub get_holiday_anchor($$$)
 # web page utils
 ########################################################################
 
+use Fcntl qw(:DEFAULT :flock);
+my $lockfile = "/pub/m/r/mradwin/private/tmp/mradwin-hebcal.lock";
+
+sub emaildb_lock
+{
+    my($mode) = @_;
+
+    open(EMAILDB, ">$lockfile") || die "$lockfile: $!\n";
+    chmod 0666, $lockfile;
+    unless (flock (EMAILDB, $mode)) { die "flock: $!" }
+    return \*EMAILDB;
+}
+
+sub emaildb_unlock
+{
+    my($fh) = @_;
+
+    flock($fh, LOCK_UN);
+    close($fh);
+    unlink($lockfile);
+}
+
 sub out_html
 {
     my($cfg,@args) = @_;
