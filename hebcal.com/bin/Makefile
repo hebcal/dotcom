@@ -1,5 +1,7 @@
 all: ../help/holidays.html ../sedrot/bereshit.html ../hebcal/sedrot.db
 
+holidays: ../holidays/purim.html
+
 ../hebcal/sedrot.db: sedrot_db.pl ../dist/aliyah.xml
 	./sedrot_db.pl ../dist/aliyah.xml ../hebcal/sedrot.db
 
