@@ -169,6 +169,10 @@ else
 
 &my_header();
 
+my($cmd_pretty) = $cmd;
+$cmd_pretty =~ s,.*/,,; # basename
+print STDOUT "<!-- $cmd_pretty -->\n";
+
 my(@events) = &Hebcal::invoke_hebcal($cmd, '');
 
 if (defined $events[0])
