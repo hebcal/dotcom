@@ -10,26 +10,19 @@
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit">
 <meta name="author" content="Michael J. Radwin">
 <link rev="made" href="mailto:webmaster@hebcal.com">
+<link rel="stylesheet" href="/style.css" type="text/css">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
 <base href="http://www.hebcal.com/" target="_top">
-<style type="text/css">
-<!--
-.navbar {background: #ffcc99 ; color: #000000 ; border-style: none none solid none; border-color: #ff9966 ; border-width: thin; padding: 2px;}
-H1, H2, H3, H4, H5, H6 {
-   font-family : Tahoma, Verdana, Arial, Helvetica, Geneva, SunSans-Regular, sans-serif;
-   margin-bottom : 0;
-}
--->
-</style>
 </head>
 <body>
 <form action="/cgi-bin/htsearch" method="get">
 <table width="100%" class="navbar">
-<tr><td><small><strong>hebcal.com</strong></small></td>
+<tr><td><small><strong>hebcal.com:</strong>
+Jewish Calendar Tools</small></td>
 <td align="right"><input type="text" name="words" size="30">
 <input type="submit" value="Search"></td></tr></table>
 </form>
-<h1>hebcal.com: Hebrew Calendar Tools</h1>
+<h1>hebcal.com: Jewish Calendar Tools</h1>
 <dl>
 <dt><strong><big><a
 href="/hebcal/">Hebcal Interactive Jewish
@@ -62,13 +55,15 @@ href="/search/">Search</a></big></strong></dt>
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a>
 <br>
+Contact: webmaster@hebcal.com
+<br>
 This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal 3.2
 for UNIX</a>, Copyright &copy; 1994 <a
 href="http://www.sadinoff.com/">Danny Sadinoff</a>.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Sun Apr 22 13:57:49 PDT 2001
+Last modified: Fri Apr 27 10:51:25 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
