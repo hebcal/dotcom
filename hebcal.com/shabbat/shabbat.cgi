@@ -989,8 +989,8 @@ sub form($$$$)
     if ($message ne '')
     {
 	$help = '' unless defined $help;
-	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	    $message . "</font></p>" . $help;
+	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
+	    $message . "</p>" . $help;
     }
 
     &Hebcal::out_html($cfg,
