@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Mar  1 14:29:44 PST 2001
+Last modified: Mon Apr 16 12:35:40 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -394,8 +394,18 @@ sub form
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
     $q->hidden(-name => 'rand',-value => time(),-override => 1),
-    qq{<input\ntype="submit" value="Compute Calendar"></form>\n},
-    $html_footer;
+    qq{<input\ntype="submit" value="Compute Calendar"></form>\n};
+
+
+    print STDOUT
+	qq{<hr noshade size=\"1\">\n},
+	qq{<p><small>[
+<a href="/hebcal/">Hebcal Interactive Jewish Calendar</a> |
+<a href="/shabbat/">1-Click Shabbat</a> |
+Interactive Yahrzeit/Birthday Calendar
+]</small></p>};
+
+    print STDOUT $html_footer;
 
     exit(0);
 }
