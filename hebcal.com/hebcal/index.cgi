@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jun  7 13:53:20 PDT 1999
+Last modified: Sat Jun 12 12:22:30 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -343,7 +343,7 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong class="navbar">
+<strong class=\"navbar\">
 <a href=\"/\">radwin.org</a> -&gt;
 hebcal
 </strong>
@@ -586,7 +586,7 @@ sub download
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong class="navbar">
+<strong class=\"navbar\">
 <a href=\"/\">radwin.org</a> -&gt;
 <a href=\"$cgipath\">hebcal</a> -&gt;
 $date
