@@ -262,8 +262,8 @@ $PALM_DBA_MAXENTRIES = 2500;
  "Bereshit"	=> 'http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml',
  "Bereshis"	=> 'http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml',
  "Noach"	=> 'http://learn.jtsa.edu/topics/parashah/5761/noah.shtml',
- "Lech-Lecha"	=> 'http://learn.jtsa.edu/topics/parashah/5760/lechlecha.shtml',
- "Vayera"	=> 'http://learn.jtsa.edu/topics/parashah/5760/vayera.shtml',
+ "Lech-Lecha"	=> 'http://learn.jtsa.edu/topics/parashah/5761/lekhlekha.shtml',
+ "Vayera"	=> 'http://learn.jtsa.edu/topics/parashah/5761/vayera.shtml',
  "Chayei Sara"	=> 'http://learn.jtsa.edu/topics/parashah/5760/hayeisarah.shtml',
  "Toldot"	=> 'http://learn.jtsa.edu/topics/parashah/5760/toldot.shtml',
  "Toldos"	=> 'http://learn.jtsa.edu/topics/parashah/5760/toldot.shtml',
@@ -399,6 +399,7 @@ sub parse_date_descr($$)
 	$dur = 0;
 	$untimed = 1;
 	$subj = $descr;
+	$subj =~ s/Channukah/Chanukah/; # fix spelling error
     }
 
     $subj =~ s/\"/''/g;
