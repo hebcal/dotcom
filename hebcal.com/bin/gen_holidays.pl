@@ -7,7 +7,7 @@ use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use Hebcal;
 use Getopt::Std;
 use Config::IniFiles;
-use DB_File::Lock;
+use DB_File;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -35,7 +35,7 @@ my($holidays) = new Config::IniFiles(-file => $infile);
 $holidays || die "$infile: $!\n";
 
 my(%DB);
-tie(%DB, 'DB_File::Lock', $outdb, O_RDWR|O_CREAT, 0644, $DB_HASH, 'write')
+tie(%DB, 'DB_File', $outdb, O_RDWR|O_CREAT, 0644, $DB_HASH)
     or die;
 
 my(%out);
