@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Dec 13 17:42:58 PST 2000
+Last modified: Wed Jan  3 14:12:42 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -502,7 +502,7 @@ sub form
 
     &out_html(
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
-	qq{</td>\n<td>&nbsp;or&nbsp;</td>\n},
+	qq{</td>\n<td>&nbsp;&nbsp;or&nbsp;&nbsp;</td>\n},
 	qq{<td class="boxed"><form\naction="$script_name">},
 	qq{<label\nfor="city">Closest City:\n},
 	$q->popup_menu(-name => 'city',
