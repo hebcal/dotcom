@@ -505,7 +505,8 @@ JSCRIPT_END
 	    "latitude/longitude</a>)</small>";
     }
 
-    print STDOUT "</td><td>&nbsp;&nbsp;&nbsp;</td><td>\n";
+    print STDOUT "</td><td><img src=\"/i/black-1x1.gif\"\n",
+    "width=\"1\" height=\"220\" hspace=\"10\" alt=\"\"></td><td>\n";
     print STDOUT $q->hidden(-name => 'c',
 			    -id => 'c'),
     $q->hidden(-name => 'geo',
