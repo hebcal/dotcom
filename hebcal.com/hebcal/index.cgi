@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Sun Oct 17 09:28:19 PDT 1999
+Last modified: Mon Oct 18 13:49:10 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1287,7 +1287,7 @@ sub http_date
 sub gen_cookie {
     local($retval);
 
-    $retval = 'C=hebcal=1';
+    $retval = 'C=t=' . time;
 
     if ($opts{'c'}) {
 	if ($in{'geo'} eq 'zip') {
