@@ -23,7 +23,6 @@
 
 package Hebcal;
 require 5.000;
-require Exporter;
 use Time::Local;
 use CGI;
 use strict;
