@@ -41,7 +41,7 @@
 
 require("HTML/Form.php");
 require("./hebnum.inc");
-require("../common.inc");
+require("../pear/Hebcal/common.inc");
 
 $VER = '$Revision$';
 $matches = array();
