@@ -91,7 +91,7 @@ my(%STATES) = (
 # process form params
 my($q) = new CGI;
 my($script_name) = $q->script_name();
-$script_name =~ s,/index.html$,/,;
+$script_name =~ s,/index.cgi$,/,;
 
 my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
