@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Mar 21 15:52:38 PST 2001
+Last modified: Wed Mar 21 16:15:20 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1130,7 +1130,8 @@ so you can keep this window open.
 
 		$cal->header("<h2 align=\"center\"><a\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
-			     $date . "\n" .
+			     $Hebcal::MoY_long{$mon} . ' ' .
+			     $q->param('year') . "\n" .
 			     "<a\nhref=\"$next_url\">&gt;&gt;</a></h2>");
 	    }
 
