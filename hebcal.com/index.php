@@ -58,14 +58,12 @@ Readings</a></big></strong></dt>
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a>
 <br>
-Contact: webmaster@hebcal.com
-<br>
 This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal 3.2
 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Tue Aug 21 18:07:24 PDT 2001
+Last modified: Tue Aug 21 18:08:48 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
