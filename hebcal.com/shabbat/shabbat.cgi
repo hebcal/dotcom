@@ -473,6 +473,8 @@ for ($i = 0; $i < $numEntries; $i++)
 		$drash_yr = $this_year + 3761;
 	    } elsif ($memo =~ /Torah: Genesis/) {
 		$drash_yr = $this_year + 3761;
+	    } elsif ($subj eq "Ha'Azinu") {
+		$drash_yr = $this_year + 3761;
 	    }
 
 	    $drash_href = join('/', $drash_prefix, $drash_yr, $drash_html);
@@ -486,14 +488,14 @@ for ($i = 0; $i < $numEntries; $i++)
 	    if (defined $torah_href && $torah_href ne '')
 	    {
 		$rss{'title'} .=
-		    qq{<b>$subj</b>\n<span class="goto">(<a\n} .
-		    qq{href="$drash_href">Drash</a>\n} .
-		    qq{- <a href="$torah_href">Torah</a>\n} .
-		    qq{- <a href="$haftarah_href">Haftarah</a>)</span>};
+		    qq{<b>$subj</b>\n<span class="goto">(<a } .
+		    qq{target="_top"\nhref="$drash_href">Drash</a>\n} .
+		    qq{- <a target="_top"\nhref="$torah_href">Torah</a>\n} .
+		    qq{- <a target="_top"\nhref="$haftarah_href">Haftarah</a>)</span>};
 	    }
 	    else
 	    {
-		$rss{'title'} .= qq{<a\nhref="$href">$subj</a>};
+		$rss{'title'} .= qq{<a\ntarget="_top" href="$href">$subj</a>};
 	    }
 	}
 	else
