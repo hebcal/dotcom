@@ -277,7 +277,7 @@ Include candle lighting times</label>
 
 <small>(<label for=\"m\">Havdalah minutes past sundown: </label><input
 type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
-maxlength=\"3\">)</small>
+maxlength=\"3\">)</small><br>
 
 <blockquote>
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
@@ -320,7 +320,7 @@ Daylight Savings Time:
 <label for=\"dst_israel\">Israel</label>
 
 <input type=\"radio\" name=\"dst\" id=\"dst_none\" value=\"none\"$none_chk>
-<label for=\"dst_none\">none</label>
+<label for=\"dst_none\">none</label><br>
 </blockquote>
 
 <input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
