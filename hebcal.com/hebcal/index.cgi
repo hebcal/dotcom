@@ -35,7 +35,6 @@ $expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
 # constants for DBA export
 $PALM_DBA_MAGIC      = 1145176320;
-$PALM_DBA_FILENAME   = "hebcal.dba";
 $PALM_DBA_INTEGER    = 1;
 $PALM_DBA_DATE       = 3;
 $PALM_DBA_BOOL       = 6;
@@ -298,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri May 12 09:37:03 PDT 2000
+Last modified: Tue May 16 15:34:53 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -309,7 +308,7 @@ $html_footer = "<hr
 noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
 &copy; $year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved.<br><a
-target=\"_top\" href=\"/michael/projects/hebcal/\">Frequently
+href=\"/michael/projects/hebcal/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
 
@@ -473,9 +472,9 @@ elsif ($q->param('c') && $q->param('c') ne 'off' &&
 	  "</b> in the zip code database.\n",
           "<ul><li>Please try a nearby zip code or select candle\n" .
 	  "lighting times by\n" .
-          "<a target=\"_top\"\nhref=\"" . $script_name .
+          "<a href=\"" . $script_name .
 	  "?c=on&amp;geo=city\">city</a> or\n" .
-          "<a target=\"_top\"\nhref=\"" . $script_name .
+          "<a href=\"" . $script_name .
 	  "?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
 	unless defined $val;
 
@@ -585,11 +584,11 @@ if (! defined $q->path_info())
 {
     &results_page();
 }
-elsif ($q->path_info() =~ /.csv$/)
+elsif ($q->path_info() =~ /[^\/]+.csv$/)
 {
     &csv_display();
 }
-elsif ($q->path_info() =~ /.dba$/)
+elsif ($q->path_info() =~ /[^\/]+.dba$/)
 {
     &dba_display();
 }
@@ -633,12 +632,15 @@ sub dba_display {
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
     print $q->header(-type =>
-		     "application/x-palm-dba; filename=\"$PALM_DBA_FILENAME\"",
+		     "application/x-palm-dba; filename=\"$path_info\"",
 		     -content_disposition =>
-		     "inline; filename=$PALM_DBA_FILENAME",
+		     "inline; filename=$path_info",
 		     -last_modified => &http_date($time));
 
+    &dba_header($path_info);
     &dba_contents(@events);
 }
 
@@ -721,6 +723,7 @@ JSCRIPT_END
 
     print STDOUT $q->header(),
     $q->start_html(-title => "Hebcal Interactive Jewish Calendar",
+		   -target=>'_top',
 		   -head => [
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'SCHEMA.dc',
@@ -749,9 +752,9 @@ JSCRIPT_END
 		   ),
     "<table border=\"0\" width=\"100%\" cellpadding=\"0\"\nclass=\"navbar\">",
     "<tr valign=\"top\"><td><small>",
-    "<a target=\"_top\"\nhref=\"/\">$server_name</a>\n<tt>-&gt;</tt>\n",
+    "<a\nhref=\"/\">$server_name</a>\n<tt>-&gt;</tt>\n",
     "hebcal</small></td>",
-    "<td align=\"right\"><small><a target=\"_top\"\n",
+    "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>",
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
@@ -764,7 +767,7 @@ JSCRIPT_END
     }
 
     print STDOUT $message, "\n",
-    "<form id=\"f1\" name=\"f1\" target=\"_top\"\naction=\"",
+    "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
     "<strong>Jewish Holidays for:</strong>&nbsp;&nbsp;&nbsp;\n",
     "<label for=\"year\">Year:\n",
@@ -794,7 +797,7 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
-    "</label><small>(<a target=\"_top\"\n",
+    "</label><small>(<a\n",
     "href=\"/michael/projects/hebcal/defaults.html\">What\n",
     "are the default Holidays?</a>)</small>",
     "<br><label\nfor=\"nx\">",
@@ -841,11 +844,11 @@ JSCRIPT_END
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
 		   -onClick => "return s1('zip')",
-		   -target => '_top'},
+	           },
 		  "zip code"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
 		   -onClick => "return s1('pos')",
-		   -target => '_top'},
+	           },
 		  "latitude/longitude");
     }
     elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
@@ -853,11 +856,11 @@ JSCRIPT_END
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
 		   -onClick => "return s1('zip')",
-		   -target => '_top'},
+	           },
 		  "zip code"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
 		   -onClick => "return s1('city')",
-		   -target => '_top'},
+	           },
 		  "closest city");
     }
     else
@@ -865,11 +868,11 @@ JSCRIPT_END
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
 		   -onClick => "return s1('city')",
-		   -target => '_top'},
+	           },
 		  "closest city"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
 		   -onClick => "return s1('pos')",
-		   -target => '_top'},
+	           },
 		  "latitude/longitude");
     }
     print STDOUT ")</small><br>";
@@ -1000,7 +1003,7 @@ JSCRIPT_END
 		 -id => 'set',
 		 -checked => 'checked',
 		 -label => "\nSave my preferences in a cookie"),
-    "</label><small>(<a target=\"_top\"\n",
+    "</label><small>(<a\n",
     "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
     "a cookie?</a>)</small>",
     "</p>\n",
@@ -1045,8 +1048,6 @@ sub results_page
 	    $filename .= '_' . $tmp;
 	}
     }
-
-    $filename .= '.csv';
 
     # process cookie, delete before we generate next/prev URLS
     if ($q->param('set')) {
@@ -1106,7 +1107,7 @@ sub results_page
 	    $prev_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	$prev_title = $MoY_long{$pm} . " " . $py;
+	$prev_title = $MoY_short[$pm-1] . " " . $py;
 
 	$next_url = $script_name . "?year=" . $ny . "&amp;month=" . $nm;
 	foreach $key ($q->param())
@@ -1115,7 +1116,7 @@ sub results_page
 	    $next_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	$next_title = $MoY_long{$nm} . " " . $ny;
+	$next_title = $MoY_short[$nm-1] . " " . $ny;
     }
     else
     {
@@ -1140,6 +1141,7 @@ sub results_page
 
     print STDOUT $q->header(-expires => $expires_date),
     $q->start_html(-title => "Hebcal: Jewish Calendar $date",
+		   -target=>'_top',
 		   -head => [
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'prev',
@@ -1157,9 +1159,9 @@ sub results_page
 	"<table border=\"0\" width=\"100%\" cellpadding=\"0\" ",
 	"class=\"navbar\">\n",
 	"<tr valign=\"top\"><td><small>\n",
-	"<a target=\"_top\"\nhref=\"/\">", $server_name, "</a>\n",
+	"<a href=\"/\">", $server_name, "</a>\n",
 	"<tt>-&gt;</tt>\n",
-	"<a target=\"_top\"\nhref=\"", $script_name, "?v=0";
+	"<a href=\"", $script_name, "?v=0";
 
     foreach $key ($q->param())
     {
@@ -1169,7 +1171,7 @@ sub results_page
     }
 
     print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt> $date</small>\n",
-    "<td align=\"right\"><small><a target=\"_top\"\n",
+    "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>\n",
     "</td></tr></table>\n",
     "<h1>Jewish Calendar $date</h1>\n";
@@ -1197,52 +1199,9 @@ sub results_page
 	}
     }
 
-    print STDOUT "Go to:\n",
-	"<a target=\"_top\"\nhref=\"$prev_url\">&lt;&lt; ",
-	$prev_title, "</a> |\n",
-	"<a target=\"_top\"\nhref=\"$next_url\">", $next_title,
-	" &gt;&gt;</a><br>\n";
-
-    print STDOUT "<p><a target=\"_top\"\nhref=\"", $script_name,
-    "index.html/$filename?dl=1";
-    foreach $key ($q->param())
-    {
-	$val = $q->param($key);
-	print STDOUT "&amp;$key=", &url_escape($val);
-    }
-    print STDOUT "&amp;filename=$filename";
-    print STDOUT "\">Download\nOutlook CSV file</a>";
-
-    # only offer DBA export when we know timegm() will work
-    if ($q->param('year') > 1969 && $q->param('year') < 2038 &&
-	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
-    {
-	print STDOUT " -\n<a target=\"_top\"\nhref=\"",
-	$script_name, "index.html/$PALM_DBA_FILENAME?dl=1";
-	foreach $key ($q->param())
-	{
-	    $val = $q->param($key);
-	    print STDOUT "&amp;$key=", &url_escape($val);
-	}
-	print STDOUT "&amp;filename=$PALM_DBA_FILENAME";
-	print STDOUT "\">Download\nPalm Date Book Archive (.DBA)</a>";
-    }
-
-    if ($ycal == 0)
-    {
-	print STDOUT " -\n<a target=\"_top\"\nhref=\"", $script_name, "?y=1";
-	foreach $key ($q->param())
-	{
-	    $val = $q->param($key);
-	    print STDOUT "&amp;$key=", &url_escape($val);
-	}
-	print STDOUT "\">Show\nYahoo! Calendar links</a>";
-    }
-    print STDOUT "</p>\n";
-
     print STDOUT
 "<div><small>
-<p>Your personal <a target=\"_top\" href=\"http://calendar.yahoo.com/\">Yahoo!
+<p>Your personal <a href=\"http://calendar.yahoo.com/\">Yahoo!
 Calendar</a> is a free web-based calendar that can synchronize with Palm
 Pilot, Outlook, etc.</p>
 <ul>
@@ -1251,7 +1210,7 @@ your Yahoo!  Calendar, do the following:
 <ol>
 <li>Click the \"Download as an Outlook CSV file\" link above.
 <li>Save the hebcal CSV file on your computer.
-<li>Go to <a target=\"_top\"
+<li>Go to <a
 href=\"http://calendar.yahoo.com/?v=81\">Import/Export page</a> of
 Yahoo! Calendar.
 <li>Find the \"Import from Outlook\" section and choose \"Import Now\"
@@ -1262,6 +1221,13 @@ the \"add\" links below.  These links will pop up a new browser window
 so you can keep this window open.
 </ul></small></div>
 " if $ycal;
+
+    my($goto) = "<p><b>" .
+	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
+	$date . "\n" .
+	"<a\nhref=\"$next_url\">&gt;&gt;</a></b></p>\n";
+
+    print STDOUT $goto;
 
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -1316,13 +1282,13 @@ so you can keep this window open.
 	    $sedra = $2;
 	    if (defined $sedrot{$sedra} && $sedrot{$sedra} !~ /^\s*$/)
 	    {
-		$descr = '<a target="_top" href="' . $sedrot{$sedra} .
+		$descr = '<a href="' . $sedrot{$sedra} .
 		    '">' . $parashat . $sedra . '</a>';
 	    }
 	    elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
 		   (defined $sedrot{$1} && $sedrot{$1} !~ /^\s*$/))
 	    {
-		$descr = '<a target="_top" href="' . $sedrot{$1} .
+		$descr = '<a href="' . $sedrot{$1} .
 		    '">' . $parashat . $sedra . '</a>';
 	    }
 	}
@@ -1333,12 +1299,46 @@ so you can keep this window open.
 	$dow, $year, $mon, $mday, $descr;
     }
 
-    print STDOUT "</pre>",
-	"Go to:\n",
-	"<a target=\"_top\"\nhref=\"$prev_url\">&lt;&lt; ",
-	$prev_title, "</a> |\n",
-	"<a target=\"_top\"\nhref=\"$next_url\">", $next_title,
-	" &gt;&gt;</a><br>\n";
+    print STDOUT "</pre>", $goto;
+
+    # download links
+    print STDOUT "<p>Advanced options:\n",
+    "[ <a href=\"", $script_name,
+    "index.html/$filename.csv?dl=1";
+    foreach $key ($q->param())
+    {
+	$val = $q->param($key);
+	print STDOUT "&amp;$key=", &url_escape($val);
+    }
+    print STDOUT "&amp;filename=$filename.csv";
+    print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
+
+    # only offer DBA export when we know timegm() will work
+    if ($q->param('year') > 1969 && $q->param('year') < 2038 &&
+	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
+    {
+	print STDOUT "\n- <a href=\"",
+	$script_name, "index.html/$filename.dba?dl=1";
+	foreach $key ($q->param())
+	{
+	    $val = $q->param($key);
+	    print STDOUT "&amp;$key=", &url_escape($val);
+	}
+	print STDOUT "&amp;filename=$filename.dba";
+	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
+    }
+
+    if ($ycal == 0)
+    {
+	print STDOUT "\n- <a href=\"", $script_name, "?y=1";
+	foreach $key ($q->param())
+	{
+	    $val = $q->param($key);
+	    print STDOUT "&amp;$key=", &url_escape($val);
+	}
+	print STDOUT "\">Show&nbsp;Yahoo!&nbsp;Calendar&nbsp;links</a>";
+    }
+    print STDOUT "\n]</p>\n";
 
     print STDOUT  $html_footer;
 
@@ -1573,8 +1573,10 @@ sub writePString {
 }
 
 sub dba_header {
+    local($filename) = @_;
+
     &writeInt($PALM_DBA_MAGIC);
-    &writePString($PALM_DBA_FILENAME);
+    &writePString($filename);
     &writeByte(0);
     &writeInt(8);
     &writeInt(0);
@@ -1617,8 +1619,6 @@ sub dba_contents {
 	# the best we can do with unknown TZ is assume GMT
 	$local2local = $secsEast;
     }
-
-    &dba_header();
 
     $numEntries = $PALM_DBA_MAXENTRIES if ($numEntries > $PALM_DBA_MAXENTRIES);
     &writeInt($numEntries*15);
