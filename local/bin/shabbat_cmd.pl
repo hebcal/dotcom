@@ -7,8 +7,8 @@ use strict;
 use DBI ();
 use Hebcal ();
 
-my $site = 'hebcal.com';
-my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
+my $site = "hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
 
 sub main() {
     my($op,$addr) = @ARGV;
@@ -28,7 +28,7 @@ sub unsubscribe($)
 {
     my($email) = @_;
 
-    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $sql = <<EOD
 SELECT email_status,email_id
@@ -48,13 +48,13 @@ EOD
 	return 0;
     }
 
-    if ($status eq 'unsubscribed') {
+    if ($status eq "unsubscribed") {
 	warn "unsub_twice";
 	$dbh->disconnect;
 	return 0;
     }
 
-    shabbat_log(1, 'unsub', $email);
+    shabbat_log(1, "unsub", $email);
 
     $sql = <<EOD
 UPDATE hebcal1.hebcal_shabbat_email
@@ -78,14 +78,14 @@ $site};
     my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
 
     my %headers =
-        (
-         'From' =>
+	(
+	 "From" =>
 	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
-         'To' => $email,
-         'MIME-Version' => '1.0',
-         'Content-Type' => 'text/plain',
-         'Subject' => 'You have been unsubscribed from hebcal',
-         );
+	 "To" => $email,
+	 "MIME-Version" => "1.0",
+	 "Content-Type" => "text/plain",
+	 "Subject" => "You have been unsubscribed from hebcal",
+	 );
 
     Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
