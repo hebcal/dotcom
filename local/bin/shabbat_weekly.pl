@@ -16,16 +16,16 @@ die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
 my $site = 'hebcal.com';
 
-my($now) = time;
+my $now = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
 
-my($friday) = Time::Local::timelocal(0,0,0,
-				     $mday,$mon,$year,$wday,$yday,$isdst);
-my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
-
-my($sat_year) = (localtime($saturday))[5] + 1900;
+my $friday = Time::Local::timelocal(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
+my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
+my $sat_year = (localtime($saturday))[5] + 1900;
+my $subject = strftime("[shabbat] %b %d Candle lighting",
+		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
 my $ZIPS = Hebcal::zipcode_open_db('/home/mradwin/web/hebcal.com/hebcal/zips99.db');
 
@@ -64,8 +64,6 @@ To unsubscribe from this list, send an email to:
 shabbat-unsubscribe\@$site
 };
 
-    my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
-
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
@@ -76,8 +74,7 @@ shabbat-unsubscribe\@$site
          'To' => $to,
          'MIME-Version' => '1.0',
          'Content-Type' => 'text/plain',
-         'Subject' =>
-	 strftime("[shabbat] %b %d Candle lighting", localtime($fri)),
+         'Subject' => $subject,
 	 'List-Unsubscribe' => "<$unsub_url>",
 	 'Precedence' => 'bulk',
          );
