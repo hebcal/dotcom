@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Wed Apr 28 12:06:17 PDT 1999
+Last modified: Thu May 13 17:55:49 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -300,6 +300,10 @@ if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
     $endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
 }
 
+local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+    (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
 print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
 if ($endl eq "\012")
 {
@@ -332,7 +336,10 @@ exit(0);
 sub form
 {
     local($message) = @_;
+    local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
+    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
@@ -566,6 +573,10 @@ sub download
     }
     $filename .= '.csv';
     
+    local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
     print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
@@ -752,6 +763,22 @@ sub city_select_html
 
     $retval .= "</select>\n";
     $retval;
+}
+
+sub http_date
+{
+    local($time) = @_;
+    local(@DoW,@MoY);
+    local($sec,$min,$hour,$mday,$mon,$year,$wday) =
+	gmtime($time);
+
+    @MoY = ('Jan','Feb','Mar','Apr','May','Jun',
+	    'Jul','Aug','Sep','Oct','Nov','Dec');
+    @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+    $year += 1900;
+
+    sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
+	    $DoW[$wday],$mday,$MoY[$mon],$year,$hour,$min,$sec);
 }
 
 if ($^W && 0)
