@@ -13,7 +13,7 @@ $dbmfile =~ s/\.db$//;
 if (!&ReadParse())
 {
     $candle =  $roshchodesh = $usa = 1;
-    &form('11565');
+    &form('11565', '');
 }
 
 $candle = ($in{'c'} eq 'on' || $in{'c'} eq '1') ? 1 : 0;
@@ -22,7 +22,7 @@ $usa = ($in{'dst'} eq 'usa') ? 1 : 0;
 $israel = ($in{'dst'} eq 'israel') ? 1 : 0;
 $none = ($in{'dst'} eq 'none') ? 1 : 0;
 
-&form('11565') if (!defined $in{'zip'});
+&form('11565', '') if (!defined $in{'zip'});
 
 &form($in{'zip'},
       "<em>Please specify a 5-digit Zip Code.</em><br><br>")
