@@ -38,8 +38,8 @@ my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
-my($h1_text) = "Email Subscription Manager (BETA)";
-my($nav_text) = "Subscription Manager";
+my($h1_text) = "1-Click Shabbat by Email (BETA)";
+my($nav_text) = "Email";
 
 my($cookies) = &Hebcal::get_cookies($q);
 if (! $q->param('v'))
@@ -152,7 +152,8 @@ hebcal.com};
     print STDOUT $q->header(),
     &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
 			undef, undef),
-    &Hebcal::navbar2($q, $nav_text),
+    &Hebcal::navbar2($q, $nav_text, 1,
+		     "1-Click\nShabbat", "/shabbat/"),
     "<h1>$h1_text</h1>\n",
     qq{<h2>Unsubscribed</h2>
 <p>You have been removed from the email subscription list.<br>
@@ -263,7 +264,8 @@ sub subscribe
     print STDOUT $q->header(),
     &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
 			undef, undef),
-    &Hebcal::navbar2($q, $nav_text),
+    &Hebcal::navbar2($q, $nav_text, 1,
+		     "1-Click\nShabbat", "/shabbat/"),
     "<h1>$h1_text</h1>\n";
 
     # check if email address already verified
@@ -360,7 +362,8 @@ sub form
 	print STDOUT $q->header(),
 	&Hebcal::start_html($q, 'Hebcal ' . $h1_text,
 			    undef, undef),
-	&Hebcal::navbar2($q, $nav_text),
+	&Hebcal::navbar2($q, $nav_text, 1,
+			 "1-Click\nShabbat", "/shabbat/"),
 	"<h1>$h1_text</h1>\n";
     }
 
