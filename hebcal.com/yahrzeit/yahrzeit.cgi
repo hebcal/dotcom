@@ -414,7 +414,7 @@ sub form
 	    ($cfg, qq{<hr noshade size=\"1\">\n});
 
 	&Hebcal::out_html($cfg,
-	qq{<p><a href="/help/#yahrzeit-tags">How\n},
+	qq{<p><a href="/help/link.html#yahrzeit-tags">How\n},
 	qq{can my synagogue link to the Yahrzeit, Birthday and Anniversary\n},
 	qq{Calendar from its own website?</a></p>});
 
