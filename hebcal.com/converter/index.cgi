@@ -42,13 +42,11 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
+use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use Time::Local;
-use Hebcal;
-use Unicode::String;
-use Date::Calc;
-use strict;
+use Hebcal ();
+use Date::Calc ();
 
 my(@hebrew_months) =
     ('Nisan', 'Iyyar', 'Sivan', 'Tamuz', 'Av', 'Elul', 'Tishrei',
