@@ -35,7 +35,6 @@ use Hebcal;
 use HTML::CalendarMonthSimple;
 use Palm::DBA;
 
-my($author) = 'webmaster@hebcal.com';
 my($expires_future) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 my($expires_date) = $expires_future;
 
@@ -378,11 +377,10 @@ JSCRIPT_END
 		       'Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude',
 
 		       'keywords' =>
-		       'hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff',
+		       'hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff',
 
 		       'DC.Title' => 'Hebcal Interactive Jewish Calendar',
 		       'DC.Creator.PersonalName' => 'Radwin, Michael',
-		       'DC.Creator.PersonalName.Address' => $author,
 		       'DC.Subject' => 'Jewish calendar, Hebrew calendar, hebcal',
 		       'DC.Type' => 'Text.Form',
 		       'DC.Language' => 'en',
