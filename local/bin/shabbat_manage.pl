@@ -13,8 +13,7 @@ use Mail::Internet;
 use Email::Valid;
 use MIME::Base64;
 
-#my $site = 'hebcal.com';
-my $site = 'hebrewcalendar.org';
+my $site = 'hebcal.com';
 my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
 
 my $err_notsub =
@@ -69,17 +68,17 @@ unless (defined $to) {
     exit(0);
 }
 
-if ($to =~ /shabbat-subscribe\@$site/) {
+if ($to =~ /shabbat-subscribe\@/) {
     shabbat_log(0, 'subscribe_useweb'); 
     error_email($from,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@$site/) {
+} elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@/) {
     shabbat_log(0, 'subscribe_useweb');
     error_email($from,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@$site/) {
+} elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@/) {
     subscribe($from,$1);
-} elsif ($to =~ /shabbat-unsubscribe\@$site/) {
+} elsif ($to =~ /shabbat-unsubscribe\@/) {
     unsubscribe($from);
 } else {
     shabbat_log(0, 'badto');
@@ -274,11 +273,12 @@ sub error_email
 
     return 0 unless $email;
 
+    my $addr = ($to ? $to : "shabbat-unsubscribe\@$site");
     while(chomp($error)) {}
     my($body) = qq{Sorry,
 
 We are unable to process the message from <$email>
-to <shabbat-unsubscribe\@$site>.
+to <$addr>.
 
 $error
 
