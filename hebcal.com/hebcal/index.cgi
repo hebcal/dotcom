@@ -852,9 +852,9 @@ so you can keep this window open.
 	{
 	    if (defined $torah_href && $torah_href ne '')
 	    {
-		$subj .= qq{ (<a href="$href">Drash</a>\n} .
+		$subj .= qq{ <span class="goto">(<a href="$href">Drash</a>\n} .
 		qq{- <a href="$torah_href">Torah</a>\n} .
-		qq{- <a href="$haftarah_href">Haftarah</a>)};
+		qq{- <a href="$haftarah_href">Haftarah</a>)</span>};
 	    }
 	    elsif ($href ne '')
 	    {
