@@ -64,7 +64,7 @@ my($evts,undef,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
 my $hebrew_year = '';
 if ($evts->[0]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Rosh Hashana (\d{4})$/)
 {
-    $hebrew_year = $1;
+    $hebrew_year = "<br>Hebrew Year $1";
 }
 
 my($title) = "Refrigerator Shabbos Times for $hebrew_year";
@@ -73,17 +73,15 @@ print "Cache-Control: private\015\012";
 print $q->header(),
     Hebcal::start_html($q, $title, [], undef, undef);
 
-print Hebcal::navbar2($q, "Shabbat Times $hebrew_year", 1, "1-Click Shabbat", "/shabbat/");
-
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
-		 qq{<h2>Candle Lighting Times for<br>\n$city_descr &nbsp;$evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR]</h2>\n});
+		 qq{<center><h3>Candle Lighting Times for<br>\n$city_descr &nbsp;$evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR]$hebrew_year</h3>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
 format_items($q,$evts);
+Hebcal::out_html($cfg,"</center>\n</body>\n</html>\n");
 
-form($cfg,0,'','');
 exit(0);
 
 sub format_items
@@ -192,9 +190,7 @@ sub process_args
 
 	if ($q->param('zip') !~ /^\d{5}$/)
 	{
-	    form($cfg,1,
-		  "Sorry, <b>" . $q->param('zip') . "</b> does\n" .
-		  "not appear to be a 5-digit zip code.");
+	    $q->param('zip', 90210);
 	}
 
 	my $DB = Hebcal::zipcode_open_db();
@@ -212,22 +208,16 @@ sub process_args
 	    Hebcal::zipcode_fields($val);
 
 	# allow CGI args to override
-	$tz = $q->param('tz')
-	    if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/);
-
-	$city_descr = "$city, $state";
-
-	if ($tz eq '?')
+	if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/)
 	{
-	    $q->param('tz_override', '1');
-
-	    form($cfg,1,
-		  "Sorry, can't auto-detect\n" .
-		  "timezone for <b>" . $city_descr . "</b>\n" .
-		  "<ul><li>Please select your time zone below.</li></ul>");
+	    $tz = $q->param('tz');
+	}
+	else
+	{
+	    $q->param('tz', $tz);
 	}
 
-	$q->param('tz', $tz);
+	$city_descr = "$city, $state";
 
 	# allow CGI args to override
 	if (defined $q->param('dst'))
@@ -284,90 +274,6 @@ sub process_args
     $cmd_pretty =~ s,.*/,,; # basename
 
     (\@events,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty);
-}
-
-sub form
-{
-    my($cfg,$head,$message,$help) = @_;
-
-    if ($head)
-    {
-	print "Cache-Control: private\015\012";
-	print $q->header(),
-	Hebcal::start_html($q, '1-Click Shabbat', undef, undef, undef);
-
-	print Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
-	"<h1>1-Click\nShabbat Candle Lighting Times</h1>\n";
-    }
-
-    Hebcal::out_html($cfg, qq{<div class="goto">\n});
-
-    if ($message ne '')
-    {
-	$help = '' unless defined $help;
-	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	    $message . "</font></p>" . $help;
-    }
-
-    Hebcal::out_html($cfg,
-	qq{$message\n},
-	qq{<hr noshade size="1"><h3><a name="change">Change City</a></h3>\n},
-	qq{<table cellpadding="8"><tr><td class="box">\n},
-	qq{<h4>Zip Code</h4>\n},
-	qq{<form name="f1" id="f1"\naction="$script_name">},
-	qq{<label for="zip">Zip code:\n},
-	$q->textfield(-name => 'zip',
-		      -id => 'zip',
-		      -size => 5,
-		      -maxlength => 5),
-	qq{</label>});
-
-    if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
-    {
-	Hebcal::out_html($cfg,
-	qq{&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
-	$q->popup_menu(-name => 'tz',
-		       -id => 'tz',
-		       -values => ['auto',-5,-6,-7,-8,-9,-10],
-		       -default => 'auto',
-		       -labels => \%Hebcal::tz_names),
-	qq{</label><br>Daylight Saving Time:\n},
-	$q->radio_group(-name => 'dst',
-			-values => ['usa','none'],
-			-default => 'usa',
-			-labels =>
-			{'usa' => "\nUSA (except AZ, HI, and IN) ",
-			 'none' => "\nnone ", }));
-    }
-    
-    Hebcal::out_html($cfg,
-	$q->hidden(-name => 'geo',
-		   -value => 'zip',
-		   -override => 1),
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
-
-
-    Hebcal::out_html($cfg,
-	qq{</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="box">\n},
-	qq{<h4>Major City</h4>},
-	qq{<form name="f2" id="f2"\naction="$script_name">},
-	qq{<label\nfor="city">Closest City:\n},
-	$q->popup_menu(-name => 'city',
-		       -id => 'city',
-		       -values => [sort keys %Hebcal::city_tz],
-		       -default => 'Jerusalem'),
-	qq{</label>},
-	$q->hidden(-name => 'geo',
-		   -value => 'city',
-		   -override => 1),
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
-	qq{</td></tr></table>});
-
-    Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
-
-    Hebcal::out_html($cfg, qq{</div>\n});
-
-    exit(0);
 }
 
 # local variables:
