@@ -1305,6 +1305,101 @@ sub dba_write_contents($$$)
 # for managing email shabbat list
 ########################################################################
 
+sub sendmail_v2
+{
+    my($return_path,$headers,$body) = @_;
+
+    use Email::Valid;
+    use Net::SMTP;
+    use Sys::Hostname;
+
+    if (! Email::Valid->address($return_path))
+    {
+	warn "Hebcal.pm: Return-Path $return_path is invalid";
+	return 0;
+    }
+
+    my($from) = $headers->{'From'};
+    if (!$from || ! Email::Valid->address($from))
+    {
+	warn "Hebcal.pm: From $from is invalid";
+	return 0;
+    }
+
+    my(%recipients);
+    foreach my $hdr ('To', 'Cc', 'Bcc')
+    {
+	if (defined $headers->{$hdr})
+	{
+	    foreach my $addr (split(/\s*,\s*/, $headers->{$hdr}))
+	    {
+		next unless $addr;
+		next unless Email::Valid->address($addr);
+		$recipients{Email::Valid->address($addr)} = 1;
+	    }
+	}
+    }
+
+    if (! keys %recipients)
+    {
+	warn "Hebcal.pm: no recipients!";
+	return 0;
+    }
+
+    my($smtp) = Net::SMTP->new('localhost', Timeout => 20);
+    unless ($smtp) {
+        return 0;
+    }
+
+    my $message = '';
+    while (my($key,$val) = each %{$headers})
+    {
+	next if lc($key) eq 'bcc';
+	$message .= "$key: $val\n";
+    }
+
+    if (! defined $headers->{'X-Sender'})
+    {
+	my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
+	my($hostname) = hostname();
+	$message .= "X-Sender: $login\@$hostname\n";
+    }
+
+    $message .= "\n" . $body;
+
+    my @recip = keys %recipients;
+
+    unless ($smtp->mail($return_path)) {
+        warn "smtp mail() failure for @recip\n";
+        return 0;
+    }
+    foreach (@recip) {
+	next unless $_;
+        unless($smtp->to($_)) {
+            warn "smtp to() failure for $_\n";
+            return 0;
+        }
+    }
+    unless($smtp->data()) {
+        warn "smtp data() failure for @recip\n";
+        return 0;
+    }
+    unless($smtp->datasend($message)) {
+        warn "smtp datasend() failure for @recip\n";
+        return 0;
+    }
+    unless($smtp->dataend()) {
+        warn "smtp dataend() failure for @recip\n";
+        return 0;
+    }
+    unless($smtp->quit) {
+        warn "smtp quit failure for @recip\n";
+        return 0;
+    }
+
+    1;
+}
+
 sub sendmail
 {
     my($return_path,$from_addr,$from_name,
