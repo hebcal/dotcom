@@ -223,6 +223,7 @@ while (my($key,$val) = each %Hebcal::cities)
   # variable holidays
   "Ta'anis Esther"		=>	"Ta'anit Esther",
   "Purim Koson"			=>	"Purim Katan",
+  "Purim Koton"			=>	"Purim Katan",
   "Ta'anis Bechoros"		=>	"Ta'anit Bechorot",
 
   # special shabbatot
@@ -356,6 +357,7 @@ sub parse_date_descr($$)
 	$untimed = 1;
 	$subj = $descr;
 	$subj =~ s/Channukah/Chanukah/; # make spelling consistent
+	$subj =~ s/Purim Koson/Purim Koton/;
     }
 
     my($yomtov) = 0;
