@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan  8 09:41:46 PST 2001
+Last modified: Fri Jan 12 09:04:10 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -740,7 +740,9 @@ JSCRIPT_END
 		 -label => "\nSave my preferences in a cookie"),
     "</label><small>(<a\n",
     "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
-    "a cookie?</a>)</small>",
+    "a cookie?</a> - <a\n",
+    "href=\"/hebcal/del_cookie?", time(), "\">Delete\n",
+    "my cookie</a>)</small>",
     "</p>\n",
     $q->submit(-name => '.s',-value => 'Get Calendar'),
     $q->hidden(-name => '.cgifields',
