@@ -38,7 +38,7 @@ my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
-my($h1_text) = "1-Click Shabbat by Email (BETA)";
+my($h1_text) = "1-Click Shabbat by Email";
 my($nav_text) = "Email";
 
 my($cookies) = &Hebcal::get_cookies($q);
