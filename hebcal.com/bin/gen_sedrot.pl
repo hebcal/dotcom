@@ -61,14 +61,28 @@ href="/search/">Search</a></small>
 EOHTML
 ;
 
-my(%out);
+my(%prev,%next,$h2);
 foreach my $h ($sedrot->Sections())
 {
-    &write_sedra_page($h);
+    next if $h =~ /^Combined /;
+    $prev{$h} = $h2;
+    $h2 = $h;
+}
+
+$h2 = undef;
+foreach my $h (reverse $sedrot->Sections())
+{
+    next if $h =~ /^Combined /;
+    $next{$h} = $h2;
+    $h2 = $h;
+}
+
+foreach my $h ($sedrot->Sections())
+{
+    &write_sedra_page($h,$prev{$h},$next{$h});
 
     $h =~ s/^Combined //;
-    my($anchor) = $h;
-    $anchor = lc($anchor);
+    my($anchor) = lc($h);
     $anchor =~ s/[^\w]//g;
 
     print OUT qq{<dt><a name="$anchor" href="$anchor.html">Parashat\n$h</a>\n};
@@ -94,7 +108,7 @@ close(OUT);
 exit(0);
 
 sub write_sedra_page {
-    my($h) = @_;
+    my($h,$prev,$next) = @_;
 
     my($sedrot_h) = $h;
     $h =~ s/^Combined //;
@@ -113,9 +127,24 @@ sub write_sedra_page {
     my($seph) = ($haftarah_seph eq $haftarah) ? '' :
 	"<br>Haftarah for Sephardim: $haftarah_seph";
 
-    my($anchor) = $h;
-    $anchor = lc($anchor);
+    my($anchor) = lc($h);
     $anchor =~ s/[^\w]//g;
+
+    my($prev_link) = '';
+    if ($prev)
+    {
+	$prev_link = lc($prev);
+	$prev_link =~ s/[^\w]//g;
+	$prev_link = qq{<a href="$prev_link.html">&lt;&lt; $prev</a>};
+    }
+
+    my($next_link) = '';
+    if ($next)
+    {
+	$next_link = lc($next);
+	$next_link =~ s/[^\w]//g;
+	$next_link = qq{<a href="$next_link.html">$next &gt;&gt;</a>};
+    }
 
     open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
 
@@ -166,7 +195,17 @@ EOHTML
 <h3><a name="haftarah">Haftarah:</a>
 <a href="$haftarah_href">$haftarah</a>$seph</h3>
 <h3><a name="drash" href="$drash_href">Commentary</a></h3>
-
+<p>
+<table width="100%">
+<tr>
+<td align="left">
+$prev_link
+</td>
+<td align="right">
+$next_link
+</td>
+</tr>
+</table>
 <p>
 <hr noshade size="1">
 <font size=-2 face=Arial>Copyright
