@@ -1,9 +1,12 @@
 # requires Apache 1.3.x
 #CheckSpelling On
-IndexOptions +SuppressHTMLPreamble +NameWidth=*
+IndexOptions +SuppressHTMLPreamble +NameWidth=* +IconWidth=20 +IconHeight=22
 HeaderName HEADER.html
 ReadmeName README.html
 #ServerName www.hebcal.com
+
+AddIcon /icons/p.gif .pm
+AddIcon /icons/generic.gif .ini
 
 # apache 1.2.x and above
 AddType application/x-javascript js
