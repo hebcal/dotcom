@@ -49,17 +49,17 @@ use Hebcal;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
-my($usage) = "usage: $0 [-h] festival.xml festival.csv output-dir
+my($usage) = "usage: $0 [-h] festival.xml output-dir
     -h        Display usage information.
+    -f f.csv  Dump full kriyah readings to comma separated values
 ";
 
 my(%opts);
-getopts('h', \%opts) || die "$usage\n";
+getopts('hf:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
-(@ARGV == 3) || die "$usage";
+(@ARGV == 2) || die "$usage";
 
 my($festival_in) = shift;
-my($outfile) = shift;
 my($outdir) = shift;
 
 if (! -d $outdir) {
@@ -67,7 +67,11 @@ if (! -d $outdir) {
 }
 
 my $fxml = XMLin($festival_in);
-open(CSV, ">$outfile") || die "$outfile: $!\n";
+
+if ($opts{'f'}) {
+    open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
+    print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
+}
 
 my $html_footer = html_footer($festival_in);
 
@@ -76,6 +80,8 @@ foreach my $f (sort keys %{$fxml->{'festival'}})
     if ($f !~ /\(on Shabbat\)$/) {
 	write_festival_page($fxml,$f);
     }
+
+    next unless $opts{'f'};
 
     print CSV "$f\n";
 
