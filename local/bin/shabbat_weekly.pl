@@ -24,7 +24,7 @@ $year += 1900;
 my $friday = Time::Local::timelocal(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
 my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 my $sat_year = (localtime($saturday))[5] + 1900;
-my $subject = strftime("[shabbat] %b %d Candle lighting",
+my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
 my $ZIPS = Hebcal::zipcode_open_db('/home/mradwin/web/hebcal.com/hebcal/zips99.db');
@@ -44,7 +44,8 @@ while (my($to,$cfg) = each(%SUBS))
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = parse_config($cfg);
-    my(@events) = Hebcal::invoke_hebcal($cmd,$loc,undef);
+    print "$cmd\n";
+    my(@events) = Hebcal::invoke_hebcal($cmd,'',undef);
 
     my $encoded = encode_base64($to);
     chomp($encoded);
@@ -67,13 +68,15 @@ shabbat-unsubscribe\@$site
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
 
+    my $lighting = get_friday_candles(\@events);
+
     my %headers =
         (
          'From' => "Hebcal <shabbat-owner\@$site>",
          'To' => $to,
          'MIME-Version' => '1.0',
          'Content-Type' => 'text/plain',
-         'Subject' => $subject,
+         'Subject' => "$subject Candles $lighting",
 	 'List-Unsubscribe' => "<$unsub_url>",
 	 'Precedence' => 'bulk',
          );
@@ -105,6 +108,34 @@ sub my_url_escape
     $str =~ s/ /+/g;
 
     $str;
+}
+
+sub get_friday_candles
+{
+    my($events) = @_;
+    my($numEntries) = scalar(@{$events});
+    my($i);
+    for ($i = 0; $i < $numEntries; $i++)
+    {
+	my($time) = Time::Local::timelocal(1,0,0,
+		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
+		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+		       '','','');
+	next if $time < $friday || $time > $saturday;
+
+	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	if ($subj eq 'Candle lighting')
+	{
+	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    $hour -= 12 if $hour > 12;
+
+	    return sprintf("%d:%02dpm\n", $hour, $min);
+	}
+    }
+
+    return undef;
 }
 
 sub gen_body
