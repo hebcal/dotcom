@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Thu Jul  8 11:57:54 PDT 1999
+Last modified: Thu Jul  8 12:08:05 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -389,7 +389,11 @@ interested in 93, but rather 1993.
 </small>
 <br><br>
 
-<input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}><label for=\"c\">
+<input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}";
+
+print STDOUT " disabled" if (defined $in{'geo'} && $in{'geo'} eq 'city');
+
+print STDOUT "><label for=\"c\">
 Include candle lighting times</label><br>
 
 <blockquote>
