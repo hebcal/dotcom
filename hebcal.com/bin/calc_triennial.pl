@@ -184,7 +184,6 @@ if ($opts{'t'})
 my(%parsha_dates);
 my(%parsha_stime2);
 my(%parsha_time);
-my(%parsha_time_prev);
 my($saturday) = get_saturday();
 readings_for_current_year($axml, \%parsha_dates, \%parsha_time);
 
@@ -1080,14 +1079,8 @@ sub get_parsha_info
 	}
     }
 
-    my $drash4t = (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) ?
-	$parsha_time{$h} : $parsha_time_prev{$h};
+    # urj site still broken. :-(
     my $drash4 = '';
-    if ($drash4t)
-    {
-	$drash4 = "http://urj.org/torah/issue/" .
-	    strftime("%y%m%d", localtime($drash4t)) . ".shtml";
-    }
 
     ($hebrew,$torah,$haftarah,$haftarah_seph,
      $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3,$drash_uj);
@@ -1217,14 +1210,6 @@ sub readings_for_current_year
 	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 	     '','','')
 		if $yr == 1;	# second year in array
-
-	$parsha_time_prev{$h} = Time::Local::timelocal
-	    (1,0,0,
-	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-	     $events[$i]->[$Hebcal::EVT_IDX_MON],
-	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-	     '','','')
-		if $yr == 0;	# second year in array
 
 	next unless $opts{'f'};
 
