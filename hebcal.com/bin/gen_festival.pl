@@ -501,22 +501,23 @@ EOHTML
     }
 
     print OUT2 qq{
+<h3><a name="ref">References</a></h3>
 <dl>
-<dt><a name="ref">References</a>
-<dd><em><a
+<dt><em><a
 href="$strassfeld_link">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
-by Rabbi Michael Strassfeld
-<dd><em><a
+<dd>Rabbi Michael Strassfeld
+<dt><em><a
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
 href="http://www.amazon.com/exec/obidos/ASIN/0827602529/hebcal-20">Tanakh:
-The Holy Scriptures</a></em> by Jewish Publication Society
+The Holy Scriptures</a></em>
+<dd>Jewish Publication Society
 };
 
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
-	print OUT2 qq{<dd><em><a
-href="http://www.bible.ort.org/">Navigating the Bible II</a></em>,
-World ORT
+	print OUT2 qq{<dt><em><a
+href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
+<dd>World ORT
 };
     }
 
@@ -526,6 +527,7 @@ World ORT
     {
 	print OUT2 <<EOHTML;
 <p>
+<hr noshade size="1"><p>
 <table width="100%">
 <tr>
 <td align="left" width="50%">
