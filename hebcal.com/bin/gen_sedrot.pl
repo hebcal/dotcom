@@ -228,7 +228,8 @@ EOHTML
 	    my $p = $1;
 	    $aliyah_range .= qq{\n<font size="-2" face="Arial">($p p'sukim)</font>};
 	}
-	print OUT2 qq{<dt>$label:<dd>$aliyah_range\n};
+	print OUT2 qq{<dt><a name="aliyah-$label">$label:</a>\n}, 
+		qq{<dd>$aliyah_range\n};
     }
 
     print OUT2 <<EOHTML;
