@@ -64,14 +64,20 @@ my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 my($items) = format_items($q,$evts);
 
+my $cache = Hebcal::cache_begin($q);
+
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
     display_wml($items) if ($cfg eq 'w');
     display_rss($items) if ($cfg eq 'r');
     display_javascript($items) if ($cfg eq 'j' || $cfg eq 'i');
 }
+else
+{
+    display_html($items);
+}
 
-display_html($items);
+Hebcal::cache_end();
 exit(0);
 
 sub format_items
@@ -468,39 +474,39 @@ sub display_wml
 	
     print "Content-Type: text/vnd.wap.wml\015\012\015\012";
 
-    print qq{<?xml version="1.0"?>
+    Hebcal::out_html($cfg,
+qq{<?xml version="1.0"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
 "http://www.wapforum.org/DTD/wml_1.1.xml">
 <wml>
 <card id="shabbat2" title="$title">
 <!-- $cmd_pretty -->
 <p><b>$city_descr</b></p>
-};
+});
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
 	my $subj = $items->[$i]->{'subj'};
 	$subj =~ s/^Candle lighting/Candles/;
 
-	print "<p>$subj";
+	Hebcal::out_html($cfg, "<p>$subj");
 
 	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
 	{
 	    my $pm = $items->[$i]->{'time'};
 	    $pm =~ s/pm$/p/;
-	    print ": $pm";
+	    Hebcal::out_html($cfg, ": $pm");
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
-	    print "<br/>\n", $items->[$i]->{'date'};
+	    Hebcal::out_html($cfg, "<br/>\n", $items->[$i]->{'date'});
 	}
 
-	print "</p>\n";
+	Hebcal::out_html($cfg, "</p>\n");
     }
 
-    print "</card>\n</wml>\n";
-
-    exit(0);
+    Hebcal::out_html($cfg, "</card>\n</wml>\n");
+    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
 }
 
 
@@ -518,7 +524,8 @@ sub display_rss
     my($this_year) = (localtime)[5];
     $this_year += 1900;
 
-    print qq{<?xml version="1.0" encoding="UTF-8"?>
+    Hebcal::out_html($cfg,
+qq{<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
 <channel>
 <title>$title</title>
@@ -528,7 +535,7 @@ sub display_rss
 <dc:rights>Copyright &#169; $this_year Michael J. Radwin. All rights reserved.</dc:rights>
 <dc:date>$dc_date</dc:date>
 <!-- $cmd_pretty -->
-};
+});
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
@@ -536,19 +543,19 @@ sub display_rss
 	if (defined $items->[$i]->{'time'}) { 
 	    $subj .= ": " . $items->[$i]->{'time'};
 	}
-	print qq{<item>
+	Hebcal::out_html($cfg, 
+qq{<item>
 <title>$subj</title>
 <link>$items->[$i]->{'link'}</link>
 <description>$items->[$i]->{'date'}</description>
 <dc:subject>$items->[$i]->{'class'}</dc:subject>
 <dc:date>$items->[$i]->{'dc:date'}</dc:date> 
 </item>
-};
+});
     }
 
-    print "</channel>\n</rss>\n";
-
-    exit(0);
+    Hebcal::out_html($cfg, "</channel>\n</rss>\n");
+    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
 }
 
 sub display_html_common
@@ -604,8 +611,9 @@ sub display_javascript
     my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
 
     if ($cfg eq 'i') {
-	print $q->header(),
-	Hebcal::start_html($q, $title, undef, undef, undef);
+	print $q->header();
+	Hebcal::out_html
+	    ($cfg, Hebcal::start_html($q, $title, undef, undef, undef));
     } else {
 	print "Content-Type: application/x-javascript\015\012\015\012";
     }
@@ -643,7 +651,7 @@ Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 	Hebcal::out_html($cfg, "</body></html>\n");
     }
 
-    exit(0);
+    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
 }
 
 sub display_html
@@ -653,25 +661,28 @@ sub display_html
     my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
     my $rss_href = self_url() . ";cfg=r";
 
-    print $q->header(),
+    print $q->header();
+    Hebcal::out_html($cfg,
     Hebcal::start_html($q, $title,
 			[
 			 qq{<link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">},
 			 ],
-			undef, undef);
+			undef, undef));
 
-    print Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
+    Hebcal::out_html($cfg,
+    Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
     qq{<h1><a href="$rss_href"><img\nsrc="/i/xml.gif" border="0" alt="View the raw XML source" align="right" width="36" height="14"></a>\n},
-    "1-Click\nShabbat Candle Lighting Times</h1>\n";
+    "1-Click\nShabbat Candle Lighting Times</h1>\n");
 
-    print "<h3>$city_descr</h3>\n";
+    Hebcal::out_html($cfg, "<h3>$city_descr</h3>\n");
 
     if (defined $dst_descr && defined $tz_descr)
     {
-	print "&nbsp;&nbsp;$tz_descr\n<br>&nbsp;&nbsp;$dst_descr\n";
+	Hebcal::out_html
+	    ($cfg, "&nbsp;&nbsp;$tz_descr\n<br>&nbsp;&nbsp;$dst_descr\n");
     }
 
-    print $Hebcal::indiana_warning
+    Hebcal::out_html($cfg, $Hebcal::indiana_warning)
 	if ($city_descr =~ / IN /);
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
@@ -749,8 +760,6 @@ sub display_html
 		      "web site</p>\n");
  
     form($cfg,0,'','');
-
-    exit(0);
 }
 
 sub form($$$$)
@@ -759,11 +768,13 @@ sub form($$$$)
 
     if ($head)
     {
-	print $q->header(),
-	Hebcal::start_html($q, '1-Click Shabbat', undef, undef, undef);
+	print $q->header();
+	Hebcal::out_html($cfg,
+	Hebcal::start_html($q, '1-Click Shabbat', undef, undef, undef));
 
-	print Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
-	"<h1>1-Click\nShabbat Candle Lighting Times</h1>\n";
+	Hebcal::out_html($cfg,
+	Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
+	"<h1>1-Click\nShabbat Candle Lighting Times</h1>\n");
     }
 
     if (defined $cfg && $cfg eq 'w')
@@ -771,6 +782,7 @@ sub form($$$$)
 	Hebcal::out_html($cfg,qq{<p>$message</p>\n},
 		  qq{<do type="accept" label="Back">\n},
 		  qq{<prev/>\n</do>\n</card>\n</wml>\n});
+	Hebcal::cache_end() if $cache;
 	exit(0);
     }
 
@@ -850,7 +862,8 @@ sub form($$$$)
 	qq{</td></tr></table>});
 
     Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
-
+    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
+    Hebcal::cache_end() if $cache;
     exit(0);
 }
 
