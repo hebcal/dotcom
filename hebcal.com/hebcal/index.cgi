@@ -882,9 +882,15 @@ sub results_page()
 	    &self_url($q, {'vis' => 'on'}) . "\">calendar\ngrid</a> ]";
     }
 
+    if ($q->param('yt') && $q->param('yt') eq 'H')
+    {
+	$goto .= "\n";
+    }
+    else
+    {
     $goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
 
-    if ($date !~ /^\d+$/ && $date !~ /^Hebrew Year \d+$/)
+    if ($date !~ /^\d+$/)
     {
 	$goto .= "<b>month</b> | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
@@ -894,6 +900,7 @@ sub results_page()
     {
 	$goto .= "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
 	    "\">month</a> |\n<b>entire year</b> ]";
+    }
     }
 
     $goto .= "</small>\n";
