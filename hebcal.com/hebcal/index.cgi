@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 11:29:12 PDT 1999
+Last modified: Tue Jul 13 09:04:34 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -215,11 +215,11 @@ elsif (defined $in{'zip'})
     $in{'dst'} = 'usa' unless defined $in{'dst'};
 
     &form("<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
-	  "Zip Code.</font></em></p>")
+	  "zip code.</font></em></p>")
 	if $in{'zip'} =~ /^\s*$/;
 
     &form("<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does\n" .
-	  "not appear to be a 5-digit Zip Code.</font></em></p>")
+	  "not appear to be a 5-digit zip code.</font></em></p>")
 	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
     dbmopen(%DB,$dbmfile, 0400) ||
@@ -232,7 +232,10 @@ elsif (defined $in{'zip'})
     dbmclose(%DB);
 
     &form("<p><em><font color=\"#ff0000\">Sorry, can't find\n".
-	  "<b>$in{'zip'}</b> in the Zip Code database.</font></em></p>")
+	  "<b>$in{'zip'}</b> in the zip code database.</font></em><br>\n" .
+          "Please try a nearby zip code or select candle lighting times by\n" .
+          "<a href=\"${cgipath}?geo=city\">city</a> or\n" .
+          "<a href=\"${cgipath}?geo=pos\">latitude/longitude</a></p>")
 	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
@@ -410,8 +413,8 @@ Include candle lighting times</label><br>
 ";
 	print STDOUT &city_select_html();
 	print STDOUT "
-&nbsp;&nbsp;(or select by <a href=\"$cgipath\">Zip</a> or
-<a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
+&nbsp;&nbsp;(or select by <a href=\"$cgipath\">zip</a> or
+<a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <br>
 ";
     }
@@ -456,8 +459,8 @@ print STDOUT "<option value=\"e\"",
 print STDOUT "</select></nobr><br>
 </td>
 <td>
-(or select by <a href=\"$cgipath\">Zip</a> or
-<a href=\"${cgipath}?geo=city\">City</a>)
+(or select by <a href=\"$cgipath\">zip</a> or
+<a href=\"${cgipath}?geo=city\">city</a>)
 </td></tr>
 </table>
 ";
@@ -465,10 +468,10 @@ print STDOUT "</select></nobr><br>
     else
     {
 	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
-<label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
+<label for=\"zip\">5-digit zip code: </label><input type=\"text\" name=\"zip\"
 id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\">
-&nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">City</a>
-or <a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
+&nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">city</a>
+or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <br>
 ";
     }
