@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Sep 28 15:19:43 PDT 2000
+Last modified: Mon Oct 30 09:33:52 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -480,7 +480,7 @@ JSCRIPT_END
 		   ),
     "<table width=\"100%\"\nclass=\"navbar\">",
     "<tr><td><small>",
-    "<strong><a\nhref=\"/\">$server_name</a></strong>\n<tt>-&gt;</tt>\n",
+    "<strong><a\nhref=\"http://www.hebrewcalendar.org\">hebrewcalendar.org</a></strong>\n<tt>-&gt;</tt>\n",
     "hebcal</small></td>",
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
@@ -896,7 +896,7 @@ sub results_page
     print STDOUT
 	"<table width=\"100%\"\nclass=\"navbar\">",
 	"<tr><td><small>",
-	"<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
+	"<strong><a\nhref=\"http://www.hebrewcalendar.org\">hebrewcalendar.org</a></strong>\n",
 	"<tt>-&gt;</tt>\n",
 	"<a href=\"", $script_name, "?v=0";
 
