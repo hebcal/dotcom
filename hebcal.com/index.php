@@ -23,7 +23,6 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
-<span class="fpgreeting">Happy Chanukah!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" -->
@@ -78,9 +77,6 @@ style="padding-left: 10px; padding-right: 5px">
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br>
 <!-- Begin temp holiday2 -->
-<br><span class="sm-grey">&gt;</span>&nbsp;<b><a
-href="/holidays/chanukah.html?tag=fp.tmp">Chanukah</a></b><br>07
-December 2004<br>(at sunset)<br>
 <!-- End temp holiday2 -->
 <br><span class="sm-grey">&gt;</span>&nbsp;<b>Major&nbsp;Holidays</b><br>for
 <a href="/hebcal/?v=1;year=2005;month=x;nh=on;tag=fp.ql">2005</a> |
