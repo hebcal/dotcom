@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2004  Michael J. Radwin.
+# Copyright (c) 2005  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -68,6 +68,8 @@ if ($VERSION =~ /(\d+)\.(\d+)/) {
     $VERSION = "$1.$2";
 }
 
+my $HOSTNAME;
+
 $Hebcal::gregorian_warning = "<p><span style=\"color: red\">WARNING:
 Results for year 1752 C.E. and before may not be accurate.</span>
 Hebcal does not take into account a correction of ten days that
@@ -81,7 +83,6 @@ Indiana has confusing time zone &amp; Daylight Saving Time
 rules.</span><br>Please check <a
 href=\"http://www.mccsc.edu/time.html#WHAT\">What time is it in
 Indiana?</a> to make sure the above settings are correct.</p>";
-
 
 # boolean options
 @Hebcal::opts = ('c','o','s','i','a','d','D');
@@ -1811,13 +1812,15 @@ sub sendmail_v2($$$)
 	$message .= "$key: $val\n";
     }
 
-    my $hostname = `/bin/hostname -f`;
-    chomp($hostname);
+    if (!$HOSTNAME) {
+	$HOSTNAME = `/bin/hostname -f`;
+	chomp($HOSTNAME);
+    }
 
     if (! defined $headers->{'X-Sender'})
     {
 	my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
-	$message .= "X-Sender: $login\@$hostname\n";
+	$message .= "X-Sender: $login\@$HOSTNAME\n";
     }
 
     if (! defined $headers->{'X-Mailer'})
@@ -1827,7 +1830,8 @@ sub sendmail_v2($$$)
 
     if (! defined $headers->{'Message-ID'})
     {
-	$message .= "Message-ID: <HEBCAL.$VERSION." . time() . ".$$\@$hostname>\n";
+	$message .= "Message-ID: <HEBCAL.$VERSION." . time() .
+	    ".$$\@$HOSTNAME>\n";
     }
 
     $message .= "\n" . $body;
