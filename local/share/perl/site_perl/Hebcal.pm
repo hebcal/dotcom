@@ -196,64 +196,68 @@ $PALM_DBA_MAXENTRIES = 2500;
      'Washington DC'	=>	-5,
      );
 
-%holiday_anchors = (
-    "Asara B'Tevet"		=> "tevet",
-    "Channukah"			=> "chanukah",
-    "Channukah: 8th Day"	=> "chanukah",
-    "Chanukah"			=> "chanukah",
-    "Erev Pesach"		=> "pesach",
-    "Erev Rosh Hashana"		=> "rosh",
-    "Erev Shavuos"		=> "shavuot",
-    "Erev Shavuot"		=> "shavuot",
-    "Erev Sukkos"		=> "sukkot",
-    "Erev Sukkot"		=> "sukkot",
-    "Erev Yom Kippur"		=> "yomkippur",
-    "Lag B'Omer"		=> "lagbaomer",
-    "Pesach"			=> "pesach",
-    "Purim Katan"		=> "katan",
-    "Purim Koson"		=> "katan",
-    "Purim"			=> "purim",
-    "Rosh Hashana"		=> "rosh",
-    "Shabbas HaChodesh"		=> "hachodesh",
-    "Shabbas HaGadol"		=> "hagadol",
-    "Shabbas Hazon"		=> "hazon",
-    "Shabbas Nachamu"		=> "nachamu",
-    "Shabbas Parah"		=> "parah",
-    "Shabbas Shekalim"		=> "shekalim",
-    "Shabbas Shuvah"		=> "shuva",
-    "Shabbas Zachor"		=> "zachor",
-    "Shabbat HaChodesh"		=> "hachodesh",
-    "Shabbat HaGadol"		=> "hagadol",
-    "Shabbat Hazon"		=> "hazon",
-    "Shabbat Nachamu"		=> "nachamu",
-    "Shabbat Parah"		=> "parah",
-    "Shabbat Shekalim"		=> "shekalim",
-    "Shabbat Shuva"		=> "shuva",
-    "Shabbat Zachor"		=> "zachor",
-    "Shavuos"			=> "shavuot",
-    "Shavuot"			=> "shavuot",
-    "Shmini Atzeres"		=> "shmini",
-    "Shmini Atzeret"		=> "shmini",
-    "Shushan Purim"		=> "shushan",
-    "Simchas Torah"		=> "simchatorah",
-    "Simchat Torah"		=> "simchatorah",
-    "Sukkos"			=> "sukkot",
-    "Sukkos VII (Hoshana Raba)"	=> "sukkot",
-    "Sukkot"			=> "sukkot",
-    "Sukkot VII (Hoshana Raba)"	=> "sukkot",
-    "Ta'anis Bechoros"		=> "bechorot",
-    "Ta'anis Esther"		=> "esther",
-    "Ta'anit Bechorot"		=> "bechorot",
-    "Ta'anit Esther"		=> "esther",
-    "Tish'a B'Av"		=> "9av",
-    "Tu B'Shvat"		=> "tubshvat",
-    "Tzom Gedaliah"		=> "gedaliah",
-    "Tzom Tammuz"		=> "tammuz",
-    "Yom HaAtzma'ut"		=> "haatzmaut",
-    "Yom HaShoah"		=> "hashoah",
-    "Yom HaZikaron"		=> "hazikaron",
-    "Yom Kippur"		=> "yomkippur",
-    "Yom Yerushalayim"		=> "yerushalayim",
+$HOLIDAY_IDX_ANCHOR = 0;	# index of html anchor
+$HOLIDAY_IDX_YOMTOV = 1;	# is holiday yom tov
+
+%holidays = (
+    "Asara B'Tevet"		=> ["tevet",		0],
+    "Channukah"			=> ["chanukah",		0],
+    "Channukah: 8th Day"	=> ["chanukah",		0],
+    "Chanukah: 8th Day"		=> ["chanukah",		0],
+    "Chanukah"			=> ["chanukah",		0],
+    "Erev Pesach"		=> ["pesach",		0],
+    "Erev Rosh Hashana"		=> ["rosh",		0],
+    "Erev Shavuos"		=> ["shavuot",		0],
+    "Erev Shavuot"		=> ["shavuot",		0],
+    "Erev Sukkos"		=> ["sukkot",		0],
+    "Erev Sukkot"		=> ["sukkot",		0],
+    "Erev Yom Kippur"		=> ["yomkippur",	0],
+    "Lag B'Omer"		=> ["lagbaomer",	0],
+    "Pesach"			=> ["pesach",		1],
+    "Purim Katan"		=> ["katan",		0],
+    "Purim Koson"		=> ["katan",		0],
+    "Purim"			=> ["purim",		0],
+    "Rosh Hashana"		=> ["rosh",		1],
+    "Shabbas HaChodesh"		=> ["hachodesh",	1],
+    "Shabbas HaGadol"		=> ["hagadol",		1],
+    "Shabbas Hazon"		=> ["hazon",		1],
+    "Shabbas Nachamu"		=> ["nachamu",		1],
+    "Shabbas Parah"		=> ["parah",		1],
+    "Shabbas Shekalim"		=> ["shekalim",		1],
+    "Shabbas Shuvah"		=> ["shuva",		1],
+    "Shabbas Zachor"		=> ["zachor",		1],
+    "Shabbat HaChodesh"		=> ["hachodesh",	1],
+    "Shabbat HaGadol"		=> ["hagadol",		1],
+    "Shabbat Hazon"		=> ["hazon",		1],
+    "Shabbat Nachamu"		=> ["nachamu",		1],
+    "Shabbat Parah"		=> ["parah",		1],
+    "Shabbat Shekalim"		=> ["shekalim",		1],
+    "Shabbat Shuva"		=> ["shuva",		1],
+    "Shabbat Zachor"		=> ["zachor",		1],
+    "Shavuos"			=> ["shavuot",		1],
+    "Shavuot"			=> ["shavuot",		1],
+    "Shmini Atzeres"		=> ["shmini",		1],
+    "Shmini Atzeret"		=> ["shmini",		1],
+    "Shushan Purim"		=> ["shushan",		0],
+    "Simchas Torah"		=> ["simchatorah",	1],
+    "Simchat Torah"		=> ["simchatorah",	1],
+    "Sukkos"			=> ["sukkot",		1],
+    "Sukkos VII (Hoshana Raba)"	=> ["sukkot",		1],
+    "Sukkot"			=> ["sukkot",		1],
+    "Sukkot VII (Hoshana Raba)"	=> ["sukkot",		1],
+    "Ta'anis Bechoros"		=> ["bechorot",		0],
+    "Ta'anis Esther"		=> ["esther",		0],
+    "Ta'anit Bechorot"		=> ["bechorot",		0],
+    "Ta'anit Esther"		=> ["esther",		0],
+    "Tish'a B'Av"		=> ["9av",		0],
+    "Tu B'Shvat"		=> ["tubshvat",		0],
+    "Tzom Gedaliah"		=> ["gedaliah",		0],
+    "Tzom Tammuz"		=> ["tammuz",		0],
+    "Yom HaAtzma'ut"		=> ["haatzmaut",	0],
+    "Yom HaShoah"		=> ["hashoah",		0],
+    "Yom HaZikaron"		=> ["hazikaron",	0],
+    "Yom Kippur"		=> ["yomkippur",	1],
+    "Yom Yerushalayim"		=> ["yerushalayim",	0],
 		    );
 
 # this doesn't work for weeks that have double parashiot
@@ -367,6 +371,20 @@ $PALM_DBA_MAXENTRIES = 2500;
      '-4'   => 'GMT -04:00',
      );
 
+# @events is an array of arrays.  these are the indices into each
+# event structure:
+
+$EVT_IDX_SUBJ = 0;		# title of event
+$EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
+$EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
+$EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
+$EVT_IDX_MDAY = 4;		# day of month, [0 .. 31]
+$EVT_IDX_MON = 5;		# month of year, [0 .. 1]
+$EVT_IDX_YEAR = 6;		# year [1970 .. 2037]
+$EVT_IDX_DUR = 7;		# duration in minutes
+$EVT_IDX_MEMO = 8;		# memo text
+$EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
+
 ########################################################################
 # invoke hebcal unix app and create perl array of output
 ########################################################################
@@ -402,12 +420,27 @@ sub parse_date_descr($$)
 	$subj =~ s/Channukah/Chanukah/; # fix spelling error
     }
 
+    my($yomtov) = 0;
+    if ($subj !~ / \(CH''M\)$/)
+    {
+	my($subj_copy) = $subj;
+    
+	$subj_copy =~ s/ I+$//;
+	$subj_copy =~ s/ VI*$//;
+	$subj_copy =~ s/ IV$//;
+	$subj_copy =~ s/ \d{4}$//;
+	$subj_copy =~ s/: \d Candles?$//;
+
+	$yomtov = 1  if (defined $holidays{$subj_copy} &&
+			 $holidays{$subj_copy}->[$HOLIDAY_IDX_YOMTOV]);
+    }
+
     $subj =~ s/\"/''/g;
     $subj =~ s/\s*:\s*$//g;
 
     my($mon,$mday,$year) = split(/\//, $date);
 
-    ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur);
+    ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur,$yomtov);
 }
 
 sub invoke_hebcal($$)
@@ -428,12 +461,12 @@ sub invoke_hebcal($$)
 	chop;
 
 	my($date,$descr) = split(/ /, $_, 2);
-	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur) =
+	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    &parse_date_descr($date,$descr);
 
 	push(@events,
 	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
-	      ($untimed ? '' : $memo)]);
+	      ($untimed ? '' : $memo),$yomtov]);
     }
     close(HEBCAL);
 
@@ -475,10 +508,10 @@ sub get_holiday_anchor($)
 	$subj =~ s/ \d{4}$//;
 	$subj =~ s/: \d Candles?$//;
 
-	if (defined $holiday_anchors{$subj})
+	if (defined $holidays{$subj})
 	{
-	    return
-	    "/michael/projects/hebcal/defaults.html#$holiday_anchors{$subj}";
+	    return "/michael/projects/hebcal/defaults.html#" .
+		$holidays{$subj}->[$HOLIDAY_IDX_ANCHOR];
 	}
 	else
 	{
@@ -714,7 +747,19 @@ sub csv_write_contents($$)
 
 	print STDOUT
 	    qq{"$subj",$date,$start_time,$end_date,$end_time,},
-	    qq{$all_day,"$memo","3"$endl};
+	    qq{$all_day,"$memo",};
+
+	if ($events->[$i]->[$EVT_IDX_UNTIMED] == 0 ||
+	    $events->[$i]->[$EVT_IDX_YOMTOV] == 1)
+	{
+	    print STDOUT qq{"4"};
+	}
+	else
+	{
+	    print STDOUT qq{"3"};
+	}
+
+	print STDOUT $endl;
     }
 
     1;
@@ -771,19 +816,6 @@ sub dba_write_header($)
 
     1;
 }
-
-# @events is an array of arrays.  these are the indices into each
-# event structure:
-
-$EVT_IDX_SUBJ = 0;		# title of event
-$EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
-$EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
-$EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
-$EVT_IDX_MDAY = 4;		# day of month, [0 .. 31]
-$EVT_IDX_MON = 5;		# month of year, [0 .. 1]
-$EVT_IDX_YEAR = 6;		# year [1970 .. 2037]
-$EVT_IDX_DUR = 7;		# duration in minutes
-$EVT_IDX_MEMO = 8;		# memo text
 
 sub dba_write_contents($$$)
 {
