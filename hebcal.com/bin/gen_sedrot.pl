@@ -40,11 +40,11 @@ print OUT <<EOHTML;
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Hebcal: Torah Readings</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/sedrot/" target="_top">
 <link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 <table width="100%" class="navbar">
@@ -130,19 +130,23 @@ sub write_sedra_page {
     $anchor =~ s/[^\w]//g;
 
     my($prev_link) = '';
+    my($prev_anchor);
     if ($prev)
     {
-	$prev_link = lc($prev);
-	$prev_link =~ s/[^\w]//g;
-	$prev_link = qq{<a href="$prev_link.html">&lt;&lt; $prev</a>};
+	$prev_anchor = lc($prev);
+	$prev_anchor =~ s/[^\w]//g;
+	$prev_anchor .= ".html";
+	$prev_link = qq{<a href="$prev_anchor">&lt;&lt; $prev</a>};
     }
 
     my($next_link) = '';
+    my($next_anchor);
     if ($next)
     {
-	$next_link = lc($next);
-	$next_link =~ s/[^\w]//g;
-	$next_link = qq{<a href="$next_link.html">$next &gt;&gt;</a>};
+	$next_anchor = lc($next);
+	$next_anchor =~ s/[^\w]//g;
+	$next_anchor .= ".html";
+	$next_link = qq{<a href="$next_anchor">$next &gt;&gt;</a>};
     }
 
     open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
@@ -152,11 +156,20 @@ sub write_sedra_page {
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Torah Readings: $h</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
 <link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+EOHTML
+;
+
+    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="Parashat $prev">\n}
+    	if $prev_anchor;
+    print OUT2 qq{<link rel="next" href="$next_anchor" title="Parashat $next">\n}
+    	if $next_anchor;
+
+    print OUT2 <<EOHTML;
 </head>
 <body>
 <table width="100%" class="navbar">
