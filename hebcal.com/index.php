@@ -38,8 +38,10 @@ to your zip code, city, or latitude/longitude.</dd>
 href="/shabbat/">1-Click Shabbat</a></big></strong></dt>
 <dd>bookmark this page for weekly Shabbat candle lighting times.</dd>
 <dt><br><strong><big><a
-href="/yahrzeit/">Yahrzeit Calendar</a></big></strong></dt>
-<dd>generates a list of Yahrzeit (memorial) and Yizkor dates.</dd>
+href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
+Calendar</a></big></strong></dt>
+<dd>generates a list of Yahrzeit (memorial) and Yizkor dates, or
+Birthdays and Anniversaries.</dd>
 <dt><br><strong><big><a
 href="/help/">Help</a></big></strong></dt>
 <dt><br><strong><big><a
@@ -55,7 +57,7 @@ href="/search/">Search</a></big></strong></dt>
 <a href="/help/">Help</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed Apr 18 10:52:18 PDT 2001
+Last modified: Wed Apr 18 10:59:41 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
