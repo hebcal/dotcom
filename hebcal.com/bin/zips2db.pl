@@ -5,7 +5,7 @@
 # part of the Hebcal Interactive Jewish Calendar, www.hebcal.com
 # $Id$
 #
-# Copyright (c) 2003  Michael J. Radwin.
+# Copyright (c) 2005  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
