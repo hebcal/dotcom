@@ -39,7 +39,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 13 18:09:10 PDT 1999
+Last modified: Tue Apr 13 18:43:39 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -258,8 +258,24 @@ open(HEBCAL,"$cmd |") ||
 	    "Please <a href=\"mailto:michael\@radwin.org" .
 	    "\">e-mail Michael</a>.");
 
-print STDOUT "Content-Type: application/octet-stream\015\012\015\012";
-print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"\015\012";
+$endl = "\012";			# default Netscape and others
+if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
+{
+    $endl = "\015\012"
+	if $ENV{'HTTP_USER_AGENT'} =~ /Microsoft Internet Explorer/;
+    $endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
+}
+
+if ($endl eq "\012")
+{
+    print STDOUT "Content-Type: text/x-csv\015\012\015\012";
+}
+else
+{
+    print STDOUT "Content-Type: text/plain\015\012\015\012";
+}
+
+print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"$endl";
 
 while(<HEBCAL>)
 {
@@ -270,7 +286,7 @@ while(<HEBCAL>)
 	= &parse_date_descr($date,$descr);
 
     print STDOUT "\"$subj\",\"$date\",$start_time,$end_date,$end_time,$all_day,";
-    print STDOUT "\"\"\015\012";
+    print STDOUT "\"\"$endl";
 }
 close(HEBCAL);
 close(STDOUT);
