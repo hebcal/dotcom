@@ -350,18 +350,6 @@ document.f1.nx.checked = false;
 }
 return false;
 }
-function s3() {
-if (document.f1.i.checked == true) {
-document.f1.s.checked = true;
-}
-return false;
-}
-function s4() {
-if (document.f1.s.checked == false) {
-document.f1.i.checked = false;
-}
-return false;
-}
 function s5() {
 if (document.f1.nx.checked == true) {
 document.f1.nh.checked = true;
@@ -466,14 +454,18 @@ JSCRIPT_END
     "<br><label\nfor=\"s\">",
     $q->checkbox(-name => 's',
 		 -id => 's',
-		 -onClick => "s4()",
-		 -label => "\nWeekly sedrot on Saturday"),
-    "</label>\n(<label\nfor=\"i\">",
-    $q->checkbox(-name => 'i',
-		 -id => 'i',
-		 -onClick => "s3()",
-		 -label => "\nUse Israeli sedra scheme"),
-    "</label>)";
+		 -label => "\nWeekly sedrot on Saturdays"),
+    "</label>\n",
+    "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n",
+    $q->radio_group(-name => 'i',
+		    -values => ['off', 'on'],
+		    -default => 'off',
+		    -labels =>
+		    {'off' => "\nDiaspora ",
+		     'on' => "\nIsrael "}),
+    "\n&nbsp;<small>(<a\n",
+    "href=\"/help/sedra.html\">What\n",
+    "is the difference?</a>)</small>";
 
     print STDOUT "<p><b>Other options:</b>",
     "<br><label\nfor=\"vis\">",
@@ -1109,10 +1101,6 @@ sub get_candle_config($)
 	{
 	    $q->param('i','on');
 	}
-	else
-	{
-	    $q->delete('i');
-	}
     }
     elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
 	   defined $q->param('ladeg') && defined $q->param('lamin') &&
@@ -1249,8 +1237,6 @@ sub get_candle_config($)
 	{
 	    $q->param('dst','none');
 	}
-
-	$q->delete('i');	# diaspora
 
 #	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
 #	$long_descr = "${long_deg}d${long_min}' W longitude";
