@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 11:01:01 PDT 2001
+Last modified: Wed Apr 18 11:20:42 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -263,6 +263,8 @@ print STDOUT $q->header(),
 			     $q->Link({-rel => 'stylesheet',
 				       -href => '/style.css',
 				       -type => 'text/css'}),
+			     $q->Link({-rel => 'p3pv1',
+				       -href => "http://www.$server_name/w3c/p3p.xml"}),
 			     ],
 			   -meta => {
 			       'robots' => 'noindex',
