@@ -427,9 +427,10 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 	else
 	{
-	    &Hebcal::out_html($cfg,qq{\n<dt>$subj for\n},
+	    &Hebcal::out_html($cfg,qq{\n<dt class="candles">$subj for\n},
 		      $rss{'description'},
 		      sprintf(" is at <b>%d:%02d PM</b>", $hour, $min));
+	    &Hebcal::out_html($cfg,"</dt>");
 	    &Hebcal::out_html($cfg,"<br>&nbsp;")
 		if ($q->param('site') &&
 		    $q->param('site') eq 'keshernj.com');
@@ -511,9 +512,12 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 	else
 	{
-	    &Hebcal::out_html($cfg,"\n<dt>", $rss{'title'});
+	    my $class = ($subj =~ /^(Parshas|Parashat)\s+/) ?
+		'parashat' : 'holiday';
+	    &Hebcal::out_html($cfg,qq{\n<dt class="$class">}, $rss{'title'});
 	    &Hebcal::out_html($cfg,"\non ", $rss{'description'})
 		unless ($subj =~ /^(Parshas|Parashat)\s+/);
+	    &Hebcal::out_html($cfg,"</dt>");
 	    &Hebcal::out_html($cfg,"<br>&nbsp;")
 		if ($q->param('site') &&
 		    $q->param('site') eq 'keshernj.com');
