@@ -266,215 +266,215 @@ my($SEDROT_IDX_TITLE_HE) = 3;
 my(%sedrot) = (
  "Bereshit"	=> ['/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
 		    '/jpstext/bereshit.shtml',
-		    'áÌÀøÅàùÑÄéú'],
+		    '×‘Ö¼Ö°×¨Öµ××©×Ö´×™×ª'],
  "Bereshis"	=> ['/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
 		    '/jpstext/bereshit.shtml',
-		    'áÌÀøÅàùÑÄéú'],
+		    '×‘Ö¼Ö°×¨Öµ××©×Ö´×™×ª'],
  "Noach"	=> ['/5761/noah.shtml', 'Genesis 6:9 - 11:32',
 		    '/jpstext/noah.shtml',
-		    'ðÉçÇ'],
+		    '× Ö¹×—Ö·'],
  "Lech-Lecha"	=> ['/5761/lekhlekha.shtml', 'Genesis 12:1 - 17:27',
 		    '/jpstext/lechlecha.shtml',
-		    'ìÆêÀÎìÀêÈ'],
+		    '×œÖ¶×šÖ°Ö¾×œÖ°×šÖ¸'],
  "Vayera"	=> ['/5761/vayera.shtml', 'Genesis 18:1 - 22:24',
 		    '/jpstext/vayera.shtml',
-		    'åÇéÌÅøÈà'],
+		    '×•Ö·×™Ö¼Öµ×¨Ö¸×'],
  "Chayei Sara"	=> ['/5761/hayyeisarah.shtml', 'Genesis 23:1 - 25:18',
 		    '/jpstext/hayyeisarah.shtml',
-		    'çÇéÌÅé ùÈÉøÈä'],
+		    '×—Ö·×™Ö¼Öµ×™ ×©Ö¸Ö¹×¨Ö¸×”'],
  "Toldot"	=> ['/5761/toledot.shtml', 'Genesis 25:19 - 28:9',
 		    '/jpstext/toledot.shtml',
-		    'úÌÍåÉìÀãÉú'],
+		    '×ªÖ¼Ö½×•Ö¹×œÖ°×“Ö¹×ª'],
  "Toldos"	=> ['/5761/toeldot.shtml', 'Genesis 25:19 - 28:9',
 		    '/jpstext/toledot.shtml',
-		    'úÌÍåÉìÀãÉú'],
+		    '×ªÖ¼Ö½×•Ö¹×œÖ°×“Ö¹×ª'],
  "Vayetzei"	=> ['/5761/vayetze.shtml', 'Genesis 28:10 - 32:3',
 		    '/jpstext/vayetze.shtml',
-		    'åÇéÌÅöÅà'],
+		    '×•Ö·×™Ö¼Öµ×¦Öµ×'],
  "Vayishlach"	=> ['/5761/vayishlah.shtml', 'Genesis 32:4 - 36:43',
 		    '/jpstext/vayishlah.shtml',
-		    'åÇéÌÄùÑÀìÇç'],
+		    '×•Ö·×™Ö¼Ö´×©×Ö°×œÖ·×—'],
  "Vayeshev"	=> ['/5761/vayeshev.shtml', 'Genesis 37:1 - 40:23',
 		    '/jpstext/vayeshev.shtml',
-		    'åÇéÌÅùÑÆá'],
+		    '×•Ö·×™Ö¼Öµ×©×Ö¶×‘'],
  "Miketz"	=> ['/5761/mikketz.shtml', 'Genesis 41:1 - 44:17',
 		    '/jpstext/mikketz.shtml',
-		    'îÄ÷ÌÅõ'],
+		    '×žÖ´×§Ö¼Öµ×¥'],
  "Vayigash"	=> ['/5761/vayiggash.shtml', 'Genesis 44:18 - 47:27',
 		    '/jpstext/vayiggash.shtml',
-		    'åÇéÌÄâÌÇùÑ'],
+		    '×•Ö·×™Ö¼Ö´×’Ö¼Ö·×©×'],
  "Vayechi"	=> ['/5761/vayehi.shtml', 'Genesis 47:28 - 50:26',
 		    '/jpstext/vayehi.shtml',
-		    'åÇéÀçÄé'],
+		    '×•Ö·×™Ö°×—Ö´×™'],
  "Shemot"	=> ['/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
 		    '/jpstext/shemot.shtml',
-		    ''],
+		    '×©×Ö°×ž×•Ö¹×ª'],
  "Shemos"	=> ['/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
 		    '/jpstext/shemot.shtml',
-		    'ùÑÀîåÉú'],
+		    '×©×Ö°×ž×•Ö¹×ª'],
  "Vaera"	=> ['/5761/vaera.shtml', 'Exodus 6:2 - 9:35',
 		    '/jpstext/vaera.shtml',
-		    'åÈÍàÅøÈà'],
+		    '×•Ö¸Ö½×Öµ×¨Ö¸×'],
  "Bo"		=> ['/5760/bo.shtml', 'Exodus 10:1 - 13:16',
 		    '/jpstext/bo.shtml',
-		    'áÌÉà'],
+		    '×‘Ö¼Ö¹×'],
  "Beshalach"	=> ['/5760/beshalah.shtml', 'Exodus 13:17 - 17:16',
 		    '/jpstext/beshallah.shtml',
-		    'áÌÀùÑÇìÌÇç'],
+		    '×‘Ö¼Ö°×©×Ö·×œÖ¼Ö·×—'],
  "Yitro"	=> ['/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
 		    '/jpstext/yitro.shtml',
-		    'éÄúÀøåÉ'],
+		    '×™Ö´×ªÖ°×¨×•Ö¹'],
  "Yisro"	=> ['/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
 		    '/jpstext/yitro.shtml',
-		    'éÄúÀøåÉ'],
+		    '×™Ö´×ªÖ°×¨×•Ö¹'],
  "Mishpatim"	=> ['/5760/mishpatim.shtml', 'Exodus 21:1 - 24:18',
 		    '/jpstext/mishpatim.shtml',
-		    'îÌÄùÑÀôÌÈèÄéí'],
+		    '×žÖ¼Ö´×©×Ö°×¤Ö¼Ö¸×˜Ö´×™×'],
  "Terumah"	=> ['/5760/terumah.shtml', 'Exodus 25:1 - 27:19',
 		    '/jpstext/terumah.shtml',
-		    'úÌÀøåÌîÈä'],
+		    '×ªÖ¼Ö°×¨×•Ö¼×žÖ¸×”'],
  "Tetzaveh"	=> ['/5760/tetsavveh.shtml', 'Exodus 27:20 - 30:10',
 		    '/jpstext/tetsavveh.shtml',
-		    'úÌÀöÇåÌÆä'],
+		    '×ªÖ¼Ö°×¦Ö·×•Ö¼Ö¶×”'],
  "Ki Tisa"	=> ['/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
 		    '/jpstext/kitissa.shtml',
-		    'ëÌÄé úÄùÌÒÈà'],
+		    '×›Ö¼Ö´×™ ×ªÖ´×©Ö¼×‚Ö¸×'],
  "Ki Sisa"	=> ['/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
 		    '/jpstext/kitissa.shtml',
-		    'ëÌÄé úÄùÌÒÈà'],
+		    '×›Ö¼Ö´×™ ×ªÖ´×©Ö¼×‚Ö¸×'],
  "Vayakhel"	=> ['/5760/vayakhel.shtml', 'Exodus 35:1 - 38:20',
 		    '/jpstext/vayakhel.shtml',
-		    'åÇéÌÇ÷ÀäÅì'],
+		    '×•Ö·×™Ö¼Ö·×§Ö°×”Öµ×œ'],
  "Pekudei"	=> ['/5760/pekuday.shtml', 'Exodus 38:21 - 40:38',
 		    '/jpstext/pekudey.shtml',
-		    'ôÀ÷åÌãÅé'],
+		    '×¤Ö°×§×•Ö¼×“Öµ×™'],
  "Vayikra"	=> ['/5760/vayikra.shtml', 'Leviticus 1:1 - 5:26',
 		    '/jpstext/vayikra.shtml',
-		    'åÇéÌÄ÷ÀøÈà'],
+		    '×•Ö·×™Ö¼Ö´×§Ö°×¨Ö¸×'],
  "Tzav"		=> ['/5760/tsav.shtml', 'Leviticus 6:1 - 8:36',
 		    '/jpstext/tzav.shtml',
-		    'öÇå'],
+		    '×¦Ö·×•'],
  "Shmini"	=> ['/5760/shemini.shtml', 'Leviticus 9:1 - 11:47',
 		    '/jpstext/shemini.shtml',
-		    'ùÌÑÀîÄéðÄé'],
+		    '×©Ö¼×Ö°×žÖ´×™× Ö´×™'],
  "Tazria"	=> ['/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
 		    '/jpstext/tazria.shtml',
-		    'úÇæÀøÄéòÇ'],
+		    '×ªÖ·×–Ö°×¨Ö´×™×¢Ö·'],
  "Sazria"	=> ['/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
 		    '/jpstext/tazria.shtml',
-		    'úÇæÀøÄéòÇ'],
+		    '×ªÖ·×–Ö°×¨Ö´×™×¢Ö·'],
  "Metzora"	=> ['/5759/tazriametzora.shtml', 'Leviticus 14:1 - 15:33',
 		    '/jpstext/metsora.shtml',
-		    'îÌÀöåÉøÈò'],
+		    '×žÖ¼Ö°×¦×•Ö¹×¨Ö¸×¢'],
  "Achrei Mot"	=> ['/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
 		    '/jpstext/ahareimot.shtml',
-		    'àÇÍçÂøÅé îåÉú'],
+		    '×Ö·Ö½×—Ö²×¨Öµ×™ ×ž×•Ö¹×ª'],
  "Achrei Mos"	=> ['/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
 		    '/jpstext/ahareimot.shtml',
-		    'àÇÍçÂøÅé îåÉú'],
+		    '×Ö·Ö½×—Ö²×¨Öµ×™ ×ž×•Ö¹×ª'],
  "Kedoshim"	=> ['/5760/kedoshim.shtml', 'Leviticus 19:1 - 20:27',
 		    '/jpstext/kedoshim.shtml',
-		    '÷ÀãùÑÄéí'],
+		    '×§Ö°×“×©×Ö´×™×'],
  "Emor"		=> ['/5760/emor.shtml', 'Leviticus 21:1 - 24:23',
 		    '/jpstext/emor.shtml',
-		    'àÁîåÉø'],
+		    '×Ö±×ž×•Ö¹×¨'],
  "Behar"	=> ['/5760/behar.shtml', 'Leviticus 25:1 - 26:2',
 		    '/jpstext/behar.shtml',
-		    'áÌÀäÇø'],
+		    '×‘Ö¼Ö°×”Ö·×¨'],
  "Bechukotai"	=> ['/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
 		    '/jpstext/behukkotai.shtml',
-		    'áÌÀçË÷ÌÉúÇé'],
+		    '×‘Ö¼Ö°×—Ö»×§Ö¼Ö¹×ªÖ·×™'],
  "Bechukosai"	=> ['/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
 		    '/jpstext/behukkotai.shtml',
-		    'áÌÀçË÷ÌÉúÇé'],
+		    '×‘Ö¼Ö°×—Ö»×§Ö¼Ö¹×ªÖ·×™'],
  "Bamidbar"	=> ['/5760/bemidbar.shtml', 'Numbers 1:1 - 4:20',
 		    '/jpstext/bemidbar.shtml',
-		    'áÌÀîÄãÀáÌÇø'],
+		    '×‘Ö¼Ö°×žÖ´×“Ö°×‘Ö¼Ö·×¨'],
  "Nasso"	=> ['/5760/naso.shtml', 'Numbers 4:21 - 7:89',
 		    '/jpstext/naso.shtml',
-		    'ðÈùÒà'],
+		    '× Ö¸×©×‚×'],
  "Beha'alotcha" => ['/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
 		    '/jpstext/behaalothekha.shtml',
-		    'áÌÀäÇÍòÂìÉÍúÀêÈ'],
+		    '×‘Ö¼Ö°×”Ö·Ö½×¢Ö²×œÖ¹Ö½×ªÖ°×šÖ¸'],
  "Beha'aloscha" => ['/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
 		    '/jpstext/behaalothekha.shtml',
-		    'áÌÀäÇÍòÂìÉÍúÀêÈ'],
+		    '×‘Ö¼Ö°×”Ö·Ö½×¢Ö²×œÖ¹Ö½×ªÖ°×šÖ¸'],
  "Sh'lach"	=> ['/5760/shelahlekha.shtml', 'Numbers 13:1 - 15:41',
 		    '/jpstext/shelahlekha.shtml',
-		    'ùÑÀìÇçÎìÀêÈ'],
+		    '×©×Ö°×œÖ·×—Ö¾×œÖ°×šÖ¸'],
  "Korach"	=> ['/5760/korah.shtml', 'Numbers 16:1 - 18:32',
 		    '/jpstext/korah.shtml',
-		    '÷ÉøÇç'],
+		    '×§Ö¹×¨Ö·×—'],
  "Chukat"	=> ['/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
 		    '/jpstext/hukkat.shtml',
-		    'çË÷ÌÇú'],
+		    '×—Ö»×§Ö¼Ö·×ª'],
  "Chukas"	=> ['/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
 		    '/jpstext/hukkat.shtml',
-		    'çË÷ÌÇú'],
+		    '×—Ö»×§Ö¼Ö·×ª'],
  "Balak"	=> ['/5760/hukkatbalak.shtml', 'Numbers 22:2 - 25:9',
 		    '/jpstext/balak.shtml',
-		    'áÌÈìÈ÷'],
+		    '×‘Ö¼Ö¸×œÖ¸×§'],
  "Pinchas"	=> ['/5760/pinhas.shtml', 'Numbers 25:10 - 30:1',
 		    '/jpstext/pinhas.shtml',
-		    'ôÌÄÍéðÀçÈñ'],
+		    '×¤Ö¼Ö´Ö½×™× Ö°×—Ö¸×¡'],
  "Matot"	=> ['/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
 		    '/jpstext/mattot.shtml',
-		    'îÌÇèÌåÉú'],
+		    '×žÖ¼Ö·×˜Ö¼×•Ö¹×ª'],
  "Matos"	=> ['/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
 		    '/jpstext/mattot.shtml',
-		    'îÌÇèÌåÉú'],
+		    '×žÖ¼Ö·×˜Ö¼×•Ö¹×ª'],
  "Masei"	=> ['/5760/mattotmaseei.shtml', 'Numbers 33:1 - 36:13',
 		    '/jpstext/maseei.shtml',
-		    'îÇñÀòÅé'],
+		    '×žÖ·×¡Ö°×¢Öµ×™'],
  "Devarim"	=> ['/5760/devarim.shtml', 'Deuteronomy 1:1 - 3:22',
 		    '/jpstext/devarim.shtml',
-		    'ãÌÀáÈøÄéí'],
+		    '×“Ö¼Ö°×‘Ö¸×¨Ö´×™×'],
  "Vaetchanan"	=> ['/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
 		    '/jpstext/vaethannan.shtml',
-		    'åÈÍàÆúÀçÇðÌÇï'],
+		    '×•Ö¸Ö½×Ö¶×ªÖ°×—Ö·× Ö¼Ö·×Ÿ'],
  "Vaeschanan"	=> ['/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
 		    '/jpstext/vaethannan.shtml',
-		    'åÈÍàÆúÀçÇðÌÇï'],
+		    '×•Ö¸Ö½×Ö¶×ªÖ°×—Ö·× Ö¼Ö·×Ÿ'],
  "Eikev"	=> ['/5760/ekev.shtml', 'Deuteronomy 7:12 - 11:25',
 		    '/jpstext/ekev.shtml',
-		    'òÅ÷Æá'],
+		    '×¢Öµ×§Ö¶×‘'],
  "Re'eh"	=> ['/5760/reeh.shtml', 'Deuteronomy 11:26 - 16:17',
 		    '/jpstext/reeh.shtml',
-		    'øÀàÅä'],
+		    '×¨Ö°×Öµ×”'],
  "Shoftim"	=> ['/5760/shofetim.shtml', 'Deuteronomy 16:18 - 21:9',
 		    '/jpstext/shofetim.shtml',
-		    'ùÑÍÉôÀèÄéí'],
+		    '×©×Ö½Ö¹×¤Ö°×˜Ö´×™×'],
  "Ki Teitzei"	=> ['/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
 		    '/jpstext/kitetse.shtml',
-		    'ëÌÄÍéÎúÅöÅà'],
+		    '×›Ö¼Ö´Ö½×™Ö¾×ªÖµ×¦Öµ×'],
  "Ki Seitzei"	=> ['/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
 		    '/jpstext/kitetse.shtml',
-		    'ëÌÄÍéÎúÅöÅà'],
+		    '×›Ö¼Ö´Ö½×™Ö¾×ªÖµ×¦Öµ×'],
  "Ki Tavo"	=> ['/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
 		    '/jpstext/kitavo.shtml',
-		    'ëÌÄÍéÎúÈáåÉà'],
+		    '×›Ö¼Ö´Ö½×™Ö¾×ªÖ¸×‘×•Ö¹×'],
  "Ki Savo"	=> ['/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
 		    '/jpstext/kitavo.shtml',
-		    'ëÌÄÍéÎúÈáåÉà'],
+		    '×›Ö¼Ö´Ö½×™Ö¾×ªÖ¸×‘×•Ö¹×'],
  "Nitzavim"	=> ['/5760/nitsavimvayelekh.shtml',
 		    'Deuteronomy 29:9 - 30:20',
 		    '/jpstext/nitsavim.shtml',
-		    'ðÄöÌÈáÄéí'],
+		    '× Ö´×¦Ö¼Ö¸×‘Ö´×™×'],
  "Vayeilech"	=> ['/5760/nitsavimvayelekh.shtml',
 		    'Deuteronomy 31:1 - 31:30',
 		    '/jpstext/vayelekh.shtml',
-		    'åÇéÌÅìÆêÀ'],
+		    '×•Ö·×™Ö¼Öµ×œÖ¶×šÖ°'],
  "Ha'Azinu"	=> ['http://www.ohr.org.il/tw/5759/devarim/haazinu.htm',
 		    'Deuteronomy 32:1 - 31:52',
 		    '/jpstext/haazinu.shtml',
-		    'äÇÍàÂæÄéðåÌ'],
+		    '×”Ö·Ö½×Ö²×–Ö´×™× ×•Ö¼'],
 
  "Rosh Hashana"	=> ['/5761/roshhashanah.shtml', '', '', ''],
  "Yom Kippur"	=> ['/5759/yk.shtml', '', '', ''],
  "Sukkot"	=> ['/5761/sukkot.shtml', '', '', ''],
  "Sukkos"	=> ['/5761/sukkot.shtml', '', '', ''],
- "Simchat Torah" => ['/5761/simhattorah.shtml', '', '', 'åÀæÉàú äÇáÌÀøÈëÈä'],
- "Simchas Torah" => ['/5761/simhattorah.shtml', '', '', 'åÀæÉàú äÇáÌÀøÈëÈä'],
+ "Simchat Torah" => ['/5761/simhattorah.shtml', '', '', '×•Ö°×–Ö¹××ª ×”Ö·×‘Ö¼Ö°×¨Ö¸×›Ö¸×”'],
+ "Simchas Torah" => ['/5761/simhattorah.shtml', '', '', '×•Ö°×–Ö¹××ª ×”Ö·×‘Ö¼Ö°×¨Ö¸×›Ö¸×”'],
  "Pesach"	=> ['/5760/pesah.shtml', '', '', ''],
  "Shavuot"	=> ['/5760/shavuot.shtml', '', '', ''],
  "Shavuos"	=> ['/5760/shavuot.shtml', '', '', ''],
@@ -622,33 +622,31 @@ sub get_dow($$$)
 sub get_holiday_anchor($)
 {
     my($subj) = @_;
+    my($href) = '';
+    my($hebrew) = '';
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
     {
 	my($parashat) = $1;
 	my($sedra) = $2;
-	my($href);
+
+	$hebrew = '×¤×¨×©×ª ';
 
 	if (defined $sedrot{$sedra})
 	{
 	    $href = $sedrot{$sedra}->[$SEDROT_IDX_DRASH_EN];
+	    $hebrew .= $sedrot{$sedra}->[$SEDROT_IDX_TITLE_HE];
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) && defined $sedrot{$1})
 	{
 	    $href = $sedrot{$1}->[$SEDROT_IDX_DRASH_EN];
+	    $hebrew .= $sedrot{$1}->[$SEDROT_IDX_TITLE_HE];
+	    $hebrew .= '-' . $sedrot{$2}->[$SEDROT_IDX_TITLE_HE]
+		if defined $sedrot{$2};
 	}
 
-	if (defined $href)
-	{
-	    if ($href =~ m,^/,)
-	    {
-		return 'http://learn.jtsa.edu/topics/parashah' . $href;
-	    }
-	    else
-	    {
-		return $href;
-	    }
-	}
+	$href = 'http://learn.jtsa.edu/topics/parashah' . $href
+	    if ($href =~ m,^/,);
     }
     else
     {
@@ -661,14 +659,12 @@ sub get_holiday_anchor($)
 
 	if (defined $holidays{$subj})
 	{
-	    return "/michael/projects/hebcal/defaults.html#" .
+	    $href = "/michael/projects/hebcal/defaults.html#" .
 		$holidays{$subj}->[$HOLIDAY_IDX_ANCHOR];
 	}
-	else
-	{
-	    return "";
-	}
     }
+
+    return (wantarray()) ? ($href,$hebrew) : $href;
 }
     
 
@@ -1113,6 +1109,16 @@ sub dba_write_contents($$$)
     }
 
     1;
+}
+
+# avoid warnings
+if ($^W && 0)
+{
+    $_ = $Hebcal::city_nodst{'foo'};
+    $_ = $Hebcal::tz_names{'foo'};
+    $_ = $Hebcal::city_tz{'foo'};
+    $_ = $Hebcal::MoY_long{'foo'};
+    $_ = $Hebcal::known_timezones{'foo'};
 }
 
 1;
