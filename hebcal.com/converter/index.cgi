@@ -27,6 +27,50 @@ use Hebcal;
 use HTML::Entities ();
 use strict;
 
+my(%num2heb) =
+(
+1 => 'א',
+2 => 'ב',
+3 => 'ג',
+4 => 'ד',
+5 => 'ה',
+6 => 'ו',
+7 => 'ז',
+8 => 'ח',
+9 => 'ט',
+10 => 'י',
+20 => 'כ',
+30 => 'ל',
+40 => 'מ',
+50 => 'נ',
+60 => 'ס',
+70 => 'ע',
+80 => 'פ',
+90 => 'צ',
+100 => 'ק',
+200 => 'ר',
+300 => 'ש',
+400 => 'ת',
+);
+
+my(%monthnames) =
+(
+'Nisan'	=> 'נִיסָן',
+'Iyyar'	=> 'אִיָיר',
+'Sivan'	=> 'סִיוָן',
+'Tamuz'	=> 'תָּמוּז',
+'Av'	=> 'אָב',
+'Elul'	=> 'אֱלוּל',
+'Tishrei'	=> 'תִּשְׁרֵי',
+'Cheshvan'	=> 'חֶשְׁוָן',
+'Kislev'	=> 'כִּסְלֵו',
+'Tevet'	=> 'טֵבֵת',
+"Sh'vat"	=> 'שְׁבָת',
+'Adar'	=> 'אַדָר',
+'Adar I'	=> 'אַדָר א׳',
+'Adar II'	=> 'אַדָר ב׳',
+);
+
 my($author) = 'webmaster@hebcal.com';
 
 my($this_year) = (localtime)[5];
@@ -36,7 +80,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 14:08:39 PDT 2001
+Last modified: Sun Apr 22 15:59:43 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -107,7 +151,7 @@ else
 		    $q->param('gm'), $q->param('gd'), $q->param('gy'));
 }
 
-print STDOUT $q->header(),
+print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
     $q->start_html(-title => 'Hebcal Hebrew Date Converter',
 		   -target => '_top',
 		   -head => [
@@ -145,15 +189,22 @@ if (defined $events[0])
 	$second = &HTML::Entities::encode($subj);
     }
 
-    print STDOUT qq{<p align="center">$first is\n<b>$second</b></p>\n};
+    print STDOUT qq{<p align="center"><span\n},
+    qq{style="font-size: large">$first =\n<b>$second</b></span>};
 
     $q->param('gm', $mon);
     $q->param('gd', $mday);
-    $q->param('gy', $year);
+    $q->param('gy', sprintf("%04d", $year));
 
     if ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     {
 	my($hm,$hd,$hy) = ($2,$1,$3);
+
+	print STDOUT qq{\n<br><span dir="rtl" lang="he"\n},
+	qq{style="font-size: xx-large">}, &hebnum_to_string($hd),
+	"&nbsp;&nbsp;בְּ", $monthnames{$hm},
+	"&nbsp;&nbsp;", &hebnum_to_string($hy),
+	qq{</span>};
 
 	$hm = "Shvat" if $hm eq "Sh'vat";
 	$hm = "Adar1" if $hm eq "Adar";
@@ -164,6 +215,8 @@ if (defined $events[0])
 	$q->param('hd', $hd);
 	$q->param('hy', $hy);
     }
+
+    print STDOUT qq{</p>\n};
 }
 
 &form(0,'','');
@@ -201,8 +254,7 @@ sub form
 	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">\n";
     }
 
-    print STDOUT qq{$message<form
-action="$script_name">
+    print STDOUT qq{$message<form action="$script_name">
 <center><table cellpadding="4">
 <tr align="center"><td colspan="3">Gregorian to Hebrew</td>
 <td>&nbsp;</td>
@@ -257,6 +309,29 @@ type="submit" value="Compute Gregorian Date"></td>
 }
 
 sub hebnum_to_string {
+    my($num) = @_;
+
+    my(@array) = &hebnum_to_array($num);
+    my($result);
+
+    if (scalar(@array) == 1)
+    {
+	$result = $num2heb{$array[0]} . '׳'; # geresh
+    }
+    else
+    {
+	$result = '';
+	for (my $i = 0; $i < @array; $i++)
+	{
+	    $result .= '״' if (($i + 1) == @array); # gershayim
+	    $result .= $num2heb{$array[$i]};
+	}
+    }
+
+    $result;
+}
+
+sub hebnum_to_array {
     my($num) = @_;
     my(@result) = ();
 
