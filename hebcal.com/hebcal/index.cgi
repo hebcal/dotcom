@@ -98,7 +98,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Aug 17 12:10:23 PDT 1999
+Last modified: Tue Aug 17 12:15:58 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -112,10 +112,7 @@ $html_footer = "<hr noshade size=\"1\">
 </body></html>
 ";
 
-$default_tz  = '-8';
-$default_zip = '95051';
-
-$status = &ReadParse();
+&ReadParse();
 
 while (($key,$val) = each(%in))
 {
@@ -141,10 +138,6 @@ if (defined $in{'tz'})
 elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
 {
     $tz{'0'} = ' selected';
-}
-else
-{
-    $tz{$default_tz} = ' selected';
 }
 
 # month opt
@@ -205,7 +198,7 @@ if (! defined $in{'zip'} &&
      ! defined $in{'lamin'} ||
      ! defined $in{'ladir'}))
 {
-    $in{'zip'} = ''; # $default_zip;
+    $in{'zip'} = '';
     &form('');
 }
     
