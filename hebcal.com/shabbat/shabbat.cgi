@@ -10,15 +10,14 @@ use POSIX qw(strftime);
 $author = 'michael@radwin.org';
 $expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
-my($this_mon,$this_year) = (localtime)[4,5];
+my($this_year) = (localtime)[5];
 $this_year += 1900;
-$this_mon++;
 
 my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 20 11:39:46 PDT 2000
+Last modified: Wed Sep 20 11:45:41 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -66,6 +65,11 @@ foreach $key ($q->param())
 }
 
 my($now) = time;
+if (defined $q->param('t') && $q->param('t') =~ /^\d+$/)
+{
+    $now = $q->param('t');
+}
+
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
@@ -284,7 +288,7 @@ $loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &invoke_hebcal($cmd, $loc);
 
-print STDOUT qq{<p>Today is }, strftime("%A, %d %B %Y", localtime()),
+print STDOUT qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
     qq{.</p>\n<p>\n};
 
 my($numEntries) = scalar(@events);
