@@ -43,12 +43,11 @@
 package Hebcal;
 require 5.000;
 use strict;
-use Time::Local;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
-use Date::Calc;
+use Date::Calc ();
 use DB_File;
 
 ########################################################################
