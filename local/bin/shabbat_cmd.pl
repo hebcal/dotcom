@@ -7,84 +7,99 @@ use strict;
 use DBI;
 use Hebcal;
 
+my $site = 'hebcal.com';
 my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
-my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
 sub main() {
     my($op,$addr) = @ARGV;
 
-    my $usage = "usage: $0 {unsub|bounce} email-addr\nusage: $0 prune";
+    my $usage = "usage: $0 unsub email-addr";
 
     if (!defined $op) {
 	die "$usage\n";
-    } elsif ($op eq 'prune') {
-	prune();
     } elsif ($op =~ /^unsub/i && $addr) {
-	unsubscribe(lc($addr), 'UNSUBSCRIBE');
-    } elsif ($op =~ /^bounce/i && $addr) {
-	unsubscribe(lc($addr), 'BOUNCE');
+	unsubscribe(lc($addr));
     } else {
 	die "$usage\n";
     }
 }
 
-sub prune() {
-    my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/email.db';
-    my(%DB);
-    tie(%DB, 'DB_File::Lock', $dbmfile, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
-	or die "$dbmfile: $!\n";
+sub unsubscribe($)
+{
+    my($email) = @_;
 
-    my @ids;
-    my $prune_time = time - (90 * 24 * 60 * 60);
+    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
-    while (my($rand,$config) = each(%DB)) {
-	my %args;
-	foreach my $kv (split(/;/, $config)) {
-	    my($key,$val) = split(/=/, $kv, 2);
-	    $args{$key} = $val;
-	}
-	if (defined $args{'t'} && $args{'t'} < $prune_time) {
-	    push(@ids, $rand);
-	}
+    my $sql = <<EOD
+SELECT email_status,email_id
+FROM   hebcal_shabbat_email
+WHERE  email_address = '$email'
+EOD
+;
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute
+	or die "can't execute the query: " . $sth->errstr;
+    my($status,$encoded) = $sth->fetchrow_array;
+    $sth->finish;
+
+    unless ($status) {
+	warn "unsub_notfound";
+	$dbh->disconnect;
+	return 0;
     }
 
-    foreach my $id (@ids) {
-	print "$DB{$id}\n";
-	delete $DB{$id};
+    if ($status eq 'unsubscribed') {
+	warn "unsub_twice";
+	$dbh->disconnect;
+	return 0;
     }
 
-    untie(%DB);
+    shabbat_log(1, 'unsub', $email);
+
+    $sql = <<EOD
+UPDATE hebcal1.hebcal_shabbat_email
+SET email_status='unsubscribed'
+WHERE email_address = '$email'
+EOD
+;
+    $dbh->do($sql);
+    $dbh->disconnect;
+
+    my($body) = qq{Hello,
+
+Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.
+
+Regards,
+$site};
+
+    my $email_mangle = $email;
+    $email_mangle =~ s/\@/=/g;
+    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
+
+    my %headers =
+        (
+         'From' =>
+	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
+         'To' => $email,
+         'MIME-Version' => '1.0',
+         'Content-Type' => 'text/plain',
+         'Subject' => 'You have been unsubscribed from hebcal',
+         );
+
+    Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
-sub unsubscribe($$) {
-    my($email,$flag) = @_;
 
-    my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
-    my(%DB);
-    tie(%DB, 'DB_File::Lock', $dbmfile, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
-	or die "$dbmfile: $!\n";
-
-    my $args = $DB{$email};
-    unless ($args) {
-	warn "ignoring $email: not subscribed\n";
-	untie(%DB);
-	return 0;
+sub shabbat_log
+{
+    my($status,$code,$to) = @_;
+    if (open(LOG, ">>$ENV{'HOME'}/.shabbat-log"))
+    {
+	my $t = time();
+	print LOG "status=$status to=$to code=$code time=$t\n";
+	close(LOG);
     }
-
-    if ($args =~ /^action=/) {
-	warn "ignoring $email: already unsubscribed\n";
-	untie(%DB);
-	return 0;
-    }
-
-    my($now) = time;
-    $DB{$email} = "action=$flag;t3=$now;$args";
-
-    untie(%DB);
-
-    warn "unsubscribe $email: OK\n";
-
-    1;
 }
 
 main();
