@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 24 12:20:34 PDT 2000
+Last modified: Wed Apr 26 13:47:04 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -455,7 +455,7 @@ elsif ($q->param('c') && $q->param('c') ne 'off' &&
     $q->param('geo','zip');
 
     &form("Please specify a 5-digit zip code\n" .
-	  "or uncheck the candle lighting times box.")
+	  "OR uncheck the candle lighting times box.")
 	if $q->param('zip') eq '';
 
     &form("Sorry, <b>" . $q->param('zip') . "</b> does\n" .
