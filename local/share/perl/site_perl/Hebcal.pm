@@ -1057,16 +1057,14 @@ sub download_html
     $s .= qq{<p>By clicking the links below, you can download 
 Jewish Calendar events into your desktop software.</p>};
 
-    $q->delete('euro');
     $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
 	"<ul><li>USA date format (month/day/year):\n" .
 	"<a href=\"" . download_href($q, "${filename}_usa", 'csv') .
 	"\">${filename}_usa.csv</a>\n";
 
-    $q->param('euro', '1');
     $s .= "<li>European date format (day/month/year):\n" .
 	"<a href=\"" . download_href($q, "${filename}_eur", 'csv') .
-	"\">${filename}_eur.csv</a></ul>\n";
+	";euro=1\">${filename}_eur.csv</a></ul>\n";
 
     $s .= qq{<li><a href="/help/import.html#csv">How to import CSV file into Outlook</a></ol>};
 
