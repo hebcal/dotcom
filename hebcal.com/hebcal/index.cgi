@@ -987,7 +987,7 @@ sub results_page()
 			     $year . "\n" .
 			     "<a class=\"goto\"\n" .
 			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
-			     '<span class="goto">' . $goto . '</span>');
+			     '<div align="center" class="goto">' . $goto . '</div>');
 	    }
 
 	    my($cal_subj) = $subj;
