@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Feb  1 10:56:14 PST 2001
+Last modified: Sun Feb 11 21:23:28 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -360,7 +360,8 @@ sub dba_display {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+	 defined $q->param('i') && $q->param('i') eq 'on');
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -394,7 +395,8 @@ sub csv_display {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+	 defined $q->param('i') && $q->param('i') eq 'on');
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -1029,7 +1031,8 @@ so you can keep this window open.
 	"in $city_descr" : '';
     $loc2 =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2);
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
+	 defined $q->param('i') && $q->param('i') eq 'on');
     print STDOUT "<p>";
 
     # header row
