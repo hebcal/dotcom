@@ -47,8 +47,3 @@ H1, H2, H3, H4, H5, H6 {
  direction: ltr;
  unicode-bidi: bidi-override;
 }
-
-@media print {
-.navbar { display: none }
-.goto { display: none }
-}
