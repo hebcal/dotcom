@@ -489,6 +489,14 @@ sub hebnum_to_string {
     $result;
 }
 
+sub build_hebrew_date($$$)
+{
+    my($hm,$hd,$hy) = @_;
+
+    hebnum_to_string($hd) . " \327\221\326\274\326\260" .
+	$monthnames{$hm} . " " . hebnum_to_string($hy);
+}
+
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;
@@ -613,8 +621,7 @@ sub get_holiday_anchor($$$)
     {
 	my($hm,$hd,$hy) = ($2,$1,$3);
 
-	$hebrew = hebnum_to_string($hd) . " \327\221\326\274\326\260" .
-		$monthnames{$hm} . " " . hebnum_to_string($hy);
+	$hebrew = build_hebrew_date($hm,$hd,$hy);
     }
     else
     {
