@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 08:41:46 PDT 1999
+Last modified: Mon Jul 12 08:50:56 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -94,7 +94,7 @@ else
 }
 
 # boolean options
-@opts = ('c','x','o','s','i','h','a','usa','israel','none');
+@opts = ('c','x','o','s','i','h','a','d','usa','israel','none');
 %opts = ();
 
 foreach (@opts)
@@ -537,6 +537,9 @@ Add weekly sedrot on Saturday</label>
 
 (<input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}><label for=\"i\">
 Use Israeli sedra scheme</label>)<br>
+
+<input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}><label for=\"d\">
+Print hebrew date for the entire date range</label><br>
 
 <br>
 
