@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan  3 15:28:27 PST 2000
+Last modified: Mon Jan  3 18:17:18 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -664,7 +664,17 @@ sub csv_display {
 sub form
 {
     local($message,$help) = @_;
-    my($key,$val);
+    my($key,$val,$JSCRIPT);
+
+    $JSCRIPT=<<JSCRIPT_END;
+function s1(geo) {
+document.f1.geo.value=geo;
+document.f1.c.value='on';
+document.f1.v.value='0';
+document.f1.submit();
+return false;
+}
+JSCRIPT_END
 
     print STDOUT $q->header(),
     $q->start_html(-title => "Hebcal Interactive Jewish Calendar",
@@ -691,7 +701,9 @@ sub form
 			   $server_name . $script_name,
 		       'DC.Language' => 'en',
 		       'DC.Date.X-MetadataLastModified' => '1999-12-24',
-		       }),
+		       },
+		   -script=>$JSCRIPT,
+		   ),
     "<table border=\"0\" width=\"100%\" cellpadding=\"0\"\nclass=\"navbar\">",
     "<tr valign=\"top\"><td><small>",
     "<a target=\"_top\"\nhref=\"/\">$server_name</a>\n<tt>-&gt;</tt>\n",
@@ -709,7 +721,8 @@ sub form
     }
 
     print STDOUT $message, "\n",
-    "<form target=\"_top\" action=\"", $script_name, "\">\n",
+    "<form id=\"f1\" name=\"f1\" target=\"_top\"\naction=\"",
+    $script_name, "\">",
     "<strong>Jewish Holidays for:</strong>&nbsp;&nbsp;&nbsp;\n",
     "<label for=\"year\">Year:\n",
     $q->textfield(-name => 'year',
@@ -778,9 +791,11 @@ sub form
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
+		   -onClick=>"return s1('zip')",
 		   -target => '_top'},
 		  "zip code"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
+		   -onClick=>"return s1('pos')",
 		   -target => '_top'},
 		  "latitude/longitude");
     }
@@ -788,9 +803,11 @@ sub form
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
+		   -onClick=>"return s1('zip')",
 		   -target => '_top'},
 		  "zip code"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
+		   -onClick=>"return s1('city')",
 		   -target => '_top'},
 		  "closest city");
     }
@@ -798,9 +815,11 @@ sub form
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
+		   -onClick=>"return s1('city')",
 		   -target => '_top'},
 		  "closest city"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
+		   -onClick=>"return s1('pos')",
 		   -target => '_top'},
 		  "latitude/longitude");
     }
@@ -808,7 +827,9 @@ sub form
 	
     if (defined $q->param('geo') && $q->param('geo') eq 'city')
     {
-	print STDOUT $q->hidden(-name => 'geo',-value => 'city'),
+	print STDOUT $q->hidden(-name => 'geo',
+				-value => 'city',
+				-id => 'geo'),
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"city\">",
 	"Closest City:\n",
 	$q->popup_menu(-name => 'city',
@@ -819,7 +840,9 @@ sub form
     }
     elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
     {
-	print STDOUT $q->hidden(-name => 'geo',-value => 'pos'),
+	print STDOUT $q->hidden(-name => 'geo',
+				-value => 'pos',
+				-id => 'geo'),
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"ladeg\">",
 	$q->textfield(-name => 'ladeg',
 		      -id => 'ladeg',
@@ -861,7 +884,9 @@ sub form
     }
     else
     {
-	print STDOUT $q->hidden(-name => 'geo',-value => 'zip'),
+	print STDOUT $q->hidden(-name => 'geo',
+				-value => 'zip',
+				-id => 'geo'),
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"zip\">\n",
 	"Zip code:\n",
 	$q->textfield(-name => 'zip',
