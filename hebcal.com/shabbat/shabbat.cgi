@@ -495,7 +495,7 @@ sub process_args
 		    $cmp1 ne $cmp2 && ! $q->param('noset'));
 	}
 
-	my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
+	my $expires_date = "Tue, 02-Jun-2037 20:00:00 GMT";
 
 	print "Cache-Control: private\015\012", "Set-Cookie: ", $cookie_to_set,
 	"; path=/; expires=",  $expires_date, "\015\012"
