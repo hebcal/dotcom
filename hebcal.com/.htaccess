@@ -19,7 +19,7 @@ RewriteCond %{HTTP_REFERER} ^http:\/\/bettythompson1\.tripod\.com.* [OR]
 RewriteCond %{HTTP_REFERER} ^http:\/\/groups\.msn\.com\/WalkingInTheLightJohn316.* [OR]
 RewriteCond %{HTTP_REFERER} ^http:\/\/www\.circlegame\.com.* [OR]
 RewriteCond %{HTTP_REFERER} ^http:\/\/www\.ammishaddai\.com.*
-RewriteRule ^  -  [F,L]
+RewriteRule ^  http://www.jewsforjudaism.org/  [R,L]
 
 AddType application/x-javascript js
 AddType text/css css
