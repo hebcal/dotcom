@@ -24,29 +24,24 @@ $rcsrev =~ s/\s*\$//g;
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 	\"http://www.w3.org/TR/REC-html40/loose.dtd\">
-<html>
-<head>
+<html><head>
 <title>Hebcal Interactive Jewish Calendar</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
 <meta name=\"description\" content=\"Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude.\">
 <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
 </head>
-
-<body>
-";
+<body>";
 
 $html_footer = "<hr noshade size=\"1\">
-
 <em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em>
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Wed Jul 14 19:26:38 PDT 1999
+Last modified: Wed Jul 14 19:55:22 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
-</body>
-</html>
+</body></html>
 ";
 
 $default_tz  = '-8';
@@ -348,59 +343,46 @@ sub form
 <a href=\"/\">radwin.org</a> -&gt;
 hebcal
 </small></div>
-
 <h1>Hebcal Interactive Jewish Calendar</h1>
-
-<p>Use the form below to generate a list of Jewish holidays.  Candle
+<p>Use the form below to generate a list of Jewish holidays. Candle
 lighting times are calculated from your latitude and longitude (which
 can be determined by your zip code or closest city).</p>
-
 <p>For example, see
-<a href=
-\"$cgipath?v=1&amp;year=" . ($year + 1) .
+<a href=\"$cgipath?v=1&amp;year=" . ($year + 1) .
 "&amp;zip=11565&amp;tz=-5&amp;dst=usa&amp;x=on\">default
 holidays for the year " . ($year + 1) . "</a>
 or
-<a href=
-\"$cgipath?v=1&amp;year=" . ($year) . "&amp;month=" . ($mon + 1) .
+<a href=\"$cgipath?v=1&amp;year=" . ($year) . "&amp;month=" . ($mon + 1) .
 "&amp;zip=60201&amp;tz=-6&amp;dst=usa&amp;h=on&amp;s=on\">sedrot
 for " . $MoY[$mon + 1] . " " . ($year) . "</a>.</p>
-
 <hr noshade size=\"1\">
 $message
-
-<form method=\"get\" action=\"$cgipath\">
-
+<form action=\"$cgipath\">
 <input type=\"hidden\" name=\"v\" value=\"1\">
-
-<label for=\"year\">Year: <input type=\"text\" name=\"year\"
+<label for=\"year\">Year: <input name=\"year\"
 id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
-
 &nbsp;&nbsp;&nbsp;
-
 <label for=\"month\">Month:
 <select name=\"month\" id=\"month\">
-<option value=\"\"$month{'0'}>- entire year -</option>
+<option value=\"\"$month{'0'}>- entire year -
 ";
     for ($i = 1; $i < 13; $i++)
     {
-	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]</option>\n";
+	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]\n";
     }
     print STDOUT "</select></label>
 <br>
 <small>
-Use all digits to specify a year.  You probably aren't
+Use all digits to specify a year. You probably aren't
 interested in 93, but rather 1993.
 </small>
 <br><br>
-
 <label for=\"c\"><input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}";
 
 print STDOUT " disabled" if (defined $in{'geo'} && $in{'geo'} eq 'city');
 
 print STDOUT ">
 Include candle lighting times</label><br>
-
 <blockquote>
 ";
 
@@ -425,41 +407,28 @@ Include candle lighting times</label><br>
 <tr>
 <td>Position:&nbsp;&nbsp;<br></td>
 <td>
-<nobr>
-<label for=\"ladeg\">
-<input type=\"text\" name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\" size=\"3\" maxlength=\"2\">
-deg&nbsp;</label>
+<label for=\"ladeg\"><input name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\"
+size=\"3\" maxlength=\"2\">&nbsp;deg</label>&nbsp;&nbsp;<label
+for=\"lamin\"><input name=\"lamin\" id=\"lamin\" value=\"$in{'lamin'}\"
+size=\"2\" maxlength=\"2\">&nbsp;min</label>&nbsp;<select
+name=\"ladir\">";
+print STDOUT "<option\nvalue=\"n\"",
+	($in{'ladir'} eq 'n' ? ' selected' : ''), ">North Latitude";
+print STDOUT "<option\nvalue=\"s\"",
+	($in{'ladir'} eq 's' ? ' selected' : ''), ">South Latitude";
 
-<label for=\"lamin\">
-<input type=\"text\" name=\"lamin\" id=\"lamin\" value=\"$in{'lamin'}\" size=\"2\" maxlength=\"2\">
-min</label>
+print STDOUT "</select><br>
+<label for=\"lodeg\"><input name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\"
+size=\"3\" maxlength=\"3\">&nbsp;deg</label>&nbsp;&nbsp;<label
+for=\"lomin\"><input name=\"lomin\" id=\"lomin\" value=\"$in{'lomin'}\"
+size=\"2\" maxlength=\"2\">&nbsp;min</label>&nbsp;<select
+name=\"lodir\">";
 
-<select name=\"ladir\">
-";
-print STDOUT "<option value=\"n\"",
-	($in{'ladir'} eq 'n' ? ' selected' : ''), ">North Latitude</option>\n";
-print STDOUT "<option value=\"s\"",
-	($in{'ladir'} eq 's' ? ' selected' : ''), ">South Latitude</option>\n";
-
-print STDOUT "</select></nobr><br>
-
-<nobr>
-<label for=\"lodeg\">
-<input type=\"text\" name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\" size=\"3\" maxlength=\"3\">
-deg&nbsp;</label>
-
-<label for=\"lomin\">
-<input type=\"text\" name=\"lomin\" id=\"lomin\" value=\"$in{'lomin'}\" size=\"2\" maxlength=\"2\">
-min</label>
-
-<select name=\"lodir\">
-";
-
-print STDOUT "<option value=\"w\"",
-	($in{'lodir'} eq 'w' ? ' selected' : ''), ">West Longitude</option>\n";
-print STDOUT "<option value=\"e\"",
-	($in{'lodir'} eq 'e' ? ' selected' : ''), ">East Longitude</option>\n";
-print STDOUT "</select></nobr><br>
+print STDOUT "<option\nvalue=\"w\"",
+	($in{'lodir'} eq 'w' ? ' selected' : ''), ">West Longitude";
+print STDOUT "<option\nvalue=\"e\"",
+	($in{'lodir'} eq 'e' ? ' selected' : ''), ">East Longitude";
+print STDOUT "</select><br>
 </td>
 <td>
 (or select by <a href=\"$cgipath\">zip</a> or
@@ -471,7 +440,7 @@ print STDOUT "</select></nobr><br>
     else
     {
 	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
-<label for=\"zip\">5-digit zip code: <input type=\"text\" name=\"zip\"
+<label for=\"zip\">5-digit zip code: <input name=\"zip\"
 id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label>
 &nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">city</a>
 or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
@@ -481,95 +450,76 @@ or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 
     if (!defined $in{'geo'} || $in{'geo'} ne 'city')
     {
-	print STDOUT "
-<label for=\"tz\">Time Zone:
+	print STDOUT "<label for=\"tz\">Time Zone:
 <select name=\"tz\" id=\"tz\">
-<option value=\"-12\"$tz{'-12'}>GMT -12:00  Dateline</option>
-<option value=\"-11\"$tz{'-11'}>GMT -11:00  Samoa</option>
-<option value=\"-10\"$tz{'-10'}>GMT -10:00  Hawaiian</option>
-<option value=\"-9\"$tz{'-9'}>GMT -09:00  Alaskan</option>
-<option value=\"-8\"$tz{'-8'}>GMT -08:00  Pacific</option>
-<option value=\"-7\"$tz{'-7'}>GMT -07:00  Mountain</option>
-<option value=\"-6\"$tz{'-6'}>GMT -06:00  Central</option>
-<option value=\"-5\"$tz{'-5'}>GMT -05:00  Eastern</option>
-<option value=\"-4\"$tz{'-4'}>GMT -04:00  Atlantic</option>
-<option value=\"-3\"$tz{'-3'}>GMT -03:00  Brasilia, Buenos Aires</option>
-<option value=\"-2\"$tz{'-2'}>GMT -02:00  Mid-Atlantic</option>
-<option value=\"-1\"$tz{'-1'}>GMT -01:00  Azores</option>
-<option value=\"0\"$tz{'0'}>Greenwich Mean Time</option>
-<option value=\"1\"$tz{'1'}>GMT +01:00  Western Europe</option>
-<option value=\"2\"$tz{'2'}>GMT +02:00  Eastern Europe</option>
-<option value=\"3\"$tz{'3'}>GMT +03:00  Russia, Saudi Arabia</option>
-<option value=\"4\"$tz{'4'}>GMT +04:00  Arabian</option>
-<option value=\"5\"$tz{'5'}>GMT +05:00  West Asia</option>
-<option value=\"6\"$tz{'6'}>GMT +06:00  Central Asia</option>
-<option value=\"7\"$tz{'7'}>GMT +07:00  Bangkok, Hanoi, Jakarta</option>
-<option value=\"8\"$tz{'8'}>GMT +08:00  China, Singapore, Taiwan</option>
-<option value=\"9\"$tz{'9'}>GMT +09:00  Korea, Japan</option>
-<option value=\"10\"$tz{'10'}>GMT +10:00  E. Australia</option>
-<option value=\"11\"$tz{'11'}>GMT +11:00  Central Pacific</option>
-<option value=\"12\"$tz{'12'}>GMT +12:00  Fiji, New Zealand</option>
+<option value=\"-12\"$tz{'-12'}>GMT -12:00 Dateline
+<option value=\"-11\"$tz{'-11'}>GMT -11:00 Samoa
+<option value=\"-10\"$tz{'-10'}>GMT -10:00 Hawaiian
+<option value=\"-9\"$tz{'-9'}>GMT -09:00 Alaskan
+<option value=\"-8\"$tz{'-8'}>GMT -08:00 Pacific
+<option value=\"-7\"$tz{'-7'}>GMT -07:00 Mountain
+<option value=\"-6\"$tz{'-6'}>GMT -06:00 Central
+<option value=\"-5\"$tz{'-5'}>GMT -05:00 Eastern
+<option value=\"-4\"$tz{'-4'}>GMT -04:00 Atlantic
+<option value=\"-3\"$tz{'-3'}>GMT -03:00 Brasilia, Buenos Aires
+<option value=\"-2\"$tz{'-2'}>GMT -02:00 Mid-Atlantic
+<option value=\"-1\"$tz{'-1'}>GMT -01:00 Azores
+<option value=\"0\"$tz{'0'}>Greenwich Mean Time
+<option value=\"1\"$tz{'1'}>GMT +01:00 Western Europe
+<option value=\"2\"$tz{'2'}>GMT +02:00 Eastern Europe
+<option value=\"3\"$tz{'3'}>GMT +03:00 Russia, Saudi Arabia
+<option value=\"4\"$tz{'4'}>GMT +04:00 Arabian
+<option value=\"5\"$tz{'5'}>GMT +05:00 West Asia
+<option value=\"6\"$tz{'6'}>GMT +06:00 Central Asia
+<option value=\"7\"$tz{'7'}>GMT +07:00 Bangkok, Hanoi, Jakarta
+<option value=\"8\"$tz{'8'}>GMT +08:00 China, Singapore, Taiwan
+<option value=\"9\"$tz{'9'}>GMT +09:00 Korea, Japan
+<option value=\"10\"$tz{'10'}>GMT +10:00 E. Australia
+<option value=\"11\"$tz{'11'}>GMT +11:00 Central Pacific
+<option value=\"12\"$tz{'12'}>GMT +12:00 Fiji, New Zealand
 </select></label><br>
-
 Daylight Savings Time:
 <label for=\"usa\">
 <input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
 USA</label>
-
 <label for=\"israel\">
 <input type=\"radio\" name=\"dst\" id=\"israel\" value=\"israel\"$opts_chk{'israel'}>
 Israel</label>
-
 <label for=\"none\">
 <input type=\"radio\" name=\"dst\" id=\"none\" value=\"none\"$opts_chk{'none'}>
 none</label><br>
 ";
     }
 
-print STDOUT "
-<label for=\"m\">Havdalah minutes past sundown: <input
-type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
+print STDOUT "<label for=\"m\">Havdalah minutes past sundown: <input
+name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
 maxlength=\"3\"></label><br>
-
 </blockquote>
-
 <label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
 Use ashkenazis hebrew</label><br>
-
 <label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
 Suppress Rosh Chodesh</label><br>
-
 <label for=\"h\"><input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}>
 Suppress all default holidays</label><br>
-
 <label for=\"o\"><input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}>
 Add days of the Omer</label><br>
-
 <label for=\"s\"><input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}>
 Add weekly sedrot on Saturday</label>
-
 (<label for=\"i\"><input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}>
 Use Israeli sedra scheme</label>)<br>
-
 <label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
 Print hebrew date for the entire date range</label><br>
-
-<br>
-
-<input type=\"submit\" value=\"Get Calendar\">
+<br><input type=\"submit\" value=\"Get Calendar\">
 </form>
-
 <p><small>This is a web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.
 Geographic zip code information is provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
 Bureau's Gazetteer</a>. If your zip code is missing from their database,
 I don't have it either.</small></p>
-
 <p><small>If you're a perl programmer, see the <a
 href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI
 form.</small></p>
-
 $html_footer";
 
     close(STDOUT);
@@ -631,7 +581,7 @@ $date
 	print STDOUT "</dl>\n\n";
     }
 
-    print STDOUT "<form method=\"get\" action=\"${cgipath}index.html/$filename\">\n";
+    print STDOUT "<form action=\"${cgipath}index.html/$filename\">\n";
 
     while (($key,$val) = each(%in))
     {
@@ -641,13 +591,11 @@ $date
     print STDOUT
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
 </form>
-
 <p><small>Use the \"add\" links below to add a holiday to your personal
 <a href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>, a free
 web-based calendar that can synchronize with Palm Pilot, Outlook, etc.
 These links will pop up a new browser window so you can keep this window
 open.</small></p>
-
 ";
 
     print STDOUT "<!-- $cmd -->\n";
@@ -800,7 +748,7 @@ sub city_select_html
     {
 	$retval .= '<option';
 	$retval .= ' selected' if 'Jerusalem' eq $_;
-	$retval .= ">$_</option>\n";
+	$retval .= ">$_\n";
     }
 
     $retval .= "</select>\n";
