@@ -57,6 +57,7 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <td valign="top" bgcolor="#eeeeee">
 <h4>Quick Links</h4>
 <hr noshade size="1">
+<b><i>Happy Chanukah!</i></b><br><!--#include file="holiday.inc" -->
 <br><span class="sm-grey">&gt;</span>
 <b><a href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current
 Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="current.inc" --><br><br><span class="sm-grey">&gt;</span>
@@ -94,7 +95,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Thu Oct  3 13:36:02 EDT 2002
+Last modified: Tue Nov 26 23:05:24 EST 2002
 <!-- hhmts end -->
 </span>
 </body></html>
