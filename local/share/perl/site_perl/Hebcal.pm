@@ -553,6 +553,31 @@ sub get_holiday_anchor($$$)
 # web page utils
 ########################################################################
 
+sub out_html
+{
+    my($cfg,@args) = @_;
+
+    if (defined $cfg && $cfg eq 'j')
+    {
+	print STDOUT "document.write(\"";
+	foreach (@args)
+	{
+	    s/\"/\\\"/g;
+	    s/\n/\\n/g;
+	    print STDOUT;
+	}
+	print STDOUT "\");\n";
+    }
+    else
+    {
+	foreach (@args)
+	{
+	    print STDOUT;
+	}
+    }
+
+    1;
+}
 
 sub guess_timezone($$$)
 {
