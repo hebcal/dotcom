@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 11 10:48:20 PDT 2001
+Last modified: Tue Apr 17 16:45:44 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -50,16 +50,16 @@ $hhmts =~ s/Last modified: /Software last updated:\n/g;
 
 my($html_footer) = "<hr
 noshade size=\"1\"><small>$hhmts
-(<a href=\"dist/ChangeLog.txt\">$rcsrev</a>)<br><br>Copyright
+(<a href=\"../dist/ChangeLog.txt\">$rcsrev</a>)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved. - <a
-href=\"help/\">Frequently
+href=\"../help/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
 
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
 
-my($cmd)  = "/home/users/mradwin/bin/hebcal";
+my($cmd)  = './hebcal';
 
 # process form params
 my($q) = new CGI;
@@ -502,7 +502,7 @@ JSCRIPT_END
     "<strong><a\nhref=\"/\">$server_name</a></strong>\n<tt>-&gt;</tt>\n",
     "hebcal</small></td>",
     "<td align=\"right\"><small><a\n",
-    "href=\"help/\">Help</a> -\n<a\n",
+    "href=\"../help/\">Help</a> -\n<a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>",
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
@@ -546,7 +546,7 @@ JSCRIPT_END
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
     "</label> <small>(<a\n",
-    "href=\"help/defaults.html\">What\n",
+    "href=\"../help/defaults.html\">What\n",
     "are the default Holidays?</a>)</small>",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
@@ -771,7 +771,7 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -label => "\nSave my preferences in a cookie"),
     "</label> <small>(<a\n",
-    "href=\"help/#cookie\">What's\n",
+    "href=\"../help/#cookie\">What's\n",
     "a cookie?</a> - <a\n",
     "href=\"del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
@@ -935,7 +935,7 @@ sub results_page
 
     print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt>\n$date</small></td>",
     "<td align=\"right\"><small><a\n",
-    "href=\"help/\">Help</a> -\n<a\n",
+    "href=\"../help/\">Help</a> -\n<a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>\n";
 
@@ -1063,8 +1063,8 @@ so you can keep this window open.
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     print STDOUT "<p>";
 
-    use lib '/home/users/mradwin/local/lib/perl5/5.00551';
-    use lib '/home/users/mradwin/local/lib/perl5/site_perl/5.00551';
+    use lib '/home/users/mradwin/local/lib/perl5/5.00503';
+    use lib '/home/users/mradwin/local/lib/perl5/site_perl/5.00503';
     use HTML::CalendarMonthSimple;
 
     my($cal);
