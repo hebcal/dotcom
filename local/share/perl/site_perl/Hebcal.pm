@@ -516,6 +516,20 @@ sub build_hebrew_date($$$)
 	$monthnames{$hm} . " " . hebnum_to_string($hy);
 }
 
+sub make_anchor($)
+{
+    my($f) = @_;
+
+    my($anchor) = lc($f);
+    $anchor =~ s/\'//g;
+    $anchor =~ s/[^\w]/-/g;
+    $anchor =~ s/-+/-/g;
+    $anchor =~ s/^-//g;
+    $anchor =~ s/-$//g;
+
+    "$anchor.html";
+}
+
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;
@@ -651,18 +665,21 @@ sub get_holiday_anchor($$$)
 
 	$subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-	if (defined $HOLIDAYS{$subj_copy})
+	if (defined $HOLIDAYS{$subj_copy} && defined $HOLIDAYS{"$subj_copy:hebrew"})
 	{
-	    $href = 'http://' . $q->virtual_host()
-		if ($q);
-	    $href .= "/help/holidays.html#" .
-		$HOLIDAYS{"$subj_copy:anchor"};
-
-	    if (defined $HOLIDAYS{"$subj_copy:hebrew"})
-	    {
-		$hebrew = $HOLIDAYS{"$subj_copy:hebrew"};
-	    }
+	    $hebrew = $HOLIDAYS{"$subj_copy:hebrew"};
 	}
+
+	$subj_copy =~ s/ \(CH\'\'M\)$//;
+	$subj_copy =~ s/ \(Hoshana Raba\)$//;
+	$subj_copy =~ s/ [IV]+$//;
+	$subj_copy =~ s/: \d Candles$//;
+	$subj_copy =~ s/: 8th Day$//;
+	$subj_copy =~ s/^Erev //;
+
+	$href = 'http://' . $q->virtual_host()
+	    if ($q);
+	$href .= "/holidays/" . make_anchor($subj_copy);
     }
 
     return (wantarray()) ?
