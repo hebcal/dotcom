@@ -89,6 +89,7 @@ class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <input type="text" name="zip" size="5" maxlength="5"
 id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="geo" value="zip">
+<input type="hidden" name="tag" value="fp.ql">
 <br>or <a href="/shabbat/#change">select by major city</a></small>
 </form>
 <hr noshade size="1">
