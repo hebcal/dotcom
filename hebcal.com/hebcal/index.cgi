@@ -98,7 +98,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Aug 17 10:34:51 PDT 1999
+Last modified: Tue Aug 17 10:52:24 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -548,7 +548,10 @@ or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <option value=\"-8\"$tz{'-8'}>GMT -08:00 (Pacific)
 <option value=\"-9\"$tz{'-9'}>GMT -09:00 (Alaskan)
 <option value=\"-10\"$tz{'-10'}>GMT -10:00 (Hawaii)
-<option value=\"-11\"$tz{'-11'}>GMT -11:00
+";
+
+    print STDOUT
+"<option value=\"-11\"$tz{'-11'}>GMT -11:00
 <option value=\"-12\"$tz{'-12'}>GMT -12:00
 <option value=\"12\"$tz{'12'}>GMT +12:00
 <option value=\"11\"$tz{'11'}>GMT +11:00
@@ -567,7 +570,11 @@ or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <option value=\"-2\"$tz{'-2'}>GMT -02:00
 <option value=\"-3\"$tz{'-3'}>GMT -03:00
 <option value=\"-4\"$tz{'-4'}>GMT -04:00
-</select></label><br>
+"
+    if (defined $in{'geo'} && $in{'geo'} eq 'pos');
+
+    print STDOUT
+"</select></label><br>
 Daylight Savings Time:
 <label for=\"usa\">
 <input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
