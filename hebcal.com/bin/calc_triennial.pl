@@ -429,7 +429,7 @@ lang="he">$hebrew</h1></td>
 <h3><a name="torah">Torah Portion:</a>
 <a href="$torah_href"\ntitle="Translation from JPS Tanakh">$torah</a></h3>
 &nbsp;
-<table border="1" cellpadding="5" title="Shabbat Aliyot">
+<table border="1" cellpadding="5">
 <tr>
 <td align="center" width="25%"><b>Full Kriyah<b></td>
 <td align="center" width="25%"><b>Triennial Year I</b>
