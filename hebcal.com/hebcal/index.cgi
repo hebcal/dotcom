@@ -689,6 +689,7 @@ JSCRIPT_END
     "</form>\n");
 
     Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev));
+    Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
     exit(0);
     1;
@@ -1138,6 +1139,7 @@ qq{<p class="goto"><span class="sm-grey">&gt;</span>
 	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
     }
     Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev));
+    Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
     1;
 }
