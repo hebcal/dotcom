@@ -22,7 +22,7 @@ Help
 <td align="right"><small><a href="/search/">Search</a></small>
 </td></tr></table>
 
-<h1>Hebcal Help and FAQ</h1>
+<h1><a name="top">Hebcal Help and FAQ</a></h1>
 
 <dl>
 <dt><a href="#about">What is the Hebcal Interactive Jewish
@@ -31,36 +31,43 @@ Calendar?</a>
 <dt><a href="#maintain">Who maintains this service?</a>
 <dt><a href="#different">What's different about this web
 interface?</a>
+<dt><a href="#kudos">How can I tell you how much I like the Hebcal
+Interactive Jewish Calendar?</a>
 </dl>
 <dt>Specifics about Jewish Holidays
 <dl>
 <dt><a href="#begin">When do the Holidays begin?</a>
 <dt><a href="#shabbat">When does Shabbat begin?</a>
 <dt><a href="#defaults">What are the default Holidays?</a>
-</dl>
+<dt><a href="#chol">What does CH''M mean?</a>
 <dt><a href="#sedrot">What are the weekly sedrot?</a>
+</dl>
 <dt><a href="#import">How do I import Hebcal entries into my PDA or
 desktop calendar program?</a>
 <dl>
 <dt><a href="#csv">Outlook CSV</a>
 <dt><a href="#dba">Palm Date Book Archive (DBA)</a>
 </dl>
+<dt>Candle lighting times
+<dl>
 <dt><a href="#zip2geo">How are candle lighting times determined from
 my zip code?</a>
-<dt><a href="#top-zips">Who's using this site to get candle-lighting
-times?</a>
-<dt><a href="#kudos">How can I tell you how much I like the Hebcal
-Interactive Jewish Calendar?</a>
-<dt><a href="#resources">What are other good Jewish calendar resources
-on the web?</a>
-<dt><a href="#code">I'm a programmer.  Can I see the source
-code?</a>
+<dt><a href="#candle-accurate">How accurate are candle lighting times?</a>
 <dt><a href="#tags">How can my synagogue put 1-Click Shabbat
 candle-lighting times on its own website?</a>
-<dt><a href="#cookie">What's the Hebcal Cookie?</a>
-<dt><a href="#chol">What does CH''M mean?</a>
+<dt><a href="#top-zips">Who's using this site to get candle-lighting
+times?</a>
+</dl>
+<dt>Jewish Calendar resources
+<dl>
+<dt><a href="#links">What are other good Jewish calendar sites
+on the web?</a>
 <dt><a href="#books">Can you recommend any books on the Hebrew
 Calendar or Jewish Holidays?</a>
+</dl>
+<dt><a href="#cookie">What's the Hebcal Cookie?</a>
+<dt><a href="#code">I'm a programmer.  Can I see the source
+code?</a>
 <dt><a href="#copyright">Copyright Notice</a>    
 </dl>
 
@@ -77,8 +84,7 @@ by your zip code or closest city).</p>
 <p><a
 href="http://www.radwin.org/michael/contact.html">Michael J. Radwin</a> created and runs the web
 interface. <a
-href="http://www.sadinoff.com/">Danny Sadinoff</a> wrote
-<a
+href="http://www.sadinoff.com/">Danny Sadinoff</a> wrote <a
 href="http://www.sadinoff.com/hebcal/">hebcal 3.2 for UNIX</a>, the
 back-end that this service uses to generate the list of Holidays.</p>
 
@@ -97,6 +103,18 @@ interface?</a></h3>
   <li>Both transliterations and actual Hebrew text with vowels
 </ul>
 
+<h3><a name="kudos">How can I tell you how much I like the Hebcal
+Interactive Jewish Calendar?</a></h3>
+
+<p>Send e-mail to Danny Sadinoff (<tt><a
+href="mailto:sadinoff@pobox.com">sadinoff@pobox.com</a></tt>), author of
+hebcal 3.2 for UNIX and tell him that you like it.  According to Danny,</p>
+
+<blockquote>
+Hebcal is available as "guiltware," which is my version of the GNU
+license, but with some interest in hearing from you thrown in.
+</blockquote>
+
 <h2>Specifics about Jewish Holidays</h2>
 
 <h3><a name="begin">When do the Holidays begin?</a></h3>
@@ -113,6 +131,12 @@ Shabbat begins 40 minutes before sundown.</p>
 <h3><a name="defaults">What are the default Holidays?</a></h3>
 
 <p>See the <a href="holidays.html">Hebcal Default Holidays</a> page.</p>
+
+<h3><a name="chol">What does CH''M mean?</a></h3>
+
+<p><strong>CH''M</strong> is an abbreviation for Chol Ha-Mo'ed.  Chol
+Ha-Mo'ed are the intermediate days of Passover and Sukkot, when work is
+permitted.</p>
 
 <h3><a name="sedrot">What are the weekly sedrot?</a></h3>
 
@@ -142,8 +166,10 @@ desktop calendar program?</a></h2>
     import the chosen file.
 </ul>
 
-<h2><a name="zip2geo">How are candle lighting times determined from
-my zip code?</a></h2>
+<h2><a name="candle">Candle lighting times</a></h2>
+
+<h3><a name="zip2geo">How are candle lighting times determined from
+my zip code?</a></h3>
 
 <p>Since candle lighting times are determined from latitude and
 longitude, a process called geocoding is used to determine the
@@ -162,29 +188,48 @@ href="/dist/usps-citynames.txt.gz">usps-citynames.txt.gz</a>, 188 Kbytes,
 contains an updated mapping from zip codes to city names obtained from
 the US Postal Service.</p>
 
-<h2><a name="top-zips">Who's using this site to get candle-lighting
-times?</a></h2>
+<h3><a name="candle-accurate">How accurate are candle lighting
+times?</a></h3>
+
+<p>Hebcal computes sunset based on an algorithm by the U.S. Naval
+Observatory (USNO). The USNO claims accuracy within 2 minutes except at
+extreme northern or southern latitudes.  Comparison to local NWS charts
+for sunrise and sunset (which are cheap and easy to come by) shows that
+with the double precision calculations, the charts produced by this
+program are no more than 1 minute removed from those charts in
+lattitudes lower than 41 degrees.  Candle lighting times agree with
+those on popular calendars also to the 1 minute accuracy.</p>
+
+<h3><a name="tags">How can my synagogue put 1-Click Shabbat
+candle-lighting times on its own website?</a></h3>
+
+<p>You can use these HTML tags to insert weekly candle-lighting times
+directly on your web page:</p>
+
+<table border="1" cellpadding="6">
+<tr><td><pre>&lt;script type="text/javascript" language="JavaScript"
+src="http://www.hebcal.com/shabbat/?zip=<span style="background: #ffff99">90210</span>;cfg=j"&gt;
+&lt;/script&gt;
+&lt;noscript&gt;
+&lt;a href="http://www.hebcal.com/shabbat/?zip=<span style="background: #ffff99">90210</span>"&gt;1-Click
+Shabbat Candle Lighting times&lt;/a&gt;.
+&lt;/noscript&gt;</pre></td></tr>
+</table>
+
+<p>Make sure you replace both <span style="background: #ffff99">zip
+codes</span> with your synagogue's zip code.</p>
+
+<h3><a name="top-zips">Who's using this site to get candle-lighting
+times?</a></h3>
 
 <p>Check out <a
 href="top-zips.txt">top-zips.txt</a>, a list of all of the
 zip codes people have used (updated daily).</p>
 
-<h2><a name="kudos">How can I tell you how much I like the Hebcal
-Interactive Jewish Calendar?</a></h2>
+<h2><a name="resources">Jewish calendar resources</a></h2>
 
-<p>Send e-mail to Danny Sadinoff (<tt><a
-href="mailto:sadinoff@pobox.com">sadinoff@pobox.com</a></tt>), author of
-<a
-href="http://www.sadinoff.com/hebcal/">hebcal 3.2 for UNIX</a>
-and tell him that you like it.  According to Danny,</p>
-
-<blockquote>
-Hebcal is available as "guiltware," which is my version of the GNU
-license, but with some interest in hearing from you thrown in.
-</blockquote>
-
-<h2><a name="resources">What are other good Jewish calendar resources
-on the web?</a></h2>
+<h3><a name="links">What are other good Jewish calendar sites
+on the web?</a></h3>
 
 <p>For easy access to weekly Shabbat times, you might try our own <a
 href="/shabbat/">1-Click Shabbat</a> page.</p>
@@ -212,33 +257,18 @@ href="http://www.kashrut.com/zemanim/">Zemanim (prayer
 time) Service</a>.  They can compute Alos HaShachar, Sunrise, Sunset,
 Sof Zeman K'rea Sh'ma, Plag HaMincha, Tzait hakochavim, etc.</p>
 
-<h2><a name="code">I'm a programmer.  Can I see the source
-code?</a></h2>
+<h3><a name="books">Can you recommend any books on the Hebrew
+Calendar or Jewish Holidays?</a></h3>
 
-<p>Yes. The code is freely available under the terms of the GNU General
-Public License.</p>
+<p>For a good reference book on the major Jewish Holidays, I'd suggest
+Rabbi Michael Strassfeld's <em><a
+href="http://www.amazon.com/exec/obidos/ISBN=0062720082/hebrewcalendaror/">The
+Jewish Holidays: A Guide & Commentary</a></em>.</p>
 
-<p>Download from
-<a href="/dist/">http://www.hebcal.com/dist/</a>.</p>
-
-<h2><a name="tags">How can my synagogue put 1-Click Shabbat
-candle-lighting times on its own website?</a></h2>
-
-<p>You can use these HTML tags to insert weekly candle-lighting times
-directly on your web page:</p>
-
-<table border="1" cellpadding="6">
-<tr><td><pre>&lt;script type="text/javascript" language="JavaScript"
-src="http://www.hebcal.com/shabbat/?zip=<span style="background: #ffff99">90210</span>;cfg=j"&gt;
-&lt;/script&gt;
-&lt;noscript&gt;
-&lt;a href="http://www.hebcal.com/shabbat/?zip=<span style="background: #ffff99">90210</span>"&gt;1-Click
-Shabbat Candle Lighting times&lt;/a&gt;.
-&lt;/noscript&gt;</pre></td></tr>
-</table>
-
-<p>Make sure you replace both <span style="background: #ffff99">zip
-codes</span> with your synagogue's zip code.</p>
+<p>Rabbi Nathan Bushwick's <em><a
+href="http://www.amazon.com/exec/obidos/ISBN=0940118173/hebrewcalendaror/">Understanding
+the Jewish Calendar</a></em> explains some of the mathematical and
+scientific underpinnings of the calendar.</p>
 
 <h2><a name="cookie">What's the Hebcal Cookie?</a></h2>
 
@@ -251,24 +281,14 @@ Hebcal results.</p>
 <p>To delete your Hebcal Cookie at any time, click the <a
 href="/hebcal/del_cookie?static">Delete my cookie</a> link.</p>
 
-<h2><a name="chol">What does CH''M mean?</a></h2>
+<h2><a name="code">I'm a programmer.  Can I see the source
+code?</a></h2>
 
-<p><strong>CH''M</strong> is an abbreviation for Chol Ha-Mo'ed.  Chol
-Ha-Mo'ed are the intermediate days of Passover and Sukkot, when work is
-permitted.</p>
+<p>Yes. The code is freely available under the terms of the GNU General
+Public License.</p>
 
-<h2><a name="books">Can you recommend any books on the Hebrew
-Calendar or Jewish Holidays?</a></h2>
-
-<p>For a good reference book on the major Jewish Holidays, I'd suggest
-Rabbi Michael Strassfeld's <em><a
-href="http://www.amazon.com/exec/obidos/ISBN=0062720082/hebrewcalendaror/">The
-Jewish Holidays: A Guide & Commentary</a></em>.</p>
-
-<p>Rabbi Nathan Bushwick's <em><a
-href="http://www.amazon.com/exec/obidos/ISBN=0940118173/hebrewcalendaror/">Understanding
-the Jewish Calendar</a></em> explains some of the mathematical and
-scientific underpinnings of the calendar.</p>
+<p>Download from
+<a href="/dist/">http://www.hebcal.com/dist/</a>.</p>
 
 <h2><a name="copyright">Copyright Notice</a></h2>
 
@@ -292,7 +312,7 @@ GNU General Public License for more details.</p>
 <a href="/help/">Help</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed May 30 11:39:21 PDT 2001
+Last modified: Thu May 31 09:52:03 PDT 2001
 <!-- hhmts end -->
 ($Revision$)
 </font>
