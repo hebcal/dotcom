@@ -953,7 +953,9 @@ sub get_parsha_info
     my($hebrew);
     my($torah,$haftarah,$haftarah_seph);
     my($torah_href,$haftarah_href,$drash1);
+    my $drash1_auto = 1;
     my $drash2 = '';
+    my $drash2_auto = 1;
     my $drash3 = '';
     my $drash_uj = '';
     if ($h =~ /^([^-]+)-(.+)$/ &&
@@ -1009,10 +1011,12 @@ sub get_parsha_info
 	    if ($l->{'rel'} eq 'drash')
 	    {
 		$drash1 = $l->{'href'};
+		$drash1_auto = $l->{'auto'} if defined $l->{'auto'};
 	    }
 	    elsif ($l->{'rel'} eq 'drash2')
 	    {
 		$drash2 = $l->{'href'};
+		$drash2_auto = $l->{'auto'} if defined $l->{'auto'};
 	    }
 	    elsif ($l->{'rel'} eq 'drash3')
 	    {
@@ -1040,10 +1044,12 @@ sub get_parsha_info
 	    if ($l->{'rel'} eq 'drash')
 	    {
 		$drash1 = $l->{'href'};
+		$drash1_auto = $l->{'auto'} if defined $l->{'auto'};
 	    }
 	    elsif ($l->{'rel'} eq 'drash2')
 	    {
 		$drash2 = $l->{'href'};
+		$drash2_auto = $l->{'auto'} if defined $l->{'auto'};
 	    }
 	    elsif ($l->{'rel'} eq 'drash3')
 	    {
@@ -1063,13 +1069,13 @@ sub get_parsha_info
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
     }
 
-    if ($drash1 =~ m,/\d\d\d\d/,) {
+    if ($drash1 =~ m,/\d\d\d\d/, && $drash1_auto) {
 	if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
 	    $drash1 =~ s,/\d\d\d\d/,/$hebrew_year/,;
 	}
     }
 
-    if ($drash2 =~ m,/\d\d\d\d/, && 
+    if ($drash2 =~ m,/\d\d\d\d/, && $drash2_auto &&
 	defined $parsha_time{$h} && $parsha_time{$h} < $saturday)
     {
 	$drash2 =~ s,/\d\d\d\d/,/$hebrew_year/,;
