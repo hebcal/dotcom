@@ -1,7 +1,8 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl5 -w
 
 # $Id$
 
+use DB_File;
 require 'ctime.pl';
 
 %city_zips = 
@@ -42,7 +43,9 @@ require 'ctime.pl';
      'Washington DC', '20301',
      );
 
-dbmopen(%DB,"/home/web/radwin.org/docs/hebcal/zips", 0400) || die;
+$dbmfile = '/home/web/radwin.org/docs/hebcal/zips.db';
+tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+    || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
 
 $total = 0;
@@ -97,7 +100,7 @@ while(($key,$val) = each(%zips))
 	$unk += $val;
     }
 }
-dbmclose(%DB);
+untie(%DB);
 
 
 foreach (sort keys %valbycity) {
