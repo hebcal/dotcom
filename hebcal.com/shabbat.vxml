@@ -1,5 +1,25 @@
 <?xml version="1.0"?>
-<!-- Based on Tellme Studio Code Example 112 -->
+<!--
+  1-Click Shabbat generates weekly Shabbat candle lighting times and
+  Parsha HaShavua from Hebcal information.
+ 
+  Copyright (c) 2002  Michael J. Radwin.  All rights reserved.
+  $Id$
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+-->
 <vxml version="2.0">
 	<!-- Document scoped variables  -->
 	<var name="zip"/>
