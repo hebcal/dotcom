@@ -75,99 +75,30 @@ if ($opts{'f'}) {
 
 my $html_footer = html_footer($festival_in);
 
-my @FESTIVALS = (
-"Pesach 1",
-"Pesach 1 (on Shabbat)",
-"Pesach 2",
-"Pesach Chol ha-Moed Day 1",
-"Pesach Chol ha-Moed Day 2",
-"Pesach Chol ha-Moed Day 3",
-"Pesach Chol ha-Moed Day 4",
-"Pesach Shabbat Chol ha-Moed",
-"Pesach 7",
-"Pesach 7 (on Shabbat)",
-"Pesach 8",
-"Pesach 8 (on Shabbat)",
-"Shavuot 1",
-"Shavuot 2",
-"Shavuot 2 (on Shabbat)",
-"Asara B'Tevet",
-"Ta'anit Bechorot",
-"Ta'anit Esther",
-"Tzom Gedaliah",
-"Tzom Tammuz",
-"Tish'a B'Av",
-"Rosh Hashana 1",
-"Rosh Hashana 1 (on Shabbat)",
-"Rosh Hashana 2",
-"Yom Kippur",
-"Yom Kippur (on Shabbat)",
-"Yom Kippur (Mincha)",
-"Sukkot 1",
-"Sukkot 1 (on Shabbat)",
-"Sukkot 2",
-"Sukkot Chol ha-Moed Day 1",
-"Sukkot Chol ha-Moed Day 2",
-"Sukkot Chol ha-Moed Day 3",
-"Sukkot Chol ha-Moed Day 4",
-"Sukkot Shabbat Chol ha-Moed",
-"Sukkot Chol ha-Moed Day 5 (Hoshana Raba)",
-"Shmini Atzeret",
-"Shmini Atzeret (on Shabbat)",
-"Erev Simchat Torah",
-"Simchat Torah",
-"Chanukah: 1 Candle",
-"Chanukah: 2 Candles",
-"Chanukah: 3 Candles",
-"Chanukah: 4 Candles",
-"Chanukah: 5 Candles",
-"Chanukah: 6 Candles",
-"Chanukah: 7 Candles",
-"Chanukah: 8 Candles",
-"Chanukah: 8th Day",
-"Purim",
-"Purim Katan",
-"Shushan Purim",
-"Shabbat HaChodesh",
-"Shabbat HaChodesh (on Rosh Chodesh)",
-"Shabbat HaGadol",
-"Shabbat Hazon",
-"Shabbat Nachamu",
-"Shabbat Parah",
-"Shabbat Shekalim",
-"Shabbat Shekalim (on Rosh Chodesh)",
-"Shabbat Shuva",
-"Shabbat Zachor",
-"Shabbat Rosh Chodesh",
-"Shabbat Machar Chodesh",
-"Rosh Chodesh Adar",
-"Rosh Chodesh Adar I",
-"Rosh Chodesh Adar II",
-"Rosh Chodesh Av",
-"Rosh Chodesh Cheshvan",
-"Rosh Chodesh Elul",
-"Rosh Chodesh Iyyar",
-"Rosh Chodesh Kislev",
-"Rosh Chodesh Nisan",
-"Rosh Chodesh Sh'vat",
-"Rosh Chodesh Sivan",
-"Rosh Chodesh Tamuz",
-"Rosh Chodesh Tevet",
-"Rosh Chodesh Tishrei",
-"Lag B'Omer",
-"Tu B'Shvat",
-"Yom HaAtzma'ut",
-"Yom HaShoah",
-"Yom HaZikaron",
-"Yom Yerushalayim",
-	     );
+my @FESTIVALS = @{$fxml->{'list'}->{'li'}};
 
-#foreach my $f (sort keys %{$fxml->{'festival'}})
+my(%PREV,%NEXT);
+{
+    my $f2;
+    foreach my $f (@FESTIVALS)
+    {
+	$PREV{$f} = $f2;
+	$f2 = $f;
+    }
+
+    $f2 = undef;
+    foreach my $f (reverse @FESTIVALS)
+    {
+	$NEXT{$f} = $f2;
+	$f2 = $f;
+    }
+}
+
 foreach my $f (@FESTIVALS)
 {
-    if ($f !~ /\(on Shabbat\)$/) {
+#    if ($f !~ /\(on Shabbat\)$/) {
 	write_festival_page($fxml,$f);
-    }
+#   }
 
     next unless $opts{'f'};
 
@@ -188,9 +119,9 @@ foreach my $f (@FESTIVALS)
 	}
     }
 
-    if (defined $fxml->{'festival'}->{$f}->{'haftara'}) {
-	print CSV "Torah Service - Haftara,",
-	$fxml->{'festival'}->{$f}->{'haftara'}, "\n";
+    if (defined $fxml->{'festival'}->{$f}->{'haft'}) {
+	print CSV "Torah Service - Haftarah,",
+	$fxml->{'festival'}->{$f}->{'haft'}, "\n";
     }
 
     print CSV "\n";
@@ -203,6 +134,20 @@ if ($opts{'f'}) {
 write_index_page($fxml);
 
 exit(0);
+
+sub make_anchor
+{
+    my($f) = @_;
+
+    my($anchor) = lc($f);
+    $anchor =~ s/\'//g;
+    $anchor =~ s/[^\w]/-/g;
+    $anchor =~ s/-+/-/g;
+    $anchor =~ s/^-//g;
+    $anchor =~ s/-$//g;
+
+    "$anchor.html";
+}
 
 sub write_index_page
 {
@@ -242,13 +187,13 @@ EOHTML
     my $prev_descr = '';
     foreach my $f (@FESTIVALS)
     {
-	next if $f =~ /\(on Shabbat\)$/;
-	my($anchor) = lc($f);
-	$anchor =~ s/[^\w]//g;
+#	next if $f =~ /\(on Shabbat\)$/;
+	my($anchor) = make_anchor($f);
 
 	my $descr = $festivals->{'festival'}->{$f}->{'descr'};
+	die "no descr for $f" unless $descr;
 
-	print OUT3 qq{<dt><a href="$anchor.html">$f</a>\n};
+	print OUT3 qq{<dt><a href="$anchor">$f</a>\n};
 	print OUT3 qq{<dd>$descr\n} unless $descr eq $prev_descr;
 	$prev_descr = $descr;
     }
@@ -263,26 +208,53 @@ sub write_festival_page
 {
     my($festivals,$f) = @_;
 
-    my($anchor) = lc($f);
-    $anchor =~ s/[^\w]//g;
+    my($anchor) = make_anchor($f);
 
     my $descr = $festivals->{'festival'}->{$f}->{'descr'};
 
-    open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
+    open(OUT2, ">$outdir/$anchor") || die "$outdir/$anchor: $!\n";
 
     print OUT2 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Jewish Holidays: $f</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.hebcal.com/holidays/$anchor.html" target="_top">
+<base href="http://www.hebcal.com/holidays/$anchor" target="_top">
 <meta name="description" content="$f: $descr">
 <meta name="keywords" content="$f,jewish,holidays,holiday,festival,chag,hag">
 <link rel="stylesheet" href="/style.css" type="text/css">
 EOHTML
 ;
 
+    my $prev = $PREV{$f};
+    my($prev_link) = '';
+    my($prev_anchor);
+    if ($prev)
+    {
+	$prev_anchor = make_anchor($prev);
+	my $title = "Previous Holiday";
+	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
+	    qq{title="$title">&lt;&lt; $prev</a>};
+    }
+
+    my $next = $NEXT{$f};
+    my($next_link) = '';
+    my($next_anchor);
+    if ($next)
+    {
+	$next_anchor = make_anchor($next);
+	my $title = "Next Holiday";
+	$next_link = qq{<a name="next" href="$next_anchor"\n} .
+	    qq{title="$title">$next &gt;&gt;</a>};
+    }
+
+    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
+    	if $prev_anchor;
+    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
+    	if $next_anchor;
+
     my $hebrew = $festivals->{'festival'}->{$f}->{'hebrew'};
+    $hebrew = '' unless $hebrew;
 
     my $torah;
     my $maftir;
@@ -324,13 +296,13 @@ EOHTML
 	}
     }
 
-    my $haftara;
-    if (defined $festivals->{'festival'}->{$f}->{'haftara'}) {
-	$haftara =  $fxml->{'festival'}->{$f}->{'haftara'};
+    my $haft;
+    if (defined $festivals->{'festival'}->{$f}->{'haft'}) {
+	$haft =  $fxml->{'festival'}->{$f}->{'haft'};
     }
 
     my $torah_href;
-    my $haftara_href;
+    my $haft_href;
     my $about_href;
 
     my $links = $festivals->{'festival'}->{$f}->{'links'}->{'link'};
@@ -349,9 +321,9 @@ EOHTML
 	{
 	    $torah_href = $l->{'href'};
 	}
-	elsif ($l->{'rel'} eq 'haftara')
+	elsif ($l->{'rel'} eq 'haft')
 	{
-	    $haftara_href = $l->{'href'};
+	    $haft_href = $l->{'href'};
 	}
 	elsif ($l->{'rel'} eq 'about')
 	{
@@ -374,9 +346,20 @@ href="/search/">Search</a></small>
 </td></tr></table>
 <!--/htdig_noindex-->
 <br>
+<table width="100%">
+<tr>
+<td align="left" width="15%">
+$prev_link
+</td>
+<td align="center" width="70%">
 <h1 align="center"><a name="top">$f</a><br><span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-
+</td>
+<td align="right" width="15%">
+$next_link
+</td>
+</tr>
+</table>
 <p>$descr.
 EOHTML
 ;
@@ -387,6 +370,8 @@ EOHTML
 href="$about_href">more...</a>]</p>
 EOHTML
 ;
+    } else {
+	warn "$f: missing About href\n";
     }
 
     if ($torah) {
@@ -397,6 +382,10 @@ EOHTML
 	print OUT2 qq{</a>}
 	    if ($torah_href);
 	print OUT2 qq{</h3>\n};
+
+	if (! $torah_href) {
+	    warn "$f: missing Torah href\n";
+	}
 
 	if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
 	    my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
@@ -412,14 +401,18 @@ EOHTML
 	print OUT2 "</p>\n";
     }
 
-    if ($haftara) {
-	print OUT2 qq{\n<h3>Haftara: };
-	print OUT2 qq{<a name="haftara"\nhref="$haftara_href"\ntitle="Translation from JPS Tanakh">}
-	    if ($haftara_href);
-	print OUT2 $haftara;
+    if ($haft) {
+	print OUT2 qq{\n<h3>Haftarah: };
+	print OUT2 qq{<a name="haft"\nhref="$haft_href"\ntitle="Translation from JPS Tanakh">}
+	    if ($haft_href);
+	print OUT2 $haft;
 	print OUT2 qq{</a>}
-	    if ($haftara_href);
+	    if ($haft_href);
 	print OUT2 qq{</h3>\n};
+
+	if (! $haft_href) {
+	    warn "$f: missing Haft href\n";
+	}
     }
 
     my($strassfeld_link) =
