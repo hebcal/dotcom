@@ -98,7 +98,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Aug 17 10:52:24 PDT 1999
+Last modified: Tue Aug 17 12:10:23 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -171,7 +171,6 @@ foreach (@opts)
     $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
 	1 : 0;
 }
-$opts{'c'} = 1 unless ($status && defined $in{'v'});
 
 if (defined $in{'dst'})
 {
@@ -198,6 +197,7 @@ $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
 if (! defined $in{'zip'} &&
     ! defined $in{'city'} &&
+    ! defined $in{'v'} &&
     (! defined $in{'lodeg'} ||
      ! defined $in{'lomin'} ||
      ! defined $in{'lodir'} ||
@@ -205,7 +205,7 @@ if (! defined $in{'zip'} &&
      ! defined $in{'lamin'} ||
      ! defined $in{'ladir'}))
 {
-    $in{'zip'} = $default_zip;
+    $in{'zip'} = ''; # $default_zip;
     &form('');
 }
     
@@ -309,8 +309,8 @@ elsif (defined $in{'zip'})
 	  "<b>" . $in{'zip'} . 
 	  "</b> in the zip code database.</font></em><br>\n" .
           "Please try a nearby zip code or select candle lighting times by\n" .
-          "<a href=\"${cgipath}?geo=city\">city</a> or\n" .
-          "<a href=\"${cgipath}?geo=pos\">latitude/longitude</a></p>")
+          "<a href=\"${cgipath}?c=on&amp;geo=city\">city</a> or\n" .
+          "<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a></p>")
 	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
@@ -360,7 +360,7 @@ if (defined $in{'month'} && $in{'month'} ne '')
 $cmd .= " $year";
 
 
-&download() unless defined $ENV{'PATH_INFO'};
+&results_page() unless defined $ENV{'PATH_INFO'};
 
 open(HEBCAL,"$cmd |") ||
     &CgiDie("Script Error: can't run hebcal",
@@ -430,13 +430,25 @@ lighting times are calculated from your latitude and longitude (which
 can be determined by your zip code or closest city).</p>
 <p>For example, see
 <a href=\"$cgipath?v=1&amp;year=" . ($year + 1) .
-"&amp;zip=11565&amp;tz=-5&amp;dst=usa&amp;x=on\">default
+"&amp;x=on\">default
 holidays for the year " . ($year + 1) . "</a>
 or
 <a href=\"$cgipath?v=1&amp;year=" . ($year) . "&amp;month=" . ($mon + 1) .
-"&amp;zip=60201&amp;tz=-6&amp;dst=usa&amp;h=on&amp;s=on\">sedrot
+"&amp;h=on&amp;s=on\">sedrot
 for " . $MoY[$mon + 1] . " " . ($year) . "</a>.</p>
-<hr noshade size=\"1\">
+";
+
+    if ($opts{'c'} == 0)
+    {
+	print STDOUT
+"<p><b>Customize candle lighting times by
+<a href=\"${cgipath}?c=on\">zip code</a>,
+<a href=\"${cgipath}?c=on&geo=city\">closest city</a>, or
+<a href=\"${cgipath}?c=on&geo=pos\">latitude/longitude</a>.</b></p>
+";
+    }
+
+print STDOUT "<hr noshade size=\"1\">
 $message
 <form action=\"$cgipath\">
 <label for=\"year\">Year: <input name=\"year\"
@@ -458,14 +470,45 @@ Use all digits to specify a year. You probably aren't
 interested in 93, but rather 1993.
 </small>
 <br><br>
-<label for=\"c\"><input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}";
-
-print STDOUT " disabled" if (defined $in{'geo'} && $in{'geo'} eq 'city');
-
-print STDOUT ">
-Include candle lighting times</label><br>
-<blockquote>
 ";
+
+    if ($opts{'c'} == 1)
+    {
+	print STDOUT 
+"<input type=\"hidden\" name=\"c\" value=\"1\">
+Include candle lighting times for ";
+	if (defined $in{'geo'})
+	{
+	    print STDOUT "zip code:\n"
+		if ($in{'geo'} eq 'zip');
+	    print STDOUT "closest city:\n"
+		if ($in{'geo'} eq 'city');
+	    print STDOUT "latitude/longitude:\n"
+		if ($in{'geo'} eq 'pos');
+	}
+	else
+	{
+	    print STDOUT "zip code:\n";
+	}
+	print STDOUT "<br><small>(or <a href=\"${cgipath}?c=off\">suppress</a>";
+	if (defined $in{'geo'})
+	{
+	    print STDOUT ", <a\nhref=\"${cgipath}?c=on\">zip code</a>"
+		if ($in{'geo'} ne 'zip');
+	    print STDOUT ", <a\nhref=\"${cgipath}?c=on&amp;geo=city\">closest city</a>"
+		if ($in{'geo'} ne 'city');
+	    print STDOUT ", <a\nhref=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>"
+		if ($in{'geo'} ne 'pos');
+	}
+	else
+	{
+	    print STDOUT ", <a
+href=\"${cgipath}?c=on&amp;geo=city\">closest city</a>, <a
+href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
+	}
+	print STDOUT ")</small>
+<br>
+<blockquote>";
 
     if (defined $in{'geo'} && $in{'geo'} eq 'city')
     {
@@ -483,20 +526,12 @@ Include candle lighting times</label><br>
 	}
 	print STDOUT "</select>\n";
 
-	print STDOUT "</label>
-&nbsp;&nbsp;(or select by <a href=\"$cgipath\">zip</a> or
-<a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
-<br>
-";
+	print STDOUT "</label><br>\n";
     }
     elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
     {
 	print STDOUT "
 <input type=\"hidden\" name=\"geo\" value=\"pos\">
-<table border=\"0\">
-<tr>
-<td>Position:&nbsp;&nbsp;<br></td>
-<td>
 <label for=\"ladeg\"><input name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\"
 size=\"3\" maxlength=\"2\">&nbsp;deg</label>&nbsp;&nbsp;<label
 for=\"lamin\"><input name=\"lamin\" id=\"lamin\" value=\"$in{'lamin'}\"
@@ -519,22 +554,14 @@ print STDOUT "<option\nvalue=\"w\"",
 print STDOUT "<option\nvalue=\"e\"",
 	($in{'lodir'} eq 'e' ? ' selected' : ''), ">East Longitude";
 print STDOUT "</select><br>
-</td>
-<td>
-(or select by <a href=\"$cgipath\">zip</a> or
-<a href=\"${cgipath}?geo=city\">city</a>)
-</td></tr>
-</table>
 ";
     }
     else
     {
-	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
-<label for=\"zip\">5-digit zip code: <input name=\"zip\"
-id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label>
-&nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">city</a>
-or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
-<br>
+	print STDOUT "
+<input type=\"hidden\" name=\"geo\" value=\"zip\">
+<label for=\"zip\">Zip code: <input name=\"zip\"
+id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label><br>
 ";
     }
 
@@ -592,7 +619,10 @@ print STDOUT "<label for=\"m\">Havdalah minutes past sundown: <input
 name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
 maxlength=\"3\"></label><br>
 </blockquote>
-<label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
+";
+}
+print STDOUT
+"<label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
 Use ashkenazis hebrew</label><br>
 <label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
 Suppress Rosh Chodesh</label><br>
@@ -632,7 +662,7 @@ $html_footer";
 
 
 
-sub download
+sub results_page
 {
     local($date) = $year;
     local($filename) = 'hebcal_' . $year;
