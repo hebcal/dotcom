@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May 16 15:34:53 PDT 2000
+Last modified: Thu May 18 10:39:13 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1225,7 +1225,36 @@ so you can keep this window open.
     my($goto) = "<p><b>" .
 	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
 	$date . "\n" .
-	"<a\nhref=\"$next_url\">&gt;&gt;</a></b></p>\n";
+	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
+
+    if ($date !~ /^\d+$/)
+    {
+	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month view | " .
+	    "<a\nhref=\"$script_name?year=" . $q->param('year') .
+	    "&amp;month=x";
+	foreach $key ($q->param())
+	{
+	    $val = $q->param($key);
+	    $goto .= "&amp;$key=" . &url_escape($val)
+		unless $key eq 'year' || $key eq 'month';
+	}
+	$goto .= "\">year\nview</a> ]</small>";
+    }
+    else
+    {
+	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
+	    "<a\nhref=\"$script_name?year=" . $q->param('year') .
+	    "&amp;month=1";
+	foreach $key ($q->param())
+	{
+	    $val = $q->param($key);
+	    $goto .= "&amp;$key=" . &url_escape($val)
+		unless $key eq 'year' || $key eq 'month';
+	}
+	$goto .= "\">month\nview</a> | year view ]</small>";
+    }
+
+    $goto .= "</p>\n";
 
     print STDOUT $goto;
 
@@ -1303,7 +1332,7 @@ so you can keep this window open.
 
     # download links
     print STDOUT "<p>Advanced options:\n",
-    "[ <a href=\"", $script_name,
+    "<small>[ <a href=\"", $script_name,
     "index.html/$filename.csv?dl=1";
     foreach $key ($q->param())
     {
@@ -1338,7 +1367,7 @@ so you can keep this window open.
 	}
 	print STDOUT "\">Show&nbsp;Yahoo!&nbsp;Calendar&nbsp;links</a>";
     }
-    print STDOUT "\n]</p>\n";
+    print STDOUT "\n]</small></p>\n";
 
     print STDOUT  $html_footer;
 
