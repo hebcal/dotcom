@@ -39,10 +39,6 @@ $this_mon++;
 
 my($rcsrev) = '$Revision$'; #'
 
-my($hhmts) = "<!-- hhmts start -->
-Last modified: Sat May 12 21:28:03 PDT 2001
-<!-- hhmts end -->";
-
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
 
 my($cmd)  = './hebcal';
@@ -558,7 +554,7 @@ JSCRIPT_END
 	       '-override'=>1),
     "</form>";
 
-    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     exit(0);
     1;
@@ -1000,7 +996,7 @@ so you can keep this window open.
     }
     print STDOUT "\n]</small></p>\n";
 
-    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     1;
 }
@@ -1219,3 +1215,7 @@ sub get_candle_config($)
 
     return ($cmd_extra,$city_descr,$lat_descr,$long_descr,$dst_tz_descr);
 }
+
+# local variables:
+# mode: perl
+# end:
