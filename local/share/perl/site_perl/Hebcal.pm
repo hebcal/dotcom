@@ -370,6 +370,36 @@ my(%holidays) =
      "Yom Yerushalayim"		=>
      ["yerushalayim",		0,
       'יוֹם יְרוּשָׁלַיִם'],
+
+     'Rosh Chodesh Iyyar'	=>
+     ['rc_iyyar', 0, ''],
+     'Rosh Chodesh Sivan'	=>
+     ['rc_sivan', 0, ''],
+     'Rosh Chodesh Tamuz'	=>
+     ['rc_tamuz', 0, ''],
+     'Rosh Chodesh Av'	=>
+     ['rc_av', 0, ''],
+     'Rosh Chodesh Elul'	=>
+     ['rc_elul', 0, ''],
+     'Rosh Chodesh Tishrei'	=>
+     ['rc_tishrei', 0, ''],
+     'Rosh Chodesh Cheshvan'	=>
+     ['rc_cheshvan', 0, ''],
+     'Rosh Chodesh Kislev'	=>
+     ['rc_kislev', 0, ''],
+     'Rosh Chodesh Tevet'	=>
+     ['rc_tevet', 0, ''],
+     "Rosh Chodesh Sh'vat"=>
+     ['rc_shvat', 0, ''],
+     'Rosh Chodesh Adar'	=>
+     ['rc_adar', 0, ''],
+     'Rosh Chodesh Adar I'	=>
+     ['rc_adar', 0, ''],
+     'Rosh Chodesh Adar II'	=>
+     ['rc_adar', 0, ''],
+     'Rosh Chodesh Nisan'	=>
+     ['rc_nisan', 0, ''],
+
 		    );
 
 # this doesn't work for weeks that have double parashiot
