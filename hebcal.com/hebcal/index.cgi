@@ -291,6 +291,15 @@ $rcsrev =~ s/\s*\$//g;
      'Washington DC', 1,
      );
 
+%tz_names = (
+     '-5', 'U.S. Eastern',
+     '-6', 'U.S. Central',
+     '-7', 'U.S. Mountain',
+     '-8', 'U.S. Pacific',
+     '-9', 'U.S. Alaskan',
+     '-10', 'U.S. Hawaii',
+     );
+
 @MoY_abbrev = ('',
 	       'jan','feb','mar','apr','may','jun',
 	       'jul','aug','sep','oct','nov','dec');
@@ -339,7 +348,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Nov 24 14:56:05 PST 1999
+Last modified: Mon Dec  6 11:53:29 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -349,7 +358,7 @@ $hhmts = 'This page generated: ' . &ctime(time) . '<br>' . $hhmts;
 
 $html_footer = "<hr noshade size=\"1\">
 <small>$hhmts ($rcsrev)
-<p>Copyright &copy; $year Michael John Radwin. All rights
+<br><br>Copyright &copy; $year Michael John Radwin. All rights
 reserved.<br><a href=\"/michael/projects/hebcal/\">Frequently
 asked questions about this service.</a></small>
 </body></html>
@@ -514,6 +523,8 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
     $dst_tz_descr =
 "Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time zone: GMT $in{'tz'}:00";
+    $dst_tz_descr .= " ($tz_names{$in{'tz'}})" if defined $tz_names{$in{'tz'}};
+
 
     # don't multiply minutes by -1 since hebcal does it internally
     $long_deg *= -1  if ($in{'lodir'} eq 'e');
@@ -587,6 +598,7 @@ elsif (defined $in{'zip'})
     $long_descr = "${long_deg}d${long_min}' W longitude";
     $dst_tz_descr =
 "Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time zone: GMT $in{'tz'}:00";
+    $dst_tz_descr .= " ($tz_names{$in{'tz'}})" if defined $tz_names{$in{'tz'}};
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -842,12 +854,13 @@ id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label>
 	    "<option value=\"auto\"$tz{'auto'}>Attempt to auto-detect\n"
 		if $in{'geo'} eq 'zip';
 
-	print STDOUT "<option value=\"-5\"$tz{'-5'}>GMT -05:00 (Eastern)
-<option value=\"-6\"$tz{'-6'}>GMT -06:00 (Central)
-<option value=\"-7\"$tz{'-7'}>GMT -07:00 (Mountain)
-<option value=\"-8\"$tz{'-8'}>GMT -08:00 (Pacific)
-<option value=\"-9\"$tz{'-9'}>GMT -09:00 (Alaskan)
-<option value=\"-10\"$tz{'-10'}>GMT -10:00 (Hawaii)
+	print STDOUT 
+"<option value=\"-5\"$tz{'-5'}>GMT -05:00 ($tz_names{'-5'})
+<option value=\"-6\"$tz{'-6'}>GMT -06:00 ($tz_names{'-6'})
+<option value=\"-7\"$tz{'-7'}>GMT -07:00 ($tz_names{'-7'})
+<option value=\"-8\"$tz{'-8'}>GMT -08:00 ($tz_names{'-8'})
+<option value=\"-9\"$tz{'-9'}>GMT -09:00 ($tz_names{'-9'})
+<option value=\"-10\"$tz{'-10'}>GMT -10:00 ($tz_names{'-10'})
 ";
 
 	print STDOUT
@@ -925,7 +938,7 @@ Print hebrew date for the entire date range</label>
 <label for=\"set\"><input type=\"checkbox\" name=\"set\" id=\"set\"$opts_chk{'set'}>
 Save my preferences in a cookie</label>
 (<a href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's
-a cookie?</a>)</small>
+a cookie?</a>)
 </td></tr>
 </table>
 <br><input type=\"submit\" value=\"Get Calendar\">
