@@ -9,7 +9,7 @@ function dba_lock_open($path, $mode, $handler) {
     if ($fd == false) {
 	die("open($lockfile) failed");
     }
-    chmod($lockfile, 0666);
+    @chmod($lockfile, 0666);
 
     if ($mode == "w") {
 	$lockmode = LOCK_EX;
