@@ -3,10 +3,9 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
-use Hebcal;
-use POSIX;
 use strict;
-use Date::Calc;
+use Hebcal ();
+use Date::Calc ();
 
 my $WEBDIR = '/home/mradwin/web/hebcal.com';
 my $HEBCAL = "$WEBDIR/bin/hebcal";
