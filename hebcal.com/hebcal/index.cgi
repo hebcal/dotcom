@@ -23,13 +23,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
+use strict;
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Time::Local;
 use Hebcal;
 use HTML::CalendarMonthSimple;
-use strict;
 
 my($author) = 'webmaster@hebcal.com';
 my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
