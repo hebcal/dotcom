@@ -2763,7 +2763,7 @@
 </parsha>
 
 <!-- Combined Sidrot -->
-<parsha id="Vayakhel-Pekudei" verse="Exodus 35:1 - 40:38">
+<parsha id="Vayakhel-Pekudei" verse="Exodus 35:1 - 40:38" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/vayakhelpekudey.shtml" />
@@ -2819,7 +2819,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tazria-Metzora" verse="Leviticus 12:1 - 15:33">
+<parsha id="Tazria-Metzora" verse="Leviticus 12:1 - 15:33" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/tazriametsora.shtml" />
@@ -2873,7 +2873,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Achrei Mot-Kedoshim" verse="Leviticus 16:1 - 20:27">
+<parsha id="Achrei Mot-Kedoshim" verse="Leviticus 16:1 - 20:27" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/ahareimotkedoshim.shtml" />
@@ -2927,7 +2927,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Behar-Bechukotai" verse="Leviticus 25:1 - 27:34">
+<parsha id="Behar-Bechukotai" verse="Leviticus 25:1 - 27:34" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5762/beharbehukkotai.shtml" />
@@ -2981,7 +2981,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Chukat-Balak" verse="Numbers 19:1 - 25:9">
+<parsha id="Chukat-Balak" verse="Numbers 19:1 - 25:9" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5760/hukkatbalak.shtml" />
@@ -3038,7 +3038,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Matot-Masei" verse="Numbers 30:2 - 36:13">
+<parsha id="Matot-Masei" verse="Numbers 30:2 - 36:13" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/mattotmaseei.shtml" />
@@ -3091,7 +3091,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Nitzavim-Vayeilech" verse="Deuteronomy 29:9 - 31:30">
+<parsha id="Nitzavim-Vayeilech" verse="Deuteronomy 29:9 - 31:30" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml" />
