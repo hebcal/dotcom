@@ -62,11 +62,11 @@ Calendar</a></b>
 <br><br><span class="sm-grey">&gt;</span>
 <b><a href="/hebcal/?v=1;year=2002;month=9;nx=on;nh=on;vis=on">High Holy
 Days 5763</a></b>
+<br><br><span class="sm-grey">&gt;</span>
+<b>Candle lighting times</b><br>
 <form action="/shabbat/">
-<span class="sm-grey">&gt;</span>
-<b>Candle lighting times</b>
-<br><label for="zip">Zip code:
-<input type="text" name="zip" size="5" maxlength="5" id="zip"></label>
+<label for="zip">Zip code:</label>
+<input type="text" name="zip" size="5" maxlength="5" id="zip">
 <input type="hidden" name="geo" value="zip">
 <small><br><a href="/shabbat/#change">select by major city</a></small>
 </form>
@@ -83,7 +83,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Tue Jul  9 13:30:25 EDT 2002
+Last modified: Tue Jul 16 13:46:40 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
