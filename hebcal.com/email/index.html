@@ -52,7 +52,7 @@ if (! $q->param('v'))
 	{
 	    $q->param('em', &decode_base64($cook->param('em')));
 	    my $info = &get_sub_info($q->param('em'));
-	    if ($info)
+	    if ($info && $info !~ /^action=/)
 	    {
 		&Hebcal::process_cookie($q,$info);
 		$want_c = 0;
@@ -133,6 +133,18 @@ sub unsubscribe
     my $email = $q->param('em');
     my $info = &get_sub_info($email);
 
+    if ($info && $info =~ /^action=/) {
+	my $html_email = &Hebcal::html_entify($email);
+	&my_header();
+
+	print STDOUT qq{<h2>Already Unsubscribed</h2>
+<p><b>$html_email</b>
+is already removed from the email subscription list.</p>
+},
+	&Hebcal::html_footer($q,$rcsrev);
+	exit(0);
+    }
+
     if (!$info) {
 	&form(1,
 	      "Sorry, <b>" . &Hebcal::html_entify($email) . "</b> is\n" .
@@ -158,12 +170,8 @@ hebcal.com};
 
     my($html_email) = &Hebcal::html_entify($email);
 
-    print STDOUT $q->header(),
-    &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
-			undef, undef),
-    &Hebcal::navbar2($q, $nav_text, 1,
-		     "1-Click\nShabbat", "/shabbat/"),
-    "<h1>$h1_text</h1>\n",
+    &my_header();
+    print STDOUT
     qq{<h2>Unsubscribed</h2>
 <p>You have been removed from the email subscription list.<br>
 A confirmation message has been sent to <b>$html_email</b>.</p>
@@ -270,16 +278,11 @@ sub subscribe
     "; path=/email; expires=",  $expires_date, "\015\012"
 	if $cookie_to_set;
 
-    print STDOUT $q->header(),
-    &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
-			undef, undef),
-    &Hebcal::navbar2($q, $nav_text, 1,
-		     "1-Click\nShabbat", "/shabbat/"),
-    "<h1>$h1_text</h1>\n";
+    &my_header();
 
     # check if email address already verified
     my $info = &get_sub_info($email);
-    if ($info)
+    if ($info && $info !~ /^action=/)
     {
 	&write_sub_info($q,
 			sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d",
@@ -357,6 +360,17 @@ to <b>$html_email</b>.</p>
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
 }
 
+sub my_header
+{
+    print STDOUT $q->header(),
+    &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
+			undef, undef),
+    &Hebcal::navbar2($q, $nav_text, 1,
+		     "1-Click\nShabbat", "/shabbat/"),
+    "<h1>$h1_text</h1>\n";
+}
+
+
 sub form
 {
     my($head,$message,$help) = @_;
@@ -369,12 +383,7 @@ sub form
     }
 
     if ($head) {
-	print STDOUT $q->header(),
-	&Hebcal::start_html($q, 'Hebcal ' . $h1_text,
-			    undef, undef),
-	&Hebcal::navbar2($q, $nav_text, 1,
-			 "1-Click\nShabbat", "/shabbat/"),
-	"<h1>$h1_text</h1>\n";
+	&my_header();
     }
 
     print STDOUT
@@ -473,9 +482,9 @@ sub get_sub_info
     untie(%DB);
     close(DB_FH);
 
-    if ($val && $val =~ /^action=/) {
-	return undef;
-    }
+#    if ($val && $val =~ /^action=/) {
+#	return undef;
+#    }
 
     return $val;
 }
