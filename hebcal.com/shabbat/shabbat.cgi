@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Jan 16 17:00:05 PST 2001
+Last modified: Tue Jan 16 18:08:30 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -277,15 +277,37 @@ unless ($default)
 my($title) = "1-Click Shabbat for $city_descr";
 $title =~ s/ &nbsp;/ /;
 
-if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/)
+if (defined $q->param('cfg'))
 {
-    &my_header($title, '');
+    if ($q->param('cfg') =~ /^[ij]$/)
+    {
+	&my_header($title, '');
 
-    my($url) = $q->url();
-    $url =~ s,/index.html$,/,;
+	my($url) = $q->url();
+	$url =~ s,/index.html$,/,;
 
-    &out_html("<h3><a target=\"_top\"\nhref=\"$url\">1-Click\n",
-	      "Shabbat</a> for $city_descr</h3>\n");
+	&out_html("<h3><a target=\"_top\"\nhref=\"$url\">1-Click\n",
+		  "Shabbat</a> for $city_descr</h3>\n");
+    }
+    elsif ($q->param('cfg') eq 'r')
+    {
+	&my_header($title, '');
+
+	&out_html("<?xml version=\"1.0\"?>
+<!DOCTYPE rss PUBLIC \"-//Netscape Communications//DTD RSS 0.91//EN\"
+\t\"http://my.netscape.com/publish/formats/rss-0.91.dtd\">
+<rss version=\"0.91\">
+<channel>
+<title>$title</title>
+");
+	&out_html("<link>http://" . $q->server_name() . $script_name .
+		  "?zip=" . $q->param('zip') . "&amp;dst=" . $q->param('dst'));
+	&out_html("&amp;tz=" . $q->param('tz'))
+	    if $q->param('tz') ne 'auto';
+	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n" .
+		  "times for your zip code</description>\n" .
+		  "<language>en-us</language>\n");
+    }
 }
 else
 {
@@ -320,8 +342,11 @@ $loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &invoke_hebcal($cmd, $loc);
 
-&out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
-	  qq{.</p>\n<p>\n});
+unless (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+{
+    &out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
+	      qq{.</p>\n<p>\n});
+}
 
 my($numEntries) = scalar(@events);
 my($i);
@@ -346,12 +371,27 @@ for ($i = 0; $i < $numEntries; $i++)
 
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
-	&out_html(qq{$subj for\n}, 
+	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+	{
+	    &out_html("<item>\n");
+	    &out_html(qq{<title>$subj for\n}, 
 		  strftime("%A, %d %B", localtime($time)));
-	&out_html(sprintf("\nis at <b>%d:%02d PM</b>.<br>\n", $hour, $min));
+	    &out_html(sprintf("\nis at %d:%02d PM</title>\n",
+			      $hour, $min));
+	    &out_html("<link>http://www.jewfaq.org/shabbat.htm</link>\n</item>\n");
+	}
+	else
+	{
+	    &out_html(qq{$subj for\n}, 
+		      strftime("%A, %d %B", localtime($time)));
+	    &out_html(sprintf("\nis at <b>%d:%02d PM</b>.<br>\n",
+			      $hour, $min));
+	}
     }
     else
     {
+	&out_html("<item>\n<title>")
+	    if (defined $q->param('cfg') && $q->param('cfg') eq 'r');
 	if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
 	{
 	    &out_html("This week's Torah portion is\n");
@@ -362,7 +402,8 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 
 	my($href) = &get_holiday_anchor($subj);
-	if ($href ne '')
+	if ($href ne '' &&
+	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
 	{
 	    &out_html(qq{<a href="$href">$subj</a>});
 	}
@@ -377,15 +418,43 @@ for ($i = 0; $i < $numEntries; $i++)
 	    &out_html("\non ", strftime("%A, %d %B", localtime($time)));
 	}
 
-	&out_html(".<br>\n");
+	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+	{
+	    &out_html("</title>\n<link>");
+	    if ($href ne '')
+	    {
+		&out_html($href);
+	    }
+	    elsif ($subj =~ /^(Parshas\s+|Parashat\s+)/)
+	    {
+		&out_html("http://learn.jtsa.edu/topics/parashah/");
+	    }
+	    else
+	    {
+		&out_html("http://www.vjholidays.com/");
+	    }
+	    &out_html("</link>\n</item>\n");
+	}
+	else
+	{
+	    &out_html(".<br>\n");
+	}
     }
 }
 
-&out_html("</p>\n");
+&out_html("</p>\n")
+    unless (defined $q->param('cfg') && $q->param('cfg') eq 'r');
 
 if (defined $q->param('cfg'))
 {
-    &out_html("</body></html>") if $q->param('cfg') eq 'i';
+    if ($q->param('cfg') eq 'i')
+    {
+	&out_html("</body></html>\n");
+    }
+    elsif ($q->param('cfg') eq 'r')
+    {
+	&out_html("</channel>\n</rss>\n");
+    }
 }
 else
 {
@@ -430,6 +499,10 @@ sub my_header
     {
 	print STDOUT "Content-Type: application/x-javascript\015\012\015\012";
     }
+    elsif (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+    {
+	print STDOUT "Content-Type: text/xml\015\012\015\012";
+    }
     else
     {
 	&out_html($q->header(),
@@ -445,7 +518,7 @@ sub my_header
 		   -meta => {'robots' => 'noindex'}));
     }
 
-    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/)
+    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
     {
 	&out_html(
 	    "<table width=\"100%\"\nclass=\"navbar\">",
