@@ -18,7 +18,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	    $now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
 	my($stime) = strftime("%B %d, %Y", localtime($saturday));
 
-	open(OUT,">current2.inc") || die;
+	open(OUT,">/pub/m/r/mradwin/hebcal.com/current.inc") || die;
 	print OUT <<EOHTML;
 <br><br><span class="sm-grey">&gt;</span>
 <b><a href="$href">$parsha</a></b>
