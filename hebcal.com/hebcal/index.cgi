@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Jan 16 16:58:19 PST 2001
+Last modified: Fri Jan 19 10:44:22 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -73,7 +73,7 @@ if (! $q->param('v') &&
     defined $q->raw_cookie() &&
     $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
 {
-    &process_cookie($q,$1);
+    &Hebcal::process_cookie($q,$1);
 }
 
 # sanitize input to prevent people from trying to hack the site.
@@ -360,7 +360,7 @@ sub dba_display {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &invoke_hebcal($cmd, $loc);
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -370,15 +370,15 @@ sub dba_display {
 		     "application/x-palm-dba; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &http_date($time));
+		     -last_modified => &Hebcal::http_date($time));
 
     my($no_dst) = (!defined($q->param('dst')) || $q->param('dst') eq 'none' ||
 		   ((defined $q->param('geo') && $q->param('geo') eq 'city' &&
 		     defined $q->param('city') && $q->param('city') ne '' &&
 		     defined $Hebcal::city_nodst{$q->param('city')})));
 
-    &dba_write_header($path_info);
-    &dba_write_contents(\@events, $q->param('tz'), ! $no_dst);
+    &Hebcal::dba_write_header($path_info);
+    &Hebcal::dba_write_contents(\@events, $q->param('tz'), ! $no_dst);
 }
 
 sub csv_display {
@@ -386,7 +386,7 @@ sub csv_display {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &invoke_hebcal($cmd, $loc);
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -395,7 +395,7 @@ sub csv_display {
     print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &http_date($time));
+		     -last_modified => &Hebcal::http_date($time));
 
     $endl = "\012";			# default Netscape and others
     if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
@@ -405,7 +405,7 @@ sub csv_display {
 	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
     }
 
-    &csv_write_contents(\@events, $endl);
+    &Hebcal::csv_write_contents(\@events, $endl);
 }
 
 sub form
@@ -788,7 +788,7 @@ sub results_page
 
     # process cookie, delete before we generate next/prev URLS
     if ($q->param('set')) {
-	$newcookie = &gen_cookie($q);
+	$newcookie = &Hebcal::gen_cookie($q);
 	if (! defined $q->raw_cookie())
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
@@ -842,7 +842,7 @@ sub results_page
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    $prev_url .= "&amp;$key=" . &url_escape($val)
+	    $prev_url .= "&amp;$key=" . &Hebcal::url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
 	$prev_title = $Hebcal::MoY_short[$pm-1] . " " . $py;
@@ -851,7 +851,7 @@ sub results_page
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    $next_url .= "&amp;$key=" . &url_escape($val)
+	    $next_url .= "&amp;$key=" . &Hebcal::url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
 	$next_title = $Hebcal::MoY_short[$nm-1] . " " . $ny;
@@ -862,7 +862,7 @@ sub results_page
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    $prev_url .= "&amp;$key=" . &url_escape($val)
+	    $prev_url .= "&amp;$key=" . &Hebcal::url_escape($val)
 		unless $key eq 'year';
 	}
 	$prev_title = ($q->param('year') - 1);
@@ -871,7 +871,7 @@ sub results_page
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    $next_url .= "&amp;$key=" . &url_escape($val)
+	    $next_url .= "&amp;$key=" . &Hebcal::url_escape($val)
 		unless $key eq 'year';
 	}
 	$next_title = ($q->param('year') + 1);
@@ -906,7 +906,7 @@ sub results_page
     foreach $key ($q->param())
     {
 	$val = $q->param($key);
-	print STDOUT "&amp;$key=", &url_escape($val)
+	print STDOUT "&amp;$key=", &Hebcal::url_escape($val)
 	    unless $key eq 'v';
     }
 
@@ -976,7 +976,7 @@ so you can keep this window open.
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    $goto .= "&amp;$key=" . &url_escape($val)
+	    $goto .= "&amp;$key=" . &Hebcal::url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
 	$goto .= "\">year\nview</a> ]</small>";
@@ -989,7 +989,7 @@ so you can keep this window open.
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    $goto .= "&amp;$key=" . &url_escape($val)
+	    $goto .= "&amp;$key=" . &Hebcal::url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
 	$goto .= "\">month\nview</a> | year view ]</small>";
@@ -1007,7 +1007,7 @@ so you can keep this window open.
 	"in $city_descr" : '';
     $loc2 =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &invoke_hebcal($cmd, $loc2);
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2);
     print STDOUT "<pre>";
 
     # header row
@@ -1057,24 +1057,25 @@ so you can keep this window open.
 
 		$ST .= "&amp;DUR=00" . $events[$i]->[$Hebcal::EVT_IDX_DUR];
 
-		$ST .= "&amp;DESC=" . &url_escape($loc)
+		$ST .= "&amp;DESC=" . &Hebcal::url_escape($loc)
 		    if $loc ne '';
 	    }
 
 	    print STDOUT
 		"<a target=\"_calendar\" href=\"http://calendar.yahoo.com/";
 	    print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
-		&url_escape($subj), "&amp;VIEW=d\">add</a> ";
+		&Hebcal::url_escape($subj), "&amp;VIEW=d\">add</a> ";
 	}
 
-	my($href) = &get_holiday_anchor($subj);
+	my($href) = &Hebcal::get_holiday_anchor($subj);
 	if ($href ne '')
 	{
 	    $subj = qq{<a href="$href">$subj</a>};
 	}
 
 	my($dow) = ($year > 1969 && $year < 2038) ?
-	    $Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
+	    $Hebcal::DoW[&Hebcal::get_dow($year-1900, $mon-1, $mday)] . ' '
+		: '';
 	printf STDOUT ("%s%04d-%02d-%02d  %s",
 		       $dow, $year, $mon, $mday, $subj);
 	printf STDOUT (": %d:%02d", $hour, $min)
@@ -1099,7 +1100,7 @@ so you can keep this window open.
 	{
 	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?city=},
- 		&url_escape($q->param('city')), qq{">1-Click Shabbat for },
+ 		&Hebcal::url_escape($q->param('city')), qq{">1-Click Shabbat for },
 		$q->param('city'), qq{</a>.</p>\n};
 	}
     }
@@ -1112,7 +1113,7 @@ so you can keep this window open.
     foreach $key ($q->param())
     {
 	$val = $q->param($key);
-	print STDOUT "&amp;$key=", &url_escape($val);
+	print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
     }
     print STDOUT "&amp;filename=$filename.csv";
     print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
@@ -1128,7 +1129,7 @@ so you can keep this window open.
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    print STDOUT "&amp;$key=", &url_escape($val);
+	    print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
 	}
 	print STDOUT "&amp;filename=$filename.dba";
 	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
@@ -1140,7 +1141,7 @@ so you can keep this window open.
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
-	    print STDOUT "&amp;$key=", &url_escape($val);
+	    print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
 	}
 	print STDOUT "\">Show&nbsp;Yahoo!&nbsp;Calendar&nbsp;links</a>";
     }
