@@ -2,6 +2,13 @@
 
 # $Id$
 
+BEGIN
+{
+    my $base = $0;
+    $base =~ s,/[^/]+$,,;
+    push(@INC, $base);
+}
+
 use DB_File;
 use strict;
 use Hebcal;
