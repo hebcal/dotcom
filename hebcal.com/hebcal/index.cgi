@@ -1057,8 +1057,9 @@ sub results_page
 		    # display previously created calendar
 		    my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
 			' style="page-break-before: always"' : '';
-		    print STDOUT "<center$style>", $cal->as_HTML(), 
-		    "</center><br><br>";
+		    print STDOUT "<div align=\"center\" class=\"cal\"$style>",
+		    $cal->as_HTML(), 
+		    "</div><br><br>";
 
 		    # grotty hack to display empty months
 		    if ($prev_mon != 0 && ($prev_mon+1 != $mon))
@@ -1068,8 +1069,9 @@ sub results_page
 			    $cal = new_html_cal($year,$i,$goto,
 						$prev_title,$prev_url,
 						$next_title,$next_url);
-			    print STDOUT "<center$style>", $cal->as_HTML(),
-			    "</center><br><br>";
+			    print STDOUT "<div align=\"center\" class=\"cal\"$style>",
+			    $cal->as_HTML(), 
+			    "</div><br><br>";
 			}
 		    }
 		}
@@ -1082,6 +1084,9 @@ sub results_page
 	    my($cal_subj) = $subj;
 	    $cal_subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj)
 		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+
+	    $cal->setcontent($mday, "")
+		if $cal->getcontent($mday) eq "&nbsp;";
 
 	    $cal->addcontent($mday, "<br>\n")
 		if $cal->getcontent($mday) ne '';
@@ -1119,8 +1124,9 @@ sub results_page
     {
 	my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
 	    ' style="page-break-before: always"' : '';
-	print STDOUT "<center$style>", $cal->as_HTML(), 
-	    "</center>\n";
+	print STDOUT "<div align=\"center\" class=\"cal\"$style>",
+	    $cal->as_HTML(), 
+	    "</div>\n";
     }
 
     print STDOUT "</p>" unless $q->param('vis');
@@ -1149,6 +1155,13 @@ sub new_html_cal {
 		 "<a class=\"goto\" title=\"$next_title\"\n" .
 		 "href=\"$next_url\">&gt;&gt;</a></h2>\n" .
 		 '<div align="center" class="goto">' . $goto . '</div>');
+
+
+    my $end_day = Date::Calc::Days_in_Month($year, $month);
+    for (my $mday = 1; $mday <= $end_day ; $mday++)
+    {
+	$cal->setcontent($mday, "&nbsp;");
+    }
 
     $cal;
 }
