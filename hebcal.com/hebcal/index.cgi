@@ -493,12 +493,7 @@ JSCRIPT_END
 		 -id => 'heb',
 		 -label => "\nShow Hebrew event names"),
     "</label>",
-    "</p>\n",
-#    $q->hidden(-name => '.rand', -value => time(), -override => 1),
-    $q->submit(-name => '.s',-value => 'Get Calendar'),
-    $q->hidden(-name => '.cgifields',
-	       -values => ['nx', 'nh', 'set'],
-	       '-override'=>1);
+    "</p>\n";
 
     $q->param('c','off') unless defined $q->param('c');
     $q->param('geo','zip') unless defined $q->param('geo');
@@ -649,7 +644,12 @@ JSCRIPT_END
 		  -default => $Hebcal::havdalah_min),
     "</p>\n";
 
-    print STDOUT "</td></tr></table>\n</form>\n";
+    print STDOUT "</td></tr></table></p>\n",
+    $q->submit(-name => '.s',-value => 'Get Calendar'),
+    $q->hidden(-name => '.cgifields',
+	       -values => ['nx', 'nh', 'set'],
+	       '-override'=>1),
+    "</form>\n";
 
     print STDOUT Hebcal::html_footer($q,$rcsrev);
 
