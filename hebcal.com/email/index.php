@@ -31,7 +31,7 @@ foreach($HTTP_GET_VARS as $key => $value) {
     $param[$key] = $value;
 }
 
-if ($param[$key])
+if ($param['v'])
 {
     $email = $param["em"];
     if (!$email)
