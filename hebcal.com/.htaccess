@@ -3,6 +3,8 @@ Header set PICS-Label '(pics-1.1 "http://www.rsac.org/ratingsv01.html" l gen tru
 
 ErrorDocument 404 /err404.shtml
 
+RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
+
 RedirectMatch ^/_vti http://www.hebcal.com/
 Redirect /MSOffice/cltreq.asp http://www.hebcal.com/
 
@@ -12,40 +14,10 @@ RewriteCond %{HTTP_ACCEPT} text\/vnd\.wap\.wml
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ /wap-shabbat.php [L]
 
-# block messianic sites from linking to us
-RewriteCond %{HTTP_REFERER} .*heartofisrael\.org.* [OR]
-RewriteCond %{HTTP_REFERER} .*aytschayim\.org.* [OR]
-RewriteCond %{HTTP_REFERER} .*levitt\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*godonthe\.net.* [OR]
-RewriteCond %{HTTP_REFERER} .*godwithus\.org.* [OR]
-RewriteCond %{HTTP_REFERER} .*levadonai\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*barujataadonai\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*annieshomepage\.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/bettythompson1\.tripod\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*cybertime\.net\/~ajgood.* [OR]
-RewriteCond %{HTTP_REFERER} .*geocities\.com\/Heartland\/Meadows\/8404 [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/members\.cox\.net\/8thday.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/groups\.msn\.com\/WalkingInTheLightJohn316.* [OR]
-RewriteCond %{HTTP_REFERER} .*circlegame\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*ammishaddai\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*kecirohomeschool\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*hebraicrenewal\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*torahofmessiah\.com.* [OR]
-RewriteCond %{HTTP_REFERER} .*hopeofdavid\.org.* [OR]
-RewriteCond %{HTTP_REFERER} .*yeshua.* [OR]
-RewriteCond %{HTTP_REFERER} .*messianic.*
-RewriteRule ^  http://www.jewsforjudaism.org/  [R,L]
-
 AddType application/x-javascript js
 AddType text/css css
 AddType text/xml xml rdf rss vxml
 AddEncoding x-gzip .gz
-
-ExpiresActive On
-ExpiresByType image/gif A63072000
-ExpiresByType image/jpeg A63072000
-
-Redirect /mt/index.html http://www.hebcal.com/mt/mt.cgi
 
 Redirect /yahrtzeit http://www.hebcal.com/yahrzeit
 Redirect /yohrzeit http://www.hebcal.com/yahrzeit
