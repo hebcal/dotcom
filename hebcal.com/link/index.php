@@ -70,7 +70,7 @@ tags are for <b><?php echo $descr ?></b>
 the appropriate place in your HTML:</p>
 
 <form>
-<textarea cols="66" rows="10" wrap="virtual">
+<textarea cols="72" rows="12" readonly wrap="virtual">
 &lt;script type="text/javascript" language="JavaScript"
 src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j"&gt;
 &lt;/script&gt;
@@ -80,7 +80,6 @@ src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;c
 Candle Lighting times for <?php echo $descr ?>&lt;/a&gt;
 courtesy of hebcal.com.
 &lt;/noscript&gt;
-
 </textarea>
 </form>
 
