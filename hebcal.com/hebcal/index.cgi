@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon May 17 16:30:47 PDT 1999
+Last modified: Mon May 17 16:58:50 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -591,7 +591,7 @@ $date
 ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 </p>
 
-<form method=\"get\" action=\"$cgipath/$filename\">
+<form method=\"get\" action=\"$cgipath/index.html/$filename\">
 ";
 
     while (($key,$val) = each(%in))
