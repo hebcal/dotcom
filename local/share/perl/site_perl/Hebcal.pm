@@ -571,38 +571,6 @@ sub display_hebrew {
     }
 }
 
-sub UCN_display_hebrew {
-    my($q,$class,@args) = @_;
-
-    my($str) = join('', @args);
-    $str =~ s/ /U+0020/g;
-
-    my($u) = Unicode::String::hex($str);
-    my($u8) = $u->utf8();
-
-    if ($q->user_agent('MSIE'))
-    {
-	$u8 =~ s/  /&nbsp;&nbsp;/g;
-
-	return join('',
-		    qq{<span dir="rtl" lang="he"\nclass="$class">},
-		    $u8,
-		    qq{</span>}
-		    );
-    }
-    else
-    {
-	my($str) = &utf8_hebrew_to_netscape($u8);
-	$str =~ s/  /&nbsp;&nbsp;/g;
-
-	return join('',
-		    qq{<span dir="ltr" lang="he"\nclass="${class}-ltr">},
-		    $str,
-		    qq{</span>}
-		    );
-    }
-}
-
 sub utf8_hebrew_to_netscape($) {
     my($str) = @_;
 
@@ -612,15 +580,18 @@ sub utf8_hebrew_to_netscape($) {
 
     for (my $i = scalar(@array) - 1; $i >= 0; --$i)
     {
+	# skip hebrew punctuation range
+	next if $array[$i] > 0x0590 && $array[$i] < 0x05D0;
+
 	if ($array[$i] == 0x0028)
 	{
-	    push(@result, 0x0029);
+	    push(@result, 0x0029); # reverse parens
 	}
 	elsif ($array[$i] == 0x0029)
 	{
-	    push(@result, 0x0028);
+	    push(@result, 0x0028); # reverse parens
 	}
-	elsif ($array[$i] >= 0x05D0 || $array[$i] <= 0x007F)
+	else
 	{
 	    push(@result, $array[$i]);
 	}
@@ -701,6 +672,8 @@ sub start_html($$$$)
 
     return $q->start_html
 	(
+	 -dir => 'ltr',
+	 -lang => 'en',
 	 -title => $title,
 	 -target => '_top',
 	 -head => [
