@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl5 -w
 
 ########################################################################
 # Hebcal Interactive Jewish Calendar is a web site that lets you
@@ -57,6 +57,12 @@ $REPEAT     = 7;
 $MAXENTRIES = 2500;
 
 @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+@MoY_short =
+    ('Jan','Feb','Mar','Apr','May','Jun',
+     'Jul','Aug','Sep','Oct','Nov','Dec');
+@MoY_long = 
+    ('January','Februrary','March','April','May','June',
+     'July','August','September','October','November','December');
 
 %exception_timezones =
     (
@@ -269,42 +275,54 @@ $MAXENTRIES = 2500;
      'PR', -5,
      );
 
-%valid_cities =
+%city_nodst =
     (
-     'Atlanta', 1,
-     'Austin', 1,
      'Berlin', 1,
-     'Baltimore', 1,
      'Bogota', 1,
-     'Boston', 1,
      'Buenos Aires', 1,
-     'Buffalo', 1,
-     'Chicago', 1,
-     'Cincinnati', 1,
-     'Cleveland', 1,
-     'Dallas', 1,
-     'Denver', 1,
-     'Detroit', 1,
-     'Gibraltar', 1,
-     'Hawaii', 1,
-     'Houston', 1,
-     'Jerusalem', 1,
      'Johannesburg', 1,
      'London', 1,
-     'Los Angeles', 1,
-     'Miami', 1,
      'Mexico City', 1,
-     'New York', 1,
-     'Omaha', 1,
-     'Philadelphia', 1,
-     'Phoenix', 1,
-     'Pittsburgh', 1,
-     'Saint Louis', 1,
-     'San Francisco', 1,
-     'Seattle', 1,
      'Toronto', 1,
      'Vancouver', 1,
-     'Washington DC', 1,
+     );
+
+%city_tz =
+    (
+     'Atlanta', -5,
+     'Austin', -6,
+     'Berlin', 1,
+     'Baltimore', -5,
+     'Bogota', -5,
+     'Boston', -5,
+     'Buenos Aires', -3,
+     'Buffalo', -5,
+     'Chicago', -6,
+     'Cincinnati', -5,
+     'Cleveland', -5,
+     'Dallas', -6,
+     'Denver', -7,
+     'Detroit', -5,
+     'Gibraltar', -10,
+     'Hawaii', -10,
+     'Houston', -6,
+     'Jerusalem', 2,
+     'Johannesburg', 1,
+     'London', 0,
+     'Los Angeles', -8,
+     'Miami', -5,
+     'Mexico City', -6,
+     'New York', -5,
+     'Omaha', -7,
+     'Philadelphia', -5,
+     'Phoenix', -7,
+     'Pittsburgh', -5,
+     'Saint Louis', -6,
+     'San Francisco', -8,
+     'Seattle', -8,
+     'Toronto', -5,
+     'Vancouver', -8,
+     'Washington DC', -5,
      );
 
 # this doesn't work for weeks that have double parashiot
@@ -388,16 +406,9 @@ $MAXENTRIES = 2500;
      '-10', 'U.S. Hawaii',
      );
 
-@MoY_abbrev = ('',
-	       'jan','feb','mar','apr','may','jun',
-	       'jul','aug','sep','oct','nov','dec');
-@MoY = 
-    ('',
-     'January','Februrary','March','April','May','June',
-     'July','August','September','October','November','December');
 
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-    localtime(time);
+
+($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
 $year += 1900;
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
@@ -436,7 +447,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Mon Dec 20 14:14:43 PST 1999
+Last modified: Tue Dec 21 18:40:33 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -551,7 +562,7 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 {
     &form("Sorry, invalid city\n" . $in{'city'})
-	unless defined($valid_cities{$in{'city'}});
+	unless defined($city_tz{$in{'city'}});
 
     $cmd .= " -C '$in{'city'}'";
 
@@ -560,7 +571,8 @@ if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
     $long_descr = '';
     $dst_tz_descr = '';
 
-    delete $in{'tz'};
+    $in{'geo'} = 'city';
+    $in{'tz'} = $city_tz{$in{'city'}};
     delete $in{'dst'};
 }
 elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
@@ -605,6 +617,10 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     &form("Sorry, latitude minutes\n" .
 	  "<b>$in{'lamin'}</b> out of valid range 0-60.")
 	if ($in{'lamin'} > 60);
+
+    $in{'dst'} = 'none' if !defined($in{'dst'}) || $in{'dst'} =~ /^\s*$/;
+    $in{'tz'} = '0' if !defined($in{'tz'}) || $in{'tz'} !~ /^\s*-?\d+\s*$/;
+    $in{'geo'} = 'pos';
 
     $city_descr = "Geographic Position";
     $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
@@ -749,7 +765,7 @@ sub invoke_hebcal {
 		"\">e-mail Michael</a> to tell him that hebcal is broken.");
 
     $prev = '';
-    $loc = (defined $in{'city'} || defined $in{'zip'}) ?
+    $loc = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
@@ -774,8 +790,8 @@ sub dba_display {
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
     print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-    print STDOUT "Expires: $expires_date\015\012";
-    print STDOUT "Content-Type: application/x-palm-dba; filename=hebcal.dba",
+#    print STDOUT "Expires: $expires_date\015\012";
+    print STDOUT "Content-Type: application/x-palm-dba; filename=$FILENAME",
     "\015\012\015\012";
 
     &dba_contents(@events);
@@ -790,7 +806,7 @@ sub csv_display {
     $ENV{'PATH_INFO'} =~ s,^/,,;
 
     print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-    print STDOUT "Expires: $expires_date\015\012";
+#    print STDOUT "Expires: $expires_date\015\012";
     print STDOUT "Content-Type: text/x-csv; filename=",
     $ENV{'PATH_INFO'}, "\015\012\015\012";
 
@@ -809,7 +825,7 @@ sub csv_display {
     foreach (@events)
     {
 	($subj,$date,$start_time,$end_date,$end_time,$all_day,
-	 $hr,$min,$month,$day,$year,$descr,$loc) = split(/\cA/);
+	 $hour,$min,$mon,$mday,$year,$descr,$loc) = split(/\cA/);
 
 	print STDOUT '"', $subj, '","', $date, '",', $start_time, ',',
 	    $end_date, ',', $end_time, ',', $all_day, ',"',
@@ -859,7 +875,7 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
 ";
     for ($i = 1; $i <= 12; $i++)
     {
-	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]\n";
+	print STDOUT "<option value=\"$i\"$month{$i}>$MoY_long[$i-1]\n";
     }
     print STDOUT "</select></label>
 <br>
@@ -930,7 +946,7 @@ href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
 ";
 
 	print STDOUT "<select name=\"city\" id=\"city\">\n";
-	foreach (sort keys %valid_cities)
+	foreach (sort keys %city_tz)
 	{
 	    print STDOUT '<option';
 	    print STDOUT ' selected' if $in{'city'} eq $_;
@@ -1108,26 +1124,21 @@ sub results_page
 
     if ($in{'month'} =~ /^\d+$/ && $in{'month'} >= 1 && $in{'month'} <= 12)
     {
-	$filename .= '_' . $MoY_abbrev[$in{'month'}];
-	$date = $MoY[$in{'month'}] . ' ' . $date;
+	$filename .= '_' . "\L$MoY_short[$in{'month'}-1]\E";
+	$date = $MoY_long[$in{'month'}-1] . ' ' . $date;
     }
 
     if ($opts{'c'} == 1)
     {
-	$filename .= '_';
 	if (defined $in{'zip'})
 	{
-	    $filename .= $in{'zip'};
+	    $filename .= '_' . $in{'zip'};
 	}
 	elsif (defined $in{'city'})
 	{
 	    $tmp = "\L$in{'city'}\E";
-	    $tmp =~ s/ /_/g;
-	    $filename .= $tmp;
-	}
-	else
-        {
-	    $filename .= 'geopos';
+	    $tmp =~ s/[^\w]/_/g;
+	    $filename .= '_' . $tmp;
 	}
     }
 
@@ -1168,7 +1179,7 @@ sub results_page
 	    $prev_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	$prev_title = $MoY[$pm] . " " . $py;
+	$prev_title = $MoY_long[$pm-1] . " " . $py;
 
 	$next_url = "$cgipath?year=" . $ny . "&amp;month=" . $nm;
 	while (($key,$val) = each(%in))
@@ -1176,7 +1187,7 @@ sub results_page
 	    $next_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	$next_title = $MoY[$nm] . " " . $ny;
+	$next_title = $MoY_long[$nm-1] . " " . $ny;
     }
     else
     {
@@ -1255,12 +1266,17 @@ $date</small>
     }
     print STDOUT "\">Download\nOutlook CSV file</a>";
 
-    print STDOUT " -\n<a href=\"${cgipath}index.html/hebcal.dba?dl=1";
-    while (($key,$val) = each(%in))
+    # only offer DBA export when we know timegm() will work
+    if ($year > 1969 && $year < 2038 &&
+	(!defined($in{'dst'}) || $in{'dst'} ne 'israel'))
     {
-	print STDOUT "&amp;$key=", &url_escape($val);
+	print STDOUT " -\n<a href=\"${cgipath}index.html/$FILENAME?dl=1";
+	while (($key,$val) = each(%in))
+	{
+	    print STDOUT "&amp;$key=", &url_escape($val);
+	}
+	print STDOUT "\">Download\nPalm Date Book Archive (.DBA)</a>";
     }
-    print STDOUT "\">Download\nPalm Date Book Archive (.DBA)</a>";
 
     if ($ycal == 0)
     {
@@ -1305,19 +1321,19 @@ so you can keep this window open.
     foreach (@events)
     {
 	($subj,$date,$start_time,$end_date,$end_time,$all_day,
-	 $hr,$min,$month,$day,$year,$descr,$loc) = split(/\cA/);
+	 $hour,$min,$mon,$mday,$year,$descr,$loc) = split(/\cA/);
 
 	if ($ycal)
 	{
-	    $ST  = sprintf("%04d%02d%02d", $year, $month, $day);
-	    if ($hr >= 0 && $min >= 0)
+	    $ST  = sprintf("%04d%02d%02d", $year, $mon, $mday);
+	    if ($hour >= 0 && $min >= 0)
 	    {
-		local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
+		$loc = (defined $city_descr && $city_descr ne '') ?
 		    "in $city_descr" : '';
 	        $loc =~ s/\s*&nbsp;\s*/ /g;
 
-		$hr += 12 if $hr < 12 && $hr > 0;
-		$ST .= sprintf("T%02d%02d00", $hr, $min);
+		$hour += 12 if $hour < 12 && $hour > 0;
+		$ST .= sprintf("T%02d%02d00", $hour, $min);
 
 		if ($in{'tz'} !~ /^\s*$/)
 		{
@@ -1359,10 +1375,10 @@ so you can keep this window open.
 	}
 
 	$dow = ($year > 1969 && $year < 2038) ? 
-	    $DoW[&get_dow($year - 1900, $month - 1, $day)] . ' ' :
+	    $DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' :
 		'';
 	printf STDOUT "%s%04d-%02d-%02d  %s\n",
-	$dow, $year, $month, $day, $descr;
+	$dow, $year, $mon, $mday, $descr;
     }
 
     print STDOUT "</pre>", "Go to:\n";
@@ -1377,39 +1393,34 @@ so you can keep this window open.
 sub get_dow
 {
     local($year,$mon,$mday) = @_;
-    local($sec,$min,$hour,$wday,$yday,$isdst);
-    local($time);
+    local($time) = &timegm(0,0,9,$mday,$mon,$year,0,0,0); # 9am
 
-    $wday = $yday = $isdst = '';
-    $sec = $min = $hour = 0;
-    $time = &timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
-
-    (localtime($time))[6];
+    (localtime($time))[6];	# $wday
 }
 
 sub parse_date_descr
 {
     local($date,$descr) = @_;
 
-    local($month,$day,$year) = split(/\//, $date);
+    local($mon,$mday,$year) = split(/\//, $date);
     if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
     {
-	($subj,$hr,$min) = ($1,$2,$3);
-	$start_time = sprintf("\"%d:%02d PM\"", $hr, $min);
+	($subj,$hour,$min) = ($1,$2,$3);
+	$start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
 #	$min += 15;
 #	if ($min >= 60)
 #	{
-#	    $hr++;
+#	    $hour++;
 #	    $min -= 60;
 #	}
-#	$end_time = sprintf("\"%d:%02d PM\"", $hr, $min);
+#	$end_time = sprintf("\"%d:%02d PM\"", $hour, $min);
 #	$end_date = $date;
 	$end_time = $end_date = '';
 	$all_day = '"false"';
     }
     else
     {
-	$hr = $min = -1;
+	$hour = $min = -1;
 	$start_time = $end_time = $end_date = '';
 	$all_day = '"true"';
 	$subj = $descr;
@@ -1419,7 +1430,7 @@ sub parse_date_descr
     $subj =~ s/\s*:\s*$//g;
 
     ($subj,$date,$start_time,$end_date,$end_time,$all_day,
-     $hr,$min,$month,$day,$year);
+     $hour,$min,$mon,$mday,$year);
 }
 
 sub url_escape
@@ -1449,16 +1460,13 @@ sub url_escape
 sub http_date
 {
     local($time) = @_;
-    local(@MoY);
     local($sec,$min,$hour,$mday,$mon,$year,$wday) =
 	gmtime($time);
 
-    @MoY = ('Jan','Feb','Mar','Apr','May','Jun',
-	    'Jul','Aug','Sep','Oct','Nov','Dec');
     $year += 1900;
 
     sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
-	    $DoW[$wday],$mday,$MoY[$mon],$year,$hour,$min,$sec);
+	    $DoW[$wday],$mday,$MoY_short[$mon],$year,$hour,$min,$sec);
 }
 
 sub gen_cookie {
@@ -1586,11 +1594,11 @@ sub writePString {
 sub dba_header {
     &writeInt($MAGIC);
     &writePString($FILENAME);
-    &writeByte(0); #show header
-    &writeInt(8); #Category Type
-    &writeInt(0); #Number of categories
+    &writeByte(0);
+    &writeInt(8);
+    &writeInt(0);
 
-    #write Object Graph Table
+    # magic OLE graph table stuff
     &writeInt(0x36);
     &writeInt(0x0f);
     &writeInt(0x00);
@@ -1604,7 +1612,7 @@ sub dba_header {
     &writeInt(0x10006);
     &writeInt(0x10006);
     &writeInt(0x80001);
-    #end Table
+    # end OLE stuff
 
     1;
 }
@@ -1612,7 +1620,23 @@ sub dba_header {
 sub dba_contents {
     local(@events) = @_;
     local($numEntries) = scalar(@events);
-    local($memo,$untimed,$startTime,$i,$z);
+    local($memo,$untimed,$startTime,$i,$z,$secsEast,$local2local);
+    
+    # compute diff seconds between GMT and whatever our local TZ is
+    # pick 1999/01/15 as a date that we're certain is standard time
+    $startTime = &timegm(0,34,12,15,0,90,0,0,0);
+    $secsEast = $startTime - &timelocal(0,34,12,15,0,90,0,0,0);
+    if ($in{'tz'} =~ /^-?\d+$/)
+    {
+	# add secsEast to go from our localtime to GMT
+	# then sub destination tz secsEast to get into local ctime
+	$local2local = $secsEast - ($in{'tz'} * 60 * 60);
+    }
+    else
+    {
+	# the best we can do with unknown TZ is assume GMT
+	$local2local = $secsEast;
+    }
 
     &dba_header();
 
@@ -1621,16 +1645,32 @@ sub dba_contents {
 
     for ($i = 0; $i < $numEntries; $i++) {
 	local($subj,$z,$z,$z,$z,$all_day,
-	      $hr,$min,$month,$day,$year) = split(/\cA/, $events[$i]);
+	      $hour,$min,$mon,$mday,$year) = split(/\cA/, $events[$i]);
 
-	$year -= 1900;
-	$mon = $month - 1;
-	$mday = $day;
-	if ($hr == -1 && $min == -1) {
-	    $hr = $min = 0;
+        next if $year <= 1969 || $year >= 2038;
+
+	if ($hour == -1 && $min == -1) {
+	    $hour = $min = 0;
+	} elsif ($hour > 0 || $min > 0) {
+	    $hour += 12;	# candle-lighting times are always PM
 	}
 
-	$startTime = &timelocal(0,$min,$hr,$mday,$mon,$year,'','','');
+	if (!defined($in{'dst'}) || $in{'dst'} eq 'none' ||
+	    ((defined $in{'geo'} && $in{'geo'} eq 'city' &&
+	      defined $in{'city'} && $in{'city'} !~ /^\s*$/ &&
+	      defined $city_nodst{$in{'city'}})))
+	{
+	    # no DST, so just use gmtime and then add that city offset
+	    $startTime = &timegm(0,$min,$hour,$mday,$mon-1,$year-1900,
+				 0,0,0);
+	    $startTime -= ($in{'tz'} * 60 * 60); # move into local tz
+	}
+	else
+	{
+	    $startTime = &timelocal(0,$min,$hour,$mday,$mon-1,$year-1900,
+				    0,0,0);
+	    $startTime += $local2local; # move into their local tz
+	}
 
 	&writeInt($INTEGER);
 	&writeInt(0);		# recordID
@@ -1647,8 +1687,8 @@ sub dba_contents {
 	&writeInt($INTEGER);
 	&writeInt(0);		# endTime
 
-	&writeInt(5);		# weird spacer
-	&writeInt(0);		# weird spacer
+	&writeInt(5);		# spacer
+	&writeInt(0);		# spacer
 
 	if ($subj eq '') {
 	    &writeByte(0);
@@ -1659,8 +1699,8 @@ sub dba_contents {
 	&writeInt($INTEGER);
 	&writeInt(0);		# duration
 
-	&writeInt(5);		# weird spacer
-	&writeInt(0);		# weird spacer
+	&writeInt(5);		# spacer
+	&writeInt(0);		# spacer
 
 	$memo = '';
 	if ($memo eq '') {
@@ -1695,11 +1735,3 @@ sub dba_contents {
 
     1;
 }
-
-if ($^W && 0)
-{
-    ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-	localtime(time);
-}
-
-1;
