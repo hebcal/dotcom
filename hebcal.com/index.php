@@ -8,9 +8,7 @@
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit">
 <meta name="author" content="Michael J. Radwin">
-<link rev="made" href="mailto:webmaster@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
-<link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
 <base href="http://www.hebcal.com/" target="_top">
 </head>
 <body>
@@ -66,7 +64,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Fri Jan  4 15:06:53 EST 2002
+Last modified: Mon Feb 11 00:11:09 EST 2002
 <!-- hhmts end -->
 </font>
 </body></html>
