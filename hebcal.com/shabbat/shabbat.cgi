@@ -31,7 +31,7 @@ use strict;
 
 my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
-my($this_year) = (localtime)[5];
+my($this_mon,$this_year) = (localtime)[4,5];
 $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
@@ -458,6 +458,25 @@ for ($i = 0; $i < $numEntries; $i++)
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
 	    = &Hebcal::get_holiday_anchor($subj,0,$q);
+
+	if ($drash_href =~
+	    m,^(http://learn.jtsa.edu/topics/parashah)/(\d{4})/(.+),)
+	{
+	    my($drash_prefix,$drash_yr,$drash_html) = ($1,$2,$3);
+
+	    # heuristic to guess the hebrew year
+	    if ($this_mon < 8) {
+		# jan 1 - aug 31
+		$drash_yr = $this_year + 3760;
+	    } elsif ($this_mon > 9) {
+		# nov 1 - dec 31
+		$drash_yr = $this_year + 3761;
+	    } elsif ($memo =~ /Torah: Genesis/) {
+		$drash_yr = $this_year + 3761;
+	    }
+
+	    $drash_href = join('/', $drash_prefix, $drash_yr, $drash_html);
+	}
 
 	$rss{'link'} = $href;
 
