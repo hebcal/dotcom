@@ -199,7 +199,7 @@ foreach my $city (sort keys %Hebcal::city_tz)
 	    $ucity =~ s/ /+/g;
 	    my $acity = lc($city);
 	    $acity =~ s/ /_/g;
-	    print OUT qq{<tr><td><a name="$acity" href="/shabbat/?geo=city;city=$ucity;tag=wc">$city</a></td><td>$stime</td></tr>\n};
+	    print OUT qq{<tr><td><a name="$acity" href="/shabbat/?geo=city;city=$ucity;m=72;tag=wc">$city</a></td><td>$stime</td></tr>\n};
 	}
     }
 }
