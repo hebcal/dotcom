@@ -53,7 +53,8 @@ my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
 my($set_checked) = 'checked';
-my($C_cookie) = &Hebcal::get_C_cookie($q);
+my($cookies) = &Hebcal::get_cookies($q);
+my($C_cookie) = (defined $cookies->{'C'}) ? 'C=' . $cookies->{'C'} : '';
 if (! $q->param('v') && $C_cookie)
 {
     if ($C_cookie eq 'C=opt_out')
