@@ -5,8 +5,9 @@
 <head>
 <title>hebcal.com: Hebrew Calendar Tools</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
-<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true on "1998.03.10T11:49-0800" r (n 0 s 0 v 0 l 0))'>
-<meta name="author" content="Michael John Radwin">
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
+<meta name="keywords" content="hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff">
+<meta name="author" content="Michael J. Radwin">
 <link rev="made" href="mailto:webmaster@hebcal.com">
 <base href="http://www.hebcal.com/" target="_top">
 <style type="text/css">
@@ -43,12 +44,13 @@ href="/yahrzeit/">Yahrzeit Calendar</a></big></strong></dt>
 href="/search/">Search</a></big></strong></dt>
 <dd>Search the whole <code>hebcal.com</code> website.</dd>
 </dl>
-<hr noshade="noshade" size="1">
+<hr noshade size="1">
+<address><a
+href="mailto:webmaster@hebcal.com">webmaster@hebcal.com</a></address>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 17 17:02:43 PDT 2001
+Last modified: Tue Apr 17 17:31:46 PDT 2001
 <!-- hhmts end -->
-</small>
-</body>
-</html>
+</small></body></html>
+
 
