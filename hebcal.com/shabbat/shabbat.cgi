@@ -5,6 +5,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Time::Local;
 use Hebcal;
+use POSIX qw(strftime);
 
 $author = 'michael@radwin.org';
 $expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
@@ -17,7 +18,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 20 10:55:07 PDT 2000
+Last modified: Wed Sep 20 11:39:46 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -283,12 +284,8 @@ $loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &invoke_hebcal($cmd, $loc);
 
-print STDOUT "<pre>";
-
-# header row
-my($hdr) = "DoW YYYY-MM-DD  Description";
-print STDOUT $hdr, "\n";
-print STDOUT '-' x length($hdr), "\n";
+print STDOUT qq{<p>Today is }, strftime("%A, %d %B %Y", localtime()),
+    qq{.</p>\n<p>\n};
 
 my($numEntries) = scalar(@events);
 my($i);
@@ -310,22 +307,44 @@ for ($i = 0; $i < $numEntries; $i++)
     my($hour) = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
     $hour -= 12 if $hour > 12;
 
-    my($href) = &get_holiday_anchor($subj);
-    if ($href ne '')
+    if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
-	$subj = qq{<a href="$href">$subj</a>};
+	print STDOUT qq{$subj for\n}, 
+	    strftime("%A, %d %B", localtime($time));
+	printf STDOUT ("\nis at <b>%d:%02d PM</b>.<br>\n", $hour, $min);
     }
+    else
+    {
+	if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
+	{
+	    print STDOUT "This week's Torah portion is\n";
+	}
+	else
+	{
+	    print STDOUT "Holiday:\n";
+	}
 
-    my($dow) = ($year > 1969 && $year < 2038) ?
-	$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
-    printf STDOUT ("%s%04d-%02d-%02d  %s",
-		   $dow, $year, $mon, $mday, $subj);
-    printf STDOUT (": %d:%02d", $hour, $min)
-	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
-    print STDOUT "\n";
+	my($href) = &get_holiday_anchor($subj);
+	if ($href ne '')
+	{
+	    print STDOUT qq{<a href="$href">$subj</a>};
+	}
+	else
+	{
+	    print STDOUT $subj;
+	}
+
+	# output day if it's a holiday
+	if ($subj !~ /^(Parshas\s+|Parashat\s+)/)
+	{
+	    print STDOUT "\non", strftime("%A, %d %B", localtime($time));
+	}
+
+	print STDOUT ".<br>\n";
+    }
 }
 
-print STDOUT "</pre>";
+print STDOUT "</p>\n";
 &form(0,'','');
 print STDOUT $html_footer;
 
