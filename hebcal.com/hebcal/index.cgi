@@ -404,27 +404,21 @@ JSCRIPT_END
     my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
 	? '; charset=UTF-8' : '';
 
+    my @head = (qq{<script language="JavaScript" type="text/javascript"><!--\n} .
+		$JSCRIPT . qq{// --></script>});
+    if ($charset) {
+	push(@head, qq{<meta http-equiv="Content-Type" content="text/html${charset}">});
+    }
+
     print STDOUT $q->header(-type => "text/html${charset}"),
     Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
-			[
-			 qq{<script language="JavaScript" type="text/javascript"><!--\n$JSCRIPT// --></script>},
-			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
-			 $q->Link({-rel => 'SCHEMA.dc',
-				   -href => 'http://purl.org/metadata/dublin_core_elements'}),
-			 ],
+		       \@head,
 			{
 		       'description' =>
 		       'Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude',
 
 		       'keywords' =>
 		       'hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff',
-
-		       'DC.Title' => 'Hebcal Interactive Jewish Calendar',
-		       'DC.Creator.PersonalName' => 'Radwin, Michael',
-		       'DC.Subject' => 'Jewish calendar, Hebrew calendar, hebcal',
-		       'DC.Type' => 'Text.Form',
-		       'DC.Language' => 'en',
-		       'DC.Date.X-MetadataLastModified' => '2001-04-22',
 		       },
 		       undef
 		   ),
@@ -812,21 +806,26 @@ sub results_page()
     my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
 	? '; charset=UTF-8' : '';
 
+    my @head = (
+		$q->Link({-rel => 'prev',
+			  -href => $prev_url,
+			  -title => $prev_title}),
+		$q->Link({-rel => 'next',
+			  -href => $next_url,
+			  -title => $next_title}),
+		$q->Link({-rel => 'start',
+			  -href => $script_name,
+			  -title => 'Hebcal Interactive Jewish Calendar'}),
+		);
+
+    if ($charset) {
+	push(@head, qq{<meta http-equiv="Content-Type" content="text/html${charset}">});
+    }
+
     print STDOUT $q->header(-expires => $expires_date,
 			    -type => "text/html${charset}"),
     Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
-			[
-			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
-			 $q->Link({-rel => 'prev',
-				   -href => $prev_url,
-				   -title => $prev_title}),
-			 $q->Link({-rel => 'next',
-				   -href => $next_url,
-				   -title => $next_title}),
-			 $q->Link({-rel => 'start',
-				   -href => $script_name,
-				   -title => 'Hebcal Interactive Jewish Calendar'})
-			 ],
+		       \@head,
 		       undef,
 		       undef
 			),
