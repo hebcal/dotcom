@@ -85,7 +85,7 @@ my($author) = 'webmaster@hebcal.com';
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:45:54 PDT 2001
+Last modified: Tue May  8 11:28:00 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -93,11 +93,6 @@ my($q) = new CGI;
 
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
-my($server_name) = $q->virtual_host();
-$server_name =~ s/^www\.//;
-
-$q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
-		"\t\"http://www.w3.org/TR/html4/loose.dtd");
 
 # sanitize input to prevent people from trying to hack the site.
 # remove anthing other than word chars, white space, or hyphens.
@@ -389,18 +384,8 @@ sub hebnum_to_array($) {
 sub my_header
 {
     print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
-    $q->start_html(-title => 'Hebcal Hebrew Date Converter',
-		   -target => '_top',
-		   -head => [
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
-			     $q->Link({-rel => 'stylesheet',
-				       -href => '/style.css',
-				       -type => 'text/css'}),
-			     $q->Link({-rel => 'p3pv1',
-				       -href => "http://www.$server_name/w3c/p3p.xml"}),
-			     ],
-		   ),
-    &Hebcal::navbar($server_name, "Hebrew\nDate Converter"),
+    &Hebcal::start_html($q, 'Hebcal Hebrew Date Converter', undef, undef),
+    &Hebcal::navbar2($q, "Hebrew\nDate Converter"),
     "<h1>Hebrew\nDate Converter</h1>\n";
 
     1;
