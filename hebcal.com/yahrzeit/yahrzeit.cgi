@@ -357,7 +357,9 @@ sub form
 	 "generate a list of Yahrzeit dates, Hebrew Birthdays,\n",
 	 "or Hebrew Anniversaries.\n",
 	 "After clicking the <b>Compute Calendar</b> button, you\n",
-	 "will also be able to download the results.</p>"); 
+	 "will also be able to download the results.</p>",
+	 "<p>For example, you might enter <b>October 20, 1994</b>\n",
+	 "to calculate <b>Reb Shlomo Carlebach's</b> yahrzeit.</p>\n");
 
     &Hebcal::out_html
 	($cfg, qq{<form name="f1" id="f1"\naction="$script_name">});
@@ -366,32 +368,7 @@ sub form
 	? 2 : 6;
     for (my $i = 1; $i < $i_max; $i++)
     {
-	&Hebcal::out_html
-	    ($cfg,
-	    $q->popup_menu(-name => "t$i",
-			   -id => "t$i",
-			   -values => ['Yahrzeit','Birthday','Anniversary']),
-	    "\n<small>Month:</small>\n",
-	    $q->popup_menu(-name => "m$i",
-			   -id => "m$i",
-			   -values => [1..12],
-			   -labels => \%months),
-	    "\n<small>Day:</small>\n",
-	    $q->textfield(-name => "d$i",
-			  -id => "d$i",
-			  -maxlength => 2,
-			  -size => 2),
-	    "\n<small>Year:</small>\n",
-	    $q->textfield(-name => "y$i",
-			  -id => "y$i",
-			  -maxlength => 4,
-			  -size => 4),
-	    "&nbsp;&nbsp;&nbsp;",
-	    "\n<small>Name:</small>\n",
-	    $q->textfield(-name => "n$i",
-			  -id => "n$i"),
-	    "<br>\n",
-	     );
+	&show_row($q,$cfg,$i,\%months);
     }
 
     &Hebcal::out_html($cfg, "<label\nfor=\"yizkor\">",
@@ -415,8 +392,10 @@ sub form
     }
     else
     {
+	&Hebcal::out_html
+	    ($cfg, qq{<hr noshade size=\"1\">\n});
+
 	&Hebcal::out_html($cfg,
-	qq{<hr noshade size=\"1\">\n},
 	qq{<p><a href="/help/#yahrzeit-tags">How\n},
 	qq{can my synagogue link to the Yahrzeit, Birthday and Anniversary\n},
 	qq{Calendar from its own website?</a></p>});
@@ -425,6 +404,37 @@ sub form
     }
 
     exit(0);
+}
+
+sub show_row {
+    my($q,$cfg,$i,$months) = @_;
+
+    &Hebcal::out_html
+	($cfg,
+	 $q->popup_menu(-name => "t$i",
+			-id => "t$i",
+			-values => ['Yahrzeit','Birthday','Anniversary']),
+	 "\n<small>Month:</small>\n",
+	 $q->popup_menu(-name => "m$i",
+			-id => "m$i",
+			-values => [1..12],
+			-labels => $months),
+	 "\n<small>Day:</small>\n",
+	 $q->textfield(-name => "d$i",
+		       -id => "d$i",
+		       -maxlength => 2,
+		       -size => 2),
+	 "\n<small>Year:</small>\n",
+	 $q->textfield(-name => "y$i",
+		       -id => "y$i",
+		       -maxlength => 4,
+		       -size => 4),
+	 "&nbsp;&nbsp;&nbsp;",
+	 "\n<small>Name:</small>\n",
+	 $q->textfield(-name => "n$i",
+		       -id => "n$i"),
+	 "<br>\n",
+	 );
 }
 
 # local variables:
