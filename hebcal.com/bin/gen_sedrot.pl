@@ -93,6 +93,9 @@ foreach my $h ($sedrot->Sections())
     qq{<td><a href="$haftarah_href">$haftarah</a>$seph</td></tr>\n};
 }
 
+my($mtime) = (stat($infile))[9];
+my($hhmts) = "Last modified:\n" . localtime($mtime);
+
 print OUT <<EOHTML;
 </table>
 <p>
@@ -102,9 +105,7 @@ print OUT <<EOHTML;
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a>
 <br>
-<!-- hhmts start -->
-Last modified: Mon May  7 14:06:17 PDT 2001
-<!-- hhmts end -->
+$hhmts
 ($rcsrev)
 </font>
 </body></html>
