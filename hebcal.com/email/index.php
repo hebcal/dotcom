@@ -393,12 +393,15 @@ EOD
     $sender =  'webmaster@';
     $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
 
+    $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+
     $headers = array('From' => "\"$from_name\" <$from_addr>",
 		     'To' => $recipients,
 		     'Reply-To' => $from_addr,
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
 		     'X-Sender' => $sender,
+		     'X-Originating-IP' => "[$ip]",
 		     'Subject' => $subject);
 
     $body = <<<EOD
@@ -492,12 +495,15 @@ EOD
     $sender =  'webmaster@';
     $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
 
+    $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+
     $headers = array('From' => "\"$from_name\" <$from_addr>",
 		     'To' => $param['em'],
 		     'Reply-To' => $from_addr,
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
 		     'X-Sender' => $sender,
+		     'X-Originating-IP' => "[$ip]",
 		     'Subject' => $subject);
 
     $body = <<<EOD
