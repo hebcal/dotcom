@@ -497,7 +497,7 @@ sub get_holiday_anchor($$$)
 	{
 	    $href = 'http://' . $q->virtual_host()
 		if ($q);
-	    $href .= "/help/defaults.html#" .
+	    $href .= "/help/holidays.html#" .
 		$holidays->val($subj_copy, 'anchor');
 
 	    if (defined $holidays->val($subj_copy, 'hebrew'))
