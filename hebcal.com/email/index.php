@@ -8,7 +8,6 @@
 <head><title>Hebcal 1-Click Shabbat by Email</title>
 <base href="http://www.hebcal.com/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
-<link type="text/css" media="print" rel="stylesheet" href="/print.css">
 </head><body><table width="100%"
 class="navbar"><tr><td><small><strong><a
 href="/">hebcal.com</a></strong>
@@ -304,7 +303,7 @@ Contact me occasionally about changes to the hebcal.com website.
 offers.</p>
 
 <p>To unsubscribe, send an email to <a
-href="mailto:shabbat-unsubscribe@hebcal.com">shabbat-unsubscribe@hebcal.com</a>.</p>
+href="mailto:shabbat-unsubscribe&#64;hebcal&#46;com">shabbat-unsubscribe&#64;hebcal&#46;com</a>.</p>
 
 <?php
     my_footer();
@@ -544,7 +543,7 @@ EOD
 to <b>$html_email</b>.</p>
 <p>Please try again in a few minutes.</p>
 <p>If the problem persists, please send email to
-<a href="mailto:webmaster@hebcal.com">webmaster@hebcal.com</a>.</p>
+<a href="mailto:webmaster&#64;hebcal&#46;com">webmaster&#64;hebcal&#46;com</a>.</p>
 EOD
 	     ;
     }
