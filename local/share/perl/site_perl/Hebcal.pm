@@ -670,16 +670,19 @@ sub get_holiday_anchor($$$)
 	    $hebrew = $HOLIDAYS{"$subj_copy:hebrew"};
 	}
 
-	$subj_copy =~ s/ \(CH\'\'M\)$//;
-	$subj_copy =~ s/ \(Hoshana Raba\)$//;
-	$subj_copy =~ s/ [IV]+$//;
-	$subj_copy =~ s/: \d Candles$//;
-	$subj_copy =~ s/: 8th Day$//;
-	$subj_copy =~ s/^Erev //;
+	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/)
+	{
+	    $subj_copy =~ s/ \(CH\'\'M\)$//;
+	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
+	    $subj_copy =~ s/ [IV]+$//;
+	    $subj_copy =~ s/: \d Candles$//;
+	    $subj_copy =~ s/: 8th Day$//;
+	    $subj_copy =~ s/^Erev //;
 
-	$href = 'http://' . $q->virtual_host()
-	    if ($q);
-	$href .= "/holidays/" . make_anchor($subj_copy);
+	    $href = 'http://' . $q->virtual_host()
+		if ($q);
+	    $href .= "/holidays/" . make_anchor($subj_copy);
+	}
     }
 
     return (wantarray()) ?
