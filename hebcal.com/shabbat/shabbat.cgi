@@ -813,6 +813,14 @@ sub display_javascript
     Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
 		     qq{<h3>Shabbat times for $city_descr</h3>\n});
 
+    for (my $i = 0; $i < scalar(@{$items}); $i++)
+    {
+	if ($items->[$i]->{'link'} && $items->[$i]->{'link'} =~ /\.html$/)
+	{
+	    $items->[$i]->{'link'} .= "?tag=js.1c";
+	}
+    }
+
     display_html_common($items);
 
     my($this_year) = (localtime)[5];
@@ -859,6 +867,14 @@ sub display_html
 
     print $Hebcal::indiana_warning
 	if ($city_descr =~ / IN /);
+
+    for (my $i = 0; $i < scalar(@{$items}); $i++)
+    {
+	if ($items->[$i]->{'link'} && $items->[$i]->{'link'} =~ /\.html$/)
+	{
+	    $items->[$i]->{'link'} .= "?tag=1c";
+	}
+    }
 
     display_html_common($items);
 
