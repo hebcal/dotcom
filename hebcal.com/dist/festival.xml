@@ -398,9 +398,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14"
+  numverses="4" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3"
+  numverses="3" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10"
+  numverses="7" />
  </kriyah>
 </festival>
 <festival id="Ta'anit Bechorot"
@@ -411,9 +414,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14"
+  numverses="4" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3"
+  numverses="3" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10"
+  numverses="7" />
  </kriyah>
 </festival>
 <festival id="Ta'anit Esther"
@@ -424,9 +430,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14"
+  numverses="4" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3"
+  numverses="3" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10"
+  numverses="7" />
  </kriyah>
 </festival>
 <festival id="Tzom Gedaliah"
@@ -437,9 +446,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14"
+  numverses="4" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3"
+  numverses="3" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10"
+  numverses="7" />
  </kriyah>
 </festival>
 <festival id="Tzom Tammuz"
@@ -450,9 +462,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14"
+  numverses="4" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3"
+  numverses="3" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10"
+  numverses="7" />
  </kriyah>
 </festival>
 
@@ -824,7 +839,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <about href="http://www.jewfaq.org/holiday7.htm">
  The Jewish festival of rededication, also known as the Festival of
- Lights. Sometimes spelled Chanukkah, Hanukkah, Hanukah, Hannukah
+ Lights. Sometimes spelled Hanukkah, Chanukkah, Hanukah, or Hannukah
  </about>
 </festival>
 <festival id="Chanukah: 1 Candle"
