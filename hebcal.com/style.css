@@ -97,3 +97,7 @@ A:hover {
  font-style: italic;
  color: #c96;
 }
+
+.cal p {
+ margin-top: 0;
+}
