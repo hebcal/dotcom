@@ -38,24 +38,10 @@ $this_year += 1900;
 $this_mon++;
 
 my($rcsrev) = '$Revision$'; #'
-$rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:22:23 PDT 2001
+Last modified: Mon May  7 21:42:09 PDT 2001
 <!-- hhmts end -->";
-
-$hhmts =~ s/<!--.*-->//g;
-$hhmts =~ s/\n//g;
-$hhmts =~ s/Last modified: /Software last updated:\n/g;
-
-my($html_footer) = "<hr
-noshade size=\"1\"><font size=-2 face=Arial>Copyright
-&copy; $this_year Michael J. Radwin. All rights reserved.
-<a href=\"/privacy/\">Privacy Policy</a> -
-<a href=\"/help/\">Help</a>
-<br>$hhmts ($rcsrev)
-</font></body></html>
-";
 
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
 
@@ -594,7 +580,7 @@ JSCRIPT_END
 	       '-override'=>1),
     "</form>";
 
-    print STDOUT $html_footer;
+    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
 
     exit(0);
     1;
@@ -1054,7 +1040,7 @@ so you can keep this window open.
     }
     print STDOUT "\n]</small></p>\n";
 
-    print STDOUT  $html_footer;
+    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
 
     1;
 }
