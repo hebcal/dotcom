@@ -199,7 +199,7 @@ my(%holidays) =
     (
      "Asara B'Tevet"		=>
      ["tevet",			0,
-      '*** בְּטֵבֵת'],
+      'עֲשָׂרָה בְּטֵבֵת'],
 
      "Chanukah: 1 Candle"	=>
      ["chanukah",		0,
@@ -289,7 +289,7 @@ my(%holidays) =
       'שַׁבָּת הַזוֹן'],
      "Shabbat Nachamu"		=>
      ["nachamu",		1,
-      'שַׁבָּת ***'],
+      'שַׁבָּת נַחֲמוּ'],
      "Shabbat Parah"		=>
      ["parah",			1,
       'שַׁבָּת פּרה'],
@@ -298,7 +298,7 @@ my(%holidays) =
       'שַׁבָּת שְׁקָלִים'],
      "Shabbat Shuva"		=>
      ["shuva",			1,
-      'שַׁבָּת ***'],
+      'שַׁבָּת שׁוּבָה'],
      "Shabbat Zachor"		=>
      ["zachor",			1,
       'שַׁבָּת זָכוֹר'],
