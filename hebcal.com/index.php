@@ -44,7 +44,7 @@ Jewish Calendar Tools</small></td>
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
-$pattern = '/^http:\/\/(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)\/.*(jewish|hebrew)(\+|%20)calend[ae]r/i';
+$pattern = '/^http:\/\/(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)\/.*calend[ae]r/i';
 if (!$http_cookie && $ref && preg_match($pattern, $ref)) {
     $cal[] = array("Jewish Traditions 2005 Calendar", "1559499265", 90, 70);
     $cal[] = array("Hebrew Illuminations 2005 Calendar", "1569374074", 89, 90);
