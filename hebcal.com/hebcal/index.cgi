@@ -28,7 +28,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <head>
 <title>hebcal</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
-<meta name=\"description\" content=\"Generates a list of Jewish Holidays and Candle Lighting times customized to your zip code, city, or latitude/longitude. Uses Danny Sadinoff's hebcal 3.2 program and The U.S. Census Bureau's Gazetteer zip code database.\">
+<meta name=\"description\" content=\"Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude.\">
 <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
 </head>
 
@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jun 28 17:02:36 PDT 1999
+Last modified: Thu Jul  8 11:57:54 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -351,17 +351,14 @@ hebcal
 
 <h1>Hebcal Interactive Jewish Calendar</h1>
 
-<p>This is a web interface to Danny Sadinoff's <a
-href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.</p>
-
-<p>Use the form below to generate a list of Jewish Holidays.  Candle
+<p>Use the form below to generate a list of Jewish holidays.  Candle
 lighting times are calculated from your latitude and longitude (which
-can be determined by your Zip Code or closest city).</p>
+can be determined by your zip code or closest city).</p>
 
 <p>For example, see <a href=
 \"$cgipath?v=1&amp;year=" . ($year + 1) .
 "&amp;zip=95051&amp;tz=-8&amp;dst=usa&amp;x=on\">default
-Holidays for the year " . ($year + 1) . "</a>.</p>
+holidays for the year " . ($year + 1) . "</a>.</p>
 
 <hr noshade size=\"1\">
 $message
@@ -543,10 +540,12 @@ Use Israeli sedra scheme</label>)<br>
 <input type=\"submit\" value=\"Get Calendar\">
 </form>
 
-<p><small>Geographic Zip Code information provided by <a
-href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census Bureau's
-Gazetteer</a>. If your Zip Code is missing from their database, I
-don't have it either.</small></p>
+<p><small>This is a web interface to Danny Sadinoff's <a
+href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.
+Geographic zip code information is provided by <a
+href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
+Bureau's Gazetteer</a>. If your zip code is missing from their database,
+I don't have it either.</small></p>
 
 <p><small>If you're a perl programmer, see the <a
 href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI
