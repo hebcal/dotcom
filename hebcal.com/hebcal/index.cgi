@@ -218,7 +218,7 @@ hebcal
 </big></strong>
 
 $message
-<p>This is a beta web interface to Danny Sadinoff's <a
+<p>This is a web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 
 <p>Use the form below to generate a list of Jewish Holidays.  Candle
