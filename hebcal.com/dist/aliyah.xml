@@ -764,7 +764,7 @@
 <year variation="Y.2" sameas="Y.1" />
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
-<triennial descr="triennial divisions with Ten Commandments in years two and three">
+<triennial-alt descr="triennial divisions with Ten Commandments in years two and three">
 <year variation="Y.1">
  <aliyah num="1" begin="18:1" end="18:4" />
  <aliyah num="2" begin="18:5" end="18:8" />
@@ -786,7 +786,7 @@
  <aliyah num="M" begin="20:21" end="20:23" />
 </year>
 <year variation="Y.3" sameas="Y.2" />
-</triennial>
+</triennial-alt>
 </parsha>
 <parsha id="Mishpatim" hebrew="מִּשְׁפָּטִים" verse="Exodus 21:1 - 24:18">
  <haftara verse="Jeremiah 34:8 - 34:22; 33:25 - 33:26" />
@@ -2126,7 +2126,7 @@
  <aliyah num="M" begin="7:9" end="7:11" />
 </year>
 </triennial>
-<triennial descr="with the Ten Commandments in year two and the Sh'ma in year three">
+<triennial-alt descr="with the Ten Commandments in year two and the Sh'ma in year three">
 <year num="1">
  <aliyah num="1" begin="3:23" end="3:25" />
  <aliyah num="2" begin="3:26" end="3:29" />
@@ -2157,7 +2157,7 @@ n<year num="3">
  <aliyah num="7" begin="7:9" end="7:11" />
  <aliyah num="M" begin="7:9" end="7:11" />
 </year>
-</triennial>
+</triennial-alt>
 </parsha>
 <parsha id="Eikev" hebrew="עֵקֶב" verse="Deuteronomy 7:12 - 11:25">
  <haftara verse="Isaiah 49:14 - 51:3" />
@@ -2490,18 +2490,12 @@ n<year num="3">
 <!-- Combined Sidrot -->
 <parsha id="Vayakhel-Pekudei">
 <cycle-variations>
- <variation name="A" pattern="TTS">
- </variation>
- <variation name="B" pattern="TST">
- </variation>
- <variation name="C" pattern="TSS">
- </variation>
- <variation name="D" pattern="SST">
- </variation>
- <variation name="E" pattern="STS">
- </variation>
- <variation name="F" pattern="STT">
- </variation>
+ <variation pattern="TTS" name="A" />
+ <variation pattern="TST" name="B" />
+ <variation pattern="TSS" name="C" />
+ <variation pattern="SST" name="D" />
+ <variation pattern="STS" name="E" />
+ <variation pattern="STT" name="F" />
 </cycle-variations>
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
@@ -2538,14 +2532,10 @@ n<year num="3">
 </parsha>
 <parsha id="Tazria-Metzora">
 <cycle-variations>
- <variation name="A" pattern="TTS">
- </variation>
- <variation name="B" pattern="TST">
- </variation>
- <variation name="C" pattern="STT">
- </variation>
- <variation name="D" pattern="STS">
- </variation>
+ <variation pattern="TTS" name="A" />
+ <variation pattern="TST" name="B" />
+ <variation pattern="STT" name="C" />
+ <variation pattern="STS" name="D" />
 </cycle-variations>
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
@@ -2580,16 +2570,12 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Acharei Mot-Kedoshim">
+<parsha id="Achrei Mot-Kedoshim">
 <cycle-variations>
- <variation name="A" pattern="TTS">
- </variation>
- <variation name="B" pattern="TST">
- </variation>
- <variation name="C" pattern="STT">
- </variation>
- <variation name="D" pattern="STS">
- </variation>
+ <variation pattern="TTS" name="A" />
+ <variation pattern="TST" name="B" />
+ <variation pattern="STT" name="C" />
+ <variation pattern="STS" name="D" />
 </cycle-variations>
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
@@ -2626,14 +2612,10 @@ n<year num="3">
 </parsha>
 <parsha id="Behar-Bechukotai">
 <cycle-variations>
- <variation name="A" pattern="TTS">
- </variation>
- <variation name="B" pattern="TST">
- </variation>
- <variation name="C" pattern="STT">
- </variation>
- <variation name="D" pattern="STS">
- </variation>
+ <variation pattern="TTS" name="A" />
+ <variation pattern="TST" name="B" />
+ <variation pattern="STT" name="C" />
+ <variation pattern="STS" name="D" />
 </cycle-variations>
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
@@ -2670,20 +2652,13 @@ n<year num="3">
 </parsha>
 <parsha id="Chukat-Balak">
 <cycle-variations>
- <variation name="A" pattern="TTS">
- </variation>
- <variation name="B" pattern="TST">
- </variation>
- <variation name="C" pattern="TSS">
- </variation>
- <variation name="D" pattern="SST">
- </variation>
- <variation name="E" pattern="STS">
- </variation>
- <variation name="F" pattern="STT">
- </variation>
- <variation name="G" pattern="SSS">
- </variation>
+ <variation pattern="TTS" name="A" />
+ <variation pattern="TST" name="B" />
+ <variation pattern="TSS" name="C" />
+ <variation pattern="SST" name="D" />
+ <variation pattern="STS" name="E" />
+ <variation pattern="STT" name="F" />
+ <variation pattern="SSS" name="G" />
 </cycle-variations>
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
@@ -2720,12 +2695,9 @@ n<year num="3">
 </parsha>
 <parsha id="Matot-Masei">
 <cycle-variations>
- <variation name="A" pattern="TTS">
- </variation>
- <variation name="B" pattern="TST">
- </variation>
- <variation name="C" pattern="STT">
- </variation>
+ <variation pattern="TTS" name="A" />
+ <variation pattern="TST" name="B" />
+ <variation pattern="STT" name="C" />
 </cycle-variations>
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
@@ -2760,7 +2732,7 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Nitzavim-Vayelech">
+<parsha id="Nitzavim-Vayeilech">
 <triennial descr="Aliyot Divisions for Combined Sidrot">
 <year num="1">
   <aliyah num="1" begin="29:9" end="29:11" />
