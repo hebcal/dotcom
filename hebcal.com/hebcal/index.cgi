@@ -403,9 +403,6 @@ JSCRIPT_END
     Hebcal::navbar2($q, 'Interactive Calendar', 1, undef, undef),
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
-    print STDOUT "\n<p style=\"color: red; font-size: large\"><em>Gmar Chatima Tova!</em>\n",
-    "Hebcal.com wishes you a good inscription in the Book of Life.</p>";
-
     if ($message ne '')
     {
 	$help = '' unless defined $help;
