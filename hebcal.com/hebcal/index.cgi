@@ -391,7 +391,7 @@ Time Zone: GMT $in{'tz'}:00
 
 ";
 
-    print STDOUT "<p>Use the \"add\" links below to add an individual entry\n";
+    print STDOUT "<p>Use the \"add\" links below to add a holiday\n";
     print STDOUT "to your personal <a target=\"_calendar\"\n";
     print STDOUT "href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>.</p>\n\n";
 
