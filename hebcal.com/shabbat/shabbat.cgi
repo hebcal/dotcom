@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Jan 16 18:08:30 PST 2001
+Last modified: Tue Jan 16 21:45:34 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -291,6 +291,7 @@ if (defined $q->param('cfg'))
     }
     elsif ($q->param('cfg') eq 'r')
     {
+	$title = '1-Click Shabbat: ' . $q->param('zip');
 	&my_header($title, '');
 
 	&out_html("<?xml version=\"1.0\"?>
@@ -305,7 +306,7 @@ if (defined $q->param('cfg'))
 	&out_html("&amp;tz=" . $q->param('tz'))
 	    if $q->param('tz') ne 'auto';
 	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n" .
-		  "times for your zip code</description>\n" .
+		  "times for $city_descr</description>\n" .
 		  "<language>en-us</language>\n");
     }
 }
@@ -374,9 +375,9 @@ for ($i = 0; $i < $numEntries; $i++)
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 	{
 	    &out_html("<item>\n");
-	    &out_html(qq{<title>$subj for\n}, 
+	    &out_html(qq{<title>$subj for }, 
 		  strftime("%A, %d %B", localtime($time)));
-	    &out_html(sprintf("\nis at %d:%02d PM</title>\n",
+	    &out_html(sprintf(" is at %d:%02d PM</title>\n",
 			      $hour, $min));
 	    &out_html("<link>http://www.jewfaq.org/shabbat.htm</link>\n</item>\n");
 	}
@@ -394,18 +395,18 @@ for ($i = 0; $i < $numEntries; $i++)
 	    if (defined $q->param('cfg') && $q->param('cfg') eq 'r');
 	if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
 	{
-	    &out_html("This week's Torah portion is\n");
+	    &out_html("This week's Torah portion is ");
 	}
 	else
 	{
-	    &out_html("Holiday:\n");
+	    &out_html("Holiday: ");
 	}
 
 	my($href) = &get_holiday_anchor($subj);
 	if ($href ne '' &&
 	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
 	{
-	    &out_html(qq{<a href="$href">$subj</a>});
+	    &out_html(qq{<a\nhref="$href">$subj</a>});
 	}
 	else
 	{
@@ -415,7 +416,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	# output day if it's a holiday
 	if ($subj !~ /^(Parshas\s+|Parashat\s+)/)
 	{
-	    &out_html("\non ", strftime("%A, %d %B", localtime($time)));
+	    &out_html(" on ", strftime("%A, %d %B", localtime($time)));
 	}
 
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
