@@ -414,12 +414,15 @@ sub process_args
     $cmd .= ' -s -c ' . $sat_year;
 
     # only set expiry if there are CGI arguments
-    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
+    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/ &&
+	(! defined $cfg || $cfg ne 'v'))
     {
-	unless (defined $cfg && $cfg eq 'v') {
-	    print "Expires: ", &Hebcal::http_date($saturday), "\015\012";
-	}
+	print "Expires: ", &Hebcal::http_date($saturday), "\015\012";
+    }
 
+    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/ &&
+	! defined $cfg)
+    {
 	my($cookie_to_set);
 
 	my($C_cookie) = (defined $cookies->{'C'}) ?
@@ -447,7 +450,7 @@ sub process_args
 
 	print "Set-Cookie: ", $cookie_to_set,
 	"; path=/; expires=",  $expires_date, "\015\012"
-	    if $cookie_to_set && !$cfg;
+	    if $cookie_to_set;
     }
 
     my($loc) = (defined $city_descr && $city_descr ne '') ?
@@ -662,7 +665,7 @@ sub display_rss
     print "Content-Type: text/xml\015\012\015\012";
 
     my($url) = self_url();
-    my $title = '1-Click Shabbat: ' . $q->param('zip');
+    my $title = '1-Click Shabbat: ' . $city_descr;
 
     my $dc_date = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(time()));
     $dc_date =~ s/00$/:00/;
