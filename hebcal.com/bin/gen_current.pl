@@ -136,7 +136,7 @@ EOHTML
 
 foreach my $city (sort keys %Hebcal::city_tz)
 {
-    @events = Hebcal::invoke_hebcal("./hebcal -C '$city' -m 0 -c -h -x $fmonth $fyear",
+    @events = Hebcal::invoke_hebcal("$HEBCAL -C '$city' -m 0 -c -h -x $fmonth $fyear",
 				    '', 0);
     for (my $i = 0; $i < @events; $i++)
     {
