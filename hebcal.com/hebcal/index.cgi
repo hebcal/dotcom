@@ -42,6 +42,20 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
+# optimize common case
+BEGIN {
+    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}) {
+	if (open(F,"/home/mradwin/web/hebcal.com/hebcal/default.html")) {
+	    print "Content-Type: text/html\n\n";
+	    while(read(F,$_,8192)) {
+		print;
+	    }
+	    close(F);
+	    exit(0);
+	}
+    }
+}
+
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
@@ -203,9 +217,9 @@ else
 my $pi = $q->path_info();
 if (! defined $pi)
 {
-    my $cache = Hebcal::cache_begin($q);
+#    my $cache = Hebcal::cache_begin($q);
     results_page($g_date, $g_filename);
-    Hebcal::cache_end() if $cache;
+#    Hebcal::cache_end() if $cache;
 }
 elsif ($pi =~ /[^\/]+\.csv$/)
 {
@@ -229,9 +243,9 @@ elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
 }
 else
 {
-    my $cache = Hebcal::cache_begin($q);
+#    my $cache = Hebcal::cache_begin($q);
     results_page($g_date, $g_filename);
-    Hebcal::cache_end() if $cache;
+#    Hebcal::cache_end() if $cache;
 }
 
 close(STDOUT);
