@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Nov  8 08:29:14 PST 2000
+Last modified: Wed Nov  8 08:58:14 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -50,6 +50,15 @@ noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved.</small></body></html>
 ";
+
+my($inline_style) = qq[<style type="text/css">
+<!--
+.boxed { border-style: solid;
+border-color: #666666;
+border-width: thin;
+padding: 8px; }
+-->
+</style>];
 
 # process form params
 $q = new CGI;
@@ -262,39 +271,18 @@ unless ($default)
 my($title) = "1-Click Shabbat for $city_descr";
 $title =~ s/ &nbsp;/ /;
 
-print STDOUT $q->header(),
-    $q->start_html(-title => $title,
-		   -target => '_top',
-		   -style => { -type => 'text/css',
-			       -code => ".boxed { border-style: solid;\n" . 
-				   "border-color: #666666;\n" . 
-				   "border-width: thin;\n" .
-				       "padding: 8px; }" },
-		   -head => [
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
-			     $q->Link({-rel => 'stylesheet',
-				       -href => '/style.css',
-				       -type => 'text/css'}),
-			     ],
-		   -meta => {'robots' => 'noindex'});
-
-if (defined $q->param('cnf') && $q->param('cnf') eq 'i')
+if (defined $q->param('cfg') && $q->param('cfg') eq 'i')
 {
+    &my_header($title, '');
+
     print STDOUT "<h3><a target=\"_top\" href=\"/shabbat/\">1-Click\n",
 	"Shabbat</a> for $city_descr</h3>\n";
 }
 else
 {
-    print STDOUT
-	"<table width=\"100%\"\nclass=\"navbar\">",
-	"<tr><td><small>",
-	"<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
-	"<tt>-&gt;</tt>\n",
-	"1-Click Shabbat</small></td>",
-	"<td align=\"right\"><small><a\n",
-	"href=\"/search/\">Search</a></small>",
-	"</td></tr></table>",
-	"<h1>1-Click\nShabbat</h1><h2>$city_descr</h2>\n";
+    &my_header($title, $inline_style);
+
+    print STDOUT "<h2>$city_descr</h2>\n";
 
     if (defined $dst_descr && defined $tz_descr)
     {
@@ -385,7 +373,7 @@ for ($i = 0; $i < $numEntries; $i++)
 }
 
 print STDOUT "</p>\n";
-if (! defined $q->param('cnf') || $q->param('cnf') ne 'i')
+if (! defined $q->param('cfg') || $q->param('cfg') ne 'i')
 {
     &form(0,'','');
     print STDOUT $html_footer;
@@ -394,24 +382,24 @@ if (! defined $q->param('cnf') || $q->param('cnf') ne 'i')
 close(STDOUT);
 exit(0);
 
-sub form
+sub my_header
 {
-    my($head,$message,$help) = @_;
+    my($title,$inline_style) = @_;
 
-    if ($head)
-    {
-	print STDOUT
-	    $q->header(),
-	    $q->start_html(-title => "1-Click Shabbat",
-			   -target=>'_top',
-			   -head => [
+    print STDOUT $q->header(),
+    $q->start_html(-title => $title,
+		   -target => '_top',
+		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			     $q->Link({-rel => 'stylesheet',
 				       -href => '/style.css',
 				       -type => 'text/css'}),
+			     $inline_style,
 			     ],
-			   -meta => {'robots' => 'noindex'});
+		   -meta => {'robots' => 'noindex'});
 
+    unless (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    {
 	print STDOUT
 	    "<table width=\"100%\"\nclass=\"navbar\">",
 	    "<tr><td><small>",
@@ -423,6 +411,15 @@ sub form
 	    "</td></tr></table>",
 	    "<h1>1-Click\nShabbat</h1>\n";
     }
+
+    1;
+}
+
+sub form
+{
+    my($head,$message,$help) = @_;
+
+    &my_header('1-Click Shabbat', $inline_style) if $head;
 
     if ($message ne '')
     {
