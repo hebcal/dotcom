@@ -36,7 +36,8 @@ $param = array();
 global $HTTP_POST_VARS;
 global $HTTP_GET_VARS;
 
-if (!isset($HTTP_POST_VARS['v']) && !isset($HTTP_GET_VARS['v']))
+if (!isset($HTTP_POST_VARS['v']) && !isset($HTTP_GET_VARS['v']) &&
+    !isset($HTTP_POST_VARS['e']) && !isset($HTTP_GET_VARS['e']))
 {
 global $HTTP_SERVER_VARS;
 $cookies = explode(';', $HTTP_SERVER_VARS["HTTP_COOKIE"]);
@@ -70,6 +71,10 @@ if (isset($param['e']))
 		$parts[1] = ($parts[1] == '1') ? 'on' : '';
 	    }
 	    $param[$parts[0]] = $parts[1];
+	}
+	if (isset($param['city'])) {
+	    $param['geo'] = 'city';
+	    $param['city'] = urldecode($param['city']);
 	}
     }
 }
