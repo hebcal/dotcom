@@ -61,12 +61,35 @@ $rcsrev =~ s/\s*\$//g;
      'July','August','September','October','November','December');
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
-	\"http://www.w3.org/TR/REC-html40/loose.dtd\">
+\t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
 <html><head>
 <title>Hebcal Interactive Jewish Calendar</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
 <meta name=\"description\" content=\"Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude.\">
+<meta name=\"keywords\" content=\"hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff\">
 <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
+<meta name=\"DC.Title\" content=\"Hebcal Interactive Jewish Calendar\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#title\">
+<meta name=\"DC.Creator.PersonalName\" content=\"Radwin, Michael\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#creator\">
+<meta name=\"DC.Creator.PersonalName.Address\" content=\"michael@radwin.org\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#creator\">
+<meta name=\"DC.Subject\" content=\"Jewish calendar\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
+<meta name=\"DC.Subject\" content=\"Hebrew calendar\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
+<meta name=\"DC.Subject\" content=\"hebcal\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
+<meta name=\"DC.Subject\" content=\"candle lighting\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
+<meta name=\"DC.Type\" content=\"Text.Form\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#type\">
+<meta name=\"DC.Identifier\" content=\"http://www.radwin.org/hebcal/\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#identifier\">
+<meta name=\"DC.Language\" scheme=\"ISO639-1\" content=\"en\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#language\">
+<meta name=\"DC.Date.X-MetadataLastModified\" scheme=\"ISO8601\" content=\"1999-08-07\">
+<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#date\">
 </head>
 <body>";
 
@@ -75,7 +98,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Jul 27 12:55:50 PDT 1999
+Last modified: Fri Aug  6 16:07:00 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -571,6 +594,9 @@ I don't have it either.</small></p>
 <p><small>If you're a perl programmer, see the <a
 href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI
 form.</small></p>
+<p><small>See also <a
+href=\"http://shamash.org/trb/judaism.html\">Judaism and Jewish
+Resources</a> at shamash.org.</small></p>
 $html_footer";
 
     close(STDOUT);
@@ -586,6 +612,7 @@ sub download
     local($date) = $year;
     local($filename) = 'hebcal_' . $year;
     local($ycal) = (defined($in{'y'}) && $in{'y'} eq '1') ? 1 : 0;
+    local($prev_url,$next_url,$prev_title,$next_title);
 
     if ($in{'month'} =~ /^\d+$/)
     {
@@ -613,26 +640,7 @@ sub download
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-    print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
-    print STDOUT "Content-Type: text/html\015\012\015\012";
-
-    print STDOUT "$html_header
-<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> -&gt;
-<a href=\"$cgipath\">hebcal</a> -&gt;
-$date</small></div><h1>Jewish Calendar $date</h1>
-";
-
-    if ($opts{'c'} == 1)
-    {
-	print STDOUT "<dl>\n<dt>", $city_descr, "\n";
-	print STDOUT "<dd>", $lat_descr, "\n" if $lat_descr ne '';
-	print STDOUT "<dd>", $long_descr, "\n" if $long_descr ne '';
-	print STDOUT "<dd>", $dst_tz_descr, "\n" if $dst_tz_descr ne '';
-	print STDOUT "</dl>\n";
-    }
-
-    print STDOUT "Go to:\n";
+    # next and prev urls
     if ($in{'month'} =~ /^\d+$/)
     {
 	local($pm,$nm,$py,$ny);
@@ -658,42 +666,72 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	    $ny = $py = $year;
 	}
 
-	print STDOUT "<a href=\"$cgipath?year=", $py, "&amp;month=", $pm;
+	$prev_url = "$cgipath?year=" . $py . "&amp;month=" . $pm;
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=", &url_escape($val)
+	    $prev_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	print STDOUT "\">", $MoY[$pm], " ", $py, "</a> |\n";
+	$prev_title = $MoY[$pm] . " " . $py;
 
-	print STDOUT "<a href=\"$cgipath?year=", $ny, "&amp;month=", $nm;
+	$next_url = "$cgipath?year=" . $ny . "&amp;month=" . $nm;
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=", &url_escape($val)
+	    $next_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	print STDOUT "\">", $MoY[$nm], " ", $ny, "</a>\n";
-	print STDOUT "<br>";
+	$next_title = $MoY[$nm] . " " . $ny;
     }
     else
     {
-	print STDOUT "<a href=\"$cgipath?year=", ($year - 1);
+	$prev_url = "$cgipath?year=" . ($year - 1);
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=", &url_escape($val)
+	    $prev_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year';
 	}
-	print STDOUT "\">", ($year - 1), "</a> |\n";
+	$prev_title = ($year - 1);
 
-	print STDOUT "<a href=\"$cgipath?year=", ($year + 1);
+	$next_url = "$cgipath?year=" . ($year + 1);
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=", &url_escape($val)
+	    $next_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year';
 	}
-	print STDOUT "\">", ($year + 1), "</a>\n";
-	print STDOUT "<br>";
+	$next_title = ($year + 1);
     }
+
+    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
+    print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
+    print STDOUT "Content-Type: text/html\015\012\015\012";
+
+    print STDOUT "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
+\t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
+<html><head>
+<title>Hebcal: Jewish Calendar $date</title>
+<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
+<link rel=\"start\" href=\"http://www.radwin.org$cgipath\" title=\"Hebcal Interactive Jewish Calendar\">
+<link rel=\"prev\" href=\"$prev_url\" title=\"$prev_title\">
+<link rel=\"next\" href=\"$next_url\" title=\"$next_title\">
+</head>
+<body>
+<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> -&gt;
+<a href=\"$cgipath\">hebcal</a> -&gt;
+$date</small></div><h1>Jewish Calendar $date</h1>
+";
+
+    if ($opts{'c'} == 1)
+    {
+	print STDOUT "<dl>\n<dt>", $city_descr, "\n";
+	print STDOUT "<dd>", $lat_descr, "\n" if $lat_descr ne '';
+	print STDOUT "<dd>", $long_descr, "\n" if $long_descr ne '';
+	print STDOUT "<dd>", $dst_tz_descr, "\n" if $dst_tz_descr ne '';
+	print STDOUT "</dl>\n";
+    }
+
+    print STDOUT "Go to:\n";
+    print STDOUT "<a href=\"$prev_url\">", $prev_title, "</a> |\n";
+    print STDOUT "<a href=\"$next_url\">", $next_title, "</a><br>\n";
 
     if ($ycal == 0)
     {
@@ -705,7 +743,7 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "\">Show Yahoo! Calendar links</a>\n";
     }
 
-    print STDOUT "<form action=\"${cgipath}index.html/$filename\">\n";
+    print STDOUT "<div><form action=\"${cgipath}index.html/$filename\">\n";
     while (($key,$val) = each(%in))
     {
 	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"", 
@@ -713,7 +751,7 @@ $date</small></div><h1>Jewish Calendar $date</h1>
     }
     print STDOUT
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
-</form>
+</form></div>
 ";
 
     print STDOUT
@@ -764,7 +802,7 @@ open.</small></p>
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&gt;/g;
 
-	printf STDOUT "%04d/%02d/%02d %s\n", $year, $month, $day, $descr;
+	printf STDOUT "%04d-%02d-%02d %s\n", $year, $month, $day, $descr;
     }
     close(HEBCAL);
 
