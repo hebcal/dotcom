@@ -67,14 +67,11 @@ if (! -d $outdir) {
 my($mtime) = (stat($infile))[9];
 my($hhmts) = "Last modified:\n" . localtime($mtime);
 
+my($copyright) = Hebcal::html_copyright2('');
 my($html_footer) = <<EOHTML;
 <p>
 <hr noshade size="1">
-<span class="tiny">Copyright
-&copy; $this_year Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a>
+<span class="tiny">$copyright
 <br>
 $hhmts
 ($rcsrev)
