@@ -31,32 +31,6 @@ use Unicode::String;
 use Date::Calc;
 use strict;
 
-my(%num2heb) =
-(
-1 => 'א',
-2 => 'ב',
-3 => 'ג',
-4 => 'ד',
-5 => 'ה',
-6 => 'ו',
-7 => 'ז',
-8 => 'ח',
-9 => 'ט',
-10 => 'י',
-20 => 'כ',
-30 => 'ל',
-40 => 'מ',
-50 => 'נ',
-60 => 'ס',
-70 => 'ע',
-80 => 'פ',
-90 => 'צ',
-100 => 'ק',
-200 => 'ר',
-300 => 'ש',
-400 => 'ת',
-);
-
 my(@hebrew_months) =
     ('Nisan', 'Iyyar', 'Sivan', 'Tamuz', 'Av', 'Elul', 'Tishrei',
      'Cheshvan', 'Kislev', 'Tevet', 'Shvat', 'Adar1', 'Adar2');
@@ -246,11 +220,11 @@ if (defined $events[0])
 
 	print STDOUT qq{\n<br>},
 			qq{<span dir="rtl" lang="he" class="hebrew-big">},
-			hebnum_to_string($hd),
+			Hebcal::hebnum_to_string($hd),
 			"&nbsp;&nbsp;בְּ",
 			$monthnames{$hm},
 			"&nbsp;&nbsp;",
-			hebnum_to_string($hy),
+			Hebcal::hebnum_to_string($hy),
 			qq{</span>}
 	    if ($q->param('heb') && $q->param('heb') =~ /^on|1$/);
 
@@ -385,63 +359,6 @@ EOHTML
 
     exit(0);
 }
-
-sub hebnum_to_string {
-    my($num) = @_;
-
-    my(@array) = hebnum_to_array($num);
-    my($result);
-
-    if (scalar(@array) == 1)
-    {
-	$result = $num2heb{$array[0]} . '׳'; # geresh
-    }
-    else
-    {
-	$result = '';
-	for (my $i = 0; $i < @array; $i++)
-	{
-	    $result .= '״' if (($i + 1) == @array); # gershayim
-	    $result .= $num2heb{$array[$i]};
-	}
-    }
-
-    $result;
-}
-
-sub hebnum_to_array {
-    my($num) = @_;
-    my(@result) = ();
-
-    $num = $num % 1000;
-
-    while ($num > 0)
-    {
-	my($incr) = 100;
-
-	if ($num == 15 || $num == 16)
-	{
-	    push(@result, 9, $num - 9);
-	    last;
-	}
-
-	my($i);
-	for ($i = 400; $i > $num; $i -= $incr)
-	{
-	    if ($i == $incr)
-	    {
-		$incr = int($incr / 10);
-	    }
-	}
-
-	push(@result, $i);
-
-	$num -= $i;
-    }
-
-    @result;
-}
-
 
 sub my_header
 {
