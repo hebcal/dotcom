@@ -1240,7 +1240,7 @@ sub get_browser_endl($)
     my($ua) = @_;
     my $endl;
 
-    if ($ua =~ /^Mozilla\/[1-4]/)
+    if ($ua && $ua =~ /^Mozilla\/[1-4]/)
     {
 	if ($ua =~ /compatible/)
 	{
