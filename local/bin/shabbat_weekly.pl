@@ -132,11 +132,11 @@ sub get_friday_candles
 	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	    $hour -= 12 if $hour > 12;
 
-	    return sprintf("%d:%02dpm\n", $hour, $min);
+	    return sprintf("%d:%02dpm", $hour, $min);
 	}
     }
 
-    return undef;
+    return '';
 }
 
 sub gen_body
@@ -172,6 +172,10 @@ sub gen_body
 	{
 	    $body .= sprintf("%s for %s is at %d:%02dpm\n",
 			     $subj, $strtime, $hour, $min);
+	}
+	elsif ($subj eq 'No sunset today.')
+	{
+	    $body .= "No sunset on $strtime\n";
 	}
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
