@@ -194,19 +194,8 @@ if (defined $events[0])
     }
 
 
-    if ($year <= 1752)
-    {
-	print STDOUT <<EOHTML
-<p><font color="#ff0000">WARNING: Results for year 1752 C.E. and before
-may not be accurate.  Hebcal does not take into account a correction of
-twelve days was introduced by Pope Gregory XIII known as the Gregorian
-Reformation.</font>
-For more information, see <a
-href="http://www.xoc.net/maya/help/gregorian.asp">Gregorian and Julian
-Calendars</a>.</p>
-EOHTML
-    ;
-    }
+    print STDOUT $Hebcal::gregorian_warning
+	if ($year <= 1752);
 
     print STDOUT qq{<p align="center"><span\n},
     qq{style="font-size: large">$first =\n<b>$second</b></span>};
