@@ -7,7 +7,7 @@ $dbmfile =~ s/\.db$//;
 
 &CgiDie("Script Error: No Database", "\nThe database is unreadable.\n" .
 	"Please <a href=\"mailto:michael\@radwin.org" .
-	"\">e-mail Michael</a>.")
+	"\">e-mail Michael</a> to tell him that hebcal is broken.")
     unless -r "${dbmfile}.db";
 
 $cgipath = '/cgi-bin/hebcal';
@@ -39,7 +39,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon Apr 19 09:33:06 PDT 1999
+Last modified: Mon Apr 19 09:47:09 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -225,8 +225,7 @@ elsif (defined $in{'zip'})
 	&CgiDie("Script Error: Database Unavailable",
 		"\nThe database is unavailable right now.\n" .
 		"Please <a href=\"${cgipath}?" .
-		$ENV{'QUERY_STRING'} .
-		"\">try again</a>.");
+		$ENV{'QUERY_STRING'} . "\">try again</a>.");
 
     $val = $DB{$in{'zip'}};
     dbmclose(%DB);
@@ -290,7 +289,7 @@ open(HEBCAL,"$cmd |") ||
     &CgiDie("Script Error: can't run hebcal",
 	    "\nCommand was \"$cmd\".\n" .
 	    "Please <a href=\"mailto:michael\@radwin.org" .
-	    "\">e-mail Michael</a>.");
+	    "\">e-mail Michael</a> to tell him that hebcal is broken.");
 
 $endl = "\012";			# default Netscape and others
 if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
@@ -607,7 +606,7 @@ ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 	&CgiDie("Script Error: can't run hebcal",
 		"\nCommand was \"$cmd\".\n" .
 		"Please <a href=\"mailto:michael\@radwin.org" .
-		"\">e-mail Michael</a>.");
+		"\">e-mail Michael</a> to tell him that hebcal is broken.");
 
     while(<HEBCAL>)
     {
