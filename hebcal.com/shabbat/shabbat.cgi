@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Apr 26 10:37:05 PDT 2001
+Last modified: Fri Apr 27 11:15:07 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -601,7 +601,7 @@ sub my_header
 
     unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
     {
-	&out_html(&Hebcal::navbar($server_name,'1-Click Shabbat'),
+	&out_html(&Hebcal::navbar($server_name,'1-Click Shabbat',1),
 		  "<h1>1-Click\nShabbat</h1>\n");
     }
 
