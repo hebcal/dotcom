@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 ########################################################################
 # Hebcal Interactive Jewish Calendar is a web site that lets you
