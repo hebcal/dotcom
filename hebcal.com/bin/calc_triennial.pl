@@ -867,15 +867,16 @@ sub readings_for_current_year
     chomp($heb_yr);
     $heb_yr =~ s/^.+, (\d\d\d\d)/$1/;
 
+    my $extra_years = 5;
     my @years;
-    foreach my $i (0 .. 3)
+    foreach my $i (0 .. $extra_years)
     {
 	my($yr) = $heb_yr + $i;
 	my(@ev) = &Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '');
 	$years[$i] = \@ev;
     }
 
-    for (my $yr = 0; $yr < 4; $yr++)
+    for (my $yr = 0; $yr < $extra_years; $yr++)
     {
     my @events = @{$years[$yr]};
     for (my $i = 0; $i < @events; $i++)
