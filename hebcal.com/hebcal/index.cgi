@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 10:46:22 PDT 2001
+Last modified: Wed Apr 18 10:48:17 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -53,8 +53,7 @@ noshade size=\"1\"><font size=-2 face=Arial>Copyright
 &copy; $this_year Michael J. Radwin. All rights reserved.
 <a href=\"/privacy/\">Privacy Policy</a> -
 <a href=\"/help/\">Help</a>
-<br>$hhmts
-(<a href=\"../dist/ChangeLog.txt\">$rcsrev</a>)
+<br>$hhmts ($rcsrev)
 </font></body></html>
 ";
 
