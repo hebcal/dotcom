@@ -96,7 +96,7 @@ foreach $key ($q->param())
     $q->param($key,$val);
 }
 
-my($cmd)  = './hebcal -x -h';
+my($cmd)  = './hebcal -S -x -h';
 my($type) = 'g2h';
 
 if ($q->param('h2g') && $q->param('hm') && $q->param('hd') &&
@@ -178,17 +178,25 @@ if (defined $events[0])
     my($mon) = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
     my($mday) = $events[0]->[$Hebcal::EVT_IDX_MDAY];
 
+    my $parsha;
+    if (defined $events[1])
+    {
+	$parsha = $events[1]->[$Hebcal::EVT_IDX_SUBJ];
+    }
+
+    my($dow) = $Hebcal::DoW[&Hebcal::get_dow($year, $mon, $mday)];;
+
     my($first,$second);
     if ($type eq 'h2g')
     {
 	$first = &Hebcal::html_entify($subj);
-	$second = sprintf("%d %s %04d",
-			  $mday, $Hebcal::MoY_long{$mon}, $year);
+	$second = sprintf("%s, %d %s %04d",
+			  $dow, $mday, $Hebcal::MoY_long{$mon}, $year);
     }
     else
     {
-	$first = sprintf("%d %s %04d",
-			  $mday, $Hebcal::MoY_long{$mon}, $year);
+	$first = sprintf("%s, %d %s %04d",
+			  $dow, $mday, $Hebcal::MoY_long{$mon}, $year);
 	$second = &Hebcal::html_entify($subj);
     }
 
@@ -224,6 +232,10 @@ if (defined $events[0])
 	$q->param('hm', $hm);
 	$q->param('hd', $hd);
 	$q->param('hy', $hy);
+    }
+
+    if ($parsha) {
+	print STDOUT qq{\n<br>$parsha};
     }
 
     print STDOUT qq{</p>\n};
