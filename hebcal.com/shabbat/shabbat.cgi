@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 14:40:12 PDT 2001
+Last modified: Mon May  7 20:01:13 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -365,7 +365,7 @@ unless (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 {
 #    &out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
 #	      qq{.</p>\n<p>\n});
-    &out_html('<p>');
+    &out_html("<dl>");
 }
 
 my($numEntries) = scalar(@events);
@@ -389,97 +389,71 @@ for ($i = 0; $i < $numEntries; $i++)
     my($hour) = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
     $hour -= 12 if $hour > 12;
 
+    my(%rss);
+    $rss{'description'} = strftime("%A, %d %B", localtime($time));
+
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 	{
-	    my($link) = &ycal($subj,$year,$mon,$mday,$min,$hour,
+	    $rss{'title'} = sprintf("%s: %d:%02d PM", $subj, $hour, $min);
+	    $rss{'link'} = &ycal($subj,$year,$mon,$mday,$min,$hour,
 			      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
 			      $events[$i]->[$Hebcal::EVT_IDX_DUR]);
 
-	    &out_html("<item>\n",
-		      sprintf("<title>%s: %d:%02d PM</title>\n",
-			      $subj, $hour, $min),
-		      "<link>$link</link>\n",
-		      "<description>",
-		      strftime("%A, %d %B", localtime($time)),
-		      "</description>\n",
-		      "</item>\n");
+	    &out_rss(\%rss);
 	}
 	else
 	{
-	    &out_html(qq{$subj for\n},
-		      strftime("%A, %d %B", localtime($time)),
-		      sprintf("\nis at <b>%d:%02d PM</b>.<br>\n",
-			      $hour, $min));
+	    &out_html(qq{\n<dt>$subj for\n},
+		      $rss{'description'},
+		      sprintf(" is at <b>%d:%02d PM</b>", $hour, $min));
 	}
     }
     else
     {
-	&out_html("<item>\n<title>")
-	    if (defined $q->param('cfg') && $q->param('cfg') eq 'r');
-	if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
-	{
-	    &out_html("This week's Torah portion is ");
-	}
-	else
-	{
-	    &out_html("Holiday: ");
-	}
+	$rss{'title'} = ($subj =~ /^(Parshas|Parashat)\s+/) ?
+	    "This week's Torah portion is " : "Holiday: ";
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
 	    = &Hebcal::get_holiday_anchor($subj,0,$q);
+
+	$rss{'link'} = $href;
 
 	if ($href ne '' &&
 	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
 	{
 	    if (defined $torah_href && $torah_href ne '')
 	    {
-		&out_html(qq{<b>$subj</b>\n(<a href="$href">Drash</a>\n} .
+		$rss{'title'} .=
+		    qq{<b>$subj</b>\n(<a href="$href">Drash</a>\n} .
 		    qq{- <a href="$torah_href">Torah</a>\n} .
-		    qq{- <a href="$haftarah_href">Haftarah</a>)});
+		    qq{- <a href="$haftarah_href">Haftarah</a>)};
 	    }
-	    elsif ($href ne '')
+	    else
 	    {
-		&out_html(qq{<a\nhref="$href">$subj</a>});
+		$rss{'title'} .= qq{<a\nhref="$href">$subj</a>};
 	    }
 	}
 	else
 	{
-	    &out_html($subj);
-	}
-
-	# output day if it's a holiday
-	if ($subj !~ /^(Parshas\s+|Parashat\s+)/)
-	{
-	    &out_html("\non ", strftime("%A, %d %B", localtime($time)));
+	    $rss{'title'} .= $subj;
 	}
 
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 	{
-	    &out_html("</title>\n<link>");
-	    if ($href ne '')
-	    {
-		&out_html($href);
-	    }
-	    elsif ($subj =~ /^(Parshas\s+|Parashat\s+)/)
-	    {
-		&out_html("http://learn.jtsa.edu/topics/parashah/");
-	    }
-	    else
-	    {
-		&out_html("http://www.vjholidays.com/");
-	    }
-	    &out_html("</link>\n</item>\n");
+	    &out_rss(\%rss);
 	}
 	else
 	{
-	    &out_html(".<br>\n");
+	    &out_html("\n<dt>", $rss{'title'});
+	    &out_html("\non ", $rss{'description'})
+		unless ($subj =~ /^(Parshas|Parashat)\s+/);
 	}
     }
 }
 
-&out_html("</p>\n")
+&out_html("\n</dl>\n")
     unless (defined $q->param('cfg') && $q->param('cfg') eq 'r');
 
 if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
@@ -508,6 +482,23 @@ else
 
 close(STDOUT);
 exit(0);
+
+sub out_rss
+{
+    my($rss) = @_;
+
+    print STDOUT
+	"<item>\n",
+	"<title>", $rss->{'title'}, "</title>\n",
+	"<link>", $rss->{'link'}, "</link>\n";
+
+    print STDOUT
+	"<description>", $rss->{'description'}, "</description>\n"
+	    if defined $rss->{'description'};
+
+    print STDOUT
+	"</item>\n";
+}
 
 sub ycal
 {
