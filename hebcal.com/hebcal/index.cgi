@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Feb 15 10:56:13 PST 2000
+Last modified: Mon Feb 28 11:19:16 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1585,7 +1585,9 @@ sub dba_contents {
         next if $year <= 1969 || $year >= 2038;
 
 	if ($hour == -1 && $min == -1) {
-	    $hour = $min = 0;
+#	    $hour = $min = 0;
+	    $hour = 12;		# try all-day/untimed events as 12 noon
+	    $min = 0;
 	} elsif ($hour > 0 || $min > 0) {
 	    $hour += 12;	# candle-lighting times are always PM
 	}
