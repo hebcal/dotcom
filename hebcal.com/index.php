@@ -55,6 +55,7 @@ Hebrew Birthdays and Anniversaries
 aliyah-by-aliyah breakdown for weekly parshiyot
 <h4>Miscellaneous</h4>
 <a href="/help/">Help</a>
+<br><a href="/news/">What's New?</a>
 <br><a href="/privacy/">Privacy Policy</a>
 <br><a href="/search/">Search</a>
 <br><a href="/donations/">Donate</a>
