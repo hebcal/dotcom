@@ -26,7 +26,7 @@ tie(%ZIPS, 'DB_File', $zips_dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
 
 my(%SUBS) = &load_subs();
 
-while (my($email,$cfg) = each(%SUBS))
+while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
     my($cmd,$loc) = &parse_config($cfg);
@@ -42,16 +42,27 @@ shabbat-unsubscribe\@hebcal.com
 };
 
     my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
-    my $strtime = strftime("[shabbat] Candle lighting %b %d", localtime($fri));
 
-    &Hebcal::sendmail
-	("shabbat-bounce\@hebcal.com",
-	 "shabbat-owner\@hebcal.com",
-	 "Hebcal",
-	 $strtime,
-	 "List-Unsubscribe: <mailto:shabbat-unsubscribe\@hebcal.com>\n" .
-	 "Precedence: bulk\n",
-	 $body,$email,'');
+    my($return_path) = "shabbat-bounce\@hebcal.com";
+    my($from_addr) = "shabbat-owner\@hebcal.com";
+    my($from_name) = "Hebcal";
+    my($subject) =
+	strftime("[shabbat] %b %d Candle lighting", localtime($fri));
+    my($xtrahead) =
+	"List-Unsubscribe: <mailto:shabbat-unsubscribe\@hebcal.com>\n" .
+	"Precedence: bulk\n";
+
+    # try 3 times to avoid intermittent failures
+    my($i);
+    my($status) = 0;
+    for ($i = 0; $status == 0 && $i < 3; $i++)
+    {
+	$status = &Hebcal::sendmail($return_path,$from_addr,$from_name,
+				    $subject,$xtrahead,$body,$to,'');
+    }
+
+    warn "$0: unable to email $to\n"
+	if ($status == 0);
 }
 
 untie(%ZIPS);
@@ -118,7 +129,24 @@ sub load_subs
     open(DB_FH, "<&=$fd") || die "dup $!";
     unless (flock (DB_FH, LOCK_SH)) { die "flock: $!" }
 
-    %subs = %DB;
+    if (@ARGV)
+    {
+	foreach (@ARGV)
+	{
+	    if (defined $DB{$_})
+	    {
+		$subs{$_} = $DB{$_};
+	    }
+	    else
+	    {
+		warn "$_: no such user\n";
+	    }
+	}
+    }
+    else
+    {
+	%subs = %DB;
+    }
 
     flock(DB_FH, LOCK_UN);
     undef $db;
