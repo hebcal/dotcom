@@ -986,12 +986,24 @@ sub results_page
 		$url .= "city=" . Hebcal::url_escape($q->param('city'));
 	    }
 
-	    $url .= ";year=" . $q->param('year')
-		if ($q->param('yt') && $q->param('yt') eq 'H');
+	    my $hyear;
+	    if ($q->param('yt') && $q->param('yt') eq 'H') {
+		$hyear = $q->param('year');
+		$url .= ";year=" . $q->param('year');
+	    } else {
+		my $i = ($q->param('month') eq 'x') ? 0 : $numEntries - 1;
+		my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+		my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+		my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+		my $hebdate = Hebcal::greg2hebrew($year,$mon,$mday);
+		$hyear = $hebdate->{'yy'};
+		$url .= ";year=" . $hyear;
+	    }
+
 	    $url .= ";tag=interactive";
 
 	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
-	    "<a href=\"$url\">Printable\npage of full year's candle-lighting times</a>";
+	    "<a href=\"$url\">Printable\npage of candle-lighting times for $hyear</a>";
 #	    print STDOUT "\n<span class=\"hl\"><b>NEW!</b></span>";
 	}
 
