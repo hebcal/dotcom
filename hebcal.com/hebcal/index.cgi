@@ -1,5 +1,28 @@
 #!/usr/local/bin/perl -w
 
+########################################################################
+# Hebcal Interactive Jewish Calendar is a web site that lets you
+# generate a list of Jewish holidays for any year. Candle lighting times
+# are calculated from your latitude and longitude (which can be determined
+# by your zip code or closest city).
+#
+# Copyright (c) 1999  Michael John Radwin.  All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+########################################################################
+
 require 'cgi-lib.pl';
 require 'timelocal.pl';
 require 'ctime.pl';
@@ -103,7 +126,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Sep  1 11:05:45 PDT 1999
+Last modified: Sun Sep  5 10:08:07 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
