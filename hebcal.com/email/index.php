@@ -331,9 +331,13 @@ Contact me occasionally about changes to the hebcal.com website.
 
 <br>
 <input type="hidden" name="v" value="1">
+<?php global $is_update;
+    if ($is_update) { ?>
+<input type="hidden" name="prev"
+value="<?php echo htmlspecialchars($param["em"]) ?>">
+<?php } ?> 
 <br>
 <input type="submit" name="submit_modify" value="<?php
-  global $is_update;
   echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?>">
 or
 <input type="submit" name="submit_unsubscribe" value="Unsubscribe">
@@ -448,6 +452,14 @@ function subscribe($param) {
     {
 	$param["geo"] = "zip";
 	form($param, "Sorry, missing zip or city field.");
+    }
+
+    # check for old sub
+    if (isset($param["prev"])) {
+	$info = get_sub_info($param["prev"]);
+	if (isset($info["status"]) && $info["status"] == "active") {
+	    sql_unsub($param["prev"]);
+	}
     }
 
     # check if email address already verified
@@ -597,6 +609,17 @@ EOD
     echo $html;
 }
 
+function sql_unsub($em) {
+    $db = my_open_db();
+    $sql = <<<EOD
+UPDATE hebcal1.hebcal_shabbat_email
+SET email_status='unsubscribed'
+WHERE email_address = '$em'
+EOD;
+
+   return mysql_query($sql, $db);
+}
+
 function unsubscribe($param) {
     global $sender, $VER;
     $html_email = htmlentities($param["em"]);
@@ -619,13 +642,7 @@ EOD
 	     "Sorry, <b>$html_email</b> is\nnot currently subscribed.");
     }
 
-    $db = my_open_db();
-    $sql = <<<EOD
-UPDATE hebcal1.hebcal_shabbat_email
-SET email_status='unsubscribed'
-WHERE email_address = '$param[em]'
-EOD;
-    if (mysql_query($sql, $db) === false) {
+    if (sql_unsub($param["em"]) === false) {
         $html = <<<EOD
 <h2>Database error</h2>
 <p>Sorry, an error occurred.  Please try again later.</p>
