@@ -56,6 +56,8 @@ my zip code?</a>
 <dt><a href="#tags">How can my synagogue put 1-Click Shabbat
 candle-lighting times on its own website?</a>
 </dl>
+<dt><a href="#yahrzeit-tags">How can my synagogue link to the
+Yahrzeit, Birthday and Anniversary Calendar from its own website?</a>
 <dt>Jewish Calendar resources
 <dl>
 <dt><a href="#links">What are other good Jewish calendar sites
@@ -233,6 +235,52 @@ Shabbat Candle Lighting times&lt;/a&gt;.
 <p>Make sure you replace both <span class="hl">zip
 codes</span> with your synagogue's zip code.</p>
 
+<h2><a name="yahrzeit-tags">How can my synagogue link to the
+Yahrzeit, Birthday and Anniversary Calendar from its own
+website?</a></h2>
+
+<p>You can use these HTML tags to insert a small form directly on your
+web page, with a reverse link back to your site:</p>
+
+<table border="1" cellpadding="8">
+<tr><td><pre>
+&lt;form action="http://www.hebcal.com/yahrzeit/"&gt;
+&lt;input type="hidden" name="ref_url" value="<span class="hl">http://www.tbala.org</span>"&gt;
+&lt;input type="hidden" name="ref_text" value="<span class="hl">Temple Beth Am</span>"&gt;
+&lt;select name="t1"&gt;
+&lt;option value="Yahrzeit"&gt;Yahrzeit&lt;/option&gt;
+&lt;option value="Birthday"&gt;Birthday&lt;/option&gt;
+&lt;option value="Anniversary"&gt;Anniversary&lt;/option&gt;
+&lt;/select&gt;
+Name: &lt;input type="text" name="n1"&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;Day:
+&lt;select name="m1"&gt;
+&lt;option value="1"&gt;January&lt;/option&gt;
+&lt;option value="2"&gt;February&lt;/option&gt;
+&lt;option value="3"&gt;March&lt;/option&gt;
+&lt;option value="4"&gt;April&lt;/option&gt;
+&lt;option value="5"&gt;May&lt;/option&gt;
+&lt;option value="6"&gt;June&lt;/option&gt;
+&lt;option value="7"&gt;July&lt;/option&gt;
+&lt;option value="8"&gt;August&lt;/option&gt;
+&lt;option value="9"&gt;September&lt;/option&gt;
+&lt;option value="10"&gt;October&lt;/option&gt;
+&lt;option value="11"&gt;November&lt;/option&gt;
+&lt;option value="12"&gt;December&lt;/option&gt;
+&lt;/select&gt;
+&lt;input type="text" name="d1" size="2" maxlength="2"&gt; ,
+&lt;input type="text" name="y1" size="4" maxlength="4"&gt;
+&lt;small&gt;(Month Day, Year)&lt;/small&gt;&lt;br&gt;
+&lt;input type="checkbox" name="yizkor" id="yizkor"&gt;
+&lt;label for="yizkor"&gt;Include Yizkor dates&lt;/label&gt;&lt;br&gt;
+&lt;input type="submit" value="Compute Calendar"&gt;
+&lt;/form&gt;
+</pre></td></tr>
+</table>
+
+<p>Make sure you replace both the <span class="hl">ref_url</span> and <span
+class="hl">ref_text</span> value fields with with your own synagogue's.</p>
+
 <h2><a name="resources">Jewish calendar resources</a></h2>
 
 <h3><a name="links">What are other good Jewish calendar sites
@@ -338,7 +386,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Thu Oct  4 09:47:09 PDT 2001
+Last modified: Thu Nov  8 16:22:52 EST 2001
 <!-- hhmts end -->
 ($Revision$)
 </font>
