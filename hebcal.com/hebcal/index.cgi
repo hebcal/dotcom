@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Jul 13 09:04:34 PDT 1999
+Last modified: Wed Jul 14 19:26:38 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -373,12 +373,12 @@ $message
 
 <input type=\"hidden\" name=\"v\" value=\"1\">
 
-<label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
-id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
+<label for=\"year\">Year: <input type=\"text\" name=\"year\"
+id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
 
 &nbsp;&nbsp;&nbsp;
 
-<label for=\"month\">Month: </label>
+<label for=\"month\">Month:
 <select name=\"month\" id=\"month\">
 <option value=\"\"$month{'0'}>- entire year -</option>
 ";
@@ -386,8 +386,7 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
     {
 	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]</option>\n";
     }
-    print STDOUT "
-</select>
+    print STDOUT "</select></label>
 <br>
 <small>
 Use all digits to specify a year.  You probably aren't
@@ -395,11 +394,11 @@ interested in 93, but rather 1993.
 </small>
 <br><br>
 
-<input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}";
+<label for=\"c\"><input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}";
 
 print STDOUT " disabled" if (defined $in{'geo'} && $in{'geo'} eq 'city');
 
-print STDOUT "><label for=\"c\">
+print STDOUT ">
 Include candle lighting times</label><br>
 
 <blockquote>
@@ -409,10 +408,10 @@ Include candle lighting times</label><br>
     {
 	print STDOUT "
 <input type=\"hidden\" name=\"geo\" value=\"city\">
-<label for=\"city\">Closest City: </label>
+<label for=\"city\">Closest City:
 ";
 	print STDOUT &city_select_html();
-	print STDOUT "
+	print STDOUT "</label>
 &nbsp;&nbsp;(or select by <a href=\"$cgipath\">zip</a> or
 <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <br>
@@ -427,11 +426,13 @@ Include candle lighting times</label><br>
 <td>Position:&nbsp;&nbsp;<br></td>
 <td>
 <nobr>
+<label for=\"ladeg\">
 <input type=\"text\" name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\" size=\"3\" maxlength=\"2\">
-<label for=\"ladeg\"> deg&nbsp;</label>
+deg&nbsp;</label>
 
+<label for=\"lamin\">
 <input type=\"text\" name=\"lamin\" id=\"lamin\" value=\"$in{'lamin'}\" size=\"2\" maxlength=\"2\">
-<label for=\"lamin\"> min</label>
+min</label>
 
 <select name=\"ladir\">
 ";
@@ -443,11 +444,13 @@ print STDOUT "<option value=\"s\"",
 print STDOUT "</select></nobr><br>
 
 <nobr>
+<label for=\"lodeg\">
 <input type=\"text\" name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\" size=\"3\" maxlength=\"3\">
-<label for=\"lodeg\"> deg&nbsp;</label>
+deg&nbsp;</label>
 
+<label for=\"lomin\">
 <input type=\"text\" name=\"lomin\" id=\"lomin\" value=\"$in{'lomin'}\" size=\"2\" maxlength=\"2\">
-<label for=\"lomin\"> min</label>
+min</label>
 
 <select name=\"lodir\">
 ";
@@ -468,8 +471,8 @@ print STDOUT "</select></nobr><br>
     else
     {
 	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
-<label for=\"zip\">5-digit zip code: </label><input type=\"text\" name=\"zip\"
-id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\">
+<label for=\"zip\">5-digit zip code: <input type=\"text\" name=\"zip\"
+id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label>
 &nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">city</a>
 or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <br>
@@ -479,7 +482,7 @@ or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
     if (!defined $in{'geo'} || $in{'geo'} ne 'city')
     {
 	print STDOUT "
-<label for=\"tz\">Time Zone: </label>
+<label for=\"tz\">Time Zone:
 <select name=\"tz\" id=\"tz\">
 <option value=\"-12\"$tz{'-12'}>GMT -12:00  Dateline</option>
 <option value=\"-11\"$tz{'-11'}>GMT -11:00  Samoa</option>
@@ -506,46 +509,49 @@ or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
 <option value=\"10\"$tz{'10'}>GMT +10:00  E. Australia</option>
 <option value=\"11\"$tz{'11'}>GMT +11:00  Central Pacific</option>
 <option value=\"12\"$tz{'12'}>GMT +12:00  Fiji, New Zealand</option>
-</select><br>
+</select></label><br>
 
 Daylight Savings Time:
+<label for=\"usa\">
 <input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
-<label for=\"usa\">USA</label>
+USA</label>
 
+<label for=\"israel\">
 <input type=\"radio\" name=\"dst\" id=\"israel\" value=\"israel\"$opts_chk{'israel'}>
-<label for=\"israel\">Israel</label>
+Israel</label>
 
+<label for=\"none\">
 <input type=\"radio\" name=\"dst\" id=\"none\" value=\"none\"$opts_chk{'none'}>
-<label for=\"none\">none</label><br>
+none</label><br>
 ";
     }
 
 print STDOUT "
-<label for=\"m\">Havdalah minutes past sundown: </label><input
+<label for=\"m\">Havdalah minutes past sundown: <input
 type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
-maxlength=\"3\"><br>
+maxlength=\"3\"></label><br>
 
 </blockquote>
 
-<input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}><label for=\"a\">
+<label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
 Use ashkenazis hebrew</label><br>
 
-<input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}><label for=\"x\">
+<label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
 Suppress Rosh Chodesh</label><br>
 
-<input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}><label for=\"h\">
+<label for=\"h\"><input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}>
 Suppress all default holidays</label><br>
 
-<input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}><label for=\"o\">
+<label for=\"o\"><input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}>
 Add days of the Omer</label><br>
 
-<input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}><label for=\"s\">
+<label for=\"s\"><input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}>
 Add weekly sedrot on Saturday</label>
 
-(<input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}><label for=\"i\">
+(<label for=\"i\"><input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}>
 Use Israeli sedra scheme</label>)<br>
 
-<input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}><label for=\"d\">
+<label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
 Print hebrew date for the entire date range</label><br>
 
 <br>
