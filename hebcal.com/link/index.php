@@ -121,6 +121,8 @@ value="<?php echo $zip ?>"></label>
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m1">
 </label>
 
+<input type="hidden" name="type" value="shabbat">
+
 <br><br>
 <input type="submit" value="Get new link">
 </form>
