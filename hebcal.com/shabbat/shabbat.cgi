@@ -146,6 +146,18 @@ sub format_items
     my($saturday) = ($wday == 6) ?
 	$now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
 
+    my $tz = 0;
+    if ($q->param('tz'))
+    {
+	$tz = $q->param('tz');
+	$tz = 0 if $tz eq 'auto';
+    }
+    elsif ($q->param('city') && 
+	   defined($Hebcal::city_tz{$q->param('city')}))
+    {
+	$tz = $Hebcal::city_tz{$q->param('city')};
+    }
+
     for (my $i = 0; $i < scalar(@{$events}); $i++)
     {
 	# holiday is at 12:00:01 am
@@ -172,8 +184,6 @@ sub format_items
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    my $tz = $q->param('tz') ? $q->param('tz') : 0;
-	    $tz = 0 if $tz eq 'auto';
 	    $item{'dc:date'} =
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
 			$year,$mon,$mday,
@@ -184,7 +194,9 @@ sub format_items
 	else
 	{
 	    $item{'dc:date'} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-	    $item{'dc:date'} .= "T00:00:00-00:00";
+	    $item{'dc:date'} .= sprintf("T00:00:00%s%02d:00",
+					$tz > 0 ? "+" : "-",
+					abs($tz));
 	}
 
 	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
@@ -196,7 +208,8 @@ sub format_items
 
 	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
 	{
-	    $item{'class'} = 'candles';
+	    $item{'class'} = ($subj eq 'Candle lighting') ?
+		'candles' : 'havdalah';
 	    $item{'time'} = sprintf("%d:%02dpm", $hour, $min);
 	    $item{'link'} = $url . "#" . $anchor;
 	}
