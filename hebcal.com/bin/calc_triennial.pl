@@ -703,21 +703,6 @@ EOHTML
 	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
 
-    if (defined $read_on{$h})
-    {
-	print OUT2 <<EOHTML;
-<h3><a name="dates">List of Dates</a></h3>
-Parashat $h is read on:
-<ul>
-EOHTML
-	;
-	foreach my $stime (@{$read_on{$h}}) {
-	    next unless defined $stime;
-	    print OUT2 "<li>$stime\n";
-	}
-	print OUT2 "</ul>\n";
-    }
-    
     print OUT2 <<EOHTML;
 <a
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20"><img
@@ -736,6 +721,21 @@ Committee on Jewish Law and Standards of the Rabbinical Assembly
 EOHTML
 ;
 
+    if (defined $read_on{$h})
+    {
+	print OUT2 <<EOHTML;
+<h3><a name="dates">List of Dates</a></h3>
+Parashat $h is read on:
+<ul>
+EOHTML
+	;
+	foreach my $stime (@{$read_on{$h}}) {
+	    next unless defined $stime;
+	    print OUT2 "<li>$stime\n";
+	}
+	print OUT2 "</ul>\n";
+    }
+    
     if ($prev_link || $next_link)
     {
 	print OUT2 <<EOHTML;
