@@ -101,7 +101,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Aug 10 16:34:58 PDT 1999
+Last modified: Tue Aug 10 16:40:38 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -596,7 +596,9 @@ Bureau's Gazetteer</a>. If your zip code is missing from their database,
 I don't have it either.</small></p>
 <p><small>If you're a perl programmer, see the <a
 href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI
-form.</small></p>
+form and <a
+href=\"/michael/projects/hebcal-ChangeLog.txt\">revision
+history</a>.</small></p>
 <p><small>See also <a
 href=\"http://shamash.org/trb/judaism.html\">Judaism and Jewish
 Resources</a> at shamash.org.</small></p>
