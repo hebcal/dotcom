@@ -64,7 +64,7 @@ EOHTML
 ;
 
 my($strassfeld_link) =
-    "http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
+    "http://www.amazon.com/exec/obidos/ASIN/0062720082/ref=nosim/hebcal-20";
 print OUT qq{<h2>Major Holidays</h2>
 <p><a
 href="$strassfeld_link"><img
