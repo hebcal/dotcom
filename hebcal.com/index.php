@@ -145,18 +145,16 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp
 <a href="/hebcal/?v=1;year=2005;month=x;nh=on;tag=fp.ql">2005</a> |
 <a href="/hebcal/?v=1;year=5765;yt=H;month=x;nh=on;tag=fp.ql">5765</a><br>
 <br><hr noshade size="1">
-<form action="/shabbat/"><span
-class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
+<form action="/shabbat/">
+<input type="hidden" name="geo" value="zip">
+<span class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <small>
 <br><label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5"
 <?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
 id="zip">&nbsp;<input type="submit" value="Go">
-<?php if ($param["m"]) { 
-  echo "<input type=\"hidden\" name=\"m\" value=\"$param[m]\">\n";
-}
-?>
-<input type="hidden" name="geo" value="zip">
+<input type="hidden" name="m" value="<?php
+  if ($param["m"]) { echo $param["m"]; } else { echo "72"; } ?>">
 <input type="hidden" name="tag" value="fp.ql">
 <br>or <a href="/shabbat/#change">select by major city</a></small>
 </form>
