@@ -202,25 +202,36 @@ sub parse_config
 	my($key,$val) = split(/=/, $kv, 2);
 	$args{$key} = $val;
     }
-    die "no zipcode key in [$config]" unless defined $args{'zip'};
 
-    my($zipinfo) = $ZIPS->{$args{'zip'}};
-    die "unknown zipcode [$config]" unless defined $zipinfo;
+    my $city_descr;
+    if (defined $args{'zip'}) {
+	my($zipinfo) = $ZIPS->{$args{'zip'}};
+	die "unknown zipcode [$config]" unless defined $zipinfo;
     
-    my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	&Hebcal::zipcode_fields($zipinfo);
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    &Hebcal::zipcode_fields($zipinfo);
 
-    my $city_descr = "$city, $state " . $args{'zip'};
-    $city_descr .= "\n" . $Hebcal::tz_names{$args{'tz'}};
-    $city_descr .= "\nDST: " . $args{'dst'}
-	if $args{'dst'} ne 'usa';
+	$city_descr = "$city, $state " . $args{'zip'};
+	$city_descr .= "\n" . $Hebcal::tz_names{$args{'tz'}};
+	if ($args{'dst'} ne 'usa') {
+	    $city_descr .= "\nDST: " . $args{'dst'};
+	}
 
-    $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 
-    $cmd .= " -z " . $args{'tz'}
-	if (defined $args{'tz'} && $args{'tz'} ne '');
-    $cmd .= " -Z " . $args{'dst'}
-	if (defined $args{'dst'} && $args{'dst'} ne '');
+	if (defined $args{'tz'} && $args{'tz'} ne '') {
+	    $cmd .= " -z " . $args{'tz'};
+	}
+	if (defined $args{'dst'} && $args{'dst'} ne '') {
+	    $cmd .= " -Z " . $args{'dst'};
+	}
+    } elsif (defined $args{'city'}) {
+	$city_descr = $args{'city'};
+	$cmd .= " -C '" . $args{'city'} . "'";
+    } else {
+	die "no geographic key in [$config]";
+    }
+
     $cmd .= " -m " . $args{'m'}
 	if (defined $args{'m'} && $args{'m'} =~ /^\d+$/);
 
