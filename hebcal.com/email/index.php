@@ -375,6 +375,43 @@ function subscribe($param) {
 		    $now)
 	    );
 
+	$from_name = "Hebcal Subscription Notification";
+    	$from_addr = "shabbat-owner@hebcal.com";
+	$return_path = "shabbat-bounce@hebcal.com";
+	$subject = "Your subscription is updated";
+
+	global $HTTP_SERVER_VARS;
+	$sender =  'webmaster@';
+	$sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
+
+	$ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+
+	$headers = array('From' => "\"$from_name\" <$from_addr>",
+			 'To' => $recipients,
+			 'Reply-To' => $from_addr,
+			 'List-Unsubscribe' =>
+			 "<mailto:shabbat-unsubscribe@hebcal.com>",
+			 'MIME-Version' => '1.0',
+			 'Content-Type' => 'text/plain',
+			 'X-Sender' => $sender,
+			 'X-Originating-IP' => "[$ip]",
+			 'Subject' => $subject);
+
+	$body = <<<EOD
+Hello,
+
+We have updated your weekly Shabbat candle lighting time
+subscription for $city_descr.
+
+Regards,
+hebcal.com
+
+To unsubscribe from this list, send an email to:
+shabbat-unsubscribe@hebcal.com
+EOD;
+
+	$err = smtp_send($return_path, $recipients, $headers, $body);
+
 	$html = <<<EOD
 <h2>Subscription Updated</h2>
 <p>Your subsciption information has been updated successfully.</p>
