@@ -734,7 +734,7 @@ sub zipcode_fields($)
     }
 
     $long_min = $long_min * 60;
-    $long_min *= -1 if $long_deg < 0;
+#    $long_min *= -1 if $long_deg < 0;
     $long_min = sprintf("%.0f", $long_min);
 
     $lat_min = $lat_min * 60;
@@ -1629,7 +1629,7 @@ sub sendmail_v2($$$)
 	return 0;
     }
 
-    my($smtp) = Net::SMTP->new('localhost', Timeout => 20);
+    my($smtp) = Net::SMTP->new('mail.hebcal.com', Timeout => 20);
     unless ($smtp) {
         return 0;
     }
