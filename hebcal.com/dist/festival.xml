@@ -10,15 +10,26 @@ Chol ha-Moed days: 4
 Rosh Chodesh: 4
 every other day (e.g. fast days): 3
 -->
-<festival id="Pesach 1" haftara="Joshua 5:2 - 6:1">
+<festival id="Pesach 1" haftara="Joshua 5:2 - 6:1"
+descr="Passover, the Feast of Unleavened Bread"
+hebrew="פֶּסַח יוֹם א׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="12:21" end="12:24" />
   <aliyah num="2" book="Exodus" begin="12:25" end="12:28" />
   <aliyah num="3" book="Exodus" begin="12:29" end="12:36" />
   <aliyah num="4" book="Exodus" begin="12:37" end="12:42" />
   <aliyah num="5" book="Exodus" begin="12:43" end="12:51" />
   <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach 1 (on Shabbat)" haftara="Joshua 5:2 - 6:1">
+<festival id="Pesach 1 (on Shabbat)" haftara="Joshua 5:2 - 6:1"
+descr="Passover, the Feast of Unleavened Bread"
+hebrew="פֶּסַח יוֹם א׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="12:21" end="12:24" />
   <aliyah num="2" book="Exodus" begin="12:25" end="12:28" />
   <aliyah num="3" book="Exodus" begin="12:29" end="12:32" />
@@ -27,44 +38,58 @@ every other day (e.g. fast days): 3
   <aliyah num="6" book="Exodus" begin="12:43" end="12:47" />
   <aliyah num="7" book="Exodus" begin="12:48" end="12:51" />
   <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach 2" haftara="II Kings 23:1 - 23:9; 23:21 - 23:25">
+<festival id="Pesach 2" haftara="II Kings 23:1 - 23:9; 23:21 - 23:25"
+yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Leviticus" begin="22:26" end="23:3" />
   <aliyah num="2" book="Leviticus" begin="23:4" end="23:14" />
   <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
   <aliyah num="4" book="Leviticus" begin="23:23" end="23:32" />
   <aliyah num="5" book="Leviticus" begin="23:33" end="23:44" />
   <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach Chol ha-Moed Day 1">
+<festival id="Pesach Chol ha-Moed Day 1" yomtov="0">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="13:1" end="13:4" />
   <aliyah num="2" book="Exodus" begin="13:5" end="13:10" />
   <aliyah num="3" book="Exodus" begin="13:11" end="13:16" />
   <aliyah num="4" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach Chol ha-Moed Day 2">
+<festival id="Pesach Chol ha-Moed Day 2" yomtov="0">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="22:24" end="22:26" />
   <aliyah num="2" book="Exodus" begin="22:27" end="23:5" />
   <aliyah num="3" book="Exodus" begin="23:6" end="23:19" />
   <aliyah num="4" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach Chol ha-Moed Day 3">
+<festival id="Pesach Chol ha-Moed Day 3" yomtov="0">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="34:1" end="34:10" />
   <aliyah num="2" book="Exodus" begin="34:11" end="34:17" />
   <aliyah num="3" book="Exodus" begin="34:18" end="34:26" />
   <aliyah num="4" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach Chol ha-Moed Day 4">
+<festival id="Pesach Chol ha-Moed Day 4" yomtov="0">
+ <kriyah>
   <aliyah num="1" book="Numbers" begin="9:1" end="9:5" />
   <aliyah num="2" book="Numbers" begin="9:6" end="9:8" />
   <aliyah num="3" book="Numbers" begin="9:9" end="9:14" />
   <aliyah num="4" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach Shabbat Chol ha-Moed" haftara="Ezekiel 37:1 - 37:14">
+<festival id="Pesach Shabbat Chol ha-Moed" haftara="Ezekiel 37:1 - 37:14"
+yomtov="0">
 <!--
 Note: if Shabbat falls on the third day of Chol ha-Moed,
 the readings for the third, fourth, and fifth days are moved ahead.
 -->
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="33:12" end="33:16" />
   <aliyah num="2" book="Exodus" begin="33:17" end="33:19" />
   <aliyah num="3" book="Exodus" begin="33:20" end="33:23" />
@@ -73,16 +98,21 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="6" book="Exodus" begin="34:11" end="34:17" />
   <aliyah num="7" book="Exodus" begin="34:18" end="34:26" />
   <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach 7" haftara="II Samuel 22:1-51">
+<festival id="Pesach 7" haftara="II Samuel 22:1-51" yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="13:17" end="13:22" />
   <aliyah num="2" book="Exodus" begin="14:1" end="14:8" />
   <aliyah num="3" book="Exodus" begin="14:9" end="14:14" />
   <aliyah num="4" book="Exodus" begin="14:15" end="14:25" />
   <aliyah num="5" book="Exodus" begin="14:26" end="15:26" />
   <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach 7 (on Shabbat)" haftara="II Samuel 22:1-51">
+<festival id="Pesach 7 (on Shabbat)" haftara="II Samuel 22:1-51"
+yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="13:17" end="13:19" />
   <aliyah num="2" book="Exodus" begin="13:20" end="13:22" />
   <aliyah num="3" book="Exodus" begin="14:1" end="14:4" />
@@ -91,16 +121,21 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="6" book="Exodus" begin="14:15" end="14:25" />
   <aliyah num="7" book="Exodus" begin="14:26" end="15:26" />
   <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach 8" haftara="Isa. 10:32 - 12:6">
+<festival id="Pesach 8" haftara="Isaiah 10:32 - 12:6" yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Deuteronomy" begin="15:19" end="15:23" />
   <aliyah num="2" book="Deuteronomy" begin="16:1" end="16:3" />
   <aliyah num="3" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="4" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="5" book="Deuteronomy" begin="16:13" end="16:17" />
   <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Pesach 8 (on Shabbat)" haftara="Isa. 10:32 - 12:6">
+<festival id="Pesach 8 (on Shabbat)" haftara="Isaiah 10:32 - 12:6"
+yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Deuteronomy" begin="14:22" end="14:29" />
   <aliyah num="2" book="Deuteronomy" begin="15:1" end="15:18" />
   <aliyah num="3" book="Deuteronomy" begin="15:19" end="15:23" />
@@ -109,24 +144,31 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
   <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+ </kriyah>
 </festival>
-<festival id="Shavuot 1" haftara="Ezekiel 1:1-28; 3:12">
+<festival id="Shavuot 1" haftara="Ezekiel 1:1-28; 3:12" yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="19:1" end="19:6" />
   <aliyah num="2" book="Exodus" begin="19:7" end="19:13" />
   <aliyah num="3" book="Exodus" begin="19:14" end="19:19" />
   <aliyah num="4" book="Exodus" begin="19:20" end="20:13" />
   <aliyah num="5" book="Exodus" begin="20:14" end="20:22" />
   <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+ </kriyah>
 </festival>
-<festival id="Shavuot 2" haftara="Habakkuk 3:1-19">
+<festival id="Shavuot 2" haftara="Habakkuk 3:1-19" yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Deuteronomy" begin="15:19" end="15:23" />
   <aliyah num="2" book="Deuteronomy" begin="16:1" end="16:3" />
   <aliyah num="3" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="4" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="5" book="Deuteronomy" begin="16:13" end="16:17" />
   <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+ </kriyah>
 </festival>
-<festival id="Shavuot 2 (on Shabbat)" haftara="Habakkuk 3:1-19">
+<festival id="Shavuot 2 (on Shabbat)" haftara="Habakkuk 3:1-19"
+yomtov="1">
+ <kriyah>
   <aliyah num="1" book="Deuteronomy" begin="14:22" end="14:29" />
   <aliyah num="2" book="Deuteronomy" begin="15:1" end="15:18" />
   <aliyah num="3" book="Deuteronomy" begin="15:19" end="15:23" />
@@ -135,18 +177,149 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
   <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+ </kriyah>
 </festival>
-<festival id="Fast Days (Shacharit)">
+<festival id="Fast Days">
+ <kriyah>
   <aliyah num="1" book="Exodus" begin="32:11" end="32:14" />
   <aliyah num="2" book="Exodus" begin="34:1" end="34:3" />
   <aliyah num="3" book="Exodus" begin="34:4" end="34:10" />
+ </kriyah>
 </festival>
+<festival id="Fast Days (Minchah)" haftara="Isaiah 65:6 - 66:8">
+ <kriyah>
+  <aliyah num="1" book="Exodus" begin="32:11" end="32:14" />
+  <aliyah num="2" book="Exodus" begin="34:1" end="34:3" />
+  <aliyah num="3" book="Exodus" begin="34:4" end="34:10" />
+ </kriyah>
+</festival>
+<festival id="Tish'a B'Av"
+haftara="Jeremiah 8:13 - 9:23"
+descr="Fast commemorating the destruction of the two Temples"
+hebrew="תִּשְׁעָה בְּאָב"
+yomtov="0">
+ <link rel="about" href="http://www.jewfaq.org/holidayd.htm" />
+ <kriyah>
+  <aliyah num="1" book="Deuteronomy" begin="4:25" end="4:29" />
+  <aliyah num="2" book="Deuteronomy" begin="4:30" end="4:35" />
+  <aliyah num="3" book="Deuteronomy" begin="4:36" end="4:40" />
+ </kriyah>
+</festival>
+
+<festival id="Shabbat HaChodesh"
+haftara="Ezekiel 45:16 - 46:18"
+descr="Shabbat before Rosh Chodesh Nissan"
+hebrew="שַׁבָּת הַחֹדֶשׁ"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
+ <kriyah>
+  <aliyah num="M" book="Exodus" begin="12:1" end="12:20" />
+ </kriyah>
+</festival>
+
+<festival id="Shabbat HaChodesh (on Rosh Chodesh)"
+haftara="Ezekiel 45:16 - 46:18"
+descr="Shabbat before Rosh Chodesh Nissan"
+hebrew="שַׁבָּת הַחֹדֶשׁ"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
+ <kriyah>
+  <aliyah num="8" book="Numbers" begin="28:9" end="28:15" />
+  <aliyah num="M" book="Exodus" begin="12:1" end="12:20" />
+ </kriyah>
+</festival>
+
+<festival id="Shabbat HaGadol"
+haftara="Malachi 3:4 - 3:24"
+descr="Shabbat before Pesach"
+hebrew="שַׁבָּת הַגָּדוֹל"
+yomtov="0">
+ <link rel="about"
+ href="http://www.passover.net/scripts/tgij/paper/passoverTemplate.asp?ArticleID=1784" />
+</festival>
+
+<festival id="Shabbat Hazon"
+descr="Shabbat before Tish'a B'Av (Shabbat of Prophecy/Shabbat of Vision)"
+hebrew="שַׁבָּת הַזוֹן"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/yerushalayim/tishabav/chazon.html" />
+</festival>
+
+<festival id="Shabbat Nachamu"
+descr="Shabbat after Tish'a B'Av (Shabbat of Consolation)"
+hebrew="שַׁבָּת נַחֲמוּ"
+yomtov="0">
+ <link rel="about"
+ href="http://www.bus.ualberta.ca/yreshef/shabbat/nachamu.html" />
+</festival>
+
+<festival id="Shabbat Parah"
+haftara="Ezekiel 36:16 - 36:38"
+descr="Shabbat after Purim"
+hebrew="שַׁבָּת פּרה"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/fourshabbatot/parah.htm" />
+ <kriyah>
+  <aliyah num="M" book="Numbers" begin="19:1" end="19:22" />
+ </kriyah>
+</festival>
+
+<festival id="Shabbat Shekalim"
+haftara="II Kings 12:1 - 12:17"
+descr="Shabbat before Rosh Chodesh Adar"
+hebrew="שַׁבָּת שְׁקָלִים"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm" />
+ <kriyah>
+  <aliyah num="M" book="Exodus" begin="30:11" end="30:16" />
+ </kriyah>
+</festival>
+
+<festival id="Shabbat Shekalim (on Rosh Chodesh)"
+haftara="II Kings 12:1 - 12:17"
+descr="Shabbat before Rosh Chodesh Adar"
+hebrew="שַׁבָּת שְׁקָלִים"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm" />
+ <kriyah>
+  <aliyah num="8" book="Numbers" begin="28:9" end="28:15" />
+  <aliyah num="M" book="Exodus" begin="30:11" end="30:16" />
+ </kriyah>
+</festival>
+
+<festival id="Shabbat Shuva"
+haftara="Hosea 14:2-10; Micah 7:18-20; Joel 2:15-27"
+descr="Shabbat that falls between Rosh Hashanah and Yom Kippur (Shabbat of Returning)"
+hebrew="שַׁבָּת שׁוּבָה"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/roshchodesh/tishrei/aseretyemai.htm#shabbat" />
+</festival>
+
+<festival id="Shabbat Zachor"
+haftara="I Samuel 15:2 - 15:34"
+descr="Shabbat before Purim"
+hebrew="שַׁבָּת זָכוֹר"
+yomtov="0">
+ <link rel="about"
+ href="http://www.ou.org/chagim/fourshabbatot/zachor.htm" />
+ <aliyah num="M" book="Deuteronomy" begin="25:17" end="25:19" />
+</festival>
+
 <festival id="" haftara="">
+ <kriyah>
   <aliyah num="1" book="" begin="" end="" />
   <aliyah num="2" book="" begin="" end="" />
   <aliyah num="3" book="" begin="" end="" />
   <aliyah num="4" book="" begin="" end="" />
   <aliyah num="5" book="" begin="" end="" />
   <aliyah num="M" book="" begin="" end="" />
+ </kriyah>
 </festival>
 </parshiot>
