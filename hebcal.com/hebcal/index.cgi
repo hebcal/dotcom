@@ -98,7 +98,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Fri Aug  6 16:09:47 PDT 1999
+Last modified: Fri Aug  6 16:15:42 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -119,8 +119,8 @@ while (($key,$val) = each(%in))
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime(time);
 $year += 1900;
-$year = $in{'year'} if (defined $in{'year'} && $in{'year'} =~ /^\d+$/);
-
+$year = $in{'year'}
+    if (defined $in{'year'} && $in{'year'} =~ /^\d+$/ && $in{'year'} > 0);
 
 # timezone opt
 for ($i = -12; $i < 13; $i++)
