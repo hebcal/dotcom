@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Jul  4 20:42:10 PDT 2000
+Last modified: Thu Jul 27 18:33:37 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -435,7 +435,7 @@ elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
     $long_descr = "${long_deg}d${long_min}' " .
 	uc($q->param('lodir')) . " longitude";
     $dst_tz_descr = "Daylight Saving Time: " .
-	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
+	$q->param('dst') . "\n<dd>Time zone: " .
 	    $tz_names{$q->param('tz')};
 
     # don't multiply minutes by -1 since hebcal does it internally
@@ -540,7 +540,7 @@ elsif ($q->param('c') && $q->param('c') ne 'off' &&
     $lat_descr  = '';
     $long_descr = '';
     $dst_tz_descr = "Daylight Saving Time: " .
-	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
+	$q->param('dst') . "\n<dd>Time zone: " .
 	    $tz_names{$q->param('tz')};
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
@@ -1179,7 +1179,7 @@ sub results_page
 	    unless $key eq 'v';
     }
 
-    print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt> $date</small>\n",
+    print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt> $date</small></td>\n",
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>\n",
     "</td></tr></table>\n",
@@ -1187,12 +1187,12 @@ sub results_page
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
-	print STDOUT "<dl>\n<dt>", $city_descr, "\n";
-	print STDOUT "<dd><small>", $lat_descr, "</small>\n"
+	print STDOUT "<dl>\n<dt><big>", $city_descr, "</big>\n";
+	print STDOUT "<dd>", $lat_descr, "\n"
 	    if $lat_descr ne '';
-	print STDOUT "<dd><small>", $long_descr, "</small>\n"
+	print STDOUT "<dd>", $long_descr, "\n"
 	    if $long_descr ne '';
-	print STDOUT "<dd><small>", $dst_tz_descr, "</small>\n"
+	print STDOUT "<dd>", $dst_tz_descr, "\n"
 	    if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n";
 
@@ -1397,26 +1397,30 @@ sub parse_date_descr
     local($date,$descr) = @_;
 
     local($mon,$mday,$year) = split(/\//, $date);
+    local($end_min,$end_hour);
+
     if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
     {
 	($subj,$hour,$min) = ($1,$2,$3);
 	$start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
+	$end_min = $min;
+	$end_hour = $hour;
 
 	if ($subj eq 'Candle lighting')
 	{
-	    $min += 18;
+	    $end_min += 18;
 	}
 	else
 	{
-	    $min += 15;
+	    $end_min += 15;
 	}
 
-	if ($min >= 60)
+	if ($end_min >= 60)
 	{
-	    $hour++;
-	    $min -= 60;
+	    $end_hour++;
+	    $end_min -= 60;
 	}
-	$end_time = sprintf("\"%d:%02d PM\"", $hour, $min);
+	$end_time = sprintf("\"%d:%02d PM\"", $end_hour, $end_min);
 	$end_date = $date;
 #	$end_time = $end_date = '';
 	$all_day = '"false"';
