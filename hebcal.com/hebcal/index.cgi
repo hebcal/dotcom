@@ -98,7 +98,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Fri Aug  6 16:07:00 PDT 1999
+Last modified: Fri Aug  6 16:09:47 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -710,6 +710,7 @@ sub download
 <html><head>
 <title>Hebcal: Jewish Calendar $date</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
+<meta name=\"robots\" content=\"noindex\">
 <link rel=\"start\" href=\"http://www.radwin.org$cgipath\" title=\"Hebcal Interactive Jewish Calendar\">
 <link rel=\"prev\" href=\"$prev_url\" title=\"$prev_title\">
 <link rel=\"next\" href=\"$next_url\" title=\"$next_title\">
