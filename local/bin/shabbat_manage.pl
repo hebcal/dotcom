@@ -10,11 +10,11 @@ use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use DBI;
-use Hebcal;
-use Mail::Internet;
-use Email::Valid;
-use MIME::Base64;
+use DBI ();
+use Hebcal ();
+use Mail::Internet ();
+use Email::Valid ();
+use MIME::Base64 ();
 
 my $site = 'hebcal.com';
 my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
@@ -136,7 +136,7 @@ EOD
     $dbh->do($sql);
     $dbh->disconnect;
 
-    my $b64 = encode_base64($email);
+    my $b64 = MIME::Base64::encode_base64($email);
     chomp($b64);
     my $unsub_url = "http://www.$site/email/?" .
 	"e=" . my_url_escape($b64);
