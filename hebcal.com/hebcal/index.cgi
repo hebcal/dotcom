@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Dec 29 12:17:54 PST 1999
+Last modified: Wed Dec 29 12:25:41 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -351,10 +351,10 @@ foreach $key ($q->param())
 &form('') unless $q->param('v');
 
 &form("Please specify a year.")
-    unless $q->param('year');
+    if !defined $q->param('year') || $q->param('year') eq '';
 
 &form("Sorry, invalid year\n<b>" . $q->param('year') . "</b>.")
-    if $q->param('year') !~ /^\d+$/;
+    if $q->param('year') !~ /^\d+$/ || $q->param('year') == 0;
 
 &form("Sorry, invalid Havdalah minutes\n<b>" . $q->param('m') . "</b>.")
     if defined $q->param('m') &&
