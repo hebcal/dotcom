@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Mar 22 14:57:27 PST 2001
+Last modified: Mon Mar 26 11:22:01 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1114,17 +1114,18 @@ so you can keep this window open.
 	    $Hebcal::DoW[&Hebcal::get_dow($year-1900, $mon-1, $mday)] . ' '
 		: '';
 
-
 	if ($q->param('vis'))
 	{
 	    if ($prev_mon != $mon)
 	    {
-		print STDOUT $cal->as_HTML(), "<br><br>" if defined $cal;
+		print STDOUT "<center>", $cal->as_HTML(), 
+		"</center><br><br>"
+		    if defined $cal;
 		$prev_mon = $mon;
 		$cal = new HTML::CalendarMonthSimple('year' => $year,
 						     'month' => $mon);
 		$cal->showdatenumbers(9);
-		$cal->width('100%');
+		$cal->width('94%');
 		$cal->border(1);
 		$cal->bgcolor('white');
 
@@ -1157,7 +1158,8 @@ so you can keep this window open.
 
     if ($q->param('vis') && defined $cal)
     {
-	print STDOUT $cal->as_HTML(), "</body></html>\n";
+	print STDOUT "<center>", $cal->as_HTML(), 
+	    "</center></body></html>\n";
 
 	return 1;
     }
