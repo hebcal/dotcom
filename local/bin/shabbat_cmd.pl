@@ -9,6 +9,8 @@ use Fcntl qw(:DEFAULT :flock);
 my($op,$addr) = @ARGV;
 if (defined $op && $op =~ /^unsub/i && $addr) {
     &unsubscribe(lc($addr));
+} else {
+    die "usage: $0 unsub email-addr\n";
 }
 
 exit(0);
@@ -30,7 +32,7 @@ sub unsubscribe
 
     my $args = $DB{$email};
     unless ($args) {
-	warn "not subscribed";
+	warn "ignoring $email: not subscribed\n";
 	flock(DB_FH, LOCK_UN);
 	undef $db;
 	untie(%DB);
@@ -39,7 +41,7 @@ sub unsubscribe
     }
 
     if ($args =~ /^action=/) {
-	warn "already unsubscribed";
+	warn "ignoring $email: already unsubscribed\n";
 	flock(DB_FH, LOCK_UN);
 	undef $db;
 	untie(%DB);
@@ -55,6 +57,8 @@ sub unsubscribe
     undef $db;
     untie(%DB);
     close(DB_FH);
+
+    warn "unsubscribe $email: OK\n";
 
     1;
 }
