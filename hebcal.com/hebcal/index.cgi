@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan 24 12:02:38 PST 2000
+Last modified: Tue Feb 15 10:56:13 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -654,16 +654,17 @@ sub csv_display {
 
     print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",",
     "\"End Time\",\"All day event\",\"Description\",",
-    "\"Private\",\"Show time as\"$endl";
+    "\"Show time as\"$endl";
 
     foreach (@events)
     {
 	($subj,$date,$start_time,$end_date,$end_time,$all_day,
 	 $hour,$min,$mon,$mday,$year,$descr,$loc) = split(/\cA/);
 
+	$loc =~ s/,//g;
 	print STDOUT '"', $subj, '","', $date, '",', $start_time, ',',
 	    $end_date, ',', $end_time, ',', $all_day, ',"',
-	    ($start_time eq '' ? '' : $loc), '","true","3"', $endl;
+	    ($start_time eq '' ? '' : $loc), '","3"', $endl;
     }
 
     1;
@@ -1623,8 +1624,10 @@ sub dba_contents {
 	&writeInt($PALM_DBA_INTEGER);
 	if ($untimed) {
 	    &writeInt($startTime); # endTime
+	} elsif ($subj eq 'Candle lighting') {
+	    &writeInt($startTime+(60*18)); # endTime
 	} else {
-	    &writeInt($startTime+60); # endTime
+	    &writeInt($startTime+(60*15)); # endTime
 	}
 
 	&writeInt(5);		# spacer
@@ -1653,7 +1656,7 @@ sub dba_contents {
 	&writeInt($untimed);
 
 	&writeInt($PALM_DBA_BOOL);
-	&writeInt(1);		# isPrivate
+	&writeInt(0);		# isPrivate
 
 	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(1);		# category
