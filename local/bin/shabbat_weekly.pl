@@ -30,12 +30,14 @@ my(%SUBS) = &load_subs();
 while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
+    next if $cfg =~ /^type=alt/;
     &parse_config($cfg);
 }
 
 while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
+    next if $cfg =~ /^type=alt/;
     my($cmd,$loc) = &parse_config($cfg);
     my(@events) = &Hebcal::invoke_hebcal($cmd,$loc);
 
