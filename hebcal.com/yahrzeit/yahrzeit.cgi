@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sat Jan 20 18:29:07 PST 2001
+Last modified: Sun Feb  4 21:15:30 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -86,6 +86,7 @@ foreach $key ($q->param())
 }
 
 my(%yahrzeits) = ();
+my(%ytype) = ();
 foreach $key (@ynums)
 {
     if (defined $q->param("m$key") &&
@@ -101,6 +102,9 @@ foreach $key (@ynums)
 		    $q->param("d$key"),
 		    $q->param("y$key"),
 		    $q->param("n$key"));
+	$ytype{$q->param("n$key")} = 
+	    ($q->param("t$key") eq 'Birthday') ? 'Hebrew Birthday' :
+		$q->param("t$key");
     }
 }
 
@@ -126,7 +130,7 @@ exit(0);
 
 sub dba_display
 {
-    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits);
+    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -144,7 +148,7 @@ sub dba_display
 
 sub csv_display
 {
-    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits);
+    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -167,7 +171,7 @@ sub csv_display
 }
 
 sub my_invoke_hebcal {
-    my($this_year,$y) = @_;
+    my($this_year,$y,$t) = @_;
     my(@events2) = ();
 
     my($tmpfile) = POSIX::tmpnam();
@@ -203,7 +207,7 @@ sub my_invoke_hebcal {
 
 	    if (defined $y->{$subj})
 	    {
-		my($subj2) = "${subj}'s Yahrzeit";
+		my($subj2) = "${subj}'s " . $t->{$subj};
 		my($isodate) = sprintf("%04d%02d%02d", $year, $mon, $mday);
 
 		$subj2 .= " ($greg2heb{$isodate})"
@@ -223,6 +227,10 @@ sub my_invoke_hebcal {
 	    elsif ($subj eq 'Pesach VIII' || $subj eq 'Shavuot II' ||
 		   $subj eq 'Yom Kippur' || $subj eq 'Shmini Atzeret')
 	    {
+		next unless defined $q->param('yizkor') &&
+		    ($q->param('yizkor') eq 'on' ||
+		     $q->param('yizkor') eq '1');
+
 		my($subj2) = "Yizkor ($subj)";
 
 		push(@events2,
@@ -245,7 +253,7 @@ sub my_invoke_hebcal {
 
 sub results_page {
 print STDOUT $q->header(),
-    $q->start_html(-title => 'Interactive Yahrzeit Calendar',
+    $q->start_html(-title => 'Interactive Yahrzeit/Birthday Calendar',
 		   -target => '_top',
 		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
@@ -267,7 +275,7 @@ print STDOUT $q->header(),
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>",
-    "<h1>Interactive\nYahrzeit Calendar</h1>\n";
+    "<h1>Interactive\nYahrzeit/Birthday Calendar</h1>\n";
 
 &form(1,'','') unless keys %yahrzeits;
 
@@ -301,7 +309,9 @@ print STDOUT $q->header(),
     }
     print STDOUT "\n]</small></p>\n";
 
-my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits);
+my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+
+print STDOUT "<pre>" unless ($q->param('yizkor'));
 
 my($numEntries) = scalar(@events);
 my($i);
@@ -312,7 +322,8 @@ for ($i = 0; $i < $numEntries; $i++)
     my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
     my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
-    if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR])
+    if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR] &&
+	$q->param('yizkor'))
     {
 	print STDOUT "</pre>" unless $i == 0;
 	print STDOUT "<h3>$year</h3><pre>";
@@ -351,7 +362,10 @@ sub form
     for (my $i = 1; $i < 6; $i++)
     {
 	print STDOUT
-	    "Name:\n",
+	    $q->popup_menu(-name => "t$i",
+			   -id => "t$i",
+			   -values => ['Yahrzeit','Birthday']),
+	    "\nName:\n",
 	    $q->textfield(-name => "n$i",
 			  -id => "n$i"),
 	    "\n&nbsp;&nbsp;&nbsp;Day:\n",
@@ -373,9 +387,14 @@ sub form
 	    "\n<small>(Month Day, Year)</small><br>\n";
     }
 
-    print STDOUT $q->hidden(-name => 'rand',-value => time(),-override => 1);
-    print STDOUT qq{<input\ntype="submit" value="Get Yahrzeits"></form>\n};
-    print STDOUT $html_footer;
+    print STDOUT "<label\nfor=\"yizkor\">",
+    $q->checkbox(-name => 'yizkor',
+		 -id => 'yizkor',
+		 -label => "\nInclude Yizkor dates"),
+    "</label><br>",
+    $q->hidden(-name => 'rand',-value => time(),-override => 1),
+    qq{<input\ntype="submit" value="Get Yahrzeits"></form>\n},
+    $html_footer;
 
     exit(0);
 }
