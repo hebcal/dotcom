@@ -25,8 +25,6 @@ Jewish Calendar Tools</small></td>
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="12" cellspacing="0">
 <tr><td valign="top">
-<h3><em>Gmar Chatima Tova!</em> Hebcal.com wishes you
-a good inscription in the Book of Life.</h3>
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
 generate a calendar of Jewish holidays for any year 0001-9999
