@@ -208,7 +208,7 @@ function form($param, $message = '', $help = '') {
     }
 
 ?>
-<form name="f1" id="f1" action="/email2/" method="get">
+<form name="f1" id="f1" action="/email2/" method="post">
 
 <label for="em">E-mail address:
 <input type="text" name="em" size="30"
