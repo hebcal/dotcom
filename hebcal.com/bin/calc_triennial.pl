@@ -444,7 +444,7 @@ sub write_sedra_page
 
 	my $title = "Previous Parsha";
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
-	    qq{title="$title">&lt;&lt; $prev</a>};
+	    qq{title="$title">&laquo;&nbsp;$prev</a>};
     }
 
     my($next_link) = '';
@@ -457,7 +457,7 @@ sub write_sedra_page
 
 	my $title = "Next Parsha";
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
-	    qq{title="$title">$next &gt;&gt;</a>};
+	    qq{title="$title">$next&nbsp;&raquo;</a>};
     }
 
     open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
