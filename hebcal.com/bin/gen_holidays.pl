@@ -61,8 +61,9 @@ Holidays
 href="/search/">Search</a></small>
 </td></tr></table>
 
-<h1><a name="top" href="./">Hebcal Help</a>: Holidays</a></h1>
+<a name="top"></a>
 <!--/htdig_noindex-->
+<h1>Jewish Holidays</h1>
 EOHTML
 ;
 
