@@ -152,15 +152,13 @@ sub load_subs
 {
     my(%subs);
 
+    my $lockfd = &Hebcal::emaildb_lock(LOCK_SH);
+
     my($dbmfile) = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
     my(%DB);
     my($db) = tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444,
 		  $DB_File::DB_HASH)
 	or die "$dbmfile: $!\n";
-
-    my($fd) = $db->fd;
-    open(DB_FH, "<&=$fd") || die "dup $!";
-    unless (flock (DB_FH, LOCK_SH)) { die "flock: $!" }
 
     if ($ARGV[0] eq '-all')
     {
@@ -186,11 +184,9 @@ sub load_subs
 	}
     }
 
-    flock(DB_FH, LOCK_UN);
     undef $db;
-    undef $fd;
     untie(%DB);
-    close(DB_FH);
+    &Hebcal::emaildb_unlock($lockfd);
 
     %subs;
 }
