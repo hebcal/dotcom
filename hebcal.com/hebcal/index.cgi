@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon Apr 19 16:37:38 PDT 1999
+Last modified: Wed Apr 28 12:06:17 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -528,18 +528,14 @@ Use Israeli sedra scheme</label>)<br>
 <input type=\"submit\" value=\"Get Calendar\">
 </form>
 
-<small>
-<p>
-Geographic Zip Code information provided by <a
-href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
-Bureau's Gazetteer</a>.  If your Zip Code is missing from their
-database, I don't have it either.
-</p>
-<p>
-If you're a perl programmer, see the <a
-href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI form.
-</p>
-</small>
+<p><small>Geographic Zip Code information provided by <a
+href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census Bureau's
+Gazetteer</a>. If your Zip Code is missing from their database, I
+don't have it either.</small></p>
+
+<p><small>If you're a perl programmer, see the <a
+href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI
+form.</small></p>
 
 $html_footer";
 
@@ -584,7 +580,7 @@ $date
 ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 </p>
 
-<p><form method=\"get\" action=\"$cgipath/$filename\">
+<form method=\"get\" action=\"$cgipath/$filename\">
 ";
 
     while (($key,$val) = each(%in))
