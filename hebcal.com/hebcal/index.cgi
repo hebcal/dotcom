@@ -787,18 +787,18 @@ sub results_page()
 	}
 
 	$prev_url = &self_url($q, {'year' => $py, 'month' => $pm});
-	$prev_title = $Hebcal::MoY_long{$pm} . " " . $py;
+	$prev_title = sprintf("%s %04d", $Hebcal::MoY_long{$pm}, $py);
 
 	$next_url = &self_url($q, {'year' => $ny, 'month' => $nm});
-	$next_title = $Hebcal::MoY_long{$nm} . " " . $ny;
+	$next_title = sprintf("%s %04d", $Hebcal::MoY_long{$nm}, $ny);
     }
     else
     {
 	$prev_url = &self_url($q, {'year' => ($q->param('year') - 1)});
-	$prev_title = ($q->param('year') - 1);
+	$prev_title = sprintf("%04d", ($q->param('year') - 1));
 
 	$next_url = &self_url($q, {'year' => ($q->param('year') + 1)});
-	$next_title = ($q->param('year') + 1);
+	$next_title = sprintf("%04d", ($q->param('year') + 1));
     }
 
     my($goto_prefix) = "<p class=\"goto\"><b>" .
@@ -1053,8 +1053,8 @@ sub results_page()
 
 		$cal->header("<h2 align=\"center\"><a class=\"goto\" title=\"$prev_title\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
-			     $Hebcal::MoY_long{$mon} . ' ' .
-			     $year . "\n" .
+			     sprintf("%s %04d\n",
+ 				     $Hebcal::MoY_long{$mon}, $year) .
 			     "<a class=\"goto\" title=\"$next_title\"\n" .
 			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
 			     '<div align="center" class="goto">' . $goto . '</div>');
