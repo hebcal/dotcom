@@ -8,6 +8,8 @@ ReadmeName README.html
 Header append P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\""
 Header append P3P "CP=\"NON CUSo PSAo PSDo OUR IND PRE\""
 
+Header append PICS-Label "(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true r (n 0 s 0 v 0 l 0))"
+
 # for WAP 1-click shabbat
 AddHandler cgi-script .cgi
 RewriteEngine on
