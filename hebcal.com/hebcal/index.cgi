@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Jun 13 14:07:24 PDT 2000
+Last modified: Wed Jun 14 12:25:25 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -325,8 +325,8 @@ $script_name =~ s,/index.html$,/,;
 my($server_name) = $q->server_name();
 $server_name =~ s/^www\.//;
 
-$q->default_dtd("-//W3C//DTD HTML 4.0 Transitional//EN\"\n" .
-		"\t\"http://www.w3.org/TR/REC-html40/loose.dtd");
+$q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
+		"\t\"http://www.w3.org/TR/html4/loose.dtd");
 
 if (! $q->param('v') &&
     defined $q->raw_cookie() &&
@@ -727,6 +727,7 @@ JSCRIPT_END
     $q->start_html(-title => "Hebcal Interactive Jewish Calendar",
 		   -target=>'_top',
 		   -head => [
+			     "<script language=\"JavaScript\" type=\"text/javascript\"><!--\n$JSCRIPT// --></script>",
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'SCHEMA.dc',
 				     -href => 'http://purl.org/metadata/dublin_core_elements'}),
@@ -750,7 +751,6 @@ JSCRIPT_END
 		       'DC.Language' => 'en',
 		       'DC.Date.X-MetadataLastModified' => '1999-12-24',
 		       },
-		   -script=>$JSCRIPT,
 		   ),
     "<table border=\"0\" width=\"100%\" cellpadding=\"0\"\nclass=\"navbar\">",
     "<tr valign=\"top\"><td><small>",
@@ -997,14 +997,14 @@ JSCRIPT_END
 		 -id => 'a',
 		 -label => "\nUse Ashkenazis Hebrew"),
     "</label>",
-    "<br><label\nfor=\"D\">",
+    "<br><label\nfor=\"Dsome\">",
     $q->checkbox(-name => 'D',
-		 -id => 'D',
+		 -id => 'Dsome',
 		 -label => "\nPrint Hebrew date for dates with some event"),
     "</label>",
-    "<br><label\nfor=\"d\">",
+    "<br><label\nfor=\"dentire\">",
     $q->checkbox(-name => 'd',
-		 -id => 'd',
+		 -id => 'dentire',
 		 -label => "\nPrint Hebrew date for entire date range"),
     "</label>",
     "<br><label\nfor=\"set\">",
