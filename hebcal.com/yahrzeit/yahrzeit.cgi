@@ -76,9 +76,23 @@ foreach $key ($q->param())
     $q->param($key,$val);
 }
 
+my $cfg = $q->param("cfg");
+$cfg ||= "";
+
+my $count;
+if ($cfg eq "i" || $cfg eq "j") {
+    $count = 1;
+    $q->param("count", 1);
+} elsif (defined $q->param("count") && $q->param("count") =~ /^\d+$/) {
+    $count = $q->param("count");
+} else {
+    $count = 5;
+    $q->param("count", 5);
+}
+
 my(%yahrzeits) = ();
 my(%ytype) = ();
-foreach $key (1 .. 5)
+foreach $key (1 .. $count)
 {
     if (defined $q->param("m$key") &&
 	defined $q->param("d$key") &&
@@ -113,7 +127,6 @@ foreach $key (1 .. 5)
     }
 }
 
-my($cfg) = $q->param('cfg');
 if (! defined $q->path_info())
 {
     &results_page();
@@ -263,14 +276,14 @@ sub my_invoke_hebcal {
 }
 
 sub results_page {
-    my($target) = (defined $cfg && $cfg eq 'i')
+    my($target) = ($cfg eq "i")
 	? '' : '_top';
-    my($type) =  (defined $cfg && $cfg eq 'j')
+    my($type) =  ($cfg eq "j")
 	? 'application/x-javascript' : 'text/html';
 
     print STDOUT $q->header(-type => $type);
 
-    if (defined $cfg && $cfg eq 'j')
+    if ($cfg eq "j")
     {
 	# nothing
     }
@@ -286,7 +299,7 @@ sub results_page {
 	     );
     }
 
-    if (defined $cfg && $cfg =~ /^[ij]$/)
+    if ($cfg eq "i" || $cfg eq "j")
     {
 	my($self_url) = join('', "http://", $q->virtual_host(), $script_name);
 	if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
@@ -413,11 +426,9 @@ sub form
 	 "to calculate <b>Reb Shlomo Carlebach</b>'s yahrzeit.</p>\n");
 
     &Hebcal::out_html
-	($cfg, qq{<form name="f1" id="f1"\naction="$script_name">});
+	($cfg, qq{<form name="f1" id="f1" method="post"\naction="$script_name">});
 
-    my($i_max) = (defined $cfg && $cfg =~ /^[ij]$/)
-	? 2 : 6;
-    for (my $i = 1; $i < $i_max; $i++)
+    for (my $i = 1; $i <= $count; $i++)
     {
 	&show_row($q,$cfg,$i,\%months);
     }
@@ -427,17 +438,18 @@ sub form
 		 -id => 'yizkor',
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
-    $q->hidden(-name => 'ref_url'),
-    $q->hidden(-name => 'ref_text'),
+    $q->hidden(-name => "ref_url"), "\n",
+    $q->hidden(-name => "ref_text"), "\n",
+    $q->hidden(-name => "count"), "\n",
 #    $q->hidden(-name => 'cfg'),
 #    $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
 
-    if (defined $cfg && $cfg eq 'i')
+    if ($cfg eq "i")
     {
 	&Hebcal::out_html($cfg, "</body></html>\n");
     }
-    elsif (defined $cfg && $cfg eq 'j')
+    elsif ($cfg eq "j")
     {
 	# nothing
     }
