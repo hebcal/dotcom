@@ -698,6 +698,8 @@ sub form
     &Hebcal::out_html($cfg,
 	qq{$message\n},
 	qq{<hr noshade size="1"><h3><a name="change">Change City</a></h3>\n},
+	qq{<table cellpadding="8"><tr><td class="box">\n},
+	qq{<h4>Zip Code</h4>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
 	qq{<label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
@@ -740,7 +742,8 @@ sub form
 
 
     &Hebcal::out_html($cfg,
-	qq{<b>(or select by major city</b>)<br>},
+	qq{</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="box">\n},
+	qq{<h4>Major City</h4>},
 	qq{<form name="f2" id="f2"\naction="$script_name">},
 	qq{<label\nfor="city">Closest City:\n},
 	$q->popup_menu(-name => 'city',
@@ -758,7 +761,8 @@ sub form
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
+	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
+	qq{</td></tr></table>});
 
     &Hebcal::out_html($cfg,&Hebcal::html_footer($q,$rcsrev));
 
