@@ -114,7 +114,7 @@ $Hebcal::havdalah_min = 72;
      'usa'     => 'USA, Mexico, Canada',
      'israel'  => 'Israel',
      'eu'      => 'European Union',
-     'aunz'    => 'Australia and New Zeland',
+     'aunz'    => 'Australia and NZ',
      );
 
 %Hebcal::cities =
