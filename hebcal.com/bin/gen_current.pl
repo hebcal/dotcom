@@ -22,8 +22,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	open(OUT,">/pub/m/r/mradwin/hebcal.com/current.inc") || die;
 	print OUT <<EOHTML;
 <br><br><span class="sm-grey">&gt;</span>
-<b><a href="$href">$parsha</a></b>
-<br>$stime
+<b><a href="$href">$parsha</a></b><br>$stime
 EOHTML
     ;
     }
