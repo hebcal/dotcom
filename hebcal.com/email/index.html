@@ -273,11 +273,12 @@ sub subscribe
     if ($info)
     {
 	&write_sub_info($q,
-			sprintf("zip=%s;tz=%s;dst=%s;m=%s;t=%d",
+			sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d",
 				$q->param('zip'),
 				$q->param('tz'),
 				$q->param('dst'),
 				$q->param('m'),
+				$q->param('upd') ? 1 : 0,
 				$now));
 
 	print STDOUT qq{<h2>Subscription Updated</h2>
@@ -406,6 +407,11 @@ sub form
 		      -maxlength => 3,
 		      -default => 72),
 	"</label>",
+	"<br><label\nfor=\"upd\">",
+	$q->checkbox(-name => 'upd',
+		     -id => 'upd',
+		     -label => "\nContact me occasionally about changes to the hebcal.com website."),
+	"</label>",
 	$q->hidden(-name => 'v',-value => 1,-override => 1),
 	qq{\n<br>\n<input type="submit" name="submit_modify"\n},
 	    qq{value="Subscribe">\n},
@@ -494,11 +500,12 @@ sub write_staging_info
     $encoded =~ s/\//_/g;
     $encoded =~ s/=/-/g;
 
-    $DB{$encoded} = sprintf("zip=%s;tz=%s;dst=%s;m=%s;t=%d;em=%s",
+    $DB{$encoded} = sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d;em=%s",
 			    $q->param('zip'),
 			    $q->param('tz'),
 			    $q->param('dst'),
 			    $q->param('m'),
+			    $q->param('upd') ? 1 : 0,
 			    $now,
 			    $q->param('em'));
 
