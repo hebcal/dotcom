@@ -39,7 +39,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-require_once('HTML/Form.php');
+require("HTML/Form.php");
+require("./hebnum.inc");
 
 $VER = '$Revision$';
 $matches = array();
@@ -67,7 +68,6 @@ $hmstr_to_num = array(
     );
 
 $hnum_to_str = array_flip($hmstr_to_num);
-$hebrew_months = array_keys($hmstr_to_num);
 
 $hmstr_to_hebcal = array(
     "Nisan" => "Nisan",
@@ -84,6 +84,8 @@ $hmstr_to_hebcal = array(
     "Adar1" => "Adar I",
     "Adar2" => "Adar II",
     );
+
+$hebrew_months = array_keys($hmstr_to_hebcal);
 
 if ($_GET["h2g"] && $_GET["hm"] && $_GET["hd"] && $_GET["hy"])
 {
@@ -102,6 +104,10 @@ if ($_GET["h2g"] && $_GET["hm"] && $_GET["hd"] && $_GET["hy"])
 	form(true, "Hebrew year must be in the common era (3761 and above)", "");
     } elseif ($hd > 30 || $hd < 1) {
 	form(true, "Hebrew day out of valid range 1-30", "");
+    }
+
+    if ($hm == "Adar2" && !is_leap_year($hy)) {
+	$hm = "Adar1";
     }
 }
 else
@@ -183,18 +189,32 @@ $dow = date("D", $t);
 if ($type == "g2h")
 {
     $first = "$dow, $gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
-    $second = numsuffix($hd) . " of " . $hmstr_to_hebcal[$hm] . ", $hy";
+    $second = format_hebrew_date($hd, $hm, $hy);
 }
 else
 {
-    $first = numsuffix($hd) . " of " . $hmstr_to_hebcal[$hm] . ", $hy";
+    $first = format_hebrew_date($hd, $hm, $hy);
     $second = "$dow, $gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
 }
 
 ?>
 <p align="center"><span style="font-size: large">
 <?php echo "$first = <b>$second</b>"; ?>
-</span></p>
+</span>
+<?php
+if (isset($_GET["heb"]) && ($_GET["heb"] == "on" || $_GET["heb"] == "1")) {
+    if ($hm == "Adar1" && !is_leap_year($hy)) {
+	$month_name = "Adar";
+    } else {
+	$month_name = $hmstr_to_hebcal[$hm];
+    }
+
+    $hebrew = build_hebrew_date($month_name, $hd, $hy);
+    echo "<br><span dir=\"rtl\" lang=\"he\"\nclass=\"hebrew-big\">",
+	$hebrew, "</span>\n";
+}
+?>
+</p>
 <?php
 
 form(false, "", "");
@@ -215,6 +235,21 @@ function numsuffix($n) {
     } else {
 	return $n . "th";
     }
+}
+
+function is_leap_year($hyear) {
+    return (1 + ($hyear * 7)) % 19 < 7 ? true : false;
+}
+
+function format_hebrew_date($hd, $hm, $hy) {
+    global $hmstr_to_hebcal;
+    if ($hm == "Adar1" && !is_leap_year($hy)) {
+	$month_name = "Adar";
+    } else {
+	$month_name = $hmstr_to_hebcal[$hm];
+    }
+
+    return numsuffix($hd) . " of " . $month_name . ", $hy";
 }
 
 function my_header() {
@@ -279,15 +314,12 @@ type="submit" value="Compute Gregorian Date"></td>
 </tr></table>
 </td></tr>
 </table>
-<?php if (false) {
-?>
 <label for="heb">
 <input type="checkbox" name="heb" value="on"
 <?php if ($_GET["heb"]) { echo " checked "; } ?>
 id="heb">
 Show date in Hebrew font</label>
 <br><small>(requires minimum of IE 4 or Netscape 6)</small>
-<?php } ?>
 </center>
 </form>
 <?php
