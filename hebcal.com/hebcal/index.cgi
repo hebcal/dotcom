@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Thu Jul  8 12:08:05 PDT 1999
+Last modified: Thu Jul  8 12:18:16 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -771,7 +771,7 @@ sub city_select_html
     foreach (@cities)
     {
 	$retval .= '<option';
-	$retval .= ' selected' if defined $in{'city'} && $in{'city'} eq $_;
+	$retval .= ' selected' if 'Jerusalem' eq $_;
 	$retval .= ">$_</option>\n";
     }
 
