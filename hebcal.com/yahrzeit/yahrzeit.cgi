@@ -24,7 +24,6 @@ use CGI;
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local;
 use Hebcal;
-use HTML::Entities ();
 use POSIX;
 use strict;
 
@@ -298,7 +297,7 @@ for ($i = 0; $i < $numEntries; $i++)
 
     printf STDOUT ("%s%02d-%s-%04d  %s\n",
 		   $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
-		 &HTML::Entities::encode($subj));
+		 &Hebcal::html_entify($subj));
 }
 print STDOUT "</pre>";
 
