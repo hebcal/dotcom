@@ -5,6 +5,13 @@ HeaderName HEADER.html
 ReadmeName README.html
 #ServerName www.hebcal.com
 
+# for WAP 1-click shabbat
+AddHandler cgi-script .cgi
+RewriteEngine on
+RewriteCond %{HTTP_ACCEPT} text\/vnd\.wap\.wml
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^ /wap-shabbat.cgi [L]
+
 AddIcon /icons/p.gif .pm
 AddIcon /icons/generic.gif .ini
 
