@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May 30 16:22:11 PDT 2000
+Last modified: Tue Jun 13 14:07:24 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -535,8 +535,10 @@ elsif ($q->param('c') && $q->param('c') ne 'off' &&
 	}
     }
 
-    $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
-    $long_descr = "${long_deg}d${long_min}' W longitude";
+#    $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
+#    $long_descr = "${long_deg}d${long_min}' W longitude";
+    $lat_descr  = '';
+    $long_descr = '';
     $dst_tz_descr = "Daylight Saving Time: " .
 	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
 	    $tz_names{$q->param('tz')};
