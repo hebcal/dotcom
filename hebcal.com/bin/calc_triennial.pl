@@ -747,10 +747,13 @@ alt="Etz Hayim: Torah and Commentary" align="right"></a><dl>
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
 Hayim: Torah and Commentary</a></em>,
 David L. Lieber et. al., Jewish Publication Society, 2001.
-<dd><em><a 
+<dd><em><a
 href="http://learn.jtsa.edu/topics/diduknow/responsa/trichart.shtml">A
 Complete Triennial System for Reading the Torah</a></em>,
 Committee on Jewish Law and Standards of the Rabbinical Assembly
+<dd><em><a
+href="http://www.bible.ort.org/">Navigating the Bible II</a></em>,
+World ORT
 </dl>
 EOHTML
 ;
