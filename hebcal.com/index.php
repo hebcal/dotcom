@@ -26,7 +26,7 @@ Jewish Calendar Tools</small></td>
 <table border="0" cellpadding="12" cellspacing="0">
 <tr><td valign="top">
 <h3><em>Shana Tova!</em> Hebcal.com wishes you
-a sweet and happy new year.</h3>
+a sweet and happy New Year.</h3>
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
 generate a calendar of Jewish holidays for any year 0001-9999
