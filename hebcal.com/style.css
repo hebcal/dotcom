@@ -87,3 +87,13 @@ A:hover {
  border-width: thin;
  border-color: red;
 }
+
+.fpsubhead {
+ font-family: Verdana,Arial,Helvetica,Geneva,sans-serif;
+}
+
+.fpgreeting {
+ font-weight: bold;
+ font-style: italic;
+ color: #c96;
+}
