@@ -81,10 +81,10 @@ Days 5763</a></b>
 <a href="/contact/">Contact</a>
 <br>This website uses <a
 href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
-Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
+Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Wed Aug  7 14:06:17 EDT 2002
+Last modified: Fri Aug  9 02:25:34 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
