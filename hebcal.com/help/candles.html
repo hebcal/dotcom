@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<!-- $Id$ -->
+<html lang="en">
+<head>
+<base href="http://www.hebcal.com/help/" target="_top">
+<title>Hebcal: Candle lighting times</title>
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
+<link rel="stylesheet" href="/style.css" type="text/css">
+</head>
+<body>
+<!--htdig_noindex-->
+<table width="100%" class="navbar">
+<tr><td><small>
+<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<a href="./">Help</a> <tt>-&gt;</tt>
+Candle lighting
+</small></td>
+<td align="right"><small><a href="/search/">Search</a></small>
+</td></tr></table>
+
+<h1><a name="top" href="./#candles">Hebcal Help</a>: Candle lighting times</h1>
+<!--/htdig_noindex-->
+
+<h2><a name="zip2geo">How are candle lighting times determined from
+my zip code?</a></h2>
+
+<p>Since candle lighting times are determined from latitude and
+longitude, a process called geocoding is used to determine the
+geographic position of a zip code.  Your zip code is looked up in a
+geocoded database of about 42,000 zip codes (<a
+href="http://www.census.gov/geo/www/tiger/zip1999.html">1999 ZIP
+Code</a> data from the <a
+href="http://www.census.gov/geo/www/gazetteer/places.html">U.S. Census
+Bureau's Gazetteer</a> project).</p>
+
+<p>The Gazetteer data from 1999 is much more complete than their
+data from 1990 -- but still not as good as the commercial-quality data
+you get from the U.S. Post Office.  Gazetteer contains zip code, city
+name, latitude and lognitude but is missing time zone.</p>
+
+<p>Fortunately, the Gazetteer data contain a FIPS code (which represents
+the county a zipcode is part of).  The U.S. National Weather Service
+provides <a
+href="http://isl715.nws.noaa.gov/mapdata/newcat/amdc/county/">county-timezone
+data</a> (keyed on FIPS code), which contains timezone and Daylight
+Saving Time data for each county.  By joining these two data sources, we
+can get a complete picture of each zip code.</p>
+
+<h2><a name="accurate">How accurate are candle lighting
+times?</a></h2>
+
+<p>Hebcal computes sunset based on an algorithm by the U.S. Naval
+Observatory (USNO). The USNO claims accuracy within 2 minutes except at
+extreme northern or southern latitudes.  Comparison to local NWS charts
+for sunrise and sunset (which are cheap and easy to come by) shows that
+with the double precision calculations, the charts produced by this
+program are no more than 1 minute removed from those charts in
+lattitudes lower than 41 degrees.  Candle lighting times agree with
+those on popular calendars also to the 1 minute accuracy.</p>
+
+<h2><a name="geo">How can I look up candle-lighting times for any
+city in the world?</a></h2>
+
+<p>Example: how to find candle-lighting times for San Jose, Costa
+Rica.</p>
+
+<ol>
+<li>Go to the Getty Thesaurus of Geographic Names at <a
+    href="http://www.getty.edu/research/tools/vocabulary/tgn/">http://www.getty.edu/research/tools/vocabulary/tgn/</a>
+<li>Type "San Jose" in the Find box and click "Search" button
+<li>Click on the link that says "San Jose, Costa Rica, inhabited place"
+<li>Note the latitude/longitude represented in "degrees minutes direction"
+    (in this case, it's <b>Lat: 09 56 N Long: 084 05 W</b>) and
+    write this information down on a sheet of paper
+<li>Go to the Hebcal Interactive Jewish Calendar at <a
+    href="http://www.hebcal.com/hebcal/">http://www.hebcal.com/hebcal/</a>
+<li>In the "Candle lighting times" section, click on the link that says
+    "select by latitude/longitude"
+<li>Type the latitude and longitude into the form (9 degrees, 56 minutes
+    North Latitude, 84 degrees 5 minutes West Longitude)
+<li>Click "Get Calendar" button at the bottom of the form
+</ol>
+
+<h2><a name="dst">What are the Daylight Saving Time options?</a></h2>
+
+<p>Hebcal offers 4 options for DST:</p>
+
+<dl>
+  <dt>USA, Mexico and Canada
+  <dd>begins at 2 a.m. on the first Sunday of April
+  <dd>ends at 2 a.m. on the last Sunday of October
+  <dt>European Union
+  <dd>begins at 1 a.m. on the last Sunday in March
+  <dd>ends at 1 a.m. on the last Sunday in October
+  <dt>Israel
+  <dd>begins on the first Sunday after Passover ends on Nisan 21
+  <dd>ends on the Sunday Selichot begins
+  <dt>None
+  <dd>hebcal makes no adjustments for summer time
+</dl>
+
+<p>To learn more about Daylight Saving Time in general, read <a
+href="http://webexhibits.org/daylightsaving/index.html">Daylight Saving
+Time from webexhibits.org</a>.</p>
+
+<h2><a name="cities">What cities outside of the USA are available?</a></h2>
+
+<p>For a list of the 47 international cities supported by hebcal.com,
+see the <a href="cities.html">Hebcal Cities</a> page.  This page also
+includes latitude, longitude, and time zone.</p>
+
+<p>
+<hr noshade size="1">
+<span class="tiny">Copyright
+&copy; 2003 Michael J. Radwin. All rights reserved.
+<a href="/privacy/">Privacy Policy</a> -
+<a href="/contact/">Contact</a> -
+<a href="/news/">News</a> -
+<a href="/donations/">Donate</a>
+<br>
+<!-- hhmts start -->
+Last modified: Mon Feb 10 20:30:49 EST 2003
+<!-- hhmts end -->
+($Revision$)
+</span>
+</body></html>
