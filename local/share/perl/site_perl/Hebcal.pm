@@ -660,12 +660,16 @@ sub cache_begin($)
 
 sub cache_end()
 {
-    close(CACHE);
-    my $fn = $cache;
-    my $newfn = $fn;
-    $newfn =~ s/\.tmp$//;
-    rename($fn, $newfn);
-    $cache = undef;
+    if ($cache)
+    {
+	close(CACHE);
+	my $fn = $cache;
+	my $newfn = $fn;
+	$newfn =~ s/\.tmp$//;
+	rename($fn, $newfn);
+	$cache = undef;
+    }
+
     1;
 }
 
