@@ -8,17 +8,21 @@ use Fcntl qw(:DEFAULT :flock);
 use Hebcal;
 
 my($op,$addr) = @ARGV;
-if (defined $op && $op =~ /^unsub/i && $addr) {
-    &unsubscribe(lc($addr));
+if (!defined $op) {
+    die "usage: $0 {unsub|bounce} email-addr\n";
+} elsif ($op =~ /^unsub/i && $addr) {
+    &unsubscribe(lc($addr), 'UNSUBSCRIBE');
+} elsif ($op =~ /^bounce/i && $addr) {
+    &unsubscribe(lc($addr), 'BOUNCE');
 } else {
-    die "usage: $0 unsub email-addr\n";
+    die "usage: $0 {unsub|bounce} email-addr\n";
 }
 
 exit(0);
 
 sub unsubscribe
 {
-    my($email) = @_;
+    my($email,$flag) = @_;
 
     my $lockfd = &Hebcal::emaildb_lock(LOCK_EX);
 
@@ -46,7 +50,7 @@ sub unsubscribe
     }
 
     my($now) = time;
-    $DB{$email} = "action=UNSUBSCRIBE;t=$now";
+    $DB{$email} = "action=$flag;t3=$now;$args";
 
     $db->sync;
     undef $db;
