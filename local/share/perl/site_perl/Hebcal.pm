@@ -568,7 +568,7 @@ my(%sedrot) = (
 		    'Jeremiah 7:21 - 8:3; 9:22 - 9:23', '',
 		    ],
  "Shmini"	=> [
-		    '/5760/shemini.shtml', 'Leviticus 9:1 - 11:47',
+		    '/5761/shemini.shtml', 'Leviticus 9:1 - 11:47',
 		    '/jpstext/shemini.shtml',
 		    'שְּׁמִינִי',
 		    'II Samuel 6:1 - 7:17', 'II Samuel 6:1 - 6:19',
