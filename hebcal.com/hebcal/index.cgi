@@ -430,8 +430,7 @@ JSCRIPT_END
 		       \@head,
 			{
 		       'description' =>
-		       'Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude',
-
+		       'Personalized Jewish calendar for any year 0000-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Palm, Outlook, iCal, etc.',
 		       'keywords' =>
 		       'hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff',
 		       },
