@@ -64,8 +64,6 @@ EOHTML
 my(%out);
 foreach my $h ($sedrot->Sections())
 {
-    next if $h =~ /^Combined /;
-
     my($anchor) = $h;
     $anchor = lc($anchor);
     $anchor =~ s/[^\w]//g;
@@ -96,6 +94,9 @@ exit(0);
 
 sub write_sedra_page {
     my($h) = @_;
+
+    my($sedrot_h) = $h;
+    $h =~ s/^Combined //;
 
     my($drash_href,$hebrew,$memo,$torah_href,$haftarah_href) =
 	&Hebcal::get_holiday_anchor("Parashat $h", 0);
@@ -153,9 +154,10 @@ Shabbat aliyot (full kriyah):
 <ol>
 EOHTML
 ;
+
     foreach (1 .. 7)
     {
-	print OUT2 qq{<li>}, $sedrot->val($h, "aliyah$_"), "\n";
+	print OUT2 qq{<li>}, $sedrot->val($sedrot_h, "aliyah$_"), "\n";
     }
 
     print OUT2 <<EOHTML;
