@@ -181,6 +181,7 @@ if ($opts{'t'})
 }
 
 my(%parsha_dates);
+my(%parsha_stime2);
 my(%parsha_time);
 my(%parsha_time_prev);
 my($saturday) = get_saturday();
@@ -623,28 +624,42 @@ EOHTML
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$aliyot})
     {
-	my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
-	my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
-	my($info);
-	if ($c1 == $c2) {
-	    $info = "$c1:$v1-$v2";
-	} else {
-	    $info = "$c1:$v1-$c2:$v2";
+	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
+    }
+
+    if (defined $parsha_stime2{$h}) {
+	my(%sp_dates,%sp_verse);
+	foreach my $stime2 (@{$parsha_stime2{$h}}) {
+	    if (defined $stime2 && defined $special_maftir{$stime2} &&
+		$special_maftir{$stime2} =~ /^(.+) \((.+)\)$/) {
+		my $verse = $1;
+		my $fest = $2;
+
+		push(@{$sp_dates{$fest}}, $stime2);
+		$sp_verse{$fest} = $verse;
+	    }
 	}
 
-	if (defined $parsha2id{$h})
-	{
-	    my $bid = bookid($torah);
-
-	    $info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
-	}
-
-	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	print OUT2 qq{$label: $info\n};
-
-	if ($aliyah->{'numverses'}) {
-	    print OUT2 "<span class=\"tiny\">(",
-		$aliyah->{'numverses'}, "&nbsp;p'sukim)</span><br>\n";
+	if (keys %sp_verse) {
+	    foreach my $fest (sort keys %sp_verse) {
+		my $aliyah = get_special_maftir($fest);
+		my $info = format_aliyah($aliyah,
+					 $all_inorder[$aliyah->{'parsha'}-1],
+					 $sp_verse{$fest},1);
+		print OUT2 <<EOHTML;
+<br>On <b>$fest</b><br>
+$info<br>
+EOHTML
+;
+		foreach my $stime2 (@{$sp_dates{$fest}}) {
+		    $stime2 =~ s/-/ /g;
+		    print OUT2 <<EOHTML;
+&nbsp;&nbsp<span class="tiny"><span class="sm-grey">&gt;</span>
+$stime2</span><br>
+EOHTML
+;
+		}
+	    }
 	}
     }
 
@@ -684,15 +699,39 @@ title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
 
-    print OUT2 <<EOHTML;
-<small>NOTE: This site does not yet indicate special maftir or haftarah
-when they occur. Always check a luach or consult with your rabbi to
-determine if this Shabbat has a special maftir and/or a special
-haftarah.</small>
+    if (defined $parsha_stime2{$h}) {
+	my $did_special;
+	foreach my $stime2 (@{$parsha_stime2{$h}}) {
+	    if (defined $stime2 && defined $special_haftara{$stime2}) {
+		if (!$did_special) {
+		    print OUT2 <<EOHTML;
+When Parashat $h coincides with a special Shabbat, we read a
+different Haftarah:
+<ul>
 EOHTML
 ;
+		    $did_special = 1;
+		}
+		if ($special_haftara{$stime2} =~ /^(.+) \((.+)\)$/) {
+		    my $sp_verse = $1;
+		    my $sp_festival = $2;
+		    my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
+		    $stime2 =~ s/-/ /g;
+		    print OUT2 <<EOHTML;
+<li>$stime2 (<b>$sp_festival</b> / <a
+title="Special Haftara for $sp_festival"
+href="$sp_href">$sp_verse</a>)
+EOHTML
+;
+		}
+	    }
+	}
+	if ($did_special) {
+	    print OUT2 "</ul>\n";
+	}
+    }
 
-    my $has_drash = $drash_jts || $drash_ou || $drash_reform ||
+    my $has_drash = $drash_jts || $drash_ou ||
 	$drash_torah || $drash_uj;
 
     if ($has_drash)
@@ -716,11 +755,6 @@ EOHTML
     if ($drash_ou)
     {
 	print OUT2 qq{<li><a title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU\nTorah Insights</a>\n};
-    }
-
-    if ($drash_reform)
-    {
-	print OUT2 qq{<li><a title="Parashat $h commentary from Union for Reform Judaism"\nhref="$drash_reform">URJ\nTorat Hayim</a>\n};
     }
 
     if ($drash_torah)
@@ -793,6 +827,7 @@ EOHTML
     close(OUT2);
 }
 
+
 sub print_tri_cell
 {
     my($triennial,$h,$yr,$torah) = @_;
@@ -846,43 +881,52 @@ sub print_tri_cell
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$triennial->[$yr]->[0]})
     {
-	my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
-	my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
-	my($info);
-	if ($c1 == $c2) {
-	    $info = "$c1:$v1-$v2";
-	} else {
-	    $info = "$c1:$v1-$c2:$v2";
-	}
-
-	if (defined $parsha2id{$h})
-	{
-	    my $bid = bookid($torah);
-
-	    $info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
-	}
-
-	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	print OUT2 qq{$label: $info<br>\n};
+	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
     }
     print OUT2 "</td>\n";
 }
 
-sub bookid
+sub format_aliyah
 {
-    my($torah) = @_; 
+    my($aliyah,$h,$torah,$show_book) = @_;
 
-    my $book = lc($torah);
-    $book =~ s/\s+.+$//;
+    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
+    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
+    my($info);
+    if ($c1 == $c2) {
+	$info = "$c1:$v1-$v2";
+    } else {
+	$info = "$c1:$v1-$c2:$v2";
+    }
 
-    my $bid = 0;
-    if ($book eq 'genesis') { $bid = 1; } 
-    elsif ($book eq 'exodus') { $bid = 2; }
-    elsif ($book eq 'leviticus') { $bid = 3; }
-    elsif ($book eq 'numbers') { $bid = 4; }
-    elsif ($book eq 'deuteronomy') { $bid = 5; }
+    $torah =~ s/\s+.+$//;
 
-    $bid;
+    if ($show_book) {
+	$info = "$torah $info";
+    }
+
+    if (defined $parsha2id{$h}) {
+	my $book = lc($torah);
+
+	my $bid = 0;
+	if ($book eq 'genesis') { $bid = 1; } 
+	elsif ($book eq 'exodus') { $bid = 2; }
+	elsif ($book eq 'leviticus') { $bid = 3; }
+	elsif ($book eq 'numbers') { $bid = 4; }
+	elsif ($book eq 'deuteronomy') { $bid = 5; }
+
+	$info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+    }
+
+    my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
+    $info = "$label: $info\n";
+
+    if ($aliyah->{'numverses'}) {
+	$info .= "<span class=\"tiny\">(" . $aliyah->{'numverses'} .
+	    "&nbsp;p'sukim)</span>\n";
+    }
+
+    $info;
 }
 
 sub get_parsha_info
@@ -1031,6 +1075,30 @@ sub get_parsha_info
      $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3,$drash_uj);
 }
 
+sub get_special_maftir
+{
+    my($h) = @_;
+
+    if (defined $fxml->{'festival'}->{$h}) {
+	if (defined $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'}) {
+	    my $a = $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'};
+	    if (ref($a) eq 'HASH') {
+		if ($a->{'num'} eq 'M') {
+		    return $a;
+		}
+	    } else {
+		foreach my $aliyah (@{$a}) {
+		    if ($aliyah->{'num'} eq 'M') {
+			return $aliyah;
+		    }
+		}
+	    }
+	}
+    }
+
+    return undef;
+}
+
 sub special_readings
 {
     my($events,$maftir,$haftara) = @_;
@@ -1072,27 +1140,13 @@ sub special_readings
 		$haftara->{$stime2} = "$haft ($h)";
 	    }
 
-	    if (defined $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'}) {
-		my $a = $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'};
-		if (ref($a) eq 'HASH') {
-		    if ($a->{'num'} eq 'M') {
-			$maftir->{$stime2} = sprintf("%s %s - %s (%s)",
-						     $a->{'book'},
-						     $a->{'begin'},
-						     $a->{'end'},
-						     $h);
-		    }
-		} else {
-		    foreach my $aliyah (@{$a}) {
-			if ($aliyah->{'num'} eq 'M') {
-			    $maftir->{$stime2} = sprintf("%s %s - %s (%s)",
-							 $aliyah->{'book'},
-							 $aliyah->{'begin'},
-							 $aliyah->{'end'},
-							 $h);
-			}
-		    }
-		}
+	    my $a = get_special_maftir($h);
+	    if ($a) {
+		$maftir->{$stime2} = sprintf("%s %s - %s (%s)",
+					     $a->{'book'},
+					     $a->{'begin'},
+					     $a->{'end'},
+					     $h);
 	    }
 	}
     }
@@ -1104,10 +1158,7 @@ sub readings_for_current_year
 {
     my($parshiot,$current,$parsha_time) = @_;
 
-    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
-    my $heb_yr = $hebdate->{'yy'};
-    $heb_yr--;
+    my $heb_yr = $hebrew_year - 1;
 
     my $extra_years = 5;
     my @years;
@@ -1163,6 +1214,8 @@ sub readings_for_current_year
 			     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 			     $Hebcal::MoY_short[$month - 1],
 			     $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	$parsha_stime2{$h}->[$yr] = $stime2;
 
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$book =~ s/\s+.+$//;
