@@ -443,9 +443,21 @@ EOHTML
     if ($about) {
 	my $about_href = $about->{'href'};
 	if ($about_href) {
+	    my $more = '';
+	    if ($about_href =~ /^http:\/\/([^\/]+)/i) {
+		$more = $1;
+		$more =~ s/^www\.//i;
+		if ($more eq 'hebcal.com') {
+		    $more = '';
+		} elsif ($more eq 'jewfaq.org') {
+		    $more = " from Judaism 101";
+		} else {
+		    $more = " from $more";
+		}
+	    }
 	    print OUT2 <<EOHTML;
 [<a title="Detailed information about holiday"
-href="$about_href">more...</a>]</p>
+href="$about_href">more${more}...</a>]</p>
 EOHTML
 ;
 	} else {
