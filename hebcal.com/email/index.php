@@ -159,9 +159,8 @@ function write_staging_info($param)
     $rand .= pack("V", $now);
 
     $encoded = rtrim(base64_encode($rand));
-    $encoded = str_replace('+', '.', $encoded);
-    $encoded = str_replace('/', '_', $encoded);
-    $encoded = str_replace('=', '-', $encoded);
+    $encoded = strtr($encoded, '+/=', '._-');
+    $encoded = strtolower($encoded);
 
     list($id, $fd) = dba_lock_open("email.db", "w", "db3");
 
