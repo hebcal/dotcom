@@ -25,6 +25,7 @@ package Hebcal;
 require 5.000;
 use Time::Local;
 use CGI;
+use POSIX qw(strftime);
 use lib "/home/users/mradwin/local/lib/perl5/$]";
 use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
 use Unicode::String;
@@ -723,11 +724,8 @@ sub url_escape($)
 sub http_date($)
 {
     my($time) = @_;
-    my($sec,$min,$hour,$mday,$mon,$year,$wday) = gmtime($time);
 
-    sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
-	    $Hebcal::DoW[$wday],$mday,$Hebcal::MoY_short[$mon],
-	    $year+1900,$hour,$min,$sec);
+    strftime("%a, %d %b %Y %T GMT", gmtime($time));
 }
 
 sub gen_cookie($)
