@@ -385,212 +385,422 @@ my($SEDROT_IDX_DRASH_EN) = 0;
 my($SEDROT_IDX_VERSE_EN) = 1;
 my($SEDROT_IDX_TORAH_EN) = 2;
 my($SEDROT_IDX_TITLE_HE) = 3;
+my($SEDROT_IDX_HAFT_ASHK) = 4;	# Askhenazic Haftarah
+my($SEDROT_IDX_HAFT_SEPH) = 5;	# Sephardic Haftarah
 
 my(%sedrot) = (
- "Bereshit"	=> ['/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
+ "Bereshit"	=> [
+		    '/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
 		    '/jpstext/bereshit.shtml',
-		    'בְּרֵאשִׁית'],
- "Bereshis"	=> ['/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
+		    'בְּרֵאשִׁית',
+		    'Isaiah 42:5 - 43:11', 'Isaiah 42:5 - 42:21',
+		    ],
+ "Bereshis"	=> [
+		    '/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
 		    '/jpstext/bereshit.shtml',
-		    'בְּרֵאשִׁית'],
- "Noach"	=> ['/5761/noah.shtml', 'Genesis 6:9 - 11:32',
+		    'בְּרֵאשִׁית',
+		    'Isaiah 42:5 - 43:11', 'Isaiah 42:5 - 42:21',
+		    ],
+ "Noach"	=> [
+		    '/5761/noah.shtml', 'Genesis 6:9 - 11:32',
 		    '/jpstext/noah.shtml',
-		    'נֹחַ'],
- "Lech-Lecha"	=> ['/5761/lekhlekha.shtml', 'Genesis 12:1 - 17:27',
+		    'נֹחַ',
+		    'Isaiah 54:1 - 55:5', 'Isaiah 54:1 - 10',
+		    ],
+ "Lech-Lecha"	=> [
+		    '/5761/lekhlekha.shtml', 'Genesis 12:1 - 17:27',
 		    '/jpstext/lechlecha.shtml',
-		    'לֶךְ־לְךָ'],
- "Vayera"	=> ['/5761/vayera.shtml', 'Genesis 18:1 - 22:24',
+		    'לֶךְ־לְךָ',
+		    'Isaiah 40:27 - 41:16', '',
+		    ],
+ "Vayera"	=> [
+		    '/5761/vayera.shtml', 'Genesis 18:1 - 22:24',
 		    '/jpstext/vayera.shtml',
-		    'וַיֵּרָא'],
- "Chayei Sara"	=> ['/5761/hayyeisarah.shtml', 'Genesis 23:1 - 25:18',
+		    'וַיֵּרָא',
+		    'II Kings 4:1 - 4:37', 'II Kings 4:1 - 4:23',
+		    ],
+ "Chayei Sara"	=> [
+		    '/5761/hayyeisarah.shtml', 'Genesis 23:1 - 25:18',
 		    '/jpstext/hayyeisarah.shtml',
-		    'חַיֵּי שָֹרָה'],
- "Toldot"	=> ['/5761/toledot.shtml', 'Genesis 25:19 - 28:9',
+		    'חַיֵּי שָֹרָה',
+		    'I Kings 1:1 - 1:31', '',
+		    ],
+ "Toldot"	=> [
+		    '/5761/toledot.shtml', 'Genesis 25:19 - 28:9',
 		    '/jpstext/toledot.shtml',
-		    'תּוֹלְדוֹת'],
- "Toldos"	=> ['/5761/toeldot.shtml', 'Genesis 25:19 - 28:9',
+		    'תּוֹלְדוֹת',
+		    'Malachi 1:1 - 2:7', '',
+		    ],
+ "Toldos"	=> [
+		    '/5761/toeldot.shtml', 'Genesis 25:19 - 28:9',
 		    '/jpstext/toledot.shtml',
-		    'תּוֹלְדֹת'],
- "Vayetzei"	=> ['/5761/vayetze.shtml', 'Genesis 28:10 - 32:3',
+		    'תּוֹלְדֹת',
+		    'Malachi 1:1 - 2:7', '',
+		    ],
+ "Vayetzei"	=> [
+		    '/5761/vayetze.shtml', 'Genesis 28:10 - 32:3',
 		    '/jpstext/vayetze.shtml',
-		    'וַיֵּצֵא'],
- "Vayishlach"	=> ['/5761/vayishlah.shtml', 'Genesis 32:4 - 36:43',
+		    'וַיֵּצֵא',
+		    'Hosea 12:13 - 14:10', 'Hosea 11:7 - 12:12',
+		    ],
+ "Vayishlach"	=> [
+		    '/5761/vayishlah.shtml', 'Genesis 32:4 - 36:43',
 		    '/jpstext/vayishlah.shtml',
-		    'וַיִּשְׁלַח'],
- "Vayeshev"	=> ['/5761/vayeshev.shtml', 'Genesis 37:1 - 40:23',
+		    'וַיִּשְׁלַח',
+		    'Hosea 11:7 - 12:12', 'Obadiah 1:1 - 1:21',
+		    ],
+ "Vayeshev"	=> [
+		    '/5761/vayeshev.shtml', 'Genesis 37:1 - 40:23',
 		    '/jpstext/vayeshev.shtml',
-		    'וַיֵּשֶׁב'],
- "Miketz"	=> ['/5761/mikketz.shtml', 'Genesis 41:1 - 44:17',
+		    'וַיֵּשֶׁב',
+		    'Amos 2:6 - 3:8', '',
+		    ],
+ "Miketz"	=> [
+		    '/5761/mikketz.shtml', 'Genesis 41:1 - 44:17',
 		    '/jpstext/mikketz.shtml',
-		    'מִקֵּץ'],
- "Vayigash"	=> ['/5761/vayiggash.shtml', 'Genesis 44:18 - 47:27',
+		    'מִקֵּץ',
+		    'I Kings 3:15 - 4:1', '',
+		    ],
+ "Vayigash"	=> [
+		    '/5761/vayiggash.shtml', 'Genesis 44:18 - 47:27',
 		    '/jpstext/vayiggash.shtml',
-		    'וַיִּגַּשׁ'],
- "Vayechi"	=> ['/5761/vayehi.shtml', 'Genesis 47:28 - 50:26',
+		    'וַיִּגַּשׁ',
+		    'Ezekiel 37:15 - 37:28', '',
+		    ],
+ "Vayechi"	=> [
+		    '/5761/vayehi.shtml', 'Genesis 47:28 - 50:26',
 		    '/jpstext/vayehi.shtml',
-		    'וַיְחִי'],
- "Shemot"	=> ['/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
+		    'וַיְחִי',
+		    'I Kings 2:1 - 12', '',
+		    ],
+ "Shemot"	=> [
+		    '/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
 		    '/jpstext/shemot.shtml',
-		    'שְׁמוֹת'],
- "Shemos"	=> ['/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
+		    'שְׁמוֹת',
+		    'Isaiah 27:6 - 28:13; 29:22 - 29:23', 'Jeremiah 1:1 - 2:3',
+		    ],
+ "Shemos"	=> [
+		    '/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
 		    '/jpstext/shemot.shtml',
-		    'שְׁמוֹת'],
- "Vaera"	=> ['/5761/vaera.shtml', 'Exodus 6:2 - 9:35',
+		    'שְׁמוֹת',
+		    'Isaiah 27:6 - 28:13; 29:22 - 29:23', 'Jeremiah 1:1 - 2:3',
+		    ],
+ "Vaera"	=> [
+		    '/5761/vaera.shtml', 'Exodus 6:2 - 9:35',
 		    '/jpstext/vaera.shtml',
-		    'וָאֵרָא'],
- "Bo"		=> ['/5761/bo.shtml', 'Exodus 10:1 - 13:16',
+		    'וָאֵרָא',
+		    'Ezekiel 28:25 - 29:21', '',
+		    ],
+ "Bo"		=> [
+		    '/5761/bo.shtml', 'Exodus 10:1 - 13:16',
 		    '/jpstext/bo.shtml',
-		    'בֹּא'],
- "Beshalach"	=> ['/5760/beshalah.shtml', 'Exodus 13:17 - 17:16',
+		    'בֹּא',
+		    'Jeremiah 46:13 - 46:28', '',
+		    ],
+ "Beshalach"	=> [
+		    '/5760/beshalah.shtml', 'Exodus 13:17 - 17:16',
 		    '/jpstext/beshallah.shtml',
-		    'בְּשַׁלַּח'],
- "Yitro"	=> ['/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
+		    'בְּשַׁלַּח',
+		    'Judges 4:4 - 5:31', 'Judges 5:1 - 5:31',
+		    ],
+ "Yitro"	=> [
+		    '/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
 		    '/jpstext/yitro.shtml',
-		    'יִתְרוֹ'],
- "Yisro"	=> ['/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
+		    'יִתְרוֹ',
+		    'Isaiah 6:1 - 7:6; 9:5 - 9:6', 'Isaiah 6:1 - 6:13',
+		    ],
+ "Yisro"	=> [
+		    '/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
 		    '/jpstext/yitro.shtml',
-		    'יִתְרוֹ'],
- "Mishpatim"	=> ['/5760/mishpatim.shtml', 'Exodus 21:1 - 24:18',
+		    'יִתְרוֹ',
+		    'Isaiah 6:1 - 7:6; 9:5 - 9:6', 'Isaiah 6:1 - 6:13',
+		    ],
+ "Mishpatim"	=> [
+		    '/5760/mishpatim.shtml', 'Exodus 21:1 - 24:18',
 		    '/jpstext/mishpatim.shtml',
-		    'מִּשְׁפָּטִים'],
- "Terumah"	=> ['/5760/terumah.shtml', 'Exodus 25:1 - 27:19',
+		    'מִּשְׁפָּטִים',
+		    'Jeremiah 34:8 - 34:22; 33:25 - 33:26', '',
+		    ],
+ "Terumah"	=> [
+		    '/5760/terumah.shtml', 'Exodus 25:1 - 27:19',
 		    '/jpstext/terumah.shtml',
-		    'תְּרוּמָה'],
- "Tetzaveh"	=> ['/5760/tetsavveh.shtml', 'Exodus 27:20 - 30:10',
+		    'תְּרוּמָה',
+		    'I Kings 5:26 - 6:13', '',
+		    ],
+ "Tetzaveh"	=> [
+		    '/5760/tetsavveh.shtml', 'Exodus 27:20 - 30:10',
 		    '/jpstext/tetsavveh.shtml',
-		    'תְּצַוֶּה'],
- "Ki Tisa"	=> ['/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
+		    'תְּצַוֶּה',
+		    'Ezekiel 43:10 - 43:27', '',
+		    ],
+ "Ki Tisa"	=> [
+		    '/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
 		    '/jpstext/kitissa.shtml',
-		    'כִּי תִשָּׂא'],
- "Ki Sisa"	=> ['/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
+		    'כִּי תִשָּׂא',
+		    'I Kings 18:1 - 18:39', 'I Kings 18:20 - 18:39',
+		    ],
+ "Ki Sisa"	=> [
+		    '/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
 		    '/jpstext/kitissa.shtml',
-		    'כִּי תִשָּׂא'],
- "Vayakhel"	=> ['/5760/vayakhel.shtml', 'Exodus 35:1 - 38:20',
+		    'כִּי תִשָּׂא',
+		    'I Kings 18:1 - 18:39', 'I Kings 18:20 - 18:39',
+		    ],
+ "Vayakhel"	=> [
+		    '/5760/vayakhel.shtml', 'Exodus 35:1 - 38:20',
 		    '/jpstext/vayakhel.shtml',
-		    'וַיַּקְהֵל'],
- "Pekudei"	=> ['/5760/pekuday.shtml', 'Exodus 38:21 - 40:38',
+		    'וַיַּקְהֵל',
+		    'I Kings 7:40 - 7:50', 'I Kings 7:13 - 7:26',
+		    ],
+ "Pekudei"	=> [
+		    '/5760/pekuday.shtml', 'Exodus 38:21 - 40:38',
 		    '/jpstext/pekudey.shtml',
-		    'פְקוּדֵי'],
- "Vayikra"	=> ['/5760/vayikra.shtml', 'Leviticus 1:1 - 5:26',
+		    'פְקוּדֵי',
+		    'I Kings 7:51 - 8:21', 'I Kings 7:40 - 7:50',
+		    ],
+ "Vayikra"	=> [
+		    '/5760/vayikra.shtml', 'Leviticus 1:1 - 5:26',
 		    '/jpstext/vayikra.shtml',
-		    'וַיִּקְרָא'],
- "Tzav"		=> ['/5760/tsav.shtml', 'Leviticus 6:1 - 8:36',
+		    'וַיִּקְרָא',
+		    'Isaiah 43:21 - 44:23', '',
+		    ],
+ "Tzav"		=> [
+		    '/5760/tsav.shtml', 'Leviticus 6:1 - 8:36',
 		    '/jpstext/tzav.shtml',
-		    'צַו'],
- "Shmini"	=> ['/5760/shemini.shtml', 'Leviticus 9:1 - 11:47',
+		    'צַו',
+		    'Jeremiah 7:21 - 8:3; 9:22 - 9:23', '',
+		    ],
+ "Shmini"	=> [
+		    '/5760/shemini.shtml', 'Leviticus 9:1 - 11:47',
 		    '/jpstext/shemini.shtml',
-		    'שְּׁמִינִי'],
- "Tazria"	=> ['/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
+		    'שְּׁמִינִי',
+		    'II Samuel 6:1 - 7:17', 'II Samuel 6:1 - 6:19',
+		    ],
+ "Tazria"	=> [
+		    '/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
 		    '/jpstext/tazria.shtml',
-		    'תַזְרִיעַ'],
- "Sazria"	=> ['/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
+		    'תַזְרִיעַ',
+		    'II Kings 4:42 - 5:19', '',
+		    ],
+ "Sazria"	=> [
+		    '/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
 		    '/jpstext/tazria.shtml',
-		    'תַזְרִיעַ'],
- "Metzora"	=> ['/5759/tazriametzora.shtml', 'Leviticus 14:1 - 15:33',
+		    'תַזְרִיעַ',
+		    'II Kings 4:42 - 5:19', '',
+		    ],
+ "Metzora"	=> [
+		    '/5759/tazriametzora.shtml', 'Leviticus 14:1 - 15:33',
 		    '/jpstext/metsora.shtml',
-		    'מְּצֹרָע'],
- "Achrei Mot"	=> ['/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
+		    'מְּצֹרָע',
+		    'II Kings 7:3 - 7:20', '',
+		    ],
+ "Achrei Mot"	=> [
+		    '/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
 		    '/jpstext/ahareimot.shtml',
-		    'אַחֲרֵי מוֹת'],
- "Achrei Mos"	=> ['/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
+		    'אַחֲרֵי מוֹת',
+		    'Ezekiel 22:1 - 22:19', 'Ezekiel 22:1 - 22:16',
+		    ],
+ "Achrei Mos"	=> [
+		    '/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
 		    '/jpstext/ahareimot.shtml',
-		    'אַחֲרֵי מוֹת'],
- "Kedoshim"	=> ['/5760/kedoshim.shtml', 'Leviticus 19:1 - 20:27',
+		    'אַחֲרֵי מוֹת',
+		    'Ezekiel 22:1 - 22:19', 'Ezekiel 22:1 - 22:16',
+		    ],
+ "Kedoshim"	=> [
+		    '/5760/kedoshim.shtml', 'Leviticus 19:1 - 20:27',
 		    '/jpstext/kedoshim.shtml',
-		    'קְדשִׁים'],
- "Emor"		=> ['/5760/emor.shtml', 'Leviticus 21:1 - 24:23',
+		    'קְדשִׁים',
+		    'Amos 9:7 - 9:15', 'Ezekiel 20:2 - 20:20',
+		    ],
+ "Emor"		=> [
+		    '/5760/emor.shtml', 'Leviticus 21:1 - 24:23',
 		    '/jpstext/emor.shtml',
-		    'אֱמוֹר'],
- "Behar"	=> ['/5760/behar.shtml', 'Leviticus 25:1 - 26:2',
+		    'אֱמוֹר',
+		    'Ezekiel 44:15 - 44:31', '',
+		    ],
+ "Behar"	=> [
+		    '/5760/behar.shtml', 'Leviticus 25:1 - 26:2',
 		    '/jpstext/behar.shtml',
-		    'בְּהַר'],
- "Bechukotai"	=> ['/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
+		    'בְּהַר',
+		    'Jeremiah 32:6 - 32:27', '',
+		    ],
+ "Bechukotai"	=> [
+		    '/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
 		    '/jpstext/behukkotai.shtml',
-		    'בְּחֻקֹּתַי'],
- "Bechukosai"	=> ['/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
+		    'בְּחֻקֹּתַי',
+		    'Jeremiah 16:19 - 17:14', '',
+		    ],
+ "Bechukosai"	=> [
+		    '/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
 		    '/jpstext/behukkotai.shtml',
-		    'בְּחֻקֹּתַי'],
- "Bamidbar"	=> ['/5760/bemidbar.shtml', 'Numbers 1:1 - 4:20',
+		    'בְּחֻקֹּתַי',
+		    'Jeremiah 16:19 - 17:14', '',
+		    ],
+ "Bamidbar"	=> [
+		    '/5760/bemidbar.shtml', 'Numbers 1:1 - 4:20',
 		    '/jpstext/bemidbar.shtml',
-		    'בְּמִדְבַּר'],
- "Nasso"	=> ['/5760/naso.shtml', 'Numbers 4:21 - 7:89',
+		    'בְּמִדְבַּר',
+		    'Hosea 2:1 - 2:22', '',
+		    ],
+ "Nasso"	=> [
+		    '/5760/naso.shtml', 'Numbers 4:21 - 7:89',
 		    '/jpstext/naso.shtml',
-		    'נָשׂא'],
- "Beha'alotcha" => ['/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
+		    'נָשׂא',
+		    'Judges 13:2 - 13:25', '',
+		    ],
+ "Beha'alotcha" => [
+		    '/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
 		    '/jpstext/behaalothekha.shtml',
-		    'בְּהַעֲלֹתְךָ'],
- "Beha'aloscha" => ['/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
+		    'בְּהַעֲלֹתְךָ',
+		    'Zechariah 2:14 - 4:7', '',
+		    ],
+ "Beha'aloscha" => [
+		    '/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
 		    '/jpstext/behaalothekha.shtml',
-		    'בְּהַעֲלֹתְךָ'],
- "Sh'lach"	=> ['/5760/shelahlekha.shtml', 'Numbers 13:1 - 15:41',
+		    'בְּהַעֲלֹתְךָ',
+		    'Zechariah 2:14 - 4:7', '',
+		    ],
+ "Sh'lach"	=> [
+		    '/5760/shelahlekha.shtml', 'Numbers 13:1 - 15:41',
 		    '/jpstext/shelahlekha.shtml',
-		    'שְׁלַח־לְךָ'],
- "Korach"	=> ['/5760/korah.shtml', 'Numbers 16:1 - 18:32',
+		    'שְׁלַח־לְךָ',
+		    'Joshua 2:1 - 2:24', '',
+		    ],
+ "Korach"	=> [
+		    '/5760/korah.shtml', 'Numbers 16:1 - 18:32',
 		    '/jpstext/korah.shtml',
-		    'קוֹרַח'],
- "Chukat"	=> ['/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
+		    'קוֹרַח',
+		    'I Samuel 11:14 - 12:22', '', 
+		    ],
+ "Chukat"	=> [
+		    '/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
 		    '/jpstext/hukkat.shtml',
-		    'חֻקַּת'],
- "Chukas"	=> ['/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
+		    'חֻקַּת',
+		    'Judges 11:1 - 11:33', '',
+		    ],
+ "Chukas"	=> [
+		    '/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
 		    '/jpstext/hukkat.shtml',
-		    'חֻקַּת'],
- "Balak"	=> ['/5760/hukkatbalak.shtml', 'Numbers 22:2 - 25:9',
+		    'חֻקַּת',
+		    'Judges 11:1 - 11:33', '',
+		    ],
+ "Balak"	=> [
+		    '/5760/hukkatbalak.shtml', 'Numbers 22:2 - 25:9',
 		    '/jpstext/balak.shtml',
-		    'בָּלָק'],
- "Pinchas"	=> ['/5760/pinhas.shtml', 'Numbers 25:10 - 30:1',
+		    'בָּלָק',
+		    'Micah 5:6 - 6:8', '',
+		    ],
+ "Pinchas"	=> [
+		    '/5760/pinhas.shtml', 'Numbers 25:10 - 30:1',
 		    '/jpstext/pinhas.shtml',
-		    'פִּינְחָס'],
- "Matot"	=> ['/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
+		    'פִּינְחָס',
+		    'I Kings 18:46 - 19:21', '',
+		    ],
+ "Matot"	=> [
+		    '/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
 		    '/jpstext/mattot.shtml',
-		    'מַּטּוֹת'],
- "Matos"	=> ['/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
+		    'מַּטּוֹת',
+		    'Jeremiah 1:1 - 2:3', '',
+		    ],
+ "Matos"	=> [
+		    '/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
 		    '/jpstext/mattot.shtml',
-		    'מַּטּוֹת'],
- "Masei"	=> ['/5760/mattotmaseei.shtml', 'Numbers 33:1 - 36:13',
+		    'מַּטּוֹת',
+		    'Jeremiah 1:1 - 2:3', '',
+		    ],
+ "Masei"	=> [
+		    '/5760/mattotmaseei.shtml', 'Numbers 33:1 - 36:13',
 		    '/jpstext/maseei.shtml',
-		    'מַסְעֵי'],
- "Devarim"	=> ['/5760/devarim.shtml', 'Deuteronomy 1:1 - 3:22',
+		    'מַסְעֵי',
+		    'Jeremiah 2:4 - 28; 3:4', 'Jeremiah 2:4 - 28; 4:1 - 4:2',
+		    ],
+ "Devarim"	=> [
+		    '/5760/devarim.shtml', 'Deuteronomy 1:1 - 3:22',
 		    '/jpstext/devarim.shtml',
-		    'דְּבָרִים'],
- "Vaetchanan"	=> ['/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
+		    'דְּבָרִים',
+		    'Isaiah 1:1 - 1:27', '',
+		    ],
+ "Vaetchanan"	=> [
+		    '/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
 		    '/jpstext/vaethannan.shtml',
-		    'וָאֶתְחַנַּן'],
- "Vaeschanan"	=> ['/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
+		    'וָאֶתְחַנַּן',
+		    'Isaiah 40:1 - 40:26', '',
+		    ],
+ "Vaeschanan"	=> [
+		    '/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
 		    '/jpstext/vaethannan.shtml',
-		    'וָאֶתְחַנַּן'],
- "Eikev"	=> ['/5760/ekev.shtml', 'Deuteronomy 7:12 - 11:25',
+		    'וָאֶתְחַנַּן',
+		    'Isaiah 40:1 - 40:26', '',
+		    ],
+ "Eikev"	=> [
+		    '/5760/ekev.shtml', 'Deuteronomy 7:12 - 11:25',
 		    '/jpstext/ekev.shtml',
-		    'עֵקֶב'],
- "Re'eh"	=> ['/5760/reeh.shtml', 'Deuteronomy 11:26 - 16:17',
+		    'עֵקֶב',
+		    'Isaiah 49:14 - 51:3', '',
+		    ],
+ "Re'eh"	=> [
+		    '/5760/reeh.shtml', 'Deuteronomy 11:26 - 16:17',
 		    '/jpstext/reeh.shtml',
-		    'רְאֵה'],
- "Shoftim"	=> ['/5760/shofetim.shtml', 'Deuteronomy 16:18 - 21:9',
+		    'רְאֵה',
+		    'Isaiah 54:11 - 55:5', '',
+		    ],
+ "Shoftim"	=> [
+		    '/5760/shofetim.shtml', 'Deuteronomy 16:18 - 21:9',
 		    '/jpstext/shofetim.shtml',
-		    'שׁוֹפְטִים'],
- "Ki Teitzei"	=> ['/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
+		    'שׁוֹפְטִים',
+		    'Isaiah 51:12 - 52:12', '',
+		    ],
+ "Ki Teitzei"	=> [
+		    '/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
 		    '/jpstext/kitetse.shtml',
-		    'כִּי־תֵצֵא'],
- "Ki Seitzei"	=> ['/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
+		    'כִּי־תֵצֵא',
+		    'Isaiah 54:1 - 54:10', '',
+		    ],
+ "Ki Seitzei"	=> [
+		    '/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
 		    '/jpstext/kitetse.shtml',
-		    'כִּי־תֵצֵא'],
- "Ki Tavo"	=> ['/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
+		    'כִּי־תֵצֵא',
+		    'Isaiah 54:1 - 54:10', '',
+		    ],
+ "Ki Tavo"	=> [
+		    '/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
 		    '/jpstext/kitavo.shtml',
-		    'כִּי־תָבוֹא'],
- "Ki Savo"	=> ['/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
+		    'כִּי־תָבוֹא',
+		    'Isaiah 60:1 - 60:22', '',
+		    ],
+ "Ki Savo"	=> [
+		    '/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
 		    '/jpstext/kitavo.shtml',
-		    'כִּי־תָבוֹא'],
- "Nitzavim"	=> ['/5760/nitsavimvayelekh.shtml',
+		    'כִּי־תָבוֹא',
+		    'Isaiah 60:1 - 60:22', '',
+		    ],
+ "Nitzavim"	=> [
+		    '/5760/nitsavimvayelekh.shtml',
 		    'Deuteronomy 29:9 - 30:20',
 		    '/jpstext/nitsavim.shtml',
-		    'נִצָּבִים'],
- "Vayeilech"	=> ['/5760/nitsavimvayelekh.shtml',
+		    'נִצָּבִים',
+		    'Isaiah 61:10 - 63:9', '',
+		    ],
+ "Vayeilech"	=> [
+		    '/5760/nitsavimvayelekh.shtml',
 		    'Deuteronomy 31:1 - 31:30',
 		    '/jpstext/vayelekh.shtml',
-		    'וַיֵּלֶךְ'],
- "Ha'Azinu"	=> ['http://www.ohr.org.il/tw/5759/devarim/haazinu.htm',
+		    'וַיֵּלֶךְ',
+		    'Isaiah 55:6 - 56:8', '',
+		    ],
+ "Ha'Azinu"	=> [
+		    'http://www.ohr.org.il/tw/5759/devarim/haazinu.htm',
 		    'Deuteronomy 32:1 - 31:52',
 		    '/jpstext/haazinu.shtml',
-		    'הַאֲזִינוּ'],
+		    'הַאֲזִינוּ',
+		    'II Samuel 22:1 - 22:51', '',
+		    ],
+ "Vezot Haberakhah"
+	        => ['',
+		    'Deuteronomy 33:1 - 34:12',
+		    '',
+		    '',
+		    'Joshua 1:1 - 1:18', 'Joshua 1:1 - 1:9',
+		    ],
 
  "Rosh Hashana"	=> ['/5761/roshhashanah.shtml', '', '', ''],
  "Yom Kippur"	=> ['/5759/yk.shtml', '', '', ''],
@@ -704,9 +914,9 @@ sub parse_date_descr($$)
     ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur,$yomtov);
 }
 
-sub invoke_hebcal($$)
+sub invoke_hebcal($$$)
 {
-    my($cmd,$memo) = @_;
+    my($cmd,$memo,$want_sephardic) = @_;
     my(@events,$prev);
     local($_);
     local(*HEBCAL);
@@ -725,7 +935,7 @@ sub invoke_hebcal($$)
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    &parse_date_descr($date,$descr);
 
-	my($href,$hebrew,$memo2) = &get_holiday_anchor($subj);
+	my($href,$hebrew,$memo2) = &get_holiday_anchor($subj,$want_sephardic);
 
 	push(@events,
 	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
@@ -744,9 +954,9 @@ sub get_dow($$$)
     (localtime($time))[6];	# $wday
 }
 
-sub get_holiday_anchor($)
+sub get_holiday_anchor($$)
 {
-    my($subj) = @_;
+    my($subj,$want_sephardic) = @_;
     my($href) = '';
     my($hebrew) = '';
     my($memo) = '';
@@ -762,17 +972,55 @@ sub get_holiday_anchor($)
 	{
 	    $href = $sedrot{$sedra}->[$SEDROT_IDX_DRASH_EN];
 	    $hebrew .= $sedrot{$sedra}->[$SEDROT_IDX_TITLE_HE];
-	    $memo = $sedrot{$sedra}->[$SEDROT_IDX_VERSE_EN];
+	    $memo = "Torah: " . $sedrot{$sedra}->[$SEDROT_IDX_VERSE_EN] .
+		" -- Haftarah: ";
+	    
+	    if ($want_sephardic &&
+		defined $sedrot{$sedra}->[$SEDROT_IDX_HAFT_SEPH])
+	    {
+		$memo .= $sedrot{$sedra}->[$SEDROT_IDX_HAFT_SEPH];
+	    }
+	    else
+	    {
+		$memo .= $sedrot{$sedra}->[$SEDROT_IDX_HAFT_ASHK];
+	    }
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) && defined $sedrot{$1})
 	{
 	    $href = $sedrot{$1}->[$SEDROT_IDX_DRASH_EN];
 	    $hebrew .= $sedrot{$1}->[$SEDROT_IDX_TITLE_HE];
-	    $hebrew .= '־' . $sedrot{$2}->[$SEDROT_IDX_TITLE_HE]
-		if defined $sedrot{$2};
-	    $memo = $sedrot{$1}->[$SEDROT_IDX_VERSE_EN];
-	    $memo .= ', ' . $sedrot{$2}->[$SEDROT_IDX_VERSE_EN]
-		if defined $sedrot{$2};
+	    $memo = "Torah: " . $sedrot{$1}->[$SEDROT_IDX_VERSE_EN];
+
+	    if (defined $sedrot{$2})
+	    {
+		$hebrew .= '־' . $sedrot{$2}->[$SEDROT_IDX_TITLE_HE];
+		$memo .= '; ' . $sedrot{$2}->[$SEDROT_IDX_VERSE_EN];
+	    }
+
+	    $memo .= " -- Haftarah: ";
+	    if ($want_sephardic &&
+		defined $sedrot{$1}->[$SEDROT_IDX_HAFT_SEPH])
+	    {
+		$memo .= $sedrot{$1}->[$SEDROT_IDX_HAFT_SEPH];
+	    }
+	    else
+	    {
+		$memo .= $sedrot{$1}->[$SEDROT_IDX_HAFT_ASHK];
+	    }
+
+	    if (defined $sedrot{$2})
+	    {
+		$memo .= '; ';
+		if ($want_sephardic &&
+		    defined $sedrot{$2}->[$SEDROT_IDX_HAFT_SEPH])
+		{
+		    $memo .= $sedrot{$2}->[$SEDROT_IDX_HAFT_SEPH];
+		}
+		else
+		{
+		    $memo .= $sedrot{$2}->[$SEDROT_IDX_HAFT_ASHK];
+		}
+	    }
 	}
 
 	$href = 'http://learn.jtsa.edu/topics/parashah' . $href
