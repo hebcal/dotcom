@@ -1024,6 +1024,32 @@ sub get_holiday_anchor($$)
 ########################################################################
 
 
+sub guess_timezone($$$)
+{
+    my($tz,$zip,$state) = @_;
+
+    return $tz if ($tz =~ /^-?\d+$/);
+
+    if (defined $Hebcal::known_timezones{$zip})
+    {
+	return $Hebcal::known_timezones{$zip}
+	if ($Hebcal::known_timezones{$zip} ne '??');
+    }
+    elsif (defined $Hebcal::known_timezones{substr($zip,0,3)})
+    {
+	return $Hebcal::known_timezones{substr($zip,0,3)}
+	if ($Hebcal::known_timezones{substr($zip,0,3)} ne '??');
+    }
+    elsif (defined $Hebcal::known_timezones{$state})
+    {
+	return $Hebcal::known_timezones{$state}
+	if ($Hebcal::known_timezones{$state} ne '??');
+    }
+
+    undef;
+}
+
+
 sub display_hebrew {
     my($q,$class,@args) = @_;
 
@@ -1174,6 +1200,15 @@ sub gen_cookie($)
     $retval .= '&nx=off'
 	if !defined $q->param('nx') || $q->param('nx') eq 'off';
 
+    if (defined $q->param('heb') && $q->param('heb') ne '')
+    {
+	$retval .= "&heb=" . $q->param('heb');
+    }
+    else
+    {
+	$retval .= '&heb=off';
+    }
+
     $retval;
 }
 
@@ -1243,15 +1278,17 @@ sub process_cookie($$)
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 
-    $q->param('nh','off')
-	if (defined $c->param('h') && $c->param('h') eq 'on');
-    $q->param('nx','off')
-	if (defined $c->param('x') && $c->param('x') eq 'on');
+#    $q->param('nh','off')
+#	if (defined $c->param('h') && $c->param('h') eq 'on');
+#    $q->param('nx','off')
+#	if (defined $c->param('x') && $c->param('x') eq 'on');
 
     $q->param('nh',$c->param('nh'))
 	if (! defined $q->param('nh') && defined $c->param('nh'));
     $q->param('nx',$c->param('nx'))
 	if (! defined $q->param('nx') && defined $c->param('nx'));
+    $q->param('heb',$c->param('heb'))
+	if (! defined $q->param('heb') && defined $c->param('heb'));
 
     $c;
 }
