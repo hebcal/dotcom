@@ -3,6 +3,7 @@
 <festivals>
 <groups>
  <group>Rosh Hashana
+  <li>Rosh Hashana</li>
   <li>Rosh Hashana 1</li>
   <li>Rosh Hashana 1 (on Shabbat)</li>
   <li>Rosh Hashana 2</li>
@@ -15,6 +16,7 @@
   <li>Yom Kippur (Mincha)</li>
  </group>
  <group>Sukkot
+  <li>Sukkot</li>
   <li>Sukkot 1</li>
   <li>Sukkot 1 (on Shabbat)</li>
   <li>Sukkot 2</li>
@@ -74,6 +76,7 @@
  <group>Shabbat HaGadol</group>
  <group>Ta'anit Bechorot</group>
  <group>Pesach
+  <li>Pesach</li>
   <li>Pesach 1</li>
   <li>Pesach 1 (on Shabbat)</li>
   <li>Pesach 2</li>
@@ -96,6 +99,7 @@
  <group>Yom Yerushalayim</group>
  <group>Rosh Chodesh Sivan</group>
  <group>Shavuot
+  <li>Shavuot</li>
   <li>Shavuot 1</li>
   <li>Shavuot 2</li>
   <li>Shavuot 2 (on Shabbat)</li>
@@ -121,6 +125,13 @@ Rosh Chodesh: 4
 every other day (e.g. fast days): 3
 -->
 <!-- Strassfeld p. 229 -->
+<festival id="Pesach"
+ hebrew="פֶּסַח"
+ yomtov="1">
+ <about href="http://www.jewfaq.org/holidaya.htm">
+ Passover, the Feast of Unleavened Bread
+ </about>
+</festival>
 <festival id="Pesach 1"
  hebrew="פֶּסַח יוֹם א׳"
  yomtov="1">
@@ -332,6 +343,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
+<festival id="Shavuot"
+ hebrew="שָׁבוּעוֹת"
+ yomtov="1">
+ <about href="http://www.jewfaq.org/holidayc.htm">
+ Feast of Pentecost
+ </about>
+</festival>
 <festival id="Shavuot 1"
  hebrew="שָׁבוּעוֹת יוֹם א׳"
  yomtov="1">
@@ -487,6 +505,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
+<festival id="Rosh Hashana"
+ hebrew="רֹאשׁ הַשָּׁנָה"
+ yomtov="1">
+ <about href="http://www.jewfaq.org/holiday2.htm">
+ The Jewish New Year
+ </about>
+</festival>
+
 <festival id="Rosh Hashana 1"
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
@@ -596,6 +622,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="29" num="2" book="Leviticus" begin="18:6" end="18:21" />
   <aliyah parsha="29" num="3" book="Leviticus" begin="18:22" end="18:30" />
  </kriyah>
+</festival>
+<festival id="Sukkot"
+ hebrew="סוּכּוֹת"
+ yomtov="1">
+ <about href="http://www.jewfaq.org/holiday5.htm">
+ Feast of Tabernacles
+ </about>
 </festival>
 <festival id="Sukkot 1"
  hebrew="סוּכּוֹת יוֹם א׳"
