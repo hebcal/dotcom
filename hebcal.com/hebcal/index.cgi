@@ -98,7 +98,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Fri Aug  6 16:15:42 PDT 1999
+Last modified: Fri Aug  6 16:52:40 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -803,7 +803,7 @@ open.</small></p>
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&gt;/g;
 
-	printf STDOUT "%04d-%02d-%02d %s\n", $year, $month, $day, $descr;
+	printf STDOUT "%04d-%02d-%02d  %s\n", $year, $month, $day, $descr;
     }
     close(HEBCAL);
 
