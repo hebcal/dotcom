@@ -41,6 +41,7 @@
 
 require("HTML/Form.php");
 require("./hebnum.inc");
+require("../common.inc");
 
 $VER = '$Revision$';
 $matches = array();
@@ -228,6 +229,21 @@ if ($hebfont) {
     echo "<br><span dir=\"rtl\" lang=\"he\"\nclass=\"hebrew-big\">",
 	$hebrew, "</span>\n";
 }
+if ($gy >= 1900 && $gy <= 2099) {
+    $century = substr($gy, 0, 2);
+    $f = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
+    @include($f);
+    $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
+    if (isset($sedra) && isset($sedra[$iso])) {
+	if (is_array($sedra[$iso])) {
+	    foreach ($sedra[$iso] as $sed) {
+		display_hebrew_event($sed);
+	    }
+	} else {
+	    display_hebrew_event($sedra[$iso]);
+	}
+    }
+}
 ?>
 </p>
 <?php
@@ -267,6 +283,15 @@ function format_hebrew_date($hd, $hm, $hy) {
     return numsuffix($hd) . " of " . $month_name . ", $hy";
 }
 
+function display_hebrew_event($h) {
+    $anchor = hebcal_make_anchor($h);
+    echo "<br><a href=\"$anchor\">", $h, "</a>\n";
+    if (strncmp($h, "Parashat", 8) == 0) {
+	echo "(in Diaspora)\n";
+    }
+}
+
+
 function my_header() {
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -297,8 +322,12 @@ function form($head, $message, $help = "") {
 	echo "<hr noshade size=\"1\"><p\nstyle=\"color: red\">",
 	    $message, "</p>", $help, "<hr noshade size=\"1\">";
     }
+
+#    global $PHP_SELF;
+#    $action = $PHP_SELF;
+    $action = "/converter/";
 ?>
-<form name="f1" id="f1" action="/converter/">
+<form name="f1" id="f1" action="<?php echo $action ?>">
 <center><table cellpadding="4">
 <tr align="center"><td class="box"><table>
 <tr><td colspan="3">Gregorian to Hebrew</td></tr>
