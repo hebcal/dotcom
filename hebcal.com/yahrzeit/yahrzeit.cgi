@@ -36,7 +36,7 @@ $this_year += 1900;
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May  8 11:28:37 PDT 2001
+Last modified: Tue May  8 11:49:32 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -241,7 +241,7 @@ sub results_page {
 			'Hebcal Yahrzeit, Birthday and Anniversary Calendar',
 			[],
 			{ 'keywords' => 'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish' }),
-    &Hebcal::navbar2($q, "Yahrzeit,\nBirthday and Anniversary Calendar"),
+    &Hebcal::navbar2($q, "Yahrzeit, Birthday and Anniversary\nCalendar"),
     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n";
 
 &form(1,'','') unless keys %yahrzeits;
