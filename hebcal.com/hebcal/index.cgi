@@ -180,7 +180,7 @@ elsif ($q->path_info() =~ /[^\/]+\.dba$/)
 {
     &dba_display();
 }
-elsif ($q->path_info() =~ /[^\/]+\.mpdb$/)
+elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
 {
     &macintosh_datebook_display();
 }
@@ -271,12 +271,12 @@ sub macintosh_datebook_display {
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
     print $q->header(-type =>
-		     "application/x-unknown-palm-macintosh; filename=\"$path_info\"",
+		     "text/tab-separated-values; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "filename=$path_info",
 		     -last_modified => Hebcal::http_date($time));
 
-    Hebcal::macintosh_datebook(\@events);
+    Hebcal::macintosh_datebook(\@events, "\015");
 }
 
 sub vcalendar_display() {
@@ -940,7 +940,7 @@ Jewish Calendar events into your desktop software.</p>};
     }
 
     $download .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li><a href=\"" .
-	download_href($filename, 'mpdb') .
+	download_href($filename, 'tsv') .
 	    "\">Export Mac Palm Calendar from Hebcal</a>\n";
     $download .= "<li>(this feature is currently experimental)</ol>\n";
 
