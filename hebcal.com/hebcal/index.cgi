@@ -54,7 +54,7 @@ my($q) = new CGI;
 $q->delete('.s');		# we don't care about submit button
 
 my($script_name) = $q->script_name();
-$script_name =~ s,/index.html$,/,;
+$script_name =~ s,/index.cgi$,/,;
 
 my($set_checked) = 'checked';
 my($cookies) = Hebcal::get_cookies($q);
@@ -665,7 +665,7 @@ sub download_href
     my($filename,$ext) = @_;
 
     my($href) = $script_name;
-    $href .= "index.html" if $q->script_name() =~ m,/index.html$,;
+    $href .= "index.cgi" if $q->script_name() =~ m,/index.cgi$,;
     $href .= "/$filename.$ext?dl=1";
     foreach my $key ($q->param())
     {
