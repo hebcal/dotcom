@@ -27,6 +27,11 @@ use Hebcal;
 use HTML::Entities ();
 use strict;
 
+use lib "/home/users/mradwin/local/lib/perl5/$]";
+use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
+
+use Unicode::String;
+
 my(%num2heb) =
 (
 1 => 'א',
@@ -80,7 +85,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 15:59:43 PDT 2001
+Last modified: Mon Apr 23 10:10:53 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -200,11 +205,13 @@ if (defined $events[0])
     {
 	my($hm,$hd,$hy) = ($2,$1,$3);
 
-	print STDOUT qq{\n<br><span dir="rtl" lang="he"\n},
-	qq{style="font-size: xx-large">}, &hebnum_to_string($hd),
-	"&nbsp;&nbsp;בְּ", $monthnames{$hm},
-	"&nbsp;&nbsp;", &hebnum_to_string($hy),
-	qq{</span>};
+	print STDOUT qq{\n<br>},
+	&display_hebrew($q,
+			&hebnum_to_string($hd),
+			"  בְּ",
+			$monthnames{$hm},
+			"  ",
+			&hebnum_to_string($hy));
 
 	$hm = "Shvat" if $hm eq "Sh'vat";
 	$hm = "Adar1" if $hm eq "Adar";
@@ -308,7 +315,58 @@ type="submit" value="Compute Gregorian Date"></td>
     exit(0);
 }
 
-sub hebnum_to_string {
+sub display_hebrew {
+    my($q,@args) = @_;
+
+    if ($q->user_agent('MSIE'))
+    {
+	my(@args2);
+	foreach (@args)
+	{
+	    s/  /&nbsp;&nbsp;/g;
+	    push(@args2, $_);
+	}
+
+	return join('',
+		    qq{<span dir="rtl" lang="he"\n},
+		    qq{style="font-size: xx-large">}, @args2,
+		    qq{</span>}
+		    );
+    }
+    else
+    {
+	my($str) = &utf8_hebrew_to_netscape(join('', @args));
+	$str =~ s/  /&nbsp;&nbsp;/g;
+
+	return join('',
+		    qq{<span dir="ltr" lang="he"\n},
+		    qq{style="font-size: xx-large">},
+		    $str,
+		    qq{</span>}
+		    );
+    }
+}
+
+sub utf8_hebrew_to_netscape($) {
+    my($str) = @_;
+
+    warn "utf8_hebrew_to_netscape()\n";
+
+    my($u) = Unicode::String::utf8($str);
+    my(@array) = $u->unpack;
+    my(@result) = ();
+
+    for (my $i = scalar(@array) - 1; $i >= 0; --$i)
+    {
+	push(@result, $array[$i])
+	    if ($array[$i] >= 0x05D0 || $array[$i] <= 0x007F);
+    }
+
+    $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
+    return $u->as_string();
+}
+
+sub hebnum_to_string($) {
     my($num) = @_;
 
     my(@array) = &hebnum_to_array($num);
@@ -331,7 +389,7 @@ sub hebnum_to_string {
     $result;
 }
 
-sub hebnum_to_array {
+sub hebnum_to_array($) {
     my($num) = @_;
     my(@result) = ();
 
