@@ -37,7 +37,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 16:04:00 PDT 2001
+Last modified: Sun Apr 22 16:04:54 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -273,7 +273,7 @@ print STDOUT $q->header(),
 		   ),
     &Hebcal::navbar($server_name,
 		    "Yahrzeit,\nBirthday and Anniversary Calendar"),
-    "<h1>Hebcal\nYahrzeit, Birthday and Anniversary Calendar</h1>\n";
+    "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n";
 
 &form(1,'','') unless keys %yahrzeits;
 
