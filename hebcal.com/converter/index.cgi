@@ -414,7 +414,7 @@ sub my_header
 			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
 			],
 			undef),
-    &Hebcal::navbar2($q, "Hebrew Date\nConverter"),
+    &Hebcal::navbar2($q, "Hebrew Date\nConverter", 1, undef, undef),
     "<h1>Hebrew\nDate Converter</h1>\n";
 
     1;
