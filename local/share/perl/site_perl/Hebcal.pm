@@ -642,6 +642,7 @@ sub cache_begin($)
     $script_name =~ s/\./_/g;
 
     my $qs = $ENV{'QUERY_STRING'};
+    $qs =~ s/[&;]?tag=[^&;]+//g;
     $qs =~ s/[&;]/,/g;
     $qs =~ s/\./_/g;
     $qs =~ s/\//-/g;
