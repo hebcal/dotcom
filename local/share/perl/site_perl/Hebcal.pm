@@ -725,9 +725,11 @@ sub invoke_hebcal($$)
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    &parse_date_descr($date,$descr);
 
+	my($href,$hebrew,$memo2) = &get_holiday_anchor($subj);
+
 	push(@events,
 	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
-	      ($untimed ? '' : $memo),$yomtov]);
+	      ($untimed ? $memo2 : $memo),$yomtov]);
     }
     close(HEBCAL);
 
@@ -747,6 +749,7 @@ sub get_holiday_anchor($)
     my($subj) = @_;
     my($href) = '';
     my($hebrew) = '';
+    my($memo) = '';
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
     {
@@ -759,12 +762,16 @@ sub get_holiday_anchor($)
 	{
 	    $href = $sedrot{$sedra}->[$SEDROT_IDX_DRASH_EN];
 	    $hebrew .= $sedrot{$sedra}->[$SEDROT_IDX_TITLE_HE];
+	    $memo = $sedrot{$sedra}->[$SEDROT_IDX_VERSE_EN];
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) && defined $sedrot{$1})
 	{
 	    $href = $sedrot{$1}->[$SEDROT_IDX_DRASH_EN];
 	    $hebrew .= $sedrot{$1}->[$SEDROT_IDX_TITLE_HE];
 	    $hebrew .= '־' . $sedrot{$2}->[$SEDROT_IDX_TITLE_HE]
+		if defined $sedrot{$2};
+	    $memo = $sedrot{$1}->[$SEDROT_IDX_VERSE_EN];
+	    $memo .= ', ' . $sedrot{$2}->[$SEDROT_IDX_VERSE_EN]
 		if defined $sedrot{$2};
 	}
 
@@ -797,7 +804,7 @@ sub get_holiday_anchor($)
 	}
     }
 
-    return (wantarray()) ? ($href,$hebrew) : $href;
+    return (wantarray()) ? ($href,$hebrew,$memo) : $href;
 }
     
 
