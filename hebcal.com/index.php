@@ -53,6 +53,10 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 </td>
 <td valign="top">
 <h4>Quick Links</h4>
+<br><span class="sm-grey">&gt;</span>
+<b><a href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current
+Calendar</a></b>
+<br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" -->
 <!--#include file="current.inc" -->
 <form action="/shabbat/">
 <span class="sm-grey">&gt;</span>
@@ -75,7 +79,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Sun Jul  7 12:49:10 EDT 2002
+Last modified: Mon Jul  8 18:28:15 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
