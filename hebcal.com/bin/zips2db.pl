@@ -47,26 +47,26 @@ $opts{'h'} && die "$usage\n";
 
 my(%tz_abbrev) =
     (
-     'E' => '-5,1',    # New York
-     'e' => '-5,0',    # Indianapolis
-     'C' => '-6,1',    # Chicago
-     'c' => '-6,0',    # Regina
-     'M' => '-7,1',    # Denver
-     'm' => '-7,0',    # Phoenix
-     'P' => '-8,1',    # Los Angeles
+     'E' => '-5,1',    # Eastern (i.e. New York)
+     'e' => '-5,0',    # Eastern no DST (i.e. Indianapolis)
+     'C' => '-6,1',    # Central (i.e. Chicago)
+     'c' => '-6,0',    # Central no DST (i.e. Regina)
+     'M' => '-7,1',    # Mountain (i.e. Denver)
+     'm' => '-7,0',    # Mountain now DST (i.e. Phoenix)
+     'P' => '-8,1',    # Pacific (i.e. Los Angeles)
      'p' => undef,     # (doesn't appear)
-     'A' => '-9,1',    # Anchorage
+     'A' => '-9,1',    # Alaska (i.e. Anchorage)
      'a' => undef,     # (doesn't appear)
      'h' => undef,     # (doesn't appear)
-     'H' => '-10,0',   # Honolulu
+     'H' => '-10,0',   # Hawaii (i.e. Honolulu)
      'AH' => '-10,1',  # Aleutians West, AK
      'V' => '-4,0',    # Puerto Rico
      'G' => '10,0',    # Guam
      'S' => '-11,0',   # Pago Pago
-     'CE' => '?,?',    # for unknown
-     'CM' => '?,?',    # for unknown
-     'MC' => '?,?',    # for unknown
-     'MP' => '?,?',    # for unknown
+     'CE' => '?,1',    # county split between Central and Eastern
+     'CM' => '?,1',    # county split between Central and Mountain
+     'MC' => '?,1',    # county split between Mountain and Central
+     'MP' => '?,1',    # county split between Mountain and Pacific
      '?' => '?,?',     # for unknown
      );
 
