@@ -21,7 +21,8 @@ $rcsrev = '$Revision$'; #'
      'January','Februrary','March','April','May','June',
      'July','August','September','October','November','December');
 
-$html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">
+$html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
+	\"http://www.w3.org/TR/REC-html40/loose.dtd\">
 <html> <head>
   <title>hebcal</title>
   <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true comment \"RSACi North America Server\" by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
@@ -40,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon Apr 12 10:34:36 PDT 1999
+Last modified: Tue Apr 13 08:49:28 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -387,7 +388,7 @@ Time Zone: GMT $in{'tz'}:00
 
     print STDOUT
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
-</form></p>
+</form>
 
 ";
 
