@@ -29,6 +29,7 @@ use lib "/home/users/mradwin/local/lib/perl5/$]";
 use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
 use Unicode::String;
 use Config::IniFiles;
+use Date::Calc;
 use strict;
 
 ########################################################################
@@ -380,9 +381,9 @@ sub invoke_hebcal($$$)
 sub get_dow($$$)
 {
     my($year,$mon,$mday) = @_;
-    my($time) = &Time::Local::timegm(0,0,9,$mday,$mon,$year,0,0,0); # 9am
 
-    (localtime($time))[6];	# $wday
+    my($dow) = &Date::Calc::Day_of_Week($year,$mon,$mday);
+    $dow == 7 ? 0 : $dow;
 }
 
 sub get_holiday_anchor($$$)
