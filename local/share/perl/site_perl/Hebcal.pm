@@ -507,18 +507,19 @@ sub hebnum_to_string {
     my($num) = @_;
 
     my(@array) = hebnum_to_array($num);
+    my $digits = scalar(@array);
     my($result);
 
-    if (scalar(@array) == 1)
+    if ($digits == 1)
     {
 	$result = $num2heb{$array[0]} . '׳'; # geresh
     }
     else
     {
 	$result = '';
-	for (my $i = 0; $i < @array; $i++)
+	for (my $i = 0; $i < $digits; $i++)
 	{
-	    $result .= '״' if (($i + 1) == @array); # gershayim
+	    $result .= '״' if (($i + 1) == $digits); # gershayim
 	    $result .= $num2heb{$array[$i]};
 	}
     }
