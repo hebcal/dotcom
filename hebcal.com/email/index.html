@@ -380,9 +380,7 @@ sub form
     print STDOUT
 qq{$message
 <p>Subscribe to email weekly Shabbat candle lighting times.
-Email is sent out every week on Thursday morning.
-<br>We will not sell your email address.  Read our <a
-href="/privacy/">Privacy Policy</a> for details.</p>
+Email is sent out every week on Thursday morning.</p>
 };
 
     print STDOUT
@@ -391,7 +389,7 @@ href="/privacy/">Privacy Policy</a> for details.</p>
 	$q->textfield(-name => 'em',
 		      -id => 'em',
 		      -size => 30),
-	qq{</label><br>},
+	qq{</label>\n&nbsp;&nbsp;<font size=-2 face=Arial><a href="/privacy/#email">Email Privacy Policy</a></font><br>},
 	qq{<label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
