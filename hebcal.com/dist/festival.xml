@@ -354,12 +354,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="M" book="Numbers" begin="29:7" end="29:11" numverses="5" />
  </kriyah>
 </festival>
-<festival id="Yom Kippur (Minchah)"
+<festival id="Yom Kippur (Mincha)"
  haftara="Jon., Mic. 7:18-20"
  yomtov="1">
  <link rel="about" href="http://www.jewfaq.org/holiday4.htm" />
  <kriyah>
-  <aliyah num="1" book="Leviticus" begin="181" end="18:5" />
+  <aliyah num="1" book="Leviticus" begin="18:1" end="18:5" />
   <aliyah num="2" book="Leviticus" begin="18:6" end="18:21" />
   <aliyah num="3" book="Leviticus" begin="18:22" end="18:30" />
  </kriyah>
