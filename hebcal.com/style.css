@@ -34,3 +34,16 @@ H1, H2, H3, H4, H5, H6 {
 .hebrew {
  font-family: David,'Times New Roman',serif;
 }
+
+.hebrew-big-ltr {
+ font-size: xx-large;
+ font-family: David,'Times New Roman',serif;
+ direction: ltr;
+ unicode-bidi: bidi-override;
+}
+
+.hebrew-ltr {
+ font-family: David,'Times New Roman',serif;
+ direction: ltr;
+ unicode-bidi: bidi-override;
+}
