@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri May 19 14:07:36 PDT 2000
+Last modified: Tue May 30 16:22:11 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -953,19 +953,26 @@ JSCRIPT_END
 	print STDOUT "<label for=\"tz\">Time zone:\n",
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
-		       -values => $q->param('geo') eq 'pos' ?
-		       [-5,-6,-7,-8,-9,-10,-11,-12,
-			12,11,10,9,8,7,6,5,4,3,2,1,0,
-			-1,-2,-3,-4] : ['auto',-5,-6,-7,-8,-9,-10],
-		       -default => $q->param('geo') eq 'pos' ? 0 : 'auto',
+		       -values =>
+		       (defined $q->param('geo') && $q->param('geo') eq 'pos')
+		       ? [-5,-6,-7,-8,-9,-10,-11,-12,
+			  12,11,10,9,8,7,6,5,4,3,2,1,0,
+			  -1,-2,-3,-4]
+		       : ['auto',-5,-6,-7,-8,-9,-10],
+		       -default =>
+		       (defined $q->param('geo') && $q->param('geo') eq 'pos')
+		       ? 0 : 'auto',
 		       -labels => \%tz_names),
 	"</label><br>",
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daylight Saving Time:\n",
 	$q->radio_group(-name => 'dst',
-			-values => $q->param('geo') eq 'pos' ?
-			['usa','israel','none'] : ['usa','none'],
+			-values =>
+			(defined $q->param('geo') && $q->param('geo') eq 'pos')
+			? ['usa','israel','none']
+			: ['usa','none'],
 			-default =>
-			$q->param('geo') eq 'pos' ? 'none' : 'usa',
+			(defined $q->param('geo') && $q->param('geo') eq 'pos')
+			? 'none' : 'usa',
 			-labels =>
 			{'usa' => "\nUSA (except AZ, HI, and IN) ",
 			 'israel' => "\nIsrael ",
