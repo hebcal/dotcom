@@ -289,12 +289,14 @@ sub dba_display() {
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
 
     my($dst) = 0;
+    my($tz) = $q->param('tz');
 
     if (defined $q->param('geo') && $q->param('geo') eq 'city' &&
 	defined $q->param('city') && $q->param('city') ne '')
     {
 	$dst = defined $Hebcal::city_nodst{$q->param('city')} ?
 	    0 : 1;
+	$tz = $Hebcal::city_tz{$q->param('city')};
     }
     elsif (defined($q->param('dst')) && $q->param('dst') eq 'usa')
     {
@@ -306,7 +308,7 @@ sub dba_display() {
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
     &Palm::DBA::write_header($path_info);
-    &Palm::DBA::write_contents(\@events, $q->param('tz'), $dst);
+    &Palm::DBA::write_contents(\@events, $tz, $dst);
 }
 
 sub csv_display() {
