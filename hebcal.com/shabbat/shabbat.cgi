@@ -17,7 +17,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Sep 19 09:11:44 PDT 2000
+Last modified: Tue Sep 19 09:42:04 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -33,6 +33,11 @@ All rights reserved.</small></body></html>
 # process form params
 $q = new CGI;
 
+# default setttings needed for cookie
+$q->param('c','on');
+$q->param('nh','on');
+$q->param('nx','on');
+
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 my($server_name) = $q->server_name();
@@ -41,8 +46,7 @@ $server_name =~ s/^www\.//;
 $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
 		"\t\"http://www.w3.org/TR/html4/loose.dtd");
 
-if (! $q->param('zip') &&
-    defined $q->raw_cookie() &&
+if (defined $q->raw_cookie() &&
     $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
 {
     &process_cookie($q,$1);
@@ -59,11 +63,6 @@ foreach $key ($q->param())
     $val =~ s/\s*$//g;		# and trailing whitespace
     $q->param($key,$val);
 }
-
-# default setttings needed for cookie
-$q->param('c','on');
-$q->param('nh','on');
-$q->param('nx','on');
 
 my($now) = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
@@ -205,6 +204,10 @@ $cmd .= " -Z " . $q->param('dst')
 $cmd .= " -m " . $q->param('m')
     if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
+$cmd .= " -a"
+    if defined $q->param('a') &&
+    ($q->param('a') eq 'on' || $q->param('a') eq '1');
+
 $cmd .= ' -s -h -c ' . $sat_year;
 
 unless ($default)
@@ -306,6 +309,34 @@ for ($i = 0; $i < $numEntries; $i++)
     my($min) = $events[$i]->[$Hebcal::EVT_IDX_MIN];
     my($hour) = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
     $hour -= 12 if $hour > 12;
+
+    if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
+    {
+	my($parashat) = $1;
+	my($sedra) = $2;
+	if (defined $Hebcal::sedrot{$sedra} &&
+	    $Hebcal::sedrot{$sedra} !~ /^\s*$/)
+	{
+	    $subj = '<a href="' . $Hebcal::sedrot{$sedra} .
+		'">' . $parashat . $sedra . '</a>';
+	}
+	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
+	       (defined $Hebcal::sedrot{$1} &&
+		$Hebcal::sedrot{$1} !~ /^\s*$/))
+	{
+	    $subj = '<a href="' . $Hebcal::sedrot{$1} .
+		'">' . $parashat . $sedra . '</a>';
+	}
+    }
+    else
+    {
+	my($href) = &get_holiday_anchor($subj);
+
+	if ($href ne '')
+	{
+	    $subj = qq{<a href="$href">$subj</a>};
+	}
+    }
 
     my($dow) = ($year > 1969 && $year < 2038) ?
 	$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
