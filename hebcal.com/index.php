@@ -17,18 +17,17 @@
 <tr><td><small><b>hebcal.com:</b>
 Jewish Calendar Tools</small></td>
 <td align="right"><input type="text" name="words" size="30">
+<input type="hidden" name="config" value="hebcal">
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
+<table border="0" cellpadding="12" cellspacing="0">
+<tr><td>
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
 generate a calendar of Jewish holidays for any year 0001-9999
 <br><span class="sm-grey">&gt;</span>
 customize candle lighting times to your zip code, city, or latitude/longitude
-<br><span class="sm-grey">&gt;</span>
-bookmarkable: <a
-href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on">Current
-Calendar</a>
 <h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
 <span class="sm-grey">&gt;</span>
 Shabbat candle lighting times and Torah Readings, updated weekly
@@ -51,6 +50,19 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <br><a href="/privacy/">Privacy Policy</a>
 <br><a href="/search/">Search</a>
 <br><a href="/contact/">Contact Information</a>
+</td>
+<td valign="top">
+<h4>Quick Links</h4>
+<!--#include file="current.inc" -->
+<form action="/shabbat/">
+<span class="sm-grey">&gt;</span>
+<b>Candle lighting times</b>
+<br><label for="zip">Zip code:
+<input type="text" name="zip" size="5" maxlength="5" id="zip"></label>
+<input type="hidden" name="geo" value="zip">
+<small><br><a href="/shabbat/#change">select by major city</a></small>
+</form>
+</td></tr></table>
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
@@ -63,7 +75,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Jun 10 12:29:54 EDT 2002
+Last modified: Sun Jun 16 20:50:22 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
