@@ -543,20 +543,19 @@ lang="he">$hebrew</h1></td>
 &nbsp;
 <table border="1" cellpadding="5">
 <tr>
-<td align="center" width="25%"><b>Full Kriyah<b></td>
-<td align="center" width="25%"><b>Triennial Year I</b>
+<td align="center"><b>Full Kriyah<b></td>
+<td align="center"><b>Triennial Year I</b>
 <br><small>$tri_date[1]</small>
 </td>
-<td align="center" width="25%"><b>Triennial Year II</b>
+<td align="center"><b>Triennial Year II</b>
 <br><small>$tri_date[2]</small>
 </td>
-<td align="center" width="25%"><b>Triennial Year III</b>
+<td align="center"><b>Triennial Year III</b>
 <br><small>$tri_date[3]</small>
 </td>
 </tr>
 <tr>
-<td>
-<dl compact>
+<td valign="top">
 EOHTML
 ;
 
@@ -573,21 +572,20 @@ EOHTML
 	    $info = "$c1:$v1-$c2:$v2";
 	}
 
-	if ($aliyah->{'numverses'}) {
-	    $info .= "\n<span class=\"tiny\">(" .
-		$aliyah->{'numverses'} . "&nbsp;p'sukim)</span>";
-	}
-
 	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	print OUT2 qq{<dt><a name="fk-$label">$label:</a>}, 
-		qq{<dd>$info\n};
+	print OUT2 qq{<a name="fk-$label">$label:</a> $info\n};
+
+	if ($aliyah->{'numverses'}) {
+	    print OUT2 "<span class=\"tiny\">(",
+		$aliyah->{'numverses'}, "&nbsp;p'sukim)</span><br>\n";
+	}
     }
 
-    print OUT2 "</dl>\n</td>\n";
+    print OUT2 "</td>\n";
 
     foreach my $yr (1 .. 3)
     {
-	print OUT2 "<td>\n";
+	print OUT2 "<td valign=\"top\">\n";
 
 	if ($h eq 'Vezot Haberakhah')
 	{
@@ -632,7 +630,6 @@ EOHTML
 	die "no aliyot array for $h (year $yr)"
 	    unless defined $triennial->[$yr]->[0];
 
-	print OUT2 "<dl compact>\n";
 	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			    @{$triennial->[$yr]->[0]})
 	{
@@ -646,10 +643,9 @@ EOHTML
 	    }
 
 	    my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	    print OUT2 qq{<dt><a name="tri-$yr-$label">$label:</a>}, 
-	    qq{<dd>$info\n};
+	    print OUT2 qq{<a name="tri-$yr-$label">$label:</a> $info<br>\n};
 	}
-	print OUT2 "</dl>\n</td>\n";
+	print OUT2 "</td>\n";
     }
 
     print OUT2 <<EOHTML;
