@@ -11,7 +11,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2002  Michael J. Radwin.  All rights reserved.
+# Copyright (c) 2003  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1070,7 +1070,7 @@ sub html_footer
     my($mtime) = (stat($aliyah_in))[9];
     my($hhmts) = "Last modified:\n" . localtime($mtime);
 
-    my($copyright) = Hebcal::html_copyright2('',0);
+    my($copyright) = Hebcal::html_copyright2('',0,undef);
     my($html_footer) = <<EOHTML;
 <p>
 <hr noshade size="1">
