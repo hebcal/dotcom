@@ -12,6 +12,7 @@ $dbmfile =~ s/\.db$//;
 
 $cgipath = '/cgi-bin/hebcal';
 $rcsrev = '$Revision$'; #'
+$rcsrev =~ s/\s*\$//g;
 
 @MoY_abbrev = ('',
 	       'jan','feb','mar','apr','may','jun',
