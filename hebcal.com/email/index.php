@@ -61,7 +61,7 @@ if (isset($param['e']))
 {
     $param['em'] = base64_decode($param['e']);
     $info = get_sub_info($param['em']);
-    if (!isset($info['action'])) {
+    if (isset($info['status']) && $info['status'] == 'active') {
 	foreach ($info as $k => $v) {
 	    if ($k == 'upd') {
 		$param[$k] = ($v == '1') ? 'on' : '';
@@ -115,24 +115,46 @@ my_footer();
 function my_open_db() {
     $passfile = file('hebcal-db-pass.cgi');
     $password = trim($passfile[0]);
-    $db = mysql_pconnect('mysql.radwin.net', 'mradwin_mt', $password)
+    $db = mysql_pconnect('mysql.hebcal.com', 'mradwin_hebcal', $password)
 	or die("Could not connect: " . mysql_error());
     return $db;
 }
 
-function write_sub_info($email, $val) {
-    return true;
+function write_sub_info($param) {
+    $db = my_open_db();
+
+    if ($param['geo'] == 'zip')
+    {
+	$geo_sql = "email_candles_zipcode='$param[zip]',email_candles_city=NULL";
+    }
+    else if ($param['geo'] == 'city')
+    {
+	$geo_sql = "email_candles_city='$param[city]',email_candles_zipcode=NULL";
+    }
+
+    $optin_announce = $param['upd'] ? 1 : 0;
+
+    $sql = <<<EOD
+UPDATE hebcal1.hebcal_shabbat_email
+SET email_status='active',
+    email_confirmed=NOW(),
+    $geo_sql,
+    email_candles_havdalah='$param[m]',
+    email_optin_announce='$optin_announce'
+WHERE email_address = '$param[em]'
+EOD;
+
+    return mysql_query($sql, $db);
 }
 
 function get_sub_info($email) {
     $db = my_open_db();
     $sql = <<<EOD
-SELECT email_verify, email_address, email_status, email_created,
-       email_confirmed, email_candles_zipcode, email_candles_timezone,
-       email_candles_dst, email_candles_havdalah, email_candles_city,
-       email_optin_announce
-FROM mradwin_mt1.hebcal_shabbat_email
-WHERE email_address = '$email'
+SELECT email_id, email_address, email_status, email_created,
+       email_confirmed, email_candles_zipcode, email_candles_city,
+       email_candles_havdalah, email_optin_announce
+FROM hebcal1.hebcal_shabbat_email
+WHERE hebcal1.hebcal_shabbat_email.email_address = '$email'
 EOD;
 
     $result = mysql_query($sql, $db)
@@ -142,9 +164,11 @@ EOD;
 	return array();
     }
 
-    list($verify,$address,$status,$created,$confirmed,$zip,$timezone,$dst,$havdalah,$city,$optin_announce) = mysql_fetch_row($result);
+    list($id,$address,$status,$created,$confirmed,$zip,$city,
+	 $havdalah,$optin_announce) = mysql_fetch_row($result);
 
     $val = array(
+	'status' => $status,
 	'em' => $address,
 	'm' => $havdalah,
 	'upd' => $optin_announce,
@@ -156,10 +180,6 @@ EOD;
 	't2' => $confirmed,
 	);
 
-    if ($status != 'ok') {
-	$val['action'] = $status;
-    }
-
     return $val;
 }
 
@@ -168,16 +188,16 @@ function write_staging_info($param)
     global $HTTP_SERVER_VARS;
 
     $now = time();
-
-    # As of PHP 4.2.0, there is no need to seed the random 
-    # number generator as this is now done automatically.
-    $rand = pack("V", rand());
+    $rand = pack("V", $now);
 
     if ($HTTP_SERVER_VARS["REMOTE_ADDR"]) {
 	list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
 	$rand .= pack("CCCC", $p1, $p2, $p3, $p4);
     }
-    $rand .= pack("V", $now);
+
+    # As of PHP 4.2.0, there is no need to seed the random 
+    # number generator as this is now done automatically.
+    $rand .= pack("V", rand());
 
     $encoded = bin2hex($rand);
 
@@ -185,34 +205,32 @@ function write_staging_info($param)
 
     if ($param['geo'] == 'zip')
     {
-	$sql = <<<EOD
-INSERT INTO mradwin_mt1.hebcal_shabbat_email
-(email_verify, email_address, email_status, email_created, email_confirmed,
- email_candles_havdalah, email_optin_announce,
- email_candles_zipcode, email_candles_timezone, email_candles_dst)
-VALUES ('$encoded', '$param[em]', 'pending', NOW(), NULL,
-	'$param[m]', '$param[upd]',
-	'$param[zip]', '$param[tz]', '$param[dst]')
-EOD;
+	$location_name = 'email_candles_zipcode';
+	$location_value = $param['zip'];
     }
     else if ($param['geo'] == 'city')
     {
-	$sql = <<<EOD
-INSERT INTO mradwin_mt1.hebcal_shabbat_email
-(email_verify, email_address, email_status, email_created, email_confirmed,
- email_candles_havdalah, email_optin_announce,
- email_candles_city)
-VALUES ('$encoded', '$param[em]', 'pending', NOW(), NULL,
-	'$param[m]', '$param[upd]',
-	'$param[city]')
-EOD;
+	$location_name = 'email_candles_city';
+	$location_value = $param['city'];
     }
+
+    $optin_announce = $param['upd'] ? 1 : 0;
+
+    $sql = <<<EOD
+REPLACE INTO hebcal1.hebcal_shabbat_email
+(email_id, email_address, email_status, email_created, email_confirmed,
+ email_candles_havdalah, email_optin_announce,
+ $location_name)
+VALUES ('$encoded', '$param[em]', 'pending', NOW(), NULL,
+	'$param[m]', '$optin_announce',
+	'$location_value')
+EOD;
 
     $result = mysql_query($sql, $db)
 	or die("Invalid query 2: " . mysql_error());
 
-    if (mysql_affected_rows($db) != 1) {
-	die("foo!");
+    if (mysql_affected_rows($db) < 1) {
+	die("Strange numrows from MySQL:" . mysql_error());
     }
 
     return $encoded;
@@ -334,8 +352,7 @@ href="mailto:shabbat-unsubscribe&#64;hebcal&#46;com">shabbat-unsubscribe&#64;heb
 }
 
 function subscribe($param) {
-    $recipients = $param['em'];
-    if (preg_match('/\@hebcal.com$/', $recipients))
+    if (preg_match('/\@hebcal.com$/', $param['em']))
     {
 	form($param,
 	     "Sorry, can't use a <b>hebcal.com</b> email address.");
@@ -376,7 +393,7 @@ function subscribe($param) {
 	$city_descr = "$city, $state " . $param['zip'];
 
 	// handle timezone == "auto"
-	if ($tz == '?')
+	if ($tz == '?' || $tz == '0')
 	{
 	    form($param,
 	    "Sorry, can't auto-detect\n" .
@@ -396,10 +413,7 @@ function subscribe($param) {
 
 	$dst_descr = "Daylight Saving Time: " . $param['dst'];
 
-	$geo_args = sprintf("zip=%s;tz=%s;dst=%s",
-			    $param['zip'],
-			    $param['tz'],
-			    $param['dst']);
+	unset($param['city']);
     }
     else if ($param['geo'] == 'city')
     {
@@ -417,12 +431,13 @@ function subscribe($param) {
 	    "not a recoginized city.");
 	}
 
-	$geo_args = "city=" . urlencode($param['city']);
 	$city_descr = $param['city'];
 	global $tz_names;
 	$tz_descr = "Time zone: " .
 	     $tz_names['tz_' . $city_tz[$param['city']]];
 	$dst_descr = '';
+
+	unset($param['zip']);
     }
     else
     {
@@ -431,18 +446,10 @@ function subscribe($param) {
     }
 
     # check if email address already verified
-    $info = get_sub_info($recipients);
-    if (isset($info['action']))
+    $info = get_sub_info($param['em']);
+    if (isset($info['status']) && $info['status'] == 'active')
     {
-	$now = time();
-	write_sub_info(
-	    $recipients, 
-	    sprintf("%s;m=%s;upd=%d;t=%d",
-		    $geo_args,
-		    $param['m'],
-		    $param['upd'] ? 1 : 0,
-		    $now)
-	    );
+	write_sub_info($param);
 
 	$from_name = "Hebcal Subscription Notification";
     	$from_addr = "shabbat-owner@hebcal.com";
@@ -456,7 +463,7 @@ function subscribe($param) {
 	$ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
 
 	$headers = array('From' => "\"$from_name\" <$from_addr>",
-			 'To' => $recipients,
+			 'To' => $param['em'],
 			 'Reply-To' => $from_addr,
 			 'List-Unsubscribe' =>
 			 "<mailto:shabbat-unsubscribe@hebcal.com>",
@@ -479,7 +486,7 @@ To unsubscribe from this list, send an email to:
 shabbat-unsubscribe@hebcal.com
 EOD;
 
-	$err = smtp_send($return_path, $recipients, $headers, $body);
+	$err = smtp_send($return_path, $param['em'], $headers, $body);
 
 	$html = <<<EOD
 <h2>Subscription Updated</h2>
@@ -510,7 +517,7 @@ EOD
     $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
 
     $headers = array('From' => "\"$from_name\" <$from_addr>",
-		     'To' => $recipients,
+		     'To' => $param['em'],
 		     'Reply-To' => $from_addr,
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
@@ -535,8 +542,8 @@ Regards,
 hebcal.com
 EOD;
 
-    $err = smtp_send($return_path, $recipients, $headers, $body);
-    $html_email = htmlentities($recipients);
+    $err = smtp_send($return_path, $param['em'], $headers, $body);
+    $html_email = htmlentities($param['em']);
 
     if ($err === true)
     {
@@ -579,7 +586,7 @@ function unsubscribe($param) {
     $html_email = htmlentities($param['em']);
     $info = get_sub_info($param['em']);
 
-    if (isset($info['action'])) {
+    if (isset($info['status']) && $info['status'] == 'unsubscribed') {
 	$html = <<<EOD
 <h2>Already Unsubscribed</h2>
 <p><b>$html_email</b>
@@ -596,9 +603,21 @@ EOD
 	     "Sorry, <b>$html_email</b> is\nnot currently subscribed.");
     }
 
-    $now = time();
-
-    write_sub_info($param['em'], "action=UNSUBSCRIBE;t=$now");
+    $db = my_open_db();
+    $sql = <<<EOD
+UPDATE hebcal1.hebcal_shabbat_email
+SET email_status='unsubscribed',email_confirmed=NOW()
+WHERE email_address = '$param[em]'
+EOD;
+    if (mysql_query($sql, $db) === false) {
+        $html = <<<EOD
+<h2>Database error</h2>
+<p>Sorry, an error occurred.  Please try again later.</p>
+EOD
+	     ;
+        echo $html;
+        return false;
+    }
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-owner@hebcal.com";
