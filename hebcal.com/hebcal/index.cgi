@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Feb 28 11:19:16 PST 2000
+Last modified: Mon Apr 24 12:20:34 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -769,7 +769,7 @@ JSCRIPT_END
     $q->popup_menu(-name => 'month',
 		   -id => 'month',
 		   -values => ['x',1..12],
-		   -default => 'x',
+		   -default => $mon + 1,
 		   -labels => \%MoY_long),
     "</label>\n",
     "<br>",
@@ -1168,8 +1168,10 @@ sub results_page
     }
 
     print STDOUT "Go to:\n",
-    "<a target=\"_top\"\nhref=\"$prev_url\">", $prev_title, "</a> |\n",
-    "<a target=\"_top\"\nhref=\"$next_url\">", $next_title, "</a><br>\n";
+	"<a target=\"_top\"\nhref=\"$prev_url\">&lt;&lt; ",
+	$prev_title, "</a> |\n",
+	"<a target=\"_top\"\nhref=\"$next_url\">", $next_title,
+	" &gt;&gt;</a><br>\n";
 
     print STDOUT "<p><a target=\"_top\"\nhref=\"", $script_name,
     "index.html/$filename?dl=1";
@@ -1299,10 +1301,12 @@ so you can keep this window open.
 	$dow, $year, $mon, $mday, $descr;
     }
 
-    print STDOUT "</pre>", "Go to:\n",
-    "<a target=\"_top\"\nhref=\"$prev_url\">", $prev_title,
-    "</a> |\n",
-    "<a target=\"_top\"\nhref=\"$next_url\">", $next_title, "</a><br>\n";
+    print STDOUT "</pre>",
+	"Go to:\n",
+	"<a target=\"_top\"\nhref=\"$prev_url\">&lt;&lt; ",
+	$prev_title, "</a> |\n",
+	"<a target=\"_top\"\nhref=\"$next_url\">", $next_title,
+	" &gt;&gt;</a><br>\n";
 
     print STDOUT  $html_footer;
 
