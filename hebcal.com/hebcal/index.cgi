@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon May 17 17:00:18 PDT 1999
+Last modified: Tue May 18 16:31:02 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -632,8 +632,9 @@ ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 	    $ST .= sprintf("T%02d%02d00", $hr, $min);
 	}
 
-	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/?v=60";
-	print STDOUT "&amp;ST=$ST&amp;TITLE=", &url_escape($subj), "&amp;VIEW=d\">add</a> ";
+	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/";
+	print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
+		&url_escape($subj), "&amp;VIEW=d\">add</a> ";
 
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&lt;/g;
