@@ -189,10 +189,7 @@ sub format_items
 		$item{'class'} = 'holiday';
 	    }
 
-	    my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
-		= &Hebcal::get_holiday_anchor($subj,0,$q);
-
-	    $item{'link'} = $href;
+	    $item{'link'} = Hebcal::get_holiday_anchor($subj,0,$q);
 	}
 
 	push(@items, \%item);
