@@ -1,10 +1,14 @@
 #!/usr/local/bin/perl -w
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use DB_File::Lock;
+use DBI;
 use Hebcal;
+
+my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
+my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
 sub main() {
     my($op,$addr) = @ARGV;
@@ -85,3 +89,4 @@ sub unsubscribe($$) {
 
 main();
 exit(0);
+
