@@ -294,9 +294,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	print STDOUT "<h3>$year</h3><pre>";
     }
 
-    my($dow) = ($year > 1969 && $year < 2038) ?
-	$Hebcal::DoW[&Hebcal::get_dow($year - 1900, $mon - 1, $mday)] . ' '
-	    : '';
+    my($dow) = $Hebcal::DoW[&Hebcal::get_dow($year, $mon, $mday)] . ' ';
 
     printf STDOUT ("%s%02d-%s-%04d  %s\n",
 		   $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
