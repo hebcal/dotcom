@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 16 12:33:51 PDT 2001
+Last modified: Tue Apr 17 16:28:13 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -113,7 +113,7 @@ my($friday) = &Time::Local::timelocal(0,0,0,
 my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
 
 my($sat_year) = (localtime($saturday))[5] + 1900;
-my($cmd)  = '/home/users/mradwin/bin/hebcal';
+my($cmd)  = './hebcal';
 
 my($default) = 0;
 my($city_descr,$dst_descr,$tz_descr);
