@@ -536,9 +536,11 @@ EOHTML
     	if $next_anchor;
 
     my @tri_date;
+    my $fk_date;
     if ($h eq 'Vezot Haberakhah')
     {
 	$tri_date[1] = $tri_date[2] = $tri_date[3] =
+	$fk_date =
 	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
     }
     else
@@ -547,7 +549,15 @@ EOHTML
 	{
 	    $tri_date[$_] = (defined $triennial->[$_]) ?
 		$triennial->[$_]->[1] : '(read separately)';
+	    if (defined $read_on{$h} && defined $read_on{$h}->[0] &&
+		$tri_date[$_] eq $read_on{$h}->[0])
+	    {
+		$tri_date[$_] = qq{<span class="hl">$tri_date[$_]</span>};
+	    }
 	}
+
+	$fk_date = (defined $read_on{$h} && defined $read_on{$h}->[0]) 
+	    ? qq{<span class="hl">$read_on{$h}->[0]</span>} : '';
     }
 
     print OUT2 <<EOHTML;
@@ -576,7 +586,9 @@ lang="he">$hebrew</h1></td>
 &nbsp;
 <table border="1" cellpadding="5">
 <tr>
-<td align="center"><b>Full Kriyah</b></td>
+<td align="center"><b>Full Kriyah</b>
+<br><small>$fk_date</small>
+</td>
 <td align="center"><b>Triennial Year I</b>
 <br><small>$tri_date[1]</small>
 </td>
