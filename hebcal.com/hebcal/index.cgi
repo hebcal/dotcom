@@ -86,6 +86,9 @@ foreach my $key ($q->param())
 &form("Sorry, invalid year\n<b>" . $q->param('year') . "</b>.")
     if $q->param('year') !~ /^\d+$/ || $q->param('year') == 0;
 
+&form("Sorry, Hebrew year must be 3762 or later.")
+    if $q->param('H') && $q->param('year') < 3762;
+
 &form("Sorry, invalid Havdalah minutes\n<b>" . $q->param('m') . "</b>.")
     if defined $q->param('m') &&
     $q->param('m') ne '' && $q->param('m') !~ /^\d+$/;
@@ -126,6 +129,9 @@ if ($q->param('c') && $q->param('c') ne 'off')
     $cmd .= " -Z " . $q->param('dst')
 	if (defined $q->param('dst') && $q->param('dst') ne '');
 }
+
+$q->param('month', 'x')
+    if defined $q->param('H') && $q->param('H') =~ /^on|1$/;
 
 $cmd .= " " . $q->param('month')
     if (defined $q->param('month') && $q->param('month') =~ /^\d+$/ &&
@@ -347,6 +353,11 @@ JSCRIPT_END
 		   -default => $this_mon,
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
+    "&nbsp;&nbsp;<label\nfor=\"H\">",
+    $q->checkbox(-name => 'H',
+		 -id => 'H',
+		 -label => "\nHebrew year (3762 or later)"),
+    "</label>",
     "<br>",
     $q->small("Use all digits to specify a year.\nYou probably aren't",
 	      "interested in 93, but rather 1993.\n");
@@ -615,6 +626,7 @@ sub results_page()
 {
     my($date);
     my($filename) = 'hebcal_' . $q->param('year');
+    $filename .= 'H' if $q->param('H');
     my($prev_url,$next_url,$prev_title,$next_title);
 
     if ($q->param('month') =~ /^\d+$/ &&
@@ -626,7 +638,9 @@ sub results_page()
     }
     else
     {
-	$date = sprintf("%04d", $q->param('year'));
+	$date = sprintf("%s%04d",
+			$q->param('H') ? 'Hebrew Year ' : '',
+			$q->param('year'));
     }
 
     if ($q->param('c') && $q->param('c') ne 'off')
@@ -761,6 +775,21 @@ sub results_page()
     print STDOUT $Hebcal::indiana_warning
 	if ($city_descr =~ / IN &nbsp;/);
 
+    my($loc2) = (defined $city_descr && $city_descr ne '') ?
+	"in $city_descr" : '';
+    $loc2 =~ s/\s*&nbsp;\s*/ /g;
+
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
+    my($numEntries) = scalar(@events);
+
+    my($greg_year1,$greg_year2) = (0,0);
+    if ($numEntries > 0)
+    {
+	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
+	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+    }
+
     # toggle month/full year and event list/calendar grid
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
 
@@ -781,7 +810,7 @@ sub results_page()
     $download .= "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
 
     # only offer DBA export when we know timegm() will work
-    if ($q->param('year') > 1969 && $q->param('year') < 2038 &&
+    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
     {
 	$download .= "\n- <a href=\"" . $script_name;
@@ -814,7 +843,7 @@ sub results_page()
 
     $goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
 
-    if ($date !~ /^\d+$/)
+    if ($date !~ /^\d+$/ && $date !~ /^Hebrew Year \d+$/)
     {
 	$goto .= "<b>month</b> | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
@@ -865,12 +894,6 @@ sub results_page()
     $cmd_pretty =~ s,.*/,,; # basename
     print STDOUT "<!-- $cmd_pretty -->\n";
 
-    my($loc2) = (defined $city_descr && $city_descr ne '') ?
-	"in $city_descr" : '';
-    $loc2 =~ s/\s*&nbsp;\s*/ /g;
-
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
-	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     print STDOUT "<p>";
 
     use lib "/home/users/mradwin/local/lib/perl5/$]";
@@ -880,7 +903,6 @@ sub results_page()
     my($cal);
     my($prev_mon) = 0;
 
-    my($numEntries) = scalar(@events);
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
     {
@@ -948,7 +970,7 @@ sub results_page()
 		$cal->header("<h2 align=\"center\"><a class=\"goto\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
 			     $Hebcal::MoY_long{$mon} . ' ' .
-			     $q->param('year') . "\n" .
+			     $year . "\n" .
 			     "<a class=\"goto\"\n" .
 			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
 			     '<span class="goto">' . $goto . '</span>');
