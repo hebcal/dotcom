@@ -678,7 +678,7 @@ sub html_footer($$)
 <hr noshade size="1"><span class="tiny">
 }, &html_copyright($q), qq{
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
+3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
 </span></body></html>
 };
