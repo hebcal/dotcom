@@ -223,10 +223,7 @@ my($saturday) = get_saturday();
 readings_for_current_year($pxml, \%parsha_dates, \%parsha_time);
 
 # init global vars needed for html
-my(%seph2ashk);
-while (my($k,$v) = each(%Hebcal::ashk2seph)) {
-    $seph2ashk{$v} = $k;
-}
+my %seph2ashk = reverse %Hebcal::ashk2seph;
 my $html_footer = html_footer($infile);
 
 foreach my $h (keys %readings)
