@@ -53,7 +53,7 @@ if ($qs) {
     } elseif (!$cfg) {
 	header("Cache-Control: private");
 	header("Set-Cookie: " . hebcal_gen_cookie() .
-	       "; expires=Tue, 02-Jun-2037 20:00:00 GMT; path=/");
+	       "; path=/; expires=Tue, 02-Jun-2037 20:00:00 GMT");
     }
 
     $url .= "?$qs";
