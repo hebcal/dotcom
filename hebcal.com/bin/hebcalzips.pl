@@ -52,7 +52,7 @@ open(A,$filename) || die "$filename: $!\n";
 while(<A>)
 {
     next unless m,/hebcal/,;
-    next if /207\.55\.191\.4|www\.radwin\.org|smiles\.yahoo\.com|205\.216\.162\.253|198\.144\.204\.|198\.144\.193\.150/;
+    next if /^207\.55\.191\.4|www\.radwin\.org|smiles\.yahoo\.com|205\.216\.162\.|198\.144\.204\.|198\.144\.193\.150|206\.251\.16\./;
 
     if (/c=(on|1)/i && /zip=(\d\d\d\d\d)/) {
 	if (defined $zips{$1}) {
