@@ -38,8 +38,14 @@ while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
-    my($cmd,$loc) = &parse_config($cfg);
+    my($cmd,$loc,$args) = &parse_config($cfg);
     my(@events) = &Hebcal::invoke_hebcal($cmd,$loc);
+
+    my $unsub_url = "http://www.hebcal.com/email/?" .
+	"em=" . $to .
+	"&zip=" . $args->{'zip'} .
+	"&m=" . $args->{'m'} .
+	"&upd=" . ($args->{'upd'} ? 'on' : '');
 
     my($body) = "$loc\n\n"
 	. &gen_body(\@events) . qq{
@@ -48,6 +54,9 @@ hebcal.com
 
 To unsubscribe from this list, send an email to:
 shabbat-unsubscribe\@hebcal.com
+
+To modify your subscription, visit:
+$unsub_url
 };
 
     my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
@@ -61,7 +70,7 @@ shabbat-unsubscribe\@hebcal.com
          'Content-Type' => 'text/plain',
          'Subject' =>
 	 strftime("[shabbat] %b %d Candle lighting", localtime($fri)),
-	 'List-Unsubscribe' => "<mailto:shabbat-unsubscribe\@hebcal.com>",
+	 'List-Unsubscribe' => "<$unsub_url>",
 	 'Precedence' => 'bulk',
          );
 
@@ -153,6 +162,11 @@ sub load_subs
 	{
 	    if (defined $DB{$_})
 	    {
+		if ($DB{$_} =~ /^action=/)
+		{
+		    warn "$_: $DB{$_}\n";
+		    next;
+		}
 		$subs{$_} = $DB{$_};
 	    }
 	    else
@@ -206,6 +220,6 @@ sub parse_config
 
     $cmd .= ' -s -c ' . $sat_year;
 
-    ($cmd,$city_descr);
+    ($cmd,$city_descr,\%args);
 }
 
