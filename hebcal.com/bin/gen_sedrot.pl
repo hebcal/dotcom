@@ -239,10 +239,15 @@ EOHTML
 <p>
 <table width="100%">
 <tr>
-<td align="left">
+<td align="left" width="33%">
 $prev_link
 </td>
-<td align="right">
+<td align="center" width="33%">
+<a href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20"
+title="Purchase Etz Hayim from Amazon.com">Etz Hayim:
+Torah and Commentary</a>
+</td>
+<td align="right" width="33%">
 $next_link
 </td>
 </tr>
