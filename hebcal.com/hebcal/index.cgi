@@ -280,6 +280,9 @@ sub javascript_events() {
 	}
 
 	my $href = Hebcal::get_holiday_anchor($subj,0,$q);
+	if ($href && $href =~ /\.html$/) {
+	    $href .= "?tag=js.cal";
+	}
 
 	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
@@ -448,7 +451,7 @@ JSCRIPT_END
     elsif (defined $q->referer())
     {
 	my $ref = $q->referer();
-	if ($ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol)\.com/.*=(jewish|hebrew)\+calend[ae]r,i)
+	if ($ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|a9)\.com/.*(jewish|hebrew)(\+|%20)calend[ae]r,i)
 	{
 	    $message=<<MESSAGE_END;
 <blockquote class="welcome">
