@@ -647,8 +647,9 @@ sub html_footer($$$)
     $hhmts =~ s/Last modified: /Software last updated:\n/g;
 
     return qq{
-<hr noshade size="1"><font size=-2 face=Arial>Copyright
-&copy; $this_year Michael J. Radwin. All rights reserved.
+<hr noshade size="1"><font size=-2 face=Arial><a
+name="copyright">Copyright &copy; $this_year
+Michael J. Radwin. All rights reserved.</a>
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a>
 <br>$hhmts ($rcsrev)
