@@ -1020,6 +1020,20 @@ sub get_holiday_anchor($$)
 # web page utils
 ########################################################################
 
+sub navbar($$)
+{
+    my($server_name,$title) = @_;
+
+    return "<table width=\"100%\"\nclass=\"navbar\">" .
+	"<tr><td><small>" .
+	"<strong><a\nhref=\"/\">" . $server_name . "</a></strong>\n" .
+	"<tt>-&gt;</tt>\n" .
+	$title . "</small></td>" .
+	"<td align=\"right\"><small><a\n" .
+	"href=\"/search/\">Search</a></small>" .
+	"</td></tr></table>";
+}
+
 sub url_escape($)
 {
     local($_) = @_;
