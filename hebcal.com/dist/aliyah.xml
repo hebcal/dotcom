@@ -751,39 +751,21 @@
  <aliyah num="M" begin="20:19" end="20:23" numverses="5" />
 </fullkriyah>
 <triennial descr="full parashah with Ten Commandments every year">
-<year num="1">
- <aliyah num="1" begin="18:1" end="18:12" />
- <aliyah num="2" begin="18:13" end="18:23" />
- <aliyah num="3" begin="18:24" end="18:27" />
- <aliyah num="4" begin="19:1" end="19:6" />
- <aliyah num="5" begin="19:7" end="19:19" />
- <aliyah num="6" begin="19:20" end="20:14" />
- <aliyah num="7" begin="20:15" end="20:23" />
- <aliyah num="M" begin="20:19" end="20:23" />
+<year variation="Y.1">
+ <aliyah num="1" begin="18:1" end="18:12" numverses="12" />
+ <aliyah num="2" begin="18:13" end="18:23" numverses="11" />
+ <aliyah num="3" begin="18:24" end="18:27" numverses="4" />
+ <aliyah num="4" begin="19:1" end="19:6" numverses="6" />
+ <aliyah num="5" begin="19:7" end="19:19" numverses="13" />
+ <aliyah num="6" begin="19:20" end="20:14" numverses="20" />
+ <aliyah num="7" begin="20:15" end="20:23" numverses="9" />
+ <aliyah num="M" begin="20:19" end="20:23" numverses="5" />
 </year>
-<year num="2">
- <aliyah num="1" begin="18:1" end="18:12" />
- <aliyah num="2" begin="18:13" end="18:23" />
- <aliyah num="3" begin="18:24" end="18:27" />
- <aliyah num="4" begin="19:1" end="19:6" />
- <aliyah num="5" begin="19:7" end="19:19" />
- <aliyah num="6" begin="19:20" end="20:14" />
- <aliyah num="7" begin="20:15" end="20:23" />
- <aliyah num="M" begin="20:19" end="20:23" />
-</year>
-<year num="3">
- <aliyah num="1" begin="18:1" end="18:12" />
- <aliyah num="2" begin="18:13" end="18:23" />
- <aliyah num="3" begin="18:24" end="18:27" />
- <aliyah num="4" begin="19:1" end="19:6" />
- <aliyah num="5" begin="19:7" end="19:19" />
- <aliyah num="6" begin="19:20" end="20:14" />
- <aliyah num="7" begin="20:15" end="20:23" />
- <aliyah num="M" begin="20:19" end="20:23" />
-</year>
+<year variation="Y.2" sameas="Y.1" />
+<year variation="Y.3" sameas="Y.1" />
 </triennial>
 <triennial descr="triennial divisions with Ten Commandments in years two and three">
-<year num="1">
+<year variation="Y.1">
  <aliyah num="1" begin="18:1" end="18:4" />
  <aliyah num="2" begin="18:5" end="18:8" />
  <aliyah num="3" begin="18:9" end="18:12" />
@@ -793,7 +775,7 @@
  <aliyah num="7" begin="18:24" end="18:27" />
  <aliyah num="M" begin="18:24" end="18:27" />
 </year>
-<year num="2">
+<year variation="Y.2">
  <aliyah num="1" begin="19:1" end="19:6" />
  <aliyah num="2" begin="19:7" end="19:9" />
  <aliyah num="3" begin="19:10" end="19:13" />
@@ -803,16 +785,7 @@
  <aliyah num="7" begin="20:19" end="20:23" />
  <aliyah num="M" begin="20:21" end="20:23" />
 </year>
-<year num="3">
- <aliyah num="1" begin="19:1" end="19:6" />
- <aliyah num="2" begin="19:7" end="19:9" />
- <aliyah num="3" begin="19:10" end="19:13" />
- <aliyah num="4" begin="19:14" end="19:19" />
- <aliyah num="5" begin="19:20" end="20:14" />
- <aliyah num="6" begin="20:15" end="20:18" />
- <aliyah num="7" begin="20:19" end="20:23" />
- <aliyah num="M" begin="20:21" end="20:23" />
-</year>
+<year variation="Y.3" sameas="Y.2" />
 </triennial>
 </parsha>
 <parsha id="Mishpatim" hebrew="מִּשְׁפָּטִים" verse="Exodus 21:1 - 24:18">
@@ -2174,7 +2147,7 @@
  <aliyah num="7" begin="6:1" end="6:3" />
  <aliyah num="M" begin="6:1" end="6:3" />
 </year>
-<year num="3">
+n<year num="3">
  <aliyah num="1" begin="6:4" end="6:9" />
  <aliyah num="2" begin="6:10" end="6:19" />
  <aliyah num="3" begin="6:20" end="6:22" />
@@ -2430,7 +2403,7 @@
  <aliyah num="M" begin="30:15" end="30:20" numverses="6" />
 </fullkriyah>
 <triennial descr="When these Sidrot are not combined, they should each be read in their entirety.">
-<year num="1">
+<year variation="Y.1">
  <aliyah num="1" begin="29:9" end="29:11" numverses="3" />
  <aliyah num="2" begin="29:12" end="29:14" numverses="3" />
  <aliyah num="3" begin="29:15" end="29:28" numverses="14" />
@@ -2440,26 +2413,8 @@
  <aliyah num="7" begin="30:15" end="30:20" numverses="6" />
  <aliyah num="M" begin="30:15" end="30:20" numverses="6" />
 </year>
-<year num="2">
- <aliyah num="1" begin="29:9" end="29:11" numverses="3" />
- <aliyah num="2" begin="29:12" end="29:14" numverses="3" />
- <aliyah num="3" begin="29:15" end="29:28" numverses="14" />
- <aliyah num="4" begin="30:1" end="30:6" numverses="6" />
- <aliyah num="5" begin="30:7" end="30:10" numverses="4" />
- <aliyah num="6" begin="30:11" end="30:14" numverses="4" />
- <aliyah num="7" begin="30:15" end="30:20" numverses="6" />
- <aliyah num="M" begin="30:15" end="30:20" numverses="6" />
-</year>
-<year num="3">
- <aliyah num="1" begin="29:9" end="29:11" numverses="3" />
- <aliyah num="2" begin="29:12" end="29:14" numverses="3" />
- <aliyah num="3" begin="29:15" end="29:28" numverses="14" />
- <aliyah num="4" begin="30:1" end="30:6" numverses="6" />
- <aliyah num="5" begin="30:7" end="30:10" numverses="4" />
- <aliyah num="6" begin="30:11" end="30:14" numverses="4" />
- <aliyah num="7" begin="30:15" end="30:20" numverses="6" />
- <aliyah num="M" begin="30:15" end="30:20" numverses="6" />
-</year>
+<year variation="Y.2" sameas="Y.1" />
+<year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
 <parsha id="Vayeilech" hebrew="וַיֵּלֶךְ" verse="Deuteronomy 31:1 - 31:30">
@@ -2476,7 +2431,7 @@
  <aliyah num="M" begin="31:28" end="31:30" numverses="3" />
 </fullkriyah>
 <triennial descr="When these Sidrot are not combined, they should each be read in their entirety.">
-<year num="1">
+<year variation="Y.1">
  <aliyah num="1" begin="31:1" end="31:3" numverses="3" />
  <aliyah num="2" begin="31:4" end="31:6" numverses="3" />
  <aliyah num="3" begin="31:7" end="31:9" numverses="3" />
@@ -2486,26 +2441,8 @@
  <aliyah num="7" begin="31:25" end="31:30" numverses="6" />
  <aliyah num="M" begin="31:28" end="31:30" numverses="3" />
 </year>
-<year num="2">
- <aliyah num="1" begin="31:1" end="31:3" numverses="3" />
- <aliyah num="2" begin="31:4" end="31:6" numverses="3" />
- <aliyah num="3" begin="31:7" end="31:9" numverses="3" />
- <aliyah num="4" begin="31:10" end="31:13" numverses="4" />
- <aliyah num="5" begin="31:14" end="31:19" numverses="6" />
- <aliyah num="6" begin="31:20" end="31:24" numverses="5" />
- <aliyah num="7" begin="31:25" end="31:30" numverses="6" />
- <aliyah num="M" begin="31:28" end="31:30" numverses="3" />
-</year>
-<year num="3">
- <aliyah num="1" begin="31:1" end="31:3" numverses="3" />
- <aliyah num="2" begin="31:4" end="31:6" numverses="3" />
- <aliyah num="3" begin="31:7" end="31:9" numverses="3" />
- <aliyah num="4" begin="31:10" end="31:13" numverses="4" />
- <aliyah num="5" begin="31:14" end="31:19" numverses="6" />
- <aliyah num="6" begin="31:20" end="31:24" numverses="5" />
- <aliyah num="7" begin="31:25" end="31:30" numverses="6" />
- <aliyah num="M" begin="31:28" end="31:30" numverses="3" />
-</year>
+<year variation="Y.2" sameas="Y.1" />
+<year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
 <parsha id="Ha'Azinu" hebrew="הַאֲזִינוּ" verse="Deuteronomy 32:1 - 32:52">
@@ -2522,7 +2459,7 @@
  <aliyah num="M" begin="32:48" end="32:52" numverses="5" />
 </fullkriyah>
 <triennial descr="every year">
-<year num="1">
+<year variation="Y.1">
  <aliyah num="1" begin="32:1" end="32:6" numverses="6" />
  <aliyah num="2" begin="32:7" end="32:12" numverses="6" />
  <aliyah num="3" begin="32:13" end="32:18" numverses="6" />
@@ -2532,26 +2469,8 @@
  <aliyah num="7" begin="32:44" end="32:52" numverses="9" />
  <aliyah num="M" begin="32:48" end="32:52" numverses="5" />
 </year>
-<year num="2">
- <aliyah num="1" begin="32:1" end="32:6" numverses="6" />
- <aliyah num="2" begin="32:7" end="32:12" numverses="6" />
- <aliyah num="3" begin="32:13" end="32:18" numverses="6" />
- <aliyah num="4" begin="32:19" end="32:28" numverses="10" />
- <aliyah num="5" begin="32:29" end="32:39" numverses="11" />
- <aliyah num="6" begin="32:40" end="32:43" numverses="4" />
- <aliyah num="7" begin="32:44" end="32:52" numverses="9" />
- <aliyah num="M" begin="32:48" end="32:52" numverses="5" />
-</year>
-<year num="3">
- <aliyah num="1" begin="32:1" end="32:6" numverses="6" />
- <aliyah num="2" begin="32:7" end="32:12" numverses="6" />
- <aliyah num="3" begin="32:13" end="32:18" numverses="6" />
- <aliyah num="4" begin="32:19" end="32:28" numverses="10" />
- <aliyah num="5" begin="32:29" end="32:39" numverses="11" />
- <aliyah num="6" begin="32:40" end="32:43" numverses="4" />
- <aliyah num="7" begin="32:44" end="32:52" numverses="9" />
- <aliyah num="M" begin="32:48" end="32:52" numverses="5" />
-</year>
+<year variation="Y.2" sameas="Y.1" />
+<year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
 <parsha id="Vezot Haberakhah" hebrew="וְזֹאת הַבְּרָכָה" verse="Deuteronomy 33:1 - 34:12">
