@@ -200,17 +200,25 @@ of the Gregorian Calendar</a>.</p>
 <?php
 }
 
-$t = mktime(12, 12, 12, $gm, $gd, $gy);
-$dow = date("D", $t);
+if ($gy > 1969 && $gy < 2038)
+{
+    $t = mktime(12, 12, 12, $gm, $gd, $gy);
+    $dow = date("D", $t) . ", ";
+}
+else
+{
+    $dow = "";
+}
+
 if ($type == "g2h")
 {
-    $first = "$dow, $gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
+    $first = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
     $second = format_hebrew_date($hd, $hm, $hy);
 }
 else
 {
     $first = format_hebrew_date($hd, $hm, $hy);
-    $second = "$dow, $gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
+    $second = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
 }
 
 ?>
