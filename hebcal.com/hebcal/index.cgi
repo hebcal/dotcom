@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Dec 28 16:08:24 PST 1999
+Last modified: Wed Dec 29 09:57:57 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -321,8 +321,10 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 $q = new CGI;
 $q->delete('.s');		# we don't care about submit button
 
-$script_name =  $q->script_name();
+my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
+my($server_name) = $q->server_name();
+$server_name =~ s/^www\.//;
 
 $q->default_dtd("-//W3C//DTD HTML 4.0 Transitional//EN\"\n" .
 		"\t\"http://www.w3.org/TR/REC-html40/loose.dtd");
@@ -676,13 +678,14 @@ sub form
 		       'DC.Creator.PersonalName.Address' => $author,
 		       'DC.Subject' => 'Jewish calendar, Hebrew calendar, hebcal',
 		       'DC.Type' => 'Text.Form',
-		       'DC.Identifier' => 'http://www.radwin.org/hebcal/',
+		       'DC.Identifier' => "http://www." .
+			   $server_name . $script_name,
 		       'DC.Language' => 'en',
 		       'DC.Date.X-MetadataLastModified' => '1999-12-24',
 		       }),
     "<table border=\"0\" width=\"100%\" cellpadding=\"0\"\nclass=\"navbar\">",
     "<tr valign=\"top\"><td><small>",
-    "<a target=\"_top\"\nhref=\"/\">radwin.org</a>\n<tt>-&gt;</tt>\n",
+    "<a target=\"_top\"\nhref=\"/\">$server_name</a>\n<tt>-&gt;</tt>\n",
     "hebcal</small></td>",
     "<td align=\"right\"><small><a target=\"_top\"\n",
     "href=\"/search/\">Search</a></small>",
@@ -1044,7 +1047,7 @@ sub results_page
 	if (! defined $q->raw_cookie() || $q->raw_cookie() ne $newcookie)
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_date, "; path=/; domain=www.radwin.org\015\012";
+	    $expires_date, "; path=/\015\012";
 	}
 	$q->delete('set');
     }
@@ -1068,7 +1071,8 @@ sub results_page
 	"<table border=\"0\" width=\"100%\" cellpadding=\"0\" ",
 	"class=\"navbar\">\n",
 	"<tr valign=\"top\"><td><small>\n",
-	"<a target=\"_top\"\nhref=\"/\">radwin.org</a> <tt>-&gt;</tt>\n",
+	"<a target=\"_top\"\nhref=\"/\">", $server_name, "</a>\n",
+	"<tt>-&gt;</tt>\n",
 	"<a target=\"_top\"\nhref=\"", $script_name, "?v=0";
 
     foreach $key ($q->param())
