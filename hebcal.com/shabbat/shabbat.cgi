@@ -445,7 +445,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	    $rss{'title'} = "Holiday: ";
 	}
 
-	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
+	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
 	    = &Hebcal::get_holiday_anchor($subj,0,$q);
 
 	$rss{'link'} = $href;
@@ -456,7 +456,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	    if (defined $torah_href && $torah_href ne '')
 	    {
 		$rss{'title'} .=
-		    qq{<b>$subj</b>\n(<a href="$href">Drash</a>\n} .
+		    qq{<b>$subj</b>\n(<a href="$drash_href">Drash</a>\n} .
 		    qq{- <a href="$torah_href">Torah</a>\n} .
 		    qq{- <a href="$haftarah_href">Haftarah</a>)};
 	    }
