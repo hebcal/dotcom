@@ -305,11 +305,14 @@ return false;
 }
 JSCRIPT_END
 
-    print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
+    my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
+	? '; charset=UTF-8' : '';
+
+    print STDOUT $q->header(-type => "text/html${charset}"),
     &Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
 			[
 			 qq{<script language="JavaScript" type="text/javascript"><!--\n$JSCRIPT// --></script>},
-			 qq{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">},
+			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
 			 $q->Link({-rel => 'SCHEMA.dc',
 				   -href => 'http://purl.org/metadata/dublin_core_elements'}),
 			 ],
@@ -739,11 +742,14 @@ sub results_page()
 	$date . "\n" .
 	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
 
+    my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
+	? '; charset=UTF-8' : '';
+
     print STDOUT $q->header(-expires => $expires_date,
-			    -type => "text/html; charset=UTF-8"),
+			    -type => "text/html${charset}"),
     &Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
 			[
-			 qq{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">},
+			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
 			 $q->Link({-rel => 'prev',
 				   -href => $prev_url,
 				   -title => $prev_title}),
