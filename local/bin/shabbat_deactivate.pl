@@ -35,6 +35,8 @@ if (!GetOptions("help|h" => \$opt_help,
 $opt_help && Usage();
 @ARGV && Usage();
 
+my @addrs;
+my @ids;
 my $dbh = get_candidates();
 deactivate_subs($dbh) unless $opt_dryrun;
 $dbh->disconnect;
@@ -59,7 +61,6 @@ EOF
     exit(1);
 }
 
-my @addrs;
 sub get_candidates
 {
     my $site = 'hebcal.com';
@@ -67,7 +68,7 @@ sub get_candidates
     my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
     my $sql = qq{
-	SELECT DISTINCT a.bounce_address,count(r.bounce_id)
+	SELECT DISTINCT a.bounce_address,r.bounce_id,count(r.bounce_id)
 	FROM hebcal1.hebcal_shabbat_email e,
 	     hebcal1.hebcal_shabbat_bounce_address a,
 	     hebcal1.hebcal_shabbat_bounce_reason r
@@ -82,12 +83,13 @@ sub get_candidates
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
 
-    while (my($email,$count) = $sth->fetchrow_array)
+    while (my($email,$id,$count) = $sth->fetchrow_array)
     {
 	if ($count > $opt_count)
 	{
 	    print "$email ($count bounces)\n" unless $opt_quiet;
 	    push(@addrs, $email);
+	    push(@ids, $id);
 	}
     }
 
@@ -107,5 +109,19 @@ EOD
 ;
 	$dbh->do($sql);
     }
+
+    my $id_sql = "bounce_id = '" . shift(@ids) . "'";
+    foreach my $id (@ids)
+    {
+	$id_sql .= " OR bounce_id = '$id'";
+    }
+
+    my $sql = "DELETE from hebcal1.hebcal_shabbat_bounce_reason WHERE "
+	. $id_sql;
+    $dbh->do($sql);
+
+    $sql = "DELETE from hebcal1.hebcal_shabbat_bounce_address WHERE "
+	. $id_sql;
+    $dbh->do($sql);
 }
 
