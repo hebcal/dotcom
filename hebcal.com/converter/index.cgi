@@ -320,7 +320,7 @@ type="submit" value="Compute Hebrew Date"></td>
 <td>&nbsp;</td>
 <td colspan="3"><input name="h2g"
 type="submit" value="Compute Gregorian Date"></td>
-</tr><td colspan="7" align="center">
+</tr><tr><td colspan="7" align="center">
 <label for="heb">
 },
     $q->checkbox(-name => 'heb',
