@@ -49,12 +49,6 @@ while (my($to,$cfg) = each(%SUBS))
 
     my($body) = "$loc\n\n"
 	. &gen_body(\@events) . qq{
-******************************************************************
-Yom Kippur, the Day of Atonement, begins before sunset on Sep. 15
-and continues through nightfall on Sep. 16. To learn more about
-this holiday, see http://www.jewfaq.org/holiday4.htm
-******************************************************************
-
 Shabbat Shalom,
 hebcal.com
 
@@ -233,7 +227,8 @@ sub parse_config
 	}
     } elsif (defined $args{'city'}) {
 	$city_descr = $args{'city'};
-	$cmd .= " -C '" . $args{'city'} . "'";
+	$city_descr =~ s/\+/ /g;
+	$cmd .= " -C '" . $city_descr . "'";
     } else {
 	die "no geographic key in [$config]";
     }
