@@ -943,7 +943,8 @@ sub results_page
 	    "\">Customize\ncalendar options</a>";
 	}
 
-	if ($q->param('c') && $q->param('c') ne 'off')
+	if ($q->param('c') && $q->param('c') ne 'off' &&
+	    $q->param('geo') && $q->param('geo') =~ /^city|zip$/)
 	{
 	    # Email
 	    my $url = join('', "http://", $q->virtual_host(), "/email/",
