@@ -106,7 +106,9 @@ this site going!</small>
 &copy; 2003 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
-<a href="/contact/">Contact</a>
+<a href="/contact/">Contact</a> -
+<a href="/news/">News</a> -
+<a href="/donations/">Donate</a>
 <br>This website uses <a
 href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
