@@ -573,6 +573,11 @@ sub display_vxml
 	<audio>Here are candle lighting times for</audio>
 	$city_audio
 	<break time="500ms"/>
+	<goto next="#times"/>
+</block>
+</form>
+<form id="times">
+<block>
 };
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
@@ -580,7 +585,7 @@ sub display_vxml
 	if ($items->[$i]->{'class'} eq 'candles')
 	{
 	    my $subj = $items->[$i]->{'subj'};
-	    $subj =~ s/Havdalah/Hav doll ahh/g;
+	    $subj =~ s/Havdalah \(\d+ min\)/Hav doll ah/g;
 	    print qq{\t<audio>$subj for
 $items->[$i]->{'date'} is at $items->[$i]->{'time'}.</audio>
 };
@@ -636,7 +641,7 @@ $items->[$i]->{'subj'}.</audio>
 		<filled>
 			<if cond="again_verify == true">
 				<audio>O K.</audio>
-				<goto next="#results"/>
+				<goto next="#times"/>
 				<else/>
 				<audio>Thanks for using the Heeb cal interactive Jewish Calendar.</audio>
 				<audio>Shabbat Shalom.</audio>
