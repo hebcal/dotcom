@@ -33,6 +33,7 @@ use Time::Local;
 use Date::Calc;
 use Hebcal;
 use HTML::CalendarMonthSimple;
+use Palm::DBA;
 
 my($author) = 'webmaster@hebcal.com';
 my($expires_future) = 'Thu, 15 Apr 2010 20:00:00 GMT';
@@ -316,8 +317,8 @@ sub dba_display() {
 	$dst = 1;
     }
 
-    &Hebcal::dba_write_header($path_info);
-    &Hebcal::dba_write_contents(\@events, $q->param('tz'), $dst);
+    &Palm::DBA::write_header($path_info);
+    &Palm::DBA::write_contents(\@events, $q->param('tz'), $dst);
 }
 
 sub csv_display() {
