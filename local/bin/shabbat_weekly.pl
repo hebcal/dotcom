@@ -7,6 +7,7 @@ use DB_File;
 use Fcntl qw(:DEFAULT :flock);
 use Hebcal;
 use POSIX qw(strftime);
+use MIME::Base64;
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
@@ -41,11 +42,10 @@ while (my($to,$cfg) = each(%SUBS))
     my($cmd,$loc,$args) = &parse_config($cfg);
     my(@events) = &Hebcal::invoke_hebcal($cmd,$loc);
 
+    my $encoded = encode_base64($to);
+    chomp($encoded);
     my $unsub_url = "http://www.hebcal.com/email/?" .
-	"em=" . $to .
-	"&zip=" . $args->{'zip'} .
-	"&m=" . $args->{'m'} .
-	"&upd=" . ($args->{'upd'} ? 'on' : '');
+	"e=" . &my_url_escape($encoded);
 
     my($body) = "$loc\n\n"
 	. &gen_body(\@events) . qq{
@@ -90,6 +90,16 @@ $unsub_url
 undef($ZIPS);
 
 exit(0);
+
+sub my_url_escape
+{
+    my($str) = @_;
+
+    $str =~ s/([^\w\$. -])/sprintf("%%%02X", ord($1))/eg;
+    $str =~ s/ /+/g;
+
+    $str;
+}
 
 sub gen_body
 {
