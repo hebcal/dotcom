@@ -3,10 +3,12 @@
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/pear/Hebcal/RCS/smtp.inc,v $
 
+require "Mail.php";
+require "Mail/RFC822.php";
+require "Net/SMTP.php";
+
 function email_address_valid($str)
 {
-    require_once('Mail/RFC822.php');
-
     $addr = Mail_RFC822::parseAddressList($str, '', false, true);
     if (!is_array($addr)) {
 	return false;
@@ -26,9 +28,6 @@ function email_address_valid($str)
 
 function smtp_send($return_path, $recipients, $headers, $body)
 {
-    require_once('Mail.php');
-    require_once('Net/SMTP.php');
-
     if (!($mail = new Mail())) {
 	return ('unable to instantiate Mail object');
     }
