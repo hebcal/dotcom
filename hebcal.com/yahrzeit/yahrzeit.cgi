@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan  8 09:44:28 PST 2001
+Last modified: Sat Jan 20 18:26:05 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -185,7 +185,7 @@ sub my_invoke_hebcal {
 
     foreach $year ($this_year .. ($this_year + 10))
     {
-	my(@events) = &invoke_hebcal("$cmd $year", '');
+	my(@events) = &Hebcal::invoke_hebcal("$cmd $year", '');
 	my($numEntries) = scalar(@events);
 	my($i);
 	for ($i = 0; $i < $numEntries; $i++)
@@ -279,7 +279,7 @@ print STDOUT $q->header(),
     foreach $key ($q->param())
     {
 	my($val) = $q->param($key);
-	print STDOUT "&amp;$key=", &url_escape($val);
+	print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
     }
     print STDOUT "&amp;filename=yahrzeit.csv";
     print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
@@ -294,7 +294,7 @@ print STDOUT $q->header(),
 	foreach $key ($q->param())
 	{
 	    my($val) = $q->param($key);
-	    print STDOUT "&amp;$key=", &url_escape($val);
+	    print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
 	}
 	print STDOUT "&amp;filename=yahrzeit.dba";
 	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
@@ -319,7 +319,8 @@ for ($i = 0; $i < $numEntries; $i++)
     }
 
     my($dow) = ($year > 1969 && $year < 2038) ?
-	$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
+	$Hebcal::DoW[&Hebcal::get_dow($year - 1900, $mon - 1, $mday)] . ' '
+	    : '';
 
     printf STDOUT "%s%04d-%02d-%02d  %s\n",
     $dow, $year, $mon, $mday, HTML::Entities::encode($subj);
