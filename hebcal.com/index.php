@@ -44,11 +44,15 @@ href="/yahrzeit/">Yahrzeit Calendar</a></big></strong></dt>
 href="/search/">Search</a></big></strong></dt>
 <dd>Search the whole <code>hebcal.com</code> website.</dd>
 </dl>
+<p>
 <hr noshade size="1">
-<address><a
-href="mailto:webmaster@hebcal.com">webmaster@hebcal.com</a></address>
-<small>
+<font size=-2 face=Arial>Copyright
+&copy; 2001 Michael J. Radwin. All rights reserved.
+<a href="/privacy/">Privacy Policy</a> -
+<a href="/help/">Help</a>
+<br>
 <!-- hhmts start -->
-Last modified: Wed Apr 18 10:10:50 PDT 2001
+Last modified: Wed Apr 18 10:40:03 PDT 2001
 <!-- hhmts end -->
-</small></body></html>
+</font>
+</body></html>
