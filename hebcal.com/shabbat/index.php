@@ -2,7 +2,7 @@
 # $Id$
 # $Source: /Users/mradwin/hebcal-copy/hebcal.com/shabbat/RCS/index.php,v $
 
-require "../common.inc";
+require "../pear/Hebcal/common.inc";
 
 $qs = $_SERVER["QUERY_STRING"];
 $matches = array();
@@ -51,9 +51,19 @@ if ($qs) {
     if ($private) {
 	header("Cache-Control: private");
     } elseif (!$cfg) {
-	header("Cache-Control: private");
-	header("Set-Cookie: " . hebcal_gen_cookie() .
-	       "; path=/; expires=Tue, 02-Jun-2037 20:00:00 GMT");
+	$newck = hebcal_gen_cookie();
+	if (isset($_COOKIE["C"])) {
+	    $oldck = "C=" . strtr($_COOKIE["C"], " ", "+");
+	} else {
+	    $oldck = "C=t=0&z=0";
+	}
+	$cmp1 = strchr($newck, "&");
+	$cmp2 = strchr($oldck, "&");
+	if ($cmp1 != $cmp2) {
+	    header("Cache-Control: private");
+	    header("Set-Cookie: " . $newck .
+		   "; path=/; expires=Tue, 02-Jun-2037 20:00:00 GMT");
+	}
     }
 
     $url .= "?$qs";
