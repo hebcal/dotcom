@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Feb 12 14:22:56 PST 2001
+Last modified: Wed Feb 21 13:48:15 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -661,7 +661,7 @@ sub form
 
     &out_html(qq{<p><small><a href="/michael/projects/hebcal/#tags">How\n},
 	      qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
-	      qq{times on it\'s own website?</a></small></p>});
+	      qq{times on its own website?</a></small></p>});
 
     &out_html($html_footer);
 
