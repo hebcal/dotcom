@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan 29 10:37:42 PST 2001
+Last modified: Thu Feb  1 10:56:14 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -372,13 +372,21 @@ sub dba_display {
 		     "inline; filename=$path_info",
 		     -last_modified => &Hebcal::http_date($time));
 
-    my($no_dst) = (!defined($q->param('dst')) || $q->param('dst') eq 'none' ||
-		   ((defined $q->param('geo') && $q->param('geo') eq 'city' &&
-		     defined $q->param('city') && $q->param('city') ne '' &&
-		     defined $Hebcal::city_nodst{$q->param('city')})));
+    my($dst) = 0;
+
+    if (defined $q->param('geo') && $q->param('geo') eq 'city' &&
+	defined $q->param('city') && $q->param('city') ne '')
+    {
+	$dst = defined $Hebcal::city_nodst{$q->param('city')} ?
+	    0 : 1;
+    }
+    elsif (defined($q->param('dst')) && $q->param('dst') eq 'usa')
+    {
+	$dst = 1;
+    }
 
     &Hebcal::dba_write_header($path_info);
-    &Hebcal::dba_write_contents(\@events, $q->param('tz'), ! $no_dst);
+    &Hebcal::dba_write_contents(\@events, $q->param('tz'), $dst);
 }
 
 sub csv_display {
