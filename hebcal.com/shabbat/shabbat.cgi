@@ -98,10 +98,10 @@ $q->param('nx','on');
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
-my($C_cookie) = &Hebcal::get_C_cookie($q);
-if ($C_cookie)
+my($cookies) = &Hebcal::get_cookies($q);
+if (defined $cookies->{'C'})
 {
-    &Hebcal::process_cookie($q,$C_cookie);
+    &Hebcal::process_cookie($q,$cookies->{'C'});
 }
 
 # sanitize input to prevent people from trying to hack the site.
@@ -281,6 +281,8 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 
     my($cookie_to_set);
 
+    my($C_cookie) = (defined $cookies->{'C'}) ?
+	'C=' . $cookies->{'C'} : '';
     if (! $C_cookie)
     {
 	$cookie_to_set = &Hebcal::gen_cookie($q)
