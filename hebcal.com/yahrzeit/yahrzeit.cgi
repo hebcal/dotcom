@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Feb  4 21:15:30 PST 2001
+Last modified: Thu Mar  1 14:29:44 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -333,8 +333,9 @@ for ($i = 0; $i < $numEntries; $i++)
 	$Hebcal::DoW[&Hebcal::get_dow($year - 1900, $mon - 1, $mday)] . ' '
 	    : '';
 
-    printf STDOUT "%s%04d-%02d-%02d  %s\n",
-    $dow, $year, $mon, $mday, HTML::Entities::encode($subj);
+    printf STDOUT ("%s%02d-%s-%04d  %s\n",
+		   $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
+		 &HTML::Entities::encode($subj));
 }
 print STDOUT "</pre>";
 
@@ -393,7 +394,7 @@ sub form
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
     $q->hidden(-name => 'rand',-value => time(),-override => 1),
-    qq{<input\ntype="submit" value="Get Yahrzeits"></form>\n},
+    qq{<input\ntype="submit" value="Compute Calendar"></form>\n},
     $html_footer;
 
     exit(0);
