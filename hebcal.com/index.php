@@ -70,16 +70,19 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current&nbsp;Cale
 <!-- Begin temp Chanukah -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/holidays/chanukah.html">Chanukah</a></b>
-<br>19 December 2003<br><br>
+<br>19 December 2003<br>
 <!-- End temp Chanukah -->
+<br><hr noshade size="1">
 <form action="/shabbat/"><span
 class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <br><label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5" id="zip">
 <input type="hidden" name="geo" value="zip">
-<small><br><a href="/shabbat/#change">select by major city</a></small>
+<input type="submit" value="Go">
+<small><br>or <a href="/shabbat/#change">select by major city</a></small>
 </form>
-<hr>
+<hr noshade size="1">
+<center>
 <!-- Begin PayPal Logo -->
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
@@ -92,6 +95,7 @@ src="http://www.paypal.com/images/x-click-but04.gif"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
 <!-- End PayPal Logo -->
+</center>
 </td></tr></table>
 <p>
 <hr noshade size="1">
