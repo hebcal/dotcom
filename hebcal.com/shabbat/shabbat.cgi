@@ -56,7 +56,7 @@ my($rcsrev) = '$Revision$'; #'
 # process form params
 my($q) = new CGI;
 my($script_name) = $q->script_name();
-$script_name =~ s,/index.cgi$,/,;
+$script_name =~ s,/[^/]+$,/,;
 
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
