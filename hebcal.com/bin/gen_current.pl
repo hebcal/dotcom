@@ -1,5 +1,6 @@
 #!/usr/local/bin/perl -w
 
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use Hebcal;
 use POSIX;
 use strict;
