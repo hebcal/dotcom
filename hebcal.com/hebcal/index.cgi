@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Dec 29 12:25:41 PST 1999
+Last modified: Sat Jan  1 20:51:36 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -977,7 +977,7 @@ sub results_page
 	    $pm = 12;
 	    $nm = 2;
 	    $py = $q->param('year') - 1;
-	    $ny = $q->param('year') - 1;
+	    $ny = $q->param('year');
 	}
 	elsif ($q->param('month') == 12)
 	{
