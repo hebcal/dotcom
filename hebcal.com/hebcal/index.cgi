@@ -2,7 +2,25 @@
 
 require 'cgi-lib.pl';
 
-$rcsrev = '$Revision$';
+$cgipath = '/cgi-bin/hebcal';
+$rcsrev = '$Revision$'; #'
+
+@month_names = 
+    (
+     '',
+     'January',
+     'Februrary',
+     'March',
+     'April',
+     'May',
+     'June',
+     'July',
+     'August',
+     'September',
+     'October',
+     'November',
+     'December',
+     );
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">
 <html> <head>
@@ -12,11 +30,6 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">
 </head>
 
 <body>
-
-<strong><big>
-<a href=\"/\">radwin.org</a> :
-hebcal web interface
-</big></strong>
 ";
 
 $html_footer = "<hr noshade size=\"1\">
@@ -28,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 16:00:31 PDT 1999
+Last modified: Fri Apr  9 17:09:23 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -134,7 +147,7 @@ $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 dbmopen(%DB, "zips", 0400) ||
     &CgiDie("Script Error: Database Unavailable",
 	    "\nThe database is unavailable right now.\n" .
-	    "Please <a href=\"/cgi-bin/hebcal?" .
+	    "Please <a href=\"${cgipath}?" .
 	    $ENV{'QUERY_STRING'} .
 	    "\">try again</a>.");
 
@@ -239,16 +252,21 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
+<strong><big>
+<a href=\"/\">radwin.org</a> :
+hebcal web interface
+</big></strong>
+
 $message
 <p>This is a beta web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 
 <p>Use the form below to generate a list of Jewish Holidays.  Candle
-lighting times will be customized to your latitude/longitude (determined
-by your Zip Code).</p>
+lighting times are calculated from your latitude/longitude (which is
+determined by your Zip Code).</p>
 
 <blockquote>
-<form method=\"get\" action=\"/cgi-bin/hebcal\">
+<form method=\"get\" action=\"${cgipath}\">
 
 <label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
 id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
@@ -258,26 +276,16 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
 <label for=\"month\">Month: </label>
 <select name=\"month\" id=\"month\">
 <option value=\"\"$month{'0'}>- entire year -</option>
-<option value=\"1\"$month{'1'}>January</option>
-<option value=\"2\"$month{'2'}>Februrary</option>
-<option value=\"3\"$month{'3'}>March</option>
-<option value=\"4\"$month{'4'}>April</option>
-<option value=\"5\"$month{'5'}>May</option>
-<option value=\"6\"$month{'6'}>June</option>
-<option value=\"7\"$month{'7'}>July</option>
-<option value=\"8\"$month{'8'}>August</option>
-<option value=\"9\"$month{'9'}>September</option>
-<option value=\"10\"$month{'10'}>October</option>
-<option value=\"11\"$month{'11'}>November</option>
-<option value=\"12\"$month{'12'}>December</option>
+";
+    for ($i = 1; $i < 13; $i++)
+    {
+	print STDOUT "<option value=\"$i\"$month{$i}>$month_names[$i]</option>\n";
+    }
+    print STDOUT "
 </select><br><br>
 
 <input type=\"checkbox\" name=\"c\" id=\"c\"$candle_chk><label for=\"c\">
-Include candle lighting times</label>
-
-<small>(<label for=\"m\">Havdalah minutes past sundown: </label><input
-type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
-maxlength=\"3\">)</small><br>
+Include candle lighting times</label><br>
 
 <blockquote>
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
@@ -321,6 +329,11 @@ Daylight Savings Time:
 
 <input type=\"radio\" name=\"dst\" id=\"dst_none\" value=\"none\"$none_chk>
 <label for=\"dst_none\">none</label><br>
+
+<label for=\"m\">Havdalah minutes past sundown: </label><input
+type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
+maxlength=\"3\"><br>
+
 </blockquote>
 
 <input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
@@ -353,6 +366,8 @@ $html_footer";
 
 sub download
 {
+    local($date) = sprintf("%s %d", $month_names[$in{'month'}], $year);
+
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     @city = split(/([- ])/, $city);
@@ -365,6 +380,12 @@ sub download
     }
 
     print STDOUT "$html_header
+<strong><big>
+<a href=\"/\">radwin.org</a> :
+<a href=\"${cgipath}\">hebcal web interface</a> :
+$date
+</big></strong>
+
 <p>
 $city, $state $in{'zip'}<br>
 ${lat_deg}d${lat_min}' N latitude<br>
@@ -375,7 +396,7 @@ Time Zone: GMT $in{'tz'}:00
 </small>
 </p>
 
-<p><a href=\"/cgi-bin/hebcal/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
+<p><a href=\"${cgipath}/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
 here to download as an Outlook CSV file</a></p>
 
 ";
