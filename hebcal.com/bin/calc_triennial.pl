@@ -80,44 +80,15 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
-## load 4 years of hebcal event data
-my($hebrew_year);
-if ($opts{'H'}) {
-    $hebrew_year = $opts{'H'};
-} else {
-    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
-    $hebrew_year = $hebdate->{'yy'};
-}
-
-# year I in triennial cycle was 5756
-my $year_num = (($hebrew_year - 5756) % 3) + 1;
-my $start_year = $hebrew_year - ($year_num - 1);
-print "Current Hebrew year $hebrew_year is year $year_num.  3-cycle started at year $start_year.\n";
-
-my(@events);
-foreach my $cycle (0 .. 3)
-{
-    my($yr) = $start_year + $cycle;
-    my(@ev) = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
-    push(@events, @ev);
-}
-
-my $bereshit_idx;
-for (my $i = 0; $i < @events; $i++)
-{
-    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit')
-    {
-	$bereshit_idx = $i;
-	last;
-    }
-}
-
-die "can't find Bereshit for Year I" unless defined $bereshit_idx;
+$| = 1;
+print "Loading XML...";
 
 ## load aliyah.xml data to get parshiot
 my $axml = XMLin($aliyah_in);
 my $fxml = XMLin($festival_in);
+
+my %triennial_aliyot;
+read_aliyot_metadata($axml, \%triennial_aliyot);
 
 my(@all_inorder,@combined,%combined,%parsha2id);
 foreach my $h (keys %{$axml->{'parsha'}})
@@ -159,93 +130,47 @@ foreach my $parsha (@combined)
     $prev{$parsha} = $prev{$p1};
 }
 
-# determine triennial year patterns
-my(%pattern);
-for (my $i = $bereshit_idx; $i < @events; $i++)
-{
-    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
-    my $subj = $1;
+print " done.\n";
 
-    if ($subj =~ /^([^-]+)-(.+)$/ &&
-	defined $combined{$1} && defined $combined{$2})
-    {
-	push(@{$pattern{$1}}, 'T');
-	push(@{$pattern{$2}}, 'T');
-    }
-    else
-    {
-	push(@{$pattern{$subj}}, 'S');
-    }
+## load 4 years of hebcal event data
+my($hebrew_year);
+if ($opts{'H'}) {
+    $hebrew_year = $opts{'H'};
+} else {
+    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
+    $hebrew_year = $hebdate->{'yy'};
 }
 
-my %cycle_option;
-calc_variation_options($axml, \%cycle_option);
-my %triennial_aliyot;
-read_aliyot_metadata($axml, \%triennial_aliyot);
+# year I in triennial cycle was 5756
+my $year_num = (($hebrew_year - 5756) % 3) + 1;
+my $start_year = $hebrew_year - ($year_num - 1);
+print "Current Hebrew year $hebrew_year is year $year_num.  3-cycle started at year $start_year.\n";
 
-my %readings;
-my $year = 1;
-for (my $i = $bereshit_idx; $i < @events; $i++)
+my($bereshit_idx1,$pattern1,$events1) = get_tri_events($start_year);
+my %cycle_option1;
+calc_variation_options($axml, \%cycle_option1, $pattern1);
+
+$start_year += 3;
+print "\n3-cycle started at year $start_year.\n";
+my($bereshit_idx2,$pattern2,$events2) = get_tri_events($start_year);
+my %cycle_option2;
+calc_variation_options($axml, \%cycle_option2, $pattern2);
+
+my %readings1 = cycle_readings($bereshit_idx1,$events1,\%cycle_option1);
+my %readings2 = cycle_readings($bereshit_idx2,$events2,\%cycle_option2);
+
+if ($opts{'t'})
 {
-    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
-	$i != $bereshit_idx)
-    {
-	$year++;
-	last if ($year == 4);
-    }
+    my $fn = $opts{'t'};
+    open(CSV, ">$fn") || die "$fn: $!\n";
+    print CSV qq{"Date","Parsha","Aliyah","Triennial Reading"\015\012};
 
-    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
-    my $h = $1;
+    triennial_csv($axml,$events1,$bereshit_idx1,\%readings1);
+    triennial_csv($axml,$events2,$bereshit_idx2,\%readings2);
 
-    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-    my $stime = sprintf("%02d %s %04d",
-			$events[$i]->[$Hebcal::EVT_IDX_MDAY],
-			$Hebcal::MoY_long{$month},
-			$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-
-    if (defined $combined{$h})
-    {
-	my $variation = $cycle_option{$h} . "." . $year;
-	my $a = $triennial_aliyot{$h}->{$variation};
-	die unless defined $a;
-	$readings{$h}->[$year] = [$a, $stime, $h];
-    }
-    elsif (defined $triennial_aliyot{$h}->{$year})
-    {
-	my $a = $triennial_aliyot{$h}->{$year};
-	die unless defined $a;
-
-	$readings{$h}->[$year] = [$a, $stime, $h];
-
-	if ($h =~ /^([^-]+)-(.+)$/ &&
-	    defined $combined{$1} && defined $combined{$2})
-	{
-	    $readings{$1}->[$year] = [$a, $stime, $h];
-	    $readings{$2}->[$year] = [$a, $stime, $h];
-	}
-    }
-    elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
-    {
-	my $a = $triennial_aliyot{$h}->{"Y.$year"};
-	die unless defined $a;
-
-	$readings{$h}->[$year] = [$a, $stime, $h];
-
-	if ($h =~ /^([^-]+)-(.+)$/ &&
-	    defined $combined{$1} && defined $combined{$2})
-	{
-	    $readings{$1}->[$year] = [$a, $stime, $h];
-	    $readings{$2}->[$year] = [$a, $stime, $h];
-	}
-    }
-    else
-    {
-	die "can't find aliyot for $h, year $year";
-    }
+    close(CSV);
 }
-
-triennial_csv($axml,$opts{'t'},\@events,$bereshit_idx)
-    if $opts{'t'};
 
 my(%parsha_dates);
 my(%parsha_time);
@@ -257,18 +182,129 @@ readings_for_current_year($axml, \%parsha_dates, \%parsha_time);
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 my $html_footer = html_footer($aliyah_in);
 
-foreach my $h (keys %readings)
+foreach my $h (keys %readings1, "Vezot Haberakhah")
 {
-    write_sedra_page($axml,\%parsha_dates,$h,$prev{$h},$next{$h},$readings{$h});
-}
-{
-    my $h = "Vezot Haberakhah";
-    write_sedra_page($axml,\%parsha_dates,$h,$prev{$h},$next{$h},$readings{$h});
+    write_sedra_page($axml,\%parsha_dates,$h,$prev{$h},$next{$h},
+		     $readings1{$h});
 }
 
 write_index_page($axml,\%parsha_dates);
 
 exit(0);
+
+sub get_tri_events
+{
+    my($start) = @_;
+
+    my @events;
+    foreach my $cycle (0 .. 3)
+    {
+	my($yr) = $start + $cycle;
+	my @ev = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
+	push(@events, @ev);
+    }
+
+    my $idx;
+    for (my $i = 0; $i < @events; $i++)
+    {
+	if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit')
+	{
+	    $idx = $i;
+	    last;
+	}
+    }
+
+    die "can't find Bereshit for Year I" unless defined $idx;
+
+    # determine triennial year patterns
+    my %pattern;
+    for (my $i = $idx; $i < @events; $i++)
+    {
+	next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
+	my $subj = $1;
+
+	if ($subj =~ /^([^-]+)-(.+)$/ &&
+	    defined $combined{$1} && defined $combined{$2})
+	{
+	    push(@{$pattern{$1}}, 'T');
+	    push(@{$pattern{$2}}, 'T');
+	}
+	else
+	{
+	    push(@{$pattern{$subj}}, 'S');
+	}
+    }
+
+    ($idx,\%pattern,\@events);
+}
+
+sub cycle_readings
+{
+    my($bereshit_idx,$events,$option) = @_;
+
+    my %readings;
+    my $year = 1;
+    for (my $i = $bereshit_idx; $i < @{$events}; $i++)
+    {
+	if ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
+	    $i != $bereshit_idx)
+	{
+	    $year++;
+	    last if ($year == 4);
+	}
+
+	next unless $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/;
+	my $h = $1;
+
+	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my $stime = sprintf("%02d %s %04d",
+			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    $Hebcal::MoY_long{$month},
+			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	if (defined $combined{$h})
+	{
+	    my $variation = $option->{$h} . "." . $year;
+	    my $a = $triennial_aliyot{$h}->{$variation};
+	    die unless defined $a;
+	    $readings{$h}->[$year] = [$a, $stime, $h];
+	}
+	elsif (defined $triennial_aliyot{$h}->{$year})
+	{
+	    my $a = $triennial_aliyot{$h}->{$year};
+	    die unless defined $a;
+
+	    $readings{$h}->[$year] = [$a, $stime, $h];
+
+	    if ($h =~ /^([^-]+)-(.+)$/ &&
+		defined $combined{$1} && defined $combined{$2})
+	    {
+		$readings{$1}->[$year] = [$a, $stime, $h];
+		$readings{$2}->[$year] = [$a, $stime, $h];
+	    }
+	}
+	elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
+	{
+	    my $a = $triennial_aliyot{$h}->{"Y.$year"};
+	    die unless defined $a;
+
+	    $readings{$h}->[$year] = [$a, $stime, $h];
+
+	    if ($h =~ /^([^-]+)-(.+)$/ &&
+		defined $combined{$1} && defined $combined{$2})
+	    {
+		$readings{$1}->[$year] = [$a, $stime, $h];
+		$readings{$2}->[$year] = [$a, $stime, $h];
+	    }
+	}
+	else
+	{
+	    die "can't find aliyot for $h, year $year";
+	}
+    }
+
+    %readings;
+}
 
 sub write_index_page
 {
@@ -352,14 +388,14 @@ EOHTML
 
 sub calc_variation_options
 {
-    my($parshiot,$option) = @_;
+    my($parshiot,$option,$patterns) = @_;
 
     foreach my $parsha (@combined)
     {
 	my($p1,$p2) = split(/-/, $parsha);
 	my $pat = '';
 	foreach my $yr (0 .. 2) {
-	    $pat .= $pattern{$p1}->[$yr];
+	    $pat .= $patterns->{$p1}->[$yr];
 	}
 
 	if ($pat eq 'TTT')
@@ -1109,10 +1145,7 @@ sub readings_for_current_year
 
 sub triennial_csv
 {
-    my($parshiot,$fn,$events,$bereshit_idx) = @_;
-
-    open(CSV, ">$fn") || die "$fn: $!\n";
-    print CSV qq{"Date","Parsha","Aliyah","Triennial Reading"\015\012};
+    my($parshiot,$events,$bereshit_idx,$readings) = @_;
 
     my $year = 1;
     for (my $i = $bereshit_idx; $i < @{$events}; $i++)
@@ -1137,7 +1170,7 @@ sub triennial_csv
 	$book =~ s/\s+.+$//;
 
 	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			    @{$readings{$h}->[$year]->[0]})
+			    @{$readings->{$h}->[$year]->[0]})
 	{
 	    printf CSV
 		qq{%s,"%s",%s,"$book %s - %s"\015\012},
@@ -1150,8 +1183,6 @@ sub triennial_csv
 
 	print CSV "\015\012";
     }
-
-    close(CSV);
 }
 
 sub get_saturday
