@@ -27,7 +27,6 @@ use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Fcntl qw(:DEFAULT :flock);
 use Hebcal;
-use Net::SMTP;
 use MIME::Base64;
 use Email::Valid;
 
@@ -40,13 +39,26 @@ my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
 my($cookies) = &Hebcal::get_cookies($q);
-if (! $q->param('v') && defined $cookies->{'C'}) {
-    &Hebcal::process_cookie($q,$cookies->{'C'});
-}
-if (! $q->param('v') && defined $cookies->{'E'}) {
-    my($cook) = new CGI($cookies->{'E'});
-    if ($cook->param('em')) {
-	$q->param('em', &decode_base64($cook->param('em')));
+if (! $q->param('v'))
+{
+    my $want_c = 1;
+    if (defined $cookies->{'E'})
+    {
+	my($cook) = new CGI($cookies->{'E'});
+	if ($cook->param('em'))
+	{
+	    $q->param('em', &decode_base64($cook->param('em')));
+	    my $info = &get_sub_info($q->param('em'));
+	    if ($info)
+	    {
+		&Hebcal::process_cookie($q,$info);
+		$want_c = 0;
+	    }
+	}
+    }
+    if (defined $cookies->{'C'} && $want_c)
+    {
+	&Hebcal::process_cookie($q,$cookies->{'C'});
     }
 }
 
@@ -64,33 +76,105 @@ foreach $key ($q->param())
     $q->param($key,$val);
 }
 
-&form(1) unless $q->param('v');
+if ($q->param('v'))
+{
+    my($email) = $q->param('em');
+    if (!$email)
+    {
+	&form(1,
+	      "Please enter your email address.");
+    }
+    elsif (! Email::Valid->address($email))
+    {
+	&form(1,
+	      "Sorry, <b>" . &Hebcal::html_entify($email) . "</b> does\n" .
+	      "not appear to be a valid email address.");
+    }
 
-my($email) = $q->param('em');
-my($zip) = $q->param('zip');
-
-if (!$email)
-{
-    &form(1,
-	  "Please enter your email address to subscribe.");
-}
-elsif (! Email::Valid->address($email))
-{
-    &form(1,
-	  "Sorry, <b>" . &Hebcal::html_entify($email) . "</b> does\n" .
-	  "not appear to be a valid email address.");
-}
-elsif (!$zip)
-{
-    &form(1,
-	  "Please enter your zip code for candle lighting times.");
+    # email is OK, write canonicalized version
+    $email = Email::Valid->address($email);
+    $q->param('em', $email);
 }
 else
 {
-    my($now) = time;
-    $email = Email::Valid->address($email);
+    &form(1);
+}
 
-    if ($email =~ /\@hebcal.com$/) {
+if ($q->param('submit_modify'))
+{
+    &subscribe($q);
+}
+elsif ($q->param('submit_unsubscribe'))
+{
+    &unsubscribe($q);
+}
+
+close(STDOUT);
+exit(0);
+
+########################################################################
+
+sub unsubscribe
+{
+    my($q) = @_;
+
+    my $email = $q->param('em');
+    my $info = &get_sub_info($email);
+
+    if (!$info) {
+	&form(1,
+	      "Sorry, <b>" . &Hebcal::html_entify($email) . "</b> is\n" .
+	      "not currently subscribed.");
+    }
+
+    my($now) = time;
+    &write_sub_info($q, "action=UNSUBSCRIBE;t=$now");
+
+    my($body) = qq{Hello,
+
+Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.
+
+Regards,
+hebcal.com};
+
+    &Hebcal::sendmail("shabbat-bounce\@hebcal.com",
+		      "shabbat-owner\@hebcal.com",
+		      "Hebcal Subscription Notification",
+		      "You have been unsubscribed from hebcal",
+		      '',$body,$email,'');
+
+    my($html_email) = &Hebcal::html_entify($email);
+
+    print STDOUT $q->header(),
+    &Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+			undef, undef),
+    &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
+    "<h1>E-mail\nSubscription Manager</h1>\n",
+    qq{<h2>Unsubscribed</h2>
+<p>You have been removed from the email subscription list.<br>
+A confirmation message has been sent to <b>$html_email</b>.</p>
+};
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
+}
+
+sub subscribe
+{
+    my($q) = @_;
+
+    my($zip) = $q->param('zip');
+
+    if (!$zip)
+    {
+	&form(1,
+	      "Please enter your zip code for candle lighting times.");
+    }
+
+    my($now) = time;
+    my($email) = $q->param('em');
+    
+    if ($email =~ /\@hebcal.com$/)
+    {
 	&form(1,
 	      "Sorry, can't use a <b>hebcal.com</b> email address.");
     }
@@ -114,16 +198,28 @@ else
     &form(1,
 	  "Sorry, can't find\n".  "<b>" . $q->param('zip') .
 	  "</b> in the zip code database.\n",
-          "<ul><li>Please try a nearby zip code</li></ul>")
+	  "<ul><li>Please try a nearby zip code</li></ul>")
 	unless defined $val;
 
     my($city,$state) = split(/\0/, substr($val,6));
 
-    if (($state eq 'HI' || $state eq 'AZ') &&
-	$q->param('dst') eq 'usa')
+    if (($state eq 'HI' || $state eq 'AZ') && $q->param('dst') eq 'usa')
     {
 	$q->param('dst','none');
     }
+
+    # handle timezone == "auto"
+    my($tz) = &Hebcal::guess_timezone($q->param('tz'),
+				      $q->param('zip'),
+				      $state);
+    unless (defined $tz)
+    {
+	&form(1, "Sorry, can't auto-detect\n" .
+	      "timezone for <b>" . $city_descr . "</b>\n".
+	      "(state <b>" . $state . "</b> spans multiple time zones).",
+	      "<ul><li>Please select your time zone below.</li></ul>");
+    }
+    $q->param('tz', $tz);
 
     my(@city) = split(/([- ])/, $city);
     $city = '';
@@ -134,48 +230,11 @@ else
 	$city .= $_;
     }
 
-    $city_descr = "$city, $state &nbsp;" . $q->param('zip');
-
-    if ($q->param('tz') !~ /^-?\d+$/)
-    {
-	my($ok) = 0;
-	if (defined $Hebcal::known_timezones{$q->param('zip')})
-	{
-	    if ($Hebcal::known_timezones{$q->param('zip')} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{$q->param('zip')});
-		$ok = 1;
-	    }
-	}
-	elsif (defined $Hebcal::known_timezones{substr($q->param('zip'),0,3)})
-	{
-	    if ($Hebcal::known_timezones{substr($q->param('zip'),0,3)} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{substr($q->param('zip'),0,3)});
-		$ok = 1;
-	    }
-	}
-	elsif (defined $Hebcal::known_timezones{$state})
-	{
-	    if ($Hebcal::known_timezones{$state} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{$state});
-		$ok = 1;
-	    }
-	}
-
-	if ($ok == 0)
-	{
-	    &form(1,
-		  "Sorry, can't auto-detect\n" .
-		  "timezone for <b>" . $city_descr . "</b>\n".
-		  "(state <b>" . $state . "</b> spans multiple time zones).",
-		  "<ul><li>Please select your time zone below.</li></ul>");
-	}
-    }
+    $city_descr = "$city, $state " . $q->param('zip');
+    $dst_descr = "Daylight Saving Time: " . $q->param('dst');
+    $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
 
     my($cookie_to_set);
-
     if (! defined $cookies->{'E'})
     {
 	$cookie_to_set = sprintf("E=t=%d&em=%s", $now, &encode_base64($email));
@@ -204,80 +263,20 @@ else
     &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
     "<h1>E-mail\nSubscription Manager</h1>\n";
 
-    $dst_descr = "Daylight Saving Time: " . $q->param('dst');
-    $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
-
-    my $dbmfile = 'email.db';
-    my(%DB);
-    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
-		  $DB_File::DB_HASH)
-	or die "$dbmfile: $!\n";
-
-    my($fd) = $db->fd;
-    open(DB_FH, "+<&=$fd") || die "dup $!";
-
-    unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
-
-    my $rand = pack("V", int(rand(0xFFFFFFFF)));
-    if ($ENV{'REMOTE_ADDR'}) {
-	$rand .= pack("CCCC", split(/\./, $ENV{'REMOTE_ADDR'}));
-    }
-    $rand .= pack("V", $now);
-
-    my $encoded = &encode_base64($rand);
-    while (chomp($encoded)) { }
-
-    # map potentially dangerous base64 chars to something better for email:
-    #   + becomes . (dot)
-    #   / becomes _ (underscore)
-    #   = becomes - (hyphen)
-    $encoded =~ s/\+/\./g;
-    $encoded =~ s/\//_/g;
-    $encoded =~ s/=/-/g;
-
-    $DB{$encoded} = join(' ', $email, $now);
-    $DB{$email} = sprintf("zip=%s;tz=%s;dst=%s;m=%s",
-			  $q->param('zip'),
-			  $q->param('tz'),
-			  $q->param('dst'),
-			  $q->param('m'));
-
-    $db->sync;
-    flock(DB_FH, LOCK_UN);
-    undef $db;
-    untie(%DB);
-    close(DB_FH);
-
-    my($body) = qq{Hello,
-
-We have received your request to receive weekly Shabbat
-candle lighting time information from hebcal.com.
-
-To receive weekly emails in your inbox, please confirm your
-request by replying to this message.
-
-If you did not request, or do not want, weekly Shabbat
-candle lighting time information, please accept our
-apologies and ignore this message.
-
-Regards,
-hebcal.com};
-
-    my $status = 
-	&my_sendmail("shabbat-bounce\@hebcal.com",
-		     "shabbat-subscribe+$encoded\@hebcal.com",
-		     "Hebcal Subscription Robot",
-		     "Please confirm your request to subscribe to hebcal",
-		     '',$body,$email,'');
-
-    my($html_email) = &Hebcal::html_entify($email);
-    if ($status)
+    # check if email address already verified
+    my $info = &get_sub_info($email);
+    if ($info)
     {
-	print STDOUT qq{
-<p>Thank you for your interest in weekly
-candle lighting times and parsha information.</p>
-<p>A confirmation message has been sent to <b>$html_email</b>
-Simply reply to that message to confirm your subscription.</p>
+	&write_sub_info($q,
+			sprintf("zip=%s;tz=%s;dst=%s;m=%s;t=%d",
+				$q->param('zip'),
+				$q->param('tz'),
+				$q->param('dst'),
+				$q->param('m'),
+				$now));
+
+	print STDOUT qq{<h2>Subscription Updated</h2>
+<p>Your subsciption information has been updated successfully.</p>
 <p><small>
 $city_descr
 <br>&nbsp;&nbsp;$dst_descr
@@ -287,21 +286,61 @@ $city_descr
     }
     else
     {
-        print STDOUT qq{
-<h2>Sorry!</h2>
+	my($encoded) = &write_staging_info($q,$now);
+
+	my($body) = qq{Hello,
+
+We have received your request to receive weekly Shabbat
+candle lighting time information from hebcal.com for
+$city_descr.
+
+Please confirm your request by replying to this message.
+
+If you did not request (or do not want) weekly Shabbat
+candle lighting time information, please accept our
+apologies and ignore this message.
+
+Regards,
+hebcal.com};
+
+	my $replyto = "shabbat-subscribe+$encoded\@hebcal.com";
+	my $status = 
+	    &Hebcal::sendmail("shabbat-bounce\@hebcal.com",
+			      $replyto,
+			      "Hebcal Subscription Notification",
+			      "Please confirm your request to subscribe to hebcal",
+			      "Reply-To: $replyto",
+			      $body,$email,'');
+
+	my($html_email) = &Hebcal::html_entify($email);
+	if ($status)
+	{
+	    print STDOUT qq{
+<p>Thank you for your interest in weekly
+candle lighting times and parsha information.</p>
+<p>A confirmation message has been sent to <b>$html_email</b>.<br>
+Simply reply to that message to confirm your subscription.</p>
+<p><small>
+$city_descr
+<br>&nbsp;&nbsp;$dst_descr
+<br>&nbsp;&nbsp;$tz_descr
+</small></p>
+};
+	}
+	else
+	{
+	    print STDOUT qq{<h2>Sorry!</h2>
 <p>Unfortunately, we are temporarily unable to send email
 to <b>$html_email</b>.</p>
 <p>Please try again in a few minutes.</p>
 <p>If the problem persists, please send email to
 <a href="mailto:webmaster\@hebcal.com">webmaster\@hebcal.com</a>.</p>
 };
+	}
     }
 
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
 }
-
-close(STDOUT);
-exit(0);
 
 sub form
 {
@@ -324,8 +363,8 @@ sub form
 
     print STDOUT
 	qq{$message\n},
-	qq{<h3>Subscribe</h3>\n},
-	qq{<form name="f1" id="f1"\naction="$script_name">},
+	qq{<p>Subscribe to email weekly Shabbat candle lighting times.</p>\n},
+	qq{<form name="f1" id="f1"\naction="$script_name" method="post">},
 	qq{<label for="em">E-mail address:\n},
 	$q->textfield(-name => 'em',
 		      -id => 'em',
@@ -361,7 +400,11 @@ sub form
 		      -default => 72),
 	"</label>",
 	$q->hidden(-name => 'v',-value => 1,-override => 1),
-	qq{<br><input\ntype="submit" value="Subscribe"></form>};
+	qq{\n<br>\n<input type="submit" name="submit_modify"\n},
+	    qq{value="Subscribe">\n},
+	qq{<input type="submit" name="submit_unsubscribe"\n},
+	    qq{value="Unsubscribe">},
+	qq{</form>};
 
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
@@ -383,74 +426,106 @@ sub get_zip_info
     $val;
 }
 
-sub my_sendmail
+sub get_sub_info
 {
-    my($return_path,$from_addr,$from_name,
-       $subject,$xtrahead,$body,$to,$cc) = @_;
+    my($em) = @_;
 
-    unless ($return_path && $to && $subject) {
-	return 0;
+    my $dbmfile = 'subs.db';
+    my(%DB);
+    my($db) = tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444,
+		  $DB_File::DB_HASH)
+	or die "$dbmfile: $!\n";
+
+    my($fd) = $db->fd;
+    open(DB_FH, "<&=$fd") || die "dup $!";
+    unless (flock (DB_FH, LOCK_SH)) { die "flock: $!" }
+
+    my $val = $DB{$em};
+
+    flock(DB_FH, LOCK_UN);
+    undef $db;
+    undef $fd;
+    untie(%DB);
+    close(DB_FH);
+
+    if ($val && $val =~ /^action=/) {
+	return undef;
     }
 
-    my($smtp) = Net::SMTP->new('localhost', Timeout => 20);
-    unless ($smtp) {
-        return 0;
-    }
+    return $val;
+}
 
-    chomp($xtrahead);
-    $xtrahead .= "\n" if $xtrahead ne '';
+sub write_staging_info
+{
+    my($q,$now) = @_;
 
-    my(@recip);
-    push(@recip, split(/\s*,\s*/, $to));
-    if ($cc) {
-	push(@recip, split(/\s*,\s*/, $cc));
-	$cc = "Cc: $cc\n";
-    }
+    my $dbmfile = 'email.db';
+    my(%DB);
+    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
+		  $DB_File::DB_HASH)
+	or die "$dbmfile: $!\n";
 
-    my $message =
-"From: \"$from_name\" <$from_addr>
-To: $to
-${cc}${xtrahead}MIME-Version: 1.0
-Content-Type: text/plain
-Subject: $subject
-";
+    my($fd) = $db->fd;
+    open(DB_FH, "+<&=$fd") || die "dup $!";
 
-    my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
-    my($hostname) = $ENV{'HOST'} || `/bin/hostname`;
-    chomp($hostname);
-    $message .= "X-Sender: $login\@$hostname\n";
+    unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
 
-    $message .= "\n" . $body;
+    my $rand = pack("V", int(rand(0xFFFFFFFF)));
+    if ($ENV{'REMOTE_ADDR'}) {
+	$rand .= pack("CCCC", split(/\./, $ENV{'REMOTE_ADDR'}));
+    }
+    $rand .= pack("V", $now);
 
-    unless ($smtp->mail($return_path)) {
-        warn "smtp mail() failure for @recip\n";
-        return 0;
-    }
-    foreach (@recip) {
-	next unless $_;
-        unless($smtp->to($_)) {
-            warn "smtp to() failure for $_\n";
-            return 0;
-        }
-    }
-    unless($smtp->data()) {
-        warn "smtp data() failure for @recip\n";
-        return 0;
-    }
-    unless($smtp->datasend($message)) {
-        warn "smtp datasend() failure for @recip\n";
-        return 0;
-    }
-    unless($smtp->dataend()) {
-        warn "smtp dataend() failure for @recip\n";
-        return 0;
-    }
-    unless($smtp->quit) {
-        warn "smtp quit failure for @recip\n";
-        return 0;
-    }
+    my $encoded = &encode_base64($rand);
+    while (chomp($encoded)) { }
 
-    1;
+    # map potentially dangerous base64 chars to something better for email:
+    #   + becomes . (dot)
+    #   / becomes _ (underscore)
+    #   = becomes - (hyphen)
+    $encoded =~ s/\+/\./g;
+    $encoded =~ s/\//_/g;
+    $encoded =~ s/=/-/g;
+
+    $DB{$encoded} = sprintf("zip=%s;tz=%s;dst=%s;m=%s;t=%d;em=%s",
+			    $q->param('zip'),
+			    $q->param('tz'),
+			    $q->param('dst'),
+			    $q->param('m'),
+			    $now,
+			    $q->param('em'));
+
+    $db->sync;
+    flock(DB_FH, LOCK_UN);
+    undef $db;
+    untie(%DB);
+    close(DB_FH);
+
+    $encoded;
+}
+
+sub write_sub_info
+{
+    my($q,$value) = @_;
+
+    my $dbmfile = 'subs.db';
+    my(%DB);
+    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
+		  $DB_File::DB_HASH)
+	or die "$dbmfile: $!\n";
+
+    my($fd) = $db->fd;
+    open(DB_FH, "+<&=$fd") || die "dup $!";
+
+    unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
+
+    $DB{$q->param('em')} = $value;
+
+    $db->sync;
+    flock(DB_FH, LOCK_UN);
+    undef $db;
+    untie(%DB);
+    close(DB_FH);
 }
 
 # local variables:
