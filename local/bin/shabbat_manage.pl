@@ -68,17 +68,17 @@ unless (defined $to) {
     exit(0);
 }
 
-if ($to =~ /shabbat-subscribe\@/) {
+if ($to =~ /shabbat-subscribe\@/i) {
     shabbat_log(0, 'subscribe_useweb'); 
     error_email($from,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@/) {
+} elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@/i) {
     shabbat_log(0, 'subscribe_useweb');
     error_email($from,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@/) {
-    subscribe($from,$1);
-} elsif ($to =~ /shabbat-unsubscribe\@/) {
+} elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@/i) {
+    subscribe($from,lc($1));
+} elsif ($to =~ /shabbat-unsubscribe\@/i) {
     unsubscribe($from);
 } else {
     shabbat_log(0, 'badto');
