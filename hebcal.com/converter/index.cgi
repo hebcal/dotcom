@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
-use CGI;
+use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local;
 use Hebcal;
@@ -314,7 +314,7 @@ type="submit" value="Compute Gregorian Date"></td>
     $q->checkbox(-name => 'heb',
 		 -id => 'heb',
 		 -label => "\nShow date in Hebrew font"),
-    qq{</label></td></tr></table></center></form>};
+    qq{</label><br>(requires minimum of IE 4 or Netscape 6)\n</td></tr></table></center></form>};
 
     print STDOUT <<EOHTML
 <p>Reference: <em><a
