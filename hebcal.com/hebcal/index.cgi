@@ -37,7 +37,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Sat Jul 24 14:52:03 PDT 1999
+Last modified: Sat Jul 24 15:15:40 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -355,9 +355,9 @@ for " . $MoY[$mon + 1] . " " . ($year) . "</a>.</p>
 <hr noshade size=\"1\">
 $message
 <form action=\"$cgipath\">
-<input type=\"hidden\" name=\"v\" value=\"1\">
 <label for=\"year\">Year: <input name=\"year\"
 id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
+<input type=\"hidden\" name=\"v\" value=\"1\">
 &nbsp;&nbsp;&nbsp;
 <label for=\"month\">Month:
 <select name=\"month\" id=\"month\">
@@ -576,6 +576,67 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "<dd>", $long_descr, "\n" if $long_descr ne '';
 	print STDOUT "<dd>", $dst_tz_descr, "\n" if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n";
+    }
+
+    print STDOUT "Go to:\n";
+    if ($in{'month'} =~ /^\d+$/)
+    {
+	local($pm,$nm,$py,$ny);
+
+	if ($in{'month'} == 1)
+	{
+	    $pm = 12;
+	    $nm = 2;
+	    $py = $year - 1;
+	    $ny = $year;
+	}
+	elsif ($in{'month'} == 12)
+	{
+	    $pm = 11;
+	    $nm = 1;
+	    $py = $year;
+	    $ny = $year + 1;
+	}
+	else
+	{
+	    $pm = $in{'month'} - 1;
+	    $nm = $in{'month'} + 1;
+	    $ny = $py = $year;
+	}
+
+	print STDOUT "<a href=\"$cgipath?year=", $py, "&amp;month=", $pm;
+	while (($key,$val) = each(%in))
+	{
+	    print STDOUT "&amp;$key=$val"
+		unless $key eq 'year' || $key eq 'month';
+	}
+	print STDOUT "\">", $MoY[$pm], " ", $py, "</a> |\n";
+
+	print STDOUT "<a href=\"$cgipath?year=", $ny, "&amp;month=", $nm;
+	while (($key,$val) = each(%in))
+	{
+	    print STDOUT "&amp;$key=$val"
+		unless $key eq 'year' || $key eq 'month';
+	}
+	print STDOUT "\">", $MoY[$nm], " ", $ny, "</a>\n";
+	print STDOUT "<br>";
+    }
+    else
+    {
+	print STDOUT "<a href=\"$cgipath?year=", ($year - 1);
+	while (($key,$val) = each(%in))
+	{
+	    print STDOUT "&amp;$key=$val" unless $key eq 'year';
+	}
+	print STDOUT "\">", ($year - 1), "</a> |\n";
+
+	print STDOUT "<a href=\"$cgipath?year=", ($year + 1);
+	while (($key,$val) = each(%in))
+	{
+	    print STDOUT "&amp;$key=$val" unless $key eq 'year';
+	}
+	print STDOUT "\">", ($year + 1), "</a>\n";
+	print STDOUT "<br>";
     }
 
     if ($ycal == 0)
