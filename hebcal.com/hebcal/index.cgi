@@ -1068,9 +1068,7 @@ sub results_page()
 	my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
 	    ' style="page-break-before: always"' : '';
 	print STDOUT "<center$style>", $cal->as_HTML(), 
-	    "</center></body></html>\n";
-
-#	return 1;
+	    "</center>\n";
     }
 
     print STDOUT "</p>" unless $q->param('vis');
