@@ -58,6 +58,8 @@ my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.cgi$,/,;
 
+my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
+
 my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 my($items) = format_items($q,$evts);
@@ -78,17 +80,6 @@ sub format_items
 
     my($url) = self_url();
     my(@items);
-
-    my $now = time();
-    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-	localtime($now);
-    $year += 1900;
-
-    my($friday) = Time::Local::timelocal(0,0,0,
-					  $mday,$mon,$year,
-					  $wday,$yday,$isdst);
-    my($saturday) = ($wday == 6) ?
-	$now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
 
     my $tz = 0;
     if ($q->param('tz'))
@@ -262,17 +253,6 @@ sub process_args
 	$q->param($key,$val);
     }
 
-    my($now) = time;
-    if (defined $q->param('t') && $q->param('t') =~ /^\d+$/)
-    {
-	$now = $q->param('t');
-    }
-
-    my $wday = (localtime($now))[6];
-    my($saturday) = ($wday == 6) ?
-	$now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
-
-    my($sat_year) = (localtime($saturday))[5] + 1900;
     my($cmd)  = './hebcal';
 
     my($city_descr,$dst_descr,$tz_descr);
@@ -404,7 +384,7 @@ sub process_args
 	$cmd .= ' -x -h';
     }
 
-    $cmd .= ' -s -c ' . $sat_year;
+    $cmd .= ' -s -c';
 
     # only set expiry if there are CGI arguments
     if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
@@ -448,7 +428,12 @@ sub process_args
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
 
-    my(@events) = Hebcal::invoke_hebcal($cmd, $loc, 0);
+    my @events = Hebcal::invoke_hebcal("$cmd $sat_year", $loc, 0);
+    if ($sat_year != $fri_year) {
+	# Happens when Friday is Dec 31st and Sat is Jan 1st
+	my @ev2 = Hebcal::invoke_hebcal("$cmd 12 $fri_year", $loc, 0);
+	@events = (@ev2, @events);
+    }
     
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -864,6 +849,31 @@ sub form($$$$)
     Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
 
     exit(0);
+}
+
+sub get_saturday
+{
+    my($q) = @_;
+
+    my $now;
+    if (defined $q->param('t') && $q->param('t') =~ /^\d+$/) {
+	$now = $q->param('t');
+    } else {
+	$now = time();
+    }
+
+    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	localtime($now);
+    $year += 1900;
+
+    my $friday = Time::Local::timelocal(0,0,0,
+					$mday,$mon,$year,
+					$wday,$yday,$isdst);
+    my $saturday = ($wday == 6) ?
+	$now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
+    my $sat_year = (localtime($saturday))[5] + 1900;
+
+    ($friday,$year,$saturday,$sat_year);
 }
 
 # local variables:
