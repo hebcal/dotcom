@@ -892,6 +892,7 @@ sub display_html
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
+    $url .= ';tag=1c';
 
     &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
 		      "See all of <a href=\"$url\">this\n",
