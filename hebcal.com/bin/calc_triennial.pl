@@ -36,6 +36,22 @@ if (! -d $outdir) {
 my($mtime) = (stat($infile))[9];
 my($hhmts) = "Last modified:\n" . localtime($mtime);
 
+my($html_footer) = <<EOHTML;
+<p>
+<hr noshade size="1">
+<span class="tiny">Copyright
+&copy; $this_year Michael J. Radwin. All rights reserved.
+<a href="/privacy/">Privacy Policy</a> -
+<a href="/help/">Help</a> -
+<a href="/contact/">Contact</a>
+<br>
+$hhmts
+($rcsrev)
+</span>
+</body></html>
+EOHTML
+;
+
 my(@combined) = ('Vayakhel-Pekudei',
 		 'Tazria-Metzora',
 		 'Achrei Mot-Kedoshim',
@@ -242,6 +258,9 @@ foreach my $h (reverse @all_inorder)
     $h2 = $h;
 }
 
+my(%read_on);
+&readings_for_current_year(\%read_on);
+
 foreach my $h (keys %readings)
 {
     &write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
@@ -251,7 +270,68 @@ foreach my $h (keys %readings)
     &write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
 }
 
+&write_index_page();
+
 exit(0);
+
+sub write_index_page
+{
+    open(OUT1, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
+
+    print OUT1 <<EOHTML;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>Hebcal: Torah Readings</title>
+<base href="http://www.hebcal.com/sedrot/" target="_top">
+<link rel="stylesheet" href="/style.css" type="text/css">
+</head>
+<body>
+<table width="100%" class="navbar">
+<tr><td><small>
+<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+Torah Readings
+</small></td>
+<td align="right"><small><a
+href="/search/">Search</a></small>
+</td></tr></table>
+<h1>Torah Readings</h1>
+<h3>Genesis</h3>
+<dl>
+EOHTML
+    ;
+
+    my($prev_book) = 'Genesis';
+    foreach my $h (@all_inorder, @combined)
+    {
+	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
+	if ($book) {
+	    $book =~ s/\s+.+$//;
+	} else {
+	    $book = "Doubled Parshiyot";
+	}
+
+	my($anchor) = lc($h);
+	$anchor =~ s/[^\w]//g;
+
+	print OUT1 "</dl>\n<h3>$book</h3>\n<dl>\n"
+	    if ($prev_book ne $book);
+	$prev_book = $book;
+
+	print OUT1 qq{<dt><a name="$anchor" },
+	qq{href="$anchor.html">Parashat\n$h</a>\n};
+	if (defined $read_on{$h})
+	{
+	    print OUT1 qq{ - <small>$read_on{$h}</small>\n};
+	}
+    }
+
+    print OUT1 "</dl>\n";
+    print OUT1 $html_footer;
+
+    close(OUT1);
+
+    1;
+}
 
 sub calc_variation_options
 {
@@ -356,6 +436,9 @@ sub write_sedra_page {
 	$prev_anchor .= ".html";
 
 	my $title = "Previous Parsha";
+	if (defined $read_on{$prev}) {
+	    $title = "Torah Reading for " . $read_on{$prev};
+	}
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
 	    qq{title="$title">&lt;&lt; $prev</a>};
     }
@@ -369,6 +452,9 @@ sub write_sedra_page {
 	$next_anchor .= ".html";
 
 	my $title = "Next Parsha";
+	if (defined $read_on{$next}) {
+	    $title = "Torah Reading for " . $read_on{$next};
+	}
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
 	    qq{title="$title">$next &gt;&gt;</a>};
     }
@@ -475,7 +561,7 @@ EOHTML
 	next if (!defined $info && $_ eq 'M');
 	die "no fk $_ defined for $h" unless defined $info;
 	my($label) = ($_ eq 'M') ? 'maf' : $_;
-	print OUT2 qq{<dt><a name="fk-$label">$label:</a>\n}, 
+	print OUT2 qq{<dt><a name="fk-$label">$label:</a>}, 
 		qq{<dd>$info\n};
     }
 
@@ -551,7 +637,7 @@ EOHTML
 	    next if (!defined $info && $_ eq 'M');
 	    die "no aliyah $_ defined for $h" unless defined $info;
 	    my($label) = ($_ eq 'M') ? 'maf' : $_;
-	    print OUT2 qq{<dt><a name="tri-$yr-$label">$label:</a>\n}, 
+	    print OUT2 qq{<dt><a name="tri-$yr-$label">$label:</a>}, 
 	    qq{<dd>$info\n};
 	}
 	print OUT2 "</dl>\n</td>\n";
@@ -599,22 +685,9 @@ EOHTML
 ;
     }
 
-    print OUT2 <<EOHTML;
-<p>
-<hr noshade size="1">
-<span class="tiny">Copyright
-&copy; $this_year Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a>
-<br>
-$hhmts
-($rcsrev)
-</span>
-</body></html>
-EOHTML
-;
+    print OUT2 $html_footer;
 
+    close(OUT2);
 }
 
 sub get_parsha_info
@@ -692,4 +765,25 @@ sub get_parsha_info
 
     ($hebrew,$torah,$haftarah,$haftarah_seph,
      $torah_href,$haftarah_href,$drash_href);
+}
+
+sub readings_for_current_year
+{
+    my($current) = @_;
+
+    my(@events) = &Hebcal::invoke_hebcal('./hebcal -s -h -x -H', '');
+    my($i);
+    for ($i = 0; $i < @events; $i++)
+    {
+	next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
+	my $h = $1;
+
+	my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my $stime = sprintf("%02d %s %04d",
+			    $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    $Hebcal::MoY_long{$month},
+			    $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	$current->{$h} = $stime;
+    }
 }
