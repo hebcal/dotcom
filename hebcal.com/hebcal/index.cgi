@@ -94,7 +94,7 @@ if (defined $q->param('year') && $q->param('year') eq 'now' &&
 
     my($end_day) = &Date::Calc::Days_in_Month($this_year, $this_mon);
     my($end_of_month) =
-	&Time::Local::timelocal(0,0,0,
+	&Time::Local::timelocal(59,59,23,
 				$end_day,
 				$this_mon - 1,
 				$this_year - 1900);
