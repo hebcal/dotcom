@@ -67,7 +67,7 @@ if (! -d $outdir) {
 my($mtime) = (stat($infile))[9];
 my($hhmts) = "Last modified:\n" . localtime($mtime);
 
-my($copyright) = Hebcal::html_copyright2('');
+my($copyright) = Hebcal::html_copyright2('',0);
 my($html_footer) = <<EOHTML;
 <p>
 <hr noshade size="1">
