@@ -34,10 +34,8 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $html_footer = "<hr noshade size=\"1\">
 
-<!-- mjrsig start -->
-  <em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em>
-  <br><br>
-<!-- mjrsig end -->
+<em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em>
+<br><br>
 
 <small>
 <!-- hhmts start -->
