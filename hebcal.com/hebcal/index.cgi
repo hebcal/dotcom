@@ -48,12 +48,11 @@ use lib "/home/mradwin/local/share/perl/site_perl";
 use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use DB_File;
-use Time::Local;
-use Date::Calc;
-use Hebcal;
-use HTML::CalendarMonthSimple;
-use Palm::DBA;
+use Time::Local ();
+use Date::Calc ();
+use Hebcal ();
+use HTML::CalendarMonthSimple ();
+use Palm::DBA ();
 
 my($expires_future) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 my($expires_date) = $expires_future;
@@ -111,7 +110,7 @@ if (defined $q->param('year') && $q->param('year') eq 'now' &&
 
     my($end_day) = &Date::Calc::Days_in_Month($this_year, $this_mon);
     my($end_of_month) =
-	&Time::Local::timelocal(59,59,23,
+	Time::Local::timelocal(59,59,23,
 				$end_day,
 				$this_mon - 1,
 				$this_year - 1900);
@@ -349,8 +348,8 @@ sub dba_display() {
 
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
-    &Palm::DBA::write_header($path_info);
-    &Palm::DBA::write_contents(\@events, $tz, $dst);
+    Palm::DBA::write_header($path_info);
+    Palm::DBA::write_contents(\@events, $tz, $dst);
 }
 
 sub csv_display() {
