@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 10:47:58 PDT 2001
+Last modified: Wed Apr 18 10:49:55 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -398,15 +398,6 @@ sub form
     "</label><br>",
     $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n};
-
-
-    print STDOUT
-	qq{<hr noshade size=\"1\">\n},
-	qq{<p><small>[
-<a href="/hebcal/">Hebcal Interactive Jewish Calendar</a> |
-<a href="/shabbat/">1-Click Shabbat</a> |
-Interactive Yahrzeit/Birthday Calendar
-]</small></p>};
 
     print STDOUT $html_footer;
 
