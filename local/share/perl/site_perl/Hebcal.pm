@@ -4,7 +4,7 @@
 # are calculated from your latitude and longitude (which can be
 # determined by your zip code or closest city).
 #
-# Copyright (c) 2003  Michael John Radwin.  All rights reserved.
+# Copyright (c) 2003  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +45,10 @@ my(%HOLIDAYS);
 my($this_year) = (localtime)[5];
 $this_year += 1900;
 
-my($VERSION) = '$Revision$'; #'
+my($VERSION) = '$Revision$$';
+if ($VERSION =~ /(\d+)\.(\d+)/) {
+    $VERSION = "$1.$2";
+}
 
 $Hebcal::gregorian_warning = "<p><font color=\"#ff0000\">WARNING:
 Results for year 1752 C.E. and before may not be accurate.</font>
@@ -1591,8 +1594,7 @@ sub sendmail_v2($$$)
 
     use Email::Valid;
     use Net::SMTP;
-    use Sys::Hostname;
-
+    
     if (! Email::Valid->address($return_path))
     {
 	warn "Hebcal.pm: Return-Path $return_path is invalid"
@@ -1641,11 +1643,23 @@ sub sendmail_v2($$$)
 	$message .= "$key: $val\n";
     }
 
+    my $hostname = `/bin/hostname -f`;
+    chomp($hostname);
+
     if (! defined $headers->{'X-Sender'})
     {
 	my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
-	my($hostname) = hostname();
 	$message .= "X-Sender: $login\@$hostname\n";
+    }
+
+    if (! defined $headers->{'X-Mailer'})
+    {
+	$message .= "X-Mailer: hebcal mail v$VERSION\n";
+    }
+
+    if (! defined $headers->{'Message-ID'})
+    {
+	$message .= "Message-ID: <HEBCAL.$VERSION." . time() . ".$$\@$hostname>\n";
     }
 
     $message .= "\n" . $body;
@@ -1683,78 +1697,6 @@ sub sendmail_v2($$$)
     unless($smtp->quit) {
         warn "smtp quit failure for @recip\n"
 	    if $warn;
-        return 0;
-    }
-
-    1;
-}
-
-sub sendmail
-{
-    my($return_path,$from_addr,$from_name,
-       $subject,$xtrahead,$body,$to,$cc) = @_;
-
-    use Net::SMTP;
-
-    unless ($return_path && $to && $subject) {
-	return 0;
-    }
-
-    my($smtp) = Net::SMTP->new('localhost', Timeout => 20);
-    unless ($smtp) {
-        return 0;
-    }
-
-    while(chomp($xtrahead)) {}
-    $xtrahead .= "\n" if $xtrahead ne '';
-
-    my(@recip);
-    push(@recip, split(/\s*,\s*/, $to));
-    if ($cc) {
-	push(@recip, split(/\s*,\s*/, $cc));
-	$cc = "Cc: $cc\n";
-    }
-
-    my $message =
-"From: \"$from_name\" <$from_addr>
-To: $to
-${cc}${xtrahead}MIME-Version: 1.0
-Content-Type: text/plain
-Subject: $subject
-";
-
-    my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
-    my($hostname) = $ENV{'HOST'} || `/bin/hostname`;
-    chomp($hostname);
-    $message .= "X-Sender: $login\@$hostname\n";
-
-    $message .= "\n" . $body;
-
-    unless ($smtp->mail($return_path)) {
-        warn "smtp mail() failure for @recip\n";
-        return 0;
-    }
-    foreach (@recip) {
-	next unless $_;
-        unless($smtp->to($_)) {
-            warn "smtp to() failure for $_\n";
-            return 0;
-        }
-    }
-    unless($smtp->data()) {
-        warn "smtp data() failure for @recip\n";
-        return 0;
-    }
-    unless($smtp->datasend($message)) {
-        warn "smtp datasend() failure for @recip\n";
-        return 0;
-    }
-    unless($smtp->dataend()) {
-        warn "smtp dataend() failure for @recip\n";
-        return 0;
-    }
-    unless($smtp->quit) {
-        warn "smtp quit failure for @recip\n";
         return 0;
     }
 
