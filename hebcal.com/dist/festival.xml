@@ -28,7 +28,7 @@ every other day (e.g. fast days): 3
   <aliyah num="7" book="Exodus" begin="12:48" end="12:51" />
   <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
 </festival>
-<festival id="Pesach 2" haftara="II Kings 23:1 - 23:9, 23:21 - 23:25">
+<festival id="Pesach 2" haftara="II Kings 23:1 - 23:9; 23:21 - 23:25">
   <aliyah num="1" book="Leviticus" begin="22:26" end="23:3" />
   <aliyah num="2" book="Leviticus" begin="23:4" end="23:14" />
   <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
@@ -61,8 +61,10 @@ every other day (e.g. fast days): 3
   <aliyah num="4" book="Numbers" begin="28:19" end="28:25" />
 </festival>
 <festival id="Pesach Shabbat Chol ha-Moed" haftara="Ezekiel 37:1 - 37:14">
- <!-- Note: if Shabbat falls on the third day of Chol ha-Moed,
- the readings for the third, fourth, and fifth days are moved ahead. -->
+<!--
+Note: if Shabbat falls on the third day of Chol ha-Moed,
+the readings for the third, fourth, and fifth days are moved ahead.
+-->
   <aliyah num="1" book="Exodus" begin="33:12" end="33:16" />
   <aliyah num="2" book="Exodus" begin="33:17" end="33:19" />
   <aliyah num="3" book="Exodus" begin="33:20" end="33:23" />
@@ -107,6 +109,37 @@ every other day (e.g. fast days): 3
   <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
   <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+</festival>
+<festival id="Shavuot 1" haftara="Ezekiel 1:1-28; 3:12">
+  <aliyah num="1" book="Exodus" begin="19:1" end="19:6" />
+  <aliyah num="2" book="Exodus" begin="19:7" end="19:13" />
+  <aliyah num="3" book="Exodus" begin="19:14" end="19:19" />
+  <aliyah num="4" book="Exodus" begin="19:20" end="20:13" />
+  <aliyah num="5" book="Exodus" begin="20:14" end="20:22" />
+  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+</festival>
+<festival id="Shavuot 2" haftara="Habakkuk 3:1-19">
+  <aliyah num="1" book="Deuteronomy" begin="15:19" end="15:23" />
+  <aliyah num="2" book="Deuteronomy" begin="16:1" end="16:3" />
+  <aliyah num="3" book="Deuteronomy" begin="16:4" end="16:8" />
+  <aliyah num="4" book="Deuteronomy" begin="16:9" end="16:12" />
+  <aliyah num="5" book="Deuteronomy" begin="16:13" end="16:17" />
+  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+</festival>
+<festival id="Shavuot 2 (on Shabbat)" haftara="Habakkuk 3:1-19">
+  <aliyah num="1" book="Deuteronomy" begin="14:22" end="14:29" />
+  <aliyah num="2" book="Deuteronomy" begin="15:1" end="15:18" />
+  <aliyah num="3" book="Deuteronomy" begin="15:19" end="15:23" />
+  <aliyah num="4" book="Deuteronomy" begin="16:1" end="16:3" />
+  <aliyah num="5" book="Deuteronomy" begin="16:4" end="16:8" />
+  <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
+  <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
+  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+</festival>
+<festival id="Fast Days (Shacharit)">
+  <aliyah num="1" book="Exodus" begin="32:11" end="32:14" />
+  <aliyah num="2" book="Exodus" begin="34:1" end="34:3" />
+  <aliyah num="3" book="Exodus" begin="34:4" end="34:10" />
 </festival>
 <festival id="" haftara="">
   <aliyah num="1" book="" begin="" end="" />
