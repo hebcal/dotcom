@@ -666,7 +666,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday6.htm" />
-  <link />
+  <link rel="torah"
+ href="http://learn.jtsa.edu/topics/parashah/jpstext/simhattorah.shtml" />
+  <link rel="haftara"
+ href="http://learn.jtsa.edu/topics/parashah/jpstext/simhattorah_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="54" num="1" book="Deuteronomy" begin="33:1" end="33:7" />
@@ -684,7 +687,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday6.htm" />
-  <link />
+  <link rel="torah"
+ href="http://learn.jtsa.edu/topics/parashah/jpstext/simhattorah.shtml" />
+  <link rel="haftara"
+ href="http://learn.jtsa.edu/topics/parashah/jpstext/simhattorah_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="54" num="1" book="Deuteronomy" begin="33:1" end="33:7" />
