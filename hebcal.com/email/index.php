@@ -21,9 +21,9 @@ href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
 </td></tr></table><h1>1-Click Shabbat by Email</h1>
 <?php
-require_once('smtp.inc');
-require_once('zips.inc');
-require_once('HTML/Form.php');
+require("./smtp.inc");
+require("./zips.inc");
+require("HTML/Form.php");
 
 $VER = '$Revision$';
 $matches = array();
@@ -32,30 +32,15 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
 }
 
 $param = array();
-
-global $HTTP_POST_VARS;
-global $HTTP_GET_VARS;
-
-if (!isset($HTTP_POST_VARS['v']) && !isset($HTTP_GET_VARS['v']) &&
-    !isset($HTTP_POST_VARS['e']) && !isset($HTTP_GET_VARS['e']))
+if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"]))
 {
-global $HTTP_SERVER_VARS;
-$cookies = explode(';', $HTTP_SERVER_VARS["HTTP_COOKIE"]);
-foreach ($cookies as $ck) {
-    if (substr($ck, 0, 2) == 'C=') {
-	$cookie_parts = explode('&', substr($ck, 2));
-	for ($i = 0; $i < count($cookie_parts); $i++) {
-	    $parts = explode('=', $cookie_parts[$i], 2);
-	    $param[$parts[0]] = $parts[1];
-	}
+    if (isset($_COOKIE["C"]))
+    {
+	parse_str($_COOKIE["C"], $param);
     }
 }
-}
 
-foreach($HTTP_POST_VARS as $key => $value) {
-    $param[$key] = $value;
-}
-foreach($HTTP_GET_VARS as $key => $value) {
+foreach($_REQUEST as $key => $value) {
     $param[$key] = $value;
 }
 
@@ -187,8 +172,6 @@ EOD;
 
 function write_staging_info($param, $old_encoded)
 {
-    global $HTTP_SERVER_VARS;
-
     if ($old_encoded)
     {
 	$encoded = $old_encoded;
@@ -198,9 +181,9 @@ function write_staging_info($param, $old_encoded)
 	$now = time();
 	$rand = pack("V", $now);
 
-	if ($HTTP_SERVER_VARS["REMOTE_ADDR"])
+	if ($_SERVER["REMOTE_ADDR"])
 	{
-	    list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
+	    list($p1,$p2,$p3,$p4) = explode('.', $_SERVER["REMOTE_ADDR"]);
 	    $rand .= pack("CCCC", $p1, $p2, $p3, $p4);
 	}
 
@@ -248,8 +231,7 @@ EOD;
 
 
 function my_footer() {
-    global $HTTP_SERVER_VARS;
-    $stat = stat($HTTP_SERVER_VARS["SCRIPT_FILENAME"]);
+    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
     $year = strftime("%Y", time());
     $date = strftime("%c", $stat[9]);
     global $VER;
@@ -472,8 +454,7 @@ function subscribe($param) {
 	$return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@hebcal.com";
 	$subject = "Your subscription is updated";
 
-	global $HTTP_SERVER_VARS;
-	$ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+	$ip = $_SERVER["REMOTE_ADDR"];
 
 	$headers = array('From' => "\"$from_name\" <$from_addr>",
 			 'To' => $param['em'],
@@ -535,8 +516,7 @@ EOD
     $return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
-    global $HTTP_SERVER_VARS;
-    $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+    $ip = $_SERVER["REMOTE_ADDR"];
 
     $headers = array('From' => "\"$from_name\" <$from_addr>",
 		     'To' => $param['em'],
@@ -580,7 +560,7 @@ to <b>$html_email</b>.<br>
 Simply reply to that message to confirm your subscription.</p>
 <p>If you do not receive this acknowledgment message within an hour
 or two, then the most likely problem is that you made a typo
-in your email address.  If you don't get the confirmation message,
+in your email address.  If you do not get the confirmation message,
 please return to the subscription page and try again, taking care
 to avoid typos.</p>
 <p><small>
@@ -650,8 +630,7 @@ EOD
     $return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";
 
-    global $HTTP_SERVER_VARS;
-    $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+    $ip = $_SERVER["REMOTE_ADDR"];
 
     $headers = array('From' => "\"$from_name\" <$from_addr>",
 		     'To' => $param['em'],
