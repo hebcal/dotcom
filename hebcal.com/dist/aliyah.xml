@@ -2759,15 +2759,15 @@ n<year num="3">
 </parsha>
 
 <!-- Combined Sidrot -->
-<parsha id="Vayakhel-Pekudei">
+<parsha id="Vayakhel-Pekudei" verse="Exodus 35:1 - 40:38">
 <fullkriyah>
- <aliyah num="1" begin="35:1" end="35:29" />
- <aliyah num="2" begin="35:30" end="37:16" />
- <aliyah num="3" begin="37:17" end="37:29" />
- <aliyah num="4" begin="38:1" end="39:1" />
- <aliyah num="5" begin="39:2" end="39:21" />
- <aliyah num="6" begin="39:22" end="39:43" />
- <aliyah num="7" begin="40:1" end="40:38" />
+ <aliyah num="1" begin="35:1" end="35:29" numverses="29" />
+ <aliyah num="2" begin="35:30" end="37:16" numverse="60" />
+ <aliyah num="3" begin="37:17" end="37:29" numverses="13" />
+ <aliyah num="4" begin="38:1" end="39:1" numverses="32" />
+ <aliyah num="5" begin="39:2" end="39:21" numverses="20" />
+ <aliyah num="6" begin="39:22" end="39:43" numverses="22" />
+ <aliyah num="7" begin="40:1" end="40:38" numverses="38" />
 </fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
@@ -2810,15 +2810,15 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Tazria-Metzora">
+<parsha id="Tazria-Metzora" verse="Leviticus 12:1 - 15:33">
 <fullkriyah>
- <aliyah num="1" begin="12:1" end="13:23" />
- <aliyah num="2" begin="13:24" end="13:39" />
- <aliyah num="3" begin="13:40" end="13:54" />
- <aliyah num="4" begin="13:55" end="14:20" />
- <aliyah num="5" begin="14:21" end="14:32" />
- <aliyah num="6" begin="14:33" end="15:15" />
- <aliyah num="7" begin="15:16" end="15:33" />
+ <aliyah num="1" begin="12:1" end="13:23" numverses="31" />
+ <aliyah num="2" begin="13:24" end="13:39" numverses="16" />
+ <aliyah num="3" begin="13:40" end="13:54" numverses="15" />
+ <aliyah num="4" begin="13:55" end="14:20" numverses="25" />
+ <aliyah num="5" begin="14:21" end="14:32" numverses="12" />
+ <aliyah num="6" begin="14:33" end="15:15" numverses="40" />
+ <aliyah num="7" begin="15:16" end="15:33" numverses="18" />
 </fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
@@ -2859,15 +2859,15 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Achrei Mot-Kedoshim">
+<parsha id="Achrei Mot-Kedoshim" verse="Leviticus 16:1 - 20:27">
 <fullkriyah>
- <aliyah num="1" begin="16:1" end="16:24" />
- <aliyah num="2" begin="16:25" end="17:7" />
- <aliyah num="3" begin="17:8" end="18:21" />
- <aliyah num="4" begin="18:22" end="19:14" />
- <aliyah num="5" begin="19:15" end="19:32" />
- <aliyah num="6" begin="19:33" end="20:7" />
- <aliyah num="7" begin="20:8" end="20:27" />
+ <aliyah num="1" begin="16:1" end="16:24" numverses="24" />
+ <aliyah num="2" begin="16:25" end="17:7" numverses="17" />
+ <aliyah num="3" begin="17:8" end="18:21" numverses="30" />
+ <aliyah num="4" begin="18:22" end="19:14" numverses="23" />
+ <aliyah num="5" begin="19:15" end="19:32" numverses="18" />
+ <aliyah num="6" begin="19:33" end="20:7" numverses="12" />
+ <aliyah num="7" begin="20:8" end="20:27" numverses="20" />
 </fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
@@ -2908,15 +2908,15 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Behar-Bechukotai">
+<parsha id="Behar-Bechukotai" verse="Leviticus 25:1 - 27:34">
 <fullkriyah>
- <aliyah num="1" begin="25:1" end="25:18" />
- <aliyah num="2" begin="25:19" end="25:28" />
- <aliyah num="3" begin="25:29" end="25:38" />
- <aliyah num="4" begin="25:39" end="26:9" />
- <aliyah num="5" begin="26:10" end="26:46" />
- <aliyah num="6" begin="27:1" end="27:15" />
- <aliyah num="7" begin="27:16" end="27:34" />
+ <aliyah num="1" begin="25:1" end="25:18" numverses="18" />
+ <aliyah num="2" begin="25:19" end="25:28" numverses="10" />
+ <aliyah num="3" begin="25:29" end="25:38" numverses="10" />
+ <aliyah num="4" begin="25:39" end="26:9" numverses="26" />
+ <aliyah num="5" begin="26:10" end="26:46" numverses="37" />
+ <aliyah num="6" begin="27:1" end="27:15" numverses="15" />
+ <aliyah num="7" begin="27:16" end="27:34" numverses="19" />
 </fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
@@ -2957,15 +2957,15 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Chukat-Balak">
+<parsha id="Chukat-Balak" verse="Numbers 19:1 - 25:9">
 <fullkriyah>
- <aliyah num="1" begin="19:1" end="20:6" />
- <aliyah num="2" begin="20:7" end="20:21" />
- <aliyah num="3" begin="20:22" end="21:20" />
- <aliyah num="4" begin="21:21" end="22:12" />
- <aliyah num="5" begin="22:13" end="22:38" />
- <aliyah num="6" begin="22:39" end="23:26" />
- <aliyah num="7" begin="23:27" end="25:9" />
+ <aliyah num="1" begin="19:1" end="20:6" numverses="28" />
+ <aliyah num="2" begin="20:7" end="20:21" numverses="15" />
+ <aliyah num="3" begin="20:22" end="21:20" numverses="28" />
+ <aliyah num="4" begin="21:21" end="22:12" numverses="27" />
+ <aliyah num="5" begin="22:13" end="22:38" numverses="26" />
+ <aliyah num="6" begin="22:39" end="23:26" numverses="29" />
+ <aliyah num="7" begin="23:27" end="25:9" numverses="38" />
 </fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
@@ -3009,15 +3009,15 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Matot-Masei">
+<parsha id="Matot-Masei" verse="Numbers 30:2 - 36:13">
 <fullkriyah>
- <aliyah num="1" begin="30:2" end="31:12" />
- <aliyah num="2" begin="31:13" end="31:54" />
- <aliyah num="3" begin="32:1" end="32:19" />
- <aliyah num="4" begin="32:20" end="33:49" />
- <aliyah num="5" begin="33:50" end="34:15" />
- <aliyah num="6" begin="34:16" end="35:8" />
- <aliyah num="7" begin="35:9" end="36:13" />
+ <aliyah num="1" begin="30:2" end="31:12" numverses="28" />
+ <aliyah num="2" begin="31:13" end="31:54" numverses="42" />
+ <aliyah num="3" begin="32:1" end="32:19" numverses="19" />
+ <aliyah num="4" begin="32:20" end="33:49" numverses="72" />
+ <aliyah num="5" begin="33:50" end="34:15" numverses="22" />
+ <aliyah num="6" begin="34:16" end="35:8" numverses="22" />
+ <aliyah num="7" begin="35:9" end="36:13" numverses="39" />
 </fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
@@ -3057,15 +3057,15 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Nitzavim-Vayeilech">
+<parsha id="Nitzavim-Vayeilech" verse="Deuteronomy 29:9 - 31:30">
 <fullkriyah>
- <aliyah num="1" begin="29:9" end="29:28" />
- <aliyah num="2" begin="30:1" end="30:6" />
- <aliyah num="3" begin="30:7" end="30:14" />
- <aliyah num="4" begin="30:15" end="31:6" />
- <aliyah num="5" begin="31:7" end="31:13" />
- <aliyah num="6" begin="31:14" end="31:19" />
- <aliyah num="7" begin="31:20" end="31:30" />
+ <aliyah num="1" begin="29:9" end="29:28" numverses="20" />
+ <aliyah num="2" begin="30:1" end="30:6" numverses="6" />
+ <aliyah num="3" begin="30:7" end="30:14" numverses="8" />
+ <aliyah num="4" begin="30:15" end="31:6" numverses="12" />
+ <aliyah num="5" begin="31:7" end="31:13" numverses="7" />
+ <aliyah num="6" begin="31:14" end="31:19" numverses="6" />
+ <aliyah num="7" begin="31:20" end="31:30" numverses="11" />
 </fullkriyah>
 <!-- When these Sidrot are not combined, they should each be -->
 <!-- read in their entirety. -->
