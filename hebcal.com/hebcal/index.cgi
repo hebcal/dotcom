@@ -27,11 +27,12 @@ require 'cgi-lib.pl';
 require 'timelocal.pl';
 require 'ctime.pl';
 
+$author = 'michael@radwin.org';
 $dbmfile = 'zips.db';
 $dbmfile =~ s/\.db$//;
 
 &CgiDie("Script Error: No Database", "\nThe database is unreadable.\n" .
-	"Please <a href=\"mailto:michael\@radwin.org" .
+	"Please <a href=\"mailto:$author" .
 	"\">e-mail Michael</a> to tell him that hebcal is broken.")
     unless -r "${dbmfile}.db";
 
@@ -316,15 +317,15 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 \t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
 <html><head>
 <title>Hebcal Interactive Jewish Calendar</title>
-<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
+<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
 <meta name=\"description\" content=\"Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude.\">
 <meta name=\"keywords\" content=\"hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff\">
-<link rev=\"made\" href=\"mailto:michael\@radwin.org\">
+<link rev=\"made\" href=\"mailto:$author\">
 <meta name=\"DC.Title\" content=\"Hebcal Interactive Jewish Calendar\">
 <link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#title\">
 <meta name=\"DC.Creator.PersonalName\" content=\"Radwin, Michael\">
 <link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#creator\">
-<meta name=\"DC.Creator.PersonalName.Address\" content=\"michael@radwin.org\">
+<meta name=\"DC.Creator.PersonalName.Address\" content=\"$author\">
 <link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#creator\">
 <meta name=\"DC.Subject\" content=\"Jewish calendar\">
 <link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
@@ -348,7 +349,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Mon Dec  6 11:53:29 PST 1999
+Last modified: Thu Dec 16 18:02:40 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -634,33 +635,20 @@ $cmd .= " $year";
 open(HEBCAL,"$cmd |") ||
     &CgiDie("Script Error: can't run hebcal",
 	    "\nCommand was \"$cmd\".\n" .
-	    "Please <a href=\"mailto:michael\@radwin.org" .
+	    "Please <a href=\"mailto:$author" .
 	    "\">e-mail Michael</a> to tell him that hebcal is broken.");
-
-$endl = "\012";			# default Netscape and others
-if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
-{
-    $endl = "\015\012"
-	if $ENV{'HTTP_USER_AGENT'} =~ /Microsoft Internet Explorer/;
-    $endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
-}
 
 local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
     (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
 print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
 print STDOUT "Expires: $expires_date\015\012";
-#if ($endl eq "\012")
-    if(1)
-{
-    print STDOUT "Content-Type: text/x-csv\015\012\015\012";
-}
-else
-{
-    print STDOUT "Content-Type: text/plain\015\012\015\012";
-}
+print STDOUT "Content-Type: text/x-csv\015\012\015\012";
 
-print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"$endl";
+$endl = "\015\012";
+print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",",
+    "\"End Time\",\"All day event\",\"Description\",",
+    "\"Private\",\"Show time as\"$endl";
 
 $prev = '';
 local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
@@ -676,8 +664,9 @@ while(<HEBCAL>)
     ($subj,$date,$start_time,$end_date,$end_time,$all_day)
 	= &parse_date_descr($date,$descr);
 
-    print STDOUT "\"$subj\",\"$date\",$start_time,$end_date,$end_time,$all_day,";
-    print STDOUT "\"", ($start_time eq '' ? '' : $loc), "\"$endl";
+    print STDOUT '"', $subj, '","', $date, '",', $start_time, ',', $end_date,
+	',', $end_time, ',"', $all_day, ',"',
+	($start_time eq '' ? '' : $loc), '","true","3"', $endl;
 }
 close(HEBCAL);
 close(STDOUT);
@@ -1077,7 +1066,7 @@ sub results_page
 \t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
 <html><head>
 <title>Hebcal: Jewish Calendar $date</title>
-<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
+<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
 <meta name=\"robots\" content=\"noindex\">
 <link rel=\"start\" href=\"$cgipath\" title=\"Hebcal Interactive Jewish Calendar\">
 <link rel=\"prev\" href=\"$prev_url\" title=\"$prev_title\">
@@ -1137,10 +1126,9 @@ $date</small>
 <p>Your personal <a href=\"http://calendar.yahoo.com/\">Yahoo!
 Calendar</a> is a free web-based calendar that can synchronize with Palm
 Pilot, Outlook, etc.</p>
-
-<p>If you wish to upload <strong>all</strong> of the below holidays to
-your Yahoo!  Calendar, do the following:</p>
-
+<ul>
+<li>If you wish to upload <strong>all</strong> of the below holidays to
+your Yahoo!  Calendar, do the following:
 <ol>
 <li>Click the \"Download as an Outlook CSV file\" button above.
 <li>Save the hebcal CSV file on your computer.
@@ -1149,11 +1137,10 @@ Yahoo! Calendar.
 <li>Find the \"Import from Outlook\" section and choose \"Import Now\"
 to import your CSV file to your online calendar.
 </ol>
-
-<p>To import individual holidays one at a time, use the \"add\" links
-below.  These links will pop up a new browser window so you can keep
-this window open.</p>
-</small></div>
+<li>To import selected holidays <strong>one at a time</strong>, use
+the \"add\" links below.  These links will pop up a new browser window
+so you can keep this window open.
+</ul></small></div>
 " if $ycal;
 
     $cmd_pretty = $cmd;
@@ -1163,7 +1150,7 @@ this window open.</p>
     open(HEBCAL,"$cmd |") ||
 	&CgiDie("Script Error: can't run hebcal",
 		"\nCommand was \"$cmd\".\n" .
-		"Please <a href=\"mailto:michael\@radwin.org" .
+		"Please <a href=\"mailto:$author" .
 		"\">e-mail Michael</a> to tell him that hebcal is broken.");
 
     $prev = '';
