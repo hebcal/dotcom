@@ -2,164 +2,126 @@
 
 # $Id$
 
-BEGIN
-{
-    my $base = $0;
-    $base =~ s,/[^/]+$,,;
-    push(@INC, $base);
-}
+# Copyright (c) 2002  Michael John Radwin.  All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-use DB_File;
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use strict;
 use Hebcal;
 
-my(%DB);
-my($dbmfile) = '../hebcal/zips.db';
-tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-    || die "Can't tie $dbmfile: $!\n";
-die unless defined $DB{"95051"};
+my $DB = &Hebcal::zipcode_open_db();
+die unless defined $DB->{"95051"};
 
-my($apache_date);
-if (defined $ARGV[0])
-{
-    $apache_date = $ARGV[0];
-}
-else
-{
-    my($yesterday) = time - (60 * 60 * 24);
-
-    my(undef,undef,undef,$mday,$mon,$year,undef,undef,undef) =
-	localtime($yesterday);
-
-    my(@MoY) = ('Jan','Feb','Mar','Apr','May','Jun',
-		'Jul','Aug','Sep','Oct','Nov','Dec');
-
-    $apache_date = sprintf("%02d/%s/%4d", $mday, $MoY[$mon], $year + 1900);
-}
-
-my($home) = my($faq) = my($holidays) = my($doc_other) = my($queries) =
-    my($candle) = my($zip) = my($city) = my($pos) = my($yhoo) =
-    my($download) = my($dba) = my($csv) = 0;
-my($unk_zip) = my($unk_tz) = 0;
+my($ncandle) = my($nzip) = my($ncity) = my($npos) =
+    my($ndownload) = my($ndba) = my($ncsv) = 0;
+my($unk_zip) = 0;
 my(%unk_zip) = ();
-my(%unk_tz) = ();
 
+my %counter = ();
 while(<STDIN>)
 {
     next unless substr($_, 0, 14) eq 'www.hebcal.com';
-    next unless m,\s+\[$apache_date,o;
 
-    $home++ if m,GET\s+/hebcal/\s+HTTP,;
-    if (m,GET\s+/help/,)
+    my $part;
+    if (m,(GET|POST)\s+/\s+HTTP/,)
     {
-	if (m,GET\s+/help/\s+HTTP,)
+	$part = '/';
+    }
+    elsif (m,(GET|POST)\s+/([^\s/]+),)
+    {
+	$part = $2;
+    }
+    else
+    {
+	next;
+    }
+
+    if (defined $counter{$part}) {
+	$counter{$part}++;
+    } else {
+	$counter{$part} = 1;
+    }
+
+    if (m,\.(dba|csv), && /v=1/ && /dl=1/)
+    {
+	$ndownload++;
+
+	if (m,\.dba,)
 	{
-	    $faq++;
-	}
-	elsif (m,GET\s+/help/(defaults|holidays).html\s+HTTP,)
-	{
-	    $holidays++;
+	    $ndba++;
 	}
 	else
 	{
-	    $doc_other++;
+	    $ncsv++;
 	}
     }
 
-    if (m,GET\s+/hebcal/index.html/.+\.(dba|csv), && /v=1/ && /dl=1/)
+    if (m,GET\s+/hebcal/\?, && /v=1/)
     {
-	$download++;
-
-	if (m,/index.html/.+\.dba,)
-	{
-	    $dba++;
-	}
-	else
-	{
-	    $csv++;
-	}
-    }
-    elsif (m,GET\s+/hebcal/\?, && /v=1/)
-    {
-	$queries++;
-
-	if (/\by=(on|1)\b/)
-	{
-	    $yhoo++;
-	}
-
 	if (/\bc=(on|1)\b/)
 	{
-	    $candle++;
+	    $ncandle++;
 	    if (/geo=city/)
 	    {
-		$city++;
+		$ncity++;
 	    }
 	    elsif (/geo=pos/)
 	    {
-		$pos++;
+		$npos++;
 	    }
 	    elsif (/zip=(\d\d\d\d\d)/)
 	    {
 		my($zipcode) = $1;
-		my($val) = $DB{$zipcode};
-		$zip++;
+		my($val) = $DB->{$zipcode};
+		$nzip++;
 
 		if (!defined $val) {
 		    $unk_zip++;
 		    $unk_zip{$zipcode}++;
-		    $candle--;
-		    $queries--;
-		    $zip--;
-		}
-		else
-		{
-		    my(undef,$state) = split(/\0/, substr($val,6));
-		    if (/=auto/)
-		    {
-			my($tz) = &Hebcal::guess_timezone('auto',
-							  $zipcode,$state);
-			unless (defined $tz)
-			{
-			    $unk_tz++;
-			    $unk_tz{$zipcode}++;
-			    $candle--;
-			    $queries--;
-			    $zip--;
-			}
-		    }
+		    $ncandle--;
+		    $nzip--;
 		}
 	    }
 	    else
 	    {
-		$candle--;
-		$queries--;
+		$ncandle--;
 	    }
 	}
     }
 }
+ 
+printf "%5d download (%5d dba, %5d csv)\n",
+   $ndownload, $ndba, $ncsv;
+printf "%5d candle   (%5d zip, %5d city, %5d pos)\n\n",
+    $ncandle, $nzip, $ncity, $npos;
 
-printf "%4d home\n", $home;
-printf "%4d faq\n", $faq;
-printf "%4d holidays\n", $holidays;
-printf "%4d doc_other\n", $doc_other;
-printf "%4d queries\n", $queries;
-printf "%4d download (%4d dba, %4d csv, %4d yhoo)\n",
-    $download + $yhoo, $dba, $csv, $yhoo;
-printf "%4d candle (%4d zip, %4d city, %4d pos)\n",
-    $candle, $zip, $city, $pos;
+foreach my $part (sort { $counter{$b} <=> $counter{$a} } keys %counter)
+{
+    printf "%5d %s\n", $counter{$part}, $part;
+}
 
-if ($unk_zip + $unk_tz > 0) {
-    printf "\n%4d zips unk, %4d timezone unk\n", $unk_zip, $unk_tz;
+if ($unk_zip > 0) {
+    printf "\n%5d zips unknown\n", $unk_zip;
 
     foreach (sort keys %unk_zip) {
-	printf "%s %4d\n", $_, $unk_zip{$_};
-    }
-
-    foreach (sort keys %unk_tz) {
-	my($zip_city,$state) = split(/\0/, substr($DB{$_},6));
-	printf "%s, %s %s (%d pv)\n", $zip_city, $state, $_, $unk_tz{$_};
+	printf "%s %5d\n", $_, $unk_zip{$_};
     }
 }
-untie(%DB);
+
+&Hebcal::zipcode_close_db($DB);
+undef($DB);
+
 exit(0);
