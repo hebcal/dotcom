@@ -36,7 +36,7 @@ $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed May  9 14:54:16 PDT 2001
+Last modified: Wed May  9 15:00:50 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -347,13 +347,7 @@ All rights reserved.</copyright>
     }
     elsif ($q->param('cfg') eq 'w')
     {
-	&my_header('');
-	&out_html(qq{<?xml version="1.0"?>
-<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
-"http://www.wapforum.org/DTD/wml_1.1.xml">
-<wml>
-<card id="shabbat" title="1-Click Shabbat">
-});
+	&my_header('1-Click Shabbat');
     }
 }
 else
@@ -635,6 +629,12 @@ sub my_header
     elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
     {
 	print STDOUT "Content-Type: text/vnd.wap.wml\015\012\015\012";
+	&out_html(qq{<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
+"http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<card id="shabbat" title="$title">
+});
     }
     else
     {
@@ -657,6 +657,14 @@ sub form
     my($head,$message,$help) = @_;
 
     &my_header('1-Click Shabbat') if $head;
+
+    if (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+    {
+	&out_html(qq{<p>$message</p>\n},
+		  qq{<do type="accept" label="Back">\n},
+		  qq{<prev/>\n</do>\n</card>\n</wml>\n});
+	exit(0);
+    }
 
     if ($message ne '')
     {
