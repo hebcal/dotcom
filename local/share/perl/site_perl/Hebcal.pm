@@ -650,11 +650,13 @@ sub cache_begin($)
     $qs =~ s/[\<\>\s\"\'\`\?\*\$\|\[\]\{\}\\\~]//g; # unsafe chars
 
     my $dir = $ENV{"DOCUMENT_ROOT"} . "/cache/" . $script_name;
-    my $fn = "$dir/$qs.tmp";
+    unless (-d $dir) {
+	system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed: $?";
+    }
 
-    system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed: $?";
-    open(CACHE, ">$fn") || die "$fn: $!\n";
-    $cache = $fn;
+    $cache = "$dir/$qs.$$";
+    open(CACHE, ">$cache") || die "$cache: $!\n";
+
     $cache;
 }
 
@@ -665,7 +667,7 @@ sub cache_end()
 	close(CACHE);
 	my $fn = $cache;
 	my $newfn = $fn;
-	$newfn =~ s/\.tmp$//;
+	$newfn =~ s/\.\d+$//;	# no pid
 	rename($fn, $newfn);
 	$cache = undef;
     }
