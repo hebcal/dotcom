@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 # $Id$
 
@@ -42,23 +42,21 @@ use DB_File;
      'Washington DC', '20301',
      );
 
-$dbmfile = '/home/web/hebcal.com/docs/hebcal/zips.db';
+$dbmfile = '/pub/m/r/mradwin/hebcal.com/hebcal/zips.db';
 tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
 
 $total = 0;
 $filename = defined $ARGV[0] ? $ARGV[0] : 
-    '/var/log/httpd/hebcal.com-access_log';
+    '/var/log/httpd/access_log.vhosts';
 open(A,$filename) || die "$filename: $!\n";
 while(<A>)
 {
+    next unless substr($_, 0, 14) eq 'www.hebcal.com';
     next unless m,/hebcal/, || m,/shabbat/,;
     next if /cfg=r/;
-    next if /cfg=/;
-    next if /^208\.46\.162\.254/;
-    next if /^24\.130\.2\.|24\.167\.142\./;
-    next if /^207\.55\.191\.4|205\.216\.162\.|198\.144\.204\.|198\.144\.193\.150|206\.251\.16\./;
+#    next if /cfg=/;
 
     if (/zip=(\d\d\d\d\d)/) {
 	if (defined $zips{$1}) {
