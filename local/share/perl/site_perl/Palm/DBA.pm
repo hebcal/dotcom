@@ -41,7 +41,7 @@ $Palm::DBA::EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
 $Palm::DBA::EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
 $Palm::DBA::EVT_IDX_MDAY = 4;		# day of month, [1 .. 31]
 $Palm::DBA::EVT_IDX_MON = 5;		# month of year, [0 .. 11]
-$Palm::DBA::EVT_IDX_YEAR = 6;		# year [1 .. 9999]
+$Palm::DBA::EVT_IDX_YEAR = 6;		# year [1970 .. 2038]
 $Palm::DBA::EVT_IDX_DUR = 7;		# duration in minutes
 $Palm::DBA::EVT_IDX_MEMO = 8;		# memo text
 
@@ -182,7 +182,7 @@ sub write_contents
 	else
 	{
 	    &write_int($startTime +
-			   ($events->[$i]->[$Palm::DBA::EVT_IDX_DUR] * 60));
+		       ($events->[$i]->[$Palm::DBA::EVT_IDX_DUR] * 60));
 	}
 
 	&write_int(5);		# spacer
