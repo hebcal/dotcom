@@ -403,7 +403,7 @@ JSCRIPT_END
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
     print STDOUT "\n<p style=\"color: red; font-size: large\"><em>Shana Tova!</em>\n",
-    "Hebcal.com wishes you a sweet and happy new year.</p>";
+    "Hebcal.com wishes you a sweet and happy New Year.</p>";
 
     if ($message ne '')
     {
