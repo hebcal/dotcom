@@ -332,10 +332,6 @@ sub read_aliyot_metadata
 sub write_sedra_page {
     my($h,$prev,$next,$triennial) = @_;
 
-    my %read_on;
-
-    my $date = defined $read_on{$h} ? $read_on{$h} : '';
-
     my(undef,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href) =
 	&Hebcal::get_holiday_anchor("Parashat $h", 0);
     my($memo2) = (&Hebcal::get_holiday_anchor("Parashat $h", 1))[2];
@@ -367,10 +363,6 @@ sub write_sedra_page {
 	$prev_anchor .= ".html";
 
 	my $title = "Previous Parsha";
-	if (defined $read_on{$prev})
-	{
-	    $title = "Torah Reading for " . $read_on{$prev};
-	}
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
 	    qq{title="$title">&lt;&lt; $prev</a>};
     }
@@ -384,10 +376,6 @@ sub write_sedra_page {
 	$next_anchor .= ".html";
 
 	my $title = "Next Parsha";
-	if (defined $read_on{$next})
-	{
-	    $title = "Torah Reading for " . $read_on{$next};
-	}
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
 	    qq{title="$title">$next &gt;&gt;</a>};
     }
@@ -443,8 +431,7 @@ href="/search/">Search</a></small>
 <br>
 <table width="100%">
 <tr>
-<td><h1>Parashat $h</h1>
-$date</td>
+<td><h1>Parashat $h</h1></td>
 <td><h1 dir="rtl" class="hebrew" name="hebrew"
 lang="he">$hebrew</h1></td>
 </tr>
