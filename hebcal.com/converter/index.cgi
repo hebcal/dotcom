@@ -27,6 +27,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use Time::Local;
 use Hebcal;
 use Unicode::String;
+use Date::Calc;
 use strict;
 
 my(%num2heb) =
@@ -145,6 +146,20 @@ else
 
 	&form(1,'Gregorian year out of valid range 0001-9999','')
 	    if ($q->param('gy') > 9999 || $q->param('gy') < 1);
+
+	# after sunset?
+	if ($q->param('gs'))
+	{
+	    my $gm = $q->param('gm');
+	    my $gd = $q->param('gd');
+	    my $gy = $q->param('gy');
+
+	    ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,1);
+
+	    $q->param('gm', $gm);
+	    $q->param('gd', $gd);
+	    $q->param('gy', $gy);
+	}
     }
     else
     {
@@ -297,8 +312,14 @@ sub form($$$)
 		  -id => "gy",
 		  -maxlength => 4,
 		  -size => 4),
-    qq{</td></tr>
-<tr><td colspan="3"><input name="g2h"
+    qq{</td></tr>\n<tr><td colspan="3"><label for="gs">},
+    $q->checkbox(-name => 'gs',
+		 -id => 'gs',
+		 -checked => '',
+		 -override => 1,
+		 -label => "\nAfter sunset"),
+    qq{</label>
+<br><input name="g2h"
 type="submit" value="Compute Hebrew Date"></td></tr>
 </table></td>
 <td>&nbsp;&nbsp;&nbsp</td>
