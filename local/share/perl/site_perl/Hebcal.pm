@@ -1396,7 +1396,7 @@ sub dba_write_contents($$$)
 	$local2local = $secsEast - ($tz * 60 * 60);
     }
 
-    warn "DBG: tz=$tz,dst=$dst,local2local=$local2local,secsEast=$secsEast\n";
+#    warn "DBG: tz=$tz,dst=$dst,local2local=$local2local,secsEast=$secsEast\n";
 
     $numEntries = $Hebcal::PALM_DBA_MAXENTRIES
 	if ($numEntries > $Hebcal::PALM_DBA_MAXENTRIES);
@@ -1415,7 +1415,7 @@ sub dba_write_contents($$$)
 	    $events->[$i]->[$Hebcal::EVT_IDX_MIN] = 0;
 	}
 
-	if ($dst == 0)
+	if (!$dst)
 	{
 	    # no DST, so just use gmtime and then add that city offset
 	    $startTime =
