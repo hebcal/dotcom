@@ -472,7 +472,7 @@ JSCRIPT_END
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
     "</label> <small>(<a\n",
-    "href=\"/help/holidays.html\">What\n",
+    "href=\"/holidays/\">What\n",
     "are the default Holidays?</a>)</small>",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
