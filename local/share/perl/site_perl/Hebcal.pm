@@ -1338,7 +1338,7 @@ sub dba_write_pstring($)
 {
     my($len) = length($_[0]);
 
-    if ($len > 64) { $len = 64; }
+    $len = 254 if $len > 254;
     &dba_write_byte($len);
     print STDOUT substr($_[0], 0, $len);
 }
