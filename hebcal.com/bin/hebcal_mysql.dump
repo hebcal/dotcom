@@ -12,6 +12,13 @@ create table hebcal1.hebcal_shabbat_email (
     index (email_status)
 );
 
+create table hebcal1.hebcal_shabbat_bounce (
+    bounce_address varchar(200) not null,
+    bounce_time datetime not null,
+    bounce_reason varchar(200),
+    index (bounce_address)
+);
+
 create table hebcal1.hebcal_zips (
     zips_zipcode varchar(5) not null primary key,
     zips_latitude varchar(12) not null,
