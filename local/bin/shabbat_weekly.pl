@@ -15,7 +15,7 @@ use DBI ();
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
-my $site = 'hebcal.com';
+my $site = "hebcal.com";
 
 my $now = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
@@ -28,10 +28,10 @@ my $sat_year = (localtime($saturday))[5] + 1900;
 my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
-my $ZIPS = Hebcal::zipcode_open_db('/home/mradwin/web/hebcal.com/hebcal/zips99.db');
+my $ZIPS = Hebcal::zipcode_open_db("/home/mradwin/web/hebcal.com/hebcal/zips99.db");
 
 my(%SUBS) = load_subs();
-if (! keys(%SUBS) && ($ARGV[0] ne '-all')) {
+if (! keys(%SUBS) && ($ARGV[0] ne "-all")) {
     die "$ARGV[0]: not found.\n";
 }
 
@@ -48,7 +48,7 @@ while (my($to,$cfg) = each(%SUBS))
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = parse_config($cfg);
-    my(@events) = Hebcal::invoke_hebcal($cmd,'',undef);
+    my(@events) = Hebcal::invoke_hebcal($cmd,"",undef);
 
     my $encoded = MIME::Base64::encode_base64($to);
     chomp($encoded);
@@ -75,15 +75,16 @@ shabbat-unsubscribe\@$site
     my $lighting = get_friday_candles(\@events);
 
     my %headers =
-        (
-         'From' => "Hebcal <shabbat-owner\@$site>",
-         'To' => $to,
-         'MIME-Version' => '1.0',
-         'Content-Type' => 'text/plain',
-         'Subject' => "$subject Candles $lighting",
-	 'List-Unsubscribe' => "<$unsub_url>",
-	 'Precedence' => 'bulk',
-         );
+	(
+	 "From" => "Hebcal <shabbat-owner\@$site>",
+	 "To" => $to,
+	 "MIME-Version" => "1.0",
+	 "Content-Type" => "text/plain",
+	 "Subject" => "$subject Candles $lighting",
+	 "List-Unsubscribe" => "<$unsub_url>",
+	 "Errors-To" => $return_path,
+	 "Precedence" => "bulk",
+	 );
 
     # try 3 times to avoid intermittent failures
     my($status) = 0;
@@ -122,11 +123,11 @@ sub get_friday_candles
 		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       '','','');
+		       "","","");
 	next if $time < $friday || $time > $saturday;
 
 	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	if ($subj eq 'Candle lighting')
+	if ($subj eq "Candle lighting")
 	{
 	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
 	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
@@ -136,14 +137,14 @@ sub get_friday_candles
 	}
     }
 
-    return '';
+    return "";
 }
 
 sub gen_body
 {
     my($events) = @_;
 
-    my $body = '';
+    my $body = "";
 
     my($numEntries) = scalar(@{$events});
     my($i);
@@ -154,7 +155,7 @@ sub gen_body
 		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       '','','');
+		       "","","");
 	next if $time < $friday || $time > $saturday;
 
 	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -168,12 +169,12 @@ sub gen_body
 
 	my $strtime = strftime("%A, %d %B %Y", localtime($time));
 
-	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
+	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
 	    $body .= sprintf("%s for %s is at %d:%02dpm\n",
 			     $subj, $strtime, $hour, $min);
 	}
-	elsif ($subj eq 'No sunset today.')
+	elsif ($subj eq "No sunset today.")
 	{
 	    $body .= "No sunset on $strtime\n";
 	}
@@ -196,11 +197,11 @@ sub load_subs
 {
     my(%subs);
 
-    my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
-    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+    my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
-    my $all_sql = '';
-    if ($ARGV[0] ne '-all') {
+    my $all_sql = "";
+    if ($ARGV[0] ne "-all") {
 	$all_sql = "AND email_address = '$ARGV[0]'";
     }
 
@@ -237,7 +238,7 @@ sub parse_config
 {
     my($config) = @_;
 
-    my($cmd) = '/home/mradwin/web/hebcal.com/bin/hebcal';
+    my($cmd) = "/home/mradwin/web/hebcal.com/bin/hebcal";
 
     my %args;
     foreach my $kv (split(/;/, $config)) {
@@ -246,18 +247,18 @@ sub parse_config
     }
 
     my $city_descr;
-    if (defined $args{'zip'}) {
-	my($zipinfo) = $ZIPS->{$args{'zip'}};
+    if (defined $args{"zip"}) {
+	my($zipinfo) = $ZIPS->{$args{"zip"}};
 	die "unknown zipcode [$config]" unless defined $zipinfo;
     
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    Hebcal::zipcode_fields($zipinfo);
 
 	$city_descr = "These times are for:";
-	$city_descr .= "\n  $city, $state " . $args{'zip'};
+	$city_descr .= "\n  $city, $state " . $args{"zip"};
 	$city_descr .= "\n  " . $Hebcal::tz_names{$tz};
 
-	if (defined $tz && $tz ne '?') {
+	if (defined $tz && $tz ne "?") {
 	    $cmd .= " -z $tz";
 	}
 
@@ -268,21 +269,21 @@ sub parse_config
 	}
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-    } elsif (defined $args{'city'}) {
-	$city_descr = $args{'city'};
+    } elsif (defined $args{"city"}) {
+	$city_descr = $args{"city"};
 	$city_descr =~ s/\+/ /g;
 	$cmd .= " -C '" . $city_descr . "'";
 	$cmd .= " -i"
-	    if ($Hebcal::city_dst{$city_descr} eq 'israel');
+	    if ($Hebcal::city_dst{$city_descr} eq "israel");
 	$city_descr = "These times are for $city_descr.";
     } else {
 	die "no geographic key in [$config]";
     }
 
-    $cmd .= " -m " . $args{'m'}
-	if (defined $args{'m'} && $args{'m'} =~ /^\d+$/);
+    $cmd .= " -m " . $args{"m"}
+	if (defined $args{"m"} && $args{"m"} =~ /^\d+$/);
 
-    $cmd .= ' -s -c ' . $sat_year;
+    $cmd .= " -s -c " . $sat_year;
 
     ($cmd,$city_descr,\%args);
 }
