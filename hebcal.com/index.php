@@ -14,47 +14,48 @@
 <body>
 <form action="/cgi-bin/htsearch" method="get">
 <table width="100%" class="navbar">
-<tr><td><small><strong>hebcal.com:</strong>
+<tr><td><small><b>hebcal.com:</b>
 Jewish Calendar Tools</small></td>
 <td align="right"><input type="text" name="words" size="30">
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <dl>
-<dt><strong><big><a
+<dt><b><big><a
 href="/hebcal/">Hebcal Interactive Jewish
-Calendar</a></big></strong></dt>
+Calendar</a></big></b></dt>
 <dd>generates a list of Jewish holidays and candle lighting times customized
-to your zip code, city, or latitude/longitude.</dd>
-<dt><br><strong><big><a
-href="/shabbat/">1-Click Shabbat</a></big></strong></dt>
-<dd>bookmark this page for weekly Shabbat candle lighting times.</dd>
-<dt><br><strong><big><a
+to your zip code, city, or latitude/longitude.
+<dt><br><b><big><a
+href="/shabbat/">1-Click Shabbat</a></big></b></dt>
+<dd>bookmark this page for weekly Shabbat candle lighting times.
+<dt><br><b><big><a
 href="/email/">Email 1-Click Shabbat</a></big>
-&nbsp;&nbsp;<span class="hl">NEW!</span></strong></dt>
-<dd>subscribe to 1-Click Shabbat by email.</dd>
-<dt><br><strong><big><a
+&nbsp;&nbsp;<span class="hl">NEW!</span></b></dt>
+<dd>subscribe to 1-Click Shabbat by email.
+<dt><br><b><big><a
 href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
-Calendar</a></big></strong></dt>
+Calendar</a></big></b></dt>
 <dd>generates a list of Yahrzeit (memorial) and Yizkor dates, or
-Birthdays and Anniversaries.</dd>
-<dt><br><strong><big><a
+Birthdays and Anniversaries.
+<dt><br><b><big><a
 href="/converter/">Hebrew Date
-Converter</a></big></strong></dt>
-<dd>convert between Hebrew and Gregorian dates.</dd>
-<dt><br><strong><big><a
+Converter</a></big></b></dt>
+<dd>convert between Hebrew and Gregorian dates.
+<dt><br><b><big><a
 href="/sedrot/">Torah
-Readings</a></big></strong></dt>
-<dd>aliyah-by-aliyah breakdown for weekly parshiyot</dd>
-<dt><br><strong><big>Miscellaneous</big></strong></dt>
-<dd><a href="/help/">Help</a></dd>
-<dd><a href="/privacy/">Privacy Policy</a></dd>
-<dd><a href="/search/">Search</a></dd>
-<dd><a href="/contact/">Contact Information</a></dd>
+Readings</a></big></b></dt>
+<dd>aliyah-by-aliyah breakdown for weekly parshiyot
+<br><b><span class="hl">NEW!</span></b> Triennial cycle
+<dt><br><b><big>Miscellaneous</big></b></dt>
+<dd><a href="/help/">Help</a>
+<dd><a href="/privacy/">Privacy Policy</a>
+<dd><a href="/search/">Search</a>
+<dd><a href="/contact/">Contact Information</a>
 </dl>
 <p>
 <hr noshade size="1">
-<font size=-2 face=Arial>Copyright
+<span class="tiny">Copyright
 &copy; 2002 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
@@ -64,7 +65,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Feb 11 00:11:09 EST 2002
+Last modified: Mon Feb 11 00:17:32 EST 2002
 <!-- hhmts end -->
-</font>
+</span>
 </body></html>
