@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon Apr 19 09:47:09 PDT 1999
+Last modified: Mon Apr 19 16:37:38 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -300,6 +300,7 @@ if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
     $endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
 }
 
+print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
 if ($endl eq "\012")
 {
     print STDOUT "Content-Type: text/x-csv\015\012\015\012";
@@ -569,6 +570,7 @@ sub download
     }
     $filename .= '.csv';
     
+    print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
