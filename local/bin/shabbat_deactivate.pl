@@ -7,8 +7,8 @@ eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
 # $Id$
 
 use strict;
-use DBI;
-use Getopt::Long;
+use DBI ();
+use Getopt::Long ();
 
 my $COUNT_DEFAULT = 7;
 
@@ -24,7 +24,7 @@ my $opt_dryrun;
 my $opt_quiet;
 my $opt_count = $COUNT_DEFAULT;
 
-if (!GetOptions("help|h" => \$opt_help,
+if (!Getopt::Long::GetOptions("help|h" => \$opt_help,
                 "count=i" => \$opt_count,
 		"quiet" => \$opt_quiet,
                 "dryrun|n" => \$opt_dryrun))
