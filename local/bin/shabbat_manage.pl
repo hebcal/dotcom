@@ -3,12 +3,14 @@
 use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 
 use strict;
-use DB_File;
-use Fcntl qw(:DEFAULT :flock);
+use DB_File::Lock;
 use Hebcal;
 use Mail::Internet;
 use Email::Valid;
 use MIME::Base64;
+
+my $STAGING = '/pub/m/r/mradwin/hebcal.com/email/email.db';
+my $SUBS = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
@@ -84,28 +86,20 @@ sub subscribe
 {
     my($from,$encoded) = @_;
 
-    my $lockfd = &Hebcal::emaildb_lock(LOCK_EX);
-
-    my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/email.db';
     my(%DB);
-    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
-		  $DB_File::DB_HASH)
-	or die "$dbmfile: $!\n";
+    tie(%DB, 'DB_File::Lock', $STAGING, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
+	or die "$STAGING: $!\n";
 
     my $args = $DB{$encoded};
     unless ($args) {
 	&log(0, 'subscribe_notfound');
-	undef $db;
 	untie(%DB);
-	&Hebcal::emaildb_unlock($lockfd);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
 	&log(0, 'subscribe_twice');
-	undef $db;
 	untie(%DB);
-	&Hebcal::emaildb_unlock($lockfd);
 	return 0;
     }
 
@@ -114,12 +108,8 @@ sub subscribe
     my($now) = time;
     $DB{$encoded} = "action=PROCESSED;t=$now";
 
-    $db->sync;
-    undef $db;
     untie(%DB);
-
-    &Hebcal::emaildb_unlock($lockfd);
-    undef $lockfd;
+    undef(%DB);
 
     my %args;
     foreach my $kv (split(/;/, $args)) {
@@ -143,24 +133,15 @@ sub subscribe
 	$newargs .= ";alt=$from";
     }
 
-    $lockfd = &Hebcal::emaildb_lock(LOCK_EX);
-
-    $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
-    $db = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
-	      $DB_File::DB_HASH)
-	or die "$dbmfile: $!\n";
+    tie(%DB, 'DB_File::Lock', $SUBS, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
+	or die "$SUBS: $!\n";
 
     $DB{$email} = $newargs;
 #    if (lc($email) ne lc($from)) {
 #	$DB{$from} = "type=alt;em=$email";
 #    }
 
-    $db->sync;
-    undef $db;
     untie(%DB);
-
-    &Hebcal::emaildb_unlock($lockfd);
-    undef $lockfd;
 
     my $b64 = encode_base64($email);
     chomp($b64);
@@ -219,21 +200,15 @@ sub unsubscribe
 {
     my($email) = @_;
 
-    my $lockfd = &Hebcal::emaildb_lock(LOCK_EX);
-
-    my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
     my(%DB);
-    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
-		  $DB_File::DB_HASH)
-	or die "$dbmfile: $!\n";
+    tie(%DB, 'DB_File::Lock', $SUBS, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
+	or die "$SUBS: $!\n";
 
     my $args = $DB{$email};
     unless ($args) {
 	&log(0, 'unsub_notfound');
 
-	undef $db;
 	untie(%DB);
-	&Hebcal::emaildb_unlock($lockfd);
 
 	&error_email($email,$err_notsub);
 	return 0;
@@ -242,9 +217,7 @@ sub unsubscribe
     if ($args =~ /^action=/) {
 	&log(0, 'unsub_twice');
 
-	undef $db;
 	untie(%DB);
-	&Hebcal::emaildb_unlock($lockfd);
 
 	&error_email($email,$err_notsub);
 	return 0;
@@ -255,12 +228,7 @@ sub unsubscribe
     my($now) = time;
     $DB{$email} = "action=UNSUBSCRIBE;t=$now";
 
-    $db->sync;
-    undef $db;
     untie(%DB);
-
-    &Hebcal::emaildb_unlock($lockfd);
-    undef $lockfd;
 
     my($body) = qq{Hello,
 
