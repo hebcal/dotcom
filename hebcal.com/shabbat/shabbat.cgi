@@ -878,9 +878,8 @@ sub display_html
  
     &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
 qq{<span class="hl"><b>NEW!</b></span> Automated candle lighting times by Phone:
-Call Tellme at 1-800-555-TELL.
-Say <b>extensions</b>.
-Dial <b>00613</b>.</p>
+Call Tellme at <b>1-800-555-TELL</b>.
+Dial <b>1-00613</b>.</p>
 });
 
     form($cfg,0,'','');
