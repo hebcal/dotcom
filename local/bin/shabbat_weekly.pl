@@ -1,12 +1,13 @@
 #!/usr/local/bin/perl -w
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use DB_File::Lock;
 use Hebcal;
 use POSIX qw(strftime);
 use MIME::Base64;
+use DBI;
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
@@ -21,8 +22,7 @@ my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
 
 my($sat_year) = (localtime($saturday))[5] + 1900;
 
-my $ZIPS =
-    &Hebcal::zipcode_open_db('/pub/m/r/mradwin/hebcal.com/email/zips99.db');
+my $ZIPS = Hebcal::zipcode_open_db('/home/mradwin/web/hebcal.com/hebcal/zips99.db');
 
 my(%SUBS) = &load_subs();
 
@@ -39,7 +39,8 @@ while (my($to,$cfg) = each(%SUBS))
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = &parse_config($cfg);
-    my(@events) = &Hebcal::invoke_hebcal($cmd,$loc);
+    print "$to\n$cfg\n$cmd\n";
+    my(@events) = Hebcal::invoke_hebcal($cmd,$loc,undef);
 
     my $encoded = encode_base64($to);
     chomp($encoded);
@@ -87,7 +88,7 @@ shabbat-unsubscribe\@hebcal.com
     sleep(2);
 }
 
-&Hebcal::zipcode_close_db($ZIPS);
+Hebcal::zipcode_close_db($ZIPS);
 undef($ZIPS);
 
 exit(0);
@@ -155,37 +156,39 @@ sub load_subs
 {
     my(%subs);
 
-    my($dbmfile) = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
-    my(%DB);
-    tie(%DB, 'DB_File::Lock', $dbmfile, O_RDONLY, 0444, $DB_HASH, 'read')
-	or die "$dbmfile: $!\n";
+    my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
+    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
-    if ($ARGV[0] eq '-all')
-    {
-	%subs = %DB;
+    my $all_sql = '';
+    if ($ARGV[0] ne '-all') {
+	$all_sql = "AND email_address = '$ARGV[0]'";
     }
-    else
-    {
-	foreach (@ARGV)
-	{
-	    if (defined $DB{$_})
-	    {
-		if ($DB{$_} =~ /^action=/)
-		{
-		    warn "$_: $DB{$_}\n";
-		    next;
-		}
-		$subs{$_} = $DB{$_};
-	    }
-	    else
-	    {
-		warn "$_: no such user\n";
-	    }
+
+    my $sql = <<EOD
+SELECT email_address,
+       email_candles_zipcode,
+       email_candles_city,
+       email_candles_havdalah
+FROM hebcal1.hebcal_shabbat_email
+WHERE hebcal1.hebcal_shabbat_email.email_status = 'active'
+$all_sql
+EOD
+;
+
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute
+	or die "can't execute the query: " . $sth->errstr;
+    while (my($email,$zip,$city,$havdalah) = $sth->fetchrow_array) {
+	my $cfg = "m=$havdalah";
+	if ($zip) {
+	    $cfg .= ";zip=$zip";
+	} elsif ($city) {
+	    $cfg .= ";city=$city";
 	}
+	$subs{$email} = $cfg;
     }
 
-    untie(%DB);
-
+    $dbh->disconnect;
     %subs;
 }
 
@@ -193,7 +196,7 @@ sub parse_config
 {
     my($config) = @_;
 
-    my($cmd) = '/home/mradwin/local/bin/hebcal';
+    my($cmd) = '/home/mradwin/web/hebcal.com/bin/hebcal';
 
     my %args;
     foreach my $kv (split(/;/, $config)) {
@@ -207,26 +210,30 @@ sub parse_config
 	die "unknown zipcode [$config]" unless defined $zipinfo;
     
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    &Hebcal::zipcode_fields($zipinfo);
+	    Hebcal::zipcode_fields($zipinfo);
 
 	$city_descr = "$city, $state " . $args{'zip'};
-	$city_descr .= "\n" . $Hebcal::tz_names{$args{'tz'}};
-	if ($args{'dst'} ne 'usa') {
-	    $city_descr .= "\nDST: " . $args{'dst'};
+	$city_descr .= "\n" . $Hebcal::tz_names{$tz};
+
+	if (defined $tz && $tz ne '?') {
+	    $cmd .= " -z $tz";
+	}
+
+	if ($dst == 1) {
+	    $city_descr .= "\nDaylight Saving Time: usa";
+	    $cmd .= " -Z usa";
+	} elsif ($dst == 0) {
+	    $city_descr .= "\nDaylight Saving Time: none";
+	    $cmd .= " -Z none";
 	}
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-
-	if (defined $args{'tz'} && $args{'tz'} ne '') {
-	    $cmd .= " -z " . $args{'tz'};
-	}
-	if (defined $args{'dst'} && $args{'dst'} ne '') {
-	    $cmd .= " -Z " . $args{'dst'};
-	}
     } elsif (defined $args{'city'}) {
 	$city_descr = $args{'city'};
 	$city_descr =~ s/\+/ /g;
 	$cmd .= " -C '" . $city_descr . "'";
+	$cmd .= " -i"
+	    if ($Hebcal::city_dst{$city_descr} eq 'israel');
     } else {
 	die "no geographic key in [$config]";
     }
@@ -238,4 +245,5 @@ sub parse_config
 
     ($cmd,$city_descr,\%args);
 }
+
 
