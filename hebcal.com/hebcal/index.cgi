@@ -528,7 +528,6 @@ Use Israeli sedra scheme</label>)<br>
 
 <small>
 <p>
-Caveat: this is beta software; my apologies if it doesn't work for you.
 Geographic Zip Code information provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
 Bureau's Gazetteer</a>.  If your Zip Code is missing from their
