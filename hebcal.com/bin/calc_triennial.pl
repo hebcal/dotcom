@@ -62,13 +62,14 @@ $0 =~ s,.*/,,;  # basename
 
 my($usage) = "usage: $0 [-h] [-H <year>] aliyah.xml festival.xml output-dir
     -h        Display usage information.
+    -2        Display two years of triennial on HTML pages
     -H <year> Start with hebrew year <year> (default this year)
     -t t.csv  Dump triennial readings to comma separated values
     -f f.csv  Dump full kriyah readings to comma separated values
 ";
 
 my(%opts);
-Getopt::Std::getopts('hH:c:t:f:', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hH:c:t:f:2', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 3) || die "$usage";
 
@@ -619,9 +620,17 @@ alt="Etz Hayim: Torah and Commentary" align="right"></a>
 </td>
 </tr>
 <tr>
-<td valign="top" rowspan="3">
 EOHTML
 ;
+
+    if ($opts{'2'})
+    {
+	print OUT2 qq{<td valign="top" rowspan="3">\n};
+    }
+    else
+    {
+	print OUT2 qq{<td valign="top">\n};
+    }
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
@@ -673,7 +682,9 @@ EOHTML
 	print_tri_cell($tri1,$h,$yr,$torah);
     }
 
-    print OUT2 <<EOHTML;
+    if ($opts{'2'})
+    {
+	print OUT2 <<EOHTML;
 </tr>
 <tr>
 <td align="center"><b>Triennial Year I</b>
@@ -689,15 +700,17 @@ EOHTML
 EOHTML
 ;
 
-    foreach my $yr (1 .. 3)
-    {
-	print_tri_cell($tri2,$h,$yr,$torah);
+	foreach my $yr (1 .. 3)
+	{
+	    print_tri_cell($tri2,$h,$yr,$torah);
+	}
     }
 
     print OUT2 <<EOHTML;
 </tr>
 </table>
-<h3>Haftarah$ashk: <a name="haftara" href="$haftarah_href"
+<h3>Haftarah$ashk: <a name="haftara"
+href="$haftarah_href"
 title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
