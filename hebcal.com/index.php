@@ -105,7 +105,7 @@ this site going!</small>
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
-&copy; 2003 Michael J. Radwin. All rights reserved.
+&copy; 2004 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a> -
