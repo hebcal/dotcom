@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Nov  1 05:48:29 PST 2000
+Last modified: Wed Nov 15 20:27:24 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -369,7 +369,7 @@ sub dba_display {
     print $q->header(-type =>
 		     "application/x-palm-dba; filename=\"$path_info\"",
 		     -content_disposition =>
-		     "attachment; filename=$path_info",
+		     "inline; filename=$path_info",
 		     -last_modified => &http_date($time));
 
     my($no_dst) = (!defined($q->param('dst')) || $q->param('dst') eq 'none' ||
@@ -394,7 +394,7 @@ sub csv_display {
     $path_info =~ s,^.*/,,;
     print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
 		     -content_disposition =>
-		     "attachment; filename=$path_info",
+		     "inline; filename=$path_info",
 		     -last_modified => &http_date($time));
 
     $endl = "\012";			# default Netscape and others
