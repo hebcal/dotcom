@@ -574,7 +574,7 @@ JSCRIPT_END
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
 		       -values => [sort keys %Hebcal::city_tz],
-		       -default => 'Jerusalem');
+		       -default => 'New York');
     }
     elsif ($q->param('geo') eq 'pos')
     {
