@@ -53,7 +53,7 @@ print $q->header(),
     &Hebcal::navbar($server_name, "Cookie\nDeleted", 1),
     "<h1>Hebcal\nCookie Deleted</h1>\n",
     "<p>We deleted your cookie for the Hebcal Interactive Jewish\n",
-    "Calendar.</p>\n", $html_footer;
+    "Calendar and 1-Click Shabbat.</p>\n", $html_footer;
 
 exit(0);
 
