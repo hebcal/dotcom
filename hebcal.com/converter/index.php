@@ -154,6 +154,21 @@ else
     }
 }
 
+$hebfont = false;
+$qs = getenv("QUERY_STRING");
+if ($qs) {
+    if (isset($_GET["heb"]) && ($_GET["heb"] == "on" || $_GET["heb"] == "1")) {
+	$hebfont = true;
+    }
+} else {
+    if (isset($_COOKIE["C"])) {
+	parse_str($_COOKIE["C"], $ck);
+	if (isset($ck["heb"]) && ($ck["heb"] == "on" || $ck["heb"] == "1")) {
+	    $hebfont = true;
+	}
+    }
+}
+
 if ($type == "g2h")
 {
     $jd = gregoriantojd($gm, $gd, $gy);
@@ -202,7 +217,7 @@ else
 <?php echo "$first = <b>$second</b>"; ?>
 </span>
 <?php
-if (isset($_GET["heb"]) && ($_GET["heb"] == "on" || $_GET["heb"] == "1")) {
+if ($hebfont) {
     if ($hm == "Adar1" && !is_leap_year($hy)) {
 	$month_name = "Adar";
     } else {
@@ -316,7 +331,7 @@ type="submit" value="Compute Gregorian Date"></td>
 </table>
 <label for="heb">
 <input type="checkbox" name="heb" value="on"
-<?php if ($_GET["heb"]) { echo " checked "; } ?>
+<?php global $hebfont; if ($hebfont) { echo " checked "; } ?>
 id="heb">
 Show date in Hebrew font</label>
 <br><small>(requires minimum of IE 4 or Netscape 6)</small>
@@ -341,14 +356,18 @@ href="http://www.amazon.com/exec/obidos/ASIN/0521777526/ref=nosim/hebcal-20">Cal
 Calculations</a></em>, Edward M. Reingold, Nachum Dershowitz,
 Cambridge University Press, 2001.</p>
 
+<p>See also the Hebcal <a href="/yahrzeit/">Yahrzeit, Birthday and
+Anniversary Calendar</a> which will calculate dates ten years into the
+future and optionally export to Palm, Outlook, or iCal.</p>
+
 <hr noshade size="1"><span class="tiny">
 <a name="copyright"></a>Copyright &copy; $year
 Michael J. Radwin. All rights reserved.
-<a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
-<a target="_top" href="http://www.hebcal.com/help/">Help</a> -
-<a target="_top" href="http://www.hebcal.com/contact/">Contact</a> -
-<a target="_top" href="http://www.hebcal.com/news/">News</a> -
-<a target="_top" href="http://www.hebcal.com/donations/">Donate</a>
+<a href="/privacy/">Privacy Policy</a> -
+<a href="/help/">Help</a> -
+<a href="/contact/">Contact</a> -
+<a href="/news/">News</a> -
+<a href="/donations/">Donate</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.4 for UNIX</a>, Copyright &copy; 2005 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
