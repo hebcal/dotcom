@@ -1218,7 +1218,13 @@ Jewish Calendar events into your desktop software.</p>};
 
     if ($title && defined $q->param('month') && $q->param('month') ne 'x')
     {
-	my $heb_year = $q->param('year') + 3760;
+	my $end_day = Date::Calc::Days_in_Month($q->param('year'),
+						$q->param('month'));
+	my $hebdate = Hebcal::greg2hebrew($q->param('year'),
+					  $q->param('month'),
+					  $end_day);
+	my $heb_year = $hebdate->{'yy'};
+
 	$s .= "<p>Note: you may also download <a\n" .
 	    "href=\"" . Hebcal::self_url($q, {'month' => 'x'})
 	    . "#export\">all of " . $q->param('year') . "</a> or <a\n" .
