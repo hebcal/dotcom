@@ -4,6 +4,7 @@ use LWP::UserAgent;
 use strict;
 
 my $ua = LWP::UserAgent->new(keep_alive => 1, timeout => 30);
+$| = 1;
 
 my %checked;
 foreach my $f (@ARGV) {
