@@ -87,7 +87,7 @@ foreach my $key ($q->param())
     if $q->param('year') !~ /^\d+$/ || $q->param('year') == 0;
 
 &form("Sorry, Hebrew year must be 3762 or later.")
-    if $q->param('H') && $q->param('year') < 3762;
+    if $q->param('yt') && $q->param('yt') eq 'H' && $q->param('year') < 3762;
 
 &form("Sorry, invalid Havdalah minutes\n<b>" . $q->param('m') . "</b>.")
     if defined $q->param('m') &&
@@ -130,8 +130,11 @@ if ($q->param('c') && $q->param('c') ne 'off')
 	if (defined $q->param('dst') && $q->param('dst') ne '');
 }
 
-$q->param('month', 'x')
-    if defined $q->param('H') && $q->param('H') =~ /^on|1$/;
+if ($q->param('yt') && $q->param('yt') eq 'H')
+{
+    $q->param('month', 'x');
+    $cmd .= ' -H';
+}
 
 $cmd .= " " . $q->param('month')
     if (defined $q->param('month') && $q->param('month') =~ /^\d+$/ &&
@@ -296,6 +299,7 @@ function s5() {
 if (document.f1.nx.checked == true) {
 document.f1.nh.checked = true;
 }
+return false;
 }
 JSCRIPT_END
 
@@ -353,11 +357,13 @@ JSCRIPT_END
 		   -default => $this_mon,
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
-    "&nbsp;&nbsp;<label\nfor=\"H\">",
-    $q->checkbox(-name => 'H',
-		 -id => 'H',
-		 -label => "\nHebrew year (3762 or later)"),
-    "</label>",
+    "<br>Year type:\n",
+    $q->radio_group(-name => 'yt',
+		    -values => ['G', 'H'],
+		    -default => 'G',
+		    -labels =>
+		    {'G' => "\nGregorian (common era) ",
+		     'H' => "\nHebrew Year "}),
     "<br>",
     $q->small("Use all digits to specify a year.\nYou probably aren't",
 	      "interested in 93, but rather 1993.\n");
@@ -626,7 +632,8 @@ sub results_page()
 {
     my($date);
     my($filename) = 'hebcal_' . $q->param('year');
-    $filename .= 'H' if $q->param('H');
+    $filename .= 'H'
+	if $q->param('yt') && $q->param('yt') eq 'H';
     my($prev_url,$next_url,$prev_title,$next_title);
 
     if ($q->param('month') =~ /^\d+$/ &&
@@ -639,7 +646,8 @@ sub results_page()
     else
     {
 	$date = sprintf("%s%04d",
-			$q->param('H') ? 'Hebrew Year ' : '',
+			($q->param('yt') && $q->param('yt') eq 'H') ?
+			'Hebrew Year ' : '',
 			$q->param('year'));
     }
 
