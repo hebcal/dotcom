@@ -679,8 +679,7 @@ xmlns="http://purl.org/rss/1.0/">
 <channel rdf:about="$url">
 <title>$title</title>
 <link>$url</link>
-<description>Weekly Shabbat candle lighting times for 
-$city_descr</description>
+<description>Weekly Shabbat candle lighting times for $city_descr</description>
 <dc:language>en-us</dc:language>
 <dc:creator>hebcal.com</dc:creator>
 <dc:rights>Copyright &#169; $this_year Michael J. Radwin. All rights reserved.</dc:rights>
