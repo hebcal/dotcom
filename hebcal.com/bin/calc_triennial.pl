@@ -763,7 +763,8 @@ EOHTML
     print OUT2 <<EOHTML;
 <a
 href="$amazon_link"><img
-src="/i/0827607121.01.TZZZZZZZ.jpg" border="0" hspace="3" vspace="3"
+src="/i/0827607121.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
+hspace="3" vspace="3"
 alt="Etz Hayim: Torah and Commentary" align="right"></a><dl>
 <dt><a name="ref">References</a>
 <dd><em><a
