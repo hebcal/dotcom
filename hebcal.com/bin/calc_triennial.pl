@@ -535,7 +535,7 @@ href="/search/">Search</a></small>
 $prev_link
 </td>
 <td align="center" width="70%">
-<h1><a name="top">Parashat $h</a><br><span
+<h1><a name="top"></a>Parashat $h<br><span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 </td>
 <td align="right" width="15%">
@@ -600,7 +600,7 @@ EOHTML
 	}
 
 	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	print OUT2 qq{<a name="fk-$label">$label:</a> $info\n};
+	print OUT2 qq{<a name="fk-$label"></a>$label: $info\n};
 
 	if ($aliyah->{'numverses'}) {
 	    print OUT2 "<span class=\"tiny\">(",
@@ -685,7 +685,7 @@ EOHTML
 	    }
 
 	    my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	    print OUT2 qq{<a name="tri-$yr-$label">$label:</a> $info<br>\n};
+	    print OUT2 qq{<a name="tri-$yr-$label"></a>$label: $info<br>\n};
 	}
 	print OUT2 "</td>\n";
     }
@@ -708,7 +708,7 @@ EOHTML
 
     if ($drash_jts || $drash_ou || $drash_reform || $drash_torah)
     {
-	print OUT2 qq{<h3><a name="drash">Commentary</a></h3>\n<ul>\n};
+	print OUT2 qq{<h3><a name="drash"></a>Commentary</h3>\n<ul>\n};
     }
 
     if ($drash_jts)
@@ -747,7 +747,7 @@ EOHTML
     if (defined $read_on->{$h})
     {
 	print OUT2 <<EOHTML;
-<h3><a name="dates">List of Dates</a></h3>
+<h3><a name="dates"></a>List of Dates</h3>
 Parashat $h is read in the Diaspora on:
 <ul>
 EOHTML
@@ -760,7 +760,7 @@ EOHTML
     }
     
     print OUT2 <<EOHTML;
-<h3><a name="ref">References</a></h3>
+<h3><a name="ref"></a>References</h3>
 <dl>
 <dt><em><a href="$amazon_link">Etz
 Hayim: Torah and Commentary</a></em>
@@ -988,9 +988,9 @@ sub readings_for_current_year
 {
     my($parshiot,$current,$parsha_time) = @_;
 
-    my $heb_yr = `./hebcal -t -x -h | grep -v Omer`;
-    chomp($heb_yr);
-    $heb_yr =~ s/^.+, (\d\d\d\d)/$1/;
+    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
+    my $heb_yr = $hebdate->{'yy'};
     $heb_yr--;
 
     my %special_maftir;
