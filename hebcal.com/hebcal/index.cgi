@@ -726,7 +726,7 @@ href="$form_href">$form_text</a> and click the Get Calendar button.
 <p>If you're looking for a full-color printed 2004-2005 calendar, I'd
 recommend the <a
 href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20">Jewish
-Year 5765 Wall Calendar</a> from Amazon.com. <b>Shana Tovah!</b>
+Year 5765 Wall Calendar</a> from Amazon.com.
 </blockquote>
 MESSAGE_END
 ;
