@@ -298,20 +298,19 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Dec 27 11:01:01 PST 1999
+Last modified: Tue Dec 28 09:08:01 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
 $hhmts =~ s/\n//g;
-$hhmts =~ s/Last modified: /Software last updated: /g;
-$hhmts = 'This page generated: ' . localtime() . '<br>' . $hhmts;
+$hhmts =~ s/Last modified: /Software last updated:\n/g;
+$hhmts = "This page generated:\n" . localtime() . '<br>' . $hhmts;
 
-$html_footer = "<hr noshade size=\"1\">
-<small>$hhmts ($rcsrev)
-<br><br>Copyright &copy; $year Michael John Radwin. All rights
-reserved.<br><a target=\"_top\" href=\"/michael/projects/hebcal/\">Frequently
-asked questions about this service.</a></small>
-</body></html>
+$html_footer = "<hr
+noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
+&copy; $year Michael John Radwin. All rights reserved.<br><a
+target=\"_top\" href=\"/michael/projects/hebcal/\">Frequently
+asked questions about this service.</a></small></body></html>
 ";
 
 # boolean options
@@ -883,39 +882,39 @@ sub form
     "<td><label\nfor=\"a\">",
     $q->checkbox(-name => 'a',
 		 -id => 'a',
-		 -label => 'Use ashkenazis hebrew'),
+		 -label => "\nUse ashkenazis hebrew"),
     "</label></td>",
     "<td><label\nfor=\"o\">",
     $q->checkbox(-name => 'o',
 		 -id => 'o',
-		 -label => 'Add days of the Omer'),
+		 -label => "\nAdd days of the Omer"),
     "</label></td>",
     "</tr><tr>",
     "<td><label\nfor=\"x\">",
     $q->checkbox(-name => 'x',
 		 -id => 'x',
-		 -label => 'Suppress Rosh Chodesh'),
+		 -label => "\nSuppress Rosh Chodesh"),
     "</label></td>",
     "<td><label\nfor=\"h\">",
     $q->checkbox(-name => 'h',
 		 -id => 'h',
-		 -label => 'Suppress all default holidays'),
+		 -label => "\nSuppress all default holidays"),
     "</label></td>",
     "</tr><tr>",
     "<td colspan=\"2\"><label\nfor=\"s\">",
     $q->checkbox(-name => 's',
 		 -id => 's',
-		 -label => 'Add weekly sedrot on Saturday'),
+		 -label => "\nAdd weekly sedrot on Saturday"),
     "</label>\n(<label\nfor=\"i\">",
     $q->checkbox(-name => 'i',
 		 -id => 'i',
-		 -label => 'Use Israeli sedra scheme'),
+		 -label => "\nUse Israeli sedra scheme"),
     "</label>)</td>",
     "</tr><tr>",
     "<td colspan=\"2\"><label\nfor=\"d\">",
     $q->checkbox(-name => 'd',
 		 -id => 'd',
-		 -label => 'Print hebrew date for the entire date range'),
+		 -label => "\nPrint hebrew date for the entire date range"),
     "</label></td>",
     "</tr><tr>",
     "<td colspan=\"2\"><label\nfor=\"set\">",
@@ -925,7 +924,7 @@ sub form
 		 (!defined $q->param('v') && defined $q->param('geo') &&
 		  (!defined $q->raw_cookie() || $q->raw_cookie() =~ /^\s*$/))
 		 ? 'checked' : undef,
-		 -label => 'Save my preferences in a cookie'),
+		 -label => "\nSave my preferences in a cookie"),
     "</label>(<a target=\"_top\"\n",
     "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
     "a cookie?</a>)</td></tr></table>\n",
