@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 10:26:41 PDT 1999
+Last modified: Mon Jul 12 11:08:26 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -198,12 +198,11 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
 	  "<b>$in{'lamin'}</b> out of valid range 0-60.</font></em></p>")
 	if ($in{'lamin'} > 60);
 
-    $city_descr = "Geographic Position<br>\n";
-    $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude<br>\n";
-    $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude<br>\n";
-    $dst_tz_descr = "
-<small>Daylight Savings Time: $in{'dst'}<br>
-Time Zone: GMT $in{'tz'}:00</small>";
+    $city_descr = "Geographic Position";
+    $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
+    $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
+    $dst_tz_descr =
+"Daylight Savings Time: $in{'dst'}</dd>\n<dd>Time Zone: GMT $in{'tz'}:00";
 
     # don't multiply minutes by -1 since hebcal does it internally
     $long_deg *= -1  if ($in{'lodir'} eq 'e');
@@ -249,12 +248,11 @@ elsif (defined $in{'zip'})
     }
     undef(@city);
 
-    $city_descr = "$city, $state $in{'zip'}<br>\n";
-    $lat_descr  = "${lat_deg}d${lat_min}' N latitude<br>\n";
-    $long_descr = "${long_deg}d${long_min}' W longitude<br>\n";
-    $dst_tz_descr = "
-<small>Daylight Savings Time: $in{'dst'}<br>
-Time Zone: GMT $in{'tz'}:00</small>";
+    $city_descr = "$city, $state $in{'zip'}";
+    $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
+    $long_descr = "${long_deg}d${long_min}' W longitude";
+    $dst_tz_descr =
+"Daylight Savings Time: $in{'dst'}</dd>\n<dd>Time Zone: GMT $in{'tz'}:00";
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -608,12 +606,18 @@ $date
 
 <h1>Jewish Calendar $date</h1>
 
-<p>
-${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
-</p>
-
-<form method=\"get\" action=\"${cgipath}index.html/$filename\">
 ";
+
+    if ($opts{'c'} == 1)
+    {
+	print STDOUT "<dl>\n<dt>", $city_descr, "</dt>\n";
+	print STDOUT "<dd>", $lat_descr, "</dd>\n" if $lat_descr ne '';
+	print STDOUT "<dd>", $long_descr, "</dd>\n" if $long_descr ne '';
+	print STDOUT "<dd>", $dst_tz_descr, "</dd>\n" if $dst_tz_descr ne '';
+	print STDOUT "</dl>\n\n";
+    }
+
+    print STDOUT "<form method=\"get\" action=\"${cgipath}index.html/$filename\">\n";
 
     while (($key,$val) = each(%in))
     {
@@ -624,11 +628,13 @@ ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
 </form>
 
-";
+<p><small>Use the \"add\" links below to add a holiday to your personal
+<a href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>, a free
+web-based calendar that can synchronize with Palm Pilot, Outlook, etc.
+These links will pop up a new browser window so you can keep this window
+open.</small></p>
 
-    print STDOUT "<p>Use the \"add\" links below to add a holiday\n";
-    print STDOUT "to your personal <a target=\"_calendar\"\n";
-    print STDOUT "href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>.</p>\n\n";
+";
 
     print STDOUT "<!-- $cmd -->\n";
     print STDOUT "<p><tt>\n";
