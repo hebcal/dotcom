@@ -49,8 +49,6 @@ href="/search/">Search</a></big></strong></dt>
 href="mailto:webmaster@hebcal.com">webmaster@hebcal.com</a></address>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 17 17:31:46 PDT 2001
+Last modified: Wed Apr 18 10:10:50 PDT 2001
 <!-- hhmts end -->
 </small></body></html>
-
-
