@@ -75,7 +75,7 @@ $PALM_DBA_MAXENTRIES = 2500;
      '996', '??',		# west AK
      '324', -6,			# west FL
      '325', -6,			# west FL
-     '463', '??',		# Jasper, Lake, LaPorte, Newton, and 
+     '463', '??',		# Jasper, Lake, LaPorte, Newton, and
      '464', '??',		#  Porter counties, IN
      '476', '??',		# Gibson, Posey, Spencer, Vanderburgh,
      '477', '??',		#  and Warrick counties, IN
@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Dec 27 10:30:40 PST 1999
+Last modified: Mon Dec 27 10:40:29 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -325,7 +325,7 @@ $q->delete('.s');		# we don't care about submit button
 $script_name =  $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
-$q->default_dtd("-//W3C//DTD HTML 4.0 Transitional//EN\"\n" . 
+$q->default_dtd("-//W3C//DTD HTML 4.0 Transitional//EN\"\n" .
 		"\t\"http://www.w3.org/TR/REC-html40/loose.dtd");
 
 if (! $q->param('v') &&
@@ -453,9 +453,9 @@ elsif ($q->param('zip'))
     $val = $DB{$q->param('zip')};
     untie(%DB);
 
-    &form("Sorry, can't find\n".  "<b>" . $q->param('zip') . 
+    &form("Sorry, can't find\n".  "<b>" . $q->param('zip') .
 	  "</b> in the zip code database.\n",
-          "<ul><li>Please try a nearby zip code or select candle\n" . 
+          "<ul><li>Please try a nearby zip code or select candle\n" .
 	  "lighting times by\n" .
           "<a target=\"_top\"\nhref=\"" . $script_name .
 	  "?c=on&amp;geo=city\">city</a> or\n" .
@@ -653,15 +653,16 @@ sub form
     my($key,$val);
 
     print STDOUT $q->header(),
-    $q->start_html(-title=>"Hebcal Interactive Jewish Calendar",
-		   -head=>[
+    $q->start_html(-title => "Hebcal Interactive Jewish Calendar",
+		   -head => [
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
-			   $q->Link({-rel=>'SCHEMA.dc',
-				     -href=>'http://purl.org/metadata/dublin_core_elements'}),
-			   $q->Link({-rev=>'made', -href=>"mailto:$author"}),
+			   $q->Link({-rel => 'SCHEMA.dc',
+				     -href => 'http://purl.org/metadata/dublin_core_elements'}),
+			   $q->Link({-rev => 'made',
+				     -href => "mailto:$author"}),
 			   ],
-		   -meta=>{
-		       'description'=>
+		   -meta => {
+		       'description' =>
 		       'Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude',
 
 		       'keywords' =>
@@ -696,20 +697,20 @@ sub form
     "<form target=\"_top\" action=\"", $script_name, "\">\n",
     "Jewish Holidays for:&nbsp;&nbsp;&nbsp;\n",
     "<label for=\"year\">Year:\n",
-    $q->textfield(-name=>'year',
-		  -id=>'year',
-		  -default=>$year,
-		  -size=>4,
-		  -maxlength=>4),
+    $q->textfield(-name => 'year',
+		  -id => 'year',
+		  -default => $year,
+		  -size => 4,
+		  -maxlength => 4),
     "</label>\n",
-    $q->hidden(-name=>'v',-value=>1,-override=>1),
+    $q->hidden(-name => 'v',-value => 1,-override => 1),
     "\n&nbsp;&nbsp;&nbsp;\n",
     "<label for=\"month\">Month:\n",
-    $q->popup_menu(-name=>'month',
-		   -id=>'month',
-		   -values=>['x',1..12],
-		   -default=>'x',
-		   -labels=>\%MoY_long),
+    $q->popup_menu(-name => 'month',
+		   -id => 'month',
+		   -values => ['x',1..12],
+		   -default => 'x',
+		   -labels => \%MoY_long),
     "</label>\n",
     $q->br(),
     $q->small("Use all digits to specify a year.\nYou probably aren't",
@@ -719,20 +720,20 @@ sub form
     if (!defined $q->param('c') || $q->param('c') eq 'off')
     {
 	print STDOUT "(Candle lighting times are off.  Turn them on for:\n",
-	$q->a({-href=>$script_name . "?c=on&amp;geo=zip",
-	       -target=>'_top'},
+	$q->a({-href => $script_name . "?c=on&amp;geo=zip",
+	       -target => '_top'},
 	      "zip code"), ",\n",
-	$q->a({-href=>$script_name . "?c=on&amp;geo=city",
-	       -target=>'_top'},
+	$q->a({-href => $script_name . "?c=on&amp;geo=city",
+	       -target => '_top'},
 	      "closest city"), ", or\n",
-	$q->a({-href=>$script_name . "?c=on&amp;geo=pos",
-	       -target=>'_top'},
+	$q->a({-href => $script_name . "?c=on&amp;geo=pos",
+	       -target => '_top'},
 	      "latitude/longitude"), ".)",
 	$q->br(), $q->br();
     }
     else
     {
-	print STDOUT $q->hidden(-name=>'c',-value=>'on'),
+	print STDOUT $q->hidden(-name => 'c',-value => 'on'),
 	"Include\ncandle lighting times for ";
 
 	print STDOUT "zip code:\n"
@@ -743,126 +744,126 @@ sub form
 	    if (defined $q->param('geo') && $q->param('geo') eq 'pos');
 
 	print STDOUT $q->br(), "<small>",
-	"(or ", $q->a({-href=>$script_name . "?c=off",
-		       -target=>'_top'},
+	"(or ", $q->a({-href => $script_name . "?c=off",
+		       -target => '_top'},
 		      "turn them off"), ",\nor select by\n";
 	
 	if (defined $q->param('geo') && $q->param('geo') eq 'city')
 	{
 	    print STDOUT
-		$q->a({-href=>$script_name . "?c=on&amp;geo=zip",
-		       -target=>'_top'},
+		$q->a({-href => $script_name . "?c=on&amp;geo=zip",
+		       -target => '_top'},
 		      "zip code"), " or\n",
-		$q->a({-href=>$script_name . "?c=on&amp;geo=pos",
-		       -target=>'_top'},
+		$q->a({-href => $script_name . "?c=on&amp;geo=pos",
+		       -target => '_top'},
 		      "latitude/longitude");
 	}
 	elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
 	{
 	    print STDOUT
-		$q->a({-href=>$script_name . "?c=on&amp;geo=zip",
-		       -target=>'_top'},
+		$q->a({-href => $script_name . "?c=on&amp;geo=zip",
+		       -target => '_top'},
 		      "zip code"), " or\n",
-		$q->a({-href=>$script_name . "?c=on&amp;geo=city",
-		       -target=>'_top'},
+		$q->a({-href => $script_name . "?c=on&amp;geo=city",
+		       -target => '_top'},
 		      "closest city");
 	}
 	else
 	{
 	    print STDOUT
-		$q->a({-href=>$script_name . "?c=on&amp;geo=city",
-		       -target=>'_top'},
+		$q->a({-href => $script_name . "?c=on&amp;geo=city",
+		       -target => '_top'},
 		      "closest city"), " or\n",
-		$q->a({-href=>$script_name . "?c=on&amp;geo=pos",
-		       -target=>'_top'},
+		$q->a({-href => $script_name . "?c=on&amp;geo=pos",
+		       -target => '_top'},
 		      "latitude/longitude");
 	}
 	print STDOUT ")</small><br><blockquote>\n";
 	
 	if (defined $q->param('geo') && $q->param('geo') eq 'city')
 	{
-	    print STDOUT $q->hidden(-name=>'geo',-value=>'city'),
+	    print STDOUT $q->hidden(-name => 'geo',-value => 'city'),
 	    "<label for=\"city\">Closest City:\n",
-	    $q->popup_menu(-name=>'city',
-			   -id=>'city',
-			   -values=>[sort keys %city_tz],
-			   -default=>'Jerusalem'),
+	    $q->popup_menu(-name => 'city',
+			   -id => 'city',
+			   -values => [sort keys %city_tz],
+			   -default => 'Jerusalem'),
 	    "</label>", $q->br(), "\n";
 	}
 	elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
 	{
-	    print STDOUT $q->hidden(-name=>'geo',-value=>'pos'),
+	    print STDOUT $q->hidden(-name => 'geo',-value => 'pos'),
 	    "<label for=\"ladeg\">",
-	    $q->textfield(-name=>'ladeg',
-			  -id=>'ladeg',
-			  -size=>3,
-			  -maxlength=>2),
+	    $q->textfield(-name => 'ladeg',
+			  -id => 'ladeg',
+			  -size => 3,
+			  -maxlength => 2),
 	    "&nbsp;deg</label>&nbsp;&nbsp;\n",
 	    "<label for=\"lamin\">",
-	    $q->textfield(-name=>'lamin',
-			  -id=>'lamin',
-			  -size=>2,
-			  -maxlength=>2),
+	    $q->textfield(-name => 'lamin',
+			  -id => 'lamin',
+			  -size => 2,
+			  -maxlength => 2),
 	    "&nbsp;min</label>&nbsp;\n",
-	    $q->popup_menu(-name=>'ladir',
-			   -id=>'ladir',
-			   -values=>['n','s'],
-			   -default=>'n',
-			   -labels=>{'n'=>'North Latitude',
-				     's'=>'South Latitude'}),
+	    $q->popup_menu(-name => 'ladir',
+			   -id => 'ladir',
+			   -values => ['n','s'],
+			   -default => 'n',
+			   -labels => {'n' => 'North Latitude',
+				       's' => 'South Latitude'}),
 	    $q->br(),
 	    "<label for=\"lodeg\">",
-	    $q->textfield(-name=>'lodeg',
-			  -id=>'lodeg',
-			  -size=>3,
-			  -maxlength=>3),
+	    $q->textfield(-name => 'lodeg',
+			  -id => 'lodeg',
+			  -size => 3,
+			  -maxlength => 3),
 	    "&nbsp;deg</label>&nbsp;&nbsp;\n",
 	    "<label for=\"lomin\">",
-	    $q->textfield(-name=>'lomin',
-			  -id=>'lomin',
-			  -size=>2,
-			  -maxlength=>2),
+	    $q->textfield(-name => 'lomin',
+			  -id => 'lomin',
+			  -size => 2,
+			  -maxlength => 2),
 	    "&nbsp;min</label>&nbsp;\n",
-	    $q->popup_menu(-name=>'lodir',
-			   -id=>'lodir',
-			   -values=>['w','e'],
-			   -default=>'w',
-			   -labels=>{'e'=>'East Longitude',
-				     'w'=>'West Longitude'}),
+	    $q->popup_menu(-name => 'lodir',
+			   -id => 'lodir',
+			   -values => ['w','e'],
+			   -default => 'w',
+			   -labels => {'e' => 'East Longitude',
+				       'w' => 'West Longitude'}),
 	    $q->br();
 	}
 	else
 	{
-	    print STDOUT $q->hidden(-name=>'geo',-value=>'zip'),
+	    print STDOUT $q->hidden(-name => 'geo',-value => 'zip'),
 	    "<label for=\"zip\">Zip code:\n",
-	    $q->textfield(-name=>'zip',
-			  -id=>'zip',
-			  -size=>5,
-			  -maxlength=>5),
+	    $q->textfield(-name => 'zip',
+			  -id => 'zip',
+			  -size => 5,
+			  -maxlength => 5),
 	    "</label>&nbsp;&nbsp;&nbsp;\n";
 	}
 
 	if ($q->param('geo') ne 'city')
 	{
 	    print STDOUT "<label for=\"tz\">Time zone:\n",
-	    $q->popup_menu(-name=>'tz',
-			   -id=>'tz',
-			   -values=>$q->param('geo') eq 'pos' ?
+	    $q->popup_menu(-name => 'tz',
+			   -id => 'tz',
+			   -values => $q->param('geo') eq 'pos' ?
 			   [-5,-6,-7,-8,-9,-10,-11,-12,
 			    12,11,10,9,8,7,6,5,4,3,2,1,0,
 			    -1,-2,-3,-4] : ['auto',-5,-6,-7,-8,-9,-10],
-			   -default=>$q->param('geo') eq 'pos' ? 0 : 'auto',
-			   -labels=>\%tz_names);
+			   -default => $q->param('geo') eq 'pos' ? 0 : 'auto',
+			   -labels => \%tz_names);
 
 	    print STDOUT "</label>", $q->br(),
 	    "Daylight Savings Time:\n",
-	    $q->radio_group(-name=>'dst',
-			    -id=>'dst',
-			    -values=>$q->param('geo') eq 'pos' ?
+	    $q->radio_group(-name => 'dst',
+			    -id => 'dst',
+			    -values => $q->param('geo') eq 'pos' ?
 			    ['usa','israel','none'] : ['usa','none'],
-			    -default=>
+			    -default =>
 			    $q->param('geo') eq 'pos' ? 'none' : 'usa',
-			    -labels=>
+			    -labels =>
 			    {'usa' => "\nUSA (except AZ, HI, and IN) ",
 			     'israel' => "\nIsrael ",
 			     'none' => "\nnone ", }),
@@ -870,65 +871,65 @@ sub form
 	}
 
 	print STDOUT "<label for=\"m\">Havdalah minutes past sundown:\n",
-	$q->textfield(-name=>'m',
-		      -id=>'m',
-		      -size=>3,
-		      -maxlength=>3,
-		      -default=>72),
+	$q->textfield(-name => 'm',
+		      -id => 'm',
+		      -size => 3,
+		      -maxlength => 3,
+		      -default => 72),
 	"</label>", $q->br(), "</blockquote>\n";
     }
 
     print STDOUT "<table border=\"0\"><tr>",
     "<td><label\nfor=\"a\">",
-    $q->checkbox(-name=>'a',
-		 -id=>'a',
-		 -label=>'Use ashkenazis hebrew'),
+    $q->checkbox(-name => 'a',
+		 -id => 'a',
+		 -label => 'Use ashkenazis hebrew'),
     "</label></td>",
     "<td><label\nfor=\"o\">",
-    $q->checkbox(-name=>'o',
-		 -id=>'o',
-		 -label=>'Add days of the Omer'),
+    $q->checkbox(-name => 'o',
+		 -id => 'o',
+		 -label => 'Add days of the Omer'),
     "</label></td>",
     "</tr><tr>",
     "<td><label\nfor=\"x\">",
-    $q->checkbox(-name=>'x',
-		 -id=>'x',
-		 -label=>'Suppress Rosh Chodesh'),
+    $q->checkbox(-name => 'x',
+		 -id => 'x',
+		 -label => 'Suppress Rosh Chodesh'),
     "</label></td>",
     "<td><label\nfor=\"h\">",
-    $q->checkbox(-name=>'h',
-		 -id=>'h',
-		 -label=>'Suppress all default holidays'),
+    $q->checkbox(-name => 'h',
+		 -id => 'h',
+		 -label => 'Suppress all default holidays'),
     "</label></td>",
     "</tr><tr>",
     "<td colspan=\"2\"><label\nfor=\"s\">",
-    $q->checkbox(-name=>'s',
-		 -id=>'s',
-		 -label=>'Add weekly sedrot on Saturday'),
+    $q->checkbox(-name => 's',
+		 -id => 's',
+		 -label => 'Add weekly sedrot on Saturday'),
     "</label>\n(<label\nfor=\"i\">",
-    $q->checkbox(-name=>'i',
-		 -id=>'i',
-		 -label=>'Use Israeli sedra scheme'),
+    $q->checkbox(-name => 'i',
+		 -id => 'i',
+		 -label => 'Use Israeli sedra scheme'),
     "</label>)</td>",
     "</tr><tr>",
     "<td colspan=\"2\"><label\nfor=\"d\">",
-    $q->checkbox(-name=>'d',
-		 -id=>'d',
-		 -label=>'Print hebrew date for the entire date range'),
+    $q->checkbox(-name => 'd',
+		 -id => 'd',
+		 -label => 'Print hebrew date for the entire date range'),
     "</label></td>",
     "</tr><tr>",
     "<td colspan=\"2\"><label\nfor=\"set\">",
-    $q->checkbox(-name=>'set',
-		 -id=>'set',
-		 -checked=> 
+    $q->checkbox(-name => 'set',
+		 -id => 'set',
+		 -checked =>
 		 (!defined $q->param('v') && defined $q->param('geo') &&
 		  (!defined $q->raw_cookie() || $q->raw_cookie() =~ /^\s*$/))
 		 ? 'checked' : undef,
-		 -label=>'Save my preferences in a cookie'),
+		 -label => 'Save my preferences in a cookie'),
     "</label>(<a target=\"_top\"\n",
     "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
     "a cookie?</a>)</td></tr></table>\n",
-    $q->br(), $q->submit(-name=>'.s',-value=>'Get Calendar'),
+    $q->br(), $q->submit(-name => '.s',-value => 'Get Calendar'),
     "</form>", $html_footer;
 
     exit(0);
@@ -1045,21 +1046,21 @@ sub results_page
 	$q->delete('set');
     }
 
-    print STDOUT $q->header(-expires=>$expires_date),
-    $q->start_html(-title=>"Hebcal: Jewish Calendar $date",
-		   -head=>[
+    print STDOUT $q->header(-expires => $expires_date),
+    $q->start_html(-title => "Hebcal: Jewish Calendar $date",
+		   -head => [
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
-			   $q->Link({-rel=>'prev',
-				 -href=>$prev_url,
-				 -title=>$prev_title}),
-			   $q->Link({-rel=>'next',
-				 -href=>$next_url,
-				 -title=>$next_title}),
-			   $q->Link({-rel=>'start',
-				 -href=>$script_name,
-				 -title=>'Hebcal Interactive Jewish Calendar'})
+			   $q->Link({-rel => 'prev',
+				     -href => $prev_url,
+				     -title => $prev_title}),
+			   $q->Link({-rel => 'next',
+				     -href => $next_url,
+				     -title => $next_title}),
+			   $q->Link({-rel => 'start',
+				     -href => $script_name,
+				     -title => 'Hebcal Interactive Jewish Calendar'})
 			   ],
-		   -meta=>{'robots'=>'noindex'});
+		   -meta => {'robots' => 'noindex'});
     print STDOUT
 	"<table border=\"0\" width=\"100%\" cellpadding=\"0\" ",
 	"class=\"navbar\">\n",
@@ -1121,8 +1122,7 @@ sub results_page
 
     if ($ycal == 0)
     {
-	print STDOUT " -\n<a target=\"_top\"\nhref=\"", 
-	$script_name, "?y=1";
+	print STDOUT " -\n<a target=\"_top\"\nhref=\"", $script_name, "?y=1";
 	foreach $key ($q->param())
 	{
 	    $val = $q->param($key);
@@ -1132,7 +1132,7 @@ sub results_page
     }
     print STDOUT "</p>\n";
 
-    print STDOUT 
+    print STDOUT
 "<div><small>
 <p>Your personal <a target=\"_top\" href=\"http://calendar.yahoo.com/\">Yahoo!
 Calendar</a> is a free web-based calendar that can synchronize with Palm
@@ -1226,7 +1226,7 @@ so you can keep this window open.
     }
 
     print STDOUT "</pre>", "Go to:\n",
-    "<a target=\"_top\"\nhref=\"$prev_url\">", $prev_title, 
+    "<a target=\"_top\"\nhref=\"$prev_url\">", $prev_title,
     "</a> |\n",
     "<a target=\"_top\"\nhref=\"$next_url\">", $next_title, "</a><br>\n";
 
@@ -1270,7 +1270,7 @@ sub parse_date_descr
 	$all_day = '"true"';
 	$subj = $descr;
     }
-    
+
     $subj =~ s/\"/''/g;
     $subj =~ s/\s*:\s*$//g;
 
@@ -1357,7 +1357,7 @@ sub process_cookie {
     local($cookieval) = @_;
 
     my($c) = new CGI($cookieval);
-    
+
     if ((! defined $q->param('c')) ||
 	($q->param('c') eq 'on') ||
 	($q->param('c') eq '1')) {
@@ -1399,7 +1399,7 @@ sub process_cookie {
 
     $q->param('m',$c->param('m'))
 	if (defined $c->param('m') && ! defined $q->param('m'));
-    
+
     foreach (@opts)
     {
 	next if $_ eq 'c';
@@ -1460,7 +1460,7 @@ sub dba_contents {
     local(@events) = @_;
     local($numEntries) = scalar(@events);
     local($memo,$untimed,$startTime,$i,$z,$secsEast,$local2local);
-    
+
     # compute diff seconds between GMT and whatever our local TZ is
     # pick 1999/01/15 as a date that we're certain is standard time
     $startTime = &Time::Local::timegm(0,34,12,15,0,90,0,0,0);
