@@ -1142,7 +1142,8 @@ sub download_html
 
     $title = '' unless $title;
 
-    my($s) = qq{<a name="export"></a><hr><div class="goto">\n<h3>Export $title calendar</h3>\n};
+    my($s) = qq{<div class="goto"><a name="export"></a><hr>\n} .
+    qq{<h3>Export $title calendar</h3>\n};
 
     $s .= qq{<p>By clicking the links below, you can download 
 Jewish Calendar events into your desktop software.</p>};
