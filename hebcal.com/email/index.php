@@ -250,7 +250,7 @@ Michael J. Radwin. All rights reserved.
 <a href="/news/">News</a> -
 <a href="/donations/">Donate</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
+3.4 for UNIX</a>, Copyright &copy; 2005 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
 </span>
 </body></html>
