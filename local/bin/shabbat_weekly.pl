@@ -10,6 +10,7 @@ use strict;
 use Hebcal ();
 use POSIX qw(strftime);
 use MIME::Base64 ();
+use Time::Local ();
 use DBI ();
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
@@ -52,7 +53,6 @@ while (my($to,$cfg) = each(%SUBS))
 	"e=" . my_url_escape($encoded);
 
     my($body) = gen_body(\@events) . qq{
-These times are for:
 $loc
 
 Shabbat Shalom,
@@ -250,7 +250,8 @@ sub parse_config
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    Hebcal::zipcode_fields($zipinfo);
 
-	$city_descr = "  $city, $state " . $args{'zip'};
+	$city_descr = "These times are for:";
+	$city_descr .= "\n  $city, $state " . $args{'zip'};
 	$city_descr .= "\n  " . $Hebcal::tz_names{$tz};
 
 	if (defined $tz && $tz ne '?') {
@@ -270,7 +271,7 @@ sub parse_config
 	$cmd .= " -C '" . $city_descr . "'";
 	$cmd .= " -i"
 	    if ($Hebcal::city_dst{$city_descr} eq 'israel');
-	$city_descr = "  $city_descr";
+	$city_descr = "These times are for $city_descr.";
     } else {
 	die "no geographic key in [$config]";
     }
