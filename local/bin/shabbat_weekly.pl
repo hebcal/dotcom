@@ -16,39 +16,39 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
 
-my($friday) = &Time::Local::timelocal(0,0,0,
-				      $mday,$mon,$year,$wday,$yday,$isdst);
+my($friday) = Time::Local::timelocal(0,0,0,
+				     $mday,$mon,$year,$wday,$yday,$isdst);
 my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
 
 my($sat_year) = (localtime($saturday))[5] + 1900;
 
 my $ZIPS = Hebcal::zipcode_open_db('/home/mradwin/web/hebcal.com/hebcal/zips99.db');
 
-my(%SUBS) = &load_subs();
+my(%SUBS) = load_subs();
 
 # walk through subs to make sure there are no errors first
 while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
-    &parse_config($cfg);
+    parse_config($cfg);
 }
 
 while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
-    my($cmd,$loc,$args) = &parse_config($cfg);
+    my($cmd,$loc,$args) = parse_config($cfg);
     print "$to\n$cfg\n$cmd\n";
     my(@events) = Hebcal::invoke_hebcal($cmd,$loc,undef);
 
     my $encoded = encode_base64($to);
     chomp($encoded);
     my $unsub_url = "http://www.hebcal.com/email/?" .
-	"e=" . &my_url_escape($encoded);
+	"e=" . my_url_escape($encoded);
 
     my($body) = "$loc\n\n"
-	. &gen_body(\@events) . qq{
+	. gen_body(\@events) . qq{
 Shabbat Shalom,
 hebcal.com
 
@@ -79,7 +79,7 @@ shabbat-unsubscribe\@hebcal.com
     my($status) = 0;
     for ($i = 0; $status == 0 && $i < 3; $i++)
     {
-	$status = &Hebcal::sendmail_v2($return_path,\%headers,$body);
+	$status = Hebcal::sendmail_v2($return_path,\%headers,$body);
     }
 
     warn "$0: unable to email $to\n"
@@ -114,7 +114,7 @@ sub gen_body
     for ($i = 0; $i < $numEntries; $i++)
     {
 	# holiday is at 12:00:01 am
-	my($time) = &Time::Local::timelocal(1,0,0,
+	my($time) = Time::Local::timelocal(1,0,0,
 		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
