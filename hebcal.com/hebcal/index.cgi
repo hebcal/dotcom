@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 10:50:57 PDT 2001
+Last modified: Wed Apr 18 11:21:31 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -476,6 +476,8 @@ JSCRIPT_END
 			   $q->Link({-rel => 'stylesheet',
 				     -href => '/style.css',
 				     -type => 'text/css'}),
+			   $q->Link({-rel => 'p3pv1',
+				     -href => "http://www.$server_name/w3c/p3p.xml"}),
 			   $q->Link({-rev => 'made',
 				     -href => "mailto:$author"}),
 			   ],
@@ -909,6 +911,8 @@ sub results_page
 			   $q->Link({-rel => 'stylesheet',
 				     -href => '/style.css',
 				     -type => 'text/css'}),
+			   $q->Link({-rel => 'p3pv1',
+				     -href => "http://www.$server_name/w3c/p3p.xml"}),
 			   $q->Link({-rel => 'prev',
 				     -href => $prev_url,
 				     -title => $prev_title}),
