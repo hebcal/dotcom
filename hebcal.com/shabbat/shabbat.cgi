@@ -285,13 +285,14 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
     {
 	my($newcookie) = &Hebcal::gen_cookie($q);
 	my($cmp1) = $newcookie;
-	my($cmp2) = $q->raw_cookie();
+	my($cmp2) = ($q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/);
 
-	$cmp1 =~ s/\bC=t=\d+\&//;
-	$cmp2 =~ s/\bC=t=\d+\&//;
+	$cmp1 =~ s/^C=t=\d+\&//;
+	$cmp2 =~ s/^t=\d+\&//;
 
 	$cookie_to_set = $newcookie 
-	    if ($cmp1 ne $cmp2 && ! $q->param('noset'));
+	    if ($cmp2 ne 'opt_out' &&
+		$cmp1 ne $cmp2 && ! $q->param('noset'));
     }
 
     print STDOUT "Set-Cookie: ", $cookie_to_set,
