@@ -534,7 +534,7 @@ href="/search/">Search</a></small>
 <table width="100%">
 <tr>
 <td><h1>Parashat $h</h1></td>
-<td><h1 dir="rtl" class="hebrew" name="hebrew"
+<td><h1 dir="rtl" class="hebrew"
 lang="he">$hebrew</h1></td>
 </tr>
 </table>
@@ -543,7 +543,7 @@ lang="he">$hebrew</h1></td>
 &nbsp;
 <table border="1" cellpadding="5">
 <tr>
-<td align="center"><b>Full Kriyah<b></td>
+<td align="center"><b>Full Kriyah</b></td>
 <td align="center"><b>Triennial Year I</b>
 <br><small>$tri_date[1]</small>
 </td>
