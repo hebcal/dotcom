@@ -3,7 +3,7 @@
 use DB_File;
 
 $dbmfile = 'zips.db';
-tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+tie(%DB, 'DB_File', $dbmfile, O_RDWR|O_CREAT, 0644, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 
 while(<>)
