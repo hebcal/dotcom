@@ -177,54 +177,6 @@ foreach my $h (keys %readings)
     &write_sedra_page($h,undef,undef,$readings{$h});
 }
 
-my $year = 1;
-for (my $i = $bereshit_idx; $i < @events; $i++)
-{
-    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
-	$i != $bereshit_idx)
-    {
-	$year++;
-	last if ($year == 4);
-    }
-
-    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
-    my $h = $1;
-
-    my($time) = &Time::Local::timelocal(1,0,0,
-		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-		       $events[$i]->[$Hebcal::EVT_IDX_MON],
-		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       '','','');
-    my($stime) = strftime("%A, %d %B %Y", localtime($time));
-
-    print $events[$i]->[$Hebcal::EVT_IDX_SUBJ], " for Year $year - $stime\n";
-
-    if (defined $combined{$h})
-    {
-	my $variation = $cycle_option{$h} . "." . $year;
-	my $a = $triennial_aliyot{$h}->{$variation};
-	die unless defined $a;
-	print "(#1) - $cycle_option{$h}\n";
-	print Dumper($a);
-    }
-    elsif (defined $triennial_aliyot{$h}->{$year})
-    {
-	my $a = $triennial_aliyot{$h}->{$year};
-	print "(#2) - $year\n";
-	print Dumper($a);
-    }
-    elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
-    {
-	my $a = $triennial_aliyot{$h}->{"Y.$year"};
-	print "(#3) - Y.$year\n";
-	print Dumper($a);
-    }
-    else
-    {
-	die "can't find aliyot for $h, year $year";
-    }
-}
-
 exit(0);
 
 sub calc_variation_options
@@ -312,7 +264,7 @@ sub read_aliyot_metadata
 }
 
 sub write_sedra_page {
-    my($h,$prev,$next) = @_;
+    my($h,$prev,$next,$triennial) = @_;
 
     my($sedrot_h) = $h;
     $h =~ s/^Combined //;
@@ -423,14 +375,19 @@ lang="he">$hebrew</h1></td>
 <a href="$torah_href"\ntitle="Translation from JPS Tanakh">$torah</a></h3>
 <table border="1">
 <tr>
+<th>Full Kriyah</th>
+<th>Triennial Year I</th>
+<th>Triennial Year II</th>
+<th>Triennial Year III</th>
+</tr>
+<tr>
 <td>
-<a name="aliyot">Shabbat aliyot (full kriyah):</a>
 <dl compact>
 EOHTML
 ;
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
-    my %aliyah;
+    my %fk;
     foreach my $a (@{$aliyot})
     {
 	my($c1,$v1) = ($a->{'begin'} =~ /^(\d+):(\d+)$/);
@@ -447,20 +404,50 @@ EOHTML
 		$a->{'numverses'} . " p'sukim)</span>";
 	}
 
-	$aliyah{$a->{'num'}} = $info;
+	$fk{$a->{'num'}} = $info;
     }
 
     foreach (1 .. 7, 'M')
     {
-	my($info) = $aliyah{$_};
+	my($info) = $fk{$_};
 	next if (!defined $info && $_ eq 'M');
-	die "no aliyah $_ defined for $h" unless defined $info;
+	die "no fk $_ defined for $h" unless defined $info;
 	my($label) = ($_ eq 'M') ? 'maf' : $_;
-	print OUT2 qq{<dt><a name="aliyah-$label">$label:</a>\n}, 
+	print OUT2 qq{<dt><a name="fk-$label">$label:</a>\n}, 
 		qq{<dd>$info\n};
     }
 
     print OUT2 "</dl>\n</td>\n";
+
+    foreach my $yr (1 .. 3)
+    {
+	print OUT2 "<td>\n<dl compact>\n";
+	my %tri;
+	foreach my $a (@{$triennial->[$yr]})
+	{
+	    my($c1,$v1) = ($a->{'begin'} =~ /^(\d+):(\d+)$/);
+	    my($c2,$v2) = ($a->{'end'}   =~ /^(\d+):(\d+)$/);
+	    my($info);
+	    if ($c1 == $c2) {
+		$info = "$c1:$v1-$v2";
+	    } else {
+		$info = "$c1:$v1-$c2:$v2";
+	    }
+
+	    $tri{$a->{'num'}} = $info;
+	}
+
+	foreach (1 .. 7, 'M')
+	{
+	    my($info) = $tri{$_};
+	    next if (!defined $info && $_ eq 'M');
+	    die "no aliyah $_ defined for $h" unless defined $info;
+	    my($label) = ($_ eq 'M') ? 'maf' : $_;
+	    print OUT2 qq{<dt><a name="tri-$yr-$label">$label:</a>\n}, 
+	    qq{<dd>$info\n};
+	}
+	print OUT2 "</dl>\n</td>\n";
+    }
 
     print OUT2 <<EOHTML;
 </tr>
