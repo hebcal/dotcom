@@ -36,6 +36,9 @@ use Date::Calc;
 # constants
 ########################################################################
 
+my($this_year) = (localtime)[5];
+$this_year += 1900;
+
 my($VERSION) = '$Revision$'; #'
 
 $Hebcal::gregorian_warning = "<p><font color=\"#ff0000\">WARNING:
@@ -663,6 +666,19 @@ sub utf8_hebrew_to_netscape($) {
     return $u->utf8();
 }
 
+sub html_copyright($)
+{
+    my($q) = @_;
+
+    my($server_name) = $q->virtual_host();
+
+    return qq{<a name="copyright">Copyright &copy; $this_year
+Michael J. Radwin. All rights reserved.</a>
+<a target="_top" href="http://$server_name/privacy/">Privacy Policy</a> -
+<a target="_top" href="http://$server_name/help/">Help</a> -
+<a target="_top" href="http://$server_name/contact/">Contact</a>};
+}
+
 sub html_footer($$)
 {
     my($q,$rcsrev) = @_;
@@ -675,18 +691,11 @@ sub html_footer($$)
     my($server_name) = $q->virtual_host();
     $server_name =~ s/^www\.//;
 
-    my($this_year) = (localtime)[5];
-    $this_year += 1900;
-
     my($hhmts) = "Software last updated:\n" . localtime($mtime);
 
     return qq{
-<hr noshade size="1"><font size=-2 face=Arial><a
-name="copyright">Copyright &copy; $this_year
-Michael J. Radwin. All rights reserved.</a>
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a>
+<hr noshade size="1"><font size=-2 face=Arial>
+}, &html_copyright($q), qq{
 <br>This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
