@@ -37,7 +37,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Wed Jul 14 20:11:10 PDT 1999
+Last modified: Sat Jul 24 14:52:03 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -531,6 +531,7 @@ sub download
 {
     local($date) = $year;
     local($filename) = 'hebcal_' . $year;
+    local($ycal) = (defined($in{'y'}) && $in{'y'} eq '1') ? 1 : 0;
 
     if ($in{'month'} =~ /^\d+$/)
     {
@@ -574,25 +575,36 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "<dd>", $lat_descr, "\n" if $lat_descr ne '';
 	print STDOUT "<dd>", $long_descr, "\n" if $long_descr ne '';
 	print STDOUT "<dd>", $dst_tz_descr, "\n" if $dst_tz_descr ne '';
-	print STDOUT "</dl>\n\n";
+	print STDOUT "</dl>\n";
+    }
+
+    if ($ycal == 0)
+    {
+	print STDOUT "<a href=\"$cgipath?y=1";
+	while (($key,$val) = each(%in))
+	{
+	    print STDOUT "&amp;$key=$val";
+	}
+	print STDOUT "\">Show Yahoo! Calendar links</a>\n";
     }
 
     print STDOUT "<form action=\"${cgipath}index.html/$filename\">\n";
-
     while (($key,$val) = each(%in))
     {
 	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"$val\">\n";
     }
-
     print STDOUT
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
 </form>
-<p><small>Use the \"add\" links below to add a holiday to your personal
+";
+
+    print STDOUT
+"<p><small>Use the \"add\" links below to add a holiday to your personal
 <a href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>, a free
 web-based calendar that can synchronize with Palm Pilot, Outlook, etc.
 These links will pop up a new browser window so you can keep this window
 open.</small></p>
-";
+" if $ycal;
 
     $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -619,9 +631,13 @@ open.</small></p>
 	    $ST .= sprintf("T%02d%02d00", $hr, $min);
 	}
 
-	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/";
-	print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
+	if ($ycal)
+	{
+	    print STDOUT
+		"<a target=\"_calendar\" href=\"http://calendar.yahoo.com/";
+	    print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
 		&url_escape($subj), "&amp;VIEW=d\">add</a> ";
+	}
 
 	$descr =~ s/&/&amp;/g;
 	$descr =~ s/</&lt;/g;
