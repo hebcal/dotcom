@@ -1,5 +1,8 @@
 #!/usr/local/bin/perl -w
 
+# $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_manage.pl,v $
+# $Id$
+
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
