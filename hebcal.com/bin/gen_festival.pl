@@ -116,6 +116,9 @@ my(%PREV,%NEXT);
     }
 }
 
+my %OBSERVED;
+holidays_observed(\%OBSERVED);
+
 foreach my $f (@FESTIVALS)
 {
     write_festival_page($fxml,$f);
@@ -422,6 +425,21 @@ EOHTML
 	}
     }
 
+    if (defined $OBSERVED{$f})
+    {
+	print OUT2 <<EOHTML;
+<h3><a name="dates">List of Dates</a></h3>
+$f is observed on:
+<ul>
+EOHTML
+	;
+	foreach my $stime (@{$OBSERVED{$f}}) {
+	    next unless defined $stime;
+	    print OUT2 "<li>$stime\n";
+	}
+	print OUT2 "</ul>\n";
+    }
+
     if (@{$SUBFESTIVALS{$f}} == 1)
     {
 	write_festival_part($festivals, $SUBFESTIVALS{$f}->[0]);
@@ -537,4 +555,63 @@ $hhmts
 EOHTML
 ;
     $html_footer;
+}
+
+sub holidays_observed
+{
+    my($current) = @_;
+
+    my $heb_yr = `./hebcal -t -x -h | grep -v Omer`;
+    chomp($heb_yr);
+    $heb_yr =~ s/^.+, (\d\d\d\d)/$1/;
+
+    my $extra_years = 5;
+    my @years;
+    foreach my $i (0 .. $extra_years)
+    {
+	my $yr = $heb_yr + $i - 1;
+	my @ev = Hebcal::invoke_hebcal("./hebcal -D -H $yr", '', 0);
+	$years[$i] = \@ev;
+    }
+
+    for (my $yr = 0; $yr < $extra_years; $yr++)
+    {
+	my %greg2heb;
+	my @events = @{$years[$yr]};
+	for (my $i = 0; $i < @events; $i++)
+	{
+	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	    next if $subj =~ /^Erev /;
+
+	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my $stime = sprintf("%02d %s %04d",
+				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				$Hebcal::MoY_long{$month},
+				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	    # hebcal -D conveniently emits the date before the event name
+	    if ($subj =~ /^\d+\w+ of [^,]+, \d+$/)
+	    {
+		$greg2heb{$stime} = $subj;
+		next;
+	    }
+
+	    my $subj_copy = $subj;
+	    $subj_copy =~ s/ \d{4}$//;
+	    $subj_copy =~ s/ \(CH\'\'M\)$//;
+	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
+	    $subj_copy =~ s/ [IV]+$//;
+	    $subj_copy =~ s/: \d Candles$//;
+	    $subj_copy =~ s/: 8th Day$//;
+	    $subj_copy =~ s/^Erev //;
+
+	    my $text = $stime;
+	    $text .= " ($greg2heb{$stime})"
+		if (defined $greg2heb{$stime});
+
+	    $current->{$subj_copy}->[$yr] = $text
+		unless (defined $current->{$subj_copy} &&
+			defined $current->{$subj_copy}->[$yr]);
+	}
+    }
 }
