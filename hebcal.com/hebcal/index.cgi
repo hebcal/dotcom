@@ -51,11 +51,21 @@ $q->delete('.s');		# we don't care about submit button
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
+my($set_checked) = 'checked';
 if (! $q->param('v') &&
     defined $q->raw_cookie() &&
     $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
 {
-    &Hebcal::process_cookie($q,$1);
+    my($cookieval) = $1;
+
+    if ($cookieval eq 'opt_out')
+    {
+	$set_checked = '';
+    }
+    else
+    {
+	&Hebcal::process_cookie($q,$cookieval);
+    }
 }
 
 # sanitize input to prevent people from trying to hack the site.
@@ -578,7 +588,7 @@ JSCRIPT_END
     "<br><label\nfor=\"set\">",
     $q->checkbox(-name => 'set',
 		 -id => 'set',
-		 -checked => 'checked',
+		 -checked => $set_checked,
 		 -label => "\nSave my preferences in a cookie"),
     "</label> <small>(<a\n",
     "href=\"/help/#cookie\">What's\n",
