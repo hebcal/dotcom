@@ -18,7 +18,10 @@ every other day (e.g. fast days): 3
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="15" num="1" book="Exodus" begin="12:21" end="12:24" />
@@ -36,7 +39,10 @@ every other day (e.g. fast days): 3
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="15" num="1" book="Exodus" begin="12:21" end="12:24" />
@@ -54,6 +60,13 @@ every other day (e.g. fast days): 3
  haftara="II Kings 23:1 - 23:9; 23:21 - 23:25"
  hebrew="פֶּסַח יוֹם ב׳"
  yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah2.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah2_haft.shtml" />
+ </links>
  <kriyah>
   <aliyah parsha="31" num="1" book="Leviticus" begin="22:26" end="23:3" />
   <aliyah parsha="31" num="2" book="Leviticus" begin="23:4" end="23:14" />
@@ -116,6 +129,13 @@ every other day (e.g. fast days): 3
 Note: if Shabbat falls on the third day of Chol ha-Moed,
 the readings for the third, fourth, and fifth days are moved ahead.
 -->
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shabbat_pesah.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shabbat_pesah_haft.shtml" />
+ </links>
  <kriyah>
   <aliyah parsha="21" num="1" book="Exodus" begin="33:12" end="33:16" />
   <aliyah parsha="21" num="2" book="Exodus" begin="33:17" end="33:19" />
@@ -132,6 +152,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
  haftara="II Samuel 22:1-51"
  hebrew="פֶּסַח יוֹם ז׳"
  yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7_haft.shtml" />
+ </links>
  <kriyah>
   <aliyah parsha="16" num="1" book="Exodus" begin="13:17" end="13:22" />
   <aliyah parsha="16" num="2" book="Exodus" begin="14:1" end="14:8" />
@@ -145,6 +172,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="Passover, the Feast of Unleavened Bread"
  haftara="II Samuel 22:1-51"
  yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7_haft.shtml" />
+ </links>
  <kriyah>
   <aliyah parsha="16" num="1" book="Exodus" begin="13:17" end="13:19" />
   <aliyah parsha="16" num="2" book="Exodus" begin="13:20" end="13:22" />
@@ -161,6 +195,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
  haftara="Isaiah 10:32 - 12:6"
  hebrew="פֶּסַח יוֹם ח׳"
  yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8_haft.shtml" />
+ </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" />
   <aliyah parsha="47" num="2" book="Deuteronomy" begin="16:1" end="16:3" />
@@ -174,6 +215,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="Passover, the Feast of Unleavened Bread"
  haftara="Isaiah 10:32 - 12:6"
  yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8_haft.shtml" />
+ </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
   <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" />
@@ -192,7 +240,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holidayc.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot1.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot1_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="17" num="1" book="Exodus" begin="19:1" end="19:6" />
@@ -210,7 +261,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holidayc.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" />
@@ -228,7 +282,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holidayc.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
@@ -359,9 +416,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
   <link rel="torah"
-   href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhashanah2.shtml" />
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhashanah1.shtml" />
   <link rel="haftara"
-   href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhashanah2_haft.shtml" />
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhashanah1_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="4" num="1" book="Genesis" begin="21:1" end="21:4" />
@@ -380,7 +437,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhashanah2.shtml" />
+  <link rel="haftara"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhashanah2_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="4" num="1" book="Genesis" begin="22:1" end="22:3" />
@@ -443,6 +503,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday4.htm" />
+  <!-- can't find a copy of vayikra 18 on JTSA's website -->
   <link />
  </links>
  <kriyah>
@@ -462,7 +523,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
     href="http://learn.jtsa.edu/topics/parashah/jpstext/sukkot.shtml" />
   <link rel="haftara"
     href="http://learn.jtsa.edu/topics/parashah/jpstext/sukkot1_haft.shtml" />
-  <link />
  </links>
  <kriyah>
   <aliyah parsha="31" num="1" book="Leviticus" begin="22:26" end="23:3" />
@@ -484,7 +544,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
     href="http://learn.jtsa.edu/topics/parashah/jpstext/sukkot.shtml" />
   <link rel="haftara"
     href="http://learn.jtsa.edu/topics/parashah/jpstext/sukkot1_haft.shtml" />
-  <link />
  </links>
  <kriyah>
   <aliyah parsha="31" num="1" book="Leviticus" begin="22:26" end="22:33" />
@@ -508,7 +567,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
     href="http://learn.jtsa.edu/topics/parashah/jpstext/sukkot.shtml" />
   <link rel="haftara"
     href="http://learn.jtsa.edu/topics/parashah/jpstext/sukkot2_haft.shtml" />
-  <link />
  </links>
  <kriyah>
   <aliyah parsha="31" num="1" book="Leviticus" begin="22:26" end="23:3" />
@@ -646,7 +704,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday6.htm" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/shminiatzeret.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
@@ -703,6 +762,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:35" end="30:1" numverses="6" />
  </kriyah>
 </festival>
+
+<!--
+ Haftarah for Hanukkah
+ Zechariah 2:14-4:7
+ http://learn.jtsa.edu/topics/parashah/jpstext/hanukkah_haft.shtml
+
+ Haftarah II for Hanukkah
+ I Kings 7:40-50
+ http://learn.jtsa.edu/topics/parashah/jpstext/hanukkah2_haft.shtml
+ -->
 
 <festival id="Chanukah: 1 Candle"
  hebrew="חֲנוּכָּה: א׳ נֵר"
@@ -806,7 +875,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
-  <link />
+  <link rel="torah"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="15" num="M" book="Exodus" begin="12:1" end="12:20" numverses="20" />
@@ -821,7 +893,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
-  <link />
+  <link rel="torah"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" />
@@ -837,7 +912,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.passover.net/scripts/tgij/paper/passoverTemplate.asp?ArticleID=1784" />
-  <link />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/hagadol_haft.shtml" />
  </links>
 </festival>
 
@@ -848,7 +924,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.ou.org/yerushalayim/tishabav/chazon.html" />
-  <link />
  </links>
 </festival>
 
@@ -859,7 +934,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.bus.ualberta.ca/yreshef/shabbat/nachamu.html" />
-  <link />
  </links>
 </festival>
 
@@ -871,7 +945,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/parah.htm" />
-  <link />
+  <link rel="torah"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#parah_maf" />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/parah_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="39" num="M" book="Numbers" begin="19:1" end="19:22" numverses="22" />
@@ -886,7 +963,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm" />
-  <link />
+  <link rel="torah"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#shekalim_maf" />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/shekalim_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="21" num="M" book="Exodus" begin="30:11" end="30:16" numverses="6" />
@@ -901,7 +981,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm" />
-  <link />
+  <link rel="torah"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#shekalim_maf" />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/shekalim_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" />
@@ -930,7 +1013,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <links>
   <link rel="about"
     href="http://www.ou.org/chagim/fourshabbatot/zachor.htm" />
-  <link />
+  <link rel="torah"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#zakhor_maf" />
+  <link rel="haftara"
+  href="http://learn.jtsa.edu/topics/parashah/jpstext/zakhor_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="49" num="M" book="Deuteronomy" begin="25:17" end="25:19" numverses="3" />
@@ -942,9 +1028,10 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="When Shabbat falls on Rosh Chodesh"
  haftara="Isaiah 66:1 - 66:24">
  <links>
-  <link rel="about"
+  <link rel="haftara"
  href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhodesh_haft.shtml" />
-  <link />
+  <link rel="torah"
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/holidays_maf.shtml#roshhodesh_maf" />
  </links>
  <kriyah>
   <aliyah parsha="41" num="M" book="Numbers" begin="28:9" end="28:15" numverses="7" />
@@ -954,18 +1041,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="When Shabbat falls the day before Rosh Chodesh"
  haftara="I Samuel 20:18 - 20:42">
  <links>
-  <link rel="about"
+  <link rel="haftara"
  href="http://learn.jtsa.edu/topics/parashah/jpstext/maharhodesh_haft.shtml" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Adar"
  descr="The new Jewish month of Adar"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/adar/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Adar I"
@@ -982,99 +1067,88 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="The new Jewish month of Av"
  hebrew="רֹאשׁ חֹדֶשׁ אָב"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/av/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Cheshvan"
  descr="The new Jewish month of Cheshvan"
  hebrew="רֹאשׁ חֹדֶשׁ חֶשְׁוָן"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/marcheshvan/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Elul"
  descr="The new Jewish month of Elul"
  hebrew="רֹאשׁ חֹדֶשׁ אֱלוּל"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/elul/rchelul.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Iyyar"
  descr="The new Jewish month of Iyyar"
  hebrew="רֹאשׁ חֹדֶשׁ אִיָיר"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/iyar/roshch.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Kislev"
  descr="The new Jewish month of Kislev"
  hebrew="רֹאשׁ חֹדֶשׁ כִּסְלֵו"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/kislev/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Nisan"
  descr="The new Jewish month of Nisan"
  hebrew="רֹאשׁ חֹדֶשׁ נִיסָן"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/nisan/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Sh'vat"
  descr="The new Jewish month of Sh'vat"
  hebrew="רֹאשׁ חֹדֶשׁ שְׁבָט"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/shevat/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Sivan"
  descr="The new Jewish month of Sivan"
  hebrew="רֹאשׁ חֹדֶשׁ סִיוָן"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Tamuz"
  descr="The new Jewish month of Tamuz"
  hebrew="רֹאשׁ חֹדֶשׁ תָּמוּז"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/tammuz/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Tevet"
  descr="The new Jewish month of Tevet"
  hebrew="רֹאשׁ חֹדֶשׁ טֵבֵת"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/tevet/default.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Rosh Chodesh Tishrei"
  descr="The new Jewish month of Tishrei"
  hebrew="רֹאשׁ חֹדֶשׁ תִּשְׁרֵי"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/tishrei/default.htm" />
-  <link />
  </links>
 </festival>
  
@@ -1083,18 +1157,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
  hebrew="ל״ג בְּעוֹמֶר"
  descr="33rd day of counting the Omer"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://learn.jtsa.edu/lagbaomer/" />
-  <link />
  </links>
 </festival>
 <festival id="Tu B'Shvat"
  hebrew="טוּ בִּשְׁבָט"
  descr="New Year for Trees"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.jewfaq.org/holiday8.htm" />
-  <link />
  </links>
 </festival>
 
@@ -1103,18 +1175,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
  hebrew="יוֹם הָעַצְמָאוּת"
  descr="Israel Independence Day"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://www.zipple.com/holidays/yomhaatzmaut.shtml" />
-  <link />
  </links>
 </festival>
 <festival id="Yom HaShoah"
  hebrew="יוֹם הַשּׁוֹאָה"
  descr="Holocaust Memorial Day"
  yomtov="0">
-  <links>
+ <links>
   <link rel="about" href="http://learn.jtsa.edu/yomhashoah/" />
-  <link />
  </links>
 </festival>
 <festival id="Yom HaZikaron"
@@ -1123,7 +1193,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <links>
   <link rel="about" href="http://www.zipple.com/holidays/yomhazikaron.shtml" />
-  <link />
  </links>
 </festival>
 <festival id="Yom Yerushalayim"
@@ -1132,7 +1201,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <links>
   <link rel="about" href="http://aish.com/holidays/yom_yerushalayim/last/yom.asp" />
-  <link />
  </links>
 </festival>
 </festivals>
