@@ -88,7 +88,7 @@ foreach my $key ($q->param())
 
 if (defined $q->param('year') && $q->param('year') eq 'now' &&
     defined $q->param('month') && 
-    ($q->param('month') eq 'now') || ($q->param('month') eq 'x'))
+    (($q->param('month') eq 'now') || ($q->param('month') eq 'x')))
 {
     $q->param('year', $this_year);
     $q->param('month', $this_mon)
