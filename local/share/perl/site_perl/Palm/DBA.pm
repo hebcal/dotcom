@@ -40,8 +40,9 @@ my $VERSION = '$Revision$'; #'
 my $PALM_DBA_MAGIC      = 1145176320;
 my $PALM_DBA_INTEGER    = 1;
 my $PALM_DBA_DATE       = 3;
+my $PALM_DBA_CSTRING    = 5;
 my $PALM_DBA_BOOL       = 6;
-my $PALM_DBA_REPEAT     = 7;
+my $PALM_DBA_REPEAT     = 8;
 my $PALM_DBA_MAXENTRIES = 2500;
 
 # @events is an array of arrays.  these are the indices into each
@@ -57,54 +58,62 @@ $Palm::DBA::EVT_IDX_YEAR = 6;		# year [1970 .. 2038]
 $Palm::DBA::EVT_IDX_DUR = 7;		# duration in minutes
 $Palm::DBA::EVT_IDX_MEMO = 8;		# memo text
 
-sub write_int
+sub write_int($)
 {
     print STDOUT pack("V", $_[0]);
 }
 
-sub write_byte
+sub write_byte($)
 {
     print STDOUT pack("C", $_[0]);
 }
 
-sub write_pstring
+sub write_cstring($)
 {
-    my($len) = length($_[0]);
+    my($s) = @_;
 
-    $len = 254 if $len > 254;
-    &write_byte($len);
-    print STDOUT substr($_[0], 0, $len);
+    if (!defined($s) || $s eq '')
+    {
+	write_byte(0);
+    }
+    else
+    {
+	my($len) = length($s);
+	$len = 254 if $len > 254;
+	write_byte($len);
+	print STDOUT substr($s, 0, $len);
+    }
 }
 
-sub write_header
+sub write_header($)
 {
     my($filename) = @_;
 
-    &write_int($PALM_DBA_MAGIC);
-    &write_pstring($filename);
-    &write_byte(0);
-    &write_int(8);
-    &write_int(0);
+    write_int($PALM_DBA_MAGIC);
+    write_cstring($filename);
+    write_byte(0);
+    write_int(8);
+    write_int(0);
 
     # magic OLE graph table
-    &write_int(0x36);
-    &write_int(0x0F);
-    &write_int(0x00);
-    &write_int(0x01);
-    &write_int(0x02);
-    &write_int(0x1000F);
-    &write_int(0x10001);
-    &write_int(0x10003);
-    &write_int(0x10005);
-    &write_int(0x60005);
-    &write_int(0x10006);
-    &write_int(0x10006);
-    &write_int(0x80001);
+    write_int(0x36);
+    write_int(0x0F);
+    write_int(0x00);
+    write_int(0x01);
+    write_int(0x02);
+    write_int(0x1000F);
+    write_int(0x10001);
+    write_int(0x10003);
+    write_int(0x10005);
+    write_int(0x60005);
+    write_int(0x10006);
+    write_int(0x10006);
+    write_int(0x80001);
 
     1;
 }
 
-sub write_contents
+sub write_contents($$$)
 {
     my($events,$tz,$dst) = @_;
     my($nevents) = scalar(@{$events});
@@ -133,7 +142,7 @@ sub write_contents
 
     $nevents = $PALM_DBA_MAXENTRIES
 	if ($nevents > $PALM_DBA_MAXENTRIES);
-    &write_int($nevents*15);
+    write_int($nevents*15);
 
     for ($i = 0; $i < $nevents; $i++)
     {
@@ -172,80 +181,62 @@ sub write_contents
 	    $startTime += $local2local; # move into their local tz
 	}
 
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(0);		# recordID
+	write_int($PALM_DBA_INTEGER);
+	write_int(0);		# recordID
 
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(1);		# status
+	write_int($PALM_DBA_INTEGER);
+	write_int(1);		# status
 
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(0x7FFFFFFF);	# position
+	write_int($PALM_DBA_INTEGER);
+	write_int(0x7FFFFFFF);	# position
 
-	&write_int($PALM_DBA_DATE);
-	&write_int($startTime);
+	write_int($PALM_DBA_DATE);
+	write_int($startTime);
 
-	&write_int($PALM_DBA_INTEGER);
+	write_int($PALM_DBA_INTEGER);
 
 	# endTime
 	if ($events->[$i]->[$Palm::DBA::EVT_IDX_UNTIMED] != 0)
 	{
-	    &write_int($startTime);
+	    write_int($startTime);
 	}
 	else
 	{
-	    &write_int($startTime +
+	    write_int($startTime +
 		       ($events->[$i]->[$Palm::DBA::EVT_IDX_DUR] * 60));
 	}
 
-	&write_int(5);		# spacer
-	&write_int(0);		# spacer
+	write_int($PALM_DBA_CSTRING);
+	write_int(0);		# always zero
+	write_cstring($events->[$i]->[$Palm::DBA::EVT_IDX_SUBJ]);
 
-	if (defined $events->[$i]->[$Palm::DBA::EVT_IDX_SUBJ] &&
-	    $events->[$i]->[$Palm::DBA::EVT_IDX_SUBJ] ne '')
-	{
-	    &write_pstring($events->[$i]->[$Palm::DBA::EVT_IDX_SUBJ]);
-	}
-	else
-	{
-	    &write_byte(0);
-	}
+	write_int($PALM_DBA_INTEGER);
+	write_int(0);		# duration
 
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(0);		# duration
+	write_int($PALM_DBA_CSTRING);
+	write_int(0);		# always zero
+	write_cstring($events->[$i]->[$Palm::DBA::EVT_IDX_MEMO]);
 
-	&write_int(5);		# spacer
-	&write_int(0);		# spacer
+	write_int($PALM_DBA_BOOL);
+	write_int($events->[$i]->[$Palm::DBA::EVT_IDX_UNTIMED] ? 1 : 0);
 
-	if (defined $events->[$i]->[$Palm::DBA::EVT_IDX_MEMO] &&
-	    $events->[$i]->[$Palm::DBA::EVT_IDX_MEMO] ne '')
-	{
-	    &write_pstring($events->[$i]->[$Palm::DBA::EVT_IDX_MEMO]);
-	}
-	else
-	{
-	    &write_byte(0);
-	}
+	write_int($PALM_DBA_BOOL);
+	write_int(0);		# isPrivate
 
-	&write_int($PALM_DBA_BOOL);
-	&write_int($events->[$i]->[$Palm::DBA::EVT_IDX_UNTIMED] ? 1 : 0);
+	write_int($PALM_DBA_INTEGER);
+	write_int(1);		# category
 
-	&write_int($PALM_DBA_BOOL);
-	&write_int(0);		# isPrivate
+	write_int($PALM_DBA_BOOL);
+	write_int(0);		# alarm
 
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(1);		# category
+	write_int($PALM_DBA_INTEGER);
+	write_int(0xFFFFFFFF);	# alarmAdv
 
-	&write_int($PALM_DBA_BOOL);
-	&write_int(0);		# alarm
+	write_int($PALM_DBA_INTEGER);
+	write_int(0);		# alarmTyp
 
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(0xFFFFFFFF);	# alarmAdv
-
-	&write_int($PALM_DBA_INTEGER);
-	&write_int(0);		# alarmTyp
-
-	&write_int($PALM_DBA_REPEAT);
-	&write_int(0);		# repeat
+	write_int($PALM_DBA_REPEAT);
+	write_int(0);		# repeat
     }
 
     1;
