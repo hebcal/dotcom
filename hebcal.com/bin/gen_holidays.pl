@@ -42,7 +42,7 @@ open(OUT, ">$outfile") || die "$outfile: $!\n";
 
 print OUT <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Hebcal Default Holidays</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <base href="http://www.hebcal.com/help/defaults.html" target="_top">
@@ -72,19 +72,20 @@ Jewish Holidays: A Guide & Commentary</a></em>.</p>
 };
 &do_section('major');
 
-print OUT "<h3>Special Shabbatot</h3>\n";
+print OUT "\n<h3>Special Shabbatot</h3>\n";
 &do_section('shabbat');
 
-print OUT "<h3>Minor Fast Days</h3>\n";
+print OUT "\n<h3>Minor Fast Days</h3>\n";
 &do_section('fast');
 
-print OUT "<h3>New Holidays</h3>\n";
+print OUT "\n<h3>New Holidays</h3>\n";
 &do_section('modern');
 
-print OUT "<h2>Rosh Chodesh</h2>\n";
+print OUT "\n<h2>Rosh Chodesh</h2>\n";
 &do_section('rc');
 
 print OUT <<EOHTML;
+
 <h2>Other Hebcal Holidays</h2>
 <dl>
 <dt><a name="omer"
