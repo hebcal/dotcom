@@ -685,6 +685,7 @@ Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="$prefix/privacy/">Privacy Policy</a> -
 <a target="_top" href="$prefix/help/">Help</a> -
 <a target="_top" href="$prefix/contact/">Contact</a> -
+<a target="_top" href="$prefix/news/">News</a> -
 <a target="_top" href="$prefix/donations/">Donate</a>};
 }
 
