@@ -627,6 +627,32 @@ sub utf8_hebrew_to_netscape($) {
     return $u->utf8();
 }
 
+sub html_footer($$$)
+{
+    my($q,$hhmts,$rcsrev) = @_;
+
+    $rcsrev =~ s/\s*\$//g;
+
+    my($server_name) = $q->virtual_host();
+    $server_name =~ s/^www\.//;
+
+    my($this_year) = (localtime)[5];
+    $this_year += 1900;
+
+    $hhmts =~ s/<!--.*-->//g;
+    $hhmts =~ s/\n//g;
+    $hhmts =~ s/Last modified: /Software last updated:\n/g;
+
+    return qq{
+<hr noshade size="1"><font size=-2 face=Arial>Copyright
+&copy; $this_year Michael J. Radwin. All rights reserved.
+<a href="/privacy/">Privacy Policy</a> -
+<a href="/help/">Help</a>
+<br>$hhmts ($rcsrev)
+</font></body></html>
+};
+}
+
 sub navbar($$$)
 {
     my($server_name,$title,$help) = @_;
