@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Nov  8 08:58:14 PST 2000
+Last modified: Sun Dec  3 17:08:35 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -266,44 +266,51 @@ unless ($default)
 	$expires_date, "; path=/\015\012"
 	    if $cmp1 ne $cmp2;
     }
+
+    print STDOUT "Expires: ",
+    strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012"
+	if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/);
 }
 
 my($title) = "1-Click Shabbat for $city_descr";
 $title =~ s/ &nbsp;/ /;
 
-if (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/)
 {
     &my_header($title, '');
 
-    print STDOUT "<h3><a target=\"_top\" href=\"/shabbat/\">1-Click\n",
-	"Shabbat</a> for $city_descr</h3>\n";
+    my($url) = $q->url();
+    $url =~ s,/index.html$,/,;
+
+    &out_html("<h3><a target=\"_top\"\nhref=\"$url\">1-Click\n",
+	      "Shabbat</a> for $city_descr</h3>\n");
 }
 else
 {
     &my_header($title, $inline_style);
 
-    print STDOUT "<h2>$city_descr</h2>\n";
+    &out_html("<h2>$city_descr</h2>\n");
 
     if (defined $dst_descr && defined $tz_descr)
     {
-	print STDOUT "&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n";
+	&out_html("&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n");
     }
 
     if ($city_descr =~ / IN &nbsp;/)
     {
-	print STDOUT "<p><font color=\"#ff0000\">",
+	&out_html("<p><font color=\"#ff0000\">",
 	"Indiana has confusing time zone &amp;\n",
 	"Daylight Saving Time rules.</font>\n",
 	"You might want to read <a\n",
 	"href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
 	"Indiana?</a> to make sure the above settings are\n",
-	"correct.</p>";
+	"correct.</p>");
     }
 }
 
 my($cmd_pretty) = $cmd;
 $cmd_pretty =~ s,.*/,,; # basename
-print STDOUT "<!-- $cmd_pretty -->\n";
+&out_html("<!-- $cmd_pretty -->\n");
 
 my($loc) = (defined $city_descr && $city_descr ne '') ?
     "in $city_descr" : '';
@@ -311,8 +318,8 @@ $loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &invoke_hebcal($cmd, $loc);
 
-print STDOUT qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
-    qq{.</p>\n<p>\n};
+&out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
+	  qq{.</p>\n<p>\n});
 
 my($numEntries) = scalar(@events);
 my($i);
@@ -337,56 +344,93 @@ for ($i = 0; $i < $numEntries; $i++)
 
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
-	print STDOUT qq{$subj for\n}, 
-	    strftime("%A, %d %B", localtime($time));
-	printf STDOUT ("\nis at <b>%d:%02d PM</b>.<br>\n", $hour, $min);
+	&out_html(qq{$subj for\n}, 
+		  strftime("%A, %d %B", localtime($time)));
+	&out_html(sprintf("\nis at <b>%d:%02d PM</b>.<br>\n", $hour, $min));
     }
     else
     {
 	if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
 	{
-	    print STDOUT "This week's Torah portion is\n";
+	    &out_html("This week's Torah portion is\n");
 	}
 	else
 	{
-	    print STDOUT "Holiday:\n";
+	    &out_html("Holiday:\n");
 	}
 
 	my($href) = &get_holiday_anchor($subj);
 	if ($href ne '')
 	{
-	    print STDOUT qq{<a href="$href">$subj</a>};
+	    &out_html(qq{<a href="$href">$subj</a>});
 	}
 	else
 	{
-	    print STDOUT $subj;
+	    &out_html($subj);
 	}
 
 	# output day if it's a holiday
 	if ($subj !~ /^(Parshas\s+|Parashat\s+)/)
 	{
-	    print STDOUT "\non ", strftime("%A, %d %B", localtime($time));
+	    &out_html("\non ", strftime("%A, %d %B", localtime($time)));
 	}
 
-	print STDOUT ".<br>\n";
+	&out_html(".<br>\n");
     }
 }
 
-print STDOUT "</p>\n";
-if (! defined $q->param('cfg') || $q->param('cfg') ne 'i')
+&out_html("</p>\n");
+
+if (defined $q->param('cfg'))
+{
+    &out_html("</body></html>") if $q->param('cfg') eq 'i';
+}
+else
 {
     &form(0,'','');
-    print STDOUT $html_footer;
+    &out_html($html_footer);
 }
 
 close(STDOUT);
 exit(0);
 
+sub out_html
+{
+    my(@args) = @_;
+
+    if (defined $q->param('cfg') && $q->param('cfg') eq 'j')
+    {
+	print STDOUT "document.write(\"";
+	foreach (@args)
+	{
+	    s/\"/\\\"/g;
+	    s/\n/\\n/g;
+	    print STDOUT;
+	}
+	print STDOUT "\");\n";
+    }
+    else
+    {
+	foreach (@args)
+	{
+	    print STDOUT;
+	}
+    }
+
+    1;
+}
+
 sub my_header
 {
     my($title,$inline_style) = @_;
 
-    print STDOUT $q->header(),
+    if (defined $q->param('cfg') && $q->param('cfg') eq 'j')
+    {
+	print STDOUT "Content-Type: application/x-javascript\015\012\015\012";
+    }
+    else
+    {
+	&out_html($q->header(),
     $q->start_html(-title => $title,
 		   -target => '_top',
 		   -head => [
@@ -396,11 +440,12 @@ sub my_header
 				       -type => 'text/css'}),
 			     $inline_style,
 			     ],
-		   -meta => {'robots' => 'noindex'});
+		   -meta => {'robots' => 'noindex'}));
+    }
 
-    unless (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/)
     {
-	print STDOUT
+	&out_html(
 	    "<table width=\"100%\"\nclass=\"navbar\">",
 	    "<tr><td><small>",
 	    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
@@ -409,7 +454,7 @@ sub my_header
 	    "<td align=\"right\"><small><a\n",
 	    "href=\"/search/\">Search</a></small>",
 	    "</td></tr></table>",
-	    "<h1>1-Click\nShabbat</h1>\n";
+	    "<h1>1-Click\nShabbat</h1>\n");
     }
 
     1;
@@ -429,7 +474,7 @@ sub form
     }
 
 
-    print STDOUT
+    &out_html(
 	qq{$message\n},
 	qq{<table><tr><td class="boxed"><form\naction="$script_name">},
 	qq{<label for="zip">Zip code:\n},
@@ -453,9 +498,9 @@ sub form
 			 'none' => "\nnone ", }),
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
-		   -override => 1);
+		   -override => 1));
 
-    print STDOUT
+    &out_html(
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
 	qq{</td>\n<td>&nbsp;or&nbsp;</td>\n},
 	qq{<td class="boxed"><form\naction="$script_name">},
@@ -469,9 +514,9 @@ sub form
 		   -value => 'city',
 		   -override => 1),
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
-	qq{</td></tr></table>};
+	qq{</td></tr></table>});
 
-    print STDOUT $html_footer;
+    &out_html($html_footer);
 
     exit(0);
 }
