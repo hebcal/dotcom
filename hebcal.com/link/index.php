@@ -2,8 +2,8 @@
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/link/index.php,v $
 
-require "../common.inc";
-require "HTML/Form.php";
+require "../pear/Hebcal/common.inc";
+require "../pear/HTML/Form.php";
 
 $VER = '$Revision$';
 $matches = array();
