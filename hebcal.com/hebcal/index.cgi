@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Jul 27 18:33:37 PDT 2000
+Last modified: Wed Aug  2 16:23:49 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -366,6 +366,18 @@ foreach $key ($q->param())
 	(!defined $q->param('c') || $q->param('c') eq 'off') &&
 	(!defined $q->param('d') || $q->param('d') eq 'off') &&
 	(!defined $q->param('s') || $q->param('s') eq 'off'));
+
+if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
+{
+    $dbmfile = 'zips.db';
+    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	|| die "Can't tie $dbmfile: $!\n";
+
+    $q->param('c','on')
+	if (defined $DB{$q->param('zip')});
+
+    untie(%DB);
+}
 
 if ($q->param('c') && $q->param('c') ne 'off' &&
     defined $q->param('city'))
