@@ -194,9 +194,9 @@ if ($gy < 1752) {
 Results for year 1752 C.E. and before may not be accurate.</span>
 Hebcal does not take into account a correction of ten days that
 was introduced by Pope Gregory XIII known as the Gregorian
-Reformation. For more information, see <a
-href="http://www.xoc.net/maya/help/gregorian.asp">Gregorian and
-Julian Calendars</a>.</p>
+Reformation. For more information, read about the <a
+href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_outside_of_Roman_Catholic_nations">adoption
+of the Gregorian Calendar</a>.</p>
 <?php
 }
 
