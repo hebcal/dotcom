@@ -90,8 +90,7 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
 
 	if ($prev_isodate ne $isodate) {
 	    if ($prev_isodate) {
-		print OUT "$prev_isodate => array(\"",
-		    join('","', @subjects), "\"),\n";
+		write_subjects($prev_isodate, \@subjects);
 	    }
 	    $prev_isodate = $isodate;
 	    @subjects = ();
@@ -100,7 +99,18 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
 	push(@subjects, $events[$i]->[$Hebcal::EVT_IDX_SUBJ]);
     }
 
-    print OUT "$prev_isodate => array(\"", join('","', @subjects), "\"),\n";
+    write_subjects($prev_isodate, \@subjects);
     print OUT ");\n";
     close(OUT);
+}
+
+sub write_subjects {
+    my($iso,$e) = @_;
+
+    print OUT "$iso => ";
+    if (scalar(@{$e}) == 1) {
+	print OUT "\"", $e->[0], "\",\n";
+    } else {
+	print OUT "array(\"", join('","', @{$e}), "\"),\n";
+    }
 }
