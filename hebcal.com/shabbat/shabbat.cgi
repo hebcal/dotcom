@@ -757,30 +757,37 @@ sub display_html_common
     {
 	&Hebcal::out_html($cfg,qq{<dt class="$items->[$i]->{'class'}">});
 
-	my($anchor) = $items->[$i]->{'about'};
-	$anchor =~ s/^.*#//;
+	my $anchor = '';
+	if (!$cfg)
+	{
+	    $anchor = $items->[$i]->{'about'};
+	    $anchor =~ s/^.*#//;
+	    $anchor = qq{ name="$anchor"};
+	}
 
 	if ($items->[$i]->{'class'} eq 'candles')
 	{
-	    &Hebcal::out_html($cfg,qq{<a name="$anchor">$items->[$i]->{'subj'}</a>:
+	    Hebcal::out_html($cfg,qq{<a$anchor></a>})
+		unless $cfg;
+	    Hebcal::out_html($cfg,qq{$items->[$i]->{'subj'}:
 <b>$items->[$i]->{'time'}</b> on $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
-	    &Hebcal::out_html($cfg,qq{Holiday: <a name="$anchor"
+	    &Hebcal::out_html($cfg,qq{Holiday: <a$anchor
 target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
 $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
-	    &Hebcal::out_html($cfg,qq{This week's Torah portion is <a name="$anchor"
+	    &Hebcal::out_html($cfg,qq{This week's Torah portion is <a$anchor
 target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
 	}
     
 	&Hebcal::out_html($cfg,qq{</dt>\n});
     }
 
-    &Hebcal::out_html($cfg,"</dl>");
+    &Hebcal::out_html($cfg,"</dl>\n");
 }
 
 sub display_javascript
@@ -803,15 +810,14 @@ sub display_javascript
 	 $cfg);
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
-    &Hebcal::out_html($cfg, qq{<h3>Shabbat times for $city_descr</h3>});
+    &Hebcal::out_html($cfg, qq{<h3>Shabbat times for $city_descr</h3>\n});
 
     display_html_common($items);
 
     my($this_year) = (localtime)[5];
     $this_year += 1900;
 
-    &Hebcal::out_html($cfg, qq{
-<font size="-2" face="Arial"><a target="$tgt"
+    &Hebcal::out_html($cfg, qq{<font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 });
