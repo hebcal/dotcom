@@ -80,6 +80,9 @@ every other day (e.g. fast days): 3
  descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ג׳ (חֹל הַמוֹעד)"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+ </links>
  <kriyah>
   <aliyah parsha="15" num="1" book="Exodus" begin="13:1" end="13:4" />
   <aliyah parsha="15" num="2" book="Exodus" begin="13:5" end="13:10" />
@@ -92,6 +95,9 @@ every other day (e.g. fast days): 3
  descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ד׳ (חֹל הַמוֹעד)"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+ </links>
  <kriyah>
   <aliyah parsha="18" num="1" book="Exodus" begin="22:24" end="22:26" />
   <aliyah parsha="18" num="2" book="Exodus" begin="22:27" end="23:5" />
@@ -103,6 +109,9 @@ every other day (e.g. fast days): 3
  descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ה׳ (חֹל הַמוֹעד)"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+ </links>
  <kriyah>
   <aliyah parsha="21" num="1" book="Exodus" begin="34:1" end="34:10" />
   <aliyah parsha="21" num="2" book="Exodus" begin="34:11" end="34:17" />
@@ -114,6 +123,9 @@ every other day (e.g. fast days): 3
  descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ו׳ (חֹל הַמוֹעד)"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidaya.htm" />
+ </links>
  <kriyah>
   <aliyah parsha="36" num="1" book="Numbers" begin="9:1" end="9:5" />
   <aliyah parsha="36" num="2" book="Numbers" begin="9:6" end="9:8" />
@@ -123,6 +135,7 @@ every other day (e.g. fast days): 3
 </festival>
 <festival id="Pesach Shabbat Chol ha-Moed"
  descr="Passover, the Feast of Unleavened Bread"
+ hebrew="(NEEDS_TRANSLATION)"
  haftara="Ezekiel 37:1 - 37:14"
  yomtov="0">
 <!--
@@ -434,6 +447,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <festival id="Rosh Hashana 2"
  descr="Rosh Hashanah is commonly known as the Jewish New Year."
  haftara="Jeremiah 31:1 - 31:19"
+ hebrew="רֹאשׁ הַשָּׁנָה יוֹם ב׳"
  yomtov="1">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
@@ -641,6 +655,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Sukkot Shabbat Chol ha-Moed"
  descr="Shabbat that falls in the intermediate days of Sukkot"
+ hebrew="(NEEDS_TRANSLATION)"
  haftara="Ezekiel 38:18 - 39:16"
  yomtov="0">
  <links>
@@ -779,48 +794,71 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
-  <link />
  </links>
 </festival>
 <festival id="Chanukah: 2 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ב׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 3 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ג׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 4 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ד׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 5 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ה׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 6 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ו׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 7 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ז׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 8 Candles"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ח׳ נֵרוֹת"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 <festival id="Chanukah: 8th Day"
  descr="Festival of Lights"
  hebrew="חֲנוּכָּה: יוֹם ח׳"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holiday7.htm" />
+ </links>
 </festival>
 
 <!--  Strassfeld p. 232 -->
@@ -874,11 +912,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <links>
   <link rel="about"
- href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
+   href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
   <link rel="torah"
-  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
   <link rel="haftara"
-  href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="15" num="M" book="Exodus" begin="12:1" end="12:20" numverses="20" />
@@ -892,11 +930,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <links>
   <link rel="about"
- href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
+   href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
   <link rel="torah"
-  href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
   <link rel="haftara"
-  href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
+   href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
  </links>
  <kriyah>
   <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" />
@@ -1026,6 +1064,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <!-- Rosh Chodesh -->
 <festival id="Shabbat Rosh Chodesh"
  descr="When Shabbat falls on Rosh Chodesh"
+ hebrew="(NEEDS_TRANSLATION)"
  haftara="Isaiah 66:1 - 66:24">
  <links>
   <link rel="haftara"
@@ -1039,6 +1078,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Shabbat Machar Chodesh"
  descr="When Shabbat falls the day before Rosh Chodesh"
+ hebrew="(NEEDS_TRANSLATION)"
  haftara="I Samuel 20:18 - 20:42">
  <links>
   <link rel="haftara"
@@ -1057,11 +1097,17 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="The new Jewish month of Adar I"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר א׳"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.ou.org/chagim/roshchodesh/adar/default.htm" />
+ </links>
 </festival>
 <festival id="Rosh Chodesh Adar II"
  descr="The new Jewish month of Adar II"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר ב׳"
  yomtov="0">
+ <links>
+  <link rel="about" href="http://www.ou.org/chagim/roshchodesh/adar/default.htm" />
+ </links>
 </festival>
 <festival id="Rosh Chodesh Av"
  descr="The new Jewish month of Av"
