@@ -92,9 +92,5 @@ alt="Make payments with PayPal - it's fast, free and secure!">
 <br>This website uses <a
 href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
-<br>
-<!-- hhmts start -->
-Last modified: Fri Nov 29 12:21:20 EST 2002
-<!-- hhmts end -->
 </span>
 </body></html>
