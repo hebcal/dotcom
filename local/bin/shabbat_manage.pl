@@ -9,19 +9,41 @@ use Hebcal;
 use Mail::Internet;
 use Email::Valid;
 
+my $err_notsub =
+"The email address used to send your message is not subscribed
+to the Shabbat candle lighting time list.";
+my $err_needto =
+"We can't accept Bcc: email messages (hebcal.com address missing
+from the To: header).";
+my $err_useweb =
+"We currently cannot handle email subscription requests.  Please
+use the web interface to subscribe:
+
+  http://www.hebcal.com/email";
+
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
-
 my $to = $header->get('To');
-
-unless (defined $to) {
-    die "$0: no To: header!";
+my $from = $header->get('From');
+my $addr;
+if (Email::Valid->address($from)) {
+    $addr = Email::Valid->address($from);
 }
 
-my $from = $header->get('From');
+unless (defined $to) {
+    &error_email($addr,$err_needto);
+    exit(0);
+}
 
-if ($to =~ /shabbat-subscribe\+([^\@]+)\@/) {
-    &subscribe($1);
+if ($to =~ /shabbat-subscribe\@/) {
+    &error_email($addr,$err_useweb);
+    exit(0);
+} elsif ($to =~ /shabbat-subscribe\+(\d{5})\@/) {
+#    &subscribe_zip($1);
+    &error_email($addr,$err_useweb);
+    exit(0);
+} elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@/) {
+    &subscribe($addr,$1);
 } elsif ($to =~ /shabbat-unsubscribe\@/) {
     chomp $from;
     if (Email::Valid->address($from))
@@ -29,12 +51,14 @@ if ($to =~ /shabbat-subscribe\+([^\@]+)\@/) {
 	my $addr = Email::Valid->address($from);
 	&unsubscribe($addr);
     }
+} else {
+    &error_email($addr,$err_needto);
 }
 exit(0);
 
 sub subscribe
 {
-    my($encoded) = @_;
+    my($addr,$encoded) = @_;
 
     my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/email.db';
     my(%DB);
@@ -141,12 +165,12 @@ sub unsubscribe
 
     my $args = $DB{$email};
     unless ($args) {
-	&not_subscribed($email);
+	&error_email($email,$err_notsub);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
-	&not_subscribed($email);
+	&error_email($email,$err_notsub);
 	return 0;
     }
 
@@ -175,17 +199,19 @@ hebcal.com};
 
 }
 
-sub not_subscribed
+sub error_email
 {
-    my($email) = @_;
+    my($email,$error) = @_;
 
+    return 0 unless $email;
+
+    while(chomp($error)) {}
     my($body) = qq{Sorry,
 
 We are unable to process the message from <$email>
 to <shabbat-unsubscribe\@hebcal.com>.
 
-The email address used to send your message is not subscribed
-to the Shabbat candle lighting time list.
+$error
 
 Regards,
 hebcal.com};
