@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Mon Apr 12 10:01:46 PDT 1999
+Last modified: Mon Apr 12 10:34:36 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -89,7 +89,7 @@ else
 }
 
 # boolean options
-@opts = ('c','x','o','s','h','usa','israel','none');
+@opts = ('c','x','o','s','i','h','a','usa','israel','none');
 %opts = ();
 
 foreach (@opts)
@@ -303,10 +303,16 @@ Suppress Rosh Chodesh</label><br>
 Add days of the Omer</label><br>
 
 <input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}><label for=\"s\">
-Add wekly sedrot on Saturday</label><br>
+Add wekly sedrot on Saturday</label>
+
+(<input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}><label for=\"i\">
+Use Israeli sedra scheme</label>)<br>
 
 <input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}><label for=\"h\">
 Suppress default holidays</label><br>
+
+<input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}><label for=\"a\">
+Use ashkenazis hebrew</label><br>
 
 <br>
 
