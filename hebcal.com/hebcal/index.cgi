@@ -32,7 +32,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 17:53:37 PDT 1999
+Last modified: Sat Apr 10 11:27:44 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -63,7 +63,10 @@ for ($i = 0; $i < 13; $i++)
 {
     $month{$i} = '';
 }
-$month{$mon + 1} = ' selected';
+
+#$month{$mon + 1} = ' selected';
+$month{'0'} = ' selected';
+
 # ------------------------------------------------------------------------
 
 $dbmfile = "zips.db";
@@ -188,8 +191,8 @@ open(HEBCAL,"$cmd |") ||
 	    "Please <a href=\"mailto:michael\@radwin.org" .
 	    "\">e-mail Michael</a>.");
 
-print STDOUT "Content-Type: text/x-csv\015\012\015\012";
-print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"\n";
+print STDOUT "Content-Type: application/octet-stream\015\012\015\012";
+print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"\015\012";
 
 while(<HEBCAL>)
 {
@@ -221,7 +224,7 @@ while(<HEBCAL>)
     $subj =~ s/\s*:\s*$//g;
 
     print STDOUT "\"$subj\",\"$date\",$start_time,$end_date,$end_time,$all_day,";
-    print STDOUT "\"\"\n";
+    print STDOUT "\"\"\015\012";
 }
 close(HEBCAL);
 close(STDOUT);
@@ -330,7 +333,7 @@ maxlength=\"3\"><br>
 <input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
 Suppress Rosh Chodesh</label><br><br>
 
-<input type=\"submit\" value=\"Submit\">
+<input type=\"submit\" value=\"Get Calendar\">
 </form>
 </blockquote>
 
@@ -391,8 +394,17 @@ Time Zone: GMT $in{'tz'}:00
 </small>
 </p>
 
-<p><a href=\"${cgipath}/${filename}?$ENV{'QUERY_STRING'}\">Click
-here to download as an Outlook CSV file</a></p>
+<p><form method=\"get\" action=\"$cgipath/$filename\">
+";
+
+    while (($key,$val) = each(%in))
+    {
+	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"$val\">\n";
+    }
+
+    print STDOUT
+"<input type=\"submit\" value=\"Download as an Outlook CSV file\">
+</form></p>
 
 ";
 
