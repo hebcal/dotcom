@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Feb 12 11:31:15 PST 2001
+Last modified: Tue Feb 13 14:14:34 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -309,8 +309,7 @@ else
 foreach (@Hebcal::opts)
 {
     $cmd .= ' -' . $_
-	if defined $q->param($_) &&
-	    ($q->param($_) eq 'on' || $q->param($_) eq '1');
+	if defined $q->param($_) && $q->param($_) =~ /^on|1$/
 }
 
 $cmd .= ' -h' if !defined $q->param('nh') || $q->param('nh') eq 'off';
@@ -361,7 +360,7 @@ sub dba_display {
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
     my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
-	 defined $q->param('i') && $q->param('i') eq 'on');
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -396,7 +395,7 @@ sub csv_display {
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
     my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
-	 defined $q->param('i') && $q->param('i') eq 'on');
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
@@ -765,6 +764,12 @@ JSCRIPT_END
     "a cookie?</a> - <a\n",
     "href=\"/hebcal/del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
+    "<br><label\nfor=\"heb\">",
+    $q->checkbox(-name => 'heb',
+		 -id => 'heb',
+		 -checked => 'checked',
+		 -label => "\nDisplay Hebrew when available"),
+    "</label>",
     "</p>\n",
     $q->hidden(-name => '.rand', -value => time(), -override => 1),
     $q->submit(-name => '.s',-value => 'Get Calendar'),
@@ -1032,7 +1037,7 @@ so you can keep this window open.
     $loc2 =~ s/\s*&nbsp;\s*/ /g;
 
     my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
-	 defined $q->param('i') && $q->param('i') eq 'on');
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     print STDOUT "<p>";
 
     # header row
@@ -1094,7 +1099,8 @@ so you can keep this window open.
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
 	    = &Hebcal::get_holiday_anchor($subj);
-	if ($hebrew ne '')
+	if ($hebrew ne '' && defined $q->param('heb') &&
+	    $q->param('heb') =~ /^on|1$/)
 	{
 	    $subj .= qq{\n/ <big><span lang="he" dir="rtl">$hebrew</span></big>};
 	}
