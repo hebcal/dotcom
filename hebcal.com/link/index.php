@@ -2,8 +2,8 @@
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/link/index.php,v $
 
-require_once('zips.inc');
-require_once('HTML/Form.php');
+require "../common.inc";
+require "HTML/Form.php";
 
 $VER = '$Revision$';
 $matches = array();
@@ -11,31 +11,32 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
     $VER = $matches[1] . "." . $matches[2];
 }
 
-global $HTTP_GET_VARS;
-if (isset($HTTP_GET_VARS['m'])) {
-    $m = htmlspecialchars($HTTP_GET_VARS['m']);
+if (isset($_GET["m"]) && is_numeric($_GET["m"])) {
+    $m = $_GET["m"];
 } else {
     $m = 72;
 }
-if ($HTTP_GET_VARS['zip'] && preg_match('/^\d{5}$/', $HTTP_GET_VARS['zip'])) {
-    $zip = $HTTP_GET_VARS['zip'];
+if ($_GET["zip"] && preg_match('/^\d{5}$/', $_GET["zip"])) {
+    $zip = $_GET["zip"];
 } else {
     $zip = 90210;
 }
 
-if ($HTTP_GET_VARS['city']) {
-    $geo_city = $HTTP_GET_VARS['city'];
+if ($_GET["city"]) {
+    $geo_city = $_GET["city"];
     $geo_link = "geo=city;city=" . urlencode($geo_city);
 
     $geo_city = htmlspecialchars($geo_city);
     $descr = $geo_city;
 } else {
+    $passfile = file("../hebcal-db-pass.cgi");
+    $password = trim($passfile[0]);
     list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	get_zipcode_fields($zip);
+	hebcal_get_zipcode_fields($zip, $password);
 
     if (!$state) {
-	$city = 'Unknown';
-	$state = 'ZZ';
+	$city = "Unknown";
+	$state = "ZZ";
     }
 
     $geo_link = "geo=zip;zip=" . urlencode($zip);
@@ -62,7 +63,8 @@ href="/help/">Help</a> -
 </td></tr></table><h1>Add 1-Click Shabbat to your website</h1>
 
 <p>You can use these HTML tags to insert weekly candle-lighting times
-and Torah portion directly on your synagogue's web page.  The following
+and Torah portion directly on your synagogue's web page.
+<br>The following
 tags are for <b><?php echo $descr ?></b>
 (<a href="#change">change city</a>).</p>
 
@@ -129,13 +131,13 @@ value="<?php echo $zip ?>"></label>
 <input type="hidden" name="geo" value="city">
 <label for="city">Closest City:
 <?php
-global $city_tz;
+global $hebcal_city_tz;
 $entries = array();
-foreach ($city_tz as $k => $v) {
+foreach ($hebcal_city_tz as $k => $v) {
     $entries[$k] = $k;
 }
-echo HTML_Form::returnSelect('city', $entries,
-			     $geo_city ? $geo_city : 'Jerusalem');
+echo HTML_Form::returnSelect("city", $entries,
+			     $geo_city ? $geo_city : "Jerusalem");
 ?>
 </label>
 <br><label for="m2">Havdalah minutes past sundown:
@@ -186,8 +188,7 @@ very powerful and flexible.</p>
     my_footer();
 
 function my_footer() {
-    global $HTTP_SERVER_VARS;
-    $stat = stat($HTTP_SERVER_VARS["SCRIPT_FILENAME"]);
+    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
     $year = strftime("%Y", time());
     $date = strftime("%c", $stat[9]);
     global $VER;
