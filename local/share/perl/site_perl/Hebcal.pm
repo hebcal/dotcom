@@ -1691,7 +1691,7 @@ sub csv_write_contents($$$)
 	$subj =~ s/\"/''/g;
 	$memo =~ s/\"/''/g;
 
-	my $loc = 'hebcal.com';
+	my $loc = 'Jewish Holidays';
 	if ($memo =~ /^in (.+)/)
 	{
 	    $memo = '';
