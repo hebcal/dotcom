@@ -17,7 +17,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	    localtime($now);
 	my($saturday) = ($wday == 6) ?
 	    $now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
-	my($stime) = strftime("%B %d, %Y", localtime($saturday));
+	my($stime) = strftime("%d %B %Y", localtime($saturday));
 
 	open(OUT,">/pub/m/r/mradwin/hebcal.com/current.inc") || die;
 	$parsha =~ s/ /\n/;
