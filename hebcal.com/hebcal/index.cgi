@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 11 10:28:57 PDT 2001
+Last modified: Wed Apr 11 10:32:50 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1171,8 +1171,10 @@ so you can keep this window open.
 	    {
 		$class = ' class="hl"';
 	    }
-	    elsif ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
-		   /^\d+\w+.+, \d{4,}$/)
+	    elsif (($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
+		    /^\d+\w+.+, \d{4,}$/) ||
+		   ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
+		    /^\d+\w+ day of the Omer$/))
 	    {
 		$class = ' class="dim"';
 	    }
