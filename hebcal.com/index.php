@@ -65,8 +65,7 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
-href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current
-Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br><br><span
+href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br><br><span
 class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <div><form action="/shabbat/">
 <label for="zip">Zip code:</label>
