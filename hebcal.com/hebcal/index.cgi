@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Jan  6 14:11:28 PST 2000
+Last modified: Fri Jan  7 09:00:38 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -774,7 +774,9 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
-    "</label>",
+    "</label>(<a target=\"_top\"\n",
+    "href=\"/michael/projects/hebcal/defaults.html\">What\n",
+    "are the default Holidays?</a>)",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
 		 -id => 'nx',
