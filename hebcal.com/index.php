@@ -14,7 +14,7 @@ if ($http_cookie) {
     }
 }
 # Is today Rosh Chodesh?
-$lines = @file("holiday.inc");
+$lines = @file("./holiday.inc");
 if (is_array($lines)) {
     foreach ($lines as $line) {
 	if (strstr($line, "Rosh&nbsp;Chodesh") !== false) {
@@ -51,7 +51,7 @@ Jewish Calendar Tools</small></td>
 <span class="fpsubhead">
 <!-- holiday greeting -->
 <!-- end holiday greeting -->
-<?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("today.inc") ?>
+<?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
 <?php if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
 <?php } ?>
@@ -63,7 +63,8 @@ if (!$http_cookie && $ref && preg_match($pattern, $ref)) {
     $cal[] = array("Jewish Traditions 2005 Calendar", "1559499265", 90, 70);
     $cal[] = array("Hebrew Illuminations 2005 Calendar", "1569374074", 89, 90);
     $cal[] = array("Jewish Year 5765 Wall Calendar", "0789311224", 90, 90);
-    list($title,$asin,$width,$height) = $cal[rand(0, count($cal)-1)];
+    shuffle($cal);
+    list($title,$asin,$width,$height) = $cal[0];
     echo <<<MESSAGE_END
 <blockquote class="welcome">
 <a title="$title from Amazon.com"
@@ -77,8 +78,8 @@ Hebcal.com offers a free personalized Jewish calendar for any year
 and Torah readings. We also offer export to Palm, Microsoft Outlook, and
 Apple iCal. <a href="/hebcal/">Customize your calendar</a>.
 
-<p>If you are looking for a full-color printed 2005 calendar,
-consider the <a
+<p>If you are looking for a full-color printed 2005 calendar
+with Jewish holidays, consider the <a
 href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.com.
 Happy (secular) New Year!
@@ -138,8 +139,8 @@ style="padding-left: 10px; padding-right: 5px">
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
   echo date("F Y");
-  include("holiday.inc");
-  include("current.inc"); ?><br>
+  include("./holiday.inc");
+  include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
 <!-- End temp holiday2 -->
 <br><span class="sm-grey">&gt;</span>&nbsp;<b>Major&nbsp;Holidays</b><br>for
