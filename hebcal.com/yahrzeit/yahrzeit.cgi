@@ -43,6 +43,7 @@ $script_name =~ s,/index.html$,/,;
 my($key);
 foreach $key ($q->param())
 {
+    next if $key =~ /^ref_(url|text)$/;
     my($val) = $q->param($key);
     $val = '' unless defined $val;
     $val =~ s/[^\w\s\.-]//g
@@ -276,6 +277,16 @@ sub results_page {
 	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
     }
 
+    if ($q->param('ref_url'))
+    {
+	my($ref_text) = $q->param('ref_text') ? $q->param('ref_text') : 
+	    $q->param('ref_url');
+	&Hebcal::out_html($cfg,
+			  "<center><big><a href=\"", $q->param('ref_url'),
+			  "\">Click\nhere to return to $ref_text",
+			  "</a></big></center>\n");
+    }
+
 &form(1,'','') unless keys %yahrzeits;
 
     # download links
@@ -394,6 +405,8 @@ sub form
 		 -id => 'yizkor',
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
+    $q->hidden(-name => 'ref_url'),
+    $q->hidden(-name => 'ref_text'),
 #    $q->hidden(-name => 'cfg'),
 #    $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
