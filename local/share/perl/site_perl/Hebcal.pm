@@ -372,33 +372,33 @@ my(%holidays) =
       'יוֹם יְרוּשָׁלַיִם'],
 
      'Rosh Chodesh Iyyar'	=>
-     ['rc_iyyar', 0, ''],
+     ['rc_iyyar', 0, 'רֹאשׁ חֹדֶשׁ אייר'],
      'Rosh Chodesh Sivan'	=>
-     ['rc_sivan', 0, ''],
+     ['rc_sivan', 0, 'רֹאשׁ חֹדֶשׁ סיון'],
      'Rosh Chodesh Tamuz'	=>
-     ['rc_tamuz', 0, ''],
+     ['rc_tamuz', 0, 'רֹאשׁ חֹדֶשׁ תמוּז'],
      'Rosh Chodesh Av'	=>
-     ['rc_av', 0, ''],
+     ['rc_av', 0, 'רֹאשׁ חֹדֶשׁ אָב'],
      'Rosh Chodesh Elul'	=>
-     ['rc_elul', 0, ''],
+     ['rc_elul', 0, 'רֹאשׁ חֹדֶשׁ אֱלוּל'],
      'Rosh Chodesh Tishrei'	=>
-     ['rc_tishrei', 0, ''],
+     ['rc_tishrei', 0, 'רֹאשׁ חֹדֶשׁ תשׁרי'],
      'Rosh Chodesh Cheshvan'	=>
-     ['rc_cheshvan', 0, ''],
+     ['rc_cheshvan', 0, 'רֹאשׁ חֹדֶשׁ חשׁון'],
      'Rosh Chodesh Kislev'	=>
-     ['rc_kislev', 0, ''],
+     ['rc_kislev', 0, 'רֹאשׁ חֹדֶשׁ כסלו'],
      'Rosh Chodesh Tevet'	=>
-     ['rc_tevet', 0, ''],
+     ['rc_tevet', 0, 'רֹאשׁ חֹדֶשׁ טבת'],
      "Rosh Chodesh Sh'vat"=>
-     ['rc_shvat', 0, ''],
+     ['rc_shvat', 0, 'רֹאשׁ חֹדֶשׁ שׁבט'],
      'Rosh Chodesh Adar'	=>
-     ['rc_adar', 0, ''],
+     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אדר'],
      'Rosh Chodesh Adar I'	=>
-     ['rc_adar', 0, ''],
+     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אדר א׳'],
      'Rosh Chodesh Adar II'	=>
-     ['rc_adar', 0, ''],
+     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אדר ב׳'],
      'Rosh Chodesh Nisan'	=>
-     ['rc_nisan', 0, ''],
+     ['rc_nisan', 0, 'רֹאשׁ חֹדֶשׁ ניסן'],
 
 		    );
 
@@ -797,12 +797,15 @@ sub get_holiday_anchor($)
     }
     else
     {
-	$subj =~ s/ \(CH''M\)$//;
-	$subj =~ s/ I+$//;
-	$subj =~ s/ VI*$//;
-	$subj =~ s/ IV$//;
-	$subj =~ s/ \d{4}$//;
-	$subj =~ s/: \d Candles?$//;
+	if (!defined $holidays{$subj})
+	{
+	    $subj =~ s/ \(CH''M\)$//;
+	    $subj =~ s/ I+$//;
+	    $subj =~ s/ VI*$//;
+	    $subj =~ s/ IV$//;
+	    $subj =~ s/ \d{4}$//;
+	    $subj =~ s/: \d Candles?$//;
+	}
 
 	if (defined $holidays{$subj})
 	{
