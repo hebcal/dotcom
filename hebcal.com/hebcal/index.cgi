@@ -566,7 +566,7 @@ ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 	}
 
 	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/?v=60";
-	print STDOUT "&ST=$ST&TITLE=", &url_escape($subj), "&VIEW=d\">add</a> ";
+	print STDOUT "&amp;ST=$ST&amp;TITLE=", &url_escape($subj), "&amp;VIEW=d\">add</a> ";
 
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&lt;/g;
