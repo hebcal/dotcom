@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!-- Based on Tellme Studio Code Example 112 -->
+<vxml version="2.0">
+	<!-- Document scoped variables  -->
+	<var name="zip"/>
+	<form id="enterzip">
+		<field name="entered_zip" type="digits">
+			<prompt>
+				<audio>Dial the the five digit zip code you want to use for candle lighting times...</audio>
+				<audio>...or just say it.</audio>
+				<break time="250ms"/>
+			</prompt>
+			<nomatch count="1">
+				<audio>I'm sorry...I didn't catch that.</audio>
+				<audio>Please dial or speak the the five digit zip code you want to use for candle lighting times</audio>
+				<reprompt/>
+			</nomatch>
+			<nomatch count="2">
+				<audio>I'm sorry...I still didn't catch that.</audio>
+				<audio>Please use your telephone keypad to dial the five digit zip code.</audio>
+				<break time="250ms"/>
+				<audio>To choose another keyword say "Tell me menu" or press star star.</audio>
+				<reprompt/>
+			</nomatch>
+			<noinput count="1">
+				<audio>I'm sorry... I didn't hear you.</audio>
+				<audio>Please dial or speak the 5 digit zip code.</audio>
+				<break time="250ms"/>
+				<audio>To choose another keyword say "Tell me menu" or press star.</audio>
+				<reprompt/>
+			</noinput>
+			<noinput count="2">
+				<audio>I'm sorry... I still didn't hear you.</audio>
+				<audio>Please dial or speak the 5 digit zip code.</audio>
+				<reprompt/>
+			</noinput>
+			<filled>
+				<!-- we've got a number to evaluate -->
+				<if cond="entered_zip.length == 5">
+					<assign name="document.zip" expr="entered_zip"/>
+					<goto next="#zip_confirm"/>
+					<else/>
+					<audio> This is an invalid entry </audio>
+					<clear namelist="entered_zip"/>
+				</if>
+			</filled>
+		</field>
+	</form>
+	<form id="zip_confirm">
+		<field name="zip_verify" type="boolean">
+			<prompt>
+				<audio src="iheard_fx.wav">I heard you say</audio>
+				<value expr="zip"/>
+				<break time="250ms"/>
+				<audio src="yesorno.wav">Is that correct?</audio>
+			</prompt>
+			<nomatch count="1">
+				<audio>I'm sorry...I didn't catch that.</audio>
+				<audio>Say Yes or No</audio>
+			</nomatch>
+			<nomatch count="2">
+				<audio>I'm sorry...I still didn't catch that.</audio>
+				<audio>Say Yes or No</audio>
+				<audio>or for yes, press one. for no, press 2</audio>
+				<audio>on your telephone keypad</audio>
+				<break time="250ms"/>
+\				<audio>To choose another keyword say "Tell me menu" or press star.</audio>
+			</nomatch>
+			<nomatch count="3">
+				<audio>I'm sorry, I'm still having trouble understanding you.</audio>
+				<audio>let's try this again...</audio>
+				<goto next="#enterzip"/>
+			</nomatch>
+			<noinput count="1">
+				<audio>I'm sorry, I didn't hear you.</audio>
+				<audio>Is that correct?</audio>
+				<break time="250ms"/>
+\				<audio>To choose another keyword say "Tell me menu" or press star.</audio>
+			</noinput>
+			<noinput count="2">
+				<audio>I'm sorry, I still didn't hear you.</audio>
+				<audio>Say Yes or No</audio>
+				<audio>or for yes, press one. for no, press 2</audio>
+				<audio>on your telephone keypad</audio>
+			</noinput>
+			<noinput count="3">
+				<audio>I'm sorry, I'm still having trouble hearing you.</audio>
+				<audio>let's try this again...</audio>
+				<goto next="#enterzip"/>
+			</noinput>
+			<filled>
+				<if cond="zip_verify == true">
+					<audio>Hang on while we fetch candle lighting times for</audio>
+					<value expr="zip"/>
+					<submit next="http://www.hebcal.com/shabbat/" namelist="zip"/>
+					<else/>
+					<audio src="sorry.wav">sorry about that... </audio>
+					<goto next="#enterzip"/>
+				</if>
+			</filled>
+		</field>
+	</form>
+</vxml>
