@@ -448,24 +448,17 @@ sub get_holiday_anchor($$$)
 
 	    if (defined $sedrot->Parameters($p2))
 	    {
+		# hypenate hebrew reading
 		$hebrew .= '־' . $sedrot->val($p2, 'hebrew');
+
+		# second part of torah reading
 		$memo .= '; ' . $sedrot->val($p2, 'verse');
-	    }
 
-	    $memo .= " -- Haftarah: ";
-	    if ($want_sephardic &&
-		defined $sedrot->val($p1, 'haft_seph'))
-	    {
-		$memo .= $sedrot->val($p1, 'haft_seph');
-	    }
-	    else
-	    {
-		$memo .= $sedrot->val($p1, 'haft_ashk');
-	    }
+		# on doubled parshiot, read only the second Haftarah
+		$haftarah_href = $sedrot->val($p2, 'torah');
+		$haftarah_href =~ s/.shtml$/_haft.shtml/;
 
-	    if (defined $sedrot->Parameters($p2))
-	    {
-		$memo .= '; ';
+		$memo .= " -- Haftarah: ";
 		if ($want_sephardic &&
 		    defined $sedrot->val($p2, 'haft_seph'))
 		{
