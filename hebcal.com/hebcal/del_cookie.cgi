@@ -16,6 +16,9 @@ Last modified: Mon May  7 21:40:33 PDT 2001
 if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} eq 'optout')
 {
     print "Set-Cookie: C=opt_out; path=/; expires=Thu, 15 Apr 2010 20:00:00 GMT\015\012";
+    print "Expires: Thu, 01 Jan 1970 16:00:01 GMT\015\012",
+    "Cache-Control: no-cache\015\012";
+
     print $q->header(),
     &Hebcal::start_html($q, 'Hebcal Opt-Out Complete', undef, undef),
     &Hebcal::navbar2($q, "Opt-Out", 1),
@@ -27,6 +30,8 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} eq 'optout')
 else
 {
 print "Set-Cookie: C=0; expires=Thu, 01 Jan 1970 16:00:01 GMT; path=/\015\012";
+print "Expires: Thu, 01 Jan 1970 16:00:01 GMT\015\012",
+"Cache-Control: no-cache\015\012";
 print $q->header(),
     &Hebcal::start_html($q, 'Hebcal Cookie Deleted', undef, undef),
     &Hebcal::navbar2($q, "Cookie\nDeleted", 1),
