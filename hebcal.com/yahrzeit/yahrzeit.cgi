@@ -78,6 +78,7 @@ foreach $key (1 .. 5)
     }
 }
 
+my($cfg) = $q->param('cfg');
 if (! defined $q->path_info())
 {
     &results_page();
@@ -226,17 +227,30 @@ sub my_invoke_hebcal {
 }
 
 sub results_page {
-    my($target) = (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    my($target) = (defined $cfg && $cfg eq 'i')
 	? '' : '_top';
+    my($type) =  (defined $cfg && $cfg eq 'j')
+	? 'application/x-javascript' : 'text/html';
 
-    print STDOUT $q->header(),
-    &Hebcal::start_html($q,
-			'Hebcal Yahrzeit, Birthday and Anniversary Calendar',
-			[],
-			{ 'keywords' => 'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish' },
-			$target);
+    print STDOUT $q->header(-type => $type);
 
-    if (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    if (defined $cfg && $cfg eq 'j')
+    {
+	# nothing
+    }
+    else
+    {
+	&Hebcal::out_html
+	    ($cfg, &Hebcal::start_html
+	     ($q,
+	      'Hebcal Yahrzeit, Birthday and Anniversary Calendar',
+	      [],
+	      { 'keywords' => 'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish' },
+	      $target)
+	     );
+    }
+
+    if (defined $cfg && $cfg =~ /^[ij]$/)
     {
 	my($self_url) = join('', "http://", $q->virtual_host(), $script_name);
 	if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
@@ -248,51 +262,57 @@ sub results_page {
 	    $self_url .= "?.from=" . &Hebcal::url_escape($q->param('.from'));
 	}
 
-	print STDOUT "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
-	"Birthday and Anniversary\nCalendar</a></h3>\n";
+	&Hebcal::out_html
+	    ($cfg,
+	     "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
+	     "Birthday and Anniversary\nCalendar</a></h3>\n");
     }
     else
     {
-	print STDOUT
-	    &Hebcal::navbar2($q, "Yahrzeit, Birthday and Anniversary\nCalendar"),
-	    "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n";
+	&Hebcal::out_html
+	    ($cfg,
+	     &Hebcal::navbar2($q,
+			      "Yahrzeit, Birthday and Anniversary\nCalendar"),
+	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
     }
 
 &form(1,'','') unless keys %yahrzeits;
 
     # download links
-    print STDOUT "<p>Advanced options:\n<small>[ <a href=\"", $script_name;
-    print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
-    print STDOUT "/yahrzeit.csv?dl=1";
+
+    &Hebcal::out_html($cfg,
+		      "<p>Advanced options:\n<small>[ <a href=\"", $script_name);
+    &Hebcal::out_html($cfg, "index.html") if $q->script_name() =~ m,/index.html$,;
+    &Hebcal::out_html($cfg, "/yahrzeit.csv?dl=1");
 
     foreach $key ($q->param())
     {
 	my($val) = $q->param($key);
-	print STDOUT ";$key=", &Hebcal::url_escape($val);
+	&Hebcal::out_html($cfg, ";$key=", &Hebcal::url_escape($val));
     }
-    print STDOUT ";filename=yahrzeit.csv";
-    print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
+    &Hebcal::out_html($cfg, ";filename=yahrzeit.csv",
+		      "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>");
 
     # only offer DBA export when we know timegm() will work
     if ($this_year > 1969 && $this_year < 2028)
     {
-	print STDOUT "\n- <a href=\"", $script_name;
-	print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
-	print STDOUT "/yahrzeit.dba?dl=1";
+	&Hebcal::out_html($cfg, "\n- <a href=\"", $script_name);
+	&Hebcal::out_html($cfg, "index.html") if $q->script_name() =~ m,/index.html$,;
+	&Hebcal::out_html($cfg, "/yahrzeit.dba?dl=1");
 
 	foreach $key ($q->param())
 	{
 	    my($val) = $q->param($key);
-	    print STDOUT ";$key=", &Hebcal::url_escape($val);
+	    &Hebcal::out_html($cfg, ";$key=", &Hebcal::url_escape($val));
 	}
-	print STDOUT ";filename=yahrzeit.dba";
-	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
+	&Hebcal::out_html($cfg, ";filename=yahrzeit.dba",
+			  "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>");
     }
-    print STDOUT "\n]</small></p>\n";
+    &Hebcal::out_html($cfg, "\n]</small></p>\n");
 
 my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
-print STDOUT "<pre>" unless ($q->param('yizkor'));
+&Hebcal::out_html($cfg, "<pre>") unless ($q->param('yizkor'));
 
 my($numEntries) = scalar(@events);
 my($i);
@@ -306,19 +326,19 @@ for ($i = 0; $i < $numEntries; $i++)
     if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR] &&
 	$q->param('yizkor'))
     {
-	print STDOUT "</pre>" unless $i == 0;
-	print STDOUT "<h3>$year</h3><pre>";
+	&Hebcal::out_html($cfg, "</pre>") unless $i == 0;
+	&Hebcal::out_html($cfg, "<h3>$year</h3><pre>");
     }
 
     my($dow) = $Hebcal::DoW[&Hebcal::get_dow($year, $mon, $mday)] . ' ';
 
-    printf STDOUT ("%s%02d-%s-%04d  %s\n",
-		   $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
-		 &Hebcal::html_entify($subj));
+    &Hebcal::out_html
+	($cfg,
+	 sprintf("%s%02d-%s-%04d  %s\n",
+		 $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
+		 &Hebcal::html_entify($subj)));
 }
-print STDOUT "</pre>";
-
-print STDOUT "<hr>\n";
+&Hebcal::out_html($cfg, "</pre><hr>\n");
 
 &form(0,'','');
 }
@@ -336,13 +356,15 @@ sub form
 	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">\n";
     }
 
-    print STDOUT qq{$message<form name="f1" id="f1"\naction="$script_name">};
+    &Hebcal::out_html
+	($cfg, qq{$message<form name="f1" id="f1"\naction="$script_name">});
 
-    my($i_max) = (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    my($i_max) = (defined $cfg && $cfg =~ /^[ij]$/)
 	? 2 : 6;
     for (my $i = 1; $i < $i_max; $i++)
     {
-	print STDOUT
+	&Hebcal::out_html
+	    ($cfg,
 	    $q->popup_menu(-name => "t$i",
 			   -id => "t$i",
 			   -values => ['Yahrzeit','Birthday','Anniversary']),
@@ -364,25 +386,29 @@ sub form
 			  -id => "y$i",
 			  -maxlength => 4,
 			  -size => 4),
-	    "\n<small>(Month Day, Year)</small><br>\n";
+	    "\n<small>(Month Day, Year)</small><br>\n");
     }
 
-    print STDOUT "<label\nfor=\"yizkor\">",
+    &Hebcal::out_html($cfg, "<label\nfor=\"yizkor\">",
     $q->checkbox(-name => 'yizkor',
 		 -id => 'yizkor',
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
-    $q->hidden(-name => 'cfg'),
+#    $q->hidden(-name => 'cfg'),
 #    $q->hidden(-name => 'rand',-value => time(),-override => 1),
-    qq{<input\ntype="submit" value="Compute Calendar"></form>\n};
+    qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
 
-    if (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    if (defined $cfg && $cfg eq 'i')
     {
-	print STDOUT "</body></html>\n";
+	&Hebcal::out_html($cfg, "</body></html>\n");
+    }
+    elsif (defined $cfg && $cfg eq 'j')
+    {
+	# nothing
     }
     else
     {
-	print STDOUT &Hebcal::html_footer($q,$rcsrev);
+	&Hebcal::out_html($cfg, &Hebcal::html_footer($q,$rcsrev));
     }
 
     exit(0);
