@@ -74,7 +74,6 @@ print OUT <<EOHTML;
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/sedrot/" target="_top">
-<link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 </head>
 <body>
@@ -229,9 +228,7 @@ sub write_sedra_page {
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
-<link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
-<link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
 EOHTML
 ;
 
