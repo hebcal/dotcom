@@ -1,12 +1,9 @@
-# deny person who is crawling this site
-Deny from 208.46.162.254
-
-SetHandler cgi-script
+DirectoryIndex index.cgi
 
 Redirect /hebcal/hebcal.html http://www.hebcal.com/hebcal/
 Redirect /hebcal/hebcal.htm http://www.hebcal.com/hebcal/
 Redirect /hebcal/hebcal.pl http://www.hebcal.com/hebcal/
 Redirect /hebcal/hebcal.cgi http://www.hebcal.com/hebcal/
-Redirect /hebcal/index.cgi http://www.hebcal.com/hebcal/
+Redirect /hebcal/index.html http://www.hebcal.com/hebcal/
 Redirect /hebcal/index.pl http://www.hebcal.com/hebcal/
 Redirect /hebcal/hebcal http://www.hebcal.com/hebcal
