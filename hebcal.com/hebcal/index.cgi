@@ -126,7 +126,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Sep 15 14:21:50 PDT 1999
+Last modified: Fri Sep 17 09:23:05 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -452,16 +452,6 @@ lighting times are calculated from your latitude and longitude (which
 can be determined by your zip code or closest city).</p>
 ";
 
-    if ($opts{'c'} == 0)
-    {
-	print STDOUT
-"<p><b>Customize candle lighting times by
-<a href=\"${cgipath}?c=on\">zip code</a>,
-<a href=\"${cgipath}?c=on&geo=city\">closest city</a>, or
-<a href=\"${cgipath}?c=on&geo=pos\">latitude/longitude</a>.</b></p>
-";
-    }
-
 print STDOUT "<hr noshade size=\"1\">
 $message
 <form action=\"$cgipath\">
@@ -486,7 +476,17 @@ interested in 93, but rather 1993.
 <br><br>
 ";
 
-    if ($opts{'c'} == 1)
+    if ($opts{'c'} == 0)
+    {
+	print STDOUT
+"(Candle lighting times are off.  Turn them on for:
+<a href=\"${cgipath}?c=on\">zip code</a>,
+<a href=\"${cgipath}?c=on&geo=city\">closest city</a>, or
+<a href=\"${cgipath}?c=on&geo=pos\">latitude/longitude</a>.)
+<br><br>
+";
+    }
+    else
     {
 	print STDOUT 
 "<input type=\"hidden\" name=\"c\" value=\"on\">
@@ -504,20 +504,22 @@ Include candle lighting times for ";
 	{
 	    print STDOUT "zip code:\n";
 	}
-	print STDOUT "<br><small>(or <a href=\"${cgipath}\">suppress</a>";
-	if (defined $in{'geo'})
+	print STDOUT
+"<br><small>(or <a href=\"${cgipath}\">turn them off</a>, or select by";
+	if (defined $in{'geo'} && $in{'geo'} eq 'city')
 	{
-	    print STDOUT ", <a\nhref=\"${cgipath}?c=on\">zip code</a>"
-		if ($in{'geo'} ne 'zip');
-	    print STDOUT ", <a\nhref=\"${cgipath}?c=on&amp;geo=city\">closest city</a>"
-		if ($in{'geo'} ne 'city');
-	    print STDOUT ", <a\nhref=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>"
-		if ($in{'geo'} ne 'pos');
+	    print STDOUT " <a\nhref=\"${cgipath}?c=on\">zip code</a> or";
+	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
+	}
+	elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
+	{
+	    print STDOUT " <a\nhref=\"${cgipath}?c=on\">zip code</a> or";
+	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=city\">closest city</a>"
 	}
 	else
 	{
-	    print STDOUT ", <a
-href=\"${cgipath}?c=on&amp;geo=city\">closest city</a>, <a
+	    print STDOUT " <a
+href=\"${cgipath}?c=on&amp;geo=city\">closest city</a> or <a
 href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
 	}
 	print STDOUT ")</small>
