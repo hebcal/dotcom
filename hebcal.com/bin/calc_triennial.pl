@@ -576,9 +576,16 @@ href="/search/">Search</a></small>
 <br>
 <table width="100%">
 <tr>
-<td><h1><a name="top">Parashat $h</a></h1></td>
-<td><h1 dir="rtl" class="hebrew"
-lang="he">$hebrew</h1></td>
+<td align="left" width="15%">
+$prev_link
+</td>
+<td align="center" width="70%">
+<h1><a name="top">Parashat $h</a><br><span
+dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
+</td>
+<td align="right" width="15%">
+$next_link
+</td>
 </tr>
 </table>
 <h3><a name="torah">Torah Portion:</a>
