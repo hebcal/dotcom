@@ -1525,7 +1525,7 @@ sub csv_write_contents($$$)
 
 sub sendmail_v2($$$)
 {
-    my($return_path,$headers,$body) = @_;
+    my($return_path,$headers,$body,$warn) = @_;
 
     use Email::Valid;
     use Net::SMTP;
@@ -1533,14 +1533,16 @@ sub sendmail_v2($$$)
 
     if (! Email::Valid->address($return_path))
     {
-	warn "Hebcal.pm: Return-Path $return_path is invalid";
+	warn "Hebcal.pm: Return-Path $return_path is invalid"
+	    if $warn;
 	return 0;
     }
 
     my($from) = $headers->{'From'};
     if (!$from || ! Email::Valid->address($from))
     {
-	warn "Hebcal.pm: From $from is invalid";
+	warn "Hebcal.pm: From $from is invalid"
+	    if $warn;
 	return 0;
     }
 
@@ -1560,7 +1562,8 @@ sub sendmail_v2($$$)
 
     if (! keys %recipients)
     {
-	warn "Hebcal.pm: no recipients!";
+	warn "Hebcal.pm: no recipients!"
+	    if $warn;
 	return 0;
     }
 
@@ -1588,30 +1591,36 @@ sub sendmail_v2($$$)
     my @recip = keys %recipients;
 
     unless ($smtp->mail($return_path)) {
-        warn "smtp mail() failure for @recip\n";
+        warn "smtp mail() failure for @recip\n"
+	    if $warn;
         return 0;
     }
     foreach (@recip) {
 	next unless $_;
         unless($smtp->to($_)) {
-            warn "smtp to() failure for $_\n";
+            warn "smtp to() failure for $_\n"
+		if $warn;
             return 0;
         }
     }
     unless($smtp->data()) {
-        warn "smtp data() failure for @recip\n";
+        warn "smtp data() failure for @recip\n"
+	    if $warn;
         return 0;
     }
     unless($smtp->datasend($message)) {
-        warn "smtp datasend() failure for @recip\n";
+        warn "smtp datasend() failure for @recip\n"
+	    if $warn;
         return 0;
     }
     unless($smtp->dataend()) {
-        warn "smtp dataend() failure for @recip\n";
+        warn "smtp dataend() failure for @recip\n"
+	    if $warn;
         return 0;
     }
     unless($smtp->quit) {
-        warn "smtp quit failure for @recip\n";
+        warn "smtp quit failure for @recip\n"
+	    if $warn;
         return 0;
     }
 
