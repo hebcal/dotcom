@@ -36,7 +36,7 @@ $inc = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
 open(OUT,">$inc") || die;
 close(OUT);
 
-$line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -t -x | grep -v ' of '`;
+$line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -t | grep -v ' of '`;
 chomp($line);
 
 if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
