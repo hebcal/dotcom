@@ -180,7 +180,9 @@ sub javascript_events() {
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
     print $q->header(-type => "application/x-javascript",
-		     -last_modified => &Hebcal::http_date($time));
+		     -last_modified => &Hebcal::http_date($time),
+		     -expires => $expires_date,
+		     );
 
     for (my $i = 0; $i < @events; $i++)
     {
@@ -198,24 +200,29 @@ sub javascript_events() {
 	my $img_w = 0;
 	my $img_h = 0;
 
-	if ($subj =~ /^Candle lighting/)
+	if ($q->param('img'))
 	{
-	    $img_url = 'http://www.hebcal.com/i/sm_candles.gif';
-	    $img_w = 40;
-	    $img_h = 69;
-	}
-	elsif ($subj =~ /Havdalah/)
-	{
-	    $img_url = 'http://www.hebcal.com/i/havdalah.gif';
-	    $img_w = 46;
-	    $img_h = 59;
+	    if ($subj =~ /^Candle lighting/)
+	    {
+		$img_url = 'http://www.hebcal.com/i/sm_candles.gif';
+		$img_w = 40;
+		$img_h = 69;
+	    }
+	    elsif ($subj =~ /Havdalah/)
+	    {
+		$img_url = 'http://www.hebcal.com/i/havdalah.gif';
+		$img_w = 46;
+		$img_h = 59;
+	    }
 	}
 
 	my $href = &Hebcal::get_holiday_anchor($subj,0,$q);
 
 	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
-	$subj .= sprintf(": %d:%02d", $hour, $min)
-	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	{
+	    $subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj);
+	}
 
 	printf("DefineEvent(%04d%02d%02d, \"%s\", \"%s\", \"%s\", %d, %d);\015\012",
 	       $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
