@@ -1040,7 +1040,7 @@ Jewish Calendar events into your desktop software.</p>};
     $s .= "<li><a href=\"" . download_href($q, $filename, 'csv') .
 	"\">European date format</a> (day/month/year)</ul>\n";
 
-    $s .= qq{<li><a href="/help/#csv">Import CSV file into Outlook</a></ol>};
+    $s .= qq{<li><a href="/help/import.html#csv">Import CSV file into Outlook</a></ol>};
 
     # only offer DBA export when we know timegm() will work
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
@@ -1049,7 +1049,7 @@ Jewish Calendar events into your desktop software.</p>};
 	$s .= "<h4>Palm Desktop for Windows</h4>\n<ol><li><a href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">Export Palm Date Book Archive (.DBA) from Hebcal</a>\n";
-	$s .= qq{<li><a href="/help/#dba">Import DBA file into Palm Desktop</a></ol>};
+	$s .= qq{<li><a href="/help/import.html#dba">Import DBA file into Palm Desktop</a></ol>};
     }
 
     $s .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li><a href=\"" .
@@ -1060,7 +1060,7 @@ Jewish Calendar events into your desktop software.</p>};
     $s .= "<h4>Lotus Notes R5, iCal, vCalendar</h4>\n<ol><li><a href=\"" .
 	download_href($q, $filename, 'vcs') .
 	    "\">Export vCalendar (.VCS) from Hebcal</a>\n";
-    $s .= qq{<li>Import VCS file into <a href="/help/#lotus-notes">Lotus Notes</a> or <a href="/help/#ical">iCal</a></ol>};
+    $s .= qq{<li>Import VCS file into <a href="/help/import.html#lotus-notes">Lotus Notes</a> or <a href="/help/import.html#ical">iCal</a></ol>};
 
     $s .= "</div>\n";
 
