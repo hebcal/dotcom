@@ -103,6 +103,17 @@ foreach $key ($q->param())
 my($cmd)  = './hebcal -S -x -h';
 my($type) = 'g2h';
 
+{
+    my($cookies) = Hebcal::get_cookies($q);
+    if (defined $cookies->{'C'})
+    {
+	Hebcal::process_cookie($q,$cookies->{'C'});
+    }
+
+    $cmd .= ' -i'
+	if ($q->param('i') && $q->param('i') =~ /^on|1$/);
+}
+
 if ($q->param('h2g') && $q->param('hm') && $q->param('hd') &&
     $q->param('hy'))
 {
@@ -256,6 +267,12 @@ if (defined $events[0])
     if ($parsha) {
         my $href = &Hebcal::get_holiday_anchor($parsha,0,$q);
 	print STDOUT qq{\n<br><a href="$href">$parsha</a>};
+
+	if ($q->param('i') && $q->param('i') =~ /^on|1$/) {
+	    print STDOUT qq{\n(in Israel)};
+	} else {
+	    print STDOUT qq{\n(in Diaspora)};
+	}
     }
 
     print STDOUT qq{</p>\n};
