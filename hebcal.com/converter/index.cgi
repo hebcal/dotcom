@@ -85,7 +85,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 23 10:22:41 PDT 2001
+Last modified: Thu May  3 19:51:29 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -211,7 +211,8 @@ if (defined $events[0])
 			"  בְּ",
 			$monthnames{$hm},
 			"  ",
-			&hebnum_to_string($hy));
+			&hebnum_to_string($hy))
+	    if ($q->param('heb') && $q->param('heb') =~ /^on|1$/);
 
 	$hm = "Shvat" if $hm eq "Sh'vat";
 	$hm = "Adar1" if $hm eq "Adar";
@@ -307,8 +308,13 @@ type="submit" value="Compute Hebrew Date"></td>
 <td>&nbsp;</td>
 <td colspan="3"><input name="h2g"
 type="submit" value="Compute Gregorian Date"></td>
-</tr></table></center></form>
-};
+</tr><td colspan="7" align="center">
+<label for="heb">
+},
+    $q->checkbox(-name => 'heb',
+		 -id => 'heb',
+		 -label => "\nShow date in Hebrew font"),
+    qq{</label></td></tr></table></center></form>};
 
     print STDOUT $html_footer;
 
