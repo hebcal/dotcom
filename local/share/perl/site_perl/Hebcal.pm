@@ -866,25 +866,22 @@ sub gen_cookie($)
     $retval;
 }
 
-sub get_C_cookie($)
+sub get_cookies($)
 {
     my($q) = @_;
 
     my($raw) = $q->raw_cookie();
-    my($C_cookie) = '';
+    my(%cookies) = ();
     if ($raw)
     {
 	foreach (split(/[;,\s]/, $raw))
 	{
-	    if (/^C=[^\s,;]+$/)
-	    {
-		$C_cookie = $_;
-		last;
-	    }
+	    my($key,$val) = split(/=/, $_, 2);
+	    $cookies{$key} = $val;
 	}
     }
 
-    $C_cookie;
+    \%cookies;
 }
 
 sub process_cookie($$)
