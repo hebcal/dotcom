@@ -3,10 +3,10 @@ Deny from 208.46.162.254
 
 SetHandler cgi-script
 
-Redirect /hebcal/hebcal.html http://www.radwin.org/hebcal/
-Redirect /hebcal/hebcal.htm http://www.radwin.org/hebcal/
-Redirect /hebcal/hebcal.pl http://www.radwin.org/hebcal/
-Redirect /hebcal/hebcal.cgi http://www.radwin.org/hebcal/
-Redirect /hebcal/index.cgi http://www.radwin.org/hebcal/
-Redirect /hebcal/index.pl http://www.radwin.org/hebcal/
-Redirect /hebcal/hebcal http://www.radwin.org/hebcal
+Redirect /hebcal/hebcal.html http://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal.htm http://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal.pl http://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal.cgi http://www.hebcal.com/hebcal/
+Redirect /hebcal/index.cgi http://www.hebcal.com/hebcal/
+Redirect /hebcal/index.pl http://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal http://www.hebcal.com/hebcal
