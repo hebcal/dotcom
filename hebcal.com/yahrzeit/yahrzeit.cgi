@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 10:49:55 PDT 2001
+Last modified: Wed Apr 18 11:01:01 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -256,7 +256,7 @@ sub my_invoke_hebcal {
 
 sub results_page {
 print STDOUT $q->header(),
-    $q->start_html(-title => 'Interactive Yahrzeit/Birthday Calendar',
+    $q->start_html(-title => 'Hebcal Yahrzeit, Birthday and Anniversary Calendar',
 		   -target => '_top',
 		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
@@ -278,7 +278,7 @@ print STDOUT $q->header(),
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>",
-    "<h1>Interactive\nYahrzeit/Birthday Calendar</h1>\n";
+    "<h1>Hebcal\nYahrzeit, Birthday and Anniversary Calendar</h1>\n";
 
 &form(1,'','') unless keys %yahrzeits;
 
@@ -368,7 +368,7 @@ sub form
 	print STDOUT
 	    $q->popup_menu(-name => "t$i",
 			   -id => "t$i",
-			   -values => ['Yahrzeit','Birthday']),
+			   -values => ['Yahrzeit','Birthday','Anniversary']),
 	    "\nName:\n",
 	    $q->textfield(-name => "n$i",
 			  -id => "n$i"),
