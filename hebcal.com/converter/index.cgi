@@ -84,10 +84,6 @@ my($author) = 'webmaster@hebcal.com';
 
 my($rcsrev) = '$Revision$'; #'
 
-my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed May 16 15:48:03 PDT 2001
-<!-- hhmts end -->";
-
 # process form params
 my($q) = new CGI;
 
@@ -319,7 +315,7 @@ type="submit" value="Compute Gregorian Date"></td>
 		 -label => "\nShow date in Hebrew font"),
     qq{</label></td></tr></table></center></form>};
 
-    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     exit(0);
 }
@@ -394,3 +390,7 @@ sub my_header
 
     1;
 }
+
+# local variables:
+# mode: perl
+# end:
