@@ -3,10 +3,8 @@
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/pear/Hebcal/RCS/dblock.inc,v $
 
-$lockfile = "/pub/m/r/mradwin/private/tmp/mradwin-hebcal.lock";
-
 function dba_lock_open($path, $mode, $handler) {
-    global $lockfile;
+    $lockfile = $path . ".lock";
     $fd = fopen($lockfile, "w");
     if ($fd == false) {
 	die("open($lockfile) failed");
@@ -33,9 +31,6 @@ function dba_lock_close($id, $fd) {
     dba_close($id);
     flock($fd, LOCK_UN);
     fclose($fd);
-
-    global $lockfile;
-    unlink($lockfile);
 }
 
 ?>
