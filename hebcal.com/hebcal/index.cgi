@@ -28,10 +28,9 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 15:48:19 PDT 1999
+Last modified: Fri Apr  9 15:49:18 PDT 1999
 <!-- hhmts end -->
-<br>
-$rcsrev
+($rcsrev)
 </small>
 
 </body> </html>
