@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Nov 15 20:28:42 PST 2000
+Last modified: Mon Jan  8 09:44:28 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -197,14 +197,14 @@ sub my_invoke_hebcal {
 	
 	    if ($subj =~ /,\s+\d{4}\s*$/)
 	    {
-		$greg2heb{sprintf("%04d%02d%02", $year, $mon, $mday)} = $subj;
+		$greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $subj;
 		next;
 	    }
 
 	    if (defined $y->{$subj})
 	    {
 		my($subj2) = "${subj}'s Yahrzeit";
-		my($isodate) = sprintf("%04d%02d%02", $year, $mon, $mday);
+		my($isodate) = sprintf("%04d%02d%02d", $year, $mon, $mday);
 
 		$subj2 .= " ($greg2heb{$isodate})"
 		    if (defined $greg2heb{$isodate});
