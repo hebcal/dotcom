@@ -43,9 +43,9 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
-use Getopt::Std;
-use XML::Simple;
-use Hebcal;
+use Getopt::Std ();
+use XML::Simple ();
+use Hebcal ();
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -55,7 +55,7 @@ my($usage) = "usage: $0 [-h] festival.xml output-dir
 ";
 
 my(%opts);
-getopts('hf:', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hf:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
@@ -66,7 +66,7 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
-my $fxml = XMLin($festival_in);
+my $fxml = XML::Simple::XMLin($festival_in);
 
 if ($opts{'f'}) {
     open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
