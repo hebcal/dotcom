@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- $Id$ -->
-<parshiot>
+<festivals>
 <!--
 # of aliyot per festival:
 Shabbat: 7
@@ -10,6 +10,7 @@ Chol ha-Moed days: 4
 Rosh Chodesh: 4
 every other day (e.g. fast days): 3
 -->
+<!-- Strassfeld p. 229 -->
 <festival id="Pesach 1" haftara="Joshua 5:2 - 6:1"
 descr="Passover, the Feast of Unleavened Bread"
 hebrew="פֶּסַח יוֹם א׳"
@@ -59,6 +60,7 @@ yomtov="1">
   <aliyah num="4" book="Numbers" begin="28:19" end="28:25" />
  </kriyah>
 </festival>
+<!-- Strassfeld p. 230 -->
 <festival id="Pesach Chol ha-Moed Day 2" yomtov="0">
  <kriyah>
   <aliyah num="1" book="Exodus" begin="22:24" end="22:26" />
@@ -205,7 +207,152 @@ yomtov="0">
   <aliyah num="3" book="Deuteronomy" begin="4:36" end="4:40" />
  </kriyah>
 </festival>
+<festival id="Rosh Hashana 1"
+haftara="I Samuel 1:1 - 1:2; 1:10"
+descr="New Year"
+hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
+ <kriyah>
+  <aliyah num="1" book="Genesis" begin="21:1" end="21:4" />
+  <aliyah num="2" book="Genesis" begin="21:5" end="21:12" />
+  <aliyah num="3" book="Genesis" begin="21:13" end="21:21" />
+  <aliyah num="4" book="Genesis" begin="21:22" end="21:27" />
+  <aliyah num="5" book="Genesis" begin="21:28" end="21:34" />
+  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" />
+ </kriyah>
+</festival>
+<festival id="Rosh Hashana 1 (on Shabbat)"
+haftara="I Samuel 1:1 - 1:2; 1:10"
+descr="New Year"
+hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
+ <kriyah>
+  <aliyah num="1" book="Genesis" begin="21:1" end="21:4" />
+  <aliyah num="2" book="Genesis" begin="21:5" end="21:8" />
+  <aliyah num="3" book="Genesis" begin="21:9" end="21:12" />
+  <aliyah num="4" book="Genesis" begin="21:13" end="21:17" />
+  <aliyah num="5" book="Genesis" begin="21:18" end="21:21" />
+  <aliyah num="6" book="Genesis" begin="21:22" end="21:27" />
+  <aliyah num="7" book="Genesis" begin="21:28" end="21:34" />
+  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" />
+ </kriyah>
+</festival>
+<festival id="Rosh Hashana 2"
+haftara="Jer. 31:1 - 31:19"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
+ <kriyah>
+  <aliyah num="1" book="Genesis" begin="22:1" end="22:3" />
+  <aliyah num="2" book="Genesis" begin="22:4" end="22:8" />
+  <aliyah num="3" book="Genesis" begin="22:9" end="22:14" />
+  <aliyah num="4" book="Genesis" begin="22:15" end="22:19" />
+  <aliyah num="5" book="Genesis" begin="22:20" end="22:24" />
+  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" />
+ </kriyah>
+</festival>
+<festival id="Yom Kippur"
+haftara="Isaiah 57:14 - 58:14"
+hebrew="יוֹם כִּפּוּר"
+descr="Day of Atonement"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday4.htm" />
+ <kriyah>
+  <aliyah num="1" book="Leviticus" begin="16:1" end="16:6" />
+  <aliyah num="2" book="Leviticus" begin="16:7" end="16:11" />
+  <aliyah num="3" book="Leviticus" begin="16:12" end="16:17" />
+  <aliyah num="4" book="Leviticus" begin="16:18" end="16:24" />
+  <aliyah num="5" book="Leviticus" begin="16:25" end="16:30" />
+  <aliyah num="6" book="Leviticus" begin="16:31" end="16:34" />
+  <aliyah num="M" book="Numbers" begin="29:7" end="29:11" />
+ </kriyah>
+</festival>
+<festival id="Yom Kippur (on Shabbat)"
+haftara="Isaiah 57:14 - 58:14"
+hebrew="יוֹם כִּפּוּר"
+descr="Day of Atonement"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday4.htm" />
+ <kriyah>
+  <aliyah num="1" book="Leviticus" begin="16:1" end="16:3" />
+  <aliyah num="2" book="Leviticus" begin="16:4" end="16:6" />
+  <aliyah num="3" book="Leviticus" begin="16:7" end="16:11" />
+  <aliyah num="4" book="Leviticus" begin="16:12" end="16:17" />
+  <aliyah num="5" book="Leviticus" begin="16:18" end="16:24" />
+  <aliyah num="6" book="Leviticus" begin="16:25" end="16:30" />
+  <aliyah num="7" book="Leviticus" begin="16:31" end="16:34" />
+  <aliyah num="M" book="Numbers" begin="29:7" end="29:11" />
+ </kriyah>
+</festival>
+<festival id="Yom Kippur (Minchah)"
+haftara="Jon., Mic. 7:18-20"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday4.htm" />
+ <kriyah>
+  <aliyah num="1" book="Leviticus" begin="181" end="18:5" />
+  <aliyah num="2" book="Leviticus" begin="18:6" end="18:21" />
+  <aliyah num="3" book="Leviticus" begin="18:22" end="18:30" />
+ </kriyah>
+</festival>
+<festival id="Sukkot 1"
+haftara="Zech. 14:1-21"
+descr="Feast of Tabernacles"
+hebrew="סוּכּוֹת יוֹם א׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday5.htm" />
+ <kriyah>
+  <aliyah num="1" book="Leviticus" begin="22:26" end="23:3" />
+  <aliyah num="2" book="Leviticus" begin="23:4" end="23:14" />
+  <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
+  <aliyah num="4" book="Leviticus" begin="23:23" end="23:32" />
+  <aliyah num="5" book="Leviticus" begin="23:33" end="23:44" />
+  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" />
+ </kriyah>
+</festival>
+<festival id="Sukkot 1 (on Shabbat)"
+haftara="Zech. 14:1-21"
+descr="Feast of Tabernacles"
+hebrew="סוּכּוֹת יוֹם א׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday5.htm" />
+ <kriyah>
+  <aliyah num="1" book="Leviticus" begin="22:26" end="22:33" />
+  <aliyah num="2" book="Leviticus" begin="23:1" end="23:3" />
+  <aliyah num="3" book="Leviticus" begin="23:4" end="23:8" />
+  <aliyah num="4" book="Leviticus" begin="23:9" end="23:14" />
+  <aliyah num="5" book="Leviticus" begin="23:15" end="23:22" />
+  <aliyah num="6" book="Leviticus" begin="23:23" end="23:32" />
+  <aliyah num="7" book="Leviticus" begin="23:33" end="23:44" />
+  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" />
+ </kriyah>
+</festival>
+<festival id="Sukkot 2"
+haftara="I Kings 8:2 - 8:21"
+hebrew="סוּכּוֹת יוֹם ב׳"
+yomtov="1">
+ <link rel="about" href="http://www.jewfaq.org/holiday5.htm" />
+ <kriyah>
+  <aliyah num="1" book="Leviticus" begin="22:26" end="23:3" />
+  <aliyah num="2" book="Leviticus" begin="23:4" end="23:14" />
+  <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
+  <aliyah num="4" book="Leviticus" begin="23:23" end="23:32" />
+  <aliyah num="5" book="Leviticus" begin="23:33" end="23:44" />
+  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" />
+ </kriyah>
+</festival>
 
+<!-- Strassfeld p. 231 -->
+<festival id="Sukkot Chol ha-Moed Day 1" yomtov="0">
+ <kriyah>
+  <aliyah num="1" book="Numbers" begin="29:17" end="29:19" />
+  <aliyah num="2" book="Numbers" begin="29:20" end="29:22" />
+  <aliyah num="3" book="Numbers" begin="29:23" end="29:25" />
+  <aliyah num="4" book="Numbers" begin="29:17" end="29:22" />
+ </kriyah>
+</festival>
+
+<!--  Strassfeld p. 232 -->
 <festival id="Shabbat HaChodesh"
 haftara="Ezekiel 45:16 - 46:18"
 descr="Shabbat before Rosh Chodesh Nissan"
@@ -312,6 +459,8 @@ yomtov="0">
  <aliyah num="M" book="Deuteronomy" begin="25:17" end="25:19" />
 </festival>
 
+
+
 <festival id="" haftara="">
  <kriyah>
   <aliyah num="1" book="" begin="" end="" />
@@ -322,4 +471,4 @@ yomtov="0">
   <aliyah num="M" book="" begin="" end="" />
  </kriyah>
 </festival>
-</parshiot>
+</festivals>
