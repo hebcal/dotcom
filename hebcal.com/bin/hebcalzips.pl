@@ -42,14 +42,14 @@ use DB_File;
      'Washington DC', '20301',
      );
 
-$dbmfile = '/home/web/radwin.org/docs/hebcal/zips.db';
+$dbmfile = '/home/web/hebcal.com/docs/hebcal/zips.db';
 tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
 
 $total = 0;
 $filename = defined $ARGV[0] ? $ARGV[0] : 
-    '/var/log/httpd/radwin.org-access_log';
+    '/var/log/httpd/hebcal.com-access_log';
 open(A,$filename) || die "$filename: $!\n";
 while(<A>)
 {
@@ -112,7 +112,7 @@ foreach (sort keys %valbycity) {
     }
 }
 
-print "Hebcal Interactive Jewish Calendar - http://www.hebrewcalendar.org/\n";
+print "Hebcal Interactive Jewish Calendar - http://www.hebcal.com/\n";
 print "Most Often Used Zip Codes\n";
 print "------------------------------------------------------------\n";
 print scalar(localtime), "\n";
