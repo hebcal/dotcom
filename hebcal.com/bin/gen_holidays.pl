@@ -44,9 +44,7 @@ print OUT <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Hebcal Default Holidays</title>
-<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <base href="http://www.hebcal.com/help/holidays.html" target="_top">
-<link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 </head>
 <body>
@@ -102,7 +100,7 @@ href="http://www.jewfaq.org/holidayb.htm">Days of the Omer</a>
 </dl>
 <p>
 <hr noshade size="1">
-<font size=-2 face=Arial>Copyright
+<span class="tiny">Copyright
 &copy; $this_year Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
@@ -110,7 +108,7 @@ href="http://www.jewfaq.org/holidayb.htm">Days of the Omer</a>
 <br>
 $hhmts
 ($rcsrev)
-</font>
+</span>
 </body></html>
 EOHTML
 ;
