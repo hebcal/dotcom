@@ -409,7 +409,7 @@ my(%sedrot) = (
 		    ],
  "Lech-Lecha"	=> [
 		    '/5761/lekhlekha.shtml', 'Genesis 12:1 - 17:27',
-		    '/jpstext/lechlecha.shtml',
+		    '/jpstext/lekhlekha.shtml',
 		    'לֶךְ־לְךָ',
 		    'Isaiah 40:27 - 41:16', '',
 		    ],
@@ -565,7 +565,7 @@ my(%sedrot) = (
 		    ],
  "Tzav"		=> [
 		    '/5760/tsav.shtml', 'Leviticus 6:1 - 8:36',
-		    '/jpstext/tzav.shtml',
+		    '/jpstext/tsav.shtml',
 		    'צַו',
 		    'Jeremiah 7:21 - 8:3; 9:22 - 9:23', '',
 		    ],
@@ -960,6 +960,8 @@ sub get_holiday_anchor($$)
     my($href) = '';
     my($hebrew) = '';
     my($memo) = '';
+    my($haftarah_href) = '';
+    my($torah_href) = '';
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
     {
@@ -971,6 +973,13 @@ sub get_holiday_anchor($$)
 	if (defined $sedrot{$sedra})
 	{
 	    $href = $sedrot{$sedra}->[$SEDROT_IDX_DRASH_EN];
+	    $torah_href = $sedrot{$sedra}->[$SEDROT_IDX_TORAH_EN];
+	    if ($torah_href =~ m,^/jpstext/,)
+	    {
+		$haftarah_href = $torah_href;
+		$haftarah_href =~ s/.shtml$/_haft.shtml/;
+	    }
+
 	    $hebrew .= $sedrot{$sedra}->[$SEDROT_IDX_TITLE_HE];
 	    $memo = "Torah: " . $sedrot{$sedra}->[$SEDROT_IDX_VERSE_EN] .
 		" -- Haftarah: ";
@@ -987,44 +996,57 @@ sub get_holiday_anchor($$)
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) && defined $sedrot{$1})
 	{
-	    $href = $sedrot{$1}->[$SEDROT_IDX_DRASH_EN];
-	    $hebrew .= $sedrot{$1}->[$SEDROT_IDX_TITLE_HE];
-	    $memo = "Torah: " . $sedrot{$1}->[$SEDROT_IDX_VERSE_EN];
+	    my($first,$second) = ($1,$2);
 
-	    if (defined $sedrot{$2})
+	    $href = $sedrot{$first}->[$SEDROT_IDX_DRASH_EN];
+	    $torah_href = $sedrot{$first}->[$SEDROT_IDX_TORAH_EN];
+	    if ($torah_href =~ m,^/jpstext/,)
 	    {
-		$hebrew .= '־' . $sedrot{$2}->[$SEDROT_IDX_TITLE_HE];
-		$memo .= '; ' . $sedrot{$2}->[$SEDROT_IDX_VERSE_EN];
+		$haftarah_href = $torah_href;
+		$haftarah_href =~ s/.shtml$/_haft.shtml/;
+	    }
+
+	    $hebrew .= $sedrot{$first}->[$SEDROT_IDX_TITLE_HE];
+	    $memo = "Torah: " . $sedrot{$first}->[$SEDROT_IDX_VERSE_EN];
+
+	    if (defined $sedrot{$second})
+	    {
+		$hebrew .= '־' . $sedrot{$second}->[$SEDROT_IDX_TITLE_HE];
+		$memo .= '; ' . $sedrot{$second}->[$SEDROT_IDX_VERSE_EN];
 	    }
 
 	    $memo .= " -- Haftarah: ";
 	    if ($want_sephardic &&
-		defined $sedrot{$1}->[$SEDROT_IDX_HAFT_SEPH])
+		defined $sedrot{$first}->[$SEDROT_IDX_HAFT_SEPH])
 	    {
-		$memo .= $sedrot{$1}->[$SEDROT_IDX_HAFT_SEPH];
+		$memo .= $sedrot{$first}->[$SEDROT_IDX_HAFT_SEPH];
 	    }
 	    else
 	    {
-		$memo .= $sedrot{$1}->[$SEDROT_IDX_HAFT_ASHK];
+		$memo .= $sedrot{$first}->[$SEDROT_IDX_HAFT_ASHK];
 	    }
 
-	    if (defined $sedrot{$2})
+	    if (defined $sedrot{$second})
 	    {
 		$memo .= '; ';
 		if ($want_sephardic &&
-		    defined $sedrot{$2}->[$SEDROT_IDX_HAFT_SEPH])
+		    defined $sedrot{$second}->[$SEDROT_IDX_HAFT_SEPH])
 		{
-		    $memo .= $sedrot{$2}->[$SEDROT_IDX_HAFT_SEPH];
+		    $memo .= $sedrot{$second}->[$SEDROT_IDX_HAFT_SEPH];
 		}
 		else
 		{
-		    $memo .= $sedrot{$2}->[$SEDROT_IDX_HAFT_ASHK];
+		    $memo .= $sedrot{$second}->[$SEDROT_IDX_HAFT_ASHK];
 		}
 	    }
 	}
 
 	$href = 'http://learn.jtsa.edu/topics/parashah' . $href
 	    if ($href =~ m,^/,);
+	$torah_href = 'http://learn.jtsa.edu/topics/parashah' . $torah_href
+	    if ($torah_href =~ m,^/,);
+	$haftarah_href = 'http://learn.jtsa.edu/topics/parashah' . $haftarah_href
+	    if ($haftarah_href =~ m,^/,);
     }
     else
     {
@@ -1052,7 +1074,8 @@ sub get_holiday_anchor($$)
 	}
     }
 
-    return (wantarray()) ? ($href,$hebrew,$memo) : $href;
+    return (wantarray()) ? ($href,$hebrew,$memo,$torah_href,$haftarah_href)
+	: $href;
 }
     
 
