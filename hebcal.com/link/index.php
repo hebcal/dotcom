@@ -50,7 +50,6 @@ if ($HTTP_GET_VARS['city']) {
 <head><title>Add weekly Shabbat candle-lighting times to your synagogue</title>
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
-<link type="text/css" media="print" rel="stylesheet" href="/print.css">
 </head><body><table width="100%"
 class="navbar"><tr><td><small><strong><a
 href="/">hebcal.com</a></strong>
@@ -99,7 +98,7 @@ href="http://www.hebcal.com/sedrot/vayechi.html">Parashat Vayechi</a>
 Saturday, 29 December 2001 is at <b>6:05 PM</b>
 </dl>
 <span class="tiny">1-Click Shabbat
-<a name="copyright">Copyright &copy; 2001
+<a name="copyright">Copyright &copy; 2003
 Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
 <a target="_top" href="http://www.hebcal.com/help/">Help</a> -
