@@ -80,6 +80,7 @@ src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;c
 Candle Lighting times for <?php echo $descr ?>&lt;/a&gt;
 courtesy of hebcal.com.
 &lt;/noscript&gt;
+
 </textarea>
 </form>
 
@@ -101,6 +102,8 @@ Shabbat</a> Copyright &copy; <?php echo strftime("%Y", time()) ?>
 Michael J. Radwin. All rights reserved.</a>
 </span>
 </blockquote>
+
+<p>You can also <a href="#fonts">customize the fonts</a> used.</p>
 
 <hr noshade size="1">
 <h2><a name="change">Change City</a></h2>
@@ -160,22 +163,26 @@ CSS stylesheet like this to the
 <tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
 page:</p>
 
-<blockquote><pre>
+<form>
+<textarea cols="80" rows="16">
 &lt;style type="text/css"&gt;
 &lt;!--
-H1, H2, H3, H4, H5, H6 {
- font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
+#hebcal {
+ font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
+ font-size: small;
 }
-.candles {
- color: red;
- font-size: large;
+#hebcal H3 {
+ font-family: Georgia,Palatino,"Times New Roman",Times,serif;
 }
-.parashat {
- color: green;
-}
+#hebcal .candles { color: red; font-size: large }
+#hebcal .havdalah { color: green } 
+#hebcal .parashat { color: black; background: #ff9 }
+#hebcal .holiday { display: none }
 --&gt;
 &lt;/style&gt;
-</pre></blockquote>
+
+</textarea>
+</form>
 
 <p>Those fonts and colors are just an example.  <a
 href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
