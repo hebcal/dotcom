@@ -319,7 +319,8 @@ sub csv_display() {
     my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
 
-    Hebcal::csv_write_contents($q, \@events);
+    my $euro = defined $q->param('euro') ? 1 : 0;
+    Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
 sub form($$)
