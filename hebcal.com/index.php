@@ -36,16 +36,16 @@ Shabbat candle lighting times and Torah Readings, updated weekly
 <br><span class="sm-grey">&gt;</span>
 <a href="/email/">Subscribe by
 Email</a>
-<h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
-Calendar</a></h4>
-<span class="sm-grey">&gt;</span>
-generate a list of Yahrzeit (memorial) and Yizkor dates, or
-Hebrew Birthdays and Anniversaries
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <span class="sm-grey">&gt;</span>
 convert between Hebrew and Gregorian dates
 <br><span class="sm-grey">&gt;</span>
 find out Torah reading for any date in the future
+<h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
+Calendar</a></h4>
+<span class="sm-grey">&gt;</span>
+generate a list of Yahrzeit (memorial) and Yizkor dates, or
+Hebrew Birthdays and Anniversaries
 <h4><a href="/sedrot/">Torah Readings</a></h4>
 <span class="sm-grey">&gt;</span>
 aliyah-by-aliyah breakdown for weekly parshiyot
