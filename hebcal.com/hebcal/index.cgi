@@ -6,7 +6,7 @@
 # are calculated from your latitude and longitude (which can be
 # determined by your zip code or closest city).
 #
-# Copyright (c) 2002  Michael J. Radwin.  All rights reserved.
+# Copyright (c) 2003  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -464,7 +464,7 @@ JSCRIPT_END
 		    {'off' => "\nDiaspora ",
 		     'on' => "\nIsrael "}),
     "\n&nbsp;<small>(<a\n",
-    "href=\"/help/sedra.html\">What\n",
+    "href=\"/help/sedra.html#scheme\">What\n",
     "is the difference?</a>)</small>";
 
     print STDOUT "<p><b>Other options:</b>",
