@@ -584,25 +584,24 @@ sub display_vxml
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
+	my $date = $items->[$i]->{'date'};
+	$date =~ s/, 0(\d) /, $1 /;
+
 	if ($items->[$i]->{'class'} eq 'candles')
 	{
 	    my $subj = $items->[$i]->{'subj'};
 	    $subj =~ s/Havdalah \(\d+ min\)/Hav doll ah/g;
-	    print qq{\t<audio>$subj for
-$items->[$i]->{'date'} is at $items->[$i]->{'time'}.</audio>
-};
+	    print qq{\t<audio>$subj for $date is at $items->[$i]->{'time'}.</audio>\n};
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
-	    print qq{\t<audio>Holiday... $items->[$i]->{'subj'} is on
-$items->[$i]->{'date'}.</audio>
-};
+	    print qq{\t<audio>Holiday... $items->[$i]->{'subj'} is on $date.</audio>\n};
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
-	    print qq{\t<audio>This week's Torah portion is
-$items->[$i]->{'subj'}.</audio>
-};
+	    my $subj = $items->[$i]->{'subj'};
+	    $subj =~ s/Parashat/Par shot/g;
+	    print qq{\t<audio>This week's Torah portion is $subj.</audio>\n};
 	}
 
 	print qq{\t<break time="250ms"/>\n};
