@@ -27,7 +27,8 @@ use strict;
 use Time::Local;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
-use lib "/home/mradwin/web/hebcal.com/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 use Date::Calc;
 use DB_File;
 
@@ -37,18 +38,9 @@ use DB_File;
 
 my $sedrotfn = '/home/mradwin/web/hebcal.com/hebcal/sedrot.db';
 my(%SEDROT);
-tie(%SEDROT, 'DB_File', $sedrotfn, O_RDONLY, 0444, $DB_File::DB_HASH)
-    || die "Can't tie $sedrotfn";
 
 my $holidaysfn = '/home/mradwin/web/hebcal.com/hebcal/holidays.db';
 my(%HOLIDAYS);
-tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
-    || die "Can't tie $holidaysfn";
-
-END {
-    untie(%SEDROT);
-    untie(%HOLIDAYS);
-}
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -384,6 +376,11 @@ sub parse_date_descr($$)
 	if defined $Hebcal::ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
+    unless(tied(%HOLIDAYS)) {
+	tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
+	    || die "Can't tie $holidaysfn";
+    }
+
     $yomtov = 1  if $HOLIDAYS{"$subj_copy:yomtov"};
 
     $subj =~ s/\"/''/g;
@@ -498,6 +495,16 @@ sub get_holiday_anchor($$$)
     my($haftarah_href) = '';
     my($torah_href) = '';
     my($drash_href) = '';
+
+    unless(tied(%SEDROT)) {
+	tie(%SEDROT, 'DB_File', $sedrotfn, O_RDONLY, 0444, $DB_File::DB_HASH)
+	    || die "Can't tie $sedrotfn";
+    }
+
+    unless(tied(%HOLIDAYS)) {
+	tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
+	    || die "Can't tie $holidaysfn";
+    }
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
@@ -746,27 +753,28 @@ sub zipcode_fields($)
     ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
 }
 
-sub html_copyright2($$)
+sub html_copyright2($$$)
 {
-    my($prefix,$break) = @_;
+    my($prefix,$break,$target) = @_;
 
     my($br) = $break ? '<br>' : '';
+    my($tgt) = $target ? $target : '_top';
 
     return qq{<a name="copyright">Copyright &copy; $this_year
 Michael J. Radwin. All rights reserved.</a>$br
-<a target="_top" href="$prefix/privacy/">Privacy Policy</a> -
-<a target="_top" href="$prefix/help/">Help</a> -
-<a target="_top" href="$prefix/contact/">Contact</a> -
-<a target="_top" href="$prefix/news/">News</a> -
-<a target="_top" href="$prefix/donations/">Donate</a>};
+<a target="$tgt" href="$prefix/privacy/">Privacy Policy</a> -
+<a target="$tgt" href="$prefix/help/">Help</a> -
+<a target="$tgt" href="$prefix/contact/">Contact</a> -
+<a target="$tgt" href="$prefix/news/">News</a> -
+<a target="$tgt" href="$prefix/donations/">Donate</a>};
 }
 
-sub html_copyright($$)
+sub html_copyright($$$)
 {
-    my($q,$break) = @_;
+    my($q,$break,$tgt) = @_;
 
     my($server_name) = $q->virtual_host();
-    return html_copyright2("http://$server_name", $break);
+    return html_copyright2("http://$server_name", $break, $tgt);
 }
 
 sub html_footer($$)
@@ -785,7 +793,7 @@ sub html_footer($$)
 
     return qq{
 <hr noshade size="1"><span class="tiny">
-}, &html_copyright($q, 0), qq{
+}, html_copyright($q, 0, undef), qq{
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
