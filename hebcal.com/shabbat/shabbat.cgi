@@ -35,9 +35,6 @@ my($this_year) = (localtime)[5];
 $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
-my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu May 10 09:50:26 PDT 2001
-<!-- hhmts end -->";
 
 # process form params
 my($q) = new CGI;
@@ -745,7 +742,11 @@ sub form
 	qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
 	qq{times on its own website?</a></p>});
 
-    &out_html(&Hebcal::html_footer($q,$hhmts,$rcsrev));
+    &out_html(&Hebcal::html_footer($q,$rcsrev));
 
     exit(0);
 }
+
+# local variables:
+# mode: perl
+# end:
