@@ -1,16 +1,16 @@
 #!/usr/local/bin/perl -w
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use DB_File::Lock;
+use DBI;
 use Hebcal;
 use Mail::Internet;
 use Email::Valid;
 use MIME::Base64;
 
-my $STAGING = '/pub/m/r/mradwin/hebcal.com/email/email.db';
-my $SUBS = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
+my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
@@ -54,31 +54,31 @@ if ($from) {
 }
 
 unless ($from) {
-    &log(0, 'missing_from');
+    shabbat_log(0, 'missing_from');
     exit(0);
 }
 
 unless (defined $to) {
-    &log(0, 'needto');
-    &error_email($from,$err_needto);
+    shabbat_log(0, 'needto');
+    error_email($from,$err_needto);
     exit(0);
 }
 
 if ($to =~ /shabbat-subscribe\@hebcal\.com/) {
-    &log(0, 'subscribe_useweb'); 
-    &error_email($from,$err_useweb);
+    shabbat_log(0, 'subscribe_useweb'); 
+    error_email($from,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe\+(\d{5})\@hebcal\.com/) {
-    &log(0, 'subscribe_useweb');
-    &error_email($from,$err_useweb);
+    shabbat_log(0, 'subscribe_useweb');
+    error_email($from,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@hebcal\.com/) {
-    &subscribe($from,$1);
+    subscribe($from,$1);
 } elsif ($to =~ /shabbat-unsubscribe\@hebcal\.com/) {
-    &unsubscribe($from);
+    unsubscribe($from);
 } else {
-    &log(0, 'badto');
-    &error_email($from,$err_needto);
+    shabbat_log(0, 'badto');
+    error_email($from,$err_needto);
 }
 exit(0);
 
@@ -86,67 +86,52 @@ sub subscribe
 {
     my($from,$encoded) = @_;
 
-    my(%DB);
-    tie(%DB, 'DB_File::Lock', $STAGING, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
-	or die "$STAGING: $!\n";
+    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
-    my $args = $DB{$encoded};
-    unless ($args) {
-	&log(0, 'subscribe_notfound');
-	untie(%DB);
+    my $sql = <<EOD
+SELECT email_address,email_status
+FROM   hebcal_shabbat_email
+WHERE  email_id = '$encoded'
+EOD
+;
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute
+	or die "can't execute the query: " . $sth->errstr;
+    my($email,$status) = $sth->fetchrow_array;
+
+    unless ($status) {
+	shabbat_log(0, 'subscribe_notfound');
+	$dbh->disconnect;
 	return 0;
     }
 
-    if ($args =~ /^action=/) {
-	&log(0, 'subscribe_twice');
-	untie(%DB);
+    if ($status eq 'active') {
+	shabbat_log(0, 'subscribe_twice');
+	$dbh->disconnect;
 	return 0;
     }
 
-    &log(1, 'subscribe');
+    shabbat_log(1, 'subscribe');
 
-    my($now) = time;
-    $DB{$encoded} = "action=PROCESSED;t=$now";
-
-    untie(%DB);
-    undef(%DB);
-
-    my %args;
-    foreach my $kv (split(/;/, $args)) {
-	my($key,$val) = split(/=/, $kv, 2);
-	$args{$key} = $val;
-    }
-    unless ($args{'em'}) {
-	warn "skipping $encoded: no email ($args)";
+    unless ($email) {
+	$dbh->disconnect;
+	warn "skipping $encoded: no email";
 	return 0;
     }
 
-    my $email = $args{'em'};
-    delete $args{'em'};
-
-    my $newargs = 't2=' . time();
-    while (my($key,$val) = each(%args)) {
-	$newargs .= ';' . $key . '=' . $val;
-    }
-
-    if (lc($email) ne lc($from)) {
-	$newargs .= ";alt=$from";
-    }
-
-    tie(%DB, 'DB_File::Lock', $SUBS, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
-	or die "$SUBS: $!\n";
-
-    $DB{$email} = $newargs;
-#    if (lc($email) ne lc($from)) {
-#	$DB{$from} = "type=alt;em=$email";
-#    }
-
-    untie(%DB);
+    $sql = <<EOD
+UPDATE hebcal1.hebcal_shabbat_email
+SET email_status='active',email_confirmed=NOW()
+WHERE email_address = '$email'
+EOD
+;
+    $dbh->do($sql);
+    $dbh->disconnect;
 
     my $b64 = encode_base64($email);
     chomp($b64);
     my $unsub_url = "http://www.hebcal.com/email/?" .
-	"e=" . &my_url_escape($b64);
+	"e=" . my_url_escape($b64);
 
     my($body) = qq{Hello,
 
@@ -183,7 +168,7 @@ shabbat-unsubscribe\@hebcal.com
 	}
 
     }
-    &Hebcal::sendmail_v2($return_path,\%headers,$body);
+    Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
 sub my_url_escape
@@ -200,35 +185,47 @@ sub unsubscribe
 {
     my($email) = @_;
 
-    my(%DB);
-    tie(%DB, 'DB_File::Lock', $SUBS, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
-	or die "$SUBS: $!\n";
+    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
-    my $args = $DB{$email};
-    unless ($args) {
-	&log(0, 'unsub_notfound');
+    my $sql = <<EOD
+SELECT email_status
+FROM   hebcal_shabbat_email
+WHERE  email_address = '$email'
+EOD
+;
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute
+	or die "can't execute the query: " . $sth->errstr;
+    my($status) = $sth->fetchrow_array;
 
-	untie(%DB);
+    unless ($status) {
+	shabbat_log(0, 'unsub_notfound');
 
-	&error_email($email,$err_notsub);
+	$dbh->disconnect;
+
+	error_email($email,$err_notsub);
 	return 0;
     }
 
-    if ($args =~ /^action=/) {
-	&log(0, 'unsub_twice');
+    if ($status eq 'unsubscribed') {
+	shabbat_log(0, 'unsub_twice');
 
-	untie(%DB);
+	$dbh->disconnect;
 
-	&error_email($email,$err_notsub);
+	error_email($email,$err_notsub);
 	return 0;
     }
 
-    &log(1, 'unsub');
+    shabbat_log(1, 'unsub');
 
-    my($now) = time;
-    $DB{$email} = "action=UNSUBSCRIBE;t=$now";
-
-    untie(%DB);
+    $sql = <<EOD
+UPDATE hebcal1.hebcal_shabbat_email
+SET email_status='unsubscribed',email_confirmed=NOW()
+WHERE email_address = '$email'
+EOD
+;
+    $dbh->do($sql);
+    $dbh->disconnect;
 
     my($body) = qq{Hello,
 
@@ -257,7 +254,7 @@ hebcal.com};
 	}
     }
 
-    &Hebcal::sendmail_v2($return_path,\%headers,$body);
+    Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
 sub error_email
@@ -296,10 +293,11 @@ hebcal.com};
 	}
     }
 
-    &Hebcal::sendmail_v2($return_path,\%headers,$body);
+    Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
-sub log {
+sub shabbat_log
+{
     my($status,$code) = @_;
     if (open(LOG, ">>$ENV{'HOME'}/.shabbat-log"))
     {
@@ -308,3 +306,5 @@ sub log {
 	close(LOG);
     }
 }
+
+
