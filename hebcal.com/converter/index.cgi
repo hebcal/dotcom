@@ -84,7 +84,7 @@ my($rcsrev) = '$Revision$'; #'
 my($q) = new CGI;
 
 my($script_name) = $q->script_name();
-$script_name =~ s,/index.html$,/,;
+$script_name =~ s,/index.cgi$,/,;
 
 # sanitize input to prevent people from trying to hack the site.
 # remove anthing other than word chars, white space, or hyphens.
