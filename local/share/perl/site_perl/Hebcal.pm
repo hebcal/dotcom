@@ -765,7 +765,7 @@ sub start_html($$$$$)
     if ($ENV{'QUERY_STRING'})
     {
 	my($script_name) = $q->script_name();
-	$script_name =~ s,/index.html$,/,;
+	$script_name =~ s,/index.cgi$,/,;
 
 	$base = "http://" . $q->virtual_host() . $script_name . "?" .
 	    $ENV{'QUERY_STRING'};
@@ -999,10 +999,10 @@ sub download_href
     my($q,$filename,$ext) = @_;
 
     my($script_name) = $q->script_name();
-    $script_name =~ s,/index.html$,/,;
+    $script_name =~ s,/index.cgi$,/,;
 
     my($href) = $script_name;
-    $href .= "index.html" if $q->script_name() =~ m,/index.html$,;
+    $href .= "index.cgi" if $q->script_name() =~ m,/index.cgi$,;
     $href .= "/$filename.$ext?dl=1";
     foreach my $key ($q->param())
     {
