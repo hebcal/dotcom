@@ -760,8 +760,23 @@ sub results_page()
     print STDOUT "<h1>Jewish\nCalendar $date</h1>\n"
 	unless ($q->param('vis'));
 
+    my($loc2) = (defined $city_descr && $city_descr ne '') ?
+	"in $city_descr" : '';
+    $loc2 =~ s/\s*&nbsp;\s*/ /g;
+
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
+    my($numEntries) = scalar(@events);
+
+    my($greg_year1,$greg_year2) = (0,0);
+    if ($numEntries > 0)
+    {
+	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
+	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+    }
+
     print STDOUT $Hebcal::gregorian_warning
-	if ($q->param('year') <= 1752);
+	if ($greg_year1 <= 1752);
 
     my($geographic_info) = '';
 
@@ -782,21 +797,6 @@ sub results_page()
 
     print STDOUT $Hebcal::indiana_warning
 	if ($city_descr =~ / IN &nbsp;/);
-
-    my($loc2) = (defined $city_descr && $city_descr ne '') ?
-	"in $city_descr" : '';
-    $loc2 =~ s/\s*&nbsp;\s*/ /g;
-
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
-	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
-    my($numEntries) = scalar(@events);
-
-    my($greg_year1,$greg_year2) = (0,0);
-    if ($numEntries > 0)
-    {
-	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
-	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
-    }
 
     # toggle month/full year and event list/calendar grid
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
