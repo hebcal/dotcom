@@ -2,6 +2,8 @@
 <!--
   1-Click Shabbat generates weekly Shabbat candle lighting times and
   Parsha HaShavua from Hebcal information.
+
+  VoiceXML dialog based on Tellme Studio Code Example 112
  
   Copyright (c) 2002  Michael J. Radwin.  All rights reserved.
   $Id$
