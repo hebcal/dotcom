@@ -28,7 +28,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 15:49:18 PDT 1999
+Last modified: Fri Apr  9 16:00:31 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -270,8 +270,16 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
 <option value=\"10\"$month{'10'}>October</option>
 <option value=\"11\"$month{'11'}>November</option>
 <option value=\"12\"$month{'12'}>December</option>
-</select><br>
+</select><br><br>
 
+<input type=\"checkbox\" name=\"c\" id=\"c\"$candle_chk><label for=\"c\">
+Include candle lighting times</label>
+
+<small>(<label for=\"m\">Havdalah minutes past sundown: </label><input
+type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
+maxlength=\"3\">)</small>
+
+<blockquote>
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
 id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\"><br>
 
@@ -304,7 +312,7 @@ id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\"><br>
 <option value=\"12\"$tz{'12'}>GMT +12:00  Fiji, New Zealand</option>
 </select><br>
 
-Daylight Savings Time rule:
+Daylight Savings Time:
 <input type=\"radio\" name=\"dst\" id=\"dst_usa\" value=\"usa\"$usa_chk>
 <label for=\"dst_usa\">USA</label>
 
@@ -313,30 +321,25 @@ Daylight Savings Time rule:
 
 <input type=\"radio\" name=\"dst\" id=\"dst_none\" value=\"none\"$none_chk>
 <label for=\"dst_none\">none</label>
-<br><br>
-
-<input type=\"checkbox\" name=\"c\" id=\"c\"$candle_chk><label for=\"c\">
-Include candle lighting times</label>
-
-<small>(<label for=\"m\">Havdalah minutes past sundown: </label><input
-type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
-maxlength=\"3\">)</small><br>
+</blockquote>
 
 <input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
-Suppress Rosh Chodesh</label><br>
+Suppress Rosh Chodesh</label><br><br>
 
-<input type=\"submit\" value=\"Next &gt;\">
+<input type=\"submit\" value=\"Submit\">
 </form>
 </blockquote>
 
-<p><small>Caveat: this is beta software; my apologies if it doesn't work
-for you.  A form interface for specifying time zones and precise
-geographic positions (latitude, longitude) is coming soon.</small></p>
+<p><small>
+Caveat: this is beta software; my apologies if it doesn't work for you.
+A form interface for specifying time zones and precise geographic
+positions (latitude, longitude) is coming soon.
 
-<p><small>Geographic Zip Code information provided by <a
+Geographic Zip Code information provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
 Bureau's Gazetteer</a>.  If your Zip Code is missing from their
-database, I don't have it either.</small></p>
+database, I don't have it either.
+</small></p>
 
 $html_footer";
 
@@ -367,7 +370,7 @@ $city, $state $in{'zip'}<br>
 ${lat_deg}d${lat_min}' N latitude<br>
 ${long_deg}d${long_min}' W longitude<br>
 <small>
-Daylight Savings Time rule: $in{'dst'}<br>
+Daylight Savings Time: $in{'dst'}<br>
 Time Zone: GMT $in{'tz'}:00
 </small>
 </p>
