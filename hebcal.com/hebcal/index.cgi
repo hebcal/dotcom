@@ -52,19 +52,16 @@ my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
 my($set_checked) = 'checked';
-if (! $q->param('v') &&
-    defined $q->raw_cookie() &&
-    $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
+my($C_cookie) = &Hebcal::get_C_cookie($q);
+if (! $q->param('v') && $C_cookie)
 {
-    my($cookieval) = $1;
-
-    if ($cookieval eq 'opt_out')
+    if ($C_cookie eq 'C=opt_out')
     {
 	$set_checked = '';
     }
     else
     {
-	&Hebcal::process_cookie($q,$cookieval);
+	&Hebcal::process_cookie($q,$C_cookie);
     }
 }
 
@@ -649,7 +646,7 @@ sub results_page()
     # process cookie, delete before we generate next/prev URLS
     if ($q->param('set')) {
 	my($newcookie) = &Hebcal::gen_cookie($q);
-	if (! defined $q->raw_cookie())
+	if (! $C_cookie)
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
 	    $expires_date, "; path=/\015\012"
@@ -658,10 +655,10 @@ sub results_page()
 	else
 	{
 	    my($cmp1) = $newcookie;
-	    my($cmp2) = $q->raw_cookie();
+	    my($cmp2) = $C_cookie;
 
-	    $cmp1 =~ s/\bC=t=\d+\&?//;
-	    $cmp2 =~ s/\bC=t=\d+\&?//;
+	    $cmp1 =~ s/^C=t=\d+\&?//;
+	    $cmp2 =~ s/^C=t=\d+\&?//;
 
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
 	    $expires_date, "; path=/\015\012"
@@ -944,9 +941,9 @@ sub results_page()
 		$cal->width('94%');
 		$cal->border(1);
 		$cal->bgcolor('white');
-		$cal->todaybordercolor('red');
 		$cal->bordercolor('');
 		$cal->contentcolor('black');
+		$cal->todaybordercolor('red');
 
 		$cal->header("<h2 align=\"center\"><a class=\"goto\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
