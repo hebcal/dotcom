@@ -135,14 +135,20 @@ To unsubscribe from this list, send an email to:
 shabbat-unsubscribe\@hebcal.com
 };
 
-    &Hebcal::sendmail
-	("shabbat-bounce\@hebcal.com",
-	 "shabbat-owner\@hebcal.com",
-	 "Hebcal Subscription Notification",
-	 "Your subscription to hebcal is complete",
-	 "List-Unsubscribe: <mailto:shabbat-unsubscribe\@hebcal.com>\n" .
-	 "Precedence: bulk\n",
-	 $body,$email,'');
+    my $return_path = "shabbat-bounce\@hebcal.com";
+    my %headers =
+        (
+         'From' =>
+	 "Hebcal Subscription Notification <shabbat-owner\@hebcal.com>",
+         'To' => $email,
+         'MIME-Version' => '1.0',
+         'Content-Type' => 'text/plain',
+         'Subject' => 'Your subscription to hebcal is complete',
+	 'List-Unsubscribe' => "<mailto:shabbat-unsubscribe\@hebcal.com>",
+	 'Precedence' => 'bulk',
+         );
+
+    &Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
 sub unsubscribe
@@ -188,12 +194,18 @@ Shabbat candle lighting time list.
 Regards,
 hebcal.com};
 
-    &Hebcal::sendmail("shabbat-bounce\@hebcal.com",
-		      "shabbat-owner\@hebcal.com",
-		      "Hebcal Subscription Notification",
-		      "You have been unsubscribed from hebcal",
-		      '',$body,$email,'');
+    my $return_path = "shabbat-bounce\@hebcal.com";
+    my %headers =
+        (
+         'From' =>
+	 "Hebcal Subscription Notification <shabbat-owner\@hebcal.com>",
+         'To' => $email,
+         'MIME-Version' => '1.0',
+         'Content-Type' => 'text/plain',
+         'Subject' => 'You have been unsubscribed from hebcal',
+         );
 
+    &Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
 sub error_email
@@ -213,10 +225,16 @@ $error
 Regards,
 hebcal.com};
 
-    &Hebcal::sendmail("shabbat-bounce\@hebcal.com",
-		      "shabbat-owner\@hebcal.com",
-		      "Hebcal Subscription Notification",
-		      "Unable to process your message",
-		      '',$body,$email,'');
+    my $return_path = "shabbat-bounce\@hebcal.com";
+    my %headers =
+        (
+         'From' =>
+	 "Hebcal Subscription Notification <shabbat-owner\@hebcal.com>",
+         'To' => $email,
+         'MIME-Version' => '1.0',
+         'Content-Type' => 'text/plain',
+         'Subject' => 'Unable to process your message',
+         );
 
+    &Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
