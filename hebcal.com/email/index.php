@@ -1,6 +1,7 @@
 <?php
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/email/RCS/index.php,v $
+header("Cache-Control: private");
 global $HTTP_SERVER_VARS;
 $site = preg_replace('/^www\./', '', $HTTP_SERVER_VARS["SERVER_NAME"]);
 $sender = "webmaster@$site";
@@ -358,7 +359,7 @@ href="mailto:shabbat-unsubscribe&#64;<?php
 }
 
 function subscribe($param) {
-    global $site, $sender;
+    global $site, $sender, $VER;
     if (preg_match('/\@' . $site . '$/', $param['em']))
     {
 	form($param,
@@ -474,6 +475,9 @@ function subscribe($param) {
 			 'MIME-Version' => '1.0',
 			 'Content-Type' => 'text/plain',
 			 'X-Sender' => $sender,
+			 'X-Mailer' => "hebcal web v$VER",
+			 'Message-ID' =>
+			 "<Hebcal.Web.$VER.".time().".".posix_getpid()."@$site>",
 			 'X-Originating-IP' => "[$ip]",
 			 'Subject' => $subject);
 
@@ -523,6 +527,9 @@ EOD
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
 		     'X-Sender' => $sender,
+		     'X-Mailer' => "hebcal web v$VER",
+		     'Message-ID' =>
+		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@$site>",
 		     'X-Originating-IP' => "[$ip]",
 		     'Subject' => $subject);
 
@@ -584,7 +591,7 @@ EOD
 }
 
 function unsubscribe($param) {
-    global $site, $sender;
+    global $site, $sender, $VER;
     $html_email = htmlentities($param['em']);
     $info = get_sub_info($param['em']);
 
@@ -635,6 +642,9 @@ EOD
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
 		     'X-Sender' => $sender,
+		     'X-Mailer' => "hebcal web v$VER",
+		     'Message-ID' =>
+		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@$site>",
 		     'X-Originating-IP' => "[$ip]",
 		     'Subject' => $subject);
 
