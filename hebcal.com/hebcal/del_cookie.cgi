@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2003  Michael J. Radwin.
+# Copyright (c) 2004  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -45,10 +45,10 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
+use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use Hebcal;
-use strict;
+use Hebcal ();
 
 # process form params
 my($q) = new CGI;
