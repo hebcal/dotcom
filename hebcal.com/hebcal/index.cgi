@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar  5 19:41:12 PST 2001
+Last modified: Mon Mar  5 19:44:32 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -773,7 +773,7 @@ JSCRIPT_END
     "</label> <small>(<a\n",
     "href=\"help/#cookie\">What's\n",
     "a cookie?</a> - <a\n",
-    "href=\"/hebcal/del_cookie?", time(), "\">Delete\n",
+    "href=\"del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
     "<br><label\nfor=\"heb\">",
     $q->checkbox(-name => 'heb',
