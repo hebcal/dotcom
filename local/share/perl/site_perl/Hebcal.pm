@@ -564,7 +564,7 @@ sub display_hebrew {
 	$str =~ s/  /&nbsp;&nbsp;/g;
 
 	return join('',
-		    qq{<span dir="ltr" lang="he"\nclass="$class">},
+		    qq{<span dir="ltr" lang="he"\nclass="${class}-ltr">},
 		    $str,
 		    qq{</span>}
 		    );
@@ -596,7 +596,7 @@ sub UCN_display_hebrew {
 	$str =~ s/  /&nbsp;&nbsp;/g;
 
 	return join('',
-		    qq{<span dir="ltr" lang="he"\nclass="$class">},
+		    qq{<span dir="ltr" lang="he"\nclass="${class}-ltr">},
 		    $str,
 		    qq{</span>}
 		    );
@@ -626,7 +626,8 @@ sub utf8_hebrew_to_netscape($) {
 	}
     }
 
-    $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
+#    $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
+    $u->pack(@result);
     return $u->utf8();
 }
 
