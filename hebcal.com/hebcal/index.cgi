@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Dec 27 10:40:29 PST 1999
+Last modified: Mon Dec 27 11:01:01 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -929,7 +929,7 @@ sub form
     "</label>(<a target=\"_top\"\n",
     "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
     "a cookie?</a>)</td></tr></table>\n",
-    $q->br(), $q->submit(-name => '.s',-value => 'Get Calendar'),
+    $q->submit(-name => '.s',-value => 'Get Calendar'),
     "</form>", $html_footer;
 
     exit(0);
@@ -1363,7 +1363,8 @@ sub process_cookie {
 	($q->param('c') eq '1')) {
 	if (defined $c->param('zip') && $c->param('zip') =~ /^\d{5}$/ &&
 	    (! defined $q->param('geo') || $q->param('geo') eq 'zip')) {
-	    $q->param('zip',$c->param('zip'));
+	    $q->param('zip',$c->param('zip'))
+		unless $q->param('zip');
 	    $q->param('geo','zip');
 	    $q->param('c','on');
 	    $q->param('dst',$c->param('dst'))
@@ -1372,7 +1373,8 @@ sub process_cookie {
 		if (defined $c->param('tz') && ! defined $q->param('tz'));
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
-	    $q->param('city',$c->param('city'));
+	    $q->param('city',$c->param('city'))
+		unless $q->param('city');
 	    $q->param('geo','city');
 	    $q->param('c','on');
 	} elsif (defined $c->param('lodeg') &&
@@ -1382,12 +1384,18 @@ sub process_cookie {
 		 defined $c->param('lamin') &&
 		 defined $c->param('ladir') &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'pos')) {
-	    $q->param('lodeg',$c->param('lodeg'));
-	    $q->param('lomin',$c->param('lomin'));
-	    $q->param('lodir',$c->param('lodir'));
-	    $q->param('ladeg',$c->param('ladeg'));
-	    $q->param('lamin',$c->param('lamin'));
-	    $q->param('ladir',$c->param('ladir'));
+	    $q->param('lodeg',$c->param('lodeg'))
+		unless $q->param('lodeg');
+	    $q->param('lomin',$c->param('lomin'))
+		unless $q->param('lomin');
+	    $q->param('lodir',$c->param('lodir'))
+		unless $q->param('lodir');
+	    $q->param('ladeg',$c->param('ladeg'))
+		unless $q->param('ladeg');
+	    $q->param('lamin',$c->param('lamin'))
+		unless $q->param('lamin');
+	    $q->param('ladir',$c->param('ladir'))
+		unless $q->param('ladir');
 	    $q->param('geo','pos');
 	    $q->param('c','on');
 	    $q->param('dst',$c->param('dst'))
