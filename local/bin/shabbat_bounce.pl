@@ -64,6 +64,7 @@ if ($@) {
 
 $email_address =~ s/\'/\\\'/g;
 $bounce_reason =~ s/\'/\\\'/g;
+$bounce_reason =~ s/\s+/ /g;
 
 my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
