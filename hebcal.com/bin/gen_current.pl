@@ -1,12 +1,14 @@
 #!/usr/local/bin/perl -w
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
+
 use Hebcal;
 use POSIX;
 use strict;
 
-my $outfile = "/pub/m/r/mradwin/hebcal.com/current.inc";
-my $line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -S -t -x -h | grep Parashat`;
+my $outfile = "/home/mradwin/web/hebcal.com/current.inc";
+my $line = `/home/mradwin/web/hebcal.com/bin/hebcal -S -t -x -h | grep Parashat`;
 chomp($line);
 my $wrote_parsha = 0;
 if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
@@ -33,13 +35,21 @@ unless ($wrote_parsha) {
     close(OUT);
 }
 
-$outfile = '/pub/m/r/mradwin/hebcal.com/today.inc';
+my $hdate = `/home/mradwin/web/hebcal.com/bin/hebcal -T -x -h | grep -v Omer`;
+chomp($hdate);
+
+$outfile = '/home/mradwin/web/hebcal.com/today.inc';
 open(OUT,">$outfile") || die;
-print OUT `/pub/m/r/mradwin/hebcal.com/bin/hebcal -T -x -h | grep -v Omer`;
+print OUT "$hdate\n";
 close(OUT);
 
-$outfile = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
-$line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -t | grep -v ' of '`;
+$outfile = '/home/mradwin/web/hebcal.com/etc/hdate.js';
+open(OUT,">$outfile") || die;
+print OUT "document.write(\"$hdate\\n\");\n";
+close(OUT);
+
+$outfile = '/home/mradwin/web/hebcal.com/holiday.inc';
+$line = `/home/mradwin/web/hebcal.com/bin/hebcal -t | grep -v ' of '`;
 chomp($line);
 my $wrote_holiday = 0;
 if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
