@@ -27,7 +27,12 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
     }
 }
 
-my $inc = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
+my $inc = '/pub/m/r/mradwin/hebcal.com/today.inc';
+open(OUT,">$inc") || die;
+print OUT `/pub/m/r/mradwin/hebcal.com/bin/hebcal -T -x -h`;
+close(OUT);
+
+$inc = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
 open(OUT,">$inc") || die;
 close(OUT);
 
@@ -47,4 +52,5 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	close(OUT);
     }
 }
+
 
