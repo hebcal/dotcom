@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- $Id$ -->
 <parshiot>
-<parsha id="Bereshit" hebrew="בְּרֵאשִׁית" verse="Genesis 1:1 - 6:8">
- <haftara verse="Isaiah 42:5 - 43:11" sephardic="Isaiah 42:5 - 42:21" />
- <links drash="/5761/bereshit.shtml" torah="/jpstext/bereshit.shtml" />
+<parsha id="Bereshit"
+ hebrew="בְּרֵאשִׁית"
+ verse="Genesis 1:1 - 6:8"
+ haftara="Isaiah 42:5 - 43:11" sephardic="Isaiah 42:5 - 42:21">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/bereshit.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="1:1" end="2:3" numverses="34" />
  <aliyah num="2" begin="2:4" end="2:19" numverses="16" />
@@ -47,9 +52,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Noach" hebrew="נֹחַ" verse="Genesis 6:9 - 11:32">
- <haftara verse="Isaiah 54:1 - 55:5" sephardic="Isaiah 54:1 - 54:10" />
- <links drash="/5761/noah.shtml" torah="/jpstext/noah.shtml" />
+<parsha id="Noach"
+ hebrew="נֹחַ"
+ verse="Genesis 6:9 - 11:32"
+ haftara="Isaiah 54:1 - 55:5" sephardic="Isaiah 54:1 - 54:10">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/noah.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/noah.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="6:9" end="6:22" numverses="14" />
  <aliyah num="2" begin="7:1" end="7:16" numverses="16" />
@@ -93,9 +103,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Lech-Lecha" hebrew="לֶךְ־לְךָ" verse="Genesis 12:1 - 17:27">
- <haftara verse="Isaiah 40:27 - 41:16" />
- <links drash="/5761/lekhlekha.shtml" torah="/jpstext/lekhlekha.shtml" />
+<parsha id="Lech-Lecha"
+ hebrew="לֶךְ־לְךָ"
+ verse="Genesis 12:1 - 17:27"
+ haftara="Isaiah 40:27 - 41:16">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/lekhlekha.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/lekhlekha.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="12:1" end="12:13" numverses="13" />
  <aliyah num="2" begin="12:14" end="13:4" numverses="11" />
@@ -139,9 +154,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayera" hebrew="וַיֵּרָא" verse="Genesis 18:1 - 22:24">
- <haftara verse="II Kings 4:1 - 4:37" sephardic="II Kings 4:1 - 4:23" />
- <links drash="/5761/vayera.shtml" torah="/jpstext/vayera.shtml" />
+<parsha id="Vayera"
+ hebrew="וַיֵּרָא"
+ verse="Genesis 18:1 - 22:24"
+ haftara="II Kings 4:1 - 4:37" sephardic="II Kings 4:1 - 4:23">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayera.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayera.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="18:1" end="18:14" numverses="14" />
  <aliyah num="2" begin="18:15" end="18:33" numverses="19" />
@@ -185,9 +205,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Chayei Sara" hebrew="חַיֵּי שָֹרָה" verse="Genesis 23:1 - 25:18">
- <haftara verse="I Kings 1:1 - 1:31" />
- <links drash="/5761/hayyeisarah.shtml" torah="/jpstext/hayyeisarah.shtml" />
+<parsha id="Chayei Sara"
+ hebrew="חַיֵּי שָֹרָה"
+ verse="Genesis 23:1 - 25:18"
+ haftara="I Kings 1:1 - 1:31">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/hayyeisarah.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/hayyeisarah.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="23:1" end="23:16" numverses="16" />
  <aliyah num="2" begin="23:17" end="24:9" numverses="13" />
@@ -231,9 +256,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Toldot" hebrew="תּוֹלְדוֹת" verse="Genesis 25:19 - 28:9">
- <haftara verse="Malachi 1:1 - 2:7" />
- <links drash="/5761/toledot.shtml" torah="/jpstext/toledot.shtml" />
+<parsha id="Toldot"
+ hebrew="תּוֹלְדוֹת"
+ verse="Genesis 25:19 - 28:9"
+ haftara="Malachi 1:1 - 2:7">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/toledot.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/toledot.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="25:19" end="26:5" numverses="21" />
  <aliyah num="2" begin="26:6" end="26:12" numverses="7" />
@@ -277,9 +307,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayetzei" hebrew="וַיֵּצֵא" verse="Genesis 28:10 - 32:3">
- <haftara verse="Hosea 12:13 - 14:10" sephardic="Hosea 11:7 - 12:12" />
- <links drash="/5761/vayetze.shtml" torah="/jpstext/vayetze.shtml" />
+<parsha id="Vayetzei"
+ hebrew="וַיֵּצֵא"
+ verse="Genesis 28:10 - 32:3"
+ haftara="Hosea 12:13 - 14:10" sephardic="Hosea 11:7 - 12:12">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayetze.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayetze.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="28:10" end="28:22" numverses="13" />
  <aliyah num="2" begin="29:1" end="29:17" numverses="17" />
@@ -323,9 +358,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayishlach" hebrew="וַיִּשְׁלַח" verse="Genesis 32:4 - 36:43">
- <haftara verse="Hosea 11:7 - 12:12" sephardic="Obadiah 1:1 - 1:21" />
- <links drash="/5761/vayishlah.shtml" torah="/jpstext/vayishlah.shtml" />
+<parsha id="Vayishlach"
+ hebrew="וַיִּשְׁלַח"
+ verse="Genesis 32:4 - 36:43"
+ haftara="Hosea 11:7 - 12:12" sephardic="Obadiah 1:1 - 1:21">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayishlah.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayishlah.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="32:4" end="32:13" numverses="10" />
  <aliyah num="2" begin="32:14" end="32:30" numverses="17" />
@@ -369,9 +409,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayeshev" hebrew="וַיֵּשֶׁב" verse="Genesis 37:1 - 40:23">
- <haftara verse="Amos 2:6 - 3:8" />
- <links drash="/5761/vayeshev.shtml" torah="/jpstext/vayeshev.shtml" />
+<parsha id="Vayeshev"
+ hebrew="וַיֵּשֶׁב"
+ verse="Genesis 37:1 - 40:23"
+ haftara="Amos 2:6 - 3:8">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayeshev.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayeshev.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="37:1" end="37:11" numverses="11" />
  <aliyah num="2" begin="37:12" end="37:22" numverses="11" />
@@ -415,9 +460,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Miketz" hebrew="מִקֵּץ" verse="Genesis 41:1 - 44:17">
- <haftara verse="I Kings 3:15 - 4:1" />
- <links drash="/5761/mikketz.shtml" torah="/jpstext/mikketz.shtml" />
+<parsha id="Miketz"
+ hebrew="מִקֵּץ"
+ verse="Genesis 41:1 - 44:17"
+ haftara="I Kings 3:15 - 4:1">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/mikketz.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/mikketz.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="41:1" end="41:14" numverses="14" />
  <aliyah num="2" begin="41:15" end="41:38" numverses="24" />
@@ -461,9 +511,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayigash" hebrew="וַיִּגַּשׁ" verse="Genesis 44:18 - 47:27">
- <haftara verse="Ezekiel 37:15 - 37:28" />
- <links drash="/5761/vayiggash.shtml" torah="/jpstext/vayiggash.shtml" />
+<parsha id="Vayigash"
+ hebrew="וַיִּגַּשׁ"
+ verse="Genesis 44:18 - 47:27"
+ haftara="Ezekiel 37:15 - 37:28">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayiggash.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayiggash.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="44:18" end="44:30" numverses="13" />
  <aliyah num="2" begin="44:31" end="45:7" numverses="11" />
@@ -507,9 +562,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayechi" hebrew="וַיְחִי" verse="Genesis 47:28 - 50:26">
- <haftara verse="I Kings 2:1 - 2:12" />
- <links drash="/5761/vayehi.shtml" torah="/jpstext/vayehi.shtml" />
+<parsha id="Vayechi"
+ hebrew="וַיְחִי"
+ verse="Genesis 47:28 - 50:26"
+ haftara="I Kings 2:1 - 2:12">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayehi.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayehi.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="47:28" end="48:9" numverses="13" />
  <aliyah num="2" begin="48:10" end="48:16" numverses="7" />
@@ -553,9 +613,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Shemot" hebrew="שְׁמוֹת" verse="Exodus 1:1 - 6:1">
- <haftara verse="Isaiah 27:6 - 28:13; 29:22 - 29:23" sephardic="Jeremiah 1:1 - 2:3" />
- <links drash="/5761/shemot.shtml" torah="/jpstext/shemot.shtml" />
+<parsha id="Shemot"
+ hebrew="שְׁמוֹת"
+ verse="Exodus 1:1 - 6:1"
+ haftara="Isaiah 27:6 - 28:13; 29:22 - 29:23" sephardic="Jeremiah 1:1 - 2:3">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/shemot.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/shemot.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="1:1" end="1:17" numverses="17" />
  <aliyah num="2" begin="1:18" end="2:10" numverses="15" />
@@ -599,9 +664,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vaera" hebrew="וָאֵרָא" verse="Exodus 6:2 - 9:35">
- <haftara verse="Ezekiel 28:25 - 29:21" />
- <links drash="/5761/vaera.shtml" torah="/jpstext/vaera.shtml" />
+<parsha id="Vaera"
+ hebrew="וָאֵרָא"
+ verse="Exodus 6:2 - 9:35"
+ haftara="Ezekiel 28:25 - 29:21">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vaera.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vaera.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="6:2" end="6:13" numverses="12" />
  <aliyah num="2" begin="6:14" end="6:28" numverses="15" />
@@ -645,9 +715,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Bo" hebrew="בֹּא" verse="Exodus 10:1 - 13:16">
- <haftara verse="Jeremiah 46:13 - 46:28" />
- <links drash="/5761/bo.shtml" torah="/jpstext/bo.shtml" />
+<parsha id="Bo"
+ hebrew="בֹּא"
+ verse="Exodus 10:1 - 13:16"
+ haftara="Jeremiah 46:13 - 46:28">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/bo.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/bo.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="10:1" end="10:11" numverses="11" />
  <aliyah num="2" begin="10:12" end="10:23" numverses="12" />
@@ -691,9 +766,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Beshalach" hebrew="בְּשַׁלַּח" verse="Exodus 13:17 - 17:16">
- <haftara verse="Judges 4:4 - 5:31" sephardic="Judges 5:1 - 5:31" />
- <links drash="/5761/beshallah.shtml" torah="/jpstext/beshallah.shtml" />
+<parsha id="Beshalach"
+ hebrew="בְּשַׁלַּח"
+ verse="Exodus 13:17 - 17:16"
+ haftara="Judges 4:4 - 5:31" sephardic="Judges 5:1 - 5:31">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/beshallah.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/beshallah.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="13:17" end="14:8" numverses="14" />
  <aliyah num="2" begin="14:9" end="14:14" numverses="6" />
@@ -737,9 +817,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Yitro" hebrew="יִתְרוֹ" verse="Exodus 18:1 - 20:23">
- <haftara verse="Isaiah 6:1 - 7:6; 9:5 - 9:6" sephardic="Isaiah 6:1 - 6:13" />
- <links drash="/5761/yitro.shtml" torah="/jpstext/yitro.shtml" />
+<parsha id="Yitro"
+ hebrew="יִתְרוֹ"
+ verse="Exodus 18:1 - 20:23"
+ haftara="Isaiah 6:1 - 7:6; 9:5 - 9:6" sephardic="Isaiah 6:1 - 6:13">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/yitro.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/yitro.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="18:1" end="18:12" numverses="12" />
  <aliyah num="2" begin="18:13" end="18:23" numverses="11" />
@@ -788,9 +873,14 @@
 <year variation="Y.3" sameas="Y.2" />
 </triennial-alt>
 </parsha>
-<parsha id="Mishpatim" hebrew="מִּשְׁפָּטִים" verse="Exodus 21:1 - 24:18">
- <haftara verse="Jeremiah 34:8 - 34:22; 33:25 - 33:26" />
- <links drash="/5761/mishpatim.shtml" torah="/jpstext/mishpatim.shtml" />
+<parsha id="Mishpatim"
+ hebrew="מִּשְׁפָּטִים"
+ verse="Exodus 21:1 - 24:18"
+ haftara="Jeremiah 34:8 - 34:22; 33:25 - 33:26">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/mishpatim.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/mishpatim.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="21:1" end="21:19" numverses="19" />
  <aliyah num="2" begin="21:20" end="22:3" numverses="21" />
@@ -834,9 +924,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Terumah" hebrew="תְּרוּמָה" verse="Exodus 25:1 - 27:19">
- <haftara verse="I Kings 5:26 - 6:13" />
- <links drash="/5761/terumah.shtml" torah="/jpstext/terumah.shtml" />
+<parsha id="Terumah"
+ hebrew="תְּרוּמָה"
+ verse="Exodus 25:1 - 27:19"
+ haftara="I Kings 5:26 - 6:13">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/terumah.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/terumah.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="25:1" end="25:16" numverses="16" />
  <aliyah num="2" begin="25:17" end="25:30" numverses="14" />
@@ -880,9 +975,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tetzaveh" hebrew="תְּצַוֶּה" verse="Exodus 27:20 - 30:10">
- <haftara verse="Ezekiel 43:10 - 43:27" />
- <links drash="/5761/tetsavveh.shtml" torah="/jpstext/tetsavveh.shtml" />
+<parsha id="Tetzaveh"
+ hebrew="תְּצַוֶּה"
+ verse="Exodus 27:20 - 30:10"
+ haftara="Ezekiel 43:10 - 43:27">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/tetsavveh.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/tetsavveh.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="27:20" end="28:12" numverses="14" />
  <aliyah num="2" begin="28:13" end="28:30" numverses="18" />
@@ -926,9 +1026,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Ki Tisa" hebrew="כִּי תִשָּׂא" verse="Exodus 30:11 - 34:35">
- <haftara verse="I Kings 18:1 - 18:39" sephardic="I Kings 18:20 - 18:39" />
- <links drash="/5761/kitissa.shtml" torah="/jpstext/kitissa.shtml" />
+<parsha id="Ki Tisa"
+ hebrew="כִּי תִשָּׂא"
+ verse="Exodus 30:11 - 34:35"
+ haftara="I Kings 18:1 - 18:39" sephardic="I Kings 18:20 - 18:39">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/kitissa.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/kitissa.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="30:11" end="31:17" numverses="45" />
  <aliyah num="2" begin="31:18" end="33:11" numverses="47" />
@@ -972,9 +1077,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayakhel" hebrew="וַיַּקְהֵל" verse="Exodus 35:1 - 38:20">
- <haftara verse="I Kings 7:40 - 7:50" sephardic="I Kings 7:13 - 7:26" />
- <links drash="/5760/vayakhel.shtml" torah="/jpstext/vayakhel.shtml" />
+<parsha id="Vayakhel"
+ hebrew="וַיַּקְהֵל"
+ verse="Exodus 35:1 - 38:20"
+ haftara="I Kings 7:40 - 7:50" sephardic="I Kings 7:13 - 7:26">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/vayakhel.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayakhel.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="35:1" end="35:20" numverses="20" />
  <aliyah num="2" begin="35:21" end="35:29" numverses="9" />
@@ -1033,9 +1143,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Pekudei" hebrew="פְקוּדֵי" verse="Exodus 38:21 - 40:38">
- <haftara verse="I Kings 7:51 - 8:21" sephardic="I Kings 7:40 - 7:50" />
- <links drash="/5760/pekuday.shtml" torah="/jpstext/pekudey.shtml" />
+<parsha id="Pekudei"
+ hebrew="פְקוּדֵי"
+ verse="Exodus 38:21 - 40:38"
+ haftara="I Kings 7:51 - 8:21" sephardic="I Kings 7:40 - 7:50">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/pekuday.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/pekudey.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="38:21" end="39:1" numverses="12" />
  <aliyah num="2" begin="39:2" end="39:21" numverses="20" />
@@ -1076,9 +1191,14 @@
 <year variation="F.1" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Vayikra" hebrew="וַיִּקְרָא" verse="Leviticus 1:1 - 5:26">
- <haftara verse="Isaiah 43:21 - 44:23" />
- <links drash="/5761/vayikra.shtml" torah="/jpstext/vayikra.shtml" />
+<parsha id="Vayikra"
+ hebrew="וַיִּקְרָא"
+ verse="Leviticus 1:1 - 5:26"
+ haftara="Isaiah 43:21 - 44:23">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vayikra.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayikra.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="1:1" end="1:13" numverses="13" />
  <aliyah num="2" begin="1:14" end="2:6" numverses="10" />
@@ -1122,9 +1242,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tzav" hebrew="צַו" verse="Leviticus 6:1 - 8:36">
- <haftara verse="Jeremiah 7:21 - 8:3; 9:22 - 9:23" />
- <links drash="/5761/tsav.shtml" torah="/jpstext/tsav.shtml" />
+<parsha id="Tzav"
+ hebrew="צַו"
+ verse="Leviticus 6:1 - 8:36"
+ haftara="Jeremiah 7:21 - 8:3; 9:22 - 9:23">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/tsav.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/tsav.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="6:1" end="6:11" numverses="11" />
  <aliyah num="2" begin="6:12" end="7:10" numverses="22" />
@@ -1168,9 +1293,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Shmini" hebrew="שְּׁמִינִי" verse="Leviticus 9:1 - 11:47">
- <haftara verse="II Samuel 6:1 - 7:17" sephardic="II Samuel 6:1 - 6:19" />
- <links drash="/5761/shemini.shtml" torah="/jpstext/shemini.shtml" />
+<parsha id="Shmini"
+ hebrew="שְּׁמִינִי"
+ verse="Leviticus 9:1 - 11:47"
+ haftara="II Samuel 6:1 - 7:17" sephardic="II Samuel 6:1 - 6:19">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/shemini.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/shemini.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="9:1" end="9:16" numverses="16" />
  <aliyah num="2" begin="9:17" end="9:23" numverses="7" />
@@ -1214,9 +1344,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tazria" hebrew="תַזְרִיעַ" verse="Leviticus 12:1 - 13:59">
- <haftara verse="II Kings 4:42 - 5:19" />
- <links drash="/5760/tazria.shtml" torah="/jpstext/tazria.shtml" />
+<parsha id="Tazria"
+ hebrew="תַזְרִיעַ"
+ verse="Leviticus 12:1 - 13:59"
+ haftara="II Kings 4:42 - 5:19">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/tazria.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/tazria.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="12:1" end="13:5" numverses="13" />
  <aliyah num="2" begin="13:6" end="13:17" numverses="12" />
@@ -1262,9 +1397,14 @@
 <year variation="D.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Metzora" hebrew="מְּצֹרָע" verse="Leviticus 14:1 - 15:33">
- <haftara verse="II Kings 7:3 - 7:20" />
- <links drash="/5761/tazriametsora.shtml" torah="/jpstext/metsora.shtml" />
+<parsha id="Metzora"
+ hebrew="מְּצֹרָע"
+ verse="Leviticus 14:1 - 15:33"
+ haftara="II Kings 7:3 - 7:20">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/tazriametsora.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/metsora.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="14:1" end="14:12" numverses="12" />
  <aliyah num="2" begin="14:13" end="14:20" numverses="8" />
@@ -1301,9 +1441,14 @@
 <year variation="D.3" sameas="A.3" />
 </triennial>
 </parsha>
-<parsha id="Achrei Mot" hebrew="אַחֲרֵי מוֹת" verse="Leviticus 16:1 - 18:30">
- <haftara verse="Ezekiel 22:1 - 22:19" sephardic="Ezekiel 22:1 - 22:16" />
- <links drash="/5761/ahareimotkedoshim.shtml" torah="/jpstext/ahareimot.shtml" />
+<parsha id="Achrei Mot"
+ hebrew="אַחֲרֵי מוֹת"
+ verse="Leviticus 16:1 - 18:30"
+ haftara="Ezekiel 22:1 - 22:19" sephardic="Ezekiel 22:1 - 22:16">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/ahareimotkedoshim.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/ahareimot.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="16:1" end="16:17" numverses="17" />
  <aliyah num="2" begin="16:18" end="16:24" numverses="7" />
@@ -1349,9 +1494,14 @@
 <year variation="D.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Kedoshim" hebrew="קְדשִׁים" verse="Leviticus 19:1 - 20:27">
- <haftara verse="Amos 9:7 - 9:15" sephardic="Ezekiel 20:2 - 20:20" />
- <links drash="/5760/kedoshim.shtml" torah="/jpstext/kedoshim.shtml" />
+<parsha id="Kedoshim"
+ hebrew="קְדשִׁים"
+ verse="Leviticus 19:1 - 20:27"
+ haftara="Amos 9:7 - 9:15" sephardic="Ezekiel 20:2 - 20:20">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/kedoshim.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/kedoshim.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="19:1" end="19:14" numverses="14" />
  <aliyah num="2" begin="19:15" end="19:22" numverses="8" />
@@ -1397,9 +1547,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Emor" hebrew="אֱמוֹר" verse="Leviticus 21:1 - 24:23">
- <haftara verse="Ezekiel 44:15 - 44:31" />
- <links drash="/5761/emor.shtml" torah="/jpstext/emor.shtml" />
+<parsha id="Emor"
+ hebrew="אֱמוֹר"
+ verse="Leviticus 21:1 - 24:23"
+ haftara="Ezekiel 44:15 - 44:31">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/emor.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/emor.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="21:1" end="21:15" numverses="15" />
  <aliyah num="2" begin="21:16" end="22:16" numverses="25" />
@@ -1443,9 +1598,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Behar" hebrew="בְּהַר" verse="Leviticus 25:1 - 26:2">
- <haftara verse="Jeremiah 32:6 - 32:27" />
- <links drash="/5761/beharbehukkotai.shtml" torah="/jpstext/behar.shtml" />
+<parsha id="Behar"
+ hebrew="בְּהַר"
+ verse="Leviticus 25:1 - 26:2"
+ haftara="Jeremiah 32:6 - 32:27">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/beharbehukkotai.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/behar.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="25:1" end="25:13" numverses="13" />
  <aliyah num="2" begin="25:14" end="25:18" numverses="5" />
@@ -1491,9 +1651,14 @@
 <year variation="D.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Bechukotai" hebrew="בְּחֻקֹּתַי" verse="Leviticus 26:3 - 27:34">
- <haftara verse="Jeremiah 16:19 - 17:14" />
- <links drash="/5760/behukkotai.shtml" torah="/jpstext/behukkotai.shtml" />
+<parsha id="Bechukotai"
+ hebrew="בְּחֻקֹּתַי"
+ verse="Leviticus 26:3 - 27:34"
+ haftara="Jeremiah 16:19 - 17:14">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/behukkotai.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/behukkotai.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="26:3" end="26:5" numverses="3" />
  <aliyah num="2" begin="26:6" end="26:9" numverses="4" />
@@ -1530,9 +1695,14 @@
 <year variation="D.3" sameas="A.3" />
 </triennial>
 </parsha>
-<parsha id="Bamidbar" hebrew="בְּמִדְבַּר" verse="Numbers 1:1 - 4:20">
- <haftara verse="Hosea 2:1 - 2:22" />
- <links drash="/5761/bemidbar.shtml" torah="/jpstext/bemidbar.shtml" />
+<parsha id="Bamidbar"
+ hebrew="בְּמִדְבַּר"
+ verse="Numbers 1:1 - 4:20"
+ haftara="Hosea 2:1 - 2:22">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/bemidbar.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/bemidbar.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="1:1" end="1:19" numverses="19" />
  <aliyah num="2" begin="1:20" end="1:54" numverses="35" />
@@ -1576,9 +1746,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Nasso" hebrew="נָשׂא" verse="Numbers 4:21 - 7:89">
- <haftara verse="Judges 13:2 - 13:25" />
- <links drash="/5761/naso.shtml" torah="/jpstext/naso.shtml" />
+<parsha id="Nasso"
+ hebrew="נָשׂא"
+ verse="Numbers 4:21 - 7:89"
+ haftara="Judges 13:2 - 13:25">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/naso.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/naso.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="4:21" end="4:37" numverses="17" />
  <aliyah num="2" begin="4:38" end="4:49" numverses="12" />
@@ -1622,9 +1797,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Beha'alotcha" hebrew="בְּהַעֲלֹתְךָ" verse="Numbers 8:1 - 12:16">
- <haftara verse="Zechariah 2:14 - 4:7" />
- <links drash="/5761/behaalothekha.shtml" torah="/jpstext/behaalothekha.shtml" />
+<parsha id="Beha'alotcha"
+ hebrew="בְּהַעֲלֹתְךָ"
+ verse="Numbers 8:1 - 12:16"
+ haftara="Zechariah 2:14 - 4:7">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/behaalothekha.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/behaalothekha.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="8:1" end="8:14" numverses="14" />
  <aliyah num="2" begin="8:15" end="8:26" numverses="12" />
@@ -1668,9 +1848,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Sh'lach" hebrew="שְׁלַח־לְךָ" verse="Numbers 13:1 - 15:41">
- <haftara verse="Joshua 2:1 - 2:24" />
- <links drash="/5761/shelahlekha.shtml" torah="/jpstext/shelahlekha.shtml" />
+<parsha id="Sh'lach"
+ hebrew="שְׁלַח־לְךָ"
+ verse="Numbers 13:1 - 15:41"
+ haftara="Joshua 2:1 - 2:24">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/shelahlekha.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/shelahlekha.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="13:1" end="13:20" numverses="20" />
  <aliyah num="2" begin="13:21" end="14:7" numverses="20" />
@@ -1714,9 +1899,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Korach" hebrew="קוֹרַח" verse="Numbers 16:1 - 18:32">
- <haftara verse="I Samuel 11:14 - 12:22" />
- <links drash="/5761/korah.shtml" torah="/jpstext/korah.shtml" />
+<parsha id="Korach"
+ hebrew="קוֹרַח"
+ verse="Numbers 16:1 - 18:32"
+ haftara="I Samuel 11:14 - 12:22">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/korah.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/korah.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="16:1" end="16:13" numverses="13" />
  <aliyah num="2" begin="16:14" end="16:19" numverses="6" />
@@ -1760,9 +1950,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Chukat" hebrew="חֻקַּת" verse="Numbers 19:1 - 22:1">
- <haftara verse="Judges 11:1 - 11:33" />
- <links drash="/5761/hukkat.shtml" torah="/jpstext/hukkat.shtml" />
+<parsha id="Chukat"
+ hebrew="חֻקַּת"
+ verse="Numbers 19:1 - 22:1"
+ haftara="Judges 11:1 - 11:33">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/hukkat.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/hukkat.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="19:1" end="19:17" numverses="17" />
  <aliyah num="2" begin="19:18" end="20:6" numverses="11" />
@@ -1842,9 +2037,14 @@
 <year variation="G.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Balak" hebrew="בָּלָק" verse="Numbers 22:2 - 25:9">
- <haftara verse="Micah 5:6 - 6:8" />
- <links drash="/5761/balak.shtml" torah="/jpstext/balak.shtml" />
+<parsha id="Balak"
+ hebrew="בָּלָק"
+ verse="Numbers 22:2 - 25:9"
+ haftara="Micah 5:6 - 6:8">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/balak.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/balak.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="22:2" end="22:12" numverses="11" />
  <aliyah num="2" begin="22:13" end="22:20" numverses="8" />
@@ -1906,9 +2106,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Pinchas" hebrew="פִּינְחָס" verse="Numbers 25:10 - 30:1">
- <haftara verse="I Kings 18:46 - 19:21" />
- <links drash="/5761/pinhas.shtml" torah="/jpstext/pinhas.shtml" />
+<parsha id="Pinchas"
+ hebrew="פִּינְחָס"
+ verse="Numbers 25:10 - 30:1"
+ haftara="I Kings 18:46 - 19:21">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/pinhas.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/pinhas.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="25:10" end="26:4" numverses="13" />
  <aliyah num="2" begin="26:5" end="26:51" numverses="47" />
@@ -1952,9 +2157,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Matot" hebrew="מַּטּוֹת" verse="Numbers 30:2 - 32:42">
- <haftara verse="Jeremiah 1:1 - 2:3" />
- <links drash="/5761/mattotmaseei.shtml" torah="/jpstext/mattot.shtml" />
+<parsha id="Matot"
+ hebrew="מַּטּוֹת"
+ verse="Numbers 30:2 - 32:42"
+ haftara="Jeremiah 1:1 - 2:3">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/mattotmaseei.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/mattot.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="30:2" end="30:17" numverses="16" />
  <aliyah num="2" begin="31:1" end="31:12" numverses="12" />
@@ -1998,9 +2208,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Masei" hebrew="מַסְעֵי" verse="Numbers 33:1 - 36:13">
- <haftara verse="Jeremiah 2:4 - 28; 3:4" sephardic="Jeremiah 2:4 - 28; 4:1 - 4:2" />
- <links drash="/5761/mattotmaseei.shtml" torah="/jpstext/maseei.shtml" />
+<parsha id="Masei"
+ hebrew="מַסְעֵי"
+ verse="Numbers 33:1 - 36:13"
+ haftara="Jeremiah 2:4 - 28; 3:4" sephardic="Jeremiah 2:4 - 28; 4:1 - 4:2">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/mattotmaseei.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/maseei.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="33:1" end="33:10" numverses="10" />
  <aliyah num="2" begin="33:11" end="33:49" numverses="39" />
@@ -2035,9 +2250,14 @@
 <year variation="C.1" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Devarim" hebrew="דְּבָרִים" verse="Deuteronomy 1:1 - 3:22">
- <haftara verse="Isaiah 1:1 - 1:27" />
- <links drash="/5761/devarim.shtml" torah="/jpstext/devarim.shtml" />
+<parsha id="Devarim"
+ hebrew="דְּבָרִים"
+ verse="Deuteronomy 1:1 - 3:22"
+ haftara="Isaiah 1:1 - 1:27">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/devarim.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/devarim.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="1:1" end="1:11" numverses="11" />
  <aliyah num="2" begin="1:12" end="1:21" numverses="10" />
@@ -2081,9 +2301,14 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vaetchanan" hebrew="וָאֶתְחַנַּן" verse="Deuteronomy 3:23 - 7:11">
- <haftara verse="Isaiah 40:1 - 40:26" />
- <links drash="/5761/vaethannan.shtml" torah="/jpstext/vaethannan.shtml" />
+<parsha id="Vaetchanan"
+ hebrew="וָאֶתְחַנַּן"
+ verse="Deuteronomy 3:23 - 7:11"
+ haftara="Isaiah 40:1 - 40:26">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/vaethannan.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vaethannan.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="3:23" end="4:4" numverses="11" />
  <aliyah num="2" begin="4:5" end="4:40" numverses="36" />
@@ -2159,9 +2384,14 @@ n<year num="3">
 </year>
 </triennial-alt>
 </parsha>
-<parsha id="Eikev" hebrew="עֵקֶב" verse="Deuteronomy 7:12 - 11:25">
- <haftara verse="Isaiah 49:14 - 51:3" />
- <links drash="/5761/ekev.shtml" torah="/jpstext/ekev.shtml" />
+<parsha id="Eikev"
+ hebrew="עֵקֶב"
+ verse="Deuteronomy 7:12 - 11:25"
+ haftara="Isaiah 49:14 - 51:3">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/ekev.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/ekev.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="7:12" end="8:10" numverses="25" />
  <aliyah num="2" begin="8:11" end="9:3" numverses="13" />
@@ -2205,9 +2435,14 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Re'eh" hebrew="רְאֵה" verse="Deuteronomy 11:26 - 16:17">
- <haftara verse="Isaiah 54:11 - 55:5" />
- <links drash="/5761/reeh.shtml" torah="/jpstext/reeh.shtml" />
+<parsha id="Re'eh"
+ hebrew="רְאֵה"
+ verse="Deuteronomy 11:26 - 16:17"
+ haftara="Isaiah 54:11 - 55:5">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/reeh.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/reeh.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="11:26" end="12:10" numverses="17" />
  <aliyah num="2" begin="12:11" end="12:28" numverses="18" />
@@ -2251,9 +2486,14 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Shoftim" hebrew="שׁוֹפְטִים" verse="Deuteronomy 16:18 - 21:9">
- <haftara verse="Isaiah 51:12 - 52:12" />
- <links drash="/5761/shofetim.shtml" torah="/jpstext/shofetim.shtml" />
+<parsha id="Shoftim"
+ hebrew="שׁוֹפְטִים"
+ verse="Deuteronomy 16:18 - 21:9"
+ haftara="Isaiah 51:12 - 52:12">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/shofetim.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/shofetim.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="16:18" end="17:13" numverses="18" />
  <aliyah num="2" begin="17:14" end="17:20" numverses="7" />
@@ -2297,9 +2537,14 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Ki Teitzei" hebrew="כִּי־תֵצֵא" verse="Deuteronomy 21:10 - 25:19">
- <haftara verse="Isaiah 54:1 - 54:10" />
- <links drash="/5761/kitetse.shtml" torah="/jpstext/kitetse.shtml" />
+<parsha id="Ki Teitzei"
+ hebrew="כִּי־תֵצֵא"
+ verse="Deuteronomy 21:10 - 25:19"
+ haftara="Isaiah 54:1 - 54:10">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/kitetse.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/kitetse.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="21:10" end="21:21" numverses="12" />
  <aliyah num="2" begin="21:22" end="22:7" numverses="9" />
@@ -2343,9 +2588,14 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Ki Tavo" hebrew="כִּי־תָבוֹא" verse="Deuteronomy 26:1 - 29:8">
- <haftara verse="Isaiah 60:1 - 60:22" />
- <links drash="/5761/kitavo.shtml" torah="/jpstext/kitavo.shtml" />
+<parsha id="Ki Tavo"
+ hebrew="כִּי־תָבוֹא"
+ verse="Deuteronomy 26:1 - 29:8"
+ haftara="Isaiah 60:1 - 60:22">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/kitavo.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/kitavo.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="26:1" end="26:11" numverses="11" />
  <aliyah num="2" begin="26:12" end="26:15" numverses="4" />
@@ -2389,9 +2639,14 @@ n<year num="3">
 </year>
 </triennial>
 </parsha>
-<parsha id="Nitzavim" hebrew="נִצָּבִים" verse="Deuteronomy 29:9 - 30:20">
- <haftara verse="Isaiah 61:10 - 63:9" />
- <links drash="/5760/nitsavimvayelekh.shtml" torah="/jpstext/nitsavim.shtml" />
+<parsha id="Nitzavim"
+ hebrew="נִצָּבִים"
+ verse="Deuteronomy 29:9 - 30:20"
+ haftara="Isaiah 61:10 - 63:9">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/nitsavim.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="29:9" end="29:11" numverses="3" />
  <aliyah num="2" begin="29:12" end="29:14" numverses="3" />
@@ -2417,9 +2672,14 @@ n<year num="3">
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
-<parsha id="Vayeilech" hebrew="וַיֵּלֶךְ" verse="Deuteronomy 31:1 - 31:30">
- <haftara verse="Isaiah 55:6 - 56:8" />
- <links drash="/5760/nitsavimvayelekh.shtml" torah="/jpstext/vayelekh.shtml" />
+<parsha id="Vayeilech"
+ hebrew="וַיֵּלֶךְ"
+ verse="Deuteronomy 31:1 - 31:30"
+ haftara="Isaiah 55:6 - 56:8">
+<links>
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vayelekh.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="31:1" end="31:3" numverses="3" />
  <aliyah num="2" begin="31:4" end="31:6" numverses="3" />
@@ -2445,9 +2705,14 @@ n<year num="3">
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
-<parsha id="Ha'Azinu" hebrew="הַאֲזִינוּ" verse="Deuteronomy 32:1 - 32:52">
- <haftara verse="II Samuel 22:1 - 22:51" />
- <links drash="http://www.ohr.org.il/tw/5759/devarim/haazinu.htm" torah="/jpstext/haazinu.shtml" />
+<parsha id="Ha'Azinu"
+ hebrew="הַאֲזִינוּ"
+ verse="Deuteronomy 32:1 - 32:52"
+ haftara="II Samuel 22:1 - 22:51">
+<links>
+ <link rel="drash" href="http://ohr.edu/tw/5761/devarim/haazinu.htm" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/haazinu.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="32:1" end="32:6" numverses="6" />
  <aliyah num="2" begin="32:7" end="32:12" numverses="6" />
@@ -2473,9 +2738,14 @@ n<year num="3">
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
-<parsha id="Vezot Haberakhah" hebrew="וְזֹאת הַבְּרָכָה" verse="Deuteronomy 33:1 - 34:12">
- <haftara verse="Joshua 1:1 - 1:18" sephardic="Joshua 1:1 - 1:9" />
- <links drash="" torah="/jpstext/vezothaberakha.shtml" />
+<parsha id="Vezot Haberakhah"
+ hebrew="וְזֹאת הַבְּרָכָה"
+ verse="Deuteronomy 33:1 - 34:12"
+ haftara="Joshua 1:1 - 1:18" sephardic="Joshua 1:1 - 1:9">
+<links>
+ <link rel="drash" href="http://ohr.edu/tw/5760/devarim/vzoshab.htm" />
+ <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/vezothaberakha.shtml" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="33:1" end="33:7" numverses="7" />
  <aliyah num="2" begin="33:8" end="33:12" numverses="5" />
@@ -2485,10 +2755,20 @@ n<year num="3">
  <aliyah num="6" begin="33:27" end="33:29" numverses="3" />
  <aliyah num="7" begin="34:1" end="34:12" numverses="12" />
 </fullkriyah>
+<!-- triennial: "To be read on Simchat Torah. See holiday readings." -->
 </parsha>
 
 <!-- Combined Sidrot -->
 <parsha id="Vayakhel-Pekudei">
+<fullkriyah>
+ <aliyah num="1" begin="35:1" end="35:29" />
+ <aliyah num="2" begin="35:30" end="37:16" />
+ <aliyah num="3" begin="37:17" end="37:29" />
+ <aliyah num="4" begin="38:1" end="39:1" />
+ <aliyah num="5" begin="39:2" end="39:21" />
+ <aliyah num="6" begin="39:22" end="39:43" />
+ <aliyah num="7" begin="40:1" end="40:38" />
+</fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
  <cycle pattern="TST" option="B" />
@@ -2531,6 +2811,15 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Tazria-Metzora">
+<fullkriyah>
+ <aliyah num="1" begin="12:1" end="13:23" />
+ <aliyah num="2" begin="13:24" end="13:39" />
+ <aliyah num="3" begin="13:40" end="13:54" />
+ <aliyah num="4" begin="13:55" end="14:20" />
+ <aliyah num="5" begin="14:21" end="14:32" />
+ <aliyah num="6" begin="14:33" end="15:15" />
+ <aliyah num="7" begin="15:16" end="15:33" />
+</fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
  <cycle pattern="TST" option="B" />
@@ -2571,6 +2860,15 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Achrei Mot-Kedoshim">
+<fullkriyah>
+ <aliyah num="1" begin="16:1" end="16:24" />
+ <aliyah num="2" begin="16:25" end="17:7" />
+ <aliyah num="3" begin="17:8" end="18:21" />
+ <aliyah num="4" begin="18:22" end="19:14" />
+ <aliyah num="5" begin="19:15" end="19:32" />
+ <aliyah num="6" begin="19:33" end="20:7" />
+ <aliyah num="7" begin="20:8" end="20:27" />
+</fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
  <cycle pattern="TST" option="B" />
@@ -2611,6 +2909,15 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Behar-Bechukotai">
+<fullkriyah>
+ <aliyah num="1" begin="25:1" end="25:18" />
+ <aliyah num="2" begin="25:19" end="25:28" />
+ <aliyah num="3" begin="25:29" end="25:38" />
+ <aliyah num="4" begin="25:39" end="26:9" />
+ <aliyah num="5" begin="26:10" end="26:46" />
+ <aliyah num="6" begin="27:1" end="27:15" />
+ <aliyah num="7" begin="27:16" end="27:34" />
+</fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
  <cycle pattern="TST" option="B" />
@@ -2651,6 +2958,15 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Chukat-Balak">
+<fullkriyah>
+ <aliyah num="1" begin="19:1" end="20:6" />
+ <aliyah num="2" begin="20:7" end="20:21" />
+ <aliyah num="3" begin="20:22" end="21:20" />
+ <aliyah num="4" begin="21:21" end="22:12" />
+ <aliyah num="5" begin="22:13" end="22:38" />
+ <aliyah num="6" begin="22:39" end="23:26" />
+ <aliyah num="7" begin="23:27" end="25:9" />
+</fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
  <cycle pattern="TST" option="B" />
@@ -2694,6 +3010,15 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Matot-Masei">
+<fullkriyah>
+ <aliyah num="1" begin="30:2" end="31:12" />
+ <aliyah num="2" begin="31:13" end="31:54" />
+ <aliyah num="3" begin="32:1" end="32:19" />
+ <aliyah num="4" begin="32:20" end="33:49" />
+ <aliyah num="5" begin="33:50" end="34:15" />
+ <aliyah num="6" begin="34:16" end="35:8" />
+ <aliyah num="7" begin="35:9" end="36:13" />
+</fullkriyah>
 <variations>
  <cycle pattern="TTS" option="A" />
  <cycle pattern="TST" option="B" />
@@ -2733,6 +3058,15 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Nitzavim-Vayeilech">
+<fullkriyah>
+ <aliyah num="1" begin="29:9" end="29:28" />
+ <aliyah num="2" begin="30:1" end="30:6" />
+ <aliyah num="3" begin="30:7" end="30:14" />
+ <aliyah num="4" begin="30:15" end="31:6" />
+ <aliyah num="5" begin="31:7" end="31:13" />
+ <aliyah num="6" begin="31:14" end="31:19" />
+ <aliyah num="7" begin="31:20" end="31:30" />
+</fullkriyah>
 <!-- When these Sidrot are not combined, they should each be -->
 <!-- read in their entirety. -->
 <variations>
