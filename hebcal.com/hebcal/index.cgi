@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Nov 17 14:37:37 PST 1999
+Last modified: Wed Nov 24 14:56:05 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1120,11 +1120,27 @@ $date</small>
 ";
 
     print STDOUT
-"<p><small>Use the \"add\" links below to add a holiday to your personal
-<a href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>, a free
-web-based calendar that can synchronize with Palm Pilot, Outlook, etc.
-These links will pop up a new browser window so you can keep this window
-open.</small></p>
+"<div><small>
+<p>Your personal <a href=\"http://calendar.yahoo.com/\">Yahoo!
+Calendar</a> is a free web-based calendar that can synchronize with Palm
+Pilot, Outlook, etc.</p>
+
+<p>If you wish to upload <strong>all</strong> of the below holidays to
+your Yahoo!  Calendar, do the following:</p>
+
+<ol>
+<li>Click the \"Download as an Outlook CSV file\" button above.
+<li>Save the hebcal CSV file on your computer.
+<li>Go to <a href=\"http://calendar.yahoo.com/?v=81\">options page</a> of
+Yahoo! Calendar.
+<li>Find the \"Import from Outlook\" section and choose \"Import Now\"
+to import your CSV file to your online calendar.
+</ol>
+
+<p>To import individual holidays one at a time, use the \"add\" links
+below.  These links will pop up a new browser window so you can keep
+this window open.</p>
+</small></div>
 " if $ycal;
 
     $cmd_pretty = $cmd;
