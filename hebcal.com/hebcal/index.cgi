@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 11:55:41 PDT 2001
+Last modified: Mon Apr 23 09:37:17 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1062,8 +1062,8 @@ so you can keep this window open.
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     print STDOUT "<p>";
 
-    use lib '/home/users/mradwin/local/lib/perl5/5.00503';
-    use lib '/home/users/mradwin/local/lib/perl5/site_perl/5.00503';
+    use lib "/home/users/mradwin/local/lib/perl5/$]";
+    use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
     use HTML::CalendarMonthSimple;
 
     my($cal);
