@@ -1219,7 +1219,7 @@ Jewish Calendar events into your desktop software.</p>};
 	"<a href=\"" .
 	$ical_href .
 	    "\">download</a>\n";
-    $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
+    $s .= qq{<li>How to import ICS file into <a href="/help/import.html#ical">Apple iCal</a> or <a href="/help/import.html#lotus-notes">Lotus Notes 6</a></ol>};
 
     $s .= "<h4>Palm Desktop 2.6.3 for Macintosh</h4>\n<ol><li>" .
 	"Export Mac Palm Calendar:\n" .
