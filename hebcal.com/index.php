@@ -57,7 +57,7 @@ Readings</a></big></strong></dt>
 <p>
 <hr noshade size="1">
 <font size=-2 face=Arial>Copyright
-&copy; 2001 Michael J. Radwin. All rights reserved.
+&copy; 2002 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a>
@@ -67,7 +67,7 @@ for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Fri Jan  4 15:01:03 EST 2002
+Last modified: Fri Jan  4 15:01:25 EST 2002
 <!-- hhmts end -->
 </font>
 </body></html>
