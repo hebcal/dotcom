@@ -37,6 +37,8 @@ Tovah!</span> &nbsp; - &nbsp;
 generate a calendar of Jewish holidays for any year 0001-9999
 <br><span class="sm-grey">&gt;</span>
 customize candle lighting times to your zip code, city, or latitude/longitude
+<br><span class="sm-grey">&gt;</span>
+export to Palm, Outlook, and iCal
 <h4><a href="/shabbat/cities.html">1-Click Shabbat Candle Lighting Times</a></h4>
 <span class="sm-grey">&gt;</span>
 Shabbat candle lighting times and Torah Readings, updated weekly
