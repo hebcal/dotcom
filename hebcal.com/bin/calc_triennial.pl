@@ -467,7 +467,7 @@ sub write_sedra_page
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
-       $drash_reform,$drash_torah) = get_parsha_info($parshiot,$h);
+       $drash_reform,$drash_torah,$drash_uj) = get_parsha_info($parshiot,$h);
 
     my $seph = '';
     my $ashk = '';
@@ -742,7 +742,10 @@ haftarah.</small>
 EOHTML
 ;
 
-    if ($drash_jts || $drash_ou || $drash_reform || $drash_torah)
+    my $has_drash = $drash_jts || $drash_ou || $drash_reform ||
+	$drash_torah || $drash_uj;
+
+    if ($has_drash)
     {
 	print OUT2 qq{<h3><a name="drash"></a>Commentary</h3>\n<ul>\n};
     }
@@ -775,7 +778,12 @@ EOHTML
 	print OUT2 qq{<li><a title="Parashat $h commentary from Project Genesis"\nhref="$drash_torah">Torah.org</a>\n};
     }
 
-    if ($drash_jts || $drash_ou || $drash_reform || $drash_torah)
+    if ($drash_uj)
+    {
+	print OUT2 qq{<li><a title="Parashat $h commentary from UJ"\nhref="$drash_uj">University of Judaism</a>\n};
+    }
+
+    if ($has_drash)
     {
 	print OUT2 qq{</ul>\n};
     }
@@ -846,6 +854,7 @@ sub get_parsha_info
     my($torah_href,$haftarah_href,$drash1);
     my $drash2 = '';
     my $drash3 = '';
+    my $drash_uj = '';
     if ($h =~ /^([^-]+)-(.+)$/ &&
 	defined $combined{$1} && defined $combined{$2})
     {
@@ -906,6 +915,10 @@ sub get_parsha_info
 	    {
 		$drash3 = $l->{'href'};
 	    }
+	    elsif ($l->{'rel'} eq 'drash4')
+	    {
+		$drash_uj = $l->{'href'};
+	    }
 	}
 
     }
@@ -932,6 +945,10 @@ sub get_parsha_info
 	    elsif ($l->{'rel'} eq 'drash3')
 	    {
 		$drash3 = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'drash4')
+	    {
+		$drash_uj = $l->{'href'};
 	    }
 	    elsif ($l->{'rel'} eq 'torah')
 	    {
@@ -969,7 +986,7 @@ sub get_parsha_info
     }
 
     ($hebrew,$torah,$haftarah,$haftarah_seph,
-     $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3);
+     $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3,$drash_uj);
 }
 
 sub special_readings
