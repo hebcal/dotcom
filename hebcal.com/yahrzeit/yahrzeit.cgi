@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 11:50:27 PDT 2001
+Last modified: Sun Apr 22 11:56:32 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -268,7 +268,6 @@ print STDOUT $q->header(),
 				       -href => "http://www.$server_name/w3c/p3p.xml"}),
 			     ],
 			   -meta => {
-			       'robots' => 'noindex',
 			       'keywords' =>
 				   'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish'
 				   },
