@@ -864,7 +864,7 @@ sub display_html
 
     if (defined $dst_descr && defined $tz_descr)
     {
-	print "&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n";
+	print "&nbsp;&nbsp;$tz_descr\n<br>&nbsp;&nbsp;$dst_descr\n";
     }
 
     print $Hebcal::indiana_warning
