@@ -271,4 +271,43 @@ EOD;
     return array($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
 }
 
+function hebcal_make_holiday_anchor($str)
+{
+    $anchor = strtolower($str);
+    $anchor = preg_replace('/\'/',	'', $anchor);
+    $anchor = preg_replace('/[^\w]/',	'-', $anchor);
+    $anchor = preg_replace('/-+/',	'-', $anchor);
+    $anchor = preg_replace('/^-/',	'', $anchor);
+    $anchor = preg_replace('/-$/',	'', $anchor);
+
+    return "/holidays/$anchor.html";
+}
+
+function hebcal_make_sedra_anchor($str)
+{
+    $anchor = strtolower($str);
+    $anchor = preg_replace('/[^\w]/',	'', $anchor);
+
+    return "/sedrot/$anchor.html";
+}
+
+function hebcal_make_anchor($str)
+{
+    if (strncmp($str, "Parashat", 8) == 0) {
+	return hebcal_make_sedra_anchor(substr($str, 9));
+    } elseif (strncmp($str, "Parshas", 7) == 0) {
+	return hebcal_make_sedra_anchor(substr($str, 8));
+    } elseif ($str != "Candle lighting" && $str != "No sunset today." &&
+	      strncmp($str, "Havdalah", 8) != 0) {
+	$str_copy = $str;
+	$str_copy = preg_replace('/ \(CH\'\'M\)$/', '', $str_copy);
+	$str_copy = preg_replace('/ \(Hoshana Raba\)$/', '', $str_copy);
+	$str_copy = preg_replace('/ [IV]+$/', '', $str_copy);
+	$str_copy = preg_replace('/: \d Candles?$/', '', $str_copy);
+	$str_copy = preg_replace('/: 8th Day$/', '', $str_copy);
+	$str_copy = preg_replace('/^Erev /', '', $str_copy);
+	return hebcal_make_holiday_anchor($str_copy);
+    }
+}
+
 ?>
