@@ -44,68 +44,11 @@
 				<!-- we've got a number to evaluate -->
 				<if cond="entered_zip.length == 5">
 					<assign name="document.zip" expr="entered_zip"/>
-					<goto next="#zip_confirm"/>
+					<submit next="http://www.hebcal.com/shabbat/" namelist="zip m cfg"/>
 					<else/>
 					<audio>I'm sorry, that's not a five digit zip code.</audio>
 					<break time="250ms"/>
 					<clear namelist="entered_zip"/>
-				</if>
-			</filled>
-		</field>
-	</form>
-	<form id="zip_confirm">
-		<field name="zip_verify" type="boolean">
-			<prompt>
-				<audio>I heard you say...</audio>
-				<value expr="zip.substr(0,1) "/>
-				<value expr="zip.substr(1,1) "/>
-				<value expr="zip.substr(2,1) "/>
-				<value expr="zip.substr(3,1) "/>
-				<value expr="zip.substr(4,1) "/>
-				<break time="250ms"/>
-				<audio>Is that correct?</audio>
-			</prompt>
-			<nomatch count="1">
-				<audio>I'm sorry...I didn't catch that.</audio>
-				<audio>Say Yes or No</audio>
-			</nomatch>
-			<nomatch count="2">
-				<audio>I'm sorry...I still didn't catch that.</audio>
-				<audio>Say Yes or No</audio>
-				<audio>or for yes, press one. for no, press 2</audio>
-				<audio>on your telephone keypad</audio>
-				<break time="250ms"/>
-				<audio>To choose another keyword say "Tell me menu" or press star.</audio>
-			</nomatch>
-			<nomatch count="3">
-				<audio>I'm sorry, I'm still having trouble understanding you.</audio>
-				<audio>let's try this again...</audio>
-				<goto next="#enterzip"/>
-			</nomatch>
-			<noinput count="1">
-				<audio>I'm sorry, I didn't hear you.</audio>
-				<audio>Is that correct?</audio>
-				<break time="250ms"/>
-				<audio>To choose another keyword say "Tell me menu" or press star.</audio>
-			</noinput>
-			<noinput count="2">
-				<audio>I'm sorry, I still didn't hear you.</audio>
-				<audio>Say Yes or No</audio>
-				<audio>or for yes, press one. for no, press 2</audio>
-				<audio>on your telephone keypad</audio>
-			</noinput>
-			<noinput count="3">
-				<audio>I'm sorry, I'm still having trouble hearing you.</audio>
-				<audio>let's try this again...</audio>
-				<goto next="#enterzip"/>
-			</noinput>
-			<filled>
-				<if cond="zip_verify == true">
-					<audio>Ok, got it...</audio>
-					<submit next="http://www.hebcal.com/shabbat/" namelist="zip m cfg"/>
-					<else/>
-					<audio>Ok, let's try this again... </audio>
-					<goto next="#enterzip"/>
 				</if>
 			</filled>
 		</field>
