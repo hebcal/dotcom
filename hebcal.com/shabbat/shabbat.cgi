@@ -512,8 +512,9 @@ if (!$cfg && $q->param('zip'))
     $self_url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    &Hebcal::out_html($cfg,"<p><b>NEW: <a href=\"$self_url\">Get\n",
-		      "1-Click Shabbat by email</a></b></p>\n");
+    &Hebcal::out_html($cfg,"<p><b><span class=\"hl\">NEW!</span>\n",
+		      "<a href=\"$self_url\">Subscribe\n",
+		      "to 1-Click Shabbat by email</a></b></p>\n");
 }
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
