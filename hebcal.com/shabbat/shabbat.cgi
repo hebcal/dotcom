@@ -17,7 +17,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 20 11:45:41 PDT 2000
+Last modified: Mon Sep 25 18:49:15 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -213,7 +213,7 @@ $cmd .= " -a"
     if defined $q->param('a') &&
     ($q->param('a') eq 'on' || $q->param('a') eq '1');
 
-$cmd .= ' -s -h -c ' . $sat_year;
+$cmd .= ' -s -c ' . $sat_year;
 
 unless ($default)
 {
@@ -341,7 +341,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	# output day if it's a holiday
 	if ($subj !~ /^(Parshas\s+|Parashat\s+)/)
 	{
-	    print STDOUT "\non", strftime("%A, %d %B", localtime($time));
+	    print STDOUT "\non ", strftime("%A, %d %B", localtime($time));
 	}
 
 	print STDOUT ".<br>\n";
