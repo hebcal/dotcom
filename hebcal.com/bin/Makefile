@@ -21,8 +21,6 @@ $(SEDROT)/bereshit.html: calc_triennial.pl $(XMLDIR)/aliyah.xml $(XMLDIR)/festiv
 	./calc_triennial.pl -f $(CSVDIR)/fullkriyah.csv \
 		-t $(CSVDIR)/triennial.csv \
 		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)
-	rm -f $(CSVDIR)/fullkriyah.csv.gz $(CSVDIR)/triennial.csv.gz
-	gzip -9 $(CSVDIR)/fullkriyah.csv $(CSVDIR)/triennial.csv
 
 $(HOLIDAYS)/purim.html: gen_festival.pl $(XMLDIR)/festival.xml
 	mkdir -p $(HOLIDAYS)
