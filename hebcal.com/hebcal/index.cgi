@@ -2,6 +2,14 @@
 
 require 'cgi-lib.pl';
 
+$dbmfile = 'zips.db';
+$dbmfile =~ s/\.db$//;
+
+&CgiDie("Script Error: No Database", "\nThe database is unreadable.\n" .
+	"Please <a href=\"mailto:michael\@radwin.org" .
+	"\">e-mail Michael</a>.")
+    unless -r "${dbmfile}.db";
+
 $cgipath = '/cgi-bin/hebcal';
 $rcsrev = '$Revision$'; #'
 
@@ -15,7 +23,7 @@ $rcsrev = '$Revision$'; #'
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">
 <html> <head>
-  <title>hebcal web interface</title>
+  <title>hebcal</title>
   <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true comment \"RSACi North America Server\" by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
   <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
 </head>
@@ -32,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Sun Apr 11 12:44:02 PDT 1999
+Last modified: Mon Apr 12 10:01:46 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -40,97 +48,56 @@ Last modified: Sun Apr 11 12:44:02 PDT 1999
 </body> </html>
 ";
 
-# ------------------------------------------------------------------------
-# defaults
 $default_tz  = '-8';
 $default_zip = '95051';
+
+$status = &ReadParse();
 
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime(time);
 $year += 1900;
+$year = $in{'year'} if (defined $in{'year'} && $in{'year'} =~ /^\d+$/);
 
-# boolean options
-@opts = ('c','x','o','s','h','usa','israel','none');
-%opts = ();
-foreach (@opts)
-{
-    $opts{$_}     = 0;
-    $opts_chk{$_} = '';
-}
 
-$havdalah = 72;
-$opts{'c'} = $opts{'usa'} = 1;
-$opts_chk{'c'} = $opts_chk{'usa'} = ' checked';
-
+# timezone opt
 for ($i = -12; $i < 13; $i++)
 {
     $tz{$i} = '';
 }
-$tz{$default_tz} = ' selected';
+if (defined $in{'tz'})
+{
+    $tz{$in{'tz'}} = ' selected';
+}
+else
+{
+    $tz{$default_tz} = ' selected';
+}
 
+# month opt
 for ($i = 0; $i < 13; $i++)
 {
     $month{$i} = '';
 }
-
-#$month{$mon + 1} = ' selected';
-$month{'0'} = ' selected';
-
-# ------------------------------------------------------------------------
-
-$dbmfile = "zips.db";
-$dbmfile =~ s/\.db$//;
-
-&CgiDie("Script Error: No Database", "\nThe database is unreadable.\n" .
-	"Please <a href=\"mailto:michael\@radwin.org" .
-	"\">e-mail Michael</a>.")
-    unless -r "${dbmfile}.db";
-
-if (!&ReadParse())
+if (defined $in{'month'} && $in{'month'} ne '')
 {
-    &form($default_zip, '');
+    $month{$in{'month'}} = ' selected';
+}
+else
+{
+#    $month{$mon + 1} = ' selected';
+    $month{'0'} = ' selected';
 }
 
-if (defined $in{'tz'})
-{
-    for ($i = -12; $i < 13; $i++)
-    {
-	if ($in{'tz'} eq $i)
-	{
-	    $tz{$i} = ' selected';
-	}
-	else
-	{
-	    $tz{$i} = '';
-	}
-    }
-}
-
-if (defined $in{'month'})
-{
-    for ($i = 0; $i < 13; $i++)
-    {
-	if ($in{'month'} eq $i)
-	{
-	    $month{$i} = ' selected';
-	}
-	else
-	{
-	    $month{$i} = '';
-	}
-    }
-
-    if ($in{'month'} eq '')
-    {
-	$month{'0'} = ' selected';
-    }
-}
+# boolean options
+@opts = ('c','x','o','s','h','usa','israel','none');
+%opts = ();
 
 foreach (@opts)
 {
     $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
 	1 : 0;
 }
+$opts{'c'} = 1 unless $status;
 
 if (defined $in{'dst'})
 {
@@ -138,13 +105,17 @@ if (defined $in{'dst'})
     $opts{'israel'} = ($in{'dst'} eq 'israel') ? 1 : 0;
     $opts{'none'}   = ($in{'dst'} eq 'none') ? 1 : 0;
 }
+else
+{
+    $opts{'usa'}    = 1;
+}
 
 foreach (@opts)
 {
     $opts_chk{$_} = $opts{$_} ? ' checked' : '';
 }
 
-$year = $in{'year'} if (defined $in{'year'} && $in{'year'} =~ /^\d+$/);
+$havdalah = 72;
 $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
 &form($default_zip, '') if (!defined $in{'zip'});
@@ -221,30 +192,9 @@ while(<HEBCAL>)
 {
     chop;
     ($date,$descr) = split(/\t/);
-    if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
-    {
-	($subj,$hr,$min) = ($1,$2,$3);
-	$start_time = sprintf("\"%d:%02d PM\"", $hr, $min);
-	$min += 15;
-	if ($min >= 60)
-	{
-	    $hr++;
-	    $min -= 60;
-	}
-#	$end_time = sprintf("\"%d:%02d PM\"", $hr, $min);
-#	$end_date = $date;
-	$end_time = $end_date = '';
-	$all_day = '"false"';
-    }
-    else
-    {
-	$start_time = $end_time = $end_date = '';
-	$all_day = '"true"';
-	$subj = $descr;
-    }
-    
-    $subj =~ s/\"/''/g;
-    $subj =~ s/\s*:\s*$//g;
+
+    ($subj,$date,$start_time,$end_date,$end_time,$all_day)
+	= &parse_date_descr($date,$descr);
 
     print STDOUT "\"$subj\",\"$date\",$start_time,$end_date,$end_time,$all_day,";
     print STDOUT "\"\"\015\012";
@@ -264,7 +214,7 @@ sub form
     print STDOUT "$html_header
 <strong><big>
 <a href=\"/\">radwin.org</a> :
-hebcal web interface
+hebcal
 </big></strong>
 
 $message
@@ -276,7 +226,7 @@ lighting times are calculated from your latitude/longitude (which is
 determined by your Zip Code).</p>
 
 <blockquote>
-<form method=\"get\" action=\"${cgipath}\">
+<form method=\"get\" action=\"$cgipath\">
 
 <label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
 id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
@@ -407,7 +357,7 @@ sub download
     print STDOUT "$html_header
 <strong><big>
 <a href=\"/\">radwin.org</a> :
-<a href=\"${cgipath}\">hebcal web interface</a> :
+<a href=\"$cgipath\">hebcal</a> :
 $date
 </big></strong>
 
@@ -435,7 +385,12 @@ Time Zone: GMT $in{'tz'}:00
 
 ";
 
-    print STDOUT "<!-- $cmd -->\n<pre>";
+    print STDOUT "<p>Use the \"add\" links below to add an individual entry\n";
+    print STDOUT "to your personal <a target=\"_calendar\"\n";
+    print STDOUT "href=\"http://calendar.yahoo.com/\">Yahoo! Calendar</a>.</p>\n\n";
+
+    print STDOUT "<!-- $cmd -->\n";
+    print STDOUT "<p><tt>\n";
     open(HEBCAL,"$cmd |") ||
 	&CgiDie("Script Error: can't run hebcal",
 		"\nCommand was \"$cmd\".\n" .
@@ -445,22 +400,94 @@ Time Zone: GMT $in{'tz'}:00
     while(<HEBCAL>)
     {
 	chop;
-	s/</&lt;/g;
-	s/>/&lt;/g;
-	s/&/&amp;/g;
-	print STDOUT $_;
-#	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/?v=60";
-#	print STDOUT "&ST=19990313&TITLE=Shabbat+HaChodesh&VIEW=d\">add</a>";
-	print STDOUT "\n";
+	($date,$descr) = split(/ /, $_, 2);
+	($subj,$date,$start_time,$end_date,$end_time,$all_day,
+	 $hr,$min,$month,$day,$year) =
+	     &parse_date_descr($date,$descr);
+
+	$ST  = sprintf("%4d%02d%02d", $year, $month, $day);
+	if ($hr >= 0 && $min >= 0)
+	{
+	    $hr += 12 if $hr < 12 && $hr > 0;
+	    $ST .= sprintf("T%02d%02d00", $hr, $min);
+	}
+
+	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/?v=60";
+	print STDOUT "&ST=$ST&TITLE=", &url_escape($subj), "&VIEW=d\">add</a> ";
+
+	$descr =~ s/</&lt;/g;
+	$descr =~ s/>/&lt;/g;
+	$descr =~ s/&/&amp;/g;
+
+	printf STDOUT "%4d/%02d/%02d %s<br>\n", $year, $month, $day, $descr;
     }
     close(HEBCAL);
 
-    print STDOUT "</pre>\n\n$html_footer";
+    print STDOUT "</tt></p>\n\n$html_footer";
 
     close(STDOUT);
     exit(0);
 
     1;
+}
+
+sub parse_date_descr
+{
+    local($date,$descr) = @_;
+
+    ($month,$day,$year) = split(/\//, $date);
+    if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
+    {
+	($subj,$hr,$min) = ($1,$2,$3);
+	$start_time = sprintf("\"%d:%02d PM\"", $hr, $min);
+#	$min += 15;
+#	if ($min >= 60)
+#	{
+#	    $hr++;
+#	    $min -= 60;
+#	}
+#	$end_time = sprintf("\"%d:%02d PM\"", $hr, $min);
+#	$end_date = $date;
+	$end_time = $end_date = '';
+	$all_day = '"false"';
+    }
+    else
+    {
+	$hr = $min = -1;
+	$start_time = $end_time = $end_date = '';
+	$all_day = '"true"';
+	$subj = $descr;
+    }
+    
+    $subj =~ s/\"/''/g;
+    $subj =~ s/\s*:\s*$//g;
+
+    ($subj,$date,$start_time,$end_date,$end_time,$all_day,
+     $hr,$min,$month,$day,$year);
+}
+
+sub url_escape
+{
+    local($_) = @_;
+    local($res) = '';
+
+    foreach (split(//))
+    {
+	if (/ /)
+	{
+	    $res .= '+';
+	}
+	elsif (/[^a-zA-Z0-9_.-]/)
+	{
+	    $res .= sprintf("%%%02X", ord($_));
+	}
+	else
+	{
+	    $res .= $_;
+	}
+    }
+
+    $res;
 }
 
 if ($^W && 0)
