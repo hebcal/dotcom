@@ -9,10 +9,11 @@ RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ /wap-shabbat.php [L]
 
 # block messianic sites from linking to us
-RewriteCond %{HTTP_REFERER} ^http:\/\/www.heartofisrael.org.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www.messianicdirectory.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www.levitt.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www.ammishaddai.com.*
+RewriteCond %{HTTP_REFERER} ^http:\/\/www\.heartofisrael\.org.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www\.messianicdirectory\.com.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www\.levitt\.com.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www\.levadonai\.com.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www\.ammishaddai\.com.*
 RewriteRule ^  -  [F,L]
 
 AddType application/x-javascript js
