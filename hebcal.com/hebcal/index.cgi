@@ -316,8 +316,8 @@ Suppress default holidays</label><br>
 
 <p><small>
 Caveat: this is beta software; my apologies if it doesn't work for you.
-A form interface for specifying time zones and precise geographic
-positions (latitude, longitude) is coming soon.
+A form interface for specifying precise geographic positions (latitude,
+longitude) is coming soon.
 
 Geographic Zip Code information provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
