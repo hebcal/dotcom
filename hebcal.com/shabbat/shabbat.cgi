@@ -805,10 +805,10 @@ sub display_javascript
     }
 
     my($url) = self_url();
-    $url .= ";.from=" . 
+    $url .= ";tag=" . 
 	($q->param('.from') ?
 	 Hebcal::url_escape($q->param('.from')) :
-	 $cfg);
+	 "js.1c");
 
     Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
 		     qq{<h3>Shabbat times for $city_descr</h3>\n});
