@@ -54,6 +54,7 @@ use Hebcal;
 use Getopt::Std;
 use XML::Simple;
 use Time::Local;
+use POSIX qw(strftime);
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -240,6 +241,7 @@ triennial_csv($axml,$opts{'t'},\@events,$bereshit_idx)
 
 my(%parsha_dates);
 my(%parsha_time);
+my(%parsha_time_prev);
 my($saturday) = get_saturday();
 readings_for_current_year($axml, \%parsha_dates, \%parsha_time);
 
@@ -311,9 +313,9 @@ EOHTML
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
-	if (defined $read_on->{$h} && defined $read_on->{$h}->[0])
+	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
-	    print OUT1 qq{ - <small>$read_on->{$h}->[0]</small>\n};
+	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>\n};
 	}
     }
 
@@ -326,9 +328,9 @@ EOHTML
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
-	if (defined $read_on->{$h} && defined $read_on->{$h}->[0])
+	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
-	    print OUT1 qq{ - <small>$read_on->{$h}->[0]</small>\n};
+	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>\n};
 	}
     }
 
@@ -420,7 +422,8 @@ sub write_sedra_page
     my($parshiot,$read_on,$h,$prev,$next,$triennial) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
-       $torah_href,$haftarah_href,$drash_href) = get_parsha_info($parshiot,$h);
+       $torah_href,$haftarah_href,$drash_jts,$drash_ou,
+       $drash_reform,$drash_torah) = get_parsha_info($parshiot,$h);
 
     my $seph = '';
     my $ashk = '';
@@ -687,11 +690,6 @@ title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
 
-    my $c_year = '';
-    if ($drash_href =~ m,/(\d\d\d\d)/,) {
-	$c_year = " for $1";
-    }
-
     print OUT2 <<EOHTML;
 <small>NOTE: This site does not yet indicate special maftir or haftarah
 when they occur. Always check a luach or consult with your rabbi to
@@ -700,10 +698,59 @@ haftarah.</small>
 EOHTML
 ;
 
-    print OUT2 
-	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
-    if $drash_href;
+    if ($drash_jts || $drash_ou || $drash_reform || $drash_torah)
+    {
+	print OUT2 qq{<h3><a name="drash">Commentary</a></h3>\n<ul>\n};
+    }
 
+    if ($drash_jts)
+    {
+	print OUT2 qq{<li><a title="Parashat $h commentary from JTS"\nhref="$drash_jts">};
+	if ($drash_jts =~ /learn.jtsa.edu/)
+	{
+	    print OUT2 qq{Jewish\nTheological Seminary</a>\n};
+	}
+	else
+	{
+	    print OUT2 qq{Commentary</a>\n};
+	}
+    }
+
+    if ($drash_ou)
+    {
+	print OUT2 qq{<li><a title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU\nTorah Insights</a>\n};
+    }
+
+    if ($drash_reform)
+    {
+	print OUT2 qq{<li><a title="Parashat $h commentary from Union for Reform Judaism"\nhref="$drash_reform">URJ\nTorat Hayim</a>\n};
+    }
+
+    if ($drash_torah)
+    {
+	print OUT2 qq{<li><a title="Parashat $h commentary from Project Genesis"\nhref="$drash_torah">Torah.org</a>\n};
+    }
+
+    if ($drash_jts || $drash_ou || $drash_reform || $drash_torah)
+    {
+	print OUT2 qq{</ul>\n};
+    }
+
+    if (defined $read_on->{$h})
+    {
+	print OUT2 <<EOHTML;
+<h3><a name="dates">List of Dates</a></h3>
+Parashat $h is read in the Diaspora on:
+<ul>
+EOHTML
+	;
+	foreach my $stime (@{$read_on->{$h}}) {
+	    next unless defined $stime;
+	    print OUT2 "<li>$stime\n";
+	}
+	print OUT2 "</ul>\n";
+    }
+    
     print OUT2 <<EOHTML;
 <dl>
 <dt><a name="ref">References</a>
@@ -722,21 +769,6 @@ World ORT
 EOHTML
 ;
 
-    if (defined $read_on->{$h})
-    {
-	print OUT2 <<EOHTML;
-<h3><a name="dates">List of Dates</a></h3>
-Parashat $h is read in the Diaspora on:
-<ul>
-EOHTML
-	;
-	foreach my $stime (@{$read_on->{$h}}) {
-	    next unless defined $stime;
-	    print OUT2 "<li>$stime\n";
-	}
-	print OUT2 "</ul>\n";
-    }
-    
     if ($prev_link || $next_link)
     {
 	print OUT2 <<EOHTML;
@@ -768,7 +800,9 @@ sub get_parsha_info
 
     my($hebrew);
     my($torah,$haftarah,$haftarah_seph);
-    my($torah_href,$haftarah_href,$drash_href);
+    my($torah_href,$haftarah_href,$drash1);
+    my $drash2 = '';
+    my $drash3 = '';
     if ($h =~ /^([^-]+)-(.+)$/ &&
 	defined $combined{$1} && defined $combined{$2})
     {
@@ -819,7 +853,15 @@ sub get_parsha_info
 	{
 	    if ($l->{'rel'} eq 'drash')
 	    {
-		$drash_href = $l->{'href'};
+		$drash1 = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'drash2')
+	    {
+		$drash2 = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'drash3')
+	    {
+		$drash3 = $l->{'href'};
 	    }
 	}
 
@@ -838,7 +880,15 @@ sub get_parsha_info
 	{
 	    if ($l->{'rel'} eq 'drash')
 	    {
-		$drash_href = $l->{'href'};
+		$drash1 = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'drash2')
+	    {
+		$drash2 = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'drash3')
+	    {
+		$drash3 = $l->{'href'};
 	    }
 	    elsif ($l->{'rel'} eq 'torah')
 	    {
@@ -850,14 +900,33 @@ sub get_parsha_info
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
     }
 
-    if ($drash_href =~ m,/\d\d\d\d/,) {
+    if ($drash1 =~ m,/\d\d\d\d/,) {
 	if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
-	    $drash_href =~ s,/\d\d\d\d/,/$hebrew_year/,;
+	    $drash1 =~ s,/\d\d\d\d/,/$hebrew_year/,;
 	}
     }
 
+    if ($drash2 =~ m,/\d\d\d\d/, && 
+	defined $parsha_time{$h} && $parsha_time{$h} < $saturday)
+    {
+	$drash2 =~ s,/\d\d\d\d/,/$hebrew_year/,;
+	if ($hebrew_year =~ /^\d\d(\d\d)$/) {
+	    my $last2 = $1;
+	    $drash2 =~ s/\d\d\.htm$/$last2.htm/;
+	}
+    }
+
+    my $drash4t = (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) ?
+	$parsha_time{$h} : $parsha_time_prev{$h};
+    my $drash4 = '';
+    if ($drash4t)
+    {
+	$drash4 = "http://urj.org/torah/issue/" .
+	    strftime("%y%m%d", localtime($drash4t)) . ".shtml";
+    }
+
     ($hebrew,$torah,$haftarah,$haftarah_seph,
-     $torah_href,$haftarah_href,$drash_href);
+     $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3);
 }
 
 sub special_readings
@@ -915,6 +984,7 @@ sub readings_for_current_year
     my $heb_yr = `./hebcal -t -x -h | grep -v Omer`;
     chomp($heb_yr);
     $heb_yr =~ s/^.+, (\d\d\d\d)/$1/;
+    $heb_yr--;
 
     my %special_maftir;
     my %special_haftara;
@@ -960,7 +1030,15 @@ sub readings_for_current_year
 	     $events[$i]->[$Hebcal::EVT_IDX_MON],
 	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 	     '','','')
-		if $yr == 0;
+		if $yr == 1;	# second year in array
+
+	$parsha_time_prev{$h} = Time::Local::timelocal
+	    (1,0,0,
+	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+	     $events[$i]->[$Hebcal::EVT_IDX_MON],
+	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+	     '','','')
+		if $yr == 0;	# second year in array
 
 	next unless $opts{'f'};
 
