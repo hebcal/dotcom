@@ -16,8 +16,8 @@ use Mail::Internet ();
 use Email::Valid ();
 use MIME::Base64 ();
 
-my $site = 'hebcal.com';
-my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
+my $site = "hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
@@ -34,7 +34,7 @@ use the web interface to subscribe:
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
 
-my $to = $header->get('To');
+my $to = $header->get("To");
 if ($to) {
     chomp($to);
     if ($to =~ /^[^<]*<([^>]+)>/) {
@@ -47,7 +47,7 @@ if ($to) {
     }
 }
 
-my $from = $header->get('From');
+my $from = $header->get("From");
 if ($from) {
     chomp($from);
     if ($from =~ /^[^<]*<([^>]+)>/) {
@@ -61,22 +61,22 @@ if ($from) {
 }
 
 unless ($from) {
-    shabbat_log(0, 'missing_from');
+    shabbat_log(0, "missing_from");
     exit(0);
 }
 
 unless (defined $to) {
-    shabbat_log(0, 'needto');
+    shabbat_log(0, "needto");
     error_email($from,$err_needto);
     exit(0);
 }
 
 if ($to =~ /shabbat-subscribe\@/i) {
-    shabbat_log(0, 'subscribe_useweb'); 
+    shabbat_log(0, "subscribe_useweb"); 
     error_email($from,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@/i) {
-    shabbat_log(0, 'subscribe_useweb');
+    shabbat_log(0, "subscribe_useweb");
     error_email($from,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@/i) {
@@ -84,7 +84,7 @@ if ($to =~ /shabbat-subscribe\@/i) {
 } elsif ($to =~ /shabbat-unsubscribe\@/i) {
     unsubscribe($from);
 } else {
-    shabbat_log(0, 'badto');
+    shabbat_log(0, "badto");
     error_email($from,$err_needto);
 }
 exit(0);
@@ -93,7 +93,7 @@ sub subscribe
 {
     my($from,$encoded) = @_;
 
-    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $sql = <<EOD
 SELECT email_address,email_status
@@ -108,18 +108,18 @@ EOD
     $sth->finish;
 
     unless ($status) {
-	shabbat_log(0, 'subscribe_notfound');
+	shabbat_log(0, "subscribe_notfound");
 	$dbh->disconnect;
 	return 0;
     }
 
-    if ($status eq 'active') {
-	shabbat_log(0, 'subscribe_twice');
+    if ($status eq "active") {
+	shabbat_log(0, "subscribe_twice");
 	$dbh->disconnect;
 	return 0;
     }
 
-    shabbat_log(1, 'subscribe');
+    shabbat_log(1, "subscribe");
 
     unless ($email) {
 	$dbh->disconnect;
@@ -160,22 +160,22 @@ shabbat-unsubscribe\@$site
     my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
 
     my %headers =
-        (
-         'From' =>
+	(
+	 "From" =>
 	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
-         'To' => $email,
-         'MIME-Version' => '1.0',
-         'Content-Type' => 'text/plain',
-         'Subject' => 'Your subscription to hebcal is complete',
-	 'List-Unsubscribe' => "<mailto:shabbat-unsubscribe\@$site>",
-	 'Precedence' => 'bulk',
-         );
+	 "To" => $email,
+	 "MIME-Version" => "1.0",
+	 "Content-Type" => "text/plain",
+	 "Subject" => "Your subscription to hebcal is complete",
+	 "List-Unsubscribe" => "<mailto:shabbat-unsubscribe\@$site>",
+	 "Precedence" => "bulk",
+	 );
 
     if ($header) {
-	my $mid = $header->get('Message-Id');
+	my $mid = $header->get("Message-Id");
 	if ($mid) {
 	    chomp($mid);
-	    $headers{'In-Reply-To'} = $mid;
+	    $headers{"In-Reply-To"} = $mid;
 	}
 
     }
@@ -196,7 +196,7 @@ sub unsubscribe
 {
     my($email) = @_;
 
-    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $sql = <<EOD
 SELECT email_status,email_id
@@ -211,7 +211,7 @@ EOD
     $sth->finish;
 
     unless ($status) {
-	shabbat_log(0, 'unsub_notfound');
+	shabbat_log(0, "unsub_notfound");
 
 	$dbh->disconnect;
 
@@ -219,8 +219,8 @@ EOD
 	return 0;
     }
 
-    if ($status eq 'unsubscribed') {
-	shabbat_log(0, 'unsub_twice');
+    if ($status eq "unsubscribed") {
+	shabbat_log(0, "unsub_twice");
 
 	$dbh->disconnect;
 
@@ -228,7 +228,7 @@ EOD
 	return 0;
     }
 
-    shabbat_log(1, 'unsub');
+    shabbat_log(1, "unsub");
 
     $sql = <<EOD
 UPDATE hebcal1.hebcal_shabbat_email
@@ -252,20 +252,20 @@ $site};
     my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
 
     my %headers =
-        (
-         'From' =>
+	(
+	 "From" =>
 	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
-         'To' => $email,
-         'MIME-Version' => '1.0',
-         'Content-Type' => 'text/plain',
-         'Subject' => 'You have been unsubscribed from hebcal',
-         );
+	 "To" => $email,
+	 "MIME-Version" => "1.0",
+	 "Content-Type" => "text/plain",
+	 "Subject" => "You have been unsubscribed from hebcal",
+	 );
 
     if ($header) {
-	my $mid = $header->get('Message-Id');
+	my $mid = $header->get("Message-Id");
 	if ($mid) {
 	    chomp($mid);
-	    $headers{'In-Reply-To'} = $mid;
+	    $headers{"In-Reply-To"} = $mid;
 	}
     }
 
@@ -292,20 +292,20 @@ $site};
 
     my $return_path = "shabbat-return\@$site";
     my %headers =
-        (
-         'From' =>
+	(
+	 "From" =>
 	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
-         'To' => $email,
-         'MIME-Version' => '1.0',
-         'Content-Type' => 'text/plain',
-         'Subject' => 'Unable to process your message',
-         );
+	 "To" => $email,
+	 "MIME-Version" => "1.0",
+	 "Content-Type" => "text/plain",
+	 "Subject" => "Unable to process your message",
+	 );
 
     if ($header) {
-	my $mid = $header->get('Message-Id');
+	my $mid = $header->get("Message-Id");
 	if ($mid) {
 	    chomp($mid);
-	    $headers{'In-Reply-To'} = $mid;
+	    $headers{"In-Reply-To"} = $mid;
 	}
     }
 
