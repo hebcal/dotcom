@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar 26 14:52:05 PST 2001
+Last modified: Mon Mar 26 15:45:32 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -753,17 +753,17 @@ JSCRIPT_END
     "<br><label\nfor=\"a\">",
     $q->checkbox(-name => 'a',
 		 -id => 'a',
-		 -label => "\nUse Ashkenazis Hebrew"),
+		 -label => "\nUse Ashkenazis Hebrew transliterations"),
     "</label>",
     "<br><label\nfor=\"Dsome\">",
     $q->checkbox(-name => 'D',
 		 -id => 'Dsome',
-		 -label => "\nPrint Hebrew date for dates with some event"),
+		 -label => "\nShow Hebrew date for dates with some event"),
     "</label>",
     "<br><label\nfor=\"dentire\">",
     $q->checkbox(-name => 'd',
 		 -id => 'dentire',
-		 -label => "\nPrint Hebrew date for entire date range"),
+		 -label => "\nShow Hebrew date for entire date range"),
     "</label>",
     "<br><label\nfor=\"set\">",
     $q->checkbox(-name => 'set',
@@ -779,7 +779,7 @@ JSCRIPT_END
     $q->checkbox(-name => 'heb',
 		 -id => 'heb',
 		 -checked => 'checked',
-		 -label => "\nDisplay Hebrew when available"),
+		 -label => "\nShow Hebrew event names"),
     "</label>",
     "</p>\n",
     $q->hidden(-name => '.rand', -value => time(), -override => 1),
