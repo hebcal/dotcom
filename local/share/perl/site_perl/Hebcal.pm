@@ -23,6 +23,7 @@
 
 package Hebcal;
 require 5.000;
+use strict;
 use Time::Local;
 use CGI;
 use POSIX qw(strftime);
@@ -30,7 +31,6 @@ use lib "/home/mradwin/local/lib/perl5/site_perl";
 use Unicode::String;
 use Config::IniFiles;
 use Date::Calc;
-use strict;
 
 ########################################################################
 # constants
