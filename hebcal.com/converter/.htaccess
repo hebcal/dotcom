@@ -1,8 +1,8 @@
-SetHandler cgi-script
+DirectoryIndex index.cgi
 
-Redirect /yahrtzeit/yahrtzeit.html http://www.hebcal.com/yahrtzeit/
-Redirect /yahrtzeit/yahrtzeit.htm http://www.hebcal.com/yahrtzeit/
-Redirect /yahrtzeit/yahrtzeit.pl http://www.hebcal.com/yahrtzeit/
-Redirect /yahrtzeit/yahrtzeit.cgi http://www.hebcal.com/yahrtzeit/
-Redirect /yahrtzeit/index.cgi http://www.hebcal.com/yahrtzeit/
-Redirect /yahrtzeit/index.pl http://www.hebcal.com/yahrtzeit/
+Redirect /converter/converter.html http://www.hebcal.com/converter/
+Redirect /converter/converter.htm http://www.hebcal.com/converter/
+Redirect /converter/converter.pl http://www.hebcal.com/converter/
+Redirect /converter/converter.cgi http://www.hebcal.com/converter/
+Redirect /converter/index.html http://www.hebcal.com/converter/
+Redirect /converter/index.pl http://www.hebcal.com/converter/
