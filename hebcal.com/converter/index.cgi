@@ -356,7 +356,7 @@ type="submit" value="Compute Gregorian Date"></td>
 
     print STDOUT <<EOHTML
 <p>Reference: <em><a
-href="http://www.amazon.com/exec/obidos/ASIN/0521777526/hebcal-20">Calendrical
+href="http://www.amazon.com/exec/obidos/ASIN/0521777526/ref=nosim/hebcal-20">Calendrical
 Calculations</a></em>, Edward M. Reingold, Nachum Dershowitz,
 Cambridge University Press, 2001.</p>
 EOHTML
