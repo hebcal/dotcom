@@ -41,7 +41,7 @@ if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"]))
 }
 
 foreach($_REQUEST as $key => $value) {
-    $param[$key] = $value;
+    $param[$key] = trim($value);
 }
 
 if (isset($param["e"]))
@@ -455,7 +455,7 @@ function subscribe($param) {
     }
 
     # check for old sub
-    if (isset($param["prev"])) {
+    if (isset($param["prev"]) && $param["prev"] != $param["em"]) {
 	$info = get_sub_info($param["prev"]);
 	if (isset($info["status"]) && $info["status"] == "active") {
 	    sql_unsub($param["prev"]);
