@@ -667,7 +667,10 @@ EOHTML
     if $drash_href;
 
     print OUT2 <<EOHTML;
-<dl>
+<a
+href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20"><img
+src="/i/0827607121.01.TZZZZZZZ.jpg" border="0" hspace="3" vspace="3"
+alt="Etz Hayim: Torah and Commentary" align="right"></a><dl>
 <dt>References
 <dd><em><a
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
