@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Aug  2 16:23:49 PDT 2000
+Last modified: Wed Sep 13 10:17:58 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -743,6 +743,9 @@ JSCRIPT_END
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'SCHEMA.dc',
 				     -href => 'http://purl.org/metadata/dublin_core_elements'}),
+			   $q->Link({-rel => 'stylesheet',
+				     -href => '/style.css',
+				     -type => 'text/css'}),
 			   $q->Link({-rev => 'made',
 				     -href => "mailto:$author"}),
 			   ],
@@ -764,9 +767,9 @@ JSCRIPT_END
 		       'DC.Date.X-MetadataLastModified' => '1999-12-24',
 		       },
 		   ),
-    "<table border=\"0\" width=\"100%\" cellpadding=\"0\"\nclass=\"navbar\">",
-    "<tr valign=\"top\"><td><small>",
-    "<a\nhref=\"/\">$server_name</a>\n<tt>-&gt;</tt>\n",
+    "<table width=\"100%\"\nclass=\"navbar\">",
+    "<tr><td><small>",
+    "<strong><a\nhref=\"/\">$server_name</a></strong>\n<tt>-&gt;</tt>\n",
     "hebcal</small></td>",
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
@@ -1165,6 +1168,9 @@ sub results_page
 		   -target=>'_top',
 		   -head => [
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			   $q->Link({-rel => 'stylesheet',
+				     -href => '/style.css',
+				     -type => 'text/css'}),
 			   $q->Link({-rel => 'prev',
 				     -href => $prev_url,
 				     -title => $prev_title}),
@@ -1177,10 +1183,9 @@ sub results_page
 			   ],
 		   -meta => {'robots' => 'noindex'});
     print STDOUT
-	"<table border=\"0\" width=\"100%\" cellpadding=\"0\" ",
-	"class=\"navbar\">\n",
-	"<tr valign=\"top\"><td><small>\n",
-	"<a href=\"/\">", $server_name, "</a>\n",
+	"<table width=\"100%\"\nclass=\"navbar\">",
+	"<tr><td><small>",
+	"<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
 	"<tt>-&gt;</tt>\n",
 	"<a href=\"", $script_name, "?v=0";
 
@@ -1191,11 +1196,11 @@ sub results_page
 	    unless $key eq 'v';
     }
 
-    print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt> $date</small></td>\n",
+    print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt>\n$date</small></td>",
     "<td align=\"right\"><small><a\n",
-    "href=\"/search/\">Search</a></small>\n",
-    "</td></tr></table>\n",
-    "<h1>Jewish Calendar $date</h1>\n";
+    "href=\"/search/\">Search</a></small>",
+    "</td></tr></table>",
+    "<h1>Jewish\nCalendar $date</h1>\n";
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
