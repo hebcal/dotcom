@@ -947,7 +947,7 @@ sub results_page()
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
 	{
-	    $subj .= "\n/ " . Hebcal::display_hebrew($q, "hebrew", $hebrew);
+	    $subj .= qq{\n/ <span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
 	}
 
 	if ($q->param('vis'))
