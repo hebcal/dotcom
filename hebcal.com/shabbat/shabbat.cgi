@@ -582,9 +582,6 @@ sub display_vxml
     my($url) = self_url();
     my $title = '1-Click Shabbat: ' . $q->param('zip');
 
-    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(time()));
-    $dc_date =~ s/00$/:00/;
-
     my($this_year) = (localtime)[5];
     $this_year += 1900;
 
@@ -710,37 +707,22 @@ sub display_rss
     my($url) = self_url();
     my $title = '1-Click Shabbat: ' . $city_descr;
 
-    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(time()));
-    $dc_date =~ s/00$/:00/;
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
 
     my($this_year) = (localtime)[5];
     $this_year += 1900;
 
-    print qq{<?xml version="1.0"?>
-<rdf:RDF
-xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-xmlns:dc="http://purl.org/dc/elements/1.1/"
-xmlns="http://purl.org/rss/1.0/">
-<channel rdf:about="$url">
+    print qq{<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
 <title>$title</title>
 <link>$url</link>
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
 <dc:language>en-us</dc:language>
-<dc:creator>hebcal.com</dc:creator>
 <dc:rights>Copyright &#169; $this_year Michael J. Radwin. All rights reserved.</dc:rights>
 <dc:date>$dc_date</dc:date>
 <!-- $cmd_pretty -->
-<items>
-<rdf:Seq>
 };
-
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	my($anchor) = $items->[$i]->{'about'};
-	print qq{<rdf:li rdf:resource="$anchor" />\n};
-    }
-
-    print "</rdf:Seq>\n</items>\n</channel>\n";
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
@@ -748,7 +730,7 @@ xmlns="http://purl.org/rss/1.0/">
 	if (defined $items->[$i]->{'time'}) { 
 	    $subj .= ": " . $items->[$i]->{'time'};
 	}
-	print qq{<item rdf:about="$items->[$i]->{'about'}">
+	print qq{<item>
 <title>$subj</title>
 <link>$items->[$i]->{'link'}</link>
 <description>$items->[$i]->{'date'}</description>
@@ -758,7 +740,7 @@ xmlns="http://purl.org/rss/1.0/">
 };
     }
 
-    print "</rdf:RDF>\n";
+    print "</channel>\n</rss>\n";
 
     exit(0);
 }
