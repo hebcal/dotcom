@@ -64,7 +64,8 @@ shabbat-unsubscribe\@hebcal.com
 
     my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
 
-    my($return_path) = "shabbat-bounce\@hebcal.com";
+    my($return_path) = sprintf('shabbat-return-%s@hebcal.com',
+			       $args->{'id'});
     my %headers =
         (
          'From' => "Hebcal <shabbat-owner\@hebcal.com>",
@@ -169,6 +170,7 @@ sub load_subs
 
     my $sql = <<EOD
 SELECT email_address,
+       email_id,
        email_candles_zipcode,
        email_candles_city,
        email_candles_havdalah
@@ -181,8 +183,8 @@ EOD
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
-    while (my($email,$zip,$city,$havdalah) = $sth->fetchrow_array) {
-	my $cfg = "m=$havdalah";
+    while (my($email,$id,$zip,$city,$havdalah) = $sth->fetchrow_array) {
+	my $cfg = "id=$id;m=$havdalah";
 	if ($zip) {
 	    $cfg .= ";zip=$zip";
 	} elsif ($city) {
