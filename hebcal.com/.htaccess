@@ -8,9 +8,16 @@ RewriteCond %{HTTP_ACCEPT} text\/vnd\.wap\.wml
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ /wap-shabbat.php [L]
 
+# block messianic sites from linking to us
+RewriteCond %{HTTP_REFERER} ^http:\/\/www.heartofisrael.org.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www.messianicdirectory.com.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www.levitt.com.* [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/www.ammishaddai.com.*
+RewriteRule ^  -  [F,L]
+
 AddType application/x-javascript js
 AddType text/css css
-AddType text/xml xml rdf
+AddType text/xml xml rdf rss vxml
 AddEncoding x-gzip .gz
 
 ExpiresActive On
