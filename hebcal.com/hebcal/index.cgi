@@ -343,7 +343,7 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong>
+<strong class="navbar">
 <a href=\"/\">radwin.org</a> -&gt;
 hebcal
 </strong>
@@ -586,7 +586,7 @@ sub download
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong>
+<strong class="navbar">
 <a href=\"/\">radwin.org</a> -&gt;
 <a href=\"$cgipath\">hebcal</a> -&gt;
 $date
