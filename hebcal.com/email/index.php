@@ -230,8 +230,6 @@ function form($param, $message = '', $help = '') {
     }
 
     echo $message;
-    echo "<p>Subscribe to email weekly Shabbat candle lighting times.\n",
-	"Email is sent out every week on Thursday morning.</p>\n";
 
     if (!$param['dst']) {
 	$param['dst'] = 'usa';
@@ -244,55 +242,23 @@ function form($param, $message = '', $help = '') {
     }
 
 ?>
+<p>Fill out the form to subscribe to email weekly Shabbat candle
+lighting times.  Email is sent out every week on Thursday morning.</p>
+
 <form name="f1" id="f1" action="/email/" method="post">
 
-<label for="em">E-mail address:
-<input type="text" name="em" size="30"
-value="<?php echo htmlspecialchars($param['em']) ?>" id="em">
-</label>
-&nbsp;&nbsp;<font size="-2" face="Arial"><a href="/privacy/#email">Email
-Privacy Policy</a></font>
-
-<br><label for="zip">Zip code:
+<label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param['zip']) ?>"></label>
-
-&nbsp;&nbsp;&nbsp;&nbsp;<label for="tz">Time zone:
-<select name="tz" id="tz">
-<option <?php if ($param['tz'] == 'auto') { echo 'selected '; } ?>
-value="auto">- Attempt to auto-detect -</option>
-<option <?php if ($param['tz'] == '-5') { echo 'selected '; } ?>
-value="-5">GMT -05:00 (U.S. Eastern)</option>
-<option <?php if ($param['tz'] == '-6') { echo 'selected '; } ?>
-value="-6">GMT -06:00 (U.S. Central)</option>
-<option <?php if ($param['tz'] == '-7') { echo 'selected '; } ?>
-value="-7">GMT -07:00 (U.S. Mountain)</option>
-<option <?php if ($param['tz'] == '-8') { echo 'selected '; } ?>
-value="-8">GMT -08:00 (U.S. Pacific)</option>
-<option <?php if ($param['tz'] == '-9') { echo 'selected '; } ?>
-value="-9">GMT -09:00 (U.S. Alaskan)</option>
-<option <?php if ($param['tz'] == '-10') { echo 'selected '; } ?>
-value="-10">GMT -10:00 (U.S. Hawaii)</option>
-</select>
-</label>
-
-<br>Daylight Saving Time:
-<label for="dst_usa">
-<input type="radio" name="dst" <?php
-	if ($param['dst'] == 'usa') { echo 'checked '; } ?>
-value="usa" id="dst_usa">
-USA (except AZ, HI, and IN)
-</label>
-<label for="dst_none">
-<input type="radio" name="dst" <?php 
-	if ($param['dst'] == 'none') { echo 'checked '; } ?>
-value="none" id="dst_none">
-none
-</label>
 
 <br><label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
   echo htmlspecialchars($param['m']) ?>" size="3" maxlength="3" id="m1">
+</label>
+
+<br><label for="em">E-mail address:
+<input type="text" name="em" size="30"
+value="<?php echo htmlspecialchars($param['em']) ?>" id="em">
 </label>
 
 <br><label for="upd">
@@ -301,12 +267,24 @@ none
 Contact me occasionally about changes to the hebcal.com website.
 </label>
 
+<br>
 <input type="hidden" name="v" value="1">
 <input type="hidden" name="geo" value="zip">
 <br>
 <input type="submit" name="submit_modify" value="Subscribe">
 <input type="submit" name="submit_unsubscribe" value="Unsubscribe">
 </form>
+
+<p><hr noshade size="1">
+<h3><a name="privacy">Email Privacy Policy</a></h3>
+
+<p>We will never sell or give your email address to anyone.
+<br>We will never use your email address to send you unsolicited
+offers.</p>
+
+<p>To unsubscribe, send an email to <a
+href="mailto:shabbat-unsubscribe@hebcal.com">shabbat-unsubscribe@hebcal.com</a>.</p>
+
 <?php
     my_footer();
 }
@@ -340,8 +318,9 @@ function subscribe($param) {
 	     "not appear to be a 5-digit zip code.");
     }
 
-    $val = get_zip_info($param['zip']);
-    if (!$val)
+    list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	get_zipcode_fields($param['zip']);
+    if (!$state)
     {
 	form($param,
 	     "Sorry, can't find\n".  "<b>" . $param['zip'] .
@@ -349,30 +328,26 @@ function subscribe($param) {
 	     "<ul><li>Please try a nearby zip code</li></ul>");
     }
 
-    list($city,$state) = explode("\0", substr($val,6), 2);
-
-    if (($state == 'HI' || $state == 'AZ') && $param['dst'] == 'usa')
-    {
-	$param['dst'] = 'none';
-    }
-
-    $city = ucwords(strtolower($city));
     $city_descr = "$city, $state " . $param['zip'];
 
     // handle timezone == "auto"
-    $tz = guess_timezone($param['tz'], $param['zip'], $state);
-    if (!$tz)
+    if ($tz == '?')
     {
 	form($param,
 	     "Sorry, can't auto-detect\n" .
-	     "timezone for <b>" . $city_descr . "</b>\n".
-	     "(state <b>" . $state . "</b> spans multiple time zones).",
+	     "timezone for <b>" . $city_descr . "</b>\n",
 	     "<ul><li>Please select your time zone below.</li></ul>");
     }
 
     global $tz_names;
     $param['tz'] = $tz;
     $tz_descr = "Time zone: " . $tz_names['tz_' . $tz];
+
+    if ($dst) {
+	$param['dst'] = 'usa';
+    } else {
+	$param['dst'] = 'none';
+    }
 
     $dst_descr = "Daylight Saving Time: " . $param['dst'];
 
