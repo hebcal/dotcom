@@ -159,9 +159,9 @@ sub subscribe
     unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
 
     $DB{$email} = $newargs;
-    if (lc($email) ne lc($from)) {
-	$DB{$from} = "type=alt;em=$email";
-    }
+#    if (lc($email) ne lc($from)) {
+#	$DB{$from} = "type=alt;em=$email";
+#    }
 
     $db->sync;
     flock(DB_FH, LOCK_UN);
