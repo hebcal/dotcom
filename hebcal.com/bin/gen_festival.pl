@@ -461,7 +461,7 @@ href="$about_href">more${more}...</a>]</p>
 EOHTML
 ;
 	} else {
-    	    warn "$f: missing About href\n";
+#    	    warn "$f: missing About href\n";
 	}
     }
 
@@ -563,10 +563,10 @@ sub print_aliyah
 {
     my($aliyah) = @_;
 
-    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
-    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
+    my($c1,$v1) = ($aliyah->{'begin'} =~ /^([^:]+):([^:]+)$/);
+    my($c2,$v2) = ($aliyah->{'end'}   =~ /^([^:]+):([^:]+)$/);
     my($info) = $aliyah->{'book'} . " ";
-    if ($c1 == $c2) {
+    if ($c1 eq $c2) {
 	$info .= "$c1:$v1-$v2";
     } else {
 	$info .= "$c1:$v1-$c2:$v2";
@@ -634,13 +634,34 @@ sub holidays_observed
     foreach my $i (0 .. $extra_years)
     {
 	my $yr = $heb_yr + $i - 1;
-	my @ev = Hebcal::invoke_hebcal("./hebcal -D -H $yr", '', 0);
+	my @ev = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
 	$years[$i] = \@ev;
+    }
+
+    my %greg2heb;
+    foreach my $i (0 .. $extra_years)
+    {
+	my $yr = $heb_yr + $i - 1;
+	my @events = Hebcal::invoke_hebcal("./hebcal -d -x -h -H $yr", '', 0);
+
+	for (my $i = 0; $i < @events; $i++)
+	{
+	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my $stime = sprintf("%02d %s %04d",
+				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				$Hebcal::MoY_long{$month},
+				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	    if ($subj =~ /^\d+\w+ of [^,]+, \d+$/)
+	    {
+		$greg2heb{$stime} = $subj;
+	    }
+	}
     }
 
     for (my $yr = 0; $yr < $extra_years; $yr++)
     {
-	my %greg2heb;
 	my @events = @{$years[$yr]};
 	for (my $i = 0; $i < @events; $i++)
 	{
@@ -652,13 +673,6 @@ sub holidays_observed
 				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
 				$Hebcal::MoY_long{$month},
 				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-
-	    # hebcal -D conveniently emits the date before the event name
-	    if ($subj =~ /^\d+\w+ of [^,]+, \d+$/)
-	    {
-		$greg2heb{$stime} = $subj;
-		next;
-	    }
 
 	    my $subj_copy = $subj;
 	    $subj_copy =~ s/ \d{4}$//;
