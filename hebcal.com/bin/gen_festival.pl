@@ -346,7 +346,7 @@ EOHTML
 	$prev_anchor = Hebcal::make_anchor($prev);
 	my $title = "Previous Holiday";
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
-	    qq{title="$title">&lt;&lt; $prev</a>};
+	    qq{title="$title">&laquo;&nbsp;$prev</a>};
     }
 
     my $next = $NEXT{$f};
@@ -357,7 +357,7 @@ EOHTML
 	$next_anchor = Hebcal::make_anchor($next);
 	my $title = "Next Holiday";
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
-	    qq{title="$title">$next &gt;&gt;</a>};
+	    qq{title="$title">$next&nbsp;&raquo;</a>};
     }
 
     print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
@@ -433,8 +433,15 @@ EOHTML
 	    my $anchor = Hebcal::make_anchor($part);
 	    $anchor =~ s/\.html$//;
 
+	    print OUT2 qq{\n<h2><a name="$anchor"></a>$part};
+	    my $part_hebrew = $festivals->{'festival'}->{$part}->{'hebrew'};
+	    if ($part_hebrew)
+	    {
+		print OUT2 qq{\n<br><span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
+	    }
+	    print OUT2 qq{</h2>\n<div style="padding-left:20px;">};
+
 	    my $part_descr = $festivals->{'festival'}->{$part}->{'descr'};
-	    print OUT2 qq{\n<h2><a name="$anchor"></a>$part</h2>\n<div style="padding-left:20px;">};
 	    if ($part_descr && $part_descr ne $descr) {
 		print OUT2 qq{<p>$part_descr.\n};
 	    }
