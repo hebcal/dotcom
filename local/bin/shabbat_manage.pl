@@ -23,23 +23,32 @@ use the web interface to subscribe:
 
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
+
 my $to = $header->get('To');
+chomp($to) if $to;
+if ($to && Email::Valid->address($to)) {
+    $to = Email::Valid->address($to);
+}
+
 my $from = $header->get('From');
+chomp($from) if $from;
 my $addr;
 if ($from && Email::Valid->address($from)) {
     $addr = lc(Email::Valid->address($from));
 }
 
 unless (defined $to) {
+    &log(0, 'needto');
     &error_email($addr,$err_needto);
     exit(0);
 }
 
 if ($to =~ /shabbat-subscribe\@hebcal\.com/) {
+    &log(0, 'subscribe_useweb'); 
     &error_email($addr,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe\+(\d{5})\@hebcal\.com/) {
-#    &subscribe_zip($1);
+    &log(0, 'subscribe_useweb');
     &error_email($addr,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@hebcal\.com/) {
@@ -47,8 +56,11 @@ if ($to =~ /shabbat-subscribe\@hebcal\.com/) {
 } elsif ($to =~ /shabbat-unsubscribe\@hebcal\.com/) {
     if ($addr) {
 	&unsubscribe($addr);
+    } else {
+	&log(0, 'unsub_bad_from');
     }
 } else {
+    &log(0, 'badto');
     &error_email($addr,$err_needto);
 }
 exit(0);
@@ -71,6 +83,7 @@ sub subscribe
     my $args = $DB{$encoded};
     unless ($args) {
 	warn "skipping $encoded: (undef)";
+	&log(0, 'subscribe_no_db');
 	flock(DB_FH, LOCK_UN);
 	undef $db;
 	untie(%DB);
@@ -80,12 +93,15 @@ sub subscribe
 
     if ($args =~ /^action=/) {
 	warn "skipping $encoded: $args";
+	&log(0, 'subscribe_twice');
 	flock(DB_FH, LOCK_UN);
 	undef $db;
 	untie(%DB);
 	close(DB_FH);
 	return 0;
     }
+
+    &log(1, 'subscribe');
 
     my($now) = time;
     $DB{$encoded} = "action=PROCESSED;t=$now";
@@ -180,6 +196,7 @@ sub unsubscribe
 	undef $db;
 	untie(%DB);
 	close(DB_FH);
+	&log(0, 'unsub_no_db');
 	&error_email($email,$err_notsub);
 	return 0;
     }
@@ -189,9 +206,12 @@ sub unsubscribe
 	undef $db;
 	untie(%DB);
 	close(DB_FH);
+	&log(0, 'unsub_twice');
 	&error_email($email,$err_notsub);
 	return 0;
     }
+
+    &log(1, 'unsub');
 
     my($now) = time;
     $DB{$email} = "action=UNSUBSCRIBE;t=$now";
@@ -253,4 +273,14 @@ hebcal.com};
          );
 
     &Hebcal::sendmail_v2($return_path,\%headers,$body);
+}
+
+sub log {
+    my($status,$code) = @_;
+    if (open(LOG, ">>$ENV{'HOME'}/.shabbat-log"))
+    {
+	my $t = time();
+	print LOG "status=$status from=$addr to=$to code=$code time=$t\n";
+	close(LOG);
+    }
 }
