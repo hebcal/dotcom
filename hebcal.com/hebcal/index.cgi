@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2003  Michael J. Radwin.
+# Copyright (c) 2004  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -351,6 +351,20 @@ sub csv_display() {
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
+sub alt_candles_text($$)
+{
+    my($q,$geo) = @_;
+
+    my $text = '?';
+    $text = 'latitude/longitude' if $geo eq 'pos';
+    $text = 'closest city' if $geo eq 'city';
+    $text = 'zip code' if $geo eq 'zip';
+
+    $q->a({-href => $script_name . "?c=on;geo=" . $geo,
+	   -onClick => "return s1('" . $geo . "')" },
+	  $text);
+}
+
 sub form($$)
 {
     my($message,$help) = @_;
@@ -555,39 +569,18 @@ JSCRIPT_END
 
     if ($q->param('geo') eq 'city')
     {
-	print STDOUT
-	    $q->a({-href => $script_name . "?c=on;geo=zip",
-		   -onClick => "return s1('zip')",
-	           },
-		  "zip code"), " or\n",
-	    $q->a({-href => $script_name . "?c=on;geo=pos",
-		   -onClick => "return s1('pos')",
-	           },
-		  "latitude/longitude");
+	print STDOUT alt_candles_text($q, 'zip'),
+	" or\n", alt_candles_text($q, 'pos');
     }
     elsif ($q->param('geo') eq 'pos')
     {
-	print STDOUT
-	    $q->a({-href => $script_name . "?c=on;geo=zip",
-		   -onClick => "return s1('zip')",
-	           },
-		  "zip code"), " or\n",
-	    $q->a({-href => $script_name . "?c=on;geo=city",
-		   -onClick => "return s1('city')",
-	           },
-		  "closest city");
+	print STDOUT alt_candles_text($q, 'zip'),
+	" or\n", alt_candles_text($q, 'city');
     }
     else
     {
-	print STDOUT
-	    $q->a({-href => $script_name . "?c=on;geo=city",
-		   -onClick => "return s1('city')",
-	           },
-		  "closest city"), " or\n",
-	    $q->a({-href => $script_name . "?c=on;geo=pos",
-		   -onClick => "return s1('pos')",
-	           },
-		  "latitude/longitude");
+	print STDOUT alt_candles_text($q, 'city'),
+	" or\n", alt_candles_text($q, 'pos');
     }
     print STDOUT ")</small><br>";
 
@@ -1210,9 +1203,10 @@ sub get_candle_config($)
 	    uc($q->param('ladir')) . " latitude";
 	$long_descr = "${long_deg}d${long_min}' " .
 	    uc($q->param('lodir')) . " longitude";
-	$dst_tz_descr = "Daylight Saving Time: " .
-	    $q->param('dst') . "\n<br>Time zone: " .
-		$Hebcal::tz_names{$q->param('tz')};
+	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
+	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
+	$dst_tz_descr = "Daylight Saving Time: $dst_text\n<br>Time zone: " .
+	    $Hebcal::tz_names{$q->param('tz')};
 
 	# don't multiply minutes by -1 since hebcal does it internally
 	$long_deg *= -1  if ($q->param('lodir') eq 'e');
@@ -1282,8 +1276,9 @@ sub get_candle_config($)
 
 #	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
 #	$long_descr = "${long_deg}d${long_min}' W longitude";
-	$dst_tz_descr = "Daylight Saving Time: " .
-	    $q->param('dst') . "\n<br>Time zone: " .
+	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
+	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
+	$dst_tz_descr = "Daylight Saving Time: $dst_text\n<br>Time zone: " .
 		$Hebcal::tz_names{$q->param('tz')};
 
 	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
