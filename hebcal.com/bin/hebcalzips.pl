@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl -w
 
+# $Id$
+
 require 'ctime.pl';
 
 %city_zips = 
@@ -43,6 +45,7 @@ require 'ctime.pl';
 dbmopen(%DB,"/home/web/radwin.org/docs/hebcal/zips", 0400) || die;
 die unless defined $DB{"95051"};
 
+$total = 0;
 $filename = defined $ARGV[0] ? $ARGV[0] : 
     '/var/log/httpd/radwin.org-access_log';
 open(A,$filename) || die "$filename: $!\n";
@@ -57,6 +60,7 @@ while(<A>)
 	} else {
 	    $zips{$1} = 1;
 	}
+	$total++;
     } elsif (/city=([^\s\&]+)/) {
 	if (defined $city_zips{$1})
 	{
@@ -65,11 +69,13 @@ while(<A>)
 	    } else {
 		$zips{$city_zips{$1}} = 1;
 	    }
+	    $total++;
 	}
     }
 }
 close(A);
 
+$unk = 0;
 while(($key,$val) = each(%zips))
 {
     if (defined $DB{$key}) {
@@ -88,6 +94,7 @@ while(($key,$val) = each(%zips))
 	    $valbycity{'***UNKNOWN***'}  = $val;
 	    $zipbycity{'***UNKNOWN***'}  = $key;
 	}
+	$unk += $val;
     }
 }
 dbmclose(%DB);
@@ -104,7 +111,10 @@ foreach (sort keys %valbycity) {
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 print "Hebcal Interactive Jewish Calendar\nhttp://www.radwin.org/hebcal/\n";
 print "most often used zip codes report\n";
+print "------------------------------------------------------------\n";
 print &ctime(time);
+printf "%d pageviews (%5.1f%% from unknown zip codes)\n",
+    $total, (($unk * 100.0) / $total);
 print "------------------------------------------------------------\n";
 
 $a = $b = 0;			# avoid warning
