@@ -215,11 +215,20 @@ EOHTML
 	my($aliyah) = $sedrot->val($sedrot_h, "aliyah$_");
 	next if (!defined $aliyah && $_ eq 'M');
 	die "no aliyah $_ defined for $h" unless defined $aliyah;
-	my($c1,$v1,$c2,$v2) = ($aliyah =~ /^(\d+):(\d+)-(\d+):(\d+)$/);
-	$aliyah = "$c1:$v1-$v2"
-	    if ($c1 == $c2);
+	my($c1,$v1,$c2,$v2) = ($aliyah =~ /^(\d+):(\d+)-(\d+):(\d+)/);
+	my($aliyah_range);
+	if ($c1 == $c2) {
+	    $aliyah_range = "$c1:$v1-$v2";
+	} else {
+	    $aliyah_range = "$c1:$v1-$c2:$v2";
+	}
+
 	my($label) = ($_ eq 'M') ? 'maf' : $_;
-	print OUT2 qq{<dt>$label:<dd>$aliyah\n};
+	if ($aliyah =~ /\s+\((\d+)\)\s*$/) {
+	    my $p = $1;
+	    $aliyah_range .= qq{ ($p p'sukim)};
+	}
+	print OUT2 qq{<dt>$label:<dd>$aliyah_range\n};
     }
 
     print OUT2 <<EOHTML;
