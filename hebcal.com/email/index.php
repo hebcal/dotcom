@@ -74,6 +74,7 @@ if (isset($param['e']))
 	if (isset($param['city'])) {
 	    $param['geo'] = 'city';
 	}
+	$is_update = true;
     }
 }
 
@@ -344,7 +345,10 @@ Contact me occasionally about changes to the hebcal.com website.
 <br>
 <input type="hidden" name="v" value="1">
 <br>
-<input type="submit" name="submit_modify" value="Subscribe">
+<input type="submit" name="submit_modify" value="<?php
+  global $is_update;
+  echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?>">
+or
 <input type="submit" name="submit_unsubscribe" value="Unsubscribe">
 </form>
 
