@@ -26,17 +26,37 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 11:52:54 PDT 1999
+Last modified: Fri Apr  9 15:10:09 PDT 1999
 <!-- hhmts end -->
 </small>
 
 </body> </html>
 ";
 
-@tz = (-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,12,11,10,9,8,7,6,5,4,3,2,1,0);
-
+# ------------------------------------------------------------------------
+# defaults
 $default_tz  = '-8';
 $default_zip = '95051';
+
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+    localtime(time);
+$year += 1900;
+
+$candle = $roshchodesh = $usa = 1;
+$israel = $none = 0;
+
+for ($i = -12; $i < 13; $i++)
+{
+    $tz{$i} = '';
+}
+$tz{$default_tz} = ' selected';
+
+for ($i = 0; $i < 13; $i++)
+{
+    $month{$i} = '';
+}
+$month{$mon + 1} = ' selected';
+# ------------------------------------------------------------------------
 
 $dbmfile = "zips.db";
 $dbmfile =~ s/\.db$//;
@@ -48,35 +68,53 @@ $dbmfile =~ s/\.db$//;
 
 if (!&ReadParse())
 {
-    $candle =  $roshchodesh = $usa = 1;
-    foreach (@tz)
-    {
-	$tz{$_} = '';
-    }
-    $tz{$default_tz} = ' selected';
     &form($default_zip, '');
 }
 
 if (defined $in{'tz'})
 {
-    foreach (@tz)
+    for ($i = -12; $i < 13; $i++)
     {
-	if ($in{'tz'} eq $_)
+	if ($in{'tz'} eq $i)
 	{
-	    $tz{$_} = ' selected';
+	    $tz{$i} = ' selected';
 	}
 	else
 	{
-	    $tz{$_} = '';
+	    $tz{$i} = '';
 	}
+    }
+}
+
+if (defined $in{'month'})
+{
+    for ($i = 0; $i < 13; $i++)
+    {
+	if ($in{'month'} eq $i)
+	{
+	    $month{$i} = ' selected';
+	}
+	else
+	{
+	    $month{$i} = '';
+	}
+    }
+
+    if ($in{'month'} eq '')
+    {
+	$month{'0'} = ' selected';
     }
 }
 
 $candle = ($in{'c'} eq 'on' || $in{'c'} eq '1') ? 1 : 0;
 $roshchodesh = ($in{'x'} eq 'on' || $in{'x'} eq '1') ? 1 : 0;
-$usa = ($in{'dst'} eq 'usa') ? 1 : 0;
-$israel = ($in{'dst'} eq 'israel') ? 1 : 0;
-$none = ($in{'dst'} eq 'none') ? 1 : 0;
+if (defined $in{'dst'})
+{
+    $usa = ($in{'dst'} eq 'usa') ? 1 : 0;
+    $israel = ($in{'dst'} eq 'israel') ? 1 : 0;
+    $none = ($in{'dst'} eq 'none') ? 1 : 0;
+}
+$year = $in{'year'} if (defined $in{'year'} && $in{'year'} =~ /^\d+$/);
 
 &form($default_zip, '') if (!defined $in{'zip'});
 
@@ -105,12 +143,11 @@ dbmclose(%DB);
 ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
 ($city,$state) = split(/\0/, substr($val,6));
 
-&download() unless defined $ENV{'PATH_INFO'};
-
 $cmd  = "/home/users/mradwin/bin/hebcal" .
-    " -L $long_deg,$long_min -l $lat_deg,$lat_min -r";
+    " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 $cmd .= ' -x' if $roshchodesh;
 $cmd .= ' -c' if $candle;
+$cmd .= ' -r' if defined $ENV{'PATH_INFO'};
 
 if (defined $in{'tz'} && $in{'tz'} ne '')
 {
@@ -125,6 +162,15 @@ else
 {
     $cmd .= ' -Z usa';
 }
+
+if (defined $in{'month'} && $in{'month'} ne '')
+{
+    $cmd .= " $in{'month'}";
+}
+
+$cmd .= " $year";
+
+&download() unless defined $ENV{'PATH_INFO'};
 
 open(HEBCAL,"$cmd |") ||
     &CgiDie("Script Error: can't run hebcal",
@@ -191,12 +237,34 @@ $message
 <p>This is a beta web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 
-<p>Use the form below to download an Outlook CSV file with Jewish
-Holidays.  Candle lighting times will be customized to your
-latitude/longitude (determined by your Zip Code).</p>
+<p>Use the form below to generate a list of Jewish Holidays.  Candle
+lighting times will be customized to your latitude/longitude (determined
+by your Zip Code).</p>
 
 <blockquote>
 <form method=\"get\" action=\"/cgi-bin/hebcal\">
+
+<label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
+id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
+
+&nbsp;&nbsp;&nbsp;
+
+<label for=\"month\">Month: </label>
+<select name=\"month\" id=\"month\">
+<option value=\"\"$month{'0'}>- entire year -</option>
+<option value=\"1\"$month{'1'}>January</option>
+<option value=\"2\"$month{'2'}>Februrary</option>
+<option value=\"3\"$month{'3'}>March</option>
+<option value=\"4\"$month{'4'}>April</option>
+<option value=\"5\"$month{'5'}>May</option>
+<option value=\"6\"$month{'6'}>June</option>
+<option value=\"7\"$month{'7'}>July</option>
+<option value=\"8\"$month{'8'}>August</option>
+<option value=\"9\"$month{'9'}>September</option>
+<option value=\"10\"$month{'10'}>October</option>
+<option value=\"11\"$month{'11'}>November</option>
+<option value=\"12\"$month{'12'}>December</option>
+</select><br>
 
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
 id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\"><br>
@@ -284,25 +352,38 @@ sub download
     }
 
     print STDOUT "$html_header
-<p><a href=\"/cgi-bin/hebcal/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
-Here to Download Outlook CSV File</a> for the following city:</p>
-
 <p>
 $city, $state $in{'zip'}<br>
 ${lat_deg}d${lat_min}' N latitude<br>
-${long_deg}d${long_min}' W longitude
+${long_deg}d${long_min}' W longitude<br>
+<small>
+Daylight Savings Time rule: $in{'dst'}<br>
+Time Zone: GMT $in{'tz'}:00
+</small>
 </p>
 
-Options:
-<ul>
-<li>Daylight Savings Time rule: $in{'dst'}
-<li>Time Zone: GMT $in{'tz'}:00
-" . ($roshchodesh ? "<li>Include Rosh Chodesh\n" : '')
-  . ($candle ? "<li>Include Candle Lighting Times\n" : '')
-  . "</ul>
+";
 
-<p><small>(This is a beta web interface to Danny Sadinoff's <a
-href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.)</small></p>
+    print STDOUT "<!-- $cmd -->\n<pre>";
+    open(HEBCAL,"$cmd |") ||
+	&CgiDie("Script Error: can't run hebcal",
+		"\nCommand was \"$cmd\".\n" .
+		"Please <a href=\"mailto:michael\@radwin.org" .
+		"\">e-mail Michael</a>.");
+
+    while(<HEBCAL>)
+    {
+	s/</&lt;/g;
+	s/>/&lt;/g;
+	s/&/&amp;/g;
+	print STDOUT $_;
+    }
+    close(HEBCAL);
+
+    print STDOUT "</pre>
+
+<p><a href=\"/cgi-bin/hebcal/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
+here to download as an Outlook CSV file</a></p>
 
 $html_footer";
 
