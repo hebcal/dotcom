@@ -1148,6 +1148,36 @@ sub process_cookie($$)
 # EXPORT
 ########################################################################
 
+sub self_url($$)
+{
+    my($q,$override) = @_;
+
+    my($script_name) = $q->script_name();
+    $script_name =~ s,/index.cgi$,/,;
+
+    my($url) = $script_name;
+    my($sep) = '?';
+
+    foreach my $key ($q->param())
+    {
+	my($val) = defined $override->{$key} ?
+	    $override->{$key} : $q->param($key);
+	$url .= "$sep$key=" . Hebcal::url_escape($val);
+	$sep = ';' if $sep eq '?';
+    }
+
+    foreach my $key (keys %{$override})
+    {
+	unless (defined $q->param($key))
+	{
+	    $url .= "$sep$key=" . Hebcal::url_escape($override->{$key});
+	    $sep = ';' if $sep eq '?';
+	}
+    }
+
+    $url;
+}
+
 sub download_href
 {
     my($q,$filename,$ext) = @_;
@@ -1169,7 +1199,7 @@ sub download_href
 
 sub download_html
 {
-    my($q, $filename, $events) = @_;
+    my($q, $filename, $events, $title) = @_;
 
     my($greg_year1,$greg_year2) = (0,0);
     my($numEntries) = scalar(@{$events});
@@ -1181,8 +1211,21 @@ sub download_html
 
     my($s) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export calendar</h3>\n};
 
+    $title = '' unless $title;
     $s .= qq{<p>By clicking the links below, you can download 
-Jewish Calendar events into your desktop software.</p>};
+Jewish Calendar $title events into your desktop software.</p>};
+
+    if ($title && defined $q->param('month') && $q->param('month') ne 'x')
+    {
+	my $heb_year = $q->param('year') + 3760;
+	$s .= "<p>Note: the following links will download $title.\n" .
+	    "You may wish to download <a\n" .
+	    "href=\"" . Hebcal::self_url($q, {'month' => 'x'})
+	    . "#export\">all of " . $q->param('year') . "</a> or <a\n" .
+	    "href=\"" .
+	    Hebcal::self_url($q, {'yt' => 'H', 'month' => 'x', 'year' => $heb_year}) .
+	    "#export\">Hebrew Year $heb_year</a>.</p>\n";
+    }
 
     $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
 	"<ul><li>USA date format (month/day/year):\n" .
