@@ -155,7 +155,7 @@ else
 }
 
 $hebfont = false;
-$qs = getenv("QUERY_STRING");
+$qs = $_SERVER["QUERY_STRING"];
 if ($qs) {
     if (isset($_GET["heb"]) && ($_GET["heb"] == "on" || $_GET["heb"] == "1")) {
 	$hebfont = true;
