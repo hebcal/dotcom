@@ -45,7 +45,7 @@ print OUT <<EOHTML;
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Hebcal Default Holidays</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
-<base href="http://www.hebcal.com/help/defaults.html" target="_top">
+<base href="http://www.hebcal.com/help/holidays.html" target="_top">
 <link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
