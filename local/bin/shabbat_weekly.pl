@@ -46,21 +46,24 @@ shabbat-unsubscribe\@hebcal.com
     my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
 
     my($return_path) = "shabbat-bounce\@hebcal.com";
-    my($from_addr) = "shabbat-owner\@hebcal.com";
-    my($from_name) = "Hebcal";
-    my($subject) =
-	strftime("[shabbat] %b %d Candle lighting", localtime($fri));
-    my($xtrahead) =
-	"List-Unsubscribe: <mailto:shabbat-unsubscribe\@hebcal.com>\n" .
-	"Precedence: bulk\n";
+    my %headers =
+        (
+         'From' => "Hebcal <shabbat-owner\@hebcal.com>",
+         'To' => $to,
+         'MIME-Version' => '1.0',
+         'Content-Type' => 'text/plain',
+         'Subject' =>
+	 strftime("[shabbat] %b %d Candle lighting", localtime($fri)),
+	 'List-Unsubscribe' => "<mailto:shabbat-unsubscribe\@hebcal.com>",
+	 'Precedence' => 'bulk',
+         );
 
     # try 3 times to avoid intermittent failures
     my($i);
     my($status) = 0;
     for ($i = 0; $status == 0 && $i < 3; $i++)
     {
-	$status = &Hebcal::sendmail($return_path,$from_addr,$from_name,
-				    $subject,$xtrahead,$body,$to,'');
+	$status = &Hebcal::sendmail_v2($return_path,\%headers,$body);
     }
 
     warn "$0: unable to email $to\n"
