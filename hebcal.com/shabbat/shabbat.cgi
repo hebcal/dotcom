@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 10:48:08 PDT 2001
+Last modified: Wed Apr 18 10:50:25 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -677,11 +677,6 @@ sub form
 
     &out_html(
 	qq{<hr noshade size=\"1\">\n},
-	qq{<p><small>[
-<a href="/hebcal/">Hebcal Interactive Jewish Calendar</a> |
-1-Click Shabbat |
-<a href="/yahrzeit/">Interactive Yahrzeit/Birthday Calendar</a>
-]</small></p>},
 	qq{<p><a href="/help/#tags">How\n},
 	qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
 	qq{times on its own website?</a></p>});
