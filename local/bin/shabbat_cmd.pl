@@ -4,8 +4,8 @@ use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use DBI;
-use Hebcal;
+use DBI ();
+use Hebcal ();
 
 my $site = 'hebcal.com';
 my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
