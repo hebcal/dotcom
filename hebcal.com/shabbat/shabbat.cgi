@@ -897,6 +897,16 @@ sub display_html
 		      "See all of <a href=\"$url\">this\n",
 		      "month's calendar</a>\n");
 
+    # Fridge calendar
+    $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
+    if ($q->param('zip')) {
+	$url .= "zip=" . $q->param('zip');
+    } else {
+	$url .= "city=" . Hebcal::url_escape($q->param('city'));
+    }
+    Hebcal::out_html($cfg,"|\nprintable page of <a href=\"$url\">this year's times</a>\n",
+		     "<span class=\"hl\"><b>NEW!</b></span>\n");
+
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
 			 "?geo=", $q->param('geo'), "&amp;");
