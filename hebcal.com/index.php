@@ -49,7 +49,6 @@ find out Torah reading for any date in the future
 <h4><a href="/holidays/">Jewish Holidays</a></h4>
 <span class="sm-grey">&gt;</span>
 Dates for the next few years and special Torah readings
-<span class="hl"><b>NEW!</b></span>
 <h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
 Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
