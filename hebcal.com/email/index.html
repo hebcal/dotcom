@@ -248,13 +248,13 @@ sub subscribe
 	$cmp1 =~ s/^t=\d+\&//;
 	$cmp2 =~ s/^t=\d+\&//;
 
-	$cookie_to_set = $newcookie 
+	$cookie_to_set = "E=$newcookie"
 	    if ($cmp2 ne 'opt_out' && $cmp1 ne $cmp2);
     }
 
     my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
     print STDOUT "Set-Cookie: ", $cookie_to_set,
-    "; path=/; expires=",  $expires_date, "\015\012"
+    "; path=/email; expires=",  $expires_date, "\015\012"
 	if $cookie_to_set;
 
     print STDOUT $q->header(),
