@@ -85,7 +85,7 @@ my($author) = 'webmaster@hebcal.com';
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May  8 11:50:09 PDT 2001
+Last modified: Thu May 10 09:42:56 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -265,7 +265,7 @@ sub form($$$)
 	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">\n";
     }
 
-    print STDOUT qq{$message<form action="$script_name">
+    print STDOUT qq{$message<form name="f1" id="f1"\naction="$script_name">
 <center><table cellpadding="4">
 <tr align="center"><td colspan="3">Gregorian to Hebrew</td>
 <td>&nbsp;</td>
