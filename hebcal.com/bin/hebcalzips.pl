@@ -2,7 +2,24 @@
 
 # $Id$
 
-use DB_File;
+# Copyright (c) 2002  Michael John Radwin.  All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use Hebcal;
 
 %city_zips = 
     (
@@ -42,14 +59,12 @@ use DB_File;
      'Washington DC', '20301',
      );
 
-$dbmfile = '/pub/m/r/mradwin/hebcal.com/hebcal/zips.db';
-tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-    || die "Can't tie $dbmfile: $!\n";
-die unless defined $DB{"95051"};
+my $DB = &Hebcal::zipcode_open_db();
+die unless defined $DB->{"95051"};
 
 $total = 0;
 $filename = defined $ARGV[0] ? $ARGV[0] : 
-    '/var/log/httpd/access_log.vhosts';
+    '/var/log/httpd/vhosts.access';
 open(A,$filename) || die "$filename: $!\n";
 while(<A>)
 {
@@ -82,13 +97,16 @@ close(A);
 $unk = 0;
 while(($key,$val) = each(%zips))
 {
-    if (defined $DB{$key}) {
-	if (defined $valbycity{substr($DB{$key},6)}) {
-	    $valbycity{substr($DB{$key},6)} += $val;
-	    $zipbycity{substr($DB{$key},6)} .= "\001" . $key;
+    if (defined $DB->{$key}) {
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    &Hebcal::zipcode_fields($DB->{$key});
+	my $citystate = $city . "\0" . $state;
+	if (defined $valbycity{$citystate}) {
+	    $valbycity{$citystate} += $val;
+	    $zipbycity{$citystate} .= "\001" . $key;
 	} else {
-	    $valbycity{substr($DB{$key},6)}  = $val;
-	    $zipbycity{substr($DB{$key},6)}  = $key;
+	    $valbycity{$citystate}  = $val;
+	    $zipbycity{$citystate}  = $key;
 	}
     } else {
 	if (defined $valbycity{'***UNKNOWN***'}) {
@@ -101,8 +119,8 @@ while(($key,$val) = each(%zips))
 	$unk += $val;
     }
 }
-untie(%DB);
-
+&Hebcal::zipcode_close_db($DB);
+undef($DB);
 
 foreach (sort keys %valbycity) {
     if (defined($byvalue{$valbycity{$_}})) {
