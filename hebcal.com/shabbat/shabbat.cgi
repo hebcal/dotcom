@@ -578,7 +578,7 @@ sub display_vxml
 	if ($items->[$i]->{'class'} eq 'candles')
 	{
 	    my $subj = $items->[$i]->{'subj'};
-	    $subj =~ s/Havdalah/Hav dal ah/g;
+	    $subj =~ s/Havdalah/Hav doll ahh/g;
 	    print qq{\t<audio>$subj for
 $items->[$i]->{'date'} is at $items->[$i]->{'time'}.</audio>
 };
@@ -601,8 +601,46 @@ $items->[$i]->{'subj'}.</audio>
 
     print qq{
 	<break time="250ms"/>
-	<audio>That's all!  Thanks for using the Heeb cal interactive Jewish Calendar.  Shabbat Shalom.</audio>
+	<audio>That's all!</audio>
+	<goto next="#again"/>
 </block>
+</form>
+<form id="again">
+	<field name="again_verify" type="boolean">
+		<prompt>
+			<audio>Would you like to hear those times again?</audio>
+		</prompt>
+		<nomatch count="1">
+			<audio>I'm sorry...I didn't catch that.</audio>
+			<audio>Say Yes or No</audio>
+		</nomatch>
+		<nomatch count="2">
+			<audio>I'm sorry...I still didn't catch that.</audio>
+			<audio>Say Yes or No</audio>
+			<audio>or for yes, press one. for no, press 2</audio>
+			<audio>on your telephone keypad</audio>
+			<break time="250ms"/>
+			<audio>To choose another keyword say "Tell me menu" or press star.</audio>
+		</nomatch>
+		<noinput count="1">
+			<audio>I'm sorry, I didn't hear you.</audio>
+		</noinput>
+		<noinput count="2">
+			<audio>I'm sorry, I still didn't hear you.</audio>
+			<audio>Say Yes or No</audio>
+			<audio>or for yes, press one. for no, press 2</audio>
+			<audio>on your telephone keypad</audio>
+		</noinput>
+		<filled>
+			<if cond="again_verify == true">
+				<audio>O K.</audio>
+				<goto next="#results"/>
+				<else/>
+				<audio>Thanks for using the Heeb cal interactive Jewish Calendar.</audio>
+				<audio>Shabbat Shalom.</audio>
+			</if>
+		</filled>
+	</field>
 </form>
 </vxml>
 };
@@ -847,6 +885,8 @@ sub form($$$$)
 <vxml version="2.0">
 	<form id="top">
 		<block>
+			<audio>I'm sorry, there was a problem.</audio>
+			<audio>let's try this again...</audio>
 			<goto next="http://www.hebcal.com/shabbat.vxml#enterzip"/>
 		</block>
 	</form>
