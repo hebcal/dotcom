@@ -286,7 +286,7 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 	if $cookie_to_set && !$cfg;
 }
 
-my($title) = "1-Click Shabbat for $city_descr";
+my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
@@ -360,7 +360,7 @@ else
 {
     &my_header($title);
 
-    &Hebcal::out_html($cfg,"<h2>$city_descr</h2>\n");
+    &Hebcal::out_html($cfg,"<h3>$city_descr</h3>\n");
 
     if (defined $dst_descr && defined $tz_descr)
     {
@@ -539,9 +539,9 @@ if (!$cfg && $q->param('zip'))
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    &Hebcal::out_html($cfg,"<p><b>",
-		      "<a href=\"$url\">Subscribe\n",
-		      "to 1-Click Shabbat by email</a></b>\n");
+    &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
+		      "<a href=\"$url\">Email:\n",
+		      "subscribe to weekly Candle Lighting Times</a>\n");
 
     $url = join('', "http://", $q->virtual_host(), "/link/",
 		"?zip=", $q->param('zip'));
@@ -549,10 +549,10 @@ if (!$cfg && $q->param('zip'))
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
     $url .= "&amp;type=shabbat";
 
-    &Hebcal::out_html($cfg,"<br><b><span class=\"hl\">NEW!</span>\n",
-		      "<a href=\"$url\">Add\n",
+    &Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
+		      "<a href=\"$url\">Synagogues: add\n",
 		      "1-Click Shabbat candle-lighting times to your\n",
-		      "synagogue's web site</a></b></p>\n");
+		      "web site</a></p>\n");
 }
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
@@ -666,7 +666,7 @@ sub my_header
     unless (defined $cfg && $cfg =~ /^[ijrw]$/)
     {
 	&Hebcal::out_html($cfg,&Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
-		  "<h1>1-Click\nShabbat</h1>\n");
+		  "<h1>1-Click\nShabbat Candle Lighting Times</h1>\n");
     }
 
     1;
@@ -695,7 +695,7 @@ sub form
 
     &Hebcal::out_html($cfg,
 	qq{$message\n},
-	qq{<hr noshade size=\"1\"><h3>Change City</h3>\n},
+	qq{<hr noshade size="1"><h3><a name="change">Change City</a></h3>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
 	qq{<label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
