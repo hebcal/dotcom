@@ -349,7 +349,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Thu Dec 16 18:02:40 PST 1999
+Last modified: Thu Dec 16 18:54:18 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -645,7 +645,14 @@ print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
 print STDOUT "Expires: $expires_date\015\012";
 print STDOUT "Content-Type: text/x-csv\015\012\015\012";
 
-$endl = "\015\012";
+$endl = "\012";			# default Netscape and others
+if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
+{
+    $endl = "\015\012"
+	if $ENV{'HTTP_USER_AGENT'} =~ /Microsoft Internet Explorer/;
+    $endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
+}
+
 print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",",
     "\"End Time\",\"All day event\",\"Description\",",
     "\"Private\",\"Show time as\"$endl";
@@ -665,7 +672,7 @@ while(<HEBCAL>)
 	= &parse_date_descr($date,$descr);
 
     print STDOUT '"', $subj, '","', $date, '",', $start_time, ',', $end_date,
-	',', $end_time, ',"', $all_day, ',"',
+	',', $end_time, ',', $all_day, ',"',
 	($start_time eq '' ? '' : $loc), '","true","3"', $endl;
 }
 close(HEBCAL);
@@ -1100,28 +1107,25 @@ $date</small>
     print STDOUT "<a href=\"$prev_url\">", $prev_title, "</a> |\n";
     print STDOUT "<a href=\"$next_url\">", $next_title, "</a><br>\n";
 
+    print STDOUT "<p><a href=\"${cgipath}index.html/$filename?dl=1";
+    while (($key,$val) = each(%in))
+    {
+	print STDOUT "&amp;$key=", &url_escape($val);
+    }
+    print STDOUT "\">Download\nas an Outlook CSV file</a>";
+
     if ($ycal == 0)
     {
-	print STDOUT "<a href=\"$cgipath?y=1";
+	print STDOUT " - <a href=\"$cgipath?y=1";
 	while (($key,$val) = each(%in))
 	{
 	    print STDOUT "&amp;$key=", &url_escape($val);
 	}
-	print STDOUT "\">Show Yahoo! Calendar links</a>\n";
+	print STDOUT "\">Show\nYahoo! Calendar links</a>";
     }
+    print STDOUT "</p>\n";
 
-    print STDOUT "<div><form action=\"${cgipath}index.html/$filename\">\n";
-    while (($key,$val) = each(%in))
-    {
-	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"", 
-	   $val, "\">\n";
-    }
-    print STDOUT
-"<input type=\"submit\" value=\"Download as an Outlook CSV file\">
-</form></div>
-";
-
-    print STDOUT
+print STDOUT 
 "<div><small>
 <p>Your personal <a href=\"http://calendar.yahoo.com/\">Yahoo!
 Calendar</a> is a free web-based calendar that can synchronize with Palm
@@ -1130,7 +1134,7 @@ Pilot, Outlook, etc.</p>
 <li>If you wish to upload <strong>all</strong> of the below holidays to
 your Yahoo!  Calendar, do the following:
 <ol>
-<li>Click the \"Download as an Outlook CSV file\" button above.
+<li>Click the \"Download as an Outlook CSV file\" link above.
 <li>Save the hebcal CSV file on your computer.
 <li>Go to <a href=\"http://calendar.yahoo.com/?v=81\">options page</a> of
 Yahoo! Calendar.
@@ -1146,7 +1150,7 @@ so you can keep this window open.
     $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
     print STDOUT "<!-- $cmd_pretty -->\n";
-    print STDOUT "<pre>\n";
+    print STDOUT "<pre>";
     open(HEBCAL,"$cmd |") ||
 	&CgiDie("Script Error: can't run hebcal",
 		"\nCommand was \"$cmd\".\n" .
