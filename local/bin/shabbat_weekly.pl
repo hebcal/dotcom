@@ -140,6 +140,8 @@ sub gen_body
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
 	    $body .= "This week's Torah portion is $subj\n";
+	    $body .= "  http://www.hebcal.com" .
+	      Hebcal::get_holiday_anchor($subj,undef,undef) . "\n";
 	}
 	else
 	{
