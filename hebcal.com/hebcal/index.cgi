@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Sun Oct 17 09:25:10 PDT 1999
+Last modified: Sun Oct 17 09:28:19 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1185,7 +1185,11 @@ open.</small></p>
     }
     close(HEBCAL);
 
-    print STDOUT "</pre>", $html_footer;
+    print STDOUT "</pre>", "Go to:\n";
+    print STDOUT "<a href=\"$prev_url\">", $prev_title, "</a> |\n";
+    print STDOUT "<a href=\"$next_url\">", $next_title, "</a><br>\n";
+
+    print STDOUT  $html_footer;
 
     close(STDOUT);
     exit(0);
