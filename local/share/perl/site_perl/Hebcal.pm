@@ -254,21 +254,21 @@ my(%holidays) =
      ["rosh",			1, 'רֹאשׁ הַשָּׁנָה יוֹם ב׳'],
 
      "Shabbat HaChodesh"	=>
-     ["hachodesh",		1, 'שַׁבָּת הַחֹדֶשׁ'],
+     ["hachodesh",		0, 'שַׁבָּת הַחֹדֶשׁ'],
      "Shabbat HaGadol"		=>
-     ["hagadol",		1, 'שַׁבָּת הַגָּדוֹל'],
+     ["hagadol",		0, 'שַׁבָּת הַגָּדוֹל'],
      "Shabbat Hazon"		=>
-     ["hazon",			1, 'שַׁבָּת הַזוֹן'],
+     ["hazon",			0, 'שַׁבָּת הַזוֹן'],
      "Shabbat Nachamu"		=>
-     ["nachamu",		1, 'שַׁבָּת נַחֲמוּ'],
+     ["nachamu",		0, 'שַׁבָּת נַחֲמוּ'],
      "Shabbat Parah"		=>
-     ["parah",			1, 'שַׁבָּת פּרה'],
+     ["parah",			0, 'שַׁבָּת פּרה'],
      "Shabbat Shekalim"		=>
-     ["shekalim",		1, 'שַׁבָּת שְׁקָלִים'],
+     ["shekalim",		0, 'שַׁבָּת שְׁקָלִים'],
      "Shabbat Shuva"		=>
-     ["shuva",			1, 'שַׁבָּת שׁוּבָה'],
+     ["shuva",			0, 'שַׁבָּת שׁוּבָה'],
      "Shabbat Zachor"		=>
-     ["zachor",			1, 'שַׁבָּת זָכוֹר'],
+     ["zachor",			0, 'שַׁבָּת זָכוֹר'],
 
      "Erev Shavuot"		=>
      ["shavuot",		0, 'עֶרֶב שָׁבוּעוֹת'],
