@@ -37,7 +37,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 11:57:45 PDT 2001
+Last modified: Sun Apr 22 12:06:09 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -271,14 +271,8 @@ print STDOUT $q->header(),
 				   'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish'
 				   },
 		   ),
-    "<table width=\"100%\"\nclass=\"navbar\">",
-    "<tr><td><small>",
-    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
-    "<tt>-&gt;</tt>\n",
-    "yahrzeit</small></td>",
-    "<td align=\"right\"><small><a\n",
-    "href=\"/search/\">Search</a></small>",
-    "</td></tr></table>",
+    &Hebcal::navbar($server_name,
+		    "Yahrzeit,\nBirthday and Anniversary Calendar"),
     "<h1>Hebcal\nYahrzeit, Birthday and Anniversary Calendar</h1>\n";
 
 &form(1,'','') unless keys %yahrzeits;
