@@ -4,7 +4,7 @@ use Hebcal;
 use POSIX;
 use strict;
 
-my $line = `./bin/hebcal -S -t -x -h | grep Parashat`;
+my $line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -S -t -x -h | grep Parashat`;
 chomp($line);
 
 if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
