@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 16 12:35:40 PDT 2001
+Last modified: Tue Apr 17 16:29:44 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -182,7 +182,7 @@ sub my_invoke_hebcal {
     }
     close(T);
 
-    my($cmd) = "/home/users/mradwin/bin/hebcal -D -x -Y $tmpfile";
+    my($cmd) = "./hebcal -D -x -Y $tmpfile";
 
     my(%greg2heb) = ();
     my($year);
