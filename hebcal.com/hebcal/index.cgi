@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Nov 15 20:27:24 PST 2000
+Last modified: Mon Jan  8 09:41:46 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1083,7 +1083,7 @@ so you can keep this window open.
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
-	if ($q->param('zip') =~ /^\d{5}$/)
+	if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
 	{
 	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
@@ -1092,7 +1092,7 @@ so you can keep this window open.
 		if $q->param('tz') ne 'auto';
 	    print STDOUT qq{">1-Click Shabbat for $city_descr</a>.</p>\n};
 	}
-	elsif ($q->param('city') !~ /^\s*$/)
+	elsif (defined $q->param('city') && $q->param('city') !~ /^\s*$/)
 	{
 	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?city=},
