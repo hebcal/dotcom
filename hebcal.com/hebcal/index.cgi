@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Apr 17 16:45:44 PDT 2001
+Last modified: Tue Apr 17 17:07:25 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -67,7 +67,7 @@ $q->delete('.s');		# we don't care about submit button
 
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
-my($server_name) = $q->server_name();
+my($server_name) = $q->virtual_host();
 $server_name =~ s/^www\.//;
 
 $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
