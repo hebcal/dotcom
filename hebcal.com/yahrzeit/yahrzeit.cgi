@@ -73,8 +73,8 @@ foreach $key (1 .. 5)
 		    $q->param("y$key"),
 		    $q->param("n$key"));
 	$ytype{$q->param("n$key")} = 
-	    ($q->param("t$key") eq 'Birthday') ? 'Hebrew Birthday' :
-		$q->param("t$key");
+	    ($q->param("t$key") eq 'Yahrzeit') ?
+		$q->param("t$key") : 'Hebrew ' . $q->param("t$key");
     }
 }
 
