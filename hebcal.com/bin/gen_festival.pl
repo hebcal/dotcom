@@ -424,7 +424,7 @@ href="/search/">Search</a></small>
 $prev_link
 </td>
 <td align="center" width="70%">
-<h1 align="center"><a name="top">$f</a><br><span
+<h1 align="center"><a name="top"></a>$f<br><span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 </td>
 <td align="right" width="15%">
@@ -468,7 +468,7 @@ EOHTML
     if (defined $OBSERVED{$f})
     {
 	print OUT2 <<EOHTML;
-<h3><a name="dates">List of Dates</a></h3>
+<h3><a name="dates"></a>List of Dates</h3>
 $f is observed on:
 <ul>
 EOHTML
@@ -513,7 +513,7 @@ EOHTML
     }
 
     print OUT2 qq{
-<h3><a name="ref">References</a></h3>
+<h3><a name="ref"></a>References</h3>
 <dl>
 <dt><em><a
 href="$strassfeld_link">The
