@@ -44,7 +44,6 @@ print OUT <<EOHTML;
 <base href="http://www.hebcal.com/sedrot/" target="_top">
 <link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
-<link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
 </head>
 <body>
 <table width="100%" class="navbar">
