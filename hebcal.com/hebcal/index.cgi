@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu May 18 10:39:13 PDT 2000
+Last modified: Fri May 19 14:07:36 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -827,7 +827,7 @@ JSCRIPT_END
     $q->param('c','off') unless defined $q->param('c');
 
     my $type = (defined $q->param('geo') && $q->param('geo') eq 'city') ?
-	"closest city" : 
+	"closest city" :
 	    (defined $q->param('geo') && $q->param('geo') eq 'pos') ?
 		"latitude/longitude" : "zip code";
 
@@ -876,7 +876,7 @@ JSCRIPT_END
 		  "latitude/longitude");
     }
     print STDOUT ")</small><br>";
-	
+
     if (defined $q->param('geo') && $q->param('geo') eq 'city')
     {
 	print STDOUT $q->hidden(-name => 'geo',
@@ -1069,7 +1069,7 @@ sub results_page
 	    $expires_date, "; path=/\015\012"
 		if $cmp1 ne $cmp2;
 	}
-	    
+
 	$q->delete('set');
     }
 
@@ -1208,7 +1208,8 @@ Pilot, Outlook, etc.</p>
 <li>If you wish to upload <strong>all</strong> of the below holidays to
 your Yahoo!  Calendar, do the following:
 <ol>
-<li>Click the \"Download as an Outlook CSV file\" link above.
+<li>Click the \"Download as an Outlook CSV file\" link at the bottom of
+this page.
 <li>Save the hebcal CSV file on your computer.
 <li>Go to <a
 href=\"http://calendar.yahoo.com/?v=81\">Import/Export page</a> of
