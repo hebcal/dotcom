@@ -77,13 +77,24 @@ foreach my $h (reverse $sedrot->Sections())
     $h2 = $h;
 }
 
+my($prev_book);
 foreach my $h ($sedrot->Sections())
 {
     &write_sedra_page($h,$prev{$h},$next{$h});
 
+    my($book) = $sedrot->val($h, 'verse');
+    if ($book) {
+	$book =~ s/\s+.+$//;
+    } else {
+	$book = "Doubled Parshiyot";
+    }
+
     $h =~ s/^Combined //;
     my($anchor) = lc($h);
     $anchor =~ s/[^\w]//g;
+
+    print OUT "<h3>$book</h3>\n" if (!$prev_book || $prev_book ne $book);
+    $prev_book = $book;
 
     print OUT qq{<dt><a name="$anchor" href="$anchor.html">Parashat\n$h</a>\n};
 }
