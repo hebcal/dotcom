@@ -349,7 +349,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Thu Dec 16 18:54:18 PST 1999
+Last modified: Thu Dec 16 19:07:01 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -987,6 +987,10 @@ sub results_page
 	    $tmp = "\L$in{'city'}\E";
 	    $tmp =~ s/ /_/g;
 	    $filename .= $tmp;
+	}
+	else
+        {
+	    $filename .= 'geopos';
 	}
     }
 
