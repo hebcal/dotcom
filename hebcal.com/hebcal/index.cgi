@@ -641,6 +641,7 @@ JSCRIPT_END
 		      -id => 'zip',
 		      -size => 5,
 		      -maxlength => 5);
+#	print STDOUT "\n&nbsp;<small>(leave blank to turn off)</small>\n";
     }
 
     if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
@@ -673,6 +674,7 @@ JSCRIPT_END
 		  -size => 3,
 		  -maxlength => 3,
 		  -default => $Hebcal::havdalah_min),
+    "\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off Havdalah times)</small>\n",
     "</p>\n";
 
     print STDOUT "</td></tr></table></p>\n",
