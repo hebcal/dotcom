@@ -42,12 +42,20 @@ $rcsrev =~ s/\s*\$//g;
 
 @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 
+%exception_timezones =
+    (
+     '99692', -10,
+     );
+
 %known_state_timezones =
     (
+     'HI', -10,
+     'AK', -9,
      'CA', -8,
      'NV', -8,
      'WA', -8,
      'MT', -7,
+     'AZ', -7,
      'UT', -7,
      'WY', -7,
      'CO', -7,
@@ -170,7 +178,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Sep 21 20:24:12 PDT 1999
+Last modified: Thu Sep 23 13:53:47 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -405,21 +413,23 @@ elsif (defined $in{'zip'})
 
     if ($in{'tz'} eq 'auto')
     {
-	if (!defined $known_state_timezones{$state})
+	if (defined $exception_timezones{$in{'zip'}})
 	{
-	    $complaint = ($state eq 'AZ' || $state eq 'IN') ?
-		'does not follow USA standard daylight savings time rule' :
-		    'spans multiple time zones';
-
+	    $in{'tz'} = $exception_timezones{$in{'zip'}};
+	}
+	elsif (!defined $known_state_timezones{$state})
+	{
 	    &form("<p><font color=\"#ff0000\">Sorry, can't auto-detect\n" .
 		  "timezone for <b>" . $city_descr . "</b>\n".
-		  "(state <b>" . $state . "</b> " . $complaint . 
+		  "(state <b>" . $state . "</b> spans multiple time zones" .
 		  ").</font></p>\n" . 
 		  "<ul><li>Please select your Time Zone below.</li></ul>\n" .
 		  "<hr noshade size=\"1\">");
 	}
-
-	$in{'tz'} = $known_state_timezones{$state};
+	else
+	{
+	    $in{'tz'} = $known_state_timezones{$state};
+	}
     }
 
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
@@ -703,7 +713,8 @@ id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label><br>
 Daylight Savings Time:
 <label for=\"usa\">
 <input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
-USA (except <small>AZ</small> and <small>IN</small>)</label>
+USA (except <small>AZ</small>, <small>HI</small>, and
+<small>IN</small>)</label>
 ";
 	print STDOUT
 "<label for=\"israel\">
@@ -747,17 +758,17 @@ a cookie?</a>)</small><br>
 <br><input type=\"submit\" value=\"Get Calendar\">
 ";
 
-# for debugging only
-if (defined $ENV{'HTTP_COOKIE'} && $ENV{'HTTP_COOKIE'} !~ /^\s*$/)
-{
-    print STDOUT "<input type=\"hidden\" name=\"cookie\"\nvalue=\"";
-    $z = $ENV{'HTTP_COOKIE'};
-    $z =~ s/&/&amp;/g;
-    $z =~ s/</&lt;/g;
-    $z =~ s/>/&gt;/g;
-    $z =~ s/"/&quot;/g; #"#
-    print STDOUT $z, "\">\n";
-}
+#  # for debugging only
+#  if (defined $ENV{'HTTP_COOKIE'} && $ENV{'HTTP_COOKIE'} !~ /^\s*$/)
+#  {
+#      print STDOUT "<input type=\"hidden\" name=\"cookie\"\nvalue=\"";
+#      $z = $ENV{'HTTP_COOKIE'};
+#      $z =~ s/&/&amp;/g;
+#      $z =~ s/</&lt;/g;
+#      $z =~ s/>/&gt;/g;
+#      $z =~ s/"/&quot;/g; #"#
+#      print STDOUT $z, "\">\n";
+#  }
 
 print STDOUT "</form>\n$html_footer";
 
