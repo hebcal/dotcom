@@ -27,7 +27,7 @@ use strict;
 use Time::Local;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
-use lib "/home/mradwin/local/lib/perl5/site_perl";
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use Unicode::String;
 use Config::IniFiles;
 use Date::Calc;
