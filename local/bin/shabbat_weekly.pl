@@ -31,6 +31,9 @@ my $subject = strftime("[shabbat] %b %d",
 my $ZIPS = Hebcal::zipcode_open_db('/home/mradwin/web/hebcal.com/hebcal/zips99.db');
 
 my(%SUBS) = load_subs();
+if (! keys(%SUBS) && ($ARGV[0] ne '-all')) {
+    die "$ARGV[0]: not found.\n";
+}
 
 # walk through subs to make sure there are no errors first
 while (my($to,$cfg) = each(%SUBS))
