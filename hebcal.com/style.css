@@ -63,6 +63,15 @@ A:hover {
  text-decoration: underline;
 }
 
+.welcome {
+ font-size: small;
+ font-family: Arial,Helvetica,Geneva,sans-serif;
+ border: solid;
+ border-width: thin;
+ border-color: red;
+ padding: 10px;    	
+}
+
 .tiny {
  font-size: x-small;
  font-family: Arial,Helvetica,Geneva,sans-serif;
