@@ -52,11 +52,11 @@ while (my($to,$cfg) = each(%SUBS))
 Shabbat Shalom,
 hebcal.com
 
-To unsubscribe from this list, send an email to:
-shabbat-unsubscribe\@hebcal.com
-
 To modify your subscription, visit:
 $unsub_url
+
+To unsubscribe from this list, send an email to:
+shabbat-unsubscribe\@hebcal.com
 };
 
     my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
