@@ -59,7 +59,7 @@ href="/">hebcal.com</a></strong>
 Link</small></td><td align="right"><small><a
 href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
-</td></tr></table><h1>Link to 1-Click Shabbat</h1>
+</td></tr></table><h1>Add 1-Click Shabbat to your website</h1>
 
 <p>You can use these HTML tags to insert weekly candle-lighting times
 and Torah portion directly on your synagogue's web page.  The following
