@@ -41,8 +41,11 @@ href="/shabbat/">1-Click Shabbat</a></big></strong></dt>
 href="/yahrzeit/">Yahrzeit Calendar</a></big></strong></dt>
 <dd>generates a list of Yahrzeit (memorial) and Yizkor dates.</dd>
 <dt><br><strong><big><a
+href="/help/">Help</a></big></strong></dt>
+<dt><br><strong><big><a
+href="/privacy/">Privacy Policy</a></big></strong></dt>
+<dt><br><strong><big><a
 href="/search/">Search</a></big></strong></dt>
-<dd>Search the whole <code>hebcal.com</code> website.</dd>
 </dl>
 <p>
 <hr noshade size="1">
@@ -52,7 +55,7 @@ href="/search/">Search</a></big></strong></dt>
 <a href="/help/">Help</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed Apr 18 10:40:03 PDT 2001
+Last modified: Wed Apr 18 10:52:18 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
