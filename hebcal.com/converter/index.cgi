@@ -80,8 +80,6 @@ my(%monthnames) =
 'Adar II'	=> 'אַדָר ב׳',
 );
 
-my($author) = 'webmaster@hebcal.com';
-
 my($rcsrev) = '$Revision$'; #'
 
 # process form params
