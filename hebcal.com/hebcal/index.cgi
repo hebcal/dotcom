@@ -40,7 +40,7 @@ $this_mon++;
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May  8 11:43:23 PDT 2001
+Last modified: Sat May 12 21:28:03 PDT 2001
 <!-- hhmts end -->";
 
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
@@ -744,9 +744,9 @@ so you can keep this window open.
     if ($q->param('vis'))
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
-	    "<a\nhref=\"" . &self_url($q, {'vis' => ''}) .
+	    "<a\nhref=\"" . &self_url($q, {'vis' => '0'}) .
 	    "\">month\nevent list</a> | " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => 'x', 'vis' => ''}) .
+	    "<a\nhref=\"" . &self_url($q, {'month' => 'x', 'vis' => '0'}) .
 	    "\">year\nevent list</a> | " .
 	    "month\ncalendar " .
 	    "]</small>";
@@ -756,7 +756,7 @@ so you can keep this window open.
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month event list | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
 	    "\">year\nevent list</a> | " .
-	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) . ';vis=1' .
+	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) .
 	    "\">month\ncalendar</a> " .
 	    "]</small>";
     }
@@ -765,8 +765,7 @@ so you can keep this window open.
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
 	    "\">month\nevent list</a> | year event list | " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => '1', 'vis' => 1})
-		. ';vis=1' .
+	    "<a\nhref=\"" . &self_url($q, {'month' => '1', 'vis' => 1}) .
 	    "\">month\ncalendar</a> " .
 	    "]</small>";
     }
@@ -1018,6 +1017,15 @@ sub self_url($$)
 	    $override->{$key} : $q->param($key);
 	$url .= "$sep$key=" . &Hebcal::url_escape($val);
 	$sep = ';' if $sep eq '?';
+    }
+
+    foreach my $key (keys %{$override})
+    {
+	unless (defined $q->param($key))
+	{
+	    $url .= "$sep$key=" . &Hebcal::url_escape($override->{$key});
+	    $sep = ';' if $sep eq '?';
+	}
     }
 
     $url;
