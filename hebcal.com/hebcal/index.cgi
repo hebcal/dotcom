@@ -1040,11 +1040,39 @@ sub results_page
 	{
 	    if ($prev_mon != $mon)
 	    {
-		my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
-		    ' style="page-break-before: always"' : '';
-		print STDOUT "<center$style>", $cal->as_HTML(), 
-		"</center><br><br>"
-		    if defined $cal;
+		if (defined $cal)
+		{
+		    # display previously created calendar
+		    my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
+			' style="page-break-before: always"' : '';
+		    print STDOUT "<center$style>", $cal->as_HTML(), 
+		    "</center><br><br>";
+
+		    # grotty hack to display empty months
+		    if ($prev_mon != 0 && ($prev_mon+1 != $mon))
+		    {
+			for (my $i = $prev_mon+1; $i < $mon; $i++)
+			{
+			    $cal = new HTML::CalendarMonthSimple('year' => $year,
+								 'month' => $i);
+			    $cal->width('97%');
+			    $cal->border(1);
+			    $cal->todaycellclass('today');
+
+			    $cal->header("<h2 align=\"center\"><a class=\"goto\" title=\"$prev_title\"\n" .
+			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
+			     sprintf("%s %04d\n",
+ 				     $Hebcal::MoY_long{$i}, $year) .
+			     "<a class=\"goto\" title=\"$next_title\"\n" .
+			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
+			     '<div align="center" class="goto">' . $goto . '</div>');
+
+			    print STDOUT "<center$style>", $cal->as_HTML(),
+			    "</center><br><br>";
+			}
+		    }
+		}
+
 		$prev_mon = $mon;
 		$cal = new HTML::CalendarMonthSimple('year' => $year,
 						     'month' => $mon);
