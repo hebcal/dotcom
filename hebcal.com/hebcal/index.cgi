@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 26 13:47:04 PDT 2000
+Last modified: Mon May  8 10:35:21 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -314,7 +314,7 @@ asked questions about this service.</a></small></body></html>
 ";
 
 # boolean options
-@opts = ('c','o','s','i','a','d');
+@opts = ('c','o','s','i','a','d','D');
 $cmd  = "/home/users/mradwin/bin/hebcal";
 
 # process form params
@@ -973,6 +973,11 @@ JSCRIPT_END
     $q->checkbox(-name => 'a',
 		 -id => 'a',
 		 -label => "\nUse Ashkenazis Hebrew"),
+    "</label>",
+    "<br><label\nfor=\"D\">",
+    $q->checkbox(-name => 'D',
+		 -id => 'D',
+		 -label => "\nPrint Hebrew date for dates with some event"),
     "</label>",
     "<br><label\nfor=\"d\">",
     $q->checkbox(-name => 'd',
