@@ -21,12 +21,17 @@ my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
 
 my($sat_year) = (localtime($saturday))[5] + 1900;
 
-my($zips_dbmfile) = '/pub/m/r/mradwin/hebcal.com/email/zips.db';
-my(%ZIPS);
-tie(%ZIPS, 'DB_File', $zips_dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-    || die "Can't tie $zips_dbmfile: $!\n";
+my $ZIPS =
+    &Hebcal::zipcode_open_db('/pub/m/r/mradwin/hebcal.com/email/zips99.db');
 
 my(%SUBS) = &load_subs();
+
+# walk through subs to make sure there are no errors first
+while (my($to,$cfg) = each(%SUBS))
+{
+    next if $cfg =~ /^action=/;
+    &parse_config($cfg);
+}
 
 while (my($to,$cfg) = each(%SUBS))
 {
@@ -70,7 +75,9 @@ shabbat-unsubscribe\@hebcal.com
 	if ($status == 0);
 }
 
-untie(%ZIPS);
+&Hebcal::zipcode_close_db($ZIPS);
+undef($ZIPS);
+
 exit(0);
 
 sub gen_body
@@ -173,19 +180,13 @@ sub parse_config
 	my($key,$val) = split(/=/, $kv, 2);
 	$args{$key} = $val;
     }
+    die "no zipcode key in [$config]" unless defined $args{'zip'};
 
-    my($zipinfo) = $ZIPS{$args{'zip'}};
-    my($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $zipinfo);
-    my($city,$state) = split(/\0/, substr($zipinfo,6));
-
-    my(@city) = split(/([- ])/, $city);
-    $city = '';
-    foreach (@city)
-    {
-	$_ = lc($_);
-	$_ = "\u$_";		# inital cap
-	$city .= $_;
-    }
+    my($zipinfo) = $ZIPS->{$args{'zip'}};
+    die "unknown zipcode [$config]" unless defined $zipinfo;
+    
+    my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	&Hebcal::zipcode_fields($zipinfo);
 
     my $city_descr = "$city, $state " . $args{'zip'};
     $city_descr .= "\n" . $Hebcal::tz_names{$args{'tz'}};
