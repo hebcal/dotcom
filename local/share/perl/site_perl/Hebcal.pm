@@ -439,6 +439,17 @@ sub invoke_hebcal($$$)
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    parse_date_descr($date,$descr);
 
+	# if Candle lighting and Havdalah are on the same day it is
+	# a bug in hebcal for unix involving shabbos and chag overlap.
+	# suppress inconsistent times until we can get hebcal fixed.
+	if ($subj =~ /^Havdalah/ && $#events >= 0 &&
+	    $events[$#events]->[$Hebcal::EVT_IDX_MDAY] == $mday &&
+	    $events[$#events]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Candle lighting/)
+	{
+	    pop(@events);
+	    next;
+	}
+
 	next if $subj eq 'Havdalah (0 min)';
 
 	my($memo2) = (&get_holiday_anchor($subj,$want_sephardic))[2];
