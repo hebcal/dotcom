@@ -1108,9 +1108,11 @@ sub utf8_hebrew_to_netscape($) {
     return $u->as_string();
 }
 
-sub navbar($$)
+sub navbar($$$)
 {
-    my($server_name,$title) = @_;
+    my($server_name,$title,$help) = @_;
+
+    my($help_html) = ($help) ? "href=\"/help/\">Help</a> -\n<a\n" : '';
 
     return "<table width=\"100%\"\nclass=\"navbar\">" .
 	"<tr><td><small>" .
@@ -1118,7 +1120,8 @@ sub navbar($$)
 	"<tt>-&gt;</tt>\n" .
 	$title . "</small></td>" .
 	"<td align=\"right\"><small><a\n" .
-	"href=\"/search/\">Search</a></small>" .
+	$help_html .
+	"href=\"/search/\">Search</a></small>\n" .
 	"</td></tr></table>";
 }
 
