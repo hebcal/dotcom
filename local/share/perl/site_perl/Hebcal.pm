@@ -1214,6 +1214,13 @@ sub csv_write_contents($$)
 	$subj =~ s/\"/''/g;
 	$memo =~ s/\"/''/g;
 
+	my $loc = 'hebcal.com';
+	if ($memo =~ /^in (.+)/)
+	{
+	    $memo = '';
+	    $loc = $1;
+	}
+
 	print STDOUT
 	    qq{"$subj",$date,$start_time,$end_date,$end_time,},
 	    qq{$all_day,"$memo",};
@@ -1228,7 +1235,7 @@ sub csv_write_contents($$)
 	    print STDOUT qq{"3"};
 	}
 
-	print STDOUT qq{,"hebcal.com"$endl};
+	print STDOUT qq{,"$loc"$endl};
     }
 
     1;
