@@ -332,7 +332,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 
 <festival id="Rosh Hashana 1"
  haftara="I Samuel 1:1 - 2:10"
- descr="New Year"
+ descr="Rosh Hashanah is commonly known as the Jewish New Year."
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
  <links>
@@ -353,7 +353,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Rosh Hashana 1 (on Shabbat)"
  haftara="I Samuel 1:1 - 2:10"
- descr="New Year"
+ descr="Rosh Hashanah is commonly known as the Jewish New Year."
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
  <links>
@@ -375,7 +375,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Rosh Hashana 2"
- descr="New Year"
+ descr="Rosh Hashanah is commonly known as the Jewish New Year."
  haftara="Jeremiah 31:1 - 31:19"
  yomtov="1">
  <links>
@@ -751,7 +751,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <!--  Strassfeld p. 232 -->
 <festival id="Purim"
  hebrew="פּוּרִים"
- descr="Feast of Lots"
+ descr="Purim is one of the most joyous and fun holidays on the Jewish
+ calendar. It commemorates a time when the Jewish people living in
+ Persia were saved from extermination."
  yomtov="0">
  <links>
   <link rel="about" href="http://www.jewfaq.org/holiday9.htm" />
