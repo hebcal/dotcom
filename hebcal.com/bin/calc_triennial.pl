@@ -164,7 +164,6 @@ my %special_maftir;
 my %special_haftara;
 foreach my $yr (($start_year - 3) .. ($start_year + 6))
 {
-    print "special readings for $yr\n";
     my(@ev) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
     special_readings(\@ev, \%special_maftir, \%special_haftara);
 }
@@ -194,7 +193,7 @@ my $html_footer = html_footer($aliyah_in);
 foreach my $h (keys %readings1, "Vezot Haberakhah")
 {
     write_sedra_page($axml,\%parsha_dates,$h,$prev{$h},$next{$h},
-		     $readings1{$h});
+		     $readings1{$h},$readings2{$h});
 }
 
 write_index_page($axml,\%parsha_dates);
@@ -472,7 +471,7 @@ sub read_aliyot_metadata
 
 sub write_sedra_page
 {
-    my($parshiot,$read_on,$h,$prev,$next,$triennial) = @_;
+    my($parshiot,$read_on,$h,$prev,$next,$tri1,$tri2) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
@@ -538,19 +537,23 @@ EOHTML
     	if $next_anchor;
 
     my @tri_date;
+    my @tri_date2;
     my $fk_date;
     if ($h eq 'Vezot Haberakhah')
     {
 	$tri_date[1] = $tri_date[2] = $tri_date[3] =
 	$fk_date =
 	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
+	@tri_date2 = @tri_date;
     }
     else
     {
 	foreach (1 .. 3)
 	{
-	    $tri_date[$_] = (defined $triennial->[$_]) ?
-		$triennial->[$_]->[1] : '(read separately)';
+	    $tri_date[$_] = (defined $tri1->[$_]) ?
+		$tri1->[$_]->[1] : '(read separately)';
+	    $tri_date2[$_] = (defined $tri2->[$_]) ?
+		$tri2->[$_]->[1] : '(read separately)';
 	}
 
 	$fk_date = '&nbsp;';
@@ -612,7 +615,7 @@ alt="Etz Hayim: Torah and Commentary" align="right"></a>
 </td>
 </tr>
 <tr>
-<td valign="top">
+<td valign="top" rowspan="3">
 EOHTML
 ;
 
@@ -631,21 +634,13 @@ EOHTML
 
 	if (defined $parsha2id{$h})
 	{
-	    my $book = lc($torah);
-	    $book =~ s/\s+.+$//;
-
-	    my $bid = 0;
-	    if ($book eq 'genesis') { $bid = 1; } 
-	    elsif ($book eq 'exodus') { $bid = 2; }
-	    elsif ($book eq 'leviticus') { $bid = 3; }
-	    elsif ($book eq 'numbers') { $bid = 4; }
-	    elsif ($book eq 'deuteronomy') { $bid = 5; }
+	    my $bid = bookid($torah);
 
 	    $info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
 	}
 
 	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	print OUT2 qq{<a name="fk-$label"></a>$label: $info\n};
+	print OUT2 qq{$label: $info\n};
 
 	if ($aliyah->{'numverses'}) {
 	    print OUT2 "<span class=\"tiny\">(",
@@ -657,82 +652,28 @@ EOHTML
 
     foreach my $yr (1 .. 3)
     {
-	print OUT2 "<td valign=\"top\">\n";
+	print_tri_cell($tri1,$h,$yr,$torah);
+    }
 
-	if ($h eq 'Vezot Haberakhah')
-	{
-	    print OUT2 "&nbsp;</td>\n";
-	    next;
-	}
-	elsif (! defined $triennial->[$yr])
-	{
-	    my($p1,$p2) = split(/-/, $h);
+    print OUT2 <<EOHTML;
+</tr>
+<tr>
+<td align="center"><b>Triennial Year I</b>
+<br><small>$tri_date2[1]</small>
+</td>
+<td align="center"><b>Triennial Year II</b>
+<br><small>$tri_date2[2]</small>
+</td>
+<td align="center"><b>Triennial Year III</b>
+<br><small>$tri_date2[3]</small>
+</td>
+</tr>
+EOHTML
+;
 
-	    print OUT2 "Read separately.  See:\n<ul>\n";
-
-	    my($anchor) = lc($p1);
-	    $anchor =~ s/[^\w]//g;
-	    print OUT2 "<li><a href=\"$anchor.html\">$p1</a>\n";
-
-	    $anchor = lc($p2);
-	    $anchor =~ s/[^\w]//g;
-	    print OUT2 "<li><a href=\"$anchor.html\">$p2</a>\n";
-	    print OUT2 "</ul>\n";
-
-	    print OUT2 "</td>\n";
-	    next;
-	}
-	elsif ($triennial->[$yr]->[2] ne $h)
-	{
-	    my($h_combined) = $triennial->[$yr]->[2];
-	    my($p1,$p2) = split(/-/, $h_combined);
-
-	    my($other) = ($p1 eq $h) ? $p2 : $p1;
-
-	    print OUT2 "Read together with<br>\nParashat $other.<br>\n";
-
-	    my($anchor) = lc($h_combined);
-	    $anchor =~ s/[^\w]//g;
-	    print OUT2 "See <a href=\"$anchor.html\">$h_combined</a>\n";
-
-	    print OUT2 "</td>\n";
-	    next;
-	}
-
-	die "no aliyot array for $h (year $yr)"
-	    unless defined $triennial->[$yr]->[0];
-
-	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			    @{$triennial->[$yr]->[0]})
-	{
-	    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
-	    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
-	    my($info);
-	    if ($c1 == $c2) {
-		$info = "$c1:$v1-$v2";
-	    } else {
-		$info = "$c1:$v1-$c2:$v2";
-	    }
-
-	    if (defined $parsha2id{$h})
-	    {
-		my $book = lc($torah);
-		$book =~ s/\s+.+$//;
-
-		my $bid = 0;
-		if ($book eq 'genesis') { $bid = 1; } 
-		elsif ($book eq 'exodus') { $bid = 2; }
-		elsif ($book eq 'leviticus') { $bid = 3; }
-		elsif ($book eq 'numbers') { $bid = 4; }
-		elsif ($book eq 'deuteronomy') { $bid = 5; }
-
-		$info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
-	    }
-
-	    my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
-	    print OUT2 qq{<a name="tri-$yr-$label"></a>$label: $info<br>\n};
-	}
-	print OUT2 "</td>\n";
+    foreach my $yr (1 .. 3)
+    {
+	print_tri_cell($tri2,$h,$yr,$torah);
     }
 
     print OUT2 <<EOHTML;
@@ -762,7 +703,7 @@ EOHTML
     if ($drash_jts)
     {
 	print OUT2 qq{<li><a title="Parashat $h commentary from JTS"\nhref="$drash_jts">};
-	if ($drash_jts =~ /learn.jtsa.edu/)
+	if ($drash_jts =~ /jtsa\.edu/)
 	{
 	    print OUT2 qq{Jewish\nTheological Seminary</a>\n};
 	}
@@ -850,6 +791,98 @@ EOHTML
     print OUT2 $html_footer;
 
     close(OUT2);
+}
+
+sub print_tri_cell
+{
+    my($triennial,$h,$yr,$torah) = @_;
+
+    print OUT2 "<td valign=\"top\">\n";
+    print OUT2 "<!-- tri $yr -->\n";
+
+    if ($h eq 'Vezot Haberakhah')
+    {
+	print OUT2 "&nbsp;</td>\n";
+	return;
+    }
+    elsif (! defined $triennial->[$yr])
+    {
+	my($p1,$p2) = split(/-/, $h);
+
+	print OUT2 "Read separately.  See:\n<ul>\n";
+
+	my($anchor) = lc($p1);
+	$anchor =~ s/[^\w]//g;
+	print OUT2 "<li><a href=\"$anchor.html\">$p1</a>\n";
+
+	$anchor = lc($p2);
+	$anchor =~ s/[^\w]//g;
+	print OUT2 "<li><a href=\"$anchor.html\">$p2</a>\n";
+	print OUT2 "</ul>\n";
+
+	print OUT2 "</td>\n";
+	return;
+    }
+    elsif ($triennial->[$yr]->[2] ne $h)
+    {
+	my($h_combined) = $triennial->[$yr]->[2];
+	my($p1,$p2) = split(/-/, $h_combined);
+
+	my($other) = ($p1 eq $h) ? $p2 : $p1;
+
+	print OUT2 "Read together with<br>\nParashat $other.<br>\n";
+
+	my($anchor) = lc($h_combined);
+	$anchor =~ s/[^\w]//g;
+	print OUT2 "See <a href=\"$anchor.html\">$h_combined</a>\n";
+
+	print OUT2 "</td>\n";
+	return;
+    }
+
+    die "no aliyot array for $h (year $yr)"
+	unless defined $triennial->[$yr]->[0];
+
+    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			@{$triennial->[$yr]->[0]})
+    {
+	my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
+	my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
+	my($info);
+	if ($c1 == $c2) {
+	    $info = "$c1:$v1-$v2";
+	} else {
+	    $info = "$c1:$v1-$c2:$v2";
+	}
+
+	if (defined $parsha2id{$h})
+	{
+	    my $bid = bookid($torah);
+
+	    $info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+	}
+
+	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
+	print OUT2 qq{$label: $info<br>\n};
+    }
+    print OUT2 "</td>\n";
+}
+
+sub bookid
+{
+    my($torah) = @_; 
+
+    my $book = lc($torah);
+    $book =~ s/\s+.+$//;
+
+    my $bid = 0;
+    if ($book eq 'genesis') { $bid = 1; } 
+    elsif ($book eq 'exodus') { $bid = 2; }
+    elsif ($book eq 'leviticus') { $bid = 3; }
+    elsif ($book eq 'numbers') { $bid = 4; }
+    elsif ($book eq 'deuteronomy') { $bid = 5; }
+
+    $bid;
 }
 
 sub get_parsha_info
