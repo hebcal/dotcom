@@ -58,6 +58,10 @@ my(%num2heb) =
 400 => 'ת',
 );
 
+my(@hebrew_months) =
+    ('Nisan', 'Iyyar', 'Sivan', 'Tamuz', 'Av', 'Elul', 'Tishrei',
+     'Cheshvan', 'Kislev', 'Tevet', 'Shvat', 'Adar1', 'Adar2');
+
 my(%monthnames) =
 (
 'Nisan'	=> 'נִיסָן',
@@ -85,7 +89,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu May  3 19:51:29 PDT 2001
+Last modified: Sun May  6 11:19:05 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -129,15 +133,51 @@ my($cmd)  = './hebcal -x -h';
 my($type) = 'g2h';
 
 if ($q->param('h2g') && $q->param('hm') && $q->param('hd') &&
-    $q->param('hy') && $q->param('hy') > 3760)
+    $q->param('hy'))
 {
+    &form(1,'Hebrew day must be numeric','')
+	if ($q->param('hd') !~ /^\d+$/);
+
+    &form(1,'Hebrew year must be numeric','')
+	if ($q->param('hy') !~ /^\d+$/);
+
+    my($hm) = $q->param('hm');
+    &form(1,'Unrecognized hebrew month','')
+	unless (grep(/^$hm$/, @hebrew_months));
+
+    &form(1,'Hebrew year must be in the common era (3761 and above).','')
+	if ($q->param('hy') <= 3760);
+
+    &form(1,'Hebrew day out of valid range 1-30.','')
+	if ($q->param('hd') > 30 || $q->param('hd') < 1);
+
     $cmd .= sprintf(' -H "%s" %d %d',
 		    $q->param('hm'), $q->param('hd'), $q->param('hy'));
     $type = 'h2g';
 }
 else
 {
-    unless ($q->param('gm') && $q->param('gd') && $q->param('gy'))
+    if ($q->param('gm') && $q->param('gd') && $q->param('gy'))
+    {
+	&form(1,'Gregorian day must be numeric','')
+	    if ($q->param('gd') !~ /^\d+$/);
+
+	&form(1,'Gregorian month must be numeric','')
+	    if ($q->param('gm') !~ /^\d+$/);
+
+	&form(1,'Gregorian year must be numeric','')
+	    if ($q->param('gy') !~ /^\d+$/);
+
+	&form(1,'Gregorian day out of valid range 1-31.','')
+	    if ($q->param('gd') > 31 || $q->param('gd') < 1);
+
+	&form(1,'Gregorian month out of valid range 1-12.','')
+	    if ($q->param('gm') > 12 || $q->param('gm') < 1);
+
+	&form(1,'Gregorian year out of valid range 0001-9999','')
+	    if ($q->param('gy') > 9999 || $q->param('gy') < 1);
+    }
+    else
     {
 	my($now) = time;
 	$now = $q->param('t')
@@ -156,20 +196,7 @@ else
 		    $q->param('gm'), $q->param('gd'), $q->param('gy'));
 }
 
-print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
-    $q->start_html(-title => 'Hebcal Hebrew Date Converter',
-		   -target => '_top',
-		   -head => [
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
-			     $q->Link({-rel => 'stylesheet',
-				       -href => '/style.css',
-				       -type => 'text/css'}),
-			     $q->Link({-rel => 'p3pv1',
-				       -href => "http://www.$server_name/w3c/p3p.xml"}),
-			     ],
-		   ),
-    &Hebcal::navbar($server_name, "Hebrew\nDate Converter"),
-    "<h1>Hebrew\nDate Converter</h1>\n";
+&my_header();
 
 my(@events) = &Hebcal::invoke_hebcal($cmd, '');
 
@@ -229,14 +256,11 @@ if (defined $events[0])
 
 &form(0,'','');
 
-sub form
+sub form($$$)
 {
     my($head,$message,$help) = @_;
 
     my(%months) = %Hebcal::MoY_long;
-    my(@hebrew_months) =
-	("Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
-	 "Cheshvan", "Kislev", "Tevet", "Shvat", "Adar1", "Adar2");
     my(%hebrew_months) =
 	(
 	 "Nisan" => "Nisan",
@@ -254,6 +278,7 @@ sub form
 	 "Adar2" => "Adar II",
 	 );
 
+    &my_header() if $head;
 
     if ($message ne '')
     {
@@ -375,4 +400,25 @@ sub hebnum_to_array($) {
     }
 
     @result;
+}
+
+
+sub my_header
+{
+    print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
+    $q->start_html(-title => 'Hebcal Hebrew Date Converter',
+		   -target => '_top',
+		   -head => [
+			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
+			     $q->Link({-rel => 'stylesheet',
+				       -href => '/style.css',
+				       -type => 'text/css'}),
+			     $q->Link({-rel => 'p3pv1',
+				       -href => "http://www.$server_name/w3c/p3p.xml"}),
+			     ],
+		   ),
+    &Hebcal::navbar($server_name, "Hebrew\nDate Converter"),
+    "<h1>Hebrew\nDate Converter</h1>\n";
+
+    1;
 }
