@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Mon Oct 18 13:49:10 PDT 1999
+Last modified: Wed Nov 10 18:21:55 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -378,7 +378,7 @@ $year = $in{'year'}
     if (defined $in{'year'} && $in{'year'} =~ /^\d+$/ && $in{'year'} > 0);
 
 # timezone opt
-for ($i = -12; $i < 13; $i++)
+for ($i = -12; $i <= 12; $i++)
 {
     $tz{$i} = '';
 }
@@ -394,11 +394,13 @@ elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
 }
 
 # month opt
-for ($i = 0; $i < 13; $i++)
+for ($i = 0; $i <= 12; $i++)
 {
     $month{$i} = '';
 }
-if (defined $in{'month'} && $in{'month'} ne '')
+
+if (defined $in{'month'} && $in{'month'} =~ /^\d+$/ &&
+    $in{'month'} >= 1 && $in{'month'} <= 12)
 {
     $month{$in{'month'}} = ' selected';
 }
@@ -605,7 +607,8 @@ if (defined $in{'dst'} && $in{'dst'} ne '')
     $cmd .= " -Z $in{'dst'}";
 }
 
-if (defined $in{'month'} && $in{'month'} ne '')
+if (defined $in{'month'} && $in{'month'} =~ /^\d+$/ &&
+    $in{'month'} >= 1 && $in{'month'} <= 12)
 {
     $cmd .= " $in{'month'}";
 }
@@ -634,7 +637,8 @@ local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 
 print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
 print STDOUT "Expires: $expires_date\015\012";
-if ($endl eq "\012")
+#if ($endl eq "\012")
+    if(1)
 {
     print STDOUT "Content-Type: text/x-csv\015\012\015\012";
 }
@@ -704,9 +708,9 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
 &nbsp;&nbsp;&nbsp;
 <label for=\"month\">Month:
 <select name=\"month\" id=\"month\">
-<option value=\"\"$month{'0'}>- entire year -
+<option value=\"x\"$month{'0'}>- entire year -
 ";
-    for ($i = 1; $i < 13; $i++)
+    for ($i = 1; $i <= 12; $i++)
     {
 	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]\n";
     }
@@ -955,7 +959,7 @@ sub results_page
     local($ycal) = (defined($in{'y'}) && $in{'y'} eq '1') ? 1 : 0;
     local($prev_url,$next_url,$prev_title,$next_title);
 
-    if ($in{'month'} =~ /^\d+$/)
+    if ($in{'month'} =~ /^\d+$/ && $in{'month'} >= 1 && $in{'month'} <= 12)
     {
 	$filename .= '_' . $MoY_abbrev[$in{'month'}];
 	$date = $MoY[$in{'month'}] . ' ' . $date;
@@ -982,7 +986,7 @@ sub results_page
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
     # next and prev urls
-    if ($in{'month'} =~ /^\d+$/)
+    if ($in{'month'} =~ /^\d+$/ && $in{'month'} >= 1 && $in{'month'} <= 12)
     {
 	local($pm,$nm,$py,$ny);
 
