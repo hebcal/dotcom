@@ -2,19 +2,19 @@
 <!-- $Id$ -->
 <festivals>
 <groups>
- <group hebdate="1 Tishrei">Rosh Hashana
+ <group>Rosh Hashana
   <li>Rosh Hashana 1</li>
   <li>Rosh Hashana 1 (on Shabbat)</li>
   <li>Rosh Hashana 2</li>
  </group>
- <group hebdate="3 or 4 Tishrei">Tzom Gedaliah</group>
+ <group>Tzom Gedaliah</group>
  <group>Shabbat Shuva</group>
- <group hebdate="9 Tishrei">Yom Kippur
+ <group>Yom Kippur
   <li>Yom Kippur</li>
   <li>Yom Kippur (on Shabbat)</li>
   <li>Yom Kippur (Mincha)</li>
  </group>
- <group hebdate="15 Tishrei">Sukkot
+ <group>Sukkot
   <li>Sukkot 1</li>
   <li>Sukkot 1 (on Shabbat)</li>
   <li>Sukkot 2</li>
@@ -25,17 +25,17 @@
   <li>Sukkot Shabbat Chol ha-Moed</li>
   <li>Sukkot Chol ha-Moed Day 5 (Hoshana Raba)</li>
  </group>
- <group hebdate="22 Tishrei">Shmini Atzeret
+ <group>Shmini Atzeret
   <li>Shmini Atzeret</li>
   <li>Shmini Atzeret (on Shabbat)</li>
  </group>
- <group hebdate="23 Tishrei">Simchat Torah
+ <group>Simchat Torah
   <li>Erev Simchat Torah</li>
   <li>Simchat Torah</li>
  </group>
- <group hebdate="1 Cheshvan">Rosh Chodesh Cheshvan</group>
- <group hebdate="1 Kislev">Rosh Chodesh Kislev</group>
- <group hebdate="25 Kislev">Chanukah
+ <group>Rosh Chodesh Cheshvan</group>
+ <group>Rosh Chodesh Kislev</group>
+ <group>Chanukah
   <li>Chanukah: 1 Candle</li>
   <li>Chanukah: 2 Candles</li>
   <li>Chanukah: 3 Candles</li>
@@ -46,35 +46,33 @@
   <li>Chanukah: 8 Candles</li>
   <li>Chanukah: 8th Day</li>
  </group>
- <group hebdate="1 Tevet">Rosh Chodesh Tevet</group>
- <group hebdate="10 Tevet">Asara B'Tevet</group>
- <group hebdate="1 Sh'vat">Rosh Chodesh Sh'vat</group>
- <group hebdate="15 Sh'vat">Tu B'Shvat</group>
+ <group>Rosh Chodesh Tevet</group>
+ <group>Asara B'Tevet</group>
+ <group>Rosh Chodesh Sh'vat</group>
+ <group>Tu B'Shvat</group>
  <group>Shabbat Shekalim
   <li>Shabbat Shekalim</li>
   <li>Shabbat Shekalim (on Rosh Chodesh)</li>
  </group>
- <group hebdate="1 Adar">Rosh Chodesh Adar
+ <group>Rosh Chodesh Adar
   <li>Rosh Chodesh Adar</li>
   <li>Rosh Chodesh Adar I</li>
   <li>Rosh Chodesh Adar II</li>
  </group>
  <group>Ta'anit Esther</group>
  <group>Shabbat Zachor</group>
- <group hebdate="14 Adar">Purim
-  <li>Purim</li>
-  <li>Purim Katan</li>
-  <li>Shushan Purim</li>
- </group>
+ <group>Purim Katan</group>
+ <group>Purim</group>
+ <group>Shushan Purim</group>
  <group>Shabbat Parah</group>
  <group>Shabbat HaChodesh
   <li>Shabbat HaChodesh</li>
   <li>Shabbat HaChodesh (on Rosh Chodesh)</li>
  </group>
- <group hebdate="1 Nisan">Rosh Chodesh Nisan</group>
+ <group>Rosh Chodesh Nisan</group>
  <group>Shabbat HaGadol</group>
  <group>Ta'anit Bechorot</group>
- <group hebdate="15 Nisan">Pesach
+ <group>Pesach
   <li>Pesach 1</li>
   <li>Pesach 1 (on Shabbat)</li>
   <li>Pesach 2</li>
@@ -89,25 +87,25 @@
   <li>Pesach 8 (on Shabbat)</li>
  </group>
  <group>Days of the Omer</group>
- <group hebdate="27 Nisan">Yom HaShoah</group>
- <group hebdate="1 Iyyar">Rosh Chodesh Iyyar</group>
- <group hebdate="2/3/4 Iyyar">Yom HaZikaron</group>
- <group hebdate="3/4/5 Iyyar">Yom HaAtzma'ut</group>
- <group hebdate="18 Iyyar">Lag B'Omer</group>
- <group hebdate="28 Iyyar">Yom Yerushalayim</group>
- <group hebdate="1 Sivan">Rosh Chodesh Sivan</group>
- <group hebdate="6 Sivan">Shavuot
+ <group>Yom HaShoah</group>
+ <group>Rosh Chodesh Iyyar</group>
+ <group>Yom HaZikaron</group>
+ <group>Yom HaAtzma'ut</group>
+ <group>Lag B'Omer</group>
+ <group>Yom Yerushalayim</group>
+ <group>Rosh Chodesh Sivan</group>
+ <group>Shavuot
   <li>Shavuot 1</li>
   <li>Shavuot 2</li>
   <li>Shavuot 2 (on Shabbat)</li>
  </group>
- <group hebdate="1 Tamuz">Rosh Chodesh Tamuz</group>
+ <group>Rosh Chodesh Tamuz</group>
  <group>Tzom Tammuz</group>
- <group hebdate="1 Av">Rosh Chodesh Av</group>
+ <group>Rosh Chodesh Av</group>
  <group>Shabbat Hazon</group>
- <group hebdate="9 Av">Tish'a B'Av</group>
+ <group>Tish'a B'Av</group>
  <group>Shabbat Nachamu</group>
- <group hebdate="1 Elul">Rosh Chodesh Elul</group>
+ <group>Rosh Chodesh Elul</group>
  <group>Shabbat Rosh Chodesh</group>
  <group>Shabbat Machar Chodesh</group>
 </groups>
