@@ -752,19 +752,17 @@ EOHTML
     }
     
     print OUT2 <<EOHTML;
+<h3><a name="ref">References</a></h3>
 <dl>
-<dt><a name="ref">References</a>
-<dd><em><a
-href="$amazon_link">Etz
-Hayim: Torah and Commentary</a></em>,
-David L. Lieber et. al., Jewish Publication Society, 2001.
-<dd><em><a
+<dt><em><a href="$amazon_link">Etz
+Hayim: Torah and Commentary</a></em>
+<dd>David L. Lieber et. al., Jewish Publication Society, 2001.
+<dt><em><a
 href="http://learn.jtsa.edu/topics/diduknow/responsa/trichart.shtml">A
-Complete Triennial System for Reading the Torah</a></em>,
-Committee on Jewish Law and Standards of the Rabbinical Assembly
-<dd><em><a
-href="http://www.bible.ort.org/">Navigating the Bible II</a></em>,
-World ORT
+Complete Triennial System for Reading the Torah</a></em>
+<dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
+<dt><em><a href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
+<dd>World ORT
 </dl>
 EOHTML
 ;
@@ -773,6 +771,7 @@ EOHTML
     {
 	print OUT2 <<EOHTML;
 <p>
+<hr noshade size="1"><p>
 <table width="100%">
 <tr>
 <td align="left" width="50%">
