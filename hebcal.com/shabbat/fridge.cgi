@@ -44,7 +44,6 @@ use lib "/home/mradwin/local/share/perl/site_perl";
 
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use DB_File;
 use Time::Local;
 use Hebcal;
 use POSIX qw(strftime);
@@ -64,7 +63,7 @@ my($evts,undef,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
 my $hebrew_year = '';
 if ($evts->[0]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Rosh Hashana (\d{4})$/)
 {
-    $hebrew_year = "<br>Hebrew Year $1";
+    $hebrew_year = $1;
 }
 
 my($title) = "Refrigerator Shabbos Times for $hebrew_year";
@@ -75,7 +74,7 @@ print $q->header(),
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
-		 qq{<center><h3>Candle Lighting Times for<br>\n$city_descr &nbsp;$evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR]$hebrew_year</h3>\n});
+		 qq{<center><h3>Candle Lighting Times for $city_descr<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h3>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
@@ -107,6 +106,15 @@ sub format_items
 	my $stime = sprintf("%2d %s &nbsp;%d:%02d",
 			    $mday, $Hebcal::MoY_short[$mon], $hour, $min);
 	$stime =~ s/^ /&nbsp;/;
+
+	my $time = Time::Local::timelocal(1,0,0,$mday,$mon,$year - 1900,'','','');
+	my $wday = (localtime($time))[6];
+	if ($wday != 5)
+	{
+	    $stime = "<b>$stime</b>";
+	}
+
+	$stime = "<tt>$stime</tt><br>\n";
 	push(@items, $stime);
     }
 
@@ -115,17 +123,26 @@ sub format_items
     my $third = int(scalar(@items) / 3);
     for (my $i = 0; $i < 3; $i++)
     {
-	Hebcal::out_html($cfg,"<td>\n");
+	Hebcal::out_html($cfg,"<td valign=\"top\">\n");
 	for (my $j = 0; $j < $third; $j++)
 	{
 	    my $k = $j + ($third * $i);
-	    Hebcal::out_html($cfg, "<tt>$items[$k]</tt>",
-			     "<br>\n");
+	    Hebcal::out_html($cfg, $items[$k]);
+	}
+
+	if ($i == 2)
+	{
+	    for (my $k = ($third * 3); $k < scalar(@items); $k++)
+	    {
+		Hebcal::out_html($cfg, $items[$k]);
+	    }
 	}
 	Hebcal::out_html($cfg,"</td>\n");
     }
 
-    Hebcal::out_html($cfg,qq{</tr></table></p><p>&nbsp;</p>\n});
+    Hebcal::out_html($cfg,qq{</tr></table>\n});
+
+    Hebcal::out_html($cfg,"<p>Times in <b>bold</b> indicate holidays.</p>\n");
 }
 
 sub process_args
@@ -267,6 +284,9 @@ sub process_args
 	$cmd .= ' -' . $_
 	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
     }
+
+    $cmd .= " " . $q->param('year')
+	if (defined $q->param('year') && $q->param('year') =~ /^\d+$/);
 
     my(@events) = Hebcal::invoke_hebcal($cmd, '', 0);
     
