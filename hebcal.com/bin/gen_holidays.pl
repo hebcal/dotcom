@@ -2,7 +2,8 @@
 
 # $Id$
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 
 use Hebcal;
 use Getopt::Std;
