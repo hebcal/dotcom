@@ -1,3 +1,7 @@
+<?php
+// $Id$
+// $Source: /Users/mradwin/hebcal-copy/hebcal.com/email/RCS/index.php,v $
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -16,7 +20,7 @@ Email</small></td><td align="right"><small><a
 href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
 </td></tr></table><h1>1-Click Shabbat by Email</h1>
-<?
+<?php
 require_once('smtp.inc');
 require_once('zips.inc');
 
@@ -227,7 +231,7 @@ function form($param, $message = '', $help = '') {
     }
 
 ?>
-<form name="f1" id="f1" action="/email2/" method="post">
+<form name="f1" id="f1" action="/email/" method="post">
 
 <label for="em">E-mail address:
 <input type="text" name="em" size="30"
