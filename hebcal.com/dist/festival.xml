@@ -131,11 +131,11 @@ every other day (e.g. fast days): 3
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1.shtml" />
   <haft reading="Joshua 5:2 - 6:1"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1_haft.shtml" />
-  <aliyah parsha="15" num="1" book="Exodus" begin="12:21" end="12:24" />
-  <aliyah parsha="15" num="2" book="Exodus" begin="12:25" end="12:28" />
-  <aliyah parsha="15" num="3" book="Exodus" begin="12:29" end="12:36" />
-  <aliyah parsha="15" num="4" book="Exodus" begin="12:37" end="12:42" />
-  <aliyah parsha="15" num="5" book="Exodus" begin="12:43" end="12:51" />
+  <aliyah parsha="15" num="1" book="Exodus" begin="12:21" end="12:24" numverses="4" />
+  <aliyah parsha="15" num="2" book="Exodus" begin="12:25" end="12:28" numverses="4" />
+  <aliyah parsha="15" num="3" book="Exodus" begin="12:29" end="12:36" numverses="8" />
+  <aliyah parsha="15" num="4" book="Exodus" begin="12:37" end="12:42" numverses="6" />
+  <aliyah parsha="15" num="5" book="Exodus" begin="12:43" end="12:51" numverses="9" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
@@ -149,13 +149,13 @@ every other day (e.g. fast days): 3
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1.shtml" />
   <haft reading="Joshua 5:2 - 6:1"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah1_haft.shtml" />
-  <aliyah parsha="15" num="1" book="Exodus" begin="12:21" end="12:24" />
-  <aliyah parsha="15" num="2" book="Exodus" begin="12:25" end="12:28" />
-  <aliyah parsha="15" num="3" book="Exodus" begin="12:29" end="12:32" />
-  <aliyah parsha="15" num="4" book="Exodus" begin="12:33" end="12:36" />
-  <aliyah parsha="15" num="5" book="Exodus" begin="12:37" end="12:42" />
-  <aliyah parsha="15" num="6" book="Exodus" begin="12:43" end="12:47" />
-  <aliyah parsha="15" num="7" book="Exodus" begin="12:48" end="12:51" />
+  <aliyah parsha="15" num="1" book="Exodus" begin="12:21" end="12:24" numverses="4" />
+  <aliyah parsha="15" num="2" book="Exodus" begin="12:25" end="12:28" numverses="4" />
+  <aliyah parsha="15" num="3" book="Exodus" begin="12:29" end="12:32" numverses="4" />
+  <aliyah parsha="15" num="4" book="Exodus" begin="12:33" end="12:36" numverses="4" />
+  <aliyah parsha="15" num="5" book="Exodus" begin="12:37" end="12:42" numverses="6" />
+  <aliyah parsha="15" num="6" book="Exodus" begin="12:43" end="12:47" numverses="5" />
+  <aliyah parsha="15" num="7" book="Exodus" begin="12:48" end="12:51" numverses="4" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
@@ -169,11 +169,11 @@ every other day (e.g. fast days): 3
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah2.shtml" />
   <haft reading="II Kings 23:1 - 23:9; 23:21 - 23:25"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah2_haft.shtml" />
-  <aliyah parsha="31" num="1" book="Leviticus" begin="22:26" end="23:3" />
-  <aliyah parsha="31" num="2" book="Leviticus" begin="23:4" end="23:14" />
-  <aliyah parsha="31" num="3" book="Leviticus" begin="23:15" end="23:22" />
-  <aliyah parsha="31" num="4" book="Leviticus" begin="23:23" end="23:32" />
-  <aliyah parsha="31" num="5" book="Leviticus" begin="23:33" end="23:44" />
+  <aliyah parsha="31" num="1" book="Leviticus" begin="22:26" end="23:3" numverses="11" />
+  <aliyah parsha="31" num="2" book="Leviticus" begin="23:4" end="23:14" numverses="11" />
+  <aliyah parsha="31" num="3" book="Leviticus" begin="23:15" end="23:22" numverses="8" />
+  <aliyah parsha="31" num="4" book="Leviticus" begin="23:23" end="23:32" numverses="10" />
+  <aliyah parsha="31" num="5" book="Leviticus" begin="23:33" end="23:44" numverses="12" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
@@ -185,10 +185,10 @@ every other day (e.g. fast days): 3
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0213.htm#1" />
-  <aliyah parsha="15" num="1" book="Exodus" begin="13:1" end="13:4" />
-  <aliyah parsha="15" num="2" book="Exodus" begin="13:5" end="13:10" />
-  <aliyah parsha="15" num="3" book="Exodus" begin="13:11" end="13:16" />
-  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah parsha="15" num="1" book="Exodus" begin="13:1" end="13:4" numverses="4" />
+  <aliyah parsha="15" num="2" book="Exodus" begin="13:5" end="13:10" numverses="6" />
+  <aliyah parsha="15" num="3" book="Exodus" begin="13:11" end="13:16" numverses="6" />
+  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <!-- Strassfeld p. 230 -->
@@ -200,10 +200,10 @@ every other day (e.g. fast days): 3
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0222.htm#24" />
-  <aliyah parsha="18" num="1" book="Exodus" begin="22:24" end="22:26" />
-  <aliyah parsha="18" num="2" book="Exodus" begin="22:27" end="23:5" />
-  <aliyah parsha="18" num="3" book="Exodus" begin="23:6" end="23:19" />
-  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah parsha="18" num="1" book="Exodus" begin="22:24" end="22:26" numverses="3" />
+  <aliyah parsha="18" num="2" book="Exodus" begin="22:27" end="23:5" numverses="9" />
+  <aliyah parsha="18" num="3" book="Exodus" begin="23:6" end="23:19" numverses="14" />
+  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach Chol ha-Moed Day 3"
@@ -214,10 +214,10 @@ every other day (e.g. fast days): 3
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0234.htm#1" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="34:1" end="34:10" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="34:11" end="34:17" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="34:18" end="34:26" />
-  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="34:1" end="34:10" numverses="10" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="34:11" end="34:17" numverses="7" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="34:18" end="34:26" numverses="9" />
+  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach Chol ha-Moed Day 4"
@@ -228,10 +228,10 @@ every other day (e.g. fast days): 3
  </about>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0409.htm#1" />
-  <aliyah parsha="36" num="1" book="Numbers" begin="9:1" end="9:5" />
-  <aliyah parsha="36" num="2" book="Numbers" begin="9:6" end="9:8" />
-  <aliyah parsha="36" num="3" book="Numbers" begin="9:9" end="9:14" />
-  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah parsha="36" num="1" book="Numbers" begin="9:1" end="9:5" numverses="5" />
+  <aliyah parsha="36" num="2" book="Numbers" begin="9:6" end="9:8" numverses="3" />
+  <aliyah parsha="36" num="3" book="Numbers" begin="9:9" end="9:14" numverses="6" />
+  <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach Shabbat Chol ha-Moed"
@@ -248,13 +248,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/shabbat_pesah.shtml" />
   <haft reading="Ezekiel 37:1 - 37:14"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/shabbat_pesah_haft.shtml" />
-  <aliyah parsha="21" num="1" book="Exodus" begin="33:12" end="33:16" />
-  <aliyah parsha="21" num="2" book="Exodus" begin="33:17" end="33:19" />
-  <aliyah parsha="21" num="3" book="Exodus" begin="33:20" end="33:23" />
-  <aliyah parsha="21" num="4" book="Exodus" begin="34:1" end="34:3" />
-  <aliyah parsha="21" num="5" book="Exodus" begin="34:4" end="34:10" />
-  <aliyah parsha="21" num="6" book="Exodus" begin="34:11" end="34:17" />
-  <aliyah parsha="21" num="7" book="Exodus" begin="34:18" end="34:26" />
+  <aliyah parsha="21" num="1" book="Exodus" begin="33:12" end="33:16" numverses="5" />
+  <aliyah parsha="21" num="2" book="Exodus" begin="33:17" end="33:19" numverses="3" />
+  <aliyah parsha="21" num="3" book="Exodus" begin="33:20" end="33:23" numverses="4" />
+  <aliyah parsha="21" num="4" book="Exodus" begin="34:1" end="34:3" numverses="3" />
+  <aliyah parsha="21" num="5" book="Exodus" begin="34:4" end="34:10" numverses="7" />
+  <aliyah parsha="21" num="6" book="Exodus" begin="34:11" end="34:17" numverses="7" />
+  <aliyah parsha="21" num="7" book="Exodus" begin="34:18" end="34:26" numverses="9" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
@@ -268,11 +268,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7.shtml" />
   <haft reading="II Samuel 22:1-51"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7_haft.shtml" />
-  <aliyah parsha="16" num="1" book="Exodus" begin="13:17" end="13:22" />
-  <aliyah parsha="16" num="2" book="Exodus" begin="14:1" end="14:8" />
-  <aliyah parsha="16" num="3" book="Exodus" begin="14:9" end="14:14" />
-  <aliyah parsha="16" num="4" book="Exodus" begin="14:15" end="14:25" />
-  <aliyah parsha="16" num="5" book="Exodus" begin="14:26" end="15:26" />
+  <aliyah parsha="16" num="1" book="Exodus" begin="13:17" end="13:22" numverses="6" />
+  <aliyah parsha="16" num="2" book="Exodus" begin="14:1" end="14:8" numverses="8" />
+  <aliyah parsha="16" num="3" book="Exodus" begin="14:9" end="14:14" numverses="6" />
+  <aliyah parsha="16" num="4" book="Exodus" begin="14:15" end="14:25" numverses="11" />
+  <aliyah parsha="16" num="5" book="Exodus" begin="14:26" end="15:26" numverses="32" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
@@ -285,13 +285,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7.shtml" />
   <haft reading="II Samuel 22:1-51"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah7_haft.shtml" />
-  <aliyah parsha="16" num="1" book="Exodus" begin="13:17" end="13:19" />
-  <aliyah parsha="16" num="2" book="Exodus" begin="13:20" end="13:22" />
-  <aliyah parsha="16" num="3" book="Exodus" begin="14:1" end="14:4" />
-  <aliyah parsha="16" num="4" book="Exodus" begin="14:5" end="14:8" />
-  <aliyah parsha="16" num="5" book="Exodus" begin="14:9" end="14:14" />
-  <aliyah parsha="16" num="6" book="Exodus" begin="14:15" end="14:25" />
-  <aliyah parsha="16" num="7" book="Exodus" begin="14:26" end="15:26" />
+  <aliyah parsha="16" num="1" book="Exodus" begin="13:17" end="13:19" numverses="3" />
+  <aliyah parsha="16" num="2" book="Exodus" begin="13:20" end="13:22" numverses="3" />
+  <aliyah parsha="16" num="3" book="Exodus" begin="14:1" end="14:4" numverses="4" />
+  <aliyah parsha="16" num="4" book="Exodus" begin="14:5" end="14:8" numverses="4" />
+  <aliyah parsha="16" num="5" book="Exodus" begin="14:9" end="14:14" numverses="6" />
+  <aliyah parsha="16" num="6" book="Exodus" begin="14:15" end="14:25" numverses="11" />
+  <aliyah parsha="16" num="7" book="Exodus" begin="14:26" end="15:26" numverses="32" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
@@ -305,11 +305,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8.shtml" />
   <haft reading="Isaiah 10:32 - 12:6"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8_haft.shtml" />
-  <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" />
-  <aliyah parsha="47" num="2" book="Deuteronomy" begin="16:1" end="16:3" />
-  <aliyah parsha="47" num="3" book="Deuteronomy" begin="16:4" end="16:8" />
-  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:9" end="16:12" />
-  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:13" end="16:17" />
+  <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" numverses="5" />
+  <aliyah parsha="47" num="2" book="Deuteronomy" begin="16:1" end="16:3" numverses="3" />
+  <aliyah parsha="47" num="3" book="Deuteronomy" begin="16:4" end="16:8" numverses="5" />
+  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:9" end="16:12" numverses="4" />
+  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:13" end="16:17" numverses="5" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
@@ -322,13 +322,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8.shtml" />
   <haft reading="Isaiah 10:32 - 12:6"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/pesah8_haft.shtml" />
-  <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
-  <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" />
-  <aliyah parsha="47" num="3" book="Deuteronomy" begin="15:19" end="15:23" />
-  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:1" end="16:3" />
-  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:4" end="16:8" />
-  <aliyah parsha="47" num="6" book="Deuteronomy" begin="16:9" end="16:12" />
-  <aliyah parsha="47" num="7" book="Deuteronomy" begin="16:13" end="16:17" />
+  <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" numverses="8" />
+  <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" numverses="18" />
+  <aliyah parsha="47" num="3" book="Deuteronomy" begin="15:19" end="15:23" numverses="5" />
+  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:1" end="16:3" numverses="3" />
+  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:4" end="16:8" numverses="5" />
+  <aliyah parsha="47" num="6" book="Deuteronomy" begin="16:9" end="16:12" numverses="4" />
+  <aliyah parsha="47" num="7" book="Deuteronomy" begin="16:13" end="16:17" numverses="5" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
@@ -342,11 +342,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot1.shtml" />
   <haft reading="Ezekiel 1:1-28; 3:12"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot1_haft.shtml" />
-  <aliyah parsha="17" num="1" book="Exodus" begin="19:1" end="19:6" />
-  <aliyah parsha="17" num="2" book="Exodus" begin="19:7" end="19:13" />
-  <aliyah parsha="17" num="3" book="Exodus" begin="19:14" end="19:19" />
-  <aliyah parsha="17" num="4" book="Exodus" begin="19:20" end="20:13" />
-  <aliyah parsha="17" num="5" book="Exodus" begin="20:14" end="20:22" />
+  <aliyah parsha="17" num="1" book="Exodus" begin="19:1" end="19:6" numverses="6" />
+  <aliyah parsha="17" num="2" book="Exodus" begin="19:7" end="19:13" numverses="7" />
+  <aliyah parsha="17" num="3" book="Exodus" begin="19:14" end="19:19" numverses="6" />
+  <aliyah parsha="17" num="4" book="Exodus" begin="19:20" end="20:13" numverses="8" />
+  <aliyah parsha="17" num="5" book="Exodus" begin="20:14" end="20:22" numverses="9" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
@@ -360,11 +360,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2.shtml" />
   <haft reading="Habakkuk 3:1-19"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2_haft.shtml" />
-  <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" />
-  <aliyah parsha="47" num="2" book="Deuteronomy" begin="16:1" end="16:3" />
-  <aliyah parsha="47" num="3" book="Deuteronomy" begin="16:4" end="16:8" />
-  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:9" end="16:12" />
-  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:13" end="16:17" />
+  <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" numverses="5" />
+  <aliyah parsha="47" num="2" book="Deuteronomy" begin="16:1" end="16:3" numverses="3" />
+  <aliyah parsha="47" num="3" book="Deuteronomy" begin="16:4" end="16:8" numverses="5" />
+  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:9" end="16:12" numverses="4" />
+  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:13" end="16:17" numverses="5" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
@@ -378,13 +378,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2.shtml" />
   <haft reading="Habakkuk 3:1-19"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/shavuot2_haft.shtml" />
-  <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
-  <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" />
-  <aliyah parsha="47" num="3" book="Deuteronomy" begin="15:19" end="15:23" />
-  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:1" end="16:3" />
-  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:4" end="16:8" />
-  <aliyah parsha="47" num="6" book="Deuteronomy" begin="16:9" end="16:12" />
-  <aliyah parsha="47" num="7" book="Deuteronomy" begin="16:13" end="16:17" />
+  <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" numverses="8" />
+  <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" numverses="18" />
+  <aliyah parsha="47" num="3" book="Deuteronomy" begin="15:19" end="15:23" numverses="5" />
+  <aliyah parsha="47" num="4" book="Deuteronomy" begin="16:1" end="16:3" numverses="3" />
+  <aliyah parsha="47" num="5" book="Deuteronomy" begin="16:4" end="16:8" numverses="5" />
+  <aliyah parsha="47" num="6" book="Deuteronomy" begin="16:9" end="16:12" numverses="4" />
+  <aliyah parsha="47" num="7" book="Deuteronomy" begin="16:13" end="16:17" numverses="5" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
@@ -943,7 +943,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#hahodesh_maf" />
   <haft reading="Ezekiel 45:16 - 46:18"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/hahodesh_haft.shtml" />
-  <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" />
+  <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" numverses="7" />
   <aliyah parsha="15" num="M" book="Exodus" begin="12:1" end="12:20" numverses="20" />
  </kriyah>
 </festival>
@@ -1014,7 +1014,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/4maf.shtml#shekalim_maf" />
   <haft reading="II Kings 12:1 - 12:17"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/shekalim_haft.shtml" />
-  <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" />
+  <aliyah parsha="41" num="8" book="Numbers" begin="28:9" end="28:15" numverses="7" />
   <aliyah parsha="21" num="M" book="Exodus" begin="30:11" end="30:16" numverses="6" />
  </kriyah>
 </festival>
