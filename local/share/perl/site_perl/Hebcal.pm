@@ -1000,7 +1000,7 @@ sub get_holiday_anchor($$)
 
 	if (defined $holidays{$subj_copy})
 	{
-	    $href = "/hebcal/help/defaults.html#" .
+	    $href = "/help/defaults.html#" .
 		$holidays{$subj_copy}->[$HOLIDAY_IDX_ANCHOR];
 
 	    if (defined $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE])
