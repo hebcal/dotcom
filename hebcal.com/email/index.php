@@ -192,7 +192,7 @@ function my_footer() {
     global $VER;
 
     $html = <<<EOD
-<hr noshade size="1"><font size="-2" face="Arial">
+<hr noshade size="1"><span class="tiny">
 <a name="copyright">Copyright &copy; $year
 Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
@@ -201,7 +201,8 @@ Michael J. Radwin. All rights reserved.</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
-</font></body></html>
+</span>
+</body></html>
 EOD
 	;
     echo $html;
