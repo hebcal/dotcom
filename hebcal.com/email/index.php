@@ -63,6 +63,31 @@ else {
 }
 my_footer();
 
+function get_sub_info($email) {
+    $fd = fopen("/tmp/hebcal.com.lock", "w");
+    if ($fd == false) {
+	die("lockfile open failed");
+    }
+
+    if (flock($fd, LOCK_SH) == false) {
+	die("flock failed");
+	fclose($fd);
+    }
+
+    $id = dba_open("subs.db", "r", "db3");
+    if (!$id) {
+	die("dba_open subs.db failed");
+    }
+
+    $val = dba_fetch($email, $id);
+
+    dba_close($id);
+    flock($fd, LOCK_UN);
+    fclose($fd);
+
+    return $val;
+}
+
 function write_staging_info($param)
 {
     global $HTTP_SERVER_VARS;
@@ -90,9 +115,9 @@ function write_staging_info($param)
 	fclose($fd);
     }
 
-    $id = dba_open("subs.db", "w", "db3");
+    $id = dba_open("email.db", "w", "db3");
     if (!$id) {
-	die("dba_open subs.db failed");
+	die("dba_open email.db failed");
     }
 
     $val = sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d;em=%s",
@@ -105,7 +130,7 @@ function write_staging_info($param)
 		   $param['em']);
 
     if (!dba_replace($encoded, $val, $id)) {
-	die("dba_replace subs.db failed");
+	die("dba_replace email.db failed");
     }
 
     dba_sync($id);
@@ -127,6 +152,7 @@ Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
+<br>$Revision$
 </font></body></html>
 <?php
     exit();
@@ -282,7 +308,7 @@ function subscribe($param) {
 
     global $tz_names;
     $param['tz'] = $tz;
-    $tz_descr = "Time zone: " . $tz_names[$tz];
+    $tz_descr = "Time zone: " . $tz_names['tz_' . $tz];
 
     $dst_descr = "Daylight Saving Time: " . $param['dst'];
 
@@ -293,12 +319,16 @@ function subscribe($param) {
     $return_path = "shabbat-bounce@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
+    global $HTTP_SERVER_VARS;
+    $sender =  'webmaster@';
+    $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
+
     $headers = array('From' => "\"$from_name\" <$from_addr>",
 		     'To' => $recipients,
 		     'Reply-To' => $from_addr,
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
-		     'X-Sender' => "webmaster@$SERVER_NAME",
+		     'X-Sender' => $sender,
 		     'Subject' => $subject);
 
     $body = <<<EOD
@@ -318,17 +348,45 @@ Regards,
 hebcal.com
 EOD;
 
-    $title = "success!";
     $err = smtp_send($return_path, $recipients, $headers, $body);
-    if ($err !== true)
+    $html_email = htmlentities($recipients);
+
+    if ($err === true)
     {
-	$title = $err;
+	$html = <<<EOD
+<p>Thank you for your interest in weekly
+candle lighting times and parsha information.</p>
+<p>A confirmation message has been sent
+to <b>$html_email</b>.<br>
+Simply reply to that message to confirm your subscription.</p>
+<p><small>
+$city_descr
+<br>&nbsp;&nbsp;$dst_descr
+<br>&nbsp;&nbsp;$tz_descr
+</small></p>
+EOD
+		     ;
     }
-?>
+    else
+    {
+	$html = <<<EOD
+<h2>Sorry!</h2>
+<p>Unfortunately, we are temporarily unable to send email
+to <b>$html_email</b>.</p>
+<p>Please try again in a few minutes.</p>
+<p>If the problem persists, please send email to
+<a href="mailto:webmaster@hebcal.com">webmaster@hebcal.com</a>.</p>
+EOD
+	     ;
+    }
 
-<h1><?php echo $title ?></h1>
-
-foobar
-
-<?php
+    echo $html;
 }
+
+function unsubscribe($param) {
+
+    $info = get_sub_info($param['em']);
+
+}
+
+?>
