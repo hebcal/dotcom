@@ -721,8 +721,6 @@ sub start_html($$$$)
 		   $q->Link({-rel => 'stylesheet',
 			     -href => '/style.css',
 			     -type => 'text/css'}),
-		   $q->Link({-rel => 'p3pv1',
-			     -href => "http://$server_name/w3c/p3p.xml"}),
 		   $q->Link({-rev => 'made',
 			     -href => "mailto:$author"}),
 		   @{$head},
