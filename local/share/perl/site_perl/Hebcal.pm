@@ -654,11 +654,13 @@ sub cache_begin($)
 
     my $dir = $ENV{"DOCUMENT_ROOT"} . "/cache/" . $script_name;
     unless (-d $dir) {
-	system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed: $?";
+	system("/bin/mkdir", "-p", $dir) == 0 or return undef;
     }
 
     $cache = "$dir/$qs.$$";
-    open(CACHE, ">$cache") || die "$cache: $!\n";
+    if (!open(CACHE, ">$cache")) {
+	$cache = undef;
+    }
 
     $cache;
 }
