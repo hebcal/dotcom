@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar 26 11:22:01 PST 2001
+Last modified: Mon Mar 26 14:25:12 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1093,7 +1093,7 @@ so you can keep this window open.
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
 	{
-	    $subj .= qq{\n/ <big><span lang="he" dir="rtl">$hebrew</span></big>};
+	    $subj .= qq{\n/ <span lang="he" dir="rtl"\nstyle="font-family: David">$hebrew</span>};
 	}
 
 	unless ($q->param('vis'))
