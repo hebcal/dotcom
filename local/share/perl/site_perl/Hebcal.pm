@@ -1049,7 +1049,6 @@ sub guess_timezone($$$)
     undef;
 }
 
-
 sub display_hebrew {
     my($q,$class,@args) = @_;
 
@@ -1081,11 +1080,43 @@ sub display_hebrew {
     }
 }
 
+sub UCN_display_hebrew {
+    my($q,$class,@args) = @_;
+
+    my($str) = join('', @args);
+    $str =~ s/ /U+0020/g;
+
+    my($u) = Unicode::String::hex($str);
+    my($u8) = $u->utf8();
+
+    if ($q->user_agent('MSIE'))
+    {
+	$u8 =~ s/  /&nbsp;&nbsp;/g;
+
+	return join('',
+		    qq{<span dir="rtl" lang="he"\nclass="$class">},
+		    $u8,
+		    qq{</span>}
+		    );
+    }
+    else
+    {
+	my($str) = &utf8_hebrew_to_netscape($u8);
+	$str =~ s/  /&nbsp;&nbsp;/g;
+
+	return join('',
+		    qq{<span dir="ltr" lang="he"\nclass="$class">},
+		    $str,
+		    qq{</span>}
+		    );
+    }
+}
+
 sub utf8_hebrew_to_netscape($) {
     my($str) = @_;
 
     my($u) = Unicode::String::utf8($str);
-    my(@array) = $u->unpack;
+    my(@array) = $u->unpack();
     my(@result) = ();
 
     for (my $i = scalar(@array) - 1; $i >= 0; --$i)
@@ -1105,7 +1136,7 @@ sub utf8_hebrew_to_netscape($) {
     }
 
     $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
-    return $u->as_string();
+    return $u->utf8();
 }
 
 sub navbar($$$)
