@@ -1111,7 +1111,7 @@ sub self_url($$)
 
     foreach my $key ($q->param())
     {
-	next if $key eq 'tag';
+	next if $key eq 'tag' && !defined $override->{$key};
 
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
