@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Mar  8 15:36:10 PST 2001
+Last modified: Mon Apr 16 12:33:51 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -54,14 +54,15 @@ href=\"/hebcal/help/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
 
-my($inline_style) = qq[<style type="text/css">
-<!--
-.boxed { border-style: solid;
-border-color: #666666;
-border-width: thin;
-padding: 8px; }
--->
-</style>];
+my($inline_style) = '';
+#my($inline_style) = qq[<style type="text/css">
+#<!--
+#.boxed { border-style: solid;
+#border-color: #666666;
+#border-width: thin;
+#padding: 8px; }
+#-->
+#</style>];
 
 # process form params
 my($q) = new CGI;
@@ -613,13 +614,13 @@ sub form
     {
 	$help = '' unless defined $help;
 	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
+	    $message . "</font></p>" . $help;
     }
-
 
     &out_html(
 	qq{$message\n},
-	qq{<table><tr><td class="boxed"><form\naction="$script_name">},
+	qq{<hr noshade size=\"1\"><h3>Change City</h3>\n},
+	qq{<form\naction="$script_name">},
 	qq{<label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
@@ -641,12 +642,20 @@ sub form
 			 'none' => "\nnone ", }),
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
-		   -override => 1));
+		   -override => 1),
+	"<br><label\nfor=\"m\">Havdalah minutes past sundown:\n",
+	$q->textfield(-name => 'm',
+		      -id => 'm',
+		      -size => 3,
+		      -maxlength => 3,
+		      -default => 72),
+	"</label>",
+	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
+
 
     &out_html(
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
-	qq{</td>\n<td>&nbsp;&nbsp;or&nbsp;&nbsp;</td>\n},
-	qq{<td class="boxed"><form\naction="$script_name">},
+	qq{<b>(or select by major city</b>)<br>},
+	qq{<form\naction="$script_name">},
 	qq{<label\nfor="city">Closest City:\n},
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
@@ -656,12 +665,25 @@ sub form
 	$q->hidden(-name => 'geo',
 		   -value => 'city',
 		   -override => 1),
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
-	qq{</td></tr></table>});
+	"<br><label\nfor=\"m\">Havdalah minutes past sundown:\n",
+	$q->textfield(-name => 'm',
+		      -id => 'm',
+		      -size => 3,
+		      -maxlength => 3,
+		      -default => 72),
+	"</label>",
+	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
-    &out_html(qq{<p><small><a href="/hebcal/help/#tags">How\n},
-	      qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
-	      qq{times on its own website?</a></small></p>});
+    &out_html(
+	qq{<hr noshade size=\"1\">\n},
+	qq{<p><small>[
+<a href="/hebcal/">Hebcal Interactive Jewish Calendar</a> |
+1-Click Shabbat |
+<a href="/yahrzeit/">Interactive Yahrzeit/Birthday Calendar</a>
+]</small></p>},
+	qq{<p><a href="/hebcal/help/#tags">How\n},
+	qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
+	qq{times on its own website?</a></p>});
 
     &out_html($html_footer);
 
