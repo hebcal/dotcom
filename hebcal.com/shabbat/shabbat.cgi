@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 19 11:09:28 PST 2001
+Last modified: Mon Feb 12 14:22:56 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -416,11 +416,23 @@ for ($i = 0; $i < $numEntries; $i++)
 	    &out_html("Holiday: ");
 	}
 
-	my($href) = &Hebcal::get_holiday_anchor($subj);
+	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
+	    = &Hebcal::get_holiday_anchor($subj);
+
 	if ($href ne '' &&
 	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
 	{
-	    &out_html(qq{<a\nhref="$href">$subj</a>});
+
+	    if (defined $torah_href && $torah_href ne '')
+	    {
+		&out_html(qq{<b>$subj</b>\n(<a href="$href">Drash</a>\n} .
+		    qq{- <a href="$torah_href">Torah</a>\n} .
+		    qq{- <a href="$haftarah_href">Haftarah</a>)});
+	    }
+	    elsif ($href ne '')
+	    {
+		&out_html(qq{<a href="$href">$subj</a>});
+	    }
 	}
 	else
 	{
