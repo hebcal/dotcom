@@ -5,6 +5,7 @@
 use Hebcal;
 use Getopt::Std;
 use Config::IniFiles;
+use POSIX qw(strftime);
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -32,6 +33,37 @@ $sedrot || die "$infile: $!\n";
 
 my($mtime) = (stat($infile))[9];
 my($hhmts) = "Last modified:\n" . localtime($mtime);
+
+#my($hebrew_year) = `./hebcal -t`;
+#chomp($hebrew_year);
+#$hebrew_year =~ s/^.+, (\d{4})/$1/;
+
+my(%read_on);
+my(@events) = &Hebcal::invoke_hebcal('./hebcal -s -h -x -H', '');
+my($i);
+for ($i = 0; $i < @events; $i++)
+{
+    # holiday is at 12:00:01 am
+    my($time) = &Time::Local::timelocal(1,0,0,
+		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+		       $events[$i]->[$Hebcal::EVT_IDX_MON],
+		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+		       '','','');
+    my($stime) = strftime("%A, %d %B %Y", localtime($time));
+
+    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+
+    $subj =~ s/^Parashat //;
+
+    $read_on{$subj} = $stime;
+
+    if ($subj =~ /^([^-]+)-(.+)$/ &&
+	defined $sedrot->Parameters($1) &&
+	defined $sedrot->Parameters($2))
+    {
+	$read_on{$1} = $read_on{$2} = $stime;
+    }
+}
 
 open(OUT, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
 
@@ -96,6 +128,12 @@ foreach my $h ($sedrot->Sections())
     $prev_book = $book;
 
     print OUT qq{<dt><a name="$anchor" href="$anchor.html">Parashat\n$h</a>\n};
+    if (defined $read_on{$h})
+    {
+	my $date = $read_on{$h};
+	$date =~ s/^Saturday, //;
+	print OUT qq{ - (<small>$date</small>)\n};
+    }
 }
 
 print OUT <<EOHTML;
@@ -123,6 +161,8 @@ sub write_sedra_page {
 
     my($sedrot_h) = $h;
     $h =~ s/^Combined //;
+
+    my $date = defined $read_on{$h} ? $read_on{$h} : '';
 
     my(undef,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href) =
 	&Hebcal::get_holiday_anchor("Parashat $h", 0);
@@ -204,7 +244,8 @@ href="/search/">Search</a></small>
 <br>
 <table width="100%">
 <tr>
-<td><h1>Parashat $h</h1></td>
+<td><h1>Parashat $h</h1>
+$date</td>
 <td><h1 dir="rtl" class="hebrew" name="hebrew"
 lang="he">$hebrew</h1></td>
 </tr>
