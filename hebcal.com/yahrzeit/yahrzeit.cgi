@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Apr 17 17:38:45 PDT 2001
+Last modified: Wed Apr 18 10:46:15 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -47,10 +47,13 @@ $hhmts =~ s/\n//g;
 $hhmts =~ s/Last modified: /Software last updated:\n/g;
 
 my($html_footer) = "<hr
-noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
-&copy; $this_year <a
-href=\"http://www.radwin.org/michael/contact.html\">Michael J. Radwin</a>.
-All rights reserved.</small></body></html>
+noshade size=\"1\"><font size=-2 face=Arial>Copyright
+&copy; $this_year Michael J. Radwin. All rights reserved.
+<a href=\"/privacy/\">Privacy Policy</a> -
+<a href=\"/help/\">Help</a>
+<br>$hhmts
+(<a href=\"../dist/ChangeLog.txt\">$rcsrev</a>)
+</font></body></html>
 ";
 
 # process form params
