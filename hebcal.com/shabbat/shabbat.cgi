@@ -407,21 +407,12 @@ sub self_url
 	if $q->param('zip');
     $url .= ";city=" . &Hebcal::url_escape($q->param('city'))
 	if $q->param('city');
-    $url .= ";dst=" . $q->param('dst')
-	if $q->param('dst');
-    $url .= ";tz=" . $q->param('tz')
-	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
+#      $url .= ";dst=" . $q->param('dst')
+#  	if $q->param('dst');
+#      $url .= ";tz=" . $q->param('tz')
+#  	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
     $url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
-    if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
-    {
-	$url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
-    }
-    elsif ($q->param('.from'))
-    {
-	$url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
-    }
 
     $url;
 }
@@ -575,6 +566,15 @@ sub display_javascript
 
     my($url) = self_url();
 
+    if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
+    {
+	$url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
+    }
+    elsif ($q->param('.from'))
+    {
+	$url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
+    }
+
     &Hebcal::out_html($cfg, qq{<h3><a target="_top"
 href="$url">1-Click
 Shabbat</a> for $city_descr</h3>
@@ -622,7 +622,27 @@ sub display_html
 
     display_html_common($items);
 
-    my($url) = join('', "http://", $q->virtual_host(), "/email/",
+    # link to hebcal full calendar
+    my($url) = join('', "http://", $q->virtual_host(), "/hebcal/",
+			 "?v=1;geo=", $q->param('geo'), ";");
+
+    if ($q->param('zip')) {
+	$url .= "zip=" . $q->param('zip');
+    } else {
+	$url .= "city=" . Hebcal::url_escape($q->param('city'));
+    }
+
+    $url .= ";m=" . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+    $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
+
+    &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
+		      "<a href=\"$url\">Get\n",
+		      "candle lighting times for dates in the future</a>\n");
+
+    # Email
+    $url = join('', "http://", $q->virtual_host(), "/email/",
 			 "?geo=", $q->param('geo'), "&amp;");
 
     if ($q->param('zip')) {
@@ -634,10 +654,11 @@ sub display_html
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
+    &Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
 		      "<a href=\"$url\">Email:\n",
 		      "subscribe to weekly Candle Lighting Times</a>\n");
 
+    # Synagogues link
     $url = join('', "http://", $q->virtual_host(), "/link/?");
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
