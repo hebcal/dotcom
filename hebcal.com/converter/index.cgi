@@ -24,12 +24,8 @@ use CGI;
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local;
 use Hebcal;
-use strict;
-
-use lib "/home/users/mradwin/local/lib/perl5/$]";
-use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
-
 use Unicode::String;
+use strict;
 
 my(%num2heb) =
 (
