@@ -75,7 +75,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Sun Jun 16 20:50:22 EDT 2002
+Last modified: Sun Jul  7 12:49:10 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
