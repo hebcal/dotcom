@@ -1,5 +1,8 @@
 <?php
 
+// $Id$
+// $Source: /Users/mradwin/hebcal-copy/hebcal.com/pear/Hebcal/RCS/smtp.inc,v $
+
 function email_address_valid($str)
 {
     require_once('Mail/RFC822.php');
