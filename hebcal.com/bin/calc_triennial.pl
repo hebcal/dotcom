@@ -282,6 +282,13 @@ foreach my $h (@all_inorder)
     $h2 = $h;
 }
 
+my(%parsha2id);
+for (my $i = 0; $i < @all_inorder; $i++)
+{
+    my $h = $all_inorder[$i];
+    $parsha2id{$h} = $i + 1;
+}
+
 $h2 = undef;
 foreach my $h (reverse @all_inorder)
 {
@@ -598,6 +605,21 @@ EOHTML
 	    $info = "$c1:$v1-$c2:$v2";
 	}
 
+	if (defined $parsha2id{$h})
+	{
+	    my $book = lc($torah);
+	    $book =~ s/\s+.+$//;
+
+	    my $bid = 0;
+	    if ($book eq 'genesis') { $bid = 1; } 
+	    elsif ($book eq 'exodus') { $bid = 2; }
+	    elsif ($book eq 'leviticus') { $bid = 3; }
+	    elsif ($book eq 'numbers') { $bid = 4; }
+	    elsif ($book eq 'deuteronomy') { $bid = 5; }
+
+	    $info = qq{<a title="audio"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+	}
+
 	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
 	print OUT2 qq{<a name="fk-$label">$label:</a> $info\n};
 
@@ -666,6 +688,21 @@ EOHTML
 		$info = "$c1:$v1-$v2";
 	    } else {
 		$info = "$c1:$v1-$c2:$v2";
+	    }
+
+	    if (defined $parsha2id{$h})
+	    {
+		my $book = lc($torah);
+		$book =~ s/\s+.+$//;
+
+		my $bid = 0;
+		if ($book eq 'genesis') { $bid = 1; } 
+		elsif ($book eq 'exodus') { $bid = 2; }
+		elsif ($book eq 'leviticus') { $bid = 3; }
+		elsif ($book eq 'numbers') { $bid = 4; }
+		elsif ($book eq 'deuteronomy') { $bid = 5; }
+
+		$info = qq{<a title="audio"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
 	    }
 
 	    my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
