@@ -31,11 +31,19 @@ sub unsubscribe
     my $args = $DB{$email};
     unless ($args) {
 	warn "not subscribed";
+	flock(DB_FH, LOCK_UN);
+	undef $db;
+	untie(%DB);
+	close(DB_FH);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
 	warn "already unsubscribed";
+	flock(DB_FH, LOCK_UN);
+	undef $db;
+	untie(%DB);
+	close(DB_FH);
 	return 0;
     }
 
