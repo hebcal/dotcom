@@ -399,7 +399,8 @@ sub get_holiday_anchor($$$)
 	my($parashat) = $1;
 	my($sedra) = $2;
 
-	$hebrew = 'פרשת ';
+	# 'פרשת ' == UTF-8 for "parashat "
+	$hebrew = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA ";
 	$sedra = $ashk2seph{$sedra} if (defined $ashk2seph{$sedra});
 
 	if (defined $sedrot->Parameters($sedra))
@@ -449,7 +450,9 @@ sub get_holiday_anchor($$$)
 	    if (defined $sedrot->Parameters($p2))
 	    {
 		# hypenate hebrew reading
-		$hebrew .= '־' . $sedrot->val($p2, 'hebrew');
+
+		# '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
+		$hebrew .= "\xD6\xBE" . $sedrot->val($p2, 'hebrew');
 
 		# second part of torah reading
 		$memo .= '; ' . $sedrot->val($p2, 'verse');
@@ -653,21 +656,63 @@ sub html_footer($$$)
 };
 }
 
-sub navbar($$$)
+sub navbar2($$$$$)
 {
-    my($server_name,$title,$help) = @_;
+    my($q,$title,$help,$parent_title,$parent_href) = @_;
+
+    my($server_name) = $q->virtual_host();
+    $server_name =~ s/^www\.//;
 
     my($help_html) = ($help) ? "href=\"/help/\">Help</a> -\n<a\n" : '';
+
+    my($parent_html) = ($parent_title && $parent_href) ? 
+	qq{<tt>-&gt;</tt>\n<a\nhref="$parent_href">$parent_title</a>\n} :
+	'';
 
     return "<table width=\"100%\"\nclass=\"navbar\">" .
 	"<tr><td><small>" .
 	"<strong><a\nhref=\"/\">" . $server_name . "</a></strong>\n" .
+	$parent_html .
 	"<tt>-&gt;</tt>\n" .
 	$title . "</small></td>" .
 	"<td align=\"right\"><small><a\n" .
 	$help_html .
 	"href=\"/search/\">Search</a></small>\n" .
 	"</td></tr></table>";
+}
+
+sub start_html($$$$)
+{
+    my($q,$title,$head,$meta) = @_;
+
+    $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
+		    "\t\"http://www.w3.org/TR/html4/loose.dtd");
+
+    my($server_name) = $q->virtual_host();
+    $meta = {} unless defined $meta;
+    $head = [] unless defined $head;
+
+    my($author) = $server_name;
+    $author =~ s/^www\.//;
+    $author = "webmaster\@$author";
+
+    return $q->start_html
+	(
+	 -title => $title,
+	 -target => '_top',
+	 -head => [
+		   qq{<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://$server_name" r (n 0 s 0 v 0 l 0))'>},
+		   $q->Link({-rel => 'stylesheet',
+			     -href => '/style.css',
+			     -type => 'text/css'}),
+		   $q->Link({-rel => 'p3pv1',
+			     -href => "http://$server_name/w3c/p3p.xml"}),
+		   $q->Link({-rev => 'made',
+			     -href => "mailto:$author"}),
+		   @{$head},
+		   ],
+	 -meta => $meta,
+	 );
 }
 
 sub url_escape($)
