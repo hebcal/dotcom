@@ -68,17 +68,17 @@ if ($VERSION =~ /(\d+)\.(\d+)/) {
     $VERSION = "$1.$2";
 }
 
-$Hebcal::gregorian_warning = "<p><font color=\"#ff0000\">WARNING:
-Results for year 1752 C.E. and before may not be accurate.</font>
+$Hebcal::gregorian_warning = "<p><span style=\"color: red\">WARNING:
+Results for year 1752 C.E. and before may not be accurate.</span>
 Hebcal does not take into account a correction of ten days that
 was introduced by Pope Gregory XIII known as the Gregorian
 Reformation. For more information, see <a
 href=\"http://www.xoc.net/maya/help/gregorian.asp\">Gregorian and
 Julian Calendars</a>.</p>";
 
-$Hebcal::indiana_warning = "<p><font color=\"#ff0000\">WARNING:
+$Hebcal::indiana_warning = "<p><span style=\"color: red\">WARNING:
 Indiana has confusing time zone &amp; Daylight Saving Time
-rules.</font><br>Please check <a
+rules.</span><br>Please check <a
 href=\"http://www.mccsc.edu/time.html#WHAT\">What time is it in
 Indiana?</a> to make sure the above settings are correct.</p>";
 
@@ -887,8 +887,10 @@ sub start_html($$$$$)
 	my($script_name) = $q->script_name();
 	$script_name =~ s,/index.cgi$,/,;
 
-	$base = "http://" . $q->virtual_host() . $script_name . "?" .
-	    $ENV{'QUERY_STRING'};
+	my $qs = $ENV{'QUERY_STRING'};
+	$qs =~ s/&/&amp;/g;
+
+	$base = "http://" . $q->virtual_host() . $script_name . "?" . $qs;
     }
 
     $target = '_top' unless defined $target;
