@@ -134,7 +134,8 @@ if (! defined $in{'zip'} &&
      ! defined $in{'lamin'} ||
      ! defined $in{'ladir'}))
 {
-    &form($default_zip, '');
+    $in{'zip'} = $default_zip;
+    &form('');
 }
     
 $cmd  = "/home/users/mradwin/bin/hebcal";
@@ -154,9 +155,8 @@ if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
        defined $in{'ladeg'} && defined $in{'lamin'} && defined $in{'ladir'})
 {
-    &form('',
-	  "<p><em><font color=\"#ff0000\">Latitude/Longitude arguments\n" .
-	  "must be numeric.</font></em></p>")
+    &form("<p><em><font color=\"#ff0000\">Sorry, all latitude/longitude\n" .
+	  "arguments must be numeric.</font></em></p>")
 	if (($in{'lodeg'} !~ /^\s*\d*\s*$/) ||
 	    ($in{'lomin'} !~ /^\s*\d*\s*$/) ||
 	    ($in{'ladeg'} !~ /^\s*\d*\s*$/) ||
@@ -180,21 +180,21 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $in{'ladeg'} = $lat_deg;
     $in{'lamin'} = $lat_min;
 
-    &form('', "<p><em><font color=\"#ff0000\">Longitude minutes\n" .
-	  "out of valid range 0-60.</font></em></p>")
-	if ($in{'lomin'} > 60);
-
-    &form('', "<p><em><font color=\"#ff0000\">Longitude degrees\n" .
-	  "out of valid range 0-180.</font></em></p>")
+    &form("<p><em><font color=\"#ff0000\">Sorry, longitude degrees\n" .
+	  "<b>$in{'lodeg'}</b> out of valid range 0-180.</font></em></p>")
 	if ($in{'lodeg'} > 180);
 
-    &form('', "<p><em><font color=\"#ff0000\">Latitude minutes\n" .
-	  "out of valid range 0-60.</font></em></p>")
-	if ($in{'lamin'} > 60);
-
-    &form('', "<p><em><font color=\"#ff0000\">Latitude degrees\n" .
-	  "out of valid range 0-90.</font></em></p>")
+    &form("<p><em><font color=\"#ff0000\">Sorry, latitude degrees\n" .
+	  "<b>$in{'ladeg'}</b> out of valid range 0-90.</font></em></p>")
 	if ($in{'ladeg'} > 90);
+
+    &form("<p><em><font color=\"#ff0000\">Sorry, longitude minutes\n" .
+	  "<b>$in{'lomin'}</b> out of valid range 0-60.</font></em></p>")
+	if ($in{'lomin'} > 60);
+
+    &form("<p><em><font color=\"#ff0000\">Sorry, latitude minutes\n" .
+	  "<b>$in{'lamin'}</b> out of valid range 0-60.</font></em></p>")
+	if ($in{'lamin'} > 60);
 
     $city_descr = "Geographic Position<br>\n";
     $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude<br>\n";
@@ -213,14 +213,12 @@ elsif (defined $in{'zip'})
 {
     $in{'dst'} = 'usa' unless defined $in{'dst'};
 
-    &form($in{'zip'},
-	  "<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
+    &form("<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
 	  "Zip Code.</font></em></p>")
 	if $in{'zip'} =~ /^\s*$/;
 
-    &form($in{'zip'},
-	  "<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does not\n" .
-	  "appear to be a 5-digit Zip Code.</font></em></p>")
+    &form("<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does\n" .
+	  "not appear to be a 5-digit Zip Code.</font></em></p>")
 	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
     dbmopen(%DB,$dbmfile, 0400) ||
@@ -233,9 +231,8 @@ elsif (defined $in{'zip'})
     $val = $DB{$in{'zip'}};
     dbmclose(%DB);
 
-    &form($in{'zip'},
-	  "<p><em><font color=\"#ff0000\">Sorry, can't find <b>$in{'zip'}</b>" .
-	  "\nin the Zip Code database.</font></em></p>")
+    &form("<p><em><font color=\"#ff0000\">Sorry, can't find\n".
+	  "<b>$in{'zip'}</b> in the Zip Code database.</font></em></p>")
 	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
@@ -333,7 +330,7 @@ exit(0);
 
 sub form
 {
-    local($zip,$message) = @_;
+    local($message) = @_;
 
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
@@ -449,7 +446,7 @@ print STDOUT "</select></nobr><br>
     {
 	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
-id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\">
+id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\">
 &nbsp;&nbsp;(or select by <a href=\"${cgipath}?geo=city\">City</a>
 or <a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
 <br>
