@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan  3 18:17:18 PST 2000
+Last modified: Thu Jan  6 14:11:28 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -674,6 +674,29 @@ document.f1.v.value='0';
 document.f1.submit();
 return false;
 }
+function s2() {
+if (document.f1.nh.checked == false) {
+document.f1.nx.checked = false;
+}
+return false;
+}
+function s3() {
+if (document.f1.i.checked == true) {
+document.f1.s.checked = true;
+}
+return false;
+}
+function s4() {
+if (document.f1.s.checked == false) {
+document.f1.i.checked = false;
+}
+return false;
+}
+function s5() {
+if (document.f1.nx.checked == true) {
+document.f1.nh.checked = true;
+}
+}
 JSCRIPT_END
 
     print STDOUT $q->header(),
@@ -749,12 +772,14 @@ JSCRIPT_END
     $q->checkbox(-name => 'nh',
 		 -id => 'nh',
 		 -checked => 'checked',
+		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
     "</label>",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
 		 -id => 'nx',
 		 -checked => 'checked',
+		 -onClick => "s5()",
 		 -label => "\nRosh Chodesh"),
     "</label>",
     "<br><label\nfor=\"o\">",
@@ -765,10 +790,12 @@ JSCRIPT_END
     "<br><label\nfor=\"s\">",
     $q->checkbox(-name => 's',
 		 -id => 's',
+		 -onClick => "s4()",
 		 -label => "\nWeekly sedrot on Saturday"),
     "</label>\n(<label\nfor=\"i\">",
     $q->checkbox(-name => 'i',
 		 -id => 'i',
+		 -onClick => "s3()",
 		 -label => "\nUse Israeli sedra scheme"),
     "</label>)";
 
@@ -791,11 +818,11 @@ JSCRIPT_END
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
-		   -onClick=>"return s1('zip')",
+		   -onClick => "return s1('zip')",
 		   -target => '_top'},
 		  "zip code"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
-		   -onClick=>"return s1('pos')",
+		   -onClick => "return s1('pos')",
 		   -target => '_top'},
 		  "latitude/longitude");
     }
@@ -803,11 +830,11 @@ JSCRIPT_END
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
-		   -onClick=>"return s1('zip')",
+		   -onClick => "return s1('zip')",
 		   -target => '_top'},
 		  "zip code"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
-		   -onClick=>"return s1('city')",
+		   -onClick => "return s1('city')",
 		   -target => '_top'},
 		  "closest city");
     }
@@ -815,11 +842,11 @@ JSCRIPT_END
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
-		   -onClick=>"return s1('city')",
+		   -onClick => "return s1('city')",
 		   -target => '_top'},
 		  "closest city"), " or\n",
 	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
-		   -onClick=>"return s1('pos')",
+		   -onClick => "return s1('pos')",
 		   -target => '_top'},
 		  "latitude/longitude");
     }
@@ -951,6 +978,9 @@ JSCRIPT_END
     "a cookie?</a>)",
     "</p>\n",
     $q->submit(-name => '.s',-value => 'Get Calendar'),
+    $q->hidden(-name => '.cgifields',
+	       -values => ['nx', 'nh', 'set'],
+	       '-override'=>1),
     "</form>", $html_footer;
 
     exit(0);
