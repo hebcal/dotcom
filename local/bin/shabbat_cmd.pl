@@ -3,8 +3,7 @@
 use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 
 use strict;
-use DB_File;
-use Fcntl qw(:DEFAULT :flock);
+use DB_File::Lock;
 use Hebcal;
 
 sub main() {
@@ -23,39 +22,28 @@ sub main() {
 sub unsubscribe($$) {
     my($email,$flag) = @_;
 
-    my $lockfd = &Hebcal::emaildb_lock(LOCK_EX);
-
     my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
     my(%DB);
-    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
-		  $DB_File::DB_HASH)
+    tie(%DB, 'DB_File::Lock', $dbmfile, O_CREAT|O_RDWR, 0644, $DB_HASH, 'write')
 	or die "$dbmfile: $!\n";
 
     my $args = $DB{$email};
     unless ($args) {
 	warn "ignoring $email: not subscribed\n";
-	undef $db;
 	untie(%DB);
-	&Hebcal::emaildb_unlock($lockfd);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
 	warn "ignoring $email: already unsubscribed\n";
-	undef $db;
 	untie(%DB);
-	&Hebcal::emaildb_unlock($lockfd);
 	return 0;
     }
 
     my($now) = time;
     $DB{$email} = "action=$flag;t3=$now;$args";
 
-    $db->sync;
-    undef $db;
     untie(%DB);
-
-    &Hebcal::emaildb_unlock($lockfd);
 
     warn "unsubscribe $email: OK\n";
 
