@@ -470,6 +470,9 @@ maxlength=\"3\"><br>
 
 </blockquote>
 
+<input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}><label for=\"a\">
+Use ashkenazis hebrew</label><br>
+
 <input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}><label for=\"x\">
 Suppress Rosh Chodesh</label><br>
 
@@ -484,9 +487,6 @@ Add weekly sedrot on Saturday</label>
 
 (<input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}><label for=\"i\">
 Use Israeli sedra scheme</label>)<br>
-
-<input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}><label for=\"a\">
-Use ashkenazis hebrew</label><br>
 
 <br>
 
