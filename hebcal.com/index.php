@@ -26,7 +26,6 @@ Jewish Calendar Tools</small></td>
 <!-- end holiday greeting -->
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" -->
-&nbsp; - &nbsp; <!--#include file="omer.inc" -->
 </span>
 <table border="0" cellpadding="1" cellspacing="0" width="100%">
 <tr><td class="tiny">&nbsp;</td></tr>
