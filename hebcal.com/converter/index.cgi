@@ -320,6 +320,14 @@ type="submit" value="Compute Gregorian Date"></td>
 		 -label => "\nShow date in Hebrew font"),
     qq{</label></td></tr></table></center></form>};
 
+    print STDOUT <<EOHTML
+<p>Reference: <em><a
+href="http://www.amazon.com/exec/obidos/ASIN/0521777526/hebcal-20">Calendrical
+Calculations</a></em>, Edward M. Reingold, Nachum Dershowitz,
+Cambridge University Press, 2001.</p>
+EOHTML
+;
+
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     exit(0);
