@@ -42,10 +42,10 @@ $this_year += 1900;
 my($VERSION) = '$Revision$'; #'
 
 $Hebcal::gregorian_warning = "<p><font color=\"#ff0000\">WARNING:
-Results for year 1752 C.E. and before may not be accurate.  Hebcal
-does not take into account a correction of ten days that was
-introduced by Pope Gregory XIII known as the Gregorian
-Reformation.</font> For more information, see <a
+Results for year 1752 C.E. and before may not be accurate.</font>
+Hebcal does not take into account a correction of ten days that
+was introduced by Pope Gregory XIII known as the Gregorian
+Reformation. For more information, see <a
 href=\"http://www.xoc.net/maya/help/gregorian.asp\">Gregorian and
 Julian Calendars</a>.</p>";
 
