@@ -1208,11 +1208,15 @@ Jewish Calendar events into your desktop software.</p>};
 	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
     }
 
-    $s .= "<h4>Apple iCal or Lotus Notes 6</h4>\n<ol><li>" .
+    my $ical_href = download_href($q, $filename, 'ics');
+
+    $s .= "<h4>Apple iCal</h4>\n<ol><li>" .
 	"Export iCalendar file:\n" .
+	"<a href=\"webcal://" . $q->virtual_host() . $ical_href .
+	    "\">subscribe</a> or\n" .
 	"<a href=\"" .
-	download_href($q, $filename, 'ics') .
-	    "\">$filename.ics</a>\n";
+	$ical_href .
+	    "\">download</a>\n";
     $s .= qq{<li>How to import ICS file into <a href="/help/import.html#ical">Apple iCal</a> or <a href="/help/import.html#lotus-notes">Lotus Notes 6</a></ol>};
 
     $s .= "<h4>Palm Desktop 2.6.3 for Macintosh</h4>\n<ol><li>" .
@@ -1222,7 +1226,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    "\">$filename.tsv</a>\n";
     $s .= "<li>(this feature is currently experimental)</ol>\n";
 
-    $s .= "<h4>vCalendar (Lotus Notes R5 and others)</h4>\n<ol><li>" .
+    $s .= "<h4>vCalendar (other desktop applications)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
 	"<a href=\"" .
 	download_href($q, $filename, 'vcs') .
