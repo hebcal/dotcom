@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Oct 23 15:23:50 PDT 2000
+Last modified: Mon Oct 23 15:39:08 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -179,11 +179,14 @@ foreach $year ($this_year .. ($this_year + 10))
 	    print STDOUT "\n";
 	}
     }
+    print STDOUT "\n";
 }
 
 unlink($tmpfile);
-print STDOUT "</pre>\n";
+print STDOUT "</pre><hr>\n";
 
+&form(0,'','');
+    
 print STDOUT $html_footer;
 
 close(STDOUT);
