@@ -42,8 +42,40 @@ Jewish Calendar Tools</small></td>
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("today.inc") ?>
 </span>
+<?php
+$ref = getenv("HTTP_REFERER");
+$pattern = '/^http:\/\/(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)\/.*(jewish|hebrew)(\+|%20)calend[ae]r/i';
+if (!$http_cookie && $ref && preg_match($pattern, $ref)) {
+    $cal[] = array("Jewish Traditions 2005 Calendar", "1559499265", 90, 70);
+    $cal[] = array("Hebrew Illuminations 2005 Calendar", "1569374074", 89, 90);
+    $cal[] = array("Jewish Year 5765 Wall Calendar", "0789311224", 90, 90);
+    list($title,$asin,$width,$height) = $cal[rand(0, count($cal)-1)];
+    echo <<<MESSAGE_END
+<blockquote class="welcome">
+<a title="$title from Amazon.com"
+href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20"><img
+src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
+width="$width" height="$height" hspace="8" vspace="8" align="right"
+alt="$title from Amazon.com"></a>
+
+Hebcal.com offers a free personalized Jewish calendar for any year
+0001-9999. You can get a list of Jewish holidays, candle lighting times,
+and Torah readings. We also offer export to Palm, Microsoft Outlook, and
+Apple iCal. <a href="/hebcal/">Customize your calendar</a>.
+
+<p>If you are looking for a full-color printed 2005 calendar,
+consider the <a
+href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
+from Amazon.com.
+Happy (secular) New Year!
+</blockquote>
+MESSAGE_END;
+}
+?>
 <table border="0" cellpadding="1" cellspacing="0" width="100%">
+<?php if (!isset($asin)) { ?>
 <tr><td class="tiny">&nbsp;</td></tr>
+<?php } ?>
 <tr><td valign="top">
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
