@@ -1,325 +1,265 @@
 #!/usr/local/bin/perl5 -w
 
-require 'cgi-lib.pl';
-require 'ctime.pl';
-require 'timelocal.pl';
+use CGI;
+use CGI::Carp qw(fatalsToBrowser);
+use DB_File;
+use Time::Local;
+use Hebcal;
 
-$dbmfile = 'zips.db';
-$dbmfile =~ s/\.db$//;
+$author = 'michael@radwin.org';
 
-&CgiDie("Script Error: No Database", "\nThe database is unreadable.\n" .
-	"Please <a href=\"mailto:michael\@radwin.org" .
-	"\">e-mail Michael</a> to tell him that hebcal is broken.")
-    unless -r "${dbmfile}.db";
+my($this_mon,$this_year) = (localtime)[4,5];
+$this_year += 1900;
+$this_mon++;
 
-$now = $ARGV[0] ? $ARGV[0] : time;
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+my($rcsrev) = '$Revision$'; #'
+$rcsrev =~ s/\s*\$//g;
+
+my($hhmts) = "<!-- hhmts start -->
+Last modified: Wed Sep 13 10:17:58 PDT 2000
+<!-- hhmts end -->";
+
+$hhmts =~ s/<!--.*-->//g;
+$hhmts =~ s/\n//g;
+$hhmts =~ s/Last modified: /Software last updated:\n/g;
+
+$html_footer = "<hr
+noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
+&copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
+All rights reserved.</small></body></html>
+";
+
+# process form params
+$q = new CGI;
+$q->delete('.s');		# we don't care about submit button
+
+my($script_name) = $q->script_name();
+$script_name =~ s,/index.html$,/,;
+my($server_name) = $q->server_name();
+$server_name =~ s/^www\.//;
+
+$q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
+		"\t\"http://www.w3.org/TR/html4/loose.dtd");
+
+if (! $q->param('v') &&
+    defined $q->raw_cookie() &&
+    $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
+{
+    &process_cookie($q,$1);
+}
+
+# sanitize input to prevent people from trying to hack the site.
+# remove anthing other than word chars, white space, or hyphens.
+my($key);
+foreach $key ($q->param())
+{
+    $val = $q->param($key);
+    $val =~ s/[^\w\s-]//g;
+    $val =~ s/^\s*//g;		# nuke leading
+    $val =~ s/\s*$//g;		# and trailing whitespace
+    $q->param($key,$val);
+}
+
+my($now) = time;
+my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
 $friday = $now + ((4 - $wday) * 60 * 60 * 24);
 $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 
 $sat_year = (localtime($saturday))[5] + 1900;
-
 $cmd  = '/home/users/mradwin/bin/hebcal';
 
-$rcsrev = '$Revision$'; #'
-$rcsrev =~ s/\s*\$//g;
-
-$hhmts = "<!-- hhmts start -->
-Last modified: Thu Sep 30 14:32:18 PDT 1999
-<!-- hhmts end -->";
-
-$hhmts =~ s/<!--.*-->//g;
-$hhmts =~ s/\n//g;
-$hhmts =~ s/Last modified: /Software last updated: /g;
-$hhmts = 'This page generated: ' . &ctime(time) . '<br>' . $hhmts;
-
-$html_footer = "<hr noshade size=\"1\">
-<small>$hhmts ($rcsrev)
-<p>Copyright &copy; $year Michael John Radwin. All rights
-reserved.</small>
-</body></html>
-";
-
-if (defined $ENV{'HTTP_COOKIE'} &&
-    $ENV{'HTTP_COOKIE'} =~ /[\s;,]*C=([^\s,;]+)/)
+if (defined $q->param('city'))
 {
-    &process_cookie($1);
+    $q->param('city','New York')
+	unless defined($Hebcal::city_tz{$q->param('city')});
+
+    $q->param('geo','city');
+    $q->param('tz',$Hebcal::city_tz{$q->param('city')});
+    $q->delete('dst');
+
+    $cmd .= " -C '" . $q->param('city') . "'";
+
+    $city_descr = $q->param('city');
 }
-
-@opts = ('c','x','o','s','i','h','a','d','usa','israel','none','set');
-%valid_cities =
-    (
-     'Atlanta', 1,
-     'Austin', 1,
-     'Berlin', 1,
-     'Baltimore', 1,
-     'Bogota', 1,
-     'Boston', 1,
-     'Buenos Aires', 1,
-     'Buffalo', 1,
-     'Chicago', 1,
-     'Cincinnati', 1,
-     'Cleveland', 1,
-     'Dallas', 1,
-     'Denver', 1,
-     'Detroit', 1,
-     'Gibraltar', 1,
-     'Hawaii', 1,
-     'Houston', 1,
-     'Jerusalem', 1,
-     'Johannesburg', 1,
-     'London', 1,
-     'Los Angeles', 1,
-     'Miami', 1,
-     'Mexico City', 1,
-     'New York', 1,
-     'Omaha', 1,
-     'Philadelphia', 1,
-     'Phoenix', 1,
-     'Pittsburgh', 1,
-     'Saint Louis', 1,
-     'San Francisco', 1,
-     'Seattle', 1,
-     'Toronto', 1,
-     'Vancouver', 1,
-     'Washington DC', 1,
-     );
-
-if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
+elsif (defined $q->param('zip'))
 {
-    &CgiDie("Invalid City: $in{'city'}", "\nBogus!")
-	unless defined($valid_cities{$in{'city'}});
+    $q->param('dst','usa')
+	unless $q->param('dst');
+    $q->param('tz','auto')
+	unless $q->param('tz');
+    $q->param('geo','zip');
 
-    $cmd .= " -C '$in{'city'}'";
-    $city_descr = $in{'city'};
+    if ($q->param('zip') eq '' || $q->param('zip') !~ /^\d{5}$/)
+    {
+	$q->param('zip','90210');
+	$q->param('tz','-8');
+	$q->param('dst','usa');
+    }
 
-    delete $in{'tz'};
-    delete $in{'dst'};
-}
-elsif (defined $in{'zip'})
-{
-    $in{'dst'} = 'usa' unless defined $in{'dst'};
+    $dbmfile = 'zips.db';
+    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	|| die "Can't tie $dbmfile: $!\n";
 
-    &CgiDie("No timezone for zip code: $in{'zip'}", "\nBogus!")
-	unless $in{'tz'} !~ /^\s*$/;
+    $val = $DB{$q->param('zip')};
+    unless (defined $val)
+    {
+	$q->param('zip','90210');
+	$q->param('tz','-8');
+	$q->param('dst','usa');
+	$val = $DB{$q->param('zip')};
+    }
+    untie(%DB);
 
-    &CgiDie("Bad zip code: $in{'zip'}", "\nBogus!")
-	if $in{'zip'} =~ /^\s*$/;
-
-    &CgiDie("Bad zip code: $in{'zip'}", "\nBogus!")
-	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
-
-    dbmopen(%DB,$dbmfile, 0400) ||
-	&CgiDie("Script Error: Database Unavailable",
-		"\nThe database is unavailable right now.\n" .
-		"Please <a href=\"${cgipath}?" .
-		$ENV{'QUERY_STRING'} . "\">try again</a>.");
-
-    $val = $DB{$in{'zip'}};
-    dbmclose(%DB);
-
-    &CgiDie("Zip code not in DB: $in{'zip'}", "\nBogus!")
-	unless defined $val;
+    die "bad zipcode database\n" unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
     ($city,$state) = split(/\0/, substr($val,6));
 
-    @city = split(/([- ])/, $city);
+    if (($state eq 'HI' || $state eq 'AZ') &&
+	$q->param('dst') eq 'usa')
+    {
+	$q->param('dst','none');
+    }
+
+    my(@city) = split(/([- ])/, $city);
     $city = '';
     foreach (@city)
     {
-	$_ = "\L$_\E";
-	$_ = "\u$_";
+	$_ = lc($_);
+	$_ = "\u$_";		# inital cap
 	$city .= $_;
     }
-    undef(@city);
 
-    $city_descr = "$city, $state &nbsp;$in{'zip'}";
+    $city_descr = "$city, $state &nbsp;" . $q->param('zip');
+
+    if ($q->param('tz') !~ /^-?\d+$/)
+    {
+	$ok = 0;
+	if (defined $Hebcal::known_timezones{$q->param('zip')})
+	{
+	    if ($Hebcal::known_timezones{$q->param('zip')} ne '??')
+	    {
+		$q->param('tz',$Hebcal::known_timezones{$q->param('zip')});
+		$ok = 1;
+	    }
+	}
+	elsif (defined $Hebcal::known_timezones{substr($q->param('zip'),0,3)})
+	{
+	    if ($Hebcal::known_timezones{substr($q->param('zip'),0,3)} ne '??')
+	    {
+		$q->param('tz',$Hebcal::known_timezones{substr($q->param('zip'),0,3)});
+		$ok = 1;
+	    }
+	}
+	elsif (defined $Hebcal::known_timezones{$state})
+	{
+	    if ($Hebcal::known_timezones{$state} ne '??')
+	    {
+		$q->param('tz',$Hebcal::known_timezones{$state});
+		$ok = 1;
+	    }
+	}
+
+	die "panic: unknown timezone\n" unless $ok;
+    }
+
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
 else
 {
-    $in{'city'} = 'New York';
-    $cmd .= " -C '$in{'city'}'";
-    $city_descr = $in{'city'};
+    $q->param('city','New York');
+    $q->param('geo','city');
+    $q->param('tz',$Hebcal::city_tz{$q->param('city')});
+    $q->delete('dst');
+
+    $cmd .= " -C '" . $q->param('city') . "'";
+
+    $city_descr = $q->param('city');
 }
 
-if (defined $in{'tz'} && $in{'tz'} ne '')
+$cmd .= " -z " . $q->param('tz')
+    if (defined $q->param('tz') && $q->param('tz') ne '');
+
+$cmd .= " -Z " . $q->param('dst')
+    if (defined $q->param('dst') && $q->param('dst') ne '');
+
+$cmd .= " -m " . $q->param('m')
+    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+$cmd .= ' -s -h -c ' . $sat_year;
+
+print STDOUT $q->header(),
+    $q->start_html(-title => "1-Click Shabbat for $city_descr",
+		   -target=>'_top',
+		   -head => [
+			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			     $q->Link({-rel => 'stylesheet',
+				       -href => '/style.css',
+				       -type => 'text/css'}),
+			     ],
+		   -meta => {'robots' => 'noindex'});
+
+print STDOUT
+    "<table width=\"100%\"\nclass=\"navbar\">",
+    "<tr><td><small>",
+    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
+    "<tt>-&gt;</tt>\n",
+    "1-Click Shabbat</small></td>",
+    "<td align=\"right\"><small><a\n",
+    "href=\"/search/\">Search</a></small>",
+    "</td></tr></table>",
+    "<h1>1-Click\nShabbat for $city_descr</h1>\n";
+
+my($cmd_pretty) = $cmd;
+$cmd_pretty =~ s,.*/,,; # basename
+print STDOUT "<!-- $cmd_pretty -->\n";
+
+my($loc) = (defined $city_descr && $city_descr ne '') ?
+    "in $city_descr" : '';
+$loc =~ s/\s*&nbsp;\s*/ /g;
+
+my(@events) = &invoke_hebcal($cmd, $loc);
+
+print STDOUT "<pre>";
+
+# header row
+my($hdr) = "DoW YYYY/MM/DD  Description";
+print STDOUT $hdr, "\n";
+print STDOUT '-' x length($hdr), "\n";
+
+my($numEntries) = scalar(@events);
+my($i);
+for ($i = 0; $i < $numEntries; $i++)
 {
-    $cmd .= " -z $in{'tz'}";
-}
-
-if (defined $in{'dst'} && $in{'dst'} ne '')
-{
-    $cmd .= " -Z $in{'dst'}";
-}
-
-$cmd .= ' -s -h -c -m 72 ' . $sat_year;
-
-@DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
-local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-
-#  ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-#      localtime($saturday);
-#  $date = sprintf("%04d-%02d-%02d", $year + 1900, $mon + 1, $mday);
-
-print STDOUT "Content-Type: text/html\015\012\015\012";
-
-    print STDOUT "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
-\t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
-<html><head>
-<title>1-Click Shabbat for $city_descr</title>
-<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
-</head>
-<body>
-<table border=\"0\" width=\"100%\" cellpadding=\"0\" class=\"navbar\">
-<tr valign=\"top\"><td><small>
-<a href=\"/\">radwin.org</a> <tt>-&gt;</tt>
-1-Click Shabbat</small></td>
-<td align=\"right\"><small><a href=\"/search/\">Search</a></small>
-</td></tr></table>
-<h1>1-Click Shabbat for $city_descr</h1>
-";
-
-print STDOUT "<!-- $cmd -->\n<pre>\n";
-
-open(HEBCAL,"$cmd |") || die;
-while(<HEBCAL>)
-{
-    chop;
-    ($date,$descr) = split(/ /, $_, 2);
-
-    ($subj,$date,$start_time,$end_date,$end_time,$all_day,
-     $hr,$min,$month,$day,$year) = &parse_date_descr($date,$descr);
-
-    $mon = $month - 1;
-    $mday = $day;
-    $year -= 1900;
-    $time = &timelocal(0,0,0,$mday,$mon,$year,'','','');
+    $time = &timelocal(0,0,0,
+		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+		       $events[$i]->[$Hebcal::EVT_IDX_MON],
+		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+		       '','','');
     next if $time < $friday || $time > $saturday;
 
-    $year += 1900;
-    $dow = ($year > 1969 && $year < 2038) ? 
-	$DoW[&get_dow($year - 1900, $month - 1, $day)] . ' ' :
-	    '';
-    printf STDOUT "%s%04d-%02d-%02d  %s\n",
-    $dow, $year, $month, $day, $descr;
-}
-close(HEBCAL);
+    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+    my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+    my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+    my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
-print STDOUT "</pre>", $html_footer;
+    my($min) = $events[$i]->[$Hebcal::EVT_IDX_MIN];
+    my($hour) = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
+    $hour -= 12 if $hour > 12;
+
+    my($dow) = ($year > 1969 && $year < 2038) ?
+	$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
+    printf STDOUT ("%s%04d/%02d/%02d  %s",
+		   $dow, $year, $mon, $mday, $subj);
+    printf STDOUT (": %d:%02d", $hour, $min)
+	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+    print STDOUT "\n";
+}
+
+print STDOUT "</pre>";
+print STDOUT $html_footer;
 
 close(STDOUT);
 exit(0);
-
-sub get_dow
-{
-    local($year,$mon,$mday) = @_;
-    local($sec,$min,$hour,$wday,$yday,$isdst);
-    local($time);
-
-    $wday = $yday = $isdst = '';
-    $sec = $min = $hour = 0;
-    $time = &timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
-
-    (localtime($time))[6];
-}
-
-sub parse_date_descr
-{
-    local($date,$descr) = @_;
-
-    ($month,$day,$year) = split(/\//, $date);
-    if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
-    {
-	($subj,$hr,$min) = ($1,$2,$3);
-	$start_time = sprintf("\"%d:%02d PM\"", $hr, $min);
-#	$min += 15;
-#	if ($min >= 60)
-#	{
-#	    $hr++;
-#	    $min -= 60;
-#	}
-#	$end_time = sprintf("\"%d:%02d PM\"", $hr, $min);
-#	$end_date = $date;
-	$end_time = $end_date = '';
-	$all_day = '"false"';
-    }
-    else
-    {
-	$hr = $min = -1;
-	$start_time = $end_time = $end_date = '';
-	$all_day = '"true"';
-	$subj = $descr;
-    }
-    
-    $subj =~ s/\"/''/g;
-    $subj =~ s/\s*:\s*$//g;
-
-    ($subj,$date,$start_time,$end_date,$end_time,$all_day,
-     $hr,$min,$month,$day,$year);
-}
-
-#  sub http_date
-#  {
-#      local($time) = @_;
-#      local(@MoY);
-#      local($sec,$min,$hour,$mday,$mon,$year,$wday) =
-#  	gmtime($time);
-
-#      @MoY = ('Jan','Feb','Mar','Apr','May','Jun',
-#  	    'Jul','Aug','Sep','Oct','Nov','Dec');
-#      $year += 1900;
-
-#      sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
-#  	    $DoW[$wday],$mday,$MoY[$mon],$year,$hour,$min,$sec);
-#  }
-
-
-
-sub process_cookie {
-    local($cookieval) = @_;
-    local(%cookie);
-    local($status);
-    local(%ENV);
-
-    $ENV{'QUERY_STRING'} = $cookieval;
-    $ENV{'REQUEST_METHOD'} = 'GET';
-    $status = &ReadParse(*cookie);
-
-    if (defined $status && $status > 0) {
-	if (! defined $in{'c'} || $in{'c'} eq 'on' || $in{'c'} eq '1') {
-	    if (defined $cookie{'zip'} && $cookie{'zip'} =~ /^\d\d\d\d\d$/ &&
-		(! defined $in{'geo'} || $in{'geo'} eq 'zip')) {
-		$in{'zip'} = $cookie{'zip'};
-		$in{'geo'} = 'zip';
-		$in{'c'} = 'on';
-		$in{'dst'} = $cookie{'dst'}
-		    if (defined $cookie{'dst'} && ! defined $in{'dst'});
-		$in{'tz'} = $cookie{'tz'}
-		    if (defined $cookie{'tz'} && ! defined $in{'tz'});
-	    } elsif (defined $cookie{'city'} && $cookie{'city'} !~ /^\s*$/ &&
-		(! defined $in{'geo'} || $in{'geo'} eq 'city')) {
-		$in{'city'} = $cookie{'city'};
-		$in{'geo'} = 'city';
-		$in{'c'} = 'on';
-	    }
-	}
-
-	$in{'m'} = $cookie{'m'}
-	   if (defined $cookie{'m'} && ! defined $in{'m'});
-
-	foreach (@opts)
-	{
-	    next if $_ eq 'c';
-	    $in{$_} = $cookie{$_}
-	        if (! defined $in{$_} && defined $cookie{$_});
-	}
-    }
-
-    $status;
-}
-
