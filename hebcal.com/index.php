@@ -42,6 +42,8 @@ Hebrew Birthdays and Anniversaries
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <span class="sm-grey">&gt;</span>
 convert between Hebrew and Gregorian dates
+<br><span class="sm-grey">&gt;</span>
+find out Torah reading for any date in the future
 <h4><a href="/sedrot/">Torah Readings</a></h4>
 <span class="sm-grey">&gt;</span>
 aliyah-by-aliyah breakdown for weekly parshiyot
@@ -92,7 +94,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Thu Sep 19 14:37:16 EDT 2002
+Last modified: Mon Sep 23 21:45:48 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
