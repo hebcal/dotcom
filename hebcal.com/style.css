@@ -1,0 +1,16 @@
+.navbar {
+   color : #000000;
+   background : #ffcc99;
+   padding : 2px;
+   border-width : thin;
+   border-style : none none solid none;
+   border-color : #ff9966;
+}
+
+H1, H2, H3, H4, H5, H6 {
+   font-family : Tahoma, Verdana, Arial, Helvetica, Geneva, SunSans-Regular, sans-serif;
+   margin-bottom : 0;
+}
+
+.hl { background: #ffff99 }
+.dim { color: #666666 }
