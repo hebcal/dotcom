@@ -26,11 +26,7 @@ require 5.000;
 require Exporter;
 use Time::Local;
 use CGI;
-
-@ISA = qw(Exporter);
-@EXPORT = qw(csv_write_contents dba_write_contents dba_write_header
-	     invoke_hebcal get_dow get_holiday_anchor
-	     url_escape http_date gen_cookie process_cookie);
+use strict;
 
 ########################################################################
 # constants
@@ -39,20 +35,20 @@ use CGI;
 my($VERSION) = '$Revision$'; #'
 
 # boolean options
-@opts = ('c','o','s','i','a','d','D');
+@Hebcal::opts = ('c','o','s','i','a','d','D');
 
-$PALM_DBA_MAGIC      = 1145176320;
-$PALM_DBA_INTEGER    = 1;
-$PALM_DBA_DATE       = 3;
-$PALM_DBA_BOOL       = 6;
-$PALM_DBA_REPEAT     = 7;
-$PALM_DBA_MAXENTRIES = 2500;
+$Hebcal::PALM_DBA_MAGIC      = 1145176320;
+$Hebcal::PALM_DBA_INTEGER    = 1;
+$Hebcal::PALM_DBA_DATE       = 3;
+$Hebcal::PALM_DBA_BOOL       = 6;
+$Hebcal::PALM_DBA_REPEAT     = 7;
+$Hebcal::PALM_DBA_MAXENTRIES = 2500;
 
-@DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
-@MoY_short =
+@Hebcal::DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+@Hebcal::MoY_short =
     ('Jan','Feb','Mar','Apr','May','Jun',
      'Jul','Aug','Sep','Oct','Nov','Dec');
-%MoY_long = (
+%Hebcal::MoY_long = (
 	     'x' => '- Entire year -',
 	     1   => 'January',
 	     2   => 'February',
@@ -70,7 +66,7 @@ $PALM_DBA_MAXENTRIES = 2500;
 
 # these states are known to span multiple timezones:
 # AK, FL, ID, IN, KS, KY, MI, ND, NE, OR, SD, TN, TX
-%known_timezones =
+%Hebcal::known_timezones =
     (
      '99692'	=>	-10,	# AK west of 170W
      '99547'	=>	-10,	# AK west of 170W
@@ -146,7 +142,7 @@ $PALM_DBA_MAXENTRIES = 2500;
      );
 
 # these cities should have DST set to 'none'
-%city_nodst =
+%Hebcal::city_nodst =
     (
      'Berlin'		=>	1,
      'Bogota'		=>	1,
@@ -158,7 +154,7 @@ $PALM_DBA_MAXENTRIES = 2500;
      'Vancouver'	=>	1,
      );
 
-%city_tz =
+%Hebcal::city_tz =
     (
      'Atlanta'		=>	-5,
      'Austin'		=>	-6,
@@ -196,10 +192,10 @@ $PALM_DBA_MAXENTRIES = 2500;
      'Washington DC'	=>	-5,
      );
 
-$HOLIDAY_IDX_ANCHOR = 0;	# index of html anchor
-$HOLIDAY_IDX_YOMTOV = 1;	# is holiday yom tov
+my($HOLIDAY_IDX_ANCHOR) = 0;	# index of html anchor
+my($HOLIDAY_IDX_YOMTOV) = 1;	# is holiday yom tov
 
-%holidays = (
+my(%holidays) = (
     "Asara B'Tevet"		=> ["tevet",		0],
     "Channukah"			=> ["chanukah",		0],
     "Channukah: 8th Day"	=> ["chanukah",		0],
@@ -262,7 +258,7 @@ $HOLIDAY_IDX_YOMTOV = 1;	# is holiday yom tov
 
 # this doesn't work for weeks that have double parashiot
 # todo: automatically get URL from hebrew year
-%sedrot = (
+my(%sedrot) = (
  "Bereshit"	=> 'http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml',
  "Bereshis"	=> 'http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml',
  "Noach"	=> 'http://learn.jtsa.edu/topics/parashah/5761/noah.shtml',
@@ -342,7 +338,7 @@ $HOLIDAY_IDX_YOMTOV = 1;	# is holiday yom tov
  "Shavuos"	=> 'http://learn.jtsa.edu/topics/parashah/5760/shavuot.shtml',
 	   );
 
-%tz_names = (
+%Hebcal::tz_names = (
      'auto' => '- Attempt to auto-detect -',
      '-5'   => 'GMT -05:00 (U.S. Eastern)',
      '-6'   => 'GMT -06:00 (U.S. Central)',
@@ -374,16 +370,16 @@ $HOLIDAY_IDX_YOMTOV = 1;	# is holiday yom tov
 # @events is an array of arrays.  these are the indices into each
 # event structure:
 
-$EVT_IDX_SUBJ = 0;		# title of event
-$EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
-$EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
-$EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
-$EVT_IDX_MDAY = 4;		# day of month, [0 .. 31]
-$EVT_IDX_MON = 5;		# month of year, [0 .. 1]
-$EVT_IDX_YEAR = 6;		# year [1970 .. 2037]
-$EVT_IDX_DUR = 7;		# duration in minutes
-$EVT_IDX_MEMO = 8;		# memo text
-$EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
+$Hebcal::EVT_IDX_SUBJ = 0;		# title of event
+$Hebcal::EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
+$Hebcal::EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
+$Hebcal::EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
+$Hebcal::EVT_IDX_MDAY = 4;		# day of month, [0 .. 31]
+$Hebcal::EVT_IDX_MON = 5;		# month of year, [0 .. 1]
+$Hebcal::EVT_IDX_YEAR = 6;		# year [1970 .. 2037]
+$Hebcal::EVT_IDX_DUR = 7;		# duration in minutes
+$Hebcal::EVT_IDX_MEMO = 8;		# memo text
+$Hebcal::EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
 
 ########################################################################
 # invoke hebcal unix app and create perl array of output
@@ -593,7 +589,7 @@ sub gen_cookie($)
 	    if defined $q->param('m') && $q->param('m') ne '';
     }
 
-    foreach (@opts)
+    foreach (@Hebcal::opts)
     {
 	next if $_ eq 'c';
 	$retval .= "&$_=" . $q->param($_)
@@ -666,7 +662,7 @@ sub process_cookie($$)
     $q->param('m',$c->param('m'))
 	if (defined $c->param('m') && ! defined $q->param('m'));
 
-    foreach (@opts)
+    foreach (@Hebcal::opts)
     {
 	next if $_ eq 'c';
 	$q->param($_,$c->param($_))
@@ -703,29 +699,29 @@ sub csv_write_contents($$)
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
     {
-	my($subj) = $events->[$i]->[$EVT_IDX_SUBJ];
-	my($memo) = $events->[$i]->[$EVT_IDX_MEMO];
+	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my($memo) = $events->[$i]->[$Hebcal::EVT_IDX_MEMO];
 
 	my($date) = sprintf("\"%d/%d/%04d\"",
-			    $events->[$i]->[$EVT_IDX_MON] + 1,
-			    $events->[$i]->[$EVT_IDX_MDAY],
-			    $events->[$i]->[$EVT_IDX_YEAR]);
+			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
+			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
 	my($start_time) = '';
 	my($end_time) = '';
 	my($end_date) = '';
 	my($all_day) = '"true"';
 
-	if ($events->[$i]->[$EVT_IDX_UNTIMED] == 0)
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    my($hour) = $events->[$i]->[$EVT_IDX_HOUR];
-	    my($min) = $events->[$i]->[$EVT_IDX_MIN];
+	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
 
 	    $hour -= 12 if $hour > 12;
 	    $start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
 
 	    $hour += 12 if $hour < 12;
-	    $min += $events->[$i]->[$EVT_IDX_DUR];
+	    $min += $events->[$i]->[$Hebcal::EVT_IDX_DUR];
 
 	    if ($min >= 60)
 	    {
@@ -749,8 +745,8 @@ sub csv_write_contents($$)
 	    qq{"$subj",$date,$start_time,$end_date,$end_time,},
 	    qq{$all_day,"$memo",};
 
-	if ($events->[$i]->[$EVT_IDX_UNTIMED] == 0 ||
-	    $events->[$i]->[$EVT_IDX_YOMTOV] == 1)
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
+	    $events->[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1)
 	{
 	    print STDOUT qq{"4"};
 	}
@@ -793,7 +789,7 @@ sub dba_write_header($)
 {
     my($filename) = @_;
 
-    &dba_write_int($PALM_DBA_MAGIC);
+    &dba_write_int($Hebcal::PALM_DBA_MAGIC);
     &dba_write_pstring($filename);
     &dba_write_byte(0);
     &dba_write_int(8);
@@ -842,19 +838,21 @@ sub dba_write_contents($$$)
 	$local2local = $secsEast - ($tz * 60 * 60);
     }
 
-    $numEntries = $PALM_DBA_MAXENTRIES if ($numEntries > $PALM_DBA_MAXENTRIES);
+    $numEntries = $Hebcal::PALM_DBA_MAXENTRIES
+	if ($numEntries > $Hebcal::PALM_DBA_MAXENTRIES);
     &dba_write_int($numEntries*15);
 
     for ($i = 0; $i < $numEntries; $i++)
     {
 	# skip events that can't be expressed in a 31-bit time_t
-        next if $events->[$i]->[$EVT_IDX_YEAR] <= 1969 ||
-	    $events->[$i]->[$EVT_IDX_YEAR] >= 2038;
+        next if $events->[$i]->[$Hebcal::EVT_IDX_YEAR] <= 1969 ||
+	    $events->[$i]->[$Hebcal::EVT_IDX_YEAR] >= 2038;
 
-	if ($events->[$i]->[$EVT_IDX_UNTIMED] != 0)
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] != 0)
 	{
-	    $events->[$i]->[$EVT_IDX_HOUR] = 12; # all-day/untimed: 12 noon
-	    $events->[$i]->[$EVT_IDX_MIN] = 0;
+	    # all-day/untimed: 12 noon
+	    $events->[$i]->[$Hebcal::EVT_IDX_HOUR] = 12;
+	    $events->[$i]->[$Hebcal::EVT_IDX_MIN] = 0;
 	}
 
 	if ($dst == 0)
@@ -862,11 +860,11 @@ sub dba_write_contents($$$)
 	    # no DST, so just use gmtime and then add that city offset
 	    $startTime =
 		&Time::Local::timegm(0,
-				     $events->[$i]->[$EVT_IDX_MIN],
-				     $events->[$i]->[$EVT_IDX_HOUR],
-				     $events->[$i]->[$EVT_IDX_MDAY],
-				     $events->[$i]->[$EVT_IDX_MON],
-				     $events->[$i]->[$EVT_IDX_YEAR] - 1900,
+				     $events->[$i]->[$Hebcal::EVT_IDX_MIN],
+				     $events->[$i]->[$Hebcal::EVT_IDX_HOUR],
+				     $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+				     $events->[$i]->[$Hebcal::EVT_IDX_MON],
+				     $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 				     0,0,0);
 	    $startTime -= ($tz * 60 * 60); # move into local tz
 	}
@@ -874,87 +872,88 @@ sub dba_write_contents($$$)
 	{
 	    $startTime =
 		&Time::Local::timelocal(0,
-					$events->[$i]->[$EVT_IDX_MIN],
-					$events->[$i]->[$EVT_IDX_HOUR],
-					$events->[$i]->[$EVT_IDX_MDAY],
-					$events->[$i]->[$EVT_IDX_MON],
-					$events->[$i]->[$EVT_IDX_YEAR] - 1900,
+					$events->[$i]->[$Hebcal::EVT_IDX_MIN],
+					$events->[$i]->[$Hebcal::EVT_IDX_HOUR],
+					$events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+					$events->[$i]->[$Hebcal::EVT_IDX_MON],
+					$events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 					0,0,0);
 	    $startTime += $local2local; # move into their local tz
 	}
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(0);		# recordID
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(1);		# status
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(0x7FFFFFFF);	# position
 
-	&dba_write_int($PALM_DBA_DATE);
+	&dba_write_int($Hebcal::PALM_DBA_DATE);
 	&dba_write_int($startTime);
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 
 	# endTime
-	if ($events->[$i]->[$EVT_IDX_UNTIMED] != 0)
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] != 0)
 	{
 	    &dba_write_int($startTime);
 	}
 	else
 	{
-	    &dba_write_int($startTime + ($events->[$i]->[$EVT_IDX_DUR] * 60));
+	    &dba_write_int($startTime +
+			   ($events->[$i]->[$Hebcal::EVT_IDX_DUR] * 60));
 	}
 
 	&dba_write_int(5);		# spacer
 	&dba_write_int(0);		# spacer
 
-	if (defined $events->[$i]->[$EVT_IDX_SUBJ] &&
-	    $events->[$i]->[$EVT_IDX_SUBJ] ne '')
+	if (defined $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] &&
+	    $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] ne '')
 	{
-	    &dba_write_pstring($events->[$i]->[$EVT_IDX_SUBJ]);
+	    &dba_write_pstring($events->[$i]->[$Hebcal::EVT_IDX_SUBJ]);
 	}
 	else
 	{
 	    &dba_write_byte(0);
 	}
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(0);		# duration
 
 	&dba_write_int(5);		# spacer
 	&dba_write_int(0);		# spacer
 
-	if (defined $events->[$i]->[$EVT_IDX_MEMO] &&
-	    $events->[$i]->[$EVT_IDX_MEMO] ne '')
+	if (defined $events->[$i]->[$Hebcal::EVT_IDX_MEMO] &&
+	    $events->[$i]->[$Hebcal::EVT_IDX_MEMO] ne '')
 	{
-	    &dba_write_pstring($events->[$i]->[$EVT_IDX_MEMO]);
+	    &dba_write_pstring($events->[$i]->[$Hebcal::EVT_IDX_MEMO]);
 	}
 	else
 	{
 	    &dba_write_byte(0);
 	}
 
-	&dba_write_int($PALM_DBA_BOOL);
-	&dba_write_int($events->[$i]->[$EVT_IDX_UNTIMED] ? 1 : 0);
+	&dba_write_int($Hebcal::PALM_DBA_BOOL);
+	&dba_write_int($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] ? 1 : 0);
 
-	&dba_write_int($PALM_DBA_BOOL);
+	&dba_write_int($Hebcal::PALM_DBA_BOOL);
 	&dba_write_int(0);		# isPrivate
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(1);		# category
 
-	&dba_write_int($PALM_DBA_BOOL);
+	&dba_write_int($Hebcal::PALM_DBA_BOOL);
 	&dba_write_int(0);		# alarm
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(0xFFFFFFFF);	# alarmAdv
 
-	&dba_write_int($PALM_DBA_INTEGER);
+	&dba_write_int($Hebcal::PALM_DBA_INTEGER);
 	&dba_write_int(0);		# alarmTyp
 
-	&dba_write_int($PALM_DBA_REPEAT);
+	&dba_write_int($Hebcal::PALM_DBA_REPEAT);
 	&dba_write_int(0);		# repeat
     }
 
