@@ -7,18 +7,20 @@ use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use Hebcal;
 use Getopt::Std;
 use Config::IniFiles;
+use DB_File;
+use Fcntl qw(:DEFAULT :flock);
 use strict;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-h] holidays.ini holidays.html
+my($usage) = "usage: $0 [-h] holidays.ini holidays.html holidays.db
     -h        Display usage information.
 ";
 
 my(%opts);
 &getopts('h', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
-(@ARGV == 2) || die "$usage";
+(@ARGV == 3) || die "$usage";
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -28,13 +30,32 @@ $rcsrev =~ s/\s*\$//g;
 
 my($infile) = shift;
 my($outfile) = shift;
+my($outdb) = shift;
 
 my($holidays) = new Config::IniFiles(-file => $infile);
 $holidays || die "$infile: $!\n";
 
+my(%DB);
+my($db) = tie(%DB, 'DB_File', $outdb, O_RDWR|O_CREAT, 0644);
+defined($db) || die "Can't tie $outdb: $!\n";
+my($fd) = $db->fd;
+open(DB_FH, "+<&=$fd") || die "dup $!";
+unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
+
 my(%out);
 foreach my $h ($holidays->Sections())
 {
+    $DB{$h} = 1;
+    $DB{"$h:yomtov"} = $holidays->val($h, 'yomtov');
+    $DB{"$h:anchor"} = $holidays->val($h, 'anchor');
+    $DB{"$h:hebrew"} = $holidays->val($h, 'hebrew');
+    $DB{"$h:href"} = $holidays->val($h, 'href')
+	if defined $holidays->val($h, 'href');
+    $DB{"$h:descr"} = $holidays->val($h, 'descr')
+	if defined $holidays->val($h, 'descr');
+    $DB{"$h:class"} = $holidays->val($h, 'class')
+	if defined $holidays->val($h, 'class');
+
     next unless defined $holidays->val($h, 'ord') &&
 	defined $holidays->val($h, 'class');
     $out{$holidays->val($h, 'class')}->{$holidays->val($h, 'ord')} = $h;
@@ -142,6 +163,13 @@ EOHTML
 ;
 
 close(OUT);
+
+flock(DB_FH, LOCK_UN);
+undef $db;
+undef $fd;
+untie(%DB);
+close(DB_FH);
+
 exit(0);
 
 sub do_section
