@@ -20,38 +20,36 @@ Jewish Calendar Tools</small></td>
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
-<dl>
-<dt><b><big><a
-href="/hebcal/">Hebcal Interactive Jewish
-Calendar</a></big></b></dt>
-<dd>generates a list of Jewish holidays and candle lighting times customized
-to your zip code, city, or latitude/longitude.
-<dd><a href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on">Current
-Calendar</a> (bookmarkable)
-<dt><br><b><big><a
-href="/shabbat/">1-Click Shabbat</a></big></b></dt>
-<dd>bookmark this page for weekly Shabbat candle lighting times.
-<dd><a href="/email/">Subscribe by
+<h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
+<span class="sm-grey">&gt;</span>
+generate a list of Jewish holidays and candle lighting times customized
+to your zip code, city, or latitude/longitude
+<br><span class="sm-grey">&gt;</span>
+bookmarkable: <a
+href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on">Current
+Calendar</a>
+<h4><a href="/shabbat/">1-Click Shabbat</a></h4>
+<span class="sm-grey">&gt;</span>
+Shabbat candle lighting times and Torah Readings, updated weekly
+<br><span class="sm-grey">&gt;</span>
+<a href="/email/">Subscribe by
 Email</a>
-<dt><br><b><big><a
-href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
-Calendar</a></big></b></dt>
-<dd>generates a list of Yahrzeit (memorial) and Yizkor dates, or
-Birthdays and Anniversaries.
-<dt><br><b><big><a
-href="/converter/">Hebrew Date
-Converter</a></big></b></dt>
-<dd>convert between Hebrew and Gregorian dates.
-<dt><br><b><big><a
-href="/sedrot/">Torah
-Readings</a></big></b></dt>
-<dd>aliyah-by-aliyah breakdown for weekly parshiyot
-<dt><br><b><big>Miscellaneous</big></b></dt>
-<dd><a href="/help/">Help</a>
-<dd><a href="/privacy/">Privacy Policy</a>
-<dd><a href="/search/">Search</a>
-<dd><a href="/contact/">Contact Information</a>
-</dl>
+<h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
+Calendar</a></h4>
+<span class="sm-grey">&gt;</span>
+generate a list of Yahrzeit (memorial) and Yizkor dates, or
+Hebrew Birthdays and Anniversaries
+<h4><a href="/converter/">Hebrew Date Converter</a></h4>
+<span class="sm-grey">&gt;</span>
+convert between Hebrew and Gregorian dates
+<h4><a href="/sedrot/">Torah Readings</a></h4>
+<span class="sm-grey">&gt;</span>
+aliyah-by-aliyah breakdown for weekly parshiyot
+<h4>Miscellaneous</h4>
+<a href="/help/">Help</a>
+<br><a href="/privacy/">Privacy Policy</a>
+<br><a href="/search/">Search</a>
+<br><a href="/contact/">Contact Information</a>
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
@@ -64,7 +62,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Sun Apr 14 18:47:42 EDT 2002
+Last modified: Sun May 12 13:09:37 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
