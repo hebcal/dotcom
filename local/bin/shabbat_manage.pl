@@ -119,7 +119,7 @@ shabbat-unsubscribe\@hebcal.com
 	 "shabbat-owner\@hebcal.com",
 	 "Hebcal Subscription Notification",
 	 "Your subscription to hebcal is complete",
-	 "List-Unsubscribe: <shabbat-unsubscribe\@hebcal.com>\n" .
+	 "List-Unsubscribe: <mailto:shabbat-unsubscribe\@hebcal.com>\n" .
 	 "Precedence: bulk\n",
 	 $body,$email,'');
 }
@@ -141,12 +141,12 @@ sub unsubscribe
 
     my $args = $DB{$email};
     unless ($args) {
-	warn "skipping $email: (undef)";
+	&not_subscribed($email);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
-	warn "skipping $email: $args";
+	&not_subscribed($email);
 	return 0;
     }
 
@@ -171,6 +171,29 @@ hebcal.com};
 		      "shabbat-owner\@hebcal.com",
 		      "Hebcal Subscription Notification",
 		      "You have been unsubscribed from hebcal",
+		      '',$body,$email,'');
+
+}
+
+sub not_subscribed
+{
+    my($email) = @_;
+
+    my($body) = qq{Sorry,
+
+We are unable to process the message from <$email>
+to <shabbat-unsubscribe\@hebcal.com>.
+
+The email address used to send your message is not subscribed
+to the Shabbat candle lighting time list.
+
+Regards,
+hebcal.com};
+
+    &Hebcal::sendmail("shabbat-bounce\@hebcal.com",
+		      "shabbat-owner\@hebcal.com",
+		      "Hebcal Subscription Notification",
+		      "Unable to process your message",
 		      '',$body,$email,'');
 
 }
