@@ -1021,7 +1021,7 @@ sub results_page
 	my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
-	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
+	my($href,$hebrew,$memo)
 	    = Hebcal::get_holiday_anchor($subj,0,undef);
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
