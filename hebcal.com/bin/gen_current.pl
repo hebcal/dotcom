@@ -20,7 +20,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	my($stime) = strftime("%d %B %Y", localtime($saturday));
 
 	open(OUT,">/pub/m/r/mradwin/hebcal.com/current.inc") || die;
-	$parsha =~ s/ /&nbsp;/;
+	$parsha =~ s/ /&nbsp;/g;
 	print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
 	print OUT "href=\"$href\">$parsha</a></b><br>$stime";
 	close(OUT);
@@ -36,7 +36,7 @@ $inc = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
 open(OUT,">$inc") || die;
 close(OUT);
 
-$line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -x`;
+$line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -t -x | grep -v ' of '`;
 chomp($line);
 
 if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
@@ -45,7 +45,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
     if ($href) {
 	my($stime) = strftime("%d %B %Y", localtime(time()));
 	open(OUT,">$inc") || die;
-	$holiday =~ s/ /&nbsp;/;
+	$holiday =~ s/ /&nbsp;/g;
 	print OUT "<span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
 	print OUT "href=\"$href\">$holiday</a></b><br>$stime<br>\n";
 	close(OUT);
