@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Apr 20 09:12:03 PDT 2001
+Last modified: Sun Apr 22 11:56:19 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -590,7 +590,7 @@ sub my_header
 				       -href => "http://www.$server_name/w3c/p3p.xml"}),
 #			     $inline_style,
 			     ],
-		   -meta => {'robots' => 'noindex'}));
+		   ));
     }
 
     unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
