@@ -776,9 +776,6 @@ sub html_footer($$)
 
     $rcsrev =~ s/\s*\$//g;
 
-    my($server_name) = $q->virtual_host();
-    $server_name =~ s/^www\.//;
-
     my($hhmts) = "Software last updated:\n" . localtime($mtime);
 
     return qq{
@@ -828,17 +825,17 @@ sub start_html($$$$$)
     $meta = {} unless defined $meta;
     $head = [] unless defined $head;
 
-    my $base;
+    my $script_name = $q->script_name();
+    $script_name =~ s,/(index|shabbat|yahrzeit).cgi$,/,;
+
+    my $base = "http://" . $q->virtual_host() . $script_name;
 
     if ($ENV{'QUERY_STRING'})
     {
-	my($script_name) = $q->script_name();
-	$script_name =~ s,/index.cgi$,/,;
-
 	my $qs = $ENV{'QUERY_STRING'};
 	$qs =~ s/&/&amp;/g;
 
-	$base = "http://" . $q->virtual_host() . $script_name . "?" . $qs;
+	$base .= "?" . $qs;
     }
 
     $target = '_top' unless defined $target;
