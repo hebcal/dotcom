@@ -1,8 +1,7 @@
-DirectoryIndex index.cgi
+DirectoryIndex shabbat.cgi
 
 Redirect /shabbat/shabbat.html http://www.hebcal.com/shabbat/
 Redirect /shabbat/shabbat.htm http://www.hebcal.com/shabbat/
 Redirect /shabbat/shabbat.pl http://www.hebcal.com/shabbat/
-Redirect /shabbat/shabbat.cgi http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.html http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.pl http://www.hebcal.com/shabbat/
