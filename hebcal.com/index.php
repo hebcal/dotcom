@@ -61,9 +61,6 @@ Calendar</a></b>
 <br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" -->
 <!--#include file="current.inc" -->
 <br><br><span class="sm-grey">&gt;</span>
-<b><a href="/hebcal/?v=1;year=2002;month=9;nx=on;nh=on;vis=on">High Holy
-Days 5763</a></b>
-<br><br><span class="sm-grey">&gt;</span>
 <b>Candle lighting</b>
 <div><form action="/shabbat/">
 <label for="zip">Zip code:</label>
@@ -96,7 +93,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Aug 19 19:04:20 EDT 2002
+Last modified: Tue Sep  3 00:38:23 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
