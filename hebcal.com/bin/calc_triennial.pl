@@ -756,14 +756,17 @@ EOHTML
 	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
 
+    my($amazon_link) =
+	"http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20";
+
     print OUT2 <<EOHTML;
 <a
-href="http://www.amazon.com/exec/obidos/ASIN/0827607121/ref=nosim/hebcal-20"><img
+href="$amazon_link"><img
 src="/i/0827607121.01.TZZZZZZZ.jpg" border="0" hspace="3" vspace="3"
 alt="Etz Hayim: Torah and Commentary" align="right"></a><dl>
 <dt><a name="ref">References</a>
 <dd><em><a
-href="http://www.amazon.com/exec/obidos/ASIN/0827607121/ref=nosim/hebcal-20">Etz
+href="$amazon_link">Etz
 Hayim: Torah and Commentary</a></em>,
 David L. Lieber et. al., Jewish Publication Society, 2001.
 <dd><em><a
