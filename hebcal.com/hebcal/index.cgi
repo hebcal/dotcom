@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Jan 13 15:47:07 PST 2000
+Last modified: Mon Jan 17 20:19:06 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -308,7 +308,8 @@ $hhmts = "This page generated:\n" . localtime() . '<br>' . $hhmts;
 
 $html_footer = "<hr
 noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
-&copy; $year Michael John Radwin. All rights reserved.<br><a
+&copy; $year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
+All rights reserved.<br><a
 target=\"_top\" href=\"/michael/projects/hebcal/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
