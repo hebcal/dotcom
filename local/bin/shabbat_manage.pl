@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 
-use lib "/home/mradwin/local/lib/perl5/site_perl";
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 
 use strict;
 use DB_File;
