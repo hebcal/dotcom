@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  8 10:35:21 PDT 2000
+Last modified: Thu May 11 09:52:22 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -481,6 +481,12 @@ elsif ($q->param('c') && $q->param('c') ne 'off' &&
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
     ($city,$state) = split(/\0/, substr($val,6));
+
+    if (($state eq 'HI' || $state eq 'AZ') &&
+	$q->param('dst') eq 'usa')
+    {
+	$q->param('dst','none');
+    }
 
     my(@city) = split(/([- ])/, $city);
     $city = '';
