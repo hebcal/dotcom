@@ -9,6 +9,7 @@
 <meta name="keywords" content="hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff">
 <meta name="author" content="Michael J. Radwin">
 <link rev="made" href="mailto:webmaster@hebcal.com">
+<link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
 <base href="http://www.hebcal.com/" target="_top">
 <style type="text/css">
 <!--
@@ -57,7 +58,7 @@ href="/search/">Search</a></big></strong></dt>
 <a href="/help/">Help</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed Apr 18 10:59:41 PDT 2001
+Last modified: Wed Apr 18 11:15:54 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
