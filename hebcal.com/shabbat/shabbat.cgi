@@ -129,7 +129,10 @@ $year += 1900;
 
 my($friday) = &Time::Local::timelocal(0,0,0,
 				      $mday,$mon,$year,$wday,$yday,$isdst);
-my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
+
+my($saturday) = ($wday == 6) ?
+    $now + (60 * 60 * 24) :
+    $now + ((6 - $wday) * 60 * 60 * 24);
 
 my($sat_year) = (localtime($saturday))[5] + 1900;
 my($cmd)  = './hebcal';
