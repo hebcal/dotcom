@@ -1,3 +1,8 @@
+@media print {
+  .navbar { display: none }
+  .goto { display: none }
+}
+
 body {
  background: #ffffff;
  color: #000000;
@@ -67,3 +72,4 @@ A:hover {
  border: solid;
  border-width: thin;
 }
+
