@@ -80,14 +80,18 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
 $outfile = "$WEBDIR/holiday.inc";
 open(OUT,">$outfile") || die;
-my @lines = `$HEBCAL -t | grep -v ' of '`;
-foreach my $line (@lines) {
-    chomp $line;
-    if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
-	my $holiday = $1;
+@events = Hebcal::invoke_hebcal("$HEBCAL -t", '', 0);
+for (my $i = 0; $i < @events; $i++)
+{
+    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] !~ / of /) {
+	my $holiday = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my $href = Hebcal::get_holiday_anchor($holiday,undef,undef);
 	if ($href) {
-	    my($stime) = strftime("%d %B %Y", localtime(time()));
+	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my $stime = sprintf("%02d %s %04d",
+				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				$Hebcal::MoY_long{$month},
+				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 	    $holiday =~ s/ /&nbsp;/g;
 	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
 	    print OUT "href=\"$href\">$holiday</a></b><br>$stime\n";
