@@ -36,6 +36,8 @@ use CGI;
 # constants
 ########################################################################
 
+my($VERSION) = '$Revision$'; #'
+
 $PALM_DBA_MAGIC      = 1145176320;
 $PALM_DBA_INTEGER    = 1;
 $PALM_DBA_DATE       = 3;
@@ -403,8 +405,9 @@ sub http_date($)
 	    $year+1900,$hour,$min,$sec);
 }
 
-sub gen_cookie()
+sub gen_cookie($)
 {
+    my($q) = @_;
     my($retval);
 
     $retval = 'C=t=' . time;
@@ -450,9 +453,9 @@ sub gen_cookie()
 }
 
 
-sub process_cookie($)
+sub process_cookie($$)
 {
-    my($cookieval) = @_;
+    my($q,$cookieval) = @_;
 
     my($c) = new CGI($cookieval);
 
