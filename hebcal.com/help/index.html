@@ -32,8 +32,15 @@ interface?</a>
 <li><a href="#kudos">How can I tell you how much I like the Hebcal
 Interactive Jewish Calendar?</a>
 </ul>
+<li><a href="#synagogue">Can my synagogue link to hebcal.com?</a>
+<ul>
 <li><a href="#cal-tags">How can my synagogue display a Jewish Calendar on
 its own web site?</a>
+<li><a href="#tags">How can my synagogue put 1-Click Shabbat
+candle-lighting times on its own website?</a>
+<li><a href="#yahrzeit-tags">How can my synagogue link to the
+Yahrzeit, Birthday and Anniversary Calendar from its own website?</a>
+</ul>
 <li>Specifics about Jewish Holidays
 <ul>
 <li><a href="#begin">When do the Holidays begin?</a>
@@ -56,11 +63,7 @@ my zip code?</a>
 <li><a href="#candle-accurate">How accurate are candle lighting times?</a>
 <li><a href="#candle-geo">How can I look up candle-lighting times for any
 city in the world?</a>
-<li><a href="#tags">How can my synagogue put 1-Click Shabbat
-candle-lighting times on its own website?</a>
 </ul>
-<li><a href="#yahrzeit-tags">How can my synagogue link to the
-Yahrzeit, Birthday and Anniversary Calendar from its own website?</a>
 <li>Jewish Calendar resources
 <ul>
 <li><a href="#links">What are other good Jewish calendar sites
@@ -101,60 +104,32 @@ interface?</a></h3>
       (instead of just a list of 34 cities)
   <li>Download calendar in Outlook CSV format
   <li>Download calendar in Palm Date Book Archive (.DBA)
-  <li>Add events to Yahoo! Calendar
   <li>Totally free; no ads, no fees -- all you need is a web browser
   <li>Both transliterations and actual Hebrew text with vowels
+  <li>WAP/WML support for mobile phones with a web browser
+      (currently limited to USA zip codes for 1-Click Shabbat)
 </ul>
 
 <h3><a name="kudos">How can I tell you how much I like the Hebcal
 Interactive Jewish Calendar?</a></h3>
 
-<p>Send e-mail to Danny Sadinoff (<tt><a
+<ol><li>Send e-mail to Danny Sadinoff (<tt><a
 href="mailto:sadinoff@pobox.com">sadinoff@pobox.com</a></tt>), author of
-hebcal 3.2 for UNIX and tell him that you like it.  According to Danny,</p>
+hebcal 3.2 for UNIX and tell him that you like it.  According to Danny,
 
 <blockquote>
 Hebcal is available as "guiltware," which is my version of the GNU
 license, but with some interest in hearing from you thrown in.
 </blockquote>
 
-<h2><a name="cal-tags">How can my synagogue display a Jewish Calendar on
-its own web site?</a></h2>
+<li><a href="/donations/">Send money</a> to Michael J. Radwin.  I
+develop and maintain this website as a free service, so if you'd like to
+send me some money via PayPal, I'll happily accept it.
 
-<p>You can use the HTML tags below, courtesy of <a
-href="http://home.attbi.com/~kilsen/">Kevin Ilsen' JavaScript Event
-Calendar</a> to put a calendar on your website.</p>
+<li>If you're a programmer, contribute to the development of <a
+href="http://sourceforge.net/projects/hebcal/">hebcal 3.3</a> for UNIX.
 
-<table border="1" cellpadding="8">
-<tr><td><pre>
-&lt;div style="font-family: Verdana,Arial,Helvetica"&gt;
-&lt;script type="text/javascript" language="JavaScript"
- src="http://www.hebcal.com/i/calendar.js"&gt;
-&lt;/script&gt;
-&lt;script type="text/javascript" language="JavaScript"
- src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x"&gt;
-&lt;/script&gt;
-&lt;script language="JavaScript"&gt;
- &lt;!--
-  SpecialDay=7;
-  FontSize="+1";
-  Calendar();
- // --&gt;
-&lt;/script&gt;
-&lt;/div&gt;
-</pre></td></tr>
-</table>
-
-<p>To add candle-lighting times for your town, you can add
-<code>;c=on;zip=90210;m=72;s=on</code> to the end of the 2nd URL (be
-sure to change <span class="hl">90210</span> to your shul's zip code).
-For example, </p>
-
-<pre>
-&lt;script type="text/javascript" language="JavaScript"
- src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x<span class="hl">;c=on;zip=90210;m=72;s=on</span>"&gt;
-&lt;/script&gt;
-</pre>
+</ol>
 
 <h2>Specifics about Jewish Holidays</h2>
 
@@ -302,71 +277,59 @@ Rica.</p>
 <li>Click "Get Calendar" button at the bottom of the form
 </ol>
 
-<h3><a name="tags">How can my synagogue put 1-Click Shabbat
-candle-lighting times on its own website?</a></h3>
+<h2><a name="synagogue">Can my synagogue link to hebcal.com?</a></h2>
 
-<p>You can use these HTML tags to insert weekly candle-lighting times
-directly on your web page:</p>
+<p>Yes, you can link to hebcal.com.  You can also add some hebcal.com
+content directly to your website using the following instructions.</p>
+
+<h3><a name="cal-tags">How can my synagogue display a Jewish Calendar on
+its own web site?</a></h3>
+
+<p>You can use the HTML tags below, courtesy of <a
+href="http://home.attbi.com/~kilsen/">Kevin Ilsen' JavaScript Event
+Calendar</a> to put a calendar on your website.</p>
 
 <table border="1" cellpadding="8">
 <tr><td><pre>
+&lt;div style="font-family: Verdana,Arial,Helvetica"&gt;
 &lt;script type="text/javascript" language="JavaScript"
-src="http://www.hebcal.com/shabbat/?zip=<span class="hl">90210</span>;m=72;cfg=j"&gt;
+ src="http://www.hebcal.com/i/calendar.js"&gt;
 &lt;/script&gt;
-&lt;noscript&gt;
-&lt;!-- this link seen by people who have JavaScript turned off --&gt;
-&lt;a href="http://www.hebcal.com/shabbat/?zip=<span class="hl">90210</span>;m=72"&gt;1-Click
-Shabbat Candle Lighting times&lt;/a&gt;.
-&lt;/noscript&gt;
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x"&gt;
+&lt;/script&gt;
+&lt;script language="JavaScript"&gt;
+ &lt;!--
+  SpecialDay=7;
+  FontSize="+1";
+  Calendar();
+ // --&gt;
+&lt;/script&gt;
+&lt;/div&gt;
 </pre></td></tr>
 </table>
 
-<p>Make sure you replace both <span class="hl">zip codes</span> with
-your synagogue's zip code.  You can also change the "Havdalah minutes
-past sundown" setting from the default of 72 to whatever your minhag is
-by changing the <tt>m=72</tt> to something like <tt>m=50</tt>.</p>
+<p>To add candle-lighting times for your town, you can add
+<code>;c=on;zip=90210;m=72;s=on</code> to the end of the 2nd URL (be
+sure to change <span class="hl">90210</span> to your shul's zip code).
+For example, </p>
 
-<p>The result will look something like this:</p>
+<pre>
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x<span class="hl">;c=on;zip=90210;m=72;s=on</span>"&gt;
+&lt;/script&gt;
+</pre>
 
-<blockquote>
-<h3><a target="_top"
-href="http://www.hebcal.com/shabbat/?geo=zip;zip=90210;dst=usa;tz=-8;m=72">1-Click
-Shabbat</a> for Beverly Hills, CA 90210</h3>
-<!-- hebcal -L 118,24 -l 34,5 -z -8 -Z usa -m 72 -c -s -c 2001 -->
-<dl>
-<dt>Candle lighting for
-Friday, 28 December 2001 is at <b>4:34 PM</b>
-<dt>This week's Torah portion is <a target="_top"
-href="http://www.hebcal.com/sedrot/vayechi.html">Parashat Vayechi</a>
-<dt>Havdalah (72 min) for
-Saturday, 29 December 2001 is at <b>6:05 PM</b>
-</dl>
-<span class="tiny">1-Click Shabbat
-<a name="copyright">Copyright &copy; 2001
-Michael J. Radwin. All rights reserved.</a>
-<a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
-<a target="_top" href="http://www.hebcal.com/help/">Help</a> -
-<a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
-</span>
-</blockquote>
+<h3><a name="tags">How can my synagogue put 1-Click Shabbat
+candle-lighting times on its own website?</a></h3>
 
-<p>To change the fonts, add a CSS stylesheet like this to the
-<tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
-page:</p>
+<p>You can use the <a href="/link/">Link to 1-Click Shabbat</a> page to
+generate HTML tags to insert weekly candle-lighting times
+directly on your web page.</p>
 
-<blockquote><pre>
-&lt;style type="text/css"&gt;
-&lt;!--
-H1, H2, H3, H4, H5, H6 {
- font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
-}
---&gt;
-&lt;/style&gt;
-</pre></blockquote>
-
-<h2><a name="yahrzeit-tags">How can my synagogue link to the
+<h3><a name="yahrzeit-tags">How can my synagogue link to the
 Yahrzeit, Birthday and Anniversary Calendar from its own
-website?</a></h2>
+website?</a></h3>
 
 <p>You can use these HTML tags to insert a small form directly on your
 web page, with a reverse link back to your site:</p>
@@ -523,7 +486,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed Jul 31 23:22:38 EDT 2002
+Last modified: Thu Aug  8 16:01:19 EDT 2002
 <!-- hhmts end -->
 ($Revision$)
 </span>
