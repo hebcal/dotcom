@@ -1512,6 +1512,9 @@ sub vcalendar_write_contents($$$$$)
 	print STDOUT qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl};
 
 	if ($is_icalendar && $href) {
+	    if ($href =~ /\.html$/) {
+		$href .= "?tag=ical";
+	    }
 	    print STDOUT qq{URL;VALUE=URI:$href$endl};
 	}
 
