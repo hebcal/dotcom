@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 ########################################################################
 # Convert between hebrew and gregorian calendar dates.
