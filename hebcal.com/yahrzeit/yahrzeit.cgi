@@ -50,25 +50,24 @@ use Palm::DBA ();
 use POSIX ();
 use Date::Calc ();
 
-my($this_year) = (localtime)[5];
+my $this_year = (localtime)[5];
 $this_year += 1900;
 
-my($rcsrev) = '$Revision$'; #'
+my $rcsrev = '$Revision$'; #'
 
 # process form params
-my($q) = new CGI;
+my $q = new CGI;
 
-my($script_name) = $q->script_name();
+my $script_name = $q->script_name();
 $script_name =~ s,/[^/]+$,/,;
 
 # sanitize input to prevent people from trying to hack the site.
 # remove anthing other than word chars, white space, or hyphens.
-my($key);
-foreach $key ($q->param())
+foreach my $key ($q->param())
 {
     next if $key =~ /^ref_(url|text)$/;
-    my($val) = $q->param($key);
-    $val = '' unless defined $val;
+    my $val = $q->param($key);
+    $val = "" unless defined $val;
     $val =~ s/[^\w\s\.-]//g
 	unless $key =~ /^n\d+$/;
     $val =~ s/^\s*//g;		# nuke leading
@@ -88,9 +87,9 @@ if ($cfg eq "i" || $cfg eq "j") {
     $count = 5;
 }
 
-my(%yahrzeits) = ();
-my(%ytype) = ();
-foreach $key (1 .. $count)
+my %yahrzeits = ();
+my %ytype = ();
+foreach my $key (1 .. $count)
 {
     if (defined $q->param("m$key") &&
 	defined $q->param("d$key") &&
@@ -120,60 +119,61 @@ foreach $key (1 .. $count)
 		    $gy,
 		    $q->param("n$key"));
 	$ytype{$q->param("n$key")} = 
-	    ($q->param("t$key") eq 'Yahrzeit') ?
-		$q->param("t$key") : 'Hebrew ' . $q->param("t$key");
+	    ($q->param("t$key") eq "Yahrzeit") ?
+		$q->param("t$key") : "Hebrew " . $q->param("t$key");
     }
 }
 
 if (! defined $q->path_info())
 {
-    &results_page();
+    results_page();
 }
 elsif ($q->path_info() =~ /[^\/]+.csv$/)
 {
-    &csv_display();
+    csv_display();
 }
 elsif ($q->path_info() =~ /[^\/]+.dba$/)
 {
-    &dba_display();
+    dba_display();
 }
 elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
 {
-    &macintosh_datebook_display();
+    macintosh_datebook_display();
 }
 elsif ($q->path_info() =~ /[^\/]+\.[vi]cs$/)
 {
     # text/x-vCalendar
-    &vcalendar_display();
+    vcalendar_display();
 }
 else
 {
-    &results_page();
+    results_page();
 }
 
 close(STDOUT);
 exit(0);
 
 sub macintosh_datebook_display {
-    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
     Hebcal::macintosh_datebook($q, \@events);
 }
 
-sub vcalendar_display() {
-    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+sub vcalendar_display
+{
+    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
     Hebcal::vcalendar_write_contents($q, \@events, undef, undef,
-				     'Yahrzeit');
+				     "Yahrzeit");
 }
 
 sub dba_display
 {
-    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
-    Hebcal::export_http_header($q, 'application/x-palm-dba');
+    Hebcal::export_http_header($q, "application/x-palm-dba");
 
-    my($path_info) = $q->path_info();
+    my $path_info = $q->path_info();
     $path_info =~ s,^.*/,,;
 
     Palm::DBA::write_header($path_info);
@@ -182,40 +182,38 @@ sub dba_display
 
 sub csv_display
 {
-    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
-    my $euro = defined $q->param('euro') ? 1 : 0;
+    my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
 sub my_invoke_hebcal {
     my($this_year,$y,$t) = @_;
-    my(@events2) = ();
+    my @events2 = ();
 
-    my($tmpfile) = POSIX::tmpnam();
+    my $tmpfile = POSIX::tmpnam();
     open(T, ">$tmpfile") || die "$tmpfile: $!\n";
-    foreach $key (keys %{$y})
+    foreach my $key (keys %{$y})
     {
 	print T $y->{$key}, "\n";
     }
     close(T);
 
-    my($cmd) = "./hebcal -D -x -Y $tmpfile";
+    my $cmd = "./hebcal -D -x -Y $tmpfile";
 
-    my(%greg2heb) = ();
-    my($year);
+    my %greg2heb = ();
 
-    foreach $year ($this_year .. ($this_year + 10))
+    foreach my $year ($this_year .. ($this_year + 10))
     {
-	my(@events) = &Hebcal::invoke_hebcal("$cmd $year", '');
-	my($numEntries) = scalar(@events);
-	my($i);
-	for ($i = 0; $i < $numEntries; $i++)
+	my @events = Hebcal::invoke_hebcal("$cmd $year", "", undef);
+	my $numEntries = scalar(@events);
+	for (my $i = 0; $i < $numEntries; $i++)
 	{
-	    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	    my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-	    my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	    my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	    my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+	    my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 	
 	    if ($subj =~ /,\s+\d{4}\s*$/)
 	    {
@@ -225,8 +223,8 @@ sub my_invoke_hebcal {
 
 	    if (defined $y->{$subj})
 	    {
-		my($subj2) = "${subj}'s " . $t->{$subj};
-		my($isodate) = sprintf("%04d%02d%02d", $year, $mon, $mday);
+		my $subj2 = "${subj}'s " . $t->{$subj};
+		my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
 
 		$subj2 .= " ($greg2heb{$isodate})"
 		    if (defined $greg2heb{$isodate});
@@ -244,14 +242,14 @@ sub my_invoke_hebcal {
 		      $events[$i]->[$Hebcal::EVT_IDX_YOMTOV],
 		      ]);
 	    }
-	    elsif ($subj eq 'Pesach VIII' || $subj eq 'Shavuot II' ||
-		   $subj eq 'Yom Kippur' || $subj eq 'Shmini Atzeret')
+	    elsif ($subj eq "Pesach VIII" || $subj eq "Shavuot II" ||
+		   $subj eq "Yom Kippur" || $subj eq "Shmini Atzeret")
 	    {
-		next unless defined $q->param('yizkor') &&
-		    ($q->param('yizkor') eq 'on' ||
-		     $q->param('yizkor') eq '1');
+		next unless defined $q->param("yizkor") &&
+		    ($q->param("yizkor") eq "on" ||
+		     $q->param("yizkor") eq "1");
 
-		my($subj2) = "Yizkor ($subj)";
+		my $subj2 = "Yizkor ($subj)";
 
 		push(@events2,
 		     [$subj2,
@@ -274,10 +272,8 @@ sub my_invoke_hebcal {
 }
 
 sub results_page {
-    my($target) = ($cfg eq "i")
-	? '' : '_top';
-    my($type) =  ($cfg eq "j")
-	? 'application/x-javascript' : 'text/html';
+    my $target = ($cfg eq "i") ? "" : "_top";
+    my $type =  ($cfg eq "j") ? "application/x-javascript" : "text/html";
 
     print STDOUT $q->header(-type => $type);
 
@@ -287,67 +283,67 @@ sub results_page {
     }
     else
     {
-	&Hebcal::out_html
-	    ($cfg, &Hebcal::start_html
+	Hebcal::out_html
+	    ($cfg, Hebcal::start_html
 	     ($q,
-	      'Hebcal Yahrzeit, Birthday and Anniversary Calendar',
+	      "Hebcal Yahrzeit, Birthday and Anniversary Calendar",
 	      [],
-	      { 'keywords' => 'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish' },
+	      { "keywords" => "yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish" },
 	      $target)
 	     );
     }
 
     if ($cfg eq "i" || $cfg eq "j")
     {
-	my($self_url) = join('', "http://", $q->virtual_host(), $script_name);
-	if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
+	my $self_url = join("", "http://", $q->virtual_host(), $script_name);
+	if (defined $ENV{"HTTP_REFERER"} && $ENV{"HTTP_REFERER"} !~ /^\s*$/)
 	{
-	    $self_url .= "?.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
+	    $self_url .= "?.from=" . Hebcal::url_escape($ENV{"HTTP_REFERER"});
 	}
-	elsif ($q->param('.from'))
+	elsif ($q->param(".from"))
 	{
-	    $self_url .= "?.from=" . &Hebcal::url_escape($q->param('.from'));
+	    $self_url .= "?.from=" . Hebcal::url_escape($q->param(".from"));
 	}
 
-	&Hebcal::out_html
+	Hebcal::out_html
 	    ($cfg,
 	     "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
 	     "Birthday and Anniversary\nCalendar</a></h3>\n");
     }
     else
     {
-	&Hebcal::out_html
+	Hebcal::out_html
 	    ($cfg,
-	     &Hebcal::navbar2($q,
+	     Hebcal::navbar2($q,
 			      "Yahrzeit, Birthday and Anniversary\nCalendar",
 			      1, undef, undef),
 	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
     }
 
-    if ($q->param('ref_url'))
+    if ($q->param("ref_url"))
     {
-	my($ref_text) = $q->param('ref_text') ? $q->param('ref_text') : 
-	    $q->param('ref_url');
-	&Hebcal::out_html($cfg,
-			  "<center><big><a href=\"", $q->param('ref_url'),
+	my $ref_text = $q->param("ref_text") ? $q->param("ref_text") : 
+	    $q->param("ref_url");
+	Hebcal::out_html($cfg,
+			  "<center><big><a href=\"", $q->param("ref_url"),
 			  "\">Click\nhere to return to $ref_text",
 			  "</a></big></center>\n");
     }
 
-&form(1,'','') unless keys %yahrzeits;
+form(1,"","") unless keys %yahrzeits;
 
-my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
-my($numEntries) = scalar(@events);
+my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+my $numEntries = scalar(@events);
 
 if ($numEntries > 0) {
-    &Hebcal::out_html($cfg,
+    Hebcal::out_html($cfg,
 		      qq{<p class="goto"><span class="sm-grey">&gt;</span>
 <a href="#export">Export calendar to Palm &amp; Outlook</a>
 <br><span class="sm-grey">&gt;</span>
 <a href="#form">Enter more dates and names</a></p>\n});
 
     # http://yizkor.ort.org/html/pp-lighting.shtml
-    &Hebcal::out_html($cfg,
+    Hebcal::out_html($cfg,
 		      qq{<p>All yahrzeits, birthdays and anniversaries
 begin the evening before the date specified. This is because the Jewish
 day actually begins at sundown on the previous night.</p>\n});
@@ -356,7 +352,7 @@ day actually begins at sundown on the previous night.</p>\n});
 for (my $i = 0; $i < $numEntries; $i++)
 {
     if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ / of Adar/) {
-	&Hebcal::out_html($cfg,
+	Hebcal::out_html($cfg,
 "<p><em>Note: the results below contain one ore more anniversary in Adar.\n",
 "To learn more about how Hebcal handles these dates, read <a\n",
 "href=\"http://www.hebcal.com/help/anniv.html#adar\">How\n",
@@ -366,60 +362,58 @@ for (my $i = 0; $i < $numEntries; $i++)
     }
 }
 
-&Hebcal::out_html($cfg, "<pre>") unless ($q->param('yizkor'));
+Hebcal::out_html($cfg, "<pre>") unless ($q->param("yizkor"));
 
 for (my $i = 0; $i < $numEntries; $i++)
 {
-    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-    my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-    my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-    my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+    my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+    my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+    my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
     if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR] &&
-	$q->param('yizkor'))
+	$q->param("yizkor"))
     {
-	&Hebcal::out_html($cfg, "</pre>") unless $i == 0;
-	&Hebcal::out_html($cfg, "<h3>$year</h3><pre>");
+	Hebcal::out_html($cfg, "</pre>") unless $i == 0;
+	Hebcal::out_html($cfg, "<h3>$year</h3><pre>");
     }
 
-    my($dow) = $Hebcal::DoW[&Hebcal::get_dow($year, $mon, $mday)] . ' ';
+    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 
-    &Hebcal::out_html
+    Hebcal::out_html
 	($cfg,
 	 sprintf("%s%02d-%s-%04d  %s\n",
 		 $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
-		 &Hebcal::html_entify($subj)));
+		 Hebcal::html_entify($subj)));
 }
 
-&Hebcal::out_html($cfg, "</pre>\n");
+Hebcal::out_html($cfg, "</pre>\n");
 
 if ($numEntries > 0) {
-    &Hebcal::out_html($cfg, Hebcal::download_html($q, 'yahrzeit', \@events));
+    Hebcal::out_html($cfg, Hebcal::download_html($q, "yahrzeit", \@events));
 }
 
-&Hebcal::out_html($cfg,
+Hebcal::out_html($cfg,
 		  "<div class=\"goto\"><hr><a name=\"form\"></a>\n",
 		  "<h3>Enter more dates and names</h3></div>\n");
 
-&form(0,'','');
+form(0,"","");
 }
 
 sub form
 {
     my($head,$message,$help) = @_;
 
-    my(%months) = %Hebcal::MoY_long;
-
     Hebcal::out_html($cfg, qq{<div class="goto">\n});
 
-    if ($message ne '')
+    if ($message ne "")
     {
-	$help = '' unless defined $help;
+	$help = "" unless defined $help;
 	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
 	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
     }
 
-    &Hebcal::out_html
+    Hebcal::out_html
 	($cfg, qq{$message},
 	 "<p>Enter dates (and optionally names) in the form below to\n",
 	 "generate a list of Yahrzeit dates, Hebrew Birthdays,\n",
@@ -429,31 +423,31 @@ sub form
 	 "<p>For example, you might enter <b>October 20, 1994 (after sunset)</b>\n",
 	 "to calculate <b>Reb Shlomo Carlebach</b>'s yahrzeit.</p>\n");
 
-    &Hebcal::out_html
+    Hebcal::out_html
 	($cfg, qq{<form name="f1" id="f1" method="post"\naction="$script_name">});
 
     for (my $i = 1; $i <= $count; $i++)
     {
-	&show_row($q,$cfg,$i,\%months);
+	show_row($q,$cfg,$i,\%Hebcal::MoY_long);
     }
 
-    &Hebcal::out_html($cfg, "<label\nfor=\"yizkor\">",
-    $q->checkbox(-name => 'yizkor',
-		 -id => 'yizkor',
+    Hebcal::out_html($cfg, "<label\nfor=\"yizkor\">",
+    $q->checkbox(-name => "yizkor",
+		 -id => "yizkor",
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
     $q->hidden(-name => "count", -default => 5), "\n",
-#    $q->hidden(-name => 'cfg'),
-#    $q->hidden(-name => 'rand',-value => time(),-override => 1),
+#    $q->hidden(-name => "cfg"),
+#    $q->hidden(-name => "rand",-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
 
     Hebcal::out_html($cfg, qq{</div>\n});
 
     if ($cfg eq "i")
     {
-	&Hebcal::out_html($cfg, "</body></html>\n");
+	Hebcal::out_html($cfg, "</body></html>\n");
     }
     elsif ($cfg eq "j")
     {
@@ -461,15 +455,15 @@ sub form
     }
     else
     {
-	&Hebcal::out_html
+	Hebcal::out_html
 	    ($cfg, qq{<hr class="goto" noshade size="1">\n});
 
-	&Hebcal::out_html($cfg,
+	Hebcal::out_html($cfg,
 	qq{<p class="goto"><a href="/help/link.html#yahrzeit-tags">How\n},
 	qq{can my synagogue link to the Yahrzeit, Birthday and Anniversary\n},
 	qq{Calendar from its own website?</a></p>});
 
-	&Hebcal::out_html($cfg, &Hebcal::html_footer($q,$rcsrev));
+	Hebcal::out_html($cfg, Hebcal::html_footer($q,$rcsrev));
     }
 
     exit(0);
@@ -478,11 +472,11 @@ sub form
 sub show_row {
     my($q,$cfg,$i,$months) = @_;
 
-    &Hebcal::out_html
+    Hebcal::out_html
 	($cfg,
 	 $q->popup_menu(-name => "t$i",
 			-id => "t$i",
-			-values => ['Yahrzeit','Birthday','Anniversary']),
+			-values => ["Yahrzeit","Birthday","Anniversary"]),
 	 "\n<small>Month:</small>\n",
 	 $q->popup_menu(-name => "m$i",
 			-id => "m$i",
