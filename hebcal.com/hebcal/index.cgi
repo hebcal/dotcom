@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 13 08:49:28 PDT 1999
+Last modified: Tue Apr 13 09:19:29 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -226,7 +226,7 @@ href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 lighting times are calculated from your latitude/longitude (which is
 determined by your Zip Code).</p>
 
-<blockquote>
+<hr noshade size=\"1\">
 <form method=\"get\" action=\"$cgipath\">
 
 <label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
@@ -243,7 +243,13 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
 	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]</option>\n";
     }
     print STDOUT "
-</select><br><br>
+</select>
+<br>
+<small><em>
+Use all digits to specify a year.  You probably aren't
+interested in 93, but rather 1993.
+</em></small>
+<br><br>
 
 <input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}><label for=\"c\">
 Include candle lighting times</label><br>
@@ -300,6 +306,9 @@ maxlength=\"3\"><br>
 <input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}><label for=\"x\">
 Suppress Rosh Chodesh</label><br>
 
+<input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}><label for=\"h\">
+Suppress all default holidays</label><br>
+
 <input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}><label for=\"o\">
 Add days of the Omer</label><br>
 
@@ -309,9 +318,6 @@ Add weekly sedrot on Saturday</label>
 (<input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}><label for=\"i\">
 Use Israeli sedra scheme</label>)<br>
 
-<input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}><label for=\"h\">
-Suppress default holidays</label><br>
-
 <input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}><label for=\"a\">
 Use ashkenazis hebrew</label><br>
 
@@ -319,7 +325,7 @@ Use ashkenazis hebrew</label><br>
 
 <input type=\"submit\" value=\"Get Calendar\">
 </form>
-</blockquote>
+<hr noshade size=\"1\">
 
 <p><small>
 Caveat: this is beta software; my apologies if it doesn't work for you.
