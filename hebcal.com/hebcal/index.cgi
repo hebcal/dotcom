@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 23 09:37:17 PDT 2001
+Last modified: Mon Apr 23 10:25:04 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1124,7 +1124,7 @@ so you can keep this window open.
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
 	{
-	    $subj .= qq{\n/ <span lang="he" dir="rtl"\nstyle="font-family: David,'Times New Roman',serif">$hebrew</span>};
+	    $subj .= "\n/ " . &Hebcal::display_hebrew($q, "hebrew", $hebrew);
 	}
 
 	unless ($q->param('vis'))
