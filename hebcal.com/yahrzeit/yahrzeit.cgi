@@ -52,27 +52,20 @@ foreach $key ($q->param())
     $q->param($key,$val);
 }
 
-my(@ynums);
-foreach $key ($q->param())
-{
-    if ($key =~ /^n(\d+)$/)
-    {
-	my($num) = $1;
-	push(@ynums, $num) if ($q->param($key) ne '');
-    }
-}
-
 my(%yahrzeits) = ();
 my(%ytype) = ();
-foreach $key (@ynums)
+foreach $key (1 .. 5)
 {
     if (defined $q->param("m$key") &&
 	defined $q->param("d$key") &&
 	defined $q->param("y$key") &&
 	$q->param("m$key") =~ /^\d{1,2}$/ &&
 	$q->param("d$key") =~ /^\d{1,2}$/ &&
-	$q->param("y$key") =~ /^\d{4}$/)
+	$q->param("y$key") =~ /^\d{2,4}$/)
     {
+	$q->param("y$key", "19" . $q->param("y$key"))
+	    if $q->param("y$key") =~ /^\d{2}$/;
+	$q->param("n$key", "Person$key") unless $q->param("n$key");
 	$yahrzeits{$q->param("n$key")} =
 	    sprintf("%02d %02d %4d %s",
 		    $q->param("m$key"),
