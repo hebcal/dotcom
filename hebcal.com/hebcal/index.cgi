@@ -24,10 +24,11 @@ $rcsrev =~ s/\s*\$//g;
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 	\"http://www.w3.org/TR/REC-html40/loose.dtd\">
-<html> <head>
-  <title>hebcal</title>
-  <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true comment \"RSACi North America Server\" by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
-  <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
+<html>
+<head>
+<title>hebcal</title>
+<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
+<link rev=\"made\" href=\"mailto:michael\@radwin.org\">
 </head>
 
 <body>
@@ -37,15 +38,14 @@ $html_footer = "<hr noshade size=\"1\">
 
 <em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em>
 <br><br>
-
 <small>
 <!-- hhmts start -->
-Last modified: Thu May 27 12:52:42 PDT 1999
+Last modified: Thu Jun  3 14:05:00 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
-
-</body> </html>
+</body>
+</html>
 ";
 
 $default_tz  = '-8';
@@ -354,6 +354,11 @@ href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 <p>Use the form below to generate a list of Jewish Holidays.  Candle
 lighting times are calculated from your latitude and longitude (which
 can be determined by your Zip Code or closest city).</p>
+
+<p>For example, see <a href=
+\"$cgipath?v=1&amp;year=" . ($year + 1) .
+"&amp;zip=95051&amp;tz=-8&amp;dst=usa&amp;x=on\">default
+Holidays for the year " . ($year + 1) . "</a>.</p>
 
 <hr noshade size=\"1\">
 $message
