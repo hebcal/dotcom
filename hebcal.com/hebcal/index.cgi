@@ -28,6 +28,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <head>
 <title>hebcal</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
+<meta name=\"description\" content=\"Generates a list of Jewish Holidays and Candle Lighting times customized to your zip code, city, or latitude/longitude. Uses Danny Sadinoff's hebcal 3.2 program and The U.S. Census Bureau's Gazetteer zip code database.\">
 <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
 </head>
 
@@ -40,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Sat Jun 12 12:22:30 PDT 1999
+Last modified: Wed Jun 16 10:06:53 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -349,7 +350,7 @@ hebcal
 </strong>
 
 <p>This is a web interface to Danny Sadinoff's <a
-href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
+href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.</p>
 
 <p>Use the form below to generate a list of Jewish Holidays.  Candle
 lighting times are calculated from your latitude and longitude (which
