@@ -289,31 +289,14 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 }
 
 my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
+my($loc) = (defined $city_descr && $city_descr ne '') ?
+    "in $city_descr" : '';
+
+my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
-    my($self_url) = join('', "http://", $q->virtual_host(), $script_name,
-			 "?geo=", $q->param('geo'));
-
-    $self_url .= ";zip=" . $q->param('zip')
-	if $q->param('zip');
-    $self_url .= ";city=" . &Hebcal::url_escape($q->param('city'))
-	if $q->param('city');
-    $self_url .= ";dst=" . $q->param('dst')
-	if $q->param('dst');
-    $self_url .= ";tz=" . $q->param('tz')
-	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
-    $self_url .= ";m=" . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
-    if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
-    {
-	$self_url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
-    }
-    elsif ($q->param('.from'))
-    {
-	$self_url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
-    }
+    my($self_url) = self_url();
 
     if ($cfg eq 'j' &&
 	$q->param('site') && $q->param('site') eq 'keshernj.com')
@@ -339,19 +322,48 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
 	$title = '1-Click Shabbat: ' . $q->param('zip');
 	&my_header($title);
 
-	&Hebcal::out_html($cfg,"<?xml version=\"1.0\"?>
-<!DOCTYPE rss PUBLIC \"-//Netscape Communications//DTD RSS 0.91//EN\"
-\t\"http://my.netscape.com/publish/formats/rss-0.91.dtd\">
-<rss version=\"0.91\">
-<channel>
+	my $dc_date = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(time()));
+	$dc_date =~ s/00$/:00/;
+
+	&Hebcal::out_html($cfg,qq{<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://purl.org/rss/1.0/">
+
+<channel rdf:about="$self_url">
 <title>$title</title>
 <link>$self_url</link>
 <description>Weekly Shabbat candle lighting times for 
 $city_descr</description>
-<language>en-us</language>
-<copyright>Copyright &copy; $this_year Michael J. Radwin. 
-All rights reserved.</copyright>
-");
+<dc:language>en-us</dc:language>
+<dc:creator>hebcal.com</dc:creator>
+<dc:date>$dc_date</dc:date>
+<lastBuildDate>$dc_date</lastBuildDate>
+<pubDate>$dc_date</pubDate>
+<items>
+<rdf:Seq>
+});
+
+	my($numEntries) = scalar(@events);
+	my($i);
+	for ($i = 0; $i < $numEntries; $i++)
+	{
+	    my($time) = &Time::Local::timelocal(1,0,0,
+		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+		       $events[$i]->[$Hebcal::EVT_IDX_MON],
+		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+		       '','','');
+	    next if $time < $friday || $time > $saturday;
+
+	    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+
+	    my $anchor = lc($subj);
+	    $anchor =~ s/[^\w]/_/g;
+	    &Hebcal::out_html($cfg,qq{<rdf:li rdf:resource="$self_url#$anchor" />\n});
+	}
+
+	&Hebcal::out_html($cfg,qq{</rdf:Seq>
+</items>
+</channel>
+});
     }
     elsif ($cfg eq 'w')
     {
@@ -376,11 +388,6 @@ else
 my($cmd_pretty) = $cmd;
 $cmd_pretty =~ s,.*/,,; # basename
 &Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
-
-my($loc) = (defined $city_descr && $city_descr ne '') ?
-    "in $city_descr" : '';
-
-my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
 unless (defined $cfg && $cfg =~ /^[rw]$/)
 {
@@ -412,14 +419,25 @@ for ($i = 0; $i < $numEntries; $i++)
 
     my(%rss);
     $rss{'description'} = strftime("%A, %d %B %Y", localtime($time));
+    $rss{'date'} = sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
+			   $year,$mon,$mday,
+			   $hour > -1 ? $hour + 12 : 12,
+			   $min > -1 ? $min : 0,
+			   0,
+			   $q->param('tz') > 0 ? "+" : "",
+			   $q->param('tz'));
+
+    my $anchor = lc($subj);
+    $anchor =~ s/[^\w]/_/g;
+    $rss{'about'} = self_url() . "#" . $anchor;
 
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
 	$rss{'title'} = sprintf("%s: %d:%02d PM", $subj, $hour, $min);
 	if (defined $cfg && $cfg eq 'r')
 	{
-	    $rss{'link'} =
-		&Hebcal::yahoo_calendar_link($events[$i], $city_descr);
+	    $rss{'link'} = self_url() . "#" . $anchor;
+	    $rss{'subject'} = 'Halachic Time';
 	    &out_rss(\%rss);
 	}
 	elsif (defined $cfg && $cfg eq 'w')
@@ -447,10 +465,12 @@ for ($i = 0; $i < $numEntries; $i++)
 	    $rss{'title'} =
 		(defined $cfg && $cfg eq 'w') ?
 		    'Torah: ' : "This week's Torah portion is ";
+	    $rss{'subject'} = 'Parsha';
 	}
 	else
 	{
 	    $rss{'title'} = "Holiday: ";
+	    $rss{'subject'} = 'Holiday';
 	}
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
@@ -576,14 +596,7 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
     }
     elsif ($cfg eq 'r')
     {
-	&Hebcal::out_html($cfg,"<textinput>
-<title>1-Click Shabbat</title>
-<description>Get Shabbat Times for another zip code</description>
-<name>zip</name>
-");
-	&Hebcal::out_html($cfg,"<link>http://", $q->virtual_host(), $script_name,
-		  "</link>\n</textinput>\n");
-	&Hebcal::out_html($cfg,"</channel>\n</rss>\n");
+	&Hebcal::out_html($cfg,"</rdf:RDF>\n");
     }
     elsif ($cfg eq 'w')
     {
@@ -608,6 +621,34 @@ else
 close(STDOUT);
 exit(0);
 
+sub self_url
+{
+    my($self_url) = join('', "http://", $q->virtual_host(), $script_name,
+			 "?geo=", $q->param('geo'));
+
+    $self_url .= ";zip=" . $q->param('zip')
+	if $q->param('zip');
+    $self_url .= ";city=" . &Hebcal::url_escape($q->param('city'))
+	if $q->param('city');
+    $self_url .= ";dst=" . $q->param('dst')
+	if $q->param('dst');
+    $self_url .= ";tz=" . $q->param('tz')
+	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
+    $self_url .= ";m=" . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+    if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
+    {
+	$self_url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
+    }
+    elsif ($q->param('.from'))
+    {
+	$self_url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
+    }
+
+    $self_url;
+}
+
 sub out_wap
 {
     my($rss) = @_;
@@ -623,16 +664,14 @@ sub out_rss
     my($rss) = @_;
 
     print STDOUT
-	"<item>\n",
-	"<title>", $rss->{'title'}, "</title>\n",
-	"<link>", $rss->{'link'}, "</link>\n";
-
-    print STDOUT
-	"<description>", $rss->{'description'}, "</description>\n"
-	    if defined $rss->{'description'};
-
-    print STDOUT
-	"</item>\n";
+	qq{<item rdf:about="$rss->{'about'}">
+<title>$rss->{'title'}</title>
+<link>$rss->{'link'}</link>
+<description>$rss->{'description'}</description>
+<dc:subject>$rss->{'subject'}</dc:subject>
+<dc:date>$rss->{'date'}</dc:date> 
+</item>
+};
 }
 
 sub my_header
