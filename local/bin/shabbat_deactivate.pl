@@ -8,30 +8,104 @@ eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
 
 use strict;
 use DBI;
+use Getopt::Long;
 
-my $site = 'hebcal.com';
-my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
-my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+my $COUNT_DEFAULT = 7;
 
-my $sql = "SELECT * FROM hebcal1.foo2";
-my $sth = $dbh->prepare($sql);
-my $rv = $sth->execute
-    or die "can't execute the query: " . $sth->errstr;
-my @addrs;
-while (my($email) = $sth->fetchrow_array) {
-    push(@addrs, $email);
+my $PROG = 'shabbat_deactivate.pl';
+my $VER = '$Revision$$';
+if ($VER =~ /(\d+)\.(\d+)/)
+{
+    $VER = "$1.$2";
 }
 
-foreach my $e (@addrs) {
-    $sql = <<EOD
+my $opt_help;
+my $opt_dryrun;
+my $opt_quiet;
+my $opt_count = $COUNT_DEFAULT;
+
+if (!GetOptions("help|h" => \$opt_help,
+                "count=i" => \$opt_count,
+		"quiet" => \$opt_quiet,
+                "dryrun|n" => \$opt_dryrun))
+{
+    Usage();
+}
+
+$opt_help && Usage();
+@ARGV && Usage();
+
+my $dbh = get_candidates();
+deactivate_subs($dbh) unless $opt_dryrun;
+$dbh->disconnect;
+exit(0);
+
+sub Usage
+{
+    print STDERR <<EOF
+Usage:
+    $PROG [options]
+
+Options:
+  -help         Help
+  -dryrun       Prints the actions that $PROG would take
+                  but does not remove anything
+  -quiet        Quiet mode (do not print commands)
+  -count <n>    Threshold is <n> for bounces (default $COUNT_DEFAULT)
+
+Version: $PROG $VER
+EOF
+;
+    exit(1);
+}
+
+my @addrs;
+sub get_candidates
+{
+    my $site = 'hebcal.com';
+    my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
+    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+
+    my $sql = qq{
+	SELECT DISTINCT a.bounce_address,count(r.bounce_id)
+	FROM hebcal1.hebcal_shabbat_email e,
+	     hebcal1.hebcal_shabbat_bounce_address a,
+	     hebcal1.hebcal_shabbat_bounce_reason r
+	WHERE r.bounce_id = a.bounce_id
+	AND a.bounce_address = e.email_address
+	AND e.email_status = 'active'
+	AND (a.bounce_std_reason = 'user_unknown' OR
+	     a.bounce_std_reason = 'domain_error')
+	GROUP by a.bounce_address
+    };
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute
+	or die "can't execute the query: " . $sth->errstr;
+
+    while (my($email,$count) = $sth->fetchrow_array)
+    {
+	if ($count > $opt_count)
+	{
+	    print "$email ($count bounces)\n" unless $opt_quiet;
+	    push(@addrs, $email);
+	}
+    }
+
+    $dbh;
+}
+
+sub deactivate_subs
+{
+    my($dbh) = @_;
+    foreach my $e (@addrs)
+    {
+	my $sql = <<EOD
 UPDATE hebcal1.hebcal_shabbat_email
 SET email_status='bounce'
 WHERE email_address = '$e'
 EOD
 ;
-    $dbh->do($sql);
+	$dbh->do($sql);
+    }
 }
-
-$dbh->disconnect;
-exit(0);
 
