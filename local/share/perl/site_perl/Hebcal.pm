@@ -984,6 +984,74 @@ sub process_cookie($$)
 # EXPORT
 ########################################################################
 
+sub download_href
+{
+    my($q,$filename,$ext) = @_;
+
+    my($script_name) = $q->script_name();
+    $script_name =~ s,/index.html$,/,;
+
+    my($href) = $script_name;
+    $href .= "index.html" if $q->script_name() =~ m,/index.html$,;
+    $href .= "/$filename.$ext?dl=1";
+    foreach my $key ($q->param())
+    {
+	my($val) = $q->param($key);
+	$href .= ";$key=" . Hebcal::url_escape($val);
+    }
+    $href .= ";filename=$filename.$ext";
+
+    $href;
+}
+
+sub download_html
+{
+    my($q, $filename, $events) = @_;
+
+    my($greg_year1,$greg_year2) = (0,0);
+    my($numEntries) = scalar(@{$events});
+    if ($numEntries > 0)
+    {
+	$greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
+	$greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+    }
+
+    my($s) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export calendar</h3>\n};
+
+    $s .= qq{<p>By clicking the links below, you can download 
+Jewish Calendar events into your desktop software.</p>};
+
+    $s .= "<h4>Microsoft Outlook</h4>\n<ol><li><a href=\"" .
+	download_href($q, $filename, 'csv') .
+	"\">Export Outlook CSV file from Hebcal</a>\n";
+
+    $s .= qq{<li><a href="/help/#csv">Import CSV file into Outlook</a></ol>};
+
+    # only offer DBA export when we know timegm() will work
+    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
+	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
+    {
+	$s .= "<h4>Palm Desktop for Windows</h4>\n<ol><li><a href=\"" .
+	    download_href($q, $filename, 'dba') .
+	    "\">Export Palm Date Book Archive (.DBA) from Hebcal</a>\n";
+	$s .= qq{<li><a href="/help/#dba">Import DBA file into Palm Desktop</a></ol>};
+    }
+
+    $s .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li><a href=\"" .
+	download_href($q, $filename, 'tsv') .
+	    "\">Export Mac Palm Calendar from Hebcal</a>\n";
+    $s .= "<li>(this feature is currently experimental)</ol>\n";
+
+    $s .= "<h4>vCalendar</h4>\n<ol><li><a href=\"" .
+	download_href($q, $filename, 'vcs') .
+	    "\">Export vCalendar (.VCS) from Hebcal</a>\n";
+    $s .= "<li>(this feature is currently experimental)</ol>\n";
+
+    $s .= "</div>\n";
+
+    $s;
+}
+
 sub export_http_header($$)
 {
     my($q,$mime) = @_;
