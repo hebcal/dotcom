@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl5 -w
 
 ########################################################################
-# compute yahrtzeit dates based on gregorian calendar based on Hebcal
+# compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
 # Copyright (c) 2000  Michael John Radwin.  All rights reserved.
 #
@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Oct 25 08:16:32 PDT 2000
+Last modified: Wed Nov  1 04:47:20 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -85,7 +85,7 @@ foreach $key ($q->param())
     }
 }
 
-my(%yahrtzeits) = ();
+my(%yahrzeits) = ();
 foreach $key (@ynums)
 {
     if (defined $q->param("m$key") &&
@@ -95,7 +95,7 @@ foreach $key (@ynums)
 	$q->param("d$key") =~ /^\d{1,2}$/ &&
 	$q->param("y$key") =~ /^\d{4}$/)
     {
-	$yahrtzeits{$q->param("n$key")} =
+	$yahrzeits{$q->param("n$key")} =
 	    sprintf("%02d %02d %4d %s",
 		    $q->param("m$key"),
 		    $q->param("d$key"),
@@ -104,20 +104,8 @@ foreach $key (@ynums)
     }
 }
 
-&form(1,'','') unless keys %yahrtzeits;
-
-my($tmpfile) = POSIX::tmpnam();
-open(T, ">$tmpfile") || die "$tmpfile: $!\n";
-foreach $key (keys %yahrtzeits)
-{
-    print T $yahrtzeits{$key}, "\n";
-}
-close(T);
-
-my($cmd) = "/home/users/mradwin/bin/hebcal -D -x -Y $tmpfile";
-
 print STDOUT $q->header(),
-    $q->start_html(-title => 'Interactive Yahrtzeit Calendar',
+    $q->start_html(-title => 'Interactive Yahrzeit Calendar',
 		   -target => '_top',
 		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
@@ -125,18 +113,33 @@ print STDOUT $q->header(),
 				       -href => '/style.css',
 				       -type => 'text/css'}),
 			     ],
-		   -meta => {'robots' => 'noindex'});
-
-print STDOUT
+			   -meta => {
+			       'robots' => 'noindex',
+			       'keywords' =>
+				   'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish'
+				   },
+		   ),
     "<table width=\"100%\"\nclass=\"navbar\">",
     "<tr><td><small>",
     "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
     "<tt>-&gt;</tt>\n",
-    "yahrtzeit</small></td>",
+    "yahrzeit</small></td>",
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>",
-    "<h1>Interactive\nYahrtzeit Calendar</h1>\n";
+    "<h1>Interactive\nYahrzeit Calendar</h1>\n";
+
+&form(1,'','') unless keys %yahrzeits;
+
+my($tmpfile) = POSIX::tmpnam();
+open(T, ">$tmpfile") || die "$tmpfile: $!\n";
+foreach $key (keys %yahrzeits)
+{
+    print T $yahrzeits{$key}, "\n";
+}
+close(T);
+
+my($cmd) = "/home/users/mradwin/bin/hebcal -D -x -Y $tmpfile";
 
 my(%greg2heb) = ();
 my($year);
@@ -164,9 +167,9 @@ foreach $year ($this_year .. ($this_year + 10))
 	my($dow) = ($year > 1969 && $year < 2038) ?
 	    $Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
 
-	if (defined $yahrtzeits{$subj})
+	if (defined $yahrzeits{$subj})
 	{
-	    printf STDOUT "%s%04d-%02d-%02d  %s's Yahrtzeit",
+	    printf STDOUT "%s%04d-%02d-%02d  %s's Yahrzeit",
 	    	$dow, $year, $mon, $mday, HTML::Entities::encode($subj);
 
 	    my($isodate) = sprintf("%04d%02d%02", $year, $mon, $mday);
@@ -201,43 +204,16 @@ sub form
     my(%months) = %Hebcal::MoY_long;
     $months{'x'} = '[select one]';
 
-
-    if ($head)
-    {
-	print STDOUT
-	    $q->header(),
-	    $q->start_html(-title => "Interactive Yahrtzeit Calendar",
-			   -target=>'_top',
-			   -head => [
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
-			     $q->Link({-rel => 'stylesheet',
-				       -href => '/style.css',
-				       -type => 'text/css'}),
-			     ],
-			   -meta => {'robots' => 'noindex'});
-
-	print STDOUT
-	    "<table width=\"100%\"\nclass=\"navbar\">",
-	    "<tr><td><small>",
-	    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
-	    "<tt>-&gt;</tt>\n",
-	    "yahrtzeit</small></td>",
-	    "<td align=\"right\"><small><a\n",
-	    "href=\"/search/\">Search</a></small>",
-	    "</td></tr></table>",
-	    "<h1>Interactive\nYahrtzeit Calendar</h1>\n";
-    }
-
     if ($message ne '')
     {
 	$help = '' unless defined $help;
 	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
+	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">\n";
     }
 
-    print STDOUT qq{$message\n<form\naction="$script_name">};
+    print STDOUT qq{$message<form\naction="$script_name">};
 
-    for (my $i = 0; $i < 6; $i++)
+    for (my $i = 1; $i < 6; $i++)
     {
 	print STDOUT
 	    "Name:\n",
@@ -259,10 +235,10 @@ sub form
 			  -id => "y$i",
 			  -maxlength => 4,
 			  -size => 4),
-	    "\n(Month Day, Year)<br>\n";
+	    "\n<small>(Month Day, Year)</small><br>\n";
     }
 
-    print STDOUT qq{<input\ntype="submit" value="Get Yahrtzeits"></form>\n};
+    print STDOUT qq{<input\ntype="submit" value="Get Yahrzeits"></form>\n};
     print STDOUT $html_footer;
 
     exit(0);
