@@ -390,36 +390,15 @@ sub form($$)
     my $hyear = $hebdate->{'yy'};
 
     $JSCRIPT=<<JSCRIPT_END;
-function s1(geo,c) {
-document.f1.geo.value=geo;
-document.f1.c.value=c;
-document.f1.v.value='0';
-document.f1.submit();
-return false;
-}
-function s2() {
-if (document.f1.nh.checked == false) {
-document.f1.nx.checked = false;
-}
-return false;
-}
-function s5() {
-if (document.f1.nx.checked == true) {
-document.f1.nh.checked = true;
-}
-return false;
-}
-function s6(val) {
-if (val=='G') {
-document.f1.year.value=$this_year;
-document.f1.month.value=$this_mon;
-}
-if (val=='H') {
-document.f1.year.value=$hyear;
-document.f1.month.value='x';
-}
-return false;
-}
+var d=document;
+function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
+d.f1.submit();return false;}
+function s2(){if(d.f1.nh.checked==false){d.f1.nx.checked=false;}return false;}
+function s5(){if(d.f1.nx.checked==true){d.f1.nh.checked=true;}returnfalse;}
+function s6(val){
+if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
+if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
+return false;}
 JSCRIPT_END
 
     my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
