@@ -713,7 +713,7 @@ sub referred_by_websearch
     my $message = "";
     my $ref = $q->referer();
 
-    if ($ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)/.*(jewish|hebrew)(\+|%20)calend[ae]r,i)
+    if ($ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)/.*calend[ae]r,i)
     {
 	my $asin = '1569374074';
 	$message=<<MESSAGE_END;
