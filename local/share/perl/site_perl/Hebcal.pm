@@ -199,63 +199,90 @@ my(%holidays) =
     (
      "Asara B'Tevet"		=>
      ["tevet",			0],
-     "Channukah"			=>
+
+     "Chanukah: 1 Candle"	=>
      ["chanukah",		0,
-      'חֲנוּכָּה'],
-     "Channukah: 8th Day"	=>
+      'חֲנוּכָּה: א׳ נֵר'],
+     "Chanukah: 2 Candles"	=>
      ["chanukah",		0,
-      'חֲנוּכָּה'],
-     "Chanukah: 8th Day"		=>
+      'חֲנוּכָּה: ב׳ נֵרוֹת'],
+     "Chanukah: 3 Candles"	=>
      ["chanukah",		0,
-      'חֲנוּכָּה'],
-     "Chanukah"			=>
+      'חֲנוּכָּה: ג׳ נֵרוֹת'],
+     "Chanukah: 4 Candles"	=>
      ["chanukah",		0,
-      'חֲנוּכָּה'],
+      'חֲנוּכָּה: ד׳ נֵרוֹת'],
+     "Chanukah: 5 Candles"	=>
+     ["chanukah",		0,
+      'חֲנוּכָּה: ה׳ נֵרוֹת'],
+     "Chanukah: 6 Candles"	=>
+     ["chanukah",		0,
+      'חֲנוּכָּה: ו׳ נֵרוֹת'],
+     "Chanukah: 7 Candles"	=>
+     ["chanukah",		0,
+      'חֲנוּכָּה: ז׳ נֵרוֹת'],
+     "Chanukah: 8 Candles"	=>
+     ["chanukah",		0,
+      'חֲנוּכָּה: ח׳ נֵרוֹת'],
+     "Chanukah: 8th Day"	=>
+     ["chanukah",		0,
+      'חֲנוּכָּה: יוֹם ח׳'],
+
+     "Lag B'Omer"		=>
+     ["lagbaomer",		0,
+      '*** הָעוֹמֶר'],
+
      "Erev Pesach"		=>
      ["pesach",			0,
       'עֶרֶב פֶּסַח'],
-     "Erev Rosh Hashana"	=>
-     ["rosh",			0,
-      'עֶרֶב רֹאשׁ הַשָּׁנָה'],
-     "Erev Shavuos"		=>
-     ["shavuot",		0,
-      'עֶרֶב שָׁבוּעוֹת'],
-     "Erev Shavuot"		=>
-     ["shavuot",		0,
-      'עֶרֶב שָׁבוּעוֹת'],
-     "Erev Sukkos"		=>
-     ["sukkot",			0,
-      'עֶרֶב סוּכּוֹת'],
-     "Erev Sukkot"		=>
-     ["sukkot",			0,
-      'עֶרֶב סוּכּוֹת'],
-     "Erev Yom Kippur"		=>
-     ["yomkippur",		0,
-      'עֶרֶב יוֹם כִּפּוּר'],
-     "Lag B'Omer"		=>
-     ["lagbaomer",		0,
-      'הָעוֹמֶר'],
-     "Pesach"			=>
+     "Pesach I"			=>
      ["pesach",			1,
-      'פֶּסַח'],
+      'פֶּסַח א׳'],
+     "Pesach II"		=>
+     ["pesach",			1,
+      'פֶּסַח ב׳'],
+     "Pesach III (CH''M)"	=>
+     ["pesach",			0,
+      'פֶּסַח ג׳ חֹל הַמוֹעד'],
+     "Pesach IV (CH''M)"	=>
+     ["pesach",			0,
+      'פֶּסַח ד׳ חֹל הַמוֹעד'],
+     "Pesach V (CH''M)"	=>
+     ["pesach",			0,
+      'פֶּסַח ה׳ חֹל הַמוֹעד'],
+     "Pesach VI (CH''M)"	=>
+     ["pesach",			0,
+      'פֶּסַח ו׳ חֹל הַמוֹעד'],
+     "Pesach VII"		=>
+     ["pesach",			1,
+      'פֶּסַח ז׳'],
+     "Pesach VIII"		=>
+     ["pesach",			1,
+      'פֶּסַח ח׳'],
+
      "Purim Katan"		=>
-     ["katan",			0,
-      'פֶּסַח קָטָן'],
-     "Purim Koson"		=>
      ["katan",			0,
       'פֶּסַח קָטָן'],
      "Purim"			=>
      ["purim",			0,
       'פּוּרִים'],
+
+     "Erev Rosh Hashana"	=>
+     ["rosh",			0,
+      'עֶרֶב רֹאשׁ הַשָּׁנָה'],
      "Rosh Hashana"		=>
      ["rosh",			1,
       'רֹאשׁ הַשָּׁנָה'],
+     "Rosh Hashana II"		=>
+     ["rosh",			1,
+      'רֹאשׁ הַשָּׁנָה ב׳'],
+
      "Shabbat HaChodesh"	=>
      ["hachodesh",		1,
-      'שַׁבָּת ***'],
+      'שַׁבָּת הַחֹדֶשׁ'],
      "Shabbat HaGadol"		=>
      ["hagadol",		1,
-      'שַׁבָּת ***'],
+      'שַׁבָּת הַגָּדוֹל'],
      "Shabbat Hazon"		=>
      ["hazon",			1,
       'שַׁבָּת ***'],
@@ -264,55 +291,61 @@ my(%holidays) =
       'שַׁבָּת ***'],
      "Shabbat Parah"		=>
      ["parah",			1,
-      'שַׁבָּת ***'],
+      'שַׁבָּת פּרה'],
      "Shabbat Shekalim"		=>
      ["shekalim",		1,
-      'שַׁבָּת ***'],
+      'שַׁבָּת שְׁקָלִים'],
      "Shabbat Shuva"		=>
      ["shuva",			1,
       'שַׁבָּת ***'],
      "Shabbat Zachor"		=>
      ["zachor",			1,
-      'שַׁבָּת ***'],
-     "Shavuos"			=>
+      'שַׁבָּת זָכוֹר'],
+
+     "Erev Shavuot"		=>
+     ["shavuot",		0,
+      'עֶרֶב שָׁבוּעוֹת'],
+     "Shavuot I"		=>
      ["shavuot",		1,
-      'שָׁבוּעוֹת'],
-     "Shavuot"			=>
+      'שָׁבוּעוֹת א׳'],
+     "Shavuot II"		=>
      ["shavuot",		1,
-      'שָׁבוּעוֹת'],
-     "Shmini Atzeres"		=>
-     ["shmini",			1,
-      'שְׁמִינִי עֲצֶרֶת'],
+      'שָׁבוּעוֹת ב׳'],
+
      "Shmini Atzeret"		=>
      ["shmini",			1,
       'שְׁמִינִי עֲצֶרֶת'],
      "Shushan Purim"		=>
      ["shushan",		0,
       'שׁוּשָׁן פּוּרִים'],
-     "Simchas Torah"		=>
-     ["simchatorah",		1,
-      'שִׂמְחַת תּוֹרָה'],
      "Simchat Torah"		=>
      ["simchatorah",		1,
       'שִׂמְחַת תּוֹרָה'],
-     "Sukkos"			=>
+
+     "Erev Sukkot"		=>
+     ["sukkot",			0,
+      'עֶרֶב סוּכּוֹת'],
+     "Sukkot I"			=>
      ["sukkot",			1,
-      'סוּכּוֹת'],
-     "Sukkos VII (Hoshana Raba)"	=>
+      'סוּכּוֹת א׳'],
+     "Sukkot II"		=>
      ["sukkot",			1,
-      'סוּכּוֹת'],
-     "Sukkot"			=>
-     ["sukkot",			1,
-      'סוּכּוֹת'],
+      'סוּכּוֹת ב׳'],
+     "Sukkot III (CH''M)"	=>
+     ["sukkot",			0,
+      'סוּכּוֹת ג׳ חֹל הַמוֹעד'],
+     "Sukkot IV (CH''M)"	=>
+     ["sukkot",			0,
+      'סוּכּוֹת ד׳ חֹל הַמוֹעד'],
+     "Sukkot V (CH''M)"	=>
+     ["sukkot",			0,
+      'סוּכּוֹת ה׳ חֹל הַמוֹעד'],
+     "Sukkot VI (CH''M)"	=>
+     ["sukkot",			0,
+      'סוּכּוֹת ו׳ חֹל הַמוֹעד'],
      "Sukkot VII (Hoshana Raba)"	=>
      ["sukkot",			1,
-      'סוּכּוֹת'],
-     "Ta'anis Bechoros"		=>
-     ["bechorot",		0,
-      'תַּעֲנִית ***'],
-     "Ta'anis Esther"		=>
-     ["esther",			0,
-      'תַּעֲנִית אֶסְתֵּר'],
+      'סוּכּוֹת ז׳ (הוֹשַׁנָא רַבָּה)'],
      "Ta'anit Bechorot"		=>
      ["bechorot",		0,
       'תַּעֲנִית ***'],
@@ -340,6 +373,10 @@ my(%holidays) =
      "Yom HaZikaron"		=>
      ["hazikaron",		0,
       'יוֹם הַזִּכָּרוֹן'],
+
+     "Erev Yom Kippur"		=>
+     ["yomkippur",		0,
+      'עֶרֶב יוֹם כִּפּוּר'],
      "Yom Kippur"		=>
      ["yomkippur",		1,
       'יוֹם כִּפּוּר'],
@@ -378,9 +415,58 @@ my(%holidays) =
 
 		    );
 
-# this doesn't work for weeks that have double parashiot
-# todo: automatically get URL from hebrew year
+# translate from Askenazic transiliterations to Separdic
+my(%ashk2seph) =
+ (
+  # parshiot translations
+  "Bereshis"			=>	"Bereshit",
+  "Toldos"			=>	"Toldot",
+  "Shemos"			=>	"Shemot",
+  "Yisro"			=>	"Yitro",
+  "Ki Sisa"			=>	"Ki Tisa",
+  "Sazria"			=>	"Tazria",
+  "Achrei Mos"			=>	"Achrei Mot",
+  "Bechukosai"			=>	"Bechukotai",
+  "Beha'aloscha"		=>	"Beha'alotcha",
+  "Chukas"			=>	"Chukat",
+  "Matos"			=>	"Matot",
+  "Vaeschanan"			=>	"Vaetchanan",
+  "Ki Seitzei"			=>	"Ki Teitzei",
+  "Ki Savo"			=>	"Ki Tavo",
 
+  # fixed holiday translations
+  "Erev Sukkos"			=>	"Erev Sukkot",
+  "Sukkos I"			=>	"Sukkot I",
+  "Sukkos II"			=>	"Sukkot II",
+  "Sukkos III (CH''M)"		=>	"Sukkot III (CH''M)",
+  "Sukkos IV (CH''M)"		=>	"Sukkot IV (CH''M)",
+  "Sukkos V (CH''M)"		=>	"Sukkot V (CH''M)",
+  "Sukkos VI (CH''M)"		=>	"Sukkot VI (CH''M)",
+  "Sukkos VII (Hoshana Raba)"	=>	"Sukkot VII (Hoshana Raba)",
+  "Shmini Atzeres"		=>	"Shmini Atzeret",
+  "Simchas Torah"		=>	"Simchat Torah",
+  "Erev Shavuos"		=>	"Erev Shavuot",
+  "Shavuos I"			=>	"Shavuot I",
+  "Shavuos II"			=>	"Shavuot II",
+
+  # variable holidays
+  "Ta'anis Esther"		=>	"Ta'anit Esther",
+  "Purim Koson"			=>	"Purim Katan",
+  "Ta'anis Bechoros"		=>	"Ta'anit Bechorot",
+
+  # special shabbatot
+  "Shabbas Shuvah"		=>	"Shabbat Shuva",
+  "Shabbas Shekalim"		=>	"Shabbat Shekalim",
+  "Shabbas Zachor"		=>	"Shabbat Zachor",
+  "Shabbas Parah"		=>	"Shabbat Parah",
+  "Shabbas HaChodesh"		=>	"Shabbat HaChodesh",
+  "Shabbas HaGadol"		=>	"Shabbat HaGadol",
+  "Shabbas Hazon"		=>	"Shabbat Hazon",
+  "Shabbas Nachamu"		=>	"Shabbat Nachamu",
+  );
+
+
+# todo: automatically get URL from hebrew year
 my($SEDROT_IDX_DRASH_EN) = 0;
 my($SEDROT_IDX_VERSE_EN) = 1;
 my($SEDROT_IDX_TORAH_EN) = 2;
@@ -390,12 +476,6 @@ my($SEDROT_IDX_HAFT_SEPH) = 5;	# Sephardic Haftarah
 
 my(%sedrot) = (
  "Bereshit"	=> [
-		    '/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
-		    '/jpstext/bereshit.shtml',
-		    'בְּרֵאשִׁית',
-		    'Isaiah 42:5 - 43:11', 'Isaiah 42:5 - 42:21',
-		    ],
- "Bereshis"	=> [
 		    '/5761/bereshit.shtml', 'Genesis 1:1 - 6:8',
 		    '/jpstext/bereshit.shtml',
 		    'בְּרֵאשִׁית',
@@ -429,12 +509,6 @@ my(%sedrot) = (
 		    '/5761/toledot.shtml', 'Genesis 25:19 - 28:9',
 		    '/jpstext/toledot.shtml',
 		    'תּוֹלְדוֹת',
-		    'Malachi 1:1 - 2:7', '',
-		    ],
- "Toldos"	=> [
-		    '/5761/toeldot.shtml', 'Genesis 25:19 - 28:9',
-		    '/jpstext/toledot.shtml',
-		    'תּוֹלְדֹת',
 		    'Malachi 1:1 - 2:7', '',
 		    ],
  "Vayetzei"	=> [
@@ -479,12 +553,6 @@ my(%sedrot) = (
 		    'שְׁמוֹת',
 		    'Isaiah 27:6 - 28:13; 29:22 - 29:23', 'Jeremiah 1:1 - 2:3',
 		    ],
- "Shemos"	=> [
-		    '/5761/shemot.shtml', 'Exodus 1:1 - 5:26',
-		    '/jpstext/shemot.shtml',
-		    'שְׁמוֹת',
-		    'Isaiah 27:6 - 28:13; 29:22 - 29:23', 'Jeremiah 1:1 - 2:3',
-		    ],
  "Vaera"	=> [
 		    '/5761/vaera.shtml', 'Exodus 6:2 - 9:35',
 		    '/jpstext/vaera.shtml',
@@ -509,12 +577,6 @@ my(%sedrot) = (
 		    'יִתְרוֹ',
 		    'Isaiah 6:1 - 7:6; 9:5 - 9:6', 'Isaiah 6:1 - 6:13',
 		    ],
- "Yisro"	=> [
-		    '/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
-		    '/jpstext/yitro.shtml',
-		    'יִתְרוֹ',
-		    'Isaiah 6:1 - 7:6; 9:5 - 9:6', 'Isaiah 6:1 - 6:13',
-		    ],
  "Mishpatim"	=> [
 		    '/5760/mishpatim.shtml', 'Exodus 21:1 - 24:18',
 		    '/jpstext/mishpatim.shtml',
@@ -534,12 +596,6 @@ my(%sedrot) = (
 		    'Ezekiel 43:10 - 43:27', '',
 		    ],
  "Ki Tisa"	=> [
-		    '/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
-		    '/jpstext/kitissa.shtml',
-		    'כִּי תִשָּׂא',
-		    'I Kings 18:1 - 18:39', 'I Kings 18:20 - 18:39',
-		    ],
- "Ki Sisa"	=> [
 		    '/5760/kitissa.shtml', 'Exodus 30:11 - 34:35',
 		    '/jpstext/kitissa.shtml',
 		    'כִּי תִשָּׂא',
@@ -581,12 +637,6 @@ my(%sedrot) = (
 		    'תַזְרִיעַ',
 		    'II Kings 4:42 - 5:19', '',
 		    ],
- "Sazria"	=> [
-		    '/5760/tazria.shtml', 'Leviticus 12:1 - 13:59',
-		    '/jpstext/tazria.shtml',
-		    'תַזְרִיעַ',
-		    'II Kings 4:42 - 5:19', '',
-		    ],
  "Metzora"	=> [
 		    '/5759/tazriametzora.shtml', 'Leviticus 14:1 - 15:33',
 		    '/jpstext/metsora.shtml',
@@ -594,12 +644,6 @@ my(%sedrot) = (
 		    'II Kings 7:3 - 7:20', '',
 		    ],
  "Achrei Mot"	=> [
-		    '/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
-		    '/jpstext/ahareimot.shtml',
-		    'אַחֲרֵי מוֹת',
-		    'Ezekiel 22:1 - 22:19', 'Ezekiel 22:1 - 22:16',
-		    ],
- "Achrei Mos"	=> [
 		    '/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
 		    '/jpstext/ahareimot.shtml',
 		    'אַחֲרֵי מוֹת',
@@ -629,12 +673,6 @@ my(%sedrot) = (
 		    'בְּחֻקֹּתַי',
 		    'Jeremiah 16:19 - 17:14', '',
 		    ],
- "Bechukosai"	=> [
-		    '/5760/behukkotai.shtml', 'Leviticus 26:3 - 27:34',
-		    '/jpstext/behukkotai.shtml',
-		    'בְּחֻקֹּתַי',
-		    'Jeremiah 16:19 - 17:14', '',
-		    ],
  "Bamidbar"	=> [
 		    '/5760/bemidbar.shtml', 'Numbers 1:1 - 4:20',
 		    '/jpstext/bemidbar.shtml',
@@ -648,12 +686,6 @@ my(%sedrot) = (
 		    'Judges 13:2 - 13:25', '',
 		    ],
  "Beha'alotcha" => [
-		    '/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
-		    '/jpstext/behaalothekha.shtml',
-		    'בְּהַעֲלֹתְךָ',
-		    'Zechariah 2:14 - 4:7', '',
-		    ],
- "Beha'aloscha" => [
 		    '/5760/behaalothekha.shtml', 'Numbers 8:1 - 12:16',
 		    '/jpstext/behaalothekha.shtml',
 		    'בְּהַעֲלֹתְךָ',
@@ -677,12 +709,6 @@ my(%sedrot) = (
 		    'חֻקַּת',
 		    'Judges 11:1 - 11:33', '',
 		    ],
- "Chukas"	=> [
-		    '/5760/hukkatbalak.shtml', 'Numbers 19:1 - 22:1',
-		    '/jpstext/hukkat.shtml',
-		    'חֻקַּת',
-		    'Judges 11:1 - 11:33', '',
-		    ],
  "Balak"	=> [
 		    '/5760/hukkatbalak.shtml', 'Numbers 22:2 - 25:9',
 		    '/jpstext/balak.shtml',
@@ -701,12 +727,6 @@ my(%sedrot) = (
 		    'מַּטּוֹת',
 		    'Jeremiah 1:1 - 2:3', '',
 		    ],
- "Matos"	=> [
-		    '/5760/mattotmaseei.shtml', 'Numbers 30:2 - 32:42',
-		    '/jpstext/mattot.shtml',
-		    'מַּטּוֹת',
-		    'Jeremiah 1:1 - 2:3', '',
-		    ],
  "Masei"	=> [
 		    '/5760/mattotmaseei.shtml', 'Numbers 33:1 - 36:13',
 		    '/jpstext/maseei.shtml',
@@ -720,12 +740,6 @@ my(%sedrot) = (
 		    'Isaiah 1:1 - 1:27', '',
 		    ],
  "Vaetchanan"	=> [
-		    '/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
-		    '/jpstext/vaethannan.shtml',
-		    'וָאֶתְחַנַּן',
-		    'Isaiah 40:1 - 40:26', '',
-		    ],
- "Vaeschanan"	=> [
 		    '/5760/vaethannan.shtml', 'Deuteronomy 3:23 - 7:11',
 		    '/jpstext/vaethannan.shtml',
 		    'וָאֶתְחַנַּן',
@@ -755,19 +769,7 @@ my(%sedrot) = (
 		    'כִּי־תֵצֵא',
 		    'Isaiah 54:1 - 54:10', '',
 		    ],
- "Ki Seitzei"	=> [
-		    '/5760/kitetse.shtml', 'Deuteronomy 21:10 - 25:19',
-		    '/jpstext/kitetse.shtml',
-		    'כִּי־תֵצֵא',
-		    'Isaiah 54:1 - 54:10', '',
-		    ],
  "Ki Tavo"	=> [
-		    '/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
-		    '/jpstext/kitavo.shtml',
-		    'כִּי־תָבוֹא',
-		    'Isaiah 60:1 - 60:22', '',
-		    ],
- "Ki Savo"	=> [
 		    '/5760/kitavo.shtml', 'Deuteronomy 26:1 - 29:8',
 		    '/jpstext/kitavo.shtml',
 		    'כִּי־תָבוֹא',
@@ -805,12 +807,9 @@ my(%sedrot) = (
  "Rosh Hashana"	=> ['/5761/roshhashanah.shtml', '', '', ''],
  "Yom Kippur"	=> ['/5759/yk.shtml', '', '', ''],
  "Sukkot"	=> ['/5761/sukkot.shtml', '', '', ''],
- "Sukkos"	=> ['/5761/sukkot.shtml', '', '', ''],
  "Simchat Torah" => ['/5761/simhattorah.shtml', '', '', 'וְזֹאת הַבְּרָכָה'],
- "Simchas Torah" => ['/5761/simhattorah.shtml', '', '', 'וְזֹאת הַבְּרָכָה'],
  "Pesach"	=> ['/5760/pesah.shtml', '', '', ''],
  "Shavuot"	=> ['/5760/shavuot.shtml', '', '', ''],
- "Shavuos"	=> ['/5760/shavuot.shtml', '', '', ''],
 	   );
 
 %Hebcal::tz_names = (
@@ -888,23 +887,18 @@ sub parse_date_descr($$)
 	$dur = 0;
 	$untimed = 1;
 	$subj = $descr;
-	$subj =~ s/Channukah/Chanukah/; # fix spelling error
+	$subj =~ s/Channukah/Chanukah/; # make spelling consistent
     }
 
     my($yomtov) = 0;
-    if ($subj !~ / \(CH''M\)$/)
-    {
-	my($subj_copy) = $subj;
-    
-	$subj_copy =~ s/ I+$//;
-	$subj_copy =~ s/ VI*$//;
-	$subj_copy =~ s/ IV$//;
-	$subj_copy =~ s/ \d{4}$//;
-	$subj_copy =~ s/: \d Candles?$//;
+    my($subj_copy) = $subj;
 
-	$yomtov = 1  if (defined $holidays{$subj_copy} &&
-			 $holidays{$subj_copy}->[$HOLIDAY_IDX_YOMTOV]);
-    }
+    $subj_copy = $ashk2seph{$subj_copy}
+	if defined $ashk2seph{$subj_copy};
+    $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
+
+    $yomtov = 1  if (defined $holidays{$subj_copy} &&
+	$holidays{$subj_copy}->[$HOLIDAY_IDX_YOMTOV]);
 
     $subj =~ s/\"/''/g;
     $subj =~ s/\s*:\s*$//g;
@@ -963,12 +957,13 @@ sub get_holiday_anchor($$)
     my($haftarah_href) = '';
     my($torah_href) = '';
 
-    if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
+    if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
 	my($parashat) = $1;
 	my($sedra) = $2;
 
 	$hebrew = 'פרשת ';
+	$sedra = $ashk2seph{$sedra} if (defined $ashk2seph{$sedra});
 
 	if (defined $sedrot{$sedra})
 	{
@@ -994,49 +989,53 @@ sub get_holiday_anchor($$)
 		$memo .= $sedrot{$sedra}->[$SEDROT_IDX_HAFT_ASHK];
 	    }
 	}
-	elsif (($sedra =~ /^([^-]+)-(.+)$/) && defined $sedrot{$1})
+	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
+	       (defined $sedrot{$1} || defined($sedrot{$ashk2seph{$1}})))
 	{
-	    my($first,$second) = ($1,$2);
+	    my($p1,$p2) = ($1,$2);
 
-	    $href = $sedrot{$first}->[$SEDROT_IDX_DRASH_EN];
-	    $torah_href = $sedrot{$first}->[$SEDROT_IDX_TORAH_EN];
+	    $p1 = $ashk2seph{$p1} if (defined $ashk2seph{$p1});
+	    $p2 = $ashk2seph{$p2} if (defined $ashk2seph{$p2});
+
+	    $href = $sedrot{$p1}->[$SEDROT_IDX_DRASH_EN];
+	    $torah_href = $sedrot{$p1}->[$SEDROT_IDX_TORAH_EN];
 	    if ($torah_href =~ m,^/jpstext/,)
 	    {
 		$haftarah_href = $torah_href;
 		$haftarah_href =~ s/.shtml$/_haft.shtml/;
 	    }
 
-	    $hebrew .= $sedrot{$first}->[$SEDROT_IDX_TITLE_HE];
-	    $memo = "Torah: " . $sedrot{$first}->[$SEDROT_IDX_VERSE_EN];
+	    $hebrew .= $sedrot{$p1}->[$SEDROT_IDX_TITLE_HE];
+	    $memo = "Torah: " . $sedrot{$p1}->[$SEDROT_IDX_VERSE_EN];
 
-	    if (defined $sedrot{$second})
+	    if (defined $sedrot{$p2})
 	    {
-		$hebrew .= '־' . $sedrot{$second}->[$SEDROT_IDX_TITLE_HE];
-		$memo .= '; ' . $sedrot{$second}->[$SEDROT_IDX_VERSE_EN];
+		$hebrew .= '־' . $sedrot{$p2}->[$SEDROT_IDX_TITLE_HE];
+		$memo .= '; ' . $sedrot{$p2}->[$SEDROT_IDX_VERSE_EN];
 	    }
 
 	    $memo .= " -- Haftarah: ";
 	    if ($want_sephardic &&
-		defined $sedrot{$first}->[$SEDROT_IDX_HAFT_SEPH])
+		defined $sedrot{$p1}->[$SEDROT_IDX_HAFT_SEPH])
 	    {
-		$memo .= $sedrot{$first}->[$SEDROT_IDX_HAFT_SEPH];
+		$memo .= $sedrot{$p1}->[$SEDROT_IDX_HAFT_SEPH];
 	    }
 	    else
 	    {
-		$memo .= $sedrot{$first}->[$SEDROT_IDX_HAFT_ASHK];
+		$memo .= $sedrot{$p1}->[$SEDROT_IDX_HAFT_ASHK];
 	    }
 
-	    if (defined $sedrot{$second})
+	    if (defined $sedrot{$p2})
 	    {
 		$memo .= '; ';
 		if ($want_sephardic &&
-		    defined $sedrot{$second}->[$SEDROT_IDX_HAFT_SEPH])
+		    defined $sedrot{$p2}->[$SEDROT_IDX_HAFT_SEPH])
 		{
-		    $memo .= $sedrot{$second}->[$SEDROT_IDX_HAFT_SEPH];
+		    $memo .= $sedrot{$p2}->[$SEDROT_IDX_HAFT_SEPH];
 		}
 		else
 		{
-		    $memo .= $sedrot{$second}->[$SEDROT_IDX_HAFT_ASHK];
+		    $memo .= $sedrot{$p2}->[$SEDROT_IDX_HAFT_ASHK];
 		}
 	    }
 	}
@@ -1050,26 +1049,23 @@ sub get_holiday_anchor($$)
     }
     else
     {
-	if (!defined $holidays{$subj})
-	{
-	    $subj =~ s/ \(CH''M\)$//;
-	    $subj =~ s/ I+$//;
-	    $subj =~ s/ VI*$//;
-	    $subj =~ s/ IV$//;
-	    $subj =~ s/ \d{4}$//;
-	    $subj =~ s/: \d Candles?$//;
-	    $subj =~ s/^Shabbas/Shabbat/;
-	}
+	my($subj_copy) = $subj;
 
-	if (defined $holidays{$subj})
+	$subj_copy = $ashk2seph{$subj_copy}
+	    if defined $ashk2seph{$subj_copy};
+
+	$subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
+
+	if (defined $holidays{$subj_copy})
 	{
 	    $href = "/michael/projects/hebcal/defaults.html#" .
-		$holidays{$subj}->[$HOLIDAY_IDX_ANCHOR];
+		$holidays{$subj_copy}->[$HOLIDAY_IDX_ANCHOR];
 
-	    if (defined $holidays{$subj}->[$HOLIDAY_IDX_TITLE_HE])
+	    if (defined $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE])
 	    {
-		$hebrew = $holidays{$subj}->[$HOLIDAY_IDX_TITLE_HE]
-		    unless $holidays{$subj}->[$HOLIDAY_IDX_TITLE_HE] =~ /\*\*\*/;
+		$hebrew = $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE]
+		    unless $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE]
+			=~ /\*\*\*/;
 	    }
 	}
     }
