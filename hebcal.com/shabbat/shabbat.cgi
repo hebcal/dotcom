@@ -213,6 +213,12 @@ sub format_items
 	    $item{'time'} = sprintf("%d:%02dpm", $hour, $min);
 	    $item{'link'} = $url . "#" . $anchor;
 	}
+	elsif ($subj eq 'No sunset today.')
+	{
+	    $item{'class'} = 'candles';
+	    $item{'link'} = self_url();
+	    $item{'time'} = '';
+	}
 	else
 	{
 	    if ($subj =~ /^(Parshas|Parashat)\s+/)
