@@ -472,6 +472,9 @@ sub display_rss
     my $dc_date = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(time()));
     $dc_date =~ s/00$/:00/;
 
+    my($this_year) = (localtime)[5];
+    $this_year += 1900;
+
     print qq{<?xml version="1.0"?>
 <rdf:RDF
 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -484,6 +487,7 @@ xmlns="http://purl.org/rss/1.0/">
 $city_descr</description>
 <dc:language>en-us</dc:language>
 <dc:creator>hebcal.com</dc:creator>
+<dc:rights>Copyright &#169; $this_year Michael J. Radwin. All rights reserved.</dc:rights>
 <dc:date>$dc_date</dc:date>
 <!-- $cmd_pretty -->
 <items>
@@ -610,7 +614,8 @@ sub display_html
 			undef, undef);
 
     print &Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
-    "<h1>1-Click\nShabbat Candle Lighting Times</h1>\n";
+    qq{<h1><a href="$rss_href"><img\nsrc="/i/xml.gif" border="0" alt="View the raw XML source" align="right" width="36" height="14"></a>\n},
+    "1-Click\nShabbat Candle Lighting Times</h1>\n";
 
     print "<h3>$city_descr</h3>\n";
 
