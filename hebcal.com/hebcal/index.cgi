@@ -126,7 +126,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Fri Sep 17 09:23:05 PDT 1999
+Last modified: Sat Sep 18 18:12:27 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -638,7 +638,8 @@ maxlength=\"3\"></label><br>
 ";
 }
 print STDOUT
-"<label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
+"<small>
+<label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
 Use ashkenazis hebrew</label><br>
 <label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
 Suppress Rosh Chodesh</label><br>
@@ -651,7 +652,7 @@ Add weekly sedrot on Saturday</label>
 (<label for=\"i\"><input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}>
 Use Israeli sedra scheme</label>)<br>
 <label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
-Print hebrew date for the entire date range</label><br>
+Print hebrew date for the entire date range</label></small><br>
 <br><input type=\"submit\" value=\"Get Calendar\">
 </form>
 $html_footer";
