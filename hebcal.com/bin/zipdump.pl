@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 use DB_File;
 
