@@ -2,7 +2,8 @@
 	"http://www.w3.org/TR/html4/loose.dtd">
 <?
 require_once('smtp.inc');
-
+require_once('Mail/RFC822.php');
+                
 global $HTTP_SERVER_VARS;
 
 $rand = pack("V", rand());
@@ -25,11 +26,23 @@ $subject = "Please confirm your request to subscribe to hebcal";
 
 global $HTTP_GET_VARS;
 $to = $HTTP_GET_VARS["to"];
+if (!$to) {
+    exit("need to!");
+}
+$to_arr = Mail_RFC822::parseAddressList($to, '', false, true);
+if (!is_array($to_arr)) {
+    exit("to $to is invalid!");
+}
+if (!$to_arr[0]->host) {
+    exit("to $to is invalid!");
+}
 
-$recipients = $to;
+$to_addr = $to_arr[0]->mailbox . '@' . $to_arr[0]->host;
+
+$recipients = $to_addr;
 
 $headers = array('From' => "\"$from_name\" <$from_addr>",
-		'To' => $to,
+		'To' => $to_addr,
 		'Reply-To' => $from_addr,
 		'MIME-Version' => '1.0',
 		'Content-Type' => 'text/plain',
