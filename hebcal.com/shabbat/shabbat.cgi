@@ -36,11 +36,60 @@ $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May  8 11:39:14 PDT 2001
+Last modified: Wed May  9 14:17:55 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
 my($q) = new CGI;
+
+$q->param('cfg', 'w')
+    if (defined $ENV{'HTTP_ACCEPT'} &&
+	$ENV{'HTTP_ACCEPT'} =~ /text\/vnd\.wap\.wml/);
+
+if (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+{
+    my $dbmfile = 'wap.db';
+    my %DB;
+    my($user) = $ENV{'HTTP_X_UP_SUBNO'};
+
+    $q->param('noset', 1);
+
+    if (defined $user &&
+	defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
+    {
+	tie(%DB, 'DB_File', $dbmfile, O_RDWR|O_CREAT, 0644, $DB_File::DB_HASH)
+	    || die "Can't tie $dbmfile: $!\n";
+	my($val) = $DB{$user};
+	if (defined $val)
+	{
+	    my($c) = new CGI($val);
+	    $c->param('zip', $q->param('zip'));
+	    $DB{$user} = $c->query_string();
+	}
+	else
+	{
+	    $DB{$user} = 'zip=' . $q->param('zip');
+	}
+	untie(%DB);
+    }
+    elsif (defined $user && !defined $q->param('zip'))
+    {
+	tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	    || die "Can't tie $dbmfile: $!\n";
+	my($val) = $DB{$user};
+	untie(%DB);
+
+	if (defined $val)
+	{
+	    my($c) = new CGI($val);
+	    if (defined $c->param('zip'))
+	    {
+		$q->param('zip', $c->param('zip'));
+		$q->param('geo', 'zip');
+	    }
+	}
+    }
+}
 
 # default setttings needed for cookie
 $q->param('c','on');
@@ -260,7 +309,7 @@ unless ($default)
 my($title) = "1-Click Shabbat for $city_descr";
 $title =~ s/ &nbsp;/ /;
 
-if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
+if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
 {
     my($self_url) = join('', "http://", $q->virtual_host(), $script_name,
 			 "?zip=", $q->param('zip'), 
@@ -277,7 +326,7 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 	&out_html("<h3><a target=\"_top\"\nhref=\"$self_url\">1-Click\n",
 		  "Shabbat</a> for $city_descr</h3>\n");
     }
-    else
+    elsif ($q->param('cfg') eq 'r')
     {
 	$title = '1-Click Shabbat: ' . $q->param('zip');
 	&my_header($title);
@@ -295,6 +344,16 @@ $city_descr</description>
 <copyright>Copyright &copy; $this_year Michael J. Radwin. 
 All rights reserved.</copyright>
 ");
+    }
+    elsif ($q->param('cfg') eq 'w')
+    {
+	&my_header('');
+	&out_html(qq{<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
+"http://www.wapforum.org/DTD/wml_1.1.xml">
+<wml>
+<card id="shabbat" title="1-Click Shabbat">
+});
     }
 }
 else
@@ -330,7 +389,7 @@ $loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
-unless (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[rw]$/)
 {
 #    &out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
 #	      qq{.</p>\n<p>\n});
@@ -363,14 +422,18 @@ for ($i = 0; $i < $numEntries; $i++)
 
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
+	$rss{'title'} = sprintf("%s: %d:%02d PM", $subj, $hour, $min);
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 	{
-	    $rss{'title'} = sprintf("%s: %d:%02d PM", $subj, $hour, $min);
 	    $rss{'link'} = &ycal($subj,$year,$mon,$mday,$min,$hour,
 			      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
 			      $events[$i]->[$Hebcal::EVT_IDX_DUR]);
 
 	    &out_rss(\%rss);
+	}
+	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+	{
+	    &out_wap(\%rss);
 	}
 	else
 	{
@@ -390,7 +453,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	$rss{'link'} = $href;
 
 	if ($href ne '' &&
-	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
+	    !(defined $q->param('cfg') && $q->param('cfg') =~ /^[rw]$/))
 	{
 	    if (defined $torah_href && $torah_href ne '')
 	    {
@@ -413,6 +476,10 @@ for ($i = 0; $i < $numEntries; $i++)
 	{
 	    &out_rss(\%rss);
 	}
+	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+	{
+	    &out_wap(\%rss);
+	}
 	else
 	{
 	    &out_html("\n<dt>", $rss{'title'});
@@ -423,9 +490,9 @@ for ($i = 0; $i < $numEntries; $i++)
 }
 
 &out_html("\n</dl>\n")
-    unless (defined $q->param('cfg') && $q->param('cfg') eq 'r');
+    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[rw]$/);
 
-if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
+if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
 {
     if ($q->param('cfg') eq 'i')
     {
@@ -442,6 +509,10 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 		  "</link>\n</textinput>\n");
 	&out_html("</channel>\n</rss>\n");
     }
+    elsif ($q->param('cfg') eq 'w')
+    {
+	&out_html("</card>\n</wml>\n");
+    }
 }
 else
 {
@@ -450,6 +521,16 @@ else
 
 close(STDOUT);
 exit(0);
+
+sub out_wap
+{
+    my($rss) = @_;
+
+    print STDOUT "<p>", $rss->{'title'};
+    print STDOUT "<br/>\n", $rss->{'description'}
+	    if defined $rss->{'description'};
+    print STDOUT "</p>\n";
+}
 
 sub out_rss
 {
@@ -540,6 +621,10 @@ sub my_header
     {
 	print STDOUT "Content-Type: text/xml\015\012\015\012";
     }
+    elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+    {
+	print STDOUT "Content-Type: text/vnd.wap.wml\015\012\015\012";
+    }
     else
     {
 	&out_html($q->header(),
@@ -547,7 +632,7 @@ sub my_header
 		  );
     }
 
-    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
+    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
     {
 	&out_html(&Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
 		  "<h1>1-Click\nShabbat</h1>\n");
