@@ -346,6 +346,9 @@ href="/search/">Search</a></small>
 <a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on">$hy1</a> -
 <a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on">$hy2</a> -
 <a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on">$hy3</a></p>
+<p>Leyning coordinators: <a
+href="/help/sedra.html#download">download</a> spreadsheet with
+aliyah-by-aliyah breakdowns.</p>
 <h3>Genesis</h3>
 <dl>
 EOHTML
