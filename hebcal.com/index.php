@@ -26,7 +26,7 @@ href="/hebcal/">Hebcal Interactive Jewish
 Calendar</a></big></b></dt>
 <dd>generates a list of Jewish holidays and candle lighting times customized
 to your zip code, city, or latitude/longitude.
-<dd><a href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=1">Current
+<dd><a href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on">Current
 Calendar</a> (bookmarkable)
 <dt><br><b><big><a
 href="/shabbat/">1-Click Shabbat</a></big></b></dt>
@@ -65,7 +65,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Wed Mar 20 12:19:39 EST 2002
+Last modified: Fri Apr 12 17:15:50 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
