@@ -275,7 +275,8 @@ sub results_page {
 	&Hebcal::out_html
 	    ($cfg,
 	     &Hebcal::navbar2($q,
-			      "Yahrzeit, Birthday and Anniversary\nCalendar"),
+			      "Yahrzeit, Birthday and Anniversary\nCalendar",
+			      1, undef, undef),
 	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
     }
 
