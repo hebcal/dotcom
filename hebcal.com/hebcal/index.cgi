@@ -977,7 +977,14 @@ sub results_page
     if ($numEntries > 0)
     {
 	print STDOUT qq{<p class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a></p>\n};
+<a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>};
+	if (defined $q->param('tag') && $q->param('tag') eq 'fp.ql')
+	{
+	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "<a href=\"", Hebcal::self_url($q, {'v' => 0, 'tag' => 'cal.cust'}),
+	    "\">Customize\ncalendar options</a>";
+	}
+	print STDOUT qq{</p>\n};
     }
     else
     {
