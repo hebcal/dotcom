@@ -183,10 +183,28 @@ $cmd .= " " . $q->param('month')
 
 $cmd .= " " . $q->param('year');
 
+my $g_date;
+my $g_filename = 'hebcal_' . $q->param('year');
+$g_filename .= 'H'
+    if $q->param('yt') && $q->param('yt') eq 'H';
+if ($q->param('month') =~ /^\d+$/ &&
+    $q->param('month') >= 1 && $q->param('month') <= 12)
+{
+    $g_filename .= '_' . lc($Hebcal::MoY_short[$q->param('month')-1]);
+    $g_date = sprintf("%s %04d", $Hebcal::MoY_long{$q->param('month')},
+		    $q->param('year'));
+}
+else
+{
+    $g_date = sprintf("%s%04d",
+		    ($q->param('yt') && $q->param('yt') eq 'H') ?
+		    'Hebrew Year ' : '',
+		    $q->param('year'));
+}
 
 if (! defined $q->path_info())
 {
-    &results_page();
+    results_page($g_date, $g_filename);
 }
 elsif ($q->path_info() =~ /[^\/]+\.csv$/)
 {
@@ -203,7 +221,7 @@ elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
 elsif ($q->path_info() =~ /[^\/]+\.[vi]cs$/)
 {
     # text/x-vCalendar
-    &vcalendar_display();
+    vcalendar_display($g_date);
 }
 elsif (defined $q->param('cfg') && $q->param('cfg') eq 'e')
 {
@@ -211,7 +229,7 @@ elsif (defined $q->param('cfg') && $q->param('cfg') eq 'e')
 }
 else
 {
-    &results_page();
+    results_page($g_date, $g_filename);
 }
 
 close(STDOUT);
@@ -285,7 +303,8 @@ sub macintosh_datebook_display {
     Hebcal::macintosh_datebook($q, \@events);
 }
 
-sub vcalendar_display() {
+sub vcalendar_display {
+    my($date) = @_;
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
@@ -305,7 +324,7 @@ sub vcalendar_display() {
 	$state = $1;
     }
 
-    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state);
+    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $date);
 }
 
 sub dba_display() {
@@ -347,7 +366,6 @@ sub csv_display() {
     my $euro = defined $q->param('euro') ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
-
 
 sub alt_candles_text($$)
 {
@@ -692,28 +710,10 @@ sub download_href
     $href;
 }
 
-sub results_page()
+sub results_page
 {
-    my($date);
-    my($filename) = 'hebcal_' . $q->param('year');
-    $filename .= 'H'
-	if $q->param('yt') && $q->param('yt') eq 'H';
+    my($date,$filename) = @_;
     my($prev_url,$next_url,$prev_title,$next_title);
-
-    if ($q->param('month') =~ /^\d+$/ &&
-	$q->param('month') >= 1 && $q->param('month') <= 12)
-    {
-	$filename .= '_' . lc($Hebcal::MoY_short[$q->param('month')-1]);
-	$date = sprintf("%s %04d", $Hebcal::MoY_long{$q->param('month')},
-			$q->param('year'));
-    }
-    else
-    {
-	$date = sprintf("%s%04d",
-			($q->param('yt') && $q->param('yt') eq 'H') ?
-			'Hebrew Year ' : '',
-			$q->param('year'));
-    }
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
@@ -948,7 +948,7 @@ sub results_page()
     if ($numEntries > 0)
     {
 	print STDOUT qq{<p class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm &amp; Outlook</a></p>\n};
+<a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a></p>\n};
     }
     else
     {
