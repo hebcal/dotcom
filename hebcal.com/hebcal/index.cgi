@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 20 10:51:55 PDT 2000
+Last modified: Wed Sep 20 11:19:42 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1080,6 +1080,26 @@ so you can keep this window open.
     }
 
     print STDOUT "</pre>", $goto;
+
+    if ($q->param('c') && $q->param('c') ne 'off')
+    {
+	if ($q->param('zip') =~ /^\d{5}$/)
+	{
+	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
+		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
+		qq{&amp;dst=}, $q->param('dst');
+	    print STDOUT qq{&amp;tz=}, $q->param('tz')
+		if $q->param('tz') ne 'auto';
+	    print STDOUT qq{">1-Click Shabbat for $city_descr</a>.</p>\n};
+	}
+	elsif ($q->param('city') !~ /^\s*$/)
+	{
+	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
+		qq{<a href="/shabbat/?city=},
+ 		$q->param('city'), qq{">1-Click Shabbat for },
+		$q->param('city'), qq{</a>.</p>\n};
+	}
+    }
 
     # download links
     print STDOUT "<p>Advanced options:\n<small>[ <a href=\"", $script_name;
