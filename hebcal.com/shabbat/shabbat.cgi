@@ -497,7 +497,7 @@ sub process_args
 
 	my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
-	print "Set-Cookie: ", $cookie_to_set,
+	print "Cache-Control: private\015\012", "Set-Cookie: ", $cookie_to_set,
 	"; path=/; expires=",  $expires_date, "\015\012"
 	    if $cookie_to_set;
     }
@@ -1044,7 +1044,7 @@ sub form($$$$)
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
 		       -values => [sort keys %Hebcal::city_tz],
-		       -default => 'Jerusalem'),
+		       -default => 'New York'),
 	qq{</label>},
 	$q->hidden(-name => 'geo',
 		   -value => 'city',
