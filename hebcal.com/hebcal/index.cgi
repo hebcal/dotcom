@@ -1205,8 +1205,8 @@ sub get_candle_config($)
 	    uc($q->param('lodir')) . " longitude";
 	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
 	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
-	$dst_tz_descr = "Daylight Saving Time: $dst_text\n<br>Time zone: " .
-	    $Hebcal::tz_names{$q->param('tz')};
+	$dst_tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')} .
+	    "\n<br>Daylight Saving Time: $dst_text";
 
 	# don't multiply minutes by -1 since hebcal does it internally
 	$long_deg *= -1  if ($q->param('lodir') eq 'e');
@@ -1278,8 +1278,8 @@ sub get_candle_config($)
 #	$long_descr = "${long_deg}d${long_min}' W longitude";
 	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
 	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
-	$dst_tz_descr = "Daylight Saving Time: $dst_text\n<br>Time zone: " .
-		$Hebcal::tz_names{$q->param('tz')};
+	$dst_tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')} .
+	    "\n<br>Daylight Saving Time: $dst_text";
 
 	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
     }
