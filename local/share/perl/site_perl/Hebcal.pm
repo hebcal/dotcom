@@ -127,6 +127,7 @@ $Hebcal::PALM_DBA_MAXENTRIES = 2500;
      'Los Angeles'	=>	-8,
      'Miami'		=>	-5,
      'Mexico City'	=>	-6,
+     'Montreal'		=>	-5,
      'New York'		=>	-5,
      'Omaha'		=>	-7,
      'Philadelphia'	=>	-5,
