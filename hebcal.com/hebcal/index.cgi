@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sat Jan  1 20:51:36 PST 2000
+Last modified: Mon Jan  3 15:28:27 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1416,6 +1416,11 @@ sub process_cookie {
 	$q->param($_,$c->param($_))
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
+
+    $q->param('nh','off')
+	if (defined $c->param('h') && $c->param('h') eq 'on');
+    $q->param('nx','off')
+	if (defined $c->param('x') && $c->param('x') eq 'on');
 
     $q->param('nh',$c->param('nh'))
 	if (! defined $q->param('nh') && defined $c->param('nh'));
