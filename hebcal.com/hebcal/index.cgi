@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan 17 20:19:06 PST 2000
+Last modified: Tue Jan 18 11:02:35 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -783,9 +783,9 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
-    "</label>(<a target=\"_top\"\n",
+    "</label><small>(<a target=\"_top\"\n",
     "href=\"/michael/projects/hebcal/defaults.html\">What\n",
-    "are the default Holidays?</a>)",
+    "are the default Holidays?</a>)</small>",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
 		 -id => 'nx',
@@ -984,9 +984,9 @@ JSCRIPT_END
 		 -id => 'set',
 		 -checked => 'checked',
 		 -label => "\nSave my preferences in a cookie"),
-    "</label>(<a target=\"_top\"\n",
+    "</label><small>(<a target=\"_top\"\n",
     "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
-    "a cookie?</a>)",
+    "a cookie?</a>)</small>",
     "</p>\n",
     $q->submit(-name => '.s',-value => 'Get Calendar'),
     $q->hidden(-name => '.cgifields',
