@@ -489,7 +489,7 @@ sub get_holiday_anchor($$$)
 use Fcntl qw(:DEFAULT :flock);
 my $lockfile = "/pub/m/r/mradwin/private/tmp/mradwin-hebcal.lock";
 
-sub emaildb_lock
+sub emaildb_lock($)
 {
     my($mode) = @_;
 
@@ -499,7 +499,7 @@ sub emaildb_lock
     return \*EMAILDB;
 }
 
-sub emaildb_unlock
+sub emaildb_unlock($)
 {
     my($fh) = @_;
 
@@ -546,7 +546,7 @@ sub zipcode_open_db
     \%DB;
 }
 
-sub zipcode_close_db
+sub zipcode_close_db($)
 {
     use DB_File;
 
@@ -554,7 +554,7 @@ sub zipcode_close_db
     untie(%{$DB});
 }
 
-sub zipcode_fields
+sub zipcode_fields($)
 {
     my($value) = @_;
 
@@ -738,16 +738,26 @@ sub navbar2($$$$$)
 	"</td></tr></table>";
 }
 
-sub start_html()
+sub start_html($$$$$)
 {
     my($q,$title,$head,$meta,$target) = @_;
 
     $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
 		    "\t\"http://www.w3.org/TR/html4/loose.dtd");
 
-    my($server_name) = $q->virtual_host();
     $meta = {} unless defined $meta;
     $head = [] unless defined $head;
+
+    my $base;
+
+    if ($ENV{'QUERY_STRING'})
+    {
+	my($script_name) = $q->script_name();
+	$script_name =~ s,/index.html$,/,;
+
+	$base = "http://" . $q->virtual_host() . $script_name . "?" .
+	    $ENV{'QUERY_STRING'};
+    }
 
     $target = '_top' unless defined $target;
     return $q->start_html
@@ -756,6 +766,7 @@ sub start_html()
 	 -lang => 'en',
 	 -title => $title,
 	 -target => $target,
+	 -xbase => $base,
 	 -head => [
 		   $q->Link({-rel => 'stylesheet',
 			     -href => '/style.css',
@@ -1023,6 +1034,61 @@ sub yahoo_calendar_link($$)
 	&url_escape($subj) . "&amp;VIEW=d";
 }
 
+sub macintosh_datebook($)
+{
+    my($events) = @_;
+    my($numEntries) = scalar(@{$events});
+    for (my $i = 0; $i < $numEntries; $i++)
+    {
+	my $date = 
+	    $Hebcal::MoY_long{$events->[$i]->[$Hebcal::EVT_IDX_MON] + 1} .
+	    ' ' .  $events->[$i]->[$Hebcal::EVT_IDX_MDAY] . ', ' .
+	    $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
+
+	my $start_time = '';
+	my $end_time = '';
+	my $end_date = $date;
+	my $memo = 'Jewish Holiday';
+
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	{
+	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+
+	    $hour -= 12 if $hour > 12;
+	    $start_time = sprintf("%d:%02d PM", $hour, $min);
+
+	    $hour += 12 if $hour < 12;
+	    $min += $events->[$i]->[$Hebcal::EVT_IDX_DUR];
+
+	    if ($min >= 60)
+	    {
+		$hour++;
+		$min -= 60;
+	    }
+
+	    $hour -= 12 if $hour > 12;
+	    $end_time = sprintf("%d:%02d PM", $hour, $min);
+	    $end_date = '';
+	    $memo = '';
+	}
+
+	# general format is
+	# Hanukkah<B8>December 14, 1998<B8>December 14, 1998<B8><B8><B8>Jewish Holiday<B8><9B>
+	# Doc group mtg<B8>August 21, 2002<B8><B8>2:00 PM<B8>3:00 PM<B8><B8><9B>
+
+	print STDOUT join("\xB8",
+			  $events->[$i]->[$Hebcal::EVT_IDX_SUBJ],
+			  $date, $end_date,
+			  $start_time, $end_time,
+			  $memo,
+			  "\x9B");
+    }
+
+    print STDOUT "\n";
+
+    1;
+}
 
 ########################################################################
 # export to vCalendar
@@ -1074,7 +1140,7 @@ sub vcalendar_write_contents($$)
 	print STDOUT qq{DTSTART:$date$endl}, qq{DTEND:$end_date$endl},
 	qq{CATEGORIES:HOLIDAY$endl};
 
-	print STDOUT qq{END:VEVENT$endl};
+	print STDOUT qq{END:VEVENT$endl$endl};
     }
 
     print STDOUT qq{END:VCALENDAR$endl};
@@ -1166,7 +1232,7 @@ sub csv_write_contents($$)
 # for managing email shabbat list
 ########################################################################
 
-sub sendmail_v2
+sub sendmail_v2($$$)
 {
     my($return_path,$headers,$body) = @_;
 
