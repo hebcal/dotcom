@@ -53,6 +53,7 @@ unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
 
 foreach my $h (keys %{$parshiot->{'parsha'}})
 {
+    next if $parshiot->{'parsha'}->{$h}->{'combined'};
     $DB{$h} = 1;
     $DB{"$h:hebrew"}    = $parshiot->{'parsha'}->{$h}->{'hebrew'};
     $DB{"$h:verse"}     = $parshiot->{'parsha'}->{$h}->{'verse'};
