@@ -799,6 +799,12 @@ sub zipcode_fields($)
 	$city .= $_;
     }
 
+    if (($state eq 'HI' || $state eq 'AZ') && $dst == 1)
+    {
+	warn "[$city, $state] had DST=1 but should be 0";
+	$dst = 0;
+    }
+
     ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
 }
 
