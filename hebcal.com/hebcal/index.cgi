@@ -765,6 +765,10 @@ sub results_page()
 	"in $city_descr" : '';
     $loc2 =~ s/\s*&nbsp;\s*/ /g;
 
+    my($cmd_pretty) = $cmd;
+    $cmd_pretty =~ s,.*/,,; # basename
+    print STDOUT "<!-- $cmd_pretty -->\n";
+
     my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($numEntries) = scalar(@events);
@@ -774,10 +778,10 @@ sub results_page()
     {
 	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
 	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
-    }
 
-    print STDOUT $Hebcal::gregorian_warning
-	if ($greg_year1 <= 1752);
+	print STDOUT $Hebcal::gregorian_warning
+	    if ($greg_year1 <= 1752);
+    }
 
     my($geographic_info) = '';
 
@@ -897,11 +901,15 @@ sub results_page()
     print STDOUT $goto_prefix, $goto, "</p>"
 	unless $q->param('vis');
 
-    print STDOUT $download;
-
-    my($cmd_pretty) = $cmd;
-    $cmd_pretty =~ s,.*/,,; # basename
-    print STDOUT "<!-- $cmd_pretty -->\n";
+    if ($numEntries > 0)
+    {
+	print STDOUT $download;
+    }
+    else
+    {
+	print STDOUT qq{<h3 style="color: red">No Hebrew Calendar events\n},
+		qq{for $date</h3>};
+    }
 
     print STDOUT "<p>";
 
@@ -1024,7 +1032,8 @@ sub results_page()
     }
 
     print STDOUT "</p>" unless $q->param('vis');
-    print STDOUT $goto_prefix, $goto, "</p>", $download;
+    print STDOUT $goto_prefix, $goto, "</p>";
+    print STDOUT $download if ($numEntries > 0);
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     1;
