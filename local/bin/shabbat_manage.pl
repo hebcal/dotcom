@@ -1,4 +1,7 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
+
+eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
 
 # $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_manage.pl,v $
 # $Id$
