@@ -73,7 +73,8 @@ class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <input type="hidden" name="geo" value="zip">
 <small><br><a href="/shabbat/#change">select by major city</a></small>
 </form></div>
-<div><!-- Begin PayPal Logo -->
+<hr>
+<!-- Begin PayPal Logo -->
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
 <input type="hidden" name="business" value="webmaster@hebcal.com">
@@ -84,7 +85,7 @@ class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 src="http://www.paypal.com/images/x-click-but04.gif"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
-<!-- End PayPal Logo --></div>
+<!-- End PayPal Logo -->
 </td></tr></table>
 <p>
 <hr noshade size="1">
