@@ -39,7 +39,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 13 13:47:42 PDT 1999
+Last modified: Tue Apr 13 18:09:10 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -96,7 +96,7 @@ foreach (@opts)
     $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
 	1 : 0;
 }
-$opts{'c'} = 1 unless $status;
+$opts{'c'} = 1 unless $status && defined $in{'v'};
 
 if (defined $in{'dst'})
 {
@@ -133,11 +133,12 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 
 if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 {
-    $cmd .= " -C $in{'city'}";
+    $cmd .= " -C '$in{'city'}'";
 
-    $city_descr = $in{'city'};
+    $city_descr = "Closest City: $in{'city'}";
     $lat_descr  = '';
     $long_descr = '';
+    $dst_tz_descr = '';
 
     delete $in{'tz'};
     delete $in{'dst'};
@@ -158,9 +159,12 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $in{'lodir'} = 'w' unless ($in{'lodir'} eq 'e');
     $in{'ladir'} = 'n' unless ($in{'ladir'} eq 's');
 
-    $city_descr = "Geographic Position";
-    $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
-    $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
+    $city_descr = "Geographic Position<br>\n";
+    $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude<br>\n";
+    $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude<br>\n";
+    $dst_tz_descr = "
+<small>Daylight Savings Time: $in{'dst'}<br>
+Time Zone: GMT $in{'tz'}:00</small>";
 
     # don't multiply minutes by -1 since hebcal does it internally
     $long_deg *= -1  if ($in{'lodir'} eq 'e');
@@ -210,9 +214,12 @@ elsif (defined $in{'zip'})
     }
     undef(@city);
 
-    $city_descr = "$city, $state $in{'zip'}";
-    $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
-    $long_descr = "${long_deg}d${long_min}' W latitude";
+    $city_descr = "$city, $state $in{'zip'}<br>\n";
+    $lat_descr  = "${lat_deg}d${lat_min}' N latitude<br>\n";
+    $long_descr = "${long_deg}d${long_min}' W latitude<br>\n";
+    $dst_tz_descr = "
+<small>Daylight Savings Time: $in{'dst'}<br>
+Time Zone: GMT $in{'tz'}:00</small>";
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -295,6 +302,8 @@ $message
 
 <form method=\"get\" action=\"$cgipath\">
 
+<input type=\"hidden\" name=\"v\" value=\"1\">
+
 <label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
 id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
 
@@ -321,10 +330,60 @@ interested in 93, but rather 1993.
 Include candle lighting times</label><br>
 
 <blockquote>
-<input type=\"hidden\" name=\"geo\" value=\"zip\">
-<label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
-id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\"><br>
+";
 
+    if (defined $in{'geo'} && $in{'geo'} eq 'city')
+    {
+	print STDOUT "
+<input type=\"hidden\" name=\"geo\" value=\"city\">
+<label for=\"city\">Closest City: </label>
+";
+	print STDOUT &city_select_html();
+	print STDOUT "
+&nbsp;&nbsp;(OR select by <a href=\"${cgipath}?geo=zip\">Zip Code</a>)
+<br>
+";
+    }
+    elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
+    {
+	print STDOUT "
+<input type=\"hidden\" name=\"geo\" value=\"pos\">
+<input type=\"text\" name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\" size=\"3\" maxlength=\"2\">
+<label for=\"ladeg\"> deg&nbsp;</label>
+
+<input type=\"text\" name=\"lamin\" id=\"lamin\" value=\"$in{'lamin'}\" size=\"2\" maxlength=\"2\">
+<label for=\"lamin\"> min</label>
+
+<select name=\"ladir\">
+<option value=\"n\">North Latitude</option>
+<option value=\"s\">South Latitude</option>
+</select><br>
+
+<input type=\"text\" name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\" size=\"3\" maxlength=\"3\">
+<label for=\"lodeg\"> deg&nbsp;</label>
+
+<input type=\"text\" name=\"lomin\" id=\"lomin\" value=\"$in{'lomin'}\" size=\"2\" maxlength=\"2\">
+<label for=\"lomin\"> min</label>
+
+<select name=\"lodir\">
+<option value=\"w\">West Longitude</option>
+<option value=\"e\">East Longitude</option>
+</select><br>
+";
+    }
+    else
+    {
+	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
+<label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
+id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\">
+&nbsp;&nbsp;(OR select by <a href=\"${cgipath}?geo=city\">Closest City</a>)
+<br>
+";
+    }
+
+    if (!defined $in{'geo'} || $in{'geo'} ne 'city')
+    {
+	print STDOUT "
 <label for=\"tz\">Time Zone: </label>
 <select name=\"tz\" id=\"tz\">
 <option value=\"-12\"$tz{'-12'}>GMT -12:00  Dateline</option>
@@ -363,7 +422,10 @@ Daylight Savings Time:
 
 <input type=\"radio\" name=\"dst\" id=\"none\" value=\"none\"$opts_chk{'none'}>
 <label for=\"none\">none</label><br>
+";
+    }
 
+print STDOUT "
 <label for=\"m\">Havdalah minutes past sundown: </label><input
 type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
 maxlength=\"3\"><br>
@@ -420,7 +482,18 @@ sub download
     local($filename) = 'hebcal_' . $year;
 
     $filename .= '_' . $MoY_abbrev[$in{'month'}] if $in{'month'} =~ /^\d+$/;
-    $filename .= '_' . $in{'zip'} . '.csv';
+    $filename .= '_';
+    if (defined $in{'zip'})
+    {
+	$filename .= $in{'zip'};
+    }
+    elsif (defined $in{'city'})
+    {
+	$tmp = "\L$in{'city'}\E";
+	$tmp =~ s/ /_/g;
+	$filename .= $tmp;
+    }
+    $filename .= '.csv';
     
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
@@ -432,13 +505,7 @@ $date
 </big></strong>
 
 <p>
-$city_descr<br>
-$lat_descr<br>
-$long_descr<br>
-<small>
-Daylight Savings Time: $in{'dst'}<br>
-Time Zone: GMT $in{'tz'}:00
-</small>
+${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 </p>
 
 <p><form method=\"get\" action=\"$cgipath/$filename\">
@@ -560,10 +627,66 @@ sub url_escape
     $res;
 }
 
+sub city_select_html
+{
+    local($_);
+    local(@cities) = 
+	(
+	 'Atlanta',
+	 'Austin',
+	 'Berlin',
+	 'Baltimore',
+	 'Bogota',
+	 'Boston',
+	 'Buenos Aires',
+	 'Buffalo',
+	 'Chicago',
+	 'Cincinnati',
+	 'Cleveland',
+	 'Dallas',
+	 'Denver',
+	 'Detroit',
+	 'Gibraltar',
+	 'Hawaii',
+	 'Houston',
+	 'Jerusalem',
+	 'Johannesburg',
+	 'London',
+	 'Los Angeles',
+	 'Miami',
+	 'Mexico City',
+	 'New York',
+	 'Omaha',
+	 'Philadelphia',
+	 'Phoenix',
+	 'Pittsburgh',
+	 'Saint Louis',
+	 'San Francisco',
+	 'Seattle',
+	 'Toronto',
+	 'Vancouver',
+	 'Washington DC',
+	 );
+    local($retval) = '';
+
+    $retval = "<select name=\"city\" id=\"city\">\n";
+
+    foreach (@cities)
+    {
+	$retval .= '<option';
+	$retval .= ' selected' if defined $in{'city'} && $in{'city'} eq $_;
+	$retval .= ">$_</option>\n";
+    }
+
+    $retval .= "</select>\n";
+    $retval;
+}
+
 if ($^W && 0)
 {
     ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
 	localtime(time);
+    &city_select_html();
 }
 
 1;
