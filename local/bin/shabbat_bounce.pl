@@ -32,7 +32,7 @@ if ($to) {
 	warn $Email::Valid::Details;
     }
 
-    if ($to =~ /shabbat-return-([^\@]+)\@/) {
+    if ($to =~ /shabbat-return-([^\@]+)\@/i) {
 	$email_address = $1;
 	$email_address =~ s/=/\@/;
     }
