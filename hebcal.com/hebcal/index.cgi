@@ -835,39 +835,10 @@ so you can keep this window open.
 
 	my($line) = '';
 
-	if ($ycal)
-	{
-	    my($ST) = sprintf("%04d%02d%02d", $year, $mon, $mday);
-	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
-	    {
-		my($loc) = (defined $city_descr && $city_descr ne '') ?
-		    "in $city_descr" : '';
-	        $loc =~ s/\s*&nbsp;\s*/ /g;
-
-		$ST .= sprintf("T%02d%02d00",
-			       ($hour < 12 && $hour > 0) ? $hour + 12 : $hour,
-			       $min);
-
-		if ($q->param('tz') ne '')
-		{
-		    my($abstz) = ($q->param('tz') >= 0) ?
-			$q->param('tz') : -$q->param('tz');
-		    my($signtz) = ($q->param('tz') < 0) ? '-' : '';
-
-		    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
-		}
-
-		$ST .= "&amp;DUR=00" . $events[$i]->[$Hebcal::EVT_IDX_DUR];
-
-		$ST .= "&amp;DESC=" . &Hebcal::url_escape($loc)
-		    if $loc ne '';
-	    }
-
-	    $line .= "<a target=\"_calendar\" " .
-		"href=\"http://calendar.yahoo.com/" .
-		"?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=" .
-		&Hebcal::url_escape($subj) . "&amp;VIEW=d\">add</a> ";
-	}
+	$line .= qq{<a target="_calendar" href="} .
+	    &Hebcal::yahoo_calendar_link($events[$i], $city_descr) .
+	    qq{">add</a> }
+		if ($ycal);
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
 	    = &Hebcal::get_holiday_anchor($subj);
