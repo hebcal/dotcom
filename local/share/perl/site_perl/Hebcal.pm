@@ -676,17 +676,24 @@ sub utf8_hebrew_to_netscape($) {
     return $u->utf8();
 }
 
+sub html_copyright2($)
+{
+    my($prefix) = @_;
+
+    return qq{<a name="copyright">Copyright &copy; $this_year
+Michael J. Radwin. All rights reserved.</a>
+<a target="_top" href="$prefix/privacy/">Privacy Policy</a> -
+<a target="_top" href="$prefix/help/">Help</a> -
+<a target="_top" href="$prefix/contact/">Contact</a> -
+<a target="_top" href="$prefix/donations/">Donate</a>};
+}
+
 sub html_copyright($)
 {
     my($q) = @_;
 
     my($server_name) = $q->virtual_host();
-
-    return qq{<a name="copyright">Copyright &copy; $this_year
-Michael J. Radwin. All rights reserved.</a>
-<a target="_top" href="http://$server_name/privacy/">Privacy Policy</a> -
-<a target="_top" href="http://$server_name/help/">Help</a> -
-<a target="_top" href="http://$server_name/contact/">Contact</a>};
+    return html_copyright2("http://$server_name");
 }
 
 sub html_footer($$)
