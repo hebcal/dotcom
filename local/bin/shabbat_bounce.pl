@@ -1,6 +1,7 @@
-#!/usr/local/bin/perl
-eval "exec /usr/local/bin/perl -S $0 $*"
-    if $running_under_some_shell;
+#!/usr/bin/perl
+
+eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
 
 # $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_bounce.pl,v $
 # $Id$
@@ -45,12 +46,19 @@ if (!$email_address) {
 my $bounce = eval { Mail::DeliveryStatus::BounceParser->new($message->as_string()) };
 if ($@) { 
     # couldn't parse.  ignore this message.
-    $bounce_reason = 'unknown (unable to parse message)';
+    warn "bounceparser unable to parse message, bailing";
+    exit(0);
 } else {
+    # don't worry about transient failures with SMTP servers
+    exit(0) unless $bounce->is_bounce();
+
     my @reports = $bounce->reports;
     foreach my $report (@reports) {
+	my $std_reason = $report->get('std_reason');
+	exit(0) if ($std_reason eq 'over_quota');
 	my $reason = $report->get('reason');
-	$bounce_reason = defined($reason) ? $reason : $report->get('std_reason');
+	$bounce_reason = defined($reason) && $reason !~ /^\s*$/ ?
+	    $reason : $std_reason;
     }
 }
 
