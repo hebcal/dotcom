@@ -245,8 +245,13 @@ EOHTML
 EOHTML
 ;
 
+    my $c_year = '';
+    if ($drash_href =~ m,/(\d{4})/,) {
+	$c_year = " for $1";
+    }
+
     print OUT2 
-	qq{<h3><a name="drash" href="$drash_href">Commentary</a></h3>\n}
+	qq{<h3><a name="drash" href="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
 
     if ($prev_link || $next_link)
