@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 # $Id$
 
@@ -14,7 +14,7 @@ use strict;
 use Hebcal;
 
 my(%DB);
-my($dbmfile) = '/home/web/hebcal.com/docs/hebcal/zips.db';
+my($dbmfile) = '../hebcal/zips.db';
 tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
@@ -46,8 +46,8 @@ my(%unk_tz) = ();
 
 while(<STDIN>)
 {
+    next unless substr($_, 0, 14) eq 'www.hebcal.com';
     next unless m,\s+\[$apache_date,o;
-    next if /^207\.55\.191\.4|www\.radwin\.org|smiles\.yahoo\.com|205\.216\.162\.253|198\.144\.204\.|198\.144\.193\.150/;
 
     $home++ if m,GET\s+/hebcal/\s+HTTP,;
     if (m,GET\s+/help/,)
