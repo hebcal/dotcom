@@ -11,19 +11,26 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
     $VER = $matches[1] . "." . $matches[2];
 }
 
-if (isset($_GET["m"]) && is_numeric($_GET["m"])) {
-    $m = $_GET["m"];
+if (isset($_COOKIE["C"])) {
+    parse_str($_COOKIE["C"], $param);
+}
+foreach($_REQUEST as $key => $value) {
+    $param[$key] = $value;
+}
+
+if (isset($param["m"]) && is_numeric($param["m"])) {
+    $m = $param["m"];
 } else {
     $m = 72;
 }
-if ($_GET["zip"] && preg_match('/^\d{5}$/', $_GET["zip"])) {
-    $zip = $_GET["zip"];
+if ($param["zip"] && preg_match('/^\d{5}$/', $param["zip"])) {
+    $zip = $param["zip"];
 } else {
     $zip = 90210;
 }
 
-if ($_GET["city"]) {
-    $geo_city = $_GET["city"];
+if ($param["city"]) {
+    $geo_city = $param["city"];
     $geo_link = "geo=city;city=" . urlencode($geo_city);
 
     $geo_city = htmlspecialchars($geo_city);
