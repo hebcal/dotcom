@@ -368,7 +368,7 @@ sub invoke_hebcal($$$)
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    &parse_date_descr($date,$descr);
 
-	my($href,$hebrew,$memo2) = &get_holiday_anchor($subj,$want_sephardic);
+	my($memo2) = (&get_holiday_anchor($subj,$want_sephardic))[2];
 
 	push(@events,
 	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
@@ -395,6 +395,7 @@ sub get_holiday_anchor($$$)
     my($memo) = '';
     my($haftarah_href) = '';
     my($torah_href) = '';
+    my($drash_href) = '';
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
@@ -407,7 +408,15 @@ sub get_holiday_anchor($$$)
 
 	if (defined $sedrot->Parameters($sedra))
 	{
-	    $href = $sedrot->val($sedra, 'drash');
+	    my($anchor) = $sedra;
+	    $anchor = lc($anchor);
+	    $anchor =~ s/[^\w]//g;
+
+	    $href = 'http://' . $q->virtual_host()
+		if ($q);
+	    $href .= "/sedrot/$anchor.html";
+
+	    $drash_href = $sedrot->val($sedra, 'drash');
 	    $torah_href = $sedrot->val($sedra, 'torah');
 	    if ($torah_href =~ m,^/jpstext/,)
 	    {
@@ -438,7 +447,15 @@ sub get_holiday_anchor($$$)
 	    $p1 = $ashk2seph{$p1} if (defined $ashk2seph{$p1});
 	    $p2 = $ashk2seph{$p2} if (defined $ashk2seph{$p2});
 
-	    $href = $sedrot->val($p1, 'drash');
+	    my($anchor) = "$p1-$p2";
+	    $anchor = lc($anchor);
+	    $anchor =~ s/[^\w]//g;
+
+	    $href = 'http://' . $q->virtual_host()
+		if ($q);
+	    $href .= "/sedrot/$anchor.html";
+
+	    $drash_href = $sedrot->val($p1, 'drash');
 	    $torah_href = $sedrot->val($p1, 'torah');
 	    if ($torah_href =~ m,^/jpstext/,)
 	    {
@@ -478,8 +495,8 @@ sub get_holiday_anchor($$$)
 	    }
 	}
 
-	$href = 'http://learn.jtsa.edu/topics/parashah' . $href
-	    if ($href =~ m,^/,);
+	$drash_href = 'http://learn.jtsa.edu/topics/parashah' . $drash_href
+	    if ($drash_href =~ m,^/,);
 	$torah_href = 'http://learn.jtsa.edu/topics/parashah' . $torah_href
 	    if ($torah_href =~ m,^/,);
 	$haftarah_href = 'http://learn.jtsa.edu/topics/parashah' . $haftarah_href
@@ -508,7 +525,8 @@ sub get_holiday_anchor($$$)
 	}
     }
 
-    return (wantarray()) ? ($href,$hebrew,$memo,$torah_href,$haftarah_href)
+    return (wantarray()) ?
+	($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
 	: $href;
 }
     
