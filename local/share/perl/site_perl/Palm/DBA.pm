@@ -139,14 +139,13 @@ sub write_contents
 	if (!$dst)
 	{
 	    # no DST, so just use gmtime and then add that city offset
-	    $startTime =
-		&Time::Local::timegm(0,
-				     $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
-				     $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
-				     $events->[$i]->[$Palm::DBA::EVT_IDX_MDAY],
-				     $events->[$i]->[$Palm::DBA::EVT_IDX_MON],
-				     $events->[$i]->[$Palm::DBA::EVT_IDX_YEAR]
-				     - 1900);
+	    $startTime = &Time::Local::timegm(
+		 0,
+		 $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
+		 $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
+		 $events->[$i]->[$Palm::DBA::EVT_IDX_MDAY],
+		 $events->[$i]->[$Palm::DBA::EVT_IDX_MON],
+		 $events->[$i]->[$Palm::DBA::EVT_IDX_YEAR] - 1900);
 	    $startTime -= ($tz * 60 * 60); # move into local tz
 	}
 	else
