@@ -86,23 +86,19 @@ courtesy of hebcal.com.
 <p>The result will look like this:</p>
 
 <blockquote>
-<h3><a target="_top"
-href="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>">1-Click
-Shabbat</a> for <?php echo $descr ?></h3>
+<h3>Shabbat times for <?php echo $descr ?></h3>
 <dl>
-<dt>Candle lighting for
-Friday, 28 December 2001 is at <b>4:34 PM</b>
-<dt>This week's Torah portion is <a target="_top"
-href="http://www.hebcal.com/sedrot/vayechi.html">Parashat Vayechi</a>
-<dt>Havdalah (72 min) for
-Saturday, 29 December 2001 is at <b>6:05 PM</b>
+<dt class="candles">Candle lighting:
+<b>4:08pm</b> on Friday, 02 January 2004</dt>
+<dt class="parashat">This week's Torah portion is <a target="_top"
+href="http://www.hebcal.com/sedrot/vayigash.html">Parashat Vayigash</a></dt>
+<dt class="havdalah">Havdalah (72 min):
+<b>5:39pm</b> on Saturday, 03 January 2004</dt>
 </dl>
-<span class="tiny">1-Click Shabbat
-<a name="copyright">Copyright &copy; 2003
+<span class="tiny"><a target="_top"
+href="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>">1-Click
+Shabbat</a> Copyright &copy; <?php echo strftime("%Y", time()) ?> 
 Michael J. Radwin. All rights reserved.</a>
-<a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
-<a target="_top" href="http://www.hebcal.com/help/">Help</a> -
-<a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
 </span>
 </blockquote>
 
