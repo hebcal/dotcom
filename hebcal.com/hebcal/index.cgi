@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 10:48:17 PDT 2001
+Last modified: Wed Apr 18 10:50:57 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -788,12 +788,6 @@ JSCRIPT_END
 	       -values => ['nx', 'nh', 'set'],
 	       '-override'=>1),
     "</form>";
-
-    print STDOUT qq{<p><small>[
-Hebcal Interactive Jewish Calendar |
-<a href="/shabbat/">1-Click Shabbat</a> |
-<a href="/yahrzeit/">Interactive Yahrzeit/Birthday Calendar</a>
-]</small></p>};
 
     print STDOUT $html_footer;
 
