@@ -21,6 +21,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
