@@ -71,26 +71,22 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 }
 
 $outfile = "$WEBDIR/holiday.inc";
-my $line = `$HEBCAL -t | grep -v ' of '`;
-chomp($line);
-my $wrote_holiday = 0;
-if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
-    my $holiday = $1;
-    my $href = &Hebcal::get_holiday_anchor($holiday);
-    if ($href) {
-	my($stime) = strftime("%d %B %Y", localtime(time()));
-	open(OUT,">$outfile") || die;
-	$holiday =~ s/ /&nbsp;/g;
-	print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
-	print OUT "href=\"$href\">$holiday</a></b><br>$stime\n";
-	close(OUT);
-	$wrote_holiday = 1;
+open(OUT,">$outfile") || die;
+my @lines = `$HEBCAL -t | grep -v ' of '`;
+foreach my $line (@lines) {
+    chomp $line;
+    if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
+	my $holiday = $1;
+	my $href = Hebcal::get_holiday_anchor($holiday,undef,undef);
+	if ($href) {
+	    my($stime) = strftime("%d %B %Y", localtime(time()));
+	    $holiday =~ s/ /&nbsp;/g;
+	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
+	    print OUT "href=\"$href\">$holiday</a></b><br>$stime\n";
+	}
     }
 }
-unless ($wrote_holiday) {
-    open(OUT,">$outfile") || die;
-    close(OUT);
-}
+close(OUT);
 
 my($fyear,$fmonth,$fday) = upcoming_dow(5); # friday
 $outfile = "$WEBDIR/shabbat/cities.html";
