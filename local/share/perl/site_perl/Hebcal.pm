@@ -675,7 +675,7 @@ sub get_holiday_anchor($$$)
 	    $subj_copy =~ s/ \(CH\'\'M\)$//;
 	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
 	    $subj_copy =~ s/ [IV]+$//;
-	    $subj_copy =~ s/: \d Candles$//;
+	    $subj_copy =~ s/: \d Candles?$//;
 	    $subj_copy =~ s/: 8th Day$//;
 	    $subj_copy =~ s/^Erev //;
 
