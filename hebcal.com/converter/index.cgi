@@ -233,12 +233,13 @@ if (defined $events[0])
 	my($hm,$hd,$hy) = ($2,$1,$3);
 
 	print STDOUT qq{\n<br>},
-	&Hebcal::display_hebrew($q, "hebrew-big",
-			&hebnum_to_string($hd),
-			"  בְּ",
+			qq{<span dir="rtl" lang="he" class="hebrew-big">},
+			hebnum_to_string($hd),
+			"&nbsp;&nbsp;בְּ",
 			$monthnames{$hm},
-			"  ",
-			&hebnum_to_string($hy))
+			"&nbsp;&nbsp;",
+			hebnum_to_string($hy),
+			qq{</span>}
 	    if ($q->param('heb') && $q->param('heb') =~ /^on|1$/);
 
 	$hm = "Shvat" if $hm eq "Sh'vat";
@@ -367,10 +368,10 @@ EOHTML
     exit(0);
 }
 
-sub hebnum_to_string($) {
+sub hebnum_to_string {
     my($num) = @_;
 
-    my(@array) = &hebnum_to_array($num);
+    my(@array) = hebnum_to_array($num);
     my($result);
 
     if (scalar(@array) == 1)
@@ -390,7 +391,7 @@ sub hebnum_to_string($) {
     $result;
 }
 
-sub hebnum_to_array($) {
+sub hebnum_to_array {
     my($num) = @_;
     my(@result) = ();
 
