@@ -20,6 +20,12 @@ href="/help/">Help</a> -
 require_once('smtp.inc');
 require_once('zips.inc');
 
+$VER = '$Revision$';
+$matches = array();
+if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
+    $VER = $matches[1] . "." . $matches[2];
+}
+
 global $HTTP_POST_VARS;
 global $HTTP_GET_VARS;
 $param = array();
@@ -176,18 +182,26 @@ function write_staging_info($param)
 
 
 function my_footer() {
-?>
+    global $HTTP_SERVER_VARS;
+    $stat = stat($HTTP_SERVER_VARS["SCRIPT_FILENAME"]);
+    $year = strftime("%Y", time());
+    $date = strftime("%c", $stat[9]);
+    global $VER;
+
+    $html = <<<EOD
 <hr noshade size="1"><font size="-2" face="Arial">
-<a name="copyright">Copyright &copy; 2001
+<a name="copyright">Copyright &copy; $year
 Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
 <a target="_top" href="http://www.hebcal.com/help/">Help</a> -
 <a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
-<br>$Revision$
+<br>Software last updated: $date (Revision: $VER) 
 </font></body></html>
-<?php
+EOD
+	;
+    echo $html;
     exit();
 }
 
@@ -344,6 +358,37 @@ function subscribe($param) {
     $tz_descr = "Time zone: " . $tz_names['tz_' . $tz];
 
     $dst_descr = "Daylight Saving Time: " . $param['dst'];
+
+    # check if email address already verified
+    $info = get_sub_info($recipients);
+    if ($info && !preg_match('/^action=/', $info))
+    {
+	$now = time();
+	write_sub_info(
+	    $recipients, 
+	    sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d",
+		    $param['zip'],
+		    $param['tz'],
+		    $param['dst'],
+		    $param['m'],
+		    $param['upd'] ? 1 : 0,
+		    $now)
+	    );
+
+	$html = <<<EOD
+<h2>Subscription Updated</h2>
+<p>Your subsciption information has been updated successfully.</p>
+<p><small>
+$city_descr
+<br>&nbsp;&nbsp;$dst_descr
+<br>&nbsp;&nbsp;$tz_descr
+</small></p>
+EOD
+	     ;
+
+	echo $html;
+	return true;
+    }
 
     $encoded = write_staging_info($param);
 
