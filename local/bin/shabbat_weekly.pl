@@ -14,8 +14,7 @@ use DBI;
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
-#my $site = 'hebcal.com';
-my $site = 'hebrewcalendar.org';
+my $site = 'hebcal.com';
 
 my($now) = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
