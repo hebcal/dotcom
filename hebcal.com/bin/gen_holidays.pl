@@ -63,14 +63,16 @@ href="/search/">Search</a></small>
 EOHTML
 ;
 
+my($strassfeld_link) =
+    "http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
 print OUT qq{<h2>Major Holidays</h2>
 <p><a
-href="http://www.amazon.com/exec/obidos/ASIN/0062720082/hebrewcalendaror"><img
+href="$strassfeld_link"><img
 src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" alt="[cover]" hspace="5"
 vspace="5" width="75" height="90" align="right"></a>
 For a good reference book on the major Jewish Holidays, I'd suggest
 Michael Strassfeld's <em><a
-href="http://www.amazon.com/exec/obidos/ASIN/0062720082/hebrewcalendaror">The
+href="$strassfeld_link">The
 Jewish Holidays: A Guide & Commentary</a></em>.</p>
 };
 &do_section('major');
