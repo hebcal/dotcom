@@ -28,13 +28,27 @@ use Time::Local;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
-use Config::IniFiles;
 use Date::Calc;
 use DB_File;
 
 ########################################################################
 # constants
 ########################################################################
+
+my $sedrotfn = '/pub/m/r/mradwin/hebcal.com/hebcal/sedrot.db';
+my(%SEDROT);
+tie(%SEDROT, 'DB_File', $sedrotfn, O_RDONLY, 0444, $DB_File::DB_HASH)
+    || die "Can't tie $sedrotfn";
+
+my $holidaysfn = '/pub/m/r/mradwin/hebcal.com/hebcal/holidays.db';
+my(%HOLIDAYS);
+tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
+    || die "Can't tie $holidaysfn";
+
+END {
+    untie(%SEDROT);
+    untie(%HOLIDAYS);
+}
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -148,13 +162,6 @@ $Hebcal::havdalah_min = 72;
      );
 
 
-my($ini_path) = '/pub/m/r/mradwin/hebcal.com/hebcal';
-my($holidays) = new Config::IniFiles(-file => "$ini_path/holidays.ini");
-
-my(%SEDROT);
-tie(%SEDROT, 'DB_File', "$ini_path/sedrot.db",
-    O_RDONLY, 0444, $DB_File::DB_HASH) || die "Can't tie $ini_path/sedrot.db";
-
 # translate from Askenazic transiliterations to Separdic
 my(%ashk2seph) =
  (
@@ -248,6 +255,50 @@ $Hebcal::EVT_IDX_DUR = 7;		# duration in minutes
 $Hebcal::EVT_IDX_MEMO = 8;		# memo text
 $Hebcal::EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
 
+my(%num2heb) =
+(
+1 => 'א',
+2 => 'ב',
+3 => 'ג',
+4 => 'ד',
+5 => 'ה',
+6 => 'ו',
+7 => 'ז',
+8 => 'ח',
+9 => 'ט',
+10 => 'י',
+20 => 'כ',
+30 => 'ל',
+40 => 'מ',
+50 => 'נ',
+60 => 'ס',
+70 => 'ע',
+80 => 'פ',
+90 => 'צ',
+100 => 'ק',
+200 => 'ר',
+300 => 'ש',
+400 => 'ת',
+);
+
+my(%monthnames) =
+(
+'Nisan'		=> 'נִיסָן',
+'Iyyar'		=> 'אִיָיר',
+'Sivan'		=> 'סִיוָן',
+'Tamuz'		=> 'תָּמוּז',
+'Av'		=> 'אָב',
+'Elul'		=> 'אֱלוּל',
+'Tishrei'	=> 'תִּשְׁרֵי',
+'Cheshvan'	=> 'חֶשְׁוָן',
+'Kislev'	=> 'כִּסְלֵו',
+'Tevet'		=> 'טֵבֵת',
+"Sh'vat"	=> 'שְׁבָט',
+'Adar'		=> 'אַדָר',
+'Adar I'	=> 'אַדָר א׳',
+'Adar II'	=> 'אַדָר ב׳',
+);
+
 ########################################################################
 # invoke hebcal unix app and create perl array of output
 ########################################################################
@@ -290,7 +341,7 @@ sub parse_date_descr($$)
 	if defined $ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-    $yomtov = 1  if $holidays->val($subj_copy, 'yomtov');
+    $yomtov = 1  if $HOLIDAYS{"$subj_copy:yomtov"};
 
     $subj =~ s/\"/''/g;
     $subj =~ s/\s*:\s*$//g;
@@ -338,6 +389,61 @@ sub get_dow($$$)
 
     my($dow) = &Date::Calc::Day_of_Week($year,$mon,$mday);
     $dow == 7 ? 0 : $dow;
+}
+sub hebnum_to_array {
+    my($num) = @_;
+    my(@result) = ();
+
+    $num = $num % 1000;
+
+    while ($num > 0)
+    {
+	my($incr) = 100;
+
+	if ($num == 15 || $num == 16)
+	{
+	    push(@result, 9, $num - 9);
+	    last;
+	}
+
+	my($i);
+	for ($i = 400; $i > $num; $i -= $incr)
+	{
+	    if ($i == $incr)
+	    {
+		$incr = int($incr / 10);
+	    }
+	}
+
+	push(@result, $i);
+
+	$num -= $i;
+    }
+
+    @result;
+}
+
+sub hebnum_to_string {
+    my($num) = @_;
+
+    my(@array) = hebnum_to_array($num);
+    my($result);
+
+    if (scalar(@array) == 1)
+    {
+	$result = $num2heb{$array[0]} . '׳'; # geresh
+    }
+    else
+    {
+	$result = '';
+	for (my $i = 0; $i < @array; $i++)
+	{
+	    $result .= '״' if (($i + 1) == @array); # gershayim
+	    $result .= $num2heb{$array[$i]};
+	}
+    }
+
+    $result;
 }
 
 sub get_holiday_anchor($$$)
@@ -445,6 +551,18 @@ sub get_holiday_anchor($$$)
 	    }
 	}
     }
+    elsif ($subj =~ /^(\d+)\w+ day of the Omer$/)
+    {
+	$hebrew = hebnum_to_string($1) .
+	" בְּעוֹמֶר";
+    }
+    elsif ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
+    {
+	my($hm,$hd,$hy) = ($2,$1,$3);
+
+	$hebrew = hebnum_to_string($hd) . " \327\221\326\274\326\260" .
+		$monthnames{$hm} . " " . hebnum_to_string($hy);
+    }
     else
     {
 	my($subj_copy) = $subj;
@@ -454,16 +572,16 @@ sub get_holiday_anchor($$$)
 
 	$subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-	if (defined $holidays->Parameters($subj_copy))
+	if (defined $HOLIDAYS{$subj_copy})
 	{
 	    $href = 'http://' . $q->virtual_host()
 		if ($q);
 	    $href .= "/help/holidays.html#" .
-		$holidays->val($subj_copy, 'anchor');
+		$HOLIDAYS{"$subj_copy:anchor"};
 
-	    if (defined $holidays->val($subj_copy, 'hebrew'))
+	    if (defined $HOLIDAYS{"$subj_copy:hebrew"})
 	    {
-		$hebrew = $holidays->val($subj_copy, 'hebrew');
+		$hebrew = $HOLIDAYS{"$subj_copy:hebrew"};
 	    }
 	}
     }
