@@ -1,6 +1,7 @@
 #!/usr/local/bin/perl -w
 
 use Hebcal;
+use POSIX;
 use strict;
 
 my $line = `./bin/hebcal -S -t -x -h | grep Parashat`;
@@ -15,7 +16,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	    localtime($now);
 	my($saturday) = ($wday == 6) ?
 	    $now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
-	my($stime) = strftime("%d %B %Y", localtime($saturday));
+	my($stime) = strftime("%B %d, %Y", localtime($saturday));
 
 	open(OUT,">current2.inc") || die;
 	print OUT <<EOHTML;
