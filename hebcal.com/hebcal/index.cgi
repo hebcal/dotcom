@@ -2,6 +2,7 @@
 
 require 'cgi-lib.pl';
 require 'timelocal.pl';
+require 'ctime.pl';
 
 $dbmfile = 'zips.db';
 $dbmfile =~ s/\.db$//;
@@ -97,11 +98,13 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Aug 11 16:22:58 PDT 1999
+Last modified: Tue Aug 17 10:34:51 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
 $hhmts =~ s/\n//g;
+$hhmts =~ s/Last modified: /Software last updated: /g;
+$hhmts = 'This page generated: ' . &ctime(time) . '<br>' . $hhmts;
 
 $html_footer = "<hr noshade size=\"1\">
 <em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em><br><br>
