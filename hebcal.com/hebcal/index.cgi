@@ -643,7 +643,7 @@ JSCRIPT_END
 		  -id => 'm',
 		  -size => 3,
 		  -maxlength => 3,
-		  -default => 72),
+		  -default => $Hebcal::havdalah_min),
     "</label></p>\n";
 
     print STDOUT "<p><b>Other options:</b>",
