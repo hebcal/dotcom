@@ -100,7 +100,8 @@ href="http://www.jewfaq.org/holidayb.htm">Days of the Omer</a>
 <font size=-2 face=Arial>Copyright
 &copy; $this_year Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a>
+<a href="/help/">Help</a> -
+<a href="/contact/">Contact</a>
 <br>
 $hhmts
 ($rcsrev)
