@@ -14,6 +14,44 @@ $cgipath = '/hebcal/';
 $rcsrev = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
+%valid_cities =
+    (
+     'Atlanta', 1,
+     'Austin', 1,
+     'Berlin', 1,
+     'Baltimore', 1,
+     'Bogota', 1,
+     'Boston', 1,
+     'Buenos Aires', 1,
+     'Buffalo', 1,
+     'Chicago', 1,
+     'Cincinnati', 1,
+     'Cleveland', 1,
+     'Dallas', 1,
+     'Denver', 1,
+     'Detroit', 1,
+     'Gibraltar', 1,
+     'Hawaii', 1,
+     'Houston', 1,
+     'Jerusalem', 1,
+     'Johannesburg', 1,
+     'London', 1,
+     'Los Angeles', 1,
+     'Miami', 1,
+     'Mexico City', 1,
+     'New York', 1,
+     'Omaha', 1,
+     'Philadelphia', 1,
+     'Phoenix', 1,
+     'Pittsburgh', 1,
+     'Saint Louis', 1,
+     'San Francisco', 1,
+     'Seattle', 1,
+     'Toronto', 1,
+     'Vancouver', 1,
+     'Washington DC', 1,
+     );
+
 @MoY_abbrev = ('',
 	       'jan','feb','mar','apr','may','jun',
 	       'jul','aug','sep','oct','nov','dec');
@@ -37,7 +75,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Sat Jul 24 15:15:40 PDT 1999
+Last modified: Tue Jul 27 12:37:08 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -139,6 +177,10 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 
 if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 {
+    &form("<p><em><font color=\"#ff0000\">Sorry, invalid city\n" .
+	  &html_entify_str($in{'city'}) . ".</font></em></p>")
+	unless defined($valid_cities{$in{'city'}});
+
     $cmd .= " -C '$in{'city'}'";
 
     $city_descr = "Closest City: $in{'city'}";
@@ -213,7 +255,8 @@ elsif (defined $in{'zip'})
 	  "zip code.</font></em></p>")
 	if $in{'zip'} =~ /^\s*$/;
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does\n" .
+    &form("<p><em><font color=\"#ff0000\">Sorry, <b>" .
+	  &html_entify_str($in{'zip'}) . "</b> does\n" .
 	  "not appear to be a 5-digit zip code.</font></em></p>")
 	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
@@ -227,7 +270,8 @@ elsif (defined $in{'zip'})
     dbmclose(%DB);
 
     &form("<p><em><font color=\"#ff0000\">Sorry, can't find\n".
-	  "<b>$in{'zip'}</b> in the zip code database.</font></em><br>\n" .
+	  "<b>" . &html_entify_str($in{'zip'}) . 
+	  "</b> in the zip code database.</font></em><br>\n" .
           "Please try a nearby zip code or select candle lighting times by\n" .
           "<a href=\"${cgipath}?geo=city\">city</a> or\n" .
           "<a href=\"${cgipath}?geo=pos\">latitude/longitude</a></p>")
@@ -334,6 +378,12 @@ sub form
     local($message) = @_;
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+    local($key,$val);
+
+    while (($key,$val) = each(%in))
+    {
+	$in{$key} = &html_entify_str($val);
+    }
 
     print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
@@ -607,7 +657,7 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "<a href=\"$cgipath?year=", $py, "&amp;month=", $pm;
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=$val"
+	    print STDOUT "&amp;$key=", &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
 	print STDOUT "\">", $MoY[$pm], " ", $py, "</a> |\n";
@@ -615,7 +665,7 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "<a href=\"$cgipath?year=", $ny, "&amp;month=", $nm;
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=$val"
+	    print STDOUT "&amp;$key=", &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
 	print STDOUT "\">", $MoY[$nm], " ", $ny, "</a>\n";
@@ -626,14 +676,16 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "<a href=\"$cgipath?year=", ($year - 1);
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=$val" unless $key eq 'year';
+	    print STDOUT "&amp;$key=", &url_escape($val)
+		unless $key eq 'year';
 	}
 	print STDOUT "\">", ($year - 1), "</a> |\n";
 
 	print STDOUT "<a href=\"$cgipath?year=", ($year + 1);
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=$val" unless $key eq 'year';
+	    print STDOUT "&amp;$key=", &url_escape($val)
+		unless $key eq 'year';
 	}
 	print STDOUT "\">", ($year + 1), "</a>\n";
 	print STDOUT "<br>";
@@ -644,7 +696,7 @@ $date</small></div><h1>Jewish Calendar $date</h1>
 	print STDOUT "<a href=\"$cgipath?y=1";
 	while (($key,$val) = each(%in))
 	{
-	    print STDOUT "&amp;$key=$val";
+	    print STDOUT "&amp;$key=", &url_escape($val);
 	}
 	print STDOUT "\">Show Yahoo! Calendar links</a>\n";
     }
@@ -652,7 +704,8 @@ $date</small></div><h1>Jewish Calendar $date</h1>
     print STDOUT "<form action=\"${cgipath}index.html/$filename\">\n";
     while (($key,$val) = each(%in))
     {
-	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"$val\">\n";
+	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"", 
+	   &html_entify_str($val), "\">\n";
     }
     print STDOUT
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
@@ -775,51 +828,27 @@ sub url_escape
     $res;
 }
 
+sub html_entify_str
+{
+    local($_) = @_;
+
+    s/&/&amp;/g;
+    s/</&lt;/g;
+    s/>/&gt;/g;
+    s/"/&quot;/g; #"#
+    s/\s+/ /g;
+
+    $_;
+}
+
 sub city_select_html
 {
     local($_);
-    local(@cities) = 
-	(
-	 'Atlanta',
-	 'Austin',
-	 'Berlin',
-	 'Baltimore',
-	 'Bogota',
-	 'Boston',
-	 'Buenos Aires',
-	 'Buffalo',
-	 'Chicago',
-	 'Cincinnati',
-	 'Cleveland',
-	 'Dallas',
-	 'Denver',
-	 'Detroit',
-	 'Gibraltar',
-	 'Hawaii',
-	 'Houston',
-	 'Jerusalem',
-	 'Johannesburg',
-	 'London',
-	 'Los Angeles',
-	 'Miami',
-	 'Mexico City',
-	 'New York',
-	 'Omaha',
-	 'Philadelphia',
-	 'Phoenix',
-	 'Pittsburgh',
-	 'Saint Louis',
-	 'San Francisco',
-	 'Seattle',
-	 'Toronto',
-	 'Vancouver',
-	 'Washington DC',
-	 );
     local($retval) = '';
 
     $retval = "<select name=\"city\" id=\"city\">\n";
 
-    foreach (@cities)
+    foreach (sort keys %valid_cities)
     {
 	$retval .= '<option';
 	$retval .= ' selected' if 'Jerusalem' eq $_;
