@@ -245,6 +245,10 @@ sub write_index_page
 
     open(OUT1, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
 
+    my $hy1 = $hebrew_year + 1;
+    my $hy2 = $hebrew_year + 2;
+    my $hy3 = $hebrew_year + 3;
+
     print OUT1 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -262,6 +266,10 @@ Torah Readings
 href="/search/">Search</a></small>
 </td></tr></table>
 <h1>Torah Readings</h1>
+<p>Readings for future years:
+<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on">$hy1</a> -
+<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on">$hy2</a> -
+<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on">$hy3</a></p>
 <h3>Genesis</h3>
 <dl>
 EOHTML
