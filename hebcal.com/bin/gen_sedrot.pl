@@ -64,13 +64,14 @@ EOHTML
 my(%out);
 foreach my $h ($sedrot->Sections())
 {
+    &write_sedra_page($h);
+
+    $h =~ s/^Combined //;
     my($anchor) = $h;
     $anchor = lc($anchor);
     $anchor =~ s/[^\w]//g;
 
     print OUT qq{<dt><a name="$anchor" href="$anchor.html">Parashat\n$h</a>\n};
-
-    &write_sedra_page($h);
 }
 
 print OUT <<EOHTML;
