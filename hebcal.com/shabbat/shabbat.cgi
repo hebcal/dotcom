@@ -532,16 +532,25 @@ for ($i = 0; $i < $numEntries; $i++)
 
 if (!$cfg && $q->param('zip'))
 {
-    my($email_url) = join('', "http://", $q->virtual_host(), "/email/",
+    my($url) = join('', "http://", $q->virtual_host(), "/email/",
 			 "?geo=", $q->param('geo'));
 
-    $email_url .= "&amp;zip=" . $q->param('zip');
-    $email_url .= "&amp;m=" . $q->param('m')
+    $url .= "&amp;zip=" . $q->param('zip');
+    $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     &Hebcal::out_html($cfg,"<p><b><span class=\"hl\">NEW!</span>\n",
-		      "<a href=\"$email_url\">Subscribe\n",
-		      "to 1-Click Shabbat by email</a></b></p>\n");
+		      "<a href=\"$url\">Subscribe\n",
+		      "to 1-Click Shabbat by email</a></b>\n");
+
+    $url = join('', "http://", $q->virtual_host(), "/link/",
+		"?zip=", $q->param('zip'));
+    $url .= "&amp;m=" . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+    &Hebcal::out_html($cfg,"<br><a href=\"$url\">Add\n",
+		      "1-Click Shabbat candle-lighting times to your\n",
+		      "synagogue's web site</a></p>\n");
 }
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
@@ -746,12 +755,6 @@ sub form
 		      -default => 72),
 	"</label>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
-
-    &Hebcal::out_html($cfg,
-	qq{<hr noshade size=\"1\">\n},
-	qq{<p><a href="/help/#tags">How\n},
-	qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
-	qq{times on its own website?</a></p>});
 
     &Hebcal::out_html($cfg,&Hebcal::html_footer($q,$rcsrev));
 
