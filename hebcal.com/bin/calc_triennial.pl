@@ -662,6 +662,14 @@ EOHTML
 	$c_year = " for $1";
     }
 
+    print OUT2 <<EOHTML;
+<small>NOTE: This site does not yet indicate special maftir or haftarah
+when they occur. Always check a luach or consult with your rabbi to
+determine if this Shabbat has a special maftir and/or a special
+haftarah.</small>
+EOHTML
+;
+
     print OUT2 
 	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
