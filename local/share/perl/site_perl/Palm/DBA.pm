@@ -16,6 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Usage:
+#
+# use Palm::DBA;
+# my @events = (
+#     ["Michael's Birthday", 1, -1, -1, 2, 5, 1975, 0, ""],
+#     ["Dinner with Ariella", 0, 30, 19, 13, 7, 2002, 120, ""],
+#     );
+#
+# Palm::DBA::write_header('calendar_2002.dba');
+# Palm::DBA::write_contents(\@events, '-8', 1);
+# 
 ########################################################################
 
 package Palm::DBA;
@@ -36,7 +48,7 @@ my $PALM_DBA_MAXENTRIES = 2500;
 # event structure:
 
 $Palm::DBA::EVT_IDX_SUBJ = 0;		# title of event
-$Palm::DBA::EVT_IDX_UNTIMED = 1;	# 0 if all-day, non-zero if timed
+$Palm::DBA::EVT_IDX_UNTIMED = 1;	# non-zero if all-day, 0 if timed
 $Palm::DBA::EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
 $Palm::DBA::EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
 $Palm::DBA::EVT_IDX_MDAY = 4;		# day of month, [1 .. 31]
