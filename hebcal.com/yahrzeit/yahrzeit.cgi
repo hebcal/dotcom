@@ -398,8 +398,8 @@ sub form
     if ($message ne '')
     {
 	$help = '' unless defined $help;
-	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">\n";
+	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
+	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
     }
 
     &Hebcal::out_html
