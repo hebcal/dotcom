@@ -25,49 +25,63 @@ my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
 
 my $to = $header->get('To');
-chomp($to) if $to;
-if ($to && Email::Valid->address($to)) {
-    $to = Email::Valid->address($to);
+if ($to) {
+    chomp($to);
+    if ($to =~ /^[^<]*<([^>]+)>/) {
+	$to = $1;
+    }
+    if (Email::Valid->address($to)) {
+	$to = Email::Valid->address($to);
+    } else {
+	warn $Email::Valid::Details;
+    }
 }
 
 my $from = $header->get('From');
-chomp($from) if $from;
-my $addr;
-if ($from && Email::Valid->address($from)) {
-    $addr = lc(Email::Valid->address($from));
+if ($from) {
+    chomp($from);
+    if ($from =~ /^[^<]*<([^>]+)>/) {
+	$from = $1;
+    }
+    if (Email::Valid->address($from)) {
+	$from = lc(Email::Valid->address($from));
+    } else {
+	warn $Email::Valid::Details;
+    }
+}
+
+unless ($from) {
+    &log(0, 'missing_from');
+    exit(0);
 }
 
 unless (defined $to) {
     &log(0, 'needto');
-    &error_email($addr,$err_needto);
+    &error_email($from,$err_needto);
     exit(0);
 }
 
 if ($to =~ /shabbat-subscribe\@hebcal\.com/) {
     &log(0, 'subscribe_useweb'); 
-    &error_email($addr,$err_useweb);
+    &error_email($from,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe\+(\d{5})\@hebcal\.com/) {
     &log(0, 'subscribe_useweb');
-    &error_email($addr,$err_useweb);
+    &error_email($from,$err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@hebcal\.com/) {
-    &subscribe($addr,$1);
+    &subscribe($from,$1);
 } elsif ($to =~ /shabbat-unsubscribe\@hebcal\.com/) {
-    if ($addr) {
-	&unsubscribe($addr);
-    } else {
-	&log(0, 'unsub_bad_from');
-    }
+    &unsubscribe($from);
 } else {
     &log(0, 'badto');
-    &error_email($addr,$err_needto);
+    &error_email($from,$err_needto);
 }
 exit(0);
 
 sub subscribe
 {
-    my($addr,$encoded) = @_;
+    my($from,$encoded) = @_;
 
     my $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/email.db';
     my(%DB);
@@ -130,6 +144,10 @@ sub subscribe
 	$newargs .= ';' . $key . '=' . $val;
     }
 
+    if (lc($email) ne lc($from)) {
+	$newargs .= ";alt=$from";
+    }
+
     $dbmfile = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
     $db = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
 	      $DB_File::DB_HASH)
@@ -141,6 +159,9 @@ sub subscribe
     unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
 
     $DB{$email} = $newargs;
+    if (lc($email) ne lc($from)) {
+	$DB{$from} = "type=alt;em=$email";
+    }
 
     $db->sync;
     flock(DB_FH, LOCK_UN);
@@ -280,7 +301,7 @@ sub log {
     if (open(LOG, ">>$ENV{'HOME'}/.shabbat-log"))
     {
 	my $t = time();
-	print LOG "status=$status from=$addr to=$to code=$code time=$t\n";
+	print LOG "status=$status from=$from to=$to code=$code time=$t\n";
 	close(LOG);
     }
 }
