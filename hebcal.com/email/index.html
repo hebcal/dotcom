@@ -369,7 +369,8 @@ sub form
 
     print STDOUT
 	qq{$message\n},
-	qq{<p>Subscribe to email weekly Shabbat candle lighting times.</p>\n},
+	qq{<p>Subscribe to email weekly Shabbat candle lighting times.\n},
+	qq{Email is sent out every week on Thursday morning.</p>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name" method="post">},
 	qq{<label for="em">E-mail address:\n},
 	$q->textfield(-name => 'em',
