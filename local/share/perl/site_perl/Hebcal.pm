@@ -1287,18 +1287,68 @@ sub macintosh_datebook($$)
 # export to vCalendar
 ########################################################################
 
-sub vcalendar_write_contents($$)
+sub vcalendar_write_contents($$$$)
 {
-    my($q,$events) = @_;
+    my($q,$events,$tz,$state) = @_;
     my($numEntries) = scalar(@{$events});
 
     export_http_header($q, 'text/x-vCalendar');
     my $endl = get_browser_endl($q->user_agent());
 
+    my $tzid;
+    if (defined $state) {
+	if ($state eq 'AK') {
+	    if ($tz == -10) {
+		$tzid = 'US/Aleutian';
+	    } else {
+		$tzid = 'US/Alaska';
+	    }
+	} elsif ($state eq 'AZ') {
+	    $tzid = 'US/Arizona';
+	} elsif ($state eq 'HI') {
+	    $tzid = 'US/Hawaii';
+	} elsif ($state eq 'IN') {
+	    $tzid = 'US/East-Indiana';
+	    $tzid = 'US/Indiana-Starke';
+	} elsif ($state eq 'MI') {
+	    $tzid = 'US/Michigan';
+	} elsif ($tz == -5) {
+	    $tzid = 'US/Eastern';
+	} elsif ($tz == -6) {
+	    $tzid = 'US/Central';
+	} elsif ($tz == -7) {
+	    $tzid = 'US/Mountain';
+	} elsif ($tz == -8) {
+	    $tzid = 'US/Pacific';
+	} elsif ($tz == -9) {
+	    $tzid = 'US/Alaska';
+	} elsif ($tz == -10) {
+	    $tzid = 'US/Hawaii';
+	} else {
+	    $tzid = 'US/Unknown';
+	}
+    } elsif ($tz == -5) {
+	$tzid = 'US/Eastern';
+    } elsif ($tz == -6) {
+	$tzid = 'US/Central';
+    } elsif ($tz == -7) {
+	$tzid = 'US/Mountain';
+    } elsif ($tz == -8) {
+	$tzid = 'US/Pacific';
+    } elsif ($tz == -9) {
+	$tzid = 'US/Alaska';
+    } elsif ($tz == -10) {
+	$tzid = 'US/Hawaii';
+    }
+
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
 
     print STDOUT qq{BEGIN:VCALENDAR$endl}, qq{VERSION:1.0$endl},
     qq{METHOD:PUBLISH$endl};
+
+    if ($tzid) {
+	print STDOUT qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl};
+    }
 
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
@@ -1361,7 +1411,13 @@ sub vcalendar_write_contents($$)
 	    $end_date .= "T000000";
 	}
 
-	print STDOUT qq{DTSTART:$date$endl}, qq{DTEND:$end_date$endl};
+	print STDOUT qq{DTSTART};
+	print STDOUT ";TZID=$tzid" if $tzid;
+	print STDOUT qq{:$date$endl};
+
+	print STDOUT qq{DTEND};
+	print STDOUT ";TZID=$tzid" if $tzid;
+	print STDOUT qq{:$end_date$endl};
 
 	my $uid = $dtstamp . '-' . $i . '@hebcal.com';
 	print STDOUT qq{UID:$uid$endl};
