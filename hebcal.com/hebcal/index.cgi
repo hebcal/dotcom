@@ -23,7 +23,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
 use CGI qw(-no_xhtml);
@@ -402,8 +403,8 @@ JSCRIPT_END
     Hebcal::navbar2($q, 'Interactive Calendar', 1, undef, undef),
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
-    print STDOUT "\n<p style=\"color: red; font-size: large\"><em>Shana Tova!</em>\n",
-    "Hebcal.com wishes you a sweet and happy New Year.</p>";
+    print STDOUT "\n<p style=\"color: red; font-size: large\"><em>Gmar Chatima Tova!</em>\n",
+    "Hebcal.com wishes you a good inscription in the Book of Life.</p>";
 
     if ($message ne '')
     {
