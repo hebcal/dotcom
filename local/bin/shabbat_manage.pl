@@ -13,19 +13,21 @@ use Mail::Internet;
 use Email::Valid;
 use MIME::Base64;
 
+#my $site = 'hebcal.com';
+my $site = 'hebrewcalendar.org';
 my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
 to the Shabbat candle lighting time list.";
 my $err_needto =
-"We can't accept Bcc: email messages (hebcal.com address missing
+"We can't accept Bcc: email messages ($site address missing
 from the To: header).";
 my $err_useweb =
 "We currently cannot handle email subscription requests.  Please
 use the web interface to subscribe:
 
-  http://www.hebcal.com/email";
+  http://www.$site/email";
 
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
@@ -71,11 +73,11 @@ if ($to =~ /shabbat-subscribe\@hebcal\.com/) {
     shabbat_log(0, 'subscribe_useweb'); 
     error_email($from,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe\+(\d{5})\@hebcal\.com/) {
+} elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@hebcal\.com/) {
     shabbat_log(0, 'subscribe_useweb');
     error_email($from,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@hebcal\.com/) {
+} elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@hebcal\.com/) {
     subscribe($from,$1);
 } elsif ($to =~ /shabbat-unsubscribe\@hebcal\.com/) {
     unsubscribe($from);
@@ -133,7 +135,7 @@ EOD
 
     my $b64 = encode_base64($email);
     chomp($b64);
-    my $unsub_url = "http://www.hebcal.com/email/?" .
+    my $unsub_url = "http://www.$site/email/?" .
 	"e=" . my_url_escape($b64);
 
     my($body) = qq{Hello,
@@ -141,25 +143,28 @@ EOD
 Your subscription request for hebcal is complete.
 
 Regards,
-hebcal.com
+$site
 
 To modify your subscription, visit:
 $unsub_url
 
 To unsubscribe from this list, send an email to:
-shabbat-unsubscribe\@hebcal.com
+shabbat-unsubscribe\@$site
 };
 
-    my $return_path = "shabbat-bounce\@hebcal.com";
+    my $email_mangle = $email;
+    $email_mangle =~ s/\@/=/g;
+    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
+
     my %headers =
         (
          'From' =>
-	 "Hebcal Subscription Notification <shabbat-owner\@hebcal.com>",
+	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
          'To' => $email,
          'MIME-Version' => '1.0',
          'Content-Type' => 'text/plain',
          'Subject' => 'Your subscription to hebcal is complete',
-	 'List-Unsubscribe' => "<mailto:shabbat-unsubscribe\@hebcal.com>",
+	 'List-Unsubscribe' => "<mailto:shabbat-unsubscribe\@$site>",
 	 'Precedence' => 'bulk',
          );
 
@@ -191,7 +196,7 @@ sub unsubscribe
     my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
     my $sql = <<EOD
-SELECT email_status
+SELECT email_status,email_id
 FROM   hebcal_shabbat_email
 WHERE  email_address = '$email'
 EOD
@@ -199,7 +204,7 @@ EOD
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
-    my($status) = $sth->fetchrow_array;
+    my($status,$encoded) = $sth->fetchrow_array;
 
     unless ($status) {
 	shabbat_log(0, 'unsub_notfound');
@@ -236,13 +241,16 @@ Per your request, you have been removed from the weekly
 Shabbat candle lighting time list.
 
 Regards,
-hebcal.com};
+$site};
 
-    my $return_path = "shabbat-bounce\@hebcal.com";
+    my $email_mangle = $email;
+    $email_mangle =~ s/\@/=/g;
+    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
+
     my %headers =
         (
          'From' =>
-	 "Hebcal Subscription Notification <shabbat-owner\@hebcal.com>",
+	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
          'To' => $email,
          'MIME-Version' => '1.0',
          'Content-Type' => 'text/plain',
@@ -270,18 +278,18 @@ sub error_email
     my($body) = qq{Sorry,
 
 We are unable to process the message from <$email>
-to <shabbat-unsubscribe\@hebcal.com>.
+to <shabbat-unsubscribe\@$site>.
 
 $error
 
 Regards,
-hebcal.com};
+$site};
 
-    my $return_path = "shabbat-bounce\@hebcal.com";
+    my $return_path = "shabbat-return\@$site";
     my %headers =
         (
          'From' =>
-	 "Hebcal Subscription Notification <shabbat-owner\@hebcal.com>",
+	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
          'To' => $email,
          'MIME-Version' => '1.0',
          'Content-Type' => 'text/plain',
