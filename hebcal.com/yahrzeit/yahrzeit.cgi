@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 11:20:42 PDT 2001
+Last modified: Thu Apr 19 15:30:02 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -72,7 +72,8 @@ my($key);
 foreach $key ($q->param())
 {
     my($val) = $q->param($key);
-    $val =~ s/[^\w\s-]//g;
+    $val = '' unless defined $val;
+    $val =~ s/[^\w\s\.-]//g;
     $val =~ s/^\s*//g;		# nuke leading
     $val =~ s/\s*$//g;		# and trailing whitespace
     $q->param($key,$val);
