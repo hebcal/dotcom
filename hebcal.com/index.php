@@ -32,6 +32,10 @@ to your zip code, city, or latitude/longitude.</dd>
 href="/shabbat/">1-Click Shabbat</a></big></strong></dt>
 <dd>bookmark this page for weekly Shabbat candle lighting times.</dd>
 <dt><br><strong><big><a
+href="/email/">Email 1-Click Shabbat</a></big>
+&nbsp;&nbsp;<span class="hl">NEW!</span></strong></dt>
+<dd>subscribe to 1-Click Shabbat by email.</dd>
+<dt><br><strong><big><a
 href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
 Calendar</a></big></strong></dt>
 <dd>generates a list of Yahrzeit (memorial) and Yizkor dates, or
@@ -63,7 +67,7 @@ for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Tue Aug 21 18:08:48 PDT 2001
+Last modified: Thu Dec 13 15:38:21 EST 2001
 <!-- hhmts end -->
 </font>
 </body></html>
