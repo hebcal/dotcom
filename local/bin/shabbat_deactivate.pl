@@ -108,6 +108,8 @@ WHERE email_address = '$e'
 EOD
 ;
 	$dbh->do($sql);
+
+	shabbat_log(1, "bounce", $e);
     }
 
     my $id_sql = "bounce_id = '" . shift(@ids) . "'";
@@ -123,5 +125,16 @@ EOD
     $sql = "DELETE from hebcal1.hebcal_shabbat_bounce_address WHERE "
 	. $id_sql;
     $dbh->do($sql);
+}
+
+sub shabbat_log
+{
+    my($status,$code,$to) = @_;
+    if (open(LOG, ">>$ENV{'HOME'}/.shabbat-log"))
+    {
+	my $t = time();
+	print LOG "status=$status to=$to code=$code time=$t\n";
+	close(LOG);
+    }
 }
 
