@@ -53,61 +53,6 @@ use POSIX qw(strftime);
 
 my($rcsrev) = '$Revision$'; #'
 
-my(%STATES) = (
-"AK" => "alaska",
-"AL" => "alabama",
-"AR" => "arkansas",
-"AZ" => "arizona",
-"CA" => "california",
-"CO" => "colorado",
-"CT" => "connecticut",
-"DC" => "washington d c",
-"DE" => "delaware",
-"FL" => "florida",
-"GA" => "georgia",
-"HI" => "hawaii",
-"IA" => "iowa",
-"ID" => "idaho",
-"IL" => "illinois",
-"IN" => "indiana",
-"KS" => "kansas",
-"KY" => "kentucky",
-"LA" => "louisiana",
-"MA" => "massachusetts",
-"MD" => "maryland",
-"ME" => "maine",
-"MI" => "michigan",
-"MN" => "minnesota",
-"MO" => "missouri",
-"MS" => "mississippi",
-"MT" => "montana",
-"NC" => "north carolina",
-"ND" => "north dakota",
-"NE" => "nebraska",
-"NH" => "new hampshire",
-"NJ" => "new jersey",
-"NM" => "new mexico",
-"NV" => "nevada",
-"NY" => "new york",
-"OH" => "ohio",
-"OK" => "oklahoma",
-"OR" => "oregon",
-"PA" => "pennsylvania",
-"PR" => "puerto rico",
-"RI" => "rhode island",
-"SC" => "south carolina",
-"SD" => "south dakota",
-"TN" => "tennessee",
-"TX" => "texas",
-"UT" => "utah",
-"VA" => "virginia",
-"VT" => "vermont",
-"WA" => "washington",
-"WI" => "wisconsin",
-"WV" => "west virginia",
-"WY" => "wyoming",
-    );
-
 # process form params
 my($q) = new CGI;
 my($script_name) = $q->script_name();
@@ -117,11 +62,10 @@ my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 my($items) = format_items($q,$evts);
 
-if (defined $cfg && $cfg =~ /^[ijrwv]$/)
+if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
     display_wml($items) if ($cfg eq 'w');
     display_rss($items) if ($cfg eq 'r');
-    display_vxml($items) if ($cfg eq 'v');
     display_javascript($items) if ($cfg eq 'j' || $cfg eq 'i');
 }
 
@@ -299,10 +243,10 @@ sub process_args
     $q->param('nh','on');
     $q->param('nx','on');
 
-    my($cookies) = &Hebcal::get_cookies($q);
+    my($cookies) = Hebcal::get_cookies($q);
     if (defined $cookies->{'C'})
     {
-	&Hebcal::process_cookie($q,$cookies->{'C'});
+	Hebcal::process_cookie($q,$cookies->{'C'});
     }
 
     # sanitize input to prevent people from trying to hack the site.
@@ -370,9 +314,9 @@ sub process_args
 		  "not appear to be a 5-digit zip code.");
 	}
 
-	my $DB = &Hebcal::zipcode_open_db();
+	my $DB = Hebcal::zipcode_open_db();
 	my($val) = $DB->{$q->param('zip')};
-	&Hebcal::zipcode_close_db($DB);
+	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
 	form($cfg,1,
@@ -382,7 +326,7 @@ sub process_args
 	    unless defined $val;
 
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    &Hebcal::zipcode_fields($val);
+	    Hebcal::zipcode_fields($val);
 
 	# allow CGI args to override
 	$tz = $q->param('tz')
@@ -454,8 +398,8 @@ sub process_args
 	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
     }
 
-    # don't do holidays or rosh chodesh for WML and VoiceXML
-    if (defined $cfg && ($cfg eq 'w' || $cfg eq 'v'))
+    # don't do holidays or rosh chodesh for WML
+    if (defined $cfg && $cfg eq 'w')
     {
 	$cmd .= ' -x -h';
     }
@@ -463,10 +407,9 @@ sub process_args
     $cmd .= ' -s -c ' . $sat_year;
 
     # only set expiry if there are CGI arguments
-    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/ &&
-	(! defined $cfg || $cfg ne 'v'))
+    if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
     {
-	print "Expires: ", &Hebcal::http_date($saturday), "\015\012";
+	print "Expires: ", Hebcal::http_date($saturday), "\015\012";
     }
 
     if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/ &&
@@ -478,12 +421,12 @@ sub process_args
 	    'C=' . $cookies->{'C'} : '';
 	if (! $C_cookie)
 	{
-	    $cookie_to_set = &Hebcal::gen_cookie($q)
+	    $cookie_to_set = Hebcal::gen_cookie($q)
 		unless $q->param('noset');
 	}
 	else
 	{
-	    my($newcookie) = &Hebcal::gen_cookie($q);
+	    my($newcookie) = Hebcal::gen_cookie($q);
 	    my($cmp1) = $newcookie;
 	    my($cmp2) = $C_cookie;
 
@@ -505,7 +448,7 @@ sub process_args
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
+    my(@events) = Hebcal::invoke_hebcal($cmd, $loc, 0);
     
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -521,7 +464,7 @@ sub self_url
 
     $url .= ";zip=" . $q->param('zip')
 	if $q->param('zip');
-    $url .= ";city=" . &Hebcal::url_escape($q->param('city'))
+    $url .= ";city=" . Hebcal::url_escape($q->param('city'))
 	if $q->param('city');
     $url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
@@ -572,131 +515,6 @@ sub display_wml
     exit(0);
 }
 
-
-sub display_vxml
-{
-    my($items) = @_;
-
-    print "Content-Type: text/xml\015\012\015\012";
-
-    my($url) = self_url();
-    my $title = '1-Click Shabbat: ' . $q->param('zip');
-
-    my($this_year) = (localtime)[5];
-    $this_year += 1900;
-
-    # fallback
-    my $city_audio = "<audio>$city_descr</audio>";
-
-    if ($city_descr =~ /^(.+),\s+(\w\w)\s+(\d{5})$/)
-    {
-	my($city,$state,$zip) = ($1,$2,$3);
-	$city_audio = "<audio>$city,";
-
-	if (defined $STATES{$state})
-	{
-	    $city_audio .= " $STATES{$state},";
-	}
-	else
-	{
-	    foreach my $d (split(//, $state))
-	    {
-		$city_audio .= " $d";
-	    }
-	    $city_audio .= ",";
-	}
-
-	foreach my $d (split(//, $zip))
-	{
-		$city_audio .= " $d";
-	}
-	$city_audio .= ".</audio>\n";
-    }
-
-    print qq{<?xml version="1.0"?>
-<vxml version="2.0">
-<form id="results">
-<block>
-	$city_audio
-	<break time="500ms"/>
-	<goto next="#times"/>
-</block>
-</form>
-<form id="times">
-<block>
-};
-
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	my $date = $items->[$i]->{'date'};
-	$date =~ s/, 0(\d) /, $1 /;
-
-	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
-	{
-	    my $subj = $items->[$i]->{'subj'};
-	    $subj =~ s/Havdalah \(\d+ min\)/Hav doll ah/g;
-	    print qq{\t<audio>$subj is at $items->[$i]->{'time'}.</audio>\n};
-	}
-	elsif ($items->[$i]->{'class'} eq 'holiday')
-	{
-	    print qq{\t<audio>Holiday... $items->[$i]->{'subj'} is on $date.</audio>\n};
-	}
-	elsif ($items->[$i]->{'class'} eq 'parashat')
-	{
-	    my $subj = $items->[$i]->{'subj'};
-	    $subj =~ s/Parashat/Par shot/g;
-	    print qq{\t<audio>This week's Torah portion is $subj.</audio>\n};
-	}
-
-	print qq{\t<break time="250ms"/>\n};
-    }
-
-    print qq{
-	<break time="250ms"/>
-	<goto next="#again"/>
-</block>
-</form>
-<form id="again">
-	<field name="again_verify" type="boolean">
-		<prompt>
-			<audio>Would you like to hear those times again?</audio>
-		</prompt>
-		<nomatch count="1">
-			<audio>I'm sorry...I didn't catch that.</audio>
-			<audio>Say Yes or No</audio>
-		</nomatch>
-		<nomatch count="2">
-			<audio>I'm sorry...I still didn't catch that.</audio>
-			<audio>Say Yes or No</audio>
-			<audio>or for yes, press one. for no, press 2</audio>
-			<audio>on your telephone keypad</audio>
-			<break time="250ms"/>
-			<audio>To choose another keyword say "Tell me menu" or press star.</audio>
-		</nomatch>
-		<noinput count="1">
-			<audio>I'm sorry, I didn't hear you.</audio>
-		</noinput>
-		<noinput count="2">
-			<audio>I'm sorry, I still didn't hear you.</audio>
-			<audio>Say Yes or No</audio>
-			<audio>or for yes, press one. for no, press 2</audio>
-			<audio>on your telephone keypad</audio>
-		</noinput>
-		<filled>
-			<if cond="again_verify == true">
-				<audio>O K.</audio>
-				<goto next="#times"/>
-				<else/>
-				<audio>Thanks for using the Heeb cal interactive Jewish Calendar.</audio>
-				<audio>Shabbat Shalom.</audio>
-			</if>
-		</filled>
-	</field>
-</form>
-</vxml>
-};
-    exit(0);
-}
 
 sub display_rss
 {
@@ -749,14 +567,14 @@ sub display_html_common
 {
     my($items) = @_;
 
-    &Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
-    &Hebcal::out_html($cfg,"<dl>\n");
+    Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
+    Hebcal::out_html($cfg,"<dl>\n");
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
-	&Hebcal::out_html($cfg,qq{<dt class="$items->[$i]->{'class'}">});
+	Hebcal::out_html($cfg,qq{<dt class="$items->[$i]->{'class'}">});
 
 	my $anchor = '';
 	if (!$cfg)
@@ -775,20 +593,20 @@ sub display_html_common
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
-	    &Hebcal::out_html($cfg,qq{Holiday: <a$anchor
+	    Hebcal::out_html($cfg,qq{Holiday: <a$anchor
 target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
 $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
-	    &Hebcal::out_html($cfg,qq{This week's Torah portion is <a$anchor
+	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor
 target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
 	}
     
-	&Hebcal::out_html($cfg,qq{</dt>\n});
+	Hebcal::out_html($cfg,qq{</dt>\n});
     }
 
-    &Hebcal::out_html($cfg,"</dl>\n");
+    Hebcal::out_html($cfg,"</dl>\n");
 }
 
 sub display_javascript
@@ -799,7 +617,7 @@ sub display_javascript
 
     if ($cfg eq 'i') {
 	print $q->header(),
-	&Hebcal::start_html($q, $title, undef, undef, undef);
+	Hebcal::start_html($q, $title, undef, undef, undef);
     } else {
 	print "Content-Type: application/x-javascript\015\012\015\012";
     }
@@ -827,14 +645,14 @@ sub display_javascript
     $this_year += 1900;
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
-    &Hebcal::out_html($cfg, qq{<font size="-2" face="Arial"><a target="$tgt"
+    Hebcal::out_html($cfg, qq{<font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 </div>
 });
 
     if ($cfg eq 'i') {
-	&Hebcal::out_html($cfg, "</body></html>\n");
+	Hebcal::out_html($cfg, "</body></html>\n");
     }
 
     exit(0);
@@ -848,13 +666,13 @@ sub display_html
     my $rss_href = self_url() . ";cfg=r";
 
     print $q->header(),
-    &Hebcal::start_html($q, $title,
+    Hebcal::start_html($q, $title,
 			[
 			 qq{<link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">},
 			 ],
 			undef, undef);
 
-    print &Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
+    print Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
     qq{<h1><a href="$rss_href"><img\nsrc="/i/xml.gif" border="0" alt="View the raw XML source" align="right" width="36" height="14"></a>\n},
     "1-Click\nShabbat Candle Lighting Times</h1>\n";
 
@@ -894,7 +712,7 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
     $url .= ';tag=1c';
 
-    &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
+    Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
 		      "See all of <a href=\"$url\">this\n",
 		      "month's calendar</a>\n");
 
@@ -921,7 +739,7 @@ sub display_html
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    &Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
+    Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
 		      "Email: <a href=\"$url\">subscribe</a>\n",
 		      "to weekly candle lighting times\n");
 
@@ -936,8 +754,8 @@ sub display_html
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
     $url .= "&amp;type=shabbat";
 
-    &Hebcal::out_html($cfg, "<br>");
-    &Hebcal::out_html($cfg,"<span class=\"sm-grey\">&gt;</span>\n",
+    Hebcal::out_html($cfg, "<br>");
+    Hebcal::out_html($cfg,"<span class=\"sm-grey\">&gt;</span>\n",
 		      "Synagogues: <a href=\"$url\">include</a>\n",
 		      "1-Click Shabbat candle-lighting times on your\n",
 		      "web site</p>\n");
@@ -951,35 +769,18 @@ sub form($$$$)
 {
     my($cfg,$head,$message,$help) = @_;
 
-    if (defined $cfg && $cfg eq 'v')
-    {
-	print "Content-Type: text/xml\015\012\015\012";
-	print qq{<?xml version="1.0"?>
-<vxml version="2.0">
-	<form id="top">
-		<block>
-			<audio>I'm sorry, there was a problem.</audio>
-			<audio>let's try this again...</audio>
-			<goto next="http://www.hebcal.com/shabbat.vxml#enterzip"/>
-		</block>
-	</form>
-</vxml>
-};
-	exit(0);
-}
-
     if ($head)
     {
 	print $q->header(),
-	&Hebcal::start_html($q, '1-Click Shabbat', undef, undef, undef);
+	Hebcal::start_html($q, '1-Click Shabbat', undef, undef, undef);
 
-	print &Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
+	print Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
 	"<h1>1-Click\nShabbat Candle Lighting Times</h1>\n";
     }
 
     if (defined $cfg && $cfg eq 'w')
     {
-	&Hebcal::out_html($cfg,qq{<p>$message</p>\n},
+	Hebcal::out_html($cfg,qq{<p>$message</p>\n},
 		  qq{<do type="accept" label="Back">\n},
 		  qq{<prev/>\n</do>\n</card>\n</wml>\n});
 	exit(0);
@@ -992,7 +793,7 @@ sub form($$$$)
 	    $message . "</p>" . $help;
     }
 
-    &Hebcal::out_html($cfg,
+    Hebcal::out_html($cfg,
 	qq{$message\n},
 	qq{<hr noshade size="1"><h3><a name="change">Change City</a></h3>\n},
 	qq{<table cellpadding="8"><tr><td class="box">\n},
@@ -1007,7 +808,7 @@ sub form($$$$)
 
     if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
     {
-	&Hebcal::out_html($cfg,
+	Hebcal::out_html($cfg,
 	qq{&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
@@ -1023,7 +824,7 @@ sub form($$$$)
 			 'none' => "\nnone ", }));
     }
     
-    &Hebcal::out_html($cfg,
+    Hebcal::out_html($cfg,
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
@@ -1037,7 +838,7 @@ sub form($$$$)
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
 
-    &Hebcal::out_html($cfg,
+    Hebcal::out_html($cfg,
 	qq{</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="box">\n},
 	qq{<h4>Major City</h4>},
 	qq{<form name="f2" id="f2"\naction="$script_name">},
@@ -1060,7 +861,7 @@ sub form($$$$)
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
 	qq{</td></tr></table>});
 
-    &Hebcal::out_html($cfg,&Hebcal::html_footer($q,$rcsrev));
+    Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
 
     exit(0);
 }
