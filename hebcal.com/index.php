@@ -23,6 +23,8 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
 <!-- holiday greeting -->
+<span style="font-weight: bold; font-style: italic; color: #cc9966">Chag Kasher
+v'Sameach!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
@@ -34,7 +36,7 @@ Jewish Calendar Tools</small></td>
 generate a calendar of Jewish holidays for any year 0001-9999
 <br><span class="sm-grey">&gt;</span>
 customize candle lighting times to your zip code, city, or latitude/longitude
-<h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
+<h4><a href="/shabbat/cities.html">1-Click Shabbat Candle Lighting Times</a></h4>
 <span class="sm-grey">&gt;</span>
 Shabbat candle lighting times and Torah Readings, updated weekly
 <br><span class="sm-grey">&gt;</span>
