@@ -26,6 +26,11 @@ H1, H2, H3, H4, H5, H6 {
  color: #666666;
 }
 
+.sm-grey {
+ font-size: xx-small;
+ color: #999999;
+}
+
 .hebrew-big {
  font-size: xx-large;
  font-family: David,'Times New Roman',serif;
