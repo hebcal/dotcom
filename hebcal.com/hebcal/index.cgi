@@ -2,6 +2,8 @@
 
 require 'cgi-lib.pl';
 
+$rcsrev = '$Revision$';
+
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">
 <html> <head>
   <title>hebcal web interface</title>
@@ -26,8 +28,10 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 15:10:09 PDT 1999
+Last modified: Fri Apr  9 15:48:19 PDT 1999
 <!-- hhmts end -->
+<br>
+$rcsrev
 </small>
 
 </body> </html>
@@ -42,6 +46,7 @@ $default_zip = '95051';
     localtime(time);
 $year += 1900;
 
+$havdalah = 72;
 $candle = $roshchodesh = $usa = 1;
 $israel = $none = 0;
 
@@ -115,6 +120,7 @@ if (defined $in{'dst'})
     $none = ($in{'dst'} eq 'none') ? 1 : 0;
 }
 $year = $in{'year'} if (defined $in{'year'} && $in{'year'} =~ /^\d+$/);
+$havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
 &form($default_zip, '') if (!defined $in{'zip'});
 
@@ -148,6 +154,7 @@ $cmd  = "/home/users/mradwin/bin/hebcal" .
 $cmd .= ' -x' if $roshchodesh;
 $cmd .= ' -c' if $candle;
 $cmd .= ' -r' if defined $ENV{'PATH_INFO'};
+$cmd .= " -m $in{'m'}" if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
 if (defined $in{'tz'} && $in{'tz'} ne '')
 {
@@ -309,19 +316,23 @@ Daylight Savings Time rule:
 <label for=\"dst_none\">none</label>
 <br><br>
 
-<input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
-Include Rosh Chodesh</label><br>
-
 <input type=\"checkbox\" name=\"c\" id=\"c\"$candle_chk><label for=\"c\">
-Include Candle Lighting Times</label><br>
+Include candle lighting times</label>
+
+<small>(<label for=\"m\">Havdalah minutes past sundown: </label><input
+type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
+maxlength=\"3\">)</small><br>
+
+<input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
+Suppress Rosh Chodesh</label><br>
 
 <input type=\"submit\" value=\"Next &gt;\">
 </form>
 </blockquote>
 
-<p><small>This is beta software.  My apologies if it doesn't work for
-you.  A form interface for specifying time zones and precise geographic
-positions (latitude, longitude) is coming soon.</small></p>
+<p><small>Caveat: this is beta software; my apologies if it doesn't work
+for you.  A form interface for specifying time zones and precise
+geographic positions (latitude, longitude) is coming soon.</small></p>
 
 <p><small>Geographic Zip Code information provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
@@ -362,6 +373,9 @@ Time Zone: GMT $in{'tz'}:00
 </small>
 </p>
 
+<p><a href=\"/cgi-bin/hebcal/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
+here to download as an Outlook CSV file</a></p>
+
 ";
 
     print STDOUT "<!-- $cmd -->\n<pre>";
@@ -380,17 +394,18 @@ Time Zone: GMT $in{'tz'}:00
     }
     close(HEBCAL);
 
-    print STDOUT "</pre>
-
-<p><a href=\"/cgi-bin/hebcal/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
-here to download as an Outlook CSV file</a></p>
-
-$html_footer";
+    print STDOUT "</pre>\n\n$html_footer";
 
     close(STDOUT);
     exit(0);
 
     1;
+}
+
+if ($^W && 0)
+{
+    ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	localtime(time);
 }
 
 1;
