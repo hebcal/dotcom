@@ -42,14 +42,13 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
+use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use Time::Local;
-use Hebcal;
-use Palm::DBA;
-use POSIX;
-use Date::Calc;
-use strict;
+use Hebcal ();
+use Palm::DBA ();
+use POSIX ();
+use Date::Calc ();
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -166,8 +165,8 @@ sub dba_display
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
 
-    &Palm::DBA::write_header($path_info);
-    &Palm::DBA::write_contents(\@events, 0, 0);
+    Palm::DBA::write_header($path_info);
+    Palm::DBA::write_contents(\@events, 0, 0);
 }
 
 sub csv_display
