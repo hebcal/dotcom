@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 08:50:56 PDT 1999
+Last modified: Mon Jul 12 09:04:30 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -354,10 +354,16 @@ hebcal
 lighting times are calculated from your latitude and longitude (which
 can be determined by your zip code or closest city).</p>
 
-<p>For example, see <a href=
+<p>For example, see
+<a href=
 \"$cgipath?v=1&amp;year=" . ($year + 1) .
-"&amp;zip=95051&amp;tz=-8&amp;dst=usa&amp;x=on\">default
-holidays for the year " . ($year + 1) . "</a>.</p>
+"&amp;zip=11565&amp;tz=-5&amp;dst=usa&amp;x=on\">default
+holidays for the year " . ($year + 1) . "</a>
+or
+<a href=
+\"$cgipath?v=1&amp;year=" . ($year) . "&amp;month=" . ($mon + 1) .
+"&amp;zip=60201&amp;tz=-6&amp;dst=usa&amp;h=on&amp;s=on\">sedrot
+for " . $MoY[$mon + 1] . " " . ($year) . "</a>.</p>
 
 <hr noshade size=\"1\">
 $message
