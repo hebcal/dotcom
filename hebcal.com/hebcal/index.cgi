@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Thu Jun  3 14:05:00 PDT 1999
+Last modified: Mon Jun  7 13:53:20 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -343,10 +343,10 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong><big>
-<a href=\"/\">radwin.org</a> :
+<strong>
+<a href=\"/\">radwin.org</a> -&gt;
 hebcal
-</big></strong>
+</strong>
 
 <p>This is a web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
@@ -586,11 +586,11 @@ sub download
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong><big>
-<a href=\"/\">radwin.org</a> :
-<a href=\"$cgipath\">hebcal</a> :
+<strong>
+<a href=\"/\">radwin.org</a> -&gt;
+<a href=\"$cgipath\">hebcal</a> -&gt;
 $date
-</big></strong>
+</strong>
 
 <p>
 ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
