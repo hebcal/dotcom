@@ -306,6 +306,15 @@ sub process_args
 	$cmd .= " -C '" . $q->param('city') . "'";
 
 	$city_descr = $q->param('city');
+
+	if ($Hebcal::city_dst{$q->param('city')} eq 'israel')
+	{
+	    $q->param('i','on');
+	}
+	else
+	{
+	    $q->delete('i');
+	}
     }
     elsif (defined $q->param('zip') && $q->param('zip') ne '')
     {
@@ -313,6 +322,7 @@ sub process_args
 	    unless $q->param('dst');
 	$q->param('geo','zip');
 	$q->delete('city');
+	$q->delete('i');
 
 	if ($q->param('zip') !~ /^\d{5}$/)
 	{
@@ -381,6 +391,7 @@ sub process_args
 	$q->delete('tz');
 	$q->delete('dst');
 	$q->delete('zip');
+	$q->delete('i');
 
 	$cmd .= " -C '" . $q->param('city') . "'";
 
