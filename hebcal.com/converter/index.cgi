@@ -36,7 +36,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 13:43:57 PDT 2001
+Last modified: Sun Apr 22 14:08:39 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -79,7 +79,8 @@ foreach $key ($q->param())
 my($cmd)  = './hebcal -x -h';
 my($type) = 'g2h';
 
-if ($q->param('h2g') && $q->param('hm') && $q->param('hd') && $q->param('hy'))
+if ($q->param('h2g') && $q->param('hm') && $q->param('hd') &&
+    $q->param('hy') && $q->param('hy') > 3760)
 {
     $cmd .= sprintf(' -H "%s" %d %d',
 		    $q->param('hm'), $q->param('hd'), $q->param('hy'));
