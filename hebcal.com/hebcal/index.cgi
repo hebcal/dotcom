@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed May  2 12:22:32 PDT 2001
+Last modified: Mon May  7 21:22:23 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -408,11 +408,11 @@ JSCRIPT_END
     if (defined $q->param('geo') && $q->param('geo') eq 'city')
     {
 	print STDOUT
-	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
+	    $q->a({-href => $script_name . "?c=on;geo=zip",
 		   -onClick => "return s1('zip')",
 	           },
 		  "zip code"), " or\n",
-	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
+	    $q->a({-href => $script_name . "?c=on;geo=pos",
 		   -onClick => "return s1('pos')",
 	           },
 		  "latitude/longitude");
@@ -420,11 +420,11 @@ JSCRIPT_END
     elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
     {
 	print STDOUT
-	    $q->a({-href => $script_name . "?c=on&amp;geo=zip",
+	    $q->a({-href => $script_name . "?c=on;geo=zip",
 		   -onClick => "return s1('zip')",
 	           },
 		  "zip code"), " or\n",
-	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
+	    $q->a({-href => $script_name . "?c=on;geo=city",
 		   -onClick => "return s1('city')",
 	           },
 		  "closest city");
@@ -432,11 +432,11 @@ JSCRIPT_END
     else
     {
 	print STDOUT
-	    $q->a({-href => $script_name . "?c=on&amp;geo=city",
+	    $q->a({-href => $script_name . "?c=on;geo=city",
 		   -onClick => "return s1('city')",
 	           },
 		  "closest city"), " or\n",
-	    $q->a({-href => $script_name . "?c=on&amp;geo=pos",
+	    $q->a({-href => $script_name . "?c=on;geo=pos",
 		   -onClick => "return s1('pos')",
 	           },
 		  "latitude/longitude");
@@ -809,7 +809,7 @@ so you can keep this window open.
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month event list | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
 	    "\">year\nevent list</a> | " .
-	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) . '&amp;vis=1' .
+	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) . ';vis=1' .
 	    "\">month\ncalendar</a> " .
 	    "]</small>";
     }
@@ -819,7 +819,7 @@ so you can keep this window open.
 	    "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
 	    "\">month\nevent list</a> | year event list | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => '1', 'vis' => 1})
-		. '&amp;vis=1' .
+		. ';vis=1' .
 	    "\">month\ncalendar</a> " .
 	    "]</small>";
     }
@@ -831,9 +831,9 @@ so you can keep this window open.
 	    $goto .= join('',
 		qq{<br>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
-		qq{&amp;dst=}, $q->param('dst'),
-		qq{&amp;tz=}, $q->param('tz'),
-		qq{&amp;m=}, $q->param('m'),
+		qq{;dst=}, $q->param('dst'),
+		qq{;tz=}, $q->param('tz'),
+		qq{;m=}, $q->param('m'),
 		qq{">1-Click Shabbat for $city_descr</a>.</p>\n},
 		);
 	}
@@ -843,7 +843,7 @@ so you can keep this window open.
 		qq{<br>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?city=},
  		&Hebcal::url_escape($q->param('city')),
-		qq{&amp;m=}, $q->param('m'),
+		qq{;m=}, $q->param('m'),
 		qq{">1-Click Shabbat for }, $q->param('city'),
 		qq{</a>.</p>\n},
 		);
@@ -1025,9 +1025,9 @@ so you can keep this window open.
     foreach my $key ($q->param())
     {
 	my($val) = $q->param($key);
-	print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
+	print STDOUT ";$key=", &Hebcal::url_escape($val);
     }
-    print STDOUT "&amp;filename=$filename.csv";
+    print STDOUT ";filename=$filename.csv";
     print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
 
     # only offer DBA export when we know timegm() will work
@@ -1041,15 +1041,15 @@ so you can keep this window open.
 	foreach my $key ($q->param())
 	{
 	    my($val) = $q->param($key);
-	    print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
+	    print STDOUT ";$key=", &Hebcal::url_escape($val);
 	}
-	print STDOUT "&amp;filename=$filename.dba";
+	print STDOUT ";filename=$filename.dba";
 	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
     }
 
     if ($ycal == 0)
     {
-	print STDOUT "\n- <a href=\"", &self_url($q, {}), '&amp;y=1';
+	print STDOUT "\n- <a href=\"", &self_url($q, {}), ';y=1';
 	print STDOUT "\">Show&nbsp;Yahoo!&nbsp;Calendar&nbsp;links</a>";
     }
     print STDOUT "\n]</small></p>\n";
@@ -1070,7 +1070,7 @@ sub self_url($$)
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
 	$url .= "$sep$key=" . &Hebcal::url_escape($val);
-	$sep = '&amp;' if $sep eq '?';
+	$sep = ';' if $sep eq '?';
     }
 
     $url;
@@ -1198,9 +1198,9 @@ sub get_candle_config($)
 	      "<ul><li>Please try a nearby zip code or select candle\n" .
 	      "lighting times by\n" .
 	      "<a href=\"" . $script_name .
-	      "?c=on&amp;geo=city\">city</a> or\n" .
+	      "?c=on;geo=city\">city</a> or\n" .
 	      "<a href=\"" . $script_name .
-	      "?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
+	      "?c=on;geo=pos\">latitude/longitude</a></li></ul>")
 	    unless defined $val;
 
 	my($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
