@@ -104,10 +104,13 @@ sub format_items
 	else
 	{
 	    $item{'dc:date'} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
+	    $item{'dc:date'} .= "T00:00:00-00:00";
 	}
 
-	my $anchor = lc($subj);
+	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
 	$anchor =~ s/[^\w]/_/g;
+	$anchor =~ s/_+/_/g;
+	$anchor =~ s/_$//g;
 	$item{'about'} = $url . "#" . $anchor;
 	$item{'subj'} = $subj;
 
