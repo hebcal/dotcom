@@ -46,8 +46,8 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	my($stime) = strftime("%d %B %Y", localtime(time()));
 	open(OUT,">$inc") || die;
 	$holiday =~ s/ /&nbsp;/g;
-	print OUT "<span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
-	print OUT "href=\"$href\">$holiday</a></b><br>$stime<br>\n";
+	print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
+	print OUT "href=\"$href\">$holiday</a></b><br>$stime\n";
 	close(OUT);
     }
 }
