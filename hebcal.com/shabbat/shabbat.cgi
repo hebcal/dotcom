@@ -811,8 +811,8 @@ sub display_javascript
     $this_year += 1900;
 
     &Hebcal::out_html($cfg, qq{
-<font size="-2" face="Arial"><a
-href="$url" target="$tgt">1-Click Shabbat</a>
+<font size="-2" face="Arial"><a target="$tgt"
+href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 });
 
