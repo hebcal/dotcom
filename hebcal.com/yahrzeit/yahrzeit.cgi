@@ -36,7 +36,7 @@ $this_year += 1900;
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:44:56 PDT 2001
+Last modified: Mon May  7 21:48:49 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -271,9 +271,9 @@ print STDOUT $q->header(),
     foreach $key ($q->param())
     {
 	my($val) = $q->param($key);
-	print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
+	print STDOUT ";$key=", &Hebcal::url_escape($val);
     }
-    print STDOUT "&amp;filename=yahrzeit.csv";
+    print STDOUT ";filename=yahrzeit.csv";
     print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
 
     # only offer DBA export when we know timegm() will work
@@ -286,9 +286,9 @@ print STDOUT $q->header(),
 	foreach $key ($q->param())
 	{
 	    my($val) = $q->param($key);
-	    print STDOUT "&amp;$key=", &Hebcal::url_escape($val);
+	    print STDOUT ";$key=", &Hebcal::url_escape($val);
 	}
-	print STDOUT "&amp;filename=yahrzeit.dba";
+	print STDOUT ";filename=yahrzeit.dba";
 	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
     }
     print STDOUT "\n]</small></p>\n";
