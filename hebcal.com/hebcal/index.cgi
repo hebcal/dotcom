@@ -709,13 +709,14 @@ sub referred_by_websearch
 
     if ($ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|a9)\.com/.*(jewish|hebrew)(\+|%20)calend[ae]r,i)
     {
+	my $asin = '1569374074';
 	$message=<<MESSAGE_END;
 <blockquote class="welcome">
-<a title="Jewish Year 5765 Wall Calendar from Amazon.com"
-href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20"><img
-src="http://www.hebcal.com/i/0789311224.01.TZZZZZZZ.jpg" border="0"
-width="90" height="90" hspace="8" vspace="8" align="right"
-alt="Jewish Year 5765 Wall Calendar from Amazon.com"></a>
+<a title="Hebrew Illuminations 2005 Calendar from Amazon.com"
+href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20"><img
+src="http://www.hebcal.com/i/$asin.01.TZZZZZZZ.jpg" border="0"
+width="89" height="90" hspace="8" vspace="8" align="right"
+alt="Hebrew Illuminations 2005 Calendar from Amazon.com"></a>
 
 Hebcal.com offers a personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
@@ -723,10 +724,10 @@ and Torah readings. We also offer export to Palm, Outlook, and iCal --
 all for free. To customize your calendar, fill out the <a
 href="$form_href">$form_text</a> and click the Get Calendar button.
 
-<p>If you're looking for a full-color printed 2004-2005 calendar, I'd
+<p>If you're looking for a full-color printed 2005 calendar, I'd
 recommend the <a
-href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20">Jewish
-Year 5765 Wall Calendar</a> from Amazon.com.
+href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">Hebrew
+Illuminations 2005 Calendar</a> from Amazon.com.
 </blockquote>
 MESSAGE_END
 ;
