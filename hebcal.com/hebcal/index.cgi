@@ -1,6 +1,7 @@
 #!/usr/local/bin/perl -w
 
 require 'cgi-lib.pl';
+require 'timelocal.pl';
 
 $dbmfile = 'zips.db';
 $dbmfile =~ s/\.db$//;
@@ -13,6 +14,8 @@ $dbmfile =~ s/\.db$//;
 $cgipath = '/hebcal/';
 $rcsrev = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
+
+@DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 
 %valid_cities =
     (
@@ -98,7 +101,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Fri Aug  6 16:52:40 PDT 1999
+Last modified: Tue Aug 10 16:34:58 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -784,15 +787,15 @@ open.</small></p>
 	 $hr,$min,$month,$day,$year) =
 	     &parse_date_descr($date,$descr);
 
-	$ST  = sprintf("%04d%02d%02d", $year, $month, $day);
-	if ($hr >= 0 && $min >= 0)
-	{
-	    $hr += 12 if $hr < 12 && $hr > 0;
-	    $ST .= sprintf("T%02d%02d00", $hr, $min);
-	}
-
 	if ($ycal)
 	{
+	    $ST  = sprintf("%04d%02d%02d", $year, $month, $day);
+	    if ($hr >= 0 && $min >= 0)
+	    {
+		$hr += 12 if $hr < 12 && $hr > 0;
+		$ST .= sprintf("T%02d%02d00", $hr, $min);
+	    }
+
 	    print STDOUT
 		"<a target=\"_calendar\" href=\"http://calendar.yahoo.com/";
 	    print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
@@ -803,7 +806,9 @@ open.</small></p>
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&gt;/g;
 
-	printf STDOUT "%04d-%02d-%02d  %s\n", $year, $month, $day, $descr;
+	$dow = $DoW[&get_dow($year - 1900, $month - 1, $day)];
+	printf STDOUT "%s %04d-%02d-%02d  %s\n",
+	$dow, $year, $month, $day, $descr;
     }
     close(HEBCAL);
 
@@ -813,6 +818,19 @@ open.</small></p>
     exit(0);
 
     1;
+}
+
+sub get_dow
+{
+    local($year,$mon,$mday) = @_;
+    local($sec,$min,$hour,$wday,$yday,$isdst);
+    local($time);
+
+    $wday = $yday = $isdst = '';
+    $sec = $min = $hour = 0;
+    $time = &timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
+
+    (localtime($time))[6];
 }
 
 sub parse_date_descr
@@ -895,13 +913,12 @@ sub city_select_html
 sub http_date
 {
     local($time) = @_;
-    local(@DoW,@MoY);
+    local(@MoY);
     local($sec,$min,$hour,$mday,$mon,$year,$wday) =
 	gmtime($time);
 
     @MoY = ('Jan','Feb','Mar','Apr','May','Jun',
 	    'Jul','Aug','Sep','Oct','Nov','Dec');
-    @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
     $year += 1900;
 
     sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
