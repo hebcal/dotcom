@@ -63,6 +63,60 @@ else {
 }
 my_footer();
 
+function write_staging_info($param)
+{
+    global $HTTP_SERVER_VARS;
+
+    $now = time();
+    $rand = pack("V", rand());
+    if ($HTTP_SERVER_VARS["REMOTE_ADDR"]) {
+	list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
+	$rand .= pack("CCCC", $p1, $p2, $p3, $p4);
+    }
+    $rand .= pack("V", $now);
+
+    $encoded = rtrim(base64_encode($rand));
+    $encoded = str_replace('+', '.', $encoded);
+    $encoded = str_replace('/', '_', $encoded);
+    $encoded = str_replace('=', '-', $encoded);
+
+    $fd = fopen("/tmp/hebcal.com.lock", "w");
+    if ($fd == false) {
+	die("lockfile open failed");
+    }
+
+    if (flock($fd, LOCK_EX) == false) {
+	die("flock failed");
+	fclose($fd);
+    }
+
+    $id = dba_open("subs.db", "w", "db3");
+    if (!$id) {
+	die("dba_open subs.db failed");
+    }
+
+    $val = sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d;em=%s",
+		   $param['zip'],
+		   $param['tz'],
+		   $param['dst'],
+		   $param['m'],
+		   $param['upd'] ? 1 : 0,
+		   $now,
+		   $param['em']);
+
+    if (!dba_replace($encoded, $val, $id)) {
+	die("dba_replace subs.db failed");
+    }
+
+    dba_sync($id);
+    dba_close($id);
+    flock($fd, LOCK_UN);
+    fclose($fd);
+
+    return $encoded;
+}
+
+
 function my_footer() {
 ?>
 <hr noshade size="1"><font size="-2" face="Arial">
@@ -168,8 +222,6 @@ Contact me occasionally about changes to the hebcal.com website.
 }
 
 function subscribe($param) {
-    global $HTTP_SERVER_VARS;
-
     if (!$param['zip'])
     {
 	form($param,
@@ -234,18 +286,7 @@ function subscribe($param) {
 
     $dst_descr = "Daylight Saving Time: " . $param['dst'];
 
-
-    $rand = pack("V", rand());
-    if ($HTTP_SERVER_VARS["REMOTE_ADDR"]) {
-	list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
-	$rand .= pack("CCCC", $p1, $p2, $p3, $p4);
-    }
-    $rand .= pack("V", time());
-
-    $encoded = rtrim(base64_encode($rand));
-    $encoded = str_replace('+', '.', $encoded);
-    $encoded = str_replace('/', '_', $encoded);
-    $encoded = str_replace('=', '-', $encoded);
+    $encoded = write_staging_info($param);
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-subscribe+$encoded@hebcal.com";
