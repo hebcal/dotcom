@@ -26,7 +26,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 	\"http://www.w3.org/TR/REC-html40/loose.dtd\">
 <html>
 <head>
-<title>hebcal</title>
+<title>Hebcal Interactive Jewish Calendar</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
 <meta name=\"description\" content=\"Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude.\">
 <link rev=\"made\" href=\"mailto:michael\@radwin.org\">
@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 09:04:30 PDT 1999
+Last modified: Mon Jul 12 10:26:41 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
