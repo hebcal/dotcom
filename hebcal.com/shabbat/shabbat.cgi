@@ -302,7 +302,7 @@ sub process_args
 	}
 
 	$q->param('geo','city');
-	$q->param('tz', $Hebcal::city_tz{$q->param('city')});
+	$q->delete('tz');
 	$q->delete('dst');
 	$q->delete('zip');
 
