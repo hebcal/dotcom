@@ -26,8 +26,10 @@ require 5.000;
 use Time::Local;
 use CGI;
 use POSIX qw(strftime);
-use lib "/home/users/mradwin/local/lib/perl5/$]";
-use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
+use lib "/home/mradwin/local/lib/perl5/$]";
+use lib "/home/mradwin/local/lib/perl5/site_perl/$]";
+use lib "/home/mradwin/local/lib/perl5/5.005";
+use lib "/home/mradwin/local/lib/perl5/site_perl/5.005";
 use Unicode::String;
 use Config::IniFiles;
 use Date::Calc;
@@ -213,7 +215,7 @@ $Hebcal::PALM_DBA_MAXENTRIES = 2500;
      );
 
 
-my($ini_path) = '/home/web/hebcal.com/docs/hebcal';
+my($ini_path) = '/pub/m/r/mradwin/hebcal.com/hebcal';
 my($holidays) = new Config::IniFiles(-file => "$ini_path/holidays.ini");
 my($sedrot)   = new Config::IniFiles(-file => "$ini_path/sedrot.ini");
 
@@ -727,6 +729,19 @@ sub start_html($$$$)
 		   ],
 	 -meta => $meta,
 	 );
+}
+
+sub html_entify($)
+{
+    local($_) = @_;
+
+    s/&/&amp;/g;
+    s/</&lt;/g;
+    s/>/&gt;/g;
+    s/"/&quot;/g; #"#
+    s/\s+/ /g;
+
+    $_;
 }
 
 sub url_escape($)
