@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Oct  2 08:40:17 PDT 2000
+Last modified: Mon Oct  2 09:14:42 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -95,7 +95,7 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
 #$friday = $now + ((4 - $wday) * 60 * 60 * 24);
-$friday = $now;
+$friday = &Time::Local::timelocal(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
 $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 
 $sat_year = (localtime($saturday))[5] + 1900;
@@ -317,7 +317,8 @@ my($numEntries) = scalar(@events);
 my($i);
 for ($i = 0; $i < $numEntries; $i++)
 {
-    $time = &Time::Local::timelocal(0,0,0,
+    # holiday is at 12:00:01 am
+    $time = &Time::Local::timelocal(1,0,0,
 		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
