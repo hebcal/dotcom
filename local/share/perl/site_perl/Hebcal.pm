@@ -4,7 +4,7 @@
 # are calculated from your latitude and longitude (which can be
 # determined by your zip code or closest city).
 #
-# Copyright (c) 2001  Michael John Radwin.  All rights reserved.
+# Copyright (c) 2002  Michael John Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -694,12 +694,12 @@ sub html_footer($$)
     my($hhmts) = "Software last updated:\n" . localtime($mtime);
 
     return qq{
-<hr noshade size="1"><font size=-2 face=Arial>
+<hr noshade size="1"><span class="tiny">
 }, &html_copyright($q), qq{
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
-</font></body></html>
+</span></body></html>
 };
 }
 
