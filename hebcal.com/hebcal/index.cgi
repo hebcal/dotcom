@@ -693,23 +693,6 @@ JSCRIPT_END
 }
 
 
-sub download_href
-{
-    my($filename,$ext) = @_;
-
-    my($href) = $script_name;
-    $href .= "index.cgi" if $q->script_name() =~ m,/index.cgi$,;
-    $href .= "/$filename.$ext?dl=1";
-    foreach my $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	$href .= ";$key=" . Hebcal::url_escape($val);
-    }
-    $href .= ";filename=$filename.$ext";
-
-    $href;
-}
-
 sub results_page
 {
     my($date,$filename) = @_;
@@ -783,18 +766,18 @@ sub results_page
 	    $ny = $py = $q->param('year');
 	}
 
-	$prev_url = &self_url($q, {'year' => $py, 'month' => $pm});
+	$prev_url = Hebcal::self_url($q, {'year' => $py, 'month' => $pm});
 	$prev_title = sprintf("%s %04d", $Hebcal::MoY_long{$pm}, $py);
 
-	$next_url = &self_url($q, {'year' => $ny, 'month' => $nm});
+	$next_url = Hebcal::self_url($q, {'year' => $ny, 'month' => $nm});
 	$next_title = sprintf("%s %04d", $Hebcal::MoY_long{$nm}, $ny);
     }
     else
     {
-	$prev_url = &self_url($q, {'year' => ($q->param('year') - 1)});
+	$prev_url = Hebcal::self_url($q, {'year' => ($q->param('year') - 1)});
 	$prev_title = sprintf("%04d", ($q->param('year') - 1));
 
-	$next_url = &self_url($q, {'year' => ($q->param('year') + 1)});
+	$next_url = Hebcal::self_url($q, {'year' => ($q->param('year') + 1)});
 	$next_title = sprintf("%04d", ($q->param('year') + 1));
     }
 
@@ -830,7 +813,7 @@ sub results_page
 		       undef
 			),
     Hebcal::navbar2($q, $date, 1,
-		     "Interactive\nCalendar", &self_url($q, {'v' => '0'}));
+		     "Interactive\nCalendar", Hebcal::self_url($q, {'v' => '0'}));
 
     print STDOUT "<h1>Jewish\nCalendar $date</h1>\n"
 	unless ($q->param('vis'));
@@ -882,13 +865,13 @@ sub results_page
 
     if ($q->param('vis'))
     {
-	$goto .= "<a\nhref=\"" . &self_url($q, {'vis' => '0'}) .
+	$goto .= "<a\nhref=\"" . Hebcal::self_url($q, {'vis' => '0'}) .
 	    "\">event\nlist</a> | <b>calendar grid</b> ]";
     }
     else
     {
 	$goto .= "<b>event list</b> | <a\nhref=\"" .
-	    &self_url($q, {'vis' => 'on'}) . "\">calendar\ngrid</a> ]";
+	    Hebcal::self_url($q, {'vis' => 'on'}) . "\">calendar\ngrid</a> ]";
     }
 
     if ($q->param('yt') && $q->param('yt') eq 'H')
@@ -902,12 +885,12 @@ sub results_page
     if ($date !~ /^\d+$/)
     {
 	$goto .= "<b>month</b> | " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
+	    "<a\nhref=\"" . Hebcal::self_url($q, {'month' => 'x'}) .
 	    "\">entire\nyear</a> ]";
     }
     else
     {
-	$goto .= "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
+	$goto .= "<a\nhref=\"" . Hebcal::self_url($q, {'month' => '1'}) .
 	    "\">month</a> |\n<b>entire year</b> ]";
     }
     }
@@ -1064,37 +1047,11 @@ sub results_page
     print STDOUT "</p>" unless $q->param('vis');
     print STDOUT $goto_prefix, $goto, "</p>";
     if ($numEntries > 0) {
-	print STDOUT Hebcal::download_html($q, $filename, \@events);
+	print STDOUT Hebcal::download_html($q, $filename, \@events, $date);
     }
     print STDOUT Hebcal::html_footer($q,$rcsrev);
 
     1;
-}
-
-sub self_url($$)
-{
-    my($q,$override) = @_;
-    my($url) = $script_name;
-    my($sep) = '?';
-
-    foreach my $key ($q->param())
-    {
-	my($val) = defined $override->{$key} ?
-	    $override->{$key} : $q->param($key);
-	$url .= "$sep$key=" . Hebcal::url_escape($val);
-	$sep = ';' if $sep eq '?';
-    }
-
-    foreach my $key (keys %{$override})
-    {
-	unless (defined $q->param($key))
-	{
-	    $url .= "$sep$key=" . Hebcal::url_escape($override->{$key});
-	    $sep = ';' if $sep eq '?';
-	}
-    }
-
-    $url;
 }
 
 sub get_candle_config($)
