@@ -98,7 +98,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Aug 17 14:36:27 PDT 1999
+Last modified: Fri Aug 20 11:18:10 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -418,7 +418,7 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> -&gt;
+<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> <tt>-&gt;</tt>
 hebcal</small></div><h1>Hebcal Interactive Jewish Calendar</h1>
 <p>Use the form below to generate a list of Jewish holidays. Candle
 lighting times are calculated from your latitude and longitude (which
@@ -766,8 +766,8 @@ sub results_page
 <link rel=\"next\" href=\"$next_url\" title=\"$next_title\">
 </head>
 <body>
-<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> -&gt;
-<a href=\"$cgipath\">hebcal</a> -&gt;
+<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> <tt>-&gt;</tt>
+<a href=\"$cgipath\">hebcal</a> <tt>-&gt;</tt>
 $date</small></div><h1>Jewish Calendar $date</h1>
 ";
 
