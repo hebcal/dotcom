@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar 26 14:25:12 PST 2001
+Last modified: Mon Mar 26 14:52:05 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1124,7 +1124,6 @@ so you can keep this window open.
 		$prev_mon = $mon;
 		$cal = new HTML::CalendarMonthSimple('year' => $year,
 						     'month' => $mon);
-		$cal->showdatenumbers(9);
 		$cal->width('94%');
 		$cal->border(1);
 		$cal->bgcolor('white');
