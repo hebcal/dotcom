@@ -154,8 +154,8 @@ sub format_items
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
 			$year,$mon,$mday,
 			$hour,$min,0,
-			$q->param('tz') > 0 ? "+" : "",
-			$q->param('tz'));
+			$q->param('tz') > 0 ? "+" : "-",
+			abs($q->param('tz')));
 	}
 	else
 	{
