@@ -1517,11 +1517,8 @@ sub vcalendar_write_contents($$$$)
 
 	    $end_date .= sprintf("T%02d%02d00", $hour, $min);
 	}
-	elsif (! $is_icalendar)
+	else
 	{
-	    # for vCalendar Palm Desktop and Outlook 2000 seem to
-	    # want midnight to midnight for all-day events.
-	    # Midnight to 23:59:59 doesn't seem to work as expected.
 	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
 		($events->[$i]->[$Hebcal::EVT_IDX_YEAR],
 		 $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
@@ -1529,8 +1526,14 @@ sub vcalendar_write_contents($$$$)
 		 1);
 	    $end_date = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 
-	    $date .= "T000000";
-	    $end_date .= "T000000";
+	    # for vCalendar Palm Desktop and Outlook 2000 seem to
+	    # want midnight to midnight for all-day events.
+	    # Midnight to 23:59:59 doesn't seem to work as expected.
+	    if (!$is_icalendar)
+	    {
+		$date .= "T000000";
+		$end_date .= "T000000";
+	    }
 	}
 
 	print STDOUT qq{DTSTART};
