@@ -277,7 +277,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <festival id="Rosh Hashana 1"
- haftara="I Samuel 1:1 - 1:2; 1:10"
+ haftara="I Samuel 1:1 - 2:10"
  descr="New Year"
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
@@ -292,7 +292,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Rosh Hashana 1 (on Shabbat)"
- haftara="I Samuel 1:1 - 1:2; 1:10"
+ haftara="I Samuel 1:1 - 2:10"
  descr="New Year"
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
@@ -309,7 +309,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Rosh Hashana 2"
- haftara="Jer. 31:1 - 31:19"
+ haftara="Jeremiah 31:1 - 31:19"
  yomtov="1">
  <link rel="about" href="http://www.jewfaq.org/holiday2.htm" />
  <kriyah>
@@ -365,7 +365,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot 1"
- haftara="Zech. 14:1-21"
+ haftara="Zechariah 14:1-21"
  descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם א׳"
  yomtov="1">
@@ -380,7 +380,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot 1 (on Shabbat)"
- haftara="Zech. 14:1-21"
+ haftara="Zechariah 14:1-21"
  descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם א׳"
  yomtov="1">
