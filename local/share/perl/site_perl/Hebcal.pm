@@ -259,9 +259,9 @@ $PALM_DBA_MAXENTRIES = 2500;
 # this doesn't work for weeks that have double parashiot
 # todo: automatically get URL from hebrew year
 %sedrot = (
- "Bereshit"	=> 'http://learn.jtsa.edu/topics/parashah/5760/bereshit.shtml',
- "Bereshis"	=> 'http://learn.jtsa.edu/topics/parashah/5760/bereshit.shtml',
- "Noach"	=> 'http://learn.jtsa.edu/topics/parashah/5760/noah.shtml',
+ "Bereshit"	=> 'http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml',
+ "Bereshis"	=> 'http://learn.jtsa.edu/topics/parashah/5761/bereshit.shtml',
+ "Noach"	=> 'http://learn.jtsa.edu/topics/parashah/5761/noah.shtml',
  "Lech-Lecha"	=> 'http://learn.jtsa.edu/topics/parashah/5760/lechlecha.shtml',
  "Vayera"	=> 'http://learn.jtsa.edu/topics/parashah/5760/vayera.shtml',
  "Chayei Sara"	=> 'http://learn.jtsa.edu/topics/parashah/5760/hayeisarah.shtml',
@@ -323,9 +323,19 @@ $PALM_DBA_MAXENTRIES = 2500;
  "Ki Seitzei"	=> 'http://learn.jtsa.edu/topics/parashah/5760/kitetse.shtml',
  "Ki Tavo"	=> 'http://learn.jtsa.edu/topics/parashah/5760/kitavo.shtml',
  "Ki Savo"	=> 'http://learn.jtsa.edu/topics/parashah/5760/kitavo.shtml',
- "Nitzavim"	=> 'http://www.ohr.org.il/tw/5759/devarim/nitzavim.htm',
- "Vayeilech"	=> 'http://www.ohr.org.il/tw/5758/devarim/vayelech.htm',
+ "Nitzavim"	=> 'http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml',
+ "Vayeilech"	=> 'http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml',
  "Ha'Azinu"	=> 'http://www.ohr.org.il/tw/5759/devarim/haazinu.htm',
+
+ "Rosh Hashana"	=> 'http://learn.jtsa.edu/topics/parashah/5761/roshhashanah.shtml',
+ "Yom Kippur"	=> 'http://learn.jtsa.edu/topics/parashah/5759/yk.shtml',
+ "Sukkot"	=> 'http://learn.jtsa.edu/topics/parashah/5761/sukkot.shtml',
+ "Sukkos"	=> 'http://learn.jtsa.edu/topics/parashah/5761/sukkot.shtml',
+ "Simchat Torah" => 'http://learn.jtsa.edu/topics/parashah/5761/simhattorah.shtml',
+ "Simchas Torah" => 'http://learn.jtsa.edu/topics/parashah/5761/simhattorah.shtml',
+ "Pesach"	=> 'http://learn.jtsa.edu/topics/parashah/5760/pesah.shtml',
+ "Shavuot"	=> 'http://learn.jtsa.edu/topics/parashah/5760/shavuot.shtml',
+ "Shavuos"	=> 'http://learn.jtsa.edu/topics/parashah/5760/shavuot.shtml',
 	   );
 
 %tz_names = (
