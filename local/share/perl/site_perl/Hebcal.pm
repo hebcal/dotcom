@@ -1081,7 +1081,7 @@ Jewish Calendar events into your desktop software.</p>};
 	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
     }
 
-    $s .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li>" .
+    $s .= "<h4>Palm Desktop 2.6.3 for Macintosh</h4>\n<ol><li>" .
 	"Export Mac Palm Calendar:\n" .
 	"<a href=\"" .
 	download_href($q, $filename, 'tsv') .
