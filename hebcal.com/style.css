@@ -49,3 +49,8 @@ H1, H2, H3, H4, H5, H6 {
 }
 
 A:hover { color: red }
+
+.tiny {
+ font-size: x-small;
+ font-family: Arial,Helvetica,Geneva,sans-serif;
+}
