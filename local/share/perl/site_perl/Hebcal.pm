@@ -747,7 +747,7 @@ sub navbar2($$$$$)
 	$help_html .
 	"href=\"/search/\">Search</a></small>\n" .
 	"</td></tr></table>\n" .
-	"<!--htdig_noindex-->\n";
+	"<!--/htdig_noindex-->\n";
 }
 
 sub start_html($$$$$)
