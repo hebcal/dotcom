@@ -432,7 +432,9 @@ sub invoke_hebcal($$$)
 
 	my($date,$descr) = split(/ /, $_, 2);
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
-	    &parse_date_descr($date,$descr);
+	    parse_date_descr($date,$descr);
+
+	next if $subj eq 'Havdalah (0 min)';
 
 	my($memo2) = (&get_holiday_anchor($subj,$want_sephardic))[2];
 
