@@ -50,6 +50,40 @@ About this service
 Calendar, available at <tt><a
 href="http://www.hebrewcalendar.org">www.hebrewcalendar.org</a></tt>.</p>
 
+<ol>
+<li><a href="#about">What is the Hebcal Interactive Jewish
+Calendar?</a></li>
+<ol type="a">
+<li><a href="#maintain">Who maintains this service?</a></li>
+<li><a href="#different">What's different about this web
+interface?</a></li>
+</ol>
+<li>Specifics about Jewish Holidays</li>
+<ol type="a">
+<li><a href="#begin">When do the Holidays begin?</a></li>
+<li><a href="#shabbat">When does Shabbat begin?</a></li>
+<li><a href="#defaults">What are the default Holidays?</a></li>
+</ol>
+<li><a href="#import">How do I import Hebcal entries into my PDA or
+desktop calendar program?</a></li>
+<ol type="a">
+<li><a href="#csv">Outlook CSV</a></li>
+<li><a href="#dba">Palm Date Book Archive (DBA)</a></li>
+</ol>
+<li><a href="#zip2geo">How are candle lighting times determined from
+my zip code?</a></li>
+<li><a href="#top-zips">Who's using this site to get candle-lighting
+times?</a></li>
+<li><a href="#kudos">How can I tell you how much I like the Hebcal
+Interactive Jewish Calendar?</a></li>
+<li><a href="#resources">What are other good Jewish calendar resources
+on the web?</a></li>
+<li><a href="#code">I'm a programmer.  Can I see the source
+code?</a></li>
+<li><a href="#tags">How can my synagogue put 1-Click Shabbat
+candle-lighting times on it's own website?</a></li>
+</ol>
+
 <h2><a name="about">1. What is the Hebcal Interactive Jewish
 Calendar?</a></h2>
 
@@ -58,7 +92,7 @@ generate a list of Jewish holidays for any year. Candle lighting times
 are calculated from your latitude and longitude (which can be determined
 by your zip code or closest city).</p>
 
-<h3><a name="maintain">1.1. Who maintains this service?</a></h3>
+<h3><a name="maintain">1.a. Who maintains this service?</a></h3>
 
 <p><a
 href="/michael/">Michael J. Radwin</a> created and runs the web
@@ -68,7 +102,7 @@ href="http://www.sadinoff.com/">Danny Sadinoff</a> wrote
 href="http://www.sadinoff.com/hebcal/">hebcal 3.2 for UNIX</a>, the
 back-end that this service uses to generate the list of Holidays.</p>
 
-<h3><a name="different">1.2. What's different about this web
+<h3><a name="different">1.b. What's different about this web
 interface?</a></h3>
 
 <p>This site offers:</p>
@@ -84,25 +118,25 @@ interface?</a></h3>
 
 <h2>2. Specifics about Jewish Holidays</h2>
 
-<h3><a name="begin">2.1. When do the Holidays begin?</a></h3>
+<h3><a name="begin">2.a. When do the Holidays begin?</a></h3>
 
 <p>All Jewish Holidays begin the evening before the date specified.  This
 is because the Jewish day actually begins at sundown on the previous
 night.  Sometimes, for clarity, the Erev Holiday is also included.</p>
 
-<h3><a name="shabbat">2.2. When does Shabbat begin?</a></h3>
+<h3><a name="shabbat">2.b. When does Shabbat begin?</a></h3>
 
 <p>Shabbat begins 18 minutes before sundown on Friday night.  In Jerusalem,
 Shabbat begins 40 minutes before sundown.</p>
 
-<h3><a name="defaults">2.3. What are the default Holidays?</a></h3>
+<h3><a name="defaults">2.c. What are the default Holidays?</a></h3>
 
 <p>See the <a href="defaults.html">Hebcal Default Holidays</a> page.</p>
 
 <h2><a name="import">3. How do I import Hebcal entries into my PDA or
 desktop calendar program?</a></h2>
 
-<h3><a name="csv">3.1 Outlook CSV</a></h3>
+<h3><a name="csv">3.a. Outlook CSV</a></h3>
 
 <ol>
 <li>Open Microsoft Outlook
@@ -114,7 +148,7 @@ desktop calendar program?</a></h2>
 <li>Selct Calendar and click Next.  This will import your chosen file.
 </ol>
 
-<h3><a name="dba">3.2 Palm Date Book Archive (DBA)</a></h3>
+<h3><a name="dba">3.b. Palm Date Book Archive (DBA)</a></h3>
 <ol>
 <li>Open Palm Desktop for Windows version 2.0 or greater
 <li>Go to the Date Book view 
@@ -210,6 +244,25 @@ License:</p>
       <a href="/shabbat/">1-Click Shabbat</a> CGI form.</li>
 </ul>
 
+<h2><a name="tags">9. How can my synagogue put 1-Click Shabbat
+candle-lighting times on it's own website?</a></h2>
+
+<p>You can use these HTML tags to insert weekly candle-lighting times
+directly on your web page:</p>
+
+<table border="1" cellpadding="6">
+<tr><td><pre>&lt;script type="text/javascript"
+src="http://www.radwin.org/shabbat/?zip=<span style="background: #ffff99">90210</span>&amp;cfg=j"&gt;
+&lt;/script&gt;
+&lt;noscript&gt;
+&lt;a href="http://www.radwin.org/shabbat/?zip=<span style="background: #ffff99">90210</span>"&gt;1-Click
+Shabbat Candle Lighting times&lt;/a&gt;.
+&lt;/noscript&gt;</pre></td></tr>
+</table>
+
+<p>Make sure you replace both <span style="background: #ffff99">zip
+codes</span> with your synagogue's zip code.</p>
+
 <hr noshade="noshade" size="1">
 <!-- mjrsig start -->
 <em><a
@@ -218,7 +271,7 @@ href="/michael/contact.html">Michael J. Radwin</a></em>
 <!-- mjrsig end -->
 <small>
 <!-- hhmts start -->
-Last modified: Wed Nov  1 05:55:21 PST 2000
+Last modified: Sun Dec  3 17:30:27 PST 2000
 <!-- hhmts end -->
 </small>
 </body>
