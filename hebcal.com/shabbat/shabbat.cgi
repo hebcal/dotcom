@@ -356,16 +356,8 @@ else
 	&out_html("&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n");
     }
 
-    if ($city_descr =~ / IN &nbsp;/)
-    {
-	&out_html("<p><font color=\"#ff0000\">",
-	"Indiana has confusing time zone &amp;\n",
-	"Daylight Saving Time rules.</font>\n",
-	"You might want to read <a\n",
-	"href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
-	"Indiana?</a> to make sure the above settings are\n",
-	"correct.</p>");
-    }
+    &out_html($Hebcal::indiana_warning)
+	if ($city_descr =~ / IN &nbsp;/);
 }
 
 my($cmd_pretty) = $cmd;
