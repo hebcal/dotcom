@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Feb 21 13:48:15 PST 2001
+Last modified: Thu Mar  1 19:49:21 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -50,7 +50,7 @@ my($html_footer) = "<hr
 noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved. - <a
-href=\"/michael/projects/hebcal/\">Frequently
+href=\"/hebcal/help/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
 
@@ -659,7 +659,7 @@ sub form
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
 	qq{</td></tr></table>});
 
-    &out_html(qq{<p><small><a href="/michael/projects/hebcal/#tags">How\n},
+    &out_html(qq{<p><small><a href="/hebcal/help/#tags">How\n},
 	      qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
 	      qq{times on its own website?</a></small></p>});
 
