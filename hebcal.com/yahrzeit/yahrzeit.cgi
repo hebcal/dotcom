@@ -82,12 +82,10 @@ $cfg ||= "";
 my $count;
 if ($cfg eq "i" || $cfg eq "j") {
     $count = 1;
-    $q->param("count", 1);
 } elsif (defined $q->param("count") && $q->param("count") =~ /^\d+$/) {
     $count = $q->param("count");
 } else {
     $count = 5;
-    $q->param("count", 5);
 }
 
 my(%yahrzeits) = ();
@@ -344,7 +342,9 @@ my($numEntries) = scalar(@events);
 if ($numEntries > 0) {
     &Hebcal::out_html($cfg,
 		      qq{<p class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm &amp; Outlook</a></p>\n});
+<a href="#export">Export calendar to Palm &amp; Outlook</a>
+<br><span class="sm-grey">&gt;</span>
+<a href="#form">Enter more dates and names</a></p>\n});
 
     # http://yizkor.ort.org/html/pp-lighting.shtml
     &Hebcal::out_html($cfg,
@@ -397,7 +397,9 @@ if ($numEntries > 0) {
     &Hebcal::out_html($cfg, Hebcal::download_html($q, 'yahrzeit', \@events));
 }
 
-&Hebcal::out_html($cfg, "<hr>\n");
+&Hebcal::out_html($cfg,
+		  "<div class=\"goto\"><hr><a name=\"form\"></a>\n",
+		  "<h3>Enter more dates and names</h3></div>\n");
 
 &form(0,'','');
 }
@@ -407,6 +409,8 @@ sub form
     my($head,$message,$help) = @_;
 
     my(%months) = %Hebcal::MoY_long;
+
+    Hebcal::out_html($cfg, qq{<div class="goto">\n});
 
     if ($message ne '')
     {
@@ -440,10 +444,12 @@ sub form
     "</label><br>",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
-    $q->hidden(-name => "count"), "\n",
+    $q->hidden(-name => "count", -default => 5), "\n",
 #    $q->hidden(-name => 'cfg'),
 #    $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
+
+    Hebcal::out_html($cfg, qq{</div>\n});
 
     if ($cfg eq "i")
     {
@@ -456,10 +462,10 @@ sub form
     else
     {
 	&Hebcal::out_html
-	    ($cfg, qq{<hr noshade size=\"1\">\n});
+	    ($cfg, qq{<hr class="goto" noshade size="1">\n});
 
 	&Hebcal::out_html($cfg,
-	qq{<p><a href="/help/link.html#yahrzeit-tags">How\n},
+	qq{<p class="goto"><a href="/help/link.html#yahrzeit-tags">How\n},
 	qq{can my synagogue link to the Yahrzeit, Birthday and Anniversary\n},
 	qq{Calendar from its own website?</a></p>});
 
