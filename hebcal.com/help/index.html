@@ -305,13 +305,19 @@ see the "How to Import Text Data" section of one of these articles:
 
 <h3><a name="csv-remove">Outlook - Removal of Hebcal entries</a></h3>
 
-<p>To remove holidays from the Calendar, follow these steps:</p>
+<p>When hebcal exports to CSV format, it puts the text "hebcal.com" in
+the Location field.  That is there to make it easy to remove entries
+from your calendar if you got the wrong settings.  For example, if you
+were using candle-lighting times but entered the wrong zip code, you
+could follow these instructions to remove all of the incorrect
+entries:</p>
 
 <ol>
 <li>Open your Calendar and on the View menu point to Current View and click
 Events.
 <li>Click the Location column heading to sort the list of holidays by
-country.
+Location (you should see "hebcal.com" in the location field for the
+holidays that you imported from CSV).
 <li>Click to select the first holiday you want to delete.
 <li>Hold down SHIFT and click the last holiday you want to delete.
 <li>Press DELETE to remove all the selected holidays from your Calendar.
@@ -483,7 +489,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Thu Aug  8 16:09:57 EDT 2002
+Last modified: Wed Aug 14 12:19:48 EDT 2002
 <!-- hhmts end -->
 ($Revision$)
 </span>
