@@ -9,6 +9,15 @@ while (($key,$val) = each(%DB))
 {
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
     ($city,$state) = split(/\0/, substr($val,6));
-    print "$key,$city,$state,$long_deg,$long_min,$lat_deg,$lat_min\n";
+
+    # "00","14863","NY","MECKLENBURG",76.7102,42.4576,0,0
+
+    # "01","35020","AL","BESSEMER",86.947547,33.409002,40549,0.010035 
+
+    
+    $long = sprintf("%.6g", $long_deg + ($long_min / 60.0));
+    $lat  = sprintf("%.6g", $lat_deg + ($lat_min / 60.0));
+
+    print "\"00\",\"$key\",\"$state\",\"$city\",$long,$lat,0,0\n";
 }
 untie(%DB);
