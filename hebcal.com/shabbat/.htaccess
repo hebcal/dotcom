@@ -1,0 +1,8 @@
+SetHandler cgi-script
+
+Redirect /shabbat/shabbat.html http://www.hebcal.com/shabbat/
+Redirect /shabbat/shabbat.htm http://www.hebcal.com/shabbat/
+Redirect /shabbat/shabbat.pl http://www.hebcal.com/shabbat/
+Redirect /shabbat/shabbat.cgi http://www.hebcal.com/shabbat/
+Redirect /shabbat/index.cgi http://www.hebcal.com/shabbat/
+Redirect /shabbat/index.pl http://www.hebcal.com/shabbat/
