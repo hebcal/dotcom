@@ -113,10 +113,9 @@ sub write_sedra_page {
     my($sedrot_h) = $h;
     $h =~ s/^Combined //;
 
-    my($drash_href,$hebrew,$memo,$torah_href,$haftarah_href) =
+    my(undef,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href) =
 	&Hebcal::get_holiday_anchor("Parashat $h", 0);
-    my(undef,undef,$memo2) =
-	&Hebcal::get_holiday_anchor("Parashat $h", 1);
+    my($memo2) = (&Hebcal::get_holiday_anchor("Parashat $h", 1))[2];
 
     $memo =~ /Torah: (.+) \/ Haftarah: (.+)$/;
     my($torah,$haftarah) = ($1,$2);
@@ -180,7 +179,7 @@ lang="he">$hebrew</h1></td>
 </table>
 <h3><a name="torah">Torah Portion:</a>
 <a href="$torah_href">$torah</a></h3>
-Shabbat aliyot (full kriyah):
+<a name="aliyot">Shabbat aliyot (full kriyah):</a>
 <ol>
 EOHTML
 ;
@@ -194,7 +193,16 @@ EOHTML
 </ol>
 <h3><a name="haftarah">Haftarah:</a>
 <a href="$haftarah_href">$haftarah</a>$seph</h3>
-<h3><a name="drash" href="$drash_href">Commentary</a></h3>
+EOHTML
+;
+
+    print OUT2 
+	qq{<h3><a name="drash" href="$drash_href">Commentary</a></h3>\n}
+    if $drash_href;
+
+    if ($prev_link || $next_link)
+    {
+	print OUT2 <<EOHTML;
 <p>
 <table width="100%">
 <tr>
@@ -206,6 +214,11 @@ $next_link
 </td>
 </tr>
 </table>
+EOHTML
+;
+    }
+
+    print OUT2 <<EOHTML;
 <p>
 <hr noshade size="1">
 <font size=-2 face=Arial>Copyright
