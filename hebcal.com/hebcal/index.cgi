@@ -336,6 +336,9 @@ sub form($$)
     my($message,$help) = @_;
     my($key,$val,$JSCRIPT);
 
+    my $hyear = $this_year + 3760;
+    $hyear++ if $this_mon >= 9;
+
     $JSCRIPT=<<JSCRIPT_END;
 function s1(geo) {
 document.f1.geo.value=geo;
@@ -362,7 +365,7 @@ document.f1.year.value=$this_year;
 document.f1.month.value=$this_mon;
 }
 if (val=='H') {
-document.f1.year.value=$this_year+3760;
+document.f1.year.value=$hyear;
 document.f1.month.value='x';
 }
 return false;
@@ -398,6 +401,9 @@ JSCRIPT_END
 		   ),
     Hebcal::navbar2($q, 'Interactive Calendar', 1, undef, undef),
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
+
+    print STDOUT "\n<p style=\"color: red; font-size: large\"><em>Shana Tova!</em>\n",
+    "Hebcal.com wishes you a sweet and happy new year.</p>";
 
     if ($message ne '')
     {
