@@ -617,7 +617,7 @@ EOHTML
 	    elsif ($book eq 'numbers') { $bid = 4; }
 	    elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-	    $info = qq{<a title="audio"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+	    $info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
 	}
 
 	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
@@ -702,7 +702,7 @@ EOHTML
 		elsif ($book eq 'numbers') { $bid = 4; }
 		elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-		$info = qq{<a title="audio"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+		$info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
 	    }
 
 	    my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
