@@ -847,8 +847,8 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
 
     &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
-		      "<a href=\"$url\">Get\n",
-		      "candle lighting times for dates in the future</a>\n");
+		      "See all of <a href=\"$url\">this\n",
+		      "month's</a> candle lighting times\n");
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
@@ -864,8 +864,8 @@ sub display_html
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     &Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
-		      "<a href=\"$url\">Email:\n",
-		      "subscribe to weekly Candle Lighting Times</a>\n");
+		      "Email: <a href=\"$url\">subscribe</a>\n",
+		      "to weekly candle lighting times\n");
 
     # Synagogues link
     $url = join('', "http://", $q->virtual_host(), "/link/?");
@@ -880,9 +880,9 @@ sub display_html
 
     &Hebcal::out_html($cfg, "<br>");
     &Hebcal::out_html($cfg,"<span class=\"sm-grey\">&gt;</span>\n",
-		      "<a href=\"$url\">Synagogues: add\n",
-		      "1-Click Shabbat candle-lighting times to your\n",
-		      "web site</a></p>\n");
+		      "Synagogues: <a href=\"$url\">include</a>\n",
+		      "1-Click Shabbat candle-lighting times on your\n",
+		      "web site</p>\n");
  
     form($cfg,0,'','');
 
