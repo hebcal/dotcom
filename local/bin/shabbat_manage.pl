@@ -26,8 +26,8 @@ my $header = $message->head();
 my $to = $header->get('To');
 my $from = $header->get('From');
 my $addr;
-if (Email::Valid->address($from)) {
-    $addr = Email::Valid->address($from);
+if ($from && Email::Valid->address($from)) {
+    $addr = lc(Email::Valid->address($from));
 }
 
 unless (defined $to) {
@@ -35,20 +35,17 @@ unless (defined $to) {
     exit(0);
 }
 
-if ($to =~ /shabbat-subscribe\@/) {
+if ($to =~ /shabbat-subscribe\@hebcal\.com/) {
     &error_email($addr,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe\+(\d{5})\@/) {
+} elsif ($to =~ /shabbat-subscribe\+(\d{5})\@hebcal\.com/) {
 #    &subscribe_zip($1);
     &error_email($addr,$err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@/) {
+} elsif ($to =~ /shabbat-subscribe\+([^\@]+)\@hebcal\.com/) {
     &subscribe($addr,$1);
-} elsif ($to =~ /shabbat-unsubscribe\@/) {
-    chomp $from;
-    if (Email::Valid->address($from))
-    {
-	my $addr = Email::Valid->address($from);
+} elsif ($to =~ /shabbat-unsubscribe\@hebcal\.com/) {
+    if ($addr) {
 	&unsubscribe($addr);
     }
 } else {
