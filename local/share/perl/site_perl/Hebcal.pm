@@ -1456,22 +1456,31 @@ sub vcalendar_write_contents($$$$)
 	print STDOUT qq{BEGIN:VEVENT$endl};
 	print STDOUT qq{DTSTAMP:$dtstamp$endl};
 
-	print STDOUT qq{CATEGORIES:HOLIDAY$endl}, qq{CLASS:PUBLIC$endl};
+	if ($path_info =~ /\.ics$/) {
+	    print STDOUT qq{CATEGORIES:Holidays$endl};
+	} else {
+	    print STDOUT qq{CATEGORIES:HOLIDAY$endl};
+	}
 
-	print STDOUT qq{SUMMARY:},
-	    $events->[$i]->[$Hebcal::EVT_IDX_SUBJ], $endl;
+	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	$subj =~ s/,/\\,/g;
 
-	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
-	{
-	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)\s*$/)
-	    {
-		print STDOUT qq{LOCATION:$1$endl};
-	    }
-	    else
-	    {
-		print STDOUT qq{DESCRIPTION:},
-		$events->[$i]->[$Hebcal::EVT_IDX_MEMO], $endl;
-	    }
+	print STDOUT qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl};
+
+ 	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
+ 	{
+ 	    my $memo = $events->[$i]->[$Hebcal::EVT_IDX_MEMO];
+ 	    $memo =~ s/,/\\,/g;
+
+ 	    if ($memo =~ /^in (.+)\s*$/)
+ 	    {
+ 		print STDOUT qq{LOCATION:$1$endl};
+ 	    }
+ 	    else
+ 	    {
+ 		print STDOUT qq{DESCRIPTION:},
+ 		$memo, $endl;
+ 	    }
 	}
 
 	my($date) = sprintf("%04d%02d%02d",
@@ -1501,7 +1510,8 @@ sub vcalendar_write_contents($$$$)
 	elsif ($path_info !~ /\.ics$/)
 	{
 	    # for vCalendar Palm Desktop and Outlook 2000 seem to
-	    # want midnight to midnight for all-day events
+	    # want midnight to midnight for all-day events.
+	    # Midnight to 23:59:59 doesn't seem to work as expected.
 	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
 		($events->[$i]->[$Hebcal::EVT_IDX_YEAR],
 		 $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
