@@ -39,6 +39,21 @@ use strict;
 
 my($VERSION) = '$Revision$'; #'
 
+$Hebcal::gregorian_warning = "<p><font color=\"#ff0000\">WARNING:
+Results for year 1752 C.E. and before may not be accurate.  Hebcal
+does not take into account a correction of twelve days was
+introduced by Pope Gregory XIII known as the Gregorian
+Reformation.</font> For more information, see <a
+href=\"http://www.xoc.net/maya/help/gregorian.asp\">Gregorian and
+Julian Calendars</a>.</p>";
+
+$Hebcal::indiana_warning = "<p><font color=\"#ff0000\">WARNING:
+Indiana has confusing time zone &amp; Daylight Saving Time
+rules.</font> You might want to read <a
+href=\"http://www.mccsc.edu/time.html\">What time is it in
+Indiana?</a> to make sure the above settings are correct.</p>";
+
+
 # boolean options
 @Hebcal::opts = ('c','o','s','i','a','d','D');
 
