@@ -21,9 +21,9 @@ href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
 </td></tr></table><h1>1-Click Shabbat by Email</h1>
 <?php
-require("./smtp.inc");
-require("./zips.inc");
-require("HTML/Form.php");
+require "./smtp.inc";
+require "../common.inc";
+require "HTML/Form.php";
 
 $VER = '$Revision$';
 $matches = array();
@@ -100,10 +100,14 @@ else {
 }
 my_footer();
 
-function my_open_db() {
-    $passfile = file('hebcal-db-pass.cgi');
+function get_password() {
+    $passfile = file("../hebcal-db-pass.cgi");
     $password = trim($passfile[0]);
-    $db = mysql_pconnect('mysql.hebcal.com', 'mradwin_hebcal', $password)
+    return $password;
+}
+
+function my_open_db() {
+    $db = mysql_pconnect('mysql.hebcal.com', 'mradwin_hebcal', get_password())
 	or die("Could not connect: " . mysql_error());
     return $db;
 }
@@ -285,9 +289,9 @@ lighting times.  Email is sent out every week on Thursday morning.</p>
 <input type="hidden" name="geo" value="city">
 <label for="city">Closest City:</label>
 <?php
-global $city_tz;
+global $hebcal_city_tz;
 $entries = array();
-foreach ($city_tz as $k => $v) {
+foreach ($hebcal_city_tz as $k => $v) {
     $entries[$k] = $k;
 }
 if ($param['city']) {
@@ -378,8 +382,10 @@ function subscribe($param) {
 	    "not appear to be a 5-digit zip code.");
 	}
 
+	$password = get_password();
 	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    get_zipcode_fields($param['zip']);
+	    hebcal_get_zipcode_fields($param['zip'], $password);
+
 	if (!$state)
 	{
 	    form($param,
@@ -399,9 +405,9 @@ function subscribe($param) {
 	    "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
-	global $tz_names;
+	global $hebcal_tz_names;
 	$param['tz'] = $tz;
-	$tz_descr = "Time zone: " . $tz_names['tz_' . $tz];
+	$tz_descr = "Time zone: " . $hebcal_tz_names['tz_' . $tz];
 
 	if ($dst) {
 	    $param['dst'] = 'usa';
@@ -421,8 +427,8 @@ function subscribe($param) {
 	    "Please select a city for candle lighting times.");
 	}
 
-	global $city_tz;
-	if (!isset($city_tz[$param['city']]))
+	global $hebcal_city_tz;
+	if (!isset($hebcal_city_tz[$param['city']]))
 	{
 	    form($param,
 	    "Sorry, <b>" . htmlspecialchars($param['city']) . "</b> is\n" .
@@ -430,9 +436,9 @@ function subscribe($param) {
 	}
 
 	$city_descr = $param['city'];
-	global $tz_names;
+	global $hebcal_tz_names;
 	$tz_descr = "Time zone: " .
-	     $tz_names['tz_' . $city_tz[$param['city']]];
+	     $hebcal_tz_names['tz_' . $hebcal_city_tz[$param['city']]];
 	$dst_descr = '';
 
 	unset($param['zip']);
