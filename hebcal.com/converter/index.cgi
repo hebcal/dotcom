@@ -279,12 +279,9 @@ sub form($$$)
 
     print STDOUT qq{$message<form name="f1" id="f1"\naction="$script_name">
 <center><table cellpadding="4">
-<tr align="center"><td colspan="3">Gregorian to Hebrew</td>
-<td>&nbsp;</td>
-<td colspan="3">Hebrew to Gregorian</td></tr>
-<tr><td>Day</td><td>Month</td><td>Year</td>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-<td>Day</td><td>Month</td><td>Year</td></tr>
+<tr align="center"><td class="box"><table>
+<tr><td colspan="3">Gregorian to Hebrew</td></tr>
+<tr><td>Day</td><td>Month</td><td>Year</td></tr>
 <tr><td>},
     $q->textfield(-name => "gd",
 		  -id => "gd",
@@ -300,9 +297,15 @@ sub form($$$)
 		  -id => "gy",
 		  -maxlength => 4,
 		  -size => 4),
-    qq{</td>\n<td>},
-    qq{&nbsp;},
-    qq{</td>\n<td>},
+    qq{</td></tr>
+<tr><td colspan="3"><input name="g2h"
+type="submit" value="Compute Hebrew Date"></td></tr>
+</table></td>
+<td>&nbsp;&nbsp;&nbsp</td>
+<td class="box"><table>
+<tr><td colspan="3">Hebrew to Gregorian</td></tr>
+<tr><td>Day</td><td>Month</td><td>Year</td></tr>\n},
+    qq{<tr><td>},
     $q->textfield(-name => "hd",
 		  -id => "hd",
 		  -maxlength => 2,
@@ -318,18 +321,17 @@ sub form($$$)
 		  -maxlength => 4,
 		  -size => 4),
     qq{</td></tr>
-<tr><td colspan="3"><input name="g2h"
-type="submit" value="Compute Hebrew Date"></td>
-<td>&nbsp;</td>
-<td colspan="3"><input name="h2g"
+<tr><td colspan="3"><input name="h2g"
 type="submit" value="Compute Gregorian Date"></td>
-</tr><tr><td colspan="7" align="center">
+</tr></table>
+</td></tr>
+</table>
 <label for="heb">
 },
     $q->checkbox(-name => 'heb',
 		 -id => 'heb',
 		 -label => "\nShow date in Hebrew font"),
-    qq{</label><br>(requires minimum of IE 4 or Netscape 6)\n</td></tr></table></center></form>};
+    qq{</label><br><small>(requires minimum of IE 4 or Netscape 6)</small>\n</center></form>};
 
     print STDOUT <<EOHTML
 <p>Reference: <em><a
