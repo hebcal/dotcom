@@ -360,9 +360,9 @@ EOHTML
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
-	if (defined $read_on{$h})
+	if (defined $read_on{$h} && defined $read_on{$h}->[0])
 	{
-	    print OUT1 qq{ - <small>$read_on{$h}</small>\n};
+	    print OUT1 qq{ - <small>$read_on{$h}->[0]</small>\n};
 	}
     }
 
@@ -375,9 +375,9 @@ EOHTML
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
-	if (defined $read_on{$h})
+	if (defined $read_on{$h} && defined $read_on{$h}->[0])
 	{
-	    print OUT1 qq{ - <small>$read_on{$h}</small>\n};
+	    print OUT1 qq{ - <small>$read_on{$h}->[0]</small>\n};
 	}
     }
 
@@ -491,8 +491,8 @@ sub write_sedra_page {
 	$prev_anchor .= ".html";
 
 	my $title = "Previous Parsha";
-	if (defined $read_on{$prev}) {
-	    $title = "Torah Reading for " . $read_on{$prev};
+	if (defined $read_on{$prev} && defined $read_on{$prev}->[0]) {
+	    $title = "Torah Reading for " . $read_on{$prev}->[0];
 	}
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
 	    qq{title="$title">&lt;&lt; $prev</a>};
@@ -507,8 +507,8 @@ sub write_sedra_page {
 	$next_anchor .= ".html";
 
 	my $title = "Next Parsha";
-	if (defined $read_on{$next}) {
-	    $title = "Torah Reading for " . $read_on{$next};
+	if (defined $read_on{$next} && defined $read_on{$next}->[0]) {
+	    $title = "Torah Reading for " . $read_on{$next}->[0];
 	}
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
 	    qq{title="$title">$next &gt;&gt;</a>};
@@ -703,6 +703,21 @@ EOHTML
 	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
 
+    if (defined $read_on{$h})
+    {
+	print OUT2 <<EOHTML;
+<h3><a name="dates">List of Dates</a></h3>
+Parashat $h is read on:
+<ul>
+EOHTML
+	;
+	foreach my $stime (@{$read_on{$h}}) {
+	    next unless defined $stime;
+	    print OUT2 "<li>$stime\n";
+	}
+	print OUT2 "</ul>\n";
+    }
+    
     print OUT2 <<EOHTML;
 <a
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20"><img
@@ -848,9 +863,22 @@ sub readings_for_current_year
 {
     my($current,$parsha_time) = @_;
 
-    my(@events) = &Hebcal::invoke_hebcal('./hebcal -s -h -x -H', '');
-    my($i);
-    for ($i = 0; $i < @events; $i++)
+    my $heb_yr = `./hebcal -t -x -h | grep -v Omer`;
+    chomp($heb_yr);
+    $heb_yr =~ s/^.+, (\d\d\d\d)/$1/;
+
+    my @years;
+    foreach my $i (0 .. 3)
+    {
+	my($yr) = $heb_yr + $i;
+	my(@ev) = &Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '');
+	$years[$i] = \@ev;
+    }
+
+    for (my $yr = 0; $yr < 4; $yr++)
+    {
+    my @events = @{$years[$yr]};
+    for (my $i = 0; $i < @events; $i++)
     {
 	next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
 	my $h = $1;
@@ -862,7 +890,9 @@ sub readings_for_current_year
 			    $Hebcal::MoY_long{$month},
 			    $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
-	$current->{$h} = $stime;
+	$current->{$h}->[$yr] = $stime;
+	next unless $yr == 0;
+
 	$parsha_time->{$h} = &Time::Local::timelocal
 	    (1,0,0,
 	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
@@ -893,6 +923,7 @@ sub readings_for_current_year
 		$aliyah->{'end'},
 		$aliyah->{'numverses'};
 	}
+    }
     }
 }
 
