@@ -88,6 +88,7 @@
   <li>Pesach 8</li>
   <li>Pesach 8 (on Shabbat)</li>
  </group>
+ <group>Days of the Omer</group>
  <group hebdate="27 Nisan">Yom HaShoah</group>
  <group hebdate="1 Iyyar">Rosh Chodesh Iyyar</group>
  <group hebdate="2/3/4 Iyyar">Yom HaZikaron</group>
@@ -733,7 +734,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <festival id="Erev Simchat Torah"
- hebrew="שִׂמְחַת תּוֹרָה"
+ hebrew="עֶרֶב שִׂמְחַת תּוֹרָה"
  descr="Day of Celebrating the Torah"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday6.htm" />
@@ -1123,5 +1124,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="Jerusalem Day.  Commemorates the re-unification of Jerusalem in 1967"
  yomtov="0">
  <about href="http://aish.com/holidays/yom_yerushalayim/last/yom.asp" />
+</festival>
+<festival id="Days of the Omer"
+ descr="7 weeks from the second night of Pesach to the day before Shavuot"
+ hebrew="עוֹמֶר"
+ yomtov="0">
+ <about href="http://www.jewfaq.org/holidayb.htm" />
 </festival>
 </festivals>
