@@ -144,8 +144,15 @@ Calendar</a> to put a calendar on your website.</p>
 </table>
 
 <p>To add candle-lighting times for your town, you can add
-<code>;c=on;zip=90210;m=72</code> to the end of the URL
-(be sure to change <span class="hl">90210</span> to your shul's zip code).</p>
+<code>;c=on;zip=90210;m=72;s=on</code> to the end of the 2nd URL (be
+sure to change <span class="hl">90210</span> to your shul's zip code).
+For example, </p>
+
+<pre>
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x<span class="hl">;c=on;zip=90210;m=72;s=on</span>"&gt;
+&lt;/script&gt;
+</pre>
 
 <h2>Specifics about Jewish Holidays</h2>
 
@@ -478,7 +485,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed Mar 20 17:36:50 EST 2002
+Last modified: Thu Mar 21 01:35:59 EST 2002
 <!-- hhmts end -->
 ($Revision$)
 </span>
