@@ -21,7 +21,10 @@ Jewish Calendar Tools</small></td>
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
-<span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif"><!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
+<span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
+<span style="font-weight: bold; font-style: italic; color: #cc9966">Chag
+Sukkot Sameach!</span> &nbsp; - &nbsp;
+<!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="12" cellspacing="0">
 <tr><td valign="top">
