@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar 26 15:45:32 PST 2001
+Last modified: Fri Apr  6 09:36:36 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1093,7 +1093,7 @@ so you can keep this window open.
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
 	{
-	    $subj .= qq{\n/ <span lang="he" dir="rtl"\nstyle="font-family: David">$hebrew</span>};
+	    $subj .= qq{\n/ <span lang="he" dir="rtl"\nstyle="font-family: David,'Times New Roman',serif">$hebrew</span>};
 	}
 
 	unless ($q->param('vis'))
@@ -1141,7 +1141,19 @@ so you can keep this window open.
 
 	    $cal->addcontent($mday, "<br>\n")
 		if $cal->getcontent($mday) ne '';
-	    $cal->addcontent($mday, "<small>$cal_subj</small>");
+
+	    my($class) = '';
+	    if ($events[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1)
+	    {
+		$class = ' class="hl"';
+	    }
+	    elsif ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
+		   /^\d+\w+.+, \d{4,}$/)
+	    {
+		$class = ' class="dim"';
+	    }
+
+	    $cal->addcontent($mday, "<small$class>$cal_subj</small>");
 	}
 
 
