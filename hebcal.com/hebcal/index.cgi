@@ -46,8 +46,8 @@ $default_zip = '95051';
 $year += 1900;
 
 $havdalah = 72;
-$candle = $roshchodesh = $usa = 1;
-$israel = $none = 0;
+$candle = $usa = 1;
+$roshchodesh = $israel = $none = 0;
 
 for ($i = -12; $i < 13; $i++)
 {
