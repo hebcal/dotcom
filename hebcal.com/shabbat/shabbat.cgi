@@ -745,13 +745,13 @@ $items->[$i]->{'date'} is at <b>$items->[$i]->{'time'}</b>});
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
 	    &Hebcal::out_html($cfg,qq{Holiday: <a name="$anchor"
-href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
+target="_top" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
 $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
 	    &Hebcal::out_html($cfg,qq{This week's Torah portion is <a name="$anchor"
-href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
+target="_top" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
 	}
     
 	&Hebcal::out_html($cfg,qq{</dt>\n});
