@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Mar  5 19:37:13 PST 2001
+Last modified: Mon Mar  5 19:41:12 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -49,7 +49,8 @@ $hhmts =~ s/\n//g;
 $hhmts =~ s/Last modified: /Software last updated:\n/g;
 
 my($html_footer) = "<hr
-noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
+noshade size=\"1\"><small>$hhmts
+(<a href=\"dist/ChangeLog.txt\">$rcsrev</a>)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved. - <a
 href=\"help/\">Frequently
