@@ -238,17 +238,76 @@ directly on your web page:</p>
 <table border="1" cellpadding="8">
 <tr><td><pre>
 &lt;script type="text/javascript" language="JavaScript"
-src="http://www.hebcal.com/shabbat/?zip=<span class="hl">90210</span>;cfg=j"&gt;
+src="http://www.hebcal.com/shabbat/?zip=<span class="hl">90210</span>;m=72;cfg=j"&gt;
 &lt;/script&gt;
 &lt;noscript&gt;
-&lt;a href="http://www.hebcal.com/shabbat/?zip=<span class="hl">90210</span>"&gt;1-Click
+&lt;!-- this link seen by people who have JavaScript turned off --&gt;
+&lt;a href="http://www.hebcal.com/shabbat/?zip=<span class="hl">90210</span>;m=72"&gt;1-Click
 Shabbat Candle Lighting times&lt;/a&gt;.
 &lt;/noscript&gt;
 </pre></td></tr>
 </table>
 
-<p>Make sure you replace both <span class="hl">zip
-codes</span> with your synagogue's zip code.</p>
+<p>Make sure you replace both <span class="hl">zip codes</span> with
+your synagogue's zip code.  You can also change the "Havdalah minutes
+past sundown" setting from the default of 72 to whatever your minhag is
+by changing the <tt>m=72</tt> to something like <tt>m=50</tt>.</p>
+
+<p>The result will look something like this (without the rectangular
+border):</p>
+
+<table border="1" cellpadding="8">
+<tr><td>
+<h3><a target="_top"
+href="http://www.hebcal.com/shabbat/?geo=zip;zip=90210;dst=usa;tz=-8;m=72">1-Click
+Shabbat</a> for Beverly Hills, CA 90210</h3>
+<!-- hebcal -L 118,24 -l 34,5 -z -8 -Z usa -m 72 -c -s -c 2001 -->
+<dl>
+<dt>Candle lighting for
+Friday, 28 December 2001 is at <b>4:34 PM</b>
+<dt>This week's Torah portion is <b>Parashat Vayechi</b>
+<span class="goto">(<a target="_top"
+href="http://learn.jtsa.edu/topics/parashah/5762/vayehi.shtml">Drash</a>
+- <a target="_top"
+href="http://learn.jtsa.edu/topics/parashah/jpstext/vayehi.shtml">Torah</a>
+- <a target="_top"
+href="http://learn.jtsa.edu/topics/parashah/jpstext/vayehi_haft.shtml">Haftarah</a>)</span>
+<dt>Havdalah (72 min) for
+Saturday, 29 December 2001 is at <b>6:05 PM</b>
+</dl>
+<font size="-2" face="Arial">1-Click Shabbat
+<a name="copyright">Copyright &copy; 2001
+Michael J. Radwin. All rights reserved.</a>
+<a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
+<a target="_top" href="http://www.hebcal.com/help/">Help</a> -
+<a target="_top" href="http://www.hebcal.com/contact/">Contact</a></font>
+</td></tr>
+</table>
+
+<p>To change the fonts, add a CSS stylesheet like this to the
+<tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
+page:</p>
+
+<blockquote><pre>
+&lt;style type="text/css"&gt;
+&lt;!--
+H1, H2, H3, H4, H5, H6 {
+ font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
+}
+--&gt;
+&lt;/style&gt;
+</pre></blockquote>
+
+<p>To disable the (Drash - Torah - Haftarah) links, use this CSS
+stylesheet:</p>
+
+<blockquote><pre>
+&lt;style type="text/css"&gt;
+&lt;!--
+.goto { display: none }
+--&gt;
+&lt;/style&gt;
+</pre></blockquote>
 
 <h2><a name="yahrzeit-tags">How can my synagogue link to the
 Yahrzeit, Birthday and Anniversary Calendar from its own
@@ -401,7 +460,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Thu Dec 13 13:56:03 EST 2001
+Last modified: Thu Dec 27 14:26:53 EST 2001
 <!-- hhmts end -->
 ($Revision$)
 </font>
