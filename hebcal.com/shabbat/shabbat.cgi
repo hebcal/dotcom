@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 20:11:26 PDT 2001
+Last modified: Mon May  7 21:18:22 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -293,14 +293,19 @@ $title =~ s/ &nbsp;/ /;
 
 if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 {
+    my($self_url) = join('', "http://", $q->virtual_host(), $script_name,
+			 "?zip=", $q->param('zip'), 
+			 ";geo=zip;dst=", $q->param('dst'));
+    $self_url .= ";tz=" . $q->param('tz')
+	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
+    $self_url .= ";m=" . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
     if ($q->param('cfg') =~ /^[ij]$/)
     {
 	&my_header($title, '');
 
-	my($url) = $q->url();
-	$url =~ s,/index.html$,/,;
-
-	&out_html("<h3><a target=\"_top\"\nhref=\"$url\">1-Click\n",
+	&out_html("<h3><a target=\"_top\"\nhref=\"$self_url\">1-Click\n",
 		  "Shabbat</a> for $city_descr</h3>\n");
     }
     else
@@ -314,18 +319,13 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 <rss version=\"0.91\">
 <channel>
 <title>$title</title>
-",
-		  "<link>http://", $q->server_name(), $script_name,
-		  "?zip=", $q->param('zip'), "&amp;dst=", $q->param('dst'));
-	&out_html("&amp;tz=", $q->param('tz'))
-	    if (defined $q->param('tz') && $q->param('tz') ne 'auto');
-	&out_html("&amp;m=", $q->param('m'))
-	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-	&out_html("</link>\n<description>Weekly Shabbat candle lighting ",
-		  "times for $city_descr</description>\n",
-		  "<language>en-us</language>\n",
-		  "<copyright>Copyright &copy; $this_year Michael J. Radwin.",
-		  " All rights reserved.</copyright>\n");
+<link>$self_url</link>
+<description>Weekly Shabbat candle lighting times for 
+$city_descr</description>
+<language>en-us</language>
+<copyright>Copyright &copy; $this_year Michael J. Radwin. 
+All rights reserved.</copyright>
+");
     }
 }
 else
@@ -469,7 +469,7 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 <description>Get Shabbat Times for another zip code</description>
 <name>zip</name>
 ");
-	&out_html("<link>http://", $q->server_name(), $script_name,
+	&out_html("<link>http://", $q->virtual_host(), $script_name,
 		  "</link>\n</textinput>\n");
 	&out_html("</channel>\n</rss>\n");
     }
