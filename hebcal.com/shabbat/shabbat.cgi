@@ -190,6 +190,19 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
 	$q->param('dst','none');
     }
 
+    # handle timezone == "auto"
+    my($tz) = &Hebcal::guess_timezone($q->param('tz'),
+				      $q->param('zip'),
+				      $state);
+    unless (defined $tz)
+    {
+	&form(1, "Sorry, can't auto-detect\n" .
+	      "timezone for <b>" . $city_descr . "</b>\n".
+	      "(state <b>" . $state . "</b> spans multiple time zones).",
+	      "<ul><li>Please select your time zone below.</li></ul>");
+    }
+    $q->param('tz', $tz);
+
     my(@city) = split(/([- ])/, $city);
     $city = '';
     foreach (@city)
@@ -199,46 +212,7 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
 	$city .= $_;
     }
 
-    $city_descr = "$city, $state &nbsp;" . $q->param('zip');
-
-    if ($q->param('tz') !~ /^-?\d+$/)
-    {
-	my($ok) = 0;
-	if (defined $Hebcal::known_timezones{$q->param('zip')})
-	{
-	    if ($Hebcal::known_timezones{$q->param('zip')} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{$q->param('zip')});
-		$ok = 1;
-	    }
-	}
-	elsif (defined $Hebcal::known_timezones{substr($q->param('zip'),0,3)})
-	{
-	    if ($Hebcal::known_timezones{substr($q->param('zip'),0,3)} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{substr($q->param('zip'),0,3)});
-		$ok = 1;
-	    }
-	}
-	elsif (defined $Hebcal::known_timezones{$state})
-	{
-	    if ($Hebcal::known_timezones{$state} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{$state});
-		$ok = 1;
-	    }
-	}
-
-	if ($ok == 0)
-	{
-	    &form(1,
-		  "Sorry, can't auto-detect\n" .
-		  "timezone for <b>" . $city_descr . "</b>\n".
-		  "(state <b>" . $state . "</b> spans multiple time zones).",
-		  "<ul><li>Please select your time zone below.</li></ul>");
-	}
-    }
-
+    $city_descr = "$city, $state " . $q->param('zip');
     $dst_descr = "Daylight Saving Time: " . $q->param('dst');
     $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
 
@@ -308,7 +282,6 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 }
 
 my($title) = "1-Click Shabbat for $city_descr";
-$title =~ s/ &nbsp;/ /;
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
@@ -378,7 +351,7 @@ else
     }
 
     &Hebcal::out_html($cfg,$Hebcal::indiana_warning)
-	if ($city_descr =~ / IN &nbsp;/);
+	if ($city_descr =~ / IN /);
 }
 
 my($cmd_pretty) = $cmd;
@@ -387,7 +360,6 @@ $cmd_pretty =~ s,.*/,,; # basename
 
 my($loc) = (defined $city_descr && $city_descr ne '') ?
     "in $city_descr" : '';
-$loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
