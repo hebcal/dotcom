@@ -160,6 +160,15 @@ calc_variation_options($axml, \%cycle_option2, $pattern2);
 my %readings1 = cycle_readings($bereshit_idx1,$events1,\%cycle_option1);
 my %readings2 = cycle_readings($bereshit_idx2,$events2,\%cycle_option2);
 
+my %special_maftir;
+my %special_haftara;
+foreach my $yr (($start_year - 3) .. ($start_year + 6))
+{
+    print "special readings for $yr\n";
+    my(@ev) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
+    special_readings(\@ev, \%special_maftir, \%special_haftara);
+}
+
 if ($opts{'t'})
 {
     my $fn = $opts{'t'};
@@ -1004,9 +1013,10 @@ sub special_readings
 				 $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 				 $Hebcal::MoY_short[$events->[$i]->[$Hebcal::EVT_IDX_MON]],
 				 $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
-	    if (defined $fxml->{'festival'}->{$h}->{'haftara'}) {
-		my $reading = $fxml->{'festival'}->{$h}->{'haftara'};
-		$haftara->{$stime2} = "$reading ($h)";
+	    my $haft =
+		$fxml->{'festival'}->{$h}->{'kriyah'}->{'haft'}->{'reading'};
+	    if (defined $haft) {
+		$haftara->{$stime2} = "$haft ($h)";
 	    }
 
 	    if (defined $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'}) {
@@ -1046,9 +1056,6 @@ sub readings_for_current_year
     my $heb_yr = $hebdate->{'yy'};
     $heb_yr--;
 
-    my %special_maftir;
-    my %special_haftara;
-
     my $extra_years = 5;
     my @years;
     foreach my $i (0 .. $extra_years)
@@ -1056,9 +1063,6 @@ sub readings_for_current_year
 	my($yr) = $heb_yr + $i;
 	my(@ev) = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
 	$years[$i] = \@ev;
-
-	my(@ev2) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
-	special_readings(\@ev2, \%special_maftir, \%special_haftara);
     }
 
     if ($opts{'f'}) {
@@ -1189,6 +1193,7 @@ sub triennial_csv
 	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			    @{$readings->{$h}->[$year]->[0]})
 	{
+	    next if $aliyah->{'num'} eq 'M' && defined $special_maftir{$stime2};
 	    printf CSV
 		qq{%s,"%s",%s,"$book %s - %s"\015\012},
 		$stime2,
@@ -1197,6 +1202,32 @@ sub triennial_csv
 		$aliyah->{'begin'},
 		$aliyah->{'end'};
 	}
+
+	if (defined $special_maftir{$stime2}) {
+	    printf CSV
+		qq{%s,"%s","%s","%s",\015\012},
+		$stime2,
+		$h,
+		'maf',
+		$special_maftir{$stime2};
+	}
+
+	my $haft = (defined $special_haftara{$stime2}) ?
+	    $special_haftara{$stime2} : $parshiot->{'parsha'}->{$h}->{'haftara'};
+
+	if (! defined $haft && $h =~ /^([^-]+)-(.+)$/ &&
+	    defined $combined{$1} && defined $combined{$2})
+	{
+	    my($p1,$p2) = ($1,$2);
+	    $haft = $parshiot->{'parsha'}->{$p2}->{'haftara'};
+	}
+
+	printf CSV
+	    qq{%s,"%s","%s","%s",\015\012},
+	    $stime2,
+	    $h,
+	    'Haftara',
+	    $haft;
 
 	print CSV "\015\012";
     }
