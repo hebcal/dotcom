@@ -12,7 +12,7 @@ use Getopt::Long ();
 
 my $COUNT_DEFAULT = 7;
 
-my $PROG = 'shabbat_deactivate.pl';
+my $PROG = "shabbat_deactivate.pl";
 my $VER = '$Revision$$';
 if ($VER =~ /(\d+)\.(\d+)/)
 {
@@ -63,9 +63,9 @@ EOF
 
 sub get_candidates
 {
-    my $site = 'hebcal.com';
-    my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
-    my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+    my $site = "hebcal.com";
+    my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $sql = qq{
 	SELECT DISTINCT a.bounce_address,r.bounce_id,count(r.bounce_id)
