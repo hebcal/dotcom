@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Mar  1 19:49:21 PST 2001
+Last modified: Thu Mar  8 15:36:10 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -281,7 +281,7 @@ unless ($default)
 my($title) = "1-Click Shabbat for $city_descr";
 $title =~ s/ &nbsp;/ /;
 
-if (defined $q->param('cfg'))
+if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 {
     if ($q->param('cfg') =~ /^[ij]$/)
     {
@@ -293,7 +293,7 @@ if (defined $q->param('cfg'))
 	&out_html("<h3><a target=\"_top\"\nhref=\"$url\">1-Click\n",
 		  "Shabbat</a> for $city_descr</h3>\n");
     }
-    elsif ($q->param('cfg') eq 'r')
+    else
     {
 	$title = '1-Click Shabbat: ' . $q->param('zip');
 	&my_header($title, '');
@@ -472,7 +472,7 @@ for ($i = 0; $i < $numEntries; $i++)
 &out_html("</p>\n")
     unless (defined $q->param('cfg') && $q->param('cfg') eq 'r');
 
-if (defined $q->param('cfg'))
+if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 {
     if ($q->param('cfg') eq 'i')
     {
