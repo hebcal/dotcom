@@ -7,6 +7,7 @@ use Time::Local;
 use Hebcal;
 
 $author = 'michael@radwin.org';
+$expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
 my($this_mon,$this_year) = (localtime)[4,5];
 $this_year += 1900;
@@ -16,7 +17,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 13 10:17:58 PDT 2000
+Last modified: Tue Sep 19 09:11:44 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -31,7 +32,6 @@ All rights reserved.</small></body></html>
 
 # process form params
 $q = new CGI;
-$q->delete('.s');		# we don't care about submit button
 
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
@@ -41,7 +41,7 @@ $server_name =~ s/^www\.//;
 $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
 		"\t\"http://www.w3.org/TR/html4/loose.dtd");
 
-if (! $q->param('v') &&
+if (! $q->param('zip') &&
     defined $q->raw_cookie() &&
     $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
 {
@@ -60,6 +60,11 @@ foreach $key ($q->param())
     $q->param($key,$val);
 }
 
+# default setttings needed for cookie
+$q->param('c','on');
+$q->param('nh','on');
+$q->param('nx','on');
+
 my($now) = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
@@ -70,20 +75,24 @@ $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 $sat_year = (localtime($saturday))[5] + 1900;
 $cmd  = '/home/users/mradwin/bin/hebcal';
 
+my($default) = 0;
 if (defined $q->param('city'))
 {
-    $q->param('city','New York')
-	unless defined($Hebcal::city_tz{$q->param('city')});
+    unless (defined($Hebcal::city_tz{$q->param('city')}))
+    {
+	$q->param('city','New York');
+	$default = 1;
+    }
 
     $q->param('geo','city');
-    $q->param('tz',$Hebcal::city_tz{$q->param('city')});
+    $q->delete('tz');
     $q->delete('dst');
 
     $cmd .= " -C '" . $q->param('city') . "'";
 
     $city_descr = $q->param('city');
 }
-elsif (defined $q->param('zip'))
+elsif (defined $q->param('zip') && $q->param('zip') ne '')
 {
     $q->param('dst','usa')
 	unless $q->param('dst');
@@ -91,11 +100,11 @@ elsif (defined $q->param('zip'))
 	unless $q->param('tz');
     $q->param('geo','zip');
 
-    if ($q->param('zip') eq '' || $q->param('zip') !~ /^\d{5}$/)
+    if ($q->param('zip') !~ /^\d{5}$/)
     {
-	$q->param('zip','90210');
-	$q->param('tz','-8');
-	$q->param('dst','usa');
+	&form(1,
+	      "Sorry, <b>" . $q->param('zip') . "</b> does\n" .
+	      "not appear to be a 5-digit zip code.");
     }
 
     $dbmfile = 'zips.db';
@@ -103,16 +112,13 @@ elsif (defined $q->param('zip'))
 	|| die "Can't tie $dbmfile: $!\n";
 
     $val = $DB{$q->param('zip')};
-    unless (defined $val)
-    {
-	$q->param('zip','90210');
-	$q->param('tz','-8');
-	$q->param('dst','usa');
-	$val = $DB{$q->param('zip')};
-    }
     untie(%DB);
 
-    die "bad zipcode database\n" unless defined $val;
+    &form(1,
+	  "Sorry, can't find\n".  "<b>" . $q->param('zip') .
+	  "</b> in the zip code database.\n",
+          "<ul><li>Please try a nearby zip code</li></ul>")
+	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
     ($city,$state) = split(/\0/, substr($val,6));
@@ -162,8 +168,18 @@ elsif (defined $q->param('zip'))
 	    }
 	}
 
-	die "panic: unknown timezone\n" unless $ok;
+	if ($ok == 0)
+	{
+	    &form(1,
+		  "Sorry, can't auto-detect\n" .
+		  "timezone for <b>" . $city_descr . "</b>\n".
+		  "(state <b>" . $state . "</b> spans multiple time zones).",
+		  "<ul><li>Please select your time zone below.</li></ul>");
+	}
     }
+
+    $dst_descr = "Daylight Saving Time: " . $q->param('dst');
+    $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -171,12 +187,13 @@ else
 {
     $q->param('city','New York');
     $q->param('geo','city');
-    $q->param('tz',$Hebcal::city_tz{$q->param('city')});
+    $q->delete('tz');
     $q->delete('dst');
 
     $cmd .= " -C '" . $q->param('city') . "'";
 
     $city_descr = $q->param('city');
+    $default = 1;
 }
 
 $cmd .= " -z " . $q->param('tz')
@@ -190,9 +207,34 @@ $cmd .= " -m " . $q->param('m')
 
 $cmd .= ' -s -h -c ' . $sat_year;
 
+unless ($default)
+{
+    my($newcookie) = &gen_cookie($q);
+    if (! defined $q->raw_cookie())
+    {
+	print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	$expires_date, "; path=/\015\012";
+    }
+    else
+    {
+	my($cmp1) = $newcookie;
+	my($cmp2) = $q->raw_cookie();
+
+	$cmp1 =~ s/\bC=t=\d+\&//;
+	$cmp2 =~ s/\bC=t=\d+\&//;
+
+	print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	$expires_date, "; path=/\015\012"
+	    if $cmp1 ne $cmp2;
+    }
+}
+
+my($title) = "1-Click Shabbat for $city_descr";
+$title =~ s/ &nbsp;/ /;
+
 print STDOUT $q->header(),
-    $q->start_html(-title => "1-Click Shabbat for $city_descr",
-		   -target=>'_top',
+    $q->start_html(-title => $title,
+		   -target => '_top',
 		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			     $q->Link({-rel => 'stylesheet',
@@ -210,7 +252,23 @@ print STDOUT
     "<td align=\"right\"><small><a\n",
     "href=\"/search/\">Search</a></small>",
     "</td></tr></table>",
-    "<h1>1-Click\nShabbat for $city_descr</h1>\n";
+    "<h1>1-Click\nShabbat</h1><h2>$city_descr</h2>\n";
+
+if (defined $dst_descr && defined $tz_descr)
+{
+    print STDOUT "&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n";
+}
+
+if ($city_descr =~ / IN &nbsp;/)
+{
+    print STDOUT "<p><font color=\"#ff0000\">",
+    "Indiana has confusing time zone &amp;\n",
+    "Daylight Saving Time rules.</font>\n",
+    "You might want to read <a\n",
+    "href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
+    "Indiana?</a> to make sure the above settings are\n",
+    "correct.</p>";
+}
 
 my($cmd_pretty) = $cmd;
 $cmd_pretty =~ s,.*/,,; # basename
@@ -233,7 +291,7 @@ my($numEntries) = scalar(@events);
 my($i);
 for ($i = 0; $i < $numEntries; $i++)
 {
-    $time = &timelocal(0,0,0,
+    $time = &Time::Local::timelocal(0,0,0,
 		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
@@ -259,7 +317,79 @@ for ($i = 0; $i < $numEntries; $i++)
 }
 
 print STDOUT "</pre>";
+&form(0,'','');
 print STDOUT $html_footer;
 
 close(STDOUT);
 exit(0);
+
+sub form
+{
+    my($head,$message,$help) = @_;
+
+    if ($head)
+    {
+	print STDOUT
+	    $q->header(),
+	    $q->start_html(-title => "1-Click Shabbat",
+			   -target=>'_top',
+			   -head => [
+			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			     $q->Link({-rel => 'stylesheet',
+				       -href => '/style.css',
+				       -type => 'text/css'}),
+			     ],
+			   -meta => {'robots' => 'noindex'});
+
+	print STDOUT
+	    "<table width=\"100%\"\nclass=\"navbar\">",
+	    "<tr><td><small>",
+	    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
+	    "<tt>-&gt;</tt>\n",
+	    "1-Click Shabbat</small></td>",
+	    "<td align=\"right\"><small><a\n",
+	    "href=\"/search/\">Search</a></small>",
+	    "</td></tr></table>",
+	    "<h1>1-Click\nShabbat</h1>\n";
+    }
+
+    if ($message ne '')
+    {
+	$help = '' unless defined $help;
+	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
+	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
+    }
+    elsif ($head == 0)
+    {
+	$message = "<hr noshade size=\"1\">";
+    }
+
+
+    print STDOUT
+	qq{$message\n<form action="$script_name">},
+	qq{<label for="zip">Zip code:\n},
+	$q->textfield(-name => 'zip',
+		      -id => 'zip',
+		      -size => 5,
+		      -maxlength => 5),
+	qq{</label><br><label\nfor="tz">Time zone:\n},
+	$q->popup_menu(-name => 'tz',
+		       -id => 'tz',
+		       -values => ['auto',-5,-6,-7,-8,-9,-10],
+		       -default => 'auto',
+		       -labels => \%Hebcal::tz_names),
+	qq{</label><br>Daylight Saving Time:\n},
+	$q->radio_group(-name => 'dst',
+			-values => ['usa','none'],
+			-default => 'usa',
+			-labels =>
+			{'usa' => "\nUSA (except AZ, HI, and IN) ",
+			 'israel' => "\nIsrael ",
+			 'none' => "\nnone ", });
+
+    print STDOUT
+	qq{<br><input type="submit" value="Get Shabbat Times"></form>},
+	$html_footer;
+
+    exit(0);
+}
