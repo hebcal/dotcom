@@ -154,7 +154,7 @@ sub vcalendar_display() {
     my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
     Hebcal::vcalendar_write_contents($q, \@events, undef, undef,
-				     'Hebcal Yahrzeit');
+				     'Yahrzeit');
 }
 
 sub dba_display
