@@ -143,6 +143,7 @@ if (defined $q->param('city'))
     $q->param('geo','city');
     $q->delete('tz');
     $q->delete('dst');
+    $q->delete('zip');
 
     $cmd .= " -C '" . $q->param('city') . "'";
 
@@ -155,6 +156,7 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
     $q->param('tz','auto')
 	unless $q->param('tz');
     $q->param('geo','zip');
+    $q->delete('city');
 
     if ($q->param('zip') !~ /^\d{5}$/)
     {
@@ -246,6 +248,7 @@ else
     $q->param('geo','city');
     $q->delete('tz');
     $q->delete('dst');
+    $q->delete('zip');
 
     $cmd .= " -C '" . $q->param('city') . "'";
 
@@ -306,8 +309,14 @@ $title =~ s/ &nbsp;/ /;
 if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
 {
     my($self_url) = join('', "http://", $q->virtual_host(), $script_name,
-			 "?zip=", $q->param('zip'), 
-			 ";geo=zip;dst=", $q->param('dst'));
+			 "?geo=", $q->param('geo'));
+
+    $self_url .= ";zip=" . $q->param('zip')
+	if $q->param('zip');
+    $self_url .= ";city=" . &Hebcal::url_escape($q->param('city'))
+	if $q->param('city');
+    $self_url .= ";dst=" . $q->param('dst')
+	if $q->param('dst');
     $self_url .= ";tz=" . $q->param('tz')
 	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
     $self_url .= ";m=" . $q->param('m')
