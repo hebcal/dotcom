@@ -1,7 +1,7 @@
 Header set P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\", CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
 Header set PICS-Label '(pics-1.1 "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0))'
 
-Redirect /_vti_bin/owssvr.dll http://www.hebcal.com/
+RedirectMatch ^/_vti http://www.hebcal.com/
 Redirect /MSOffice/cltreq.asp http://www.hebcal.com/
 
 # for WAP 1-click shabbat
