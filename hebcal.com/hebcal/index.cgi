@@ -442,8 +442,8 @@ JSCRIPT_END
     if ($message ne '')
     {
 	$help = '' unless defined $help;
-	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
+	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
+	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
     }
 
     print STDOUT $message, "\n",
@@ -982,10 +982,7 @@ sub results_page
 						     'month' => $mon);
 		$cal->width('97%');
 		$cal->border(1);
-		$cal->bgcolor('white');
-		$cal->bordercolor('');
-		$cal->contentcolor('black');
-		$cal->todaybordercolor('red');
+		$cal->todaycellclass('today');
 
 		$cal->header("<h2 align=\"center\"><a class=\"goto\" title=\"$prev_title\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
