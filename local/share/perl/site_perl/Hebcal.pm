@@ -1396,9 +1396,9 @@ sub macintosh_datebook($$)
 # export to vCalendar
 ########################################################################
 
-sub vcalendar_write_contents($$$$)
+sub vcalendar_write_contents($$$$$)
 {
-    my($q,$events,$tz,$state) = @_;
+    my($q,$events,$tz,$state,$title) = @_;
 
     my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
 
@@ -1467,6 +1467,7 @@ sub vcalendar_write_contents($$$$)
 
     if ($is_icalendar) {
 	print STDOUT qq{VERSION:2.0$endl},
+	qq{X-WR-CALNAME:Hebcal $title$endl},
 	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl};
     } else {
 	print STDOUT qq{VERSION:1.0$endl};
