@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl5 -w
 
+use DB_File;
+
 %known_timezones =
     (
      '99692', -10, # west alaska
@@ -69,7 +71,9 @@
      'PR', -5,
      );
 
-dbmopen(%DB,"/home/web/radwin.org/docs/hebcal/zips", 0400) || die;
+$dbmfile = '/home/web/radwin.org/docs/hebcal/zips.db';
+tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+    || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
 
 $yesterday = time - (60 * 60 * 24);
@@ -188,5 +192,5 @@ if ($unk_zip + $unk_tz > 0) {
 	printf "%s, %s %s (%d pv)\n", $zip_city, $state, $_, $unk_tz{$_};
     }
 }
-dbmclose(%DB);
+untie(%DB);
 exit(0);
