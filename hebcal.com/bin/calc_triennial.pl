@@ -129,7 +129,7 @@ my($hebrew_year);
 if ($opts{'H'}) {
     $hebrew_year = $opts{'H'};
 } else {
-    $hebrew_year = `./hebcal -t`;
+    $hebrew_year = `./hebcal -t -x -h | grep -v Omer`;
     chomp($hebrew_year);
     $hebrew_year =~ s/^.+, (\d\d\d\d)/$1/;
 }
@@ -575,7 +575,7 @@ EOHTML
 
 	if ($aliyah->{'numverses'}) {
 	    $info .= "\n<span class=\"tiny\">(" .
-		$aliyah->{'numverses'} . " p'sukim)</span>";
+		$aliyah->{'numverses'} . "&nbsp;p'sukim)</span>";
 	}
 
 	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
@@ -670,22 +670,31 @@ EOHTML
 	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
 
+    print OUT2 <<EOHTML;
+<dl>
+<dt>References
+<dd><em><a
+href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
+Hayim: Torah and Commentary</a></em>,
+David L. Lieber et. al., Jewish Publication Society, 2001.
+<dd><em><a 
+href="http://learn.jtsa.edu/topics/diduknow/responsa/trichart.shtml">A
+Complete Triennial System for Reading the Torah</a></em>,
+Committee on Jewish Law and Standards of the Rabbinical Assembly
+</dl>
+EOHTML
+;
+
     if ($prev_link || $next_link)
     {
 	print OUT2 <<EOHTML;
 <p>
 <table width="100%">
 <tr>
-<td align="left" width="33%">
+<td align="left" width="50%">
 $prev_link
 </td>
-<td align="center" width="33%">
-<small>Reference: <em><a
-href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
-Hayim: Torah and Commentary</a></em>,
-David L. Lieber et. al., JPS 2001.</small>
-</td>
-<td align="right" width="33%">
+<td align="right" width="50%">
 $next_link
 </td>
 </tr>
