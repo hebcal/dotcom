@@ -36,7 +36,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 13:38:17 PDT 2001
+Last modified: Sun Apr 22 13:43:57 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -107,7 +107,7 @@ else
 }
 
 print STDOUT $q->header(),
-    $q->start_html(-title => 'Hebcal Hewbrew Date Converter',
+    $q->start_html(-title => 'Hebcal Hebrew Date Converter',
 		   -target => '_top',
 		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
