@@ -292,6 +292,78 @@ $rcsrev =~ s/\s*\$//g;
      'Washington DC', 1,
      );
 
+# this doesn't work for weeks that have double parashiot
+# todo: automatically get URL from hebrew year
+%sedrot = (
+   "Bereshit", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/bereishi.htm',
+   "Bereshis", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/bereishi.htm',
+   "Noach", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/noach.htm',
+   "Lech-Lecha", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/lech.htm',
+   "Vayera", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/vayera.htm',
+   "Chayei Sara", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/chayeisa.htm',
+   "Toldot", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/toldos.htm',
+   "Toldos", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/toldos.htm',
+   "Vayetzei", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/vayeitze.htm',
+   "Vayishlach", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/vayishla.htm',
+   "Vayeshev", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/vayeshev.htm',
+   "Miketz", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/miketz.htm',
+   "Vayigash", 'http://www.virtual.co.il/education/education/ohr/tw/5760/bereishi/vayigash.htm',
+   "Vayechi", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bereishi/vayechi.htm',
+   "Shemot", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/shmos.htm',
+   "Shemos", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/shmos.htm',
+   "Vaera", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/vaera.htm',
+   "Bo", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/bo.htm',
+   "Beshalach", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/beshalac.htm',
+   "Yitro", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/yisro.htm',
+   "Yisro", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/yisro.htm',
+   "Mishpatim", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/mishpati.htm',
+   "Terumah", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/terumah.htm',
+   "Tetzaveh", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/tetzaveh.htm',
+   "Ki Tisa", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/kisisa.htm',
+   "Ki Sisa", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/kisisa.htm',
+   "Vayakhel", 'http://www.virtual.co.il/education/education/ohr/tw/5759/shmos/vayakhel.htm',
+   "Pekudei", 'http://www.virtual.co.il/education/education/ohr/tw/5757/shmos/pekudei.htm',
+   "Vayikra", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/vayikra.htm',
+   "Tzav", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/tzav.htm',
+   "Shmini", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/shmini.htm',
+   "Tazria", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/tazria.htm',
+   "Sazria", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/tazria.htm',
+   "Metzora", 'http://www.virtual.co.il/education/education/ohr/tw/5757/vayikra/metzora.htm',
+   "Achrei Mot", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/acharei.htm',
+   "Achrei Mos", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/acharei.htm',
+   "Kedoshim", 'http://www.virtual.co.il/education/education/ohr/tw/5757/vayikra/kedoshim.htm',
+   "Emor", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/emor.htm',
+   "Behar", 'http://www.virtual.co.il/education/education/ohr/tw/5759/vayikra/behar.htm',
+   "Bechukotai", 'http://www.virtual.co.il/education/education/ohr/tw/5757/vayikra/bechukos.htm',
+   "Bechukosai", 'http://www.virtual.co.il/education/education/ohr/tw/5757/vayikra/bechukos.htm',
+   "Bamidbar", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/bamidbar.htm',
+   "Nasso", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/naso.htm',
+   "Beha'alotcha", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/behaalos.htm',
+   "Beha'aloscha", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/behaalos.htm',
+   "Sh'lach", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/shlach.htm',
+   "Korach", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/korach.htm',
+   "Chukat", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/chukas.htm',
+   "Chukas", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/chukas.htm',
+   "Balak", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/balak.htm',
+   "Pinchas", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/pinchas.htm',
+   "Matot", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/matos.htm',
+   "Matos", 'http://www.virtual.co.il/education/education/ohr/tw/5759/bamidbar/matos.htm',
+   "Masei", '',
+   "Devarim", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/devarim.htm',
+   "Vaetchanan", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/vaeschan.htm',
+   "Vaeschanan", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/vaeschan.htm',
+   "Eikev", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/eikev.htm',
+   "Re'eh", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/reeh.htm',
+   "Shoftim", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/shoftim.htm',
+   "Ki Teitzei", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/kiseitze.htm',
+   "Ki Seitzei", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/kiseitze.htm',
+   "Ki Tavo", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/kisavo.htm',
+   "Ki Savo", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/kisavo.htm',
+   "Nitzavim", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/nitzavim.htm',
+   "Vayeilech", 'http://www.virtual.co.il/education/education/ohr/tw/5758/devarim/vayelech.htm',
+   "Ha'Azinu", 'http://www.virtual.co.il/education/education/ohr/tw/5759/devarim/haazinu.htm',
+	   );
+
 %tz_names = (
      '-5', 'U.S. Eastern',
      '-6', 'U.S. Central',
@@ -349,7 +421,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Thu Dec 16 19:07:01 PST 1999
+Last modified: Mon Dec 20 10:19:06 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1205,6 +1277,23 @@ so you can keep this window open.
 	$descr =~ s/&/&amp;/g;
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&gt;/g;
+
+	if ($descr =~ /^(Parshas\s+|Parashat\s+)(.+)/)
+	{
+	    $parashat = $1;
+	    $sedra = $2;
+	    if (defined $sedrot{$sedra} && $sedrot{$sedra} !~ /^\s*$/)
+	    {
+		$descr = '<a href="' . $sedrot{$sedra} . '">' . $parashat .
+		    $sedra . '</a>';
+	    }
+	    elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
+		   (defined $sedrot{$1} && $sedrot{$1} !~ /^\s*$/))
+	    {
+		$descr = '<a href="' . $sedrot{$1} . '">' . $parashat .
+		    $sedra . '</a>';
+	    }
+	}
 
 	$dow = ($year > 1969 && $year < 2038) ? 
 	    $DoW[&get_dow($year - 1900, $month - 1, $day)] . ' ' :
