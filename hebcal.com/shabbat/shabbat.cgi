@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 12 09:19:32 PST 2001
+Last modified: Tue Jan 16 17:00:05 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -48,7 +48,9 @@ $hhmts =~ s/Last modified: /Software last updated:\n/g;
 $html_footer = "<hr
 noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
-All rights reserved.</small></body></html>
+All rights reserved. - <a
+href=\"/michael/projects/hebcal/\">Frequently
+asked questions about this service.</a></small></body></html>
 ";
 
 my($inline_style) = qq[<style type="text/css">
