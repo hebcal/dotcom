@@ -29,7 +29,7 @@ use CGI;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(csv_write_contents dba_write_contents dba_write_header
-	     invoke_hebcal get_dow
+	     invoke_hebcal get_dow get_holiday_anchor
 	     url_escape http_date gen_cookie process_cookie);
 
 ########################################################################
@@ -195,6 +195,66 @@ $PALM_DBA_MAXENTRIES = 2500;
      'Vancouver'	=>	-8,
      'Washington DC'	=>	-5,
      );
+
+%holiday_anchors = (
+    "Asara B'Tevet"		=> "tevet",
+    "Channukah"			=> "chanukah",
+    "Channukah: 8th Day"	=> "chanukah",
+    "Chanukah"			=> "chanukah",
+    "Erev Pesach"		=> "pesach",
+    "Erev Rosh Hashana"		=> "rosh",
+    "Erev Shavuos"		=> "shavuot",
+    "Erev Shavuot"		=> "shavuot",
+    "Erev Sukkos"		=> "sukkot",
+    "Erev Sukkot"		=> "sukkot",
+    "Erev Yom Kippur"		=> "yomkippur",
+    "Lag B'Omer"		=> "lagbaomer",
+    "Pesach"			=> "pesach",
+    "Purim Katan"		=> "katan",
+    "Purim Koson"		=> "katan",
+    "Purim"			=> "purim",
+    "Rosh Hashana"		=> "rosh",
+    "Shabbas HaChodesh"		=> "hachodesh",
+    "Shabbas HaGadol"		=> "hagadol",
+    "Shabbas Hazon"		=> "hazon",
+    "Shabbas Nachamu"		=> "nachamu",
+    "Shabbas Parah"		=> "parah",
+    "Shabbas Shekalim"		=> "shekalim",
+    "Shabbas Shuvah"		=> "shuva",
+    "Shabbas Zachor"		=> "zachor",
+    "Shabbat HaChodesh"		=> "hachodesh",
+    "Shabbat HaGadol"		=> "hagadol",
+    "Shabbat Hazon"		=> "hazon",
+    "Shabbat Nachamu"		=> "nachamu",
+    "Shabbat Parah"		=> "parah",
+    "Shabbat Shekalim"		=> "shekalim",
+    "Shabbat Shuva"		=> "shuva",
+    "Shabbat Zachor"		=> "zachor",
+    "Shavuos"			=> "shavuot",
+    "Shavuot"			=> "shavuot",
+    "Shmini Atzeres"		=> "shmini",
+    "Shmini Atzeret"		=> "shmini",
+    "Shushan Purim"		=> "shushan",
+    "Simchas Torah"		=> "simchatorah",
+    "Simchat Torah"		=> "simchatorah",
+    "Sukkos"			=> "sukkot",
+    "Sukkos VII (Hoshana Raba)"	=> "sukkot",
+    "Sukkot"			=> "sukkot",
+    "Sukkot VII (Hoshana Raba)"	=> "sukkot",
+    "Ta'anis Bechoros"		=> "bechorot",
+    "Ta'anis Esther"		=> "esther",
+    "Ta'anit Bechorot"		=> "bechorot",
+    "Ta'anit Esther"		=> "esther",
+    "Tish'a B'Av"		=> "9av",
+    "Tu B'Shvat"		=> "tubshvat",
+    "Tzom Gedaliah"		=> "gedaliah",
+    "Tzom Tammuz"		=> "tammuz",
+    "Yom HaAtzma'ut"		=> "haatzmaut",
+    "Yom HaShoah"		=> "hashoah",
+    "Yom HaZikaron"		=> "hazikaron",
+    "Yom Kippur"		=> "yomkippur",
+    "Yom Yerushalayim"		=> "yerushalayim",
+		    );
 
 # this doesn't work for weeks that have double parashiot
 # todo: automatically get URL from hebrew year
@@ -376,6 +436,29 @@ sub get_dow($$$)
 
     (localtime($time))[6];	# $wday
 }
+
+sub get_holiday_anchor($)
+{
+    my($subj) = @_;
+
+    $subj =~ s/ \(CH''M\)$//;
+    $subj =~ s/ I+$//;
+    $subj =~ s/ VI*$//;
+    $subj =~ s/ IV$//;
+    $subj =~ s/ \d{4}$//;
+    $subj =~ s/: \d Candles?$//;
+
+    if (defined $holiday_anchors{$subj})
+    {
+	"/michael/projects/hebcal/defaults.html#$holiday_anchors{$subj}";
+    }
+    else
+    {
+	"";
+    }
+}
+    
+
 
 ########################################################################
 # web page utils
