@@ -36,6 +36,7 @@ print STDOUT <<EOF;
    <go href="/shabbat/" method="get">
     <postfield name="zip" value="\$(zip)"/>
     <postfield name="cfg" value="w"/>
+    <postfield name="m" value="50"/>
    </go>
   </do>
   <p>Enter Zip: <input name="zip" format="5N" size="5" value="$zip"/></p>
