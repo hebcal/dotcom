@@ -9,7 +9,7 @@ $sender = "webmaster@$site";
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head><title>Hebcal 1-Click Shabbat by Email</title>
-<base href="http://www.hebrewcalendar.org/email/" target="_top">
+<base href="http://www.<?php echo $site ?>/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
 class="navbar"><tr><td><small><strong><a
