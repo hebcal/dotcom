@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 10:38:40 PDT 2001
+Last modified: Mon May  7 10:43:50 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -442,7 +442,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	    }
 	    elsif ($href ne '')
 	    {
-		&out_html(qq{<a href="$href">$subj</a>});
+		&out_html(qq{<a\nhref="$href">$subj</a>});
 	    }
 	}
 	else
@@ -453,7 +453,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	# output day if it's a holiday
 	if ($subj !~ /^(Parshas\s+|Parashat\s+)/)
 	{
-	    &out_html(" on ", strftime("%A, %d %B", localtime($time)));
+	    &out_html("\non ", strftime("%A, %d %B", localtime($time)));
 	}
 
 	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
