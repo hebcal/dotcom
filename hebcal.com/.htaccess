@@ -6,7 +6,7 @@ ReadmeName README.html
 #ServerName www.hebcal.com
 
 Header append P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\""
-Header append P3P "CP=\"NOI CUSa OUR BUS PRE\""
+Header append P3P "CP=\"NON CUSo PSAo PSDo OUR IND PRE\""
 
 # for WAP 1-click shabbat
 AddHandler cgi-script .cgi
