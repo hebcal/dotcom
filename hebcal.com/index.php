@@ -50,6 +50,10 @@ Hebrew Birthdays and Anniversaries
 <h4><a href="/sedrot/">Torah Readings</a></h4>
 <span class="sm-grey">&gt;</span>
 aliyah-by-aliyah breakdown for weekly parshiyot
+<h4><a href="/holidays/">Jewish Holidays</a></h4>
+<span class="sm-grey">&gt;</span>
+Special Torah Readings for Jewish Holidays
+<span class="hl"><b>NEW!</b></span>
 <h4>Miscellaneous</h4>
 <a href="/help/">Help</a>
 <br><a href="/news/">What's New?</a>
