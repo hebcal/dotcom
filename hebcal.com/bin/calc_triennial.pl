@@ -963,10 +963,12 @@ sub get_parsha_info
 	$torah =~ s/\s+\d+:\d+\s*$/ $torah_end/;
 
 	# on doubled parshiot, read only the second Haftarah
-	$haftarah = $parshiot->{'parsha'}->{$p2}->{'haftara'};
-	$haftarah_seph = $parshiot->{'parsha'}->{$p2}->{'sephardic'};
+	# except for Nitzavim-Vayelech
+	my $ph = ($p1 eq 'Nitzavim') ? $p1 : $p2;
+	$haftarah = $parshiot->{'parsha'}->{$ph}->{'haftara'};
+	$haftarah_seph = $parshiot->{'parsha'}->{$ph}->{'sephardic'};
 
-	my $links = $parshiot->{'parsha'}->{$p2}->{'links'}->{'link'};
+	my $links = $parshiot->{'parsha'}->{$ph}->{'links'}->{'link'};
 	foreach my $l (@{$links})
 	{
 	    if ($l->{'rel'} eq 'torah')
@@ -1254,7 +1256,8 @@ sub readings_for_current_year
 	    defined $combined{$1} && defined $combined{$2})
 	{
 	    my($p1,$p2) = ($1,$2);
-	    $haft = $parshiot->{'parsha'}->{$p2}->{'haftara'};
+	    my $ph = ($p1 eq 'Nitzavim') ? $p1 : $p2;
+	    $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
 	}
 
 	printf CSV
@@ -1328,7 +1331,8 @@ sub triennial_csv
 	    defined $combined{$1} && defined $combined{$2})
 	{
 	    my($p1,$p2) = ($1,$2);
-	    $haft = $parshiot->{'parsha'}->{$p2}->{'haftara'};
+	    my $ph = ($p1 eq 'Nitzavim') ? $p1 : $p2;
+	    $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
 	}
 
 	printf CSV
