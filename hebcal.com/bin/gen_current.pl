@@ -23,6 +23,28 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	$parsha =~ s/ /\n/;
 	print OUT "<br><br><span class=\"sm-grey\">&gt;</span>\n";
 	print OUT "<b><a href=\"$href\">$parsha</a></b><br>$stime";
+	close(OUT);
+    }
+}
+
+my $inc = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
+open(OUT,">$inc") || die;
+close(OUT);
+
+$line = `/pub/m/r/mradwin/hebcal.com/bin/hebcal -x`;
+chomp($line);
+
+if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
+    my $holiday = $1;
+    my $href = &Hebcal::get_holiday_anchor($holiday);
+    if ($href) {
+	my($stime) = strftime("%d %B %Y", localtime(time()));
+
+	open(OUT,">$inc") || die;
+	$holiday =~ s/ /\n/;
+	print OUT "<span class=\"sm-grey\">&gt;</span>\n";
+	print OUT "<b><a href=\"$href\">$holiday</a></b><br>$stime<br>\n";
+	close(OUT);
     }
 }
 
