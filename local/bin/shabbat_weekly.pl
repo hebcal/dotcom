@@ -3,8 +3,7 @@
 use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 
 use strict;
-use DB_File;
-use Fcntl qw(:DEFAULT :flock);
+use DB_File::Lock;
 use Hebcal;
 use POSIX qw(strftime);
 use MIME::Base64;
@@ -156,12 +155,9 @@ sub load_subs
 {
     my(%subs);
 
-    my $lockfd = &Hebcal::emaildb_lock(LOCK_SH);
-
     my($dbmfile) = '/pub/m/r/mradwin/hebcal.com/email/subs.db';
     my(%DB);
-    my($db) = tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444,
-		  $DB_File::DB_HASH)
+    tie(%DB, 'DB_File::Lock', $dbmfile, O_RDONLY, 0444, $DB_HASH, 'read')
 	or die "$dbmfile: $!\n";
 
     if ($ARGV[0] eq '-all')
@@ -188,9 +184,7 @@ sub load_subs
 	}
     }
 
-    undef $db;
     untie(%DB);
-    &Hebcal::emaildb_unlock($lockfd);
 
     %subs;
 }
