@@ -5,7 +5,6 @@
 use Hebcal;
 use Getopt::Std;
 use XML::Simple;
-use Data::Dumper;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -13,10 +12,12 @@ $0 =~ s,.*/,,;  # basename
 my($usage) = "usage: $0 [-h] [-H <year>] aliyah.xml output-dir
     -h        Display usage information.
     -H <year> Start with hebrew year <year> (default this year)
+    -t t.csv  Dump triennial readings to comma separated values
+    -f f.csv  Dump full kriyah readings to comma separated values
 ";
 
 my(%opts);
-&getopts('hH:c:', \%opts) || die "$usage\n";
+&getopts('hH:c:t:f:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
@@ -209,6 +210,9 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
 	my $a = $triennial_aliyot{$h}->{$variation};
 	die unless defined $a;
 	$readings{$h}->[$year] = [$a, $stime, $h];
+	if ($opts{'t'}) {
+#	    print TRI_CSV qq{};
+	}
     }
     elsif (defined $triennial_aliyot{$h}->{$year})
     {
@@ -258,8 +262,17 @@ foreach my $h (reverse @all_inorder)
     $h2 = $h;
 }
 
+if ($opts{'f'}) {
+    open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
+    print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
+}
+
 my(%read_on);
 &readings_for_current_year(\%read_on);
+
+if ($opts{'f'}) {
+    close(CSV);
+}
 
 foreach my $h (keys %readings)
 {
@@ -301,14 +314,10 @@ EOHTML
     ;
 
     my($prev_book) = 'Genesis';
-    foreach my $h (@all_inorder, @combined)
+    foreach my $h (@all_inorder)
     {
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
-	if ($book) {
-	    $book =~ s/\s+.+$//;
-	} else {
-	    $book = "Doubled Parshiyot";
-	}
+	$book =~ s/\s+.+$//;
 
 	my($anchor) = lc($h);
 	$anchor =~ s/[^\w]//g;
@@ -316,6 +325,21 @@ EOHTML
 	print OUT1 "</dl>\n<h3>$book</h3>\n<dl>\n"
 	    if ($prev_book ne $book);
 	$prev_book = $book;
+
+	print OUT1 qq{<dt><a name="$anchor" },
+	qq{href="$anchor.html">Parashat\n$h</a>\n};
+	if (defined $read_on{$h})
+	{
+	    print OUT1 qq{ - <small>$read_on{$h}</small>\n};
+	}
+    }
+
+    print OUT1 "</dl>\n<h3>Doubled Parshiyot</h3>\n<dl>\n";
+
+    foreach my $h (@combined)
+    {
+	my($anchor) = lc($h);
+	$anchor =~ s/[^\w]//g;
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
@@ -389,8 +413,7 @@ sub read_aliyot_metadata
 		    $aliyot->{$parsha}->{$y->{'variation'}} = $y->{'aliyah'};
 		}
 	    } else {
-		warn "strange data for Parashat $parsha";
-		die Dumper($y);
+		die "strange data for Parashat $parsha";
 	    }
 	}
 
@@ -535,11 +558,11 @@ EOHTML
 ;
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
-    my %fk;
-    foreach my $a (@{$aliyot})
+    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			@{$aliyot})
     {
-	my($c1,$v1) = ($a->{'begin'} =~ /^(\d+):(\d+)$/);
-	my($c2,$v2) = ($a->{'end'}   =~ /^(\d+):(\d+)$/);
+	my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
+	my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
 	my($info);
 	if ($c1 == $c2) {
 	    $info = "$c1:$v1-$v2";
@@ -547,20 +570,12 @@ EOHTML
 	    $info = "$c1:$v1-$c2:$v2";
 	}
 
-	if ($a->{'numverses'}) {
+	if ($aliyah->{'numverses'}) {
 	    $info .= "\n<span class=\"tiny\">(" .
-		$a->{'numverses'} . " p'sukim)</span>";
+		$aliyah->{'numverses'} . " p'sukim)</span>";
 	}
 
-	$fk{$a->{'num'}} = $info;
-    }
-
-    foreach (1 .. 7, 'M')
-    {
-	my($info) = $fk{$_};
-	next if (!defined $info && $_ eq 'M');
-	die "no fk $_ defined for $h" unless defined $info;
-	my($label) = ($_ eq 'M') ? 'maf' : $_;
+	my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
 	print OUT2 qq{<dt><a name="fk-$label">$label:</a>}, 
 		qq{<dd>$info\n};
     }
@@ -611,15 +626,15 @@ EOHTML
 	    next;
 	}
 
-	my %tri;
 	die "no aliyot array for $h (year $yr)"
 	    unless defined $triennial->[$yr]->[0];
 
-
-	foreach my $a (@{$triennial->[$yr]->[0]})
+	print OUT2 "<dl compact>\n";
+	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			    @{$triennial->[$yr]->[0]})
 	{
-	    my($c1,$v1) = ($a->{'begin'} =~ /^(\d+):(\d+)$/);
-	    my($c2,$v2) = ($a->{'end'}   =~ /^(\d+):(\d+)$/);
+	    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
+	    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
 	    my($info);
 	    if ($c1 == $c2) {
 		$info = "$c1:$v1-$v2";
@@ -627,16 +642,7 @@ EOHTML
 		$info = "$c1:$v1-$c2:$v2";
 	    }
 
-	    $tri{$a->{'num'}} = $info;
-	}
-
-	print OUT2 "<dl compact>\n";
-	foreach (1 .. 7, 'M')
-	{
-	    my($info) = $tri{$_};
-	    next if (!defined $info && $_ eq 'M');
-	    die "no aliyah $_ defined for $h" unless defined $info;
-	    my($label) = ($_ eq 'M') ? 'maf' : $_;
+	    my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
 	    print OUT2 qq{<dt><a name="tri-$yr-$label">$label:</a>}, 
 	    qq{<dd>$info\n};
 	}
@@ -785,5 +791,29 @@ sub readings_for_current_year
 			    $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
 	$current->{$h} = $stime;
+
+	next unless $opts{'f'};
+
+	my $stime2 = sprintf("%02d-%s-%04d",
+			     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+			     $Hebcal::MoY_short[$month - 1],
+			     $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
+	$book =~ s/\s+.+$//;
+
+	my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
+	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			    @{$aliyot})
+	{
+	    printf CSV
+		qq{%s,"%s",%s,"$book %s - %s",%s\015\012},
+		$stime2,
+		$h,
+		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
+		$aliyah->{'begin'},
+		$aliyah->{'end'},
+		$aliyah->{'numverses'};
+	}
     }
 }
