@@ -204,7 +204,9 @@ function my_footer() {
 Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
 <a target="_top" href="http://www.hebcal.com/help/">Help</a> -
-<a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
+<a target="_top" href="http://www.hebcal.com/contact/">Contact</a> -
+<a target="_top" href="http://www.hebcal.com/news/">News</a> -
+<a target="_top" href="http://www.hebcal.com/donations/">Donate</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
