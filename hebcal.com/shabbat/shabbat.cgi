@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Oct 11 09:50:39 PDT 2000
+Last modified: Wed Nov  8 08:29:14 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -278,31 +278,39 @@ print STDOUT $q->header(),
 			     ],
 		   -meta => {'robots' => 'noindex'});
 
-print STDOUT
-    "<table width=\"100%\"\nclass=\"navbar\">",
-    "<tr><td><small>",
-    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
-    "<tt>-&gt;</tt>\n",
-    "1-Click Shabbat</small></td>",
-    "<td align=\"right\"><small><a\n",
-    "href=\"/search/\">Search</a></small>",
-    "</td></tr></table>",
-    "<h1>1-Click\nShabbat</h1><h2>$city_descr</h2>\n";
-
-if (defined $dst_descr && defined $tz_descr)
+if (defined $q->param('cnf') && $q->param('cnf') eq 'i')
 {
-    print STDOUT "&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n";
+    print STDOUT "<h3><a target=\"_top\" href=\"/shabbat/\">1-Click\n",
+	"Shabbat</a> for $city_descr</h3>\n";
 }
-
-if ($city_descr =~ / IN &nbsp;/)
+else
 {
-    print STDOUT "<p><font color=\"#ff0000\">",
-    "Indiana has confusing time zone &amp;\n",
-    "Daylight Saving Time rules.</font>\n",
-    "You might want to read <a\n",
-    "href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
-    "Indiana?</a> to make sure the above settings are\n",
-    "correct.</p>";
+    print STDOUT
+	"<table width=\"100%\"\nclass=\"navbar\">",
+	"<tr><td><small>",
+	"<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
+	"<tt>-&gt;</tt>\n",
+	"1-Click Shabbat</small></td>",
+	"<td align=\"right\"><small><a\n",
+	"href=\"/search/\">Search</a></small>",
+	"</td></tr></table>",
+	"<h1>1-Click\nShabbat</h1><h2>$city_descr</h2>\n";
+
+    if (defined $dst_descr && defined $tz_descr)
+    {
+	print STDOUT "&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n";
+    }
+
+    if ($city_descr =~ / IN &nbsp;/)
+    {
+	print STDOUT "<p><font color=\"#ff0000\">",
+	"Indiana has confusing time zone &amp;\n",
+	"Daylight Saving Time rules.</font>\n",
+	"You might want to read <a\n",
+	"href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
+	"Indiana?</a> to make sure the above settings are\n",
+	"correct.</p>";
+    }
 }
 
 my($cmd_pretty) = $cmd;
@@ -377,8 +385,11 @@ for ($i = 0; $i < $numEntries; $i++)
 }
 
 print STDOUT "</p>\n";
-&form(0,'','');
-print STDOUT $html_footer;
+if (! defined $q->param('cnf') || $q->param('cnf') ne 'i')
+{
+    &form(0,'','');
+    print STDOUT $html_footer;
+}
 
 close(STDOUT);
 exit(0);
