@@ -169,7 +169,7 @@ this site going!</small>
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
-&copy; 2004 Michael J. Radwin. All rights reserved.
+&copy; <?php echo date("Y") ?> Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a> -
