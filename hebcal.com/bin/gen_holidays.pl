@@ -45,21 +45,24 @@ open(OUT, ">$outfile") || die "$outfile: $!\n";
 print OUT <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>Hebcal Default Holidays</title>
+<html><head><title>Hebcal Jewish Holidays</title>
 <base href="http://www.hebcal.com/help/holidays.html" target="_top">
 <link rel="stylesheet" href="/style.css" type="text/css">
 </head>
 <body>
+<!--htdig_noindex-->
 <table width="100%" class="navbar">
 <tr><td><small>
 <strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
 <a href="/help/">Help</a> <tt>-&gt;</tt>
-Default Holidays
+Holidays
 </small></td>
 <td align="right"><small><a
 href="/search/">Search</a></small>
 </td></tr></table>
-<h1>Hebcal Default Holidays</h1>
+
+<h1><a name="top" href="./">Hebcal Help</a>: Holidays</a></h1>
+<!--/htdig_noindex-->
 EOHTML
 ;
 
@@ -102,6 +105,30 @@ print OUT <<EOHTML;
 href="http://www.jewfaq.org/holidayb.htm">Days of the Omer</a>
 <dd>7 weeks from the second night of Pesach to the day before Shavuot
 </dl>
+
+<a name="faq"></a>
+<h2>Frequently Asked Questions</h2>
+
+<h3><a name="begin">When do the Holidays begin?</a></h3>
+
+<p>All Jewish Holidays begin the evening before the date specified.  This
+is because the Jewish day actually begins at sundown on the previous
+night.  Sometimes, for clarity, the Erev Holiday is also included.</p>
+
+<h3><a name="shabbat">When does Shabbat begin?</a></h3>
+
+<p>Shabbat begins 18 minutes before sundown on Friday night.  In Jerusalem,
+Shabbat begins 40 minutes before sundown.</p>
+
+<h3><a name="chol">What does CH''M mean?</a></h3>
+
+<p><strong>CH''M</strong> is an abbreviation for Chol Ha-Mo'ed.  Chol
+Ha-Mo'ed are the intermediate days of Passover and Sukkot, when work is
+permitted.</p>
+
+<h3><a name="sedrot">What are the weekly sedrot?</a></h3>
+
+<p>See the <a href="/sedrot/">Torah Readings</a> page.</p>
 <p>
 <hr noshade size="1">
 <span class="tiny">$copyright
