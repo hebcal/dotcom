@@ -44,7 +44,6 @@ while (my($to,$cfg) = each(%SUBS))
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = parse_config($cfg);
-    print "$to\n$cfg\n$cmd\n";
     my(@events) = Hebcal::invoke_hebcal($cmd,$loc,undef);
 
     my $encoded = encode_base64($to);
