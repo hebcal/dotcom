@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 23 10:25:04 PDT 2001
+Last modified: Fri Apr 27 10:02:35 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -105,6 +105,9 @@ foreach my $key ($q->param())
     if defined $q->param('m') &&
     $q->param('m') ne '' && $q->param('m') !~ /^\d+$/;
 
+$q->param('c','on')
+    if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/);
+
 &form("Please select at least one event option.")
     if ((!defined $q->param('nh') || $q->param('nh') eq 'off') &&
 	(!defined $q->param('nx') || $q->param('nx') eq 'off') &&
@@ -113,208 +116,10 @@ foreach my $key ($q->param())
 	(!defined $q->param('d') || $q->param('d') eq 'off') &&
 	(!defined $q->param('s') || $q->param('s') eq 'off'));
 
-if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
-{
-    my($dbmfile) = 'zips.db';
-    my(%DB);
-    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-	|| die "Can't tie $dbmfile: $!\n";
+my($cmd_extra,$city_descr,$lat_descr,$long_descr,$dst_tz_descr) =
+    &get_candle_config($q);
 
-    $q->param('c','on')
-	if (defined $DB{$q->param('zip')});
-
-    untie(%DB);
-}
-
-my($city_descr,$lat_descr,$long_descr,$dst_tz_descr);
-my($long_deg,$long_min,$lat_deg,$lat_min);
-
-if ($q->param('c') && $q->param('c') ne 'off' &&
-    defined $q->param('city'))
-{
-    &form("Sorry, invalid city\n<b>" . $q->param('city') . "</b>.")
-	unless defined($Hebcal::city_tz{$q->param('city')});
-
-    $q->param('geo','city');
-    $q->param('tz',$Hebcal::city_tz{$q->param('city')});
-    $q->delete('dst');
-
-    $cmd .= " -C '" . $q->param('city') . "'";
-
-    $city_descr = "Closest City: " . $q->param('city');
-    $lat_descr  = '';
-    $long_descr = '';
-    $dst_tz_descr = '';
-}
-elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
-       defined $q->param('lodir') &&
-       defined $q->param('ladeg') && defined $q->param('lamin') &&
-       defined $q->param('ladir'))
-{
-    &form("Sorry, all latitude/longitude\narguments must be numeric.")
-	if (($q->param('lodeg') !~ /^\d*$/) ||
-	    ($q->param('lomin') !~ /^\d*$/) ||
-	    ($q->param('ladeg') !~ /^\d*$/) ||
-	    ($q->param('lamin') !~ /^\d*$/));
-
-    $q->param('lodir','w') unless ($q->param('lodir') eq 'e');
-    $q->param('ladir','n') unless ($q->param('ladir') eq 's');
-
-    $q->param('lodeg',0) if $q->param('lodeg') eq '';
-    $q->param('lomin',0) if $q->param('lomin') eq '';
-    $q->param('ladeg',0) if $q->param('ladeg') eq '';
-    $q->param('lamin',0) if $q->param('lamin') eq '';
-
-    &form("Sorry, longitude degrees\n" .
-	  "<b>" . $q->param('lodeg') . "</b> out of valid range 0-180.")
-	if ($q->param('lodeg') > 180);
-
-    &form("Sorry, latitude degrees\n" .
-	  "<b>" . $q->param('ladeg') . "</b> out of valid range 0-90.")
-	if ($q->param('ladeg') > 90);
-
-    &form("Sorry, longitude minutes\n" .
-	  "<b>" . $q->param('lomin') . "</b> out of valid range 0-60.")
-	if ($q->param('lomin') > 60);
-
-    &form("Sorry, latitude minutes\n" .
-	  "<b>" . $q->param('lamin') . "</b> out of valid range 0-60.")
-	if ($q->param('lamin') > 60);
-
-    ($long_deg,$long_min,$lat_deg,$lat_min) =
-	($q->param('lodeg'),$q->param('lomin'),
-	 $q->param('ladeg'),$q->param('lamin'));
-
-    $q->param('dst','none')
-	unless $q->param('dst');
-    $q->param('tz','0')
-	unless $q->param('tz');
-    $q->param('geo','pos');
-
-    $city_descr = "Geographic Position";
-    $lat_descr  = "${lat_deg}d${lat_min}' " .
-	uc($q->param('ladir')) . " latitude";
-    $long_descr = "${long_deg}d${long_min}' " .
-	uc($q->param('lodir')) . " longitude";
-    $dst_tz_descr = "Daylight Saving Time: " .
-	$q->param('dst') . "\n<dd>Time zone: " .
-	    $Hebcal::tz_names{$q->param('tz')};
-
-    # don't multiply minutes by -1 since hebcal does it internally
-    $long_deg *= -1  if ($q->param('lodir') eq 'e');
-    $lat_deg  *= -1  if ($q->param('ladir') eq 's');
-
-    $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-}
-elsif ($q->param('c') && $q->param('c') ne 'off' &&
-       defined $q->param('zip'))
-{
-    $q->param('dst','usa')
-	unless $q->param('dst');
-    $q->param('tz','auto')
-	unless $q->param('tz');
-    $q->param('geo','zip');
-
-    &form("Please specify a 5-digit zip code\n" .
-	  "OR uncheck the candle lighting times box.")
-	if $q->param('zip') eq '';
-
-    &form("Sorry, <b>" . $q->param('zip') . "</b> does\n" .
-	  "not appear to be a 5-digit zip code.")
-	unless $q->param('zip') =~ /^\d\d\d\d\d$/;
-
-    my($dbmfile) = 'zips.db';
-    my(%DB);
-    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-	|| die "Can't tie $dbmfile: $!\n";
-
-    my($val) = $DB{$q->param('zip')};
-    untie(%DB);
-
-    &form("Sorry, can't find\n".  "<b>" . $q->param('zip') .
-	  "</b> in the zip code database.\n",
-          "<ul><li>Please try a nearby zip code or select candle\n" .
-	  "lighting times by\n" .
-          "<a href=\"" . $script_name .
-	  "?c=on&amp;geo=city\">city</a> or\n" .
-          "<a href=\"" . $script_name .
-	  "?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
-	unless defined $val;
-
-    ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
-    my($city,$state) = split(/\0/, substr($val,6));
-
-    if (($state eq 'HI' || $state eq 'AZ') &&
-	$q->param('dst') eq 'usa')
-    {
-	$q->param('dst','none');
-    }
-
-    my(@city) = split(/([- ])/, $city);
-    $city = '';
-    foreach (@city)
-    {
-	$_ = lc($_);
-	$_ = "\u$_";		# inital cap
-	$city .= $_;
-    }
-
-    $city_descr = "$city, $state &nbsp;" . $q->param('zip');
-
-    if ($q->param('tz') !~ /^-?\d+$/)
-    {
-	my($ok) = 0;
-	if (defined $Hebcal::known_timezones{$q->param('zip')})
-	{
-	    if ($Hebcal::known_timezones{$q->param('zip')} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{$q->param('zip')});
-		$ok = 1;
-	    }
-	}
-	elsif (defined $Hebcal::known_timezones{substr($q->param('zip'),0,3)})
-	{
-	    if ($Hebcal::known_timezones{substr($q->param('zip'),0,3)} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{substr($q->param('zip'),0,3)});
-		$ok = 1;
-	    }
-	}
-	elsif (defined $Hebcal::known_timezones{$state})
-	{
-	    if ($Hebcal::known_timezones{$state} ne '??')
-	    {
-		$q->param('tz',$Hebcal::known_timezones{$state});
-		$ok = 1;
-	    }
-	}
-
-	if ($ok == 0)
-	{
-	    &form("Sorry, can't auto-detect\n" .
-		  "timezone for <b>" . $city_descr . "</b>\n".
-		  "(state <b>" . $state . "</b> spans multiple time zones).",
-		  "<ul><li>Please select your time zone below.</li></ul>");
-	}
-    }
-
-#    $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
-#    $long_descr = "${long_deg}d${long_min}' W longitude";
-    $lat_descr  = '';
-    $long_descr = '';
-    $dst_tz_descr = "Daylight Saving Time: " .
-	$q->param('dst') . "\n<dd>Time zone: " .
-	    $Hebcal::tz_names{$q->param('tz')};
-
-    $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-}
-else
-{
-    $q->delete('c');
-    $q->delete('zip');
-    $q->delete('city');
-    $q->delete('geo');
-}
+$cmd .= $cmd_extra if $cmd_extra;
 
 foreach (@Hebcal::opts)
 {
@@ -364,7 +169,7 @@ else
 close(STDOUT);
 exit(0);
 
-sub dba_display {
+sub dba_display() {
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
@@ -399,7 +204,7 @@ sub dba_display {
     &Hebcal::dba_write_contents(\@events, $q->param('tz'), $dst);
 }
 
-sub csv_display {
+sub csv_display() {
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
@@ -427,7 +232,7 @@ sub csv_display {
     &Hebcal::csv_write_contents(\@events, $endl);
 }
 
-sub form
+sub form($$)
 {
     my($message,$help) = @_;
     my($key,$val,$JSCRIPT);
@@ -594,13 +399,11 @@ JSCRIPT_END
 	}
     }
 
-    print STDOUT "<br><label\nfor=\"c\">",
-    $q->checkbox(-name => 'c',
-		 -id => 'c',
-		 -checked => 'checked',
-		 -label => "\nCandle lighting times for $type:"),
-    "</label>", $after_type,
-    "<br><small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(or select by\n";
+    print STDOUT $q->hidden(-name => 'c',
+			    -id => 'c'),
+    "<br>Candle lighting times for $type:\n",
+    $after_type,
+    "<br><small>(or select by\n";
 
     if (defined $q->param('geo') && $q->param('geo') eq 'city')
     {
@@ -702,7 +505,7 @@ JSCRIPT_END
 	print STDOUT $q->hidden(-name => 'geo',
 				-value => 'zip',
 				-id => 'geo'),
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"zip\">\n",
+	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"zip\">\n",
 	"Zip code:\n",
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
@@ -781,7 +584,6 @@ JSCRIPT_END
     "<br><label\nfor=\"heb\">",
     $q->checkbox(-name => 'heb',
 		 -id => 'heb',
-		 -checked => 'checked',
 		 -label => "\nShow Hebrew event names"),
     "</label>",
     "</p>\n",
@@ -798,7 +600,7 @@ JSCRIPT_END
     1;
 }
 
-sub results_page
+sub results_page()
 {
     my($date);
     my($filename) = 'hebcal_' . $q->param('year');
@@ -1029,19 +831,21 @@ so you can keep this window open.
 		qq{<br>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
 		qq{&amp;dst=}, $q->param('dst'),
+		qq{&amp;tz=}, $q->param('tz'),
+		qq{&amp;m=}, $q->param('m'),
+		qq{">1-Click Shabbat for $city_descr</a>.</p>\n},
 		);
-	    $goto .= join('', qq{&amp;tz=}, $q->param('tz'))
-		if $q->param('tz') ne 'auto';
-	    $goto .= qq{">1-Click Shabbat for $city_descr</a>.</p>\n};
 	}
 	elsif (defined $q->param('city') && $q->param('city') !~ /^\s*$/)
 	{
 	    $goto .= join('',
 		qq{<br>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?city=},
- 		&Hebcal::url_escape($q->param('city')), qq{">1-Click Shabbat for },
-		$q->param('city'), qq{</a>.</p>\n}
-			  );
+ 		&Hebcal::url_escape($q->param('city')),
+		qq{&amp;m=}, $q->param('m'),
+		qq{">1-Click Shabbat for }, $q->param('city'),
+		qq{</a>.</p>\n},
+		);
 	}
     }
 
@@ -1252,7 +1056,7 @@ so you can keep this window open.
     1;
 }
 
-sub self_url
+sub self_url($$)
 {
     my($q,$override) = @_;
     my($url) = $script_name;
@@ -1267,4 +1071,193 @@ sub self_url
     }
 
     $url;
+}
+
+sub get_candle_config($)
+{
+    my($q) = @_;
+
+    my($city_descr,$lat_descr,$long_descr,$dst_tz_descr) = ('','','','');
+    my($cmd_extra);
+
+    if ($q->param('c') && $q->param('c') ne 'off' &&
+	defined $q->param('city'))
+    {
+	&form("Sorry, invalid city\n<b>" . $q->param('city') . "</b>.")
+	    unless defined($Hebcal::city_tz{$q->param('city')});
+
+	$q->param('geo','city');
+	$q->param('tz',$Hebcal::city_tz{$q->param('city')});
+	$q->delete('dst');
+
+	$city_descr = "Closest City: " . $q->param('city');
+	$cmd_extra = " -C '" . $q->param('city') . "'";
+    }
+    elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
+	   defined $q->param('ladeg') && defined $q->param('lamin') &&
+	   defined $q->param('lodir') && defined $q->param('ladir'))
+    {
+	if (($q->param('lodeg') eq '') &&
+	    ($q->param('lomin') eq '') &&
+	    ($q->param('ladeg') eq '') &&
+	    ($q->param('lamin') eq ''))
+	{
+	    $q->delete('c');
+	    $q->delete('zip');
+	    $q->delete('city');
+	    $q->delete('geo');
+	    $q->delete('lodeg');
+	    $q->delete('lomin');
+	    $q->delete('ladeg');
+	    $q->delete('lamin');
+	    $q->delete('lodir');
+	    $q->delete('ladir');
+	    $q->delete('dst');
+	    $q->delete('tz');
+	    $q->delete('m');
+
+	    return (undef,$city_descr,$lat_descr,$long_descr,$dst_tz_descr);
+	}
+
+	&form("Sorry, all latitude/longitude\narguments must be numeric.")
+	    if (($q->param('lodeg') !~ /^\d+$/) ||
+		($q->param('lomin') !~ /^\d+$/) ||
+		($q->param('ladeg') !~ /^\d+$/) ||
+		($q->param('lamin') !~ /^\d+$/));
+
+	$q->param('lodir','w') unless ($q->param('lodir') eq 'e');
+	$q->param('ladir','n') unless ($q->param('ladir') eq 's');
+
+	&form("Sorry, longitude degrees\n" .
+	      "<b>" . $q->param('lodeg') . "</b> out of valid range 0-180.")
+	    if ($q->param('lodeg') > 180);
+
+	&form("Sorry, latitude degrees\n" .
+	      "<b>" . $q->param('ladeg') . "</b> out of valid range 0-90.")
+	    if ($q->param('ladeg') > 90);
+
+	&form("Sorry, longitude minutes\n" .
+	      "<b>" . $q->param('lomin') . "</b> out of valid range 0-60.")
+	    if ($q->param('lomin') > 60);
+
+	&form("Sorry, latitude minutes\n" .
+	      "<b>" . $q->param('lamin') . "</b> out of valid range 0-60.")
+	    if ($q->param('lamin') > 60);
+
+	my($long_deg,$long_min,$lat_deg,$lat_min) =
+	    ($q->param('lodeg'),$q->param('lomin'),
+	     $q->param('ladeg'),$q->param('lamin'));
+
+	$q->param('dst','none')
+	    unless $q->param('dst');
+	$q->param('tz','0')
+	    unless $q->param('tz');
+	$q->param('geo','pos');
+
+	$city_descr = "Geographic Position";
+	$lat_descr  = "${lat_deg}d${lat_min}' " .
+	    uc($q->param('ladir')) . " latitude";
+	$long_descr = "${long_deg}d${long_min}' " .
+	    uc($q->param('lodir')) . " longitude";
+	$dst_tz_descr = "Daylight Saving Time: " .
+	    $q->param('dst') . "\n<dd>Time zone: " .
+		$Hebcal::tz_names{$q->param('tz')};
+
+	# don't multiply minutes by -1 since hebcal does it internally
+	$long_deg *= -1  if ($q->param('lodir') eq 'e');
+	$lat_deg  *= -1  if ($q->param('ladir') eq 's');
+
+	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+    }
+    elsif ($q->param('c') && $q->param('c') ne 'off' &&
+	   defined $q->param('zip') && $q->param('zip') ne '')
+    {
+	$q->param('dst','usa')
+	    unless $q->param('dst');
+	$q->param('tz','auto')
+	    unless $q->param('tz');
+	$q->param('geo','zip');
+
+	&form("Sorry, <b>" . $q->param('zip') . "</b> does\n" .
+	      "not appear to be a 5-digit zip code.")
+	    unless $q->param('zip') =~ /^\d\d\d\d\d$/;
+
+	my($dbmfile) = 'zips.db';
+	my(%DB);
+	tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	    || die "Can't tie $dbmfile: $!\n";
+
+	my($val) = $DB{$q->param('zip')};
+	untie(%DB);
+
+	&form("Sorry, can't find\n".  "<b>" . $q->param('zip') .
+	      "</b> in the zip code database.\n",
+	      "<ul><li>Please try a nearby zip code or select candle\n" .
+	      "lighting times by\n" .
+	      "<a href=\"" . $script_name .
+	      "?c=on&amp;geo=city\">city</a> or\n" .
+	      "<a href=\"" . $script_name .
+	      "?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
+	    unless defined $val;
+
+	my($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
+	my($city,$state) = split(/\0/, substr($val,6));
+
+	if (($state eq 'HI' || $state eq 'AZ') && $q->param('dst') eq 'usa')
+	{
+	    $q->param('dst','none');
+	}
+
+	my(@city) = split(/([- ])/, $city);
+	$city = '';
+	foreach (@city)
+	{
+	    $_ = lc($_);
+	    $_ = "\u$_";		# inital cap
+	    $city .= $_;
+	}
+
+	$city_descr = "$city, $state &nbsp;" . $q->param('zip');
+
+	my($tz) = &Hebcal::guess_timezone($q->param('tz'),
+					  $q->param('zip'),$state);
+
+	unless (defined $tz)
+	{
+	    &form("Sorry, can't auto-detect\n" .
+		  "timezone for <b>" . $city_descr . "</b>\n".
+		  "(state <b>" . $state . "</b> spans multiple time zones).",
+		  "<ul><li>Please select your time zone below.</li></ul>");
+	}
+
+	$q->param('tz', $tz);
+
+#	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
+#	$long_descr = "${long_deg}d${long_min}' W longitude";
+	$dst_tz_descr = "Daylight Saving Time: " .
+	    $q->param('dst') . "\n<dd>Time zone: " .
+		$Hebcal::tz_names{$q->param('tz')};
+
+	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+    }
+    else
+    {
+	$q->delete('c');
+	$q->delete('zip');
+	$q->delete('city');
+	$q->delete('geo');
+	$q->delete('lodeg');
+	$q->delete('lomin');
+	$q->delete('ladeg');
+	$q->delete('lamin');
+	$q->delete('lodir');
+	$q->delete('ladir');
+	$q->delete('dst');
+	$q->delete('tz');
+	$q->delete('m');
+
+	$cmd_extra = undef;
+    }
+
+    return ($cmd_extra,$city_descr,$lat_descr,$long_descr,$dst_tz_descr);
 }
