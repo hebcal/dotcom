@@ -73,3 +73,8 @@ A:hover {
  border-width: thin;
 }
 
+.today {
+ border: solid;
+ border-width: thin;
+ border-color: red;
+}
