@@ -1094,7 +1094,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Adar I"
- descr="The new Jewish month of Adar I"
+ descr="The new Jewish month of Adar I (on leap years)"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר א׳"
  yomtov="0">
  <links>
@@ -1102,7 +1102,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Adar II"
- descr="The new Jewish month of Adar II"
+ descr="The new Jewish month of Adar II (on leap years)"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר ב׳"
  yomtov="0">
  <links>
