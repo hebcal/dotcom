@@ -564,18 +564,6 @@ sub get_holiday_anchor($$$)
 	    }
 
 	    $hebrew .= $SEDROT{"$sedra:hebrew"};
-	    $memo = "Torah: " . $SEDROT{"$sedra:verse"} .
-		" / Haftarah: ";
-	    
-	    if ($want_sephardic &&
-		defined $SEDROT{"$sedra:haft_seph"})
-	    {
-		$memo .= $SEDROT{"$sedra:haft_seph"};
-	    }
-	    else
-	    {
-		$memo .= $SEDROT{"$sedra:haft_ashk"};
-	    }
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
 	       (defined $SEDROT{$1} || defined $SEDROT{$Hebcal::ashk2seph{$1}}))
@@ -611,24 +599,6 @@ sub get_holiday_anchor($$$)
 	    # hypenate hebrew reading
 	    # '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
 	    $hebrew .= "\xD6\xBE" . $SEDROT{"$p2:hebrew"};
-
-	    # second part of torah reading
-	    my($torah_end) = $SEDROT{"$p2:verse"};
-	    $torah_end =~ s/^.+\s+(\d+:\d+)\s*$/$1/;
-
-	    $memo = "Torah: " . $SEDROT{"$p1:verse"};
-	    $memo =~ s/\s+\d+:\d+\s*$/ $torah_end/;
-
-	    $memo .= " / Haftarah: ";
-	    if ($want_sephardic &&
-		defined $SEDROT{"$p2:haft_seph"})
-	    {
-		$memo .= $SEDROT{"$p2:haft_seph"};
-	    }
-	    else
-	    {
-		$memo .= $SEDROT{"$p2:haft_ashk"};
-	    }
 	}
     }
     elsif ($subj =~ /^(\d+)\w+ day of the Omer$/)
