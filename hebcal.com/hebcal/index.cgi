@@ -276,7 +276,19 @@ sub vcalendar_display() {
     my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
 
-    Hebcal::vcalendar_write_contents($q, \@events);
+    my($tz) = $q->param('tz');
+    my $state;
+
+    if ($city_descr =~ /^Closest City: (.+)$/)
+    {
+	$tz = $Hebcal::city_tz{$q->param('city')};
+    }
+    elsif ($city_descr =~ /^.+, (\w\w) &nbsp;\d{5}$/)
+    {
+	$state = $1;
+    }
+
+    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state);
 }
 
 sub dba_display() {
@@ -1099,6 +1111,13 @@ sub get_candle_config($)
 #	$q->param('tz',$Hebcal::city_tz{$q->param('city')});
 	$q->delete('tz');
 	$q->delete('dst');
+	$q->delete('zip');
+	$q->delete('lodeg');
+	$q->delete('lomin');
+	$q->delete('ladeg');
+	$q->delete('lamin');
+	$q->delete('lodir');
+	$q->delete('ladir');
 
 	$city_descr = "Closest City: " . $q->param('city');
 	$cmd_extra = " -C '" . $q->param('city') . "'";
