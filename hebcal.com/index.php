@@ -29,38 +29,8 @@ Tovah!</span> &nbsp; - &nbsp;
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" -->
 </span>
-<!--#if expr="\"$HTTP_REFERER\" = /http://www\.google\.com/" -->
-<!--#set var="search" value="1" -->
-<!--#elif expr="\"$HTTP_REFERER\" = /http://search\.yahoo\.com/" -->
-<!--#set var="search" value="1" -->
-<!--#elif expr="\"$HTTP_REFERER\" = /http://search\.msn\.com/" -->
-<!--#set var="search" value="1" -->
-<!--#elif expr="\"$HTTP_REFERER\" = /http://aolsearch\.aol\.com/" -->
-<!--#set var="search" value="1" -->
-<!--#endif -->
-<!--#if expr="$search = 1" -->
-<blockquote class="welcome">
-<a title="Jewish Year 5765 Wall Calendar from Amazon.com"
-href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20"><img
-src="/i/0789311224.01.TZZZZZZZ.jpg" border="0"
-width="90" height="90" hspace="8" vspace="8" align="right"
-alt="Jewish Year 5765 Wall Calendar from Amazon.com"></a>
-
-Hebcal.com offers a <a href="/hebcal/">personalized Jewish calendar</a>
-for any year 0000-9999. You can get a list of Jewish holidays, candle
-lighting times, and Torah readings. We also offer export to Palm,
-Outlook, and iCal -- all for free.
-
-<p>If you're looking for a full-color printed 2004-2005 calendar,
-consider the <a
-href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20">Jewish
-Year 5765 Wall Calendar</a> from Amazon.com.
-</blockquote>
-<!--#endif -->
 <table border="0" cellpadding="1" cellspacing="0" width="100%">
-<!--#if expr="$search != 1" -->
 <tr><td class="tiny">&nbsp;</td></tr>
-<!--#endif -->
 <tr><td valign="top">
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
