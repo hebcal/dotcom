@@ -368,7 +368,15 @@ sub form
     }
 
     &Hebcal::out_html
-	($cfg, qq{$message<form name="f1" id="f1"\naction="$script_name">});
+	($cfg, qq{$message},
+	 "<p>Enter dates (and optionally names) in the form below to\n",
+	 "generate a list of Yahrzeit dates, Hebrew Birthdays,\n",
+	 "or Hebrew Anniversaries.\n",
+	 "After clicking the <b>Compute Calendar</b> button, you\n",
+	 "will also be able to download the results.</p>"); 
+
+    &Hebcal::out_html
+	($cfg, qq{<form name="f1" id="f1"\naction="$script_name">});
 
     my($i_max) = (defined $cfg && $cfg =~ /^[ij]$/)
 	? 2 : 6;
@@ -379,25 +387,27 @@ sub form
 	    $q->popup_menu(-name => "t$i",
 			   -id => "t$i",
 			   -values => ['Yahrzeit','Birthday','Anniversary']),
-	    "\nName:\n",
-	    $q->textfield(-name => "n$i",
-			  -id => "n$i"),
-	    "\n&nbsp;&nbsp;&nbsp;Day:\n",
+	    "\n<small>Month:</small>\n",
 	    $q->popup_menu(-name => "m$i",
 			   -id => "m$i",
 			   -values => [1..12],
 			   -labels => \%months),
-	    "\n",
+	    "\n<small>Day:</small>\n",
 	    $q->textfield(-name => "d$i",
 			  -id => "d$i",
 			  -maxlength => 2,
 			  -size => 2),
-	    "\n,\n",
+	    "\n<small>Year:</small>\n",
 	    $q->textfield(-name => "y$i",
 			  -id => "y$i",
 			  -maxlength => 4,
 			  -size => 4),
-	    "\n<small>(Month Day, Year)</small><br>\n");
+	    "&nbsp;&nbsp;&nbsp;",
+	    "\n<small>Name:</small>\n",
+	    $q->textfield(-name => "n$i",
+			  -id => "n$i"),
+	    "<br>\n",
+	     );
     }
 
     &Hebcal::out_html($cfg, "<label\nfor=\"yizkor\">",
