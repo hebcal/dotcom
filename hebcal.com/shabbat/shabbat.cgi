@@ -424,6 +424,8 @@ for ($i = 0; $i < $numEntries; $i++)
 	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
 	{
 	    delete($rss{'description'});
+	    $rss{'title'} =~ s/^Candle lighting/Candles/;
+	    $rss{'title'} =~ s/ PM$/p/;
 	    &out_wap(\%rss);
 	}
 	else
