@@ -111,7 +111,7 @@ elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
 {
     &macintosh_datebook_display();
 }
-elsif ($q->path_info() =~ /[^\/]+\.vcs$/)
+elsif ($q->path_info() =~ /[^\/]+\.[vi]cs$/)
 {
     # text/x-vCalendar
     &vcalendar_display();
