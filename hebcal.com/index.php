@@ -1,17 +1,7 @@
 <?php
-$http_cookie = getenv("HTTP_COOKIE");
-if ($http_cookie) {
+if (isset($_COOKIE["C"])) {
     header("Cache-Control: private");
-    $cookies = explode(";", $http_cookie);
-    foreach ($cookies as $ck) {
-	if (strncmp($ck, "C=", 2) == 0) {
-	    $cookie_parts = explode("&", substr($ck, 2));
-	    for ($i = 0; $i < count($cookie_parts); $i++) {
-		$parts = explode("=", $cookie_parts[$i], 2);
-		$param[strip_tags($parts[0])] = strip_tags($parts[1]);
-	    }
-	}
-    }
+    parse_str($_COOKIE["C"], $param);
 }
 # Is today Rosh Chodesh?
 $lines = @file("./holiday.inc");
@@ -59,7 +49,7 @@ Jewish Calendar Tools</small></td>
 <?php
 $ref = getenv("HTTP_REFERER");
 $pattern = '/^http:\/\/(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)\/.*calend[ae]r/i';
-if (!$http_cookie && $ref && preg_match($pattern, $ref)) {
+if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref)) {
     $cal[] = array("Jewish Traditions 2005 Calendar", "1559499265", 90, 70);
     $cal[] = array("Hebrew Illuminations 2005 Calendar", "1569374074", 89, 90);
     $cal[] = array("Jewish Year 5765 Wall Calendar", "0789311224", 90, 90);
@@ -154,7 +144,7 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp
 <?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
 id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="m" value="<?php
-  if ($param["m"]) { echo $param["m"]; } else { echo "72"; } ?>">
+  if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <input type="hidden" name="tag" value="fp.ql">
 <br>or <a href="/shabbat/#change">select by major city</a></small>
 </form>
