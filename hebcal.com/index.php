@@ -59,11 +59,11 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a>
 <br>This website uses <a
-href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
+href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Jun 10 12:29:27 EDT 2002
+Last modified: Mon Jun 10 12:29:54 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
