@@ -1576,19 +1576,20 @@ sub vcalendar_write_contents($$$$$)
 	    my $date_copy = $date;
 	    $date_copy =~ s/T\d+$//;
 
-	    my $uid = $subj_copy . '-' . $date_copy;
+	    my $uid = "hebcal-$date_copy-$subj_copy";
 
 	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] &&
 		$events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)\s*$/) {
 		my $loc = lc($1);
+		if ($loc =~ /\s+(\d{5})\s*$/) {
+		    $loc = $1;
+		}
 		$loc =~ s/[^\w]/-/g;
 		$loc =~ s/-+/-/g;
 		$loc =~ s/-$//g;
 
 		$uid .= '-' . $loc;
 	    }
-
-	    $uid .= '@hebcal.com';
 
 	    print STDOUT qq{UID:$uid$endl};
 	    print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
