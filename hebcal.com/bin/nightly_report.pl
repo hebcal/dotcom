@@ -1,11 +1,13 @@
 #!/usr/local/bin/perl5 -w
 
+# $Id$
+
 use DB_File;
 use strict;
 use Hebcal;
 
 my(%DB);
-my($dbmfile) = '/home/web/radwin.org/docs/hebcal/zips.db';
+my($dbmfile) = '/home/web/hebcal.com/docs/hebcal/zips.db';
 tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
@@ -37,18 +39,17 @@ my(%unk_tz) = ();
 
 while(<STDIN>)
 {
-    next unless m,/hebcal/,;
     next unless m,\s+\[$apache_date,o;
     next if /^207\.55\.191\.4|www\.radwin\.org|smiles\.yahoo\.com|205\.216\.162\.253|198\.144\.204\.|198\.144\.193\.150/;
 
     $home++ if m,GET\s+/hebcal/\s+HTTP,;
-    if (m,GET\s+/michael/projects/hebcal/,)
+    if (m,GET\s+/help/,)
     {
-	if (m,GET\s+/michael/projects/hebcal/\s+HTTP,)
+	if (m,GET\s+/help/\s+HTTP,)
 	{
 	    $faq++;
 	}
-	elsif (m,GET\s+/michael/projects/hebcal/defaults.html\s+HTTP,)
+	elsif (m,GET\s+/help/defaults.html\s+HTTP,)
 	{
 	    $holidays++;
 	}
@@ -109,30 +110,9 @@ while(<STDIN>)
 		    my(undef,$state) = split(/\0/, substr($val,6));
 		    if (/=auto/)
 		    {
-			my($ok) = 0;
-			if (defined $Hebcal::known_timezones{$zipcode})
-			{
-			    if ($Hebcal::known_timezones{$zipcode} ne '??')
-			    {
-				$ok = 1;
-			    }
-			}
-			elsif (defined $Hebcal::known_timezones{substr($zipcode,0,3)})
-			{
-			    if ($Hebcal::known_timezones{substr($zipcode,0,3)} ne '??')
-			    {
-				$ok = 1;
-			    }
-			}
-			elsif (defined $Hebcal::known_timezones{$state})
-			{
-			    if ($Hebcal::known_timezones{$state} ne '??')
-			    {
-				$ok = 1;
-			    }
-			}
-
-			if ($ok == 0)
+			my($tz) = &Hebcal::guess_timezone('auto',
+							  $zipcode,$state);
+			unless (defined $tz)
 			{
 			    $unk_tz++;
 			    $unk_tz{$zipcode}++;
