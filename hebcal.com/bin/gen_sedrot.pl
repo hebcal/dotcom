@@ -226,7 +226,7 @@ EOHTML
 	my($label) = ($_ eq 'M') ? 'maf' : $_;
 	if ($aliyah =~ /\s+\((\d+)\)\s*$/) {
 	    my $p = $1;
-	    $aliyah_range .= qq{ ($p p'sukim)};
+	    $aliyah_range .= qq{\n<font size="-2" face="Arial">($p p'sukim)</font>};
 	}
 	print OUT2 qq{<dt>$label:<dd>$aliyah_range\n};
     }
