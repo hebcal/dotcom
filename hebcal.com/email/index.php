@@ -1,6 +1,9 @@
 <?php
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/email/RCS/index.php,v $
+global $HTTP_SERVER_VARS;
+$site = preg_replace('/^www\./', '', $HTTP_SERVER_VARS["SERVER_NAME"]);
+$sender = "webmaster@$site";
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -10,7 +13,7 @@
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
 class="navbar"><tr><td><small><strong><a
-href="/">hebcal.com</a></strong>
+href="/"><?php echo $site ?></a></strong>
 <tt>-&gt;</tt>
 <a href="/shabbat/">1-Click Shabbat</a>
 <tt>-&gt;</tt>
@@ -37,7 +40,6 @@ global $HTTP_GET_VARS;
 if (!isset($HTTP_POST_VARS['v']) && !isset($HTTP_GET_VARS['v']) &&
     !isset($HTTP_POST_VARS['e']) && !isset($HTTP_GET_VARS['e']))
 {
-global $HTTP_SERVER_VARS;
 $cookies = explode(';', $HTTP_SERVER_VARS["HTTP_COOKIE"]);
 foreach ($cookies as $ck) {
     if (substr($ck, 0, 2) == 'C=') {
@@ -168,6 +170,7 @@ EOD;
 	 $havdalah,$optin_announce) = mysql_fetch_row($result);
 
     $val = array(
+	'id' => $id,
 	'status' => $status,
 	'em' => $address,
 	'm' => $havdalah,
@@ -243,14 +246,15 @@ function my_footer() {
     $year = strftime("%Y", time());
     $date = strftime("%c", $stat[9]);
     global $VER;
+    global $site;
 
     $html = <<<EOD
 <hr noshade size="1"><span class="tiny">
 <a name="copyright">Copyright &copy; $year
 Michael J. Radwin. All rights reserved.</a>
-<a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
-<a target="_top" href="http://www.hebcal.com/help/">Help</a> -
-<a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
+<a target="_top" href="http://www.$site/privacy/">Privacy Policy</a> -
+<a target="_top" href="http://www.$site/help/">Help</a> -
+<a target="_top" href="http://www.$site/contact/">Contact</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
@@ -263,6 +267,8 @@ EOD
 }
 
 function form($param, $message = '', $help = '') {
+    global $site;
+
     if ($message != '') {
 	$message = '<hr noshade size="1"><p><font' . "\n" .
 	    'color="#ff0000">' .  $message . '</font></p>' . $help . 
@@ -327,7 +333,8 @@ value="<?php echo htmlspecialchars($param['em']) ?>" id="em">
 <br><label for="upd">
 <input type="checkbox" name="upd" value="on" <?php
   if ($param['upd'] == 'on') { echo 'checked'; } ?> id="upd">
-Contact me occasionally about changes to the hebcal.com website.
+Contact me occasionally about changes to the <?php
+  echo $site ?> website.
 </label>
 
 <br>
@@ -345,17 +352,19 @@ Contact me occasionally about changes to the hebcal.com website.
 offers.</p>
 
 <p>To unsubscribe, send an email to <a
-href="mailto:shabbat-unsubscribe&#64;hebcal&#46;com">shabbat-unsubscribe&#64;hebcal&#46;com</a>.</p>
+href="mailto:shabbat-unsubscribe&#64;<?php
+ echo $site ?>">shabbat-unsubscribe&#64;<?php echo $site ?></a>.</p>
 
 <?php
     my_footer();
 }
 
 function subscribe($param) {
-    if (preg_match('/\@hebcal.com$/', $param['em']))
+    global $site, $sender;
+    if (preg_match('/\@' . $site . '$/', $param['em']))
     {
 	form($param,
-	     "Sorry, can't use a <b>hebcal.com</b> email address.");
+	     "Sorry, can't use a <b>$site</b> email address.");
     }
 
     if ($param['geo'] == 'zip')
@@ -452,21 +461,18 @@ function subscribe($param) {
 	write_sub_info($param);
 
 	$from_name = "Hebcal Subscription Notification";
-    	$from_addr = "shabbat-owner@hebcal.com";
-	$return_path = "shabbat-bounce@hebcal.com";
+    	$from_addr = "shabbat-owner@$site";
+	$return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@$site";
 	$subject = "Your subscription is updated";
 
 	global $HTTP_SERVER_VARS;
-	$sender =  'webmaster@';
-	$sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
-
 	$ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
 
 	$headers = array('From' => "\"$from_name\" <$from_addr>",
 			 'To' => $param['em'],
 			 'Reply-To' => $from_addr,
 			 'List-Unsubscribe' =>
-			 "<mailto:shabbat-unsubscribe@hebcal.com>",
+			 "<mailto:shabbat-unsubscribe@$site>",
 			 'MIME-Version' => '1.0',
 			 'Content-Type' => 'text/plain',
 			 'X-Sender' => $sender,
@@ -480,10 +486,10 @@ We have updated your weekly Shabbat candle lighting time
 subscription for $city_descr.
 
 Regards,
-hebcal.com
+$site
 
 To unsubscribe from this list, send an email to:
-shabbat-unsubscribe@hebcal.com
+shabbat-unsubscribe@$site
 EOD;
 
 	$err = smtp_send($return_path, $param['em'], $headers, $body);
@@ -506,14 +512,11 @@ EOD
     $encoded = write_staging_info($param);
 
     $from_name = "Hebcal Subscription Notification";
-    $from_addr = "shabbat-subscribe+$encoded@hebcal.com";
-    $return_path = "shabbat-bounce@hebcal.com";
+    $from_addr = "shabbat-subscribe-$encoded@$site";
+    $return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@$site";
     $subject = "Please confirm your request to subscribe to hebcal";
 
     global $HTTP_SERVER_VARS;
-    $sender =  'webmaster@';
-    $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
-
     $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
 
     $headers = array('From' => "\"$from_name\" <$from_addr>",
@@ -529,7 +532,7 @@ EOD
 Hello,
 
 We have received your request to receive weekly Shabbat
-candle lighting time information from hebcal.com for
+candle lighting time information from $site for
 $city_descr.
 
 Please confirm your request by replying to this message.
@@ -539,7 +542,7 @@ candle lighting time information, please accept our
 apologies and ignore this message.
 
 Regards,
-hebcal.com
+$site
 EOD;
 
     $err = smtp_send($return_path, $param['em'], $headers, $body);
@@ -574,7 +577,7 @@ EOD
 to <b>$html_email</b>.</p>
 <p>Please try again in a few minutes.</p>
 <p>If the problem persists, please send email to
-<a href="mailto:webmaster&#64;hebcal&#46;com">webmaster&#64;hebcal&#46;com</a>.</p>
+<a href="mailto:webmaster&#64;$site">webmaster&#64;$site</a>.</p>
 EOD
 	     ;
     }
@@ -583,6 +586,7 @@ EOD
 }
 
 function unsubscribe($param) {
+    global $site, $sender;
     $html_email = htmlentities($param['em']);
     $info = get_sub_info($param['em']);
 
@@ -620,14 +624,11 @@ EOD
     }
 
     $from_name = "Hebcal Subscription Notification";
-    $from_addr = "shabbat-owner@hebcal.com";
-    $return_path = "shabbat-bounce@hebcal.com";
+    $from_addr = "shabbat-owner@$site";
+    $return_path = "shabbat-return-" . strtr($param['em'], '@', '=') . "@$site";
     $subject = "You have been unsubscribed from hebcal";
 
     global $HTTP_SERVER_VARS;
-    $sender =  'webmaster@';
-    $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
-
     $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
 
     $headers = array('From' => "\"$from_name\" <$from_addr>",
@@ -646,7 +647,7 @@ Per your request, you have been removed from the weekly
 Shabbat candle lighting time list.
 
 Regards,
-hebcal.com
+$site
 EOD;
 
     $err = smtp_send($return_path, $param['em'], $headers, $body);
