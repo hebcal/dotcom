@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:18:22 PDT 2001
+Last modified: Mon May  7 21:28:06 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -390,7 +390,7 @@ for ($i = 0; $i < $numEntries; $i++)
     $hour -= 12 if $hour > 12;
 
     my(%rss);
-    $rss{'description'} = strftime("%A, %d %B", localtime($time));
+    $rss{'description'} = strftime("%A, %d %B %Y", localtime($time));
 
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
