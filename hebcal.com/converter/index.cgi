@@ -388,10 +388,13 @@ sub hebnum_to_array($) {
 
 sub my_header
 {
-    print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
+    my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
+	? '; charset=UTF-8' : '';
+
+    print STDOUT $q->header(-type => "text/html${charset}"),
     &Hebcal::start_html($q, 'Hebcal Hebrew Date Converter',
 			[
-			 qq{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">},
+			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
 			],
 			undef),
     &Hebcal::navbar2($q, "Hebrew Date\nConverter"),
