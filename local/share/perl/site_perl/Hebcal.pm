@@ -634,17 +634,43 @@ sub get_holiday_anchor($$$)
 # web page utils
 ########################################################################
 
+sub script_name($)
+{
+    my($q) = @_;
+
+    my $script_name;
+    if (defined $ENV{"SCRIPT_URL"}) {
+	$script_name = $ENV{"SCRIPT_URL"};
+    } else {
+	$script_name = $q->script_name();
+	$script_name =~ s,/\w+\.cgi$,/,;
+    }
+
+    $script_name;
+}
+
+
 my $cache = undef;
 sub cache_begin($)
 {
     my($q) = @_;
 
-    return undef unless $ENV{'QUERY_STRING'};
+    return undef unless $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
 
     my $script_name = $q->script_name();
     $script_name =~ s/\./_/g;
 
-    my $qs = $ENV{'QUERY_STRING'};
+    my $qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
+#    if ($qs =~ /v=1/) {
+#	my $s = "v=1";
+#	foreach my $key (sort $q->param()) {
+#	    next if $key eq "v";
+#	    my $val = $q->param($key) || "";
+#	    $s .= ";" . url_escape($key) . "=" . url_escape($val);
+#	}
+#	$qs = $s;
+#    }
+
     $qs =~ s/[&;]?(tag|set)=[^&;]+//g;
     $qs =~ s/[&;]?\.(from|cgifields|s)=[^&;]+//g;
     $qs =~ s/[&;]/,/g;
@@ -879,14 +905,12 @@ sub start_html($$$$$)
     $meta = {} unless defined $meta;
     $head = [] unless defined $head;
 
-    my $script_name = $q->script_name();
-    $script_name =~ s,/(index|shabbat|yahrzeit|hebcal)\.cgi$,/,;
-
+    my $script_name = Hebcal::script_name($q);
     my $base = "http://" . $q->virtual_host() . $script_name;
 
-    if ($ENV{'QUERY_STRING'})
+    if ($ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'})
     {
-	my $qs = $ENV{'QUERY_STRING'};
+	my $qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
 	$qs =~ s/&/&amp;/g;
 
 	$base .= "?" . $qs;
@@ -1132,8 +1156,7 @@ sub self_url($$)
 {
     my($q,$override) = @_;
 
-    my($script_name) = $q->script_name();
-    $script_name =~ s,/\w+\.cgi$,/,;
+    my $script_name = Hebcal::script_name($q);
 
     my($url) = $script_name;
     my($sep) = '?';
@@ -1502,6 +1525,7 @@ sub vcalendar_write_contents($$$$$)
 
     if ($is_icalendar) {
 	print STDOUT qq{VERSION:2.0$endl},
+	qq{CALSCALE:GREGORIAN$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl},
 	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl};
     } else {
@@ -1624,6 +1648,13 @@ sub vcalendar_write_contents($$$$$)
         }
 	
 	if ($is_icalendar) {
+	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
+		$events->[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+		print STDOUT "TRANSP:OPAQUE$endl"; # show as busy
+	    } else {
+		print STDOUT "TRANSP:TRANSPARENT$endl"; # show as free
+	    }
+
 	    my $subj_copy = lc($subj);
 	    $subj_copy =~ s/[^\w]/-/g;
 	    $subj_copy =~ s/-+/-/g;
