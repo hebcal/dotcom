@@ -823,8 +823,8 @@ sub html_copyright2($$$)
     my($br) = $break ? '<br>' : '';
     my($tgt) = $target ? $target : '_top';
 
-    return qq{<a name="copyright">Copyright &copy; $this_year
-Michael J. Radwin. All rights reserved.</a>$br
+    return qq{<a name="copyright"></a>Copyright &copy; $this_year
+Michael J. Radwin. All rights reserved.$br
 <a target="$tgt" href="$prefix/privacy/">Privacy Policy</a> -
 <a target="$tgt" href="$prefix/help/">Help</a> -
 <a target="$tgt" href="$prefix/contact/">Contact</a> -
@@ -1211,7 +1211,7 @@ sub download_html
 
     $title = '' unless $title;
 
-    my($s) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export $title calendar</h3>\n};
+    my($s) = qq{<a name="export"></a><hr><div class="goto">\n<h3>Export $title calendar</h3>\n};
 
     $s .= qq{<p>By clicking the links below, you can download 
 Jewish Calendar events into your desktop software.</p>};
