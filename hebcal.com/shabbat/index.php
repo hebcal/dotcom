@@ -22,6 +22,13 @@ if ($cfg == "j") {
 
 $url = "/shabbat/shabbat.cgi";
 if ($qs) {
+    $now = time();
+    $lt = localtime($now);
+    $wday = $lt[6];
+    $saturday = ($wday == 6) ? $now + (60 * 60 * 24) :
+	$now + ((6 - $wday) * 60 * 60 * 24);
+    header("Expires: ". gmdate("D, d M Y H:i:s", $saturday). " GMT");
+
     $url .= "?$qs";
     $cqs = preg_replace('/[&;]?tag=[^&;]+/', "", $qs);
     $cqs = preg_replace('/[&;]?\.from=[^&;]+/', "", $cqs);
