@@ -2,6 +2,8 @@
 
 # $Id$
 
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+
 use Hebcal;
 use Getopt::Std;
 use Config::IniFiles;
