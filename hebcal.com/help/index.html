@@ -45,21 +45,21 @@ About this service
 Calendar</a>, available at <tt><a
 href="/hebcal/">http://www.radwin.org/hebcal/</a></tt>.</p>
 
-<h2>What is the Hebcal Interactive Jewish Calendar?</h2>
+<h2>1. What is the Hebcal Interactive Jewish Calendar?</h2>
 
 <p>Hebcal Interactive Jewish Calendar is a web site that lets you
 generate a list of Jewish holidays for any year. Candle lighting times
 are calculated from your latitude and longitude (which can be determined
 by your zip code or closest city).</p>
 
-<h2>Who maintains this service?</h2>
+<h2>2. Who maintains this service?</h2>
 
 <p><a href="/michael/">Michael J. Radwin</a> created and runs the web
 interface. <a href="http://www.sadinoff.com/">Danny Sadinoff</a> wrote
 the <a href="http://www.sadinoff.com/hebcal/">hebcal 3.2</a>, the unix
 back-end that this service uses.</p>
 
-<h2>How are candle lighting times determined from my zip code?</h2>
+<h2>3. How are candle lighting times determined from my zip code?</h2>
 
 Geographic zip code information was downloaded from <a
 href="http://www.census.gov/cgi-bin/gazetteer">The U.S. Census Bureau's
@@ -67,7 +67,7 @@ Gazetteer</a>.  Their database maps zip codes to latitude and longitude,
 and candle lighting times are determined from that information.
 
 
-<h2>How can I tell you how much I like the Hebcal Interactive Jewish
+<h2>4. How can I tell you how much I like the Hebcal Interactive Jewish
 Calendar?</h2>
 
 There's two things you might do:
@@ -99,20 +99,26 @@ and enter my email address (<tt>michael@radwin.org</tt>).</p>
 </li>
       </ol>
 
-<h2>What are other good Jewish calendar resources on the web?</h2>
+<h2>5. What are other good Jewish calendar resources on the web?</h2>
 
-The Judaism and Jewish Resources page (<tt><a
-href="http://shamash.org/trb/judaism.html#cal">http://shamash.org/trb/judaism.html#cal</a></tt>)
-has a few good links to other sites.
+The <a href="http://shamash.org/trb/judaism.html#cal">Judaism and Jewish
+Resources page</a> has a few good links to other sites.  Also, you might
+see <a
+href="http://dir.yahoo.com/Society_and_Culture/Religion_and_Spirituality/Faiths_and_Practices/Judaism/Resources/Calendars/">Yahoo!
+Society and Culture:Religion and Spirituality:Faiths and Practices:Judaism:Resources:Calendars</a>.
 
-<h2>I'm a programmer.  Can I see the source code?</h2>
+<h2>6. I'm a programmer.  Can I see the source code?</h2>
 
 Sure thing:
 
 <ul>
-  <li><tt><a href="hebcal.pl">hebcal.pl</a></tt>, source code.</li>
+  <li><tt><a href="hebcal.pl">hebcal.pl</a></tt>, source code to the CGI
+      form.</li>
   <li><tt><a href="ChangeLog.txt">ChangeLog.txt</a></tt>, revision
-      history.</li>
+      history of hebcal.pl.</li>
+  <li><tt><a href="zips2db.pl">zips2db.pl</a></tt>, perl script that
+      translates a Gazetteer zip code CSV file into a Berkeley DBM hash
+      file.</li>
 </ul>
 
 
@@ -123,7 +129,7 @@ Sure thing:
 <!-- mjrsig end -->
 <small>
 <!-- hhmts start -->
-Last modified: Fri Aug 20 15:14:41 PDT 1999
+Last modified: Mon Aug 30 10:18:00 PDT 1999
 <!-- hhmts end -->
 </small>
 </body>
