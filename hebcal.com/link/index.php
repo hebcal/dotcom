@@ -3,6 +3,7 @@
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/link/index.php,v $
 
 require_once('zips.inc');
+require_once('HTML/Form.php');
 
 $VER = '$Revision$';
 $matches = array();
@@ -16,22 +17,31 @@ if ($HTTP_GET_VARS['m']) {
 } else {
     $m = 72;
 }
-if ($HTTP_GET_VARS['zip']) {
+if ($HTTP_GET_VARS['zip'] && preg_match('/^\d{5}$/', $HTTP_GET_VARS['zip'])) {
     $zip = $HTTP_GET_VARS['zip'];
 } else {
     $zip = 90210;
 }
 
-list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-    get_zipcode_fields($zip);
+if ($HTTP_GET_VARS['city']) {
+    $geo_city = $HTTP_GET_VARS['city'];
+    $geo_link = "geo=city;city=" . urlencode($geo_city);
 
-if (!$state) {
-    $city = 'Unknown';
-    $state = 'ZZ';
+    $geo_city = htmlspecialchars($geo_city);
+    $descr = $geo_city;
+} else {
+    list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	get_zipcode_fields($zip);
+
+    if (!$state) {
+	$city = 'Unknown';
+	$state = 'ZZ';
+    }
+
+    $geo_link = "geo=zip;zip=" . urlencode($zip);
+    $descr = htmlspecialchars("$city, $state $zip");
+    $zip = htmlspecialchars($zip);
 }
-
-$descr = htmlspecialchars("$city, $state $zip");
-$zip = htmlspecialchars($zip);
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -63,11 +73,11 @@ the appropriate place in your HTML:</p>
 <form>
 <textarea cols="66" rows="10" wrap="virtual">
 &lt;script type="text/javascript" language="JavaScript"
-src="http://www.hebcal.com/shabbat/?zip=<?php echo $zip ?>;m=<?php echo $m ?>;cfg=j"&gt;
+src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j"&gt;
 &lt;/script&gt;
 &lt;noscript&gt;
 &lt;!-- this link seen by people who have JavaScript turned off --&gt;
-&lt;a href="http://www.hebcal.com/shabbat/?zip=<?php echo $zip ?>;m=<?php echo $m ?>"&gt;Shabbat
+&lt;a href="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>"&gt;Shabbat
 Candle Lighting times for <?php echo $descr ?>&lt;/a&gt;
 courtesy of hebcal.com.
 &lt;/noscript&gt;
@@ -78,7 +88,7 @@ courtesy of hebcal.com.
 
 <blockquote>
 <h3><a target="_top"
-href="http://www.hebcal.com/shabbat/?geo=zip;zip=<?php echo $zip ?>;m=<?php echo $m ?>">1-Click
+href="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>">1-Click
 Shabbat</a> for <?php echo $descr ?></h3>
 <dl>
 <dt>Candle lighting for
@@ -100,11 +110,14 @@ Michael J. Radwin. All rights reserved.</a>
 <hr noshade size="1">
 <h2><a name="change">Change City</a></h2>
 
-<p>Enter a new zip code to get revised HTML tags for your
+<p>Enter a new city to get revised HTML tags for your
 synagogue's web page.</p>
 
-<form action="/link/" method="get">
+<table cellpadding="8"><tr><td class="box">
+<h4>Zip Code</h4>
 
+<form action="/link/" method="get">
+<input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo $zip ?>"></label>
@@ -115,9 +128,34 @@ value="<?php echo $zip ?>"></label>
 
 <input type="hidden" name="type" value="shabbat">
 
-<br><br>
+<br>
 <input type="submit" value="Get new link">
 </form>
+</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="box">
+<h4>Major City</h4>
+<form name="f2" id="f2" action="/link/">
+<input type="hidden" name="geo" value="city">
+<label for="city">Closest City:
+<?php
+global $city_tz;
+$entries = array();
+foreach ($city_tz as $k => $v) {
+    $entries[$k] = $k;
+}
+echo HTML_Form::returnSelect('city', $entries,
+			     $geo_city ? $geo_city : 'Jerusalem');
+?>
+</label>
+<br><label for="m2">Havdalah minutes past sundown:
+<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m2">
+</label>
+
+<input type="hidden" name="type" value="shabbat">
+
+<br>
+<input type="submit" value="Get new link">
+</form>
+</td></tr></table>
 
 <p><hr noshade size="1">
 <h2><a name="fonts">Customize Fonts</a></h2>
