@@ -441,20 +441,38 @@ sub get_holiday_anchor($)
 {
     my($subj) = @_;
 
-    $subj =~ s/ \(CH''M\)$//;
-    $subj =~ s/ I+$//;
-    $subj =~ s/ VI*$//;
-    $subj =~ s/ IV$//;
-    $subj =~ s/ \d{4}$//;
-    $subj =~ s/: \d Candles?$//;
-
-    if (defined $holiday_anchors{$subj})
+    if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
     {
-	"/michael/projects/hebcal/defaults.html#$holiday_anchors{$subj}";
+	my($parashat) = $1;
+	my($sedra) = $2;
+	if (defined $sedrot{$sedra} && $sedrot{$sedra} !~ /^\s*$/)
+	{
+	    return $sedrot{$sedra};
+	}
+	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
+	       (defined $sedrot{$1} && $sedrot{$1} !~ /^\s*$/))
+	{
+	    return $sedrot{$1};
+	}
     }
     else
     {
-	"";
+	$subj =~ s/ \(CH''M\)$//;
+	$subj =~ s/ I+$//;
+	$subj =~ s/ VI*$//;
+	$subj =~ s/ IV$//;
+	$subj =~ s/ \d{4}$//;
+	$subj =~ s/: \d Candles?$//;
+
+	if (defined $holiday_anchors{$subj})
+	{
+	    return
+	    "/michael/projects/hebcal/defaults.html#$holiday_anchors{$subj}";
+	}
+	else
+	{
+	    return "";
+	}
     }
 }
     
