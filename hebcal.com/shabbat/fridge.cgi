@@ -42,12 +42,11 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
+use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use Time::Local;
-use Hebcal;
-use POSIX qw(strftime);
-use strict;
+use Time::Local ();
+use Hebcal ();
 
 my($rcsrev) = '$Revision$'; #'
 
