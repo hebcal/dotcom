@@ -43,13 +43,13 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
+use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
-use Time::Local;
-use Hebcal;
+use Time::Local ();
+use Hebcal ();
 use POSIX qw(strftime);
-use strict;
 
 my($rcsrev) = '$Revision$'; #'
 
@@ -140,7 +140,7 @@ sub format_items
 	localtime($now);
     $year += 1900;
 
-    my($friday) = &Time::Local::timelocal(0,0,0,
+    my($friday) = Time::Local::timelocal(0,0,0,
 					  $mday,$mon,$year,
 					  $wday,$yday,$isdst);
     my($saturday) = ($wday == 6) ?
@@ -161,7 +161,7 @@ sub format_items
     for (my $i = 0; $i < scalar(@{$events}); $i++)
     {
 	# holiday is at 12:00:01 am
-	my($time) = &Time::Local::timelocal(1,0,0,
+	my($time) = Time::Local::timelocal(1,0,0,
 		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
