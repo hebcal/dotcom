@@ -24,7 +24,8 @@ Jewish Calendar Tools</small></td>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
-<table border="0" cellpadding="12" cellspacing="0">
+<table border="0" cellpadding="1" cellspacing="0" width="100%">
+<tr><td class="tiny">&nbsp;</td></tr>
 <tr><td valign="top">
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
@@ -54,7 +55,7 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <span class="sm-grey">&gt;</span>
 Special Torah Readings for Jewish Holidays
 <span class="hl"><b>NEW!</b></span>
-<h4>Miscellaneous</h4>
+<h4>About Us</h4>
 <a href="/help/">Help</a>
 <br><a href="/news/">What's New?</a>
 <br><a href="/privacy/">Privacy Policy</a>
@@ -62,7 +63,9 @@ Special Torah Readings for Jewish Holidays
 <br><a href="/donations/">Donate</a>
 <br><a href="/contact/">Contact Information</a>
 </td>
-<td valign="top" bgcolor="#ffddaa">
+<td>&nbsp;&nbsp;</td>
+<td valign="top" bgcolor="#ffddaa"
+style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
@@ -75,11 +78,12 @@ href="/holidays/chanukah.html">Chanukah</a></b>
 <br><hr noshade size="1">
 <form action="/shabbat/"><span
 class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
+<small>
 <br><label for="zip">Zip code:</label>
-<input type="text" name="zip" size="5" maxlength="5" id="zip">
+<input type="text" name="zip" size="5" maxlength="5"
+id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="geo" value="zip">
-<input type="submit" value="Go">
-<small><br>or <a href="/shabbat/#change">select by major city</a></small>
+<br>or <a href="/shabbat/#change">select by major city</a></small>
 </form>
 <hr noshade size="1">
 <center>
@@ -91,7 +95,7 @@ class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <input type="hidden" name="no_note" value="1">
 <input type="hidden" name="no_shipping" value="1">
 <input type="image" name="submit"
-src="http://www.paypal.com/images/x-click-but04.gif"
+src="/i/x-click-but04.gif"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
 <!-- End PayPal Logo -->
