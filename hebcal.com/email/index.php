@@ -9,7 +9,6 @@
 <base href="http://www.hebcal.com/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 <link type="text/css" media="print" rel="stylesheet" href="/print.css">
-<link href="mailto:webmaster@hebcal.com" rev="made">
 </head><body><table width="100%"
 class="navbar"><tr><td><small><strong><a
 href="/">hebcal.com</a></strong>
