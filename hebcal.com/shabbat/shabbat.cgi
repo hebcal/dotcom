@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 11:56:19 PDT 2001
+Last modified: Sun Apr 22 12:04:37 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -595,16 +595,8 @@ sub my_header
 
     unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
     {
-	&out_html(
-	    "<table width=\"100%\"\nclass=\"navbar\">",
-	    "<tr><td><small>",
-	    "<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
-	    "<tt>-&gt;</tt>\n",
-	    "1-Click Shabbat</small></td>",
-	    "<td align=\"right\"><small><a\n",
-	    "href=\"/search/\">Search</a></small>",
-	    "</td></tr></table>",
-	    "<h1>1-Click\nShabbat</h1>\n");
+	&out_html(&Hebcal::navbar($server_name,'1-Click Shabbat'),
+		  "<h1>1-Click\nShabbat</h1>\n");
     }
 
     1;
