@@ -144,9 +144,6 @@ Shabbat begins 40 minutes before sundown.</p>
 Ha-Mo'ed are the intermediate days of Passover and Sukkot, when work is
 permitted.</p>
 
-<h3><a name="sedrot">What are the weekly sedrot?</a></h3>
-
-<p>See the <a href="/sedrot/">Torah Readings</a> page.</p>
 <p>
 <hr noshade size="1">
 <span class="tiny">$copyright
