@@ -39,7 +39,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Wed Apr 14 08:59:09 PDT 1999
+Last modified: Wed Apr 14 11:28:57 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -100,7 +100,7 @@ foreach (@opts)
     $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
 	1 : 0;
 }
-$opts{'c'} = 1 unless $status && defined $in{'v'};
+$opts{'c'} = 1 unless ($status && defined $in{'v'});
 
 if (defined $in{'dst'})
 {
@@ -224,7 +224,7 @@ elsif (defined $in{'zip'})
 
     $city_descr = "$city, $state $in{'zip'}<br>\n";
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude<br>\n";
-    $long_descr = "${long_deg}d${long_min}' W latitude<br>\n";
+    $long_descr = "${long_deg}d${long_min}' W longitude<br>\n";
     $dst_tz_descr = "
 <small>Daylight Savings Time: $in{'dst'}<br>
 Time Zone: GMT $in{'tz'}:00</small>";
@@ -318,8 +318,8 @@ hebcal
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 
 <p>Use the form below to generate a list of Jewish Holidays.  Candle
-lighting times are calculated from your latitude/longitude (which is
-determined by your Zip Code).</p>
+lighting times are calculated from your latitude and longitude (which
+can be determined by your Zip Code or closest city).</p>
 
 <hr noshade size=\"1\">
 $message
