@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Dec  3 17:08:35 PST 2000
+Last modified: Wed Dec 13 17:42:58 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -515,6 +515,10 @@ sub form
 		   -override => 1),
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
 	qq{</td></tr></table>});
+
+    &out_html(qq{<p><small><a href="/michael/projects/hebcal/#tags">How\n},
+	      qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
+	      qq{times on it\'s own website?</a></small></p>});
 
     &out_html($html_footer);
 
