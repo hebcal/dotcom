@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jan 10 18:33:29 PST 2000
+Last modified: Thu Jan 13 14:39:55 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -435,7 +435,7 @@ elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
 	uc($q->param('ladir')) . " latitude";
     $long_descr = "${long_deg}d${long_min}' " .
 	uc($q->param('lodir')) . " longitude";
-    $dst_tz_descr = "Daylight Savings Time: " .
+    $dst_tz_descr = "Daylight Saving Time: " .
 	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
 	    $tz_names{$q->param('tz')};
 
@@ -532,7 +532,7 @@ elsif ($q->param('c') && $q->param('c') ne 'off' &&
 
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
     $long_descr = "${long_deg}d${long_min}' W longitude";
-    $dst_tz_descr = "Daylight Savings Time: " .
+    $dst_tz_descr = "Daylight Saving Time: " .
 	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
 	    $tz_names{$q->param('tz')};
 
@@ -945,7 +945,7 @@ JSCRIPT_END
 		       -default => $q->param('geo') eq 'pos' ? 0 : 'auto',
 		       -labels => \%tz_names),
 	"</label><br>",
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daylight Savings Time:\n",
+	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daylight Saving Time:\n",
 	$q->radio_group(-name => 'dst',
 			-values => $q->param('geo') eq 'pos' ?
 			['usa','israel','none'] : ['usa','none'],
@@ -1153,6 +1153,17 @@ sub results_page
 	print STDOUT "<dd><small>", $dst_tz_descr, "</small>\n"
 	    if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n";
+
+	if ($city_descr =~ / IN &nbsp;/)
+	{
+	    print STDOUT "<p><font color=\"#ff0000\">",
+	    "Indiana has confusing time zone &amp;\n",
+	    "Daylight Saving Time rules.</font>\n",
+	    "You might want to read <a\n",
+	    "href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
+	    "Indiana?</a> to make sure the above settings are\n",
+	    "correct.</p>";
+	}
     }
 
     print STDOUT "Go to:\n",
