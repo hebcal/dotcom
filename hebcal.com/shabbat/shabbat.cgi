@@ -170,13 +170,10 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
 	      "not appear to be a 5-digit zip code.");
     }
 
-    my($dbmfile) = 'zips.db';
-    my(%DB);
-    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-	|| die "Can't tie $dbmfile: $!\n";
-
-    my($val) = $DB{$q->param('zip')};
-    untie(%DB);
+    my $DB = &Hebcal::zipcode_open_db();
+    my($val) = $DB->{$q->param('zip')};
+    &Hebcal::zipcode_close_db($DB);
+    undef($DB);
 
     &form(1,
 	  "Sorry, can't find\n".  "<b>" . $q->param('zip') .
@@ -184,38 +181,43 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
           "<ul><li>Please try a nearby zip code</li></ul>")
 	unless defined $val;
 
-    my($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
-    my($city,$state) = split(/\0/, substr($val,6));
+    my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	&Hebcal::zipcode_fields($val);
 
-    if (($state eq 'HI' || $state eq 'AZ') &&
-	$q->param('dst') eq 'usa')
+    # allow CGI args to override
+    $tz = $q->param('tz')
+	if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/);
+
+    $city_descr = "$city, $state " . $q->param('zip');
+
+    if ($tz eq '?')
+    {
+	$q->param('tz_override', '1');
+
+	&form(1,
+	      "Sorry, can't auto-detect\n" .
+	      "timezone for <b>" . $city_descr . "</b>\n" .
+	      "<ul><li>Please select your time zone below.</li></ul>");
+    }
+
+    $q->param('tz', $tz);
+
+    # allow CGI args to override
+    if (defined $q->param('dst'))
+    {
+	$dst = 0 if $q->param('dst') eq 'none';
+	$dst = 1 if $q->param('dst') eq 'usa';
+    }
+
+    if ($dst eq '1')
+    {
+	$q->param('dst','usa');
+    }
+    else
     {
 	$q->param('dst','none');
     }
 
-    # handle timezone == "auto"
-    my($tz) = &Hebcal::guess_timezone($q->param('tz'),
-				      $q->param('zip'),
-				      $state);
-    unless (defined $tz)
-    {
-	&form(1, "Sorry, can't auto-detect\n" .
-	      "timezone for <b>" . $city_descr . "</b>\n".
-	      "(state <b>" . $state . "</b> spans multiple time zones).",
-	      "<ul><li>Please select your time zone below.</li></ul>");
-    }
-    $q->param('tz', $tz);
-
-    my(@city) = split(/([- ])/, $city);
-    $city = '';
-    foreach (@city)
-    {
-	$_ = lc($_);
-	$_ = "\u$_";		# inital cap
-	$city .= $_;
-    }
-
-    $city_descr = "$city, $state " . $q->param('zip');
     $dst_descr = "Daylight Saving Time: " . $q->param('dst');
     $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
 
@@ -693,7 +695,12 @@ sub form
 		      -id => 'zip',
 		      -size => 5,
 		      -maxlength => 5),
-	qq{</label>&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
+	qq{</label>});
+
+    if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
+    {
+	&Hebcal::out_html($cfg,
+	qq{&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
 		       -values => ['auto',-5,-6,-7,-8,-9,-10],
@@ -706,7 +713,10 @@ sub form
 			-labels =>
 			{'usa' => "\nUSA (except AZ, HI, and IN) ",
 			 'israel' => "\nIsrael ",
-			 'none' => "\nnone ", }),
+			 'none' => "\nnone ", }));
+    }
+    
+    &Hebcal::out_html($cfg,
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
