@@ -141,6 +141,8 @@ sub trim
 	local($/) = undef;
 	$value =~ s/^\s+//;
 	$value =~ s/\s+$//;
+	$value =~ s/\n/ /g;
+	$value =~ s/\s+/ /g;
     }
 
     $value;
@@ -519,6 +521,25 @@ World ORT
     }
 
     print OUT2 "</dl>\n";
+
+    if ($prev_link || $next_link)
+    {
+	print OUT2 <<EOHTML;
+<p>
+<table width="100%">
+<tr>
+<td align="left" width="50%">
+$prev_link
+</td>
+<td align="right" width="50%">
+$next_link
+</td>
+</tr>
+</table>
+EOHTML
+;
+    }
+
     print OUT2 $html_footer;
 
     close(OUT2);
