@@ -409,7 +409,7 @@ sub form
 	 "or Hebrew Anniversaries.\n",
 	 "After clicking the <b>Compute Calendar</b> button, you\n",
 	 "will also be able to download the results.</p>",
-	 "<p>For example, you might enter <b>October 20, 1994</b>\n",
+	 "<p>For example, you might enter <b>October 20, 1994 (after sunset)</b>\n",
 	 "to calculate <b>Reb Shlomo Carlebach</b>'s yahrzeit.</p>\n");
 
     &Hebcal::out_html
