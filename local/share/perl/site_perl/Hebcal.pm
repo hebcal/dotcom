@@ -57,7 +57,7 @@ Indiana?</a> to make sure the above settings are correct.</p>";
 
 
 # boolean options
-@Hebcal::opts = ('c','o','s','i','a','d','D','H');
+@Hebcal::opts = ('c','o','s','i','a','d','D');
 
 $Hebcal::PALM_DBA_MAGIC      = 1145176320;
 $Hebcal::PALM_DBA_INTEGER    = 1;
