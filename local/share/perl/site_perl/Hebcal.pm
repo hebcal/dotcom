@@ -198,7 +198,8 @@ my($HOLIDAY_IDX_TITLE_HE) = 2;	# title of holiday in hebrew
 my(%holidays) = 
     (
      "Asara B'Tevet"		=>
-     ["tevet",			0],
+     ["tevet",			0,
+      '*** טֵבֵת'],
 
      "Chanukah: 1 Candle"	=>
      ["chanukah",		0,
@@ -230,7 +231,7 @@ my(%holidays) =
 
      "Lag B'Omer"		=>
      ["lagbaomer",		0,
-      '*** הָעוֹמֶר'],
+      '*** בָּעוֹמֶר'],
 
      "Erev Pesach"		=>
      ["pesach",			0,
@@ -363,7 +364,7 @@ my(%holidays) =
       'צוֹם ***'],
      "Tzom Tammuz"		=>
      ["tammuz",			0,
-      'צוֹם ***'],
+      'צוֹם תָּמוּז'],
      "Yom HaAtzma'ut"		=>
      ["haatzmaut",		0,
       'יוֹם הָעַצְמָאוּת'],
@@ -385,33 +386,33 @@ my(%holidays) =
       'יוֹם יְרוּשָׁלַיִם'],
 
      'Rosh Chodesh Iyyar'	=>
-     ['rc_iyyar', 0, 'רֹאשׁ חֹדֶשׁ אייר'],
+     ['rc_iyyar', 0, 'רֹאשׁ חֹדֶשׁ אִיָיר'],
      'Rosh Chodesh Sivan'	=>
-     ['rc_sivan', 0, 'רֹאשׁ חֹדֶשׁ סיון'],
+     ['rc_sivan', 0, 'רֹאשׁ חֹדֶשׁ סִיוָן'],
      'Rosh Chodesh Tamuz'	=>
-     ['rc_tamuz', 0, 'רֹאשׁ חֹדֶשׁ תמוּז'],
+     ['rc_tamuz	', 0, 'רֹאשׁ חֹדֶשׁ תָּמוּז'],
      'Rosh Chodesh Av'	=>
      ['rc_av', 0, 'רֹאשׁ חֹדֶשׁ אָב'],
      'Rosh Chodesh Elul'	=>
      ['rc_elul', 0, 'רֹאשׁ חֹדֶשׁ אֱלוּל'],
      'Rosh Chodesh Tishrei'	=>
-     ['rc_tishrei', 0, 'רֹאשׁ חֹדֶשׁ תשׁרי'],
+     ['rc_tishrei', 0, 'רֹאשׁ חֹדֶשׁ תִּשְׁרֵי'],
      'Rosh Chodesh Cheshvan'	=>
-     ['rc_cheshvan', 0, 'רֹאשׁ חֹדֶשׁ חשׁון'],
+     ['rc_cheshvan', 0, 'רֹאשׁ חֹדֶשׁ חֶשְׁוָן'],
      'Rosh Chodesh Kislev'	=>
-     ['rc_kislev', 0, 'רֹאשׁ חֹדֶשׁ כסלו'],
+     ['rc_kislev', 0, 'רֹאשׁ חֹדֶשׁ כִּסְלֵו'],
      'Rosh Chodesh Tevet'	=>
-     ['rc_tevet', 0, 'רֹאשׁ חֹדֶשׁ טבת'],
+     ['rc_tevet', 0, 'רֹאשׁ חֹדֶשׁ טֵבֵת'],
      "Rosh Chodesh Sh'vat"=>
-     ['rc_shvat', 0, 'רֹאשׁ חֹדֶשׁ שׁבט'],
+     ['rc_shvat', 0, 'רֹאשׁ חֹדֶשׁ שְׁבָת'],
      'Rosh Chodesh Adar'	=>
-     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אדר'],
+     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אַדָר'],
      'Rosh Chodesh Adar I'	=>
-     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אדר א׳'],
+     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אַדָר א׳'],
      'Rosh Chodesh Adar II'	=>
-     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אדר ב׳'],
+     ['rc_adar', 0, 'רֹאשׁ חֹדֶשׁ אַדָר ב׳'],
      'Rosh Chodesh Nisan'	=>
-     ['rc_nisan', 0, 'רֹאשׁ חֹדֶשׁ ניסן'],
+     ['rc_nisan', 0, 'רֹאשׁ חֹדֶשׁ נִיסָן'],
 
 		    );
 
