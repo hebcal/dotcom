@@ -14,6 +14,9 @@ use DBI;
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
+#my $site = 'hebcal.com';
+my $site = 'hebrewcalendar.org';
+
 my($now) = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
@@ -47,28 +50,30 @@ while (my($to,$cfg) = each(%SUBS))
 
     my $encoded = encode_base64($to);
     chomp($encoded);
-    my $unsub_url = "http://www.hebcal.com/email/?" .
+    my $unsub_url = "http://www.$site/email/?" .
 	"e=" . my_url_escape($encoded);
 
     my($body) = "$loc\n\n"
 	. gen_body(\@events) . qq{
 Shabbat Shalom,
-hebcal.com
+$site
 
 To modify your subscription, visit:
 $unsub_url
 
 To unsubscribe from this list, send an email to:
-shabbat-unsubscribe\@hebcal.com
+shabbat-unsubscribe\@$site
 };
 
     my($fri) = $now + ((5 - $wday) * 60 * 60 * 24);
 
-    my($return_path) = sprintf('shabbat-return-%s@hebcal.com',
-			       $args->{'id'});
+    my $email_mangle = $to;
+    $email_mangle =~ s/\@/=/g;
+    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
+
     my %headers =
         (
-         'From' => "Hebcal <shabbat-owner\@hebcal.com>",
+         'From' => "Hebcal <shabbat-owner\@$site>",
          'To' => $to,
          'MIME-Version' => '1.0',
          'Content-Type' => 'text/plain',
@@ -144,7 +149,7 @@ sub gen_body
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
 	    $body .= "This week's Torah portion is $subj\n";
-	    $body .= "  http://www.hebcal.com" .
+	    $body .= "  http://www.$site" .
 	      Hebcal::get_holiday_anchor($subj,undef,undef) . "\n";
 	}
 	else
