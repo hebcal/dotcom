@@ -194,10 +194,8 @@ $hebcal_tz_names = array(
      "tz_-4"   => "GMT -04:00",
      );
 
-function hebcal_get_zipcode_fields($zip)
+function hebcal_get_zipcode_fields($zip, $password)
 {
-    $passfile = file("hebcal-db-pass.cgi");
-    $password = trim($passfile[0]);
     $db = mysql_pconnect("mysql.hebcal.com", "mradwin_hebcal", $password)
 	or die("Could not connect: " . mysql_error());
 
