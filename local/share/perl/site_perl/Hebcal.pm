@@ -1209,22 +1209,22 @@ sub download_html
 	$greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
     }
 
-    my($s) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export calendar</h3>\n};
-
     $title = '' unless $title;
+
+    my($s) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export $title calendar</h3>\n};
+
     $s .= qq{<p>By clicking the links below, you can download 
-Jewish Calendar $title events into your desktop software.</p>};
+Jewish Calendar events into your desktop software.</p>};
 
     if ($title && defined $q->param('month') && $q->param('month') ne 'x')
     {
 	my $heb_year = $q->param('year') + 3760;
-	$s .= "<p>Note: the following links will download $title.\n" .
-	    "You may wish to download <a\n" .
+	$s .= "<p>Note: you may also download <a\n" .
 	    "href=\"" . Hebcal::self_url($q, {'month' => 'x'})
 	    . "#export\">all of " . $q->param('year') . "</a> or <a\n" .
 	    "href=\"" .
 	    Hebcal::self_url($q, {'yt' => 'H', 'month' => 'x', 'year' => $heb_year}) .
-	    "#export\">Hebrew Year $heb_year</a>.</p>\n";
+	    "#export\">Hebrew Year $heb_year</a> events.</p>\n";
     }
 
     $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
