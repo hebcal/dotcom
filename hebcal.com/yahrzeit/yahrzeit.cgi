@@ -37,7 +37,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 12:06:09 PDT 2001
+Last modified: Sun Apr 22 16:04:00 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -347,7 +347,6 @@ sub form
     my($head,$message,$help) = @_;
 
     my(%months) = %Hebcal::MoY_long;
-    $months{'x'} = '[select one]';
 
     if ($message ne '')
     {
@@ -370,8 +369,7 @@ sub form
 	    "\n&nbsp;&nbsp;&nbsp;Day:\n",
 	    $q->popup_menu(-name => "m$i",
 			   -id => "m$i",
-			   -values => ['x',1..12],
-			   -default => 'x',
+			   -values => [1..12],
 			   -labels => \%months),
 	    "\n",
 	    $q->textfield(-name => "d$i",
