@@ -20,6 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use lib "/pub/p/e/perl/lib/site_perl";
 
 use Getopt::Std;
