@@ -73,7 +73,7 @@ vspace="5" width="75" height="90" align="right"></a>
 For a good reference book on the major Jewish Holidays, I'd suggest
 Michael Strassfeld's <em><a
 href="$strassfeld_link">The
-Jewish Holidays: A Guide & Commentary</a></em>.</p>
+Jewish Holidays: A Guide &amp; Commentary</a></em>.</p>
 };
 &do_section('major');
 
