@@ -20,6 +20,14 @@ Jewish Calendar Tools</small></td>
 <input type="hidden" name="config" value="hebcal">
 <input type="submit" value="Search"></td></tr></table>
 </form>
+<div align="center"
+style="font-family:Verdana,Arial,Helvetica,Geneva,sans-serif; font-size: x-small;">
+<span class="hl"><b>NEW &gt;&gt;</b></span> Candle lighting times by Phone!
+Call Tellme at 1-800-555-TELL.
+Say <b>extensions</b>.
+Dial <b>00613</b>.
+<span class="hl"><b>&lt;&lt; NEW</b></span>
+</div>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif"><!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
