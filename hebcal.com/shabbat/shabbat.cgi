@@ -547,7 +547,7 @@ if (!$cfg && $q->param('zip'))
 		"?zip=", $q->param('zip'));
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-    $url .= "&amp;=type=shabbat";
+    $url .= "&amp;type=shabbat";
 
     &Hebcal::out_html($cfg,"<br><b><span class=\"hl\">NEW!</span>\n",
 		      "<a href=\"$url\">Add\n",
