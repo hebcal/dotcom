@@ -963,36 +963,44 @@ sub download_html
 Jewish Calendar events into your desktop software.</p>};
 
     $q->delete('euro');
-    $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file from Hebcal.\nSelect one of:\n" .
-	"<ul><li><a href=\"" . download_href($q, $filename, 'csv') .
-	"\">USA date format</a> (month/day/year)\n";
+    $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
+	"<ul><li>USA date format (month/day/year):\n" .
+	"<a href=\"" . download_href($q, "${filename}_usa", 'csv') .
+	"\">${filename}_usa.csv</a>\n";
 
     $q->param('euro', '1');
-    $s .= "<li><a href=\"" . download_href($q, $filename, 'csv') .
-	"\">European date format</a> (day/month/year)</ul>\n";
+    $s .= "<li>European date format (day/month/year):\n" .
+	"<a href=\"" . download_href($q, "${filename}_eur", 'csv') .
+	"\">${filename}_eur.csv</a></ul>\n";
 
-    $s .= qq{<li><a href="/help/import.html#csv">Import CSV file into Outlook</a></ol>};
+    $s .= qq{<li><a href="/help/import.html#csv">How to import CSV file into Outlook</a></ol>};
 
     # only offer DBA export when we know timegm() will work
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($q->param('dst')) || $q->param('dst') eq 'usa'
 	 || $q->param('dst') eq 'none'))
     {
-	$s .= "<h4>Palm Desktop for Windows</h4>\n<ol><li><a href=\"" .
+	$s .= "<h4>Palm Desktop for Windows</h4>\n<ol><li>" .
+	    "Export Palm Date Book Archive:\n" .
+	    "<a href=\"" .
 	    download_href($q, $filename, 'dba') .
-	    "\">Export Palm Date Book Archive (.DBA) from Hebcal</a>\n";
-	$s .= qq{<li><a href="/help/import.html#dba">Import DBA file into Palm Desktop</a></ol>};
+	    "\">$filename.dba</a>\n";
+	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
     }
 
-    $s .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li><a href=\"" .
+    $s .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li>" .
+	"Export Mac Palm Calendar:\n" .
+	"<a href=\"" .
 	download_href($q, $filename, 'tsv') .
-	    "\">Export Mac Palm Calendar from Hebcal</a>\n";
+	    "\">$filename.tsv</a>\n";
     $s .= "<li>(this feature is currently experimental)</ol>\n";
 
-    $s .= "<h4>Lotus Notes R5, iCal, vCalendar</h4>\n<ol><li><a href=\"" .
+    $s .= "<h4>Lotus Notes R5, iCal, vCalendar</h4>\n<ol><li>" .
+	"Export vCalendar file:\n" .
+	"<a href=\"" .
 	download_href($q, $filename, 'vcs') .
-	    "\">Export vCalendar (.VCS) from Hebcal</a>\n";
-    $s .= qq{<li>Import VCS file into <a href="/help/import.html#lotus-notes">Lotus Notes</a> or <a href="/help/import.html#ical">iCal</a></ol>};
+	    "\">$filename.vcs</a>\n";
+    $s .= qq{<li>How to import VCS file into\n<a href="/help/import.html#lotus-notes">Lotus Notes</a> or <a href="/help/import.html#ical">iCal</a></ol>};
 
     $s .= "</div>\n";
 
