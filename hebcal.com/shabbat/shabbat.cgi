@@ -33,6 +33,61 @@ use strict;
 
 my($rcsrev) = '$Revision$'; #'
 
+my(%STATES) = (
+"AK" => "alaska",
+"AL" => "alabama",
+"AR" => "arkansas",
+"AZ" => "arizona",
+"CA" => "california",
+"CO" => "colorado",
+"CT" => "connecticut",
+"DC" => "washington d c",
+"DE" => "delaware",
+"FL" => "florida",
+"GA" => "georgia",
+"HI" => "hawaii",
+"IA" => "iowa",
+"ID" => "idaho",
+"IL" => "illinois",
+"IN" => "indiana",
+"KS" => "kansas",
+"KY" => "kentucky",
+"LA" => "louisiana",
+"MA" => "massachusetts",
+"MD" => "maryland",
+"ME" => "maine",
+"MI" => "michigan",
+"MN" => "minnesota",
+"MO" => "missouri",
+"MS" => "mississippi",
+"MT" => "montana",
+"NC" => "north carolina",
+"ND" => "north dakota",
+"NE" => "nebraska",
+"NH" => "new hampshire",
+"NJ" => "new jersey",
+"NM" => "new mexico",
+"NV" => "nevada",
+"NY" => "new york",
+"OH" => "ohio",
+"OK" => "oklahoma",
+"OR" => "oregon",
+"PA" => "pennsylvania",
+"PR" => "puerto rico",
+"RI" => "rhode island",
+"SC" => "south carolina",
+"SD" => "south dakota",
+"TN" => "tennessee",
+"TX" => "texas",
+"UT" => "utah",
+"VA" => "virginia",
+"VT" => "vermont",
+"WA" => "washington",
+"WI" => "wisconsin",
+"WV" => "west virginia",
+"WY" => "wyoming",
+    );
+
 # process form params
 my($q) = new CGI;
 my($script_name) = $q->script_name();
@@ -42,10 +97,11 @@ my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 my($items) = format_items($evts);
 
-if (defined $cfg && $cfg =~ /^[ijrw]$/)
+if (defined $cfg && $cfg =~ /^[ijrwv]$/)
 {
     display_wml($items) if ($cfg eq 'w');
     display_rss($items) if ($cfg eq 'r');
+    display_vxml($items) if ($cfg eq 'v');
     display_javascript($items) if ($cfg eq 'j' || $cfg eq 'i');
 }
 
@@ -263,7 +319,7 @@ sub process_args
 
 	if ($q->param('zip') !~ /^\d{5}$/)
 	{
-	    &form(1,
+	    form($cfg,1,
 		  "Sorry, <b>" . $q->param('zip') . "</b> does\n" .
 		  "not appear to be a 5-digit zip code.");
 	}
@@ -273,7 +329,7 @@ sub process_args
 	&Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
-	&form(1,
+	form($cfg,1,
 	      "Sorry, can't find\n".  "<b>" . $q->param('zip') .
 	      "</b> in the zip code database.\n",
 	      "<ul><li>Please try a nearby zip code</li></ul>")
@@ -292,7 +348,7 @@ sub process_args
 	{
 	    $q->param('tz_override', '1');
 
-	    &form(1,
+	    form($cfg,1,
 		  "Sorry, can't auto-detect\n" .
 		  "timezone for <b>" . $city_descr . "</b>\n" .
 		  "<ul><li>Please select your time zone below.</li></ul>");
@@ -343,10 +399,16 @@ sub process_args
     $cmd .= " -m " . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    foreach (@Hebcal::opts)
+    foreach ('a', 'i')
     {
 	$cmd .= ' -' . $_
 	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
+    }
+
+    # don't do holidays or rosh chodesh for WML and VoiceXML
+    if (defined $cfg && ($cfg eq 'w' || $cfg eq 'v'))
+    {
+	$cmd .= ' -x -h';
     }
 
     $cmd .= ' -s -c ' . $sat_year;
@@ -457,6 +519,93 @@ sub display_wml
 
     print "</card>\n</wml>\n";
 
+    exit(0);
+}
+
+
+sub display_vxml
+{
+    my($items) = @_;
+
+    print "Content-Type: text/xml\015\012\015\012";
+
+    my($url) = self_url();
+    my $title = '1-Click Shabbat: ' . $q->param('zip');
+
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(time()));
+    $dc_date =~ s/00$/:00/;
+
+    my($this_year) = (localtime)[5];
+    $this_year += 1900;
+
+    # fallback
+    my $city_audio = "<audio>$city_descr</audio>";
+
+    if ($city_descr =~ /^(.+),\s+(\w\w)\s+(\d{5})$/)
+    {
+	my($city,$state,$zip) = ($1,$2,$3);
+	$city_audio = "<audio>$city,</audio>";
+
+	if (defined $STATES{$state})
+	{
+	    $city_audio .= "<audio>$STATES{$state},</audio>";
+	}
+	else
+	{
+	    foreach my $d (split(//, $state))
+	    {
+		$city_audio .= "<audio>$d</audio>\n";
+	    }
+	}
+
+	foreach my $d (split(//, $zip))
+	{
+	    $city_audio .= "<audio>$d</audio>\n";
+	}
+    }
+
+    print qq{<?xml version="1.0"?>
+<vxml version="2.0">
+<form id="results">
+<block>
+	<audio>Here are candle lighting times for</audio>
+	$city_audio
+	<break time="500ms"/>
+};
+
+    for (my $i = 0; $i < scalar(@{$items}); $i++)
+    {
+	if ($items->[$i]->{'class'} eq 'candles')
+	{
+	    my $subj = $items->[$i]->{'subj'};
+	    $subj =~ s/Havdalah/Hav dal ah/g;
+	    print qq{\t<audio>$subj for
+$items->[$i]->{'date'} is at $items->[$i]->{'time'}.</audio>
+};
+	}
+	elsif ($items->[$i]->{'class'} eq 'holiday')
+	{
+	    print qq{\t<audio>Holiday... $items->[$i]->{'subj'} is on
+$items->[$i]->{'date'}.</audio>
+};
+	}
+	elsif ($items->[$i]->{'class'} eq 'parashat')
+	{
+	    print qq{\t<audio>This week's Torah portion is
+$items->[$i]->{'subj'}.</audio>
+};
+	}
+
+	print qq{\t<break time="250ms"/>\n};
+    }
+
+    print qq{
+	<break time="250ms"/>
+	<audio>That's all!  Thanks for using the Heeb cal interactive Jewish Calendar.  Shabbat Shalom.</audio>
+</block>
+</form>
+</vxml>
+};
     exit(0);
 }
 
@@ -682,14 +831,29 @@ sub display_html
 		      "1-Click Shabbat candle-lighting times to your\n",
 		      "web site</a></p>\n");
 
-    &form(0,'','');
+    form($cfg,0,'','');
 
     exit(0);
 }
 
-sub form
+sub form($$$$)
 {
-    my($head,$message,$help) = @_;
+    my($cfg,$head,$message,$help) = @_;
+
+    if (defined $cfg && $cfg eq 'v')
+    {
+	print "Content-Type: text/xml\015\012\015\012";
+	print qq{<?xml version="1.0"?>
+<vxml version="2.0">
+	<form id="top">
+		<block>
+			<goto next="http://www.hebcal.com/shabbat.vxml#enterzip"/>
+		</block>
+	</form>
+</vxml>
+};
+	exit(0);
+}
 
     if ($head)
     {
