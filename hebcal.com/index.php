@@ -20,18 +20,11 @@ Jewish Calendar Tools</small></td>
 <input type="hidden" name="config" value="hebcal">
 <input type="submit" value="Search"></td></tr></table>
 </form>
-<div align="center"
-style="font-family:Verdana,Arial,Helvetica,Geneva,sans-serif; font-size: x-small;">
-<span class="hl"><b>NEW &gt;&gt;</b></span> Automated candle lighting times by Phone!
-Call Tellme at <b>1-800-555-TELL</b>.
-Dial <b>1-00613</b>.
-<span class="hl"><b>&lt;&lt; NEW</b></span>
-</div>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif"><!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="12" cellspacing="0">
-<tr><td>
+<tr><td valign="top">
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
 generate a calendar of Jewish holidays for any year 0001-9999
@@ -43,6 +36,10 @@ Shabbat candle lighting times and Torah Readings, updated weekly
 <br><span class="sm-grey">&gt;</span>
 <a href="/email/">Subscribe by
 Email</a>
+<br><span class="sm-grey">&gt;</span>
+<span class="hl"><b>NEW!</b></span> By telephone:
+Call Tellme at <b>1-800-555-TELL</b>.
+Dial <b>1-00613</b>.
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <span class="sm-grey">&gt;</span>
 convert between Hebrew and Gregorian dates
