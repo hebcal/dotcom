@@ -1050,6 +1050,11 @@ sub process_cookie($$)
     my($q,$cookieval) = @_;
 
     $cookieval =~ s/^C=//;
+
+    if ($cookieval eq 'opt_out') {
+	return undef;
+    }
+
     my($c) = new CGI($cookieval);
 
     if ((! defined $q->param('c')) ||
