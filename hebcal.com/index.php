@@ -58,6 +58,9 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 Calendar</a></b>
 <br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" -->
 <!--#include file="current.inc" -->
+<br><br><span class="sm-grey">&gt;</span>
+<b><a href="/hebcal/?v=1;year=2002;month=9;nx=on;nh=on;vis=on">High Holy
+Days 5763</a></b>
 <form action="/shabbat/">
 <span class="sm-grey">&gt;</span>
 <b>Candle lighting times</b>
@@ -79,7 +82,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Jul  8 18:28:15 EDT 2002
+Last modified: Tue Jul  9 13:24:21 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
