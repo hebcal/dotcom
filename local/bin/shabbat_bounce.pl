@@ -14,12 +14,12 @@ use DBI ();
 use Email::Valid ();
 use Mail::DeliveryStatus::BounceParser ();
 
-my $site = 'hebcal.com';
-my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
+my $site = "hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
 
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
-my $to = $header->get('To');
+my $to = $header->get("To");
 
 my($email_address,$bounce_reason);
 my($std_reason);
@@ -55,9 +55,9 @@ if ($@) {
 
     my @reports = $bounce->reports;
     foreach my $report (@reports) {
-	$std_reason = $report->get('std_reason');
-	exit(0) if ($std_reason eq 'over_quota');
-	$bounce_reason = $report->get('reason');
+	$std_reason = $report->get("std_reason");
+	exit(0) if ($std_reason eq "over_quota");
+	$bounce_reason = $report->get("reason");
     }
 }
 
@@ -65,7 +65,7 @@ $email_address =~ s/\'/\\\'/g;
 $bounce_reason =~ s/\'/\\\'/g;
 $bounce_reason =~ s/\s+/ /g;
 
-my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
+my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
 my $sql = <<EOD
 SELECT bounce_id
@@ -83,7 +83,7 @@ VALUES ('$email_address', NULL, '$std_reason')
 EOD
 ;
     $dbh->do($sql);
-    $id = $dbh->{'mysql_insertid'};
+    $id = $dbh->{"mysql_insertid"};
 }
 
 $sql = <<EOD
