@@ -761,10 +761,10 @@ sub results_page()
 	}
 
 	$prev_url = &self_url($q, {'year' => $py, 'month' => $pm});
-	$prev_title = $Hebcal::MoY_short[$pm-1] . " " . $py;
+	$prev_title = $Hebcal::MoY_long{$pm} . " " . $py;
 
 	$next_url = &self_url($q, {'year' => $ny, 'month' => $nm});
-	$next_title = $Hebcal::MoY_short[$nm-1] . " " . $ny;
+	$next_title = $Hebcal::MoY_long{$nm} . " " . $ny;
     }
     else
     {
@@ -776,9 +776,9 @@ sub results_page()
     }
 
     my($goto_prefix) = "<p class=\"goto\"><b>" .
-	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
+	"<a title=\"$prev_title\"\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
 	$date . "\n" .
-	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
+	"<a title=\"$next_title\"\nhref=\"$next_url\">&gt;&gt;</a></b>";
 
     my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
 	? '; charset=UTF-8' : '';
@@ -1025,11 +1025,11 @@ sub results_page()
 		$cal->contentcolor('black');
 		$cal->todaybordercolor('red');
 
-		$cal->header("<h2 align=\"center\"><a class=\"goto\"\n" .
+		$cal->header("<h2 align=\"center\"><a class=\"goto\" title=\"$prev_title\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
 			     $Hebcal::MoY_long{$mon} . ' ' .
 			     $year . "\n" .
-			     "<a class=\"goto\"\n" .
+			     "<a class=\"goto\" title=\"$next_title\"\n" .
 			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
 			     '<div align="center" class="goto">' . $goto . '</div>');
 	    }
