@@ -79,7 +79,12 @@ foreach my $h ($sedrot->Sections())
 
     my($seph) = ($haftarah_seph eq $haftarah) ? '' : "<br>($haftarah_seph)";
 
-    print OUT qq{<tr><td><big>$h<br><span dir="rtl" class="hebrew"\n},
+    my($anchor) = $h;
+    $anchor = lc($anchor);
+    $anchor =~ s/[^\w\-]//g;
+
+    print OUT qq{<tr><td><big><a name="$anchor">$h</a><br>\n},
+    qq{<span dir="rtl" class="hebrew"\n},
     qq{lang="he">$hebrew</span></big></td>\n},
     qq{<td><a href="$torah_href">$torah</a>\n},
     qq{<small><ol>};
