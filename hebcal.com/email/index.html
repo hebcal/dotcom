@@ -38,6 +38,9 @@ my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
+my($h1_text) = "Email Subscription Manager (BETA)";
+my($nav_text) = "Subscription Manager";
+
 my($cookies) = &Hebcal::get_cookies($q);
 if (! $q->param('v'))
 {
@@ -147,10 +150,10 @@ hebcal.com};
     my($html_email) = &Hebcal::html_entify($email);
 
     print STDOUT $q->header(),
-    &Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+    &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
 			undef, undef),
-    &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
-    "<h1>E-mail\nSubscription Manager</h1>\n",
+    &Hebcal::navbar2($q, $nav_text),
+    "<h1>$h1_text</h1>\n",
     qq{<h2>Unsubscribed</h2>
 <p>You have been removed from the email subscription list.<br>
 A confirmation message has been sent to <b>$html_email</b>.</p>
@@ -258,10 +261,10 @@ sub subscribe
 	if $cookie_to_set;
 
     print STDOUT $q->header(),
-    &Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+    &Hebcal::start_html($q, 'Hebcal ' . $h1_text,
 			undef, undef),
-    &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
-    "<h1>E-mail\nSubscription Manager</h1>\n";
+    &Hebcal::navbar2($q, $nav_text),
+    "<h1>$h1_text</h1>\n";
 
     # check if email address already verified
     my $info = &get_sub_info($email);
@@ -355,10 +358,10 @@ sub form
 
     if ($head) {
 	print STDOUT $q->header(),
-	&Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+	&Hebcal::start_html($q, 'Hebcal ' . $h1_text,
 			    undef, undef),
-	&Hebcal::navbar2($q, "E-mail Subscription\nManager"),
-	"<h1>E-mail\nSubscription Manager</h1>\n";
+	&Hebcal::navbar2($q, $nav_text),
+	"<h1>$h1_text</h1>\n";
     }
 
     print STDOUT
