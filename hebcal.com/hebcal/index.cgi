@@ -436,7 +436,7 @@ JSCRIPT_END
 		       \@head,
 			{
 		       'description' =>
-		       'Personalized Jewish calendar for any year 0000-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Palm, Outlook, iCal, etc.',
+		       'Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Palm, Outlook, iCal, etc.',
 		       'keywords' =>
 		       'hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff',
 		       },
@@ -718,7 +718,7 @@ width="90" height="90" hspace="8" vspace="8" align="right"
 alt="Jewish Year 5765 Wall Calendar from Amazon.com"></a>
 
 Hebcal.com offers a personalized Jewish calendar for any year
-0000-9999. You can get a list of Jewish holidays, candle lighting times,
+0001-9999. You can get a list of Jewish holidays, candle lighting times,
 and Torah readings. We also offer export to Palm, Outlook, and iCal --
 all for free. To customize your calendar, fill out the <a
 href="$form_href">$form_text</a> and click the Get Calendar button.
