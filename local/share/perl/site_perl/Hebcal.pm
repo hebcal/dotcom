@@ -999,8 +999,6 @@ sub process_cookie($$)
 		$q->param('tz',$c->param('tz'))
 		    if defined $c->param('tz');
 	    }
-	    $q->delete('i');
-	    $c->delete('i');
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
 	    $q->param('city',$c->param('city'))
@@ -1009,11 +1007,11 @@ sub process_cookie($$)
 	    $q->param('c','on');
 	    $q->delete('tz');
 	    $q->delete('dst');
-	    if (! defined $Hebcal::city_dst{$q->param('city')} ||
-		$Hebcal::city_dst{$q->param('city')} ne 'israel')
+	    if (defined $Hebcal::city_dst{$q->param('city')} ||
+		$Hebcal::city_dst{$q->param('city')} eq 'israel')
 	    {
-		$q->delete('i');
-		$c->delete('i');
+		$q->param('i','on');
+		$c->param('i','on');
 	    }
 	} elsif (defined $c->param('lodeg') &&
 		 defined $c->param('lomin') &&
