@@ -87,7 +87,7 @@ $yesterday = time - (60 * 60 * 24);
 $apache_date = sprintf("%02d/%s/%4d", $mday, $MoY[$mon], $year + 1900);
 
 $home = $faq = $holidays = $doc_other = $queries =
-    $candle = $zip = $city = $pos = 0;
+    $candle = $zip = $city = $pos = $yhoo = $download = $dba = $csv = 0;
 $unk_zip = $unk_tz = 0;
 %unk_zip = ();
 %unk_tz = ();
@@ -114,10 +114,30 @@ while(<STDIN>)
 	    $doc_other++;
 	}
     }
-    if (m,GET\s+/hebcal/\?, && /v=1/)
+
+    if (m,GET\s+/hebcal/index.html/.+\.(dba|csv), && /v=1/ && /dl=1/)
+    {
+	$download++;
+
+	if (m,/index.html/.+\.dba,)
+	{
+	    $dba++;
+	}
+	else
+	{
+	    $csv++;
+	}
+    }
+    elsif (m,GET\s+/hebcal/\?, && /v=1/)
     {
 	$queries++;
-	if (/c=(on|1)/)
+
+	if (/\by=(on|1)\b/)
+	{
+	    $yhoo++;
+	}
+
+	if (/\bc=(on|1)\b/)
 	{
 	    $candle++;
 	    if (/geo=city/)
@@ -194,6 +214,8 @@ printf "%4d faq\n", $faq;
 printf "%4d holidays\n", $holidays;
 printf "%4d doc_other\n", $doc_other;
 printf "%4d queries\n", $queries;
+printf "%4d download (%4d dba, %4d csv, %4d yhoo)\n",
+    $download + $yhoo, $dba, $csv, $yhoo;
 printf "%4d candle (%4d zip, %4d city, %4d pos)\n",
     $candle, $zip, $city, $pos;
 
