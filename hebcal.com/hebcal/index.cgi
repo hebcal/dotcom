@@ -65,6 +65,11 @@ $this_mon++;
 my($rcsrev) = '$Revision$'; #'
 
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
+my %long_candles_text =
+    ('pos' => 'latitude/longitude',
+     'city' => 'closest city',
+     'zip' => 'zip code',
+     'none' => 'none');
 
 my($cmd)  = './hebcal';
 
@@ -76,19 +81,11 @@ $q->delete('.s');		# we don't care about submit button
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.cgi$,/,;
 
-my($set_checked) = 'checked';
 my($cookies) = Hebcal::get_cookies($q);
 my($C_cookie) = (defined $cookies->{'C'}) ? 'C=' . $cookies->{'C'} : '';
 if (! $q->param('v') && $C_cookie)
 {
-    if ($C_cookie eq 'C=opt_out')
-    {
-	$set_checked = '';
-    }
-    else
-    {
-	Hebcal::process_cookie($q,$C_cookie);
-    }
+    Hebcal::process_cookie($q,$C_cookie);
 }
 
 # sanitize input to prevent people from trying to hack the site.
@@ -351,17 +348,15 @@ sub csv_display() {
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
+
 sub alt_candles_text($$)
 {
     my($q,$geo) = @_;
 
-    my $text = '?';
-    $text = 'latitude/longitude' if $geo eq 'pos';
-    $text = 'closest city' if $geo eq 'city';
-    $text = 'zip code' if $geo eq 'zip';
-
-    $q->a({-href => $script_name . "?c=on;geo=" . $geo,
-	   -onClick => "return s1('" . $geo . "')" },
+    my $text = $long_candles_text{$geo};
+    my $c = ($geo eq 'none') ? 'off' : 'on';
+    $q->a({-href => $script_name . "?c=$c;geo=" . $geo,
+	   -onClick => "return s1('" . $geo . "', '" . $c . "')" },
 	  $text);
 }
 
@@ -374,9 +369,9 @@ sub form($$)
     $hyear++ if $this_mon >= 9;
 
     $JSCRIPT=<<JSCRIPT_END;
-function s1(geo) {
+function s1(geo,c) {
 document.f1.geo.value=geo;
-document.f1.c.value='on';
+document.f1.c.value=c;
 document.f1.v.value='0';
 document.f1.submit();
 return false;
@@ -549,40 +544,28 @@ JSCRIPT_END
     $q->param('c','off') unless defined $q->param('c');
     $q->param('geo','zip') unless defined $q->param('geo');
 
-    my($after_type) = '';
-    if (defined $q->param('geo') && $q->param('geo') eq 'pos')
-    {
-	$after_type = "\n<small>(<a href=\"$latlong_url\">search\n" .
-	    "latitude/longitude</a>)</small>";
-    }
-
     print STDOUT "</td><td><img src=\"/i/black-1x1.gif\"\n",
-    "width=\"1\" height=\"220\" hspace=\"10\" alt=\"\"></td><td>\n";
+    "width=\"1\" height=\"250\" hspace=\"10\" alt=\"\"></td><td>\n";
     print STDOUT $q->hidden(-name => 'c',
 			    -id => 'c'),
     $q->hidden(-name => 'geo',
 	       -default => 'zip',
 	       -id => 'geo'),
-    "<p><b>Candle lighting times:</b>",
-    $after_type,
-    "<br><small>(or select by\n";
+    "<p><b>Candle lighting times:</b>\n";
 
-    if ($q->param('geo') eq 'city')
+    print STDOUT "<br><small>[\n";
+    foreach my $type ('none', 'zip', 'city', 'pos')
     {
-	print STDOUT alt_candles_text($q, 'zip'),
-	" or\n", alt_candles_text($q, 'pos');
+	if ($type eq $q->param('geo')) {
+	    print STDOUT $long_candles_text{$type};
+	} else {
+	    print STDOUT alt_candles_text($q, $type);
+	}
+	if ($type ne 'pos') {
+	    print STDOUT "\n| ";
+	}
     }
-    elsif ($q->param('geo') eq 'pos')
-    {
-	print STDOUT alt_candles_text($q, 'zip'),
-	" or\n", alt_candles_text($q, 'city');
-    }
-    else
-    {
-	print STDOUT alt_candles_text($q, 'city'),
-	" or\n", alt_candles_text($q, 'pos');
-    }
-    print STDOUT ")</small><br>";
+    print STDOUT "\n]</small><br><br>\n";
 
     if ($q->param('geo') eq 'city')
     {
@@ -595,6 +578,9 @@ JSCRIPT_END
     }
     elsif ($q->param('geo') eq 'pos')
     {
+	print STDOUT "<small><a href=\"$latlong_url\">Search</a>\n",
+	"for the exact location of your city.</small><br><br>\n";
+
 	print STDOUT
 	"<label\nfor=\"ladeg\">",
 	$q->textfield(-name => 'ladeg',
@@ -634,8 +620,10 @@ JSCRIPT_END
 		       -labels => {'e' => 'East Longitude',
 				   'w' => 'West Longitude'});
     }
-    else
+    elsif ($q->param('geo') ne 'none')
     {
+	# default is Zip Code
+
 	print STDOUT "<label\nfor=\"zip\">Zip code:</label>\n",
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
@@ -667,6 +655,7 @@ JSCRIPT_END
 		       -labels => \%Hebcal::dst_names);
     }
 
+    if ($q->param('geo') ne 'none') {
     print STDOUT "<br><label\nfor=\"m\">",
     "Havdalah minutes past sundown:</label>\n",
     $q->textfield(-name => 'm',
@@ -676,6 +665,7 @@ JSCRIPT_END
 		  -default => $Hebcal::havdalah_min),
     "\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off Havdalah times)</small>\n",
     "</p>\n";
+    }
 
     print STDOUT "</td></tr></table></p>\n",
     $q->submit(-name => '.s',-value => 'Get Calendar'),
@@ -750,7 +740,8 @@ sub results_page()
 	my($newcookie) = Hebcal::gen_cookie($q);
 	if (! $C_cookie)
 	{
-	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	    print STDOUT "Cache-Control: private\015\012",
+	    "Set-Cookie: ", $newcookie, "; expires=",
 	    $expires_future, "; path=/\015\012"
 		if $newcookie =~ /&/;
 	}
@@ -762,7 +753,8 @@ sub results_page()
 	    $cmp1 =~ s/^C=t=\d+\&?//;
 	    $cmp2 =~ s/^C=t=\d+\&?//;
 
-	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	    print STDOUT "Cache-Control: private\015\012",
+	    "Set-Cookie: ", $newcookie, "; expires=",
 	    $expires_future, "; path=/\015\012"
 		if $cmp1 ne $cmp2;
 	}
@@ -1148,10 +1140,10 @@ sub get_candle_config($)
 	    ($q->param('ladeg') eq '') &&
 	    ($q->param('lamin') eq ''))
 	{
-	    $q->delete('c');
+	    $q->param('c','off');
 	    $q->delete('zip');
 	    $q->delete('city');
-	    $q->delete('geo');
+	    $q->param('geo','pos');
 	    $q->delete('lodeg');
 	    $q->delete('lomin');
 	    $q->delete('ladeg');
@@ -1287,10 +1279,10 @@ sub get_candle_config($)
     }
     else
     {
-	$q->delete('c');
+	$q->param('c','off');
 	$q->delete('zip');
 	$q->delete('city');
-	$q->delete('geo');
+#	$q->param('geo', 'none');
 	$q->delete('lodeg');
 	$q->delete('lomin');
 	$q->delete('ladeg');
