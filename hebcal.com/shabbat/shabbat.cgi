@@ -790,7 +790,7 @@ Shabbat</a> for $city_descr</h3>
 
     &Hebcal::out_html($cfg, 
 		      "<font size=\"-2\" face=\"Arial\">1-Click Shabbat\n",
-		      &Hebcal::html_copyright($q), "</font>\n");
+		      &Hebcal::html_copyright($q, 1), "</font>\n");
 
     if ($cfg eq 'i') {
 	&Hebcal::out_html($cfg, "</body></html>\n");
