@@ -848,7 +848,20 @@ so you can keep this window open.
 	    $subj .= "\n/ " . &Hebcal::display_hebrew($q, "hebrew", $hebrew);
 	}
 
-	unless ($q->param('vis'))
+	if ($q->param('vis'))
+	{
+	    if (defined $torah_href && $torah_href ne '')
+	    {
+		my($anchor) = $subj;
+
+		$anchor =~ s/^(Parshas\s+|Parashat\s+)//;
+		$anchor = lc($anchor);
+		$anchor =~ s/[^\w]//g;
+
+		$subj = qq{<a href="/sedrot/$anchor.html">$subj</a>};
+	    }
+	}
+	else
 	{
 	    if (defined $torah_href && $torah_href ne '')
 	    {
