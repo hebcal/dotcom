@@ -20,8 +20,13 @@ href="/help/">Help</a> -
 require_once('smtp.inc');
 require_once('zips.inc');
 
+global $HTTP_POST_VARS;
 global $HTTP_GET_VARS;
 $param = array();
+
+foreach($HTTP_POST_VARS as $key => $value) {
+    $param[$key] = $value;
+}
 foreach($HTTP_GET_VARS as $key => $value) {
     $param[$key] = $value;
 }
