@@ -70,7 +70,7 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current&nbsp;Cale
 <!-- Begin temp Chanukah -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/holidays/chanukah.html">Chanukah</a></b>
-<br>19 December 2003<br>
+<br>19 December 2003<br>(at sunset)<br>
 <!-- End temp Chanukah -->
 <br><hr noshade size="1">
 <form action="/shabbat/"><span
@@ -95,6 +95,9 @@ src="http://www.paypal.com/images/x-click-but04.gif"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
 <!-- End PayPal Logo -->
+<small>This is a free service.<br>
+Your contributions keep<br>
+this site going!</small>
 </center>
 </td></tr></table>
 <p>
