@@ -23,7 +23,8 @@ if ($cfg == "j") {
 $url = "/shabbat/shabbat.cgi";
 if ($qs) {
     $url .= "?$qs";
-    $cqs = strtr($qs, "&;./", ",,_-");
+    $cqs = preg_replace('/[&;]?tag=[^&;]+/', "", $qs);
+    $cqs = strtr($cqs, "&;./", ",,_-");
     $cqs = str_replace("%20", "+", $cqs);
     $dir = getenv("DOCUMENT_ROOT") . "/cache/shabbat/shabbat_cgi";
     $status = @readfile("$dir/$cqs");
