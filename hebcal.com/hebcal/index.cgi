@@ -23,46 +23,44 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
-require 'cgi-lib.pl';
-require 'timelocal.pl';
-require 'ctime.pl';
+package hebcal;
+
+use CGI;
+use CGI::Carp qw(fatalsToBrowser);
+use DB_File;
+use Time::Local;
 
 $author = 'michael@radwin.org';
-$dbmfile = 'zips.db';
-$dbmfile =~ s/\.db$//;
-
-&CgiDie("Script Error: No Database", "\nThe database is unreadable.\n" .
-	"Please <a href=\"mailto:$author" .
-	"\">e-mail Michael</a> to tell him that hebcal is broken.")
-    unless -r "${dbmfile}.db";
-
 $expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
-$cgipath = '/hebcal/';
-$rcsrev = '$Revision$'; #'
-$rcsrev =~ s/\s*\$//g;
 
-# magic constants for DBA export
-$MAGIC      = 1145176320;
-$FILENAME   = "hebcal.dba";
-# Type Fields
-#$NONE       = 0;
-$INTEGER    = 1;
-#$FLOAT      = 2;
-$DATE       = 3;
-#$ALPHA      = 4;
-#$CSTRING    = 5;
-$BOOL       = 6;
-#$BITFLAG    = 7;
-$REPEAT     = 7;
-$MAXENTRIES = 2500;
+# constants for DBA export
+$PALM_DBA_MAGIC      = 1145176320;
+$PALM_DBA_FILENAME   = "hebcal.dba";
+$PALM_DBA_INTEGER    = 1;
+$PALM_DBA_DATE       = 3;
+$PALM_DBA_BOOL       = 6;
+$PALM_DBA_REPEAT     = 7;
+$PALM_DBA_MAXENTRIES = 2500;
 
 @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 @MoY_short =
     ('Jan','Feb','Mar','Apr','May','Jun',
      'Jul','Aug','Sep','Oct','Nov','Dec');
-@MoY_long = 
-    ('January','Februrary','March','April','May','June',
-     'July','August','September','October','November','December');
+%MoY_long = (
+	     'x' => '- entire year -',
+	     1   => 'January',
+	     2   => 'Februrary',
+	     3   => 'March',
+	     4   => 'April',
+	     5   => 'May',
+	     6   => 'June',
+	     7   => 'July',
+	     8   => 'August',
+	     9   => 'September',
+	     10  => 'October',
+	     11  => 'November',
+	     12  => 'December',
+	     );
 
 # these states are known to span multiple timezones:
 # AK, FL, ID, IN, KS, KY, MI, ND, NE, OR, SD, TN, TX
@@ -141,6 +139,7 @@ $MAXENTRIES = 2500;
      'PR', -5,
      );
 
+# these cities should have DST set to 'none'
 %city_nodst =
     (
      'Berlin', 1,
@@ -264,304 +263,236 @@ $MAXENTRIES = 2500;
 	   );
 
 %tz_names = (
-     '-5', 'U.S. Eastern',
-     '-6', 'U.S. Central',
-     '-7', 'U.S. Mountain',
-     '-8', 'U.S. Pacific',
-     '-9', 'U.S. Alaskan',
-     '-10', 'U.S. Hawaii',
+     'auto' => 'Attempt to auto-detect',
+     '-5'   => 'GMT -05:00 (U.S. Eastern)',
+     '-6'   => 'GMT -06:00 (U.S. Central)',
+     '-7'   => 'GMT -07:00 (U.S. Mountain)',
+     '-8'   => 'GMT -08:00 (U.S. Pacific)',
+     '-9'   => 'GMT -09:00 (U.S. Alaskan)',
+     '-10'  => 'GMT -10:00 (U.S. Hawaii)',
+     '-11'  => 'GMT -11:00',
+     '-12'  => 'GMT -12:00',
+     '12'   => 'GMT +12:00',
+     '11'   => 'GMT +11:00',
+     '10'   => 'GMT +10:00',
+     '9'    => 'GMT +09:00',
+     '8'    => 'GMT +08:00',
+     '7'    => 'GMT +07:00',
+     '6'    => 'GMT +06:00',
+     '5'    => 'GMT +05:00',
+     '4'    => 'GMT +04:00',
+     '3'    => 'GMT +03:00',
+     '2'    => 'GMT +02:00',
+     '1'    => 'GMT +01:00',
+     '0'    => 'Greenwich Mean Time',
+     '-1'   => 'GMT -01:00',
+     '-2'   => 'GMT -02:00',
+     '-3'   => 'GMT -03:00',
+     '-4'   => 'GMT -04:00',
      );
 
-
-
-($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
+local($sec,$min,$hour,$mday,$mon,$year) = localtime(time);
 $year += 1900;
 
-$html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
-\t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
-<html><head>
-<title>Hebcal Interactive Jewish Calendar</title>
-<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
-<meta name=\"description\" content=\"Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude.\">
-<meta name=\"keywords\" content=\"hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff\">
-<link rev=\"made\" href=\"mailto:$author\">
-<meta name=\"DC.Title\" content=\"Hebcal Interactive Jewish Calendar\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#title\">
-<meta name=\"DC.Creator.PersonalName\" content=\"Radwin, Michael\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#creator\">
-<meta name=\"DC.Creator.PersonalName.Address\" content=\"$author\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#creator\">
-<meta name=\"DC.Subject\" content=\"Jewish calendar\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
-<meta name=\"DC.Subject\" content=\"Hebrew calendar\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
-<meta name=\"DC.Subject\" content=\"hebcal\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
-<meta name=\"DC.Subject\" content=\"candle lighting\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#subject\">
-<meta name=\"DC.Type\" content=\"Text.Form\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#type\">
-<meta name=\"DC.Identifier\" content=\"http://www.radwin.org/hebcal/\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#identifier\">
-<meta name=\"DC.Language\" scheme=\"ISO639-1\" content=\"en\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#language\">
-<meta name=\"DC.Date.X-MetadataLastModified\" scheme=\"ISO8601\" content=\"1999-08-07\">
-<link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#date\">
-<base href=\"http://www.radwin.org/hebcal/\">
-</head>
-<body>";
+my($rcsrev) = '$Revision$'; #'
+$rcsrev =~ s/\s*\$//g;
 
-$ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
-$hhmts = "<!-- hhmts start -->
-Last modified: Thu Dec 23 15:50:31 PST 1999
+my($hhmts) = "<!-- hhmts start -->
+Last modified: Mon Dec 27 10:05:04 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
 $hhmts =~ s/\n//g;
 $hhmts =~ s/Last modified: /Software last updated: /g;
-$hhmts = 'This page generated: ' . &ctime(time) . '<br>' . $hhmts;
+$hhmts = 'This page generated: ' . localtime() . '<br>' . $hhmts;
 
 $html_footer = "<hr noshade size=\"1\">
 <small>$hhmts ($rcsrev)
 <br><br>Copyright &copy; $year Michael John Radwin. All rights
-reserved.<br><a href=\"/michael/projects/hebcal/\">Frequently
+reserved.<br><a target=\"_top\" href=\"/michael/projects/hebcal/\">Frequently
 asked questions about this service.</a></small>
 </body></html>
 ";
 
 # boolean options
-@opts = ('c','x','o','s','i','h','a','d','usa','israel','none','set');
-%opts = ();
+@opts = ('c','x','o','s','i','h','a','d');
+$cmd  = "/home/users/mradwin/bin/hebcal";
 
-&ReadParse();
+# process form params
+$q = new CGI;
+$q->delete('.s');		# we don't care about submit button
 
-if (! defined $in{'v'} &&
-    defined $ENV{'HTTP_COOKIE'} &&
-    $ENV{'HTTP_COOKIE'} =~ /[\s;,]*C=([^\s,;]+)/)
+$script_name =  $q->script_name();
+$script_name =~ s,/index.html$,/,;
+
+$q->default_dtd("-//W3C//DTD HTML 4.0 Transitional//EN\"\n" . 
+		"\t\"http://www.w3.org/TR/REC-html40/loose.dtd");
+
+if (! $q->param('v') &&
+    defined $q->raw_cookie() &&
+    $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
 {
     &process_cookie($1);
 }
 
-while (($key,$val) = each(%in))
+# sanitize input to prevent people from trying to hack the site.
+# remove anthing other than word chars, white space, or hyphens.
+foreach $key ($q->param())
 {
+    $val = $q->param($key);
     $val =~ s/[^\w\s-]//g;
-    $in{$key} = $val;
+    $val =~ s/^\s*//g;		# nuke leading
+    $val =~ s/\s*$//g;		# and trailing whitespace
+    $q->param($key,$val);
 }
 
-$year = $in{'year'}
-    if (defined $in{'year'} && $in{'year'} =~ /^\d+$/ && $in{'year'} > 0);
+# decide whether this is a results page or a blank form
+&form('') unless $q->param('v');
 
-# timezone opt
-for ($i = -12; $i <= 12; $i++)
-{
-    $tz{$i} = '';
-}
-$tz{'auto'} = '';
+&form("Please specify a year.")
+    unless $q->param('year');
 
-if (defined $in{'tz'})
-{
-    $tz{$in{'tz'}} = ' selected';
-}
-elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
-{
-    $tz{'0'} = ' selected';
-}
+&form("Sorry, invalid year\n<b>" . $q->param('year') . "</b>.")
+    if $q->param('year') !~ /^\d+$/;
 
-# month opt
-for ($i = 0; $i <= 12; $i++)
+if ($q->param('city'))
 {
-    $month{$i} = '';
-}
+    &form("Sorry, invalid city\n<b>" . $q->param('city') . "</b>.")
+	unless defined($city_tz{$q->param('city')});
 
-if (defined $in{'month'} && $in{'month'} =~ /^\d+$/ &&
-    $in{'month'} >= 1 && $in{'month'} <= 12)
-{
-    $month{$in{'month'}} = ' selected';
-}
-else
-{
-#    $month{$mon + 1} = ' selected';
-    $month{'0'} = ' selected';
-}
+    $q->param('geo','city');
+    $q->param('tz',$city_tz{$q->param('city')});
+    $q->delete('dst');
 
-foreach (@opts)
-{
-    $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
-	1 : 0;
-}
+    $cmd .= " -C '" . $q->param('city') . "'";
 
-if (defined $in{'dst'})
-{
-    $opts{'usa'}    = ($in{'dst'} eq 'usa') ? 1 : 0;
-    $opts{'israel'} = ($in{'dst'} eq 'israel') ? 1 : 0;
-    $opts{'none'}   = ($in{'dst'} eq 'none') ? 1 : 0;
-}
-elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
-{
-    $opts{'none'}   = 1;
-}
-else
-{
-    $opts{'usa'}    = 1;
-}
-
-$opts{'set'} = 1
-    if (!defined $in{'v'} && defined $in{'geo'} &&
-	(! defined $ENV{'HTTP_COOKIE'} || $ENV{'HTTP_COOKIE'} =~ /^\s*$/));
-
-foreach (@opts)
-{
-    $opts_chk{$_} = $opts{$_} ? ' checked' : '';
-}
-
-$havdalah = 72;
-$havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
-
-if (! defined $in{'v'})
-{
-    $in{'zip'} = '' unless defined $in{'zip'};
-    &form('');
-}
-    
-$cmd  = "/home/users/mradwin/bin/hebcal";
-
-if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
-{
-    &form("Sorry, invalid city\n" . $in{'city'})
-	unless defined($city_tz{$in{'city'}});
-
-    $cmd .= " -C '$in{'city'}'";
-
-    $city_descr = "Closest City: $in{'city'}";
+    $city_descr = "Closest City: " . $q->param('city');
     $lat_descr  = '';
     $long_descr = '';
     $dst_tz_descr = '';
-
-    $in{'geo'} = 'city';
-    $in{'tz'} = $city_tz{$in{'city'}};
-    delete $in{'dst'};
 }
-elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
-       defined $in{'ladeg'} && defined $in{'lamin'} && defined $in{'ladir'})
+elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
+       defined $q->param('lodir') &&
+       defined $q->param('ladeg') && defined $q->param('lamin') &&
+       defined $q->param('ladir'))
 {
     &form("Sorry, all latitude/longitude\narguments must be numeric.")
-	if (($in{'lodeg'} !~ /^\s*\d*\s*$/) ||
-	    ($in{'lomin'} !~ /^\s*\d*\s*$/) ||
-	    ($in{'ladeg'} !~ /^\s*\d*\s*$/) ||
-	    ($in{'lamin'} !~ /^\s*\d*\s*$/));
+	if (($q->param('lodeg') !~ /^\d*$/) ||
+	    ($q->param('lomin') !~ /^\d*$/) ||
+	    ($q->param('ladeg') !~ /^\d*$/) ||
+	    ($q->param('lamin') !~ /^\d*$/));
 
-    ($long_deg) = ($in{'lodeg'} =~ /^\s*(\d+)\s*$/);
-    ($long_min) = ($in{'lomin'} =~ /^\s*(\d+)\s*$/);
-    ($lat_deg)  = ($in{'ladeg'} =~ /^\s*(\d+)\s*$/);
-    ($lat_min)  = ($in{'lamin'} =~ /^\s*(\d+)\s*$/);
+    $q->param('lodir','w') unless ($q->param('lodir') eq 'e');
+    $q->param('ladir','n') unless ($q->param('ladir') eq 's');
 
-    $long_deg   = 0 unless defined $long_deg;
-    $long_min   = 0 unless defined $long_min;
-    $lat_deg    = 0 unless defined $lat_deg;
-    $lat_min    = 0 unless defined $lat_min;
-
-    $in{'lodir'} = 'w' unless ($in{'lodir'} eq 'e');
-    $in{'ladir'} = 'n' unless ($in{'ladir'} eq 's');
-
-    $in{'lodeg'} = $long_deg;
-    $in{'lomin'} = $long_min;
-    $in{'ladeg'} = $lat_deg;
-    $in{'lamin'} = $lat_min;
+    $q->param('lodeg',0) if $q->param('lodeg') eq '';
+    $q->param('lomin',0) if $q->param('lomin') eq '';
+    $q->param('ladeg',0) if $q->param('ladeg') eq '';
+    $q->param('lamin',0) if $q->param('lamin') eq '';
 
     &form("Sorry, longitude degrees\n" .
-	  "<b>$in{'lodeg'}</b> out of valid range 0-180.")
-	if ($in{'lodeg'} > 180);
+	  "<b>" . $q->param('lodeg') . "</b> out of valid range 0-180.")
+	if ($q->param('lodeg') > 180);
 
     &form("Sorry, latitude degrees\n" .
-	  "<b>$in{'ladeg'}</b> out of valid range 0-90.")
-	if ($in{'ladeg'} > 90);
+	  "<b>" . $q->param('ladeg') . "</b> out of valid range 0-90.")
+	if ($q->param('ladeg') > 90);
 
     &form("Sorry, longitude minutes\n" .
-	  "<b>$in{'lomin'}</b> out of valid range 0-60.")
-	if ($in{'lomin'} > 60);
+	  "<b>" . $q->param('lomin') . "</b> out of valid range 0-60.")
+	if ($q->param('lomin') > 60);
 
     &form("Sorry, latitude minutes\n" .
-	  "<b>$in{'lamin'}</b> out of valid range 0-60.")
-	if ($in{'lamin'} > 60);
+	  "<b>" . $q->param('lamin') . "</b> out of valid range 0-60.")
+	if ($q->param('lamin') > 60);
 
-    $in{'dst'} = 'none' if !defined($in{'dst'}) || $in{'dst'} =~ /^\s*$/;
-    $in{'tz'} = '0' if !defined($in{'tz'}) || $in{'tz'} !~ /^\s*-?\d+\s*$/;
-    $in{'geo'} = 'pos';
+    ($long_deg,$long_min,$lat_deg,$lat_min) =
+	($q->param('lodeg'),$q->param('lomin'),
+	 $q->param('ladeg'),$q->param('lamin'));
+
+    $q->param('dst','none')
+	unless $q->param('dst');
+    $q->param('tz','0')
+	unless $q->param('tz');
+    $q->param('geo','pos');
 
     $city_descr = "Geographic Position";
-    $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
-    $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
-    $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time zone: GMT $in{'tz'}:00";
-    $dst_tz_descr .= " ($tz_names{$in{'tz'}})" if defined $tz_names{$in{'tz'}};
-
+    $lat_descr  = "${lat_deg}d${lat_min}' " .
+	uc($q->param('ladir')) . " latitude";
+    $long_descr = "${long_deg}d${long_min}' " .
+	uc($q->param('lodir')) . " longitude";
+    $dst_tz_descr = "Daylight Savings Time: " .
+	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
+	    $tz_names{$q->param('tz')};
 
     # don't multiply minutes by -1 since hebcal does it internally
-    $long_deg *= -1  if ($in{'lodir'} eq 'e');
-    $lat_deg  *= -1  if ($in{'ladir'} eq 's');
+    $long_deg *= -1  if ($q->param('lodir') eq 'e');
+    $lat_deg  *= -1  if ($q->param('ladir') eq 's');
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
-elsif (defined $in{'zip'})
+elsif ($q->param('zip'))
 {
-    $in{'dst'} = 'usa' if !defined($in{'dst'}) || $in{'dst'} =~ /^\s*$/;
-    $in{'tz'} = 'auto' if !defined($in{'tz'}) || $in{'tz'} =~ /^\s*$/;
-    $in{'geo'} = 'zip';
+    $q->param('dst','usa')
+	unless $q->param('dst');
+    $q->param('tz','auto')
+	unless $q->param('tz');
+    $q->param('geo','zip');
 
     &form("Please specify a 5-digit\nzip code.")
-	if $in{'zip'} =~ /^\s*$/;
+	if $q->param('zip') eq '';
 
-    &form("Sorry, <b>" . $in{'zip'} . "</b> does\n" .
+    &form("Sorry, <b>" . $q->param('zip') . "</b> does\n" .
 	  "not appear to be a 5-digit zip code.")
-	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
+	unless $q->param('zip') =~ /^\d\d\d\d\d$/;
 
-    dbmopen(%DB,$dbmfile, 0400) ||
-	&CgiDie("Script Error: Database Unavailable",
-		"\nThe database is unavailable right now.\n" .
-		"Please <a href=\"${cgipath}?" .
-		$ENV{'QUERY_STRING'} . "\">try again</a>.");
+    $dbmfile = 'zips.db';
+    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	|| die "Can't tie $dbmfile: $!\n";
 
-    $val = $DB{$in{'zip'}};
-    dbmclose(%DB);
+    $val = $DB{$q->param('zip')};
+    untie(%DB);
 
-    &form("Sorry, can't find\n".  "<b>" . $in{'zip'} . 
-	  "</b> in the zip code database.",
-          "<ul><li>Please try a nearby zip code or select candle lighting times by\n" .
-          "<a href=\"${cgipath}?c=on&amp;geo=city\">city</a> or\n" .
-          "<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
+    &form("Sorry, can't find\n".  "<b>" . $q->param('zip') . 
+	  "</b> in the zip code database.\n",
+          "<ul><li>Please try a nearby zip code or select candle\n" . 
+	  "lighting times by\n" .
+          "<a target=\"_top\"\nhref=\"" . $script_name .
+	  "?c=on&amp;geo=city\">city</a> or\n" .
+          "<a target=\"_top\"\nhref=\"" . $script_name .
+	  "?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
 	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
     ($city,$state) = split(/\0/, substr($val,6));
 
-    @city = split(/([- ])/, $city);
+    my(@city) = split(/([- ])/, $city);
     $city = '';
     foreach (@city)
     {
-	$_ = "\L$_\E";
-	$_ = "\u$_";
+	$_ = lc($_);
+	$_ = "\u$_";		# inital cap
 	$city .= $_;
     }
-    undef(@city);
 
-    $city_descr = "$city, $state &nbsp;$in{'zip'}";
+    $city_descr = "$city, $state &nbsp;" . $q->param('zip');
 
-    if ($in{'tz'} !~ /^-?\d+$/)
+    if ($q->param('tz') !~ /^-?\d+$/)
     {
 	$ok = 0;
-	if (defined $known_timezones{$in{'zip'}})
+	if (defined $known_timezones{$q->param('zip')})
 	{
-	    if ($known_timezones{$in{'zip'}} ne '??')
+	    if ($known_timezones{$q->param('zip')} ne '??')
 	    {
-		$in{'tz'} = $known_timezones{$in{'zip'}};
+		$q->param('tz',$known_timezones{$q->param('zip')});
 		$ok = 1;
 	    }
 	}
-	elsif (defined $known_timezones{substr($in{'zip'},0,3)})
+	elsif (defined $known_timezones{substr($q->param('zip'),0,3)})
 	{
-	    if ($known_timezones{substr($in{'zip'},0,3)} ne '??')
+	    if ($known_timezones{substr($q->param('zip'),0,3)} ne '??')
 	    {
-		$in{'tz'} = $known_timezones{substr($in{'zip'},0,3)};
+		$q->param('tz',$known_timezones{substr($q->param('zip'),0,3)});
 		$ok = 1;
 	    }
 	}
@@ -569,7 +500,7 @@ elsif (defined $in{'zip'})
 	{
 	    if ($known_timezones{$state} ne '??')
 	    {
-		$in{'tz'} = $known_timezones{$state};
+		$q->param('tz',$known_timezones{$state});
 		$ok = 1;
 	    }
 	}
@@ -585,48 +516,52 @@ elsif (defined $in{'zip'})
 
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
     $long_descr = "${long_deg}d${long_min}' W longitude";
-    $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time zone: GMT $in{'tz'}:00";
-    $dst_tz_descr .= " ($tz_names{$in{'tz'}})" if defined $tz_names{$in{'tz'}};
+    $dst_tz_descr = "Daylight Savings Time: " .
+	$q->param('dst') . "</small>\n<dd><small>Time zone: " .
+	    $tz_names{$q->param('tz')};
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+}
+else
+{
+    $q->delete('c');
+    $q->delete('zip');
+    $q->delete('city');
+    $q->delete('geo');
 }
 
 foreach (@opts)
 {
-    $cmd .= ' -' . $_ if $opts{$_} && length($_) == 1;
+    $cmd .= ' -' . $_
+	if defined $q->param($_) &&
+	    ($q->param($_) eq 'on' || $q->param($_) eq '1');
 }
 
-$cmd .= " -m $in{'m'}" if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
+$cmd .= " -m " . $q->param('m')
+    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-if (defined $in{'tz'} && $in{'tz'} ne '')
-{
-    $cmd .= " -z $in{'tz'}";
-}
+$cmd .= " -z " . $q->param('tz')
+    if (defined $q->param('tz') && $q->param('tz') ne '');
 
-if (defined $in{'dst'} && $in{'dst'} ne '')
-{
-    $cmd .= " -Z $in{'dst'}";
-}
+$cmd .= " -Z " . $q->param('dst')
+    if (defined $q->param('dst') && $q->param('dst') ne '');
 
-if (defined $in{'month'} && $in{'month'} =~ /^\d+$/ &&
-    $in{'month'} >= 1 && $in{'month'} <= 12)
-{
-    $cmd .= " $in{'month'}";
-}
+$cmd .= " " . $q->param('month')
+    if (defined $q->param('month') && $q->param('month') =~ /^\d+$/ &&
+	$q->param('month') >= 1 && $q->param('month') <= 12);
 
-$cmd .= " $year";
+$cmd .= " " . $q->param('year');
 
 
-if (! defined $ENV{'PATH_INFO'})
+if (! defined $q->path_info())
 {
     &results_page();
 }
-elsif ($ENV{'PATH_INFO'} =~ /.csv$/)
+elsif ($q->path_info() =~ /.csv$/)
 {
     &csv_display();
 }
-elsif ($ENV{'PATH_INFO'} =~ /.dba$/)
+elsif ($q->path_info() =~ /.dba$/)
 {
     &dba_display();
 }
@@ -643,11 +578,7 @@ sub invoke_hebcal {
     local(*HEBCAL,@events,$prev,$loc,$_);
 
     @events = ();
-    open(HEBCAL,"$cmd |") ||
-	&CgiDie("Script Error: can't run hebcal",
-		"\nCommand was \"$cmd\".\n" .
-		"Please <a href=\"mailto:$author" .
-		"\">e-mail Michael</a> to tell him that hebcal is broken.");
+    open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
 
     $prev = '';
     $loc = (defined $city_descr && $city_descr ne '') ?
@@ -674,10 +605,9 @@ sub dba_display {
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-#    print STDOUT "Expires: $expires_date\015\012";
-    print STDOUT "Content-Type: application/x-palm-dba; filename=$FILENAME",
-    "\015\012\015\012";
+    print $q->header(-type =>
+		     "application/x-palm-dba; filename=$PALM_DBA_FILENAME",
+		     -last_modified => &http_date($time));
 
     &dba_contents(@events);
 }
@@ -687,20 +617,17 @@ sub csv_display {
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    $ENV{'PATH_INFO'} =~ s,^/index.html/,,;
-    $ENV{'PATH_INFO'} =~ s,^/,,;
-
-    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-#    print STDOUT "Expires: $expires_date\015\012";
-    print STDOUT "Content-Type: text/x-csv; filename=",
-    $ENV{'PATH_INFO'}, "\015\012\015\012";
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
+    print $q->header(-type => 'text/x-csv; filename=' . $path_info,
+		     -last_modified => &http_date($time));
 
     $endl = "\012";			# default Netscape and others
-    if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
+    if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
     {
 	$endl = "\015\012"
-	    if $ENV{'HTTP_USER_AGENT'} =~ /Microsoft Internet Explorer/;
-	$endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
+	    if $q->user_agent() =~ /Microsoft Internet Explorer/;
+	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
     }
 
     print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",",
@@ -723,305 +650,318 @@ sub csv_display {
 sub form
 {
     local($message,$help) = @_;
-    local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-    local($key,$val);
+    my($key,$val);
 
-#    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-    print STDOUT "Content-Type: text/html\015\012\015\012";
+    print STDOUT $q->header(),
+    $q->start_html(-title=>"Hebcal Interactive Jewish Calendar",
+		   -author=>$author,
+		   -head=>[
+			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			   $q->Link({-rel=>'SCHEMA.dc',
+				     -href=>'http://purl.org/metadata/dublin_core_elements'}),
+			   ],
+		   -meta=>{
+		       'description'=>
+		       'Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude',
 
-    print STDOUT "$html_header
-<table border=\"0\" width=\"100%\" cellpadding=\"0\" class=\"navbar\">
-<tr valign=\"top\"><td><small>
-<a href=\"/\">radwin.org</a> <tt>-&gt;</tt>
-hebcal</small></td>
-<td align=\"right\"><small><a href=\"/search/\">Search</a></small>
-</td></tr></table>
-<h1>Hebcal Interactive Jewish Calendar</h1>
-";
+		       'keywords' =>
+		       'hebcal, Jewish calendar, Hebrew calendar, candle lighting, Shabbat, Havdalah, sedrot, Sadinoff',
 
-if ($message ne '')
-{
-    $help = '' unless defined $help;
-    $message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
-	$message . "</font></p>\n" . $help . "\n<hr noshade size=\"1\">";
-}
+		       'DC.Title' => 'Hebcal Interactive Jewish Calendar',
+		       'DC.Creator.PersonalName' => 'Radwin, Michael',
+		       'DC.Creator.PersonalName.Address' => $author,
+		       'DC.Subject' => 'Jewish calendar, Hebrew calendar, hebcal',
+		       'DC.Type' => 'Text.Form',
+		       'DC.Identifier' => 'http://www.radwin.org/hebcal/',
+		       'DC.Language' => 'en',
+		       'DC.Date.X-MetadataLastModified' => '1999-12-24',
+		       }),
+    "<table border=\"0\" width=\"100%\" cellpadding=\"0\"\nclass=\"navbar\">",
+    "<tr valign=\"top\"><td><small>",
+    "<a target=\"_top\"\nhref=\"/\">radwin.org</a>\n<tt>-&gt;</tt>\n",
+    "hebcal</small></td>",
+    "<td align=\"right\"><small><a target=\"_top\"\n",
+    "href=\"/search/\">Search</a></small>",
+    "</td></tr></table>",
+    "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
-print STDOUT "$message
-<form action=\"$cgipath\">
-Jewish Holidays for:&nbsp;&nbsp;&nbsp;
-<label for=\"year\">Year: <input name=\"year\"
-id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
-<input type=\"hidden\" name=\"v\" value=\"1\">
-&nbsp;&nbsp;&nbsp;
-<label for=\"month\">Month:
-<select name=\"month\" id=\"month\">
-<option value=\"x\"$month{'0'}>- entire year -
-";
-    for ($i = 1; $i <= 12; $i++)
+    if ($message ne '')
     {
-	print STDOUT "<option value=\"$i\"$month{$i}>$MoY_long[$i-1]\n";
+	$help = '' unless defined $help;
+	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
+	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
     }
-    print STDOUT "</select></label>
-<br>
-<small>
-Use all digits to specify a year. You probably aren't
-interested in 93, but rather 1993.
-</small>
-<br><br>
-";
 
-    if ($opts{'c'} == 0)
+    print STDOUT $message, "\n",
+    "<form target=\"_top\" action=\"", $script_name, "\">\n",
+    "Jewish Holidays for:&nbsp;&nbsp;&nbsp;\n",
+    "<label for=\"year\">Year:\n",
+    $q->textfield(-name=>'year',
+		  -id=>'year',
+		  -default=>$year,
+		  -size=>4,
+		  -maxlength=>4),
+    "</label>\n",
+    $q->hidden(-name=>'v',-value=>1,-override=>1),
+    "\n&nbsp;&nbsp;&nbsp;\n",
+    "<label for=\"month\">Month:\n",
+    $q->popup_menu(-name=>'month',
+		   -id=>'month',
+		   -values=>['x',1..12],
+		   -default=>'x',
+		   -labels=>\%MoY_long),
+    "</label>\n",
+    $q->br(),
+    $q->small("Use all digits to specify a year.\nYou probably aren't",
+	      "interested in 93, but rather 1993.\n"),
+    $q->br(), $q->br();
+
+    if (!defined $q->param('c') || $q->param('c') eq 'off')
     {
-	print STDOUT
-"(Candle lighting times are off.  Turn them on for:
-<a href=\"${cgipath}?c=on&amp;geo=zip\">zip code</a>,
-<a href=\"${cgipath}?c=on&amp;geo=city\">closest city</a>, or
-<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>.)
-<br><br>
-";
-    }
-    else
-    {
-	print STDOUT 
-"<input type=\"hidden\" name=\"c\" value=\"on\">
-Include candle lighting times for ";
-	if (defined $in{'geo'})
-	{
-	    print STDOUT "zip code:\n"
-		if ($in{'geo'} eq 'zip');
-	    print STDOUT "closest city:\n"
-		if ($in{'geo'} eq 'city');
-	    print STDOUT "latitude/longitude:\n"
-		if ($in{'geo'} eq 'pos');
-	}
-	else
-	{
-	    print STDOUT "zip code:\n";
-	}
-	print STDOUT
-"<br><small>(or <a href=\"${cgipath}?c=off\">turn them off</a>, or select by";
-	if (defined $in{'geo'} && $in{'geo'} eq 'city')
-	{
-	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=zip\">zip code</a> or";
-	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
-	}
-	elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
-	{
-	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=zip\">zip code</a> or";
-	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=city\">closest city</a>"
-	}
-	else
-	{
-	    print STDOUT " <a
-href=\"${cgipath}?c=on&amp;geo=city\">closest city</a> or <a
-href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
-	}
-	print STDOUT ")</small>
-<br>
-<blockquote>";
-
-    if (defined $in{'geo'} && $in{'geo'} eq 'city')
-    {
-	$in{'city'} = 'Jerusalem'
-	    unless defined $in{'city'} && $in{'city'} !~ /^\s*$/;
-	print STDOUT "
-<input type=\"hidden\" name=\"geo\" value=\"city\">
-<label for=\"city\">Closest City:
-";
-
-	print STDOUT "<select name=\"city\" id=\"city\">\n";
-	foreach (sort keys %city_tz)
-	{
-	    print STDOUT '<option';
-	    print STDOUT ' selected' if $in{'city'} eq $_;
-	    print STDOUT ">$_\n";
-	}
-	print STDOUT "</select>\n";
-
-	print STDOUT "</label><br>\n";
-    }
-    elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
-    {
-	print STDOUT "
-<input type=\"hidden\" name=\"geo\" value=\"pos\">
-<label for=\"ladeg\"><input name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\"
-size=\"3\" maxlength=\"2\">&nbsp;deg</label>&nbsp;&nbsp;<label
-for=\"lamin\"><input name=\"lamin\" id=\"lamin\" value=\"$in{'lamin'}\"
-size=\"2\" maxlength=\"2\">&nbsp;min</label>&nbsp;<select
-name=\"ladir\">";
-print STDOUT "<option\nvalue=\"n\"",
-	($in{'ladir'} eq 'n' ? ' selected' : ''), ">North Latitude";
-print STDOUT "<option\nvalue=\"s\"",
-	($in{'ladir'} eq 's' ? ' selected' : ''), ">South Latitude";
-
-print STDOUT "</select><br>
-<label for=\"lodeg\"><input name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\"
-size=\"3\" maxlength=\"3\">&nbsp;deg</label>&nbsp;&nbsp;<label
-for=\"lomin\"><input name=\"lomin\" id=\"lomin\" value=\"$in{'lomin'}\"
-size=\"2\" maxlength=\"2\">&nbsp;min</label>&nbsp;<select
-name=\"lodir\">";
-
-print STDOUT "<option\nvalue=\"w\"",
-	($in{'lodir'} eq 'w' ? ' selected' : ''), ">West Longitude";
-print STDOUT "<option\nvalue=\"e\"",
-	($in{'lodir'} eq 'e' ? ' selected' : ''), ">East Longitude";
-print STDOUT "</select><br>
-";
+	print STDOUT "(Candle lighting times are off.  Turn them on for:\n",
+	$q->a({-href=>$script_name . "?c=on&amp;geo=zip",
+	       -target=>'_top'},
+	      "zip code"), ",\n",
+	$q->a({-href=>$script_name . "?c=on&amp;geo=city",
+	       -target=>'_top'},
+	      "closest city"), ", or\n",
+	$q->a({-href=>$script_name . "?c=on&amp;geo=pos",
+	       -target=>'_top'},
+	      "latitude/longitude"), ".)",
+	$q->br(), $q->br();
     }
     else
     {
-	print STDOUT "
-<input type=\"hidden\" name=\"geo\" value=\"zip\">
-<label for=\"zip\">Zip code: <input name=\"zip\"
-id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label>
-&nbsp;&nbsp;&nbsp;
-";
+	print STDOUT $q->hidden(-name=>'c',-value=>'on'),
+	"Include candle lighting times for ";
+
+	print STDOUT "zip code:\n"
+	    if (! defined $q->param('geo') || $q->param('geo') eq 'zip');
+	print STDOUT "closest city:\n"
+	    if (defined $q->param('geo') && $q->param('geo') eq 'city');
+	print STDOUT "latitude/longitude:\n"
+	    if (defined $q->param('geo') && $q->param('geo') eq 'pos');
+
+	print STDOUT $q->br(), "<small>",
+	"(or ", $q->a({-href=>$script_name . "?c=off",
+		       -target=>'_top'},
+		      "turn them off"), ", or select by\n";
+	
+	if (defined $q->param('geo') && $q->param('geo') eq 'city')
+	{
+	    print STDOUT
+		$q->a({-href=>$script_name . "?c=on&amp;geo=zip",
+		       -target=>'_top'},
+		      "zip code"), " or\n",
+		$q->a({-href=>$script_name . "?c=on&amp;geo=pos",
+		       -target=>'_top'},
+		      "latitude/longitude");
+	}
+	elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
+	{
+	    print STDOUT
+		$q->a({-href=>$script_name . "?c=on&amp;geo=zip",
+		       -target=>'_top'},
+		      "zip code"), " or\n",
+		$q->a({-href=>$script_name . "?c=on&amp;geo=city",
+		       -target=>'_top'},
+		      "closest city");
+	}
+	else
+	{
+	    print STDOUT
+		$q->a({-href=>$script_name . "?c=on&amp;geo=city",
+		       -target=>'_top'},
+		      "closest city"), " or\n",
+		$q->a({-href=>$script_name . "?c=on&amp;geo=pos",
+		       -target=>'_top'},
+		      "latitude/longitude");
+	}
+	print STDOUT ")</small><br><blockquote>\n";
+	
+	if (defined $q->param('geo') && $q->param('geo') eq 'city')
+	{
+	    print STDOUT $q->hidden(-name=>'geo',-value=>'city'),
+	    "<label for=\"city\">Closest City:\n",
+	    $q->popup_menu(-name=>'city',
+			   -id=>'city',
+			   -values=>[sort keys %city_tz],
+			   -default=>'Jerusalem'),
+	    "</label>", $q->br(), "\n";
+	}
+	elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
+	{
+	    print STDOUT $q->hidden(-name=>'geo',-value=>'pos'),
+	    "<label for=\"ladeg\">",
+	    $q->textfield(-name=>'ladeg',
+			  -id=>'ladeg',
+			  -size=>3,
+			  -maxlength=>2),
+	    "&nbsp;deg</label>&nbsp;&nbsp;\n",
+	    "<label for=\"lamin\">",
+	    $q->textfield(-name=>'lamin',
+			  -id=>'lamin',
+			  -size=>2,
+			  -maxlength=>2),
+	    "&nbsp;min</label>&nbsp;\n",
+	    $q->popup_menu(-name=>'ladir',
+			   -id=>'ladir',
+			   -values=>['n','s'],
+			   -default=>'n',
+			   -labels=>{'n'=>'North Latitude',
+				     's'=>'South Latitude'}),
+	    $q->br(),
+	    "<label for=\"lodeg\">",
+	    $q->textfield(-name=>'lodeg',
+			  -id=>'lodeg',
+			  -size=>3,
+			  -maxlength=>3),
+	    "&nbsp;deg</label>&nbsp;&nbsp;\n",
+	    "<label for=\"lomin\">",
+	    $q->textfield(-name=>'lomin',
+			  -id=>'lomin',
+			  -size=>2,
+			  -maxlength=>2),
+	    "&nbsp;min</label>&nbsp;\n",
+	    $q->popup_menu(-name=>'lodir',
+			   -id=>'lodir',
+			   -values=>['w','e'],
+			   -default=>'w',
+			   -labels=>{'e'=>'East Longitude',
+				     'w'=>'West Longitude'}),
+	    $q->br();
+	}
+	else
+	{
+	    print STDOUT $q->hidden(-name=>'geo',-value=>'zip'),
+	    "<label for=\"zip\">Zip code:\n",
+	    $q->textfield(-name=>'zip',
+			  -id=>'zip',
+			  -size=>5,
+			  -maxlength=>5),
+	    "</label>&nbsp;&nbsp;&nbsp;\n";
+	}
+
+	if ($q->param('geo') ne 'city')
+	{
+	    print STDOUT "<label for=\"tz\">Time zone:\n",
+	    $q->popup_menu(-name=>'tz',
+			   -id=>'tz',
+			   -values=>$q->param('geo') eq 'pos' ?
+			   [-5,-6,-7,-8,-9,-10,-11,-12,
+			    12,11,10,9,8,7,6,5,4,3,2,1,0,
+			    -1,-2,-3,-4] : ['auto',-5,-6,-7,-8,-9,-10],
+			   -default=>$q->param('geo') eq 'pos' ? 0 : 'auto',
+			   -labels=>\%tz_names);
+
+	    print STDOUT "</label>", $q->br(),
+	    "Daylight Savings Time:\n",
+	    $q->radio_group(-name=>'dst',
+			    -id=>'dst',
+			    -values=>$q->param('geo') eq 'pos' ?
+			    ['usa','israel','none'] : ['usa','none'],
+			    -default=>
+			    $q->param('geo') eq 'pos' ? 'none' : 'usa',
+			    -labels=>
+			    {'usa' => "\nUSA (except AZ, HI, and IN) ",
+			     'israel' => "\nIsrael ",
+			     'none' => "\nnone ", }),
+	     $q->br();
+	}
+
+	print STDOUT "<label for=\"m\">Havdalah minutes past sundown:\n",
+	$q->textfield(-name=>'m',
+		      -id=>'m',
+		      -size=>3,
+		      -maxlength=>3,
+		      -default=>72),
+	"</label>", $q->br(), "</blockquote>\n";
     }
 
-    if (!defined $in{'geo'} || $in{'geo'} ne 'city')
-    {
-	print STDOUT "<label for=\"tz\">Time zone:
-<select name=\"tz\" id=\"tz\">
-";
+    print STDOUT "<table border=\"0\"><tr>",
+    "<td><label\nfor=\"a\">",
+    $q->checkbox(-name=>'a',
+		 -id=>'a',
+		 -label=>'Use ashkenazis hebrew'),
+    "</label></td>",
+    "<td><label\nfor=\"o\">",
+    $q->checkbox(-name=>'o',
+		 -id=>'o',
+		 -label=>'Add days of the Omer'),
+    "</label></td>",
+    "</tr><tr>",
+    "<td><label\nfor=\"x\">",
+    $q->checkbox(-name=>'x',
+		 -id=>'x',
+		 -label=>'Suppress Rosh Chodesh'),
+    "</label></td>",
+    "<td><label\nfor=\"h\">",
+    $q->checkbox(-name=>'h',
+		 -id=>'h',
+		 -label=>'Suppress all default holidays'),
+    "</label></td>",
+    "</tr><tr>",
+    "<td colspan=\"2\"><label\nfor=\"s\">",
+    $q->checkbox(-name=>'s',
+		 -id=>'s',
+		 -label=>'Add weekly sedrot on Saturday'),
+    "</label>\n(<label\nfor=\"i\">",
+    $q->checkbox(-name=>'i',
+		 -id=>'i',
+		 -label=>'Use Israeli sedra scheme'),
+    "</label>)</td>",
+    "</tr><tr>",
+    "<td colspan=\"2\"><label\nfor=\"d\">",
+    $q->checkbox(-name=>'d',
+		 -id=>'d',
+		 -label=>'Print hebrew date for the entire date range'),
+    "</label></td>",
+    "</tr><tr>",
+    "<td colspan=\"2\"><label\nfor=\"set\">",
+    $q->checkbox(-name=>'set',
+		 -id=>'set',
+		 -checked=> 
+		 (!defined $q->param('v') && defined $q->param('geo') &&
+		  (!defined $q->raw_cookie() || $q->raw_cookie() =~ /^\s*$/))
+		 ? 'checked' : undef,
+		 -label=>'Save my preferences in a cookie'),
+    "</label>(<a target=\"_top\"\n",
+    "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
+    "a cookie?</a>)</td></tr></table>\n",
+    $q->br(), $q->submit(-name=>'.s',-value=>'Get Calendar'),
+    "</form>", $html_footer;
 
-	print STDOUT 
-	    "<option value=\"auto\"$tz{'auto'}>Attempt to auto-detect\n"
-		if $in{'geo'} eq 'zip';
-
-	print STDOUT 
-"<option value=\"-5\"$tz{'-5'}>GMT -05:00 ($tz_names{'-5'})
-<option value=\"-6\"$tz{'-6'}>GMT -06:00 ($tz_names{'-6'})
-<option value=\"-7\"$tz{'-7'}>GMT -07:00 ($tz_names{'-7'})
-<option value=\"-8\"$tz{'-8'}>GMT -08:00 ($tz_names{'-8'})
-<option value=\"-9\"$tz{'-9'}>GMT -09:00 ($tz_names{'-9'})
-<option value=\"-10\"$tz{'-10'}>GMT -10:00 ($tz_names{'-10'})
-";
-
-	print STDOUT
-"<option value=\"-11\"$tz{'-11'}>GMT -11:00
-<option value=\"-12\"$tz{'-12'}>GMT -12:00
-<option value=\"12\"$tz{'12'}>GMT +12:00
-<option value=\"11\"$tz{'11'}>GMT +11:00
-<option value=\"10\"$tz{'10'}>GMT +10:00
-<option value=\"9\"$tz{'9'}>GMT +09:00
-<option value=\"8\"$tz{'8'}>GMT +08:00
-<option value=\"7\"$tz{'7'}>GMT +07:00
-<option value=\"6\"$tz{'6'}>GMT +06:00
-<option value=\"5\"$tz{'5'}>GMT +05:00
-<option value=\"4\"$tz{'4'}>GMT +04:00
-<option value=\"3\"$tz{'3'}>GMT +03:00
-<option value=\"2\"$tz{'2'}>GMT +02:00
-<option value=\"1\"$tz{'1'}>GMT +01:00
-<option value=\"0\"$tz{'0'}>Greenwich Mean Time
-<option value=\"-1\"$tz{'-1'}>GMT -01:00
-<option value=\"-2\"$tz{'-2'}>GMT -02:00
-<option value=\"-3\"$tz{'-3'}>GMT -03:00
-<option value=\"-4\"$tz{'-4'}>GMT -04:00
-"  if (defined $in{'geo'} && $in{'geo'} eq 'pos');
-
-	print STDOUT
-"</select></label><br>
-Daylight Savings Time:
-<label for=\"usa\">
-<input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
-USA (except <small>AZ</small>, <small>HI</small>, and
-<small>IN</small>)</label>
-";
-	print STDOUT
-"<label for=\"israel\">
-<input type=\"radio\" name=\"dst\" id=\"israel\" value=\"israel\"$opts_chk{'israel'}>
-Israel</label>
-"  if (defined $in{'geo'} && $in{'geo'} eq 'pos');
-
-	print STDOUT
-"<label for=\"none\">
-<input type=\"radio\" name=\"dst\" id=\"none\" value=\"none\"$opts_chk{'none'}>
-none</label><br>
-";
-    }
-
-print STDOUT "<label for=\"m\">Havdalah minutes past sundown: <input
-name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
-maxlength=\"3\"></label><br>
-</blockquote>
-";
-}
-print STDOUT
-"<table border=\"0\">
-<tr><td>
-<label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
-Use ashkenazis hebrew</label>
-</td><td>
-<label for=\"o\"><input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}>
-Add days of the Omer</label>
-</td></tr><tr><td>
-<label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
-Suppress Rosh Chodesh</label>
-</td><td>
-<label for=\"h\"><input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}>
-Suppress all default holidays</label>
-</td></tr><tr><td colspan=\"2\">
-<label for=\"s\"><input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}>
-Add weekly sedrot on Saturday</label>
-(<label for=\"i\"><input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}>
-Use Israeli sedra scheme</label>)
-</td></tr><tr><td colspan=\"2\">
-<label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
-Print hebrew date for the entire date range</label>
-</td></tr><tr><td colspan=\"2\">
-<label for=\"set\"><input type=\"checkbox\" name=\"set\" id=\"set\"$opts_chk{'set'}>
-Save my preferences in a cookie</label>
-(<a href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's
-a cookie?</a>)
-</td></tr>
-</table>
-<br><input type=\"submit\" value=\"Get Calendar\">
-";
-
-#  # for debugging only
-#  if (defined $ENV{'HTTP_COOKIE'} && $ENV{'HTTP_COOKIE'} !~ /^\s*$/)
-#  {
-#      print STDOUT "<input type=\"hidden\" name=\"cookie\"\nvalue=\"";
-#      $z = $ENV{'HTTP_COOKIE'};
-#      $z =~ s/&/&amp;/g;
-#      $z =~ s/</&lt;/g;
-#      $z =~ s/>/&gt;/g;
-#      $z =~ s/"/&quot;/g; #"#
-#      print STDOUT $z, "\">\n";
-#  }
-
-print STDOUT "</form>\n$html_footer";
-
-    close(STDOUT);
     exit(0);
-
     1;
 }
 
-
 sub results_page
 {
-    local($date) = $year;
-    local($filename) = 'hebcal_' . $year;
-    local($ycal) = (defined($in{'y'}) && $in{'y'} eq '1') ? 1 : 0;
+    local($date);
+    local($filename) = 'hebcal_' . $q->param('year');
+    local($ycal) = (defined($q->param('y')) && $q->param('y') eq '1') ? 1 : 0;
     local($prev_url,$next_url,$prev_title,$next_title);
 
-    if ($in{'month'} =~ /^\d+$/ && $in{'month'} >= 1 && $in{'month'} <= 12)
+    if ($q->param('month') =~ /^\d+$/ &&
+	$q->param('month') >= 1 && $q->param('month') <= 12)
     {
-	$filename .= '_' . "\L$MoY_short[$in{'month'}-1]\E";
-	$date = $MoY_long[$in{'month'}-1] . ' ' . $date;
+	$filename .= '_' . lc($MoY_short[$q->param('month')-1]);
+	$date = $MoY_long{$q->param('month')} . ' ' . $q->param('year');
+    }
+    else
+    {
+	$date = $q->param('year');
     }
 
-    if ($opts{'c'} == 1)
+    if ($q->param('c'))
     {
-	if (defined $in{'zip'})
+	if (defined $q->param('zip'))
 	{
-	    $filename .= '_' . $in{'zip'};
+	    $filename .= '_' . $q->param('zip');
 	}
-	elsif (defined $in{'city'})
+	elsif (defined $q->param('city'))
 	{
-	    $tmp = "\L$in{'city'}\E";
+	    $tmp = lc($q->param('city'));
 	    $tmp =~ s/[^\w]/_/g;
 	    $filename .= '_' . $tmp;
 	}
@@ -1029,135 +969,151 @@ sub results_page
 
     $filename .= '.csv';
 
-    local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-
     # next and prev urls
-    if ($in{'month'} =~ /^\d+$/ && $in{'month'} >= 1 && $in{'month'} <= 12)
+    if ($q->param('month') =~ /^\d+$/ &&
+	$q->param('month') >= 1 && $q->param('month') <= 12)
     {
-	local($pm,$nm,$py,$ny);
+	my($pm,$nm,$py,$ny);
 
-	if ($in{'month'} == 1)
+	if ($q->param('month') == 1)
 	{
 	    $pm = 12;
 	    $nm = 2;
-	    $py = $year - 1;
-	    $ny = $year;
+	    $py = $q->param('year') - 1;
+	    $ny = $q->param('year') - 1;
 	}
-	elsif ($in{'month'} == 12)
+	elsif ($q->param('month') == 12)
 	{
 	    $pm = 11;
 	    $nm = 1;
-	    $py = $year;
-	    $ny = $year + 1;
+	    $py = $q->param('year');
+	    $ny = $q->param('year') + 1;
 	}
 	else
 	{
-	    $pm = $in{'month'} - 1;
-	    $nm = $in{'month'} + 1;
-	    $ny = $py = $year;
+	    $pm = $q->param('month') - 1;
+	    $nm = $q->param('month') + 1;
+	    $ny = $py = $q->param('year');
 	}
 
-	$prev_url = "$cgipath?year=" . $py . "&amp;month=" . $pm;
-	while (($key,$val) = each(%in))
+	$prev_url = $script_name . "?year=" . $py . "&amp;month=" . $pm;
+	foreach $key ($q->param())
 	{
+	    $val = $q->param($key);
 	    $prev_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	$prev_title = $MoY_long[$pm-1] . " " . $py;
+	$prev_title = $MoY_long{$pm} . " " . $py;
 
-	$next_url = "$cgipath?year=" . $ny . "&amp;month=" . $nm;
-	while (($key,$val) = each(%in))
+	$next_url = $script_name . "?year=" . $ny . "&amp;month=" . $nm;
+	foreach $key ($q->param())
 	{
+	    $val = $q->param($key);
 	    $next_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year' || $key eq 'month';
 	}
-	$next_title = $MoY_long[$nm-1] . " " . $ny;
+	$next_title = $MoY_long{$nm} . " " . $ny;
     }
     else
     {
-	$prev_url = "$cgipath?year=" . ($year - 1);
-	while (($key,$val) = each(%in))
+	$prev_url = $script_name . "?year=" . ($q->param('year') - 1);
+	foreach $key ($q->param())
 	{
+	    $val = $q->param($key);
 	    $prev_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year';
 	}
-	$prev_title = ($year - 1);
+	$prev_title = ($q->param('year') - 1);
 
-	$next_url = "$cgipath?year=" . ($year + 1);
-	while (($key,$val) = each(%in))
+	$next_url = $script_name . "?year=" . ($q->param('year') + 1);
+	foreach $key ($q->param())
 	{
+	    $val = $q->param($key);
 	    $next_url .= "&amp;$key=" . &url_escape($val)
 		unless $key eq 'year';
 	}
-	$next_title = ($year + 1);
+	$next_title = ($q->param('year') + 1);
     }
 
-    if ($opts{'set'}) {
+    if ($q->param('set')) {
 	$newcookie = &gen_cookie();
-	if (! defined $ENV{'HTTP_COOKIE'} || $ENV{'HTTP_COOKIE'} ne $newcookie)
+	if (! defined $q->raw_cookie() || $q->raw_cookie() ne $newcookie)
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
 	    $expires_date, "; path=/; domain=www.radwin.org\015\012";
 	}
+	$q->delete('set');
     }
 
-#    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-    print STDOUT "Expires: $expires_date\015\012";
-    print STDOUT "Content-Type: text/html\015\012\015\012";
+    print STDOUT $q->header(-expires=>$expires_date),
+    $q->start_html(-title=>"Hebcal: Jewish Calendar $date",
+		   -head=>[
+			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			   $q->Link({-rel=>'prev',
+				 -href=>$prev_url,
+				 -title=>$prev_title}),
+			   $q->Link({-rel=>'next',
+				 -href=>$next_url,
+				 -title=>$next_title}),
+			   $q->Link({-rel=>'start',
+				 -href=>$script_name,
+				 -title=>'Hebcal Interactive Jewish Calendar'})
+			   ],
+		   -meta=>{'robots'=>'noindex'});
+    print STDOUT
+	"<table border=\"0\" width=\"100%\" cellpadding=\"0\" ",
+	"class=\"navbar\">\n",
+	"<tr valign=\"top\"><td><small>\n",
+	"<a target=\"_top\"\nhref=\"/\">radwin.org</a> <tt>-&gt;</tt>\n",
+	"<a target=\"_top\"\nhref=\"", $script_name, "?v=0";
 
-    print STDOUT "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
-\t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
-<html><head>
-<title>Hebcal: Jewish Calendar $date</title>
-<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
-<meta name=\"robots\" content=\"noindex\">
-<link rel=\"start\" href=\"$cgipath\" title=\"Hebcal Interactive Jewish Calendar\">
-<link rel=\"prev\" href=\"$prev_url\" title=\"$prev_title\">
-<link rel=\"next\" href=\"$next_url\" title=\"$next_title\">
-</head>
-<body>
-<table border=\"0\" width=\"100%\" cellpadding=\"0\" class=\"navbar\">
-<tr valign=\"top\"><td><small>
-<a href=\"/\">radwin.org</a> <tt>-&gt;</tt>
-";
+    foreach $key ($q->param())
+    {
+	$val = $q->param($key);
+	print STDOUT "&amp;$key=", &url_escape($val)
+	    unless $key eq 'v';
+    }
 
-    print STDOUT "<a href=\"$cgipath";
-    print STDOUT "?c=on&amp;geo=$in{'geo'}" if ($opts{'c'} == 1);
-    print STDOUT "\">hebcal</a> <tt>-&gt;</tt>
-$date</small>
-<td align=\"right\"><small><a href=\"/search/\">Search</a></small>
-</td></tr></table>
-<h1>Jewish Calendar $date</h1>
-";
+    print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt> $date</small>\n",
+    "<td align=\"right\"><small><a target=\"_top\"\n",
+    "href=\"/search/\">Search</a></small>\n",
+    "</td></tr></table>\n",
+    "<h1>Jewish Calendar $date</h1>\n";
 
-    if ($opts{'c'} == 1)
+    if ($q->param('c'))
     {
 	print STDOUT "<dl>\n<dt>", $city_descr, "\n";
-	print STDOUT "<dd><small>", $lat_descr, "</small>\n" if $lat_descr ne '';
-	print STDOUT "<dd><small>", $long_descr, "</small>\n" if $long_descr ne '';
-	print STDOUT "<dd><small>", $dst_tz_descr, "</small>\n" if $dst_tz_descr ne '';
+	print STDOUT "<dd><small>", $lat_descr, "</small>\n"
+	    if $lat_descr ne '';
+	print STDOUT "<dd><small>", $long_descr, "</small>\n"
+	    if $long_descr ne '';
+	print STDOUT "<dd><small>", $dst_tz_descr, "</small>\n"
+	    if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n";
     }
 
-    print STDOUT "Go to:\n";
-    print STDOUT "<a href=\"$prev_url\">", $prev_title, "</a> |\n";
-    print STDOUT "<a href=\"$next_url\">", $next_title, "</a><br>\n";
+    print STDOUT "Go to:\n",
+    "<a target=\"_top\"\nhref=\"$prev_url\">", $prev_title, "</a> |\n",
+    "<a target=\"_top\"\nhref=\"$next_url\">", $next_title, "</a><br>\n";
 
-    print STDOUT "<p><a href=\"${cgipath}index.html/$filename?dl=1";
-    while (($key,$val) = each(%in))
+    print STDOUT "<p><a target=\"_top\"\nhref=\"", $script_name,
+    "index.html/$filename?dl=1";
+    foreach $key ($q->param())
     {
+	$val = $q->param($key);
 	print STDOUT "&amp;$key=", &url_escape($val);
     }
     print STDOUT "\">Download\nOutlook CSV file</a>";
 
     # only offer DBA export when we know timegm() will work
-    if ($year > 1969 && $year < 2038 &&
-	(!defined($in{'dst'}) || $in{'dst'} ne 'israel'))
+    if ($q->param('year') > 1969 && $q->param('year') < 2038 &&
+	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
     {
-	print STDOUT " -\n<a href=\"${cgipath}index.html/$FILENAME?dl=1";
-	while (($key,$val) = each(%in))
+	print STDOUT " -\n<a target=\"_top\"\nhref=\"",
+	$script_name, "index.html/$PALM_DBA_FILENAME?dl=1";
+	foreach $key ($q->param())
 	{
+	    $val = $q->param($key);
 	    print STDOUT "&amp;$key=", &url_escape($val);
 	}
 	print STDOUT "\">Download\nPalm Date Book Archive (.DBA)</a>";
@@ -1165,18 +1121,20 @@ $date</small>
 
     if ($ycal == 0)
     {
-	print STDOUT " -\n<a href=\"$cgipath?y=1";
-	while (($key,$val) = each(%in))
+	print STDOUT " -\n<a target=\"_top\"\nhref=\"", 
+	$script_name, "?y=1";
+	foreach $key ($q->param())
 	{
+	    $val = $q->param($key);
 	    print STDOUT "&amp;$key=", &url_escape($val);
 	}
 	print STDOUT "\">Show\nYahoo! Calendar links</a>";
     }
     print STDOUT "</p>\n";
 
-print STDOUT 
+    print STDOUT 
 "<div><small>
-<p>Your personal <a href=\"http://calendar.yahoo.com/\">Yahoo!
+<p>Your personal <a target=\"_top\" href=\"http://calendar.yahoo.com/\">Yahoo!
 Calendar</a> is a free web-based calendar that can synchronize with Palm
 Pilot, Outlook, etc.</p>
 <ul>
@@ -1185,7 +1143,8 @@ your Yahoo!  Calendar, do the following:
 <ol>
 <li>Click the \"Download as an Outlook CSV file\" link above.
 <li>Save the hebcal CSV file on your computer.
-<li>Go to <a href=\"http://calendar.yahoo.com/?v=81\">options page</a> of
+<li>Go to <a target=\"_top\"
+href=\"http://calendar.yahoo.com/?v=81\">Import/Export page</a> of
 Yahoo! Calendar.
 <li>Find the \"Import from Outlook\" section and choose \"Import Now\"
 to import your CSV file to your online calendar.
@@ -1196,7 +1155,7 @@ so you can keep this window open.
 </ul></small></div>
 " if $ycal;
 
-    $cmd_pretty = $cmd;
+    my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
     print STDOUT "<!-- $cmd_pretty -->\n";
 
@@ -1220,10 +1179,11 @@ so you can keep this window open.
 		$hour += 12 if $hour < 12 && $hour > 0;
 		$ST .= sprintf("T%02d%02d00", $hour, $min);
 
-		if ($in{'tz'} !~ /^\s*$/)
+		if ($q->param('tz') ne '')
 		{
-		    $abstz = $in{'tz'} >= 0 ? $in{'tz'} : -$in{'tz'};
-		    $signtz = $in{'tz'} < 0 ? '-' : '';
+		    $abstz = ($q->param('tz') >= 0) ?
+			$q->param('tz') : -$q->param('tz');
+		    $signtz = ($q->param('tz') < 0) ? '-' : '';
 
 		    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
 		}
@@ -1248,27 +1208,27 @@ so you can keep this window open.
 	    $sedra = $2;
 	    if (defined $sedrot{$sedra} && $sedrot{$sedra} !~ /^\s*$/)
 	    {
-		$descr = '<a href="' . $sedrot{$sedra} . '">' . $parashat .
-		    $sedra . '</a>';
+		$descr = '<a target="_top" href="' . $sedrot{$sedra} .
+		    '">' . $parashat . $sedra . '</a>';
 	    }
 	    elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
 		   (defined $sedrot{$1} && $sedrot{$1} !~ /^\s*$/))
 	    {
-		$descr = '<a href="' . $sedrot{$1} . '">' . $parashat .
-		    $sedra . '</a>';
+		$descr = '<a target="_top" href="' . $sedrot{$1} .
+		    '">' . $parashat . $sedra . '</a>';
 	    }
 	}
 
-	$dow = ($year > 1969 && $year < 2038) ? 
-	    $DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' :
-		'';
+	$dow = ($year > 1969 && $year < 2038) ?
+	    $DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
 	printf STDOUT "%s%04d-%02d-%02d  %s\n",
 	$dow, $year, $mon, $mday, $descr;
     }
 
-    print STDOUT "</pre>", "Go to:\n";
-    print STDOUT "<a href=\"$prev_url\">", $prev_title, "</a> |\n";
-    print STDOUT "<a href=\"$next_url\">", $next_title, "</a><br>\n";
+    print STDOUT "</pre>", "Go to:\n",
+    "<a target=\"_top\"\nhref=\"$prev_url\">", $prev_title, 
+    "</a> |\n",
+    "<a target=\"_top\"\nhref=\"$next_url\">", $next_title, "</a><br>\n";
 
     print STDOUT  $html_footer;
 
@@ -1278,7 +1238,7 @@ so you can keep this window open.
 sub get_dow
 {
     local($year,$mon,$mday) = @_;
-    local($time) = &timegm(0,0,9,$mday,$mon,$year,0,0,0); # 9am
+    local($time) = &Time::Local::timegm(0,0,9,$mday,$mon,$year,0,0,0); # 9am
 
     (localtime($time))[6];	# $wday
 }
@@ -1348,10 +1308,8 @@ sub http_date
     local($sec,$min,$hour,$mday,$mon,$year,$wday) =
 	gmtime($time);
 
-    $year += 1900;
-
     sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
-	    $DoW[$wday],$mday,$MoY_short[$mon],$year,$hour,$min,$sec);
+	    $DoW[$wday],$mday,$MoY_short[$mon],$year+1900,$hour,$min,$sec);
 }
 
 sub gen_cookie {
@@ -1359,35 +1317,36 @@ sub gen_cookie {
 
     $retval = 'C=t=' . time;
 
-    if ($opts{'c'}) {
-	if ($in{'geo'} eq 'zip') {
-	    $retval .= '&zip=' . $in{'zip'};
-	    $retval .= '&dst=' . $in{'dst'}
-	        if defined $in{'dst'} && $in{'dst'} !~ /^\s*$/;
-	    $retval .= '&tz=' . $in{'tz'}
-	        if defined $in{'tz'} && $in{'tz'} !~ /^\s*$/;
-	} elsif ($in{'geo'} eq 'city') {
-	    $retval .= '&city=' . &url_escape($in{'city'});
-	} elsif ($in{'geo'} eq 'pos') {
-	    $retval .= '&lodeg=' . $in{'lodeg'};
-	    $retval .= '&lomin=' . $in{'lomin'};
-	    $retval .= '&lodir=' . $in{'lodir'};
-	    $retval .= '&ladeg=' . $in{'ladeg'};
-	    $retval .= '&lamin=' . $in{'lamin'};
-	    $retval .= '&ladir=' . $in{'ladir'};
-	    $retval .= '&dst=' . $in{'dst'}
-	        if defined $in{'dst'} && $in{'dst'} !~ /^\s*$/;
-	    $retval .= '&tz=' . $in{'tz'}
-	        if defined $in{'tz'} && $in{'tz'} !~ /^\s*$/;
+    if ($q->param('c')) {
+	if ($q->param('geo') eq 'zip') {
+	    $retval .= '&zip=' . $q->param('zip');
+	    $retval .= '&dst=' . $q->param('dst')
+	        if defined $q->param('dst') && $q->param('dst') ne '';
+	    $retval .= '&tz=' . $q->param('tz')
+	        if defined $q->param('tz') && $q->param('tz') ne '';
+	} elsif ($q->param('geo') eq 'city') {
+	    $retval .= '&city=' . &url_escape($q->param('city'));
+	} elsif ($q->param('geo') eq 'pos') {
+	    $retval .= '&lodeg=' . $q->param('lodeg');
+	    $retval .= '&lomin=' . $q->param('lomin');
+	    $retval .= '&lodir=' . $q->param('lodir');
+	    $retval .= '&ladeg=' . $q->param('ladeg');
+	    $retval .= '&lamin=' . $q->param('lamin');
+	    $retval .= '&ladir=' . $q->param('ladir');
+	    $retval .= '&dst=' . $q->param('dst')
+	        if defined $q->param('dst') && $q->param('dst') ne '';
+	    $retval .= '&tz=' . $q->param('tz')
+	        if defined $q->param('tz') && $q->param('tz') ne '';
 	}
-	$retval .= '&m=' . $in{'m'} if defined $in{'m'} && $in{'m'} !~ /^\s*$/;
+	$retval .= '&m=' . $q->param('m')
+	    if defined $q->param('m') && $q->param('m') ne '';
     }
 
     foreach (@opts)
     {
 	next if $_ eq 'c';
-	next if length($_) > 1;
-	$retval .= "&$_=" . $in{$_} if defined $in{$_} && $in{$_} !~ /^\s*$/;
+	$retval .= "&$_=" . $q->param($_)
+	    if defined $q->param($_) && $q->param($_) ne '';
     }
 
     $retval;
@@ -1396,64 +1355,59 @@ sub gen_cookie {
 
 sub process_cookie {
     local($cookieval) = @_;
-    local(%cookie);
-    local($status);
-    local(%ENV);
 
-    $ENV{'QUERY_STRING'} = $cookieval;
-    $ENV{'REQUEST_METHOD'} = 'GET';
-    $status = &ReadParse(*cookie);
-
-    if (defined $status && $status > 0) {
-	if (! defined $in{'c'} || $in{'c'} eq 'on' || $in{'c'} eq '1') {
-	    if (defined $cookie{'zip'} && $cookie{'zip'} =~ /^\d\d\d\d\d$/ &&
-		(! defined $in{'geo'} || $in{'geo'} eq 'zip')) {
-		$in{'zip'} = $cookie{'zip'};
-		$in{'geo'} = 'zip';
-		$in{'c'} = 'on';
-		$in{'dst'} = $cookie{'dst'}
-		    if (defined $cookie{'dst'} && ! defined $in{'dst'});
-		$in{'tz'} = $cookie{'tz'}
-		    if (defined $cookie{'tz'} && ! defined $in{'tz'});
-	    } elsif (defined $cookie{'city'} && $cookie{'city'} !~ /^\s*$/ &&
-		(! defined $in{'geo'} || $in{'geo'} eq 'city')) {
-		$in{'city'} = $cookie{'city'};
-		$in{'geo'} = 'city';
-		$in{'c'} = 'on';
-	    } elsif (defined $cookie{'lodeg'} &&
-		     defined $cookie{'lomin'} &&
-		     defined $cookie{'lodir'} &&
-		     defined $cookie{'ladeg'} &&
-		     defined $cookie{'lamin'} &&
-		     defined $cookie{'ladir'} &&
-		     (! defined $in{'geo'} || $in{'geo'} eq 'pos')) {
-		$in{'lodeg'} = $cookie{'lodeg'};
-		$in{'lomin'} = $cookie{'lomin'};
-		$in{'lodir'} = $cookie{'lodir'};
-		$in{'ladeg'} = $cookie{'ladeg'};
-		$in{'lamin'} = $cookie{'lamin'};
-		$in{'ladir'} = $cookie{'ladir'};
-		$in{'geo'} = 'pos';
-		$in{'c'} = 'on';
-		$in{'dst'} = $cookie{'dst'}
-		    if (defined $cookie{'dst'} && ! defined $in{'dst'});
-		$in{'tz'} = $cookie{'tz'}
-		    if (defined $cookie{'tz'} && ! defined $in{'tz'});
-	    }
-	}
-
-	$in{'m'} = $cookie{'m'}
-	   if (defined $cookie{'m'} && ! defined $in{'m'});
-
-	foreach (@opts)
-	{
-	    next if $_ eq 'c';
-	    $in{$_} = $cookie{$_}
-	        if (! defined $in{$_} && defined $cookie{$_});
+    my($c) = new CGI($cookieval);
+    
+    if ((! defined $q->param('c')) ||
+	($q->param('c') eq 'on') ||
+	($q->param('c') eq '1')) {
+	if (defined $c->param('zip') && $c->param('zip') =~ /^\d{5}$/ &&
+	    (! defined $q->param('geo') || $q->param('geo') eq 'zip')) {
+	    $q->param('zip',$c->param('zip'));
+	    $q->param('geo','zip');
+	    $q->param('c','on');
+	    $q->param('dst',$c->param('dst'))
+		if (defined $c->param('dst') && ! defined $q->param('dst'));
+	    $q->param('tz',$c->param('tz'))
+		if (defined $c->param('tz') && ! defined $q->param('tz'));
+	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
+		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
+	    $q->param('city',$c->param('city'));
+	    $q->param('geo','city');
+	    $q->param('c','on');
+	} elsif (defined $c->param('lodeg') &&
+		 defined $c->param('lomin') &&
+		 defined $c->param('lodir') &&
+		 defined $c->param('ladeg') &&
+		 defined $c->param('lamin') &&
+		 defined $c->param('ladir') &&
+		 (! defined $q->param('geo') || $q->param('geo') eq 'pos')) {
+	    $q->param('lodeg',$c->param('lodeg'));
+	    $q->param('lomin',$c->param('lomin'));
+	    $q->param('lodir',$c->param('lodir'));
+	    $q->param('ladeg',$c->param('ladeg'));
+	    $q->param('lamin',$c->param('lamin'));
+	    $q->param('ladir',$c->param('ladir'));
+	    $q->param('geo','pos');
+	    $q->param('c','on');
+	    $q->param('dst',$c->param('dst'))
+		if (defined $c->param('dst') && ! defined $q->param('dst'));
+	    $q->param('tz',$c->param('tz'))
+		if (defined $c->param('tz') && ! defined $q->param('tz'));
 	}
     }
 
-    $status;
+    $q->param('m',$c->param('m'))
+	if (defined $c->param('m') && ! defined $q->param('m'));
+    
+    foreach (@opts)
+    {
+	next if $_ eq 'c';
+	$q->param($_,$c->param($_))
+	    if (! defined $q->param($_) && defined $c->param($_));
+    }
+
+    1;
 }
 
 ########################################################################
@@ -1477,8 +1431,8 @@ sub writePString {
 }
 
 sub dba_header {
-    &writeInt($MAGIC);
-    &writePString($FILENAME);
+    &writeInt($PALM_DBA_MAGIC);
+    &writePString($PALM_DBA_FILENAME);
     &writeByte(0);
     &writeInt(8);
     &writeInt(0);
@@ -1509,13 +1463,13 @@ sub dba_contents {
     
     # compute diff seconds between GMT and whatever our local TZ is
     # pick 1999/01/15 as a date that we're certain is standard time
-    $startTime = &timegm(0,34,12,15,0,90,0,0,0);
-    $secsEast = $startTime - &timelocal(0,34,12,15,0,90,0,0,0);
-    if ($in{'tz'} =~ /^-?\d+$/)
+    $startTime = &Time::Local::timegm(0,34,12,15,0,90,0,0,0);
+    $secsEast = $startTime - &Time::Local::timelocal(0,34,12,15,0,90,0,0,0);
+    if ($q->param('tz') =~ /^-?\d+$/)
     {
 	# add secsEast to go from our localtime to GMT
-	# then sub destination tz secsEast to get into local ctime
-	$local2local = $secsEast - ($in{'tz'} * 60 * 60);
+	# then sub destination tz secsEast to get into local time
+	$local2local = $secsEast - ($q->param('tz') * 60 * 60);
     }
     else
     {
@@ -1525,7 +1479,7 @@ sub dba_contents {
 
     &dba_header();
 
-    $numEntries = $MAXENTRIES if ($numEntries > $MAXENTRIES);
+    $numEntries = $PALM_DBA_MAXENTRIES if ($numEntries > $PALM_DBA_MAXENTRIES);
     &writeInt($numEntries*15);
 
     for ($i = 0; $i < $numEntries; $i++) {
@@ -1540,36 +1494,36 @@ sub dba_contents {
 	    $hour += 12;	# candle-lighting times are always PM
 	}
 
-	if (!defined($in{'dst'}) || $in{'dst'} eq 'none' ||
-	    ((defined $in{'geo'} && $in{'geo'} eq 'city' &&
-	      defined $in{'city'} && $in{'city'} !~ /^\s*$/ &&
-	      defined $city_nodst{$in{'city'}})))
+	if (!defined($q->param('dst')) || $q->param('dst') eq 'none' ||
+	    ((defined $q->param('geo') && $q->param('geo') eq 'city' &&
+	      defined $q->param('city') && $q->param('city') ne '' &&
+	      defined $city_nodst{$q->param('city')})))
 	{
 	    # no DST, so just use gmtime and then add that city offset
-	    $startTime = &timegm(0,$min,$hour,$mday,$mon-1,$year-1900,
-				 0,0,0);
-	    $startTime -= ($in{'tz'} * 60 * 60); # move into local tz
+	    $startTime = &Time::Local::timegm(0,$min,$hour,$mday,$mon-1,
+					      $year-1900,0,0,0);
+	    $startTime -= ($q->param('tz') * 60 * 60); # move into local tz
 	}
 	else
 	{
-	    $startTime = &timelocal(0,$min,$hour,$mday,$mon-1,$year-1900,
-				    0,0,0);
+	    $startTime = &Time::Local::timelocal(0,$min,$hour,$mday,$mon-1,
+						 $year-1900,0,0,0);
 	    $startTime += $local2local; # move into their local tz
 	}
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(0);		# recordID
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(1);		# status
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(2147483647);	# position
 
-	&writeInt($DATE);
+	&writeInt($PALM_DBA_DATE);
 	&writeInt($startTime);
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(0);		# endTime
 
 	&writeInt(5);		# spacer
@@ -1581,7 +1535,7 @@ sub dba_contents {
 	    &writePString($subj);
 	}
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(0);		# duration
 
 	&writeInt(5);		# spacer
@@ -1596,25 +1550,25 @@ sub dba_contents {
 
 	$untimed = ($all_day eq '"true"');
 
-	&writeInt($BOOL);
+	&writeInt($PALM_DBA_BOOL);
 	&writeInt($untimed);
 
-	&writeInt($BOOL);
+	&writeInt($PALM_DBA_BOOL);
 	&writeInt(1);		# isPrivate
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(1);		# category
 
-	&writeInt($BOOL);
+	&writeInt($PALM_DBA_BOOL);
 	&writeInt(0);		# alarm
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(0xFFFFFFFF);	# alarmAdv
 
-	&writeInt($INTEGER);
+	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(0);		# alarmTyp
 
-	&writeInt($REPEAT);
+	&writeInt($PALM_DBA_REPEAT);
 	&writeInt(0);		# repeat
     }
 
