@@ -32,7 +32,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Sat Apr 10 11:27:44 PDT 1999
+Last modified: Sun Apr 11 12:44:02 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -49,9 +49,18 @@ $default_zip = '95051';
     localtime(time);
 $year += 1900;
 
+# boolean options
+@opts = ('c','x','o','s','h','usa','israel','none');
+%opts = ();
+foreach (@opts)
+{
+    $opts{$_}     = 0;
+    $opts_chk{$_} = '';
+}
+
 $havdalah = 72;
-$candle = $usa = 1;
-$roshchodesh = $israel = $none = 0;
+$opts{'c'} = $opts{'usa'} = 1;
+$opts_chk{'c'} = $opts_chk{'usa'} = ' checked';
 
 for ($i = -12; $i < 13; $i++)
 {
@@ -117,14 +126,24 @@ if (defined $in{'month'})
     }
 }
 
-$candle = ($in{'c'} eq 'on' || $in{'c'} eq '1') ? 1 : 0;
-$roshchodesh = ($in{'x'} eq 'on' || $in{'x'} eq '1') ? 1 : 0;
+foreach (@opts)
+{
+    $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
+	1 : 0;
+}
+
 if (defined $in{'dst'})
 {
-    $usa = ($in{'dst'} eq 'usa') ? 1 : 0;
-    $israel = ($in{'dst'} eq 'israel') ? 1 : 0;
-    $none = ($in{'dst'} eq 'none') ? 1 : 0;
+    $opts{'usa'}    = ($in{'dst'} eq 'usa') ? 1 : 0;
+    $opts{'israel'} = ($in{'dst'} eq 'israel') ? 1 : 0;
+    $opts{'none'}   = ($in{'dst'} eq 'none') ? 1 : 0;
 }
+
+foreach (@opts)
+{
+    $opts_chk{$_} = $opts{$_} ? ' checked' : '';
+}
+
 $year = $in{'year'} if (defined $in{'year'} && $in{'year'} =~ /^\d+$/);
 $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
@@ -157,8 +176,12 @@ dbmclose(%DB);
 
 $cmd  = "/home/users/mradwin/bin/hebcal" .
     " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-$cmd .= ' -x' if $roshchodesh;
-$cmd .= ' -c' if $candle;
+
+foreach (@opts)
+{
+    $cmd .= ' -' . $_ if $opts{$_} && length($_) == 1;
+}
+
 $cmd .= ' -r' if defined $ENV{'PATH_INFO'};
 $cmd .= " -m $in{'m'}" if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
@@ -236,13 +259,6 @@ sub form
 {
     local($zip,$message) = @_;
 
-    $candle_chk = $candle ? ' checked' : '';
-    $roshchodesh_chk = $roshchodesh ? ' checked' : '';
-
-    $usa_chk = $usa ? ' checked' : '';
-    $israel_chk = $israel ? ' checked' : '';
-    $none_chk = $none ? ' checked' : '';
-
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
@@ -278,7 +294,7 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
     print STDOUT "
 </select><br><br>
 
-<input type=\"checkbox\" name=\"c\" id=\"c\"$candle_chk><label for=\"c\">
+<input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}><label for=\"c\">
 Include candle lighting times</label><br>
 
 <blockquote>
@@ -315,14 +331,14 @@ id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\"><br>
 </select><br>
 
 Daylight Savings Time:
-<input type=\"radio\" name=\"dst\" id=\"dst_usa\" value=\"usa\"$usa_chk>
-<label for=\"dst_usa\">USA</label>
+<input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
+<label for=\"usa\">USA</label>
 
-<input type=\"radio\" name=\"dst\" id=\"dst_israel\" value=\"israel\"$israel_chk>
-<label for=\"dst_israel\">Israel</label>
+<input type=\"radio\" name=\"dst\" id=\"israel\" value=\"israel\"$opts_chk{'israel'}>
+<label for=\"israel\">Israel</label>
 
-<input type=\"radio\" name=\"dst\" id=\"dst_none\" value=\"none\"$none_chk>
-<label for=\"dst_none\">none</label><br>
+<input type=\"radio\" name=\"dst\" id=\"none\" value=\"none\"$opts_chk{'none'}>
+<label for=\"none\">none</label><br>
 
 <label for=\"m\">Havdalah minutes past sundown: </label><input
 type=\"text\" name=\"m\" id=\"m\" value=\"$havdalah\" size=\"3\"
@@ -330,8 +346,19 @@ maxlength=\"3\"><br>
 
 </blockquote>
 
-<input type=\"checkbox\" name=\"x\" id=\"x\"$roshchodesh_chk><label for=\"x\">
-Suppress Rosh Chodesh</label><br><br>
+<input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}><label for=\"x\">
+Suppress Rosh Chodesh</label><br>
+
+<input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}><label for=\"o\">
+Add days of the Omer</label><br>
+
+<input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}><label for=\"s\">
+Add wekly sedrot on Saturday</label><br>
+
+<input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}><label for=\"h\">
+Suppress default holidays</label><br>
+
+<br>
 
 <input type=\"submit\" value=\"Get Calendar\">
 </form>
