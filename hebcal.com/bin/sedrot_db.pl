@@ -42,8 +42,8 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
-use Getopt::Std;
-use XML::Simple;
+use Getopt::Std ();
+use XML::Simple ();
 use DB_File;
 use strict;
 
@@ -54,14 +54,14 @@ my($usage) = "usage: $0 [-h] aliyah.xml output.db
 ";
 
 my(%opts);
-getopts('h', \%opts) || die "$usage\n";
+Getopt::Std::getopts('h', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
 my($infile) = shift;
 my($outfile) = shift;
 
-my $parshiot = XMLin($infile);
+my $parshiot = XML::Simple::XMLin($infile);
 
 my(%DB);
 tie(%DB, 'DB_File', $outfile, O_RDWR|O_CREAT, 0644, $DB_HASH)
