@@ -876,7 +876,7 @@ sub parse_date_descr($$)
 	}
 	else
 	{
-	    $dur = 15;
+	    $dur = 1;
 	}
 
 	$untimed = 0;
