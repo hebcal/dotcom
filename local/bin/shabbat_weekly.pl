@@ -7,10 +7,10 @@ use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use Hebcal;
+use Hebcal ();
 use POSIX qw(strftime);
-use MIME::Base64;
-use DBI;
+use MIME::Base64 ();
+use DBI ();
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
@@ -46,7 +46,7 @@ while (my($to,$cfg) = each(%SUBS))
     my($cmd,$loc,$args) = parse_config($cfg);
     my(@events) = Hebcal::invoke_hebcal($cmd,'',undef);
 
-    my $encoded = encode_base64($to);
+    my $encoded = MIME::Base64::encode_base64($to);
     chomp($encoded);
     my $unsub_url = "http://www.$site/email/?" .
 	"e=" . my_url_escape($encoded);
