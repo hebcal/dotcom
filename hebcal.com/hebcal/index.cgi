@@ -776,6 +776,7 @@ so you can keep this window open.
 		qq{;dst=}, $q->param('dst'),
 		qq{;tz=}, $q->param('tz'),
 		qq{;m=}, $q->param('m'),
+		qq{;.from=interactive},
 		qq{">1-Click Shabbat for $city_descr</a>.</p>\n},
 		);
 	}
@@ -786,6 +787,7 @@ so you can keep this window open.
 		qq{<a href="/shabbat/?city=},
  		&Hebcal::url_escape($q->param('city')),
 		qq{;m=}, $q->param('m'),
+		qq{;.from=interactive},
 		qq{">1-Click Shabbat for }, $q->param('city'),
 		qq{</a>.</p>\n},
 		);
