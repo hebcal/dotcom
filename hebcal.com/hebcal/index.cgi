@@ -962,26 +962,9 @@ sub results_page()
 	    $subj .= qq{\n/ <span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
 	}
 
-	if ($q->param('vis'))
+	if (defined $href && $href ne '')
 	{
-	    if (defined $href && $href ne '')
-	    {
-		$subj = qq{<a href="$href">$subj</a>};
-	    }
-	}
-	else
-	{
-	    if (defined $torah_href && $torah_href ne '')
-	    {
-		$subj .= qq{ <span class="goto">} . 
-		qq{(<a href="$drash_href">Drash</a>\n} .
-		qq{- <a href="$torah_href">Torah</a>\n} .
-		qq{- <a href="$haftarah_href">Haftarah</a>)</span>};
-	    }
-	    elsif ($href ne '')
-	    {
-		$subj = qq{<a href="$href">$subj</a>};
-	    }
+	    $subj = qq{<a href="$href">$subj</a>};
 	}
 
 	my($dow) = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . ' ';
