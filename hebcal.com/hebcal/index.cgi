@@ -428,6 +428,9 @@ JSCRIPT_END
     $q->small("Use all digits to specify a year.\nYou probably aren't",
 	      "interested in 93, but rather 1993.\n");
 
+    print STDOUT "<p><table border=\"0\" cellpadding=\"0\"\n",
+    "cellspacing=\"0\"><tr valign=\"top\"><td>\n";
+
     print STDOUT "<p><b>Include events:</b>",
     "<br><label\nfor=\"nh\">",
     $q->checkbox(-name => 'nh',
@@ -462,6 +465,41 @@ JSCRIPT_END
 		 -label => "\nUse Israeli sedra scheme"),
     "</label>)";
 
+    print STDOUT "<p><b>Other options:</b>",
+    "<br><label\nfor=\"vis\">",
+    $q->checkbox(-name => 'vis',
+		 -id => 'vis',
+		 -checked => 'checked',
+		 -label => "\nDisplay visual calendar grid"),
+    "</label>",
+    "<br><label\nfor=\"a\">",
+    $q->checkbox(-name => 'a',
+		 -id => 'a',
+		 -label => "\nUse Ashkenazis Hebrew transliterations"),
+    "</label>",
+    "<br><label\nfor=\"Dsome\">",
+    $q->checkbox(-name => 'D',
+		 -id => 'Dsome',
+		 -label => "\nShow Hebrew date for dates with some event"),
+    "</label>",
+    "<br><label\nfor=\"dentire\">",
+    $q->checkbox(-name => 'd',
+		 -id => 'dentire',
+		 -label => "\nShow Hebrew date for entire date range"),
+    "</label>",
+    $q->hidden(-name => 'set', -value => 'on'),
+    "<br><label\nfor=\"heb\">",
+    $q->checkbox(-name => 'heb',
+		 -id => 'heb',
+		 -label => "\nShow Hebrew event names"),
+    "</label>",
+    "</p>\n",
+#    $q->hidden(-name => '.rand', -value => time(), -override => 1),
+    $q->submit(-name => '.s',-value => 'Get Calendar'),
+    $q->hidden(-name => '.cgifields',
+	       -values => ['nx', 'nh', 'set'],
+	       '-override'=>1);
+
     $q->param('c','off') unless defined $q->param('c');
     $q->param('geo','zip') unless defined $q->param('geo');
 
@@ -469,9 +507,10 @@ JSCRIPT_END
     if (defined $q->param('geo') && $q->param('geo') eq 'pos')
     {
 	$after_type = "\n<small>(<a href=\"$latlong_url\">search\n" .
-	    "latitude/longitude</a>)</small>\n";
+	    "latitude/longitude</a>)</small>";
     }
 
+    print STDOUT "</td><td>&nbsp;&nbsp;&nbsp;</td><td>\n";
     print STDOUT $q->hidden(-name => 'c',
 			    -id => 'c'),
     $q->hidden(-name => 'geo',
@@ -522,18 +561,16 @@ JSCRIPT_END
     if ($q->param('geo') eq 'city')
     {
 	print STDOUT
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"city\">",
-	"Closest City:\n",
+	"<label\nfor=\"city\">Closest City:</label>\n",
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
 		       -values => [sort keys %Hebcal::city_tz],
-		       -default => 'Jerusalem'),
-	"</label><br>";
+		       -default => 'Jerusalem');
     }
     elsif ($q->param('geo') eq 'pos')
     {
 	print STDOUT
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"ladeg\">",
+	"<label\nfor=\"ladeg\">",
 	$q->textfield(-name => 'ladeg',
 		      -id => 'ladeg',
 		      -size => 3,
@@ -552,7 +589,7 @@ JSCRIPT_END
 		       -labels => {'n' => 'North Latitude',
 				   's' => 'South Latitude'}),
 	"<br>",
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"lodeg\">",
+	"<label\nfor=\"lodeg\">",
 	$q->textfield(-name => 'lodeg',
 		      -id => 'lodeg',
 		      -size => 3,
@@ -569,25 +606,20 @@ JSCRIPT_END
 		       -values => ['w','e'],
 		       -default => 'w',
 		       -labels => {'e' => 'East Longitude',
-				   'w' => 'West Longitude'}),
-	"<br>\n";
+				   'w' => 'West Longitude'});
     }
     else
     {
-	print STDOUT
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"zip\">\n",
-	"Zip code:\n",
+	print STDOUT "<label\nfor=\"zip\">Zip code:</label>\n",
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
 		      -size => 5,
-		      -maxlength => 5),
-	"</label>&nbsp;&nbsp;&nbsp;<br>\n";
+		      -maxlength => 5);
     }
 
     if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
     {
-	print STDOUT 
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for=\"tz\">Time zone:\n",
+	print STDOUT "<br><label for=\"tz\">Time zone:</label>\n",
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
 		       -values =>
@@ -600,69 +632,24 @@ JSCRIPT_END
 		       (defined $q->param('geo') && $q->param('geo') eq 'pos')
 		       ? 0 : 'auto',
 		       -labels => \%Hebcal::tz_names),
-	"</label><br>",
-	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daylight Saving Time:\n",
+	"<br><label for=\"dst\">Daylight Saving Time:</label>\n",
 	$q->popup_menu(-name => 'dst',
 		       -id => 'dst',
 		       -values => ['usa','eu','israel','none'],
 		       -default => 'none',
-		       -labels => \%Hebcal::dst_names),
-	"</label><br>";
+		       -labels => \%Hebcal::dst_names);
     }
 
-    print STDOUT "<label\nfor=\"m\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-    "Havdalah minutes past sundown:\n",
+    print STDOUT "<br><label\nfor=\"m\">",
+    "Havdalah minutes past sundown:</label>\n",
     $q->textfield(-name => 'm',
 		  -id => 'm',
 		  -size => 3,
 		  -maxlength => 3,
 		  -default => $Hebcal::havdalah_min),
-    "</label></p>\n";
+    "</p>\n";
 
-    print STDOUT "<p><b>Other options:</b>",
-    "<br><label\nfor=\"vis\">",
-    $q->checkbox(-name => 'vis',
-		 -id => 'vis',
-		 -checked => 'checked',
-		 -label => "\nDisplay visual calendar grid"),
-    "</label>",
-    "<br><label\nfor=\"a\">",
-    $q->checkbox(-name => 'a',
-		 -id => 'a',
-		 -label => "\nUse Ashkenazis Hebrew transliterations"),
-    "</label>",
-    "<br><label\nfor=\"Dsome\">",
-    $q->checkbox(-name => 'D',
-		 -id => 'Dsome',
-		 -label => "\nShow Hebrew date for dates with some event"),
-    "</label>",
-    "<br><label\nfor=\"dentire\">",
-    $q->checkbox(-name => 'd',
-		 -id => 'dentire',
-		 -label => "\nShow Hebrew date for entire date range"),
-    "</label>",
-    "<br><label\nfor=\"set\">",
-    $q->checkbox(-name => 'set',
-		 -id => 'set',
-		 -checked => $set_checked,
-		 -label => "\nSave my preferences in a cookie"),
-    "</label> <small>(<a\n",
-    "href=\"/help/#cookie\">What's\n",
-    "a cookie?</a> - <a\n",
-    "href=\"del_cookie?", time(), "\">Delete\n",
-    "my cookie</a>)</small>",
-    "<br><label\nfor=\"heb\">",
-    $q->checkbox(-name => 'heb',
-		 -id => 'heb',
-		 -label => "\nShow Hebrew event names"),
-    "</label>",
-    "</p>\n",
-#    $q->hidden(-name => '.rand', -value => time(), -override => 1),
-    $q->submit(-name => '.s',-value => 'Get Calendar'),
-    $q->hidden(-name => '.cgifields',
-	       -values => ['nx', 'nh', 'set'],
-	       '-override'=>1),
-    "</form>";
+    print STDOUT "</td></tr></table>\n</form>\n";
 
     print STDOUT Hebcal::html_footer($q,$rcsrev);
 
