@@ -981,6 +981,50 @@ sub process_cookie($$)
 }
 
 ########################################################################
+# EXPORT
+########################################################################
+
+sub export_http_header($$)
+{
+    my($q,$mime) = @_;
+
+    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
+
+    print $q->header(-type => "$mime; filename=\"$path_info\"",
+                     -content_disposition =>
+                     "filename=$path_info",
+                     -last_modified => http_date($time));
+}
+
+sub get_browser_endl($)
+{
+    my($ua) = @_;
+    my $endl;
+
+    if ($ua =~ /^Mozilla\/[1-4]/)
+    {
+	if ($ua =~ /compatible/)
+	{
+	    $endl = "\015\012";
+	}
+	else
+	{
+	    $endl = "\012";	# netscape 4.x and below want unix LF only
+	}
+    }
+    else
+    {
+	$endl = "\015\012";
+    }
+
+    $endl;
+}
+
+########################################################################
 # Yahoo! Calendar link
 ########################################################################
 
@@ -1042,8 +1086,10 @@ sub yahoo_calendar_link($$)
 
 sub macintosh_datebook($$)
 {
-    my($events,$endl) = @_;
+    my($q, $events) = @_;
     my($numEntries) = scalar(@{$events});
+
+    export_http_header($q, 'text/tab-separated-values');
 
     for (my $i = 0; $i < $numEntries; $i++)
     {
@@ -1090,7 +1136,7 @@ sub macintosh_datebook($$)
 			  $date, $end_date,
 			  $start_time, $end_time,
 			  $memo,
-			  ), $endl;
+			  ), "\015";
     }
 
     1;
@@ -1102,8 +1148,11 @@ sub macintosh_datebook($$)
 
 sub vcalendar_write_contents($$)
 {
-    my($events,$endl) = @_;
+    my($q,$events) = @_;
     my($numEntries) = scalar(@{$events});
+
+    export_http_header($q, 'text/x-vCalendar');
+    my $endl = get_browser_endl($q->user_agent());
 
     print STDOUT qq{BEGIN:VCALENDAR$endl}, qq{VERSION:1.0$endl},
     qq{PRODID:Hebcal Generated$endl};
@@ -1161,8 +1210,11 @@ sub vcalendar_write_contents($$)
 
 sub csv_write_contents($$)
 {
-    my($events,$endl) = @_;
+    my($q,$events) = @_;
     my($numEntries) = scalar(@{$events});
+
+    export_http_header($q, 'text/x-csv');
+    my $endl = get_browser_endl($q->user_agent());
 
     print STDOUT
 	qq{"Subject","Start Date","Start Time","End Date",},
