@@ -97,7 +97,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Aug 10 16:58:39 PDT 1999
+Last modified: Wed Aug 11 11:11:08 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -809,8 +809,10 @@ open.</small></p>
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&gt;/g;
 
-	$dow = $DoW[&get_dow($year - 1900, $month - 1, $day)];
-	printf STDOUT "%s %04d-%02d-%02d  %s\n",
+	$dow = ($year > 1969 && $year < 2038) ? 
+	    $DoW[&get_dow($year - 1900, $month - 1, $day)] . ' ' :
+		'';
+	printf STDOUT "%s%04d-%02d-%02d  %s\n",
 	$dow, $year, $month, $day, $descr;
     }
     close(HEBCAL);
