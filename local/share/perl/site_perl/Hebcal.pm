@@ -31,6 +31,7 @@ use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use Unicode::String;
 use Config::IniFiles;
 use Date::Calc;
+use DB_File;
 
 ########################################################################
 # constants
@@ -150,7 +151,10 @@ $Hebcal::havdalah_min = 72;
 
 my($ini_path) = '/pub/m/r/mradwin/hebcal.com/hebcal';
 my($holidays) = new Config::IniFiles(-file => "$ini_path/holidays.ini");
-my($sedrot)   = new Config::IniFiles(-file => "$ini_path/sedrot.ini");
+
+my(%SEDROT);
+tie(%SEDROT, 'DB_File', "$ini_path/sedrot.db",
+    O_RDONLY, 0444, $DB_File::DB_HASH) || die "Can't tie $ini_path/sedrot.db";
 
 # translate from Askenazic transiliterations to Separdic
 my(%ashk2seph) =
@@ -356,7 +360,7 @@ sub get_holiday_anchor($$$)
 	$hebrew = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA ";
 	$sedra = $ashk2seph{$sedra} if (defined $ashk2seph{$sedra});
 
-	if (defined $sedrot->Parameters($sedra))
+	if (defined $SEDROT{$sedra})
 	{
 	    my($anchor) = $sedra;
 	    $anchor = lc($anchor);
@@ -366,31 +370,30 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    $drash_href = $sedrot->val($sedra, 'drash');
-	    $torah_href = $sedrot->val($sedra, 'torah');
+	    $drash_href = $SEDROT{"$sedra:drash"};
+	    $torah_href = $SEDROT{"$sedra:torah"};
 	    if ($torah_href =~ m,^/jpstext/,)
 	    {
 		$haftarah_href = $torah_href;
 		$haftarah_href =~ s/.shtml$/_haft.shtml/;
 	    }
 
-	    $hebrew .= $sedrot->val($sedra, 'hebrew');
-	    $memo = "Torah: " . $sedrot->val($sedra, 'verse') .
+	    $hebrew .= $SEDROT{"$sedra:hebrew"};
+	    $memo = "Torah: " . $SEDROT{"$sedra:verse"} .
 		" / Haftarah: ";
 	    
 	    if ($want_sephardic &&
-		defined $sedrot->val($sedra, 'haft_seph'))
+		defined $SEDROT{"$sedra:haft_seph"})
 	    {
-		$memo .= $sedrot->val($sedra, 'haft_seph');
+		$memo .= $SEDROT{"$sedra:haft_seph"};
 	    }
 	    else
 	    {
-		$memo .= $sedrot->val($sedra, 'haft_ashk');
+		$memo .= $SEDROT{"$sedra:haft_ashk"};
 	    }
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
-	       (defined $sedrot->Parameters($1) ||
-		defined $sedrot->Parameters($ashk2seph{$1})))
+	       (defined $SEDROT{$1} || defined $SEDROT{$ashk2seph{$1}}))
 	{
 	    my($p1,$p2) = ($1,$2);
 
@@ -405,43 +408,42 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    $drash_href = $sedrot->val($p1, 'drash');
-	    $torah_href = $sedrot->val($p1, 'torah');
+	    $drash_href = $SEDROT{"$p1:drash"};
+	    $torah_href = $SEDROT{"$p1:torah"};
 	    if ($torah_href =~ m,^/jpstext/,)
 	    {
 		$haftarah_href = $torah_href;
 		$haftarah_href =~ s/.shtml$/_haft.shtml/;
 	    }
 
-	    $hebrew .= $sedrot->val($p1, 'hebrew');
+	    $hebrew .= $SEDROT{"$p1:hebrew"};
 
-	    die "sedrot.ini missing $p2!"
-		unless (defined $sedrot->Parameters($p2));
+	    die "sedrot.db missing $p2!" unless defined $SEDROT{$p2};
 
 	    # hypenate hebrew reading
 	    # '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
-	    $hebrew .= "\xD6\xBE" . $sedrot->val($p2, 'hebrew');
+	    $hebrew .= "\xD6\xBE" . $SEDROT{"$p2:hebrew"};
 
 	    # second part of torah reading
-	    my($torah_end) = $sedrot->val($p2, 'verse');
+	    my($torah_end) = $SEDROT{"$p2:verse"};
 	    $torah_end =~ s/^.+\s+(\d+:\d+)\s*$/$1/;
 
-	    $memo = "Torah: " . $sedrot->val($p1, 'verse');
+	    $memo = "Torah: " . $SEDROT{"$p1:verse"};
 	    $memo =~ s/\s+\d+:\d+\s*$/ $torah_end/;
 
 	    # on doubled parshiot, read only the second Haftarah
-	    $haftarah_href = $sedrot->val($p2, 'torah');
+	    $haftarah_href = $SEDROT{"$p2:torah"};
 	    $haftarah_href =~ s/.shtml$/_haft.shtml/;
 
 	    $memo .= " / Haftarah: ";
 	    if ($want_sephardic &&
-		defined $sedrot->val($p2, 'haft_seph'))
+		defined $SEDROT{"$p2:haft_seph"})
 	    {
-		$memo .= $sedrot->val($p2, 'haft_seph');
+		$memo .= $SEDROT{"$p2:haft_seph"};
 	    }
 	    else
 	    {
-		$memo .= $sedrot->val($p2, 'haft_ashk');
+		$memo .= $SEDROT{"$p2:haft_ashk"};
 	    }
 	}
 
