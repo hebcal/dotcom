@@ -94,13 +94,13 @@ for (my $i = 0; $i < @events; $i++)
 die "can't find Bereshit for Year I" unless defined $bereshit_idx;
 
 ## load aliyah.xml data to get parshiot
-my $parshiot = XMLin($infile);
+my $pxml = XMLin($infile);
 
 my(@all_inorder,@combined,%combined,%parsha2id);
-foreach my $h (keys %{$parshiot->{'parsha'}})
+foreach my $h (keys %{$pxml->{'parsha'}})
 {
-    my $num = $parshiot->{'parsha'}->{$h}->{'num'};
-    if ($parshiot->{'parsha'}->{$h}->{'combined'})
+    my $num = $pxml->{'parsha'}->{$h}->{'num'};
+    if ($pxml->{'parsha'}->{$h}->{'combined'})
     {
 	$combined[$num - 101] = $h;
 
@@ -136,8 +136,6 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
     next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
     my $subj = $1;
 
-#    print "idx=$i, subj=$subj\n";
-
     if ($subj =~ /^([^-]+)-(.+)$/ &&
 	defined $combined{$1} && defined $combined{$2})
     {
@@ -151,9 +149,9 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
 }
 
 my %cycle_option;
-calc_variation_options($parshiot, \%cycle_option);
+calc_variation_options($pxml, \%cycle_option);
 my %triennial_aliyot;
-read_aliyot_metadata($parshiot, \%triennial_aliyot);
+read_aliyot_metadata($pxml, \%triennial_aliyot);
 
 my %readings;
 my $year = 1;
@@ -181,9 +179,6 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
 	my $a = $triennial_aliyot{$h}->{$variation};
 	die unless defined $a;
 	$readings{$h}->[$year] = [$a, $stime, $h];
-	if ($opts{'t'}) {
-#	    print TRI_CSV qq{};
-	}
     }
     elsif (defined $triennial_aliyot{$h}->{$year})
     {
@@ -219,19 +214,13 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
     }
 }
 
-if ($opts{'f'}) {
-    open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
-    print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
-}
+triennial_csv($pxml,$opts{'t'},\@events,$bereshit_idx)
+    if $opts{'t'};
 
-my(%read_on);
+my(%parsha_dates);
 my(%parsha_time);
 my($saturday) = get_saturday();
-readings_for_current_year(\%read_on, \%parsha_time);
-
-if ($opts{'f'}) {
-    close(CSV);
-}
+readings_for_current_year($pxml, \%parsha_dates, \%parsha_time);
 
 # init global vars needed for html
 my(%seph2ashk);
@@ -242,19 +231,21 @@ my $html_footer = html_footer($infile);
 
 foreach my $h (keys %readings)
 {
-    write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
+    write_sedra_page($pxml,\%parsha_dates,$h,$prev{$h},$next{$h},$readings{$h});
 }
 {
     my $h = "Vezot Haberakhah";
-    write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
+    write_sedra_page($pxml,\%parsha_dates,$h,$prev{$h},$next{$h},$readings{$h});
 }
 
-write_index_page();
+write_index_page($pxml,\%parsha_dates);
 
 exit(0);
 
 sub write_index_page
 {
+    my($parshiot,$read_on) = @_;
+
     open(OUT1, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
 
     print OUT1 <<EOHTML;
@@ -294,9 +285,9 @@ EOHTML
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
-	if (defined $read_on{$h} && defined $read_on{$h}->[0])
+	if (defined $read_on->{$h} && defined $read_on->{$h}->[0])
 	{
-	    print OUT1 qq{ - <small>$read_on{$h}->[0]</small>\n};
+	    print OUT1 qq{ - <small>$read_on->{$h}->[0]</small>\n};
 	}
     }
 
@@ -309,9 +300,9 @@ EOHTML
 
 	print OUT1 qq{<dt><a name="$anchor" },
 	qq{href="$anchor.html">Parashat\n$h</a>\n};
-	if (defined $read_on{$h} && defined $read_on{$h}->[0])
+	if (defined $read_on->{$h} && defined $read_on->{$h}->[0])
 	{
-	    print OUT1 qq{ - <small>$read_on{$h}->[0]</small>\n};
+	    print OUT1 qq{ - <small>$read_on->{$h}->[0]</small>\n};
 	}
     }
 
@@ -400,10 +391,10 @@ sub read_aliyot_metadata
 
 sub write_sedra_page
 {
-    my($h,$prev,$next,$triennial) = @_;
+    my($parshiot,$read_on,$h,$prev,$next,$triennial) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
-       $torah_href,$haftarah_href,$drash_href) = get_parsha_info($h);
+       $torah_href,$haftarah_href,$drash_href) = get_parsha_info($parshiot,$h);
 
     my $seph = '';
     my $ashk = '';
@@ -705,7 +696,7 @@ World ORT
 EOHTML
 ;
 
-    if (defined $read_on{$h})
+    if (defined $read_on->{$h})
     {
 	print OUT2 <<EOHTML;
 <h3><a name="dates">List of Dates</a></h3>
@@ -713,7 +704,7 @@ Parashat $h is read on:
 <ul>
 EOHTML
 	;
-	foreach my $stime (@{$read_on{$h}}) {
+	foreach my $stime (@{$read_on->{$h}}) {
 	    next unless defined $stime;
 	    print OUT2 "<li>$stime\n";
 	}
@@ -745,7 +736,7 @@ EOHTML
 
 sub get_parsha_info
 {
-    my($h) = @_;
+    my($parshiot,$h) = @_;
 
     my $parashat = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA";  # UTF-8 for "parashat"
 
@@ -845,7 +836,7 @@ sub get_parsha_info
 
 sub readings_for_current_year
 {
-    my($current,$parsha_time) = @_;
+    my($parshiot,$current,$parsha_time) = @_;
 
     my $heb_yr = `./hebcal -t -x -h | grep -v Omer`;
     chomp($heb_yr);
@@ -858,6 +849,11 @@ sub readings_for_current_year
 	my($yr) = $heb_yr + $i;
 	my(@ev) = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
 	$years[$i] = \@ev;
+    }
+
+    if ($opts{'f'}) {
+	open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
+	print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
     }
 
     for (my $yr = 0; $yr < $extra_years; $yr++)
@@ -912,6 +908,57 @@ sub readings_for_current_year
 	print CSV "\015\012";
     }
     }
+
+    if ($opts{'f'}) {
+	close(CSV);
+    }
+}
+
+sub triennial_csv
+{
+    my($parshiot,$fn,$events,$bereshit_idx) = @_;
+
+    open(CSV, ">$fn") || die "$fn: $!\n";
+    print CSV qq{"Date","Parsha","Aliyah","Triennial Reading"\015\012};
+
+    my $year = 1;
+    for (my $i = $bereshit_idx; $i < @events; $i++)
+    {
+	if ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
+	    $i != $bereshit_idx)
+	{
+	    $year++;
+	    last if ($year == 4);
+	}
+
+	next unless ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
+	my $h = $1;
+
+	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my $stime2 = sprintf("%02d-%s-%04d",
+			     $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			     $Hebcal::MoY_short[$month - 1],
+			     $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
+	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
+	$book =~ s/\s+.+$//;
+
+	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			    @{$readings{$h}->[$year]->[0]})
+	{
+	    printf CSV
+		qq{%s,"%s",%s,"$book %s - %s"\015\012},
+		$stime2,
+		$h,
+		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
+		$aliyah->{'begin'},
+		$aliyah->{'end'};
+	}
+
+	print CSV "\015\012";
+    }
+
+    close(CSV);
 }
 
 sub get_saturday
