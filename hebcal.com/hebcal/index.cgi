@@ -303,7 +303,7 @@ Suppress Rosh Chodesh</label><br>
 Add days of the Omer</label><br>
 
 <input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}><label for=\"s\">
-Add wekly sedrot on Saturday</label>
+Add weekly sedrot on Saturday</label>
 
 (<input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}><label for=\"i\">
 Use Israeli sedra scheme</label>)<br>
