@@ -20,9 +20,9 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 	my($stime) = strftime("%d %B %Y", localtime($saturday));
 
 	open(OUT,">/pub/m/r/mradwin/hebcal.com/current.inc") || die;
-	$parsha =~ s/ /\n/;
-	print OUT "<br><br><span class=\"sm-grey\">&gt;</span>\n";
-	print OUT "<b><a href=\"$href\">$parsha</a></b><br>$stime";
+	$parsha =~ s/ /&nbsp;/;
+	print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
+	print OUT "href=\"$href\">$parsha</a></b><br>$stime";
 	close(OUT);
     }
 }
@@ -44,11 +44,10 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
     my $href = &Hebcal::get_holiday_anchor($holiday);
     if ($href) {
 	my($stime) = strftime("%d %B %Y", localtime(time()));
-
 	open(OUT,">$inc") || die;
-	$holiday =~ s/ /\n/;
-	print OUT "<span class=\"sm-grey\">&gt;</span>\n";
-	print OUT "<b><a href=\"$href\">$holiday</a></b><br>$stime<br>\n";
+	$holiday =~ s/ /&nbsp;/;
+	print OUT "<span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
+	print OUT "href=\"$href\">$holiday</a></b><br>$stime<br>\n";
 	close(OUT);
     }
 }
