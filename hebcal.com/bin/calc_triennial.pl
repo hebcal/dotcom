@@ -758,12 +758,12 @@ EOHTML
 
     print OUT2 <<EOHTML;
 <a
-href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20"><img
+href="http://www.amazon.com/exec/obidos/ASIN/0827607121/ref=nosim/hebcal-20"><img
 src="/i/0827607121.01.TZZZZZZZ.jpg" border="0" hspace="3" vspace="3"
 alt="Etz Hayim: Torah and Commentary" align="right"></a><dl>
 <dt><a name="ref">References</a>
 <dd><em><a
-href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
+href="http://www.amazon.com/exec/obidos/ASIN/0827607121/ref=nosim/hebcal-20">Etz
 Hayim: Torah and Commentary</a></em>,
 David L. Lieber et. al., Jewish Publication Society, 2001.
 <dd><em><a
