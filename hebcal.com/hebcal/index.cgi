@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Mar  2 11:02:49 PST 2001
+Last modified: Sat Mar  3 19:25:49 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -460,7 +460,8 @@ JSCRIPT_END
 		   -target=>'_top',
 		   -head => [
 			     "<script language=\"JavaScript\" type=\"text/javascript\"><!--\n$JSCRIPT// --></script>",
-			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
+			     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">",
+			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'SCHEMA.dc',
 				     -href => 'http://purl.org/metadata/dublin_core_elements'}),
 			   $q->Link({-rel => 'stylesheet',
@@ -911,6 +912,7 @@ sub results_page
     $q->start_html(-title => "Hebcal: Jewish Calendar $date",
 		   -target=>'_top',
 		   -head => [
+			   "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">",
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel => 'stylesheet',
 				     -href => '/style.css',
