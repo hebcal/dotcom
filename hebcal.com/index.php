@@ -64,13 +64,25 @@ Calendar</a></b>
 <b><a href="/hebcal/?v=1;year=2002;month=9;nx=on;nh=on;vis=on">High Holy
 Days 5763</a></b>
 <br><br><span class="sm-grey">&gt;</span>
-<b>Candle lighting times</b><br>
-<form action="/shabbat/">
+<b>Candle lighting</b>
+<div><form action="/shabbat/">
 <label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5" id="zip">
 <input type="hidden" name="geo" value="zip">
 <small><br><a href="/shabbat/#change">select by major city</a></small>
+</form></div>
+<div><!-- Begin PayPal Logo -->
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="business" value="webmaster@hebcal.com">
+<input type="hidden" name="item_name" value="Donation to hebcal.com">
+<input type="hidden" name="no_note" value="1">
+<input type="hidden" name="no_shipping" value="1">
+<input type="image" name="submit"
+src="http://www.paypal.com/images/x-click-but04.gif" border="0"
+alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
+<!-- End PayPal Logo --></div>
 </td></tr></table>
 <p>
 <hr noshade size="1">
@@ -84,7 +96,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Fri Aug  9 02:25:34 EDT 2002
+Last modified: Mon Aug 19 19:04:20 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
