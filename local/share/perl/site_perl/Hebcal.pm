@@ -25,7 +25,7 @@ package Hebcal;
 require 5.000;
 use strict;
 use Time::Local;
-use CGI;
+use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/home/mradwin/local/lib/perl5/site_perl";
 use Unicode::String;
@@ -607,8 +607,8 @@ sub guess_timezone($$$)
 sub display_hebrew {
     my($q,$class,@args) = @_;
 
-    if ($q->user_agent('MSIE'))
-    {
+#    if ($q->user_agent('MSIE'))
+#    {
 	my(@args2);
 	foreach (@args)
 	{
@@ -621,18 +621,18 @@ sub display_hebrew {
 		    @args2,
 		    qq{</span>}
 		    );
-    }
-    else
-    {
-	my($str) = &utf8_hebrew_to_netscape(join('', @args));
-	$str =~ s/  /&nbsp;&nbsp;/g;
+#      }
+#      else
+#      {
+#  	my($str) = &utf8_hebrew_to_netscape(join('', @args));
+#  	$str =~ s/  /&nbsp;&nbsp;/g;
 
-	return join('',
-		    qq{<span dir="ltr" lang="he"\nclass="${class}-ltr">},
-		    $str,
-		    qq{</span>}
-		    );
-    }
+#  	return join('',
+#  		    qq{<span dir="ltr" lang="he"\nclass="${class}-ltr">},
+#  		    $str,
+#  		    qq{</span>}
+#  		    );
+#      }
 }
 
 sub utf8_hebrew_to_netscape($) {
