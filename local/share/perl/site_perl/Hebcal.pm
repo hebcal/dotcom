@@ -385,9 +385,9 @@ sub get_dow($$$)
     (localtime($time))[6];	# $wday
 }
 
-sub get_holiday_anchor($$)
+sub get_holiday_anchor($$$)
 {
-    my($subj,$want_sephardic) = @_;
+    my($subj,$want_sephardic,$q) = @_;
     my($href) = '';
     my($hebrew) = '';
     my($memo) = '';
@@ -496,7 +496,9 @@ sub get_holiday_anchor($$)
 
 	if (defined $holidays->Parameters($subj_copy))
 	{
-	    $href = "/help/defaults.html#" .
+	    $href = 'http://' . $q->virtual_host()
+		if ($q);
+	    $href .= "/help/defaults.html#" .
 		$holidays->val($subj_copy, 'anchor');
 
 	    if (defined $holidays->val($subj_copy, 'hebrew'))
