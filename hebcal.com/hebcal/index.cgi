@@ -49,7 +49,7 @@ $PALM_DBA_MAXENTRIES = 2500;
 %MoY_long = (
 	     'x' => '- Entire year -',
 	     1   => 'January',
-	     2   => 'Februrary',
+	     2   => 'February',
 	     3   => 'March',
 	     4   => 'April',
 	     5   => 'May',
@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Jan 13 14:39:55 PST 2000
+Last modified: Thu Jan 13 15:47:07 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
