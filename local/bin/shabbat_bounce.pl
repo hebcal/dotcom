@@ -22,6 +22,7 @@ my $header = $message->head();
 my $to = $header->get('To');
 
 my($email_address,$bounce_reason);
+my($std_reason);
 if ($to) {
     chomp($to);
     if ($to =~ /^[^<]*<([^>]+)>/) {
@@ -54,11 +55,9 @@ if ($@) {
 
     my @reports = $bounce->reports;
     foreach my $report (@reports) {
-	my $std_reason = $report->get('std_reason');
+	$std_reason = $report->get('std_reason');
 	exit(0) if ($std_reason eq 'over_quota');
-	my $reason = $report->get('reason');
-	$bounce_reason = defined($reason) && $reason !~ /^\s*$/ ?
-	    $reason : $std_reason;
+	$bounce_reason = $report->get('reason');
     }
 }
 
@@ -69,13 +68,32 @@ $bounce_reason =~ s/\s+/ /g;
 my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
 
 my $sql = <<EOD
-INSERT INTO hebcal1.hebcal_shabbat_bounce
-       (bounce_time, bounce_address, bounce_reason)
-VALUES (NOW(), '$email_address', '$bounce_reason')
+SELECT bounce_id
+FROM hebcal1.hebcal_shabbat_bounce_address
+WHERE hebcal1.hebcal_shabbat_bounce_address.bounce_address = '$email_address'
 EOD
 ;
 
+my($id) = $dbh->selectrow_array($sql);
+if (!$id) {
+    $sql = <<EOD
+INSERT INTO hebcal1.hebcal_shabbat_bounce_address
+       (bounce_address, bounce_id, bounce_std_reason)
+VALUES ('$email_address', NULL, '$std_reason')
+EOD
+;
+    $dbh->do($sql);
+    $id = $dbh->{'mysql_insertid'};
+}
+
+$sql = <<EOD
+INSERT INTO hebcal1.hebcal_shabbat_bounce_reason
+       (bounce_id, bounce_time, bounce_reason)
+VALUES ($id, NOW(), '$bounce_reason')
+EOD
+;
 $dbh->do($sql);
+
 $dbh->disconnect;
 exit(0);
 
