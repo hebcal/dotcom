@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Mar 20 10:57:28 PST 2001
+Last modified: Wed Mar 21 15:46:29 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -892,6 +892,11 @@ sub results_page
 	$next_title = ($q->param('year') + 1);
     }
 
+    my($goto) = "<p><b>" .
+	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
+	$date . "\n" .
+	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
+
     print STDOUT $q->header(-expires => $expires_date,
 			    -type => "text/html; charset=UTF-8"),
     $q->start_html(-title => "Hebcal: Jewish Calendar $date",
@@ -924,8 +929,11 @@ sub results_page
     "<td align=\"right\"><small><a\n",
     "href=\"help/\">Help</a> -\n<a\n",
     "href=\"/search/\">Search</a></small>",
-    "</td></tr></table>",
-    "<h1>Jewish\nCalendar $date</h1>\n";
+    "</td></tr></table>\n";
+
+    unless ($q->param('vis'))
+    {
+    print STDOUT "<h1>Jewish\nCalendar $date</h1>\n";
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
@@ -974,27 +982,42 @@ so you can keep this window open.
 </ul></small></div>
 " if $ycal;
 
-    my($goto) = "<p><b>" .
-	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
-	$date . "\n" .
-	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
+    }
 
-    if ($date !~ /^\d+$/)
+    if ($q->param('vis'))
+    {
+	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
+	    "<a\nhref=\"" . &self_url($q, {'vis' => ''}) .
+	    "\">month\nview</a> | " .
+	    "<a\nhref=\"" . &self_url($q, {'month' => 'x', 'vis' => ''}) .
+	    "\">year\nview</a> | " .
+	    "printable\nview " .
+	    "]</small>";
+    }
+    elsif ($date !~ /^\d+$/)
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month view | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
-	    "\">year\nview</a> ]</small>";
+	    "\">year\nview</a> | " .
+	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) . '&amp;vis=1' .
+	    "\">printable\nview</a> " .
+	    "]</small>";
     }
     else
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
-	    "\">month\nview</a> | year view ]</small>";
+	    "\">month\nview</a> | year view | " .
+	    "<a\nhref=\"" . &self_url($q, {'month' => '1', 'vis' => 1})
+		. '&amp;vis=1' .
+	    "\">printable\nview</a> " .
+	    "]</small>";
     }
 
     $goto .= "</p>\n";
 
-    print STDOUT $goto;
+    print STDOUT $goto
+	unless $q->param('vis');
 
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -1007,6 +1030,13 @@ so you can keep this window open.
     my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     print STDOUT "<p>";
+
+    use lib '/home/users/mradwin/local/lib/perl5/5.00551';
+    use lib '/home/users/mradwin/local/lib/perl5/site_perl/5.00551';
+    use HTML::CalendarMonthSimple;
+
+    my($cal);
+    my($prev_mon) = 0;
 
     my($numEntries) = scalar(@events);
     my($i);
@@ -1021,6 +1051,8 @@ so you can keep this window open.
 	my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
 	my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+
+	my($line) = '';
 
 	if ($ycal)
 	{
@@ -1050,10 +1082,10 @@ so you can keep this window open.
 		    if $loc ne '';
 	    }
 
-	    print STDOUT
-		"<a target=\"_calendar\" href=\"http://calendar.yahoo.com/";
-	    print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
-		&Hebcal::url_escape($subj), "&amp;VIEW=d\">add</a> ";
+	    $line .= "<a target=\"_calendar\" " .
+		"href=\"http://calendar.yahoo.com/" .
+		"?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=" .
+		&Hebcal::url_escape($subj) . "&amp;VIEW=d\">add</a> ";
 	}
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
@@ -1064,27 +1096,66 @@ so you can keep this window open.
 	    $subj .= qq{\n/ <big><span lang="he" dir="rtl">$hebrew</span></big>};
 	}
 
-	if (defined $torah_href && $torah_href ne '')
+	unless ($q->param('vis'))
 	{
-	    $subj .= qq{ (<a href="$href">Drash</a>\n} .
+	    if (defined $torah_href && $torah_href ne '')
+	    {
+		$subj .= qq{ (<a href="$href">Drash</a>\n} .
 		qq{- <a href="$torah_href">Torah</a>\n} .
 		qq{- <a href="$haftarah_href">Haftarah</a>)};
-	}
-	elsif ($href ne '')
-	{
-	    $subj = qq{<a href="$href">$subj</a>};
+	    }
+	    elsif ($href ne '')
+	    {
+		$subj = qq{<a href="$href">$subj</a>};
+	    }
 	}
 
 	my($dow) = ($year > 1969 && $year < 2038) ?
 	    $Hebcal::DoW[&Hebcal::get_dow($year-1900, $mon-1, $mday)] . ' '
 		: '';
-	printf STDOUT ("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
-		       $dow, $mday, $Hebcal::MoY_short[$mon-1], $year, $subj);
-	printf STDOUT (": %d:%02dpm", $hour, $min)
+
+
+	if ($q->param('vis'))
+	{
+	    if ($prev_mon != $mon)
+	    {
+		print STDOUT $cal->as_HTML(), "<br><br>" if defined $cal;
+		$prev_mon = $mon;
+		$cal = new HTML::CalendarMonthSimple('year' => $year,
+						     'month' => $mon);
+		$cal->showdatenumbers(9);
+		$cal->width('100%');
+		$cal->border(1);
+		$cal->bgcolor('white');
+
+		$cal->header("<h2 align=\"center\"><a\n" .
+			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
+			     $date . "\n" .
+			     "<a\nhref=\"$next_url\">&gt;&gt;</a></h2>");
+	    }
+
+	    my($cal_subj) = $subj;
+	    $cal_subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj)
+		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+
+	    $cal->addcontent($mday, "<br>\n")
+		if $cal->getcontent($mday) ne '';
+	    $cal->addcontent($mday, "<small>$cal_subj</small>");
+	}
+
+
+	$line .= sprintf("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
+			 $dow, $mday, $Hebcal::MoY_short[$mon-1],
+			 $year, $subj);
+	$line .= sprintf(": %d:%02dpm", $hour, $min)
 	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
-	print STDOUT "<br>\n";
+	$line .= "<br>\n";
+
+	print STDOUT $line unless $q->param('vis');
     }
 
+    print STDOUT $cal->as_HTML(), "<br><br>"
+	if ($q->param('vis') && defined $cal);
     print STDOUT "</p>", $goto;
 
     if ($q->param('c') && $q->param('c') ne 'off')
