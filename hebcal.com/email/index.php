@@ -454,6 +454,11 @@ candle lighting times and parsha information.</p>
 <p>A confirmation message has been sent
 to <b>$html_email</b>.<br>
 Simply reply to that message to confirm your subscription.</p>
+<p>If you do not receive this acknowledgment message within an hour
+or two, then the most likely problem is that you made a typo
+in your email address.  If you don't get the confirmation message,
+please return to the subscription page and try again, taking care
+to avoid typos.</p>
 <p><small>
 $city_descr
 <br>&nbsp;&nbsp;$dst_descr
