@@ -61,15 +61,18 @@ back-end that this service uses.</p>
 
 <h2>3. How are candle lighting times determined from my zip code?</h2>
 
-<p>Geographic zip code information was downloaded from <a
-href="http://www.census.gov/cgi-bin/gazetteer">The U.S. Census Bureau's
-Gazetteer</a>.  Their database maps zip codes to latitude and longitude,
-and candle lighting times are determined from that information.</p>
+<p>Since candle lighting times are determined from latitude and
+longitude, a process called geocoding is used to determine the
+geographic position of a zip code.  Your zip code is looked up in a
+geocoded database of about 43,000 zip codes.</p>
 
-<p>Additionally, a handful of zip codes that aren't listed in the
-Gazetteer database were obtained from an Internet mapping service.  I've
-created <a href="extra-zips.txt.gz">extra-zips.txt.gz</a> in the same
-format as the Gazetteer database.</p>
+<p>Two-thirds of the zip codes were downloaded from <a
+href="http://www.census.gov/cgi-bin/gazetteer">The U.S. Census Bureau's
+Gazetteer</a> project, based on 1990 Census data.  The other third of
+the zip codes that aren't listed in the Gazetteer database were obtained
+from an Internet mapping service (available via <a
+href="extra-zips.txt.gz">extra-zips.txt.gz</a>, 161 Kbytes, in the same
+format as the Gazetteer database).</p>
 
 <h2>4. What are popular zip codes people have been using for
 candle-lighting times?</h2>
@@ -118,7 +121,7 @@ Society and Culture:Religion and Spirituality:Faiths and Practices:Judaism:Resou
 
 <h2>7. I'm a programmer.  Can I see the source code?</h2>
 
-Sure thing:
+Sure!  Use of the following is subject to the GNU General Public License:
 
 <ul>
   <li><tt><a href="hebcal.pl">hebcal.pl</a></tt>, source code to the CGI
@@ -141,7 +144,7 @@ Sure thing:
 <!-- mjrsig end -->
 <small>
 <!-- hhmts start -->
-Last modified: Wed Sep 15 15:52:31 PDT 1999
+Last modified: Thu Sep 16 13:38:55 PDT 1999
 <!-- hhmts end -->
 </small>
 </body>
