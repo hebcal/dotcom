@@ -164,17 +164,9 @@ href="/search/">Search</a></small>
 </td></tr></table>
 <!--/htdig_noindex-->
 <h1>Candle lighting times for world cities</h1>
-<h3>$parsha<br>$fday $fmonth_text $fyear</h3>
-<h4>United States</h4>
-<p>
-<form action="/shabbat/">
-<input type="hidden" name="geo" value="zip">
-<label for="zip">Enter Zip code:</label>
-<input type="text" name="zip" size="5" maxlength="5" id="zip">
-<input type="hidden" name="m" value="72">
-<input type="submit" value="Go">
-</form>
-</p>
+<h3>$parsha / $fday $fmonth_text $fyear</h3>
+<table border="0">
+<tr><td>
 <h4>International Cities</h4>
 <br>
 <table border="1" cellpadding="3">
@@ -207,6 +199,22 @@ foreach my $city (sort keys %Hebcal::city_tz)
 
 my $copyright = Hebcal::html_copyright2('',0,undef);
 print OUT <<EOHTML;
+</table>
+</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">
+<h4>United States</h4>
+<p>
+<form action="/shabbat/">
+<input type="hidden" name="geo" value="zip">
+<label for="zip">Enter Zip code:</label>
+<input type="text" name="zip" size="5" maxlength="5" id="zip">
+<input type="hidden" name="m" value="72">
+<input type="submit" value="Go">
+</form>
+</p>
+</td>
+</tr>
 </table>
 <p>
 <hr noshade size="1">
