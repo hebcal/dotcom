@@ -628,6 +628,9 @@ name="copyright">Copyright &copy; $this_year
 Michael J. Radwin. All rights reserved.</a>
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a>
+<br>This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal
+3.2 for UNIX</a>, Copyright &copy; 1994 <a
+href="http://www.sadinoff.com/">Danny Sadinoff</a>.  All rights reserved.
 <br>$hhmts ($rcsrev)
 </font></body></html>
 };
