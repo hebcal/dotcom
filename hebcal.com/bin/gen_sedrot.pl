@@ -206,22 +206,24 @@ lang="he">$hebrew</h1></td>
 <h3><a name="torah">Torah Portion:</a>
 <a href="$torah_href">$torah</a></h3>
 <a name="aliyot">Shabbat aliyot (full kriyah):</a>
-<ol>
+<dl compact>
 EOHTML
 ;
 
-    foreach (1 .. 7)
+    foreach (1 .. 7, 'M')
     {
 	my($aliyah) = $sedrot->val($sedrot_h, "aliyah$_");
+	next if (!defined $aliyah && $_ eq 'M');
 	die "no aliyah $_ defined for $h" unless defined $aliyah;
 	my($c1,$v1,$c2,$v2) = ($aliyah =~ /^(\d+):(\d+)-(\d+):(\d+)$/);
 	$aliyah = "$c1:$v1-$v2"
 	    if ($c1 == $c2);
-	print OUT2 qq{<li>$aliyah\n};
+	my($label) = ($_ eq 'M') ? 'maf' : $_;
+	print OUT2 qq{<dt>$label:<dd>$aliyah\n};
     }
 
     print OUT2 <<EOHTML;
-</ol>
+</dl>
 <h3><a name="haftarah">Haftarah:</a>
 <a href="$haftarah_href">$haftarah</a>$seph</h3>
 EOHTML
