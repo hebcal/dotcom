@@ -6,7 +6,7 @@
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head><title>Hebcal 1-Click Shabbat by Email</title>
-<base href="http://www.hebcal.com/email/" target="_top">
+<base href="http://www.hebrewcalendar.org/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
 class="navbar"><tr><td><small><strong><a
@@ -21,7 +21,6 @@ href="/help/">Help</a> -
 <?php
 require_once('smtp.inc');
 require_once('zips.inc');
-require_once('dblock.inc');
 require_once('HTML/Form.php');
 
 $VER = '$Revision$';
@@ -62,18 +61,16 @@ if (isset($param['e']))
 {
     $param['em'] = base64_decode($param['e']);
     $info = get_sub_info($param['em']);
-    if ($info && !preg_match('/^action=/', $info)) {
-	$array = explode(';', $info);
-	foreach ($array as $i) {
-	    $parts = explode('=', $i, 2);
-	    if ($parts[0] == 'upd') {
-		$parts[1] = ($parts[1] == '1') ? 'on' : '';
+    if (!isset($info['action'])) {
+	foreach ($info as $k => $v) {
+	    if ($k == 'upd') {
+		$param[$k] = ($v == '1') ? 'on' : '';
+	    } else {
+		$param[$k] = $v;
 	    }
-	    $param[$parts[0]] = $parts[1];
 	}
 	if (isset($param['city'])) {
 	    $param['geo'] = 'city';
-	    $param['city'] = urldecode($param['city']);
 	}
     }
 }
@@ -115,32 +112,53 @@ else {
 }
 my_footer();
 
+function my_open_db() {
+    $passfile = file('hebcal-db-pass.cgi');
+    $password = trim($passfile[0]);
+    $db = mysql_pconnect('mysql.radwin.net', 'mradwin_mt', $password)
+	or die("Could not connect: " . mysql_error());
+    return $db;
+}
+
 function write_sub_info($email, $val) {
-    list($id, $fd) = dba_lock_open("subs.db", "w", "db3");
-
-    if (!$id) {
-	die("dba_open subs.db failed");
-    }
-
-    if (!dba_replace($email, $val, $id)) {
-	die("dba_replace subs.db failed");
-    }
-
-    dba_lock_close($id, $fd);
-
     return true;
 }
 
 function get_sub_info($email) {
-    list($id, $fd) = dba_lock_open("subs.db", "r", "db3");
+    $db = my_open_db();
+    $sql = <<<EOD
+SELECT email_verify, email_address, email_status, email_created,
+       email_confirmed, email_candles_zipcode, email_candles_timezone,
+       email_candles_dst, email_candles_havdalah, email_candles_city,
+       email_optin_announce
+FROM mradwin_mt1.hebcal_shabbat_email
+WHERE email_address = '$email'
+EOD;
 
-    if (!$id) {
-	die("dba_open subs.db failed");
+    $result = mysql_query($sql, $db)
+	or die("Invalid query 1: " . mysql_error());
+
+    if (mysql_num_rows($result) != 1) {
+	return array();
     }
 
-    $val = dba_fetch($email, $id);
+    list($verify,$address,$status,$created,$confirmed,$zip,$timezone,$dst,$havdalah,$city,$optin_announce) = mysql_fetch_row($result);
 
-    dba_lock_close($id, $fd);
+    $val = array(
+	'em' => $address,
+	'm' => $havdalah,
+	'upd' => $optin_announce,
+	'zip' => $zip,
+	'tz' => $timezone,
+	'dst' => $dst,
+	'city' => $city,
+	't' => $created,
+	't2' => $confirmed,
+	);
+
+    if ($status != 'ok') {
+	$val['action'] = $status;
+    }
 
     return $val;
 }
@@ -150,46 +168,52 @@ function write_staging_info($param)
     global $HTTP_SERVER_VARS;
 
     $now = time();
+
+    # As of PHP 4.2.0, there is no need to seed the random 
+    # number generator as this is now done automatically.
     $rand = pack("V", rand());
+
     if ($HTTP_SERVER_VARS["REMOTE_ADDR"]) {
 	list($p1,$p2,$p3,$p4) = explode('.', $HTTP_SERVER_VARS["REMOTE_ADDR"]);
 	$rand .= pack("CCCC", $p1, $p2, $p3, $p4);
     }
     $rand .= pack("V", $now);
 
-    $encoded = rtrim(base64_encode($rand));
-    $encoded = strtr($encoded, '+/=', '___');
-    $encoded = strtolower($encoded);
+    $encoded = bin2hex($rand);
 
-    list($id, $fd) = dba_lock_open("email.db", "w", "db3");
+    $db = my_open_db();
 
     if ($param['geo'] == 'zip')
     {
-	$val = sprintf("zip=%s;tz=%s;dst=%s",
-		       $param['zip'],
-		       $param['tz'],
-		       $param['dst']);
+	$sql = <<<EOD
+INSERT INTO mradwin_mt1.hebcal_shabbat_email
+(email_verify, email_address, email_status, email_created, email_confirmed,
+ email_candles_havdalah, email_optin_announce,
+ email_candles_zipcode, email_candles_timezone, email_candles_dst)
+VALUES ('$encoded', '$param[em]', 'pending', NOW(), NULL,
+	'$param[m]', '$param[upd]',
+	'$param[zip]', '$param[tz]', '$param[dst]')
+EOD;
     }
     else if ($param['geo'] == 'city')
     {
-	$val = 'city=' . urlencode($param['city']);
-    }
-    else
-    {
-	$val = 'bogus=1';
-    }
-
-    $val .= sprintf(";m=%s;upd=%d;t=%d;em=%s",
-		   $param['m'],
-		   $param['upd'] ? 1 : 0,
-		   $now,
-		   $param['em']);
-
-    if (!dba_replace($encoded, $val, $id)) {
-	die("dba_replace email.db failed");
+	$sql = <<<EOD
+INSERT INTO mradwin_mt1.hebcal_shabbat_email
+(email_verify, email_address, email_status, email_created, email_confirmed,
+ email_candles_havdalah, email_optin_announce,
+ email_candles_city)
+VALUES ('$encoded', '$param[em]', 'pending', NOW(), NULL,
+	'$param[m]', '$param[upd]',
+	'$param[city]')
+EOD;
     }
 
-    dba_lock_close($id, $fd);
+    $result = mysql_query($sql, $db)
+	or die("Invalid query 2: " . mysql_error());
+
+    if (mysql_affected_rows($db) != 1) {
+	die("foo!");
+    }
 
     return $encoded;
 }
@@ -408,7 +432,7 @@ function subscribe($param) {
 
     # check if email address already verified
     $info = get_sub_info($recipients);
-    if ($info && !preg_match('/^action=/', $info))
+    if (isset($info['action']))
     {
 	$now = time();
 	write_sub_info(
@@ -555,7 +579,7 @@ function unsubscribe($param) {
     $html_email = htmlentities($param['em']);
     $info = get_sub_info($param['em']);
 
-    if ($info && preg_match('/^action=/', $info)) {
+    if (isset($info['action'])) {
 	$html = <<<EOD
 <h2>Already Unsubscribed</h2>
 <p><b>$html_email</b>
