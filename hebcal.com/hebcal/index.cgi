@@ -516,6 +516,12 @@ JSCRIPT_END
     "</label></p>\n";
 
     print STDOUT "<p><strong>Other options:</strong>",
+    "<br><label\nfor=\"vis\">",
+    $q->checkbox(-name => 'vis',
+		 -id => 'vis',
+		 -checked => 'checked',
+		 -label => "\nDisplay visual calendar grid"),
+    "</label>",
     "<br><label\nfor=\"a\">",
     $q->checkbox(-name => 'a',
 		 -id => 'a',
@@ -745,7 +751,7 @@ so you can keep this window open.
     else
     {
 	$goto .= "<b>event list</b> | <a\nhref=\"" .
-	    &self_url($q, {'vis' => '1'}) . "\">calendar\ngrid</a> ]";
+	    &self_url($q, {'vis' => 'on'}) . "\">calendar\ngrid</a> ]";
     }
 
     $goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
@@ -883,11 +889,12 @@ so you can keep this window open.
 		$cal->border(1);
 		$cal->bgcolor('white');
 
-		$cal->header("<h2 align=\"center\"><a\n" .
+		$cal->header("<h2 align=\"center\"><a class=\"goto\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
 			     $Hebcal::MoY_long{$mon} . ' ' .
 			     $q->param('year') . "\n" .
-			     "<a\nhref=\"$next_url\">&gt;&gt;</a></h2>");
+			     "<a class=\"goto\"\n" .
+			     "href=\"$next_url\">&gt;&gt;</a></h2>");
 	    }
 
 	    my($cal_subj) = $subj;
