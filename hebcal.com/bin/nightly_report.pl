@@ -2,75 +2,7 @@
 
 use DB_File;
 use strict;
-
-my(%known_timezones) =
-    (
-     '99692', -10, # west alaska
-     '996', '??',		# west AK
-     '324', -6, # west florida
-     '325', -6, # west florida
-     '463', '??', # northwest indiana
-     '464', '??', # northwest indiana
-     '476', '??', # southwest indiana
-     '477', '??', # southwest indiana
-     '677', '??', # west kansas
-     '678', '??', # west kansas
-     '679', '??', # west kansas
-     '799', -7, # el paso
-     '798', '??', # west texas
-     '838', -8, # north idaho
-     '835', -8, # north idaho
-     '979', '??', # east oregon
-     '498', '??', # west michigan
-     '499', '??', # west michigan
-     'KS', -6,
-     'IN', -5,
-     'MI', -5,
-     'ID', -7,
-     'OR', -8,
-     'FL', -5,
-     'HI', -10,
-     'AK', -9,
-     'CA', -8,
-     'NV', -8,
-     'WA', -8,
-     'MT', -7,
-     'AZ', -7,
-     'UT', -7,
-     'WY', -7,
-     'CO', -7,
-     'NM', -7,
-     'TX', -6,
-     'OK', -6,
-     'IL', -6,
-     'WI', -6,
-     'MN', -6,
-     'IA', -6,
-     'MO', -6,
-     'AR', -6,
-     'LA', -6,
-     'MS', -6,
-     'AL', -6,
-     'OH', -5,
-     'RI', -5,
-     'MA', -5,
-     'NY', -5,
-     'NH', -5,
-     'VT', -5,
-     'ME', -5,
-     'CT', -5,
-     'NJ', -5,
-     'DE', -5,
-     'DC', -5,
-     'PA', -5,
-     'WV', -5,
-     'VA', -5,
-     'NC', -5,
-     'SC', -5,
-     'GA', -5,
-     'MD', -5,
-     'PR', -5,
-     );
+use Hebcal;
 
 my(%DB);
 my($dbmfile) = '/home/web/radwin.org/docs/hebcal/zips.db';
@@ -178,23 +110,23 @@ while(<STDIN>)
 		    if (/=auto/)
 		    {
 			my($ok) = 0;
-			if (defined $known_timezones{$zipcode})
+			if (defined $Hebcal::known_timezones{$zipcode})
 			{
-			    if ($known_timezones{$zipcode} ne '??')
+			    if ($Hebcal::known_timezones{$zipcode} ne '??')
 			    {
 				$ok = 1;
 			    }
 			}
-			elsif (defined $known_timezones{substr($zipcode,0,3)})
+			elsif (defined $Hebcal::known_timezones{substr($zipcode,0,3)})
 			{
-			    if ($known_timezones{substr($zipcode,0,3)} ne '??')
+			    if ($Hebcal::known_timezones{substr($zipcode,0,3)} ne '??')
 			    {
 				$ok = 1;
 			    }
 			}
-			elsif (defined $known_timezones{$state})
+			elsif (defined $Hebcal::known_timezones{$state})
 			{
-			    if ($known_timezones{$state} ne '??')
+			    if ($Hebcal::known_timezones{$state} ne '??')
 			    {
 				$ok = 1;
 			    }
