@@ -36,7 +36,7 @@ $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed May  9 14:17:55 PDT 2001
+Last modified: Wed May  9 14:54:16 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -433,6 +433,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
 	{
+	    delete($rss{'description'});
 	    &out_wap(\%rss);
 	}
 	else
@@ -444,8 +445,16 @@ for ($i = 0; $i < $numEntries; $i++)
     }
     else
     {
-	$rss{'title'} = ($subj =~ /^(Parshas|Parashat)\s+/) ?
-	    "This week's Torah portion is " : "Holiday: ";
+	if ($subj =~ /^(Parshas|Parashat)\s+/)
+	{
+	    $rss{'title'} =
+		(defined $q->param('cfg') && $q->param('cfg') eq 'w') ?
+		    'Torah: ' : "This week's Torah portion is ";
+	}
+	else
+	{
+	    $rss{'title'} = "Holiday: ";
+	}
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
 	    = &Hebcal::get_holiday_anchor($subj,0,$q);
@@ -478,6 +487,8 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
 	{
+	    delete($rss{'description'})
+		if ($subj =~ /^(Parshas|Parashat)\s+/);
 	    &out_wap(\%rss);
 	}
 	else
