@@ -659,7 +659,7 @@ sub results_page()
 	$next_title = ($q->param('year') + 1);
     }
 
-    my($goto) = "<p><b>" .
+    my($goto) = "<p class=\"goto\"><b>" .
 	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
 	$date . "\n" .
 	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
@@ -932,7 +932,8 @@ so you can keep this window open.
     print STDOUT $goto;
 
     # download links
-    print STDOUT "<p>Advanced options:\n<small>[ <a href=\"", $script_name;
+    print STDOUT qq{<p class="goto">Advanced options:\n<small>[ <a href="},
+	$script_name;
     print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
     print STDOUT "/$filename.csv?dl=1";
 
