@@ -61,7 +61,7 @@ my $cfg;
 my($evts,undef,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 
-my $hebrew_year = 'zzzz';
+my $hebrew_year = '';
 if ($evts->[0]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Rosh Hashana (\d{4})$/)
 {
     $hebrew_year = $1;
@@ -106,7 +106,7 @@ sub format_items
 	my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
 
-	my $stime = sprintf("%2d %s - %d:%02dp", 
+	my $stime = sprintf("%2d %s &nbsp;%d:%02dp", 
 			    $mday, $Hebcal::MoY_short[$mon], $hour, $min);
 	$stime =~ s/^ /&nbsp;/;
 	push(@items, $stime);
@@ -114,20 +114,20 @@ sub format_items
 
     Hebcal::out_html($cfg,qq{<p><table border="1" cellpadding="8"><tr>\n});
 
-    my $quarter = int(scalar(@items) / 3);
+    my $third = int(scalar(@items) / 3);
     for (my $i = 0; $i < 3; $i++)
     {
 	Hebcal::out_html($cfg,"<td>\n");
-	for (my $j = 0; $j < $quarter; $j++)
+	for (my $j = 0; $j < $third; $j++)
 	{
-	    my $k = $j + ($quarter * $i);
+	    my $k = $j + ($third * $i);
 	    Hebcal::out_html($cfg, "<tt>$items[$k]</tt>",
 			     "<br>\n");
 	}
 	Hebcal::out_html($cfg,"</td>\n");
     }
 
-    Hebcal::out_html($cfg,qq{</tr></table></p>\n});
+    Hebcal::out_html($cfg,qq{</tr></table></p><p>&nbsp;</p>\n});
 }
 
 sub process_args
@@ -272,9 +272,6 @@ sub process_args
     $cmd .= " -Z " . $q->param('dst')
 	if (defined $q->param('dst') && $q->param('dst') ne '');
 
-    $cmd .= " -m " . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
     foreach ('a', 'i')
     {
 	$cmd .= ' -' . $_
@@ -303,13 +300,7 @@ sub form
 	"<h1>1-Click\nShabbat Candle Lighting Times</h1>\n";
     }
 
-    if (defined $cfg && $cfg eq 'w')
-    {
-	Hebcal::out_html($cfg,qq{<p>$message</p>\n},
-		  qq{<do type="accept" label="Back">\n},
-		  qq{<prev/>\n</do>\n</card>\n</wml>\n});
-	exit(0);
-    }
+    Hebcal::out_html($cfg, qq{<div class="goto">\n});
 
     if ($message ne '')
     {
@@ -353,13 +344,6 @@ sub form
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
-	"<br><label\nfor=\"m1\">Havdalah minutes past sundown:\n",
-	$q->textfield(-name => 'm',
-		      -id => 'm1',
-		      -size => 3,
-		      -maxlength => 3,
-		      -default => $Hebcal::havdalah_min),
-	"</label>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
 
@@ -376,17 +360,12 @@ sub form
 	$q->hidden(-name => 'geo',
 		   -value => 'city',
 		   -override => 1),
-	"<br><label\nfor=\"m2\">Havdalah minutes past sundown:\n",
-	$q->textfield(-name => 'm',
-		      -id => 'm2',
-		      -size => 3,
-		      -maxlength => 3,
-		      -default => $Hebcal::havdalah_min),
-	"</label>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
 	qq{</td></tr></table>});
 
     Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
+
+    Hebcal::out_html($cfg, qq{</div>\n});
 
     exit(0);
 }
