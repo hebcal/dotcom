@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 19 10:44:22 PST 2001
+Last modified: Thu Jan 25 12:09:17 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -554,17 +554,29 @@ JSCRIPT_END
 
     $q->param('c','off') unless defined $q->param('c');
 
-    my $type = (defined $q->param('geo') && $q->param('geo') eq 'city') ?
-	"closest city" :
-	    (defined $q->param('geo') && $q->param('geo') eq 'pos') ?
-		"latitude/longitude" : "zip code";
+    my($type) = 'zip code';
+    my($after_type) = '';
+    if (defined $q->param('geo'))
+    {
+	if ($q->param('geo') eq 'city')
+	{
+	    $type = "closest city";
+	}
+	elsif ($q->param('geo') eq 'pos')
+	{
+	    $type = "latitude/longitude";
+	    $after_type = "<small>(<a\n" . 
+		"href=\"http://shiva.pub.getty.edu/tgn_browser/\">search\n" .
+		"latitude/longitude</a>)</small>\n";
+	}
+    }
 
     print STDOUT "<br><label\nfor=\"c\">",
     $q->checkbox(-name => 'c',
 		 -id => 'c',
 		 -checked => 'checked',
 		 -label => "\nCandle lighting times for $type:"),
-    "</label>",
+    "</label>", $after_type,
     "<br><small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(or select by\n";
 
     if (defined $q->param('geo') && $q->param('geo') eq 'city')
