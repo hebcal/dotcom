@@ -9,16 +9,24 @@ RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ /wap-shabbat.php [L]
 
 # block messianic sites from linking to us
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.heartofisrael\.org.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.messianicdirectory\.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.levitt\.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.levadonai\.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.barujataadonai\.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.messianicdirectory\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*heartofisrael\.org.* [OR]
+RewriteCond %{HTTP_REFERER} .*aytschayim\.org.* [OR]
+RewriteCond %{HTTP_REFERER} .*levitt\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*godonthe\.net.* [OR]
+RewriteCond %{HTTP_REFERER} .*godwithus\.org.* [OR]
+RewriteCond %{HTTP_REFERER} .*levadonai\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*barujataadonai\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*annieshomepage\.com.* [OR]
 RewriteCond %{HTTP_REFERER} ^http:\/\/bettythompson1\.tripod\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*cybertime\.net\/~ajgood.* [OR]
+RewriteCond %{HTTP_REFERER} .*geocities\.com\/Heartland\/Meadows\/8404 [OR]
+RewriteCond %{HTTP_REFERER} ^http:\/\/members\.cox\.net\/8thday.* [OR]
 RewriteCond %{HTTP_REFERER} ^http:\/\/groups\.msn\.com\/WalkingInTheLightJohn316.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.circlegame\.com.* [OR]
-RewriteCond %{HTTP_REFERER} ^http:\/\/www\.ammishaddai\.com.*
+RewriteCond %{HTTP_REFERER} .*circlegame\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*ammishaddai\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*kecirohomeschool\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*yeshua.* [OR]
+RewriteCond %{HTTP_REFERER} .*messianic.*
 RewriteRule ^  http://www.jewsforjudaism.org/  [R,L]
 
 AddType application/x-javascript js
