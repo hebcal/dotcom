@@ -24,6 +24,7 @@ $url = "/shabbat/shabbat.cgi";
 if ($qs) {
     $url .= "?$qs";
     $cqs = preg_replace('/[&;]?tag=[^&;]+/', "", $qs);
+    $cqs = preg_replace('/[&;]?\.from=[^&;]+/', "", $cqs);
     $cqs = strtr($cqs, "&;./", ",,_-");
     $cqs = str_replace("%20", "+", $cqs);
     $dir = getenv("DOCUMENT_ROOT") . "/cache/shabbat/shabbat_cgi";
