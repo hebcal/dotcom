@@ -96,15 +96,16 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 </head>
 <body>";
 
+$hhmts = "<!-- hhmts start -->
+Last modified: Tue Aug 10 16:58:39 PDT 1999
+<!-- hhmts end -->";
+
+$hhmts =~ s/<!--.*-->//g;
+$hhmts =~ s/\n//g;
+
 $html_footer = "<hr noshade size=\"1\">
-<em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em>
-<br><br>
-<small>
-<!-- hhmts start -->
-Last modified: Tue Aug 10 16:40:38 PDT 1999
-<!-- hhmts end -->
-($rcsrev)
-</small>
+<em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em><br><br>
+<small>$hhmts ($rcsrev)</small>
 </body></html>
 ";
 
@@ -716,7 +717,7 @@ sub download
 <title>Hebcal: Jewish Calendar $date</title>
 <meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"michael\@radwin.org\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>
 <meta name=\"robots\" content=\"noindex\">
-<link rel=\"start\" href=\"http://www.radwin.org$cgipath\" title=\"Hebcal Interactive Jewish Calendar\">
+<link rel=\"start\" href=\"$cgipath\" title=\"Hebcal Interactive Jewish Calendar\">
 <link rel=\"prev\" href=\"$prev_url\" title=\"$prev_title\">
 <link rel=\"next\" href=\"$next_url\" title=\"$next_title\">
 </head>
@@ -814,7 +815,7 @@ open.</small></p>
     }
     close(HEBCAL);
 
-    print STDOUT "</pre>\n", $html_footer;
+    print STDOUT "</pre>", $html_footer;
 
     close(STDOUT);
     exit(0);
