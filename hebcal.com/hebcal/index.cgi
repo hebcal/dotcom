@@ -56,6 +56,7 @@ use Palm::DBA ();
 
 my $http_expires = "Tue, 02 Jun 2037 20:00:00 GMT";
 my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
+my $content_type = "text/html; charset=UTF-8";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
@@ -76,7 +77,7 @@ my $q = new CGI;
 $q->delete(".s");		# we don't care about submit button
 
 my $script_name = $q->script_name();
-$script_name =~ s,/index.cgi$,/,;
+$script_name =~ s,/[^/]+$,/,;
 
 my $cookies = Hebcal::get_cookies($q);
 my $C_cookie = (defined $cookies->{"C"}) ? "C=" . $cookies->{"C"} : "";
@@ -199,25 +200,27 @@ else
 		    $q->param("year"));
 }
 
-if (! defined $q->path_info())
+my $pi = $q->path_info();
+if (! defined $pi)
 {
+    my $cache = Hebcal::cache_begin($q);
     results_page($g_date, $g_filename);
+    Hebcal::cache_end() if $cache;
 }
-elsif ($q->path_info() =~ /[^\/]+\.csv$/)
+elsif ($pi =~ /[^\/]+\.csv$/)
 {
     csv_display();
 }
-elsif ($q->path_info() =~ /[^\/]+\.dba$/)
+elsif ($pi =~ /[^\/]+\.dba$/)
 {
     dba_display();
 }
-elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
+elsif ($pi =~ /[^\/]+\.tsv$/)
 {
     macintosh_datebook_display();
 }
-elsif ($q->path_info() =~ /[^\/]+\.[vi]cs$/)
+elsif ($pi =~ /[^\/]+\.[vi]cs$/)
 {
-    # text/x-vCalendar
     vcalendar_display($g_date);
 }
 elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
@@ -226,7 +229,9 @@ elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
 }
 else
 {
+    my $cache = Hebcal::cache_begin($q);
     results_page($g_date, $g_filename);
+    Hebcal::cache_end() if $cache;
 }
 
 close(STDOUT);
@@ -243,10 +248,10 @@ sub javascript_events
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
 
-    print $q->header(-type => "application/x-javascript",
-		     -last_modified => Hebcal::http_date($time),
-		     -expires => $http_expires,
-		     );
+    print STDOUT $q->header(-type => "application/x-javascript",
+			    -last_modified => Hebcal::http_date($time),
+			    -expires => $http_expires,
+			    );
 
     for (my $i = 0; $i < @events; $i++)
     {
@@ -340,23 +345,21 @@ sub dba_display
     my @events = Hebcal::invoke_hebcal($cmd, $loc,
 	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
 
-    my $dst = (defined($q->param("dst")) && $q->param("dst") eq "usa") ?
-	1 : 0;
+    my $dst = (defined($q->param("dst")) && $q->param("dst") eq "usa") ? 1 : 0;
     my $tz = $q->param("tz");
 
     if (defined $q->param("geo") && $q->param("geo") eq "city" &&
 	defined $q->param("city") && $q->param("city") ne "")
     {
-	$dst = $Hebcal::city_dst{$q->param("city")} eq "none" ?
-	    0 : 1;
+	$dst = $Hebcal::city_dst{$q->param("city")} eq "none" ? 0 : 1;
 	$tz = $Hebcal::city_tz{$q->param("city")};
     }
 
     Hebcal::export_http_header($q, "application/x-palm-dba");
 
-    my $path_info = $q->path_info();
-    $path_info =~ s,^.*/,,;
-    Palm::DBA::write_header($path_info);
+    my $basename = $q->path_info();
+    $basename =~ s,^.*/,,;
+    Palm::DBA::write_header($basename);
     Palm::DBA::write_contents(\@events, $tz, $dst);
 }
 
@@ -405,16 +408,15 @@ if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
 JSCRIPT_END
 
-    my $charset = ($q->param("heb") && $q->param("heb") =~ /^on|1$/)
-	? "; charset=UTF-8" : "";
+    my @head = (
+    qq{<meta http-equiv="Content-Type" content="$content_type">},
+    qq{<script language="JavaScript" type="text/javascript"><!--\n} .
+    $JSCRIPT . qq{// --></script>},
+    );
 
-    my @head = (qq{<script language="JavaScript" type="text/javascript"><!--\n} .
-		$JSCRIPT . qq{// --></script>});
-    if ($charset) {
-	push(@head, qq{<meta http-equiv="Content-Type" content="text/html${charset}">});
-    }
+    print STDOUT $q->header(-type => $content_type);
 
-    print STDOUT $q->header(-type => "text/html${charset}"),
+    Hebcal::out_html(undef,
     Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
 		       \@head,
 			{
@@ -426,7 +428,7 @@ JSCRIPT_END
 		       undef
 		   ),
     Hebcal::navbar2($q, "Interactive Calendar", 1, undef, undef),
-    "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
+    "<h1>Hebcal\nInteractive Jewish Calendar</h1>");
 
     if ($message ne "")
     {
@@ -439,7 +441,8 @@ JSCRIPT_END
 	$message = referred_by_websearch($q, "form below", "#form");
     }
 
-    print STDOUT $message, "\n",
+    Hebcal::out_html(undef,
+    $message, "\n",
     "<a name=\"form\"></a>",
     "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
@@ -470,12 +473,15 @@ JSCRIPT_END
 		    -onClick => "s6(this.value)",
 		    -labels =>
 		    {"G" => "\nGregorian (common era) ",
-		     "H" => "\nHebrew Year "});
+		     "H" => "\nHebrew Year "}));
 
-    print STDOUT "<p><table border=\"0\" cellpadding=\"0\"\n",
-    "cellspacing=\"0\" style=\"margin-bottom: 10px\"><tr valign=\"top\"><td>\n";
+    Hebcal::out_html(undef,
+    "<p><table border=\"0\" cellpadding=\"0\"\n",
+    "cellspacing=\"0\" style=\"margin-bottom: 10px\">",
+    "<tr valign=\"top\"><td>\n");
 
-    print STDOUT "<b>Include events</b>",
+    Hebcal::out_html(undef,
+    "<b>Include events</b>",
     "<br><label\nfor=\"nh\">",
     $q->checkbox(-name => "nh",
 		 -id => "nh",
@@ -511,9 +517,10 @@ JSCRIPT_END
 		     "on" => "\nIsrael "}),
     "\n&nbsp;<small>(<a\n",
     "href=\"/help/sedra.html#scheme\">What\n",
-    "is the difference?</a>)</small>";
+    "is the difference?</a>)</small>");
 
-    print STDOUT "<p><b>Other options</b>",
+    Hebcal::out_html(undef,
+    "<p><b>Other options</b>",
     "<br><label\nfor=\"vis\">",
     $q->checkbox(-name => "vis",
 		 -id => "vis",
@@ -541,49 +548,52 @@ JSCRIPT_END
 		 -id => "heb",
 		 -label => "\nShow Hebrew event names"),
     "</label>",
-    "\n";
+    "\n");
 
     $q->param("c","off") unless defined $q->param("c");
     $q->param("geo","zip") unless defined $q->param("geo");
 
-    print STDOUT "</td><td><img src=\"/i/black-1x1.gif\"\n",
-    "width=\"1\" height=\"250\" hspace=\"10\" alt=\"\"></td><td>\n";
-    print STDOUT $q->hidden(-name => "c",
-			    -id => "c"),
+    Hebcal::out_html(undef, "</td><td><img src=\"/i/black-1x1.gif\"\n",
+    "width=\"1\" height=\"250\" hspace=\"10\" alt=\"\"></td><td>\n");
+
+    Hebcal::out_html(undef,
+    $q->hidden(-name => "c",
+	       -id => "c"),
     $q->hidden(-name => "geo",
 	       -default => "zip",
 	       -id => "geo"),
-    "<b>Candle lighting times</b>\n";
+    "<b>Candle lighting times</b>\n");
 
-    print STDOUT "<br><small>[\n";
+    Hebcal::out_html(undef, "<br><small>[\n");
     foreach my $type ("none", "zip", "city", "pos")
     {
 	if ($type eq $q->param("geo")) {
-	    print STDOUT $long_candles_text{$type};
+	    Hebcal::out_html(undef, $long_candles_text{$type});
 	} else {
-	    print STDOUT alt_candles_text($q, $type);
+	    Hebcal::out_html(undef, alt_candles_text($q, $type));
 	}
 	if ($type ne "pos") {
-	    print STDOUT "\n| ";
+	    Hebcal::out_html(undef, "\n| ");
 	}
     }
-    print STDOUT "\n]</small><br><br>\n";
+    Hebcal::out_html(undef, "\n]</small><br><br>\n");
 
     if ($q->param("geo") eq "city")
     {
-	print STDOUT
+	Hebcal::out_html(undef,
 	"<label\nfor=\"city\">Large City:</label>\n",
 	$q->popup_menu(-name => "city",
 		       -id => "city",
 		       -values => [sort keys %Hebcal::city_tz],
-		       -default => "New York");
+		       -default => "New York"));
     }
     elsif ($q->param("geo") eq "pos")
     {
-	print STDOUT "<small><a href=\"$latlong_url\">Search</a>\n",
-	"for the exact location of your city.</small><br><br>\n";
-
-	print STDOUT
+	Hebcal::out_html(undef,
+	"<small><a href=\"$latlong_url\">Search</a>\n",
+	"for the exact location of your city.</small><br><br>\n");
+	  
+	Hebcal::out_html(undef,
 	"<label\nfor=\"ladeg\">",
 	$q->textfield(-name => "ladeg",
 		      -id => "ladeg",
@@ -620,23 +630,23 @@ JSCRIPT_END
 		       -values => ["w","e"],
 		       -default => "w",
 		       -labels => {"e" => "East Longitude",
-				   "w" => "West Longitude"});
+				   "w" => "West Longitude"}));
     }
     elsif ($q->param("geo") ne "none")
     {
 	# default is Zip Code
-
-	print STDOUT "<label\nfor=\"zip\">Zip code:</label>\n",
+	Hebcal::out_html(undef,
+	"<label\nfor=\"zip\">Zip code:</label>\n",
 	$q->textfield(-name => "zip",
 		      -id => "zip",
 		      -size => 5,
-		      -maxlength => 5);
-#	print STDOUT "\n&nbsp;<small>(leave blank to turn off)</small>\n";
+		      -maxlength => 5));
     }
 
     if ($q->param("geo") eq "pos" || $q->param("tz_override"))
     {
-	print STDOUT "<br><label for=\"tz\">Time zone:</label>\n",
+	Hebcal::out_html(undef,
+	"<br><label for=\"tz\">Time zone:</label>\n",
 	$q->popup_menu(-name => "tz",
 		       -id => "tz",
 		       -values =>
@@ -654,29 +664,31 @@ JSCRIPT_END
 		       -id => "dst",
 		       -values => ["usa","eu","israel","aunz","none"],
 		       -default => "none",
-		       -labels => \%Hebcal::dst_names);
+		       -labels => \%Hebcal::dst_names));
     }
 
     if ($q->param("geo") ne "none") {
-    print STDOUT "<br><label\nfor=\"m\">",
-    "Havdalah minutes past sundown:</label>\n",
-    $q->textfield(-name => "m",
-		  -id => "m",
-		  -size => 3,
-		  -maxlength => 3,
-		  -default => $Hebcal::havdalah_min),
-    "\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off Havdalah times)</small>\n",
-    "\n";
+	Hebcal::out_html(undef,
+	"<br><label\nfor=\"m\">",
+	"Havdalah minutes past sundown:</label>\n",
+	$q->textfield(-name => "m",
+		      -id => "m",
+		      -size => 3,
+		      -maxlength => 3,
+		      -default => $Hebcal::havdalah_min),
+	"\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off Havdalah\n",
+	"times)</small>\n\n");
     }
 
-    print STDOUT "</td></tr></table>\n",
+    Hebcal::out_html(undef,
+    "</td></tr></table>\n",
     $q->submit(-name => ".s",-value => "Get Calendar"),
     $q->hidden(-name => ".cgifields",
 	       -values => ["nx", "nh", "set"],
 	       "-override"=>1),
-    "</form>\n";
+    "</form>\n");
 
-    print STDOUT Hebcal::html_footer($q,$rcsrev);
+    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev));
 
     exit(0);
     1;
@@ -818,10 +830,8 @@ sub results_page
 	$date . "\n" .
 	"<a title=\"$next_title\"\nhref=\"$next_url\">&gt;&gt;</a></b>";
 
-    my $charset = ($q->param("heb") && $q->param("heb") =~ /^on|1$/)
-	? "; charset=UTF-8" : "";
-
     my @head = (
+		qq{<meta http-equiv="Content-Type" content="$content_type">},
 		$q->Link({-rel => "prev",
 			  -href => $prev_url,
 			  -title => $prev_title}),
@@ -833,25 +843,23 @@ sub results_page
 			  -title => "Hebcal Interactive Jewish Calendar"}),
 		);
 
-    if ($charset) {
-	push(@head, qq{<meta http-equiv="Content-Type" content="text/html${charset}">});
-    }
-
     print STDOUT $q->header(-expires => $http_expires,
-			    -type => "text/html${charset}"),
+			    -type => $content_type);
+
+    Hebcal::out_html(undef,
     Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
 		       \@head,
 		       undef,
 		       undef
 			),
     Hebcal::navbar2($q, $date, 1,
-		     "Interactive\nCalendar", Hebcal::self_url($q, {"v" => "0"}));
+		     "Interactive\nCalendar", Hebcal::self_url($q, {"v" => "0"})));
 
-    print STDOUT "<h1>Jewish\nCalendar $date</h1>\n"
+    Hebcal::out_html(undef, "<h1>Jewish\nCalendar $date</h1>\n")
 	unless ($q->param("vis"));
 
     my $message = referred_by_websearch($q, "form", "/hebcal/");
-    print STDOUT $message if $message;
+    Hebcal::out_html(undef, $message) if $message;
 
     my $loc2 = (defined $city_descr && $city_descr ne "") ?
 	"in $city_descr" : "";
@@ -860,7 +868,7 @@ sub results_page
 
     my $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
-    print STDOUT "<!-- $cmd_pretty -->\n";
+    Hebcal::out_html(undef, "<!-- $cmd_pretty -->\n");
 
     my @events = Hebcal::invoke_hebcal($cmd, $loc2,
 	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
@@ -872,7 +880,7 @@ sub results_page
 	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
 	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
 
-	print STDOUT $Hebcal::gregorian_warning
+	Hebcal::out_html(undef, $Hebcal::gregorian_warning)
 	    if ($greg_year1 <= 1752);
     }
 
@@ -889,9 +897,9 @@ sub results_page
 	    if $dst_tz_descr ne "";
     }
 
-    print STDOUT $geographic_info;
+    Hebcal::out_html(undef, $geographic_info);
 
-    print STDOUT $Hebcal::indiana_warning
+    Hebcal::out_html(undef, $Hebcal::indiana_warning)
 	if ($city_descr =~ / IN &nbsp;/);
 
     # toggle month/full year and event list/calendar grid
@@ -933,18 +941,20 @@ sub results_page
 
     $goto .= "</small>\n";
 
-    print STDOUT $goto_prefix, $goto, "</p>"
+    Hebcal::out_html(undef, $goto_prefix, $goto, "</p>")
 	unless $q->param("vis");
 
     if ($numEntries > 0)
     {
-	print STDOUT qq{<p class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>};
+	Hebcal::out_html(undef,
+qq{<p class="goto"><span class="sm-grey">&gt;</span>
+<a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>});
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
-	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    Hebcal::out_html(undef,
+	    "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
 	    "<a href=\"", Hebcal::self_url($q, {"v" => 0, "tag" => "cal.cust"}),
-	    "\">Customize\ncalendar options</a>";
+	    "\">Customize\ncalendar options</a>");
 	}
 
 	if ($q->param("c") && $q->param("c") ne "off" &&
@@ -964,8 +974,9 @@ sub results_page
 		if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
 	    $url .= "&amp;tag=interactive";
 
-	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
-	    "<a href=\"$url\">Subscribe\nto weekly candle lighting times via email</a>";
+	    Hebcal::out_html(undef,
+	    "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "<a href=\"$url\">Subscribe\nto weekly candle lighting times via email</a>");
 
 	    # Fridge
 	    $url =
@@ -992,20 +1003,22 @@ sub results_page
 
 	    $url .= ";tag=interactive";
 
-	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
-	    "<a href=\"$url\">Printable\npage of candle-lighting times for $hyear</a>";
-#	    print STDOUT "\n<span class=\"hl\"><b>NEW!</b></span>";
+	    Hebcal::out_html(undef,
+	    "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "<a href=\"$url\">Printable\npage of candle-lighting times for $hyear</a>");
+#	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
-	print STDOUT qq{</p>\n};
+	Hebcal::out_html(undef, "</p>\n");
     }
     else
-    {
-	print STDOUT qq{<h3 style="color: red">No Hebrew Calendar events\n},
-		qq{for $date</h3>};
+    {    
+	Hebcal::out_html(undef,
+	qq{<h3 style="color: red">No Hebrew Calendar events\n},
+	qq{for $date</h3>});
     }
 
-    print STDOUT "<p>";
+    Hebcal::out_html(undef, "<p>");
 
     my $cal;
     my $prev_mon = 0;
@@ -1045,9 +1058,10 @@ sub results_page
 		    # display previously created calendar
 		    my $style = ($q->param("month") eq "x" && $prev_mon > 1) ?
 			' style="page-break-before: always"' : "";
-		    print STDOUT "<div align=\"center\" class=\"cal\"$style>",
+		    Hebcal::out_html(undef,
+		    "<div align=\"center\" class=\"cal\"$style>",
 		    $cal->as_HTML(), 
-		    "</div><br><br>";
+		    "</div><br><br>");
 
 		    # grotty hack to display empty months
 		    if ($prev_mon != 0 && ($prev_mon+1 != $mon))
@@ -1057,9 +1071,10 @@ sub results_page
 			    $cal = new_html_cal($year,$j,$goto,
 						$prev_title,$prev_url,
 						$next_title,$next_url);
-			    print STDOUT "<div align=\"center\" class=\"cal\"$style>",
+			    Hebcal::out_html(undef,
+			    "<div align=\"center\" class=\"cal\"$style>",
 			    $cal->as_HTML(), 
-			    "</div><br><br>";
+			    "</div><br><br>");
 			}
 		    }
 		}
@@ -1103,7 +1118,7 @@ sub results_page
 		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
 	    $line .= "<br>\n";
 
-	    print STDOUT $line;
+	    Hebcal::out_html(undef, $line);
 	}
     }
 
@@ -1111,17 +1126,18 @@ sub results_page
     {
 	my $style = ($q->param("month") eq "x" && $prev_mon > 1) ?
 	    ' style="page-break-before: always"' : "";
-	print STDOUT "<div align=\"center\" class=\"cal\"$style>",
-	    $cal->as_HTML(), 
-	    "</div>\n";
+	Hebcal::out_html(undef,
+			 "<div align=\"center\" class=\"cal\"$style>",
+			 $cal->as_HTML(), 
+			 "</div>\n");
     }
 
-    print STDOUT "</p>" unless $q->param("vis");
-    print STDOUT $goto_prefix, $goto, "</p>";
+    Hebcal::out_html(undef, "</p>") unless $q->param("vis");
+    Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
     if ($numEntries > 0) {
-	print STDOUT Hebcal::download_html($q, $filename, \@events, $date);
+	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
     }
-    print STDOUT Hebcal::html_footer($q,$rcsrev);
+    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev));
 
     1;
 }
