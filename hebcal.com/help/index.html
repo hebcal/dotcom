@@ -32,6 +32,8 @@ interface?</a>
 <dt><a href="#kudos">How can I tell you how much I like the Hebcal
 Interactive Jewish Calendar?</a>
 </dl>
+<dt><a href="#cal-tags">How can my synagogue display a Jewish Calendar on
+its own web site?</a>
 <dt>Specifics about Jewish Holidays
 <dl>
 <dt><a href="#begin">When do the Holidays begin?</a>
@@ -113,6 +115,40 @@ hebcal 3.2 for UNIX and tell him that you like it.  According to Danny,</p>
 Hebcal is available as "guiltware," which is my version of the GNU
 license, but with some interest in hearing from you thrown in.
 </blockquote>
+
+<h2><a name="cal-tags">How can my synagogue display a Jewish Calendar on
+its own web site?</a></h2>
+
+<p>You can use the HTML tags below, courtesy of <a
+href="http://home.attbi.com/~kilsen/">Kevin Ilsen' JavaScript Event
+Calendar</a> to put a calendar on your website.</p>
+
+<table border="1" cellpadding="8">
+<tr><td><pre>
+&lt;div style="font-family: Verdana,Arial,Helvetica"&gt;
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/i/calendar.js"&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=<span class="hl">2002</span>;month=x"&gt;
+&lt;/script&gt;
+&lt;script language="JavaScript"&gt;
+ &lt;!--
+  SpecialDay=7;
+  FontSize="+1";
+  Calendar();
+ // --&gt;
+&lt;/script&gt;
+&lt;/div&gt;
+</pre></td></tr>
+</table>
+
+<p>Be sure to replace <code>year=<span class="hl">2002</span></code>
+with the current year.</p>
+
+<p>To add candle-lighting times for your synagogue, you can add
+<code>;c=on;zip=90210;m=72</code> to the end of the URL
+(be sure to change <span class="hl">90210</span> to your shul's zip code).</p>
 
 <h2>Specifics about Jewish Holidays</h2>
 
@@ -445,7 +481,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Wed Feb 13 14:37:12 EST 2002
+Last modified: Tue Mar 19 19:08:01 EST 2002
 <!-- hhmts end -->
 ($Revision$)
 </span>
