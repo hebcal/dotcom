@@ -25,6 +25,9 @@ package Hebcal;
 require 5.000;
 use Time::Local;
 use CGI;
+use lib "/home/users/mradwin/local/lib/perl5/$]";
+use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
+use Unicode::String;
 use strict;
 
 ########################################################################
@@ -1019,6 +1022,65 @@ sub get_holiday_anchor($$)
 ########################################################################
 # web page utils
 ########################################################################
+
+
+sub display_hebrew {
+    my($q,$class,@args) = @_;
+
+    if ($q->user_agent('MSIE'))
+    {
+	my(@args2);
+	foreach (@args)
+	{
+	    s/  /&nbsp;&nbsp;/g;
+	    push(@args2, $_);
+	}
+
+	return join('',
+		    qq{<span dir="rtl" lang="he"\nclass="$class">},
+		    @args2,
+		    qq{</span>}
+		    );
+    }
+    else
+    {
+	my($str) = &utf8_hebrew_to_netscape(join('', @args));
+	$str =~ s/  /&nbsp;&nbsp;/g;
+
+	return join('',
+		    qq{<span dir="ltr" lang="he"\nclass="$class">},
+		    $str,
+		    qq{</span>}
+		    );
+    }
+}
+
+sub utf8_hebrew_to_netscape($) {
+    my($str) = @_;
+
+    my($u) = Unicode::String::utf8($str);
+    my(@array) = $u->unpack;
+    my(@result) = ();
+
+    for (my $i = scalar(@array) - 1; $i >= 0; --$i)
+    {
+	if ($array[$i] == 0x0028)
+	{
+	    push(@result, 0x0029);
+	}
+	elsif ($array[$i] == 0x0029)
+	{
+	    push(@result, 0x0028);
+	}
+	elsif ($array[$i] >= 0x05D0 || $array[$i] <= 0x007F)
+	{
+	    push(@result, $array[$i]);
+	}
+    }
+
+    $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
+    return $u->as_string();
+}
 
 sub navbar($$)
 {
