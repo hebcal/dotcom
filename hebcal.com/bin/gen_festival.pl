@@ -257,6 +257,28 @@ EOHTML
 ;
     }
 
+    my($strassfeld_link) =
+	"http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
+    print OUT2 qq{<a
+href="$strassfeld_link"><img
+src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
+alt="The Jewish Holidays: A Guide &amp; Commentary"
+vspace="5" width="75" height="90" align="right"></a>
+<dl>
+<dt><a name="ref">References</a>
+<dd><em><a
+href="$strassfeld_link">The
+Jewish Holidays: A Guide &amp; Commentary</a></em>
+by Rabbi Michael Strassfeld</p>
+<dd><em><a title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
+href="http://www.amazon.com/exec/obidos/ASIN/0827602529/hebcal-20">Tanakh:
+The Holy Scriptures</a></em> by Jewish Publication Society
+<dd><em><a
+href="http://www.bible.ort.org/">Navigating the Bible II</a></em>,
+World ORT
+</dl>
+};
+
     print OUT2 $html_footer;
 
     close(OUT2);
