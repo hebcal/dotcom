@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Nov  1 04:47:20 PST 2000
+Last modified: Wed Nov  1 05:32:12 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -104,6 +104,146 @@ foreach $key (@ynums)
     }
 }
 
+if (! defined $q->path_info())
+{
+    &results_page();
+}
+elsif ($q->path_info() =~ /[^\/]+.csv$/)
+{
+    &csv_display();
+}
+elsif ($q->path_info() =~ /[^\/]+.dba$/)
+{
+    &dba_display();
+}
+else
+{
+    &results_page();
+}
+
+close(STDOUT);
+exit(0);
+
+sub dba_display
+{
+    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits);
+    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
+    print $q->header(-type =>
+		     "application/x-palm-dba; filename=\"$path_info\"",
+		     -content_disposition =>
+		     "attachment; filename=$path_info",
+		     -last_modified => &http_date($time));
+
+    &dba_write_header($path_info);
+    &dba_write_contents(\@events, 0, 0);
+}
+
+sub csv_display
+{
+    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits);
+    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
+    print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
+		     -content_disposition =>
+		     "attachment; filename=$path_info",
+		     -last_modified => &http_date($time));
+
+    my($endl) = "\012";			# default Netscape and others
+    if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
+    {
+	$endl = "\015\012"
+	    if $q->user_agent() =~ /Microsoft Internet Explorer/;
+	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
+    }
+
+    &csv_write_contents(\@events, $endl);
+}
+
+sub my_invoke_hebcal {
+    my($this_year,$y) = @_;
+    my(@events2) = ();
+
+    my($tmpfile) = POSIX::tmpnam();
+    open(T, ">$tmpfile") || die "$tmpfile: $!\n";
+    foreach $key (keys %{$y})
+    {
+	print T $y->{$key}, "\n";
+    }
+    close(T);
+
+    my($cmd) = "/home/users/mradwin/bin/hebcal -D -x -Y $tmpfile";
+
+    my(%greg2heb) = ();
+    my($year);
+
+    foreach $year ($this_year .. ($this_year + 10))
+    {
+	my(@events) = &invoke_hebcal("$cmd $year", '');
+	my($numEntries) = scalar(@events);
+	my($i);
+	for ($i = 0; $i < $numEntries; $i++)
+	{
+	    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	    my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+	    my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+	
+	    if ($subj =~ /,\s+\d{4}\s*$/)
+	    {
+		$greg2heb{sprintf("%04d%02d%02", $year, $mon, $mday)} = $subj;
+		next;
+	    }
+
+	    if (defined $y->{$subj})
+	    {
+		my($subj2) = "${subj}'s Yahrzeit";
+		my($isodate) = sprintf("%04d%02d%02", $year, $mon, $mday);
+
+		$subj2 .= " ($greg2heb{$isodate})"
+		    if (defined $greg2heb{$isodate});
+
+		push(@events2,
+		     [$subj2,
+		      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
+		      $events[$i]->[$Hebcal::EVT_IDX_MIN],
+		      $events[$i]->[$Hebcal::EVT_IDX_HOUR],
+		      $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+		      $events[$i]->[$Hebcal::EVT_IDX_MON],
+		      $events[$i]->[$Hebcal::EVT_IDX_YEAR],
+		      $events[$i]->[$Hebcal::EVT_IDX_DUR],
+		      $events[$i]->[$Hebcal::EVT_IDX_MEMO]]);
+	    }
+	    elsif ($subj eq 'Pesach VIII' || $subj eq 'Shavuot II' ||
+		   $subj eq 'Yom Kippur' || $subj eq 'Shmini Atzeret')
+	    {
+		my($subj2) = "Yizkor ($subj)";
+
+		push(@events2,
+		     [$subj2,
+		      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
+		      $events[$i]->[$Hebcal::EVT_IDX_MIN],
+		      $events[$i]->[$Hebcal::EVT_IDX_HOUR],
+		      $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+		      $events[$i]->[$Hebcal::EVT_IDX_MON],
+		      $events[$i]->[$Hebcal::EVT_IDX_YEAR],
+		      $events[$i]->[$Hebcal::EVT_IDX_DUR],
+		      $events[$i]->[$Hebcal::EVT_IDX_MEMO]]);
+	    }
+	}
+    }
+
+    unlink($tmpfile);
+    @events2;
+}
+
+sub results_page {
 print STDOUT $q->header(),
     $q->start_html(-title => 'Interactive Yahrzeit Calendar',
 		   -target => '_top',
@@ -131,71 +271,65 @@ print STDOUT $q->header(),
 
 &form(1,'','') unless keys %yahrzeits;
 
-my($tmpfile) = POSIX::tmpnam();
-open(T, ">$tmpfile") || die "$tmpfile: $!\n";
-foreach $key (keys %yahrzeits)
-{
-    print T $yahrzeits{$key}, "\n";
-}
-close(T);
+    # download links
+    print STDOUT "<p>Advanced options:\n<small>[ <a href=\"", $script_name;
+    print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
+    print STDOUT "/yahrzeit.csv?dl=1";
 
-my($cmd) = "/home/users/mradwin/bin/hebcal -D -x -Y $tmpfile";
-
-my(%greg2heb) = ();
-my($year);
-foreach $year ($this_year .. ($this_year + 10))
-{
-    print STDOUT "<h3>$year</h3><pre>";
-
-    my(@events) = &invoke_hebcal("$cmd $year", '');
-
-    my($numEntries) = scalar(@events);
-    my($i);
-    for ($i = 0; $i < $numEntries; $i++)
+    foreach $key ($q->param())
     {
-	my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
-	
-	if ($subj =~ /,\s+\d{4}\s*$/)
-	{
-	    $greg2heb{sprintf("%04d%02d%02", $year, $mon, $mday)} = $subj;
-	    next;
-	}
-
-	my($dow) = ($year > 1969 && $year < 2038) ?
-	    $Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
-
-	if (defined $yahrzeits{$subj})
-	{
-	    printf STDOUT "%s%04d-%02d-%02d  %s's Yahrzeit",
-	    	$dow, $year, $mon, $mday, HTML::Entities::encode($subj);
-
-	    my($isodate) = sprintf("%04d%02d%02", $year, $mon, $mday);
-	    print STDOUT " ($greg2heb{$isodate})"
-		if (defined $greg2heb{$isodate});
-	    print STDOUT "\n";
-	}
-	elsif ($subj eq 'Pesach VIII' || $subj eq 'Shavuot II' ||
-	       $subj eq 'Yom Kippur' || $subj eq 'Shmini Atzeret')
-	{
-	    printf STDOUT "%s%04d-%02d-%02d  Yizkor (%s)\n",
-	    	$dow, $year, $mon, $mday, $subj;
-	}
+	my($val) = $q->param($key);
+	print STDOUT "&amp;$key=", &url_escape($val);
     }
-    print STDOUT "</pre>";
-}
+    print STDOUT "&amp;filename=yahrzeit.csv";
+    print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
 
-unlink($tmpfile);
+    # only offer DBA export when we know timegm() will work
+    if ($this_year > 1969 && $this_year < 2028)
+    {
+	print STDOUT "\n- <a href=\"", $script_name;
+	print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
+	print STDOUT "/yahrzeit.dba?dl=1";
+
+	foreach $key ($q->param())
+	{
+	    my($val) = $q->param($key);
+	    print STDOUT "&amp;$key=", &url_escape($val);
+	}
+	print STDOUT "&amp;filename=yahrzeit.dba";
+	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
+    }
+    print STDOUT "\n]</small></p>\n";
+
+my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits);
+
+my($numEntries) = scalar(@events);
+my($i);
+for ($i = 0; $i < $numEntries; $i++)
+{
+    my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+    my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+    my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+    my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+
+    if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR])
+    {
+	print STDOUT "</pre>" unless $i == 0;
+	print STDOUT "<h3>$year</h3><pre>";
+    }
+
+    my($dow) = ($year > 1969 && $year < 2038) ?
+	$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
+
+    printf STDOUT "%s%04d-%02d-%02d  %s\n",
+    $dow, $year, $mon, $mday, HTML::Entities::encode($subj);
+}
+print STDOUT "</pre>";
+
 print STDOUT "<hr>\n";
 
 &form(0,'','');
-    
-print STDOUT $html_footer;
-
-close(STDOUT);
-exit(0);
+}
 
 sub form
 {
@@ -238,6 +372,7 @@ sub form
 	    "\n<small>(Month Day, Year)</small><br>\n";
     }
 
+    print STDOUT $q->hidden(-name => 'rand',-value => time(),-override => 1);
     print STDOUT qq{<input\ntype="submit" value="Get Yahrzeits"></form>\n};
     print STDOUT $html_footer;
 
