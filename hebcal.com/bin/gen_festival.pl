@@ -133,6 +133,19 @@ write_index_page($fxml);
 
 exit(0);
 
+sub trim
+{
+    my($value) = @_;
+
+    if ($value) {
+	local($/) = undef;
+	$value =~ s/^\s+//;
+	$value =~ s/\s+$//;
+    }
+
+    $value;
+}
+
 sub get_var
 {
     my($festivals,$f,$name) = @_;
@@ -143,6 +156,11 @@ sub get_var
     if (! defined $value) {
 	warn "ERROR: no $name for $f";
     }
+
+    if (ref($value) eq 'SCALAR') {
+	$value = trim($value);
+    }
+
     $value;
 }
 
@@ -211,7 +229,11 @@ EOHTML
     {
 	my($anchor) = Hebcal::make_anchor($f);
 
-	my $descr = get_var($festivals, $f, 'descr');
+	my $descr;
+	my $about = get_var($festivals, $f, 'about');
+	if ($about) {
+	    $descr = trim($about->{'content'});
+	}
 	die "no descr for $f" unless $descr;
 
 	print OUT3 qq{<dt><a href="$anchor">$f</a>\n};
@@ -325,7 +347,12 @@ sub write_festival_page
 
     my($anchor) = Hebcal::make_anchor($f);
 
-    my $descr = get_var($festivals, $f, 'descr');
+    my $descr;
+    my $about = get_var($festivals, $f, 'about');
+    if ($about) {
+	$descr = trim($about->{'content'});
+    }
+    warn "$f: missing About description\n" unless $descr;
 
     open(OUT2, ">$outdir/$anchor") || die "$outdir/$anchor: $!\n";
 
@@ -411,7 +438,6 @@ vspace="5" width="75" height="90" align="right"></a>
 EOHTML
 ;
 
-    my $about = get_var($festivals, $f, 'about');
     if ($about) {
 	my $about_href = $about->{'href'};
 	if ($about_href) {
@@ -459,9 +485,12 @@ EOHTML
 	    }
 	    print OUT2 qq{</h2>\n<div style="padding-left:20px;">};
 
-	    my $part_descr = $festivals->{'festival'}->{$part}->{'descr'};
-	    if ($part_descr && $part_descr ne $descr) {
-		print OUT2 qq{<p>$part_descr.\n};
+	    my $part_about = $festivals->{'festival'}->{$part}->{'about'};
+	    if ($part_about) {
+		my $part_descr = trim($part_about->{'content'});
+		if ($part_descr && $part_descr ne $descr) {
+		    print OUT2 qq{<p>$part_descr.\n};
+		}
 	    }
 
 	    write_festival_part($festivals,$part);
@@ -601,7 +630,7 @@ sub holidays_observed
 	    $subj_copy =~ s/ \(CH\'\'M\)$//;
 	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
 	    $subj_copy =~ s/ [IV]+$//;
-	    $subj_copy =~ s/: \d Candles$//;
+	    $subj_copy =~ s/: \d Candles?$//;
 	    $subj_copy =~ s/: 8th Day$//;
 	    $subj_copy =~ s/^Erev //;
 
