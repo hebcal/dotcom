@@ -1,7 +1,7 @@
 <?php
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/shabbat/RCS/fridge.php,v $
-require "../common.inc";
+require "../pear/Hebcal/common.inc";
 require "../pear/HTML/Form.php";
 
 header("Cache-Control: private");
