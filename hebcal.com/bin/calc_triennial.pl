@@ -563,6 +563,7 @@ EOHTML
     print OUT2 <<EOHTML;
 </head>
 <body>
+<!--htdig_noindex-->
 <table width="100%" class="navbar">
 <tr><td><small>
 <strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
@@ -572,7 +573,7 @@ $h
 <td align="right"><small><a
 href="/search/">Search</a></small>
 </td></tr></table>
-
+<!--/htdig_noindex-->
 <br>
 <table width="100%">
 <tr>
