@@ -323,7 +323,7 @@ for (my $i = 0; $i < $numEntries; $i++)
 {
     if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ / of Adar/) {
 	&Hebcal::out_html($cfg,
-"<p><em>Note: the results below contain one ore more annivesary in Adar.\n",
+"<p><em>Note: the results below contain one ore more anniversary in Adar.\n",
 "To learn more about how Hebcal handles these dates, read <a\n",
 "href=\"http://www.hebcal.com/help/anniv.html#adar\">How\n",
 "does Hebcal determine an anniversary occurring in Adar?</a></em></p>\n",
