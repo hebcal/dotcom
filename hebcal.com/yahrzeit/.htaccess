@@ -1,0 +1,8 @@
+SetHandler cgi-script
+
+Redirect /yahrtzeit/yahrtzeit.html http://www.hebcal.com/yahrtzeit/
+Redirect /yahrtzeit/yahrtzeit.htm http://www.hebcal.com/yahrtzeit/
+Redirect /yahrtzeit/yahrtzeit.pl http://www.hebcal.com/yahrtzeit/
+Redirect /yahrtzeit/yahrtzeit.cgi http://www.hebcal.com/yahrtzeit/
+Redirect /yahrtzeit/index.cgi http://www.hebcal.com/yahrtzeit/
+Redirect /yahrtzeit/index.pl http://www.hebcal.com/yahrtzeit/
