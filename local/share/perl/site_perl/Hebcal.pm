@@ -372,7 +372,7 @@ sub get_holiday_anchor($$$)
 
 	    $drash_href = $SEDROT{"$sedra:drash"};
 	    $torah_href = $SEDROT{"$sedra:torah"};
-	    if ($torah_href =~ m,^/jpstext/,)
+	    if ($torah_href =~ m,/jpstext/,)
 	    {
 		$haftarah_href = $torah_href;
 		$haftarah_href =~ s/.shtml$/_haft.shtml/;
@@ -400,6 +400,8 @@ sub get_holiday_anchor($$$)
 	    $p1 = $ashk2seph{$p1} if (defined $ashk2seph{$p1});
 	    $p2 = $ashk2seph{$p2} if (defined $ashk2seph{$p2});
 
+	    die "sedrot.db missing $p2!" unless defined $SEDROT{$p2};
+
 	    my($anchor) = "$p1-$p2";
 	    $anchor = lc($anchor);
 	    $anchor =~ s/[^\w]//g;
@@ -410,15 +412,16 @@ sub get_holiday_anchor($$$)
 
 	    $drash_href = $SEDROT{"$p1:drash"};
 	    $torah_href = $SEDROT{"$p1:torah"};
-	    if ($torah_href =~ m,^/jpstext/,)
+
+	    # on doubled parshiot, read only the second Haftarah
+	    if (defined $SEDROT{"$p2:torah"} && 
+		$SEDROT{"$p2:torah"} =~ m,/jpstext/,)
 	    {
-		$haftarah_href = $torah_href;
+		$haftarah_href = $SEDROT{"$p2:torah"};
 		$haftarah_href =~ s/.shtml$/_haft.shtml/;
 	    }
 
 	    $hebrew .= $SEDROT{"$p1:hebrew"};
-
-	    die "sedrot.db missing $p2!" unless defined $SEDROT{$p2};
 
 	    # hypenate hebrew reading
 	    # '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
@@ -431,10 +434,6 @@ sub get_holiday_anchor($$$)
 	    $memo = "Torah: " . $SEDROT{"$p1:verse"};
 	    $memo =~ s/\s+\d+:\d+\s*$/ $torah_end/;
 
-	    # on doubled parshiot, read only the second Haftarah
-	    $haftarah_href = $SEDROT{"$p2:torah"};
-	    $haftarah_href =~ s/.shtml$/_haft.shtml/;
-
 	    $memo .= " / Haftarah: ";
 	    if ($want_sephardic &&
 		defined $SEDROT{"$p2:haft_seph"})
@@ -446,13 +445,6 @@ sub get_holiday_anchor($$$)
 		$memo .= $SEDROT{"$p2:haft_ashk"};
 	    }
 	}
-
-	$drash_href = 'http://learn.jtsa.edu/topics/parashah' . $drash_href
-	    if ($drash_href =~ m,^/,);
-	$torah_href = 'http://learn.jtsa.edu/topics/parashah' . $torah_href
-	    if ($torah_href =~ m,^/,);
-	$haftarah_href = 'http://learn.jtsa.edu/topics/parashah' . $haftarah_href
-	    if ($haftarah_href =~ m,^/,);
     }
     else
     {
