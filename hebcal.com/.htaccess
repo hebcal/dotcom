@@ -34,9 +34,16 @@ AddType text/css css
 AddType text/xml xml rdf rss vxml
 AddEncoding x-gzip .gz
 
+#mod_gzip_item_exclude mime ^application/x-javascript
+#mod_gzip_item_exclude mime ^text/css
+#mod_gzip_item_exclude file \.css$
+#mod_gzip_item_exclude file \.js$
+
 ExpiresActive On
 ExpiresByType image/gif A63072000
 ExpiresByType image/jpeg A63072000
+
+Redirect /mt/index.html http://www.hebcal.com/mt/mt.cgi
 
 Redirect /yahrtzeit http://www.hebcal.com/yahrzeit
 Redirect /yohrzeit http://www.hebcal.com/yahrzeit
