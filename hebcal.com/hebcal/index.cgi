@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Mar 21 15:46:29 PST 2001
+Last modified: Wed Mar 21 15:52:38 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1154,8 +1154,13 @@ so you can keep this window open.
 	print STDOUT $line unless $q->param('vis');
     }
 
-    print STDOUT $cal->as_HTML(), "<br><br>"
-	if ($q->param('vis') && defined $cal);
+    if ($q->param('vis') && defined $cal)
+    {
+	print STDOUT $cal->as_HTML(), "</body></html>\n";
+
+	return 1;
+    }
+
     print STDOUT "</p>", $goto;
 
     if ($q->param('c') && $q->param('c') ne 'off')
