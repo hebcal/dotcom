@@ -198,192 +198,133 @@ my($HOLIDAY_IDX_TITLE_HE) = 2;	# title of holiday in hebrew
 my(%holidays) = 
     (
      "Asara B'Tevet"		=>
-     ["tevet",			0,
-      'עֲשָׂרָה בְּטֵבֵת'],
+     ["tevet",			0, 'עֲשָׂרָה בְּטֵבֵת'],
 
      "Chanukah: 1 Candle"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: א׳ נֵר'],
+     ["chanukah",		0, 'חֲנוּכָּה: א׳ נֵר'],
      "Chanukah: 2 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ב׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ב׳ נֵרוֹת'],
      "Chanukah: 3 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ג׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ג׳ נֵרוֹת'],
      "Chanukah: 4 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ד׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ד׳ נֵרוֹת'],
      "Chanukah: 5 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ה׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ה׳ נֵרוֹת'],
      "Chanukah: 6 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ו׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ו׳ נֵרוֹת'],
      "Chanukah: 7 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ז׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ז׳ נֵרוֹת'],
      "Chanukah: 8 Candles"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: ח׳ נֵרוֹת'],
+     ["chanukah",		0, 'חֲנוּכָּה: ח׳ נֵרוֹת'],
      "Chanukah: 8th Day"	=>
-     ["chanukah",		0,
-      'חֲנוּכָּה: יוֹם ח׳'],
+     ["chanukah",		0, 'חֲנוּכָּה: יוֹם ח׳'],
 
      "Lag B'Omer"		=>
-     ["lagbaomer",		0,
-      'לג׳ בְּעוֹמֶר'],
+     ["lagbaomer",		0, 'לג׳ בְּעוֹמֶר'],
 
      "Erev Pesach"		=>
-     ["pesach",			0,
-      'עֶרֶב פֶּסַח'],
+     ["pesach",			0, 'עֶרֶב פֶּסַח'],
      "Pesach I"			=>
-     ["pesach",			1,
-      'פֶּסַח א׳'],
+     ["pesach",			1, 'פֶּסַח א׳'],
      "Pesach II"		=>
-     ["pesach",			1,
-      'פֶּסַח ב׳'],
+     ["pesach",			1, 'פֶּסַח ב׳'],
      "Pesach III (CH''M)"	=>
-     ["pesach",			0,
-      'פֶּסַח ג׳ חֹל הַמוֹעד'],
+     ["pesach",			0, 'פֶּסַח ג׳ חֹל הַמוֹעד'],
      "Pesach IV (CH''M)"	=>
-     ["pesach",			0,
-      'פֶּסַח ד׳ חֹל הַמוֹעד'],
+     ["pesach",			0, 'פֶּסַח ד׳ חֹל הַמוֹעד'],
      "Pesach V (CH''M)"	=>
-     ["pesach",			0,
-      'פֶּסַח ה׳ חֹל הַמוֹעד'],
+     ["pesach",			0, 'פֶּסַח ה׳ חֹל הַמוֹעד'],
      "Pesach VI (CH''M)"	=>
-     ["pesach",			0,
-      'פֶּסַח ו׳ חֹל הַמוֹעד'],
+     ["pesach",			0, 'פֶּסַח ו׳ חֹל הַמוֹעד'],
      "Pesach VII"		=>
-     ["pesach",			1,
-      'פֶּסַח ז׳'],
+     ["pesach",			1, 'פֶּסַח ז׳'],
      "Pesach VIII"		=>
-     ["pesach",			1,
-      'פֶּסַח ח׳'],
+     ["pesach",			1, 'פֶּסַח ח׳'],
 
      "Purim Katan"		=>
-     ["katan",			0,
-      'פֶּסַח קָטָן'],
+     ["katan",			0, 'פֶּסַח קָטָן'],
      "Purim"			=>
-     ["purim",			0,
-      'פּוּרִים'],
+     ["purim",			0, 'פּוּרִים'],
 
      "Erev Rosh Hashana"	=>
-     ["rosh",			0,
-      'עֶרֶב רֹאשׁ הַשָּׁנָה'],
+     ["rosh",			0, 'עֶרֶב רֹאשׁ הַשָּׁנָה'],
      "Rosh Hashana"		=>
-     ["rosh",			1,
-      'רֹאשׁ הַשָּׁנָה'],
+     ["rosh",			1, 'רֹאשׁ הַשָּׁנָה'],
      "Rosh Hashana II"		=>
-     ["rosh",			1,
-      'רֹאשׁ הַשָּׁנָה ב׳'],
+     ["rosh",			1, 'רֹאשׁ הַשָּׁנָה ב׳'],
 
      "Shabbat HaChodesh"	=>
-     ["hachodesh",		1,
-      'שַׁבָּת הַחֹדֶשׁ'],
+     ["hachodesh",		1, 'שַׁבָּת הַחֹדֶשׁ'],
      "Shabbat HaGadol"		=>
-     ["hagadol",		1,
-      'שַׁבָּת הַגָּדוֹל'],
+     ["hagadol",		1, 'שַׁבָּת הַגָּדוֹל'],
      "Shabbat Hazon"		=>
-     ["hazon",			1,
-      'שַׁבָּת הַזוֹן'],
+     ["hazon",			1, 'שַׁבָּת הַזוֹן'],
      "Shabbat Nachamu"		=>
-     ["nachamu",		1,
-      'שַׁבָּת נַחֲמוּ'],
+     ["nachamu",		1, 'שַׁבָּת נַחֲמוּ'],
      "Shabbat Parah"		=>
-     ["parah",			1,
-      'שַׁבָּת פּרה'],
+     ["parah",			1, 'שַׁבָּת פּרה'],
      "Shabbat Shekalim"		=>
-     ["shekalim",		1,
-      'שַׁבָּת שְׁקָלִים'],
+     ["shekalim",		1, 'שַׁבָּת שְׁקָלִים'],
      "Shabbat Shuva"		=>
-     ["shuva",			1,
-      'שַׁבָּת שׁוּבָה'],
+     ["shuva",			1, 'שַׁבָּת שׁוּבָה'],
      "Shabbat Zachor"		=>
-     ["zachor",			1,
-      'שַׁבָּת זָכוֹר'],
+     ["zachor",			1, 'שַׁבָּת זָכוֹר'],
 
      "Erev Shavuot"		=>
-     ["shavuot",		0,
-      'עֶרֶב שָׁבוּעוֹת'],
+     ["shavuot",		0, 'עֶרֶב שָׁבוּעוֹת'],
      "Shavuot I"		=>
-     ["shavuot",		1,
-      'שָׁבוּעוֹת א׳'],
+     ["shavuot",		1, 'שָׁבוּעוֹת א׳'],
      "Shavuot II"		=>
-     ["shavuot",		1,
-      'שָׁבוּעוֹת ב׳'],
+     ["shavuot",		1, 'שָׁבוּעוֹת ב׳'],
 
      "Shmini Atzeret"		=>
-     ["shmini",			1,
-      'שְׁמִינִי עֲצֶרֶת'],
+     ["shmini",			1, 'שְׁמִינִי עֲצֶרֶת'],
      "Shushan Purim"		=>
-     ["shushan",		0,
-      'שׁוּשָׁן פּוּרִים'],
+     ["shushan",		0, 'שׁוּשָׁן פּוּרִים'],
      "Simchat Torah"		=>
-     ["simchatorah",		1,
-      'שִׂמְחַת תּוֹרָה'],
+     ["simchatorah",		1, 'שִׂמְחַת תּוֹרָה'],
 
      "Erev Sukkot"		=>
-     ["sukkot",			0,
-      'עֶרֶב סוּכּוֹת'],
+     ["sukkot",			0, 'עֶרֶב סוּכּוֹת'],
      "Sukkot I"			=>
-     ["sukkot",			1,
-      'סוּכּוֹת א׳'],
+     ["sukkot",			1, 'סוּכּוֹת א׳'],
      "Sukkot II"		=>
-     ["sukkot",			1,
-      'סוּכּוֹת ב׳'],
+     ["sukkot",			1, 'סוּכּוֹת ב׳'],
      "Sukkot III (CH''M)"	=>
-     ["sukkot",			0,
-      'סוּכּוֹת ג׳ חֹל הַמוֹעד'],
+     ["sukkot",			0, 'סוּכּוֹת ג׳ חֹל הַמוֹעד'],
      "Sukkot IV (CH''M)"	=>
-     ["sukkot",			0,
-      'סוּכּוֹת ד׳ חֹל הַמוֹעד'],
+     ["sukkot",			0, 'סוּכּוֹת ד׳ חֹל הַמוֹעד'],
      "Sukkot V (CH''M)"	=>
-     ["sukkot",			0,
-      'סוּכּוֹת ה׳ חֹל הַמוֹעד'],
+     ["sukkot",			0, 'סוּכּוֹת ה׳ חֹל הַמוֹעד'],
      "Sukkot VI (CH''M)"	=>
-     ["sukkot",			0,
-      'סוּכּוֹת ו׳ חֹל הַמוֹעד'],
+     ["sukkot",			0, 'סוּכּוֹת ו׳ חֹל הַמוֹעד'],
      "Sukkot VII (Hoshana Raba)"	=>
-     ["sukkot",			1,
-      'סוּכּוֹת ז׳ (הוֹשַׁנָא רַבָּה)'],
+     ["sukkot",			1, 'סוּכּוֹת ז׳ (הוֹשַׁנָא רַבָּה)'],
      "Ta'anit Bechorot"		=>
-     ["bechorot",		0,
-      'תַּעֲנִית בְּכוֹרוֹת'],
+     ["bechorot",		0, 'תַּעֲנִית בְּכוֹרוֹת'],
      "Ta'anit Esther"		=>
-     ["esther",			0,
-      'תַּעֲנִית אֶסְתֵּר'],
+     ["esther",			0, 'תַּעֲנִית אֶסְתֵּר'],
      "Tish'a B'Av"		=>
-     ["9av",			0,
-      'תִּשְׁעָה בְּאָב'],
+     ["9av",			0, 'תִּשְׁעָה בְּאָב'],
      "Tu B'Shvat"		=>
-     ["tubshvat",		0,
-      'טוּ בִּשְׁבָט'],
+     ["tubshvat",		0, 'טוּ בִּשְׁבָט'],
      "Tzom Gedaliah"		=>
-     ["gedaliah",		0,
-      'צוֹם ***'],
+     ["gedaliah",		0, 'צוֹם ***'],
      "Tzom Tammuz"		=>
-     ["tammuz",			0,
-      'צוֹם תָּמוּז'],
+     ["tammuz",			0, 'צוֹם תָּמוּז'],
      "Yom HaAtzma'ut"		=>
-     ["haatzmaut",		0,
-      'יוֹם הָעַצְמָאוּת'],
+     ["haatzmaut",		0, 'יוֹם הָעַצְמָאוּת'],
      "Yom HaShoah"		=>
-     ["hashoah",		0,
-      'יוֹם הַשּׁוֹאָה'],
+     ["hashoah",		0, 'יוֹם הַשּׁוֹאָה'],
      "Yom HaZikaron"		=>
-     ["hazikaron",		0,
-      'יוֹם הַזִּכָּרוֹן'],
+     ["hazikaron",		0, 'יוֹם הַזִּכָּרוֹן'],
 
      "Erev Yom Kippur"		=>
-     ["yomkippur",		0,
-      'עֶרֶב יוֹם כִּפּוּר'],
+     ["yomkippur",		0, 'עֶרֶב יוֹם כִּפּוּר'],
      "Yom Kippur"		=>
-     ["yomkippur",		1,
-      'יוֹם כִּפּוּר'],
+     ["yomkippur",		1, 'יוֹם כִּפּוּר'],
      "Yom Yerushalayim"		=>
-     ["yerushalayim",		0,
-      'יוֹם יְרוּשָׁלַיִם'],
+     ["yerushalayim",		0, 'יוֹם יְרוּשָׁלַיִם'],
 
      'Rosh Chodesh Iyyar'	=>
      ['rc_iyyar', 0, 'רֹאשׁ חֹדֶשׁ אִיָיר'],
