@@ -8,6 +8,8 @@ use Fcntl qw(:DEFAULT :flock);
 use Hebcal;
 use POSIX qw(strftime);
 
+die "usage: $0 {-all | address ...}\n" unless @ARGV;
+
 my($now) = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
@@ -129,7 +131,11 @@ sub load_subs
     open(DB_FH, "<&=$fd") || die "dup $!";
     unless (flock (DB_FH, LOCK_SH)) { die "flock: $!" }
 
-    if (@ARGV)
+    if ($ARGV[0] eq '-all')
+    {
+	%subs = %DB;
+    }
+    else
     {
 	foreach (@ARGV)
 	{
@@ -142,10 +148,6 @@ sub load_subs
 		warn "$_: no such user\n";
 	    }
 	}
-    }
-    else
-    {
-	%subs = %DB;
     }
 
     flock(DB_FH, LOCK_UN);
