@@ -10,9 +10,9 @@ use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
-use DBI;
-use Email::Valid;
-use Mail::DeliveryStatus::BounceParser;
+use DBI ();
+use Email::Valid ();
+use Mail::DeliveryStatus::BounceParser ();
 
 my $site = 'hebcal.com';
 my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
