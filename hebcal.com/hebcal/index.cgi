@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 12 09:20:39 PST 2001
+Last modified: Tue Jan 16 16:55:04 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -792,15 +792,16 @@ sub results_page
 	if (! defined $q->raw_cookie())
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_date, "; path=/\015\012";
+	    $expires_date, "; path=/\015\012"
+		if $newcookie =~ /&/;
 	}
 	else
 	{
 	    my($cmp1) = $newcookie;
 	    my($cmp2) = $q->raw_cookie();
 
-	    $cmp1 =~ s/\bC=t=\d+\&//;
-	    $cmp2 =~ s/\bC=t=\d+\&//;
+	    $cmp1 =~ s/\bC=t=\d+\&?//;
+	    $cmp2 =~ s/\bC=t=\d+\&?//;
 
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
 	    $expires_date, "; path=/\015\012"
