@@ -1640,6 +1640,7 @@ sub sendmail_v2($$$)
     while (my($key,$val) = each %{$headers})
     {
 	next if lc($key) eq 'bcc';
+	while (chomp($val)) {}
 	$message .= "$key: $val\n";
     }
 
