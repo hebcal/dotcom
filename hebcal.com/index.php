@@ -57,12 +57,11 @@ href="/search/">Search</a></big></strong></dt>
 Contact: webmaster@hebcal.com
 <br>
 This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal 3.2
-for UNIX</a>, Copyright &copy; 1994 <a
-href="http://www.sadinoff.com/">Danny Sadinoff</a>.  All rights
+for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Wed May  2 12:44:42 PDT 2001
+Last modified: Thu May 31 07:58:19 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
