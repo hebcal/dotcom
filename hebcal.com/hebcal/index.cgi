@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Feb 13 14:14:34 PST 2001
+Last modified: Thu Mar  1 14:24:44 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1040,15 +1040,6 @@ so you can keep this window open.
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     print STDOUT "<p>";
 
-    # header row
-    my($hdr) = '<tt>';
-    $hdr .= '    ' if $ycal;
-    $hdr .= 'DoW ' if ($q->param('year') > 1969 && $q->param('year') < 2038);
-    $hdr .= "YYYY-MM-DD  </tt>Description";
-
-    print STDOUT $hdr, "<br>\n";
-    print STDOUT '-' x length($hdr), "<br>\n";
-
     my($numEntries) = scalar(@events);
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
@@ -1119,9 +1110,9 @@ so you can keep this window open.
 	my($dow) = ($year > 1969 && $year < 2038) ?
 	    $Hebcal::DoW[&Hebcal::get_dow($year-1900, $mon-1, $mday)] . ' '
 		: '';
-	printf STDOUT ("<tt>%s%04d-%02d-%02d  </tt>%s",
-		       $dow, $year, $mon, $mday, $subj);
-	printf STDOUT (": %d:%02d", $hour, $min)
+	printf STDOUT ("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
+		       $dow, $mday, $Hebcal::MoY_short[$mon-1], $year, $subj);
+	printf STDOUT (": %d:%02dpm", $hour, $min)
 	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
 	print STDOUT "<br>\n";
     }
