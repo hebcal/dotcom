@@ -178,9 +178,9 @@ sub write_csv
 	}
     }
 
-    if (defined $festivals->{'festival'}->{$f}->{'haft'}) {
-	print CSV "Torah Service - Haftarah,",
-	$festivals->{'festival'}->{$f}->{'haft'}, "\n";
+    my $haft = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'reading'};
+    if (defined $haft) {
+	print CSV "Torah Service - Haftarah,$haft\n",
     }
 
     print CSV "\n";
@@ -243,9 +243,6 @@ sub write_festival_part
     my $anchor = make_anchor($f);
     $anchor =~ s/\.html$//;
 
-    my $descr = $festivals->{'festival'}->{$f}->{'descr'};
-    print OUT2 qq{\n<h2><a name="$anchor"></a>$f</h2>\n<p>$descr.\n};
-
     my $torah;
     my $maftir;
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
@@ -286,52 +283,9 @@ sub write_festival_part
 	}
     }
 
-    my $haft;
-    if (defined $festivals->{'festival'}->{$f}->{'haft'}) {
-	$haft =  $festivals->{'festival'}->{$f}->{'haft'};
-    }
-
-    my $torah_href;
-    my $haft_href;
-    my $about_href;
-
-    my $links = $festivals->{'festival'}->{$f}->{'links'}->{'link'};
-    if (defined $links) {
-	if (ref($links) eq 'HASH') {
-	    $links = [ $links ];
-	}
-    } else {
-	$links = [];
-    }
-
-    foreach my $l (@{$links})
-    {
-	next unless $l->{'rel'};
-	if ($l->{'rel'} eq 'torah')
-	{
-	    $torah_href = $l->{'href'};
-	}
-	elsif ($l->{'rel'} eq 'haft')
-	{
-	    $haft_href = $l->{'href'};
-	}
-	elsif ($l->{'rel'} eq 'about')
-	{
-	    $about_href = $l->{'href'};
-	}
-    }
-
-    if ($about_href) {
-    print OUT2 <<EOHTML;
-[<a title="Detailed information about holiday"
-href="$about_href">more...</a>]</p>
-EOHTML
-;
-    } else {
-	warn "$f: missing About href\n";
-    }
-
     if ($torah) {
+	my $torah_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'torah'}->{'href'};
+
 	print OUT2 qq{\n<h3>Torah Portion: };
 	print OUT2 qq{<a name="$anchor-torah"\nhref="$torah_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($torah_href);
@@ -358,7 +312,10 @@ EOHTML
 	print OUT2 "</p>\n";
     }
 
+    my $haft = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'reading'};
     if ($haft) {
+	my $haft_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'href'};
+
 	print OUT2 qq{\n<h3>Haftarah: };
 	print OUT2 qq{<a name="$anchor-haft"\nhref="$haft_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($haft_href);
@@ -371,7 +328,6 @@ EOHTML
 	    warn "$f: missing Haft href\n";
 	}
     }
-
 }
 
 sub write_festival_page
@@ -466,6 +422,20 @@ vspace="5" width="75" height="90" align="right"></a>
 EOHTML
 ;
 
+    my $about = get_var($festivals, $f, 'about');
+    if ($about) {
+	my $about_href = $about->{'href'};
+	if ($about_href) {
+	    print OUT2 <<EOHTML;
+[<a title="Detailed information about holiday"
+href="$about_href">more...</a>]</p>
+EOHTML
+;
+	} else {
+    	    warn "$f: missing About href\n";
+	}
+    }
+
     if (@{$SUBFESTIVALS{$f}} == 1)
     {
 	write_festival_part($festivals, $SUBFESTIVALS{$f}->[0]);
@@ -474,7 +444,17 @@ EOHTML
     {
 	foreach my $part (@{$SUBFESTIVALS{$f}})
 	{
+	    my $anchor = make_anchor($part);
+	    $anchor =~ s/\.html$//;
+
+	    my $part_descr = $festivals->{'festival'}->{$part}->{'descr'};
+	    print OUT2 qq{\n<h2><a name="$anchor"></a>$part</h2>\n<div style="padding-left:20px;">};
+	    if ($part_descr && $part_descr ne $descr) {
+		print OUT2 qq{<p>$part_descr.\n};
+	    }
+
 	    write_festival_part($festivals,$part);
+	    print OUT2 qq{</div>\n};
 	}
     }
 
@@ -484,8 +464,9 @@ EOHTML
 <dd><em><a
 href="$strassfeld_link">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
-by Rabbi Michael Strassfeld</p>
-<dd><em><a title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
+by Rabbi Michael Strassfeld
+<dd><em><a
+title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
 href="http://www.amazon.com/exec/obidos/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em> by Jewish Publication Society
 };
