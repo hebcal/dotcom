@@ -64,9 +64,13 @@ EOHTML
 ;
 
 print OUT qq{<h2>Major Holidays</h2>
-<p>For a good reference book on the major Jewish Holidays, I'd suggest
+<p><a
+href="http://www.amazon.com/exec/obidos/ASIN/0062720082/hebrewcalendaror"><img
+src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" alt="[cover]" hspace="5"
+vspace="5" width="75" height="90" align="right"></a>
+For a good reference book on the major Jewish Holidays, I'd suggest
 Michael Strassfeld's <em><a
-href="http://www.amazon.com/exec/obidos/ISBN=0062720082/hebrewcalendaror/">The
+href="http://www.amazon.com/exec/obidos/ASIN/0062720082/hebrewcalendaror">The
 Jewish Holidays: A Guide & Commentary</a></em>.</p>
 };
 &do_section('major');
