@@ -5,9 +5,9 @@
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
-use Hebcal;
-use Getopt::Std;
-use Config::IniFiles;
+use Hebcal ();
+use Getopt::Std ();
+use Config::IniFiles ();
 use DB_File;
 use strict;
 
@@ -18,7 +18,7 @@ my($usage) = "usage: $0 [-h] holidays.ini holidays.html holidays.db
 ";
 
 my(%opts);
-&getopts('h', \%opts) || die "$usage\n";
+Getopt::Std::getopts('h', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 3) || die "$usage";
 
