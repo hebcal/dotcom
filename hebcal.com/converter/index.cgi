@@ -235,7 +235,8 @@ if (defined $events[0])
     }
 
     if ($parsha) {
-	print STDOUT qq{\n<br>$parsha};
+        my $href = &Hebcal::get_holiday_anchor($parsha,0,$q);
+	print STDOUT qq{\n<br><a href="$href">$parsha</a>};
     }
 
     print STDOUT qq{</p>\n};
