@@ -36,7 +36,7 @@ $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed May  9 15:00:50 PDT 2001
+Last modified: Thu May 10 09:43:20 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -676,7 +676,7 @@ sub form
     &out_html(
 	qq{$message\n},
 	qq{<hr noshade size=\"1\"><h3>Change City</h3>\n},
-	qq{<form\naction="$script_name">},
+	qq{<form name="f1" id="f1"\naction="$script_name">},
 	qq{<label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
@@ -711,7 +711,7 @@ sub form
 
     &out_html(
 	qq{<b>(or select by major city</b>)<br>},
-	qq{<form\naction="$script_name">},
+	qq{<form name="f2" id="f2"\naction="$script_name">},
 	qq{<label\nfor="city">Closest City:\n},
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
