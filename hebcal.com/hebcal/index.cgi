@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Apr 19 15:30:27 PDT 2001
+Last modified: Sun Apr 22 11:55:41 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -497,7 +497,7 @@ JSCRIPT_END
 		       'DC.Identifier' => "http://www." .
 			   $server_name . $script_name,
 		       'DC.Language' => 'en',
-		       'DC.Date.X-MetadataLastModified' => '1999-12-24',
+		       'DC.Date.X-MetadataLastModified' => '2001-04-22',
 		       },
 		   ),
     "<table width=\"100%\"\nclass=\"navbar\">",
@@ -924,7 +924,7 @@ sub results_page
 				     -href => $script_name,
 				     -title => 'Hebcal Interactive Jewish Calendar'})
 			   ],
-		   -meta => {'robots' => 'noindex'});
+		   );
     print STDOUT
 	"<table width=\"100%\"\nclass=\"navbar\">",
 	"<tr><td><small>",
