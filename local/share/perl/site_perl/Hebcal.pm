@@ -1300,6 +1300,82 @@ sub dba_write_contents($$$)
     1;
 }
 
+########################################################################
+# for managing email shabbat list
+########################################################################
+
+sub sendmail
+{
+    my($return_path,$from_addr,$from_name,
+       $subject,$xtrahead,$body,$to,$cc) = @_;
+
+    use Net::SMTP;
+
+    unless ($return_path && $to && $subject) {
+	return 0;
+    }
+
+    my($smtp) = Net::SMTP->new('localhost', Timeout => 20);
+    unless ($smtp) {
+        return 0;
+    }
+
+    while(chomp($xtrahead)) {}
+    $xtrahead .= "\n" if $xtrahead ne '';
+
+    my(@recip);
+    push(@recip, split(/\s*,\s*/, $to));
+    if ($cc) {
+	push(@recip, split(/\s*,\s*/, $cc));
+	$cc = "Cc: $cc\n";
+    }
+
+    my $message =
+"From: \"$from_name\" <$from_addr>
+To: $to
+${cc}${xtrahead}MIME-Version: 1.0
+Content-Type: text/plain
+Subject: $subject
+";
+
+    my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
+    my($hostname) = $ENV{'HOST'} || `/bin/hostname`;
+    chomp($hostname);
+    $message .= "X-Sender: $login\@$hostname\n";
+
+    $message .= "\n" . $body;
+
+    unless ($smtp->mail($return_path)) {
+        warn "smtp mail() failure for @recip\n";
+        return 0;
+    }
+    foreach (@recip) {
+	next unless $_;
+        unless($smtp->to($_)) {
+            warn "smtp to() failure for $_\n";
+            return 0;
+        }
+    }
+    unless($smtp->data()) {
+        warn "smtp data() failure for @recip\n";
+        return 0;
+    }
+    unless($smtp->datasend($message)) {
+        warn "smtp datasend() failure for @recip\n";
+        return 0;
+    }
+    unless($smtp->dataend()) {
+        warn "smtp dataend() failure for @recip\n";
+        return 0;
+    }
+    unless($smtp->quit) {
+        warn "smtp quit failure for @recip\n";
+        return 0;
+    }
+
+    1;
+}
+
 # avoid warnings
 if ($^W && 0)
 {
