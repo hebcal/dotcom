@@ -29,7 +29,7 @@ use CGI;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(csv_write_contents dba_write_contents dba_write_header
-	     invoke_hebcal
+	     invoke_hebcal get_dow
 	     url_escape http_date gen_cookie process_cookie);
 
 ########################################################################
@@ -37,6 +37,9 @@ use CGI;
 ########################################################################
 
 my($VERSION) = '$Revision$'; #'
+
+# boolean options
+@opts = ('c','o','s','i','a','d','D');
 
 $PALM_DBA_MAGIC      = 1145176320;
 $PALM_DBA_INTEGER    = 1;
@@ -366,6 +369,13 @@ sub invoke_hebcal($$)
     @events;
 }
 
+sub get_dow($$$)
+{
+    my($year,$mon,$mday) = @_;
+    my($time) = &Time::Local::timegm(0,0,9,$mday,$mon,$year,0,0,0); # 9am
+
+    (localtime($time))[6];	# $wday
+}
 
 ########################################################################
 # web page utils
