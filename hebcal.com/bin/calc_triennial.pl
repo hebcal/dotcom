@@ -674,7 +674,7 @@ $prev_link
 <small>Reference: <em><a
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
 Hayim: Torah and Commentary</a></em>,
-David L. Lieber et. al., Jewish Publication Society, 2001.</small>
+David L. Lieber et. al., JPS 2001.</small>
 </td>
 <td align="right" width="33%">
 $next_link
