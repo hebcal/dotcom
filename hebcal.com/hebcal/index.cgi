@@ -102,7 +102,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Fri Aug 20 15:25:51 PDT 1999
+Last modified: Wed Sep  1 10:58:42 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -465,7 +465,7 @@ interested in 93, but rather 1993.
     if ($opts{'c'} == 1)
     {
 	print STDOUT 
-"<input type=\"hidden\" name=\"c\" value=\"1\">
+"<input type=\"hidden\" name=\"c\" value=\"on\">
 Include candle lighting times for ";
 	if (defined $in{'geo'})
 	{
