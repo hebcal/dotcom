@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Oct  2 09:14:42 PDT 2000
+Last modified: Wed Oct 11 09:50:39 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -265,6 +265,11 @@ $title =~ s/ &nbsp;/ /;
 print STDOUT $q->header(),
     $q->start_html(-title => $title,
 		   -target => '_top',
+		   -style => { -type => 'text/css',
+			       -code => ".boxed { border-style: solid;\n" . 
+				   "border-color: #666666;\n" . 
+				   "border-width: thin;\n" .
+				       "padding: 8px; }" },
 		   -head => [
 			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			     $q->Link({-rel => 'stylesheet',
@@ -414,14 +419,11 @@ sub form
 	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
 	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
     }
-    elsif ($head == 0)
-    {
-	$message = "<hr noshade size=\"1\">";
-    }
 
 
     print STDOUT
-	qq{$message\n<form action="$script_name">},
+	qq{$message\n},
+	qq{<table><tr><td class="boxed"><form\naction="$script_name">},
 	qq{<label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
@@ -440,11 +442,28 @@ sub form
 			-labels =>
 			{'usa' => "\nUSA (except AZ, HI, and IN) ",
 			 'israel' => "\nIsrael ",
-			 'none' => "\nnone ", });
+			 'none' => "\nnone ", }),
+	$q->hidden(-name => 'geo',
+		   -value => 'zip',
+		   -override => 1);
 
     print STDOUT
-	qq{<br><input type="submit" value="Get Shabbat Times"></form>},
-	$html_footer;
+	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
+	qq{</td>\n<td>&nbsp;or&nbsp;</td>\n},
+	qq{<td class="boxed"><form\naction="$script_name">},
+	qq{<label\nfor="city">Closest City:\n},
+	$q->popup_menu(-name => 'city',
+		       -id => 'city',
+		       -values => [sort keys %Hebcal::city_tz],
+		       -default => 'Jerusalem'),
+	qq{</label>},
+	$q->hidden(-name => 'geo',
+		   -value => 'city',
+		   -override => 1),
+	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
+	qq{</td></tr></table>};
+
+    print STDOUT $html_footer;
 
     exit(0);
 }
