@@ -246,19 +246,22 @@ my zip code?</a></h3>
 <p>Since candle lighting times are determined from latitude and
 longitude, a process called geocoding is used to determine the
 geographic position of a zip code.  Your zip code is looked up in a
-geocoded database of about 43,000 zip codes.</p>
+geocoded database of about 42,000 zip codes.</p>
 
-<p>Two-thirds of the zip codes were downloaded from <a
-href="http://www.census.gov/geo/www/gazetteer/places.html">The
-U.S. Census Bureau's
-Gazetteer</a> project, based on 1990 Census data.  The other third of
-the zip codes that aren't listed in the Gazetteer database were obtained
-from an Internet mapping service (available via <a
-href="/dist/extra-zips.txt.gz">extra-zips.txt.gz</a>, 161 Kbytes, in the same
-format as the Gazetteer database).  Also <a
-href="/dist/usps-citynames.txt.gz">usps-citynames.txt.gz</a>, 188 Kbytes,
-contains an updated mapping from zip codes to city names obtained from
-the US Postal Service.</p>
+<p>We combined <a
+href="http://www.census.gov/geo/www/tiger/zip1999.html">1999 ZIP
+Code</a> data from the <a
+href="http://www.census.gov/geo/www/gazetteer/places.html">U.S. Census
+Bureau's Gazetteer</a> project with National Weather Service <a
+href="http://isl715.nws.noaa.gov/mapdata/newcat/amdc/county/">county-timezone
+data</a>.  The Gazetteer data from 1999 is much more complete than their
+data from 1990 -- but still not as good as the commercial-quality data
+you get from the U.S. Post Office.  Gazetteer contains zip code, city
+name, latitude and lognitude but is missing time zone.</p>
+
+<p>However, the Gazetteer data contain a FIPS code which represents the
+county, and the NWS data matches FIPS code to timezone and whether that
+county observes Daylight Saving Time.</p>
 
 <h3><a name="candle-accurate">How accurate are candle lighting
 times?</a></h3>
@@ -485,7 +488,7 @@ GNU General Public License for more details.</p>
 <a href="/contact/">Contact</a>
 <br>
 <!-- hhmts start -->
-Last modified: Thu Mar 21 01:35:59 EST 2002
+Last modified: Fri Apr 12 18:14:01 EDT 2002
 <!-- hhmts end -->
 ($Revision$)
 </span>
