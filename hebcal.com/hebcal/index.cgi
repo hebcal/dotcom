@@ -394,7 +394,7 @@ JSCRIPT_END
     print STDOUT $message, "\n",
     "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
-    "<strong>Jewish Holidays for:</strong>&nbsp;&nbsp;&nbsp;\n",
+    "<b>Jewish Holidays for:</b>&nbsp;&nbsp;&nbsp;\n",
     "<label for=\"year\">Year:\n",
     $q->textfield(-name => 'year',
 		  -id => 'year',
@@ -422,7 +422,7 @@ JSCRIPT_END
     $q->small("Use all digits to specify a year.\nYou probably aren't",
 	      "interested in 93, but rather 1993.\n");
 
-    print STDOUT "<p><strong>Include events:</strong>",
+    print STDOUT "<p><b>Include events:</b>",
     "<br><label\nfor=\"nh\">",
     $q->checkbox(-name => 'nh',
 		 -id => 'nh',
@@ -457,31 +457,25 @@ JSCRIPT_END
     "</label>)";
 
     $q->param('c','off') unless defined $q->param('c');
+    $q->param('geo','zip') unless defined $q->param('geo');
 
-    my($type) = 'zip code';
     my($after_type) = '';
-    if (defined $q->param('geo'))
+    if (defined $q->param('geo') && $q->param('geo') eq 'pos')
     {
-	if ($q->param('geo') eq 'city')
-	{
-	    $type = "closest city";
-	}
-	elsif ($q->param('geo') eq 'pos')
-	{
-	    $type = "latitude/longitude";
-	    $after_type = "<small>(<a\n" . 
-		"href=\"$latlong_url\">search\n" .
-		"latitude/longitude</a>)</small>\n";
-	}
+	$after_type = "\n<small>(<a href=\"$latlong_url\">search\n" .
+	    "latitude/longitude</a>)</small>\n";
     }
 
     print STDOUT $q->hidden(-name => 'c',
 			    -id => 'c'),
-    "<br>Candle lighting times for $type:\n",
+    $q->hidden(-name => 'geo',
+	       -default => 'zip',
+	       -id => 'geo'),
+    "<p><b>Candle lighting times:</b>",
     $after_type,
     "<br><small>(or select by\n";
 
-    if (defined $q->param('geo') && $q->param('geo') eq 'city')
+    if ($q->param('geo') eq 'city')
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on;geo=zip",
@@ -493,7 +487,7 @@ JSCRIPT_END
 	           },
 		  "latitude/longitude");
     }
-    elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
+    elsif ($q->param('geo') eq 'pos')
     {
 	print STDOUT
 	    $q->a({-href => $script_name . "?c=on;geo=zip",
@@ -519,11 +513,9 @@ JSCRIPT_END
     }
     print STDOUT ")</small><br>";
 
-    if (defined $q->param('geo') && $q->param('geo') eq 'city')
+    if ($q->param('geo') eq 'city')
     {
-	print STDOUT $q->hidden(-name => 'geo',
-				-value => 'city',
-				-id => 'geo'),
+	print STDOUT
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"city\">",
 	"Closest City:\n",
 	$q->popup_menu(-name => 'city',
@@ -532,11 +524,9 @@ JSCRIPT_END
 		       -default => 'Jerusalem'),
 	"</label><br>";
     }
-    elsif (defined $q->param('geo') && $q->param('geo') eq 'pos')
+    elsif ($q->param('geo') eq 'pos')
     {
-	print STDOUT $q->hidden(-name => 'geo',
-				-value => 'pos',
-				-id => 'geo'),
+	print STDOUT
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"ladeg\">",
 	$q->textfield(-name => 'ladeg',
 		      -id => 'ladeg',
@@ -574,25 +564,24 @@ JSCRIPT_END
 		       -default => 'w',
 		       -labels => {'e' => 'East Longitude',
 				   'w' => 'West Longitude'}),
-	"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
+	"<br>\n";
     }
     else
     {
-	print STDOUT $q->hidden(-name => 'geo',
-				-value => 'zip',
-				-id => 'geo'),
+	print STDOUT
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor=\"zip\">\n",
 	"Zip code:\n",
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
 		      -size => 5,
 		      -maxlength => 5),
-	"</label>&nbsp;&nbsp;&nbsp;\n";
+	"</label>&nbsp;&nbsp;&nbsp;<br>\n";
     }
 
-    if (!defined $q->param('geo') || $q->param('geo') ne 'city')
+    if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
     {
-	print STDOUT "<label for=\"tz\">Time zone:\n",
+	print STDOUT 
+	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for=\"tz\">Time zone:\n",
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
 		       -values =>
@@ -631,7 +620,7 @@ JSCRIPT_END
 		  -default => 72),
     "</label></p>\n";
 
-    print STDOUT "<p><strong>Other options:</strong>",
+    print STDOUT "<p><b>Other options:</b>",
     "<br><label\nfor=\"vis\">",
     $q->checkbox(-name => 'vis',
 		 -id => 'vis',
@@ -1224,23 +1213,16 @@ sub get_candle_config($)
     elsif ($q->param('c') && $q->param('c') ne 'off' &&
 	   defined $q->param('zip') && $q->param('zip') ne '')
     {
-	$q->param('dst','usa')
-	    unless $q->param('dst');
-	$q->param('tz','auto')
-	    unless $q->param('tz');
 	$q->param('geo','zip');
 
 	&form("Sorry, <b>" . $q->param('zip') . "</b> does\n" .
 	      "not appear to be a 5-digit zip code.")
 	    unless $q->param('zip') =~ /^\d\d\d\d\d$/;
 
-	my($dbmfile) = 'zips.db';
-	my(%DB);
-	tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-	    || die "Can't tie $dbmfile: $!\n";
-
-	my($val) = $DB{$q->param('zip')};
-	untie(%DB);
+	my $DB = &Hebcal::zipcode_open_db();
+	my($val) = $DB->{$q->param('zip')};
+	&Hebcal::zipcode_close_db($DB);
+	undef($DB);
 
 	&form("Sorry, can't find\n".  "<b>" . $q->param('zip') .
 	      "</b> in the zip code database.\n",
@@ -1252,37 +1234,41 @@ sub get_candle_config($)
 	      "?c=on;geo=pos\">latitude/longitude</a></li></ul>")
 	    unless defined $val;
 
-	my($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
-	my($city,$state) = split(/\0/, substr($val,6));
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    	&Hebcal::zipcode_fields($val);
 
-	if (($state eq 'HI' || $state eq 'AZ') && $q->param('dst') eq 'usa')
-	{
-	    $q->param('dst','none');
-	}
-
-	my(@city) = split(/([- ])/, $city);
-	$city = '';
-	foreach (@city)
-	{
-	    $_ = lc($_);
-	    $_ = "\u$_";		# inital cap
-	    $city .= $_;
-	}
+	# allow CGI args to override
+	$tz = $q->param('tz')
+	    if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/);
 
 	$city_descr = "$city, $state &nbsp;" . $q->param('zip');
 
-	my($tz) = &Hebcal::guess_timezone($q->param('tz'),
-					  $q->param('zip'),$state);
-
-	unless (defined $tz)
+	if ($tz eq '?')
 	{
+	    $q->param('tz_override', '1');
+
 	    &form("Sorry, can't auto-detect\n" .
-		  "timezone for <b>" . $city_descr . "</b>\n".
-		  "(state <b>" . $state . "</b> spans multiple time zones).",
+		  "timezone for <b>" . $city_descr . "</b>\n",
 		  "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
 	$q->param('tz', $tz);
+
+	# allow CGI args to override
+	if (defined $q->param('dst'))
+	{
+	    $dst = 0 if $q->param('dst') eq 'none';
+	    $dst = 1 if $q->param('dst') eq 'usa';
+	}
+
+	if ($dst eq '1')
+	{
+	    $q->param('dst','usa');
+	}
+	else
+	{
+	    $q->param('dst','none');
+	}
 
 #	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
 #	$long_descr = "${long_deg}d${long_min}' W longitude";
