@@ -21,8 +21,9 @@ Jewish Calendar Tools</small></td>
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
-<span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
+<span class="fpsubhead">
 <!-- holiday greeting -->
+<span class="fpgreeting">Happy Chanukah!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" -->
