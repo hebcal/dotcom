@@ -63,6 +63,34 @@ else {
 }
 my_footer();
 
+function write_sub_info($email, $val) {
+    $fd = fopen("/tmp/hebcal.com.lock", "w");
+    if ($fd == false) {
+	die("lockfile open failed");
+    }
+
+    if (flock($fd, LOCK_EX) == false) {
+	die("flock failed");
+	fclose($fd);
+    }
+
+    $id = dba_open("subs.db", "w", "db3");
+    if (!$id) {
+	die("dba_open subs.db failed");
+    }
+
+    if (!dba_replace($email, $val, $id)) {
+	die("dba_replace subs.db failed");
+    }
+
+    dba_sync($id);
+    dba_close($id);
+    flock($fd, LOCK_UN);
+    fclose($fd);
+
+    return true;
+}
+
 function get_sub_info($email) {
     $fd = fopen("/tmp/hebcal.com.lock", "w");
     if ($fd == false) {
@@ -384,9 +412,67 @@ EOD
 }
 
 function unsubscribe($param) {
-
+    $html_email = htmlentities($param['em']);
     $info = get_sub_info($param['em']);
 
+    if ($info && preg_match('/^action=/', $info)) {
+	$html = <<<EOD
+<h2>Already Unsubscribed</h2>
+<p><b>$html_email</b>
+is already removed from the email subscription list.</p>
+EOD
+	     ;
+
+	echo $html;
+	return false;
+    }
+
+    if (!$info) {
+	form($param,
+	     "Sorry, <b>$html_email</b> is\nnot currently subscribed.");
+    }
+
+    $now = time();
+
+    write_sub_info($param['em'], "action=UNSUBSCRIBE;t=$now");
+
+    $from_name = "Hebcal Subscription Notification";
+    $from_addr = "shabbat-owner@hebcal.com";
+    $return_path = "shabbat-bounce@hebcal.com";
+    $subject = "You have been unsubscribed from hebcal";
+
+    global $HTTP_SERVER_VARS;
+    $sender =  'webmaster@';
+    $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
+
+    $headers = array('From' => "\"$from_name\" <$from_addr>",
+		     'To' => $recipients,
+		     'Reply-To' => $from_addr,
+		     'MIME-Version' => '1.0',
+		     'Content-Type' => 'text/plain',
+		     'X-Sender' => $sender,
+		     'Subject' => $subject);
+
+    $body = <<<EOD
+Hello,
+
+Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.
+
+Regards,
+hebcal.com
+EOD;
+
+    $err = smtp_send($return_path, $recipients, $headers, $body);
+
+    $html = <<<EOD
+<h2>Unsubscribed</h2>
+<p>You have been removed from the email subscription list.<br>
+A confirmation message has been sent to <b>$html_email</b>.</p>
+EOD
+	     ;
+    echo $html;
+    return true;
 }
 
 ?>
