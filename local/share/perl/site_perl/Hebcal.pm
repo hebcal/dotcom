@@ -1038,7 +1038,8 @@ Jewish Calendar events into your desktop software.</p>};
 
     # only offer DBA export when we know timegm() will work
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
+	(!defined($q->param('dst')) || $q->param('dst') eq 'usa'
+	 || $q->param('dst') eq 'none'))
     {
 	$s .= "<h4>Palm Desktop for Windows</h4>\n<ol><li><a href=\"" .
 	    download_href($q, $filename, 'dba') .
