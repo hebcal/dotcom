@@ -132,14 +132,12 @@ my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
 my($sat_year) = (localtime($saturday))[5] + 1900;
 my($cmd)  = './hebcal';
 
-my($default) = 0;
 my($city_descr,$dst_descr,$tz_descr);
 if (defined $q->param('city'))
 {
     unless (defined($Hebcal::city_tz{$q->param('city')}))
     {
 	$q->param('city','New York');
-	$default = 1;
     }
 
     $q->param('geo','city');
@@ -252,7 +250,6 @@ else
     $cmd .= " -C '" . $q->param('city') . "'";
 
     $city_descr = $q->param('city');
-    $default = 1;
 }
 
 $cmd .= " -z " . $q->param('tz')
@@ -272,7 +269,7 @@ foreach (@Hebcal::opts)
 
 $cmd .= ' -s -c ' . $sat_year;
 
-unless ($default)
+if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 {
     my($cookie_to_set);
 
@@ -297,10 +294,9 @@ unless ($default)
     print STDOUT "Set-Cookie: ", $cookie_to_set,
     "; path=/; expires=",  $expires_date, "\015\012"
 	if $cookie_to_set;
-	    
+
     print STDOUT "Expires: ",
-    strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012"
-	if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/);
+    strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012";
 }
 
 my($title) = "1-Click Shabbat for $city_descr";
