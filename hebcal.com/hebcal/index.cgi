@@ -448,11 +448,8 @@ JSCRIPT_END
     elsif (defined $q->referer())
     {
 	my $ref = $q->referer();
-	if ($ref =~ m,http://www.google.com/search.*q=([^&]+),i ||
-	    $ref =~ m,http://search.yahoo.com/search.*p=([^&]+),i)
+	if ($ref =~ m,http://(www.google|search.yahoo|search.msn|aolsearch.aol).com/,i)
 	{
-	    my $query = $1;
-
 	    $message=<<MESSAGE_END;
 <blockquote class="welcome">
 <a title="Jewish Year 5765 Wall Calendar from Amazon.com"
