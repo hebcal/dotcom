@@ -28,14 +28,14 @@ use strict;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-h] output.db zipnov99.csv c_22mr02.csv
+my($usage) = "usage: $0 [-h] zipnov99.csv c_22mr02.csv
     -h        Display usage information.
 ";
 
 my(%opts);
 &getopts('h', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
-(@ARGV == 3) || die "$usage";
+(@ARGV == 2) || die "$usage";
 
 ## National Weather Service county-timezone data comes from a file named
 ## c_DDmmYY.zip from http://www.nws.noaa.gov/geodata/catalog/county/data/
@@ -70,7 +70,8 @@ my(%tz_abbrev) =
      '?' => '?,?',     # for unknown
      );
 
-my($dbmfile,$zips_file,$weather_file) = @ARGV;
+my $zips_file = shift;
+my $weather_file = shift;
 
 my(%fips_zone,%fips_state);
 
@@ -104,7 +105,7 @@ open(IN,$zips_file) || die "$zips_file: $!\n";
 my $dsn = 'DBI:mysql:database=mradwin_mt1;host=mysql.radwin.net';
 my $dbh = DBI->connect($dsn, 'mradwin_mt', 'xxxxxxxx');
 
-print "reading zipcodes from $zips_file, writing to $dbmfile\n";
+print "reading zipcodes from $zips_file, writing to MySQL\n";
 
 $count = 0;
 my $matched = 0;
@@ -136,14 +137,14 @@ while(<IN>)
     }
     else
     {
-	warn "$zips_file:$.: unknown timezone for FIPS $fips\n";
+	warn "$zips_file: zipcode $zip_code (line $.) unknown timezone for FIPS $fips\n";
 	$tz = '?';
 	$us_state = '??';
     }
 
     if (defined $seen{$zip_code})
     {
-	warn "$zips_file:$.: duplicate zipcode $zip_code (already seen on line $seen{$zip_code})\n";
+	warn "$zips_file: zipcode $zip_code (line $.) duplicate (already seen on line $seen{$zip_code})\n";
 	next;
     }
     else
@@ -158,6 +159,8 @@ while(<IN>)
 
     my($tztz,$tzdst) = split(/,/, $tz_abbrev{$tz});
 
+    $poname =~ s/\'/\\\'/g;
+
     my $sql = "INSERT INTO hebcal_zips";
     $sql .= " (zips_zipcode, zips_latitude, zips_longitude, zips_timezone, zips_dst, zips_city, zips_state)";
     $sql .= " VALUES ('$zip_code', '$latitude', '$longitude', '$tztz', '$tzdst', '$poname', '$us_state');";
@@ -168,7 +171,7 @@ while(<IN>)
 close(IN);
 $dbh->disconnect();
 
-print "inserted $count zipcodes from $zips_file into $dbmfile\n";
+print "inserted $count zipcodes from $zips_file into MySQL\n";
 print "$matched / $count zipcodes had a timezone\n";
 
 exit(0);
