@@ -3,7 +3,7 @@
 <!-- $Id$ -->
 <html lang="en">
 <head>
-<title>Hebrew Calendar</title>
+<title>hebcal.com: Hebrew Calendar Tools</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true on "1998.03.10T11:49-0800" r (n 0 s 0 v 0 l 0))'>
 <meta name="author" content="Michael John Radwin">
@@ -26,9 +26,7 @@ H1, H2, H3, H4, H5, H6 {
 <td align="right"><input type="text" name="words" size="30">
 <input type="submit" value="Search"></td></tr></table>
 </form>
-<h1>Hebrew Calendar</h1>
-<p>hebcal.com is a free site that provides web tools for the Jewish
-calendar.</p>
+<h1>hebcal.com: Hebrew Calendar Tools</h1>
 <dl>
 <dt><strong><big><a
 href="/hebcal/">Hebcal Interactive Jewish
@@ -48,7 +46,7 @@ href="/search/">Search</a></big></strong></dt>
 <hr noshade="noshade" size="1">
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 17 16:58:07 PDT 2001
+Last modified: Tue Apr 17 17:02:43 PDT 2001
 <!-- hhmts end -->
 </small>
 </body>
