@@ -448,7 +448,7 @@ JSCRIPT_END
     elsif (defined $q->referer())
     {
 	my $ref = $q->referer();
-	if ($ref =~ m,http://(www.google|search.yahoo|search.msn|aolsearch.aol).com/,i)
+	if ($ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol)\.com/.*=(jewish|hebrew)\+calend[ae]r,i)
 	{
 	    $message=<<MESSAGE_END;
 <blockquote class="welcome">
