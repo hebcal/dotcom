@@ -23,16 +23,20 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
+use lib "/home/mradwin/local/lib/perl5/site_perl";
+
 use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Time::Local;
+use Date::Calc;
 use Hebcal;
 use HTML::CalendarMonthSimple;
 
 my($author) = 'webmaster@hebcal.com';
-my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
+my($expires_future) = 'Thu, 15 Apr 2010 20:00:00 GMT';
+my($expires_date) = $expires_future;
 
 my($this_mon,$this_year) = (localtime)[4,5];
 $this_year += 1900;
@@ -81,6 +85,22 @@ foreach my $key ($q->param())
 
 # decide whether this is a results page or a blank form
 &form('') unless $q->param('v');
+
+if (defined $q->param('year') && $q->param('year') eq 'now' &&
+    defined $q->param('month') && $q->param('month') eq 'now')
+{
+    $q->param('year', $this_year);
+    $q->param('month', $this_mon);
+
+    my($end_day) = &Date::Calc::Days_in_Month($this_year, $this_mon);
+    my($end_of_month) =
+	&Time::Local::timelocal(0,0,0,
+				$end_day,
+				$this_mon - 1,
+				$this_year - 1900);
+
+    $expires_date = &Hebcal::http_date($end_of_month);
+}
 
 &form("Please specify a year.")
     if !defined $q->param('year') || $q->param('year') eq '';
@@ -703,7 +723,7 @@ sub results_page()
 	if (! $C_cookie)
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_date, "; path=/\015\012"
+	    $expires_future, "; path=/\015\012"
 		if $newcookie =~ /&/;
 	}
 	else
@@ -715,7 +735,7 @@ sub results_page()
 	    $cmp2 =~ s/^C=t=\d+\&?//;
 
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_date, "; path=/\015\012"
+	    $expires_future, "; path=/\015\012"
 		if $cmp1 ne $cmp2;
 	}
 
