@@ -481,14 +481,14 @@ for ($i = 0; $i < $numEntries; $i++)
 	    {
 		$rss{'title'} .= "<b>$subj</b>";
 	    }
-	    elsif (defined $torah_href && $torah_href ne '')
-	    {
-		$rss{'title'} .=
-		    qq{<b>$subj</b>\n<span class="goto">(<a } .
-		    qq{target="_top"\nhref="$drash_href">Drash</a>\n} .
-		    qq{- <a target="_top"\nhref="$torah_href">Torah</a>\n} .
-		    qq{- <a target="_top"\nhref="$haftarah_href">Haftarah</a>)</span>};
-	    }
+#	    elsif (defined $torah_href && $torah_href ne '')
+#	    {
+#		$rss{'title'} .=
+#		    qq{<b>$subj</b>\n<span class="goto">(<a } .
+#		    qq{target="_top"\nhref="$drash_href">Drash</a>\n} .
+#		    qq{- <a target="_top"\nhref="$torah_href">Torah</a>\n} .
+#		    qq{- <a target="_top"\nhref="$haftarah_href">Haftarah</a>)</span>};
+#	    }
 	    else
 	    {
 		$rss{'title'} .= qq{<a\ntarget="_top" href="$href">$subj</a>};
