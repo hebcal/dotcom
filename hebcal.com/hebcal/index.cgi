@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Thu Sep 30 14:19:13 PDT 1999
+Last modified: Wed Oct  6 15:02:57 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -659,8 +659,9 @@ else
 print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"$endl";
 
 $prev = '';
-local($loc) = defined $in{'city'} ? "in $in{'city'}" :
-    defined $in{'zip'} ? "in $in{'zip'}" : '';
+local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
+    "in $city_descr" : '';
+$loc =~ s/&nbsp;/ /g;
 while(<HEBCAL>)
 {
     next if $_ eq $prev;
@@ -1146,11 +1147,23 @@ open.</small></p>
 	    $ST  = sprintf("%04d%02d%02d", $year, $month, $day);
 	    if ($hr >= 0 && $min >= 0)
 	    {
-	        local($loc) = defined $in{'city'} ? $in{'city'} :
-	                      defined $in{'zip'} ? $in{'zip'} : '';
+		local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
+		    "in $city_descr" : '';
+		$loc =~ s/&nbsp;/ /g;
+
 		$hr += 12 if $hr < 12 && $hr > 0;
 		$ST .= sprintf("T%02d%02d00", $hr, $min);
-		$ST .= "&amp;DESC=" . &url_escape("in $loc");
+
+		if ($in{'tz'} !~ /^\s*$/)
+		{
+		    $abstz = $in{'tz'} >= 0 ? $in{'tz'} : -$in{'tz'};
+		    $signtz = $in{'tz'} < 0 ? '-' : '';
+
+		    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
+		}
+
+		$ST .= "&amp;DESC=" . &url_escape($loc)
+		    if $loc ne '';
 	    }
 
 	    print STDOUT
