@@ -918,7 +918,7 @@ sub results_page()
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
 
     # download links
-    my($download) = qq{<a name="export">&nbsp;</a><div class="goto">\n<h3>Export calendar</h3>\n};
+    my($download) = qq{<a name="export"><hr></a><div class="goto">\n<h3>Export calendar</h3>\n};
 
     $download .= qq{<p>By clicking the links below, you can download 
 Jewish Calendar events into your desktop software.</p>};
@@ -1013,8 +1013,8 @@ Jewish Calendar events into your desktop software.</p>};
 
     if ($numEntries > 0)
     {
-	print STDOUT qq{<span class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm &amp; Outlook</a></span>\n};
+	print STDOUT qq{<p class="goto"><span class="sm-grey">&gt;</span>
+<a href="#export">Export calendar to Palm &amp; Outlook</a></p>\n};
     }
     else
     {
