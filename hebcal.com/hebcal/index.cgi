@@ -55,8 +55,6 @@ href=\"/michael/projects/hebcal/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
 
-# boolean options
-@opts = ('c','o','s','i','a','d','D');
 $cmd  = "/home/users/mradwin/bin/hebcal";
 
 # process form params
@@ -308,7 +306,7 @@ else
     $q->delete('geo');
 }
 
-foreach (@opts)
+foreach (@Hebcal::opts)
 {
     $cmd .= ' -' . $_
 	if defined $q->param($_) &&
@@ -1145,12 +1143,4 @@ so you can keep this window open.
     print STDOUT  $html_footer;
 
     1;
-}
-
-sub get_dow
-{
-    my($year,$mon,$mday) = @_;
-    my($time) = &Time::Local::timegm(0,0,9,$mday,$mon,$year,0,0,0); # 9am
-
-    (localtime($time))[6];	# $wday
 }
