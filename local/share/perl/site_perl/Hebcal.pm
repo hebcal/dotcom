@@ -27,7 +27,7 @@ use strict;
 use Time::Local;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/web/hebcal.com/lib/perl5/site_perl";
 use Date::Calc;
 use DB_File;
 
@@ -35,12 +35,12 @@ use DB_File;
 # constants
 ########################################################################
 
-my $sedrotfn = '/pub/m/r/mradwin/hebcal.com/hebcal/sedrot.db';
+my $sedrotfn = '/home/mradwin/web/hebcal.com/hebcal/sedrot.db';
 my(%SEDROT);
 tie(%SEDROT, 'DB_File', $sedrotfn, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $sedrotfn";
 
-my $holidaysfn = '/pub/m/r/mradwin/hebcal.com/hebcal/holidays.db';
+my $holidaysfn = '/home/mradwin/web/hebcal.com/hebcal/holidays.db';
 my(%HOLIDAYS);
 tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $holidaysfn";
