@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Dec 28 14:55:34 PST 1999
+Last modified: Tue Dec 28 15:58:14 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1522,6 +1522,8 @@ sub dba_contents {
 	    $startTime += $local2local; # move into their local tz
 	}
 
+	$untimed = ($all_day eq '"true"') ? 1 : 0;
+
 	&writeInt($PALM_DBA_INTEGER);
 	&writeInt(0);		# recordID
 
@@ -1535,7 +1537,11 @@ sub dba_contents {
 	&writeInt($startTime);
 
 	&writeInt($PALM_DBA_INTEGER);
-	&writeInt(0);		# endTime
+	if ($untimed) {
+	    &writeInt($startTime); # endTime
+	} else {
+	    &writeInt($startTime+60); # endTime
+	}
 
 	&writeInt(5);		# spacer
 	&writeInt(0);		# spacer
@@ -1558,8 +1564,6 @@ sub dba_contents {
 	} else {
 	    &writePString($memo);
 	}
-
-	$untimed = ($all_day eq '"true"');
 
 	&writeInt($PALM_DBA_BOOL);
 	&writeInt($untimed);
