@@ -39,7 +39,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Wed Apr 14 11:28:57 PDT 1999
+Last modified: Mon Apr 19 09:33:06 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -154,6 +154,14 @@ if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
        defined $in{'ladeg'} && defined $in{'lamin'} && defined $in{'ladir'})
 {
+    &form('',
+	  "<p><em><font color=\"#ff0000\">Latitude/Longitude arguments\n" .
+	  "must be numeric.</font></em></p>")
+	if (($in{'lodeg'} !~ /^\s*\d*\s*$/) ||
+	    ($in{'lomin'} !~ /^\s*\d*\s*$/) ||
+	    ($in{'ladeg'} !~ /^\s*\d*\s*$/) ||
+	    ($in{'lamin'} !~ /^\s*\d*\s*$/));
+
     ($long_deg) = ($in{'lodeg'} =~ /^\s*(\d+)\s*$/);
     ($long_min) = ($in{'lomin'} =~ /^\s*(\d+)\s*$/);
     ($lat_deg)  = ($in{'ladeg'} =~ /^\s*(\d+)\s*$/);
@@ -166,6 +174,27 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
 
     $in{'lodir'} = 'w' unless ($in{'lodir'} eq 'e');
     $in{'ladir'} = 'n' unless ($in{'ladir'} eq 's');
+
+    $in{'lodeg'} = $long_deg;
+    $in{'lomin'} = $long_min;
+    $in{'ladeg'} = $lat_deg;
+    $in{'lamin'} = $lat_min;
+
+    &form('', "<p><em><font color=\"#ff0000\">Longitude minutes\n" .
+	  "out of valid range 0-60.</font></em></p>")
+	if ($in{'lomin'} > 60);
+
+    &form('', "<p><em><font color=\"#ff0000\">Longitude degrees\n" .
+	  "out of valid range 0-180.</font></em></p>")
+	if ($in{'lodeg'} > 180);
+
+    &form('', "<p><em><font color=\"#ff0000\">Latitude minutes\n" .
+	  "out of valid range 0-60.</font></em></p>")
+	if ($in{'lamin'} > 60);
+
+    &form('', "<p><em><font color=\"#ff0000\">Latitude degrees\n" .
+	  "out of valid range 0-90.</font></em></p>")
+	if ($in{'ladeg'} > 90);
 
     $city_descr = "Geographic Position<br>\n";
     $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude<br>\n";
@@ -385,9 +414,13 @@ Include candle lighting times</label><br>
 <label for=\"lamin\"> min</label>
 
 <select name=\"ladir\">
-<option value=\"n\">North Latitude</option>
-<option value=\"s\">South Latitude</option>
-</select></nobr><br>
+";
+print STDOUT "<option value=\"n\"",
+	($in{'ladir'} eq 'n' ? ' selected' : ''), ">North Latitude</option>\n";
+print STDOUT "<option value=\"s\"",
+	($in{'ladir'} eq 's' ? ' selected' : ''), ">South Latitude</option>\n";
+
+print STDOUT "</select></nobr><br>
 
 <nobr>
 <input type=\"text\" name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\" size=\"3\" maxlength=\"3\">
@@ -397,9 +430,13 @@ Include candle lighting times</label><br>
 <label for=\"lomin\"> min</label>
 
 <select name=\"lodir\">
-<option value=\"w\">West Longitude</option>
-<option value=\"e\">East Longitude</option>
-</select></nobr><br>
+";
+
+print STDOUT "<option value=\"w\"",
+	($in{'lodir'} eq 'w' ? ' selected' : ''), ">West Longitude</option>\n";
+print STDOUT "<option value=\"e\"",
+	($in{'lodir'} eq 'e' ? ' selected' : ''), ">East Longitude</option>\n";
+print STDOUT "</select></nobr><br>
 </td>
 <td>
 (or select by <a href=\"$cgipath\">Zip</a> or
@@ -493,14 +530,19 @@ Use Israeli sedra scheme</label>)<br>
 <input type=\"submit\" value=\"Get Calendar\">
 </form>
 
-<p><small>
+<small>
+<p>
 Caveat: this is beta software; my apologies if it doesn't work for you.
-
 Geographic Zip Code information provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
 Bureau's Gazetteer</a>.  If your Zip Code is missing from their
 database, I don't have it either.
-</small></p>
+</p>
+<p>
+If you're a perl programmer, see the <a
+href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI form.
+</p>
+</small>
 
 $html_footer";
 
