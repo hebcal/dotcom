@@ -34,7 +34,7 @@ if ($val)
  <card id="main" title="1-Click Shabbat">
   <do type="accept" label="OK">
    <go href="/shabbat/" method="get">
-    <postfield name="zip" value="\$(zip)"/>
+    <postfield name="zip" value="$(zip)"/>
     <postfield name="cfg" value="w"/>
     <postfield name="m" value="50"/>
    </go>
