@@ -306,7 +306,7 @@ sub dba_display() {
     if (defined $q->param('geo') && $q->param('geo') eq 'city' &&
 	defined $q->param('city') && $q->param('city') ne '')
     {
-	$dst = defined $Hebcal::city_nodst{$q->param('city')} ?
+	$dst = $Hebcal::city_dst{$q->param('city')} eq 'none' ?
 	    0 : 1;
 	$tz = $Hebcal::city_tz{$q->param('city')};
     }
@@ -1104,6 +1104,15 @@ sub get_candle_config($)
 
 	$city_descr = "Closest City: " . $q->param('city');
 	$cmd_extra = " -C '" . $q->param('city') . "'";
+
+	if ($Hebcal::city_dst{$q->param('city')} eq 'israel')
+	{
+	    $q->param('i','on');
+	}
+	else
+	{
+	    $q->delete('i');
+	}
     }
     elsif (defined $q->param('lodeg') && defined $q->param('lomin') &&
 	   defined $q->param('ladeg') && defined $q->param('lamin') &&
@@ -1240,6 +1249,8 @@ sub get_candle_config($)
 	{
 	    $q->param('dst','none');
 	}
+
+	$q->delete('i');	# diaspora
 
 #	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
 #	$long_descr = "${long_deg}d${long_min}' W longitude";
