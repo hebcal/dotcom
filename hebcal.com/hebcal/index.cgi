@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 20 11:19:42 PDT 2000
+Last modified: Thu Sep 28 15:19:43 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1096,7 +1096,7 @@ so you can keep this window open.
 	{
 	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?city=},
- 		$q->param('city'), qq{">1-Click Shabbat for },
+ 		&url_escape($q->param('city')), qq{">1-Click Shabbat for },
 		$q->param('city'), qq{</a>.</p>\n};
 	}
     }
