@@ -75,7 +75,29 @@ if ($opts{'f'}) {
 
 my $html_footer = html_footer($festival_in);
 
-my @FESTIVALS = @{$fxml->{'list'}->{'li'}};
+my @FESTIVALS;
+my %SUBFESTIVALS;
+foreach my $node (@{$fxml->{'groups'}->{'group'}})
+{
+    my $f;
+    if (ref($node) eq 'HASH') {
+	$f = $node->{'content'};
+	$f =~ s/^\s+//;
+	$f =~ s/\s+$//;
+	if (defined $node->{'li'}) {
+	    $SUBFESTIVALS{$f} = $node->{'li'};
+	} else {
+	    $SUBFESTIVALS{$f} = [ $f ];
+	}
+    } else {
+	$f = $node;
+	$f =~ s/^\s+//;
+	$f =~ s/\s+$//;
+	$SUBFESTIVALS{$f} = [ $f ];
+    }
+
+    push(@FESTIVALS, $f);
+}
 
 my(%PREV,%NEXT);
 {
@@ -96,35 +118,8 @@ my(%PREV,%NEXT);
 
 foreach my $f (@FESTIVALS)
 {
-#    if ($f !~ /\(on Shabbat\)$/) {
-	write_festival_page($fxml,$f);
-#   }
-
-    next unless $opts{'f'};
-
-    print CSV "$f\n";
-
-    if (defined $fxml->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
-	my $aliyot = $fxml->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
-	if (ref($aliyot) eq 'HASH') {
-	    $aliyot = [ $aliyot ];
-	}
-
-	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}} @{$aliyot}) {
-	    printf CSV "Torah Service - Aliyah %s,%s %s - %s\n",
-	    $aliyah->{'num'},
-	    $aliyah->{'book'},
-	    $aliyah->{'begin'},
-	    $aliyah->{'end'};
-	}
-    }
-
-    if (defined $fxml->{'festival'}->{$f}->{'haft'}) {
-	print CSV "Torah Service - Haftarah,",
-	$fxml->{'festival'}->{$f}->{'haft'}, "\n";
-    }
-
-    print CSV "\n";
+    write_festival_page($fxml,$f);
+    write_csv($fxml,$f) if $opts{'f'};
 }
 
 if ($opts{'f'}) {
@@ -149,13 +144,51 @@ sub make_anchor
     "$anchor.html";
 }
 
+sub get_var
+{
+    my($festivals,$f,$name) = @_;
+
+    my $sub = $SUBFESTIVALS{$f}->[0];
+    my $value = $festivals->{'festival'}->{$sub}->{$name};
+
+    if (! defined $value) {
+	warn "ERROR: no $name for $f";
+    }
+    $value;
+}
+
+sub write_csv
+{
+    my($festivals,$f) = @_;
+
+    print CSV "$f\n";
+
+    if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
+	my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
+	if (ref($aliyot) eq 'HASH') {
+	    $aliyot = [ $aliyot ];
+	}
+
+	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}} @{$aliyot}) {
+	    printf CSV "Torah Service - Aliyah %s,%s %s - %s\n",
+	    $aliyah->{'num'},
+	    $aliyah->{'book'},
+	    $aliyah->{'begin'},
+	    $aliyah->{'end'};
+	}
+    }
+
+    if (defined $festivals->{'festival'}->{$f}->{'haft'}) {
+	print CSV "Torah Service - Haftarah,",
+	$festivals->{'festival'}->{$f}->{'haft'}, "\n";
+    }
+
+    print CSV "\n";
+}
+
 sub write_index_page
 {
     my($festivals) = @_;
-
-#    use Data::Dumper;
-
-#    print Dumper($festivals);
 
     open(OUT3, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
 
@@ -187,10 +220,9 @@ EOHTML
     my $prev_descr = '';
     foreach my $f (@FESTIVALS)
     {
-#	next if $f =~ /\(on Shabbat\)$/;
 	my($anchor) = make_anchor($f);
 
-	my $descr = $festivals->{'festival'}->{$f}->{'descr'};
+	my $descr = get_var($festivals, $f, 'descr');
 	die "no descr for $f" unless $descr;
 
 	print OUT3 qq{<dt><a href="$anchor">$f</a>\n};
@@ -204,57 +236,15 @@ EOHTML
     close(OUT3);
 }
 
-sub write_festival_page
+sub write_festival_part
 {
     my($festivals,$f) = @_;
 
-    my($anchor) = make_anchor($f);
+    my $anchor = make_anchor($f);
+    $anchor =~ s/\.html$//;
 
     my $descr = $festivals->{'festival'}->{$f}->{'descr'};
-
-    open(OUT2, ">$outdir/$anchor") || die "$outdir/$anchor: $!\n";
-
-    print OUT2 <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>Jewish Holidays: $f</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.hebcal.com/holidays/$anchor" target="_top">
-<meta name="description" content="$f: $descr">
-<meta name="keywords" content="$f,jewish,holidays,holiday,festival,chag,hag">
-<link rel="stylesheet" href="/style.css" type="text/css">
-EOHTML
-;
-
-    my $prev = $PREV{$f};
-    my($prev_link) = '';
-    my($prev_anchor);
-    if ($prev)
-    {
-	$prev_anchor = make_anchor($prev);
-	my $title = "Previous Holiday";
-	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
-	    qq{title="$title">&lt;&lt; $prev</a>};
-    }
-
-    my $next = $NEXT{$f};
-    my($next_link) = '';
-    my($next_anchor);
-    if ($next)
-    {
-	$next_anchor = make_anchor($next);
-	my $title = "Next Holiday";
-	$next_link = qq{<a name="next" href="$next_anchor"\n} .
-	    qq{title="$title">$next &gt;&gt;</a>};
-    }
-
-    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
-    	if $prev_anchor;
-    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
-    	if $next_anchor;
-
-    my $hebrew = $festivals->{'festival'}->{$f}->{'hebrew'};
-    $hebrew = '' unless $hebrew;
+    print OUT2 qq{\n<h2><a name="$anchor"></a>$f</h2>\n<p>$descr.\n};
 
     my $torah;
     my $maftir;
@@ -298,7 +288,7 @@ EOHTML
 
     my $haft;
     if (defined $festivals->{'festival'}->{$f}->{'haft'}) {
-	$haft =  $fxml->{'festival'}->{$f}->{'haft'};
+	$haft =  $festivals->{'festival'}->{$f}->{'haft'};
     }
 
     my $torah_href;
@@ -331,6 +321,114 @@ EOHTML
 	}
     }
 
+    if ($about_href) {
+    print OUT2 <<EOHTML;
+[<a title="Detailed information about holiday"
+href="$about_href">more...</a>]</p>
+EOHTML
+;
+    } else {
+	warn "$f: missing About href\n";
+    }
+
+    if ($torah) {
+	print OUT2 qq{\n<h3>Torah Portion: };
+	print OUT2 qq{<a name="$anchor-torah"\nhref="$torah_href"\ntitle="Translation from JPS Tanakh">}
+	    if ($torah_href);
+	print OUT2 $torah;
+	print OUT2 qq{</a>}
+	    if ($torah_href);
+	print OUT2 qq{</h3>\n};
+
+	if (! $torah_href) {
+	    warn "$f: missing Torah href\n";
+	}
+
+	if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
+	    my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
+	    if (ref($aliyot) eq 'HASH') {
+		$aliyot = [ $aliyot ];
+	    }
+
+	    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}} @{$aliyot}) {
+		print_aliyah($aliyah);
+	    }
+	}
+
+	print OUT2 "</p>\n";
+    }
+
+    if ($haft) {
+	print OUT2 qq{\n<h3>Haftarah: };
+	print OUT2 qq{<a name="$anchor-haft"\nhref="$haft_href"\ntitle="Translation from JPS Tanakh">}
+	    if ($haft_href);
+	print OUT2 $haft;
+	print OUT2 qq{</a>}
+	    if ($haft_href);
+	print OUT2 qq{</h3>\n};
+
+	if (! $haft_href) {
+	    warn "$f: missing Haft href\n";
+	}
+    }
+
+}
+
+sub write_festival_page
+{
+    my($festivals,$f) = @_;
+
+    my($anchor) = make_anchor($f);
+
+    my $descr = get_var($festivals, $f, 'descr');
+
+    open(OUT2, ">$outdir/$anchor") || die "$outdir/$anchor: $!\n";
+
+    print OUT2 <<EOHTML;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>Jewish Holidays: $f</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="http://www.hebcal.com/holidays/$anchor" target="_top">
+<meta name="description" content="$f: $descr">
+<meta name="keywords" content="$f,jewish,holidays,holiday,festival,chag,hag">
+<link rel="stylesheet" href="/style.css" type="text/css">
+EOHTML
+;
+
+    my $prev = $PREV{$f};
+    my($prev_link) = '';
+    my($prev_anchor);
+    if ($prev)
+    {
+	$prev_anchor = make_anchor($prev);
+	my $title = "Previous Holiday";
+	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
+	    qq{title="$title">&lt;&lt; $prev</a>};
+    }
+
+    my $next = $NEXT{$f};
+    my($next_link) = '';
+    my($next_anchor);
+    if ($next)
+    {
+	$next_anchor = make_anchor($next);
+	my $title = "Next Holiday";
+	$next_link = qq{<a name="next" href="$next_anchor"\n} .
+	    qq{title="$title">$next &gt;&gt;</a>};
+    }
+
+    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
+    	if $prev_anchor;
+    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
+    	if $next_anchor;
+
+    my $hebrew = get_var($festivals, $f, 'hebrew');
+    $hebrew = '' unless $hebrew;
+
+    my($strassfeld_link) =
+	"http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
+
     print OUT2 <<EOHTML;
 </head>
 <body>
@@ -360,68 +458,27 @@ $next_link
 </td>
 </tr>
 </table>
+<a href="$strassfeld_link"><img
+src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
+alt="The Jewish Holidays: A Guide &amp; Commentary"
+vspace="5" width="75" height="90" align="right"></a>
 <p>$descr.
 EOHTML
 ;
 
-    if ($about_href) {
-    print OUT2 <<EOHTML;
-[<a title="Detailed information about holiday"
-href="$about_href">more...</a>]</p>
-EOHTML
-;
-    } else {
-	warn "$f: missing About href\n";
+    if (@{$SUBFESTIVALS{$f}} == 1)
+    {
+	write_festival_part($festivals, $SUBFESTIVALS{$f}->[0]);
     }
-
-    if ($torah) {
-	print OUT2 qq{\n<h3>Torah Portion: };
-	print OUT2 qq{<a name="torah"\nhref="$torah_href"\ntitle="Translation from JPS Tanakh">}
-	    if ($torah_href);
-	print OUT2 $torah;
-	print OUT2 qq{</a>}
-	    if ($torah_href);
-	print OUT2 qq{</h3>\n};
-
-	if (! $torah_href) {
-	    warn "$f: missing Torah href\n";
-	}
-
-	if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
-	    my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
-	    if (ref($aliyot) eq 'HASH') {
-		$aliyot = [ $aliyot ];
-	    }
-
-	    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}} @{$aliyot}) {
-		print_aliyah($aliyah);
-	    }
-	}
-
-	print OUT2 "</p>\n";
-    }
-
-    if ($haft) {
-	print OUT2 qq{\n<h3>Haftarah: };
-	print OUT2 qq{<a name="haft"\nhref="$haft_href"\ntitle="Translation from JPS Tanakh">}
-	    if ($haft_href);
-	print OUT2 $haft;
-	print OUT2 qq{</a>}
-	    if ($haft_href);
-	print OUT2 qq{</h3>\n};
-
-	if (! $haft_href) {
-	    warn "$f: missing Haft href\n";
+    else
+    {
+	foreach my $part (@{$SUBFESTIVALS{$f}})
+	{
+	    write_festival_part($festivals,$part);
 	}
     }
 
-    my($strassfeld_link) =
-	"http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
-    print OUT2 qq{<a
-href="$strassfeld_link"><img
-src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
-alt="The Jewish Holidays: A Guide &amp; Commentary"
-vspace="5" width="75" height="90" align="right"></a>
+    print OUT2 qq{
 <dl>
 <dt><a name="ref">References</a>
 <dd><em><a
@@ -469,7 +526,7 @@ sub print_aliyah
     elsif ($book eq 'numbers') { $bid = 4; }
     elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-    $info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=} .
+    $info = qq{<a title="Hebrew text and audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=} .
     $aliyah->{'parsha'} . qq{">$info</a>};
 
     my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
