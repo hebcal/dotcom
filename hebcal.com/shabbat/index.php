@@ -57,17 +57,20 @@ if ($qs) {
     }
 
     $url .= "?$qs";
-    $cqs = preg_replace('/[&;]?tag=[^&;]+/', "", $qs);
-    $cqs = preg_replace('/[&;]?\.from=[^&;]+/', "", $cqs);
-    $cqs = strtr($cqs, "&;./", ",,_-");
-    $cqs = str_replace("%20", "+", $cqs);
+    $qs = preg_replace('/[&;]?(tag|set)=[^&;]+/', "", $qs);
+    $qs = preg_replace('/[&;]?\.(from|cgifields|s)=[^&;]+/', "", $qs);
+    $qs = strtr($qs, "&;./", ",,_-");
+    $qs = str_replace("%20", "+", $qs);
     $dir = $_SERVER["DOCUMENT_ROOT"] . "/cache/shabbat/shabbat_cgi";
-    $status = @readfile("$dir/$cqs");
+    $status = @readfile("$dir/$qs");
 } else {
     $status = false;
 }
 if (!$status) {
     virtual($url);
+    echo "<!-- cache miss -->\n";
+} else {
+    echo "<!-- cache hit -->\n";
 }
 exit();
 ?>
