@@ -82,28 +82,11 @@ my(%monthnames) =
 
 my($author) = 'webmaster@hebcal.com';
 
-my($this_year) = (localtime)[5];
-$this_year += 1900;
-
 my($rcsrev) = '$Revision$'; #'
-$rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun May  6 11:19:05 PDT 2001
+Last modified: Mon May  7 21:45:54 PDT 2001
 <!-- hhmts end -->";
-
-$hhmts =~ s/<!--.*-->//g;
-$hhmts =~ s/\n//g;
-$hhmts =~ s/Last modified: /Software last updated:\n/g;
-
-my($html_footer) = "<hr
-noshade size=\"1\"><font size=-2 face=Arial>Copyright
-&copy; $this_year Michael J. Radwin. All rights reserved.
-<a href=\"/privacy/\">Privacy Policy</a> -
-<a href=\"/help/\">Help</a>
-<br>$hhmts ($rcsrev)
-</font></body></html>
-";
 
 # process form params
 my($q) = new CGI;
@@ -341,7 +324,7 @@ type="submit" value="Compute Gregorian Date"></td>
 		 -label => "\nShow date in Hebrew font"),
     qq{</label></td></tr></table></center></form>};
 
-    print STDOUT $html_footer;
+    print STDOUT &Hebcal::html_footer($q,$hhmts,$rcsrev);
 
     exit(0);
 }
