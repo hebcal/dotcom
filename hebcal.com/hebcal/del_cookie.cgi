@@ -26,7 +26,7 @@ $hhmts =~ s/Last modified: /Software last updated:\n/g;
 my($html_footer) = "<hr
 noshade size=\"1\"><small>$hhmts<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
-All rights reserved.<br><a
+All rights reserved. - <a
 href=\"/michael/projects/hebcal/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
