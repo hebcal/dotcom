@@ -1141,6 +1141,8 @@ sub self_url($$)
 
     foreach my $key ($q->param())
     {
+	next if $key eq 'tag';
+
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
 	$url .= "$sep$key=" . Hebcal::url_escape($val);
