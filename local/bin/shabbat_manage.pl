@@ -71,11 +71,19 @@ sub subscribe
     my $args = $DB{$encoded};
     unless ($args) {
 	warn "skipping $encoded: (undef)";
+	flock(DB_FH, LOCK_UN);
+	undef $db;
+	untie(%DB);
+	close(DB_FH);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
 	warn "skipping $encoded: $args";
+	flock(DB_FH, LOCK_UN);
+	undef $db;
+	untie(%DB);
+	close(DB_FH);
 	return 0;
     }
 
@@ -168,11 +176,19 @@ sub unsubscribe
 
     my $args = $DB{$email};
     unless ($args) {
+	flock(DB_FH, LOCK_UN);
+	undef $db;
+	untie(%DB);
+	close(DB_FH);
 	&error_email($email,$err_notsub);
 	return 0;
     }
 
     if ($args =~ /^action=/) {
+	flock(DB_FH, LOCK_UN);
+	undef $db;
+	untie(%DB);
+	close(DB_FH);
 	&error_email($email,$err_notsub);
 	return 0;
     }
