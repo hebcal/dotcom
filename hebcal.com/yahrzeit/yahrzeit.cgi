@@ -36,7 +36,7 @@ $this_year += 1900;
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May  8 11:49:32 PDT 2001
+Last modified: Tue May  8 13:37:54 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -206,7 +206,9 @@ sub my_invoke_hebcal {
 		      $events[$i]->[$Hebcal::EVT_IDX_MON],
 		      $events[$i]->[$Hebcal::EVT_IDX_YEAR],
 		      $events[$i]->[$Hebcal::EVT_IDX_DUR],
-		      $events[$i]->[$Hebcal::EVT_IDX_MEMO]]);
+		      $events[$i]->[$Hebcal::EVT_IDX_MEMO],
+		      $events[$i]->[$Hebcal::EVT_IDX_YOMTOV],
+		      ]);
 	    }
 	    elsif ($subj eq 'Pesach VIII' || $subj eq 'Shavuot II' ||
 		   $subj eq 'Yom Kippur' || $subj eq 'Shmini Atzeret')
@@ -226,7 +228,9 @@ sub my_invoke_hebcal {
 		      $events[$i]->[$Hebcal::EVT_IDX_MON],
 		      $events[$i]->[$Hebcal::EVT_IDX_YEAR],
 		      $events[$i]->[$Hebcal::EVT_IDX_DUR],
-		      $events[$i]->[$Hebcal::EVT_IDX_MEMO]]);
+		      $events[$i]->[$Hebcal::EVT_IDX_MEMO],
+		      $events[$i]->[$Hebcal::EVT_IDX_YOMTOV],
+		      ]);
 	    }
 	}
     }
