@@ -929,8 +929,6 @@ sub results_page()
 	my($mon) = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
-	my($line) = '';
-
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
 	    = &Hebcal::get_holiday_anchor($subj,0,undef);
 	if ($hebrew ne '' && defined $q->param('heb') &&
@@ -967,7 +965,9 @@ sub results_page()
 	{
 	    if ($prev_mon != $mon)
 	    {
-		print STDOUT "<center>", $cal->as_HTML(), 
+		my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
+		    ' style="page-break-before: always"' : '';
+		print STDOUT "<center$style>", $cal->as_HTML(), 
 		"</center><br><br>"
 		    if defined $cal;
 		$prev_mon = $mon;
@@ -1011,21 +1011,25 @@ sub results_page()
 
 	    $cal->addcontent($mday, "<small$class>$cal_subj</small>");
 	}
-
-
-	$line .= sprintf("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
+	else
+	{
+	    my($line);
+	    $line = sprintf("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
 			 $dow, $mday, $Hebcal::MoY_short[$mon-1],
 			 $year, $subj);
-	$line .= sprintf(": %d:%02dpm", $hour, $min)
-	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
-	$line .= "<br>\n";
+	    $line .= sprintf(": %d:%02dpm", $hour, $min)
+		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+	    $line .= "<br>\n";
 
-	print STDOUT $line unless $q->param('vis');
+	    print STDOUT $line;
+	}
     }
 
     if ($q->param('vis') && defined $cal)
     {
-	print STDOUT "<center>", $cal->as_HTML(), 
+	my($style) = ($q->param('month') eq 'x' && $prev_mon > 1) ?
+	    ' style="page-break-before: always"' : '';
+	print STDOUT "<center$style>", $cal->as_HTML(), 
 	    "</center></body></html>\n";
 
 #	return 1;
