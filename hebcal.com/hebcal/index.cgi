@@ -24,7 +24,7 @@
 ########################################################################
 
 use strict;
-use CGI;
+use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Time::Local;
