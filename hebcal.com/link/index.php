@@ -149,7 +149,7 @@ Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="http://www.hebcal.com/help/">Help</a> -
 <a target="_top" href="http://www.hebcal.com/contact/">Contact</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
+3.3 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
 </span>
 </body></html>
