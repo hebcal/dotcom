@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Thu Jul  8 12:18:16 PDT 1999
+Last modified: Mon Jul 12 08:41:46 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -264,7 +264,6 @@ foreach (@opts)
     $cmd .= ' -' . $_ if $opts{$_} && length($_) == 1;
 }
 
-$cmd .= ' -r' if defined $ENV{'PATH_INFO'};
 $cmd .= " -m $in{'m'}" if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
 if (defined $in{'tz'} && $in{'tz'} ne '')
@@ -320,7 +319,7 @@ print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\
 while(<HEBCAL>)
 {
     chop;
-    ($date,$descr) = split(/\t/);
+    ($date,$descr) = split(/ /, $_, 2);
 
     ($subj,$date,$start_time,$end_date,$end_time,$all_day)
 	= &parse_date_descr($date,$descr);
