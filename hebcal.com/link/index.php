@@ -159,7 +159,8 @@ echo HTML_Form::returnSelect('city', $entries,
 <p><hr noshade size="1">
 <h2><a name="fonts">Customize Fonts</a></h2>
 
-<p>To change the fonts, add a CSS stylesheet like this to the
+<p>To change the fonts to match the rest of your site, you can add a
+CSS stylesheet like this to the 
 <tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
 page:</p>
 
@@ -169,10 +170,20 @@ page:</p>
 H1, H2, H3, H4, H5, H6 {
  font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
 }
+.candles {
+ color: red;
+ font-size: large;
+}
+.parashat {
+ color: green;
+}
 --&gt;
 &lt;/style&gt;
 </pre></blockquote>
 
+<p>Those fonts and colors are just an example.  <a
+href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
+very powerful and flexible.</p>
 
 <?php
     my_footer();
