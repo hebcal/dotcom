@@ -28,7 +28,6 @@ use Time::Local;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
-use Unicode::String;
 use Config::IniFiles;
 use Date::Calc;
 use DB_File;
@@ -606,68 +605,6 @@ sub zipcode_fields($)
     }
 
     ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
-}
-
-sub display_hebrew {
-    my($q,$class,@args) = @_;
-
-#    if ($q->user_agent('MSIE'))
-#    {
-	my(@args2);
-	foreach (@args)
-	{
-	    s/  /&nbsp;&nbsp;/g;
-	    push(@args2, $_);
-	}
-
-	return join('',
-		    qq{<span dir="rtl" lang="he"\nclass="$class">},
-		    @args2,
-		    qq{</span>}
-		    );
-#      }
-#      else
-#      {
-#  	my($str) = &utf8_hebrew_to_netscape(join('', @args));
-#  	$str =~ s/  /&nbsp;&nbsp;/g;
-
-#  	return join('',
-#  		    qq{<span dir="ltr" lang="he"\nclass="${class}-ltr">},
-#  		    $str,
-#  		    qq{</span>}
-#  		    );
-#      }
-}
-
-sub utf8_hebrew_to_netscape($) {
-    my($str) = @_;
-
-    my($u) = Unicode::String::utf8($str);
-    my(@array) = $u->unpack();
-    my(@result) = ();
-
-    for (my $i = scalar(@array) - 1; $i >= 0; --$i)
-    {
-	# skip hebrew punctuation range
-	next if $array[$i] > 0x0590 && $array[$i] < 0x05D0;
-
-	if ($array[$i] == 0x0028)
-	{
-	    push(@result, 0x0029); # reverse parens
-	}
-	elsif ($array[$i] == 0x0029)
-	{
-	    push(@result, 0x0028); # reverse parens
-	}
-	else
-	{
-	    push(@result, $array[$i]);
-	}
-    }
-
-#    $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
-    $u->pack(@result);
-    return $u->utf8();
 }
 
 sub html_copyright2($$)
