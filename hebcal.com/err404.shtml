@@ -34,6 +34,12 @@ Please check your request for typing errors and retry.
 <!--#endif -->
 </p>
 
+<form action="/cgi-bin/htsearch" method="get">
+<input type="text" name="words" size="30">
+<input type="hidden" name="config" value="hebcal">
+<input type="submit" value="Search"></td></tr></table>
+</form>
+
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright &copy;
