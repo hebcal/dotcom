@@ -989,7 +989,7 @@ sub results_page()
 		$prev_mon = $mon;
 		$cal = new HTML::CalendarMonthSimple('year' => $year,
 						     'month' => $mon);
-		$cal->width('94%');
+		$cal->width('97%');
 		$cal->border(1);
 		$cal->bgcolor('white');
 		$cal->bordercolor('');
