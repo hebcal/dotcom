@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Oct  6 15:02:57 PDT 1999
+Last modified: Sun Oct 17 00:02:55 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -661,7 +661,7 @@ print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\
 $prev = '';
 local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
     "in $city_descr" : '';
-$loc =~ s/&nbsp;/ /g;
+$loc =~ s/\s*&nbsp;\s*/ /g;
 while(<HEBCAL>)
 {
     next if $_ eq $prev;
@@ -1149,7 +1149,7 @@ open.</small></p>
 	    {
 		local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
 		    "in $city_descr" : '';
-		$loc =~ s/&nbsp;/ /g;
+	        $loc =~ s/\s*&nbsp;\s*/ /g;
 
 		$hr += 12 if $hr < 12 && $hr > 0;
 		$ST .= sprintf("T%02d%02d00", $hr, $min);
