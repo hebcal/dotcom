@@ -1034,15 +1034,15 @@ sub yahoo_calendar_link($$)
 	&url_escape($subj) . "&amp;VIEW=d";
 }
 
-$Hebcal::mac_format = '';
-format STDOUT =
-^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
-$Hebcal::mac_format
-.
+#$Hebcal::mac_format = '';
+#format STDOUT =
+#^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
+#$Hebcal::mac_format
+#.
 
-sub macintosh_datebook($)
+sub macintosh_datebook($$)
 {
-    my($events) = @_;
+    my($events,$endl) = @_;
     my($numEntries) = scalar(@{$events});
 
     for (my $i = 0; $i < $numEntries; $i++)
@@ -1055,7 +1055,7 @@ sub macintosh_datebook($)
 	my $start_time = '';
 	my $end_time = '';
 	my $end_date = $date;
-	my $memo = 'Jewish Holiday';
+	my $memo = '';
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
@@ -1080,19 +1080,18 @@ sub macintosh_datebook($)
 	    $memo = '';
 	}
 
+	# this is BROKEN
 	# general format is
 	# Hanukkah<B8>December 14, 1998<B8>December 14, 1998<B8><B8><B8>Jewish Holiday<B8><9B>
 	# Doc group mtg<B8>August 21, 2002<B8><B8>2:00 PM<B8>3:00 PM<B8><B8><9B>
 
-	$Hebcal::mac_format .= join("\xB8",
+	print STDOUT join("\t",
 			  $events->[$i]->[$Hebcal::EVT_IDX_SUBJ],
 			  $date, $end_date,
 			  $start_time, $end_time,
 			  $memo,
-			  "\x9B");
+			  ), $endl;
     }
-
-    write;
 
     1;
 }
