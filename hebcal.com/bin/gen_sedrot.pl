@@ -193,8 +193,14 @@ sub write_sedra_page {
 	$prev_anchor = lc($prev);
 	$prev_anchor =~ s/[^\w]//g;
 	$prev_anchor .= ".html";
+
+	my $title = "Previous Parsha";
+	if (defined $read_on{$prev})
+	{
+	    $title = "Torah Reading for " . $read_on{$prev};
+	}
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
-	    qq{title="Previous Parsha">&lt;&lt; $prev</a>};
+	    qq{title="$title">&lt;&lt; $prev</a>};
     }
 
     my($next_link) = '';
@@ -204,8 +210,14 @@ sub write_sedra_page {
 	$next_anchor = lc($next);
 	$next_anchor =~ s/[^\w]//g;
 	$next_anchor .= ".html";
+
+	my $title = "Next Parsha";
+	if (defined $read_on{$next})
+	{
+	    $title = "Torah Reading for " . $read_on{$next};
+	}
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
-	    qq{title="Next Parsha">$next &gt;&gt;</a>};
+	    qq{title="$title">$next &gt;&gt;</a>};
     }
 
     open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
