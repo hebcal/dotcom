@@ -31,7 +31,7 @@ Calendar</a> (bookmarkable)
 <dt><br><b><big><a
 href="/shabbat/">1-Click Shabbat</a></big></b></dt>
 <dd>bookmark this page for weekly Shabbat candle lighting times.
-<dd><b><span class="hl">NEW!</span></b> <a href="/email/">Subscribe by
+<dd><a href="/email/">Subscribe by
 Email</a>
 <dt><br><b><big><a
 href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
@@ -46,7 +46,6 @@ Converter</a></big></b></dt>
 href="/sedrot/">Torah
 Readings</a></big></b></dt>
 <dd>aliyah-by-aliyah breakdown for weekly parshiyot
-<dd><b><span class="hl">NEW!</span></b> Triennial cycle
 <dt><br><b><big>Miscellaneous</big></b></dt>
 <dd><a href="/help/">Help</a>
 <dd><a href="/privacy/">Privacy Policy</a>
@@ -65,7 +64,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Fri Apr 12 17:15:50 EDT 2002
+Last modified: Sun Apr 14 18:47:42 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
