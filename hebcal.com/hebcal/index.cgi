@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jun 28 12:26:14 PDT 1999
+Last modified: Mon Jun 28 12:26:48 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -344,10 +344,10 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<strong class=\"navbar\">
+<div class=\"navbar\"><small>
 <a href=\"/\">radwin.org</a> -&gt;
 hebcal
-</strong>
+</small></div>
 
 <p>This is a web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.</p>
