@@ -213,6 +213,7 @@ EOHTML
     foreach (1 .. 7)
     {
 	my($aliyah) = $sedrot->val($sedrot_h, "aliyah$_");
+	die "no aliyah $_ defined for $h" unless defined $aliyah;
 	my($c1,$v1,$c2,$v2) = ($aliyah =~ /^(\d+):(\d+)-(\d+):(\d+)$/);
 	$aliyah = "$c1:$v1-$v2"
 	    if ($c1 == $c2);
