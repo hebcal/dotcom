@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Jan 17 10:07:38 PST 2001
+Last modified: Fri Jan 19 10:46:02 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -81,7 +81,7 @@ $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
 if (defined $q->raw_cookie() &&
     $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
 {
-    &process_cookie($q,$1);
+    &Hebcal::process_cookie($q,$1);
 }
 
 # sanitize input to prevent people from trying to hack the site.
@@ -250,7 +250,7 @@ $cmd .= ' -s -c ' . $sat_year;
 
 unless ($default)
 {
-    my($newcookie) = &gen_cookie($q);
+    my($newcookie) = &Hebcal::gen_cookie($q);
     if (! defined $q->raw_cookie())
     {
 	print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
@@ -345,7 +345,7 @@ my($loc) = (defined $city_descr && $city_descr ne '') ?
     "in $city_descr" : '';
 $loc =~ s/\s*&nbsp;\s*/ /g;
 
-my(@events) = &invoke_hebcal($cmd, $loc);
+my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
 unless (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 {
@@ -412,7 +412,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	    &out_html("Holiday: ");
 	}
 
-	my($href) = &get_holiday_anchor($subj);
+	my($href) = &Hebcal::get_holiday_anchor($subj);
 	if ($href ne '' &&
 	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
 	{
@@ -465,7 +465,7 @@ if (defined $q->param('cfg'))
     elsif ($q->param('cfg') eq 'r')
     {
 	&out_html("<textinput>
-<title>Shabbat</title>
+<title>1-Click Shabbat</title>
 <description>Get Shabbat Times for another zip code</description>
 <name>zip</name>
 ");
@@ -509,12 +509,12 @@ sub ycal
 
 	$ST .= "&amp;DUR=00" . $dur;
 
-	$ST .= "&amp;DESC=" . &url_escape($loc)
+	$ST .= "&amp;DESC=" . &Hebcal::url_escape($loc)
 	    if $loc ne '';
     }
 
     "http://calendar.yahoo.com/?v=60&amp;TITLE=" .
-	&url_escape($subj) . "&amp;TYPE=16&amp;ST=" . $ST;
+	&Hebcal::url_escape($subj) . "&amp;TYPE=16&amp;ST=" . $ST;
 }
 
 sub out_html
