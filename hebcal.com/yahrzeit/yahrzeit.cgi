@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sat Jan 20 18:26:05 PST 2001
+Last modified: Sat Jan 20 18:29:07 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -136,10 +136,10 @@ sub dba_display
 		     "application/x-palm-dba; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &http_date($time));
+		     -last_modified => &Hebcal::http_date($time));
 
-    &dba_write_header($path_info);
-    &dba_write_contents(\@events, 0, 0);
+    &Hebcal::dba_write_header($path_info);
+    &Hebcal::dba_write_contents(\@events, 0, 0);
 }
 
 sub csv_display
@@ -153,7 +153,7 @@ sub csv_display
     print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &http_date($time));
+		     -last_modified => &Hebcal::http_date($time));
 
     my($endl) = "\012";			# default Netscape and others
     if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
@@ -163,7 +163,7 @@ sub csv_display
 	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
     }
 
-    &csv_write_contents(\@events, $endl);
+    &Hebcal::csv_write_contents(\@events, $endl);
 }
 
 sub my_invoke_hebcal {
