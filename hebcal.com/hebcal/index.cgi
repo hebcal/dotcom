@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Sun Oct 17 00:02:55 PDT 1999
+Last modified: Sun Oct 17 09:25:10 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -350,8 +350,8 @@ $hhmts = 'This page generated: ' . &ctime(time) . '<br>' . $hhmts;
 $html_footer = "<hr noshade size=\"1\">
 <small>$hhmts ($rcsrev)
 <p>Copyright &copy; $year Michael John Radwin. All rights
-reserved.<br><a href=\"/michael/projects/hebcal/\">About this
-service</a>.</small>
+reserved.<br><a href=\"/michael/projects/hebcal/\">Frequently
+asked questions about this service.</a></small>
 </body></html>
 ";
 
@@ -451,8 +451,7 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 
 if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 {
-    &form("<p><font color=\"#ff0000\">Sorry, invalid city\n" .
-	  $in{'city'} . ".</font></p>\n<hr noshade size=\"1\">")
+    &form("Sorry, invalid city\n" . $in{'city'})
 	unless defined($valid_cities{$in{'city'}});
 
     $cmd .= " -C '$in{'city'}'";
@@ -468,8 +467,7 @@ if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
        defined $in{'ladeg'} && defined $in{'lamin'} && defined $in{'ladir'})
 {
-    &form("<p><font color=\"#ff0000\">Sorry, all latitude/longitude\n" .
-	  "arguments must be numeric.</font></p>\n<hr noshade size=\"1\">")
+    &form("Sorry, all latitude/longitude\narguments must be numeric.")
 	if (($in{'lodeg'} !~ /^\s*\d*\s*$/) ||
 	    ($in{'lomin'} !~ /^\s*\d*\s*$/) ||
 	    ($in{'ladeg'} !~ /^\s*\d*\s*$/) ||
@@ -493,31 +491,27 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $in{'ladeg'} = $lat_deg;
     $in{'lamin'} = $lat_min;
 
-    &form("<p><font color=\"#ff0000\">Sorry, longitude degrees\n" .
-	  "<b>$in{'lodeg'}</b> out of valid range 0-180.</font></p>\n" .
-	  "<hr noshade size=\"1\">")
+    &form("Sorry, longitude degrees\n" .
+	  "<b>$in{'lodeg'}</b> out of valid range 0-180.")
 	if ($in{'lodeg'} > 180);
 
-    &form("<p><font color=\"#ff0000\">Sorry, latitude degrees\n" .
-	  "<b>$in{'ladeg'}</b> out of valid range 0-90.</font></p>\n" .
-	  "<hr noshade size=\"1\">")
+    &form("Sorry, latitude degrees\n" .
+	  "<b>$in{'ladeg'}</b> out of valid range 0-90.")
 	if ($in{'ladeg'} > 90);
 
-    &form("<p><font color=\"#ff0000\">Sorry, longitude minutes\n" .
-	  "<b>$in{'lomin'}</b> out of valid range 0-60.</font></p>\n" .
-	  "<hr noshade size=\"1\">")
+    &form("Sorry, longitude minutes\n" .
+	  "<b>$in{'lomin'}</b> out of valid range 0-60.")
 	if ($in{'lomin'} > 60);
 
-    &form("<p><font color=\"#ff0000\">Sorry, latitude minutes\n" .
-	  "<b>$in{'lamin'}</b> out of valid range 0-60.</font></p>\n" .
-	  "<hr noshade size=\"1\">")
+    &form("Sorry, latitude minutes\n" .
+	  "<b>$in{'lamin'}</b> out of valid range 0-60.")
 	if ($in{'lamin'} > 60);
 
     $city_descr = "Geographic Position";
     $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
     $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
     $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time Zone: GMT $in{'tz'}:00";
+"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time zone: GMT $in{'tz'}:00";
 
     # don't multiply minutes by -1 since hebcal does it internally
     $long_deg *= -1  if ($in{'lodir'} eq 'e');
@@ -529,14 +523,11 @@ elsif (defined $in{'zip'})
 {
     $in{'dst'} = 'usa' unless defined $in{'dst'};
 
-    &form("<p><font color=\"#ff0000\">Please specify a 5-digit\n" .
-	  "zip code.</font></p>\n<hr noshade size=\"1\">")
+    &form("Please specify a 5-digit\nzip code.")
 	if $in{'zip'} =~ /^\s*$/;
 
-    &form("<p><font color=\"#ff0000\">Sorry, <b>" .
-	  $in{'zip'} . "</b> does\n" .
-	  "not appear to be a 5-digit zip code.</font></p>\n".
-	  "<hr noshade size=\"1\">")
+    &form("Sorry, <b>" . $in{'zip'} . "</b> does\n" .
+	  "not appear to be a 5-digit zip code.")
 	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
     dbmopen(%DB,$dbmfile, 0400) ||
@@ -548,13 +539,11 @@ elsif (defined $in{'zip'})
     $val = $DB{$in{'zip'}};
     dbmclose(%DB);
 
-    &form("<p><font color=\"#ff0000\">Sorry, can't find\n".
-	  "<b>" . $in{'zip'} . 
-	  "</b> in the zip code database.</font></p>\n" .
+    &form("Sorry, can't find\n".  "<b>" . $in{'zip'} . 
+	  "</b> in the zip code database.",
           "<ul><li>Please try a nearby zip code or select candle lighting times by\n" .
           "<a href=\"${cgipath}?c=on&amp;geo=city\">city</a> or\n" .
-          "<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>\n" .
-	  "<hr noshade size=\"1\">")
+          "<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>")
 	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
@@ -580,12 +569,10 @@ elsif (defined $in{'zip'})
 	}
 	elsif (!defined $known_state_timezones{$state})
 	{
-	    &form("<p><font color=\"#ff0000\">Sorry, can't auto-detect\n" .
+	    &form("Sorry, can't auto-detect\n" .
 		  "timezone for <b>" . $city_descr . "</b>\n".
-		  "(state <b>" . $state . "</b> spans multiple time zones" .
-		  ").</font></p>\n" . 
-		  "<ul><li>Please select your Time Zone below.</li></ul>\n" .
-		  "<hr noshade size=\"1\">");
+		  "(state <b>" . $state . "</b> spans multiple time zones).",
+		  "<ul><li>Please select your time zone below.</li></ul>");
 	}
 	else
 	{
@@ -596,7 +583,7 @@ elsif (defined $in{'zip'})
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
     $long_descr = "${long_deg}d${long_min}' W longitude";
     $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time Zone: GMT $in{'tz'}:00";
+"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time zone: GMT $in{'tz'}:00";
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -683,7 +670,7 @@ exit(0);
 
 sub form
 {
-    local($message) = @_;
+    local($message,$help) = @_;
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
     local($key,$val);
@@ -699,14 +686,18 @@ hebcal</small></td>
 <td align=\"right\"><small><a href=\"/search/\">Search</a></small>
 </td></tr></table>
 <h1>Hebcal Interactive Jewish Calendar</h1>
-<p>Use the form below to generate a list of Jewish holidays. Candle
-lighting times are calculated from your latitude and longitude (which
-can be determined by your zip code or closest city).</p>
 ";
 
-print STDOUT "<hr noshade size=\"1\">
-$message
+if ($message ne '')
+{
+    $help = '' unless defined $help;
+    $message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
+	$message . "</font></p>\n" . $help . "\n<hr noshade size=\"1\">";
+}
+
+print STDOUT "$message
 <form action=\"$cgipath\">
+Jewish Holidays for:&nbsp;&nbsp;&nbsp;
 <label for=\"year\">Year: <input name=\"year\"
 id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\"></label>
 <input type=\"hidden\" name=\"v\" value=\"1\">
@@ -831,13 +822,14 @@ print STDOUT "</select><br>
 	print STDOUT "
 <input type=\"hidden\" name=\"geo\" value=\"zip\">
 <label for=\"zip\">Zip code: <input name=\"zip\"
-id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label><br>
+id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label>
+&nbsp;&nbsp;&nbsp;
 ";
     }
 
     if (!defined $in{'geo'} || $in{'geo'} ne 'city')
     {
-	print STDOUT "<label for=\"tz\">Time Zone:
+	print STDOUT "<label for=\"tz\">Time zone:
 <select name=\"tz\" id=\"tz\">
 ";
 
@@ -903,25 +895,34 @@ maxlength=\"3\"></label><br>
 ";
 }
 print STDOUT
-"<small>
+"<table border=\"0\">
+<tr><td>
 <label for=\"a\"><input type=\"checkbox\" name=\"a\" id=\"a\"$opts_chk{'a'}>
-Use ashkenazis hebrew</label><br>
-<label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
-Suppress Rosh Chodesh</label><br>
-<label for=\"h\"><input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}>
-Suppress all default holidays</label><br>
+Use ashkenazis hebrew</label>
+</td><td>
 <label for=\"o\"><input type=\"checkbox\" name=\"o\" id=\"o\"$opts_chk{'o'}>
-Add days of the Omer</label><br>
+Add days of the Omer</label>
+</td></tr><tr><td>
+<label for=\"x\"><input type=\"checkbox\" name=\"x\" id=\"x\"$opts_chk{'x'}>
+Suppress Rosh Chodesh</label>
+</td><td>
+<label for=\"h\"><input type=\"checkbox\" name=\"h\" id=\"h\"$opts_chk{'h'}>
+Suppress all default holidays</label>
+</td></tr><tr><td colspan=\"2\">
 <label for=\"s\"><input type=\"checkbox\" name=\"s\" id=\"s\"$opts_chk{'s'}>
 Add weekly sedrot on Saturday</label>
 (<label for=\"i\"><input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}>
-Use Israeli sedra scheme</label>)<br>
+Use Israeli sedra scheme</label>)
+</td></tr><tr><td colspan=\"2\">
 <label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
-Print hebrew date for the entire date range</label><br>
+Print hebrew date for the entire date range</label>
+</td></tr><tr><td colspan=\"2\">
 <label for=\"set\"><input type=\"checkbox\" name=\"set\" id=\"set\"$opts_chk{'set'}>
 Save my preferences in a cookie</label>
 (<a href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's
-a cookie?</a>)</small><br>
+a cookie?</a>)</small>
+</td></tr>
+</table>
 <br><input type=\"submit\" value=\"Get Calendar\">
 ";
 
