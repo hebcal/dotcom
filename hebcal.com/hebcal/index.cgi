@@ -75,7 +75,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Jul 27 12:37:08 PDT 1999
+Last modified: Tue Jul 27 12:51:02 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -86,6 +86,12 @@ $default_tz  = '-8';
 $default_zip = '95051';
 
 $status = &ReadParse();
+
+while (($key,$val) = each(%in))
+{
+    $val =~ s/[^\w\s-]//g;
+    $in{$key} = $val;
+}
 
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime(time);
@@ -178,7 +184,7 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 {
     &form("<p><em><font color=\"#ff0000\">Sorry, invalid city\n" .
-	  &html_entify_str($in{'city'}) . ".</font></em></p>")
+	  $in{'city'} . ".</font></em></p>")
 	unless defined($valid_cities{$in{'city'}});
 
     $cmd .= " -C '$in{'city'}'";
@@ -256,7 +262,7 @@ elsif (defined $in{'zip'})
 	if $in{'zip'} =~ /^\s*$/;
 
     &form("<p><em><font color=\"#ff0000\">Sorry, <b>" .
-	  &html_entify_str($in{'zip'}) . "</b> does\n" .
+	  $in{'zip'} . "</b> does\n" .
 	  "not appear to be a 5-digit zip code.</font></em></p>")
 	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
@@ -270,7 +276,7 @@ elsif (defined $in{'zip'})
     dbmclose(%DB);
 
     &form("<p><em><font color=\"#ff0000\">Sorry, can't find\n".
-	  "<b>" . &html_entify_str($in{'zip'}) . 
+	  "<b>" . $in{'zip'} . 
 	  "</b> in the zip code database.</font></em><br>\n" .
           "Please try a nearby zip code or select candle lighting times by\n" .
           "<a href=\"${cgipath}?geo=city\">city</a> or\n" .
@@ -379,11 +385,6 @@ sub form
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
     local($key,$val);
-
-    while (($key,$val) = each(%in))
-    {
-	$in{$key} = &html_entify_str($val);
-    }
 
     print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
@@ -705,7 +706,7 @@ $date</small></div><h1>Jewish Calendar $date</h1>
     while (($key,$val) = each(%in))
     {
 	print STDOUT "<input type=\"hidden\" name=\"$key\" value=\"", 
-	   &html_entify_str($val), "\">\n";
+	   $val, "\">\n";
     }
     print STDOUT
 "<input type=\"submit\" value=\"Download as an Outlook CSV file\">
@@ -826,19 +827,6 @@ sub url_escape
     }
 
     $res;
-}
-
-sub html_entify_str
-{
-    local($_) = @_;
-
-    s/&/&amp;/g;
-    s/</&lt;/g;
-    s/>/&gt;/g;
-    s/"/&quot;/g; #"#
-    s/\s+/ /g;
-
-    $_;
 }
 
 sub city_select_html
