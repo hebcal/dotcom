@@ -250,15 +250,15 @@ $PALM_DBA_MAXENTRIES = 2500;
    "Vaetchanan"	=>	'http://learn.jtsa.edu/topics/parashah/archive.shtml#deu',
    "Vaeschanan"	=>	'http://learn.jtsa.edu/topics/parashah/archive.shtml#deu',
    "Eikev"	=>	'http://learn.jtsa.edu/topics/parashah/archive.shtml#deu',
-   "Re'eh"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5759/devarim/reeh.htm',
-   "Shoftim"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5759/devarim/shoftim.htm',
-   "Ki Teitzei"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5759/devarim/kiseitze.htm',
-   "Ki Seitzei"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5759/devarim/kiseitze.htm',
+   "Re'eh"	=>	'http://www.ohr.org.il/tw/5759/devarim/reeh.htm',
+   "Shoftim"	=>	'http://www.ohr.org.il/tw/5759/devarim/shoftim.htm',
+   "Ki Teitzei"	=>	'http://www.ohr.org.il/tw/5759/devarim/kiseitze.htm',
+   "Ki Seitzei"	=>	'http://www.ohr.org.il/tw/5759/devarim/kiseitze.htm',
    "Ki Tavo"	=>	'http://learn.jtsa.edu/topics/parashah/archive.shtml#deu',
    "Ki Savo"	=>	'http://learn.jtsa.edu/topics/parashah/archive.shtml#deu',
-   "Nitzavim"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5759/devarim/nitzavim.htm',
-   "Vayeilech"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5758/devarim/vayelech.htm',
-   "Ha'Azinu"	=>	'http://www.virtualjerusalem.com/education/education/ohr/tw/5759/devarim/haazinu.htm',
+   "Nitzavim"	=>	'http://www.ohr.org.il/tw/5759/devarim/nitzavim.htm',
+   "Vayeilech"	=>	'http://www.ohr.org.il/tw/5758/devarim/vayelech.htm',
+   "Ha'Azinu"	=>	'http://www.ohr.org.il/tw/5759/devarim/haazinu.htm',
 	   );
 
 %tz_names = (
@@ -297,7 +297,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Jun 26 09:37:32 PDT 2000
+Last modified: Tue Jul  4 20:42:10 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
