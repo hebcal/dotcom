@@ -312,7 +312,7 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
     }
 
     if ($cfg eq 'j' &&
-	$q->param('custom') && $q->param('custom') eq 'keshernj.com')
+	$q->param('site') && $q->param('site') eq 'keshernj.com')
     {
 	&my_header($title);
 
@@ -431,8 +431,8 @@ for ($i = 0; $i < $numEntries; $i++)
 		      $rss{'description'},
 		      sprintf(" is at <b>%d:%02d PM</b>", $hour, $min));
 	    &Hebcal::out_html($cfg,"<br>&nbsp;")
-		if ($q->param('custom') &&
-		    $q->param('custom') eq 'keshernj.com');
+		if ($q->param('site') &&
+		    $q->param('site') eq 'keshernj.com');
 	}
     }
     else
@@ -477,7 +477,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	if ($href ne '' &&
 	    !(defined $cfg && $cfg =~ /^[rw]$/))
 	{
-	    if ($q->param('custom') && $q->param('custom') eq 'keshernj.com')
+	    if ($q->param('site') && $q->param('site') eq 'keshernj.com')
 	    {
 		$rss{'title'} .= "<b>$subj</b>";
 	    }
@@ -515,8 +515,8 @@ for ($i = 0; $i < $numEntries; $i++)
 	    &Hebcal::out_html($cfg,"\non ", $rss{'description'})
 		unless ($subj =~ /^(Parshas|Parashat)\s+/);
 	    &Hebcal::out_html($cfg,"<br>&nbsp;")
-		if ($q->param('custom') &&
-		    $q->param('custom') eq 'keshernj.com');
+		if ($q->param('site') &&
+		    $q->param('site') eq 'keshernj.com');
 	}
     }
 }
@@ -529,12 +529,12 @@ if (!$cfg && $q->param('zip'))
     my($self_url) = join('', "http://", $q->virtual_host(), "/email/",
 			 "?geo=", $q->param('geo'));
 
-    $self_url .= ";zip=" . $q->param('zip');
-    $self_url .= ";dst=" . $q->param('dst')
+    $self_url .= "&amp;zip=" . $q->param('zip');
+    $self_url .= "&amp;dst=" . $q->param('dst')
 	if $q->param('dst');
-    $self_url .= ";tz=" . $q->param('tz')
+    $self_url .= "&amp;tz=" . $q->param('tz')
 	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
-    $self_url .= ";m=" . $q->param('m')
+    $self_url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     &Hebcal::out_html($cfg,"<p><b><span class=\"hl\">NEW!</span>\n",
@@ -566,7 +566,7 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
 	&Hebcal::out_html($cfg,"</card>\n</wml>\n");
     }
     elsif ($cfg eq 'j' &&
-	   $q->param('custom') && $q->param('custom') eq 'keshernj.com')
+	   $q->param('site') && $q->param('site') eq 'keshernj.com')
     {
 	# no copyright
     }
