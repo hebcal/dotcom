@@ -24,7 +24,6 @@ use CGI;
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local;
 use Hebcal;
-use HTML::Entities ();
 use strict;
 
 use lib "/home/users/mradwin/local/lib/perl5/$]";
@@ -182,7 +181,7 @@ if (defined $events[0])
     my($first,$second);
     if ($type eq 'h2g')
     {
-	$first = &HTML::Entities::encode($subj);
+	$first = &Hebcal::html_entify($subj);
 	$second = sprintf("%d %s %04d",
 			  $mday, $Hebcal::MoY_long{$mon}, $year);
     }
@@ -190,7 +189,7 @@ if (defined $events[0])
     {
 	$first = sprintf("%d %s %04d",
 			  $mday, $Hebcal::MoY_long{$mon}, $year);
-	$second = &HTML::Entities::encode($subj);
+	$second = &Hebcal::html_entify($subj);
     }
 
 
