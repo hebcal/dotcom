@@ -532,6 +532,7 @@ for ($i = 0; $i < $numEntries; $i++)
 &Hebcal::out_html($cfg,"\n</dl>\n")
     unless (defined $cfg && $cfg =~ /^[rw]$/);
 
+my $wrote_p = 0;
 if (!$cfg && $q->param('zip'))
 {
     my($url) = join('', "http://", $q->virtual_host(), "/email/",
@@ -544,14 +545,23 @@ if (!$cfg && $q->param('zip'))
     &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
 		      "<a href=\"$url\">Email:\n",
 		      "subscribe to weekly Candle Lighting Times</a>\n");
+    $wrote_p = 1;
+}
 
-    $url = join('', "http://", $q->virtual_host(), "/link/",
-		"?zip=", $q->param('zip'));
+if (!$cfg && ($q->param('zip') || $q->param('city')))
+{
+    my $url = join('', "http://", $q->virtual_host(), "/link/?");
+    if ($q->param('zip')) {
+	$url .= "zip=" . $q->param('zip');
+    } else {
+	$url .= "city=" . $q->param('city');
+    }
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
     $url .= "&amp;type=shabbat";
 
-    &Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
+    &Hebcal::out_html($cfg, ($wrote_p ? "<br>" : "<p>"));
+    &Hebcal::out_html($cfg,"<span class=\"sm-grey\">&gt;</span>\n",
 		      "<a href=\"$url\">Synagogues: add\n",
 		      "1-Click Shabbat candle-lighting times to your\n",
 		      "web site</a></p>\n");
