@@ -29,9 +29,22 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
     $VER = $matches[1] . "." . $matches[2];
 }
 
+$param = array();
+
+global $HTTP_SERVER_VARS;
+$cookies = explode(';', $HTTP_SERVER_VARS["HTTP_COOKIE"]);
+foreach ($cookies as $ck) {
+    if (substr($ck, 0, 2) == 'C=') {
+	$cookie_parts = explode('&', substr($ck, 2));
+	for ($i = 0; $i < count($cookie_parts); $i++) {
+	    $parts = explode('=', $cookie_parts[$i], 2);
+	    $param[$parts[0]] = $parts[1];
+	}
+    }
+}
+
 global $HTTP_POST_VARS;
 global $HTTP_GET_VARS;
-$param = array();
 
 foreach($HTTP_POST_VARS as $key => $value) {
     $param[$key] = $value;
