@@ -42,6 +42,48 @@ $rcsrev =~ s/\s*\$//g;
 
 @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 
+%known_state_timezones =
+    (
+     'CA', -8,
+     'NV', -8,
+     'WA', -8,
+     'MT', -7,
+     'UT', -7,
+     'WY', -7,
+     'CO', -7,
+     'NM', -7,
+     'TX', -6,
+     'OK', -6,
+     'IL', -6,
+     'WI', -6,
+     'MN', -6,
+     'IA', -6,
+     'MO', -6,
+     'AR', -6,
+     'LA', -6,
+     'MS', -6,
+     'AL', -6,
+     'OH', -5,
+     'RI', -5,
+     'MA', -5,
+     'NY', -5,
+     'NH', -5,
+     'VT', -5,
+     'ME', -5,
+     'CT', -5,
+     'NJ', -5,
+     'DE', -5,
+     'DC', -5,
+     'PA', -5,
+     'WV', -5,
+     'VA', -5,
+     'NC', -5,
+     'SC', -5,
+     'NC', -5,
+     'GA', -5,
+     'MD', -5,
+     );
+
 %valid_cities =
     (
      'Atlanta', 1,
@@ -128,7 +170,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Tue Sep 21 10:42:03 PDT 1999
+Last modified: Tue Sep 21 20:24:12 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -171,6 +213,8 @@ for ($i = -12; $i < 13; $i++)
 {
     $tz{$i} = '';
 }
+$tz{'auto'} = '';
+
 if (defined $in{'tz'})
 {
     $tz{$in{'tz'}} = ' selected';
@@ -216,6 +260,10 @@ else
     $opts{'usa'}    = 1;
 }
 
+$opts{'set'} = 1
+    if (!defined $in{'v'} && defined $in{'geo'} &&
+	(! defined $ENV{'HTTP_COOKIE'} || $ENV{'HTTP_COOKIE'} =~ /^\s*$/));
+
 foreach (@opts)
 {
     $opts_chk{$_} = $opts{$_} ? ' checked' : '';
@@ -234,8 +282,8 @@ $cmd  = "/home/users/mradwin/bin/hebcal";
 
 if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 {
-    &form("<p><em><font color=\"#ff0000\">Sorry, invalid city\n" .
-	  $in{'city'} . ".</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Sorry, invalid city\n" .
+	  $in{'city'} . ".</font></p>\n<hr noshade size=\"1\">")
 	unless defined($valid_cities{$in{'city'}});
 
     $cmd .= " -C '$in{'city'}'";
@@ -251,8 +299,8 @@ if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
 elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
        defined $in{'ladeg'} && defined $in{'lamin'} && defined $in{'ladir'})
 {
-    &form("<p><em><font color=\"#ff0000\">Sorry, all latitude/longitude\n" .
-	  "arguments must be numeric.</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Sorry, all latitude/longitude\n" .
+	  "arguments must be numeric.</font></p>\n<hr noshade size=\"1\">")
 	if (($in{'lodeg'} !~ /^\s*\d*\s*$/) ||
 	    ($in{'lomin'} !~ /^\s*\d*\s*$/) ||
 	    ($in{'ladeg'} !~ /^\s*\d*\s*$/) ||
@@ -276,20 +324,24 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $in{'ladeg'} = $lat_deg;
     $in{'lamin'} = $lat_min;
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, longitude degrees\n" .
-	  "<b>$in{'lodeg'}</b> out of valid range 0-180.</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Sorry, longitude degrees\n" .
+	  "<b>$in{'lodeg'}</b> out of valid range 0-180.</font></p>\n" .
+	  "<hr noshade size=\"1\">")
 	if ($in{'lodeg'} > 180);
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, latitude degrees\n" .
-	  "<b>$in{'ladeg'}</b> out of valid range 0-90.</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Sorry, latitude degrees\n" .
+	  "<b>$in{'ladeg'}</b> out of valid range 0-90.</font></p>\n" .
+	  "<hr noshade size=\"1\">")
 	if ($in{'ladeg'} > 90);
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, longitude minutes\n" .
-	  "<b>$in{'lomin'}</b> out of valid range 0-60.</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Sorry, longitude minutes\n" .
+	  "<b>$in{'lomin'}</b> out of valid range 0-60.</font></p>\n" .
+	  "<hr noshade size=\"1\">")
 	if ($in{'lomin'} > 60);
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, latitude minutes\n" .
-	  "<b>$in{'lamin'}</b> out of valid range 0-60.</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Sorry, latitude minutes\n" .
+	  "<b>$in{'lamin'}</b> out of valid range 0-60.</font></p>\n" .
+	  "<hr noshade size=\"1\">")
 	if ($in{'lamin'} > 60);
 
     $city_descr = "Geographic Position";
@@ -308,13 +360,14 @@ elsif (defined $in{'zip'})
 {
     $in{'dst'} = 'usa' unless defined $in{'dst'};
 
-    &form("<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
-	  "zip code.</font></em></p>")
+    &form("<p><font color=\"#ff0000\">Please specify a 5-digit\n" .
+	  "zip code.</font></p>\n<hr noshade size=\"1\">")
 	if $in{'zip'} =~ /^\s*$/;
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, <b>" .
+    &form("<p><font color=\"#ff0000\">Sorry, <b>" .
 	  $in{'zip'} . "</b> does\n" .
-	  "not appear to be a 5-digit zip code.</font></em></p>")
+	  "not appear to be a 5-digit zip code.</font></p>\n".
+	  "<hr noshade size=\"1\">")
 	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
     dbmopen(%DB,$dbmfile, 0400) ||
@@ -326,12 +379,13 @@ elsif (defined $in{'zip'})
     $val = $DB{$in{'zip'}};
     dbmclose(%DB);
 
-    &form("<p><em><font color=\"#ff0000\">Sorry, can't find\n".
+    &form("<p><font color=\"#ff0000\">Sorry, can't find\n".
 	  "<b>" . $in{'zip'} . 
-	  "</b> in the zip code database.</font></em><br>\n" .
-          "Please try a nearby zip code or select candle lighting times by\n" .
+	  "</b> in the zip code database.</font></p>\n" .
+          "<ul><li>Please try a nearby zip code or select candle lighting times by\n" .
           "<a href=\"${cgipath}?c=on&amp;geo=city\">city</a> or\n" .
-          "<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a></p>")
+          "<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a></li></ul>\n" .
+	  "<hr noshade size=\"1\">")
 	unless defined $val;
 
     ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
@@ -348,6 +402,26 @@ elsif (defined $in{'zip'})
     undef(@city);
 
     $city_descr = "$city, $state &nbsp;$in{'zip'}";
+
+    if ($in{'tz'} eq 'auto')
+    {
+	if (!defined $known_state_timezones{$state})
+	{
+	    $complaint = ($state eq 'AZ' || $state eq 'IN') ?
+		'does not follow USA standard daylight savings time rule' :
+		    'spans multiple time zones';
+
+	    &form("<p><font color=\"#ff0000\">Sorry, can't auto-detect\n" .
+		  "timezone for <b>" . $city_descr . "</b>\n".
+		  "(state <b>" . $state . "</b> " . $complaint . 
+		  ").</font></p>\n" . 
+		  "<ul><li>Please select your Time Zone below.</li></ul>\n" .
+		  "<hr noshade size=\"1\">");
+	}
+
+	$in{'tz'} = $known_state_timezones{$state};
+    }
+
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
     $long_descr = "${long_deg}d${long_min}' W longitude";
     $dst_tz_descr =
@@ -588,7 +662,13 @@ id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label><br>
     {
 	print STDOUT "<label for=\"tz\">Time Zone:
 <select name=\"tz\" id=\"tz\">
-<option value=\"-5\"$tz{'-5'}>GMT -05:00 (Eastern)
+";
+
+	print STDOUT 
+	    "<option value=\"auto\"$tz{'auto'}>Attempt to auto-detect\n"
+		if $in{'geo'} eq 'zip';
+
+	print STDOUT "<option value=\"-5\"$tz{'-5'}>GMT -05:00 (Eastern)
 <option value=\"-6\"$tz{'-6'}>GMT -06:00 (Central)
 <option value=\"-7\"$tz{'-7'}>GMT -07:00 (Mountain)
 <option value=\"-8\"$tz{'-8'}>GMT -08:00 (Pacific)
@@ -596,7 +676,7 @@ id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label><br>
 <option value=\"-10\"$tz{'-10'}>GMT -10:00 (Hawaii)
 ";
 
-    print STDOUT
+	print STDOUT
 "<option value=\"-11\"$tz{'-11'}>GMT -11:00
 <option value=\"-12\"$tz{'-12'}>GMT -12:00
 <option value=\"12\"$tz{'12'}>GMT +12:00
@@ -616,19 +696,23 @@ id=\"zip\" value=\"$in{'zip'}\" size=\"5\" maxlength=\"5\"></label><br>
 <option value=\"-2\"$tz{'-2'}>GMT -02:00
 <option value=\"-3\"$tz{'-3'}>GMT -03:00
 <option value=\"-4\"$tz{'-4'}>GMT -04:00
-"
-    if (defined $in{'geo'} && $in{'geo'} eq 'pos');
+"  if (defined $in{'geo'} && $in{'geo'} eq 'pos');
 
-    print STDOUT
+	print STDOUT
 "</select></label><br>
 Daylight Savings Time:
 <label for=\"usa\">
 <input type=\"radio\" name=\"dst\" id=\"usa\" value=\"usa\"$opts_chk{'usa'}>
-USA</label>
-<label for=\"israel\">
+USA (except <small>AZ</small> and <small>IN</small>)</label>
+";
+	print STDOUT
+"<label for=\"israel\">
 <input type=\"radio\" name=\"dst\" id=\"israel\" value=\"israel\"$opts_chk{'israel'}>
 Israel</label>
-<label for=\"none\">
+"  if (defined $in{'geo'} && $in{'geo'} eq 'pos');
+
+	print STDOUT
+"<label for=\"none\">
 <input type=\"radio\" name=\"dst\" id=\"none\" value=\"none\"$opts_chk{'none'}>
 none</label><br>
 ";
@@ -657,12 +741,25 @@ Use Israeli sedra scheme</label>)<br>
 <label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
 Print hebrew date for the entire date range</label><br>
 <label for=\"set\"><input type=\"checkbox\" name=\"set\" id=\"set\"$opts_chk{'set'}>
-Set my preferences in a cookie</label>
+Save my preferences in a cookie</label>
 (<a href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's
 a cookie?</a>)</small><br>
 <br><input type=\"submit\" value=\"Get Calendar\">
-</form>
-$html_footer";
+";
+
+# for debugging only
+if (defined $ENV{'HTTP_COOKIE'} && $ENV{'HTTP_COOKIE'} !~ /^\s*$/)
+{
+    print STDOUT "<input type=\"hidden\" name=\"cookie\"\nvalue=\"";
+    $z = $ENV{'HTTP_COOKIE'};
+    $z =~ s/&/&amp;/g;
+    $z =~ s/</&lt;/g;
+    $z =~ s/>/&gt;/g;
+    $z =~ s/"/&quot;/g; #"#
+    print STDOUT $z, "\">\n";
+}
+
+print STDOUT "</form>\n$html_footer";
 
     close(STDOUT);
     exit(0);
@@ -1038,7 +1135,6 @@ sub process_cookie {
     $status = &ReadParse(*cookie);
 
     if (defined $status && $status > 0) {
-	$in{'cookie'} = $cookieval;
 	if (! defined $in{'c'} || $in{'c'} eq 'on' || $in{'c'} eq '1') {
 	    if (defined $cookie{'zip'} && $cookie{'zip'} =~ /^\d\d\d\d\d$/ &&
 		(! defined $in{'geo'} || $in{'geo'} eq 'zip')) {
@@ -1082,9 +1178,8 @@ sub process_cookie {
 	foreach (@opts)
 	{
 	    next if $_ eq 'c';
-	    $in{$_} = (defined $in{$_}) ? $in{$_} :
-		(defined $cookie{$_} &&
-		 ($cookie{$_} eq 'on' || $cookie{$_} eq '1')) ? 'on' : '';
+	    $in{$_} = $cookie{$_}
+	        if (! defined $in{$_} && defined $cookie{$_});
 	}
     }
 
