@@ -142,7 +142,15 @@ sub format_items
 
     Hebcal::out_html($cfg,qq{</tr></table>\n});
 
-    Hebcal::out_html($cfg,"<p>Times in <b>bold</b> indicate holidays.</p>\n");
+    Hebcal::out_html($cfg,"<p><a class=\"goto\" title=\"Previous\" href=\"",
+		     Hebcal::self_url($q, {'year' => $hebrew_year - 1}),
+		     "\">&laquo;&nbsp;", $hebrew_year - 1,
+		     "</a>&nbsp;&nbsp;&nbsp;",
+		     "Times in <b>bold</b> indicate holidays.",
+		     "&nbsp;&nbsp;&nbsp;<a class=\"goto\" title=\"Next\" href=\"",
+		     Hebcal::self_url($q, {'year' => $hebrew_year + 1}),
+		     "\">", $hebrew_year + 1, "&nbsp;&raquo;</a>",
+		     "</p>\n");
 }
 
 sub process_args
