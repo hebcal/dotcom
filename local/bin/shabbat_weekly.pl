@@ -183,6 +183,9 @@ sub parse_config
     }
 
     my $city_descr = "$city, $state " . $args{'zip'};
+    $city_descr .= "\n" . $Hebcal::tz_names{$args{'tz'}};
+    $city_descr .= "\nDST: " . $args{'dst'}
+	if $args{'dst'} ne 'usa';
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 
