@@ -547,7 +547,7 @@ JSCRIPT_END
 		 -label => "\nShow Hebrew event names"),
     "</label>",
     "</p>\n",
-    $q->hidden(-name => '.rand', -value => time(), -override => 1),
+#    $q->hidden(-name => '.rand', -value => time(), -override => 1),
     $q->submit(-name => '.s',-value => 'Get Calendar'),
     $q->hidden(-name => '.cgifields',
 	       -values => ['nx', 'nh', 'set'],
