@@ -37,7 +37,7 @@ print OUT <<EOHTML;
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Hebcal: Torah Readings</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
-<base href="http://www.hebcal.com/help/defaults.html" target="_top">
+<base href="http://www.hebcal.com/help/sedrot.html" target="_top">
 <link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
@@ -81,7 +81,7 @@ foreach my $h ($sedrot->Sections())
 
     my($anchor) = $h;
     $anchor = lc($anchor);
-    $anchor =~ s/[^\w\-]//g;
+    $anchor =~ s/[^\w]//g;
 
     print OUT qq{<tr><td><big><a name="$anchor">$h</a><br>\n},
     qq{<span dir="rtl" class="hebrew"\n},
