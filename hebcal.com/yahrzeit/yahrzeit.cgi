@@ -28,6 +28,7 @@ use Time::Local;
 use Hebcal;
 use Palm::DBA;
 use POSIX;
+use Date::Calc;
 use strict;
 
 my($this_year) = (localtime)[5];
@@ -70,6 +71,21 @@ foreach $key (1 .. 5)
 	$q->param("y$key", "19" . $q->param("y$key"))
 	    if $q->param("y$key") =~ /^\d{2}$/;
 	$q->param("n$key", "Person$key") unless $q->param("n$key");
+
+	# after sunset?
+	if ($q->param("s$key"))
+	{
+	    my $gm = $q->param("m$key");
+	    my $gd = $q->param("d$key");
+	    my $gy = $q->param("y$key");
+
+	    ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,1);
+
+	    $q->param("m$key", $gm);
+	    $q->param("d$key", $gd);
+	    $q->param("y$key", $gy);
+	}
+
 	$yahrzeits{$q->param("n$key")} =
 	    sprintf("%02d %02d %4d %s",
 		    $q->param("m$key"),
@@ -439,6 +455,13 @@ sub show_row {
 	 "\n<small>Name:</small>\n",
 	 $q->textfield(-name => "n$i",
 		       -id => "n$i"),
+	 qq{\n<small><label for="s$i">},
+	 $q->checkbox(-name => "s$i",
+		      -id => "s$i",
+		      -checked => '',
+		      -override => 1,
+		      -label => "\nAfter sunset"),
+	 qq{</label></small>},
 	 "<br>\n",
 	 );
 }
