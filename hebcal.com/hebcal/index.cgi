@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Tue May 18 16:31:02 PDT 1999
+Last modified: Thu May 27 12:52:42 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -625,7 +625,7 @@ ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 	 $hr,$min,$month,$day,$year) =
 	     &parse_date_descr($date,$descr);
 
-	$ST  = sprintf("%4d%02d%02d", $year, $month, $day);
+	$ST  = sprintf("%04d%02d%02d", $year, $month, $day);
 	if ($hr >= 0 && $min >= 0)
 	{
 	    $hr += 12 if $hr < 12 && $hr > 0;
@@ -640,7 +640,7 @@ ${city_descr}${lat_descr}${long_descr}${dst_tz_descr}
 	$descr =~ s/>/&lt;/g;
 	$descr =~ s/&/&amp;/g;
 
-	printf STDOUT "%4d/%02d/%02d %s<br>\n", $year, $month, $day, $descr;
+	printf STDOUT "%04d/%02d/%02d %s<br>\n", $year, $month, $day, $descr;
     }
     close(HEBCAL);
 
