@@ -589,8 +589,9 @@ $next_link
 </td>
 </tr>
 </table>
-<h3><a name="torah">Torah Portion:</a>
-<a href="$torah_href"\ntitle="Translation from JPS Tanakh">$torah</a></h3>
+<h3>Torah Portion: <a name="torah"
+href="$torah_href"
+title="Translation from JPS Tanakh">$torah</a></h3>
 &nbsp;
 <table border="1" cellpadding="5">
 <tr>
@@ -734,8 +735,7 @@ EOHTML
     print OUT2 <<EOHTML;
 </tr>
 </table>
-<h3><a name="haftarah">Haftarah$ashk:</a>
-<a href="$haftarah_href"
+<h3>Haftarah$ashk: <a name="haftara" href="$haftarah_href"
 title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
