@@ -867,6 +867,61 @@ sub process_cookie($$)
     $c;
 }
 
+########################################################################
+# Yahoo! Calendar link
+########################################################################
+
+sub yahoo_calendar_link($$)
+{
+    my($event,$city_descr) = @_;
+
+    my($subj) = $event->[$Hebcal::EVT_IDX_SUBJ];
+
+    my($min) = $event->[$Hebcal::EVT_IDX_MIN];
+    my($hour) = $event->[$Hebcal::EVT_IDX_HOUR];
+    $hour -= 12 if $hour > 12;
+
+    my($year) = $event->[$Hebcal::EVT_IDX_YEAR];
+    my($mon) = $event->[$Hebcal::EVT_IDX_MON] + 1;
+    my($mday) = $event->[$Hebcal::EVT_IDX_MDAY];
+
+    my($desc);
+
+    my($ST) = sprintf("%04d%02d%02d", $year, $mon, $mday);
+    if ($event->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+    {
+	$desc = (defined $city_descr && $city_descr ne '') ?
+	    "in $city_descr" : '';
+	$desc =~ s/\s*&nbsp;\s*/ /g;
+
+	$ST .= sprintf("T%02d%02d00",
+		       ($hour < 12 && $hour > 0) ? $hour + 12 : $hour,
+		       $min);
+
+#  	if ($q->param('tz') ne '')
+#  	{
+#  	    my($abstz) = ($q->param('tz') >= 0) ?
+#  		$q->param('tz') : -$q->param('tz');
+#  	    my($signtz) = ($q->param('tz') < 0) ? '-' : '';
+
+#  	    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
+#  	}
+
+	$ST .= "&amp;DUR=00" . $event->[$Hebcal::EVT_IDX_DUR];
+    }
+    else
+    {
+	$desc = (&get_holiday_anchor($subj))[2];
+    }
+
+    $ST .= "&amp;DESC=" . &url_escape($desc)
+	if $desc ne '';
+
+    "http://calendar.yahoo.com/?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=" .
+	&url_escape($subj) . "&amp;VIEW=d";
+}
+
+
 
 ########################################################################
 # export to Outlook CSV
