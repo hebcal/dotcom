@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Apr 27 10:02:35 PDT 2001
+Last modified: Fri Apr 27 11:02:33 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -308,10 +308,10 @@ JSCRIPT_END
     "<table width=\"100%\"\nclass=\"navbar\">",
     "<tr><td><small>",
     "<strong><a\nhref=\"/\">$server_name</a></strong>\n<tt>-&gt;</tt>\n",
-    "hebcal</small></td>",
+    "Interactive Calendar</small></td>",
     "<td align=\"right\"><small><a\n",
-    "href=\"../help/\">Help</a> -\n<a\n",
-    "href=\"/search/\">Search</a></small>",
+    "href=\"/help/\">Help</a> -\n<a\n",
+    "href=\"/search/\">Search</a></small>\n",
     "</td></tr></table>",
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
@@ -354,7 +354,7 @@ JSCRIPT_END
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
     "</label> <small>(<a\n",
-    "href=\"../help/defaults.html\">What\n",
+    "href=\"/help/defaults.html\">What\n",
     "are the default Holidays?</a>)</small>",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
@@ -577,7 +577,7 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -label => "\nSave my preferences in a cookie"),
     "</label> <small>(<a\n",
-    "href=\"../help/#cookie\">What's\n",
+    "href=\"/help/#cookie\">What's\n",
     "a cookie?</a> - <a\n",
     "href=\"del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
@@ -734,10 +734,11 @@ sub results_page()
 	"<tt>-&gt;</tt>\n",
 	"<a href=\"", &self_url($q, {'v' => '0'});
 
-    print STDOUT "\">hebcal</a>\n<tt>-&gt;</tt>\n$date</small></td>",
+    print STDOUT "\">Interactive\nCalendar</a>\n",
+    "<tt>-&gt;</tt>\n$date</small></td>",
     "<td align=\"right\"><small><a\n",
-    "href=\"../help/\">Help</a> -\n<a\n",
-    "href=\"/search/\">Search</a></small>",
+    "href=\"/help/\">Help</a> -\n<a\n",
+    "href=\"/search/\">Search</a></small>\n",
     "</td></tr></table>\n";
 
     unless ($q->param('vis'))
