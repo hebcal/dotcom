@@ -10,7 +10,7 @@ $dbmfile =~ s/\.db$//;
 	"\">e-mail Michael</a> to tell him that hebcal is broken.")
     unless -r "${dbmfile}.db";
 
-$cgipath = '/cgi-bin/hebcal';
+$cgipath = '/hebcal/';
 $rcsrev = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
@@ -40,7 +40,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Thu May 13 17:55:49 PDT 1999
+Last modified: Mon May 17 16:30:47 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
