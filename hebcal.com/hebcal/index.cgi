@@ -75,7 +75,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Tue Jul 27 12:51:02 PDT 1999
+Last modified: Tue Jul 27 12:55:50 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -362,8 +362,11 @@ else
 
 print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"$endl";
 
+$prev = '';
 while(<HEBCAL>)
 {
+    next if $_ eq $prev;
+    $prev = $_;
     chop;
     ($date,$descr) = split(/ /, $_, 2);
 
@@ -731,8 +734,11 @@ open.</small></p>
 		"Please <a href=\"mailto:michael\@radwin.org" .
 		"\">e-mail Michael</a> to tell him that hebcal is broken.");
 
+    $prev = '';
     while(<HEBCAL>)
     {
+	next if $_ eq $prev;
+	$prev = $_;
 	chop;
 	($date,$descr) = split(/ /, $_, 2);
 	($subj,$date,$start_time,$end_date,$end_time,$all_day,
