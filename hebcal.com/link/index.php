@@ -32,7 +32,7 @@ $zip = htmlspecialchars($zip);
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head><title>Add weekly Shabbat candle-lighting times to your synagogue</title>
-<base href="http://www.hebcal.com/shabbat/link/" target="_top">
+<base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 <link type="text/css" media="print" rel="stylesheet" href="/print.css">
 </head><body><table width="100%"
@@ -48,7 +48,8 @@ href="/help/">Help</a> -
 
 <p>You can use these HTML tags to insert weekly candle-lighting times
 and Torah portion directly on your synagogue's web page.  The following
-results are for <b><?php echo $descr ?></b>.</p>
+results are for <b><?php echo $descr ?></b>
+(<a href="#change">change city</a>).</p>
 
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML:</p>
@@ -103,6 +104,27 @@ H1, H2, H3, H4, H5, H6 {
 --&gt;
 &lt;/style&gt;
 </pre></blockquote>
+
+<hr noshade size="1">
+<h2><a name="change">Change City</a></h2>
+
+<p>Enter a new zip code to get revised HTML tags for your
+synagogue's web page.</p>
+
+<form action="/link/" method="get">
+
+<label for="zip">Zip code:
+<input type="text" name="zip" size="5" maxlength="5" id="zip"
+value="<?php echo $zip ?>"></label>
+
+<br><label for="m1">Havdalah minutes past sundown:
+<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m1">
+</label>
+
+<br><br>
+<input type="submit" value="Get new link">
+</form>
+
 <?php
     my_footer();
 
