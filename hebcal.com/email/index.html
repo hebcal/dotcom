@@ -56,6 +56,15 @@ if (! $q->param('v'))
 	    {
 		&Hebcal::process_cookie($q,$info);
 		$want_c = 0;
+
+		my %args;
+		foreach my $kv (split(/;/, $info)) {
+		    my($key,$val) = split(/=/, $kv, 2);
+		    $args{$key} = $val;
+		}
+		if ($args{'upd'}) {
+		    $q->param('upd', 'on');
+		}
 	    }
 	}
     }
@@ -369,9 +378,14 @@ sub form
     }
 
     print STDOUT
-	qq{$message\n},
-	qq{<p>Subscribe to email weekly Shabbat candle lighting times.\n},
-	qq{Email is sent out every week on Thursday morning.</p>\n},
+qq{$message
+<p>Subscribe to email weekly Shabbat candle lighting times.
+Email is sent out every week on Thursday morning.
+<br>We will not sell your email address.  Read our <a
+href="/privacy/">Privacy Policy</a> for details.</p>
+};
+
+    print STDOUT
 	qq{<form name="f1" id="f1"\naction="$script_name" method="post">},
 	qq{<label for="em">E-mail address:\n},
 	$q->textfield(-name => 'em',
