@@ -739,10 +739,6 @@ sub start_html()
     $meta = {} unless defined $meta;
     $head = [] unless defined $head;
 
-    my($author) = $server_name;
-    $author =~ s/^www\.//;
-    $author = "webmaster\@$author";
-
     $target = '_top' unless defined $target;
     return $q->start_html
 	(
@@ -758,8 +754,6 @@ sub start_html()
 			     -media => 'print',
 			     -href => '/print.css',
 			     -type => 'text/css'}),
-		   $q->Link({-rev => 'made',
-			     -href => "mailto:$author"}),
 		   @{$head},
 		   ],
 	 -meta => $meta,
