@@ -32,7 +32,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 17:25:05 PDT 1999
+Last modified: Fri Apr  9 17:53:37 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -189,7 +189,7 @@ open(HEBCAL,"$cmd |") ||
 	    "\">e-mail Michael</a>.");
 
 print STDOUT "Content-Type: text/x-csv\015\012\015\012";
-print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"\015\012";
+print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",\"End Time\",\"All day event\",\"Description\"\n";
 
 while(<HEBCAL>)
 {
@@ -221,7 +221,7 @@ while(<HEBCAL>)
     $subj =~ s/\s*:\s*$//g;
 
     print STDOUT "\"$subj\",\"$date\",$start_time,$end_date,$end_time,$all_day,";
-    print STDOUT "\"\"\015\012";
+    print STDOUT "\"\"\n";
 }
 close(HEBCAL);
 close(STDOUT);
