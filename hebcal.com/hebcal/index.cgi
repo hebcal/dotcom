@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Sep 18 23:23:46 PDT 2000
+Last modified: Wed Sep 20 10:51:55 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1011,7 +1011,7 @@ so you can keep this window open.
     my($hdr) = '';
     $hdr .= '    ' if $ycal;
     $hdr .= 'DoW ' if ($q->param('year') > 1969 && $q->param('year') < 2038);
-    $hdr .= "YYYY/MM/DD  Description";
+    $hdr .= "YYYY-MM-DD  Description";
 
     print STDOUT $hdr, "\n";
     print STDOUT '-' x length($hdr), "\n";
@@ -1064,41 +1064,15 @@ so you can keep this window open.
 		&url_escape($subj), "&amp;VIEW=d\">add</a> ";
 	}
 
-	$subj =~ s/&/&amp;/g;
-	$subj =~ s/</&lt;/g;
-	$subj =~ s/>/&gt;/g;
-
-	if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
+	my($href) = &get_holiday_anchor($subj);
+	if ($href ne '')
 	{
-	    my($parashat) = $1;
-	    my($sedra) = $2;
-	    if (defined $Hebcal::sedrot{$sedra} &&
-		$Hebcal::sedrot{$sedra} !~ /^\s*$/)
-	    {
-		$subj = '<a href="' . $Hebcal::sedrot{$sedra} .
-		    '">' . $parashat . $sedra . '</a>';
-	    }
-	    elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
-		   (defined $Hebcal::sedrot{$1} &&
-		    $Hebcal::sedrot{$1} !~ /^\s*$/))
-	    {
-		$subj = '<a href="' . $Hebcal::sedrot{$1} .
-		    '">' . $parashat . $sedra . '</a>';
-	    }
-	}
-	else
-	{
-	    my($href) = &get_holiday_anchor($subj);
-
-	    if ($href ne '')
-	    {
-		$subj = qq{<a href="$href">$subj</a>};
-	    }
+	    $subj = qq{<a href="$href">$subj</a>};
 	}
 
 	my($dow) = ($year > 1969 && $year < 2038) ?
 	    $Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
-	printf STDOUT ("%s%04d/%02d/%02d  %s",
+	printf STDOUT ("%s%04d-%02d-%02d  %s",
 		       $dow, $year, $mon, $mday, $subj);
 	printf STDOUT (": %d:%02d", $hour, $min)
 	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
