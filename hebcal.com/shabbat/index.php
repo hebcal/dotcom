@@ -2,6 +2,8 @@
 # $Id$
 # $Source: /Users/mradwin/hebcal-copy/hebcal.com/shabbat/RCS/index.php,v $
 
+require "../common.inc";
+
 $qs = $_SERVER["QUERY_STRING"];
 $matches = array();
 if ($qs && preg_match('/\bcfg=([a-z])/', $qs, $matches)) {
@@ -68,72 +70,4 @@ if (!$status) {
     virtual($url);
 }
 exit();
-
-function hebcal_gen_cookie() {
-    if (isset($_COOKIE["C"])) {
-	parse_str($_COOKIE["C"], $param);
-    }
-    foreach ($_REQUEST as $k => $v) {
-	$param[$k] = $v;
-    }
-
-    $retval = "C=t=" . time();
-
-    # candle-lighting options
-    if (isset($param["geo"])) {
-	if ($param["geo"] == "zip") {
-	    $retval .= "&zip=" . $param["zip"];
-	    if (isset($param["dst"]) && $param["dst"] != "") {
-		$retval .= "&dst=" . $param["dst"];
-	    }
-	    if (isset($param["tz"]) && $param["tz"] != "") {
-		$retval .= "&tz=" . $param["tz"];
-	    }
-	} elseif ($param["geo"] == "city") {
-	    $retval .= "&city=" . urlencode($param["city"]);
-	} elseif ($param["geo"] == "pos") {
-	    $retval .= "&lodeg=" . $param["lodeg"];
-	    $retval .= "&lomin=" . $param["lomin"];
-	    $retval .= "&lodir=" . $param["lodir"];
-	    $retval .= "&ladeg=" . $param["ladeg"];
-	    $retval .= "&lamin=" . $param["lamin"];
-	    $retval .= "&ladir=" . $param["ladir"];
-	    if (isset($param["dst"]) && $param["dst"] != "") {
-		$retval .= "&dst=" . $param["dst"];
-	    }
-	    if (isset($param["tz"]) && $param["tz"] != "") {
-		$retval .= "&tz=" . $param["tz"];
-	    }
-	}
-	if (isset($param["m"]) && $param["m"] != "") {
-	    $retval .= "&m=" . $param["m"];
-	}
-    }
-
-    # boolean options
-    $opts = array("o","s","i","a","d","D");
-    foreach ($opts as $o) {
-	if (isset($param[$o]) && $param[$o] != "") {
-	    $retval .= "&" . $o . "=" . $param[$o];
-	}
-    }
-
-    # hebcal interactive options
-    if (isset($_REQUEST["v"]) && $_REQUEST["v"] == "1") {
-	if (!isset($_REQUEST["nh"]) || $_REQUEST["nh"] == "off") {
-	    $retval .= "&nh=off";
-	}
-	if (!isset($_REQUEST["nx"]) || $_REQUEST["nx"] == "off") {
-	    $retval .= "&nx=off";
-	}
-
-	if (isset($param["heb"]) && $param["heb"] != "") {
-	    $retval .= "&heb=" . $param["heb"];
-	} else {
-	    $retval .= "&heb=off";
-	}
-    }
-
-    return $retval;
-}
 ?>
