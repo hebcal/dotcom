@@ -94,14 +94,6 @@ $Hebcal::havdalah_min = 72;
 	     12  => 'December',
 	     );
 
-# these cities should have DST set to 'none'
-%Hebcal::city_nodst =
-    (
-     'Bogota'		=>	1,
-     'Buenos Aires'	=>	1,
-     'Johannesburg'	=>	1,
-     );
-
 %Hebcal::dst_names =
     (
      'none'    => 'none',
@@ -159,6 +151,57 @@ $Hebcal::havdalah_min = 72;
      'Toronto'		=>	-5,
      'Vancouver'	=>	-8,
      'Washington DC'	=>	-5,
+     );
+
+%Hebcal::city_dst =
+    (
+     'Ashdod'		=>	'israel',
+     'Atlanta'		=>	'usa',
+     'Austin'		=>	'usa',
+     'Berlin'		=>	'eu',
+     'Beer Sheva'	=>	'israel',
+     'Baltimore'	=>	'usa',
+     'Bogota'		=>	'none',
+     'Boston'		=>	'usa',
+     'Buenos Aires'	=>	'none',
+     'Buffalo'		=>	'usa',
+     'Chicago'		=>	'usa',
+     'Cincinnati'	=>	'usa',
+     'Cleveland'	=>	'usa',
+     'Dallas'		=>	'usa',
+     'Denver'		=>	'usa',
+     'Detroit'		=>	'usa',
+     'Eilat'		=>	'israel',
+     'Gibraltar'	=>	'usa',
+     'Haifa'		=>	'israel',
+     'Hawaii'		=>	'usa',      # none?
+     'Houston'		=>	'usa',
+     'Jerusalem'	=>	'israel',
+     'Johannesburg'	=>	'none',
+     'Kiev'		=>	'eu',
+     'La Paz'		=>	'none',
+     'London'		=>	'eu',
+     'Los Angeles'	=>	'usa',
+     'Miami'		=>	'usa',
+     'Mexico City'	=>	'usa',
+     'Montreal'		=>	'usa',
+     'Moscow'		=>	'eu',
+     'New York'		=>	'usa',
+     'Omaha'		=>	'usa',
+     'Paris'		=>	'eu',
+     'Petach Tikvah'	=>	'israel',
+     'Philadelphia'	=>	'usa',
+     'Phoenix'		=>	'usa',
+     'Pittsburgh'	=>	'usa',
+     'Saint Louis'	=>	'usa',
+     'Saint Petersburg'	=>	'eu',
+     'San Francisco'	=>	'usa',
+     'Seattle'		=>	'usa',
+     'Tel Aviv'		=>	'israel',
+     'Tiberias'		=>	'israel',
+     'Toronto'		=>	'usa',
+     'Vancouver'	=>	'usa',
+     'Washington DC'	=>	'usa',
      );
 
 
@@ -956,6 +999,8 @@ sub process_cookie($$)
 		$q->param('tz',$c->param('tz'))
 		    if defined $c->param('tz');
 	    }
+	    $q->delete('i');
+	    $c->delete('i');
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
 	    $q->param('city',$c->param('city'))
@@ -964,6 +1009,12 @@ sub process_cookie($$)
 	    $q->param('c','on');
 	    $q->delete('tz');
 	    $q->delete('dst');
+	    if (! defined $Hebcal::city_dst{$q->param('city')} ||
+		$Hebcal::city_dst{$q->param('city')} ne 'israel')
+	    {
+		$q->delete('i');
+		$c->delete('i');
+	    }
 	} elsif (defined $c->param('lodeg') &&
 		 defined $c->param('lomin') &&
 		 defined $c->param('lodir') &&
@@ -1702,9 +1753,9 @@ Subject: $subject
 # avoid warnings
 if ($^W && 0)
 {
-    $_ = $Hebcal::city_nodst{'foo'};
     $_ = $Hebcal::tz_names{'foo'};
     $_ = $Hebcal::city_tz{'foo'};
+    $_ = $Hebcal::city_dst{'foo'};
     $_ = $Hebcal::MoY_long{'foo'};
     $_ = $Hebcal::ashk2seph{'foo'};
 }
