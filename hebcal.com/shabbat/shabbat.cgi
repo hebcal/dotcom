@@ -321,8 +321,15 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
 	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
     $self_url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-    $self_url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'})
-	if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/);
+
+    if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
+    {
+	$self_url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
+    }
+    elsif ($q->param('.from'))
+    {
+	$self_url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
+    }
 
     if ($q->param('cfg') =~ /^[ij]$/)
     {
