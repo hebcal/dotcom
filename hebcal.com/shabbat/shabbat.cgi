@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Apr 19 15:30:12 PDT 2001
+Last modified: Fri Apr 20 09:12:03 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -249,9 +249,11 @@ $cmd .= " -Z " . $q->param('dst')
 $cmd .= " -m " . $q->param('m')
     if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-$cmd .= " -a"
-    if defined $q->param('a') &&
-    ($q->param('a') eq 'on' || $q->param('a') eq '1');
+foreach (@Hebcal::opts)
+{
+    $cmd .= ' -' . $_
+	if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
+}
 
 $cmd .= ' -s -c ' . $sat_year;
 
