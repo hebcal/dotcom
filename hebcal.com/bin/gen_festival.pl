@@ -475,9 +475,21 @@ EOHTML
 	;
 	foreach my $stime (@{$OBSERVED{$f}}) {
 	    next unless defined $stime;
-	    print OUT2 "<li>$stime\n";
+	    if ($stime =~ /^(\d+)\s+(\w+)\s+(\d+)(.*)$/) {
+		my($d,$m,$y,$rest) = ($1,$2,$3,$4);
+		my %rev = reverse %Hebcal::MoY_long;
+		print OUT2 "<li><a href=\"/hebcal/?v=1;year=$y;month=",
+		    $rev{$m}, ";nx=on;nh=on;vis=on;tag=hol.obs\">$d $m $y</a>",
+		    $rest, "\n";
+	    }
 	}
-	print OUT2 "</ul>\n";
+	print OUT2 <<EOHTML;
+</ul>
+<p>All Jewish Holidays begin the evening before the date specified. This
+is because the Jewish day actually begins at sundown on the previous
+night.</p>
+EOHTML
+    ;
     }
 
     if (@{$SUBFESTIVALS{$f}} == 1)
@@ -668,6 +680,9 @@ sub holidays_observed
 	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	    next if $subj =~ /^Erev /;
 
+	    # Since Chanukah doesn't have an Erev, skip a day
+	    next if $subj =~ /^Chanukah: 1 Candle$/;
+
 	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	    my $stime = sprintf("%02d %s %04d",
 				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
@@ -681,7 +696,6 @@ sub holidays_observed
 	    $subj_copy =~ s/ [IV]+$//;
 	    $subj_copy =~ s/: \d Candles?$//;
 	    $subj_copy =~ s/: 8th Day$//;
-	    $subj_copy =~ s/^Erev //;
 
 	    my $text = $stime;
 	    $text .= " ($greg2heb{$stime})"
