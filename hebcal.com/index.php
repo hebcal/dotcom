@@ -44,19 +44,19 @@ Converter</a></big></strong></dt>
 href="/sedrot/">Torah
 Readings</a></big></strong></dt>
 <dd>aliyah-by-aliyah breakdown for weekly parshiyot</dd>
-<dt><br><strong><big><a
-href="/help/">Help</a></big></strong></dt>
-<dt><br><strong><big><a
-href="/privacy/">Privacy Policy</a></big></strong></dt>
-<dt><br><strong><big><a
-href="/search/">Search</a></big></strong></dt>
+<dt><br><strong><big>Miscellaneous</big></strong></dt>
+<dd><a href="/help/">Help</a></dd>
+<dd><a href="/privacy/">Privacy Policy</a></dd>
+<dd><a href="/search/">Search</a></dd>
+<dd><a href="/contact/">Contact Information</a></dd>
 </dl>
 <p>
 <hr noshade size="1">
 <font size=-2 face=Arial>Copyright
 &copy; 2001 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a>
+<a href="/help/">Help</a> -
+<a href="/contact/">Contact</a>
 <br>
 Contact: webmaster@hebcal.com
 <br>
@@ -65,7 +65,7 @@ for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Jul  9 12:19:18 PDT 2001
+Last modified: Tue Aug 21 18:07:24 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
