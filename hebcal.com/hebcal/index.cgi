@@ -68,14 +68,19 @@ $MAXENTRIES = 2500;
 # AK, FL, ID, IN, KS, KY, MI, ND, NE, OR, SD, TN, TX
 %known_timezones =
     (
-     '99692', -10,		# west AK
+     '99692', -10,		# AK west of 170W
+     '99547', -10,		# AK west of 170W
+     '99660', -10,		# AK west of 170W
+     '99742', -10,		# AK west of 170W
+     '98791', -10,		# AK west of 170W
+     '99769', -10,		# AK west of 170W
      '996', '??',		# west AK
      '324', -6,			# west FL
      '325', -6,			# west FL
-     '463', '??',		# northwest IN
-     '464', '??',		# northwest IN
-     '476', '??',		# southwest IN
-     '477', '??',		# southwest IN
+     '463', '??',		# Jasper, Lake, LaPorte, Newton, and 
+     '464', '??',		#  Porter counties, IN
+     '476', '??',		# Gibson, Posey, Spencer, Vanderburgh,
+     '477', '??',		#  and Warrick counties, IN
      '677', '??',		# west KS
      '678', '??',		# west KS
      '679', '??',		# west KS
@@ -84,6 +89,7 @@ $MAXENTRIES = 2500;
      '838', -8,			# north ID
      '835', -8,			# north ID
      '979', '??',		# east OR
+     '49858', -6,		# Menominee, MI
      '498', '??',		# west MI
      '499', '??',		# west MI
      'KS', -6,
@@ -307,7 +313,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Dec 22 17:53:11 PST 1999
+Last modified: Thu Dec 23 15:50:31 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
