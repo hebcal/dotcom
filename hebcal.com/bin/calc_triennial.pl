@@ -144,6 +144,11 @@ my(@all_inorder) =
      "Ha'Azinu",
      "Vezot Haberakhah");
 
+my(%seph2ashk);
+while (my($k,$v) = each(%Hebcal::ashk2seph)) {
+    $seph2ashk{$v} = $k;
+}
+
 my(%combined);
 foreach (@combined) {
     my($p1,$p2) = split(/-/);
@@ -520,13 +525,16 @@ sub write_sedra_page {
 
     open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
 
+    my $keyword = $h;
+    $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
+
     print OUT2 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>Torah Readings: $h</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
-<meta name="keywords" content="$h,parsha,parashat,prarshas,hashavua,hashavuah,leyning,aliya,aliyah,aliyot,torah,haftarah,haftorah,drash">
+<meta name="keywords" content="$keyword,parsha,parashat,prarshas,hashavua,hashavuah,leyning,aliya,aliyah,aliyot,torah,haftarah,haftorah,drash">
 <link rel="stylesheet" href="/style.css" type="text/css">
 EOHTML
 ;
