@@ -332,20 +332,13 @@ sub read_aliyot_metadata
 sub write_sedra_page {
     my($h,$prev,$next,$triennial) = @_;
 
-    my(undef,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href) =
-	&Hebcal::get_holiday_anchor("Parashat $h", 0);
-    my($memo2) = (&Hebcal::get_holiday_anchor("Parashat $h", 1))[2];
-
-    $memo =~ /Torah: (.+) \/ Haftarah: (.+)$/;
-    my($torah,$haftarah) = ($1,$2);
-
-    $memo2 =~ /Torah: .+ \/ Haftarah: (.+)$/;
-    my($haftarah_seph) = $1;
+    my($hebrew,$torah,$haftarah,$haftarah_seph,
+       $torah_href,$haftarah_href,$drash_href) = &get_parsha_info($h);
 
     my $seph = '';
     my $ashk = '';
 
-    if ($haftarah_seph ne $haftarah)
+    if (defined($haftarah_seph) && ($haftarah_seph ne $haftarah))
     {
 	$seph = "\n<br>Haftarah for Sephardim: $haftarah_seph";
 	$ashk = " for Ashkenazim";
@@ -622,4 +615,81 @@ $hhmts
 EOHTML
 ;
 
+}
+
+sub get_parsha_info
+{
+    my($h) = @_;
+
+    my $parashat = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA";  # UTF-8 for "parashat"
+
+    my($hebrew);
+    my($torah,$haftarah,$haftarah_seph);
+    my($torah_href,$haftarah_href,$drash_href);
+    if ($h =~ /^([^-]+)-(.+)$/ &&
+	defined $combined{$1} && defined $combined{$2})
+    {
+	my($p1,$p2) = ($1,$2);
+
+	# UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
+	$hebrew = sprintf("%s %s%s%s",
+			  $parashat,
+			  $parshiot->{'parsha'}->{$p1}->{'hebrew'},
+			  "\xD6\xBE", 
+			  $parshiot->{'parsha'}->{$p2}->{'hebrew'});
+
+	my $torah_end = $parshiot->{'parsha'}->{$p2}->{'verse'};
+	$torah_end =~ s/^.+\s+(\d+:\d+)\s*$/$1/;
+
+	$torah = $parshiot->{'parsha'}->{$p1}->{'verse'};
+	$torah =~ s/\s+\d+:\d+\s*$/ $torah_end/;
+
+	# on doubled parshiot, read only the second Haftarah
+	$haftarah = $parshiot->{'parsha'}->{$p2}->{'haftara'};
+	$haftarah_seph = $parshiot->{'parsha'}->{$p2}->{'sephardic'};
+
+	my $links = $parshiot->{'parsha'}->{$p1}->{'links'}->{'link'};
+	foreach my $l (@{$links})
+	{
+	    if ($l->{'rel'} eq 'drash')
+	    {
+		$drash_href = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'torah')
+	    {
+		$torah_href = $l->{'href'};
+	    }
+	}
+
+	$haftarah_href = $torah_href;
+	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+    }
+    else
+    {
+	$hebrew = sprintf("%s %s",
+			  $parashat,
+			  $parshiot->{'parsha'}->{$h}->{'hebrew'});
+	$torah = $parshiot->{'parsha'}->{$h}->{'verse'};
+	$haftarah = $parshiot->{'parsha'}->{$h}->{'haftara'};
+	$haftarah_seph = $parshiot->{'parsha'}->{$h}->{'sephardic'};
+
+	my $links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
+	foreach my $l (@{$links})
+	{
+	    if ($l->{'rel'} eq 'drash')
+	    {
+		$drash_href = $l->{'href'};
+	    }
+	    elsif ($l->{'rel'} eq 'torah')
+	    {
+		$torah_href = $l->{'href'};
+	    }
+	}
+
+	$haftarah_href = $torah_href;
+	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+    }
+
+    ($hebrew,$torah,$haftarah,$haftarah_seph,
+     $torah_href,$haftarah_href,$drash_href);
 }
