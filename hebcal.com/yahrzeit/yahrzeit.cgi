@@ -226,13 +226,37 @@ sub my_invoke_hebcal {
 }
 
 sub results_page {
+    my($target) = (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+	? '' : '_top';
+
     print STDOUT $q->header(),
     &Hebcal::start_html($q,
 			'Hebcal Yahrzeit, Birthday and Anniversary Calendar',
 			[],
-			{ 'keywords' => 'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish' }),
-    &Hebcal::navbar2($q, "Yahrzeit, Birthday and Anniversary\nCalendar"),
-    "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n";
+			{ 'keywords' => 'yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish' },
+			$target);
+
+    if (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    {
+	my($self_url) = join('', "http://", $q->virtual_host(), $script_name);
+	if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
+	{
+	    $self_url .= "?.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
+	}
+	elsif ($q->param('.from'))
+	{
+	    $self_url .= "?.from=" . &Hebcal::url_escape($q->param('.from'));
+	}
+
+	print STDOUT "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
+	"Birthday and Anniversary\nCalendar</a></h3>\n";
+    }
+    else
+    {
+	print STDOUT
+	    &Hebcal::navbar2($q, "Yahrzeit, Birthday and Anniversary\nCalendar"),
+	    "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n";
+    }
 
 &form(1,'','') unless keys %yahrzeits;
 
@@ -314,7 +338,9 @@ sub form
 
     print STDOUT qq{$message<form name="f1" id="f1"\naction="$script_name">};
 
-    for (my $i = 1; $i < 6; $i++)
+    my($i_max) = (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+	? 2 : 6;
+    for (my $i = 1; $i < $i_max; $i++)
     {
 	print STDOUT
 	    $q->popup_menu(-name => "t$i",
@@ -346,10 +372,18 @@ sub form
 		 -id => 'yizkor',
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
+    $q->hidden(-name => 'cfg'),
 #    $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n};
 
-    print STDOUT &Hebcal::html_footer($q,$rcsrev);
+    if (defined $q->param('cfg') && $q->param('cfg') eq 'i')
+    {
+	print STDOUT "</body></html>\n";
+    }
+    else
+    {
+	print STDOUT &Hebcal::html_footer($q,$rcsrev);
+    }
 
     exit(0);
 }
