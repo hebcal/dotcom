@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 
-use CGI;
+use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal;
 use strict;
