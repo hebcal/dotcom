@@ -3,7 +3,6 @@
 # $Id$
 
 use DB_File;
-require 'ctime.pl';
 
 %city_zips = 
     (
@@ -111,11 +110,10 @@ foreach (sort keys %valbycity) {
     }
 }
 
-$ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
-print "Hebcal Interactive Jewish Calendar\nhttp://www.radwin.org/hebcal/\n";
-print "most often used zip codes report\n";
+print "Hebcal Interactive Jewish Calendar - http://www.radwin.org/hebcal/\n";
+print "Most Often Used Zip Codes\n";
 print "------------------------------------------------------------\n";
-print &ctime(time);
+print scalar(localtime), "\n";
 printf "%d pageviews (%5.1f%% from unknown zip codes)\n",
     $total, (($unk * 100.0) / $total);
 print "------------------------------------------------------------\n";
