@@ -39,7 +39,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 13 18:43:39 PDT 1999
+Last modified: Wed Apr 14 08:59:09 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -66,6 +66,10 @@ for ($i = -12; $i < 13; $i++)
 if (defined $in{'tz'})
 {
     $tz{$in{'tz'}} = ' selected';
+}
+elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
+{
+    $tz{'0'} = ' selected';
 }
 else
 {
@@ -103,6 +107,10 @@ if (defined $in{'dst'})
     $opts{'usa'}    = ($in{'dst'} eq 'usa') ? 1 : 0;
     $opts{'israel'} = ($in{'dst'} eq 'israel') ? 1 : 0;
     $opts{'none'}   = ($in{'dst'} eq 'none') ? 1 : 0;
+}
+elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
+{
+    $opts{'none'}   = 1;
 }
 else
 {
@@ -356,7 +364,8 @@ Include candle lighting times</label><br>
 ";
 	print STDOUT &city_select_html();
 	print STDOUT "
-&nbsp;&nbsp;(OR select by <a href=\"$cgipath\">Zip Code</a>)
+&nbsp;&nbsp;(select by <a href=\"$cgipath\">Zip</a> or
+<a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
 <br>
 ";
     }
@@ -364,6 +373,11 @@ Include candle lighting times</label><br>
     {
 	print STDOUT "
 <input type=\"hidden\" name=\"geo\" value=\"pos\">
+<table border=\"0\">
+<tr>
+<td>Position:&nbsp;&nbsp;<br></td>
+<td>
+<nobr>
 <input type=\"text\" name=\"ladeg\" id=\"ladeg\" value=\"$in{'ladeg'}\" size=\"3\" maxlength=\"2\">
 <label for=\"ladeg\"> deg&nbsp;</label>
 
@@ -373,8 +387,9 @@ Include candle lighting times</label><br>
 <select name=\"ladir\">
 <option value=\"n\">North Latitude</option>
 <option value=\"s\">South Latitude</option>
-</select><br>
+</select></nobr><br>
 
+<nobr>
 <input type=\"text\" name=\"lodeg\" id=\"lodeg\" value=\"$in{'lodeg'}\" size=\"3\" maxlength=\"3\">
 <label for=\"lodeg\"> deg&nbsp;</label>
 
@@ -384,7 +399,13 @@ Include candle lighting times</label><br>
 <select name=\"lodir\">
 <option value=\"w\">West Longitude</option>
 <option value=\"e\">East Longitude</option>
-</select><br>
+</select></nobr><br>
+</td>
+<td>
+(select by <a href=\"$cgipath\">Zip</a> or
+<a href=\"${cgipath}?geo=city\">City</a>)
+</td></tr>
+</table>
 ";
     }
     else
@@ -392,7 +413,8 @@ Include candle lighting times</label><br>
 	print STDOUT "<input type=\"hidden\" name=\"geo\" value=\"zip\">
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
 id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\">
-&nbsp;&nbsp;(OR select by <a href=\"${cgipath}?geo=city\">Closest City</a>)
+&nbsp;&nbsp;(select by <a href=\"${cgipath}?geo=city\">City</a>
+or <a href=\"${cgipath}?geo=pos\">Latitude/Longitude</a>)
 <br>
 ";
     }
@@ -473,8 +495,6 @@ Use ashkenazis hebrew</label><br>
 
 <p><small>
 Caveat: this is beta software; my apologies if it doesn't work for you.
-A form interface for specifying precise geographic positions (latitude,
-longitude) is coming soon.
 
 Geographic Zip Code information provided by <a
 href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
