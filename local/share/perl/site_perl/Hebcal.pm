@@ -566,13 +566,13 @@ my(%sedrot) = (
 		    'Jeremiah 46:13 - 46:28', '',
 		    ],
  "Beshalach"	=> [
-		    '/5760/beshalah.shtml', 'Exodus 13:17 - 17:16',
+		    '/5761/beshallah.shtml', 'Exodus 13:17 - 17:16',
 		    '/jpstext/beshallah.shtml',
 		    'בְּשַׁלַּח',
 		    'Judges 4:4 - 5:31', 'Judges 5:1 - 5:31',
 		    ],
  "Yitro"	=> [
-		    '/5760/yitro.shtml', 'Exodus 18:1 - 20:23',
+		    '/5761/yitro.shtml', 'Exodus 18:1 - 20:23',
 		    '/jpstext/yitro.shtml',
 		    'יִתְרוֹ',
 		    'Isaiah 6:1 - 7:6; 9:5 - 9:6', 'Isaiah 6:1 - 6:13',
