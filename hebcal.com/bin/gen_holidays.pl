@@ -84,6 +84,9 @@ print OUT "\n<h3>New Holidays</h3>\n";
 print OUT "\n<h2>Rosh Chodesh</h2>\n";
 &do_section('rc');
 
+my($mtime) = (stat($infile))[9];
+my($hhmts) = "Last modified:\n" . localtime($mtime);
+
 print OUT <<EOHTML;
 
 <h2>Other Hebcal Holidays</h2>
@@ -99,9 +102,7 @@ href="http://www.jewfaq.org/holidayb.htm">Days of the Omer</a>
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a>
 <br>
-<!-- hhmts start -->
-Last modified: Mon May  7 14:06:17 PDT 2001
-<!-- hhmts end -->
+$hhmts
 ($rcsrev)
 </font>
 </body></html>
