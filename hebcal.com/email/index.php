@@ -23,6 +23,8 @@ href="/help/">Help</a> -
 require_once('smtp.inc');
 require_once('zips.inc');
 
+$lockfile = "/tmp/hebcal.com.lock";
+
 $VER = '$Revision$';
 $matches = array();
 if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
@@ -91,7 +93,8 @@ else {
 my_footer();
 
 function write_sub_info($email, $val) {
-    $fd = fopen("/tmp/hebcal.com.lock", "w");
+    global $lockfile;
+    $fd = fopen($lockfile, "w");
     if ($fd == false) {
 	die("lockfile open failed");
     }
@@ -114,12 +117,14 @@ function write_sub_info($email, $val) {
     dba_close($id);
     flock($fd, LOCK_UN);
     fclose($fd);
+    unlink($lockfile);
 
     return true;
 }
 
 function get_sub_info($email) {
-    $fd = fopen("/tmp/hebcal.com.lock", "w");
+    global $lockfile;
+    $fd = fopen($lockfile, "w");
     if ($fd == false) {
 	die("lockfile open failed");
     }
@@ -139,6 +144,7 @@ function get_sub_info($email) {
     dba_close($id);
     flock($fd, LOCK_UN);
     fclose($fd);
+    unlink($lockfile);
 
     return $val;
 }
@@ -160,7 +166,8 @@ function write_staging_info($param)
     $encoded = str_replace('/', '_', $encoded);
     $encoded = str_replace('=', '-', $encoded);
 
-    $fd = fopen("/tmp/hebcal.com.lock", "w");
+    global $lockfile;
+    $fd = fopen($lockfile, "w");
     if ($fd == false) {
 	die("lockfile open failed");
     }
@@ -192,6 +199,7 @@ function write_staging_info($param)
     dba_close($id);
     flock($fd, LOCK_UN);
     fclose($fd);
+    unlink($lockfile);
 
     return $encoded;
 }
