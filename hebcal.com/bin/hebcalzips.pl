@@ -53,12 +53,12 @@ $filename = defined $ARGV[0] ? $ARGV[0] :
 open(A,$filename) || die "$filename: $!\n";
 while(<A>)
 {
-    next unless m,/hebcal/,;
+    next unless m,/hebcal/, || m,/shabbat/,;
     next if /^208\.46\.162\.254/;
     next if /^24\.130\.2\./;
     next if /^207\.55\.191\.4|205\.216\.162\.|198\.144\.204\.|198\.144\.193\.150|206\.251\.16\./;
 
-    if (/c=(on|1)/i && /zip=(\d\d\d\d\d)/) {
+    if (/zip=(\d\d\d\d\d)/) {
 	if (defined $zips{$1}) {
 	    $zips{$1}++;
 	} else {
