@@ -87,14 +87,12 @@ lighting times by Email.</p>
 ?>
 <hr noshade size="1"><span class="tiny">
 <a name="copyright"></a>Copyright &copy; <?php echo $year ?>
-Michael J. Radwin. All rights reserved.
+ Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a> -
 <a href="/news/">News</a> -
 <a href="/donations/">Donate</a>
-<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>Software last updated:
 <?php echo $date ?> (Revision: <?php echo $VER ?>)
 </span>
