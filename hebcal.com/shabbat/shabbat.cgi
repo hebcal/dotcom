@@ -546,24 +546,26 @@ sub display_vxml
     if ($city_descr =~ /^(.+),\s+(\w\w)\s+(\d{5})$/)
     {
 	my($city,$state,$zip) = ($1,$2,$3);
-	$city_audio = "<audio>$city,</audio>";
+	$city_audio = "<audio>$city,";
 
 	if (defined $STATES{$state})
 	{
-	    $city_audio .= "<audio>$STATES{$state},</audio>";
+	    $city_audio .= " $STATES{$state},";
 	}
 	else
 	{
 	    foreach my $d (split(//, $state))
 	    {
-		$city_audio .= "<audio>$d</audio>\n";
+		$city_audio .= " $d";
 	    }
+	    $city_audio .= ",";
 	}
 
 	foreach my $d (split(//, $zip))
 	{
-	    $city_audio .= "<audio>$d</audio>\n";
+		$city_audio .= " $d";
 	}
+	$city_audio .= ".</audio>\n";
     }
 
     print qq{<?xml version="1.0"?>
