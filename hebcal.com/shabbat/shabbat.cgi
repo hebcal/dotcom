@@ -547,7 +547,7 @@ sub display_wml
 
 	print "<p>$subj";
 
-	if ($items->[$i]->{'class'} eq 'candles') 
+	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
 	{
 	    my $pm = $items->[$i]->{'time'};
 	    $pm =~ s/pm$/p/;
@@ -628,7 +628,7 @@ sub display_vxml
 	my $date = $items->[$i]->{'date'};
 	$date =~ s/, 0(\d) /, $1 /;
 
-	if ($items->[$i]->{'class'} eq 'candles')
+	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
 	{
 	    my $subj = $items->[$i]->{'subj'};
 	    $subj =~ s/Havdalah \(\d+ min\)/Hav doll ah/g;
@@ -778,7 +778,7 @@ sub display_html_common
 	    $anchor = qq{ name="$anchor"};
 	}
 
-	if ($items->[$i]->{'class'} eq 'candles')
+	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
 	{
 	    Hebcal::out_html($cfg,qq{<a$anchor></a>})
 		unless $cfg;
