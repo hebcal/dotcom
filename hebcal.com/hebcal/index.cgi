@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Apr  6 09:36:36 PDT 2001
+Last modified: Wed Apr 11 10:28:57 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1014,6 +1014,30 @@ so you can keep this window open.
 	    "]</small>";
     }
 
+    if ($q->param('c') && $q->param('c') ne 'off')
+    {
+	if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
+	{
+	    $goto .= join('',
+		qq{<br>For weekly candle lighting times, bookmark\n},
+		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
+		qq{&amp;dst=}, $q->param('dst'),
+		);
+	    $goto .= join('', qq{&amp;tz=}, $q->param('tz'))
+		if $q->param('tz') ne 'auto';
+	    $goto .= qq{">1-Click Shabbat for $city_descr</a>.</p>\n};
+	}
+	elsif (defined $q->param('city') && $q->param('city') !~ /^\s*$/)
+	{
+	    $goto .= join('',
+		qq{<br>For weekly candle lighting times, bookmark\n},
+		qq{<a href="/shabbat/?city=},
+ 		&Hebcal::url_escape($q->param('city')), qq{">1-Click Shabbat for },
+		$q->param('city'), qq{</a>.</p>\n}
+			  );
+	}
+    }
+
     $goto .= "</p>\n";
 
     print STDOUT $goto
@@ -1176,26 +1200,6 @@ so you can keep this window open.
     }
 
     print STDOUT "</p>", $goto;
-
-    if ($q->param('c') && $q->param('c') ne 'off')
-    {
-	if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
-	{
-	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
-		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
-		qq{&amp;dst=}, $q->param('dst');
-	    print STDOUT qq{&amp;tz=}, $q->param('tz')
-		if $q->param('tz') ne 'auto';
-	    print STDOUT qq{">1-Click Shabbat for $city_descr</a>.</p>\n};
-	}
-	elsif (defined $q->param('city') && $q->param('city') !~ /^\s*$/)
-	{
-	    print STDOUT qq{<p>For weekly candle lighting times, bookmark\n},
-		qq{<a href="/shabbat/?city=},
- 		&Hebcal::url_escape($q->param('city')), qq{">1-Click Shabbat for },
-		$q->param('city'), qq{</a>.</p>\n};
-	}
-    }
 
     # download links
     print STDOUT "<p>Advanced options:\n<small>[ <a href=\"", $script_name;
