@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Jan 25 12:09:17 PST 2001
+Last modified: Fri Jan 26 11:31:13 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -446,7 +446,7 @@ document.f1.nh.checked = true;
 }
 JSCRIPT_END
 
-    print STDOUT $q->header(),
+    print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
     $q->start_html(-title => "Hebcal Interactive Jewish Calendar",
 		   -target=>'_top',
 		   -head => [
@@ -889,7 +889,8 @@ sub results_page
 	$next_title = ($q->param('year') + 1);
     }
 
-    print STDOUT $q->header(-expires => $expires_date),
+    print STDOUT $q->header(-expires => $expires_date,
+			    -type => "text/html; charset=UTF-8"),
     $q->start_html(-title => "Hebcal: Jewish Calendar $date",
 		   -target=>'_top',
 		   -head => [
@@ -1020,16 +1021,16 @@ so you can keep this window open.
     $loc2 =~ s/\s*&nbsp;\s*/ /g;
 
     my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2);
-    print STDOUT "<pre>";
+    print STDOUT "<p>";
 
     # header row
-    my($hdr) = '';
+    my($hdr) = '<tt>';
     $hdr .= '    ' if $ycal;
     $hdr .= 'DoW ' if ($q->param('year') > 1969 && $q->param('year') < 2038);
-    $hdr .= "YYYY-MM-DD  Description";
+    $hdr .= "YYYY-MM-DD  </tt>Description";
 
-    print STDOUT $hdr, "\n";
-    print STDOUT '-' x length($hdr), "\n";
+    print STDOUT $hdr, "<br>\n";
+    print STDOUT '-' x length($hdr), "<br>\n";
 
     my($numEntries) = scalar(@events);
     my($i);
@@ -1079,23 +1080,28 @@ so you can keep this window open.
 		&Hebcal::url_escape($subj), "&amp;VIEW=d\">add</a> ";
 	}
 
-	my($href) = &Hebcal::get_holiday_anchor($subj);
+	my($href,$hebrew) = &Hebcal::get_holiday_anchor($subj);
 	if ($href ne '')
 	{
 	    $subj = qq{<a href="$href">$subj</a>};
 	}
 
+	if ($hebrew ne '')
+	{
+	    $subj .= qq{\n<big><span lang="he" dir="rtl">$hebrew</span></big>};
+	}
+
 	my($dow) = ($year > 1969 && $year < 2038) ?
 	    $Hebcal::DoW[&Hebcal::get_dow($year-1900, $mon-1, $mday)] . ' '
 		: '';
-	printf STDOUT ("%s%04d-%02d-%02d  %s",
+	printf STDOUT ("<tt>%s%04d-%02d-%02d  </tt>%s",
 		       $dow, $year, $mon, $mday, $subj);
 	printf STDOUT (": %d:%02d", $hour, $min)
 	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
-	print STDOUT "\n";
+	print STDOUT "<br>\n";
     }
 
-    print STDOUT "</pre>", $goto;
+    print STDOUT "</p>", $goto;
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
