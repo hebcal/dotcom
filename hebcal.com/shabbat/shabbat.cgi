@@ -27,9 +27,10 @@ use DB_File;
 use Time::Local;
 use Hebcal;
 use POSIX qw(strftime);
+use strict;
 
-$author = 'michael@radwin.org';
-$expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
+my($author) = 'michael@radwin.org';
+my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -38,14 +39,14 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 19 10:46:02 PST 2001
+Last modified: Fri Jan 19 11:09:28 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
 $hhmts =~ s/\n//g;
 $hhmts =~ s/Last modified: /Software last updated:\n/g;
 
-$html_footer = "<hr
+my($html_footer) = "<hr
 noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved. - <a
@@ -63,7 +64,7 @@ padding: 8px; }
 </style>];
 
 # process form params
-$q = new CGI;
+my($q) = new CGI;
 
 # default setttings needed for cookie
 $q->param('c','on');
@@ -89,7 +90,7 @@ if (defined $q->raw_cookie() &&
 my($key);
 foreach $key ($q->param())
 {
-    $val = $q->param($key);
+    my($val) = $q->param($key);
     $val =~ s/[^\w\s-]//g;
     $val =~ s/^\s*//g;		# nuke leading
     $val =~ s/\s*$//g;		# and trailing whitespace
@@ -105,14 +106,16 @@ if (defined $q->param('t') && $q->param('t') =~ /^\d+$/)
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
-#$friday = $now + ((4 - $wday) * 60 * 60 * 24);
-$friday = &Time::Local::timelocal(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
-$saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 
-$sat_year = (localtime($saturday))[5] + 1900;
-$cmd  = '/home/users/mradwin/bin/hebcal';
+my($friday) = &Time::Local::timelocal(0,0,0,
+				      $mday,$mon,$year,$wday,$yday,$isdst);
+my($saturday) = $now + ((6 - $wday) * 60 * 60 * 24);
+
+my($sat_year) = (localtime($saturday))[5] + 1900;
+my($cmd)  = '/home/users/mradwin/bin/hebcal';
 
 my($default) = 0;
+my($city_descr,$dst_descr,$tz_descr);
 if (defined $q->param('city'))
 {
     unless (defined($Hebcal::city_tz{$q->param('city')}))
@@ -144,11 +147,12 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
 	      "not appear to be a 5-digit zip code.");
     }
 
-    $dbmfile = 'zips.db';
+    my($dbmfile) = 'zips.db';
+    my(%DB);
     tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
 	|| die "Can't tie $dbmfile: $!\n";
 
-    $val = $DB{$q->param('zip')};
+    my($val) = $DB{$q->param('zip')};
     untie(%DB);
 
     &form(1,
@@ -157,8 +161,8 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
           "<ul><li>Please try a nearby zip code</li></ul>")
 	unless defined $val;
 
-    ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
-    ($city,$state) = split(/\0/, substr($val,6));
+    my($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
+    my($city,$state) = split(/\0/, substr($val,6));
 
     if (($state eq 'HI' || $state eq 'AZ') &&
 	$q->param('dst') eq 'usa')
@@ -179,7 +183,7 @@ elsif (defined $q->param('zip') && $q->param('zip') ne '')
 
     if ($q->param('tz') !~ /^-?\d+$/)
     {
-	$ok = 0;
+	my($ok) = 0;
 	if (defined $Hebcal::known_timezones{$q->param('zip')})
 	{
 	    if ($Hebcal::known_timezones{$q->param('zip')} ne '??')
@@ -358,7 +362,7 @@ my($i);
 for ($i = 0; $i < $numEntries; $i++)
 {
     # holiday is at 12:00:01 am
-    $time = &Time::Local::timelocal(1,0,0,
+    my($time) = &Time::Local::timelocal(1,0,0,
 		       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
@@ -500,9 +504,9 @@ sub ycal
 
 	if ($q->param('tz') ne '')
 	{
-	    $abstz = ($q->param('tz') >= 0) ?
+	    my($abstz) = ($q->param('tz') >= 0) ?
 		$q->param('tz') : -$q->param('tz');
-	    $signtz = ($q->param('tz') < 0) ? '-' : '';
+	    my($signtz) = ($q->param('tz') < 0) ? '-' : '';
 
 	    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
 	}
