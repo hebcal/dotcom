@@ -41,6 +41,21 @@ $cgipath = '/hebcal/';
 $rcsrev = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
+# magic constants for DBA export
+$MAGIC      = 1145176320;
+$FILENAME   = "hebcal.dba";
+# Type Fields
+#$NONE       = 0;
+$INTEGER    = 1;
+#$FLOAT      = 2;
+$DATE       = 3;
+#$ALPHA      = 4;
+#$CSTRING    = 5;
+$BOOL       = 6;
+#$BITFLAG    = 7;
+$REPEAT     = 7;
+$MAXENTRIES = 2500;
+
 @DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 
 %exception_timezones =
@@ -421,7 +436,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Mon Dec 20 10:19:06 PST 1999
+Last modified: Mon Dec 20 14:14:43 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -702,56 +717,107 @@ if (defined $in{'month'} && $in{'month'} =~ /^\d+$/ &&
 $cmd .= " $year";
 
 
-&results_page() unless defined $ENV{'PATH_INFO'};
-
-open(HEBCAL,"$cmd |") ||
-    &CgiDie("Script Error: can't run hebcal",
-	    "\nCommand was \"$cmd\".\n" .
-	    "Please <a href=\"mailto:$author" .
-	    "\">e-mail Michael</a> to tell him that hebcal is broken.");
-
-local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-    (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-
-print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-print STDOUT "Expires: $expires_date\015\012";
-print STDOUT "Content-Type: text/x-csv\015\012\015\012";
-
-$endl = "\012";			# default Netscape and others
-if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
+if (! defined $ENV{'PATH_INFO'})
 {
-    $endl = "\015\012"
-	if $ENV{'HTTP_USER_AGENT'} =~ /Microsoft Internet Explorer/;
-    $endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
+    &results_page();
+}
+elsif ($ENV{'PATH_INFO'} =~ /.csv$/)
+{
+    &csv_display();
+}
+elsif ($ENV{'PATH_INFO'} =~ /.dba$/)
+{
+    &dba_display();
+}
+else
+{
+    &results_page();
 }
 
-print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",",
+close(STDOUT);
+exit(0);
+
+sub invoke_hebcal {
+    local($cmd) = @_;
+    local(*HEBCAL,@events,$prev,$loc,$_);
+
+    @events = ();
+    open(HEBCAL,"$cmd |") ||
+	&CgiDie("Script Error: can't run hebcal",
+		"\nCommand was \"$cmd\".\n" .
+		"Please <a href=\"mailto:$author" .
+		"\">e-mail Michael</a> to tell him that hebcal is broken.");
+
+    $prev = '';
+    $loc = (defined $in{'city'} || defined $in{'zip'}) ?
+	"in $city_descr" : '';
+    $loc =~ s/\s*&nbsp;\s*/ /g;
+
+    while(<HEBCAL>)
+    {
+	next if $_ eq $prev;
+	$prev = $_;
+	chop;
+	($date,$descr) = split(/ /, $_, 2);
+
+	push(@events,
+	     join("\cA", &parse_date_descr($date,$descr),$descr,$loc));
+    }
+    close(HEBCAL);
+
+    @events;
+}
+
+sub dba_display {
+    local(@events) = &invoke_hebcal($cmd);
+    local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
+    print STDOUT "Expires: $expires_date\015\012";
+    print STDOUT "Content-Type: application/x-palm-dba; filename=hebcal.dba",
+    "\015\012\015\012";
+
+    &dba_contents(@events);
+}
+
+sub csv_display {
+    local(@events) = &invoke_hebcal($cmd);
+    local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    $ENV{'PATH_INFO'} =~ s,^/index.html/,,;
+    $ENV{'PATH_INFO'} =~ s,^/,,;
+
+    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
+    print STDOUT "Expires: $expires_date\015\012";
+    print STDOUT "Content-Type: text/x-csv; filename=",
+    $ENV{'PATH_INFO'}, "\015\012\015\012";
+
+    $endl = "\012";			# default Netscape and others
+    if (defined $ENV{'HTTP_USER_AGENT'} && $ENV{'HTTP_USER_AGENT'} !~ /^\s*$/)
+    {
+	$endl = "\015\012"
+	    if $ENV{'HTTP_USER_AGENT'} =~ /Microsoft Internet Explorer/;
+	$endl = "\015\012" if $ENV{'HTTP_USER_AGENT'} =~ /MSP?IM?E/;
+    }
+
+    print STDOUT "\"Subject\",\"Start Date\",\"Start Time\",\"End Date\",",
     "\"End Time\",\"All day event\",\"Description\",",
     "\"Private\",\"Show time as\"$endl";
 
-$prev = '';
-local($loc) = (defined $in{'city'} || defined $in{'zip'}) ?
-    "in $city_descr" : '';
-$loc =~ s/\s*&nbsp;\s*/ /g;
-while(<HEBCAL>)
-{
-    next if $_ eq $prev;
-    $prev = $_;
-    chop;
-    ($date,$descr) = split(/ /, $_, 2);
+    foreach (@events)
+    {
+	($subj,$date,$start_time,$end_date,$end_time,$all_day,
+	 $hr,$min,$month,$day,$year,$descr,$loc) = split(/\cA/);
 
-    ($subj,$date,$start_time,$end_date,$end_time,$all_day)
-	= &parse_date_descr($date,$descr);
+	print STDOUT '"', $subj, '","', $date, '",', $start_time, ',',
+	    $end_date, ',', $end_time, ',', $all_day, ',"',
+	    ($start_time eq '' ? '' : $loc), '","true","3"', $endl;
+    }
 
-    print STDOUT '"', $subj, '","', $date, '",', $start_time, ',', $end_date,
-	',', $end_time, ',', $all_day, ',"',
-	($start_time eq '' ? '' : $loc), '","true","3"', $endl;
+    1;
 }
-close(HEBCAL);
-close(STDOUT);
-
-exit(0);
-
 
 sub form
 {
@@ -1033,7 +1099,6 @@ print STDOUT "</form>\n$html_footer";
 }
 
 
-
 sub results_page
 {
     local($date) = $year;
@@ -1188,11 +1253,18 @@ $date</small>
     {
 	print STDOUT "&amp;$key=", &url_escape($val);
     }
-    print STDOUT "\">Download\nas an Outlook CSV file</a>";
+    print STDOUT "\">Download\nOutlook CSV file</a>";
+
+    print STDOUT " -\n<a href=\"${cgipath}index.html/hebcal.dba?dl=1";
+    while (($key,$val) = each(%in))
+    {
+	print STDOUT "&amp;$key=", &url_escape($val);
+    }
+    print STDOUT "\">Download\nPalm Date Book Archive (.DBA)</a>";
 
     if ($ycal == 0)
     {
-	print STDOUT " - <a href=\"$cgipath?y=1";
+	print STDOUT " -\n<a href=\"$cgipath?y=1";
 	while (($key,$val) = each(%in))
 	{
 	    print STDOUT "&amp;$key=", &url_escape($val);
@@ -1226,23 +1298,14 @@ so you can keep this window open.
     $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
     print STDOUT "<!-- $cmd_pretty -->\n";
-    print STDOUT "<pre>";
-    open(HEBCAL,"$cmd |") ||
-	&CgiDie("Script Error: can't run hebcal",
-		"\nCommand was \"$cmd\".\n" .
-		"Please <a href=\"mailto:$author" .
-		"\">e-mail Michael</a> to tell him that hebcal is broken.");
 
-    $prev = '';
-    while(<HEBCAL>)
+    local(@events) = &invoke_hebcal($cmd);
+    print STDOUT "<pre>";
+
+    foreach (@events)
     {
-	next if $_ eq $prev;
-	$prev = $_;
-	chop;
-	($date,$descr) = split(/ /, $_, 2);
 	($subj,$date,$start_time,$end_date,$end_time,$all_day,
-	 $hr,$min,$month,$day,$year) =
-	     &parse_date_descr($date,$descr);
+	 $hr,$min,$month,$day,$year,$descr,$loc) = split(/\cA/);
 
 	if ($ycal)
 	{
@@ -1301,16 +1364,12 @@ so you can keep this window open.
 	printf STDOUT "%s%04d-%02d-%02d  %s\n",
 	$dow, $year, $month, $day, $descr;
     }
-    close(HEBCAL);
 
     print STDOUT "</pre>", "Go to:\n";
     print STDOUT "<a href=\"$prev_url\">", $prev_title, "</a> |\n";
     print STDOUT "<a href=\"$next_url\">", $next_title, "</a><br>\n";
 
     print STDOUT  $html_footer;
-
-    close(STDOUT);
-    exit(0);
 
     1;
 }
@@ -1332,7 +1391,7 @@ sub parse_date_descr
 {
     local($date,$descr) = @_;
 
-    ($month,$day,$year) = split(/\//, $date);
+    local($month,$day,$year) = split(/\//, $date);
     if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
     {
 	($subj,$hr,$min) = ($1,$2,$3);
@@ -1502,6 +1561,139 @@ sub process_cookie {
     }
 
     $status;
+}
+
+########################################################################
+# export to Palm Date Book Archive (.DBA)
+########################################################################
+
+sub writeInt {
+    print STDOUT pack("V", $_[0]);
+}
+
+sub writeByte {
+    print STDOUT pack("C", $_[0]);
+}
+
+sub writePString {
+    local($len) = length($_[0]);
+
+    if ($len > 64) { $len = 64; }
+    &writeByte($len);
+    print STDOUT substr($_[0], 0, 64);
+}
+
+sub dba_header {
+    &writeInt($MAGIC);
+    &writePString($FILENAME);
+    &writeByte(0); #show header
+    &writeInt(8); #Category Type
+    &writeInt(0); #Number of categories
+
+    #write Object Graph Table
+    &writeInt(0x36);
+    &writeInt(0x0f);
+    &writeInt(0x00);
+    &writeInt(0x01);
+    &writeInt(0x02);
+    &writeInt(0x1000f);
+    &writeInt(0x10001);
+    &writeInt(0x10003);
+    &writeInt(0x10005);
+    &writeInt(0x60005);
+    &writeInt(0x10006);
+    &writeInt(0x10006);
+    &writeInt(0x80001);
+    #end Table
+
+    1;
+}
+
+sub dba_contents {
+    local(@events) = @_;
+    local($numEntries) = scalar(@events);
+    local($memo,$untimed,$startTime,$i,$z);
+
+    &dba_header();
+
+    $numEntries = $MAXENTRIES if ($numEntries > $MAXENTRIES);
+    &writeInt($numEntries*15);
+
+    for ($i = 0; $i < $numEntries; $i++) {
+	local($subj,$z,$z,$z,$z,$all_day,
+	      $hr,$min,$month,$day,$year) = split(/\cA/, $events[$i]);
+
+	$year -= 1900;
+	$mon = $month - 1;
+	$mday = $day;
+	if ($hr == -1 && $min == -1) {
+	    $hr = $min = 0;
+	}
+
+	$startTime = &timelocal(0,$min,$hr,$mday,$mon,$year,'','','');
+
+	&writeInt($INTEGER);
+	&writeInt(0);		# recordID
+
+	&writeInt($INTEGER);
+	&writeInt(1);		# status
+
+	&writeInt($INTEGER);
+	&writeInt(2147483647);	# position
+
+	&writeInt($DATE);
+	&writeInt($startTime);
+
+	&writeInt($INTEGER);
+	&writeInt(0);		# endTime
+
+	&writeInt(5);		# weird spacer
+	&writeInt(0);		# weird spacer
+
+	if ($subj eq '') {
+	    &writeByte(0);
+	} else {
+	    &writePString($subj);
+	}
+
+	&writeInt($INTEGER);
+	&writeInt(0);		# duration
+
+	&writeInt(5);		# weird spacer
+	&writeInt(0);		# weird spacer
+
+	$memo = '';
+	if ($memo eq '') {
+	    &writeByte(0);
+	} else {
+	    &writePString($memo);
+	}
+
+	$untimed = ($all_day eq '"true"');
+
+	&writeInt($BOOL);
+	&writeInt($untimed);
+
+	&writeInt($BOOL);
+	&writeInt(1);		# isPrivate
+
+	&writeInt($INTEGER);
+	&writeInt(1);		# category
+
+	&writeInt($BOOL);
+	&writeInt(0);		# alarm
+
+	&writeInt($INTEGER);
+	&writeInt(0xFFFFFFFF);	# alarmAdv
+
+	&writeInt($INTEGER);
+	&writeInt(0);		# alarmTyp
+
+	&writeInt($REPEAT);
+	&writeInt(0);		# repeat
+    }
+
+    1;
 }
 
 if ($^W && 0)
