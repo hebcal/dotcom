@@ -53,7 +53,10 @@ H1, H2, H3, H4, H5, H6 {
  unicode-bidi: bidi-override;
 }
 
-A:hover { color: red }
+A:hover { 
+ color: red;
+ text-decoration: underline;
+}
 
 .tiny {
  font-size: x-small;
