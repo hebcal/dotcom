@@ -49,12 +49,6 @@ while (my($to,$cfg) = each(%SUBS))
 
     my($body) = "$loc\n\n"
 	. &gen_body(\@events) . qq{
-******************************************************************
-Light the first night of Chanukah candles before Shabbat begins.
-Light the second night of Chanukah candles after Havdalah.
-For more information, see http://www.jewfaq.org/holiday7.htm
-******************************************************************
-
 Shabbat Shalom,
 hebcal.com
 
