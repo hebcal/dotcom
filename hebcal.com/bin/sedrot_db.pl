@@ -25,7 +25,7 @@ use lib "/pub/p/e/perl/lib/site_perl";
 
 use Getopt::Std;
 use XML::Simple;
-use DB_File::Lock;
+use DB_File;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -45,7 +45,7 @@ my($outfile) = shift;
 my $parshiot = XMLin($infile);
 
 my(%DB);
-tie(%DB, 'DB_File::Lock', $outfile, O_RDWR|O_CREAT, 0644, 'write', $DB_HASH)
+tie(%DB, 'DB_File', $outfile, O_RDWR|O_CREAT, 0644, $DB_HASH)
     or die;
 
 foreach my $h (keys %{$parshiot->{'parsha'}})
