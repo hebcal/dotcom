@@ -1059,10 +1059,10 @@ Jewish Calendar events into your desktop software.</p>};
 	    "\">Export Mac Palm Calendar from Hebcal</a>\n";
     $s .= "<li>(this feature is currently experimental)</ol>\n";
 
-    $s .= "<h4>vCalendar</h4>\n<ol><li><a href=\"" .
+    $s .= "<h4>Lotus Notes R5, iCal, vCalendar</h4>\n<ol><li><a href=\"" .
 	download_href($q, $filename, 'vcs') .
 	    "\">Export vCalendar (.VCS) from Hebcal</a>\n";
-    $s .= "<li>(this feature is currently experimental)</ol>\n";
+    $s .= qq{<li>Import VCS file into <a href="/help/#lotus-notes">Lotus Notes</a> or <a href="/help/#ical">iCal</a></ol>};
 
     $s .= "</div>\n";
 
