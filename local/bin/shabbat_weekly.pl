@@ -49,7 +49,7 @@ while (my($to,$cfg) = each(%SUBS))
 
     my($body) = "$loc\n\n"
 	. &gen_body(\@events) . qq{
-Regards,
+Shabbat Shalom,
 hebcal.com
 
 To unsubscribe from this list, send an email to:
