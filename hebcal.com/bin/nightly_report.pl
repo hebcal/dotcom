@@ -49,7 +49,7 @@ while(<STDIN>)
 	{
 	    $faq++;
 	}
-	elsif (m,GET\s+/help/defaults.html\s+HTTP,)
+	elsif (m,GET\s+/help/(defaults|holidays).html\s+HTTP,)
 	{
 	    $holidays++;
 	}
