@@ -62,3 +62,8 @@ A:hover {
  font-size: x-small;
  font-family: Arial,Helvetica,Geneva,sans-serif;
 }
+
+.box {
+ border: solid;
+ border-width: thin;
+}
