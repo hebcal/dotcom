@@ -130,20 +130,6 @@ write_index_page($fxml);
 
 exit(0);
 
-sub make_anchor
-{
-    my($f) = @_;
-
-    my($anchor) = lc($f);
-    $anchor =~ s/\'//g;
-    $anchor =~ s/[^\w]/-/g;
-    $anchor =~ s/-+/-/g;
-    $anchor =~ s/^-//g;
-    $anchor =~ s/-$//g;
-
-    "$anchor.html";
-}
-
 sub get_var
 {
     my($festivals,$f,$name) = @_;
@@ -220,7 +206,7 @@ EOHTML
     my $prev_descr = '';
     foreach my $f (@FESTIVALS)
     {
-	my($anchor) = make_anchor($f);
+	my($anchor) = Hebcal::make_anchor($f);
 
 	my $descr = get_var($festivals, $f, 'descr');
 	die "no descr for $f" unless $descr;
@@ -240,7 +226,7 @@ sub write_festival_part
 {
     my($festivals,$f) = @_;
 
-    my $anchor = make_anchor($f);
+    my $anchor = Hebcal::make_anchor($f);
     $anchor =~ s/\.html$//;
 
     my $torah;
@@ -334,7 +320,7 @@ sub write_festival_page
 {
     my($festivals,$f) = @_;
 
-    my($anchor) = make_anchor($f);
+    my($anchor) = Hebcal::make_anchor($f);
 
     my $descr = get_var($festivals, $f, 'descr');
 
@@ -357,7 +343,7 @@ EOHTML
     my($prev_anchor);
     if ($prev)
     {
-	$prev_anchor = make_anchor($prev);
+	$prev_anchor = Hebcal::make_anchor($prev);
 	my $title = "Previous Holiday";
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
 	    qq{title="$title">&lt;&lt; $prev</a>};
@@ -368,7 +354,7 @@ EOHTML
     my($next_anchor);
     if ($next)
     {
-	$next_anchor = make_anchor($next);
+	$next_anchor = Hebcal::make_anchor($next);
 	my $title = "Next Holiday";
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
 	    qq{title="$title">$next &gt;&gt;</a>};
@@ -444,7 +430,7 @@ EOHTML
     {
 	foreach my $part (@{$SUBFESTIVALS{$f}})
 	{
-	    my $anchor = make_anchor($part);
+	    my $anchor = Hebcal::make_anchor($part);
 	    $anchor =~ s/\.html$//;
 
 	    my $part_descr = $festivals->{'festival'}->{$part}->{'descr'};
