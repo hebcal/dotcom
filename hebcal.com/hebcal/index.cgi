@@ -287,7 +287,8 @@ sub dba_display() {
     my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
 
-    my($dst) = 0;
+    my($dst) = (defined($q->param('dst')) && $q->param('dst') eq 'usa') ?
+	1 : 0;
     my($tz) = $q->param('tz');
 
     if (defined $q->param('geo') && $q->param('geo') eq 'city' &&
@@ -296,10 +297,6 @@ sub dba_display() {
 	$dst = defined $Hebcal::city_nodst{$q->param('city')} ?
 	    0 : 1;
 	$tz = $Hebcal::city_tz{$q->param('city')};
-    }
-    elsif (defined($q->param('dst')) && $q->param('dst') eq 'usa')
-    {
-	$dst = 1;
     }
 
     Hebcal::export_http_header($q, 'application/x-palm-dba');
@@ -418,16 +415,16 @@ JSCRIPT_END
 		   -default => $this_mon,
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
+    "<br>",
+    $q->small("Use all digits to specify a year.\nYou probably aren't",
+	      "interested in 93, but rather 1993.\n"),
     "<br>Year type:\n",
     $q->radio_group(-name => 'yt',
 		    -values => ['G', 'H'],
 		    -default => 'G',
 		    -labels =>
 		    {'G' => "\nGregorian (common era) ",
-		     'H' => "\nHebrew Year "}),
-    "<br>",
-    $q->small("Use all digits to specify a year.\nYou probably aren't",
-	      "interested in 93, but rather 1993.\n");
+		     'H' => "\nHebrew Year "});
 
     print STDOUT "<p><table border=\"0\" cellpadding=\"0\"\n",
     "cellspacing=\"0\"><tr valign=\"top\"><td>\n";
