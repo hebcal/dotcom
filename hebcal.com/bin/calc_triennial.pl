@@ -533,7 +533,7 @@ href="/search/">Search</a></small>
 <br>
 <table width="100%">
 <tr>
-<td><h1>Parashat $h</h1></td>
+<td><h1><a name="top">Parashat $h</a></h1></td>
 <td><h1 dir="rtl" class="hebrew"
 lang="he">$hebrew</h1></td>
 </tr>
@@ -679,7 +679,7 @@ EOHTML
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20"><img
 src="/i/0827607121.01.TZZZZZZZ.jpg" border="0" hspace="3" vspace="3"
 alt="Etz Hayim: Torah and Commentary" align="right"></a><dl>
-<dt>References
+<dt><a name="ref">References</a>
 <dd><em><a
 href="http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20">Etz
 Hayim: Torah and Commentary</a></em>,
