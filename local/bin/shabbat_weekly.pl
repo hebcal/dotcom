@@ -83,17 +83,14 @@ shabbat-unsubscribe\@$site
          );
 
     # try 3 times to avoid intermittent failures
-    my($i);
     my($status) = 0;
-    for ($i = 0; $status == 0 && $i < 3; $i++)
+    for (my $i = 0; $status == 0 && $i < 3; $i++)
     {
 	$status = Hebcal::sendmail_v2($return_path,\%headers,$body);
+	sleep(2);
     }
 
-    warn "$0: unable to email $to\n"
-	if ($status == 0);
-
-    sleep(2);
+#    warn "$0: unable to email $to\n" if ($status == 0);
 }
 
 Hebcal::zipcode_close_db($ZIPS);
