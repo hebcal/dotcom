@@ -1582,9 +1582,32 @@ sub vcalendar_write_contents($$$$$)
 	print STDOUT ";TZID=$tzid" if $tzid;
 	print STDOUT qq{:$end_date$endl};
 
-	my $uid = $dtstamp . '-' . $i . '@hebcal.com';
-	print STDOUT qq{UID:$uid$endl};
-	print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
+	if ($is_icalendar) {
+	    my $subj_copy = lc($subj);
+	    $subj_copy =~ s/[^\w]/-/g;
+	    $subj_copy =~ s/-+/-/g;
+	    $subj_copy =~ s/-$//g;
+
+	    my $date_copy = $date;
+	    $date_copy =~ s/T\d+$//;
+
+	    my $uid = $subj_copy . '-' . $date_copy;
+
+	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] &&
+		$events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)\s*$/) {
+		my $loc = lc($1);
+		$loc =~ s/[^\w]/-/g;
+		$loc =~ s/-+/-/g;
+		$loc =~ s/-$//g;
+
+		$uid .= '-' . $loc;
+	    }
+
+	    $uid .= '@hebcal.com';
+
+	    print STDOUT qq{UID:$uid$endl};
+	    print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
+	}
 
 	print STDOUT qq{END:VEVENT$endl};
     }
