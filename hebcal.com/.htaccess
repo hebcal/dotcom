@@ -17,6 +17,7 @@ RewriteRule ^ /wap-shabbat.php [L]
 AddType application/x-javascript js
 AddType text/css css
 AddType text/xml xml rdf rss vxml
+AddType text/x-csv csv
 AddEncoding x-gzip .gz
 
 Redirect /yahrtzeit http://www.hebcal.com/yahrzeit
