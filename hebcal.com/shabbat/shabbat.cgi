@@ -96,10 +96,10 @@ $q->param('nx','on');
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
-if (defined $q->raw_cookie() &&
-    $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
+my($C_cookie) = &Hebcal::get_C_cookie($q);
+if ($C_cookie)
 {
-    &Hebcal::process_cookie($q,$1);
+    &Hebcal::process_cookie($q,$C_cookie);
 }
 
 # sanitize input to prevent people from trying to hack the site.
@@ -279,7 +279,7 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 
     my($cookie_to_set);
 
-    if (! defined $q->raw_cookie())
+    if (! $C_cookie)
     {
 	$cookie_to_set = &Hebcal::gen_cookie($q)
 	    unless $q->param('noset');
@@ -288,10 +288,10 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
     {
 	my($newcookie) = &Hebcal::gen_cookie($q);
 	my($cmp1) = $newcookie;
-	my($cmp2) = ($q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/);
+	my($cmp2) = $C_cookie;
 
 	$cmp1 =~ s/^C=t=\d+\&//;
-	$cmp2 =~ s/^t=\d+\&//;
+	$cmp2 =~ s/^C=t=\d+\&//;
 
 	$cookie_to_set = $newcookie 
 	    if ($cmp2 ne 'opt_out' &&
