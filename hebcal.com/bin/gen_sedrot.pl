@@ -134,8 +134,14 @@ sub write_sedra_page {
     $memo2 =~ /Torah: .+ \/ Haftarah: (.+)$/;
     my($haftarah_seph) = $1;
 
-    my($seph) = ($haftarah_seph eq $haftarah) ? '' :
-	"<br>Haftarah for Sephardim: $haftarah_seph";
+    my $seph = '';
+    my $ashk = '';
+
+    if ($haftarah_seph ne $haftarah)
+    {
+	$seph = "<br>Haftarah for Sephardim: $haftarah_seph";
+	$ashk = " for Ashkenazim";
+    }
 
     my($anchor) = lc($h);
     $anchor =~ s/[^\w]//g;
@@ -234,7 +240,7 @@ EOHTML
 
     print OUT2 <<EOHTML;
 </dl>
-<h3><a name="haftarah">Haftarah:</a>
+<h3><a name="haftarah">Haftarah$ashk:</a>
 <a href="$haftarah_href">$haftarah</a>$seph</h3>
 EOHTML
 ;
