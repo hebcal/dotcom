@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Dec 27 10:05:04 PST 1999
+Last modified: Mon Dec 27 10:30:40 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -654,11 +654,11 @@ sub form
 
     print STDOUT $q->header(),
     $q->start_html(-title=>"Hebcal Interactive Jewish Calendar",
-		   -author=>$author,
 		   -head=>[
 			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true by \"$author\" on \"1998.03.10T11:49-0800\" r (n 0 s 0 v 0 l 0))'>",
 			   $q->Link({-rel=>'SCHEMA.dc',
 				     -href=>'http://purl.org/metadata/dublin_core_elements'}),
+			   $q->Link({-rev=>'made', -href=>"mailto:$author"}),
 			   ],
 		   -meta=>{
 		       'description'=>
@@ -733,7 +733,7 @@ sub form
     else
     {
 	print STDOUT $q->hidden(-name=>'c',-value=>'on'),
-	"Include candle lighting times for ";
+	"Include\ncandle lighting times for ";
 
 	print STDOUT "zip code:\n"
 	    if (! defined $q->param('geo') || $q->param('geo') eq 'zip');
@@ -745,7 +745,7 @@ sub form
 	print STDOUT $q->br(), "<small>",
 	"(or ", $q->a({-href=>$script_name . "?c=off",
 		       -target=>'_top'},
-		      "turn them off"), ", or select by\n";
+		      "turn them off"), ",\nor select by\n";
 	
 	if (defined $q->param('geo') && $q->param('geo') eq 'city')
 	{
