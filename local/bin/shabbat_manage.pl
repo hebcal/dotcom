@@ -102,6 +102,7 @@ EOD
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
     my($email,$status) = $sth->fetchrow_array;
+    $sth->finish;
 
     unless ($status) {
 	shabbat_log(0, 'subscribe_notfound');
@@ -204,6 +205,7 @@ EOD
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
     my($status,$encoded) = $sth->fetchrow_array;
+    $sth->finish;
 
     unless ($status) {
 	shabbat_log(0, 'unsub_notfound');
