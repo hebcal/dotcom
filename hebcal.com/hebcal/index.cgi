@@ -577,11 +577,12 @@ sub results_page()
 	$q->param('month') >= 1 && $q->param('month') <= 12)
     {
 	$filename .= '_' . lc($Hebcal::MoY_short[$q->param('month')-1]);
-	$date = $Hebcal::MoY_long{$q->param('month')} . ' ' . $q->param('year');
+	$date = sprintf("%s %04d", $Hebcal::MoY_long{$q->param('month')},
+			$q->param('year'));
     }
     else
     {
-	$date = $q->param('year');
+	$date = sprintf("%04d", $q->param('year'));
     }
 
     if ($q->param('c') && $q->param('c') ne 'off')
@@ -693,6 +694,9 @@ sub results_page()
     print STDOUT "<h1>Jewish\nCalendar $date</h1>\n"
 	unless ($q->param('vis'));
 
+    print STDOUT $Hebcal::gregorian_warning
+	if ($q->param('year') <= 1752);
+
     if ($q->param('c') && $q->param('c') ne 'off')
     {
 	print STDOUT "<dl>\n<dt><big>", $city_descr, "</big>\n";
@@ -704,16 +708,8 @@ sub results_page()
 	    if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n";
 
-	if ($city_descr =~ / IN &nbsp;/)
-	{
-	    print STDOUT "<p><font color=\"#ff0000\">",
-	    "Indiana has confusing time zone &amp;\n",
-	    "Daylight Saving Time rules.</font>\n",
-	    "You might want to read <a\n",
-	    "href=\"http://www.mccsc.edu/time.html\">What time is it in\n",
-	    "Indiana?</a> to make sure the above settings are\n",
-	    "correct.</p>";
-	}
+	print STDOUT $Hebcal::indiana_warning
+	    if ($city_descr =~ / IN &nbsp;/);
     }
 
     print STDOUT
