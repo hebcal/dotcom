@@ -707,7 +707,7 @@ EOHTML
     {
 	print OUT2 <<EOHTML;
 <h3><a name="dates">List of Dates</a></h3>
-Parashat $h is read on:
+Parashat $h is read in the Diaspora on:
 <ul>
 EOHTML
 	;
