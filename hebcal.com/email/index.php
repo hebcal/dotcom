@@ -446,7 +446,7 @@ EOD
     $sender .= $HTTP_SERVER_VARS["SERVER_NAME"];
 
     $headers = array('From' => "\"$from_name\" <$from_addr>",
-		     'To' => $recipients,
+		     'To' => $param['em'],
 		     'Reply-To' => $from_addr,
 		     'MIME-Version' => '1.0',
 		     'Content-Type' => 'text/plain',
@@ -463,7 +463,7 @@ Regards,
 hebcal.com
 EOD;
 
-    $err = smtp_send($return_path, $recipients, $headers, $body);
+    $err = smtp_send($return_path, $param['em'], $headers, $body);
 
     $html = <<<EOD
 <h2>Unsubscribed</h2>
