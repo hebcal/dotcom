@@ -575,14 +575,16 @@ sub process_cookie($$)
 	($q->param('c') eq '1')) {
 	if (defined $c->param('zip') && $c->param('zip') =~ /^\d{5}$/ &&
 	    (! defined $q->param('geo') || $q->param('geo') eq 'zip')) {
-	    $q->param('zip',$c->param('zip'))
-		unless $q->param('zip');
 	    $q->param('geo','zip');
 	    $q->param('c','on');
-	    $q->param('dst',$c->param('dst'))
-		if (defined $c->param('dst') && ! defined $q->param('dst'));
-	    $q->param('tz',$c->param('tz'))
-		if (defined $c->param('tz') && ! defined $q->param('tz'));
+	    if (! defined $q->param('zip') || $q->param('zip') =~ /^\s*$/)
+	    {
+		$q->param('zip',$c->param('zip'));
+		$q->param('dst',$c->param('dst'))
+		    if defined $c->param('dst');
+		$q->param('tz',$c->param('tz'))
+		    if defined $c->param('tz');
+	    }
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
 	    $q->param('city',$c->param('city'))
@@ -637,7 +639,7 @@ sub process_cookie($$)
     $q->param('nx',$c->param('nx'))
 	if (! defined $q->param('nx') && defined $c->param('nx'));
 
-    1;
+    $c;
 }
 
 
