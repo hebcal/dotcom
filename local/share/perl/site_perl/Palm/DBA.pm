@@ -12,7 +12,7 @@
 # Palm::DBA::write_header('calendar_2002.dba');
 # Palm::DBA::write_contents(\@events, '-8', 1);
 # 
-# Copyright (c) 2003  Michael J. Radwin.
+# Copyright (c) 2004  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
