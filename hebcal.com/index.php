@@ -23,8 +23,8 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
 <!-- holiday greeting -->
-<span style="font-weight: bold; font-style: italic; color: #cc9966">Chag
-Sameach!</span> &nbsp; - &nbsp;
+<span style="font-weight: bold; font-style: italic; color:#cc9966">Moadim
+L'Simcha!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" -->
