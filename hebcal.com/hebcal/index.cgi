@@ -943,34 +943,6 @@ sub results_page
 
     $goto .= "</small>\n";
 
-    if ($q->param('c') && $q->param('c') ne 'off')
-    {
-	if (defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
-	{
-	    $goto .= join('',
-		qq{<br>For weekly candle lighting times, bookmark\n},
-		qq{<a href="/shabbat/?zip=}, $q->param('zip'),
-		qq{;dst=}, $q->param('dst'),
-		qq{;tz=}, $q->param('tz'),
-		qq{;m=}, $q->param('m'),
-		qq{;tag=interactive},
-		qq{">1-Click Shabbat for $city_descr</a>.\n},
-		);
-	}
-	elsif (defined $q->param('city') && $q->param('city') !~ /^\s*$/)
-	{
-	    $goto .= join('',
-		qq{<br>For weekly candle lighting times, bookmark\n},
-		qq{<a href="/shabbat/?city=},
- 		Hebcal::url_escape($q->param('city')),
-		qq{;m=}, $q->param('m'),
-		qq{;tag=interactive},
-		qq{">1-Click Shabbat for }, $q->param('city'),
-		qq{</a>.\n},
-		);
-	}
-    }
-
     print STDOUT $goto_prefix, $goto, "</p>"
 	unless $q->param('vis');
 
@@ -984,6 +956,44 @@ sub results_page
 	    "<a href=\"", Hebcal::self_url($q, {'v' => 0, 'tag' => 'cal.cust'}),
 	    "\">Customize\ncalendar options</a>";
 	}
+
+	if ($q->param('c') && $q->param('c') ne 'off')
+	{
+	    # Email
+	    my $url = join('', "http://", $q->virtual_host(), "/email/",
+			   "?geo=", $q->param('geo'), "&amp;");
+
+	    if ($q->param('zip')) {
+		$url .= "zip=" . $q->param('zip');
+	    } else {
+		$url .= "city=" . Hebcal::url_escape($q->param('city'));
+	    }
+
+	    $url .= "&amp;m=" . $q->param('m')
+		if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+	    $url .= "&amp;tag=interactive";
+
+	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "<a href=\"$url\">Subscribe\nto weekly candle lighting times via email</a>";
+
+	    # Fridge
+	    $url =
+		join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
+	    if ($q->param('zip')) {
+		$url .= "zip=" . $q->param('zip');
+	    } else {
+		$url .= "city=" . Hebcal::url_escape($q->param('city'));
+	    }
+
+	    $url .= ";year=" . $q->param('year')
+		if ($q->param('yt') && $q->param('yt') eq 'H');
+	    $url .= ";tag=interactive";
+
+	    print STDOUT "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "<a href=\"$url\">Printable\npage of full year's candle-lighting times</a>";
+#	    print STDOUT "\n<span class=\"hl\"><b>NEW!</b></span>";
+	}
+
 	print STDOUT qq{</p>\n};
     }
     else
