@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2002  Michael J. Radwin.  All rights reserved.
+# Copyright (c) 2003  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ########################################################################
 
-use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+use lib "/home/mradwin/local/share/perl";
+use lib "/home/mradwin/local/share/perl/site_perl";
 
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
@@ -313,6 +314,7 @@ if ($numEntries > 0) {
 		      qq{<p class="goto"><span class="sm-grey">&gt;</span>
 <a href="#export">Export calendar to Palm &amp; Outlook</a></p>\n});
 
+    # http://yizkor.ort.org/html/pp-lighting.shtml
     &Hebcal::out_html($cfg,
 		      qq{<p>All yahrzeits, birthdays and anniversaries
 begin the evening before the date specified. This is because the Jewish
