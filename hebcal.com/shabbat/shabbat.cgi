@@ -730,6 +730,8 @@ sub display_html_common
     &Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
     &Hebcal::out_html($cfg,"<dl>\n");
 
+    my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
+
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
 	&Hebcal::out_html($cfg,qq{<dt class="$items->[$i]->{'class'}">});
@@ -745,13 +747,13 @@ $items->[$i]->{'date'} is at <b>$items->[$i]->{'time'}</b>});
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
 	    &Hebcal::out_html($cfg,qq{Holiday: <a name="$anchor"
-target="_top" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
+target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
 $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
 	    &Hebcal::out_html($cfg,qq{This week's Torah portion is <a name="$anchor"
-target="_top" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
+target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
 	}
     
 	&Hebcal::out_html($cfg,qq{</dt>\n});
@@ -784,7 +786,8 @@ sub display_javascript
 	$url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
     }
 
-    &Hebcal::out_html($cfg, qq{<h3><a target="_top"
+    my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
+    &Hebcal::out_html($cfg, qq{<h3><a target="$tgt"
 href="$url">1-Click
 Shabbat</a> for $city_descr</h3>
 });
@@ -793,7 +796,7 @@ Shabbat</a> for $city_descr</h3>
 
     &Hebcal::out_html($cfg, 
 		      "<font size=\"-2\" face=\"Arial\">1-Click Shabbat\n",
-		      &Hebcal::html_copyright($q, 1), "</font>\n");
+		      Hebcal::html_copyright($q, 1, $tgt), "</font>\n");
 
     if ($cfg eq 'i') {
 	&Hebcal::out_html($cfg, "</body></html>\n");
