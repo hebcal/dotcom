@@ -25,6 +25,9 @@ RewriteCond %{HTTP_REFERER} ^http:\/\/groups\.msn\.com\/WalkingInTheLightJohn316
 RewriteCond %{HTTP_REFERER} .*circlegame\.com.* [OR]
 RewriteCond %{HTTP_REFERER} .*ammishaddai\.com.* [OR]
 RewriteCond %{HTTP_REFERER} .*kecirohomeschool\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*hebraicrenewal\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*torahofmessiah\.com.* [OR]
+RewriteCond %{HTTP_REFERER} .*hopeofdavid\.org.* [OR]
 RewriteCond %{HTTP_REFERER} .*yeshua.* [OR]
 RewriteCond %{HTTP_REFERER} .*messianic.*
 RewriteRule ^  http://www.jewsforjudaism.org/  [R,L]
