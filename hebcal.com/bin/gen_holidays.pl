@@ -99,7 +99,7 @@ href="http://www.jewfaq.org/holidayb.htm">Days of the Omer</a>
 <a href="/help/">Help</a>
 <br>
 <!-- hhmts start -->
-Last modified: Fri Apr 27 10:35:30 PDT 2001
+Last modified: Mon May  7 14:06:17 PDT 2001
 <!-- hhmts end -->
 ($rcsrev)
 </font>
