@@ -6,12 +6,12 @@ require 'ctime.pl';
 
 %city_zips = 
     (
-     'Atlanta', '30303',
+     'Atlanta', '30334',
      'Austin', '78701',
      'Baltimore', '21201',
      'Boston', '02108',
      'Buffalo', '14201',
-     'Chicago', '60601',
+     'Chicago', '60608',
      'Cincinnati', '45202',
      'Cleveland', '44102',
      'Dallas', '75201',
@@ -19,10 +19,10 @@ require 'ctime.pl';
      'Detroit', '48201',
      'Hawaii', '96813',
      'Houston', '77002',
-     'Los+Angeles', '90001',
-     'Los Angeles', '90001',
-     'Los%20Angeles', '90001',
-     'Miami', '33122',
+     'Los+Angeles', '90079',
+     'Los Angeles', '90079',
+     'Los%20Angeles', '90079',
+     'Miami', '33128',
      'New+York', '10007',
      'New York', '10007',
      'New%20York', '10007',
@@ -37,9 +37,9 @@ require 'ctime.pl';
      'San%20Francisco', '94102',
      'San Francisco', '94102',
      'Seattle', '98101',
-     'Washington+DC', '20001',
-     'Washington%20DC', '20001',
-     'Washington DC', '20001',
+     'Washington+DC', '20301',
+     'Washington%20DC', '20301',
+     'Washington DC', '20301',
      );
 
 dbmopen(%DB,"/home/web/radwin.org/docs/hebcal/zips", 0400) || die;
