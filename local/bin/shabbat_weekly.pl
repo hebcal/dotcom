@@ -15,8 +15,6 @@ use DBI ();
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
 
-my $site = "hebcal.com";
-
 my $now = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
@@ -48,35 +46,40 @@ while (my($to,$cfg) = each(%SUBS))
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = parse_config($cfg);
-    my(@events) = Hebcal::invoke_hebcal($cmd,"",undef);
+    my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
+    if ($sat_year != $year) {
+	# Happens when Friday is Dec 31st and Sat is Jan 1st
+	my @ev2 = Hebcal::invoke_hebcal("$cmd 12 $year","",undef);
+	@events = (@ev2, @events);
+    }
 
     my $encoded = MIME::Base64::encode_base64($to);
     chomp($encoded);
-    my $unsub_url = "http://www.$site/email/?" .
+    my $unsub_url = "http://www.hebcal.com/email/?" .
 	"e=" . my_url_escape($encoded);
 
     my($body) = gen_body(\@events) . qq{
 $loc
 
 Shabbat Shalom,
-$site
+hebcal.com
 
 To modify your subscription, visit:
 $unsub_url
 
 To unsubscribe from this list, send an email to:
-shabbat-unsubscribe\@$site
+shabbat-unsubscribe\@hebcal.com
 };
 
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
-    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
+    my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
 
     my $lighting = get_friday_candles(\@events);
 
     my %headers =
 	(
-	 "From" => "Hebcal <shabbat-owner\@$site>",
+	 "From" => "Hebcal <shabbat-owner\@hebcal.com>",
 	 "To" => $to,
 	 "MIME-Version" => "1.0",
 	 "Content-Type" => "text/plain",
@@ -181,7 +184,7 @@ sub gen_body
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
 	    $body .= "This week's Torah portion is $subj\n";
-	    $body .= "  http://www.$site" .
+	    $body .= "  http://www.hebcal.com" .
 	      Hebcal::get_holiday_anchor($subj,undef,undef) . "\n";
 	}
 	else
@@ -283,7 +286,7 @@ sub parse_config
     $cmd .= " -m " . $args{"m"}
 	if (defined $args{"m"} && $args{"m"} =~ /^\d+$/);
 
-    $cmd .= " -s -c " . $sat_year;
+    $cmd .= " -s -c";
 
     ($cmd,$city_descr,\%args);
 }
