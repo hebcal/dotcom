@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 
 # $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_weekly.pl,v $
 # $Id$
@@ -51,8 +51,10 @@ while (my($to,$cfg) = each(%SUBS))
     my $unsub_url = "http://www.$site/email/?" .
 	"e=" . my_url_escape($encoded);
 
-    my($body) = "$loc\n\n"
-	. gen_body(\@events) . qq{
+    my($body) = gen_body(\@events) . qq{
+These times are for:
+$loc
+
 Shabbat Shalom,
 $site
 
@@ -168,7 +170,7 @@ sub gen_body
 
 	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
 	{
-	    $body .= sprintf("%s for %s is at %d:%02d PM\n",
+	    $body .= sprintf("%s for %s is at %d:%02dpm\n",
 			     $subj, $strtime, $hour, $min);
 	}
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
@@ -247,18 +249,16 @@ sub parse_config
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    Hebcal::zipcode_fields($zipinfo);
 
-	$city_descr = "$city, $state " . $args{'zip'};
-	$city_descr .= "\n" . $Hebcal::tz_names{$tz};
+	$city_descr = "  $city, $state " . $args{'zip'};
+	$city_descr .= "\n  " . $Hebcal::tz_names{$tz};
 
 	if (defined $tz && $tz ne '?') {
 	    $cmd .= " -z $tz";
 	}
 
 	if ($dst == 1) {
-	    $city_descr .= "\nDaylight Saving Time: usa";
 	    $cmd .= " -Z usa";
 	} elsif ($dst == 0) {
-	    $city_descr .= "\nDaylight Saving Time: none";
 	    $cmd .= " -Z none";
 	}
 
@@ -269,6 +269,7 @@ sub parse_config
 	$cmd .= " -C '" . $city_descr . "'";
 	$cmd .= " -i"
 	    if ($Hebcal::city_dst{$city_descr} eq 'israel');
+	$city_descr = "  $city_descr";
     } else {
 	die "no geographic key in [$config]";
     }
