@@ -719,7 +719,6 @@ sub start_html($$$$)
 	 -title => $title,
 	 -target => '_top',
 	 -head => [
-		   qq{<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://$server_name" r (n 0 s 0 v 0 l 0))'>},
 		   $q->Link({-rel => 'stylesheet',
 			     -href => '/style.css',
 			     -type => 'text/css'}),
