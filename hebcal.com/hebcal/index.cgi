@@ -37,7 +37,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Wed Jul 14 19:55:22 PDT 1999
+Last modified: Wed Jul 14 20:11:10 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -197,7 +197,7 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
     $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
     $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}</dd>\n<dd>Time Zone: GMT $in{'tz'}:00";
+"Daylight Savings Time: $in{'dst'}\n<dd>Time Zone: GMT $in{'tz'}:00";
 
     # don't multiply minutes by -1 since hebcal does it internally
     $long_deg *= -1  if ($in{'lodir'} eq 'e');
@@ -250,7 +250,7 @@ elsif (defined $in{'zip'})
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
     $long_descr = "${long_deg}d${long_min}' W longitude";
     $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}</dd>\n<dd>Time Zone: GMT $in{'tz'}:00";
+"Daylight Savings Time: $in{'dst'}\n<dd>Time Zone: GMT $in{'tz'}:00";
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -339,11 +339,8 @@ sub form
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<div class=\"navbar\"><small>
-<a href=\"/\">radwin.org</a> -&gt;
-hebcal
-</small></div>
-<h1>Hebcal Interactive Jewish Calendar</h1>
+<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> -&gt;
+hebcal</small></div><h1>Hebcal Interactive Jewish Calendar</h1>
 <p>Use the form below to generate a list of Jewish holidays. Candle
 lighting times are calculated from your latitude and longitude (which
 can be determined by your zip code or closest city).</p>
@@ -532,10 +529,14 @@ $html_footer";
 
 sub download
 {
-    local($date) = sprintf("%s %d", $MoY[$in{'month'}], $year);
+    local($date) = $year;
     local($filename) = 'hebcal_' . $year;
 
-    $filename .= '_' . $MoY_abbrev[$in{'month'}] if $in{'month'} =~ /^\d+$/;
+    if ($in{'month'} =~ /^\d+$/)
+    {
+	$filename .= '_' . $MoY_abbrev[$in{'month'}];
+	$date = $MoY[$in{'month'}] . ' ' . $date;
+    }
 
     if ($opts{'c'} == 1)
     {
@@ -562,22 +563,17 @@ sub download
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
-<div class=\"navbar\"><small>
-<a href=\"/\">radwin.org</a> -&gt;
+<div class=\"navbar\"><small><a href=\"/\">radwin.org</a> -&gt;
 <a href=\"$cgipath\">hebcal</a> -&gt;
-$date
-</small></div>
-
-<h1>Jewish Calendar $date</h1>
-
+$date</small></div><h1>Jewish Calendar $date</h1>
 ";
 
     if ($opts{'c'} == 1)
     {
-	print STDOUT "<dl>\n<dt>", $city_descr, "</dt>\n";
-	print STDOUT "<dd>", $lat_descr, "</dd>\n" if $lat_descr ne '';
-	print STDOUT "<dd>", $long_descr, "</dd>\n" if $long_descr ne '';
-	print STDOUT "<dd>", $dst_tz_descr, "</dd>\n" if $dst_tz_descr ne '';
+	print STDOUT "<dl>\n<dt>", $city_descr, "\n";
+	print STDOUT "<dd>", $lat_descr, "\n" if $lat_descr ne '';
+	print STDOUT "<dd>", $long_descr, "\n" if $long_descr ne '';
+	print STDOUT "<dd>", $dst_tz_descr, "\n" if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n\n";
     }
 
@@ -598,8 +594,10 @@ These links will pop up a new browser window so you can keep this window
 open.</small></p>
 ";
 
-    print STDOUT "<!-- $cmd -->\n";
-    print STDOUT "<p><tt>\n";
+    $cmd_pretty = $cmd;
+    $cmd_pretty =~ s,.*/,,; # basename
+    print STDOUT "<!-- $cmd_pretty -->\n";
+    print STDOUT "<pre>\n";
     open(HEBCAL,"$cmd |") ||
 	&CgiDie("Script Error: can't run hebcal",
 		"\nCommand was \"$cmd\".\n" .
@@ -629,11 +627,11 @@ open.</small></p>
 	$descr =~ s/</&lt;/g;
 	$descr =~ s/>/&gt;/g;
 
-	printf STDOUT "%04d/%02d/%02d %s<br>\n", $year, $month, $day, $descr;
+	printf STDOUT "%04d/%02d/%02d %s\n", $year, $month, $day, $descr;
     }
     close(HEBCAL);
 
-    print STDOUT "</tt></p>\n\n$html_footer";
+    print STDOUT "</pre>\n", $html_footer;
 
     close(STDOUT);
     exit(0);
