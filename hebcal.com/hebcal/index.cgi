@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Mar  1 14:24:44 PST 2001
+Last modified: Thu Mar  1 19:36:30 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -51,7 +51,7 @@ $html_footer = "<hr
 noshade size=\"1\"><small>$hhmts ($rcsrev)<br><br>Copyright
 &copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
 All rights reserved. - <a
-href=\"/michael/projects/hebcal/\">Frequently
+href=\"help/\">Frequently
 asked questions about this service.</a></small></body></html>
 ";
 
@@ -534,8 +534,8 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
-    "</label><small>(<a\n",
-    "href=\"/michael/projects/hebcal/defaults.html\">What\n",
+    "</label> <small>(<a\n",
+    "href=\"help/defaults.html\">What\n",
     "are the default Holidays?</a>)</small>",
     "<br><label\nfor=\"nx\">",
     $q->checkbox(-name => 'nx',
@@ -759,8 +759,8 @@ JSCRIPT_END
 		 -id => 'set',
 		 -checked => 'checked',
 		 -label => "\nSave my preferences in a cookie"),
-    "</label><small>(<a\n",
-    "href=\"/michael/projects/hebcal/#cookie\">What's\n",
+    "</label> <small>(<a\n",
+    "href=\"help/#cookie\">What's\n",
     "a cookie?</a> - <a\n",
     "href=\"/hebcal/del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
