@@ -54,8 +54,8 @@ use Hebcal ();
 use HTML::CalendarMonthSimple ();
 use Palm::DBA ();
 
-my($expires_future) = 'Thu, 15 Apr 2010 20:00:00 GMT';
-my($expires_date) = $expires_future;
+my $http_expires = "Tue, 02 Jun 2037 20:00:00 GMT";
+my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
@@ -115,7 +115,7 @@ if (defined $q->param('year') && $q->param('year') eq 'now' &&
 				$this_mon - 1,
 				$this_year - 1900);
 
-    $expires_date = Hebcal::http_date($end_of_month);
+    $http_expires = Hebcal::http_date($end_of_month);
 }
 
 &form("Please specify a year.")
@@ -244,7 +244,7 @@ sub javascript_events() {
 
     print $q->header(-type => "application/x-javascript",
 		     -last_modified => Hebcal::http_date($time),
-		     -expires => $expires_date,
+		     -expires => $http_expires,
 		     );
 
     for (my $i = 0; $i < @events; $i++)
@@ -762,7 +762,7 @@ sub results_page
 	{
 	    print STDOUT "Cache-Control: private\015\012",
 	    "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_future, "; path=/\015\012"
+	    $cookie_expires, "; path=/\015\012"
 		if $newcookie =~ /&/;
 	}
 	else
@@ -775,7 +775,7 @@ sub results_page
 
 	    print STDOUT "Cache-Control: private\015\012",
 	    "Set-Cookie: ", $newcookie, "; expires=",
-	    $expires_future, "; path=/\015\012"
+	    $cookie_expires, "; path=/\015\012"
 		if $cmp1 ne $cmp2;
 	}
 
@@ -848,7 +848,7 @@ sub results_page
 	push(@head, qq{<meta http-equiv="Content-Type" content="text/html${charset}">});
     }
 
-    print STDOUT $q->header(-expires => $expires_date,
+    print STDOUT $q->header(-expires => $http_expires,
 			    -type => "text/html${charset}"),
     Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
 		       \@head,
