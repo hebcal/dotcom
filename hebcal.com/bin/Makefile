@@ -7,4 +7,4 @@ all: ../help/holidays.html ../sedrot/bereshit.html
 #	./gen_sedrot.pl sedrot.ini ../sedrot/
 
 ../sedrot/bereshit.html: calc_triennial.pl ../dist/aliyah.xml
-	./calc_triennial.pl ../dist/aliyah.xml ../sedrot/
+	./calc_triennial.pl -f ../dist/fullkriyah.csv ../dist/aliyah.xml ../sedrot/
