@@ -200,8 +200,8 @@ function my_footer() {
 
     $html = <<<EOD
 <hr noshade size="1"><span class="tiny">
-<a name="copyright">Copyright &copy; $year
-Michael J. Radwin. All rights reserved.</a>
+<a name="copyright"></a>Copyright &copy; $year
+Michael J. Radwin. All rights reserved.
 <a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
 <a target="_top" href="http://www.hebcal.com/help/">Help</a> -
 <a target="_top" href="http://www.hebcal.com/contact/">Contact</a> -
