@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- $Id$ -->
 <parshiot>
-<parsha id="Bereshit"
+<parsha id="Bereshit" num="1"
  hebrew="בְּרֵאשִׁית"
  verse="Genesis 1:1 - 6:8"
  haftara="Isaiah 42:5 - 43:11" sephardic="Isaiah 42:5 - 42:21">
@@ -52,7 +52,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Noach"
+<parsha id="Noach" num="2"
  hebrew="נֹחַ"
  verse="Genesis 6:9 - 11:32"
  haftara="Isaiah 54:1 - 55:5" sephardic="Isaiah 54:1 - 54:10">
@@ -103,7 +103,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Lech-Lecha"
+<parsha id="Lech-Lecha" num="3"
  hebrew="לֶךְ־לְךָ"
  verse="Genesis 12:1 - 17:27"
  haftara="Isaiah 40:27 - 41:16">
@@ -154,7 +154,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayera"
+<parsha id="Vayera" num="4"
  hebrew="וַיֵּרָא"
  verse="Genesis 18:1 - 22:24"
  haftara="II Kings 4:1 - 4:37" sephardic="II Kings 4:1 - 4:23">
@@ -205,7 +205,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Chayei Sara"
+<parsha id="Chayei Sara" num="5"
  hebrew="חַיֵּי שָֹרָה"
  verse="Genesis 23:1 - 25:18"
  haftara="I Kings 1:1 - 1:31">
@@ -256,7 +256,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Toldot"
+<parsha id="Toldot" num="6"
  hebrew="תּוֹלְדוֹת"
  verse="Genesis 25:19 - 28:9"
  haftara="Malachi 1:1 - 2:7">
@@ -307,7 +307,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayetzei"
+<parsha id="Vayetzei" num="7"
  hebrew="וַיֵּצֵא"
  verse="Genesis 28:10 - 32:3"
  haftara="Hosea 12:13 - 14:10" sephardic="Hosea 11:7 - 12:12">
@@ -358,7 +358,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayishlach"
+<parsha id="Vayishlach" num="8"
  hebrew="וַיִּשְׁלַח"
  verse="Genesis 32:4 - 36:43"
  haftara="Hosea 11:7 - 12:12" sephardic="Obadiah 1:1 - 1:21">
@@ -409,7 +409,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayeshev"
+<parsha id="Vayeshev" num="9"
  hebrew="וַיֵּשֶׁב"
  verse="Genesis 37:1 - 40:23"
  haftara="Amos 2:6 - 3:8">
@@ -460,7 +460,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Miketz"
+<parsha id="Miketz" num="10"
  hebrew="מִקֵּץ"
  verse="Genesis 41:1 - 44:17"
  haftara="I Kings 3:15 - 4:1">
@@ -511,7 +511,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayigash"
+<parsha id="Vayigash" num="11"
  hebrew="וַיִּגַּשׁ"
  verse="Genesis 44:18 - 47:27"
  haftara="Ezekiel 37:15 - 37:28">
@@ -562,7 +562,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayechi"
+<parsha id="Vayechi" num="12"
  hebrew="וַיְחִי"
  verse="Genesis 47:28 - 50:26"
  haftara="I Kings 2:1 - 2:12">
@@ -613,7 +613,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Shemot"
+<parsha id="Shemot" num="13"
  hebrew="שְׁמוֹת"
  verse="Exodus 1:1 - 6:1"
  haftara="Isaiah 27:6 - 28:13; 29:22 - 29:23" sephardic="Jeremiah 1:1 - 2:3">
@@ -664,7 +664,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vaera"
+<parsha id="Vaera" num="14"
  hebrew="וָאֵרָא"
  verse="Exodus 6:2 - 9:35"
  haftara="Ezekiel 28:25 - 29:21">
@@ -715,7 +715,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Bo"
+<parsha id="Bo" num="15"
  hebrew="בֹּא"
  verse="Exodus 10:1 - 13:16"
  haftara="Jeremiah 46:13 - 46:28">
@@ -766,7 +766,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Beshalach"
+<parsha id="Beshalach" num="16"
  hebrew="בְּשַׁלַּח"
  verse="Exodus 13:17 - 17:16"
  haftara="Judges 4:4 - 5:31" sephardic="Judges 5:1 - 5:31">
@@ -817,7 +817,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Yitro"
+<parsha id="Yitro" num="17"
  hebrew="יִתְרוֹ"
  verse="Exodus 18:1 - 20:23"
  haftara="Isaiah 6:1 - 7:6; 9:5 - 9:6" sephardic="Isaiah 6:1 - 6:13">
@@ -873,7 +873,7 @@
 <year variation="Y.3" sameas="Y.2" />
 </triennial-alt>
 </parsha>
-<parsha id="Mishpatim"
+<parsha id="Mishpatim" num="18"
  hebrew="מִּשְׁפָּטִים"
  verse="Exodus 21:1 - 24:18"
  haftara="Jeremiah 34:8 - 34:22; 33:25 - 33:26">
@@ -924,7 +924,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Terumah"
+<parsha id="Terumah" num="19"
  hebrew="תְּרוּמָה"
  verse="Exodus 25:1 - 27:19"
  haftara="I Kings 5:26 - 6:13">
@@ -975,7 +975,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tetzaveh"
+<parsha id="Tetzaveh" num="20"
  hebrew="תְּצַוֶּה"
  verse="Exodus 27:20 - 30:10"
  haftara="Ezekiel 43:10 - 43:27">
@@ -1026,7 +1026,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Ki Tisa"
+<parsha id="Ki Tisa" num="21"
  hebrew="כִּי תִשָּׂא"
  verse="Exodus 30:11 - 34:35"
  haftara="I Kings 18:1 - 18:39" sephardic="I Kings 18:20 - 18:39">
@@ -1077,7 +1077,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vayakhel"
+<parsha id="Vayakhel" num="22"
  hebrew="וַיַּקְהֵל"
  verse="Exodus 35:1 - 38:20"
  haftara="I Kings 7:40 - 7:50" sephardic="I Kings 7:13 - 7:26">
@@ -1143,7 +1143,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Pekudei"
+<parsha id="Pekudei" num="23"
  hebrew="פְקוּדֵי"
  verse="Exodus 38:21 - 40:38"
  haftara="I Kings 7:51 - 8:21" sephardic="I Kings 7:40 - 7:50">
@@ -1191,7 +1191,7 @@
 <year variation="F.1" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Vayikra"
+<parsha id="Vayikra" num="24"
  hebrew="וַיִּקְרָא"
  verse="Leviticus 1:1 - 5:26"
  haftara="Isaiah 43:21 - 44:23">
@@ -1242,7 +1242,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tzav"
+<parsha id="Tzav" num="25"
  hebrew="צַו"
  verse="Leviticus 6:1 - 8:36"
  haftara="Jeremiah 7:21 - 8:3; 9:22 - 9:23">
@@ -1293,7 +1293,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Shmini"
+<parsha id="Shmini" num="26"
  hebrew="שְּׁמִינִי"
  verse="Leviticus 9:1 - 11:47"
  haftara="II Samuel 6:1 - 7:17" sephardic="II Samuel 6:1 - 6:19">
@@ -1344,7 +1344,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tazria"
+<parsha id="Tazria" num="27"
  hebrew="תַזְרִיעַ"
  verse="Leviticus 12:1 - 13:59"
  haftara="II Kings 4:42 - 5:19">
@@ -1397,7 +1397,7 @@
 <year variation="D.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Metzora"
+<parsha id="Metzora" num="28"
  hebrew="מְּצֹרָע"
  verse="Leviticus 14:1 - 15:33"
  haftara="II Kings 7:3 - 7:20">
@@ -1442,7 +1442,7 @@
 <year variation="D.3" sameas="A.3" />
 </triennial>
 </parsha>
-<parsha id="Achrei Mot"
+<parsha id="Achrei Mot" num="29"
  hebrew="אַחֲרֵי מוֹת"
  verse="Leviticus 16:1 - 18:30"
  haftara="Ezekiel 22:1 - 22:19" sephardic="Ezekiel 22:1 - 22:16">
@@ -1496,7 +1496,7 @@
 <year variation="D.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Kedoshim"
+<parsha id="Kedoshim" num="30"
  hebrew="קְדשִׁים"
  verse="Leviticus 19:1 - 20:27"
  haftara="Amos 9:7 - 9:15" sephardic="Ezekiel 20:2 - 20:20">
@@ -1549,7 +1549,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Emor"
+<parsha id="Emor" num="31"
  hebrew="אֱמוֹר"
  verse="Leviticus 21:1 - 24:23"
  haftara="Ezekiel 44:15 - 44:31">
@@ -1600,7 +1600,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Behar"
+<parsha id="Behar" num="32"
  hebrew="בְּהַר"
  verse="Leviticus 25:1 - 26:2"
  haftara="Jeremiah 32:6 - 32:27">
@@ -1654,7 +1654,7 @@
 <year variation="D.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Bechukotai"
+<parsha id="Bechukotai" num="33"
  hebrew="בְּחֻקֹּתַי"
  verse="Leviticus 26:3 - 27:34"
  haftara="Jeremiah 16:19 - 17:14">
@@ -1698,7 +1698,7 @@
 <year variation="D.3" sameas="A.3" />
 </triennial>
 </parsha>
-<parsha id="Bamidbar"
+<parsha id="Bamidbar" num="34"
  hebrew="בְּמִדְבַּר"
  verse="Numbers 1:1 - 4:20"
  haftara="Hosea 2:1 - 2:22">
@@ -1749,7 +1749,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Nasso"
+<parsha id="Nasso" num="35"
  hebrew="נָשׂא"
  verse="Numbers 4:21 - 7:89"
  haftara="Judges 13:2 - 13:25">
@@ -1800,7 +1800,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Beha'alotcha"
+<parsha id="Beha'alotcha" num="36"
  hebrew="בְּהַעֲלֹתְךָ"
  verse="Numbers 8:1 - 12:16"
  haftara="Zechariah 2:14 - 4:7">
@@ -1851,7 +1851,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Sh'lach"
+<parsha id="Sh'lach" num="37"
  hebrew="שְׁלַח־לְךָ"
  verse="Numbers 13:1 - 15:41"
  haftara="Joshua 2:1 - 2:24">
@@ -1902,7 +1902,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Korach"
+<parsha id="Korach" num="38"
  hebrew="קוֹרַח"
  verse="Numbers 16:1 - 18:32"
  haftara="I Samuel 11:14 - 12:22">
@@ -1953,7 +1953,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Chukat"
+<parsha id="Chukat" num="39"
  hebrew="חֻקַּת"
  verse="Numbers 19:1 - 22:1"
  haftara="Judges 11:1 - 11:33">
@@ -2040,7 +2040,7 @@
 <year variation="G.3" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Balak"
+<parsha id="Balak" num="40"
  hebrew="בָּלָק"
  verse="Numbers 22:2 - 25:9"
  haftara="Micah 5:6 - 6:8">
@@ -2109,7 +2109,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Pinchas"
+<parsha id="Pinchas" num="41"
  hebrew="פִּינְחָס"
  verse="Numbers 25:10 - 30:1"
  haftara="I Kings 18:46 - 19:21">
@@ -2160,7 +2160,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Matot"
+<parsha id="Matot" num="42"
  hebrew="מַּטּוֹת"
  verse="Numbers 30:2 - 32:42"
  haftara="Jeremiah 1:1 - 2:3">
@@ -2211,7 +2211,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Masei"
+<parsha id="Masei" num="43"
  hebrew="מַסְעֵי"
  verse="Numbers 33:1 - 36:13"
  haftara="Jeremiah 2:4 - 28; 3:4" sephardic="Jeremiah 2:4 - 28; 4:1 - 4:2">
@@ -2253,7 +2253,7 @@
 <year variation="C.1" sameas="B.2" />
 </triennial>
 </parsha>
-<parsha id="Devarim"
+<parsha id="Devarim" num="44"
  hebrew="דְּבָרִים"
  verse="Deuteronomy 1:1 - 3:22"
  haftara="Isaiah 1:1 - 1:27">
@@ -2304,7 +2304,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Vaetchanan"
+<parsha id="Vaetchanan" num="45"
  hebrew="וָאֶתְחַנַּן"
  verse="Deuteronomy 3:23 - 7:11"
  haftara="Isaiah 40:1 - 40:26">
@@ -2387,7 +2387,7 @@
 </year>
 </triennial-alt>
 </parsha>
-<parsha id="Eikev"
+<parsha id="Eikev" num="46"
  hebrew="עֵקֶב"
  verse="Deuteronomy 7:12 - 11:25"
  haftara="Isaiah 49:14 - 51:3">
@@ -2438,7 +2438,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Re'eh"
+<parsha id="Re'eh" num="47"
  hebrew="רְאֵה"
  verse="Deuteronomy 11:26 - 16:17"
  haftara="Isaiah 54:11 - 55:5">
@@ -2489,7 +2489,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Shoftim"
+<parsha id="Shoftim" num="48"
  hebrew="שׁוֹפְטִים"
  verse="Deuteronomy 16:18 - 21:9"
  haftara="Isaiah 51:12 - 52:12">
@@ -2540,7 +2540,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Ki Teitzei"
+<parsha id="Ki Teitzei" num="49"
  hebrew="כִּי־תֵצֵא"
  verse="Deuteronomy 21:10 - 25:19"
  haftara="Isaiah 54:1 - 54:10">
@@ -2591,7 +2591,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Ki Tavo"
+<parsha id="Ki Tavo" num="50"
  hebrew="כִּי־תָבוֹא"
  verse="Deuteronomy 26:1 - 29:8"
  haftara="Isaiah 60:1 - 60:22">
@@ -2642,7 +2642,7 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Nitzavim"
+<parsha id="Nitzavim" num="51"
  hebrew="נִצָּבִים"
  verse="Deuteronomy 29:9 - 30:20"
  haftara="Isaiah 61:10 - 63:9">
@@ -2676,7 +2676,7 @@
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
-<parsha id="Vayeilech"
+<parsha id="Vayeilech" num="52"
  hebrew="וַיֵּלֶךְ"
  verse="Deuteronomy 31:1 - 31:30"
  haftara="Isaiah 55:6 - 56:8">
@@ -2709,7 +2709,7 @@
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
-<parsha id="Ha'Azinu"
+<parsha id="Ha'Azinu" num="53"
  hebrew="הַאֲזִינוּ"
  verse="Deuteronomy 32:1 - 32:52"
  haftara="II Samuel 22:1 - 22:51">
@@ -2742,7 +2742,7 @@
 <year variation="Y.3" sameas="Y.1" />
 </triennial>
 </parsha>
-<parsha id="Vezot Haberakhah"
+<parsha id="Vezot Haberakhah" num="54"
  hebrew="וְזֹאת הַבְּרָכָה"
  verse="Deuteronomy 33:1 - 34:12"
  haftara="Joshua 1:1 - 1:18" sephardic="Joshua 1:1 - 1:9">
@@ -2763,7 +2763,8 @@
 </parsha>
 
 <!-- Combined Sidrot -->
-<parsha id="Vayakhel-Pekudei" verse="Exodus 35:1 - 40:38" combined="1">
+<parsha id="Vayakhel-Pekudei" num="101"
+ verse="Exodus 35:1 - 40:38" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/vayakhelpekudey.shtml" />
@@ -2819,7 +2820,8 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Tazria-Metzora" verse="Leviticus 12:1 - 15:33" combined="1">
+<parsha id="Tazria-Metzora" num="102"
+ verse="Leviticus 12:1 - 15:33" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/tazriametsora.shtml" />
@@ -2873,7 +2875,8 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Achrei Mot-Kedoshim" verse="Leviticus 16:1 - 20:27" combined="1">
+<parsha id="Achrei Mot-Kedoshim" num="103"
+ verse="Leviticus 16:1 - 20:27" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/ahareimotkedoshim.shtml" />
@@ -2927,7 +2930,8 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Behar-Bechukotai" verse="Leviticus 25:1 - 27:34" combined="1">
+<parsha id="Behar-Bechukotai" num="104"
+ verse="Leviticus 25:1 - 27:34" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5762/beharbehukkotai.shtml" />
@@ -2981,7 +2985,8 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Chukat-Balak" verse="Numbers 19:1 - 25:9" combined="1">
+<parsha id="Chukat-Balak" num="105"
+ verse="Numbers 19:1 - 25:9" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5760/hukkatbalak.shtml" />
@@ -3038,7 +3043,8 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Matot-Masei" verse="Numbers 30:2 - 36:13" combined="1">
+<parsha id="Matot-Masei" num="106"
+ verse="Numbers 30:2 - 36:13" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5761/mattotmaseei.shtml" />
@@ -3091,7 +3097,8 @@
 </year>
 </triennial>
 </parsha>
-<parsha id="Nitzavim-Vayeilech" verse="Deuteronomy 29:9 - 31:30" combined="1">
+<parsha id="Nitzavim-Vayeilech" num="107"
+ verse="Deuteronomy 29:9 - 31:30" combined="1">
 <links>
  <link rel="drash"
  href="http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml" />
