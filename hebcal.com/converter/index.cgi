@@ -85,7 +85,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Apr 23 10:10:53 PDT 2001
+Last modified: Mon Apr 23 10:22:41 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -206,7 +206,7 @@ if (defined $events[0])
 	my($hm,$hd,$hy) = ($2,$1,$3);
 
 	print STDOUT qq{\n<br>},
-	&display_hebrew($q,
+	&Hebcal::display_hebrew($q, "hebrew-big",
 			&hebnum_to_string($hd),
 			"  בְּ",
 			$monthnames{$hm},
@@ -313,57 +313,6 @@ type="submit" value="Compute Gregorian Date"></td>
     print STDOUT $html_footer;
 
     exit(0);
-}
-
-sub display_hebrew {
-    my($q,@args) = @_;
-
-    if ($q->user_agent('MSIE'))
-    {
-	my(@args2);
-	foreach (@args)
-	{
-	    s/  /&nbsp;&nbsp;/g;
-	    push(@args2, $_);
-	}
-
-	return join('',
-		    qq{<span dir="rtl" lang="he"\n},
-		    qq{style="font-size: xx-large">}, @args2,
-		    qq{</span>}
-		    );
-    }
-    else
-    {
-	my($str) = &utf8_hebrew_to_netscape(join('', @args));
-	$str =~ s/  /&nbsp;&nbsp;/g;
-
-	return join('',
-		    qq{<span dir="ltr" lang="he"\n},
-		    qq{style="font-size: xx-large">},
-		    $str,
-		    qq{</span>}
-		    );
-    }
-}
-
-sub utf8_hebrew_to_netscape($) {
-    my($str) = @_;
-
-    warn "utf8_hebrew_to_netscape()\n";
-
-    my($u) = Unicode::String::utf8($str);
-    my(@array) = $u->unpack;
-    my(@result) = ();
-
-    for (my $i = scalar(@array) - 1; $i >= 0; --$i)
-    {
-	push(@result, $array[$i])
-	    if ($array[$i] >= 0x05D0 || $array[$i] <= 0x007F);
-    }
-
-    $u->pack(0x202D, @result);	# LEFT-TO-RIGHT OVERRIDE
-    return $u->as_string();
 }
 
 sub hebnum_to_string($) {
