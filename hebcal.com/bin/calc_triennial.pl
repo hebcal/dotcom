@@ -47,15 +47,9 @@ my($usage) = "usage: $0 [-h] [-H <year>] aliyah.xml output-dir
 ";
 
 my(%opts);
-&getopts('hH:c:t:f:', \%opts) || die "$usage\n";
+getopts('hH:c:t:f:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
-
-my($this_year) = (localtime)[5];
-$this_year += 1900;
-
-my($rcsrev) = '$Revision$'; #'
-$rcsrev =~ s/\s*\$//g;
 
 my($infile) = shift;
 my($outdir) = shift;
@@ -64,98 +58,7 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
-my($mtime) = (stat($infile))[9];
-my($hhmts) = "Last modified:\n" . localtime($mtime);
-
-my($copyright) = Hebcal::html_copyright2('',0);
-my($html_footer) = <<EOHTML;
-<p>
-<hr noshade size="1">
-<span class="tiny">$copyright
-<br>
-$hhmts
-($rcsrev)
-</span>
-</body></html>
-EOHTML
-;
-
-my(@combined) = ('Vayakhel-Pekudei',
-		 'Tazria-Metzora',
-		 'Achrei Mot-Kedoshim',
-		 'Behar-Bechukotai',
-		 'Chukat-Balak',
-		 'Matot-Masei',
-		 'Nitzavim-Vayeilech');
-
-my(@all_inorder) =
-    ("Bereshit",
-     "Noach",
-     "Lech-Lecha",
-     "Vayera",
-     "Chayei Sara",
-     "Toldot",
-     "Vayetzei",
-     "Vayishlach",
-     "Vayeshev",
-     "Miketz",
-     "Vayigash",
-     "Vayechi",
-     "Shemot",
-     "Vaera",
-     "Bo",
-     "Beshalach",
-     "Yitro",
-     "Mishpatim",
-     "Terumah",
-     "Tetzaveh",
-     "Ki Tisa",
-     "Vayakhel",
-     "Pekudei",
-     "Vayikra",
-     "Tzav",
-     "Shmini",
-     "Tazria",
-     "Metzora",
-     "Achrei Mot",
-     "Kedoshim",
-     "Emor",
-     "Behar",
-     "Bechukotai",
-     "Bamidbar",
-     "Nasso",
-     "Beha'alotcha",
-     "Sh'lach",
-     "Korach",
-     "Chukat",
-     "Balak",
-     "Pinchas",
-     "Matot",
-     "Masei",
-     "Devarim",
-     "Vaetchanan",
-     "Eikev",
-     "Re'eh",
-     "Shoftim",
-     "Ki Teitzei",
-     "Ki Tavo",
-     "Nitzavim",
-     "Vayeilech",
-     "Ha'Azinu",
-     "Vezot Haberakhah");
-
-my(%seph2ashk);
-while (my($k,$v) = each(%Hebcal::ashk2seph)) {
-    $seph2ashk{$v} = $k;
-}
-
-my(%combined);
-foreach (@combined) {
-    my($p1,$p2) = split(/-/);
-    $combined{$p1} = $_;
-    $combined{$p2} = $_;
-}
-
+## load 4 years of hebcal event data
 my($hebrew_year);
 if ($opts{'H'}) {
     $hebrew_year = $opts{'H'};
@@ -168,13 +71,13 @@ if ($opts{'H'}) {
 # year I in triennial cycle was 5756
 my $year_num = (($hebrew_year - 5756) % 3) + 1;
 my $start_year = $hebrew_year - ($year_num - 1);
-print "$hebrew_year is year $year_num.  cycle starts at year $start_year\n";
+print "Current Hebrew year $hebrew_year is year $year_num.  3-cycle started at year $start_year.\n";
 
 my(@events);
 foreach my $cycle (0 .. 3)
 {
     my($yr) = $start_year + $cycle;
-    my(@ev) = &Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '');
+    my(@ev) = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
     push(@events, @ev);
 }
 
@@ -190,6 +93,43 @@ for (my $i = 0; $i < @events; $i++)
 
 die "can't find Bereshit for Year I" unless defined $bereshit_idx;
 
+## load aliyah.xml data to get parshiot
+my $parshiot = XMLin($infile);
+
+my(@all_inorder,@combined,%combined,%parsha2id);
+foreach my $h (keys %{$parshiot->{'parsha'}})
+{
+    my $num = $parshiot->{'parsha'}->{$h}->{'num'};
+    if ($parshiot->{'parsha'}->{$h}->{'combined'})
+    {
+	$combined[$num - 101] = $h;
+
+	my($p1,$p2) = split(/-/, $h);
+	$combined{$p1} = $h;
+	$combined{$p2} = $h;
+    }
+    else
+    {
+	$all_inorder[$num - 1] = $h;
+	$parsha2id{$h} = $num;
+    }
+}
+
+my(%prev,%next,$h2);
+foreach my $h (@all_inorder)
+{
+    $prev{$h} = $h2;
+    $h2 = $h;
+}
+
+$h2 = undef;
+foreach my $h (reverse @all_inorder)
+{
+    $next{$h} = $h2;
+    $h2 = $h;
+}
+
+# determine triennial year patterns
 my(%pattern);
 for (my $i = $bereshit_idx; $i < @events; $i++)
 {
@@ -210,11 +150,10 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
     }
 }
 
-my $parshiot = XMLin($infile);
 my %cycle_option;
-&calc_variation_options($parshiot, \%cycle_option);
+calc_variation_options($parshiot, \%cycle_option);
 my %triennial_aliyot;
-&read_aliyot_metadata($parshiot, \%triennial_aliyot);
+read_aliyot_metadata($parshiot, \%triennial_aliyot);
 
 my %readings;
 my $year = 1;
@@ -280,27 +219,6 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
     }
 }
 
-my(%prev,%next,$h2);
-foreach my $h (@all_inorder)
-{
-    $prev{$h} = $h2;
-    $h2 = $h;
-}
-
-my(%parsha2id);
-for (my $i = 0; $i < @all_inorder; $i++)
-{
-    my $h = $all_inorder[$i];
-    $parsha2id{$h} = $i + 1;
-}
-
-$h2 = undef;
-foreach my $h (reverse @all_inorder)
-{
-    $next{$h} = $h2;
-    $h2 = $h;
-}
-
 if ($opts{'f'}) {
     open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
     print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
@@ -308,23 +226,30 @@ if ($opts{'f'}) {
 
 my(%read_on);
 my(%parsha_time);
-my($saturday) = &get_saturday();
-&readings_for_current_year(\%read_on, \%parsha_time);
+my($saturday) = get_saturday();
+readings_for_current_year(\%read_on, \%parsha_time);
 
 if ($opts{'f'}) {
     close(CSV);
 }
 
+# init global vars needed for html
+my(%seph2ashk);
+while (my($k,$v) = each(%Hebcal::ashk2seph)) {
+    $seph2ashk{$v} = $k;
+}
+my $html_footer = html_footer($infile);
+
 foreach my $h (keys %readings)
 {
-    &write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
+    write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
 }
 {
     my $h = "Vezot Haberakhah";
-    &write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
+    write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
 }
 
-&write_index_page();
+write_index_page();
 
 exit(0);
 
@@ -473,11 +398,12 @@ sub read_aliyot_metadata
     1;
 }
 
-sub write_sedra_page {
+sub write_sedra_page
+{
     my($h,$prev,$next,$triennial) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
-       $torah_href,$haftarah_href,$drash_href) = &get_parsha_info($h);
+       $torah_href,$haftarah_href,$drash_href) = get_parsha_info($h);
 
     my $seph = '';
     my $ashk = '';
@@ -500,9 +426,6 @@ sub write_sedra_page {
 	$prev_anchor .= ".html";
 
 	my $title = "Previous Parsha";
-	if (defined $read_on{$prev} && defined $read_on{$prev}->[0]) {
-	    $title = "Torah Reading for " . $read_on{$prev}->[0];
-	}
 	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
 	    qq{title="$title">&lt;&lt; $prev</a>};
     }
@@ -516,9 +439,6 @@ sub write_sedra_page {
 	$next_anchor .= ".html";
 
 	my $title = "Next Parsha";
-	if (defined $read_on{$next} && defined $read_on{$next}->[0]) {
-	    $title = "Torah Reading for " . $read_on{$next}->[0];
-	}
 	$next_link = qq{<a name="next" href="$next_anchor"\n} .
 	    qq{title="$title">$next &gt;&gt;</a>};
     }
@@ -558,15 +478,9 @@ EOHTML
 	{
 	    $tri_date[$_] = (defined $triennial->[$_]) ?
 		$triennial->[$_]->[1] : '(read separately)';
-	    if (defined $read_on{$h} && defined $read_on{$h}->[0] &&
-		$tri_date[$_] eq $read_on{$h}->[0])
-	    {
-		$tri_date[$_] = qq{<span class="hl">$tri_date[$_]</span>};
-	    }
 	}
 
-	$fk_date = (defined $read_on{$h} && defined $read_on{$h}->[0]) 
-	    ? qq{<span class="hl">$read_on{$h}->[0]</span>} : '';
+	$fk_date = '&nbsp;';
     }
 
     print OUT2 <<EOHTML;
@@ -942,7 +856,7 @@ sub readings_for_current_year
     foreach my $i (0 .. $extra_years)
     {
 	my($yr) = $heb_yr + $i;
-	my(@ev) = &Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '');
+	my(@ev) = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
 	$years[$i] = \@ev;
     }
 
@@ -964,7 +878,7 @@ sub readings_for_current_year
 	$current->{$h}->[$yr] = $stime;
 	next unless $yr == 0;
 
-	$parsha_time->{$h} = &Time::Local::timelocal
+	$parsha_time->{$h} = Time::Local::timelocal
 	    (1,0,0,
 	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 	     $events[$i]->[$Hebcal::EVT_IDX_MON],
@@ -1006,4 +920,29 @@ sub get_saturday
 
     ($wday == 6) ? $now + (60 * 60 * 24) :
 	$now + ((6 - $wday) * 60 * 60 * 24);
+}
+
+sub html_footer
+{
+    my($infile) = @_;
+
+    my($rcsrev) = '$Revision$'; #'
+    $rcsrev =~ s/\s*\$//g;
+
+    my($mtime) = (stat($infile))[9];
+    my($hhmts) = "Last modified:\n" . localtime($mtime);
+
+    my($copyright) = Hebcal::html_copyright2('',0);
+    my($html_footer) = <<EOHTML;
+<p>
+<hr noshade size="1">
+<span class="tiny">$copyright
+<br>
+$hhmts
+($rcsrev)
+</span>
+</body></html>
+EOHTML
+;
+    $html_footer;
 }
