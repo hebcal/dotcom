@@ -46,7 +46,7 @@ if (! $q->param('v') && defined $cookies->{'C'}) {
 if (! $q->param('v') && defined $cookies->{'E'}) {
     my($cook) = new CGI($cookies->{'E'});
     if ($cook->param('em')) {
-	$q->param('em', $cook->param('em'));
+	$q->param('em', &decode_base64($cook->param('em')));
     }
 }
 
@@ -64,14 +64,7 @@ foreach $key ($q->param())
     $q->param($key,$val);
 }
 
-
-print STDOUT $q->header(),
-    &Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
-			undef, undef),
-    &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
-    "<h1>E-mail\nSubscription Manager</h1>\n";
-
-&form('') unless $q->param('v');
+&form(1) unless $q->param('v');
 
 my($email) = $q->param('em');
 my($zip) = $q->param('zip');
@@ -94,7 +87,13 @@ elsif (!$zip)
 }
 else
 {
+    my($now) = time;
     $email = Email::Valid->address($email);
+
+    if ($email =~ /\@hebcal.com$/) {
+	&form(1,
+	      "Sorry, can't use a <b>hebcal.com</b> email address.");
+    }
 
     my($city_descr,$dst_descr,$tz_descr);
     $q->param('dst','usa')
@@ -175,6 +174,36 @@ else
 	}
     }
 
+    my($cookie_to_set);
+
+    if (! defined $cookies->{'E'})
+    {
+	$cookie_to_set = sprintf("E=t=%d&em=%s", $now, &encode_base64($email));
+    }
+    else
+    {
+	my($newcookie) = sprintf("t=%d&em=%s", $now, &encode_base64($email));
+	my($cmp1) = $newcookie;
+	my($cmp2) = $cookies->{'E'};
+
+	$cmp1 =~ s/^t=\d+\&//;
+	$cmp2 =~ s/^t=\d+\&//;
+
+	$cookie_to_set = $newcookie 
+	    if ($cmp2 ne 'opt_out' && $cmp1 ne $cmp2);
+    }
+
+    my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
+    print STDOUT "Set-Cookie: ", $cookie_to_set,
+    "; path=/; expires=",  $expires_date, "\015\012"
+	if $cookie_to_set;
+
+    print STDOUT $q->header(),
+    &Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+			undef, undef),
+    &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
+    "<h1>E-mail\nSubscription Manager</h1>\n";
+
     $dst_descr = "Daylight Saving Time: " . $q->param('dst');
     $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
 
@@ -193,7 +222,7 @@ else
     if ($ENV{'REMOTE_ADDR'}) {
 	$rand .= pack("CCCC", split(/\./, $ENV{'REMOTE_ADDR'}));
     }
-    $rand .= pack("V", scalar(time));
+    $rand .= pack("V", $now);
 
     my $encoded = &encode_base64($rand);
     while (chomp($encoded)) { }
@@ -206,7 +235,7 @@ else
     $encoded =~ s/\//_/g;
     $encoded =~ s/=/-/g;
 
-    $DB{$encoded} = join(' ', $email, scalar(time()));
+    $DB{$encoded} = join(' ', $email, $now);
     $DB{$email} = sprintf("zip=%s;tz=%s;dst=%s;m=%s",
 			  $q->param('zip'),
 			  $q->param('tz'),
@@ -283,6 +312,14 @@ sub form
 	$help = '' unless defined $help;
 	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
 	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
+    }
+
+    if ($head) {
+	print STDOUT $q->header(),
+	&Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+			    undef, undef),
+	&Hebcal::navbar2($q, "E-mail Subscription\nManager"),
+	"<h1>E-mail\nSubscription Manager</h1>\n";
     }
 
     print STDOUT
