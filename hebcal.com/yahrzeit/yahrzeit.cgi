@@ -22,7 +22,6 @@
 
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);
-use DB_File;
 use Time::Local;
 use Hebcal;
 use HTML::Entities ();
@@ -38,7 +37,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 11:56:32 PDT 2001
+Last modified: Sun Apr 22 11:57:45 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
