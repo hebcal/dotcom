@@ -7,8 +7,7 @@ use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
 use Hebcal;
 use Getopt::Std;
 use Config::IniFiles;
-use DB_File;
-use Fcntl qw(:DEFAULT :flock);
+use DB_File::Lock;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -36,11 +35,8 @@ my($holidays) = new Config::IniFiles(-file => $infile);
 $holidays || die "$infile: $!\n";
 
 my(%DB);
-my($db) = tie(%DB, 'DB_File', $outdb, O_RDWR|O_CREAT, 0644);
-defined($db) || die "Can't tie $outdb: $!\n";
-my($fd) = $db->fd;
-open(DB_FH, "+<&=$fd") || die "dup $!";
-unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
+tie(%DB, 'DB_File::Lock', $outdb, O_RDWR|O_CREAT, 0644, $DB_HASH, 'write')
+    or die;
 
 my(%out);
 foreach my $h ($holidays->Sections())
@@ -164,11 +160,7 @@ EOHTML
 
 close(OUT);
 
-flock(DB_FH, LOCK_UN);
-undef $db;
-undef $fd;
 untie(%DB);
-close(DB_FH);
 
 exit(0);
 
