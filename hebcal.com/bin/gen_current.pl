@@ -29,7 +29,7 @@ if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
 
 my $inc = '/pub/m/r/mradwin/hebcal.com/today.inc';
 open(OUT,">$inc") || die;
-print OUT `/pub/m/r/mradwin/hebcal.com/bin/hebcal -T -x -h`;
+print OUT `/pub/m/r/mradwin/hebcal.com/bin/hebcal -T -x -h | grep -v Omer`;
 close(OUT);
 
 $inc = '/pub/m/r/mradwin/hebcal.com/holiday.inc';
