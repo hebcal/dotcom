@@ -29,20 +29,20 @@ ExpiresActive On
 ExpiresByType image/gif A63072000
 ExpiresByType image/jpeg A63072000
 
-Redirect /yahrtzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yohrzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yohrtzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yartzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yarzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yortzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yorzeit http://www.hebrewcalendar.org/yahrzeit
-Redirect /yizkor http://www.hebrewcalendar.org/yahrzeit
+Redirect /yahrtzeit http://www.hebcal.com/yahrzeit
+Redirect /yohrzeit http://www.hebcal.com/yahrzeit
+Redirect /yohrtzeit http://www.hebcal.com/yahrzeit
+Redirect /yartzeit http://www.hebcal.com/yahrzeit
+Redirect /yarzeit http://www.hebcal.com/yahrzeit
+Redirect /yortzeit http://www.hebcal.com/yahrzeit
+Redirect /yorzeit http://www.hebcal.com/yahrzeit
+Redirect /yizkor http://www.hebcal.com/yahrzeit
 
-Redirect /HEBCAL http://www.hebrewcalendar.org/hebcal
-Redirect /cgi-bin/hebcal http://www.hebrewcalendar.org/hebcal
-Redirect /hebcal.html http://www.hebrewcalendar.org/hebcal/
-Redirect /shabbat.html http://www.hebrewcalendar.org/shabbat/
+Redirect /HEBCAL http://www.hebcal.com/hebcal
+Redirect /cgi-bin/hebcal http://www.hebcal.com/hebcal
+Redirect /hebcal.html http://www.hebcal.com/hebcal/
+Redirect /shabbat.html http://www.hebcal.com/shabbat/
 
-Redirect /michael/hebcal http://www.hebrewcalendar.org/hebcal
-Redirect /michael/projects/hebcal.pl http://www.hebrewcalendar.org/dist/hebcal.pl
-Redirect /michael/projects/hebcal-ChangeLog.txt http://www.hebrewcalendar.org/dist/ChangeLog.txt
+Redirect /michael/hebcal http://www.hebcal.com/hebcal
+Redirect /michael/projects/hebcal.pl http://www.hebcal.com/dist/hebcal.pl
+Redirect /michael/projects/hebcal-ChangeLog.txt http://www.hebcal.com/dist/ChangeLog.txt
