@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 18 11:22:37 PDT 2001
+Last modified: Wed Apr 18 14:09:34 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -646,9 +646,9 @@ sub form
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
-	"<br><label\nfor=\"m\">Havdalah minutes past sundown:\n",
+	"<br><label\nfor=\"m1\">Havdalah minutes past sundown:\n",
 	$q->textfield(-name => 'm',
-		      -id => 'm',
+		      -id => 'm1',
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => 72),
@@ -668,9 +668,9 @@ sub form
 	$q->hidden(-name => 'geo',
 		   -value => 'city',
 		   -override => 1),
-	"<br><label\nfor=\"m\">Havdalah minutes past sundown:\n",
+	"<br><label\nfor=\"m2\">Havdalah minutes past sundown:\n",
 	$q->textfield(-name => 'm',
-		      -id => 'm',
+		      -id => 'm2',
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => 72),
