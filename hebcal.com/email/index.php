@@ -22,9 +22,7 @@ href="/help/">Help</a> -
 <?php
 require_once('smtp.inc');
 require_once('zips.inc');
-
-#$lockfile = "/pub/tmp/mradwin-hebcal2.lock";
-$lockfile = "/pub/m/r/mradwin/private/tmp/mradwin-hebcal.lock";
+require_once('dblock.inc');
 
 $VER = '$Revision$';
 $matches = array();
@@ -109,18 +107,8 @@ else {
 my_footer();
 
 function write_sub_info($email, $val) {
-    global $lockfile;
-    $fd = fopen($lockfile, "w");
-    if ($fd == false) {
-	die("open($lockfile) failed");
-    }
+    list($id, $fd) = dba_lock_open("subs.db", "w", "db3");
 
-    if (flock($fd, LOCK_EX) == false) {
-	die("flock($lockfile,$fd) failed");
-	fclose($fd);
-    }
-
-    $id = dba_open("subs.db", "w", "db3");
     if (!$id) {
 	die("dba_open subs.db failed");
     }
@@ -129,38 +117,21 @@ function write_sub_info($email, $val) {
 	die("dba_replace subs.db failed");
     }
 
-    dba_sync($id);
-    dba_close($id);
-    flock($fd, LOCK_UN);
-    fclose($fd);
-    unlink($lockfile);
+    dba_lock_close($id, $fd);
 
     return true;
 }
 
 function get_sub_info($email) {
-    global $lockfile;
-    $fd = fopen($lockfile, "w");
-    if ($fd == false) {
-	die("open($lockfile) failed");
-    }
+    list($id, $fd) = dba_lock_open("subs.db", "r", "db3");
 
-    if (flock($fd, LOCK_SH) == false) {
-	die("flock($lockfile,$fd) failed");
-	fclose($fd);
-    }
-
-    $id = dba_open("subs.db", "r", "db3");
     if (!$id) {
 	die("dba_open subs.db failed");
     }
 
     $val = dba_fetch($email, $id);
 
-    dba_close($id);
-    flock($fd, LOCK_UN);
-    fclose($fd);
-    unlink($lockfile);
+    dba_lock_close($id, $fd);
 
     return $val;
 }
@@ -182,21 +153,7 @@ function write_staging_info($param)
     $encoded = str_replace('/', '_', $encoded);
     $encoded = str_replace('=', '-', $encoded);
 
-    global $lockfile;
-    $fd = fopen($lockfile, "w");
-    if ($fd == false) {
-	die("open($lockfile) failed");
-    }
-
-    if (flock($fd, LOCK_EX) == false) {
-	die("flock($lockfile,$fd) failed");
-	fclose($fd);
-    }
-
-    $id = dba_open("email.db", "w", "db3");
-    if (!$id) {
-	die("dba_open email.db failed");
-    }
+    list($id, $fd) = dba_lock_open("email.db", "w", "db3");
 
     $val = sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d;em=%s",
 		   $param['zip'],
@@ -211,11 +168,7 @@ function write_staging_info($param)
 	die("dba_replace email.db failed");
     }
 
-    dba_sync($id);
-    dba_close($id);
-    flock($fd, LOCK_UN);
-    fclose($fd);
-    unlink($lockfile);
+    dba_lock_close($id, $fd);
 
     return $encoded;
 }
