@@ -450,7 +450,7 @@ sub write_sedra_page
 <html><head><title>Torah Readings: $h</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
-<meta name="keywords" content="$keyword,parsha,parashat,prarshas,hashavua,hashavuah,leyning,aliya,aliyah,aliyot,torah,haftarah,haftorah,drash">
+<meta name="keywords" content="$keyword,parsha,parshat,parashat,parshas,hashavua,hashavuah,leyning,aliya,aliyah,aliyot,torah,haftarah,haftorah,drash">
 <link rel="stylesheet" href="/style.css" type="text/css">
 EOHTML
 ;
