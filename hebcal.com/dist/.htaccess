@@ -1,0 +1,2 @@
+IndexIgnore zips.db
+AddType text/plain;charset=UTF-8 ini
