@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 11:08:26 PDT 1999
+Last modified: Mon Jul 12 11:13:00 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -577,19 +577,24 @@ sub download
     local($filename) = 'hebcal_' . $year;
 
     $filename .= '_' . $MoY_abbrev[$in{'month'}] if $in{'month'} =~ /^\d+$/;
-    $filename .= '_';
-    if (defined $in{'zip'})
+
+    if ($opts{'c'} == 1)
     {
-	$filename .= $in{'zip'};
+	$filename .= '_';
+	if (defined $in{'zip'})
+	{
+	    $filename .= $in{'zip'};
+	}
+	elsif (defined $in{'city'})
+	{
+	    $tmp = "\L$in{'city'}\E";
+	    $tmp =~ s/ /_/g;
+	    $filename .= $tmp;
+	}
     }
-    elsif (defined $in{'city'})
-    {
-	$tmp = "\L$in{'city'}\E";
-	$tmp =~ s/ /_/g;
-	$filename .= $tmp;
-    }
+
     $filename .= '.csv';
-    
+
     local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
