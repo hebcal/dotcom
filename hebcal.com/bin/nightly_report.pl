@@ -120,9 +120,15 @@ while(<STDIN>)
 	if (/c=(on|1)/)
 	{
 	    $candle++;
-	    $city++ if /geo=city/;
-	    $pos++ if /geo=pos/;
-	    if (/zip=(\d\d\d\d\d)/)
+	    if (/geo=city/)
+	    {
+		$city++;
+	    }
+	    elsif (/geo=pos/)
+	    {
+		$pos++;
+	    }
+	    elsif (/zip=(\d\d\d\d\d)/)
 	    {
 		$zipcode = $1;
 		$val = $DB{$zipcode};
@@ -131,6 +137,9 @@ while(<STDIN>)
 		if (!defined $val) {
 		    $unk_zip++;
 		    $unk_zip{$zipcode}++;
+		    $candle--;
+		    $queries--;
+		    $zip--;
 		}
 		else
 		{
@@ -164,9 +173,17 @@ while(<STDIN>)
 			{
 			    $unk_tz++;
 			    $unk_tz{$zipcode}++;
+			    $candle--;
+			    $queries--;
+			    $zip--;
 			}
 		    }
 		}
+	    }
+	    else
+	    {
+		$candle--;
+		$queries--;
 	    }
 	}
     }
