@@ -1402,7 +1402,8 @@
  verse="Leviticus 14:1 - 15:33"
  haftara="II Kings 7:3 - 7:20">
 <links>
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/tazriametsora.shtml" />
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5755/metzora.shtml" />
  <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/metsora.shtml" />
 </links>
 <fullkriyah>
@@ -1446,7 +1447,8 @@
  verse="Leviticus 16:1 - 18:30"
  haftara="Ezekiel 22:1 - 22:19" sephardic="Ezekiel 22:1 - 22:16">
 <links>
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/ahareimotkedoshim.shtml" />
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5755/ahareymot.shtml" />
  <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/ahareimot.shtml" />
 </links>
 <fullkriyah>
@@ -1603,7 +1605,8 @@
  verse="Leviticus 25:1 - 26:2"
  haftara="Jeremiah 32:6 - 32:27">
 <links>
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5761/beharbehukkotai.shtml" />
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5760/behar.shtml" />
  <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/behar.shtml" />
 </links>
 <fullkriyah>
@@ -2644,7 +2647,8 @@ n<year num="3">
  verse="Deuteronomy 29:9 - 30:20"
  haftara="Isaiah 61:10 - 63:9">
 <links>
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml" />
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5761/nitsavim.shtml" />
  <link rel="torah" href="http://learn.jtsa.edu/topics/parashah/jpstext/nitsavim.shtml" />
 </links>
 <fullkriyah>
@@ -2760,6 +2764,11 @@ n<year num="3">
 
 <!-- Combined Sidrot -->
 <parsha id="Vayakhel-Pekudei" verse="Exodus 35:1 - 40:38">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5761/vayakhelpekudey.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="35:1" end="35:29" numverses="29" />
  <aliyah num="2" begin="35:30" end="37:16" numverses="60" />
@@ -2811,6 +2820,11 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Tazria-Metzora" verse="Leviticus 12:1 - 15:33">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5761/tazriametsora.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="12:1" end="13:23" numverses="31" />
  <aliyah num="2" begin="13:24" end="13:39" numverses="16" />
@@ -2860,6 +2874,11 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Achrei Mot-Kedoshim" verse="Leviticus 16:1 - 20:27">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5761/ahareimotkedoshim.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="16:1" end="16:24" numverses="24" />
  <aliyah num="2" begin="16:25" end="17:7" numverses="17" />
@@ -2909,6 +2928,11 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Behar-Bechukotai" verse="Leviticus 25:1 - 27:34">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5758/beharbehukotai.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="25:1" end="25:18" numverses="18" />
  <aliyah num="2" begin="25:19" end="25:28" numverses="10" />
@@ -2958,6 +2982,11 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Chukat-Balak" verse="Numbers 19:1 - 25:9">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5760/hukkatbalak.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="19:1" end="20:6" numverses="28" />
  <aliyah num="2" begin="20:7" end="20:21" numverses="15" />
@@ -3010,6 +3039,11 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Matot-Masei" verse="Numbers 30:2 - 36:13">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5761/mattotmaseei.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="30:2" end="31:12" numverses="28" />
  <aliyah num="2" begin="31:13" end="31:54" numverses="42" />
@@ -3058,6 +3092,11 @@ n<year num="3">
 </triennial>
 </parsha>
 <parsha id="Nitzavim-Vayeilech" verse="Deuteronomy 29:9 - 31:30">
+<links>
+ <link rel="drash"
+ href="http://learn.jtsa.edu/topics/parashah/5760/nitsavimvayelekh.shtml" />
+ <link rel="dummy" />
+</links>
 <fullkriyah>
  <aliyah num="1" begin="29:9" end="29:28" numverses="20" />
  <aliyah num="2" begin="30:1" end="30:6" numverses="6" />
