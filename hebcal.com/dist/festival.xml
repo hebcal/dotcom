@@ -23,7 +23,7 @@ every other day (e.g. fast days): 3
   <aliyah num="3" book="Exodus" begin="12:29" end="12:36" />
   <aliyah num="4" book="Exodus" begin="12:37" end="12:42" />
   <aliyah num="5" book="Exodus" begin="12:43" end="12:51" />
-  <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
 <festival id="Pesach 1 (on Shabbat)"
@@ -40,7 +40,7 @@ every other day (e.g. fast days): 3
   <aliyah num="5" book="Exodus" begin="12:37" end="12:42" />
   <aliyah num="6" book="Exodus" begin="12:43" end="12:47" />
   <aliyah num="7" book="Exodus" begin="12:48" end="12:51" />
-  <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
 <festival id="Pesach 2"
@@ -53,7 +53,7 @@ every other day (e.g. fast days): 3
   <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
   <aliyah num="4" book="Leviticus" begin="23:23" end="23:32" />
   <aliyah num="5" book="Leviticus" begin="23:33" end="23:44" />
-  <aliyah num="M" book="Numbers" begin="28:16" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
 <festival id="Pesach Chol ha-Moed Day 1"
@@ -112,7 +112,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Exodus" begin="34:4" end="34:10" />
   <aliyah num="6" book="Exodus" begin="34:11" end="34:17" />
   <aliyah num="7" book="Exodus" begin="34:18" end="34:26" />
-  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach 7"
@@ -125,7 +125,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Exodus" begin="14:9" end="14:14" />
   <aliyah num="4" book="Exodus" begin="14:15" end="14:25" />
   <aliyah num="5" book="Exodus" begin="14:26" end="15:26" />
-  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach 7 (on Shabbat)"
@@ -139,7 +139,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Exodus" begin="14:9" end="14:14" />
   <aliyah num="6" book="Exodus" begin="14:15" end="14:25" />
   <aliyah num="7" book="Exodus" begin="14:26" end="15:26" />
-  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach 8"
@@ -152,7 +152,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="4" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="5" book="Deuteronomy" begin="16:13" end="16:17" />
-  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Pesach 8 (on Shabbat)"
@@ -166,7 +166,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
-  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" />
+  <aliyah num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
 <festival id="Shavuot 1"
@@ -177,7 +177,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Exodus" begin="19:14" end="19:19" />
   <aliyah num="4" book="Exodus" begin="19:20" end="20:13" />
   <aliyah num="5" book="Exodus" begin="20:14" end="20:22" />
-  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
 <festival id="Shavuot 2"
@@ -188,7 +188,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="4" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="5" book="Deuteronomy" begin="16:13" end="16:17" />
-  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
 <festival id="Shavuot 2 (on Shabbat)"
@@ -202,7 +202,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
-  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" />
+  <aliyah num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
 
@@ -288,7 +288,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Genesis" begin="21:13" end="21:21" />
   <aliyah num="4" book="Genesis" begin="21:22" end="21:27" />
   <aliyah num="5" book="Genesis" begin="21:28" end="21:34" />
-  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" />
+  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" numverses="6" />
  </kriyah>
 </festival>
 <festival id="Rosh Hashana 1 (on Shabbat)"
@@ -305,7 +305,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Genesis" begin="21:18" end="21:21" />
   <aliyah num="6" book="Genesis" begin="21:22" end="21:27" />
   <aliyah num="7" book="Genesis" begin="21:28" end="21:34" />
-  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" />
+  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" numverses="6" />
  </kriyah>
 </festival>
 <festival id="Rosh Hashana 2"
@@ -318,7 +318,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Genesis" begin="22:9" end="22:14" />
   <aliyah num="4" book="Genesis" begin="22:15" end="22:19" />
   <aliyah num="5" book="Genesis" begin="22:20" end="22:24" />
-  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" />
+  <aliyah num="M" book="Numbers" begin="29:1" end="29:6" numverses="6" />
  </kriyah>
 </festival>
 <festival id="Yom Kippur"
@@ -334,7 +334,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="4" book="Leviticus" begin="16:18" end="16:24" />
   <aliyah num="5" book="Leviticus" begin="16:25" end="16:30" />
   <aliyah num="6" book="Leviticus" begin="16:31" end="16:34" />
-  <aliyah num="M" book="Numbers" begin="29:7" end="29:11" />
+  <aliyah num="M" book="Numbers" begin="29:7" end="29:11" numverses="5" />
  </kriyah>
 </festival>
 <festival id="Yom Kippur (on Shabbat)"
@@ -351,7 +351,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Leviticus" begin="16:18" end="16:24" />
   <aliyah num="6" book="Leviticus" begin="16:25" end="16:30" />
   <aliyah num="7" book="Leviticus" begin="16:31" end="16:34" />
-  <aliyah num="M" book="Numbers" begin="29:7" end="29:11" />
+  <aliyah num="M" book="Numbers" begin="29:7" end="29:11" numverses="5" />
  </kriyah>
 </festival>
 <festival id="Yom Kippur (Minchah)"
@@ -376,7 +376,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
   <aliyah num="4" book="Leviticus" begin="23:23" end="23:32" />
   <aliyah num="5" book="Leviticus" begin="23:33" end="23:44" />
-  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" />
+  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" numverses="5" />
  </kriyah>
 </festival>
 <festival id="Sukkot 1 (on Shabbat)"
@@ -393,7 +393,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Leviticus" begin="23:15" end="23:22" />
   <aliyah num="6" book="Leviticus" begin="23:23" end="23:32" />
   <aliyah num="7" book="Leviticus" begin="23:33" end="23:44" />
-  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" />
+  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" numverses="5" />
  </kriyah>
 </festival>
 <festival id="Sukkot 2"
@@ -407,7 +407,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Leviticus" begin="23:15" end="23:22" />
   <aliyah num="4" book="Leviticus" begin="23:23" end="23:32" />
   <aliyah num="5" book="Leviticus" begin="23:33" end="23:44" />
-  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" />
+  <aliyah num="M" book="Numbers" begin="29:12" end="29:16" numverses="5" />
  </kriyah>
 </festival>
 
@@ -464,7 +464,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="6" book="Exodus" begin="34:11" end="34:17" />
   <aliyah num="7" book="Exodus" begin="34:18" end="34:26" />
   <!-- The maftir changes depending on what day of Chol ha-Moed Shabbat falls. -->
-  <aliyah num="M" book="Numbers" begin="29:x" end="29:x" />
+  <aliyah num="M" book="Numbers" begin="29:x" end="29:x" numverses="x" />
  </kriyah>
 </festival>
 <festival id="Sukkot Chol ha-Moed Day 5 (Hoshana Raba)"
@@ -489,7 +489,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="3" book="Deuteronomy" begin="15:19" end="16:3" />
   <aliyah num="4" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="5" book="Deuteronomy" begin="16:9" end="16:17" />
-  <aliyah num="M" book="Numbers" begin="29:35" end="30:1" />
+  <aliyah num="M" book="Numbers" begin="29:35" end="30:1" numverses="6" />
  </kriyah>
 </festival>
 
@@ -505,7 +505,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Deuteronomy" begin="16:4" end="16:8" />
   <aliyah num="6" book="Deuteronomy" begin="16:9" end="16:12" />
   <aliyah num="7" book="Deuteronomy" begin="16:13" end="16:17" />
-  <aliyah num="M" book="Numbers" begin="29:35" end="30:1" />
+  <aliyah num="M" book="Numbers" begin="29:35" end="30:1" numverses="6" />
  </kriyah>
 </festival>
 
@@ -537,7 +537,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah num="5" book="Deuteronomy" begin="33:22" end="33:26" />
   <aliyah num="6" book="Deuteronomy" begin="33:27" end="34:12" />
   <aliyah num="7" book="Genesis" begin="1:1" end="2:3" />
-  <aliyah num="M" book="Numbers" begin="29:35" end="30:1" />
+  <aliyah num="M" book="Numbers" begin="29:35" end="30:1" numverses="6" />
  </kriyah>
 </festival>
 
@@ -605,6 +605,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  descr="Purim celebrated in Jerusalem and walled cities"
  yomtov="0">
  <link rel="about" href="http://aish.com/holidays/purim/shushan_purim.asp" />
+ <kriyah>
+  <aliyah num="1" book="Exodus" begin="17:8" end="17:10" />
+  <aliyah num="2" book="Exodus" begin="17:11" end="17:13" />
+  <aliyah num="3" book="Exodus" begin="17:14" end="17:16" />
+ </kriyah>
 </festival>
 
 <!-- Special Shabbatot -->
@@ -616,7 +621,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
  <kriyah>
-  <aliyah num="M" book="Exodus" begin="12:1" end="12:20" />
+  <aliyah num="M" book="Exodus" begin="12:1" end="12:20" numverses="20" />
  </kriyah>
 </festival>
 
@@ -629,7 +634,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm" />
  <kriyah>
   <aliyah num="8" book="Numbers" begin="28:9" end="28:15" />
-  <aliyah num="M" book="Exodus" begin="12:1" end="12:20" />
+  <aliyah num="M" book="Exodus" begin="12:1" end="12:20" numverses="20" />
  </kriyah>
 </festival>
 
@@ -666,7 +671,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/parah.htm" />
  <kriyah>
-  <aliyah num="M" book="Numbers" begin="19:1" end="19:22" />
+  <aliyah num="M" book="Numbers" begin="19:1" end="19:22" numverses="22" />
  </kriyah>
 </festival>
 
@@ -678,7 +683,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm" />
  <kriyah>
-  <aliyah num="M" book="Exodus" begin="30:11" end="30:16" />
+  <aliyah num="M" book="Exodus" begin="30:11" end="30:16" numverses="6" />
  </kriyah>
 </festival>
 
@@ -691,7 +696,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm" />
  <kriyah>
   <aliyah num="8" book="Numbers" begin="28:9" end="28:15" />
-  <aliyah num="M" book="Exodus" begin="30:11" end="30:16" />
+  <aliyah num="M" book="Exodus" begin="30:11" end="30:16" numverses="6" />
  </kriyah>
 </festival>
 
@@ -711,81 +716,96 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <link rel="about"
  href="http://www.ou.org/chagim/fourshabbatot/zachor.htm" />
- <aliyah num="M" book="Deuteronomy" begin="25:17" end="25:19" />
+ <kriyah>
+  <aliyah num="M" book="Deuteronomy" begin="25:17" end="25:19" numverses="3" />
+ </kriyah>
 </festival>
 
 <!-- Rosh Chodesh -->
- <festival id="Rosh Chodesh Adar"
+<festival id="Shabbat Rosh Chodesh"
+ haftara="Isaiah 66:1 - 66:24">
+ <link rel="about"
+ href="http://learn.jtsa.edu/topics/parashah/jpstext/roshhodesh_haft.shtml" />
+ <kriyah>
+  <aliyah num="M" book="Numbers" begin="28:9" end="28:15" numverses="7" />
+ </kriyah>
+</festival>
+<festival id="Shabbat Machar Chodesh"
+ haftara="I Samuel 20:18 - 20:42">
+ <link rel="about"
+ href="http://learn.jtsa.edu/topics/parashah/jpstext/maharhodesh_haft.shtml" />
+</festival>
+<festival id="Rosh Chodesh Adar"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/adar/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Adar I"
+</festival>
+<festival id="Rosh Chodesh Adar I"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר א׳"
  yomtov="0">
- </festival>
- <festival id="Rosh Chodesh Adar II"
+</festival>
+<festival id="Rosh Chodesh Adar II"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר ב׳"
  yomtov="0">
- </festival>
- <festival id="Rosh Chodesh Av"
+</festival>
+<festival id="Rosh Chodesh Av"
  hebrew="רֹאשׁ חֹדֶשׁ אָב"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/av/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Cheshvan"
+</festival>
+<festival id="Rosh Chodesh Cheshvan"
  hebrew="רֹאשׁ חֹדֶשׁ חֶשְׁוָן"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/marcheshvan/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Elul"
+</festival>
+<festival id="Rosh Chodesh Elul"
  hebrew="רֹאשׁ חֹדֶשׁ אֱלוּל"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/elul/rchelul.htm" />
- </festival>
- <festival id="Rosh Chodesh Iyyar"
+</festival>
+<festival id="Rosh Chodesh Iyyar"
  hebrew="רֹאשׁ חֹדֶשׁ אִיָיר"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/iyar/roshch.htm" />
- </festival>
- <festival id="Rosh Chodesh Kislev"
+</festival>
+<festival id="Rosh Chodesh Kislev"
  hebrew="רֹאשׁ חֹדֶשׁ כִּסְלֵו"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/kislev/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Nisan"
+</festival>
+<festival id="Rosh Chodesh Nisan"
  hebrew="רֹאשׁ חֹדֶשׁ נִיסָן"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/nisan/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Sh'vat"
+</festival>
+<festival id="Rosh Chodesh Sh'vat"
  hebrew="רֹאשׁ חֹדֶשׁ שְׁבָט"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/shevat/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Sivan"
+</festival>
+<festival id="Rosh Chodesh Sivan"
  hebrew="רֹאשׁ חֹדֶשׁ סִיוָן"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Tamuz"
+</festival>
+<festival id="Rosh Chodesh Tamuz"
  hebrew="רֹאשׁ חֹדֶשׁ תָּמוּז"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/tammuz/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Tevet"
+</festival>
+<festival id="Rosh Chodesh Tevet"
  hebrew="רֹאשׁ חֹדֶשׁ טֵבֵת"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/tevet/default.htm" />
- </festival>
- <festival id="Rosh Chodesh Tishrei"
+</festival>
+<festival id="Rosh Chodesh Tishrei"
  hebrew="רֹאשׁ חֹדֶשׁ תִּשְׁרֵי"
  yomtov="0">
   <link rel="about" href="http://www.ou.org/chagim/roshchodesh/tishrei/default.htm" />
- </festival>
+</festival>
  
 <!-- Other Hebcal holidays -->
- <festival id="Lag B'Omer"
+<festival id="Lag B'Omer"
  hebrew="ל״ג בְּעוֹמֶר"
  descr="33rd day of counting the Omer"
  yomtov="0">
@@ -817,7 +837,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <link rel="about" href="http://www.zipple.com/holidays/yomhazikaron.shtml" />
 </festival>
- <festival id="Yom Yerushalayim"
+<festival id="Yom Yerushalayim"
  hebrew="יוֹם יְרוּשָׁלַיִם"
  descr="Jerusalem Day"
  yomtov="0">
