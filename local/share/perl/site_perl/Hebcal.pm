@@ -89,14 +89,17 @@ $Hebcal::PALM_DBA_MAXENTRIES = 2500;
 # these cities should have DST set to 'none'
 %Hebcal::city_nodst =
     (
-     'Berlin'		=>	1,
      'Bogota'		=>	1,
      'Buenos Aires'	=>	1,
      'Johannesburg'	=>	1,
-     'London'		=>	1,
-     'Mexico City'	=>	1,
-     'Toronto'		=>	1,
-     'Vancouver'	=>	1,
+     );
+
+%Hebcal::dst_names =
+    (
+     'none'    => 'none',
+     'usa'     => 'USA, Mexico, Canada',
+     'israel'  => 'Israel',
+     'eu'      => 'European Union',
      );
 
 %Hebcal::city_tz =
