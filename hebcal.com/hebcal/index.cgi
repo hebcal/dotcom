@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Sep 13 10:17:58 PDT 2000
+Last modified: Mon Sep 18 23:23:46 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1084,6 +1084,15 @@ so you can keep this window open.
 	    {
 		$subj = '<a href="' . $Hebcal::sedrot{$1} .
 		    '">' . $parashat . $sedra . '</a>';
+	    }
+	}
+	else
+	{
+	    my($href) = &get_holiday_anchor($subj);
+
+	    if ($href ne '')
+	    {
+		$subj = qq{<a href="$href">$subj</a>};
 	    }
 	}
 
