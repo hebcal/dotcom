@@ -50,6 +50,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <festival id="Pesach 2"
+ descr="Passover, the Feast of Unleavened Bread"
  haftara="II Kings 23:1 - 23:9; 23:21 - 23:25"
  hebrew="פֶּסַח יוֹם ב׳"
  yomtov="1">
@@ -63,6 +64,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <festival id="Pesach Chol ha-Moed Day 1"
+ descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ג׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <kriyah>
@@ -74,6 +76,7 @@ every other day (e.g. fast days): 3
 </festival>
 <!-- Strassfeld p. 230 -->
 <festival id="Pesach Chol ha-Moed Day 2"
+ descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ד׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <kriyah>
@@ -84,6 +87,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <festival id="Pesach Chol ha-Moed Day 3"
+ descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ה׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <kriyah>
@@ -94,6 +98,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <festival id="Pesach Chol ha-Moed Day 4"
+ descr="Passover, the Feast of Unleavened Bread"
  hebrew="פֶּסַח יוֹם ו׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <kriyah>
@@ -104,6 +109,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <festival id="Pesach Shabbat Chol ha-Moed"
+ descr="Passover, the Feast of Unleavened Bread"
  haftara="Ezekiel 37:1 - 37:14"
  yomtov="0">
 <!--
@@ -122,6 +128,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Pesach 7"
+ descr="Passover, the Feast of Unleavened Bread"
  haftara="II Samuel 22:1-51"
  hebrew="פֶּסַח יוֹם ז׳"
  yomtov="1">
@@ -135,6 +142,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Pesach 7 (on Shabbat)"
+ descr="Passover, the Feast of Unleavened Bread"
  haftara="II Samuel 22:1-51"
  yomtov="1">
  <kriyah>
@@ -149,6 +157,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Pesach 8"
+ descr="Passover, the Feast of Unleavened Bread"
  haftara="Isaiah 10:32 - 12:6"
  hebrew="פֶּסַח יוֹם ח׳"
  yomtov="1">
@@ -162,6 +171,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Pesach 8 (on Shabbat)"
+ descr="Passover, the Feast of Unleavened Bread"
  haftara="Isaiah 10:32 - 12:6"
  yomtov="1">
  <kriyah>
@@ -176,7 +186,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shavuot 1"
- haftara="Ezekiel 1:1-28; 3:12" yomtov="1">
+ descr="Feast of Pentecost"
+ hebrew="שָׁבוּעוֹת יוֹם א׳"
+ haftara="Ezekiel 1:1-28; 3:12"
+ yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidayc.htm" />
+  <link />
+ </links>
  <kriyah>
   <aliyah parsha="17" num="1" book="Exodus" begin="19:1" end="19:6" />
   <aliyah parsha="17" num="2" book="Exodus" begin="19:7" end="19:13" />
@@ -187,7 +204,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shavuot 2"
- haftara="Habakkuk 3:1-19" yomtov="1">
+ descr="Feast of Pentecost"
+ hebrew="שָׁבוּעוֹת יוֹם ב׳"
+ haftara="Habakkuk 3:1-19"
+ yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidayc.htm" />
+  <link />
+ </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="15:19" end="15:23" />
   <aliyah parsha="47" num="2" book="Deuteronomy" begin="16:1" end="16:3" />
@@ -198,8 +222,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shavuot 2 (on Shabbat)"
+ descr="Feast of Pentecost"
+ hebrew="שָׁבוּעוֹת יוֹם ב׳"
  haftara="Habakkuk 3:1-19"
  yomtov="1">
+ <links>
+  <link rel="about" href="http://www.jewfaq.org/holidayc.htm" />
+  <link />
+ </links>
  <kriyah>
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
   <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" />
@@ -345,6 +375,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Rosh Hashana 2"
+ descr="New Year"
  haftara="Jeremiah 31:1 - 31:19"
  yomtov="1">
  <links>
@@ -406,6 +437,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Yom Kippur (Mincha)"
+ hebrew="יוֹם כִּפּוּר"
+ descr="Day of Atonement"
  haftara="Jonah 1:1-4:11; Micah 7:18-20"
  yomtov="1">
  <links>
@@ -466,6 +499,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Sukkot 2"
  haftara="I Kings 8:2 - 8:21"
+ descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם ב׳"
  yomtov="1">
  <links>
@@ -488,6 +522,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 
 <!-- Strassfeld p. 231 -->
 <festival id="Sukkot Chol ha-Moed Day 1"
+ descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם ג׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <links>
@@ -502,6 +537,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot Chol ha-Moed Day 2"
+ descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <links>
@@ -516,6 +552,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot Chol ha-Moed Day 3"
+ descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם ה׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <links>
@@ -530,6 +567,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot Chol ha-Moed Day 4"
+ descr="Feast of Tabernacles"
  hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)"
  yomtov="0">
  <links>
@@ -544,6 +582,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot Shabbat Chol ha-Moed"
+ descr="Shabbat that falls in the intermediate days of Sukkot"
  haftara="Ezekiel 38:18 - 39:16"
  yomtov="0">
  <links>
@@ -566,6 +605,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot Chol ha-Moed Day 5 (Hoshana Raba)"
+ descr="Last day of Chol Hamoed Sukkot"
  hebrew="סוּכּוֹת יוֹם ז׳ (הוֹשַׁנָא רַבָּה)"
  yomtov="0">
  <links>
@@ -668,34 +708,42 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Chanukah: 2 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ב׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 3 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ג׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 4 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ד׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 5 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ה׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 6 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ו׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 7 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ז׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 8 Candles"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: ח׳ נֵרוֹת"
  yomtov="0">
 </festival>
 <festival id="Chanukah: 8th Day"
+ descr="Festival of Lights"
  hebrew="חֲנוּכָּה: יוֹם ח׳"
  yomtov="0">
 </festival>
@@ -883,6 +931,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 
 <!-- Rosh Chodesh -->
 <festival id="Shabbat Rosh Chodesh"
+ descr="When Shabbat falls on Rosh Chodesh"
  haftara="Isaiah 66:1 - 66:24">
  <links>
   <link rel="about"
@@ -894,6 +943,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shabbat Machar Chodesh"
+ descr="When Shabbat falls the day before Rosh Chodesh"
  haftara="I Samuel 20:18 - 20:42">
  <links>
   <link rel="about"
@@ -902,6 +952,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Adar"
+ descr="The new Jewish month of Adar"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר"
  yomtov="0">
   <links>
@@ -910,14 +961,17 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Adar I"
+ descr="The new Jewish month of Adar I"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר א׳"
  yomtov="0">
 </festival>
 <festival id="Rosh Chodesh Adar II"
+ descr="The new Jewish month of Adar II"
  hebrew="רֹאשׁ חֹדֶשׁ אַדָר ב׳"
  yomtov="0">
 </festival>
 <festival id="Rosh Chodesh Av"
+ descr="The new Jewish month of Av"
  hebrew="רֹאשׁ חֹדֶשׁ אָב"
  yomtov="0">
   <links>
@@ -926,6 +980,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Cheshvan"
+ descr="The new Jewish month of Cheshvan"
  hebrew="רֹאשׁ חֹדֶשׁ חֶשְׁוָן"
  yomtov="0">
   <links>
@@ -934,6 +989,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Elul"
+ descr="The new Jewish month of Elul"
  hebrew="רֹאשׁ חֹדֶשׁ אֱלוּל"
  yomtov="0">
   <links>
@@ -942,6 +998,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Iyyar"
+ descr="The new Jewish month of Iyyar"
  hebrew="רֹאשׁ חֹדֶשׁ אִיָיר"
  yomtov="0">
   <links>
@@ -950,6 +1007,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Kislev"
+ descr="The new Jewish month of Kislev"
  hebrew="רֹאשׁ חֹדֶשׁ כִּסְלֵו"
  yomtov="0">
   <links>
@@ -958,6 +1016,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Nisan"
+ descr="The new Jewish month of Nisan"
  hebrew="רֹאשׁ חֹדֶשׁ נִיסָן"
  yomtov="0">
   <links>
@@ -966,6 +1025,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Sh'vat"
+ descr="The new Jewish month of Sh'vat"
  hebrew="רֹאשׁ חֹדֶשׁ שְׁבָט"
  yomtov="0">
   <links>
@@ -974,6 +1034,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Sivan"
+ descr="The new Jewish month of Sivan"
  hebrew="רֹאשׁ חֹדֶשׁ סִיוָן"
  yomtov="0">
   <links>
@@ -982,6 +1043,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Tamuz"
+ descr="The new Jewish month of Tamuz"
  hebrew="רֹאשׁ חֹדֶשׁ תָּמוּז"
  yomtov="0">
   <links>
@@ -990,6 +1052,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Tevet"
+ descr="The new Jewish month of Tevet"
  hebrew="רֹאשׁ חֹדֶשׁ טֵבֵת"
  yomtov="0">
   <links>
@@ -998,6 +1061,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </links>
 </festival>
 <festival id="Rosh Chodesh Tishrei"
+ descr="The new Jewish month of Tishrei"
  hebrew="רֹאשׁ חֹדֶשׁ תִּשְׁרֵי"
  yomtov="0">
   <links>
