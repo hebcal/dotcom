@@ -79,7 +79,7 @@ src="http://www.paypal.com/images/x-click-but04.gif" border="0"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
 <!-- End PayPal Logo --></div>
-<a href="http://www.jafi.org.il/top10/"><img border="0"
+<a href="http://www.jafi.org.il/top10/index45.htm"><img border="0"
 src="/i/jafi-award.jpg" alt="JAFI top site" align="left"></a>
 </td></tr></table>
 <p>
@@ -94,7 +94,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Sep 23 21:45:48 EDT 2002
+Last modified: Thu Oct  3 13:36:02 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
