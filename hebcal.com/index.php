@@ -49,6 +49,7 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <a href="/help/">Help</a>
 <br><a href="/privacy/">Privacy Policy</a>
 <br><a href="/search/">Search</a>
+<br><a href="/donations/">Donate</a>
 <br><a href="/contact/">Contact Information</a>
 </td>
 <td valign="top">
@@ -83,7 +84,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Tue Jul 16 13:46:40 EDT 2002
+Last modified: Wed Aug  7 14:06:17 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
