@@ -1053,20 +1053,9 @@ sub results_page
 		    {
 			for (my $i = $prev_mon+1; $i < $mon; $i++)
 			{
-			    $cal = new HTML::CalendarMonthSimple('year' => $year,
-								 'month' => $i);
-			    $cal->width('97%');
-			    $cal->border(1);
-			    $cal->todaycellclass('today');
-
-			    $cal->header("<h2 align=\"center\"><a class=\"goto\" title=\"$prev_title\"\n" .
-			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
-			     sprintf("%s %04d\n",
- 				     $Hebcal::MoY_long{$i}, $year) .
-			     "<a class=\"goto\" title=\"$next_title\"\n" .
-			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
-			     '<div align="center" class="goto">' . $goto . '</div>');
-
+			    $cal = new_html_cal($year,$i,$goto,
+						$prev_title,$prev_url,
+						$next_title,$next_url);
 			    print STDOUT "<center$style>", $cal->as_HTML(),
 			    "</center><br><br>";
 			}
@@ -1074,19 +1063,8 @@ sub results_page
 		}
 
 		$prev_mon = $mon;
-		$cal = new HTML::CalendarMonthSimple('year' => $year,
-						     'month' => $mon);
-		$cal->width('97%');
-		$cal->border(1);
-		$cal->todaycellclass('today');
-
-		$cal->header("<h2 align=\"center\"><a class=\"goto\" title=\"$prev_title\"\n" .
-			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
-			     sprintf("%s %04d\n",
- 				     $Hebcal::MoY_long{$mon}, $year) .
-			     "<a class=\"goto\" title=\"$next_title\"\n" .
-			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
-			     '<div align="center" class="goto">' . $goto . '</div>');
+		$cal = new_html_cal($year,$mon,$goto,
+				    $prev_title,$prev_url,$next_title,$next_url);
 	    }
 
 	    my($cal_subj) = $subj;
@@ -1142,6 +1120,27 @@ sub results_page
 
     1;
 }
+
+sub new_html_cal {
+    my($year,$month,$goto,$prev_title,$prev_url,$next_title,$next_url) = @_;
+
+    my $cal = new HTML::CalendarMonthSimple('year' => $year,
+					    'month' => $month);
+    $cal->width('97%');
+    $cal->border(1);
+    $cal->todaycellclass('today');
+
+    $cal->header("<h2 style=\"margin: 0.2em;\" align=\"center\">" .
+		 "<a class=\"goto\" title=\"$prev_title\"\n" .
+		 "href=\"$prev_url\">&lt;&lt;</a>\n" .
+		 sprintf("%s %04d\n", $Hebcal::MoY_long{$month}, $year) .
+		 "<a class=\"goto\" title=\"$next_title\"\n" .
+		 "href=\"$next_url\">&gt;&gt;</a></h2>\n" .
+		 '<div align="center" class="goto">' . $goto . '</div>');
+
+    $cal;
+}
+
 
 sub get_candle_config($)
 {
