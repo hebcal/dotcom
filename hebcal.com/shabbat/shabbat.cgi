@@ -485,8 +485,6 @@ $city_descr</description>
 <dc:language>en-us</dc:language>
 <dc:creator>hebcal.com</dc:creator>
 <dc:date>$dc_date</dc:date>
-<lastBuildDate>$dc_date</lastBuildDate>
-<pubDate>$dc_date</pubDate>
 <!-- $cmd_pretty -->
 <items>
 <rdf:Seq>
@@ -502,8 +500,12 @@ $city_descr</description>
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
+	my $subj = $items->[$i]->{'subj'};
+	if (defined $items->[$i]->{'time'}) { 
+	    $subj .= ": " . $items->[$i]->{'time'};
+	}
 	print qq{<item rdf:about="$items->[$i]->{'about'}">
-<title>$items->[$i]->{'subj'}</title>
+<title>$subj</title>
 <link>$items->[$i]->{'link'}</link>
 <description>$items->[$i]->{'date'}</description>
 <dc:subject>$items->[$i]->{'class'}</dc:subject>
