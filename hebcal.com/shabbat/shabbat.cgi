@@ -155,7 +155,7 @@ sub format_items
 	    $item{'dc:date'} =
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
 			$year,$mon,$mday,
-			$hour,$min,0,
+			$hour + 12,$min,0,
 			$tz > 0 ? "+" : "-",
 			abs($tz));
 	}
