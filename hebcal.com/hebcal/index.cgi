@@ -67,7 +67,7 @@ my($rcsrev) = '$Revision$'; #'
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
 my %long_candles_text =
     ('pos' => 'latitude/longitude',
-     'city' => 'closest city',
+     'city' => 'large cities',
      'zip' => 'zip code',
      'none' => 'none');
 
@@ -296,7 +296,7 @@ sub vcalendar_display() {
     my($tz) = $q->param('tz');
     my $state;
 
-    if ($city_descr =~ /^Closest City: (.+)$/)
+    if ($city_descr =~ /^Large City: (.+)$/)
     {
 	$tz = $Hebcal::city_tz{$q->param('city')};
     }
@@ -473,7 +473,7 @@ JSCRIPT_END
     print STDOUT "<p><table border=\"0\" cellpadding=\"0\"\n",
     "cellspacing=\"0\"><tr valign=\"top\"><td>\n";
 
-    print STDOUT "<p><b>Include events:</b>",
+    print STDOUT "<b>Include events</b>",
     "<br><label\nfor=\"nh\">",
     $q->checkbox(-name => 'nh',
 		 -id => 'nh',
@@ -511,7 +511,7 @@ JSCRIPT_END
     "href=\"/help/sedra.html#scheme\">What\n",
     "is the difference?</a>)</small>";
 
-    print STDOUT "<p><b>Other options:</b>",
+    print STDOUT "<p><b>Other options</b>",
     "<br><label\nfor=\"vis\">",
     $q->checkbox(-name => 'vis',
 		 -id => 'vis',
@@ -539,7 +539,7 @@ JSCRIPT_END
 		 -id => 'heb',
 		 -label => "\nShow Hebrew event names"),
     "</label>",
-    "</p>\n";
+    "\n";
 
     $q->param('c','off') unless defined $q->param('c');
     $q->param('geo','zip') unless defined $q->param('geo');
@@ -551,7 +551,7 @@ JSCRIPT_END
     $q->hidden(-name => 'geo',
 	       -default => 'zip',
 	       -id => 'geo'),
-    "<p><b>Candle lighting times:</b>\n";
+    "<b>Candle lighting times</b>\n";
 
     print STDOUT "<br><small>[\n";
     foreach my $type ('none', 'zip', 'city', 'pos')
@@ -570,7 +570,7 @@ JSCRIPT_END
     if ($q->param('geo') eq 'city')
     {
 	print STDOUT
-	"<label\nfor=\"city\">Closest City:</label>\n",
+	"<label\nfor=\"city\">Large City:</label>\n",
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
 		       -values => [sort keys %Hebcal::city_tz],
@@ -664,7 +664,7 @@ JSCRIPT_END
 		  -maxlength => 3,
 		  -default => $Hebcal::havdalah_min),
     "\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off Havdalah times)</small>\n",
-    "</p>\n";
+    "\n";
     }
 
     print STDOUT "</td></tr></table></p>\n",
@@ -1123,7 +1123,7 @@ sub get_candle_config($)
 	$q->delete('lodir');
 	$q->delete('ladir');
 
-	$city_descr = "Closest City: " . $q->param('city');
+	$city_descr = "Large City: " . $q->param('city');
 	$cmd_extra = " -C '" . $q->param('city') . "'";
 
 	if ($Hebcal::city_dst{$q->param('city')} eq 'israel')
