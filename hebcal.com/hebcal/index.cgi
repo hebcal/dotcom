@@ -684,9 +684,8 @@ sub results_page()
     &Hebcal::navbar2($q, $date, 1,
 		     "Interactive\nCalendar", &self_url($q, {'v' => '0'}));
 
-    unless ($q->param('vis'))
-    {
-    print STDOUT "<h1>Jewish\nCalendar $date</h1>\n";
+    print STDOUT "<h1>Jewish\nCalendar $date</h1>\n"
+	unless ($q->param('vis'));
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
@@ -734,8 +733,6 @@ the \"add\" links below.  These links will pop up a new browser window
 so you can keep this window open.
 </ul></small></div>
 " if $ycal;
-
-    }
 
     # toggle month/full year and event list/calendar grid
     $goto .= "\n&nbsp;&nbsp;&nbsp; <small>change view: [ ";
@@ -840,8 +837,8 @@ so you can keep this window open.
 	    qq{">add</a> }
 		if ($ycal);
 
-	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
-	    = &Hebcal::get_holiday_anchor($subj);
+	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
+	    = &Hebcal::get_holiday_anchor($subj,0,undef);
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
 	{
@@ -850,22 +847,17 @@ so you can keep this window open.
 
 	if ($q->param('vis'))
 	{
-	    if (defined $torah_href && $torah_href ne '')
+	    if (defined $href && $href ne '')
 	    {
-		my($anchor) = $subj;
-
-		$anchor =~ s/^(Parshas\s+|Parashat\s+)//;
-		$anchor = lc($anchor);
-		$anchor =~ s/[^\w]//g;
-
-		$subj = qq{<a href="/sedrot/$anchor.html">$subj</a>};
+		$subj = qq{<a href="$href">$subj</a>};
 	    }
 	}
 	else
 	{
 	    if (defined $torah_href && $torah_href ne '')
 	    {
-		$subj .= qq{ <span class="goto">(<a href="$href">Drash</a>\n} .
+		$subj .= qq{ <span class="goto">} . 
+		qq{(<a href="$drash_href">Drash</a>\n} .
 		qq{- <a href="$torah_href">Torah</a>\n} .
 		qq{- <a href="$haftarah_href">Haftarah</a>)</span>};
 	    }
