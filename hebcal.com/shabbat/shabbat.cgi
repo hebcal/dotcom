@@ -732,7 +732,7 @@ sub form
 		      -id => 'm1',
 		      -size => 3,
 		      -maxlength => 3,
-		      -default => 72),
+		      -default => $Hebcal::havdalah_min),
 	"</label>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
@@ -754,7 +754,7 @@ sub form
 		      -id => 'm2',
 		      -size => 3,
 		      -maxlength => 3,
-		      -default => 72),
+		      -default => $Hebcal::havdalah_min),
 	"</label>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
