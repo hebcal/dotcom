@@ -64,6 +64,10 @@ $rcsrev =~ s/\s*\$//g;
      'January','Februrary','March','April','May','June',
      'July','August','September','October','November','December');
 
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+    localtime(time);
+$year += 1900;
+
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 \t\"http://www.w3.org/TR/REC-html40/loose.dtd\">
 <html><head>
@@ -98,7 +102,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Fri Aug 20 11:18:10 PDT 1999
+Last modified: Fri Aug 20 15:25:51 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -107,8 +111,10 @@ $hhmts =~ s/Last modified: /Software last updated: /g;
 $hhmts = 'This page generated: ' . &ctime(time) . '<br>' . $hhmts;
 
 $html_footer = "<hr noshade size=\"1\">
-<em><a href=\"/michael/contact.html\">Michael J. Radwin</a></em><br><br>
-<small>$hhmts ($rcsrev)</small>
+<small>$hhmts ($rcsrev)
+<p>Copyright &copy; $year Michael John Radwin. All rights
+reserved.<br><a href=\"/michael/projects/hebcal/\">About this
+service</a>.</small>
 </body></html>
 ";
 
@@ -120,9 +126,6 @@ while (($key,$val) = each(%in))
     $in{$key} = $val;
 }
 
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-    localtime(time);
-$year += 1900;
 $year = $in{'year'}
     if (defined $in{'year'} && $in{'year'} =~ /^\d+$/ && $in{'year'} > 0);
 
@@ -423,14 +426,6 @@ hebcal</small></div><h1>Hebcal Interactive Jewish Calendar</h1>
 <p>Use the form below to generate a list of Jewish holidays. Candle
 lighting times are calculated from your latitude and longitude (which
 can be determined by your zip code or closest city).</p>
-<p>For example, see
-<a href=\"$cgipath?v=1&amp;year=" . ($year + 1) .
-"&amp;x=on\">default
-holidays for the year " . ($year + 1) . "</a>
-or
-<a href=\"$cgipath?v=1&amp;year=" . ($year) . "&amp;month=" . ($mon + 1) .
-"&amp;h=on&amp;s=on\">sedrot
-for " . $MoY[$mon + 1] . " " . ($year) . "</a>.</p>
 ";
 
     if ($opts{'c'} == 0)
@@ -485,7 +480,7 @@ Include candle lighting times for ";
 	{
 	    print STDOUT "zip code:\n";
 	}
-	print STDOUT "<br><small>(or <a href=\"${cgipath}?c=off\">suppress</a>";
+	print STDOUT "<br><small>(or <a href=\"${cgipath}\">suppress</a>";
 	if (defined $in{'geo'})
 	{
 	    print STDOUT ", <a\nhref=\"${cgipath}?c=on\">zip code</a>"
@@ -633,20 +628,6 @@ Use Israeli sedra scheme</label>)<br>
 Print hebrew date for the entire date range</label><br>
 <br><input type=\"submit\" value=\"Get Calendar\">
 </form>
-<p><small>This is a web interface to Danny Sadinoff's <a
-href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.
-Geographic zip code information is provided by <a
-href=\"http://www.census.gov/cgi-bin/gazetteer\">The U.S. Census
-Bureau's Gazetteer</a>. If your zip code is missing from their database,
-I don't have it either.</small></p>
-<p><small>If you're a perl programmer, see the <a
-href=\"/michael/projects/hebcal.pl\">source code</a> to this CGI
-form and <a
-href=\"/michael/projects/hebcal-ChangeLog.txt\">revision
-history</a>.</small></p>
-<p><small>See also <a
-href=\"http://shamash.org/trb/judaism.html\">Judaism and Jewish
-Resources</a> at shamash.org.</small></p>
 $html_footer";
 
     close(STDOUT);
