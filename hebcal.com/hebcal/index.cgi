@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri May 12 09:11:09 PDT 2000
+Last modified: Fri May 12 09:37:03 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -634,7 +634,7 @@ sub dba_display {
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
     print $q->header(-type =>
-		     "application/x-palm-dba; filename=$PALM_DBA_FILENAME",
+		     "application/x-palm-dba; filename=\"$PALM_DBA_FILENAME\"",
 		     -content_disposition =>
 		     "inline; filename=$PALM_DBA_FILENAME",
 		     -last_modified => &http_date($time));
@@ -649,7 +649,7 @@ sub csv_display {
 
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
-    print $q->header(-type => 'text/x-csv; filename=' . $path_info,
+    print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
 		     -last_modified => &http_date($time));
@@ -673,7 +673,8 @@ sub csv_display {
 
 	$loc =~ s/,//g;
 	print STDOUT '"', $subj, '","', $date, '",', $start_time, ',',
-	    $end_date, ',', $end_time, ',', $all_day, ',"',
+	    ($end_date eq '' ? '' : "\"$end_date\""),
+	    ',', $end_time, ',', $all_day, ',"',
 	    ($start_time eq '' ? '' : $loc), '","3"', $endl;
     }
 
@@ -1361,15 +1362,24 @@ sub parse_date_descr
     {
 	($subj,$hour,$min) = ($1,$2,$3);
 	$start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
-#	$min += 15;
-#	if ($min >= 60)
-#	{
-#	    $hour++;
-#	    $min -= 60;
-#	}
-#	$end_time = sprintf("\"%d:%02d PM\"", $hour, $min);
-#	$end_date = $date;
-	$end_time = $end_date = '';
+
+	if ($subj eq 'Candle lighting')
+	{
+	    $min += 18;
+	}
+	else
+	{
+	    $min += 15;
+	}
+
+	if ($min >= 60)
+	{
+	    $hour++;
+	    $min -= 60;
+	}
+	$end_time = sprintf("\"%d:%02d PM\"", $hour, $min);
+	$end_date = $date;
+#	$end_time = $end_date = '';
 	$all_day = '"false"';
     }
     else
