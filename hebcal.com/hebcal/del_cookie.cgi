@@ -2,6 +2,7 @@
 
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);
+use Hebcal;
 use strict;
 
 # process form params
@@ -14,9 +15,13 @@ my($server_name) = $q->server_name();
 $server_name =~ s/^www\.//;
 
 my($this_year) = (localtime)[5];
+$this_year += 1900;
+
+my($rcsrev) = '$Revision$'; #'
+$rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 12 09:02:26 PST 2001
+Last modified: Fri Apr 27 11:02:33 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -24,11 +29,12 @@ $hhmts =~ s/\n//g;
 $hhmts =~ s/Last modified: /Software last updated:\n/g;
 
 my($html_footer) = "<hr
-noshade size=\"1\"><small>$hhmts<br><br>Copyright
-&copy; $this_year <a href=\"/michael/contact.html\">Michael J. Radwin</a>.
-All rights reserved. - <a
-href=\"/michael/projects/hebcal/\">Frequently
-asked questions about this service.</a></small></body></html>
+noshade size=\"1\"><font size=-2 face=Arial>Copyright
+&copy; $this_year Michael J. Radwin. All rights reserved.
+<a href=\"/privacy/\">Privacy Policy</a> -
+<a href=\"/help/\">Help</a>
+<br>$hhmts ($rcsrev)
+</font></body></html>
 ";
 
 print "Set-Cookie: C=0; expires=Thu, 01 Jan 1970 16:00:01 GMT; path=/\015\012";
@@ -44,14 +50,7 @@ print $q->header(),
 				     -href => "mailto:$author"}),
 			   ],
 		   ),
-    "<table width=\"100%\"\nclass=\"navbar\">",
-    "<tr><td><small>",
-    "<strong><a\nhref=\"/\">$server_name</a></strong>\n<tt>-&gt;</tt>\n",
-    "<a href=\"/hebcal/\">hebcal</a>\n<tt>-&gt;</tt>\n",
-    "cookie deleted</small></td>",
-    "<td align=\"right\"><small><a\n",
-    "href=\"/search/\">Search</a></small>",
-    "</td></tr></table>",
+    &Hebcal::navbar($server_name, "Cookie\nDeleted", 1),
     "<h1>Hebcal\nCookie Deleted</h1>\n",
     "<p>We deleted your cookie for the Hebcal Interactive Jewish\n",
     "Calendar.</p>\n", $html_footer;
