@@ -953,7 +953,7 @@ sub results_page
 		qq{;dst=}, $q->param('dst'),
 		qq{;tz=}, $q->param('tz'),
 		qq{;m=}, $q->param('m'),
-		qq{;.from=interactive},
+		qq{;tag=interactive},
 		qq{">1-Click Shabbat for $city_descr</a>.\n},
 		);
 	}
@@ -964,7 +964,7 @@ sub results_page
 		qq{<a href="/shabbat/?city=},
  		Hebcal::url_escape($q->param('city')),
 		qq{;m=}, $q->param('m'),
-		qq{;.from=interactive},
+		qq{;tag=interactive},
 		qq{">1-Click Shabbat for }, $q->param('city'),
 		qq{</a>.\n},
 		);
