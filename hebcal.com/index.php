@@ -1,3 +1,19 @@
+<?php
+$http_cookie = getenv("HTTP_COOKIE");
+if ($http_cookie) {
+    header("Cache-Control: private");
+    $cookies = explode(";", $http_cookie);
+    foreach ($cookies as $ck) {
+	if (strncmp($ck, "C=", 2) == 0) {
+	    $cookie_parts = explode("&", substr($ck, 2));
+	    for ($i = 0; $i < count($cookie_parts); $i++) {
+		$parts = explode("=", $cookie_parts[$i], 2);
+		$param[strip_tags($parts[0])] = strip_tags($parts[1]);
+	    }
+	}
+    }
+}
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <!-- $Id$ -->
@@ -24,8 +40,7 @@ Jewish Calendar Tools</small></td>
 <span class="fpsubhead">
 <!-- holiday greeting -->
 <!-- end holiday greeting -->
-<!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
-&nbsp; - &nbsp; <!--#include file="today.inc" -->
+<?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("today.inc") ?>
 </span>
 <table border="0" cellpadding="1" cellspacing="0" width="100%">
 <tr><td class="tiny">&nbsp;</td></tr>
@@ -75,7 +90,10 @@ style="padding-left: 10px; padding-right: 5px">
 <!-- Begin temp holiday -->
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
-href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br>
+href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
+  echo date("F Y");
+  include("holiday.inc");
+  include("current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
 <!-- End temp holiday2 -->
 <br><span class="sm-grey">&gt;</span>&nbsp;<b>Major&nbsp;Holidays</b><br>for
@@ -87,7 +105,12 @@ class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <small>
 <br><label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5"
+<?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
 id="zip">&nbsp;<input type="submit" value="Go">
+<?php if ($param["m"]) { 
+  echo "<input type=\"hidden\" name=\"m\" value=\"$param[m]\">\n";
+}
+?>
 <input type="hidden" name="geo" value="zip">
 <input type="hidden" name="tag" value="fp.ql">
 <br>or <a href="/shabbat/#change">select by major city</a></small>
