@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Sep 28 15:26:30 PDT 2000
+Last modified: Mon Oct  2 08:40:17 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -94,7 +94,8 @@ if (defined $q->param('t') && $q->param('t') =~ /^\d+$/)
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
-$friday = $now + ((4 - $wday) * 60 * 60 * 24);
+#$friday = $now + ((4 - $wday) * 60 * 60 * 24);
+$friday = $now;
 $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 
 $sat_year = (localtime($saturday))[5] + 1900;
@@ -425,7 +426,7 @@ sub form
 		      -id => 'zip',
 		      -size => 5,
 		      -maxlength => 5),
-	qq{</label><br><label\nfor="tz">Time zone:\n},
+	qq{</label>&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
 		       -values => ['auto',-5,-6,-7,-8,-9,-10],
