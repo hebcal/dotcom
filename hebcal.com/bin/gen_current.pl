@@ -54,6 +54,14 @@ open(OUT,">$outfile") || die;
 print OUT "$hdate\n";
 close(OUT);
 
+my $omer = `$HEBCAL -T | grep Omer`;
+chomp($omer);
+
+$outfile = "$WEBDIR/omer.inc";
+open(OUT,">$outfile") || die;
+print OUT "$omer\n";
+close(OUT);
+
 $outfile = "$WEBDIR/etc/hdate-en.js";
 open(OUT,">$outfile") || die;
 print OUT "document.write(\"$hdate\");\n";
