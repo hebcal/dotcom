@@ -30,7 +30,6 @@ use POSIX;
 use strict;
 
 my($author) = 'webmaster@hebcal.com';
-my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -39,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Thu Apr 19 15:30:02 PDT 2001
+Last modified: Sun Apr 22 11:50:27 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -73,7 +72,8 @@ foreach $key ($q->param())
 {
     my($val) = $q->param($key);
     $val = '' unless defined $val;
-    $val =~ s/[^\w\s\.-]//g;
+    $val =~ s/[^\w\s\.-]//g
+	unless $key =~ /^n\d+$/;
     $val =~ s/^\s*//g;		# nuke leading
     $val =~ s/\s*$//g;		# and trailing whitespace
     $q->param($key,$val);
