@@ -272,8 +272,7 @@ $cmd .= ' -s -c ' . $sat_year;
 # only set expiry if there are CGI arguments
 if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 {
-    print STDOUT "Expires: ",
-    strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012";
+    print STDOUT "Expires: ", &Hebcal::http_date($saturday), "\015\012";
 
     my($cookie_to_set);
 
