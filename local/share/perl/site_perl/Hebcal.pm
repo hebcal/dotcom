@@ -1030,9 +1030,14 @@ sub download_html
     $s .= qq{<p>By clicking the links below, you can download 
 Jewish Calendar events into your desktop software.</p>};
 
-    $s .= "<h4>Microsoft Outlook</h4>\n<ol><li><a href=\"" .
-	download_href($q, $filename, 'csv') .
-	"\">Export Outlook CSV file from Hebcal</a>\n";
+    $q->delete('euro');
+    $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file from Hebcal.\nSelect one of:\n" .
+	"<ul><li><a href=\"" . download_href($q, $filename, 'csv') .
+	"\">USA date format</a> (month/day/year)\n";
+
+    $q->param('euro', '1');
+    $s .= "<li><a href=\"" . download_href($q, $filename, 'csv') .
+	"\">European date format</a> (day/month/year)</ul>\n";
 
     $s .= qq{<li><a href="/help/#csv">Import CSV file into Outlook</a></ol>};
 
@@ -1285,9 +1290,9 @@ sub vcalendar_write_contents($$)
 # export to Outlook CSV
 ########################################################################
 
-sub csv_write_contents($$)
+sub csv_write_contents($$$)
 {
-    my($q,$events) = @_;
+    my($q,$events,$euro) = @_;
     my($numEntries) = scalar(@{$events});
 
     export_http_header($q, 'text/x-csv');
@@ -1304,10 +1309,18 @@ sub csv_write_contents($$)
 	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my($memo) = $events->[$i]->[$Hebcal::EVT_IDX_MEMO];
 
-	my($date) = sprintf("\"%d/%d/%04d\"",
+	my $date;
+	if ($euro) {
+	    $date = sprintf("\"%d/%d/%04d\"",
+			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
+			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+	} else {
+	    $date = sprintf("\"%d/%d/%04d\"",
 			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
 			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+	}
 
 	my($start_time) = '';
 	my($end_time) = '';
