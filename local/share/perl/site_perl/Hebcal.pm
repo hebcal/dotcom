@@ -934,6 +934,8 @@ sub process_cookie($$)
 		unless $q->param('city');
 	    $q->param('geo','city');
 	    $q->param('c','on');
+	    $q->delete('tz');
+	    $q->delete('dst');
 	} elsif (defined $c->param('lodeg') &&
 		 defined $c->param('lomin') &&
 		 defined $c->param('lodir') &&
