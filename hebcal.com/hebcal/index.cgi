@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jul 12 11:13:00 PDT 1999
+Last modified: Mon Jul 12 11:29:12 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -668,9 +668,9 @@ open.</small></p>
 	print STDOUT "?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=",
 		&url_escape($subj), "&amp;VIEW=d\">add</a> ";
 
-	$descr =~ s/</&lt;/g;
-	$descr =~ s/>/&lt;/g;
 	$descr =~ s/&/&amp;/g;
+	$descr =~ s/</&lt;/g;
+	$descr =~ s/>/&gt;/g;
 
 	printf STDOUT "%04d/%02d/%02d %s<br>\n", $year, $month, $day, $descr;
     }
