@@ -3,8 +3,7 @@
 <!-- $Id$ -->
 <html lang="en">
 <head>
-<title>hebcal.com: Hebcal Interactive Jewish Calendar and
-1-Click Shabbat</title>
+<title>hebcal.com: Interactive Jewish Calendar Tools</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit">
@@ -63,7 +62,7 @@ href="http://www.sadinoff.com/">Danny Sadinoff</a>.  All rights
 reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Fri Apr 27 10:51:25 PDT 2001
+Last modified: Wed May  2 12:44:42 PDT 2001
 <!-- hhmts end -->
 </font>
 </body></html>
