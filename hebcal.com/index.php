@@ -21,7 +21,7 @@ Jewish Calendar Tools</small></td>
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
-<span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif"><!--#config timefmt="%A, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
+<span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif"><!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="12" cellspacing="0">
 <tr><td>
@@ -60,10 +60,10 @@ aliyah-by-aliyah breakdown for weekly parshiyot
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <b><i>Happy Chanukah!</i></b><br><!--#include file="holiday.inc" -->
-<br><span class="sm-grey">&gt;</span>
-<b><a href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current
-Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="current.inc" --><br><br><span class="sm-grey">&gt;</span>
-<b>Candle lighting</b>
+<br><span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current
+Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="current.inc" --><br><br><span
+class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <div><form action="/shabbat/">
 <label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5" id="zip">
@@ -97,7 +97,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Wed Nov 27 17:58:43 EST 2002
+Last modified: Wed Nov 27 18:06:28 EST 2002
 <!-- hhmts end -->
 </span>
 </body></html>
