@@ -166,7 +166,9 @@ sub format_items
 	$hour -= 12 if $hour > 12;
 
 	my(%item);
-	$item{'date'} = strftime("%A, %d %B %Y", localtime($time));
+	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
+	    "%A, %d %b %Y" : "%A, %d %B %Y";
+	$item{'date'} = strftime($format, localtime($time));
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
@@ -195,7 +197,7 @@ sub format_items
 	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
 	{
 	    $item{'class'} = 'candles';
-	    $item{'time'} = sprintf("%d:%02d PM", $hour, $min);
+	    $item{'time'} = sprintf("%d:%02dpm", $hour, $min);
 	    $item{'link'} = $url . "#" . $anchor;
 	}
 	else
@@ -535,7 +537,7 @@ sub display_wml
 	if ($items->[$i]->{'class'} eq 'candles') 
 	{
 	    my $pm = $items->[$i]->{'time'};
-	    $pm =~ s/ PM$/p/;
+	    $pm =~ s/pm$/p/;
 	    print ": $pm";
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
@@ -760,8 +762,8 @@ sub display_html_common
 
 	if ($items->[$i]->{'class'} eq 'candles')
 	{
-	    &Hebcal::out_html($cfg,qq{<a name="$anchor">$items->[$i]->{'subj'}</a> for
-$items->[$i]->{'date'} is at <b>$items->[$i]->{'time'}</b>});
+	    &Hebcal::out_html($cfg,qq{<a name="$anchor">$items->[$i]->{'subj'}</a>:
+<b>$items->[$i]->{'time'}</b> on $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
@@ -795,27 +797,24 @@ sub display_javascript
     }
 
     my($url) = self_url();
-
-    if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/)
-    {
-	$url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'});
-    }
-    elsif ($q->param('.from'))
-    {
-	$url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
-    }
+    $url .= ";.from=" . 
+	($q->param('.from') ?
+	 Hebcal::url_escape($q->param('.from')) :
+	 $cfg);
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
-    &Hebcal::out_html($cfg, qq{<h3><a target="$tgt"
-href="$url">1-Click
-Shabbat</a> for $city_descr</h3>
-});
+    &Hebcal::out_html($cfg, qq{<h3>Shabbat times for $city_descr</h3>});
 
     display_html_common($items);
 
-    &Hebcal::out_html($cfg, 
-		      "<font size=\"-2\" face=\"Arial\">1-Click Shabbat\n",
-		      Hebcal::html_copyright($q, 1, $tgt), "</font>\n");
+    my($this_year) = (localtime)[5];
+    $this_year += 1900;
+
+    &Hebcal::out_html($cfg, qq{
+<font size="-2" face="Arial"><a
+href="$url" target="$tgt">1-Click Shabbat</a>
+Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
+});
 
     if ($cfg eq 'i') {
 	&Hebcal::out_html($cfg, "</body></html>\n");
