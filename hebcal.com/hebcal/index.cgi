@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 26 12:34:59 PST 2001
+Last modified: Mon Jan 29 10:37:42 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -756,6 +756,7 @@ JSCRIPT_END
     "href=\"/hebcal/del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
     "</p>\n",
+    $q->hidden(-name => '.rand', -value => time(), -override => 1),
     $q->submit(-name => '.s',-value => 'Get Calendar'),
     $q->hidden(-name => '.cgifields',
 	       -values => ['nx', 'nh', 'set'],
