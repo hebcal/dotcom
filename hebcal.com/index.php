@@ -29,10 +29,8 @@ to your zip code, city, or latitude/longitude.
 <dt><br><b><big><a
 href="/shabbat/">1-Click Shabbat</a></big></b></dt>
 <dd>bookmark this page for weekly Shabbat candle lighting times.
-<dt><br><b><big><a
-href="/email/">Email 1-Click Shabbat</a></big>
-&nbsp;&nbsp;<span class="hl">NEW!</span></b></dt>
-<dd>subscribe to 1-Click Shabbat by email.
+<dd><b><span class="hl">NEW!</span></b> <a href="/email/">Subscribe by
+Email</a>
 <dt><br><b><big><a
 href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
 Calendar</a></big></b></dt>
@@ -46,7 +44,7 @@ Converter</a></big></b></dt>
 href="/sedrot/">Torah
 Readings</a></big></b></dt>
 <dd>aliyah-by-aliyah breakdown for weekly parshiyot
-<br><b><span class="hl">NEW!</span></b> Triennial cycle
+<dd><b><span class="hl">NEW!</span></b> Triennial cycle
 <dt><br><b><big>Miscellaneous</big></b></dt>
 <dd><a href="/help/">Help</a>
 <dd><a href="/privacy/">Privacy Policy</a>
@@ -65,7 +63,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Mon Feb 11 00:17:32 EST 2002
+Last modified: Wed Feb 13 15:06:26 EST 2002
 <!-- hhmts end -->
 </span>
 </body></html>
