@@ -630,9 +630,12 @@ sub utf8_hebrew_to_netscape($) {
     return $u->utf8();
 }
 
-sub html_footer($$$)
+sub html_footer($$)
 {
-    my($q,$hhmts,$rcsrev) = @_;
+    my($q,$rcsrev) = @_;
+
+    my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
     $rcsrev =~ s/\s*\$//g;
 
@@ -642,9 +645,7 @@ sub html_footer($$$)
     my($this_year) = (localtime)[5];
     $this_year += 1900;
 
-    $hhmts =~ s/<!--.*-->//g;
-    $hhmts =~ s/\n//g;
-    $hhmts =~ s/Last modified: /Software last updated:\n/g;
+    my($hhmts) = "Software last updated:\n" . localtime($mtime);
 
     return qq{
 <hr noshade size="1"><font size=-2 face=Arial><a
