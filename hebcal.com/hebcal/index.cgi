@@ -5,22 +5,13 @@ require 'cgi-lib.pl';
 $cgipath = '/cgi-bin/hebcal';
 $rcsrev = '$Revision$'; #'
 
-@month_names = 
-    (
-     '',
-     'January',
-     'Februrary',
-     'March',
-     'April',
-     'May',
-     'June',
-     'July',
-     'August',
-     'September',
-     'October',
-     'November',
-     'December',
-     );
+@MoY_abbrev = ('',
+	       'jan','feb','mar','apr','may','jun',
+	       'jul','aug','sep','oct','nov','dec');
+@MoY = 
+    ('',
+     'January','Februrary','March','April','May','June',
+     'July','August','September','October','November','December');
 
 $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">
 <html> <head>
@@ -41,7 +32,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Fri Apr  9 17:09:23 PDT 1999
+Last modified: Fri Apr  9 17:25:05 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -279,7 +270,7 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
 ";
     for ($i = 1; $i < 13; $i++)
     {
-	print STDOUT "<option value=\"$i\"$month{$i}>$month_names[$i]</option>\n";
+	print STDOUT "<option value=\"$i\"$month{$i}>$MoY[$i]</option>\n";
     }
     print STDOUT "
 </select><br><br>
@@ -366,8 +357,12 @@ $html_footer";
 
 sub download
 {
-    local($date) = sprintf("%s %d", $month_names[$in{'month'}], $year);
+    local($date) = sprintf("%s %d", $MoY[$in{'month'}], $year);
+    local($filename) = 'hebcal_' . $year;
 
+    $filename .= '_' . $MoY_abbrev[$in{'month'}] if $in{'month'} =~ /^\d+$/;
+    $filename .= '_' . $in{'zip'} . '.csv';
+    
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     @city = split(/([- ])/, $city);
@@ -396,7 +391,7 @@ Time Zone: GMT $in{'tz'}:00
 </small>
 </p>
 
-<p><a href=\"${cgipath}/$in{'zip'}.csv?$ENV{'QUERY_STRING'}\">Click
+<p><a href=\"${cgipath}/${filename}?$ENV{'QUERY_STRING'}\">Click
 here to download as an Outlook CSV file</a></p>
 
 ";
