@@ -51,7 +51,7 @@
 package Palm::DBA;
 require 5.000;
 use strict;
-use Time::Local;
+use Time::Local ();
 
 my $VERSION = '$Revision$'; #'
 
@@ -139,8 +139,8 @@ sub write_contents($$$)
 
     # compute diff seconds between GMT and whatever our local TZ is
     # pick 1990/01/15 as a date that we're certain is standard time
-    $startTime = &Time::Local::timegm(0,34,12,15,0,90,0,0,0);
-    $secsEast = $startTime - &Time::Local::timelocal(0,34,12,15,0,90,0,0,0);
+    $startTime = Time::Local::timegm(0,34,12,15,0,90,0,0,0);
+    $secsEast = $startTime - Time::Local::timelocal(0,34,12,15,0,90,0,0,0);
 
     $tz = 0 unless (defined $tz && $tz =~ /^-?\d+$/);
 
@@ -178,7 +178,7 @@ sub write_contents($$$)
 	if (!$dst)
 	{
 	    # no DST, so just use gmtime and then add that city offset
-	    $startTime = &Time::Local::timegm(
+	    $startTime = Time::Local::timegm(
 		 0,
 		 $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
 		 $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
@@ -189,7 +189,7 @@ sub write_contents($$$)
 	}
 	else
 	{
-	    $startTime = &Time::Local::timelocal(
+	    $startTime = Time::Local::timelocal(
 		 0,
 		 $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
 		 $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
