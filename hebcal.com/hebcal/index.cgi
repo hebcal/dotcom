@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Apr 27 11:02:33 PDT 2001
+Last modified: Wed May  2 12:22:32 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1010,10 +1010,12 @@ so you can keep this window open.
 	print STDOUT "<center>", $cal->as_HTML(), 
 	    "</center></body></html>\n";
 
-	return 1;
+	$ycal = 1;
+#	return 1;
     }
 
-    print STDOUT "</p>", $goto;
+    print STDOUT "</p>" unless $q->param('vis');
+    print STDOUT $goto;
 
     # download links
     print STDOUT "<p>Advanced options:\n<small>[ <a href=\"", $script_name;
