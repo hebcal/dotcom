@@ -3,8 +3,8 @@
 ########################################################################
 # Hebcal Interactive Jewish Calendar is a web site that lets you
 # generate a list of Jewish holidays for any year. Candle lighting times
-# are calculated from your latitude and longitude (which can be determined
-# by your zip code or closest city).
+# are calculated from your latitude and longitude (which can be
+# determined by your zip code or closest city).
 #
 # Copyright (c) 1999  Michael John Radwin.  All rights reserved.
 #
@@ -126,7 +126,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Sun Sep  5 10:08:07 PDT 1999
+Last modified: Wed Sep 15 14:21:50 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -295,7 +295,7 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
     $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
     $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
     $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}\n<dd>Time Zone: GMT $in{'tz'}:00";
+"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time Zone: GMT $in{'tz'}:00";
 
     # don't multiply minutes by -1 since hebcal does it internally
     $long_deg *= -1  if ($in{'lodir'} eq 'e');
@@ -346,11 +346,11 @@ elsif (defined $in{'zip'})
     }
     undef(@city);
 
-    $city_descr = "$city, $state $in{'zip'}";
+    $city_descr = "$city, $state &nbsp;$in{'zip'}";
     $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
     $long_descr = "${long_deg}d${long_min}' W longitude";
     $dst_tz_descr =
-"Daylight Savings Time: $in{'dst'}\n<dd>Time Zone: GMT $in{'tz'}:00";
+"Daylight Savings Time: $in{'dst'}</small>\n<dd><small>Time Zone: GMT $in{'tz'}:00";
 
     $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
 }
@@ -779,9 +779,9 @@ $date</small></div><h1>Jewish Calendar $date</h1>
     if ($opts{'c'} == 1)
     {
 	print STDOUT "<dl>\n<dt>", $city_descr, "\n";
-	print STDOUT "<dd>", $lat_descr, "\n" if $lat_descr ne '';
-	print STDOUT "<dd>", $long_descr, "\n" if $long_descr ne '';
-	print STDOUT "<dd>", $dst_tz_descr, "\n" if $dst_tz_descr ne '';
+	print STDOUT "<dd><small>", $lat_descr, "</small>\n" if $lat_descr ne '';
+	print STDOUT "<dd><small>", $long_descr, "</small>\n" if $long_descr ne '';
+	print STDOUT "<dd><small>", $dst_tz_descr, "</small>\n" if $dst_tz_descr ne '';
 	print STDOUT "</dl>\n";
     }
 
