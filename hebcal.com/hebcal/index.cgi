@@ -298,7 +298,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan  7 09:00:38 PST 2000
+Last modified: Mon Jan 10 18:33:29 PST 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -359,6 +359,14 @@ foreach $key ($q->param())
 &form("Sorry, invalid Havdalah minutes\n<b>" . $q->param('m') . "</b>.")
     if defined $q->param('m') &&
     $q->param('m') ne '' && $q->param('m') !~ /^\d+$/;
+
+&form("Please select at least one event option.")
+    if ((!defined $q->param('nh') || $q->param('nh') eq 'off') &&
+	(!defined $q->param('nx') || $q->param('nx') eq 'off') &&
+	(!defined $q->param('o') || $q->param('o') eq 'off') &&
+	(!defined $q->param('c') || $q->param('c') eq 'off') &&
+	(!defined $q->param('d') || $q->param('d') eq 'off') &&
+	(!defined $q->param('s') || $q->param('s') eq 'off'));
 
 if ($q->param('c') && $q->param('c') ne 'off' &&
     defined $q->param('city'))
