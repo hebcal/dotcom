@@ -571,7 +571,6 @@ sub display_vxml
 <vxml version="2.0">
 <form id="results">
 <block>
-	<audio>Here are candle lighting times for</audio>
 	$city_audio
 	<break time="500ms"/>
 	<goto next="#times"/>
@@ -590,7 +589,7 @@ sub display_vxml
 	{
 	    my $subj = $items->[$i]->{'subj'};
 	    $subj =~ s/Havdalah \(\d+ min\)/Hav doll ah/g;
-	    print qq{\t<audio>$subj for $date is at $items->[$i]->{'time'}.</audio>\n};
+	    print qq{\t<audio>$subj is at $items->[$i]->{'time'}.</audio>\n};
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
@@ -608,7 +607,6 @@ sub display_vxml
 
     print qq{
 	<break time="250ms"/>
-	<audio>That's all!</audio>
 	<goto next="#again"/>
 </block>
 </form>
