@@ -1523,6 +1523,7 @@ sub vcalendar_write_contents($$$$)
 
 	my $uid = $dtstamp . '-' . $i . '@hebcal.com';
 	print STDOUT qq{UID:$uid$endl};
+	print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
 
 	print STDOUT qq{END:VEVENT$endl};
     }
