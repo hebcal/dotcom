@@ -1,0 +1,289 @@
+#!/usr/local/bin/perl -w
+
+########################################################################
+# Weekly Shabbat Email form for sending candle lighting times and
+# parsha information via email.
+#
+# Copyright (c) 2001  Michael J. Radwin.  All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+########################################################################
+
+use strict;
+use CGI;
+use CGI::Carp qw(fatalsToBrowser);
+use DB_File;
+use Fcntl qw(:DEFAULT :flock);
+use Hebcal;
+use Net::SMTP; 
+
+my($rcsrev) = '$Revision$'; #'
+
+# process form params
+my($q) = new CGI;
+
+my($script_name) = $q->script_name();
+$script_name =~ s,/index.html$,/,;
+
+my($cookies) = &Hebcal::get_cookies($q);
+if (! $q->param('v') && defined $cookies->{'C'}) {
+    &Hebcal::process_cookie($q,$cookies->{'C'});
+}
+if (! $q->param('v') && defined $cookies->{'E'}) {
+    my($cook) = new CGI($cookies->{'E'});
+    if ($cook->param('em')) {
+	$q->param('em', $cook->param('em'));
+    }
+}
+
+# sanitize input to prevent people from trying to hack the site.
+# remove anthing other than word chars, white space, or hyphens.
+my($key);
+foreach $key ($q->param())
+{
+    next if $key eq 'em';
+    my($val) = $q->param($key);
+    $val = '' unless defined $val;
+    $val =~ s/[^\w\s\.-]//g;
+    $val =~ s/^\s*//g;		# nuke leading
+    $val =~ s/\s*$//g;		# and trailing whitespace
+    $q->param($key,$val);
+}
+
+
+print STDOUT $q->header(),
+    &Hebcal::start_html($q, 'Hebcal E-mail Subscription Manager',
+			undef, undef),
+    &Hebcal::navbar2($q, "E-mail Subscription\nManager"),
+    "<h1>E-mail\nSubscription Manager</h1>\n";
+
+&form('') unless $q->param('v');
+
+my($email) = $q->param('em');
+my($zip) = $q->param('zip');
+
+if (!$email)
+{
+    &form(1,
+	  "Please enter your email address to subscribe.");
+}
+elsif ($email !~ /^\s*[^\@\s\(\)\"]+\@([^\.\s\(\)\"]+\.)+\w\w\w?\s*$/)
+{
+    &form(1,
+	  "Sorry, <b>" . &Hebcal::html_entify($email) . "</b> does\n" .
+	  "not appear to be a valid email address.");
+}
+elsif (!$zip)
+{
+    &form(1,
+	  "Please enter your zip code for candle lighting times.");
+}
+else
+{
+    my($city_descr,$dst_descr,$tz_descr);
+    $q->param('dst','usa')
+	unless $q->param('dst');
+    $q->param('tz','auto')
+	unless $q->param('tz');
+    $q->param('geo','zip');
+
+    if ($q->param('zip') !~ /^\d{5}$/)
+    {
+	&form(1,
+	      "Sorry, <b>" . $q->param('zip') . "</b> does\n" .
+	      "not appear to be a 5-digit zip code.");
+    }
+
+    my($val) = &get_zip_info($q->param('zip'));
+
+    &form(1,
+	  "Sorry, can't find\n".  "<b>" . $q->param('zip') .
+	  "</b> in the zip code database.\n",
+          "<ul><li>Please try a nearby zip code</li></ul>")
+	unless defined $val;
+
+    my($city,$state) = split(/\0/, substr($val,6));
+
+    if (($state eq 'HI' || $state eq 'AZ') &&
+	$q->param('dst') eq 'usa')
+    {
+	$q->param('dst','none');
+    }
+
+    my(@city) = split(/([- ])/, $city);
+    $city = '';
+    foreach (@city)
+    {
+	$_ = lc($_);
+	$_ = "\u$_";		# inital cap
+	$city .= $_;
+    }
+
+    $city_descr = "$city, $state &nbsp;" . $q->param('zip');
+
+    if ($q->param('tz') !~ /^-?\d+$/)
+    {
+	my($ok) = 0;
+	if (defined $Hebcal::known_timezones{$q->param('zip')})
+	{
+	    if ($Hebcal::known_timezones{$q->param('zip')} ne '??')
+	    {
+		$q->param('tz',$Hebcal::known_timezones{$q->param('zip')});
+		$ok = 1;
+	    }
+	}
+	elsif (defined $Hebcal::known_timezones{substr($q->param('zip'),0,3)})
+	{
+	    if ($Hebcal::known_timezones{substr($q->param('zip'),0,3)} ne '??')
+	    {
+		$q->param('tz',$Hebcal::known_timezones{substr($q->param('zip'),0,3)});
+		$ok = 1;
+	    }
+	}
+	elsif (defined $Hebcal::known_timezones{$state})
+	{
+	    if ($Hebcal::known_timezones{$state} ne '??')
+	    {
+		$q->param('tz',$Hebcal::known_timezones{$state});
+		$ok = 1;
+	    }
+	}
+
+	if ($ok == 0)
+	{
+	    &form(1,
+		  "Sorry, can't auto-detect\n" .
+		  "timezone for <b>" . $city_descr . "</b>\n".
+		  "(state <b>" . $state . "</b> spans multiple time zones).",
+		  "<ul><li>Please select your time zone below.</li></ul>");
+	}
+    }
+
+    $dst_descr = "Daylight Saving Time: " . $q->param('dst');
+    $tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
+
+    my $dbmfile = 'email.db';
+    my(%DB);
+    my($db) = tie(%DB, 'DB_File', $dbmfile, O_CREAT|O_RDWR, 0644,
+		  $DB_File::DB_HASH)
+	or die "$dbmfile: $!\n";
+
+    my($fd) = $db->fd;
+    open(DB_FH, "+<&=$fd") || die "dup $!";
+
+    unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
+    $DB{$email} = sprintf("zip=%s&tz=%s&dst=%s&m=%s",
+			  $q->param('zip'),
+			  $q->param('tz'),
+			  $q->param('dst'),
+			  $q->param('m'));
+
+    $db->sync;
+    flock(DB_FH, LOCK_UN);
+    undef $db;
+    untie(%DB);
+    close(DB_FH);
+
+    print STDOUT "<p>Thank you for your interest in weekly\n",
+    "candle lighting times and parsha information.</p>";
+
+    print STDOUT "<p>A confirmation message has been sent to <b>", 
+    &Hebcal::html_entify($email), "</b>.\n",
+    "Simply reply to that message to confirm your subscription.</p>\n";
+
+    print STDOUT "<p><small>$city_descr",
+    "\n<br>&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n",
+    "</small></p>\n";
+
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
+}
+
+close(STDOUT);
+exit(0);
+
+sub form
+{
+    my($head,$message,$help) = @_;
+
+    if ($message ne '')
+    {
+	$help = '' unless defined $help;
+	$message = "<hr noshade size=\"1\"><p><font\ncolor=\"#ff0000\">" .
+	    $message . "</font></p>" . $help . "<hr noshade size=\"1\">";
+    }
+
+    print STDOUT
+	qq{$message\n},
+	qq{<h3>Subscribe</h3>\n},
+	qq{<form name="f1" id="f1"\naction="$script_name">},
+	qq{<label for="em">E-mail address:\n},
+	$q->textfield(-name => 'em',
+		      -id => 'em',
+		      -size => 30),
+	qq{</label><br>},
+	qq{<label for="zip">Zip code:\n},
+	$q->textfield(-name => 'zip',
+		      -id => 'zip',
+		      -size => 5,
+		      -maxlength => 5),
+	qq{</label>&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
+	$q->popup_menu(-name => 'tz',
+		       -id => 'tz',
+		       -values => ['auto',-5,-6,-7,-8,-9,-10],
+		       -default => 'auto',
+		       -labels => \%Hebcal::tz_names),
+	qq{</label><br>Daylight Saving Time:\n},
+	$q->radio_group(-name => 'dst',
+			-values => ['usa','none'],
+			-default => 'usa',
+			-labels =>
+			{'usa' => "\nUSA (except AZ, HI, and IN) ",
+			 'israel' => "\nIsrael ",
+			 'none' => "\nnone ", }),
+	$q->hidden(-name => 'geo',
+		   -value => 'zip',
+		   -override => 1),
+	"<br><label\nfor=\"m1\">Havdalah minutes past sundown:\n",
+	$q->textfield(-name => 'm',
+		      -id => 'm1',
+		      -size => 3,
+		      -maxlength => 3,
+		      -default => 72),
+	"</label>",
+	$q->hidden(-name => 'v',-value => 1,-override => 1),
+	qq{<br><input\ntype="submit" value="Subscribe"></form>};
+
+    print STDOUT &Hebcal::html_footer($q,$rcsrev);
+
+    exit(0);
+}
+
+sub get_zip_info
+{
+    my($zip) = @_;
+
+    my($dbmfile) = 'zips.db';
+    my(%DB);
+    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	|| die "Can't tie $dbmfile: $!\n";
+
+    my($val) = $DB{$zip};
+    untie(%DB);
+
+    $val;
+}
+# local variables:
+# mode: perl
+# end:
