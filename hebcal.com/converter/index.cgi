@@ -35,24 +35,6 @@ my(@hebrew_months) =
     ('Nisan', 'Iyyar', 'Sivan', 'Tamuz', 'Av', 'Elul', 'Tishrei',
      'Cheshvan', 'Kislev', 'Tevet', 'Shvat', 'Adar1', 'Adar2');
 
-my(%monthnames) =
-(
-'Nisan'	=> 'נִיסָן',
-'Iyyar'	=> 'אִיָיר',
-'Sivan'	=> 'סִיוָן',
-'Tamuz'	=> 'תָּמוּז',
-'Av'	=> 'אָב',
-'Elul'	=> 'אֱלוּל',
-'Tishrei'	=> 'תִּשְׁרֵי',
-'Cheshvan'	=> 'חֶשְׁוָן',
-'Kislev'	=> 'כִּסְלֵו',
-'Tevet'	=> 'טֵבֵת',
-"Sh'vat"	=> 'שְׁבָט',
-'Adar'	=> 'אַדָר',
-'Adar I'	=> 'אַדָר א׳',
-'Adar II'	=> 'אַדָר ב׳',
-);
-
 my($rcsrev) = '$Revision$'; #'
 
 # process form params
@@ -218,15 +200,14 @@ if (defined $events[0])
     {
 	my($hm,$hd,$hy) = ($2,$1,$3);
 
-	print STDOUT qq{\n<br>},
-			qq{<span dir="rtl" lang="he" class="hebrew-big">},
-			Hebcal::hebnum_to_string($hd),
-			"&nbsp;&nbsp;בְּ",
-			$monthnames{$hm},
-			"&nbsp;&nbsp;",
-			Hebcal::hebnum_to_string($hy),
-			qq{</span>}
-	    if ($q->param('heb') && $q->param('heb') =~ /^on|1$/);
+	if ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
+	{
+	    my $hebrew = Hebcal::build_hebrew_date($hm,$hd,$hy);
+	    $hebrew =~ s/ /&nbsp;&nbsp;/g;
+
+	    print STDOUT qq{\n<br><span dir="rtl" lang="he"\n},
+	    qq{class="hebrew-big">$hebrew</span>};
+	}
 
 	$hm = "Shvat" if $hm eq "Sh'vat";
 	$hm = "Adar1" if $hm eq "Adar";
