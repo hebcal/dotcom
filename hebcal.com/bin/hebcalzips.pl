@@ -54,7 +54,9 @@ open(A,$filename) || die "$filename: $!\n";
 while(<A>)
 {
     next unless m,/hebcal/,;
-    next if /^207\.55\.191\.4|www\.radwin\.org|smiles\.yahoo\.com|205\.216\.162\.|198\.144\.204\.|198\.144\.193\.150|206\.251\.16\./;
+    next if /^208\.46\.162\.254/;
+    next if /^24\.130\.2\./;
+    next if /^207\.55\.191\.4|205\.216\.162\.|198\.144\.204\.|198\.144\.193\.150|206\.251\.16\./;
 
     if (/c=(on|1)/i && /zip=(\d\d\d\d\d)/) {
 	if (defined $zips{$1}) {
@@ -110,7 +112,7 @@ foreach (sort keys %valbycity) {
     }
 }
 
-print "Hebcal Interactive Jewish Calendar - http://www.radwin.org/hebcal/\n";
+print "Hebcal Interactive Jewish Calendar - http://www.hebrewcalendar.org/\n";
 print "Most Often Used Zip Codes\n";
 print "------------------------------------------------------------\n";
 print scalar(localtime), "\n";
