@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 <br><br>
 <small>
 <!-- hhmts start -->
-Last modified: Mon Jun 28 12:28:02 PDT 1999
+Last modified: Mon Jun 28 17:00:57 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -349,7 +349,7 @@ sub form
 hebcal
 </small></div>
 
-<h1>Interactive Hebrew Calendar</h1>
+<h1>Hebcal Interactive Hebrew Calendar</h1>
 
 <p>This is a web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> 3.2 program.</p>
