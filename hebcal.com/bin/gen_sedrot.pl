@@ -212,7 +212,11 @@ EOHTML
 
     foreach (1 .. 7)
     {
-	print OUT2 qq{<li>}, $sedrot->val($sedrot_h, "aliyah$_"), "\n";
+	my($aliyah) = $sedrot->val($sedrot_h, "aliyah$_");
+	my($c1,$v1,$c2,$v2) = ($aliyah =~ /^(\d+):(\d+)-(\d+):(\d+)$/);
+	$aliyah = "$c1:$v1-$v2"
+	    if ($c1 == $c2);
+	print OUT2 qq{<li>$aliyah\n};
     }
 
     print OUT2 <<EOHTML;
