@@ -311,7 +311,19 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
 	$self_url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
     }
 
-    if ($cfg =~ /^[ij]$/)
+    if ($cfg eq 'j' &&
+	$q->param('custom') && $q->param('custom') eq 'keshernj.com')
+    {
+	&my_header($title);
+
+	&Hebcal::out_html($cfg,
+			  "<font size=5><strong>", $city_descr, 
+			  "</strong></font>\n",
+			  "<br>$dst_descr\n",
+			  "<br>$tz_descr\n",
+			  );
+    }
+    elsif ($cfg =~ /^[ij]$/)
     {
 	&my_header($title);
 
@@ -418,6 +430,9 @@ for ($i = 0; $i < $numEntries; $i++)
 	    &Hebcal::out_html($cfg,qq{\n<dt>$subj for\n},
 		      $rss{'description'},
 		      sprintf(" is at <b>%d:%02d PM</b>", $hour, $min));
+	    &Hebcal::out_html($cfg,"<br>&nbsp;")
+		if ($q->param('custom') &&
+		    $q->param('custom') eq 'keshernj.com');
 	}
     }
     else
@@ -462,7 +477,11 @@ for ($i = 0; $i < $numEntries; $i++)
 	if ($href ne '' &&
 	    !(defined $cfg && $cfg =~ /^[rw]$/))
 	{
-	    if (defined $torah_href && $torah_href ne '')
+	    if ($q->param('custom') && $q->param('custom') eq 'keshernj.com')
+	    {
+		$rss{'title'} .= "<b>$subj</b>";
+	    }
+	    elsif (defined $torah_href && $torah_href ne '')
 	    {
 		$rss{'title'} .=
 		    qq{<b>$subj</b>\n<span class="goto">(<a } .
@@ -495,6 +514,9 @@ for ($i = 0; $i < $numEntries; $i++)
 	    &Hebcal::out_html($cfg,"\n<dt>", $rss{'title'});
 	    &Hebcal::out_html($cfg,"\non ", $rss{'description'})
 		unless ($subj =~ /^(Parshas|Parashat)\s+/);
+	    &Hebcal::out_html($cfg,"<br>&nbsp;")
+		if ($q->param('custom') &&
+		    $q->param('custom') eq 'keshernj.com');
 	}
     }
 }
@@ -542,6 +564,11 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
     elsif ($cfg eq 'w')
     {
 	&Hebcal::out_html($cfg,"</card>\n</wml>\n");
+    }
+    elsif ($cfg eq 'j' &&
+	   $q->param('custom') && $q->param('custom') eq 'keshernj.com')
+    {
+	# no copyright
     }
     elsif ($cfg eq 'j')
     {
