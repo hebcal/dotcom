@@ -438,7 +438,10 @@ sub process_args
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
 
-    print "Cache-Control: private\015\012";
+    # private cache only if we're tailoring results by cookie
+    print "Cache-Control: private\015\012"
+	unless $ENV{'QUERY_STRING'};
+
     (\@events,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty);
 }
 
