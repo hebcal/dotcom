@@ -4,6 +4,12 @@
 
 require_once('zips.inc');
 
+$VER = '$Revision$';
+$matches = array();
+if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
+    $VER = $matches[1] . "." . $matches[2];
+}
+
 global $HTTP_GET_VARS;
 if ($HTTP_GET_VARS['m']) {
     $m = htmlspecialchars($HTTP_GET_VARS['m']);
