@@ -51,7 +51,7 @@ Julian Calendars</a>.</p>";
 
 $Hebcal::indiana_warning = "<p><font color=\"#ff0000\">WARNING:
 Indiana has confusing time zone &amp; Daylight Saving Time
-rules.</font> You might want to read <a
+rules.</font><br>Please check <a
 href=\"http://www.mccsc.edu/time.html#WHAT\">What time is it in
 Indiana?</a> to make sure the above settings are correct.</p>";
 
@@ -577,6 +577,86 @@ sub out_html
     }
 
     1;
+}
+
+sub zipcode_open_db
+{
+    use DB_File;
+
+    my($dbmfile) = $_[0] ? $_[0] : 'zips99.db';
+    my(%DB);
+    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
+	|| die "Can't tie $dbmfile: $!\n";
+
+    \%DB;
+}
+
+sub zipcode_close_db
+{
+    use DB_File;
+
+    my($DB) = @_;
+    untie(%{$DB});
+}
+
+sub zipcode_fields
+{
+    my($value) = @_;
+
+    my($latitude,$longitude,$tz,$dst,$city,$state) = split(/,/, $value);
+
+    if (! defined $state)
+    {
+	warn "zips99: bad data for $value";
+	return undef;
+    }
+
+    # remove any prefixed + signs from the strings
+    $latitude =~ s/^\+//;
+    $longitude =~ s/^\+//;
+
+    # in hebcal, negative longitudes are EAST (this is backwards)
+    $longitude *= -1.0;
+
+    my($long_deg,$long_min) = split(/\./, $longitude, 2);
+    my($lat_deg,$lat_min) = split(/\./, $latitude, 2);
+
+    if (defined $long_min && $long_min ne '')
+    {
+	$long_min = '.' . $long_min;
+    }
+    else
+    {
+	$long_min = 0;
+    }
+
+    if (defined $lat_min && $lat_min ne '')
+    {
+	$lat_min = '.' . $lat_min;
+    }
+    else
+    {
+	$lat_min = 0;
+    }
+
+    $long_min = $long_min * 60;
+    $long_min *= -1 if $long_deg < 0;
+    $long_min = sprintf("%.0f", $long_min);
+
+    $lat_min = $lat_min * 60;
+    $lat_min *= -1 if $lat_deg < 0;
+    $lat_min = sprintf("%.0f", $lat_min);
+
+    my(@city) = split(/([- ])/, $city);
+    $city = '';
+    foreach (@city)
+    {
+	$_ = lc($_);
+	$_ = "\u$_";		# inital cap
+	$city .= $_;
+    }
+
+    ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
 }
 
 sub guess_timezone($$$)
