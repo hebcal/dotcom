@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2001  Michael J. Radwin.  All rights reserved.
+# Copyright (c) 2002  Michael J. Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
