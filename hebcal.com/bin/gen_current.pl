@@ -9,13 +9,14 @@ use strict;
 use Date::Calc;
 
 my $WEBDIR = '/home/mradwin/web/hebcal.com';
+my $HEBCAL = "$WEBDIR/bin/hebcal";
 
 my($syear,$smonth,$sday) = upcoming_dow(6); # saturday
 
 my $outfile = "$WEBDIR/current.inc";
 my $wrote_parsha = 0;
 
-my(@events) = Hebcal::invoke_hebcal("./hebcal -s -h -x $smonth $syear", '', 0);
+my(@events) = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $smonth $syear", '', 0);
 my $parsha = '';
 for (my $i = 0; $i < @events; $i++)
 {
@@ -45,7 +46,7 @@ unless ($wrote_parsha) {
     close(OUT);
 }
 
-my $hdate = `$WEBDIR/bin/hebcal -T -x -h | grep -v Omer`;
+my $hdate = `$HEBCAL -T -x -h | grep -v Omer`;
 chomp($hdate);
 
 $outfile = "$WEBDIR/today.inc";
@@ -70,7 +71,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 }
 
 $outfile = "$WEBDIR/holiday.inc";
-my $line = `$WEBDIR/bin/hebcal -t | grep -v ' of '`;
+my $line = `$HEBCAL -t | grep -v ' of '`;
 chomp($line);
 my $wrote_holiday = 0;
 if ($line =~ m,^\d+/\d+/\d+\s+(.+)\s*$,) {
