@@ -58,7 +58,7 @@ my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
 
 my($set_checked) = 'checked';
-my($cookies) = &Hebcal::get_cookies($q);
+my($cookies) = Hebcal::get_cookies($q);
 my($C_cookie) = (defined $cookies->{'C'}) ? 'C=' . $cookies->{'C'} : '';
 if (! $q->param('v') && $C_cookie)
 {
@@ -68,7 +68,7 @@ if (! $q->param('v') && $C_cookie)
     }
     else
     {
-	&Hebcal::process_cookie($q,$C_cookie);
+	Hebcal::process_cookie($q,$C_cookie);
     }
 }
 
@@ -102,7 +102,7 @@ if (defined $q->param('year') && $q->param('year') eq 'now' &&
 				$this_mon - 1,
 				$this_year - 1900);
 
-    $expires_date = &Hebcal::http_date($end_of_month);
+    $expires_date = Hebcal::http_date($end_of_month);
 }
 
 &form("Please specify a year.")
@@ -180,6 +180,10 @@ elsif ($q->path_info() =~ /[^\/]+\.dba$/)
 {
     &dba_display();
 }
+elsif ($q->path_info() =~ /[^\/]+\.mpdb$/)
+{
+    &macintosh_datebook_display();
+}
 elsif ($q->path_info() =~ /[^\/]+\.vcs$/)
 {
     # text/x-vCalendar
@@ -202,13 +206,13 @@ sub javascript_events() {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+    my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
     print $q->header(-type => "application/x-javascript",
-		     -last_modified => &Hebcal::http_date($time),
+		     -last_modified => Hebcal::http_date($time),
 		     -expires => $expires_date,
 		     );
 
@@ -244,7 +248,7 @@ sub javascript_events() {
 	    }
 	}
 
-	my $href = &Hebcal::get_holiday_anchor($subj,0,$q);
+	my $href = Hebcal::get_holiday_anchor($subj,0,$q);
 
 	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
@@ -257,13 +261,30 @@ sub javascript_events() {
     }
 }
 
+sub macintosh_datebook_display {
+
+    my(@events) = Hebcal::invoke_hebcal($cmd, '',
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
+    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
+    print $q->header(-type =>
+		     "application/x-unknown-palm-macintosh; filename=\"$path_info\"",
+		     -content_disposition =>
+		     "filename=$path_info",
+		     -last_modified => Hebcal::http_date($time));
+
+    Hebcal::macintosh_datebook(\@events);
+}
 
 sub vcalendar_display() {
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+    my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -273,7 +294,7 @@ sub vcalendar_display() {
     print $q->header(-type => "text/x-vCalendar; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &Hebcal::http_date($time));
+		     -last_modified => Hebcal::http_date($time));
 
     my($endl) = "\012";			# default Netscape and others
     if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
@@ -283,7 +304,7 @@ sub vcalendar_display() {
 	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
     }
 
-    &Hebcal::vcalendar_write_contents(\@events, $endl);
+    Hebcal::vcalendar_write_contents(\@events, $endl);
 }
 
 sub dba_display() {
@@ -291,7 +312,7 @@ sub dba_display() {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+    my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -302,7 +323,7 @@ sub dba_display() {
 		     "application/x-palm-dba; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &Hebcal::http_date($time));
+		     -last_modified => Hebcal::http_date($time));
 
     my($dst) = 0;
 
@@ -326,7 +347,7 @@ sub csv_display() {
 	"in $city_descr" : '';
     $loc =~ s/\s*&nbsp;\s*/ /g;
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+    my(@events) = Hebcal::invoke_hebcal($cmd, $loc,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -336,7 +357,7 @@ sub csv_display() {
     print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
 		     -content_disposition =>
 		     "inline; filename=$path_info",
-		     -last_modified => &Hebcal::http_date($time));
+		     -last_modified => Hebcal::http_date($time));
 
     my($endl) = "\012";			# default Netscape and others
     if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
@@ -346,7 +367,7 @@ sub csv_display() {
 	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
     }
 
-    &Hebcal::csv_write_contents(\@events, $endl);
+    Hebcal::csv_write_contents(\@events, $endl);
 }
 
 sub form($$)
@@ -392,7 +413,7 @@ JSCRIPT_END
 	? '; charset=UTF-8' : '';
 
     print STDOUT $q->header(-type => "text/html${charset}"),
-    &Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
+    Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
 			[
 			 qq{<script language="JavaScript" type="text/javascript"><!--\n$JSCRIPT// --></script>},
 			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
@@ -414,8 +435,9 @@ JSCRIPT_END
 		       'DC.Language' => 'en',
 		       'DC.Date.X-MetadataLastModified' => '2001-04-22',
 		       },
+		       undef
 		   ),
-    &Hebcal::navbar2($q, 'Interactive Calendar', 1, undef, undef),
+    Hebcal::navbar2($q, 'Interactive Calendar', 1, undef, undef),
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
     if ($message ne '')
@@ -692,10 +714,28 @@ JSCRIPT_END
 	       '-override'=>1),
     "</form>";
 
-    print STDOUT &Hebcal::html_footer($q,$rcsrev);
+    print STDOUT Hebcal::html_footer($q,$rcsrev);
 
     exit(0);
     1;
+}
+
+
+sub download_href
+{
+    my($filename,$ext) = @_;
+
+    my($href) = $script_name;
+    $href .= "index.html" if $q->script_name() =~ m,/index.html$,;
+    $href .= "/$filename.$ext?dl=1";
+    foreach my $key ($q->param())
+    {
+	my($val) = $q->param($key);
+	$href .= ";$key=" . Hebcal::url_escape($val);
+    }
+    $href .= ";filename=$filename.$ext";
+
+    $href;
 }
 
 sub results_page()
@@ -737,7 +777,7 @@ sub results_page()
 
     # process cookie, delete before we generate next/prev URLS
     if ($q->param('set')) {
-	my($newcookie) = &Hebcal::gen_cookie($q);
+	my($newcookie) = Hebcal::gen_cookie($q);
 	if (! $C_cookie)
 	{
 	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
@@ -812,7 +852,7 @@ sub results_page()
 
     print STDOUT $q->header(-expires => $expires_date,
 			    -type => "text/html${charset}"),
-    &Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
+    Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
 			[
 			 qq{<meta http-equiv="Content-Type" content="text/html${charset}">},
 			 $q->Link({-rel => 'prev',
@@ -825,9 +865,10 @@ sub results_page()
 				   -href => $script_name,
 				   -title => 'Hebcal Interactive Jewish Calendar'})
 			 ],
-			undef
+		       undef,
+		       undef
 			),
-    &Hebcal::navbar2($q, $date, 1,
+    Hebcal::navbar2($q, $date, 1,
 		     "Interactive\nCalendar", &self_url($q, {'v' => '0'}));
 
     print STDOUT "<h1>Jewish\nCalendar $date</h1>\n"
@@ -841,7 +882,7 @@ sub results_page()
     $cmd_pretty =~ s,.*/,,; # basename
     print STDOUT "<!-- $cmd_pretty -->\n";
 
-    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc2,
+    my(@events) = Hebcal::invoke_hebcal($cmd, $loc2,
 	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
     my($numEntries) = scalar(@events);
 
@@ -859,15 +900,13 @@ sub results_page()
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
-	$geographic_info = "<dl>\n<dt><big>" . $city_descr . "</big>\n";
-	$geographic_info .= "<dd>" . $lat_descr . "\n"
+	$geographic_info = "<h3>" . $city_descr . "</h3>\n";
+	$geographic_info .= $lat_descr . "<br>\n"
 	    if $lat_descr ne '';
-	$geographic_info .= "<dd>" . $long_descr . "\n"
+	$geographic_info .= $long_descr . "<br>\n"
 	    if $long_descr ne '';
-	$geographic_info .= "<dd>" . $dst_tz_descr . "\n"
+	$geographic_info .= $dst_tz_descr . "<br>\n"
 	    if $dst_tz_descr ne '';
-	$geographic_info .= "</dl>\n";
-
     }
 
     print STDOUT $geographic_info;
@@ -879,39 +918,38 @@ sub results_page()
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
 
     # download links
-    my($download) = "";
+    my($download) = qq{<a name="export">&nbsp;</a><div class="goto">\n<h3>Export calendar</h3>\n};
 
-    $download .= qq{<p class="goto">Advanced options:\n<small>[ <a href="} .
-	$script_name;
-    $download .= "index.html" if $q->script_name() =~ m,/index.html$,;
-    $download .= "/$filename.csv?dl=1";
+    $download .= qq{<p>By clicking the links below, you can download 
+Jewish Calendar events into your desktop software.</p>};
 
-    foreach my $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	$download .= ";$key=" . &Hebcal::url_escape($val);
-    }
-    $download .= ";filename=$filename.csv";
-    $download .= "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
+    $download .= "<h4>Microsoft Outlook</h4>\n<ol><li><a href=\"" .
+	download_href($filename, 'csv') .
+	"\">Export Outlook CSV file from Hebcal</a>\n";
+
+    $download .= qq{<li><a href="/help/#csv">Import CSV file into Outlook</a></ol>};
 
     # only offer DBA export when we know timegm() will work
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
     {
-	$download .= "\n- <a href=\"" . $script_name;
-	$download .= "index.html" if $q->script_name() =~ m,/index.html$,;
-	$download .= "/$filename.dba?dl=1";
-
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    $download .= ";$key=" . &Hebcal::url_escape($val);
-	}
-	$download .= ";filename=$filename.dba";
-	$download .= "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
+	$download .= "<h4>Palm Desktop for Windows</h4>\n<ol><li><a href=\"" .
+	    download_href($filename, 'dba') .
+	    "\">Export Palm Date Book Archive (.DBA) from Hebcal</a>\n";
+	$download .= qq{<li><a href="/help/#dba">Import DBA file into Palm Desktop</a></ol>};
     }
 
-    $download .= "\n]</small></p>\n";
+    $download .= "<h4>Palm Desktop for Macintosh 2.6.3</h4>\n<ol><li><a href=\"" .
+	download_href($filename, 'mpdb') .
+	    "\">Export Mac Palm Calendar from Hebcal</a>\n";
+    $download .= "<li>(this feature is currently experimental)</ol>\n";
+
+    $download .= "<h4>vCalendar</h4>\n<ol><li><a href=\"" .
+	download_href($filename, 'vcs') .
+	    "\">Export vCalendar (.VCS) from Hebcal</a>\n";
+    $download .= "<li>(this feature is currently experimental)</ol>\n";
+
+    $download .= "</div>\n";
 
     my($goto) = "<small>change view: [ ";
 
@@ -961,7 +999,7 @@ sub results_page()
 	    $goto .= join('',
 		qq{<br>For weekly candle lighting times, bookmark\n},
 		qq{<a href="/shabbat/?city=},
- 		&Hebcal::url_escape($q->param('city')),
+ 		Hebcal::url_escape($q->param('city')),
 		qq{;m=}, $q->param('m'),
 		qq{;.from=interactive},
 		qq{">1-Click Shabbat for }, $q->param('city'),
@@ -975,7 +1013,8 @@ sub results_page()
 
     if ($numEntries > 0)
     {
-	print STDOUT $download;
+	print STDOUT qq{<span class="goto"><span class="sm-grey">&gt;</span>
+<a href="#export">Export calendar to Palm &amp; Outlook</a></span>\n};
     }
     else
     {
@@ -1002,11 +1041,11 @@ sub results_page()
 	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
-	    = &Hebcal::get_holiday_anchor($subj,0,undef);
+	    = Hebcal::get_holiday_anchor($subj,0,undef);
 	if ($hebrew ne '' && defined $q->param('heb') &&
 	    $q->param('heb') =~ /^on|1$/)
 	{
-	    $subj .= "\n/ " . &Hebcal::display_hebrew($q, "hebrew", $hebrew);
+	    $subj .= "\n/ " . Hebcal::display_hebrew($q, "hebrew", $hebrew);
 	}
 
 	if ($q->param('vis'))
@@ -1031,7 +1070,7 @@ sub results_page()
 	    }
 	}
 
-	my($dow) = $Hebcal::DoW[&Hebcal::get_dow($year, $mon, $mday)] . ' ';
+	my($dow) = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . ' ';
 
 	if ($q->param('vis'))
 	{
@@ -1108,7 +1147,7 @@ sub results_page()
     print STDOUT "</p>" unless $q->param('vis');
     print STDOUT $goto_prefix, $goto, "</p>";
     print STDOUT $download if ($numEntries > 0);
-    print STDOUT &Hebcal::html_footer($q,$rcsrev);
+    print STDOUT Hebcal::html_footer($q,$rcsrev);
 
     1;
 }
@@ -1123,7 +1162,7 @@ sub self_url($$)
     {
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
-	$url .= "$sep$key=" . &Hebcal::url_escape($val);
+	$url .= "$sep$key=" . Hebcal::url_escape($val);
 	$sep = ';' if $sep eq '?';
     }
 
@@ -1131,7 +1170,7 @@ sub self_url($$)
     {
 	unless (defined $q->param($key))
 	{
-	    $url .= "$sep$key=" . &Hebcal::url_escape($override->{$key});
+	    $url .= "$sep$key=" . Hebcal::url_escape($override->{$key});
 	    $sep = ';' if $sep eq '?';
 	}
     }
@@ -1227,7 +1266,7 @@ sub get_candle_config($)
 	$long_descr = "${long_deg}d${long_min}' " .
 	    uc($q->param('lodir')) . " longitude";
 	$dst_tz_descr = "Daylight Saving Time: " .
-	    $q->param('dst') . "\n<dd>Time zone: " .
+	    $q->param('dst') . "\n<br>Time zone: " .
 		$Hebcal::tz_names{$q->param('tz')};
 
 	# don't multiply minutes by -1 since hebcal does it internally
@@ -1245,9 +1284,9 @@ sub get_candle_config($)
 	      "not appear to be a 5-digit zip code.")
 	    unless $q->param('zip') =~ /^\d\d\d\d\d$/;
 
-	my $DB = &Hebcal::zipcode_open_db();
+	my $DB = Hebcal::zipcode_open_db();
 	my($val) = $DB->{$q->param('zip')};
-	&Hebcal::zipcode_close_db($DB);
+	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
 	&form("Sorry, can't find\n".  "<b>" . $q->param('zip') .
@@ -1261,7 +1300,7 @@ sub get_candle_config($)
 	    unless defined $val;
 
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    	&Hebcal::zipcode_fields($val);
+	    	Hebcal::zipcode_fields($val);
 
 	# allow CGI args to override
 	$tz = $q->param('tz')
@@ -1299,7 +1338,7 @@ sub get_candle_config($)
 #	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
 #	$long_descr = "${long_deg}d${long_min}' W longitude";
 	$dst_tz_descr = "Daylight Saving Time: " .
-	    $q->param('dst') . "\n<dd>Time zone: " .
+	    $q->param('dst') . "\n<br>Time zone: " .
 		$Hebcal::tz_names{$q->param('tz')};
 
 	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
