@@ -250,30 +250,6 @@ my(%holidays) =
      "Rosh Hashana"		=>
      ["rosh",			1,
       'רֹאשׁ הַשָּׁנָה'],
-     "Shabbas HaChodesh"		=>
-     ["hachodesh",		1,
-      'שַׁבָּת ***'],
-     "Shabbas HaGadol"		=>
-     ["hagadol",		1,
-      'שַׁבָּת ***'],
-     "Shabbas Hazon"		=>
-     ["hazon",			1,
-      'שַׁבָּת ***'],
-     "Shabbas Nachamu"		=>
-     ["nachamu",		1,
-      'שַׁבָּת ***'],
-     "Shabbas Parah"		=>
-     ["parah",			1,
-      'שַׁבָּת ***'],
-     "Shabbas Shekalim"		=>
-     ["shekalim",		1,
-      'שַׁבָּת ***'],
-     "Shabbas Shuvah"		=>
-     ["shuva",			1,
-      'שַׁבָּת ***'],
-     "Shabbas Zachor"		=>
-     ["zachor",			1,
-      'שַׁבָּת ***'],
      "Shabbat HaChodesh"	=>
      ["hachodesh",		1,
       'שַׁבָּת ***'],
@@ -663,9 +639,9 @@ $Hebcal::EVT_IDX_SUBJ = 0;		# title of event
 $Hebcal::EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
 $Hebcal::EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
 $Hebcal::EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
-$Hebcal::EVT_IDX_MDAY = 4;		# day of month, [0 .. 31]
-$Hebcal::EVT_IDX_MON = 5;		# month of year, [0 .. 1]
-$Hebcal::EVT_IDX_YEAR = 6;		# year [1970 .. 2037]
+$Hebcal::EVT_IDX_MDAY = 4;		# day of month, [1 .. 31]
+$Hebcal::EVT_IDX_MON = 5;		# month of year, [0 .. 11]
+$Hebcal::EVT_IDX_YEAR = 6;		# year [1 .. 9999]
 $Hebcal::EVT_IDX_DUR = 7;		# duration in minutes
 $Hebcal::EVT_IDX_MEMO = 8;		# memo text
 $Hebcal::EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
@@ -805,6 +781,7 @@ sub get_holiday_anchor($)
 	    $subj =~ s/ IV$//;
 	    $subj =~ s/ \d{4}$//;
 	    $subj =~ s/: \d Candles?$//;
+	    $subj =~ s/^Shabbas/Shabbat/;
 	}
 
 	if (defined $holidays{$subj})
@@ -1127,7 +1104,7 @@ sub dba_write_contents($$$)
     my($startTime,$i,$secsEast,$local2local);
 
     # compute diff seconds between GMT and whatever our local TZ is
-    # pick 1999/01/15 as a date that we're certain is standard time
+    # pick 1990/01/15 as a date that we're certain is standard time
     $startTime = &Time::Local::timegm(0,34,12,15,0,90,0,0,0);
     $secsEast = $startTime - &Time::Local::timelocal(0,34,12,15,0,90,0,0,0);
 
@@ -1144,6 +1121,8 @@ sub dba_write_contents($$$)
 	# then sub destination tz secsEast to get into local time
 	$local2local = $secsEast - ($tz * 60 * 60);
     }
+
+    warn "DBG: tz=$tz,dst=$dst,local2local=$local2local,secsEast=$secsEast\n";
 
     $numEntries = $Hebcal::PALM_DBA_MAXENTRIES
 	if ($numEntries > $Hebcal::PALM_DBA_MAXENTRIES);
@@ -1171,8 +1150,8 @@ sub dba_write_contents($$$)
 				     $events->[$i]->[$Hebcal::EVT_IDX_HOUR],
 				     $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 				     $events->[$i]->[$Hebcal::EVT_IDX_MON],
-				     $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-				     0,0,0);
+				     $events->[$i]->[$Hebcal::EVT_IDX_YEAR]
+				     - 1900);
 	    $startTime -= ($tz * 60 * 60); # move into local tz
 	}
 	else
@@ -1183,8 +1162,8 @@ sub dba_write_contents($$$)
 					$events->[$i]->[$Hebcal::EVT_IDX_HOUR],
 					$events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 					$events->[$i]->[$Hebcal::EVT_IDX_MON],
-					$events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-					0,0,0);
+					$events->[$i]->[$Hebcal::EVT_IDX_YEAR]
+					- 1900);
 	    $startTime += $local2local; # move into their local tz
 	}
 
