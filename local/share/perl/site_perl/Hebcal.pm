@@ -661,7 +661,8 @@ sub html_footer($$)
 name="copyright">Copyright &copy; $this_year
 Michael J. Radwin. All rights reserved.</a>
 <a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a>
+<a href="/help/">Help</a> -
+<a href="/contact/">Contact</a>
 <br>This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
