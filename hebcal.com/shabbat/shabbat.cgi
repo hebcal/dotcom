@@ -269,8 +269,12 @@ foreach (@Hebcal::opts)
 
 $cmd .= ' -s -c ' . $sat_year;
 
+# only set expiry if there are CGI arguments
 if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 {
+    print STDOUT "Expires: ",
+    strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012";
+
     my($cookie_to_set);
 
     if (! defined $q->raw_cookie())
@@ -293,10 +297,7 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 
     print STDOUT "Set-Cookie: ", $cookie_to_set,
     "; path=/; expires=",  $expires_date, "\015\012"
-	if $cookie_to_set;
-
-    print STDOUT "Expires: ",
-    strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012";
+	if $cookie_to_set && !$q->param('cfg');
 }
 
 my($title) = "1-Click Shabbat for $city_descr";
@@ -311,6 +312,8 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
 	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
     $self_url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+    $self_url .= ";.from=" . &Hebcal::url_escape($ENV{'HTTP_REFERER'})
+	if (defined $ENV{'HTTP_REFERER'} && $ENV{'HTTP_REFERER'} !~ /^\s*$/);
 
     if ($q->param('cfg') =~ /^[ij]$/)
     {
