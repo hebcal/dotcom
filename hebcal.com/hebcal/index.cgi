@@ -356,6 +356,17 @@ document.f1.nh.checked = true;
 }
 return false;
 }
+function s6(val) {
+if (val=='G') {
+document.f1.year.value=$this_year;
+document.f1.month.value=$this_mon;
+}
+if (val=='H') {
+document.f1.year.value=$this_year+3760;
+document.f1.month.value='x';
+}
+return false;
+}
 JSCRIPT_END
 
     my($charset) = ($q->param('heb') && $q->param('heb') =~ /^on|1$/)
@@ -422,6 +433,7 @@ JSCRIPT_END
     $q->radio_group(-name => 'yt',
 		    -values => ['G', 'H'],
 		    -default => 'G',
+		    -onClick => "s6(this.value)",
 		    -labels =>
 		    {'G' => "\nGregorian (common era) ",
 		     'H' => "\nHebrew Year "});
