@@ -108,8 +108,6 @@ Email</a>
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <span class="sm-grey">&gt;</span>
 convert between Hebrew and Gregorian dates
-<br><span class="sm-grey">&gt;</span>
-find out Torah reading for any date in the future
 <h4><a href="/holidays/">Jewish Holidays</a></h4>
 <span class="sm-grey">&gt;</span>
 Dates for the next few years and special Torah readings
