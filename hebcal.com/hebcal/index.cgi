@@ -445,8 +445,40 @@ JSCRIPT_END
 	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
 	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
     }
+    elsif (defined $q->referer())
+    {
+	my $ref = $q->referer();
+	if ($ref =~ m,http://www.google.com/search.*q=([^&]+),i ||
+	    $ref =~ m,http://search.yahoo.com/search.*p=([^&]+),i)
+	{
+	    my $query = $1;
+
+	    $message=<<MESSAGE_END;
+<blockquote class="welcome">
+<a title="Jewish Year 5765 Wall Calendar from Amazon.com"
+href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20"><img
+src="http://www.hebcal.com/i/0789311224.01.TZZZZZZZ.jpg" border="0"
+width="90" height="90" hspace="8" vspace="8" align="right"
+alt="Jewish Year 5765 Wall Calendar from Amazon.com"></a>
+
+Hebcal.com offers a personalized Jewish calendar for any year
+0000-9999. You can get a list of Jewish holidays, candle lighting times,
+and Torah readings. We also offer export to Palm, Outlook, and iCal --
+all for free. Just fill out the <a href="#form">form below</a> and click
+the Get Calendar button.
+
+<p>If you're looking for a full-color printed 2004-2005 calendar, I'd
+recommend the <a
+href="http://www.amazon.com/exec/obidos/ASIN/0789311224/hebcal-20">Jewish
+Year 5765 Wall Calendar</a> from Amazon.com. <b>Shana Tovah!</b>
+</blockquote>
+MESSAGE_END
+;
+	}
+    }
 
     print STDOUT $message, "\n",
+    "<a name=\"form\"></a>",
     "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
     "<b>Jewish Holidays for:</b>&nbsp;&nbsp;&nbsp;\n",
