@@ -28,6 +28,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Time::Local;
 use Hebcal;
+use HTML::CalendarMonthSimple;
 use strict;
 
 my($author) = 'webmaster@hebcal.com';
@@ -903,10 +904,6 @@ sub results_page()
     print STDOUT "<!-- $cmd_pretty -->\n";
 
     print STDOUT "<p>";
-
-    use lib "/home/users/mradwin/local/lib/perl5/$]";
-    use lib "/home/users/mradwin/local/lib/perl5/site_perl/$]";
-    use HTML::CalendarMonthSimple;
 
     my($cal);
     my($prev_mon) = 0;
