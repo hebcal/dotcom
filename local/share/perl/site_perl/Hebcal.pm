@@ -312,7 +312,7 @@ my(%holidays) =
       'שְׁמִינִי עֲצֶרֶת'],
      "Shushan Purim"		=>
      ["shushan",		0,
-      '*** פּוּרִים'],
+      'שׁוּשָׁן פּוּרִים'],
      "Simchas Torah"		=>
      ["simchatorah",		1,
       'שִׂמְחַת תּוֹרָה'],
@@ -336,13 +336,13 @@ my(%holidays) =
       'תַּעֲנִית ***'],
      "Ta'anis Esther"		=>
      ["esther",			0,
-      'תַּעֲנִית ***'],
+      'תַּעֲנִית אֶסְתֵּר'],
      "Ta'anit Bechorot"		=>
      ["bechorot",		0,
       'תַּעֲנִית ***'],
      "Ta'anit Esther"		=>
      ["esther",			0,
-      'תַּעֲנִית ***'],
+      'תַּעֲנִית אֶסְתֵּר'],
      "Tish'a B'Av"		=>
      ["9av",			0,
       'תִּשְׁעָה בְּאָב'],
@@ -389,7 +389,7 @@ my(%sedrot) = (
 		    'בְּרֵאשִׁית'],
  "Noach"	=> ['/5761/noah.shtml', 'Genesis 6:9 - 11:32',
 		    '/jpstext/noah.shtml',
-		    'נוֹחַ'],
+		    'נֹחַ'],
  "Lech-Lecha"	=> ['/5761/lekhlekha.shtml', 'Genesis 12:1 - 17:27',
 		    '/jpstext/lechlecha.shtml',
 		    'לֶךְ־לְךָ'],
@@ -434,7 +434,7 @@ my(%sedrot) = (
 		    'וָאֵרָא'],
  "Bo"		=> ['/5760/bo.shtml', 'Exodus 10:1 - 13:16',
 		    '/jpstext/bo.shtml',
-		    'בּוֹא'],
+		    'בֹּא'],
  "Beshalach"	=> ['/5760/beshalah.shtml', 'Exodus 13:17 - 17:16',
 		    '/jpstext/beshallah.shtml',
 		    'בְּשַׁלַּח'],
@@ -482,7 +482,7 @@ my(%sedrot) = (
 		    'תַזְרִיעַ'],
  "Metzora"	=> ['/5759/tazriametzora.shtml', 'Leviticus 14:1 - 15:33',
 		    '/jpstext/metsora.shtml',
-		    'מְּצוֹרָע'],
+		    'מְּצֹרָע'],
  "Achrei Mot"	=> ['/5755/ahareymot.shtml', 'Leviticus 16:1 - 18:30',
 		    '/jpstext/ahareimot.shtml',
 		    'אַחֲרֵי מוֹת'],
