@@ -29,27 +29,15 @@ use Hebcal;
 use POSIX qw(strftime);
 use strict;
 
-my($author) = 'webmaster@hebcal.com';
 my($expires_date) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
-
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:43:01 PDT 2001
+Last modified: Tue May  8 11:39:14 PDT 2001
 <!-- hhmts end -->";
-
-my($inline_style) = '';
-#my($inline_style) = qq[<style type="text/css">
-#<!--
-#.boxed { border-style: solid;
-#border-color: #666666;
-#border-width: thin;
-#padding: 8px; }
-#-->
-#</style>];
 
 # process form params
 my($q) = new CGI;
@@ -61,11 +49,6 @@ $q->param('nx','on');
 
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
-my($server_name) = $q->virtual_host();
-$server_name =~ s/^www\.//;
-
-$q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
-		"\t\"http://www.w3.org/TR/html4/loose.dtd");
 
 if (defined $q->raw_cookie() &&
     $q->raw_cookie() =~ /[\s;,]*C=([^\s,;]+)/)
@@ -289,7 +272,7 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 
     if ($q->param('cfg') =~ /^[ij]$/)
     {
-	&my_header($title, '');
+	&my_header($title);
 
 	&out_html("<h3><a target=\"_top\"\nhref=\"$self_url\">1-Click\n",
 		  "Shabbat</a> for $city_descr</h3>\n");
@@ -297,7 +280,7 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
     else
     {
 	$title = '1-Click Shabbat: ' . $q->param('zip');
-	&my_header($title, '');
+	&my_header($title);
 
 	&out_html("<?xml version=\"1.0\"?>
 <!DOCTYPE rss PUBLIC \"-//Netscape Communications//DTD RSS 0.91//EN\"
@@ -316,7 +299,7 @@ All rights reserved.</copyright>
 }
 else
 {
-    &my_header($title, $inline_style);
+    &my_header($title);
 
     &out_html("<h2>$city_descr</h2>\n");
 
@@ -547,7 +530,7 @@ sub out_html
 
 sub my_header
 {
-    my($title,$inline_style) = @_;
+    my($title) = @_;
 
     if (defined $q->param('cfg') && $q->param('cfg') eq 'j')
     {
@@ -560,23 +543,13 @@ sub my_header
     else
     {
 	&out_html($q->header(),
-    $q->start_html(-title => $title,
-		   -target => '_top',
-		   -head => [
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
-			     $q->Link({-rel => 'stylesheet',
-				       -href => '/style.css',
-				       -type => 'text/css'}),
-			     $q->Link({-rel => 'p3pv1',
-				       -href => "http://www.$server_name/w3c/p3p.xml"}),
-#			     $inline_style,
-			     ],
-		   ));
+		  &Hebcal::start_html($q, $title, undef, undef)
+		  );
     }
 
     unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
     {
-	&out_html(&Hebcal::navbar($server_name,'1-Click Shabbat',1),
+	&out_html(&Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
 		  "<h1>1-Click\nShabbat</h1>\n");
     }
 
@@ -587,7 +560,7 @@ sub form
 {
     my($head,$message,$help) = @_;
 
-    &my_header('1-Click Shabbat', $inline_style) if $head;
+    &my_header('1-Click Shabbat') if $head;
 
     if ($message ne '')
     {
