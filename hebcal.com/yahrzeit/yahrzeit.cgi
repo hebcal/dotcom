@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Oct 23 15:39:08 PDT 2000
+Last modified: Mon Oct 23 15:56:00 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -114,7 +114,7 @@ foreach $key (keys %yahrtzeits)
 }
 close(T);
 
-my($cmd) = "/home/users/mradwin/bin/hebcal -D -h -x -Y $tmpfile";
+my($cmd) = "/home/users/mradwin/bin/hebcal -D -x -Y $tmpfile";
 
 print STDOUT $q->header(),
     $q->start_html(-title => 'Interactive Yahrtzeit Calendar',
@@ -165,11 +165,11 @@ foreach $year ($this_year .. ($this_year + 10))
 	    next;
 	}
 
+	my($dow) = ($year > 1969 && $year < 2038) ?
+	    $Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
+
 	if (defined $yahrtzeits{$subj})
 	{
-	    my($dow) = ($year > 1969 && $year < 2038) ?
-		$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' :
-		    '';
 	    printf STDOUT "%s%04d-%02d-%02d  %s's Yahrtzeit",
 	    	$dow, $year, $mon, $mday, HTML::Entities::encode($subj);
 
@@ -177,6 +177,12 @@ foreach $year ($this_year .. ($this_year + 10))
 	    print STDOUT " ($greg2heb{$isodate})"
 		if (defined $greg2heb{$isodate});
 	    print STDOUT "\n";
+	}
+	elsif ($subj eq 'Pesach VIII' || $subj eq 'Shavuot II' ||
+	       $subj eq 'Yom Kippur' || $subj eq 'Shmini Atzeret')
+	{
+	    printf STDOUT "%s%04d-%02d-%02d  Yizkor (%s)\n",
+	    	$dow, $year, $mon, $mday, $subj;
 	}
     }
     print STDOUT "\n";
