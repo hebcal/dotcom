@@ -35,6 +35,7 @@ $dbmfile =~ s/\.db$//;
 	"\">e-mail Michael</a> to tell him that hebcal is broken.")
     unless -r "${dbmfile}.db";
 
+$expires_date = 'Thu, 15 Apr 2010 20:00:00 GMT';
 $cgipath = '/hebcal/';
 $rcsrev = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
@@ -121,12 +122,13 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#language\">
 <meta name=\"DC.Date.X-MetadataLastModified\" scheme=\"ISO8601\" content=\"1999-08-07\">
 <link rel=SCHEMA.dc href=\"http://purl.org/metadata/dublin_core_elements#date\">
+<base href=\"http://www.radwin.org/hebcal/\">
 </head>
 <body>";
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Sat Sep 18 18:12:27 PDT 1999
+Last modified: Tue Sep 21 10:42:03 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -142,7 +144,18 @@ service</a>.</small>
 </body></html>
 ";
 
+# boolean options
+@opts = ('c','x','o','s','i','h','a','d','usa','israel','none','set');
+%opts = ();
+
 &ReadParse();
+
+if (! defined $in{'v'} &&
+    defined $ENV{'HTTP_COOKIE'} &&
+    $ENV{'HTTP_COOKIE'} =~ /[\s;,]*C=([^\s,;]+)/)
+{
+    &process_cookie($1);
+}
 
 while (($key,$val) = each(%in))
 {
@@ -182,10 +195,6 @@ else
     $month{'0'} = ' selected';
 }
 
-# boolean options
-@opts = ('c','x','o','s','i','h','a','d','usa','israel','none');
-%opts = ();
-
 foreach (@opts)
 {
     $opts{$_}     = (defined $in{$_} && ($in{$_} eq 'on' || $in{$_} eq '1')) ?
@@ -215,17 +224,9 @@ foreach (@opts)
 $havdalah = 72;
 $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
-if (! defined $in{'zip'} &&
-    ! defined $in{'city'} &&
-    ! defined $in{'v'} &&
-    (! defined $in{'lodeg'} ||
-     ! defined $in{'lomin'} ||
-     ! defined $in{'lodir'} ||
-     ! defined $in{'ladeg'} ||
-     ! defined $in{'lamin'} ||
-     ! defined $in{'ladir'}))
+if (! defined $in{'v'})
 {
-    $in{'zip'} = '';
+    $in{'zip'} = '' unless defined $in{'zip'};
     &form('');
 }
     
@@ -400,7 +401,7 @@ local($time) = defined $ENV{'SCRIPT_FILENAME'} ?
     (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
 print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
+print STDOUT "Expires: $expires_date\015\012";
 if ($endl eq "\012")
 {
     print STDOUT "Content-Type: text/x-csv\015\012\015\012";
@@ -441,7 +442,7 @@ sub form
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
     local($key,$val);
 
-    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
+#    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "$html_header
@@ -480,9 +481,9 @@ interested in 93, but rather 1993.
     {
 	print STDOUT
 "(Candle lighting times are off.  Turn them on for:
-<a href=\"${cgipath}?c=on\">zip code</a>,
-<a href=\"${cgipath}?c=on&geo=city\">closest city</a>, or
-<a href=\"${cgipath}?c=on&geo=pos\">latitude/longitude</a>.)
+<a href=\"${cgipath}?c=on&amp;geo=zip\">zip code</a>,
+<a href=\"${cgipath}?c=on&amp;geo=city\">closest city</a>, or
+<a href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>.)
 <br><br>
 ";
     }
@@ -505,15 +506,15 @@ Include candle lighting times for ";
 	    print STDOUT "zip code:\n";
 	}
 	print STDOUT
-"<br><small>(or <a href=\"${cgipath}\">turn them off</a>, or select by";
+"<br><small>(or <a href=\"${cgipath}?c=off\">turn them off</a>, or select by";
 	if (defined $in{'geo'} && $in{'geo'} eq 'city')
 	{
-	    print STDOUT " <a\nhref=\"${cgipath}?c=on\">zip code</a> or";
+	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=zip\">zip code</a> or";
 	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
 	}
 	elsif (defined $in{'geo'} && $in{'geo'} eq 'pos')
 	{
-	    print STDOUT " <a\nhref=\"${cgipath}?c=on\">zip code</a> or";
+	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=zip\">zip code</a> or";
 	    print STDOUT " <a\nhref=\"${cgipath}?c=on&amp;geo=city\">closest city</a>"
 	}
 	else
@@ -528,6 +529,8 @@ href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
 
     if (defined $in{'geo'} && $in{'geo'} eq 'city')
     {
+	$in{'city'} = 'Jerusalem'
+	    unless defined $in{'city'} && $in{'city'} !~ /^\s*$/;
 	print STDOUT "
 <input type=\"hidden\" name=\"geo\" value=\"city\">
 <label for=\"city\">Closest City:
@@ -537,7 +540,7 @@ href=\"${cgipath}?c=on&amp;geo=pos\">latitude/longitude</a>";
 	foreach (sort keys %valid_cities)
 	{
 	    print STDOUT '<option';
-	    print STDOUT ' selected' if 'Jerusalem' eq $_;
+	    print STDOUT ' selected' if $in{'city'} eq $_;
 	    print STDOUT ">$_\n";
 	}
 	print STDOUT "</select>\n";
@@ -652,7 +655,11 @@ Add weekly sedrot on Saturday</label>
 (<label for=\"i\"><input type=\"checkbox\" name=\"i\" id=\"i\"$opts_chk{'i'}>
 Use Israeli sedra scheme</label>)<br>
 <label for=\"d\"><input type=\"checkbox\" name=\"d\" id=\"d\"$opts_chk{'d'}>
-Print hebrew date for the entire date range</label></small><br>
+Print hebrew date for the entire date range</label><br>
+<label for=\"set\"><input type=\"checkbox\" name=\"set\" id=\"set\"$opts_chk{'set'}>
+Set my preferences in a cookie</label>
+(<a href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's
+a cookie?</a>)</small><br>
 <br><input type=\"submit\" value=\"Get Calendar\">
 </form>
 $html_footer";
@@ -759,8 +766,17 @@ sub results_page
 	$next_title = ($year + 1);
     }
 
-    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
-    print STDOUT "Expires: Fri, 31 Dec 2010 23:00:00 GMT\015\012";
+    if ($opts{'set'}) {
+	$newcookie = &gen_cookie();
+	if (! defined $ENV{'HTTP_COOKIE'} || $ENV{'HTTP_COOKIE'} ne $newcookie)
+	{
+	    print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
+	    $expires_date, "; path=/; domain=www.radwin.org\015\012";
+	}
+    }
+
+#    print STDOUT "Last-Modified: ", &http_date($time), "\015\012";
+    print STDOUT "Expires: $expires_date\015\012";
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
     print STDOUT "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
@@ -775,7 +791,11 @@ sub results_page
 </head>
 <body>
 <div class=\"navbar\"><small><a href=\"/\">radwin.org</a> <tt>-&gt;</tt>
-<a href=\"$cgipath\">hebcal</a> <tt>-&gt;</tt>
+";
+
+    print STDOUT "<a href=\"$cgipath";
+    print STDOUT "?c=on&amp;geo=$in{'geo'}" if ($opts{'c'} == 1);
+    print STDOUT "\">hebcal</a> <tt>-&gt;</tt>
 $date</small></div><h1>Jewish Calendar $date</h1>
 ";
 
@@ -965,6 +985,110 @@ sub http_date
 
     sprintf("%s, %02d %s %4d %02d:%02d:%02d GMT",
 	    $DoW[$wday],$mday,$MoY[$mon],$year,$hour,$min,$sec);
+}
+
+sub gen_cookie {
+    local($retval);
+
+    $retval = 'C=hebcal=1';
+
+    if ($opts{'c'}) {
+	if ($in{'geo'} eq 'zip') {
+	    $retval .= '&zip=' . $in{'zip'};
+	    $retval .= '&dst=' . $in{'dst'}
+	        if defined $in{'dst'} && $in{'dst'} !~ /^\s*$/;
+	    $retval .= '&tz=' . $in{'tz'}
+	        if defined $in{'tz'} && $in{'tz'} !~ /^\s*$/;
+	} elsif ($in{'geo'} eq 'city') {
+	    $retval .= '&city=' . &url_escape($in{'city'});
+	} elsif ($in{'geo'} eq 'pos') {
+	    $retval .= '&lodeg=' . $in{'lodeg'};
+	    $retval .= '&lomin=' . $in{'lomin'};
+	    $retval .= '&lodir=' . $in{'lodir'};
+	    $retval .= '&ladeg=' . $in{'ladeg'};
+	    $retval .= '&lamin=' . $in{'lamin'};
+	    $retval .= '&ladir=' . $in{'ladir'};
+	    $retval .= '&dst=' . $in{'dst'}
+	        if defined $in{'dst'} && $in{'dst'} !~ /^\s*$/;
+	    $retval .= '&tz=' . $in{'tz'}
+	        if defined $in{'tz'} && $in{'tz'} !~ /^\s*$/;
+	}
+	$retval .= '&m=' . $in{'m'} if defined $in{'m'} && $in{'m'} !~ /^\s*$/;
+    }
+
+    foreach (@opts)
+    {
+	next if $_ eq 'c';
+	next if length($_) > 1;
+	$retval .= "&$_=" . $in{$_} if defined $in{$_} && $in{$_} !~ /^\s*$/;
+    }
+
+    $retval;
+}
+
+
+sub process_cookie {
+    local($cookieval) = @_;
+    local(%cookie);
+    local($status);
+    local(%ENV);
+
+    $ENV{'QUERY_STRING'} = $cookieval;
+    $ENV{'REQUEST_METHOD'} = 'GET';
+    $status = &ReadParse(*cookie);
+
+    if (defined $status && $status > 0) {
+	$in{'cookie'} = $cookieval;
+	if (! defined $in{'c'} || $in{'c'} eq 'on' || $in{'c'} eq '1') {
+	    if (defined $cookie{'zip'} && $cookie{'zip'} =~ /^\d\d\d\d\d$/ &&
+		(! defined $in{'geo'} || $in{'geo'} eq 'zip')) {
+		$in{'zip'} = $cookie{'zip'};
+		$in{'geo'} = 'zip';
+		$in{'c'} = 'on';
+		$in{'dst'} = $cookie{'dst'}
+		    if (defined $cookie{'dst'} && ! defined $in{'dst'});
+		$in{'tz'} = $cookie{'tz'}
+		    if (defined $cookie{'tz'} && ! defined $in{'tz'});
+	    } elsif (defined $cookie{'city'} && $cookie{'city'} !~ /^\s*$/ &&
+		(! defined $in{'geo'} || $in{'geo'} eq 'city')) {
+		$in{'city'} = $cookie{'city'};
+		$in{'geo'} = 'city';
+		$in{'c'} = 'on';
+	    } elsif (defined $cookie{'lodeg'} &&
+		     defined $cookie{'lomin'} &&
+		     defined $cookie{'lodir'} &&
+		     defined $cookie{'ladeg'} &&
+		     defined $cookie{'lamin'} &&
+		     defined $cookie{'ladir'} &&
+		     (! defined $in{'geo'} || $in{'geo'} eq 'pos')) {
+		$in{'lodeg'} = $cookie{'lodeg'};
+		$in{'lomin'} = $cookie{'lomin'};
+		$in{'lodir'} = $cookie{'lodir'};
+		$in{'ladeg'} = $cookie{'ladeg'};
+		$in{'lamin'} = $cookie{'lamin'};
+		$in{'ladir'} = $cookie{'ladir'};
+		$in{'geo'} = 'pos';
+		$in{'c'} = 'on';
+		$in{'dst'} = $cookie{'dst'}
+		    if (defined $cookie{'dst'} && ! defined $in{'dst'});
+		$in{'tz'} = $cookie{'tz'}
+		    if (defined $cookie{'tz'} && ! defined $in{'tz'});
+	    }
+	}
+
+	$in{'m'} = $cookie{'m'}
+	   if (defined $cookie{'m'} && ! defined $in{'m'});
+
+	foreach (@opts)
+	{
+	    next if $_ eq 'c';
+	    $in{$_} = (defined $in{$_}) ? $in{$_} :
+		(defined $cookie{$_} &&
+		 ($cookie{$_} eq 'on' || $cookie{$_} eq '1')) ? 'on' : '';
+	}
+    }
+
+    $status;
 }
 
 if ($^W && 0)
