@@ -934,6 +934,7 @@ sub results_page()
 		$cal->width('94%');
 		$cal->border(1);
 		$cal->bgcolor('white');
+		$cal->todaybordercolor('red');
 
 		$cal->header("<h2 align=\"center\"><a class=\"goto\"\n" .
 			     "href=\"$prev_url\">&lt;&lt;</a>\n" .
