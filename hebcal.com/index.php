@@ -21,6 +21,8 @@ Jewish Calendar Tools</small></td>
 <input type="submit" value="Search"></td></tr></table>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
+<span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif"><!--#config timefmt="%A, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
+&nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="12" cellspacing="0">
 <tr><td>
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
@@ -76,7 +78,7 @@ Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --
 <input type="hidden" name="no_note" value="1">
 <input type="hidden" name="no_shipping" value="1">
 <input type="image" name="submit"
-src="http://www.paypal.com/images/x-click-but04.gif" border="0"
+src="http://www.paypal.com/images/x-click-but04.gif"
 alt="Make payments with PayPal - it's fast, free and secure!">
 </form>
 <!-- End PayPal Logo --></div>
@@ -95,7 +97,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.3 for UNIX</a>,
 Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Tue Nov 26 23:05:24 EST 2002
+Last modified: Wed Nov 27 17:58:43 EST 2002
 <!-- hhmts end -->
 </span>
 </body></html>
