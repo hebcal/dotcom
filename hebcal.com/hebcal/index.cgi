@@ -40,7 +40,7 @@ $this_mon++;
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:42:09 PDT 2001
+Last modified: Tue May  8 11:43:23 PDT 2001
 <!-- hhmts end -->";
 
 my($latlong_url) = 'http://www.getty.edu/research/tools/vocabulary/tgn/';
@@ -49,15 +49,11 @@ my($cmd)  = './hebcal';
 
 # process form params
 my($q) = new CGI;
+
 $q->delete('.s');		# we don't care about submit button
 
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.html$,/,;
-my($server_name) = $q->virtual_host();
-$server_name =~ s/^www\.//;
-
-$q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
-		"\t\"http://www.w3.org/TR/html4/loose.dtd");
 
 if (! $q->param('v') &&
     defined $q->raw_cookie() &&
@@ -257,23 +253,14 @@ document.f1.nh.checked = true;
 JSCRIPT_END
 
     print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
-    $q->start_html(-title => "Hebcal Interactive Jewish Calendar",
-		   -target=>'_top',
-		   -head => [
-			     "<script language=\"JavaScript\" type=\"text/javascript\"><!--\n$JSCRIPT// --></script>",
-			     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">",
-			     "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
-			   $q->Link({-rel => 'SCHEMA.dc',
-				     -href => 'http://purl.org/metadata/dublin_core_elements'}),
-			   $q->Link({-rel => 'stylesheet',
-				     -href => '/style.css',
-				     -type => 'text/css'}),
-			   $q->Link({-rel => 'p3pv1',
-				     -href => "http://www.$server_name/w3c/p3p.xml"}),
-			   $q->Link({-rev => 'made',
-				     -href => "mailto:$author"}),
-			   ],
-		   -meta => {
+    &Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
+			[
+			 qq{<script language="JavaScript" type="text/javascript"><!--\n$JSCRIPT// --></script>},
+			 qq{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">},
+			 $q->Link({-rel => 'SCHEMA.dc',
+				   -href => 'http://purl.org/metadata/dublin_core_elements'}),
+			 ],
+			{
 		       'description' =>
 		       'Generates a list of Jewish holidays and candle lighting times customized to your zip code, city, or latitude/longitude',
 
@@ -285,20 +272,11 @@ JSCRIPT_END
 		       'DC.Creator.PersonalName.Address' => $author,
 		       'DC.Subject' => 'Jewish calendar, Hebrew calendar, hebcal',
 		       'DC.Type' => 'Text.Form',
-		       'DC.Identifier' => "http://www." .
-			   $server_name . $script_name,
 		       'DC.Language' => 'en',
 		       'DC.Date.X-MetadataLastModified' => '2001-04-22',
 		       },
 		   ),
-    "<table width=\"100%\"\nclass=\"navbar\">",
-    "<tr><td><small>",
-    "<strong><a\nhref=\"/\">$server_name</a></strong>\n<tt>-&gt;</tt>\n",
-    "Interactive Calendar</small></td>",
-    "<td align=\"right\"><small><a\n",
-    "href=\"/help/\">Help</a> -\n<a\n",
-    "href=\"/search/\">Search</a></small>\n",
-    "</td></tr></table>",
+    &Hebcal::navbar2($q, 'Interactive Calendar', 1, undef, undef),
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>";
 
     if ($message ne '')
@@ -692,40 +670,23 @@ sub results_page()
 
     print STDOUT $q->header(-expires => $expires_date,
 			    -type => "text/html; charset=UTF-8"),
-    $q->start_html(-title => "Hebcal: Jewish Calendar $date",
-		   -target=>'_top',
-		   -head => [
-			   "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">",
-			   "<meta http-equiv=\"PICS-Label\" content='(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true for \"http://www.$server_name\" r (n 0 s 0 v 0 l 0))'>",
-			   $q->Link({-rel => 'stylesheet',
-				     -href => '/style.css',
-				     -type => 'text/css'}),
-			   $q->Link({-rel => 'p3pv1',
-				     -href => "http://www.$server_name/w3c/p3p.xml"}),
-			   $q->Link({-rel => 'prev',
-				     -href => $prev_url,
-				     -title => $prev_title}),
-			   $q->Link({-rel => 'next',
-				     -href => $next_url,
-				     -title => $next_title}),
-			   $q->Link({-rel => 'start',
-				     -href => $script_name,
-				     -title => 'Hebcal Interactive Jewish Calendar'})
-			   ],
-		   );
-    print STDOUT
-	"<table width=\"100%\"\nclass=\"navbar\">",
-	"<tr><td><small>",
-	"<strong><a\nhref=\"/\">", $server_name, "</a></strong>\n",
-	"<tt>-&gt;</tt>\n",
-	"<a href=\"", &self_url($q, {'v' => '0'});
-
-    print STDOUT "\">Interactive\nCalendar</a>\n",
-    "<tt>-&gt;</tt>\n$date</small></td>",
-    "<td align=\"right\"><small><a\n",
-    "href=\"/help/\">Help</a> -\n<a\n",
-    "href=\"/search/\">Search</a></small>\n",
-    "</td></tr></table>\n";
+    &Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
+			[
+			 qq{<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">},
+			 $q->Link({-rel => 'prev',
+				   -href => $prev_url,
+				   -title => $prev_title}),
+			 $q->Link({-rel => 'next',
+				   -href => $next_url,
+				   -title => $next_title}),
+			 $q->Link({-rel => 'start',
+				   -href => $script_name,
+				   -title => 'Hebcal Interactive Jewish Calendar'})
+			 ],
+			undef
+			),
+    &Hebcal::navbar2($q, $date, 1,
+		     "Interactive\nCalendar", &self_url($q, {'v' => '0'}));
 
     unless ($q->param('vis'))
     {
