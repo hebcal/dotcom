@@ -1,4 +1,6 @@
 #!/usr/local/bin/perl
+eval "exec /usr/local/bin/perl -S $0 $*"
+    if $running_under_some_shell;
 
 # $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_bounce.pl,v $
 # $Id$
@@ -34,6 +36,10 @@ if ($to) {
 	$email_address = $1;
 	$email_address =~ s/=/\@/;
     }
+}
+
+if (!$email_address) {
+    die "can't find email address in message";
 }
 
 my $bounce = eval { Mail::DeliveryStatus::BounceParser->new($message->as_string()) };
