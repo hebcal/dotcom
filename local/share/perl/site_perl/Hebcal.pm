@@ -676,12 +676,14 @@ sub utf8_hebrew_to_netscape($) {
     return $u->utf8();
 }
 
-sub html_copyright2($)
+sub html_copyright2($$)
 {
-    my($prefix) = @_;
+    my($prefix,$break) = @_;
+
+    my($br) = $break ? '<br>' : '';
 
     return qq{<a name="copyright">Copyright &copy; $this_year
-Michael J. Radwin. All rights reserved.</a>
+Michael J. Radwin. All rights reserved.</a>$br
 <a target="_top" href="$prefix/privacy/">Privacy Policy</a> -
 <a target="_top" href="$prefix/help/">Help</a> -
 <a target="_top" href="$prefix/contact/">Contact</a> -
@@ -689,12 +691,12 @@ Michael J. Radwin. All rights reserved.</a>
 <a target="_top" href="$prefix/donations/">Donate</a>};
 }
 
-sub html_copyright($)
+sub html_copyright($$)
 {
-    my($q) = @_;
+    my($q,$break) = @_;
 
     my($server_name) = $q->virtual_host();
-    return html_copyright2("http://$server_name");
+    return html_copyright2("http://$server_name", $break);
 }
 
 sub html_footer($$)
@@ -713,7 +715,7 @@ sub html_footer($$)
 
     return qq{
 <hr noshade size="1"><span class="tiny">
-}, &html_copyright($q), qq{
+}, &html_copyright($q, 0), qq{
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.3 for UNIX</a>, Copyright &copy; 2002 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
