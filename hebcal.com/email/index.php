@@ -23,6 +23,7 @@ href="/help/">Help</a> -
 require_once('smtp.inc');
 require_once('zips.inc');
 require_once('dblock.inc');
+require_once('HTML/Form.php');
 
 $VER = '$Revision$';
 $matches = array();
@@ -32,6 +33,11 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
 
 $param = array();
 
+global $HTTP_POST_VARS;
+global $HTTP_GET_VARS;
+
+if (!isset($HTTP_POST_VARS['v']) && !isset($HTTP_GET_VARS['v']))
+{
 global $HTTP_SERVER_VARS;
 $cookies = explode(';', $HTTP_SERVER_VARS["HTTP_COOKIE"]);
 foreach ($cookies as $ck) {
@@ -43,9 +49,7 @@ foreach ($cookies as $ck) {
 	}
     }
 }
-
-global $HTTP_POST_VARS;
-global $HTTP_GET_VARS;
+}
 
 foreach($HTTP_POST_VARS as $key => $value) {
     $param[$key] = $value;
@@ -54,7 +58,8 @@ foreach($HTTP_GET_VARS as $key => $value) {
     $param[$key] = $value;
 }
 
-if (array_key_exists('e', $param)) {
+if (isset($param['e']))
+{
     $param['em'] = base64_decode($param['e']);
     $info = get_sub_info($param['em']);
     if ($info && !preg_match('/^action=/', $info)) {
@@ -155,10 +160,23 @@ function write_staging_info($param)
 
     list($id, $fd) = dba_lock_open("email.db", "w", "db3");
 
-    $val = sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d;em=%s",
-		   $param['zip'],
-		   $param['tz'],
-		   $param['dst'],
+    if ($param['geo'] == 'zip')
+    {
+	$val = sprintf("zip=%s;tz=%s;dst=%s",
+		       $param['zip'],
+		       $param['tz'],
+		       $param['dst']);
+    }
+    else if ($param['geo'] == 'city')
+    {
+	$val = 'city=' . urlencode($param['city']);
+    }
+    else
+    {
+	$val = 'bogus=1';
+    }
+
+    $val .= sprintf(";m=%s;upd=%d;t=%d;em=%s",
 		   $param['m'],
 		   $param['upd'] ? 1 : 0,
 		   $now,
@@ -224,9 +242,32 @@ lighting times.  Email is sent out every week on Thursday morning.</p>
 
 <form name="f1" id="f1" action="/email/" method="post">
 
+<?php if (isset($param['geo']) && $param['geo'] == 'city') { ?>
+<input type="hidden" name="geo" value="city">
+<label for="city">Closest City:</label>
+<?php
+global $city_tz;
+$entries = array();
+foreach ($city_tz as $k => $v) {
+    $entries[$k] = $k;
+}
+if ($param['city']) {
+    $geo_city = htmlspecialchars($param['city']);
+}
+echo HTML_Form::returnSelect('city', $entries,
+			     $geo_city ? $geo_city : 'Jerusalem', 1,
+			     '', false, 'id="city"');
+?>
+&nbsp;&nbsp;<small>(or select by <a
+href="/email/?geo=zip">zip code</a></small>)
+<?php } else { ?>
+<input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param['zip']) ?>"></label>
+&nbsp;&nbsp;<small>(or select by <a
+href="/email/?geo=city">closest city</a></small>)
+<?php } ?>
 
 <br><label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
@@ -246,7 +287,6 @@ Contact me occasionally about changes to the hebcal.com website.
 
 <br>
 <input type="hidden" name="v" value="1">
-<input type="hidden" name="geo" value="zip">
 <br>
 <input type="submit" name="submit_modify" value="Subscribe">
 <input type="submit" name="submit_unsubscribe" value="Unsubscribe">
@@ -267,12 +307,6 @@ href="mailto:shabbat-unsubscribe@hebcal.com">shabbat-unsubscribe@hebcal.com</a>.
 }
 
 function subscribe($param) {
-    if (!$param['zip'])
-    {
-	form($param,
-	     "Please enter your zip code for candle lighting times.");
-    }
-
     $recipients = $param['em'];
     if (preg_match('/\@hebcal.com$/', $recipients))
     {
@@ -280,53 +314,94 @@ function subscribe($param) {
 	     "Sorry, can't use a <b>hebcal.com</b> email address.");
     }
 
-    if (!$param['dst']) {
-	$param['dst'] = 'usa';
-    }
-    if (!$param['tz']) {
-	$param['tz'] = 'auto';
-    }
-    $param['geo'] = 'zip';
-
-    if (!preg_match('/^\d{5}$/', $param['zip']))
+    if ($param['geo'] == 'zip')
     {
-	form($param,
-	     "Sorry, <b>" . $param['zip'] . "</b> does\n" .
-	     "not appear to be a 5-digit zip code.");
-    }
+	if (!$param['zip'])
+	{
+	    form($param,
+	    "Please enter your zip code for candle lighting times.");
+	}
 
-    list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	get_zipcode_fields($param['zip']);
-    if (!$state)
+	if (!$param['dst']) {
+	    $param['dst'] = 'usa';
+	}
+	if (!$param['tz']) {
+	    $param['tz'] = 'auto';
+	}
+
+	if (!preg_match('/^\d{5}$/', $param['zip']))
+	{
+	    form($param,
+	    "Sorry, <b>" . $param['zip'] . "</b> does\n" .
+	    "not appear to be a 5-digit zip code.");
+	}
+
+	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    get_zipcode_fields($param['zip']);
+	if (!$state)
+	{
+	    form($param,
+	    "Sorry, can't find\n".  "<b>" . $param['zip'] .
+	    "</b> in the zip code database.\n",
+	    "<ul><li>Please try a nearby zip code</li></ul>");
+	}
+
+	$city_descr = "$city, $state " . $param['zip'];
+
+	// handle timezone == "auto"
+	if ($tz == '?')
+	{
+	    form($param,
+	    "Sorry, can't auto-detect\n" .
+	    "timezone for <b>" . $city_descr . "</b>\n",
+	    "<ul><li>Please select your time zone below.</li></ul>");
+	}
+
+	global $tz_names;
+	$param['tz'] = $tz;
+	$tz_descr = "Time zone: " . $tz_names['tz_' . $tz];
+
+	if ($dst) {
+	    $param['dst'] = 'usa';
+	} else {
+	    $param['dst'] = 'none';
+	}
+
+	$dst_descr = "Daylight Saving Time: " . $param['dst'];
+
+	$geo_args = sprintf("zip=%s;tz=%s;dst=%s",
+			    $param['zip'],
+			    $param['tz'],
+			    $param['dst']);
+    }
+    else if ($param['geo'] == 'city')
     {
-	form($param,
-	     "Sorry, can't find\n".  "<b>" . $param['zip'] .
-	     "</b> in the zip code database.\n",
-	     "<ul><li>Please try a nearby zip code</li></ul>");
+	if (!$param['city'])
+	{
+	    form($param,
+	    "Please select a city for candle lighting times.");
+	}
+
+	global $city_tz;
+	if (!isset($city_tz[$param['city']]))
+	{
+	    form($param,
+	    "Sorry, <b>" . htmlspecialchars($param['city']) . "</b> is\n" .
+	    "not a recoginized city.");
+	}
+
+	$geo_args = "city=" . urlencode($param['city']);
+	$city_descr = $param['city'];
+	global $tz_names;
+	$tz_descr = "Time zone: " .
+	     $tz_names['tz_' . $city_tz[$param['city']]];
+	$dst_descr = '';
     }
-
-    $city_descr = "$city, $state " . $param['zip'];
-
-    // handle timezone == "auto"
-    if ($tz == '?')
+    else
     {
-	form($param,
-	     "Sorry, can't auto-detect\n" .
-	     "timezone for <b>" . $city_descr . "</b>\n",
-	     "<ul><li>Please select your time zone below.</li></ul>");
+	$param['geo'] = 'zip';
+	form($param, "Sorry, missing zip or city field.");
     }
-
-    global $tz_names;
-    $param['tz'] = $tz;
-    $tz_descr = "Time zone: " . $tz_names['tz_' . $tz];
-
-    if ($dst) {
-	$param['dst'] = 'usa';
-    } else {
-	$param['dst'] = 'none';
-    }
-
-    $dst_descr = "Daylight Saving Time: " . $param['dst'];
 
     # check if email address already verified
     $info = get_sub_info($recipients);
@@ -335,10 +410,8 @@ function subscribe($param) {
 	$now = time();
 	write_sub_info(
 	    $recipients, 
-	    sprintf("zip=%s;tz=%s;dst=%s;m=%s;upd=%d;t=%d",
-		    $param['zip'],
-		    $param['tz'],
-		    $param['dst'],
+	    sprintf("%s;m=%s;upd=%d;t=%d",
+		    $geo_args,
 		    $param['m'],
 		    $param['upd'] ? 1 : 0,
 		    $now)
@@ -386,8 +459,8 @@ EOD;
 <p>Your subsciption information has been updated successfully.</p>
 <p><small>
 $city_descr
-<br>&nbsp;&nbsp;$dst_descr
 <br>&nbsp;&nbsp;$tz_descr
+<br>&nbsp;&nbsp;$dst_descr
 </small></p>
 EOD
 	     ;
@@ -453,8 +526,8 @@ please return to the subscription page and try again, taking care
 to avoid typos.</p>
 <p><small>
 $city_descr
-<br>&nbsp;&nbsp;$dst_descr
 <br>&nbsp;&nbsp;$tz_descr
+<br>&nbsp;&nbsp;$dst_descr
 </small></p>
 EOD
 		     ;
