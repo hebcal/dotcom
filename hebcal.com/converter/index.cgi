@@ -85,7 +85,7 @@ my($author) = 'webmaster@hebcal.com';
 my($rcsrev) = '$Revision$'; #'
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue May  8 11:28:00 PDT 2001
+Last modified: Tue May  8 11:50:09 PDT 2001
 <!-- hhmts end -->";
 
 # process form params
@@ -385,7 +385,7 @@ sub my_header
 {
     print STDOUT $q->header(-type => "text/html; charset=UTF-8"),
     &Hebcal::start_html($q, 'Hebcal Hebrew Date Converter', undef, undef),
-    &Hebcal::navbar2($q, "Hebrew\nDate Converter"),
+    &Hebcal::navbar2($q, "Hebrew Date\nConverter"),
     "<h1>Hebrew\nDate Converter</h1>\n";
 
     1;
