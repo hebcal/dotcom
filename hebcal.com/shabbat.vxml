@@ -6,6 +6,7 @@
 <vxml version="2.0">
 	<var name="zip"/>
 	<var name="cfg" expr="'v'"/>
+	<var name="m" expr="'50'"/>
 	<form id="top">
 		<block>
 			<audio>Welcome to heeb cal interactive Jewish Calendar.</audio>
@@ -101,7 +102,7 @@
 			<filled>
 				<if cond="zip_verify == true">
 					<audio>Ok, got it...</audio>
-					<submit next="http://www.hebcal.com/shabbat/" namelist="zip cfg"/>
+					<submit next="http://www.hebcal.com/shabbat/" namelist="zip m cfg"/>
 					<else/>
 					<audio>Ok, let's try this again... </audio>
 					<goto next="#enterzip"/>
