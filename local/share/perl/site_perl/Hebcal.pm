@@ -1212,7 +1212,7 @@ Jewish Calendar events into your desktop software.</p>};
 
     my $ical_href = download_href($q, $filename, 'ics');
 
-    $s .= "<h4>Apple iCal</h4>\n<ol><li>" .
+    $s .= "<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
 	"Export iCalendar file:\n" .
 	"<a href=\"webcal://" . $q->virtual_host() . $ical_href .
 	    "\">subscribe</a> or\n" .
@@ -1228,7 +1228,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    "\">$filename.tsv</a>\n";
     $s .= "<li>(this feature is currently experimental)</ol>\n";
 
-    $s .= "<h4>vCalendar (other desktop applications)</h4>\n<ol><li>" .
+    $s .= "<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
 	"<a href=\"" .
 	download_href($q, $filename, 'vcs') .
@@ -1581,10 +1581,19 @@ sub vcalendar_write_contents($$$$$)
 	print STDOUT ";TZID=$tzid" if $tzid;
 	print STDOUT qq{:$date$endl};
 
-	print STDOUT qq{DTEND};
-	print STDOUT ";TZID=$tzid" if $tzid;
-	print STDOUT qq{:$end_date$endl};
-
+	if ($is_icalendar && $events->[$i]->[$Hebcal::EVT_IDX_UNTIMED])
+	{
+	    # avoid using DTEND since Apple iCal and Lotus Notes
+	    # seem to interpret all-day events differently
+	    print STDOUT qq{DURATION:P1D$endl};
+	}
+	else
+	{
+	    print STDOUT qq{DTEND};
+	    print STDOUT ";TZID=$tzid" if $tzid;
+	    print STDOUT qq{:$end_date$endl};
+        }
+	
 	if ($is_icalendar) {
 	    my $subj_copy = lc($subj);
 	    $subj_copy =~ s/[^\w]/-/g;
