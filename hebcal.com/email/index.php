@@ -23,7 +23,8 @@ href="/help/">Help</a> -
 require_once('smtp.inc');
 require_once('zips.inc');
 
-$lockfile = "/tmp/hebcal.com.lock";
+#$lockfile = "/pub/tmp/mradwin-hebcal2.lock";
+$lockfile = "/pub/m/r/mradwin/private/tmp/mradwin-hebcal.lock";
 
 $VER = '$Revision$';
 $matches = array();
@@ -96,11 +97,11 @@ function write_sub_info($email, $val) {
     global $lockfile;
     $fd = fopen($lockfile, "w");
     if ($fd == false) {
-	die("lockfile open failed");
+	die("open($lockfile) failed");
     }
 
     if (flock($fd, LOCK_EX) == false) {
-	die("flock failed");
+	die("flock($lockfile,$fd) failed");
 	fclose($fd);
     }
 
@@ -126,11 +127,11 @@ function get_sub_info($email) {
     global $lockfile;
     $fd = fopen($lockfile, "w");
     if ($fd == false) {
-	die("lockfile open failed");
+	die("open($lockfile) failed");
     }
 
     if (flock($fd, LOCK_SH) == false) {
-	die("flock failed");
+	die("flock($lockfile,$fd) failed");
 	fclose($fd);
     }
 
@@ -169,11 +170,11 @@ function write_staging_info($param)
     global $lockfile;
     $fd = fopen($lockfile, "w");
     if ($fd == false) {
-	die("lockfile open failed");
+	die("open($lockfile) failed");
     }
 
     if (flock($fd, LOCK_EX) == false) {
-	die("flock failed");
+	die("flock($lockfile,$fd) failed");
 	fclose($fd);
     }
 
