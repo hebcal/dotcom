@@ -52,7 +52,7 @@ Julian Calendars</a>.</p>";
 $Hebcal::indiana_warning = "<p><font color=\"#ff0000\">WARNING:
 Indiana has confusing time zone &amp; Daylight Saving Time
 rules.</font> You might want to read <a
-href=\"http://www.mccsc.edu/time.html\">What time is it in
+href=\"http://www.mccsc.edu/time.html#WHAT\">What time is it in
 Indiana?</a> to make sure the above settings are correct.</p>";
 
 
