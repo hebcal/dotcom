@@ -47,10 +47,6 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
     $VER = $matches[1] . "." . $matches[2];
 }
 
-$hebrew_months = array(
-    "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
-    "Cheshvan", "Kislev", "Tevet", "Shvat", "Adar1", "Adar2");
-
 $calinf = cal_info(CAL_GREGORIAN);
 $MoY_long = $calinf["months"];
 
@@ -71,6 +67,7 @@ $hmstr_to_num = array(
     );
 
 $hnum_to_str = array_flip($hmstr_to_num);
+$hebrew_months = array_keys($hmstr_to_num);
 
 $hmstr_to_hebcal = array(
     "Nisan" => "Nisan",
