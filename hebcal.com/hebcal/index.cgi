@@ -596,19 +596,12 @@ JSCRIPT_END
 		       -labels => \%Hebcal::tz_names),
 	"</label><br>",
 	"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Daylight Saving Time:\n",
-	$q->radio_group(-name => 'dst',
-			-values =>
-			(defined $q->param('geo') && $q->param('geo') eq 'pos')
-			? ['usa','israel','none']
-			: ['usa','none'],
-			-default =>
-			(defined $q->param('geo') && $q->param('geo') eq 'pos')
-			? 'none' : 'usa',
-			-labels =>
-			{'usa' => "\nUSA (except AZ, HI, and IN) ",
-			 'israel' => "\nIsrael ",
-			 'none' => "\nnone ", }),
-	"<br>";
+	$q->popup_menu(-name => 'dst',
+		       -id => 'dst',
+		       -values => ['usa','eu','israel','none'],
+		       -default => 'none',
+		       -labels => \%Hebcal::dst_names),
+	"</label><br>";
     }
 
     print STDOUT "<label\nfor=\"m\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
@@ -1128,7 +1121,8 @@ sub get_candle_config($)
 	    unless defined($Hebcal::city_tz{$q->param('city')});
 
 	$q->param('geo','city');
-	$q->param('tz',$Hebcal::city_tz{$q->param('city')});
+#	$q->param('tz',$Hebcal::city_tz{$q->param('city')});
+	$q->delete('tz');
 	$q->delete('dst');
 
 	$city_descr = "Closest City: " . $q->param('city');
