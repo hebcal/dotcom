@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<!-- $Id$ -->
+<html lang="en">
+<head>
+<base href="http://www.hebcal.com/help/" target="_top">
+<title>Linking from your Synagogue to Hebcal</title>
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
+<link rel="stylesheet" href="/style.css" type="text/css">
+</head>
+<body>
+<!--htdig_noindex-->
+<table width="100%" class="navbar">
+<tr><td><small>
+<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<a href="./">Help</a> <tt>-&gt;</tt>
+Linking
+</small></td>
+<td align="right"><small><a href="/search/">Search</a></small>
+</td></tr></table>
+
+<h1><a name="top" href="./#synagogue">Hebcal Help</a>: Linking</h1>
+<!--/htdig_noindex-->
+
+<h2><a name="synagogue">Can my synagogue link to hebcal.com?</a></h2>
+
+<p>Yes, you can link to hebcal.com.  You can also add some hebcal.com
+content directly to your website using the following instructions.</p>
+
+<h2><a name="tags">How can my synagogue put 1-Click Shabbat
+candle-lighting times on its own website?</a></h2>
+
+<p>You can use the <a href="/link/">Link to 1-Click Shabbat</a> page to
+generate HTML tags to insert weekly candle-lighting times
+directly on your web page.</p>
+
+<h2><a name="cal-tags">How can my synagogue display a Jewish Calendar on
+its own web site?</a></h2>
+
+<p>You can use the HTML tags below, courtesy of <a
+href="http://home.attbi.com/~kilsen/">Kevin Ilsen' JavaScript Event
+Calendar</a> to put a calendar on your website.</p>
+
+<table border="1" cellpadding="8">
+<tr><td><pre>
+&lt;div style="font-family: Verdana,Arial,Helvetica"&gt;
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/i/calendar.js"&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x"&gt;
+&lt;/script&gt;
+&lt;script language="JavaScript"&gt;
+ &lt;!--
+  SpecialDay=7;
+  FontSize="+1";
+  Calendar();
+ // --&gt;
+&lt;/script&gt;
+&lt;/div&gt;
+</pre></td></tr>
+</table>
+
+<p>To add candle-lighting times for your town, you can add
+<code>;c=on;zip=90210;m=72;s=on</code> to the end of the 2nd URL (be
+sure to change <span class="hl">90210</span> to your shul's zip code).
+For example, </p>
+
+<pre>
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x<span class="hl">;c=on;zip=90210;m=72;s=on</span>"&gt;
+&lt;/script&gt;
+</pre>
+
+<h2><a name="yahrzeit-tags">How can my synagogue link to the
+Yahrzeit, Birthday and Anniversary Calendar from its own
+website?</a></h2>
+
+<p>You can use these HTML tags to insert a small form directly on your
+web page, with a reverse link back to your site:</p>
+
+<table border="1" cellpadding="8">
+<tr><td><pre>
+&lt;form action="http://www.hebcal.com/yahrzeit/"&gt;
+&lt;input type="hidden" name="ref_url" value="<span class="hl">http://www.tbala.org</span>"&gt;
+&lt;input type="hidden" name="ref_text" value="<span class="hl">Temple Beth Am</span>"&gt;
+&lt;select name="t1"&gt;
+&lt;option value="Yahrzeit"&gt;Yahrzeit&lt;/option&gt;
+&lt;option value="Birthday"&gt;Birthday&lt;/option&gt;
+&lt;option value="Anniversary"&gt;Anniversary&lt;/option&gt;
+&lt;/select&gt;
+
+Month:
+&lt;select name="m1" id="m1"&gt;
+&lt;option value="1"&gt;January&lt;/option&gt;
+&lt;option value="2"&gt;February&lt;/option&gt;
+&lt;option value="3"&gt;March&lt;/option&gt;
+&lt;option value="4"&gt;April&lt;/option&gt;
+&lt;option value="5"&gt;May&lt;/option&gt;
+&lt;option value="6"&gt;June&lt;/option&gt;
+&lt;option value="7"&gt;July&lt;/option&gt;
+&lt;option value="8"&gt;August&lt;/option&gt;
+&lt;option value="9"&gt;September&lt;/option&gt;
+&lt;option value="10"&gt;October&lt;/option&gt;
+&lt;option value="11"&gt;November&lt;/option&gt;
+&lt;option value="12"&gt;December&lt;/option&gt;
+&lt;/select&gt;
+
+Day:
+&lt;input type="text" name="d1" size="2" maxlength="2" id="d1"&gt;
+Year:
+&lt;input type="text" name="y1" size="4" maxlength="4" id="y1"&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;
+Name:
+&lt;input type="text" name="n1" id="n1"&gt;&lt;br&gt;
+
+&lt;input type="checkbox" name="yizkor" id="yizkor"&gt;
+&lt;label for="yizkor"&gt;Include Yizkor dates&lt;/label&gt;&lt;br&gt;
+&lt;input type="submit" value="Compute Calendar"&gt;
+&lt;/form&gt;
+</pre></td></tr>
+</table>
+
+<p>Make sure you replace both the <span class="hl">ref_url</span> and <span
+class="hl">ref_text</span> value fields with with your own synagogue's.</p>
+
+<p>
+<hr noshade size="1">
+<span class="tiny">Copyright
+&copy; 2003 Michael J. Radwin. All rights reserved.
+<a href="/privacy/">Privacy Policy</a> -
+<a href="/contact/">Contact</a> -
+<a href="/news/">News</a> -
+<a href="/donations/">Donate</a>
+<br>
+<!-- hhmts start -->
+Last modified: Mon Feb 10 20:32:50 EST 2003
+<!-- hhmts end -->
+($Revision$)
+</span>
+</body></html>
