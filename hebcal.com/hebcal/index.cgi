@@ -890,9 +890,7 @@ so you can keep this window open.
 	    }
 	}
 
-	my($dow) = ($year > 1969 && $year < 2038) ?
-	    $Hebcal::DoW[&Hebcal::get_dow($year-1900, $mon-1, $mday)] . ' '
-		: '';
+	my($dow) = $Hebcal::DoW[&Hebcal::get_dow($year, $mon, $mday)] . ' ';
 
 	if ($q->param('vis'))
 	{
