@@ -43,7 +43,9 @@ $q->param('cfg', 'w')
     if (defined $ENV{'HTTP_ACCEPT'} &&
 	$ENV{'HTTP_ACCEPT'} =~ /text\/vnd\.wap\.wml/);
 
-if (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+my($cfg) = $q->param('cfg');
+
+if (defined $cfg && $cfg eq 'w')
 {
     my $dbmfile = 'wap.db';
     my %DB;
@@ -300,13 +302,13 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/)
 
     print STDOUT "Set-Cookie: ", $cookie_to_set,
     "; path=/; expires=",  $expires_date, "\015\012"
-	if $cookie_to_set && !$q->param('cfg');
+	if $cookie_to_set && !$cfg;
 }
 
 my($title) = "1-Click Shabbat for $city_descr";
 $title =~ s/ &nbsp;/ /;
 
-if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
+if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
     my($self_url) = join('', "http://", $q->virtual_host(), $script_name,
 			 "?geo=", $q->param('geo'));
@@ -331,19 +333,19 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
 	$self_url .= ";.from=" . &Hebcal::url_escape($q->param('.from'));
     }
 
-    if ($q->param('cfg') =~ /^[ij]$/)
+    if ($cfg =~ /^[ij]$/)
     {
 	&my_header($title);
 
-	&out_html("<h3><a target=\"_top\"\nhref=\"$self_url\">1-Click\n",
+	&Hebcal::out_html($cfg,"<h3><a target=\"_top\"\nhref=\"$self_url\">1-Click\n",
 		  "Shabbat</a> for $city_descr</h3>\n");
     }
-    elsif ($q->param('cfg') eq 'r')
+    elsif ($cfg eq 'r')
     {
 	$title = '1-Click Shabbat: ' . $q->param('zip');
 	&my_header($title);
 
-	&out_html("<?xml version=\"1.0\"?>
+	&Hebcal::out_html($cfg,"<?xml version=\"1.0\"?>
 <!DOCTYPE rss PUBLIC \"-//Netscape Communications//DTD RSS 0.91//EN\"
 \t\"http://my.netscape.com/publish/formats/rss-0.91.dtd\">
 <rss version=\"0.91\">
@@ -357,7 +359,7 @@ $city_descr</description>
 All rights reserved.</copyright>
 ");
     }
-    elsif ($q->param('cfg') eq 'w')
+    elsif ($cfg eq 'w')
     {
 	&my_header($title);
     }
@@ -366,20 +368,20 @@ else
 {
     &my_header($title);
 
-    &out_html("<h2>$city_descr</h2>\n");
+    &Hebcal::out_html($cfg,"<h2>$city_descr</h2>\n");
 
     if (defined $dst_descr && defined $tz_descr)
     {
-	&out_html("&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n");
+	&Hebcal::out_html($cfg,"&nbsp;&nbsp;$dst_descr\n<br>&nbsp;&nbsp;$tz_descr\n");
     }
 
-    &out_html($Hebcal::indiana_warning)
+    &Hebcal::out_html($cfg,$Hebcal::indiana_warning)
 	if ($city_descr =~ / IN &nbsp;/);
 }
 
 my($cmd_pretty) = $cmd;
 $cmd_pretty =~ s,.*/,,; # basename
-&out_html("<!-- $cmd_pretty -->\n");
+&Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
 my($loc) = (defined $city_descr && $city_descr ne '') ?
     "in $city_descr" : '';
@@ -387,11 +389,11 @@ $loc =~ s/\s*&nbsp;\s*/ /g;
 
 my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
-unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[rw]$/)
+unless (defined $cfg && $cfg =~ /^[rw]$/)
 {
-#    &out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
+#    &Hebcal::out_html($cfg,qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
 #	      qq{.</p>\n<p>\n});
-    &out_html("<dl>");
+    &Hebcal::out_html($cfg,"<dl>");
 }
 
 my($numEntries) = scalar(@events);
@@ -421,13 +423,13 @@ for ($i = 0; $i < $numEntries; $i++)
     if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
     {
 	$rss{'title'} = sprintf("%s: %d:%02d PM", $subj, $hour, $min);
-	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+	if (defined $cfg && $cfg eq 'r')
 	{
 	    $rss{'link'} =
 		&Hebcal::yahoo_calendar_link($events[$i], $city_descr);
 	    &out_rss(\%rss);
 	}
-	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+	elsif (defined $cfg && $cfg eq 'w')
 	{
 	    delete($rss{'description'});
 	    $rss{'title'} =~ s/^Candle lighting/Candles/;
@@ -436,7 +438,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 	else
 	{
-	    &out_html(qq{\n<dt>$subj for\n},
+	    &Hebcal::out_html($cfg,qq{\n<dt>$subj for\n},
 		      $rss{'description'},
 		      sprintf(" is at <b>%d:%02d PM</b>", $hour, $min));
 	}
@@ -446,7 +448,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	if ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
 	    $rss{'title'} =
-		(defined $q->param('cfg') && $q->param('cfg') eq 'w') ?
+		(defined $cfg && $cfg eq 'w') ?
 		    'Torah: ' : "This week's Torah portion is ";
 	}
 	else
@@ -460,7 +462,7 @@ for ($i = 0; $i < $numEntries; $i++)
 	$rss{'link'} = $href;
 
 	if ($href ne '' &&
-	    !(defined $q->param('cfg') && $q->param('cfg') =~ /^[rw]$/))
+	    !(defined $cfg && $cfg =~ /^[rw]$/))
 	{
 	    if (defined $torah_href && $torah_href ne '')
 	    {
@@ -480,11 +482,11 @@ for ($i = 0; $i < $numEntries; $i++)
 	    $rss{'title'} .= $subj;
 	}
 
-	if (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+	if (defined $cfg && $cfg eq 'r')
 	{
 	    &out_rss(\%rss);
 	}
-	elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+	elsif (defined $cfg && $cfg eq 'w')
 	{
 	    delete($rss{'description'})
 		if ($subj =~ /^(Parshas|Parashat)\s+/);
@@ -492,36 +494,36 @@ for ($i = 0; $i < $numEntries; $i++)
 	}
 	else
 	{
-	    &out_html("\n<dt>", $rss{'title'});
-	    &out_html("\non ", $rss{'description'})
+	    &Hebcal::out_html($cfg,"\n<dt>", $rss{'title'});
+	    &Hebcal::out_html($cfg,"\non ", $rss{'description'})
 		unless ($subj =~ /^(Parshas|Parashat)\s+/);
 	}
     }
 }
 
-&out_html("\n</dl>\n")
-    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[rw]$/);
+&Hebcal::out_html($cfg,"\n</dl>\n")
+    unless (defined $cfg && $cfg =~ /^[rw]$/);
 
-if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
+if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
-    if ($q->param('cfg') eq 'i')
+    if ($cfg eq 'i')
     {
-	&out_html("</body></html>\n");
+	&Hebcal::out_html($cfg,"</body></html>\n");
     }
-    elsif ($q->param('cfg') eq 'r')
+    elsif ($cfg eq 'r')
     {
-	&out_html("<textinput>
+	&Hebcal::out_html($cfg,"<textinput>
 <title>1-Click Shabbat</title>
 <description>Get Shabbat Times for another zip code</description>
 <name>zip</name>
 ");
-	&out_html("<link>http://", $q->virtual_host(), $script_name,
+	&Hebcal::out_html($cfg,"<link>http://", $q->virtual_host(), $script_name,
 		  "</link>\n</textinput>\n");
-	&out_html("</channel>\n</rss>\n");
+	&Hebcal::out_html($cfg,"</channel>\n</rss>\n");
     }
-    elsif ($q->param('cfg') eq 'w')
+    elsif ($cfg eq 'w')
     {
-	&out_html("</card>\n</wml>\n");
+	&Hebcal::out_html($cfg,"</card>\n</wml>\n");
     }
 }
 else
@@ -559,45 +561,19 @@ sub out_rss
 	"</item>\n";
 }
 
-sub out_html
-{
-    my(@args) = @_;
-
-    if (defined $q->param('cfg') && $q->param('cfg') eq 'j')
-    {
-	print STDOUT "document.write(\"";
-	foreach (@args)
-	{
-	    s/\"/\\\"/g;
-	    s/\n/\\n/g;
-	    print STDOUT;
-	}
-	print STDOUT "\");\n";
-    }
-    else
-    {
-	foreach (@args)
-	{
-	    print STDOUT;
-	}
-    }
-
-    1;
-}
-
 sub my_header
 {
     my($title) = @_;
 
-    if (defined $q->param('cfg') && $q->param('cfg') eq 'j')
+    if (defined $cfg && $cfg eq 'j')
     {
 	print STDOUT "Content-Type: application/x-javascript\015\012\015\012";
     }
-    elsif (defined $q->param('cfg') && $q->param('cfg') eq 'r')
+    elsif (defined $cfg && $cfg eq 'r')
     {
 	print STDOUT "Content-Type: text/xml\015\012\015\012";
     }
-    elsif (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+    elsif (defined $cfg && $cfg eq 'w')
     {
 	my($descr);
 	if ($title =~ /^(1-Click Shabbat) for (.+)$/)
@@ -608,24 +584,24 @@ sub my_header
 	
 	print STDOUT "Content-Type: text/vnd.wap.wml\015\012\015\012";
 
-	&out_html(qq{<?xml version="1.0"?>
+	&Hebcal::out_html($cfg,qq{<?xml version="1.0"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
 "http://www.wapforum.org/DTD/wml_1.1.xml">
 <wml>
 <card id="shabbat2" title="$title">
 });
-	&out_html(qq{<p><b>$descr</b></p>\n}) if defined $descr;
+	&Hebcal::out_html($cfg,qq{<p><b>$descr</b></p>\n}) if defined $descr;
     }
     else
     {
-	&out_html($q->header(),
+	&Hebcal::out_html($cfg,$q->header(),
 		  &Hebcal::start_html($q, $title, undef, undef)
 		  );
     }
 
-    unless (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijrw]$/)
+    unless (defined $cfg && $cfg =~ /^[ijrw]$/)
     {
-	&out_html(&Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
+	&Hebcal::out_html($cfg,&Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
 		  "<h1>1-Click\nShabbat</h1>\n");
     }
 
@@ -638,9 +614,9 @@ sub form
 
     &my_header('1-Click Shabbat') if $head;
 
-    if (defined $q->param('cfg') && $q->param('cfg') eq 'w')
+    if (defined $cfg && $cfg eq 'w')
     {
-	&out_html(qq{<p>$message</p>\n},
+	&Hebcal::out_html($cfg,qq{<p>$message</p>\n},
 		  qq{<do type="accept" label="Back">\n},
 		  qq{<prev/>\n</do>\n</card>\n</wml>\n});
 	exit(0);
@@ -653,7 +629,7 @@ sub form
 	    $message . "</font></p>" . $help;
     }
 
-    &out_html(
+    &Hebcal::out_html($cfg,
 	qq{$message\n},
 	qq{<hr noshade size=\"1\"><h3>Change City</h3>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
@@ -689,7 +665,7 @@ sub form
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
 
-    &out_html(
+    &Hebcal::out_html($cfg,
 	qq{<b>(or select by major city</b>)<br>},
 	qq{<form name="f2" id="f2"\naction="$script_name">},
 	qq{<label\nfor="city">Closest City:\n},
@@ -710,13 +686,13 @@ sub form
 	"</label>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
-    &out_html(
+    &Hebcal::out_html($cfg,
 	qq{<hr noshade size=\"1\">\n},
 	qq{<p><a href="/help/#tags">How\n},
 	qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
 	qq{times on its own website?</a></p>});
 
-    &out_html(&Hebcal::html_footer($q,$rcsrev));
+    &Hebcal::out_html($cfg,&Hebcal::html_footer($q,$rcsrev));
 
     exit(0);
 }
