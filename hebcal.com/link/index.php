@@ -55,7 +55,7 @@ if ($param["city"]) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
-<head><title>Add weekly Shabbat candle-lighting times to your synagogue</title>
+<head><title>Add weekly Shabbat candle-lighting times to your synagogue website</title>
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
@@ -67,11 +67,12 @@ href="/">hebcal.com</a></strong>
 Link</small></td><td align="right"><small><a
 href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
-</td></tr></table><h1>Add 1-Click Shabbat to your website</h1>
+</td></tr></table><h1>Add Shabbat Times to your Website</h1>
 
-<p>You can use these HTML tags to insert weekly candle-lighting times
-and Torah portion directly on your synagogue's web page.
-<br>The following
+<p>You can use these HTML tags to add weekly Shabbat candle-lighting
+times and Torah portion directly on your synagogue's website.</p>
+
+<p>The following
 tags are for <b><?php echo $descr ?></b>
 (<a href="#change">change city</a>).</p>
 
