@@ -1036,16 +1036,36 @@ sub special_readings
     my($events,$maftir,$haftara) = @_;
 
     for (my $i = 0; $i < @{$events}; $i++) {
+	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
+	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my $day = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+
+	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+
+	my $stime2 = sprintf("%02d-%s-%04d",
+			     $day, $Hebcal::MoY_short[$month - 1], $year);
+
+	next if defined $haftara->{$stime2};
+	next if defined $maftir->{$stime2};
+
 	my $h = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	# hack! for Shabbat Rosh Chodesh
-	if ($h =~ /^Rosh Chodesh/) {
+	if ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
+	} elsif ($dow == 7 && $h =~ /^Rosh Chodesh/) {
+	    # even worse hack!
+	    $h = 'Shabbat Machar Chodesh';
+	    ($year,$month,$day) =
+		Date::Calc::Add_Delta_Days($year, $month, $day, -1);
+	    $stime2 = sprintf("%02d-%s-%04d",
+			      $day, $Hebcal::MoY_short[$month - 1], $year);
+	    next if defined $haftara->{$stime2};
+	    next if defined $maftir->{$stime2};
+	} elsif ($dow != 6) {
+	    next;
 	}
+
 	if (defined $fxml->{'festival'}->{$h}) {
-	    my $stime2 = sprintf("%02d-%s-%04d",
-				 $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-				 $Hebcal::MoY_short[$events->[$i]->[$Hebcal::EVT_IDX_MON]],
-				 $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
 	    my $haft =
 		$fxml->{'festival'}->{$h}->{'kriyah'}->{'haft'}->{'reading'};
 	    if (defined $haft) {
