@@ -6,7 +6,7 @@
 # are calculated from your latitude and longitude (which can be
 # determined by your zip code or closest city).
 #
-# Copyright (c) 1999  Michael John Radwin.  All rights reserved.
+# Copyright (c) 2001  Michael John Radwin.  All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 12 09:04:10 PST 2001
+Last modified: Fri Jan 12 09:20:39 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -739,7 +739,7 @@ JSCRIPT_END
 		 -checked => 'checked',
 		 -label => "\nSave my preferences in a cookie"),
     "</label><small>(<a\n",
-    "href=\"http://www.zdwebopedia.com/TERM/c/cookie.html\">What's\n",
+    "href=\"/michael/projects/hebcal/#cookie\">What's\n",
     "a cookie?</a> - <a\n",
     "href=\"/hebcal/del_cookie?", time(), "\">Delete\n",
     "my cookie</a>)</small>",
