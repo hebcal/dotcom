@@ -4,7 +4,7 @@
 # 1-Click Shabbat generates weekly Shabbat candle lighting times and
 # Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2003  Michael J. Radwin.
+# Copyright (c) 2004  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -414,7 +414,9 @@ sub process_args
 	    $q->param('dst','none');
 	}
 
-	$dst_descr = "Daylight Saving Time: " . $q->param('dst');
+	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
+	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
+	$dst_descr = "Daylight Saving Time: $dst_text";
 	$tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
