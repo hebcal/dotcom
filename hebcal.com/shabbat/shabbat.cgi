@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Apr 22 12:04:37 PDT 2001
+Last modified: Thu Apr 26 10:37:05 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -259,25 +259,30 @@ $cmd .= ' -s -c ' . $sat_year;
 
 unless ($default)
 {
-    my($newcookie) = &Hebcal::gen_cookie($q);
+    my($cookie_to_set);
+
     if (! defined $q->raw_cookie())
     {
-	print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	$expires_date, "; path=/\015\012";
+	$cookie_to_set = &Hebcal::gen_cookie($q)
+	    unless $q->param('noset');
     }
     else
     {
+	my($newcookie) = &Hebcal::gen_cookie($q);
 	my($cmp1) = $newcookie;
 	my($cmp2) = $q->raw_cookie();
 
 	$cmp1 =~ s/\bC=t=\d+\&//;
 	$cmp2 =~ s/\bC=t=\d+\&//;
 
-	print STDOUT "Set-Cookie: ", $newcookie, "; expires=",
-	$expires_date, "; path=/\015\012"
-	    if $cmp1 ne $cmp2;
+	$cookie_to_set = $newcookie 
+	    if ($cmp1 ne $cmp2 && ! $q->param('noset'));
     }
 
+    print STDOUT "Set-Cookie: ", $cookie_to_set,
+    "; path=/; expires=",  $expires_date, "\015\012"
+	if $cookie_to_set;
+	    
     print STDOUT "Expires: ",
     strftime("%a, %d %b %Y %T GMT", gmtime($saturday)), "\015\012"
 	if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ij]$/);
@@ -358,8 +363,9 @@ my(@events) = &Hebcal::invoke_hebcal($cmd, $loc);
 
 unless (defined $q->param('cfg') && $q->param('cfg') eq 'r')
 {
-    &out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
-	      qq{.</p>\n<p>\n});
+#    &out_html(qq{<p>Today is }, strftime("%A, %d %B %Y", localtime($now)),
+#	      qq{.</p>\n<p>\n});
+    &out_html('<p>');
 }
 
 my($numEntries) = scalar(@events);
