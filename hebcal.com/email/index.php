@@ -21,9 +21,9 @@ href="/help/">Help</a> -
 <a href="/search/">Search</a></small>
 </td></tr></table><h1>1-Click Shabbat by Email</h1>
 <?php
-require "./smtp.inc";
-require "../common.inc";
-require "HTML/Form.php";
+require "../pear/Hebcal/smtp.inc";
+require "../pear/Hebcal/common.inc";
+require "../pear/HTML/Form.php";
 
 $VER = '$Revision$';
 $matches = array();
