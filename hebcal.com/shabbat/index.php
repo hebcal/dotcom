@@ -72,7 +72,12 @@ if ($qs) {
     $qs = strtr($qs, "&;./", ",,_-");
     $qs = str_replace("%20", "+", $qs);
     $dir = $_SERVER["DOCUMENT_ROOT"] . "/cache/shabbat/shabbat_cgi";
-    $status = @readfile("$dir/$qs");
+    $cachefile = "$dir/$qs";
+    if (file_exists($cachefile) && filesize($cachefile) > 0) {
+	$status = @readfile($cachefile);
+    } else {
+	$status = false;
+    }
 } else {
     $status = false;
 }
