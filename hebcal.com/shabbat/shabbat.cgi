@@ -619,6 +619,7 @@ sub my_header
 {
     my($title) = @_;
 
+    print STDOUT "Cache-Control: private\015\012";
     if (defined $cfg && $cfg eq 'j')
     {
 	print STDOUT "Content-Type: application/x-javascript\015\012\015\012";
