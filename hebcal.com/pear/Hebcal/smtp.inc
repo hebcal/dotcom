@@ -32,7 +32,7 @@ function smtp_send($return_path, $recipients, $headers, $body)
     if (!($mail = new Mail())) {
 	return ('unable to instantiate Mail object');
     }
-    if (!($smtp = new Net_SMTP())) {
+    if (!($smtp = new Net_SMTP('mail.hebcal.com'))) {
 	return ('unable to instantiate Net_SMTP object');
     }
     if (!$smtp->connect()) {
