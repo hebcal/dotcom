@@ -444,10 +444,14 @@ Time Zone: GMT $in{'tz'}:00
 
     while(<HEBCAL>)
     {
+	chop;
 	s/</&lt;/g;
 	s/>/&lt;/g;
 	s/&/&amp;/g;
 	print STDOUT $_;
+#	print STDOUT "<a target=\"_calendar\" href=\"http://calendar.yahoo.com/?v=60";
+#	print STDOUT "&ST=19990313&TITLE=Shabbat+HaChodesh&VIEW=d\">add</a>";
+	print STDOUT "\n";
     }
     close(HEBCAL);
 
