@@ -345,8 +345,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="17" num="1" book="Exodus" begin="19:1" end="19:6" numverses="6" />
   <aliyah parsha="17" num="2" book="Exodus" begin="19:7" end="19:13" numverses="7" />
   <aliyah parsha="17" num="3" book="Exodus" begin="19:14" end="19:19" numverses="6" />
-  <aliyah parsha="17" num="4" book="Exodus" begin="19:20" end="20:13" numverses="8" />
-  <aliyah parsha="17" num="5" book="Exodus" begin="20:14" end="20:22" numverses="9" />
+  <aliyah parsha="17" num="4" book="Exodus" begin="19:20" end="20:14" numverses="20" />
+  <aliyah parsha="17" num="5" book="Exodus" begin="20:15" end="20:23" numverses="9" />
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
