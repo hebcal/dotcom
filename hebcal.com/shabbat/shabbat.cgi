@@ -95,7 +95,7 @@ $script_name =~ s,/index.html$,/,;
 
 my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
-my($items) = format_items($evts);
+my($items) = format_items($q,$evts);
 
 if (defined $cfg && $cfg =~ /^[ijrwv]$/)
 {
@@ -110,7 +110,7 @@ exit(0);
 
 sub format_items
 {
-    my($events) = @_;
+    my($q,$events) = @_;
 
     my($url) = self_url();
     my(@items);
@@ -150,12 +150,14 @@ sub format_items
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
+	    my $tz = $q->param('tz') ? $q->param('tz') : 0;
+	    $tz = 0 if $tz eq 'auto';
 	    $item{'dc:date'} =
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
 			$year,$mon,$mday,
 			$hour,$min,0,
-			$q->param('tz') > 0 ? "+" : "-",
-			abs($q->param('tz')));
+			$tz > 0 ? "+" : "-",
+			abs($tz));
 	}
 	else
 	{
@@ -300,7 +302,7 @@ sub process_args
 	}
 
 	$q->param('geo','city');
-	$q->delete('tz');
+	$q->param('tz', $Hebcal::city_tz{$q->param('city')});
 	$q->delete('dst');
 	$q->delete('zip');
 
@@ -312,8 +314,6 @@ sub process_args
     {
 	$q->param('dst','usa')
 	    unless $q->param('dst');
-	$q->param('tz','auto')
-	    unless $q->param('tz');
 	$q->param('geo','zip');
 	$q->delete('city');
 
@@ -474,10 +474,6 @@ sub self_url
 	if $q->param('zip');
     $url .= ";city=" . &Hebcal::url_escape($q->param('city'))
 	if $q->param('city');
-#      $url .= ";dst=" . $q->param('dst')
-#  	if $q->param('dst');
-#      $url .= ";tz=" . $q->param('tz')
-#  	if (defined $q->param('tz') && $q->param('tz') ne 'auto');
     $url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
