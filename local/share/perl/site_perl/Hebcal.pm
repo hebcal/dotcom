@@ -122,6 +122,7 @@ $Hebcal::havdalah_min = 72;
      'Ashdod'		=>	[2,'israel'],
      'Atlanta'		=>	[-5,'usa'],
      'Austin'		=>	[-6,'usa'],
+     'Baghdad'		=>	[3,'eu'],
      'Berlin'		=>	[1,'eu'],
      'Beer Sheva'	=>	[2,'israel'],
      'Baltimore'	=>	[-5,'usa'],
