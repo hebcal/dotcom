@@ -13,6 +13,17 @@ if ($http_cookie) {
 	}
     }
 }
+# Is today Rosh Chodesh?
+$lines = @file("holiday.inc");
+if (is_array($lines)) {
+    foreach ($lines as $line) {
+	if (strstr($line, "Rosh&nbsp;Chodesh") !== false) {
+	    $rosh_chodesh = true;
+	    break;
+	}
+    }
+}
+unset($lines);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -41,6 +52,9 @@ Jewish Calendar Tools</small></td>
 <!-- holiday greeting -->
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("today.inc") ?>
+<?php if ($rosh_chodesh) { ?>
+&nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
+<?php } ?>
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
@@ -108,7 +122,7 @@ Hebrew Birthdays and Anniversaries
 aliyah-by-aliyah breakdown for weekly parshiyot
 <h4>About Us</h4>
 <a href="/help/">Help</a>
-<br><a href="/news/">What's New?</a>
+<br><a href="/news/">News</a>
 <br><a href="/privacy/">Privacy Policy</a>
 <br><a href="/search/">Search</a>
 <br><a href="/donations/">Donate</a>
