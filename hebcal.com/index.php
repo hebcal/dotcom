@@ -73,6 +73,10 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/holidays/sukkot.html?tag=fp.ql">Sukkot</a></b><br>29
+September 2004<br>at sundown
+<br><br>   
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br>
