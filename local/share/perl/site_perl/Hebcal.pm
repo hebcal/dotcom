@@ -1058,7 +1058,6 @@ sub download_href
 	my($val) = $q->param($key);
 	$href .= ";$key=" . Hebcal::url_escape($val);
     }
-    $href .= ";filename=$filename.$ext";
 
     $href;
 }
@@ -1113,13 +1112,19 @@ Jewish Calendar events into your desktop software.</p>};
 	    "\">$filename.tsv</a>\n";
     $s .= "<li>(this feature is currently experimental)</ol>\n";
 
-    $s .= "<h4>Lotus Notes R5, iCal, vCalendar</h4>\n<ol><li>" .
+    $s .= "<h4>vCalendar (Lotus Notes R5 and others)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
 	"<a href=\"" .
 	download_href($q, $filename, 'vcs') .
 	    "\">$filename.vcs</a>\n";
-    $s .= qq{<li>How to import VCS file into\n<a href="/help/import.html#lotus-notes">Lotus Notes</a> or <a href="/help/import.html#ical">iCal</a></ol>};
+    $s .= qq{<li><a href="/help/import.html#lotus-notes">How to import VCS file into Lotus Notes</a></ol>};
 
+    $s .= "<h4>Apple iCal</h4>\n<ol><li>" .
+	"Export iCalendar file:\n" .
+	"<a href=\"" .
+	download_href($q, $filename, 'ics') .
+	    "\">$filename.ics</a>\n";
+    $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
     $s .= "</div>\n";
 
     $s;
@@ -1292,10 +1297,17 @@ sub vcalendar_write_contents($$$$)
     my($q,$events,$tz,$state) = @_;
     my($numEntries) = scalar(@{$events});
 
-    export_http_header($q, 'text/x-vCalendar');
+    my($path_info) = $q->path_info();
+    if ($path_info =~ /\.ics$/) {
+	export_http_header($q, 'text/calendar');
+    } else {
+	export_http_header($q, 'text/x-vCalendar');
+    }
+
     my $endl = get_browser_endl($q->user_agent());
 
     my $tzid;
+    if ($path_info =~ /\.ics$/) {
     if (defined $state) {
 	if ($state eq 'AK') {
 	    if ($tz == -10) {
@@ -1339,6 +1351,7 @@ sub vcalendar_write_contents($$$$)
 	$tzid = 'US/Alaska';
     } elsif ($tz == -10) {
 	$tzid = 'US/Hawaii';
+    }
     }
 
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
@@ -1407,8 +1420,10 @@ sub vcalendar_write_contents($$$$)
 		 1);
 	    $end_date = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 
+	    if ($path_info !~ /\.ics$/) {
 	    $date .= "T000000";
 	    $end_date .= "T000000";
+	    }
 	}
 
 	print STDOUT qq{DTSTART};
