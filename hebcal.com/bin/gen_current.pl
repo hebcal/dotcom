@@ -45,7 +45,7 @@ close(OUT);
 
 $outfile = '/home/mradwin/web/hebcal.com/etc/hdate.js';
 open(OUT,">$outfile") || die;
-print OUT "document.write(\"$hdate\\n\");\n";
+print OUT "document.write(\"$hdate\");\n";
 close(OUT);
 
 $outfile = '/home/mradwin/web/hebcal.com/holiday.inc';
