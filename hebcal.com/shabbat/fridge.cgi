@@ -47,6 +47,7 @@ use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Hebcal ();
+use POSIX ();
 
 my($rcsrev) = '$Revision$'; #'
 
@@ -119,7 +120,7 @@ sub format_items
 
     Hebcal::out_html($cfg,qq{<p><table border="1" cellpadding="8"><tr>\n});
 
-    my $third = int(scalar(@items) / 3);
+    my $third = POSIX::ceil(scalar(@items) / 3.0);
     for (my $i = 0; $i < 3; $i++)
     {
 	Hebcal::out_html($cfg,"<td valign=\"top\">\n");
