@@ -58,9 +58,7 @@ use Palm::DBA;
 my($expires_future) = 'Thu, 15 Apr 2010 20:00:00 GMT';
 my($expires_date) = $expires_future;
 
-my($this_mon,$this_year) = (localtime)[4,5];
-$this_year += 1900;
-$this_mon++;
+my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
 my($rcsrev) = '$Revision$'; #'
 
@@ -383,8 +381,8 @@ sub form($$)
     my($message,$help) = @_;
     my($key,$val,$JSCRIPT);
 
-    my $hyear = $this_year + 3760;
-    $hyear++ if $this_mon >= 9;
+    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
+    my $hyear = $hebdate->{'yy'};
 
     $JSCRIPT=<<JSCRIPT_END;
 function s1(geo,c) {
