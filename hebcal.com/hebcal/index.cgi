@@ -97,7 +97,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 <body>";
 
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Aug 11 11:11:08 PDT 1999
+Last modified: Wed Aug 11 16:22:58 PDT 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -470,7 +470,16 @@ Include candle lighting times</label><br>
 <input type=\"hidden\" name=\"geo\" value=\"city\">
 <label for=\"city\">Closest City:
 ";
-	print STDOUT &city_select_html();
+
+	print STDOUT "<select name=\"city\" id=\"city\">\n";
+	foreach (sort keys %valid_cities)
+	{
+	    print STDOUT '<option';
+	    print STDOUT ' selected' if 'Jerusalem' eq $_;
+	    print STDOUT ">$_\n";
+	}
+	print STDOUT "</select>\n";
+
 	print STDOUT "</label>
 &nbsp;&nbsp;(or select by <a href=\"$cgipath\">zip</a> or
 <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
@@ -530,31 +539,31 @@ or <a href=\"${cgipath}?geo=pos\">latitude/longitude</a>)
     {
 	print STDOUT "<label for=\"tz\">Time Zone:
 <select name=\"tz\" id=\"tz\">
-<option value=\"-12\"$tz{'-12'}>GMT -12:00 Dateline
-<option value=\"-11\"$tz{'-11'}>GMT -11:00 Samoa
-<option value=\"-10\"$tz{'-10'}>GMT -10:00 Hawaiian
-<option value=\"-9\"$tz{'-9'}>GMT -09:00 Alaskan
-<option value=\"-8\"$tz{'-8'}>GMT -08:00 Pacific
-<option value=\"-7\"$tz{'-7'}>GMT -07:00 Mountain
-<option value=\"-6\"$tz{'-6'}>GMT -06:00 Central
-<option value=\"-5\"$tz{'-5'}>GMT -05:00 Eastern
-<option value=\"-4\"$tz{'-4'}>GMT -04:00 Atlantic
-<option value=\"-3\"$tz{'-3'}>GMT -03:00 Brasilia, Buenos Aires
-<option value=\"-2\"$tz{'-2'}>GMT -02:00 Mid-Atlantic
-<option value=\"-1\"$tz{'-1'}>GMT -01:00 Azores
+<option value=\"-5\"$tz{'-5'}>GMT -05:00 (Eastern)
+<option value=\"-6\"$tz{'-6'}>GMT -06:00 (Central)
+<option value=\"-7\"$tz{'-7'}>GMT -07:00 (Mountain)
+<option value=\"-8\"$tz{'-8'}>GMT -08:00 (Pacific)
+<option value=\"-9\"$tz{'-9'}>GMT -09:00 (Alaskan)
+<option value=\"-10\"$tz{'-10'}>GMT -10:00 (Hawaii)
+<option value=\"-11\"$tz{'-11'}>GMT -11:00
+<option value=\"-12\"$tz{'-12'}>GMT -12:00
+<option value=\"12\"$tz{'12'}>GMT +12:00
+<option value=\"11\"$tz{'11'}>GMT +11:00
+<option value=\"10\"$tz{'10'}>GMT +10:00
+<option value=\"9\"$tz{'9'}>GMT +09:00
+<option value=\"8\"$tz{'8'}>GMT +08:00
+<option value=\"7\"$tz{'7'}>GMT +07:00
+<option value=\"6\"$tz{'6'}>GMT +06:00
+<option value=\"5\"$tz{'5'}>GMT +05:00
+<option value=\"4\"$tz{'4'}>GMT +04:00
+<option value=\"3\"$tz{'3'}>GMT +03:00
+<option value=\"2\"$tz{'2'}>GMT +02:00
+<option value=\"1\"$tz{'1'}>GMT +01:00
 <option value=\"0\"$tz{'0'}>Greenwich Mean Time
-<option value=\"1\"$tz{'1'}>GMT +01:00 Western Europe
-<option value=\"2\"$tz{'2'}>GMT +02:00 Eastern Europe
-<option value=\"3\"$tz{'3'}>GMT +03:00 Russia, Saudi Arabia
-<option value=\"4\"$tz{'4'}>GMT +04:00 Arabian
-<option value=\"5\"$tz{'5'}>GMT +05:00 West Asia
-<option value=\"6\"$tz{'6'}>GMT +06:00 Central Asia
-<option value=\"7\"$tz{'7'}>GMT +07:00 Bangkok, Hanoi, Jakarta
-<option value=\"8\"$tz{'8'}>GMT +08:00 China, Singapore, Taiwan
-<option value=\"9\"$tz{'9'}>GMT +09:00 Korea, Japan
-<option value=\"10\"$tz{'10'}>GMT +10:00 E. Australia
-<option value=\"11\"$tz{'11'}>GMT +11:00 Central Pacific
-<option value=\"12\"$tz{'12'}>GMT +12:00 Fiji, New Zealand
+<option value=\"-1\"$tz{'-1'}>GMT -01:00
+<option value=\"-2\"$tz{'-2'}>GMT -02:00
+<option value=\"-3\"$tz{'-3'}>GMT -03:00
+<option value=\"-4\"$tz{'-4'}>GMT -04:00
 </select></label><br>
 Daylight Savings Time:
 <label for=\"usa\">
@@ -897,24 +906,6 @@ sub url_escape
     $res;
 }
 
-sub city_select_html
-{
-    local($_);
-    local($retval) = '';
-
-    $retval = "<select name=\"city\" id=\"city\">\n";
-
-    foreach (sort keys %valid_cities)
-    {
-	$retval .= '<option';
-	$retval .= ' selected' if 'Jerusalem' eq $_;
-	$retval .= ">$_\n";
-    }
-
-    $retval .= "</select>\n";
-    $retval;
-}
-
 sub http_date
 {
     local($time) = @_;
@@ -934,7 +925,6 @@ if ($^W && 0)
 {
     ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
 	localtime(time);
-    &city_select_html();
 }
 
 1;
