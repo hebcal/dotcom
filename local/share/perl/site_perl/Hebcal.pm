@@ -1032,7 +1032,8 @@ sub csv_write_contents($$)
 
     print STDOUT
 	qq{"Subject","Start Date","Start Time","End Date",},
-	qq{"End Time","All day event","Description","Show time as"$endl};
+	qq{"End Time","All day event","Description","Show time as",},
+	qq{"Location"$endl};
 
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
@@ -1093,7 +1094,7 @@ sub csv_write_contents($$)
 	    print STDOUT qq{"3"};
 	}
 
-	print STDOUT $endl;
+	print STDOUT qq{,"hebcal.com"$endl};
     }
 
     1;
