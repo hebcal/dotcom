@@ -78,7 +78,7 @@ class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
 <!-- Begin PayPal Logo -->
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_xclick">
-<input type="hidden" name="business" value="webmaster@hebcal.com">
+<input type="hidden" name="business" value="webmaster&#64;hebcal.com">
 <input type="hidden" name="item_name" value="Donation to hebcal.com">
 <input type="hidden" name="no_note" value="1">
 <input type="hidden" name="no_shipping" value="1">
@@ -91,7 +91,7 @@ alt="Make payments with PayPal - it's fast, free and secure!">
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
-&copy; 2002 Michael J. Radwin. All rights reserved.
+&copy; 2003 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a>
