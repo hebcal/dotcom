@@ -6,7 +6,6 @@ use strict;
 use DB_File;
 use Fcntl qw(:DEFAULT :flock);
 use Hebcal;
-use Net::SMTP;
 use Mail::Internet;
 use Email::Valid;
 
@@ -103,6 +102,26 @@ sub subscribe
     undef $db;
     untie(%DB);
     close(DB_FH);
+
+    my($body) = qq{Hello,
+
+Your subscription request for hebcal is complete.
+
+Regards,
+hebcal.com
+
+To unsubscribe from this list, send an email to:
+shabbat-unsubscribe\@hebcal.com
+};
+
+    &Hebcal::sendmail
+	("shabbat-bounce\@hebcal.com",
+	 "shabbat-owner\@hebcal.com",
+	 "Hebcal Subscription Notification",
+	 "Your subscription to hebcal is complete",
+	 "List-Unsubscribe: <shabbat-unsubscribe\@hebcal.com>\n" .
+	 "Precedence: bulk\n",
+	 $body,$email,'');
 }
 
 sub unsubscribe
@@ -139,4 +158,19 @@ sub unsubscribe
     undef $db;
     untie(%DB);
     close(DB_FH);
+
+    my($body) = qq{Hello,
+
+Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.
+
+Regards,
+hebcal.com};
+
+    &Hebcal::sendmail("shabbat-bounce\@hebcal.com",
+		      "shabbat-owner\@hebcal.com",
+		      "Hebcal Subscription Notification",
+		      "You have been unsubscribed from hebcal",
+		      '',$body,$email,'');
+
 }
