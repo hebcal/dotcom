@@ -25,8 +25,7 @@ use lib "/pub/p/e/perl/lib/site_perl";
 
 use Getopt::Std;
 use XML::Simple;
-use DB_File;
-use Fcntl qw(:DEFAULT :flock);
+use DB_File::Lock;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -46,11 +45,8 @@ my($outfile) = shift;
 my $parshiot = XMLin($infile);
 
 my(%DB);
-my($db) = tie(%DB, 'DB_File', $outfile, O_RDWR|O_CREAT, 0644);
-defined($db) || die "Can't tie $outfile: $!\n";
-my($fd) = $db->fd;
-open(DB_FH, "+<&=$fd") || die "dup $!";
-unless (flock (DB_FH, LOCK_EX)) { die "flock: $!" }
+tie(%DB, 'DB_File::Lock', $outfile, O_RDWR|O_CREAT, 0644, 'write', $DB_HASH)
+    or die;
 
 foreach my $h (keys %{$parshiot->{'parsha'}})
 {
@@ -73,10 +69,6 @@ foreach my $h (keys %{$parshiot->{'parsha'}})
     }
 }
 
-flock(DB_FH, LOCK_UN);
-undef $db;
-undef $fd;
 untie(%DB);
-close(DB_FH);
 
 exit(0);
