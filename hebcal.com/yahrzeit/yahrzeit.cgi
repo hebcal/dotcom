@@ -356,7 +356,7 @@ sub form
 		 -id => 'yizkor',
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
-    $q->hidden(-name => 'rand',-value => time(),-override => 1),
+#    $q->hidden(-name => 'rand',-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n};
 
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
