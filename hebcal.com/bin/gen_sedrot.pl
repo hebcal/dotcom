@@ -139,7 +139,7 @@ sub write_sedra_page {
 
     if ($haftarah_seph ne $haftarah)
     {
-	$seph = "<br>Haftarah for Sephardim: $haftarah_seph";
+	$seph = "\n<br>Haftarah for Sephardim: $haftarah_seph";
 	$ashk = " for Ashkenazim";
     }
 
@@ -210,7 +210,7 @@ lang="he">$hebrew</h1></td>
 </tr>
 </table>
 <h3><a name="torah">Torah Portion:</a>
-<a href="$torah_href">$torah</a></h3>
+<a href="$torah_href"\ntitle="Translation from JPS Tanakh">$torah</a></h3>
 <a name="aliyot">Shabbat aliyot (full kriyah):</a>
 <dl compact>
 EOHTML
@@ -241,7 +241,8 @@ EOHTML
     print OUT2 <<EOHTML;
 </dl>
 <h3><a name="haftarah">Haftarah$ashk:</a>
-<a href="$haftarah_href">$haftarah</a>$seph</h3>
+<a href="$haftarah_href"
+title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
 
@@ -251,7 +252,7 @@ EOHTML
     }
 
     print OUT2 
-	qq{<h3><a name="drash" href="$drash_href">Commentary$c_year</a></h3>\n}
+	qq{<h3><a name="drash"\nhref="$drash_href">Commentary$c_year</a></h3>\n}
     if $drash_href;
 
     if ($prev_link || $next_link)
