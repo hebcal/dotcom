@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 10:43:50 PDT 2001
+Last modified: Mon May  7 14:40:12 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -314,8 +314,8 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 <rss version=\"0.91\">
 <channel>
 <title>$title</title>
-");
-	&out_html("<link>http://", $q->server_name(), $script_name,
+",
+		  "<link>http://", $q->server_name(), $script_name,
 		  "?zip=", $q->param('zip'), "&amp;dst=", $q->param('dst'));
 	&out_html("&amp;tz=", $q->param('tz'))
 	    if (defined $q->param('tz') && $q->param('tz') ne 'auto');
@@ -323,8 +323,8 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n",
 		  "times for $city_descr</description>\n",
-		  "<language>en-us</language>\n");
-	&out_html("<copyright>Copyright &copy; $this_year Michael J. Radwin.",
+		  "<language>en-us</language>\n",
+		  "<copyright>Copyright &copy; $this_year Michael J. Radwin.",
 		  " All rights reserved.</copyright>\n");
     }
 }
@@ -397,20 +397,20 @@ for ($i = 0; $i < $numEntries; $i++)
 			      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
 			      $events[$i]->[$Hebcal::EVT_IDX_DUR]);
 
-	    &out_html("<item>\n");
-	    &out_html(sprintf("<title>%s: %d:%02d PM</title>\n",
-			      $subj, $hour, $min));
-	    &out_html("<link>$link</link>\n");
-	    &out_html("<description>",
+	    &out_html("<item>\n",
+		      sprintf("<title>%s: %d:%02d PM</title>\n",
+			      $subj, $hour, $min),
+		      "<link>$link</link>\n",
+		      "<description>",
 		      strftime("%A, %d %B", localtime($time)),
-		      "</description>\n");
-	    &out_html("</item>\n");
+		      "</description>\n",
+		      "</item>\n");
 	}
 	else
 	{
-	    &out_html(qq{$subj for\n}, 
-		      strftime("%A, %d %B", localtime($time)));
-	    &out_html(sprintf("\nis at <b>%d:%02d PM</b>.<br>\n",
+	    &out_html(qq{$subj for\n},
+		      strftime("%A, %d %B", localtime($time)),
+		      sprintf("\nis at <b>%d:%02d PM</b>.<br>\n",
 			      $hour, $min));
 	}
     }
@@ -433,7 +433,6 @@ for ($i = 0; $i < $numEntries; $i++)
 	if ($href ne '' &&
 	    !(defined $q->param('cfg') && $q->param('cfg') eq 'r'))
 	{
-
 	    if (defined $torah_href && $torah_href ne '')
 	    {
 		&out_html(qq{<b>$subj</b>\n(<a href="$href">Drash</a>\n} .
