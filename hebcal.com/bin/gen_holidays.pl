@@ -66,7 +66,8 @@ my($strassfeld_link) =
 print OUT qq{<h2>Major Holidays</h2>
 <p><a
 href="$strassfeld_link"><img
-src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" alt="[cover]" hspace="5"
+src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
+alt="The Jewish Holidays: A Guide &amp; Commentary"
 vspace="5" width="75" height="90" align="right"></a>
 For a good reference book on the major Jewish Holidays, I'd suggest
 Michael Strassfeld's <em><a
