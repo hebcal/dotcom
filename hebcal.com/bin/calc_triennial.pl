@@ -99,23 +99,13 @@ my %triennial_aliyot;
 foreach my $key (keys %{$parshiot->{'parsha'}}) {
     my $val = $parshiot->{'parsha'}->{$key};
     my $yrs = $val->{'triennial'}->{'year'};
-#    print "\n\n", $key, "\n", "-" x 72, "\n";
-#    print Dumper($yrs);
 
     foreach my $y (@{$yrs}) {
 	if (defined $y->{'num'}) {
 	    $triennial_aliyot{$key}->{$y->{'num'}} = $y->{'aliyah'};
-#	    print "1: t{$key}{", $y->{'num'}, "} = ",
-#	    	$triennial_aliyot{$key}->{$y->{'num'}},
-#	    	"\n";
 	} elsif (defined $y->{'variation'}) {
 	    if (! defined $y->{'sameas'}) {
 		$triennial_aliyot{$key}->{$y->{'variation'}} = $y->{'aliyah'};
-#		print "2: t{$key}{", $y->{'variation'}, "} = ",
-#			$triennial_aliyot{$key}->{$y->{'variation'}},
-#			"\n";
-	    } else {
-#		print "2: t{$key}{", $y->{'variation'}, "} = skipped\n";
 	    }
 	} else {
 	    warn "strange data for $key";
@@ -130,12 +120,50 @@ foreach my $key (keys %{$parshiot->{'parsha'}}) {
 		unless defined $triennial_aliyot{$key}->{$y->{'sameas'}};
 	    $triennial_aliyot{$key}->{$y->{'variation'}} =
 		$triennial_aliyot{$key}->{$y->{'sameas'}};
-#	    print "3: t{$key}{", $y->{'variation'}, "} = ",
-#		    $triennial_aliyot{$key}->{$y->{'variation'}},
-#	    	" (sameas ", $y->{'sameas'}, ")\n";
 	}
     }
 }
+
+my %option;
+foreach my $h (
+	       'Vayakhel-Pekudei',
+	       'Tazria-Metzora',
+	       'Achrei Mot-Kedoshim',
+	       'Behar-Bechukotai',
+	       'Chukat-Balak',
+	       'Matot-Masei',
+	       'Nitzavim-Vayeilech',
+	       )
+{
+    my($p1,$p2) = split(/-/, $h);
+    my $pat = '';
+    foreach my $yr (0 .. 2) {
+	$pat .= $pattern{$p1}->[$yr];
+    }
+
+    if ($pat eq 'TTT')
+    {
+	$option{$h} = 'all-together';
+    }
+    else
+    {
+	my $vars = $parshiot->{'parsha'}->{$h}->{'variations'}->{'cycle'};
+	foreach my $cycle (@{$vars}) {
+	    if ($cycle->{'pattern'} eq $pat) {
+		$option{$h} = $cycle->{'option'};
+		$option{$p1} = $cycle->{'option'};
+		$option{$p2} = $cycle->{'option'};
+		last;
+	    }
+	}
+
+	die "can't find option for $h (pat == $pat)"
+	    unless defined $option{$h};
+    }
+
+    print "$h: $pat ($option{$h})\n";
+}
+
 
 my $year = 1;
 for (my $i = $bereshit_idx; $i < @events; $i++)
@@ -159,99 +187,28 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
 
     print $events[$i]->[$Hebcal::EVT_IDX_SUBJ], " for Year $year - $stime\n";
 
-    if ($h =~ /^([^-]+)-(.+)$/ &&
-	defined $combined{$1} && defined $combined{$2})
+    if (defined $combined{$h})
     {
-	my($p1,$p2) = split(/-/, $h);
-	my $pat = '';
-	foreach my $yr (0 .. 2) {
-	    $pat .= $pattern{$p1}->[$yr];
-	}
-
-	my $option;
-	if ($pat eq 'TTT') {
-	    $option = 'all-together';
-	} else {
-	    my $vars = $parshiot->{'parsha'}->{$h}->{'variations'}->{'cycle'};
-	    foreach my $cycle (@{$vars}) {
-		if ($cycle->{'pattern'} eq $pat) {
-		    $option = $cycle->{'option'};
-		    last;
-		}
-	    }
-
-	    die "can't find pattern for $h (pat == $pat)"
-		unless defined $option;
-	}
-
-	print "$p1-$p2: $pat ($option)";
-	print "\n";
-
-	if ($pattern{$p1}->[$year - 1] eq 'T') {
-	    my $yrs = $parshiot->{'parsha'}->{$h}->{'triennial'}->{'year'};
-#	    print "$h for year $year\n";
-
-	    foreach my $y (@{$yrs}) {
-		if ($y->{'num'} == $year) {
-		    print Dumper($y);
-		    last;
-		}
-	    }
-
-	    my $a = $triennial_aliyot{$h}->{$year};
-	    die unless defined $a;
-	    print Dumper($a);
-
-	} else {
-	    my $yrs = $parshiot->{'parsha'}->{$p1}->{'triennial'}->{'year'};
-	    print "$p1 for year $year\n";
-
-	    foreach my $y (@{$yrs}) {
-		if ($y->{'variation'} eq "$option.$year") {
-		    print Dumper($y);
-#		    my $a = $y->{'aliyah'};
-		    last;
-		}
-	    }
-
-	    my $a = $triennial_aliyot{$p1}->{"$option.$year"};
-	    die unless defined $a;
-	    print Dumper($a);
-
-	    $yrs = $parshiot->{'parsha'}->{$p2}->{'triennial'}->{'year'};
-	    print "$p2 for year $year\n";
-
-	    foreach my $y (@{$yrs}) {
-		if ($y->{'variation'} eq "$option.$year") {
-		    print Dumper($y);
-#		    my $a = $y->{'aliyah'};
-		    last;
-		}
-	    }
-	    
-	    $a = $triennial_aliyot{$p2}->{"$option.$year"};
-	    die unless defined $a;
-	    print Dumper($a);
-	}
+	my $variation = $option{$h} . "." . $year;
+	my $a = $triennial_aliyot{$h}->{$variation};
+	die unless defined $a;
+	print "(#1) - $option{$h}\n";
+	print Dumper($a);
+    }
+    elsif (defined $triennial_aliyot{$h}->{$year})
+    {
+	my $a = $triennial_aliyot{$h}->{$year};
+	print "(#2) - $year\n";
+	print Dumper($a);
+    }
+    elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
+    {
+	my $a = $triennial_aliyot{$h}->{"Y.$year"};
+	print "(#3) - Y.$year\n";
+	print Dumper($a);
     }
     else
     {
-	my $yrs = $parshiot->{'parsha'}->{$h}->{'triennial'}->{'year'};
-#	print "$h for year $year\n";
-
-	foreach my $y (@{$yrs}) {
-	    if (defined $y->{'num'}) {
-		if ($y->{'num'} == $year) {
-		    print Dumper($y);
-		    last;
-		}
-	    } elsif (defined $y->{'variation'}) {
-		print Dumper($triennial_aliyot{$h}->{$y->{'variation'}});
-		last;
-	    } else {
-		warn "strange data for $h";
-		die Dumper($y);
-	    }
-	}
+	die "can't find aliyot for $h, year $year";
     }
 }
