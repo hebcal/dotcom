@@ -95,6 +95,15 @@ elsif ($q->path_info() =~ /[^\/]+.dba$/)
 {
     &dba_display();
 }
+elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
+{
+    &macintosh_datebook_display();
+}
+elsif ($q->path_info() =~ /[^\/]+\.vcs$/)
+{
+    # text/x-vCalendar
+    &vcalendar_display();
+}
 else
 {
     &results_page();
@@ -103,19 +112,26 @@ else
 close(STDOUT);
 exit(0);
 
+sub macintosh_datebook_display {
+    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+
+    Hebcal::macintosh_datebook($q, \@events);
+}
+
+sub vcalendar_display() {
+    my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+
+    Hebcal::vcalendar_write_contents($q, \@events);
+}
+
 sub dba_display
 {
     my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
-    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    Hebcal::export_http_header($q, 'application/x-palm-dba');
 
     my($path_info) = $q->path_info();
     $path_info =~ s,^.*/,,;
-    print $q->header(-type =>
-		     "application/x-palm-dba; filename=\"$path_info\"",
-		     -content_disposition =>
-		     "inline; filename=$path_info",
-		     -last_modified => &Hebcal::http_date($time));
 
     &Palm::DBA::write_header($path_info);
     &Palm::DBA::write_contents(\@events, 0, 0);
@@ -124,25 +140,8 @@ sub dba_display
 sub csv_display
 {
     my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
-    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    my($path_info) = $q->path_info();
-    $path_info =~ s,^.*/,,;
-    print $q->header(-type => "text/x-csv; filename=\"$path_info\"",
-		     -content_disposition =>
-		     "inline; filename=$path_info",
-		     -last_modified => &Hebcal::http_date($time));
-
-    my($endl) = "\012";			# default Netscape and others
-    if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
-    {
-	$endl = "\015\012"
-	    if $q->user_agent() =~ /Microsoft Internet Explorer/;
-	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
-    }
-
-    &Hebcal::csv_write_contents(\@events, $endl);
+    &Hebcal::csv_write_contents($q, \@events);
 }
 
 sub my_invoke_hebcal {
@@ -292,43 +291,17 @@ sub results_page {
 
 &form(1,'','') unless keys %yahrzeits;
 
-    # download links
-
-    &Hebcal::out_html($cfg,
-		      "<p>Advanced options:\n<small>[ <a href=\"", $script_name);
-    &Hebcal::out_html($cfg, "index.html") if $q->script_name() =~ m,/index.html$,;
-    &Hebcal::out_html($cfg, "/yahrzeit.csv?dl=1");
-
-    foreach $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	&Hebcal::out_html($cfg, ";$key=", &Hebcal::url_escape($val));
-    }
-    &Hebcal::out_html($cfg, ";filename=yahrzeit.csv",
-		      "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>");
-
-    # only offer DBA export when we know timegm() will work
-    if ($this_year > 1969 && $this_year < 2028)
-    {
-	&Hebcal::out_html($cfg, "\n- <a href=\"", $script_name);
-	&Hebcal::out_html($cfg, "index.html") if $q->script_name() =~ m,/index.html$,;
-	&Hebcal::out_html($cfg, "/yahrzeit.dba?dl=1");
-
-	foreach $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    &Hebcal::out_html($cfg, ";$key=", &Hebcal::url_escape($val));
-	}
-	&Hebcal::out_html($cfg, ";filename=yahrzeit.dba",
-			  "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>");
-    }
-    &Hebcal::out_html($cfg, "\n]</small></p>\n");
-
 my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+my($numEntries) = scalar(@events);
+
+if ($numEntries > 0) {
+    &Hebcal::out_html($cfg,
+		      qq{<p class="goto"><span class="sm-grey">&gt;</span>
+<a href="#export">Export calendar to Palm &amp; Outlook</a></p>\n});
+}
 
 &Hebcal::out_html($cfg, "<pre>") unless ($q->param('yizkor'));
 
-my($numEntries) = scalar(@events);
 my($i);
 for ($i = 0; $i < $numEntries; $i++)
 {
@@ -352,7 +325,14 @@ for ($i = 0; $i < $numEntries; $i++)
 		 $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
 		 &Hebcal::html_entify($subj)));
 }
-&Hebcal::out_html($cfg, "</pre><hr>\n");
+
+&Hebcal::out_html($cfg, "</pre>\n");
+
+if ($numEntries > 0) {
+    &Hebcal::out_html($cfg, Hebcal::download_html($q, 'yahrzeit', \@events));
+}
+
+&Hebcal::out_html($cfg, "<hr>\n");
 
 &form(0,'','');
 }
