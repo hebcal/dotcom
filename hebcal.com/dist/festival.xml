@@ -100,7 +100,7 @@
   <li>Shavuot 2</li>
   <li>Shavuot 2 (on Shabbat)</li>
  </group>
- <group hebdate="1 Tammuz">Rosh Chodesh Tammuz</group>
+ <group hebdate="1 Tamuz">Rosh Chodesh Tamuz</group>
  <group>Tzom Tammuz</group>
  <group hebdate="1 Av">Rosh Chodesh Av</group>
  <group>Shabbat Hazon</group>
@@ -1072,8 +1072,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
  yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm" />
 </festival>
-<festival id="Rosh Chodesh Tammuz"
- descr="The new Jewish month of Tammuz"
+<festival id="Rosh Chodesh Tamuz"
+ descr="The new Jewish month of Tamuz"
  hebrew="רֹאשׁ חֹדֶשׁ תָּמוּז"
  yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/tammuz/default.htm" />
