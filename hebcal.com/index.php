@@ -22,13 +22,14 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <span class="sm-grey">&gt;</span>
-generate a list of Jewish holidays and candle lighting times customized
-to your zip code, city, or latitude/longitude
+generate a calendar of Jewish holidays for any year 0001-9999
+<br><span class="sm-grey">&gt;</span>
+customize candle lighting times to your zip code, city, or latitude/longitude
 <br><span class="sm-grey">&gt;</span>
 bookmarkable: <a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on">Current
 Calendar</a>
-<h4><a href="/shabbat/">1-Click Shabbat</a></h4>
+<h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
 <span class="sm-grey">&gt;</span>
 Shabbat candle lighting times and Torah Readings, updated weekly
 <br><span class="sm-grey">&gt;</span>
@@ -62,7 +63,7 @@ href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
 Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Sun May 12 13:09:37 EDT 2002
+Last modified: Mon Jun 10 12:29:27 EDT 2002
 <!-- hhmts end -->
 </span>
 </body></html>
