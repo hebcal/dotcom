@@ -290,7 +290,7 @@ function form($param, $message = '', $help = '') {
     if (!$param['tz']) {
 	$param['tz'] = 'auto';
     }
-    if (!$param['m']) {
+    if (!isset($param['m'])) {
 	$param['m'] = 72;
     }
 
