@@ -438,7 +438,7 @@ my(%sedrot) = (
  "Vaera"	=> ['/5761/vaera.shtml', 'Exodus 6:2 - 9:35',
 		    '/jpstext/vaera.shtml',
 		    'וָאֵרָא'],
- "Bo"		=> ['/5760/bo.shtml', 'Exodus 10:1 - 13:16',
+ "Bo"		=> ['/5761/bo.shtml', 'Exodus 10:1 - 13:16',
 		    '/jpstext/bo.shtml',
 		    'בֹּא'],
  "Beshalach"	=> ['/5760/beshalah.shtml', 'Exodus 13:17 - 17:16',
