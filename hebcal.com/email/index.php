@@ -139,7 +139,6 @@ function write_sub_info($param) {
     $sql = <<<EOD
 UPDATE hebcal1.hebcal_shabbat_email
 SET email_status='active',
-    email_confirmed=NOW(),
     $geo_sql,
     email_candles_havdalah='$param[m]',
     email_optin_announce='$optin_announce'
@@ -153,7 +152,7 @@ function get_sub_info($email) {
     $db = my_open_db();
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
-       email_confirmed, email_candles_zipcode, email_candles_city,
+       email_candles_zipcode, email_candles_city,
        email_candles_havdalah, email_optin_announce
 FROM hebcal1.hebcal_shabbat_email
 WHERE hebcal1.hebcal_shabbat_email.email_address = '$email'
@@ -166,7 +165,7 @@ EOD;
 	return array();
     }
 
-    list($id,$address,$status,$created,$confirmed,$zip,$city,
+    list($id,$address,$status,$created,$zip,$city,
 	 $havdalah,$optin_announce) = mysql_fetch_row($result);
 
     $val = array(
@@ -180,7 +179,6 @@ EOD;
 	'dst' => $dst,
 	'city' => $city,
 	't' => $created,
-	't2' => $confirmed,
 	);
 
     return $val;
@@ -221,10 +219,10 @@ function write_staging_info($param)
 
     $sql = <<<EOD
 REPLACE INTO hebcal1.hebcal_shabbat_email
-(email_id, email_address, email_status, email_created, email_confirmed,
+(email_id, email_address, email_status, email_created,
  email_candles_havdalah, email_optin_announce,
  $location_name)
-VALUES ('$encoded', '$param[em]', 'pending', NOW(), NULL,
+VALUES ('$encoded', '$param[em]', 'pending', NOW(),
 	'$param[m]', '$optin_announce',
 	'$location_value')
 EOD;
@@ -610,7 +608,7 @@ EOD
     $db = my_open_db();
     $sql = <<<EOD
 UPDATE hebcal1.hebcal_shabbat_email
-SET email_status='unsubscribed',email_confirmed=NOW()
+SET email_status='unsubscribed'
 WHERE email_address = '$param[em]'
 EOD;
     if (mysql_query($sql, $db) === false) {
