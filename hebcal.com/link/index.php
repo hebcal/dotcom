@@ -12,7 +12,7 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
 }
 
 global $HTTP_GET_VARS;
-if ($HTTP_GET_VARS['m']) {
+if (isset($HTTP_GET_VARS['m'])) {
     $m = htmlspecialchars($HTTP_GET_VARS['m']);
 } else {
     $m = 72;
@@ -63,7 +63,7 @@ href="/help/">Help</a> -
 
 <p>You can use these HTML tags to insert weekly candle-lighting times
 and Torah portion directly on your synagogue's web page.  The following
-results are for <b><?php echo $descr ?></b>
+tags are for <b><?php echo $descr ?></b>
 (<a href="#change">change city</a>).</p>
 
 <p><b>Instructions:</b> Copy everything from this box and paste it into
