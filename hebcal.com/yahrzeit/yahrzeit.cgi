@@ -39,7 +39,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon Oct 23 15:56:00 PDT 2000
+Last modified: Wed Oct 25 08:16:32 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -138,15 +138,11 @@ print STDOUT
     "</td></tr></table>",
     "<h1>Interactive\nYahrtzeit Calendar</h1>\n";
 
-print STDOUT "<pre>\n";
-
 my(%greg2heb) = ();
 my($year);
 foreach $year ($this_year .. ($this_year + 10))
 {
-    my($cmd_pretty) = "$cmd $year";
-    $cmd_pretty =~ s,.*/hebcal,hebcal,; # basename
-    print STDOUT "<!-- $cmd_pretty -->\n";
+    print STDOUT "<h3>$year</h3><pre>";
 
     my(@events) = &invoke_hebcal("$cmd $year", '');
 
@@ -185,11 +181,11 @@ foreach $year ($this_year .. ($this_year + 10))
 	    	$dow, $year, $mon, $mday, $subj;
 	}
     }
-    print STDOUT "\n";
+    print STDOUT "</pre>";
 }
 
 unlink($tmpfile);
-print STDOUT "</pre><hr>\n";
+print STDOUT "<hr>\n";
 
 &form(0,'','');
     
