@@ -419,7 +419,7 @@ sub invoke_hebcal($$$)
 
 	next if $subj eq 'Havdalah (0 min)';
 
-	my($memo2) = (&get_holiday_anchor($subj,$want_sephardic))[2];
+	my($memo2) = (Hebcal::get_holiday_anchor($subj,$want_sephardic,undef))[2];
 
 	push(@events,
 	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
@@ -522,9 +522,6 @@ sub get_holiday_anchor($$$)
     my($href) = '';
     my($hebrew) = '';
     my($memo) = '';
-    my($haftarah_href) = '';
-    my($torah_href) = '';
-    my($drash_href) = '';
 
     unless(tied(%SEDROT)) {
 	tie(%SEDROT, 'DB_File', $sedrotfn, O_RDONLY, 0444, $DB_File::DB_HASH)
@@ -555,14 +552,6 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    $drash_href = $SEDROT{"$sedra:drash"};
-	    $torah_href = $SEDROT{"$sedra:torah"};
-	    if ($torah_href =~ m,/jpstext/,)
-	    {
-		$haftarah_href = $torah_href;
-		$haftarah_href =~ s/.shtml$/_haft.shtml/;
-	    }
-
 	    $hebrew .= $SEDROT{"$sedra:hebrew"};
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
@@ -582,17 +571,6 @@ sub get_holiday_anchor($$$)
 	    $href = 'http://' . $q->virtual_host()
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
-
-	    $drash_href = $SEDROT{"$p1:drash"};
-	    $torah_href = $SEDROT{"$p1:torah"};
-
-	    # on doubled parshiot, read only the second Haftarah
-	    if (defined $SEDROT{"$p2:torah"} && 
-		$SEDROT{"$p2:torah"} =~ m,/jpstext/,)
-	    {
-		$haftarah_href = $SEDROT{"$p2:torah"};
-		$haftarah_href =~ s/.shtml$/_haft.shtml/;
-	    }
 
 	    $hebrew .= $SEDROT{"$p1:hebrew"};
 
@@ -643,7 +621,7 @@ sub get_holiday_anchor($$$)
     }
 
     return (wantarray()) ?
-	($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
+	($href,$hebrew,$memo)
 	: $href;
 }
     
@@ -1324,7 +1302,7 @@ sub yahoo_calendar_link($$)
     }
     else
     {
-	$desc = (&get_holiday_anchor($subj))[2];
+	$desc = (Hebcal::get_holiday_anchor($subj,undef,undef))[2];
     }
 
     $ST .= "&amp;DESC=" . &url_escape($desc)
@@ -1333,12 +1311,6 @@ sub yahoo_calendar_link($$)
     "http://calendar.yahoo.com/?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=" .
 	&url_escape($subj) . "&amp;VIEW=d";
 }
-
-#$Hebcal::mac_format = '';
-#format STDOUT =
-#^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
-#$Hebcal::mac_format
-#.
 
 sub macintosh_datebook($$)
 {
@@ -1500,7 +1472,7 @@ sub vcalendar_write_contents($$$$$)
 
 	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 
-	my($href,$hebrew,@dummy) = Hebcal::get_holiday_anchor($subj,0,$q);
+	my($href,$hebrew,$dummy_memo) = Hebcal::get_holiday_anchor($subj,0,$q);
 
 	$subj =~ s/,/\\,/g;
 
