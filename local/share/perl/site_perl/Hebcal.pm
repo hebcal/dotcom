@@ -1380,10 +1380,10 @@ sub macintosh_datebook($$)
 sub vcalendar_write_contents($$$$)
 {
     my($q,$events,$tz,$state) = @_;
-    my($numEntries) = scalar(@{$events});
 
-    my($path_info) = $q->path_info();
-    if ($path_info =~ /\.ics$/) {
+    my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
+
+    if ($is_icalendar) {
 	export_http_header($q, 'text/calendar');
     } else {
 	export_http_header($q, 'text/x-vCalendar');
@@ -1394,7 +1394,7 @@ sub vcalendar_write_contents($$$$)
     my $tzid;
     $tz = 0 unless defined $tz;
 
-    if ($path_info =~ /\.ics$/) {
+    if ($is_icalendar) {
     if (defined $state) {
 	if ($state eq 'AK') {
 	    if ($tz == -10) {
@@ -1407,6 +1407,7 @@ sub vcalendar_write_contents($$$$)
 	} elsif ($state eq 'HI') {
 	    $tzid = 'US/Hawaii';
 	} elsif ($state eq 'IN') {
+	    # TODO: figure out which one of these to use
 	    $tzid = 'US/East-Indiana';
 	    $tzid = 'US/Indiana-Starke';
 	} elsif ($state eq 'MI') {
@@ -1443,20 +1444,29 @@ sub vcalendar_write_contents($$$$)
 
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
 
-    print STDOUT qq{BEGIN:VCALENDAR$endl}, qq{VERSION:1.0$endl},
-    qq{METHOD:PUBLISH$endl};
+    print STDOUT qq{BEGIN:VCALENDAR$endl};
+
+    if ($is_icalendar) {
+	print STDOUT qq{VERSION:2.0$endl},
+	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl};
+    } else {
+	print STDOUT qq{VERSION:1.0$endl};
+    }
+
+    print STDOUT qq{METHOD:PUBLISH$endl};
 
     if ($tzid) {
 	print STDOUT qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl};
     }
 
     my($i);
+    my($numEntries) = scalar(@{$events});
     for ($i = 0; $i < $numEntries; $i++)
     {
 	print STDOUT qq{BEGIN:VEVENT$endl};
 	print STDOUT qq{DTSTAMP:$dtstamp$endl};
 
-	if ($path_info =~ /\.ics$/) {
+	if ($is_icalendar) {
 	    print STDOUT qq{CATEGORIES:Holidays$endl};
 	} else {
 	    print STDOUT qq{CATEGORIES:HOLIDAY$endl};
@@ -1507,7 +1517,7 @@ sub vcalendar_write_contents($$$$)
 
 	    $end_date .= sprintf("T%02d%02d00", $hour, $min);
 	}
-	elsif ($path_info !~ /\.ics$/)
+	elsif (! $is_icalendar)
 	{
 	    # for vCalendar Palm Desktop and Outlook 2000 seem to
 	    # want midnight to midnight for all-day events.
