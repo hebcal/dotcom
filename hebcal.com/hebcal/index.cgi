@@ -171,14 +171,19 @@ if (! defined $q->path_info())
 {
     &results_page();
 }
-elsif ($q->path_info() =~ /[^\/]+.csv$/)
+elsif ($q->path_info() =~ /[^\/]+\.csv$/)
 {
     &csv_display();
 }
-elsif ($q->path_info() =~ /[^\/]+.dba$/)
+elsif ($q->path_info() =~ /[^\/]+\.dba$/)
 {
     &dba_display();
 }
+#elsif ($q->path_info() =~ /[^\/]+\.vcs$/)
+#{
+    # text/x-vCalendar
+#    &vcalendar_display();
+#}
 elsif (defined $q->param('cfg') && $q->param('cfg') eq 'e')
 {
     &javascript_events();
