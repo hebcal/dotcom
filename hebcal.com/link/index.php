@@ -91,20 +91,6 @@ Michael J. Radwin. All rights reserved.</a>
 </span>
 </blockquote>
 
-<p>To change the fonts, add a CSS stylesheet like this to the
-<tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
-page:</p>
-
-<blockquote><pre>
-&lt;style type="text/css"&gt;
-&lt;!--
-H1, H2, H3, H4, H5, H6 {
- font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
-}
---&gt;
-&lt;/style&gt;
-</pre></blockquote>
-
 <hr noshade size="1">
 <h2><a name="change">Change City</a></h2>
 
@@ -126,6 +112,24 @@ value="<?php echo $zip ?>"></label>
 <br><br>
 <input type="submit" value="Get new link">
 </form>
+
+<p><hr noshade size="1">
+<h2><a name="fonts">Customize Fonts</a></h2>
+
+<p>To change the fonts, add a CSS stylesheet like this to the
+<tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
+page:</p>
+
+<blockquote><pre>
+&lt;style type="text/css"&gt;
+&lt;!--
+H1, H2, H3, H4, H5, H6 {
+ font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
+}
+--&gt;
+&lt;/style&gt;
+</pre></blockquote>
+
 
 <?php
     my_footer();
