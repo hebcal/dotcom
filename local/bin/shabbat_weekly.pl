@@ -84,6 +84,8 @@ shabbat-unsubscribe\@hebcal.com
 
     warn "$0: unable to email $to\n"
 	if ($status == 0);
+
+    sleep(2);
 }
 
 &Hebcal::zipcode_close_db($ZIPS);
