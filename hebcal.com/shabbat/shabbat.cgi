@@ -36,24 +36,10 @@ my($this_year) = (localtime)[5];
 $this_year += 1900;
 
 my($rcsrev) = '$Revision$'; #'
-$rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:28:06 PDT 2001
+Last modified: Mon May  7 21:43:01 PDT 2001
 <!-- hhmts end -->";
-
-$hhmts =~ s/<!--.*-->//g;
-$hhmts =~ s/\n//g;
-$hhmts =~ s/Last modified: /Software last updated:\n/g;
-
-my($html_footer) = "<hr
-noshade size=\"1\"><font size=-2 face=Arial>Copyright
-&copy; $this_year Michael J. Radwin. All rights reserved.
-<a href=\"/privacy/\">Privacy Policy</a> -
-<a href=\"/help/\">Help</a>
-<br>$hhmts ($rcsrev)
-</font></body></html>
-";
 
 my($inline_style) = '';
 #my($inline_style) = qq[<style type="text/css">
@@ -477,7 +463,6 @@ if (defined $q->param('cfg') && $q->param('cfg') =~ /^[ijr]$/)
 else
 {
     &form(0,'','');
-    &out_html($html_footer);
 }
 
 close(STDOUT);
@@ -674,7 +659,7 @@ sub form
 	qq{can my synagogue put 1-Click Shabbat candle-lighting\n},
 	qq{times on its own website?</a></p>});
 
-    &out_html($html_footer);
+    &out_html(&Hebcal::html_footer($q,$hhmts,$rcsrev));
 
     exit(0);
 }
