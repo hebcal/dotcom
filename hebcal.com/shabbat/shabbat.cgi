@@ -38,7 +38,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Jan 17 09:45:41 PST 2001
+Last modified: Wed Jan 17 10:07:38 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -301,15 +301,17 @@ if (defined $q->param('cfg'))
 <channel>
 <title>$title</title>
 ");
-	&out_html("<link>http://" . $q->server_name() . $script_name .
-		  "?zip=" . $q->param('zip') . "&amp;dst=" . $q->param('dst'));
-	&out_html("&amp;tz=" . $q->param('tz'))
+	&out_html("<link>http://", $q->server_name(), $script_name,
+		  "?zip=", $q->param('zip'), "&amp;dst=", $q->param('dst'));
+	&out_html("&amp;tz=", $q->param('tz'))
 	    if (defined $q->param('tz') && $q->param('tz') ne 'auto');
-	&out_html("&amp;m=" . $q->param('m'))
+	&out_html("&amp;m=", $q->param('m'))
 	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n" .
-		  "times for $city_descr</description>\n" .
+	&out_html("</link>\n<description>Weekly Shabbat candle lighting\n",
+		  "times for $city_descr</description>\n",
 		  "<language>en-us</language>\n");
+	&out_html("<copyright>Copyright &copy; $this_year Michael J. Radwin.",
+		  " All rights reserved.</copyright>\n");
     }
 }
 else
@@ -467,7 +469,7 @@ if (defined $q->param('cfg'))
 <description>Get Shabbat Times for another zip code</description>
 <name>zip</name>
 ");
-	&out_html("<link>http://" . $q->server_name() . $script_name .
+	&out_html("<link>http://", $q->server_name(), $script_name,
 		  "</link>\n</textinput>\n");
 	&out_html("</channel>\n</rss>\n");
     }
