@@ -122,11 +122,13 @@ $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 &form($default_zip, '') if (!defined $in{'zip'});
 
 &form($in{'zip'},
-      "<p><em><font color=\"#ff0000\">Please specify a 5-digit Zip Code.</font></em></p>")
+      "<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
+      "Zip Code.</font></em></p>")
     if $in{'zip'} =~ /^\s*$/;
 
 &form($in{'zip'},
-      "<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does not appear to be a 5-digit Zip Code.</font></em></p>")
+      "<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does not\n" .
+      "appear to be a 5-digit Zip Code.</font></em></p>")
     unless $in{'zip'} =~ /^\d\d\d\d\d$/;
 
 dbmopen(%DB, "zips", 0400) ||
@@ -140,7 +142,8 @@ $val = $DB{$in{'zip'}};
 dbmclose(%DB);
 
 &form($in{'zip'},
-      "<p><em><font color=\"#ff0000\">Sorry, can't find <b>$in{'zip'}</b> in the Zip Code database.</font></em></p>")
+      "<p><em><font color=\"#ff0000\">Sorry, can't find <b>$in{'zip'}</b>\n" .
+      "in the Zip Code database.</font></em></p>")
     unless defined $val;
 
 ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
@@ -218,7 +221,6 @@ sub form
 hebcal
 </big></strong>
 
-$message
 <p>This is a web interface to Danny Sadinoff's <a
 href=\"http://www.sadinoff.com/hebcal/\">hebcal</a> program.</p>
 
@@ -227,6 +229,8 @@ lighting times are calculated from your latitude/longitude (which is
 determined by your Zip Code).</p>
 
 <hr noshade size=\"1\">
+$message
+
 <form method=\"get\" action=\"$cgipath\">
 
 <label for=\"year\">Year: </label><input type=\"text\" name=\"year\"
