@@ -22,8 +22,10 @@ Jewish Calendar Tools</small></td>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
+<!-- holiday greeting -->
 <span style="font-weight: bold; font-style: italic; color: #cc9966">Purim
 Sameach!</span> &nbsp; - &nbsp;
+<!-- end holiday greeting -->
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="1" cellspacing="0" width="100%">
@@ -71,9 +73,6 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
-<span class="sm-grey">&gt;</span>&nbsp;<b><a
-href="/holidays/purim.html">Purim</a></b>
-<br>06 March 2004 (at sunset)<br><br>
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;s=on;vis=on">Current&nbsp;Calendar</a></b><br><!--#config timefmt="%B %Y" --><!--#echo var="DATE_LOCAL" --><!--#include file="holiday.inc" --><!--#include file="current.inc" --><br>
