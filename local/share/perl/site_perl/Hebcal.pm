@@ -236,6 +236,14 @@ while (my($key,$val) = each %Hebcal::cities)
   "Shabbas HaGadol"		=>	"Shabbat HaGadol",
   "Shabbas Hazon"		=>	"Shabbat Hazon",
   "Shabbas Nachamu"		=>	"Shabbat Nachamu",
+  "Shabbos Shuvah"		=>	"Shabbat Shuva",
+  "Shabbos Shekalim"		=>	"Shabbat Shekalim",
+  "Shabbos Zachor"		=>	"Shabbat Zachor",
+  "Shabbos Parah"		=>	"Shabbat Parah",
+  "Shabbos HaChodesh"		=>	"Shabbat HaChodesh",
+  "Shabbos HaGadol"		=>	"Shabbat HaGadol",
+  "Shabbos Hazon"		=>	"Shabbat Hazon",
+  "Shabbos Nachamu"		=>	"Shabbat Nachamu",
   );
 
 %Hebcal::tz_names = (
