@@ -11,11 +11,10 @@ Header append P3P "CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV
 Header append PICS-Label "(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l gen true r (n 0 s 0 v 0 l 0))"
 
 # for WAP 1-click shabbat
-AddHandler cgi-script .cgi
 RewriteEngine on
 RewriteCond %{HTTP_ACCEPT} text\/vnd\.wap\.wml
 RewriteCond %{REQUEST_URI} ^/$
-RewriteRule ^ /wap-shabbat.cgi [L]
+RewriteRule ^ /wap-shabbat.php [L]
 
 AddIcon /icons/p.gif .pm
 AddIcon /icons/generic.gif .ini
