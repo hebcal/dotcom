@@ -56,6 +56,21 @@ foreach($HTTP_GET_VARS as $key => $value) {
     $param[$key] = $value;
 }
 
+if (array_key_exists('e', $param)) {
+    $param['em'] = base64_decode($param['e']);
+    $info = get_sub_info($param['em']);
+    if ($info && !preg_match('/^action=/', $info)) {
+	$array = explode(';', $info);
+	foreach ($array as $i) {
+	    $parts = explode('=', $i, 2);
+	    if ($parts[0] == 'upd') {
+		$parts[1] = ($parts[1] == '1') ? 'on' : '';
+	    }
+	    $param[$parts[0]] = $parts[1];
+	}
+    }
+}
+
 if ($param['v'])
 {
     $email = $param["em"];
