@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Sun Feb 11 21:23:28 PST 2001
+Last modified: Sun Feb 11 22:11:55 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1092,13 +1092,20 @@ so you can keep this window open.
 		&Hebcal::url_escape($subj), "&amp;VIEW=d\">add</a> ";
 	}
 
-	my($href,$hebrew) = &Hebcal::get_holiday_anchor($subj);
+	my($href,$hebrew,$memo,$torah_href,$haftarah_href)
+	    = &Hebcal::get_holiday_anchor($subj);
 	if ($hebrew ne '')
 	{
 	    $subj .= qq{\n(<big><span lang="he" dir="rtl">$hebrew</span></big>)};
 	}
 
-	if ($href ne '')
+	if (defined $torah_href && $torah_href ne '')
+	{
+	    $subj .= qq{ (<a href="$href">Drash</a>\n} .
+		qq{- <a href="$torah_href">Torah</a>\n} .
+		qq{- <a href="$haftarah_href">Haftarah</a>)};
+	}
+	elsif ($href ne '')
 	{
 	    $subj = qq{<a href="$href">$subj</a>};
 	}
