@@ -319,10 +319,22 @@ begin the evening before the date specified. This is because the Jewish
 day actually begins at sundown on the previous night.</p>\n});
 }
 
+for (my $i = 0; $i < $numEntries; $i++)
+{
+    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ / of Adar/) {
+	&Hebcal::out_html($cfg,
+"<p><em>Note: the results below contain one ore more annivesary in Adar.\n",
+"To learn more about how Hebcal handles these dates, read <a\n",
+"href=\"http://www.hebcal.com/help/anniv.html#adar\">How\n",
+"does Hebcal determine an anniversary occurring in Adar?</a></em></p>\n",
+			  );
+	last;
+    }
+}
+
 &Hebcal::out_html($cfg, "<pre>") unless ($q->param('yizkor'));
 
-my($i);
-for ($i = 0; $i < $numEntries; $i++)
+for (my $i = 0; $i < $numEntries; $i++)
 {
     my($subj) = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
     my($year) = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
