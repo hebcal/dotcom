@@ -309,7 +309,7 @@ my(%holidays) =
      "Tu B'Shvat"		=>
      ["tubshvat",		0, 'טוּ בִּשְׁבָט'],
      "Tzom Gedaliah"		=>
-     ["gedaliah",		0, 'צוֹם ***'],
+     ["gedaliah",		0, 'צוֹם גְּדַלְיָה'],
      "Tzom Tammuz"		=>
      ["tammuz",			0, 'צוֹם תָּמוּז'],
      "Yom HaAtzma'ut"		=>
@@ -1005,9 +1005,7 @@ sub get_holiday_anchor($$)
 
 	    if (defined $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE])
 	    {
-		$hebrew = $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE]
-		    unless $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE]
-			=~ /\*\*\*/;
+		$hebrew = $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE];
 	    }
 	}
     }
