@@ -86,83 +86,6 @@ $Hebcal::PALM_DBA_MAXENTRIES = 2500;
 	     12  => 'December',
 	     );
 
-# these states are known to span multiple timezones:
-# AK, FL, ID, IN, KS, KY, MI, ND, NE, OR, SD, TN, TX
-%Hebcal::known_timezones =
-    (
-     '99692'	=>	-10,	# AK west of 170W
-     '99547'	=>	-10,	# AK west of 170W
-     '99660'	=>	-10,	# AK west of 170W
-     '99742'	=>	-10,	# AK west of 170W
-     '98791'	=>	-10,	# AK west of 170W
-     '99769'	=>	-10,	# AK west of 170W
-     '996'	=>	'??',	# west AK
-     '324'	=>	-6,	# west FL
-     '325'	=>	-6,	# west FL
-     '463'	=>	'??',	# Jasper, Lake, LaPorte, Newton, and
-     '464'	=>	'??',	#  Porter counties, IN
-     '476'	=>	'??',	# Gibson, Posey, Spencer, Vanderburgh,
-     '477'	=>	'??',	#  and Warrick counties, IN
-     '677'	=>	'??',	# west KS
-     '678'	=>	'??',	# west KS
-     '679'	=>	'??',	# west KS
-     '799'	=>	-7,	# el paso, TX
-     '798'	=>	'??',	# west TX
-     '838'	=>	-8,	# north ID
-     '835'	=>	-8,	# north ID
-     '979'	=>	'??',	# east OR
-     '49858'	=>	-6,	# Menominee, MI
-     '498'	=>	'??',	# west MI
-     '499'	=>	'??',	# west MI
-     'KS'	=>	-6,
-     'IN'	=>	-5,
-     'MI'	=>	-5,
-     'ID'	=>	-7,
-     'OR'	=>	-8,
-     'FL'	=>	-5,
-     'HI'	=>	-10,
-     'AK'	=>	-9,
-     'CA'	=>	-8,
-     'NV'	=>	-8,
-     'WA'	=>	-8,
-     'MT'	=>	-7,
-     'AZ'	=>	-7,
-     'UT'	=>	-7,
-     'WY'	=>	-7,
-     'CO'	=>	-7,
-     'NM'	=>	-7,
-     'TX'	=>	-6,
-     'OK'	=>	-6,
-     'IL'	=>	-6,
-     'WI'	=>	-6,
-     'MN'	=>	-6,
-     'IA'	=>	-6,
-     'MO'	=>	-6,
-     'AR'	=>	-6,
-     'LA'	=>	-6,
-     'MS'	=>	-6,
-     'AL'	=>	-6,
-     'OH'	=>	-5,
-     'RI'	=>	-5,
-     'MA'	=>	-5,
-     'NY'	=>	-5,
-     'NH'	=>	-5,
-     'VT'	=>	-5,
-     'ME'	=>	-5,
-     'CT'	=>	-5,
-     'NJ'	=>	-5,
-     'DE'	=>	-5,
-     'DC'	=>	-5,
-     'PA'	=>	-5,
-     'WV'	=>	-5,
-     'VA'	=>	-5,
-     'NC'	=>	-5,
-     'SC'	=>	-5,
-     'GA'	=>	-5,
-     'MD'	=>	-5,
-     'PR'	=>	-5,
-     );
-
 # these cities should have DST set to 'none'
 %Hebcal::city_nodst =
     (
@@ -657,31 +580,6 @@ sub zipcode_fields
     }
 
     ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
-}
-
-sub guess_timezone($$$)
-{
-    my($tz,$zip,$state) = @_;
-
-    return $tz if ($tz =~ /^-?\d+$/);
-
-    if (defined $Hebcal::known_timezones{$zip})
-    {
-	return $Hebcal::known_timezones{$zip}
-	if ($Hebcal::known_timezones{$zip} ne '??');
-    }
-    elsif (defined $Hebcal::known_timezones{substr($zip,0,3)})
-    {
-	return $Hebcal::known_timezones{substr($zip,0,3)}
-	if ($Hebcal::known_timezones{substr($zip,0,3)} ne '??');
-    }
-    elsif (defined $Hebcal::known_timezones{$state})
-    {
-	return $Hebcal::known_timezones{$state}
-	if ($Hebcal::known_timezones{$state} ne '??');
-    }
-
-    undef;
 }
 
 sub display_hebrew {
@@ -1553,7 +1451,6 @@ if ($^W && 0)
     $_ = $Hebcal::tz_names{'foo'};
     $_ = $Hebcal::city_tz{'foo'};
     $_ = $Hebcal::MoY_long{'foo'};
-    $_ = $Hebcal::known_timezones{'foo'};
 }
 
 1;
