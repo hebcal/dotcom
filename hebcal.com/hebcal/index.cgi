@@ -737,34 +737,35 @@ so you can keep this window open.
 
     }
 
+    # toggle month/full year and event list/calendar grid
+    $goto .= "\n&nbsp;&nbsp;&nbsp; <small>change view: [ ";
+
     if ($q->param('vis'))
     {
-	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
-	    "<a\nhref=\"" . &self_url($q, {'vis' => '0'}) .
-	    "\">month\nevent list</a> | " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => 'x', 'vis' => '0'}) .
-	    "\">year\nevent list</a> | " .
-	    "month\ncalendar " .
-	    "]</small>";
-    }
-    elsif ($date !~ /^\d+$/)
-    {
-	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month event list | " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
-	    "\">year\nevent list</a> | " .
-	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) .
-	    "\">month\ncalendar</a> " .
-	    "]</small>";
+	$goto .= "<a\nhref=\"" . &self_url($q, {'vis' => '0'}) .
+	    "\">event\nlist</a> | <b>calendar grid</b> ]";
     }
     else
     {
-	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
-	    "\">month\nevent list</a> | year event list | " .
-	    "<a\nhref=\"" . &self_url($q, {'month' => '1', 'vis' => 1}) .
-	    "\">month\ncalendar</a> " .
-	    "]</small>";
+	$goto .= "<b>event list</b> | <a\nhref=\"" .
+	    &self_url($q, {'vis' => '1'}) . "\">calendar\ngrid</a> ]";
     }
+
+    $goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
+
+    if ($date !~ /^\d+$/)
+    {
+	$goto .= "<b>month</b> | " .
+	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
+	    "\">entire\nyear</a> ]";
+    }
+    else
+    {
+	$goto .= "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
+	    "\">month</a> |\n<b>entire year</b> ]";
+    }
+
+    $goto .= "</small>\n";
 
     if ($q->param('c') && $q->param('c') ne 'off')
     {
@@ -796,8 +797,8 @@ so you can keep this window open.
 
     $goto .= "</p>\n";
 
-    print STDOUT $goto
-	unless $q->param('vis');
+    print STDOUT $goto;
+#	unless $q->param('vis');
 
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
