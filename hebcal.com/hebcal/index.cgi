@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Mar 21 16:15:20 PST 2001
+Last modified: Thu Mar 22 14:57:27 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -988,29 +988,29 @@ so you can keep this window open.
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
 	    "<a\nhref=\"" . &self_url($q, {'vis' => ''}) .
-	    "\">month\nview</a> | " .
+	    "\">month\nevent list</a> | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x', 'vis' => ''}) .
-	    "\">year\nview</a> | " .
-	    "printable\nview " .
+	    "\">year\nevent list</a> | " .
+	    "month\ncalendar " .
 	    "]</small>";
     }
     elsif ($date !~ /^\d+$/)
     {
-	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month view | " .
+	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ month event list | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => 'x'}) .
-	    "\">year\nview</a> | " .
+	    "\">year\nevent list</a> | " .
 	    "<a\nhref=\"" . &self_url($q, {'vis' => 1}) . '&amp;vis=1' .
-	    "\">printable\nview</a> " .
+	    "\">month\ncalendar</a> " .
 	    "]</small>";
     }
     else
     {
 	$goto .= "\n&nbsp;&nbsp;&nbsp; <small>[ " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => '1'}) .
-	    "\">month\nview</a> | year view | " .
+	    "\">month\nevent list</a> | year event list | " .
 	    "<a\nhref=\"" . &self_url($q, {'month' => '1', 'vis' => 1})
 		. '&amp;vis=1' .
-	    "\">printable\nview</a> " .
+	    "\">month\ncalendar</a> " .
 	    "]</small>";
     }
 
