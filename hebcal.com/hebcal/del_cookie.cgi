@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl -w
 
+use lib "/pub/m/r/mradwin/private/lib/perl5/site_perl";
+
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal;
