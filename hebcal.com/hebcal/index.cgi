@@ -41,7 +41,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Wed Apr 11 10:32:50 PDT 2001
+Last modified: Wed Apr 11 10:48:20 PDT 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -787,7 +787,15 @@ JSCRIPT_END
     $q->hidden(-name => '.cgifields',
 	       -values => ['nx', 'nh', 'set'],
 	       '-override'=>1),
-    "</form>", $html_footer;
+    "</form>";
+
+    print STDOUT qq{<p><small>[
+Hebcal Interactive Jewish Calendar |
+<a href="/shabbat/">1-Click Shabbat</a> |
+<a href="/yahrzeit/">Interactive Yahrzeit/Birthday Calendar</a>
+]</small></p>};
+
+    print STDOUT $html_footer;
 
     exit(0);
     1;
