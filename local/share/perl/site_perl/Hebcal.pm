@@ -631,6 +631,43 @@ sub get_holiday_anchor($$$)
 # web page utils
 ########################################################################
 
+my $cache = undef;
+sub cache_begin($)
+{
+    my($q) = @_;
+
+    return undef unless $ENV{'QUERY_STRING'};
+
+    my $script_name = $q->script_name();
+    $script_name =~ s/\./_/g;
+
+    my $qs = $ENV{'QUERY_STRING'};
+    $qs =~ s/[&;]/,/g;
+    $qs =~ s/\./_/g;
+    $qs =~ s/\//-/g;
+    $qs =~ s/\%20/+/g;
+    $qs =~ s/[\<\>\s\"\'\`\?\*\$\|\[\]\{\}\\\~]//g; # unsafe chars
+
+    my $dir = $ENV{"DOCUMENT_ROOT"} . "/cache/" . $script_name;
+    my $fn = "$dir/$qs.tmp";
+
+    system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed: $?";
+    open(CACHE, ">$fn") || die "$fn: $!\n";
+    $cache = $fn;
+    $cache;
+}
+
+sub cache_end()
+{
+    close(CACHE);
+    my $fn = $cache;
+    my $newfn = $fn;
+    $newfn =~ s/\.tmp$//;
+    rename($fn, $newfn);
+    $cache = undef;
+    1;
+}
+
 sub out_html
 {
     my($cfg,@args) = @_;
@@ -638,19 +675,23 @@ sub out_html
     if (defined $cfg && $cfg eq 'j')
     {
 	print STDOUT "document.write(\"";
+	print CACHE "document.write(\"" if $cache;
 	foreach (@args)
 	{
 	    s/\"/\\\"/g;
 	    s/\n/\\n/g;
 	    print STDOUT;
+	    print CACHE if $cache;
 	}
 	print STDOUT "\");\n";
+	print CACHE "\");\n" if $cache;
     }
     else
     {
 	foreach (@args)
 	{
 	    print STDOUT;
+	    print CACHE if $cache;
 	}
     }
 
