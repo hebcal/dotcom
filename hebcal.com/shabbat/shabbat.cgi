@@ -539,7 +539,7 @@ if (!$cfg && $q->param('zip'))
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    &Hebcal::out_html($cfg,"<p><b><span class=\"hl\">NEW!</span>\n",
+    &Hebcal::out_html($cfg,"<p><b>",
 		      "<a href=\"$url\">Subscribe\n",
 		      "to 1-Click Shabbat by email</a></b>\n");
 
@@ -547,10 +547,12 @@ if (!$cfg && $q->param('zip'))
 		"?zip=", $q->param('zip'));
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+    $url .= "&amp;=type=shabbat";
 
-    &Hebcal::out_html($cfg,"<br><a href=\"$url\">Add\n",
+    &Hebcal::out_html($cfg,"<br><b><span class=\"hl\">NEW!</span>\n",
+		      "<a href=\"$url\">Add\n",
 		      "1-Click Shabbat candle-lighting times to your\n",
-		      "synagogue's web site</a></p>\n");
+		      "synagogue's web site</a></b></p>\n");
 }
 
 if (defined $cfg && $cfg =~ /^[ijrw]$/)
