@@ -481,7 +481,7 @@ JSCRIPT_END
 		     'H' => "\nHebrew Year "});
 
     print STDOUT "<p><table border=\"0\" cellpadding=\"0\"\n",
-    "cellspacing=\"0\"><tr valign=\"top\"><td>\n";
+    "cellspacing=\"0\" style=\"margin-bottom: 10px\"><tr valign=\"top\"><td>\n";
 
     print STDOUT "<b>Include events</b>",
     "<br><label\nfor=\"nh\">",
@@ -677,7 +677,7 @@ JSCRIPT_END
     "\n";
     }
 
-    print STDOUT "</td></tr></table></p>\n",
+    print STDOUT "</td></tr></table>\n",
     $q->submit(-name => '.s',-value => 'Get Calendar'),
     $q->hidden(-name => '.cgifields',
 	       -values => ['nx', 'nh', 'set'],
