@@ -40,7 +40,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Fri Jan 26 11:31:13 PST 2001
+Last modified: Fri Jan 26 12:34:59 PST 2001
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -1081,14 +1081,14 @@ so you can keep this window open.
 	}
 
 	my($href,$hebrew) = &Hebcal::get_holiday_anchor($subj);
+	if ($hebrew ne '')
+	{
+	    $subj .= qq{\n(<big><span lang="he" dir="rtl">$hebrew</span></big>)};
+	}
+
 	if ($href ne '')
 	{
 	    $subj = qq{<a href="$href">$subj</a>};
-	}
-
-	if ($hebrew ne '')
-	{
-	    $subj .= qq{\n<big><span lang="he" dir="rtl">$hebrew</span></big>};
 	}
 
 	my($dow) = ($year > 1969 && $year < 2038) ?
