@@ -831,11 +831,32 @@ sub gen_cookie($)
     $retval;
 }
 
+sub get_C_cookie($)
+{
+    my($q) = @_;
+
+    my($raw) = $q->raw_cookie();
+    my($C_cookie) = '';
+    if ($raw)
+    {
+	foreach (split(/[;,\s]/, $raw))
+	{
+	    if (/^C=[^\s,;]+$/)
+	    {
+		$C_cookie = $_;
+		last;
+	    }
+	}
+    }
+
+    $C_cookie;
+}
 
 sub process_cookie($$)
 {
     my($q,$cookieval) = @_;
 
+    $cookieval =~ s/^C=//;
     my($c) = new CGI($cookieval);
 
     if ((! defined $q->param('c')) ||
