@@ -168,10 +168,11 @@ href="/search/">Search</a></small>
 <h4>United States</h4>
 <p>
 <form action="/shabbat/">
-<label for="zip">Enter Zip code:</label>
-<input type="text" name="zip" size="5" maxlength="5"
-id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="geo" value="zip">
+<label for="zip">Enter Zip code:</label>
+<input type="text" name="zip" size="5" maxlength="5" id="zip">
+<input type="hidden" name="m" value="72">
+<input type="submit" value="Go">
 </form>
 </p>
 <h4>International Cities</h4>
