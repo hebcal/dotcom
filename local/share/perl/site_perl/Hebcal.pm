@@ -410,6 +410,11 @@ sub parse_date_descr($$)
 
     my($mon,$mday,$year) = split(/\//, $date);
 
+    if (($subj eq 'Yom HaZikaron' || $subj eq "Yom HaAtzma'ut") &&
+	($year == 2004)) {
+	$mday++;
+    }
+
     ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur,$yomtov);
 }
 
@@ -1398,7 +1403,7 @@ sub vcalendar_write_contents($$$$)
     my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
 
     if ($is_icalendar) {
-	export_http_header($q, 'text/calendar');
+	export_http_header($q, 'text/calendar; charset=UTF-8');
     } else {
 	export_http_header($q, 'text/x-vCalendar');
     }
@@ -1487,9 +1492,21 @@ sub vcalendar_write_contents($$$$)
 	}
 
 	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+
+	my($href,$hebrew,@dummy) = Hebcal::get_holiday_anchor($subj,0,$q);
+
 	$subj =~ s/,/\\,/g;
 
+	if ($is_icalendar && $hebrew &&
+	    defined $q->param('heb') && $q->param('heb') =~ /^on|1$/) {
+	    $subj .= " / $hebrew";
+	}
+
 	print STDOUT qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl};
+
+	if ($is_icalendar && $href) {
+	    print STDOUT qq{URL;VALUE=URI:$href$endl};
+	}
 
  	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
  	{
