@@ -163,7 +163,7 @@ $Hebcal::havdalah_min = 72;
 
 
 # translate from Askenazic transiliterations to Separdic
-my(%ashk2seph) =
+%Hebcal::ashk2seph =
  (
   # parshiot translations
   "Bereshis"			=>	"Bereshit",
@@ -337,8 +337,8 @@ sub parse_date_descr($$)
     my($yomtov) = 0;
     my($subj_copy) = $subj;
 
-    $subj_copy = $ashk2seph{$subj_copy}
-	if defined $ashk2seph{$subj_copy};
+    $subj_copy = $Hebcal::ashk2seph{$subj_copy}
+	if defined $Hebcal::ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
     $yomtov = 1  if $HOLIDAYS{"$subj_copy:yomtov"};
@@ -463,7 +463,7 @@ sub get_holiday_anchor($$$)
 
 	# 'פרשת ' == UTF-8 for "parashat "
 	$hebrew = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA ";
-	$sedra = $ashk2seph{$sedra} if (defined $ashk2seph{$sedra});
+	$sedra = $Hebcal::ashk2seph{$sedra} if (defined $Hebcal::ashk2seph{$sedra});
 
 	if (defined $SEDROT{$sedra})
 	{
@@ -498,12 +498,12 @@ sub get_holiday_anchor($$$)
 	    }
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
-	       (defined $SEDROT{$1} || defined $SEDROT{$ashk2seph{$1}}))
+	       (defined $SEDROT{$1} || defined $SEDROT{$Hebcal::ashk2seph{$1}}))
 	{
 	    my($p1,$p2) = ($1,$2);
 
-	    $p1 = $ashk2seph{$p1} if (defined $ashk2seph{$p1});
-	    $p2 = $ashk2seph{$p2} if (defined $ashk2seph{$p2});
+	    $p1 = $Hebcal::ashk2seph{$p1} if (defined $Hebcal::ashk2seph{$p1});
+	    $p2 = $Hebcal::ashk2seph{$p2} if (defined $Hebcal::ashk2seph{$p2});
 
 	    die "sedrot.db missing $p2!" unless defined $SEDROT{$p2};
 
@@ -567,8 +567,8 @@ sub get_holiday_anchor($$$)
     {
 	my($subj_copy) = $subj;
 
-	$subj_copy = $ashk2seph{$subj_copy}
-	    if defined $ashk2seph{$subj_copy};
+	$subj_copy = $Hebcal::ashk2seph{$subj_copy}
+	    if defined $Hebcal::ashk2seph{$subj_copy};
 
 	$subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
@@ -1721,6 +1721,7 @@ if ($^W && 0)
     $_ = $Hebcal::tz_names{'foo'};
     $_ = $Hebcal::city_tz{'foo'};
     $_ = $Hebcal::MoY_long{'foo'};
+    $_ = $Hebcal::ashk2seph{'foo'};
 }
 
 1;
