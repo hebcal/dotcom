@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl5 -w
+#!/usr/local/bin/perl -w
 
 ########################################################################
 # 1-Click Shabbat generates weekly Shabbat candle lighting times and
