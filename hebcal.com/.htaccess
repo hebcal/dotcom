@@ -11,6 +11,7 @@ RewriteRule ^ /wap-shabbat.php [L]
 AddType application/x-javascript js
 AddType text/css css
 AddType text/xml xml rdf
+AddEncoding x-gzip .gz
 
 ExpiresActive On
 ExpiresByType image/gif A63072000
