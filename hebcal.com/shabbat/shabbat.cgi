@@ -529,7 +529,9 @@ if (defined $cfg && $cfg =~ /^[ijrw]$/)
 {
     if ($cfg eq 'i')
     {
-	&Hebcal::out_html($cfg,"</body></html>\n");
+	&Hebcal::out_html($cfg, "<font size=-2 face=Arial>1-Click Shabbat\n",
+			  &Hebcal::html_copyright($q), "</font>\n",
+			  "</body></html>\n");
     }
     elsif ($cfg eq 'r')
     {
