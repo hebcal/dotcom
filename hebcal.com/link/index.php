@@ -87,20 +87,15 @@ courtesy of hebcal.com.
 <p>The result will look like this:</p>
 
 <blockquote>
-<h3>Shabbat times for <?php echo $descr ?></h3>
-<dl>
-<dt class="candles">Candle lighting:
-<b>4:08pm</b> on Friday, 02 January 2004</dt>
-<dt class="parashat">This week's Torah portion is <a target="_top"
-href="http://www.hebcal.com/sedrot/vayigash.html">Parashat Vayigash</a></dt>
-<dt class="havdalah">Havdalah (72 min):
-<b>5:39pm</b> on Saturday, 03 January 2004</dt>
-</dl>
-<span class="tiny"><a target="_top"
-href="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>">1-Click
-Shabbat</a> Copyright &copy; <?php echo strftime("%Y", time()) ?> 
-Michael J. Radwin. All rights reserved.</a>
-</span>
+<script type="text/javascript" language="JavaScript"
+src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j">
+</script>
+<noscript>
+<!-- this link seen by people who have JavaScript turned off -->
+<a href="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>">Shabbat
+Candle Lighting times for <?php echo $descr ?></a>
+courtesy of hebcal.com.
+</noscript>
 </blockquote>
 
 <p>You can also <a href="#fonts">customize the fonts</a> used.</p>
