@@ -17,7 +17,7 @@ my($rcsrev) = '$Revision$'; #'
 $rcsrev =~ s/\s*\$//g;
 
 my($hhmts) = "<!-- hhmts start -->
-Last modified: Tue Sep 19 09:42:04 PDT 2000
+Last modified: Wed Sep 20 10:55:07 PDT 2000
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -286,7 +286,7 @@ my(@events) = &invoke_hebcal($cmd, $loc);
 print STDOUT "<pre>";
 
 # header row
-my($hdr) = "DoW YYYY/MM/DD  Description";
+my($hdr) = "DoW YYYY-MM-DD  Description";
 print STDOUT $hdr, "\n";
 print STDOUT '-' x length($hdr), "\n";
 
@@ -310,37 +310,15 @@ for ($i = 0; $i < $numEntries; $i++)
     my($hour) = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
     $hour -= 12 if $hour > 12;
 
-    if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)/)
+    my($href) = &get_holiday_anchor($subj);
+    if ($href ne '')
     {
-	my($parashat) = $1;
-	my($sedra) = $2;
-	if (defined $Hebcal::sedrot{$sedra} &&
-	    $Hebcal::sedrot{$sedra} !~ /^\s*$/)
-	{
-	    $subj = '<a href="' . $Hebcal::sedrot{$sedra} .
-		'">' . $parashat . $sedra . '</a>';
-	}
-	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
-	       (defined $Hebcal::sedrot{$1} &&
-		$Hebcal::sedrot{$1} !~ /^\s*$/))
-	{
-	    $subj = '<a href="' . $Hebcal::sedrot{$1} .
-		'">' . $parashat . $sedra . '</a>';
-	}
-    }
-    else
-    {
-	my($href) = &get_holiday_anchor($subj);
-
-	if ($href ne '')
-	{
-	    $subj = qq{<a href="$href">$subj</a>};
-	}
+	$subj = qq{<a href="$href">$subj</a>};
     }
 
     my($dow) = ($year > 1969 && $year < 2038) ?
 	$Hebcal::DoW[&get_dow($year - 1900, $mon - 1, $mday)] . ' ' : '';
-    printf STDOUT ("%s%04d/%02d/%02d  %s",
+    printf STDOUT ("%s%04d-%02d-%02d  %s",
 		   $dow, $year, $mon, $mday, $subj);
     printf STDOUT (": %d:%02d", $hour, $min)
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
