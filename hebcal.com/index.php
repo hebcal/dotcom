@@ -61,13 +61,12 @@ Readings</a></big></strong></dt>
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a>
-<br>
-This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal 3.2
-for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff.  All rights
-reserved.
+<br>This website uses <a
+href="http://sourceforge.net/projects/hebcal/">hebcal 3.2 for UNIX</a>,
+Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>
 <!-- hhmts start -->
-Last modified: Fri Jan  4 15:01:25 EST 2002
+Last modified: Fri Jan  4 15:06:53 EST 2002
 <!-- hhmts end -->
 </font>
 </body></html>
