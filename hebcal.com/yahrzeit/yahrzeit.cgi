@@ -28,8 +28,6 @@ use HTML::Entities ();
 use POSIX;
 use strict;
 
-my($author) = 'webmaster@hebcal.com';
-
 my($this_year) = (localtime)[5];
 $this_year += 1900;
 
