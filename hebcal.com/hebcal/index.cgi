@@ -339,7 +339,7 @@ $html_header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"
 
 $ENV{'TZ'} = 'PST8PDT';  # so ctime displays the time zone
 $hhmts = "<!-- hhmts start -->
-Last modified: Wed Nov 10 18:21:55 PST 1999
+Last modified: Wed Nov 17 14:37:37 PST 1999
 <!-- hhmts end -->";
 
 $hhmts =~ s/<!--.*-->//g;
@@ -523,7 +523,8 @@ elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
 }
 elsif (defined $in{'zip'})
 {
-    $in{'dst'} = 'usa' unless defined $in{'dst'};
+    $in{'dst'} = 'usa' if !defined($in{'dst'}) || $in{'dst'} =~ /^\s*$/;
+    $in{'geo'} = 'zip';
 
     &form("Please specify a 5-digit\nzip code.")
 	if $in{'zip'} =~ /^\s*$/;
@@ -563,7 +564,7 @@ elsif (defined $in{'zip'})
 
     $city_descr = "$city, $state &nbsp;$in{'zip'}";
 
-    if ($in{'tz'} eq 'auto')
+    if ($in{'tz'} eq 'auto' || $in{'tz'} eq '')
     {
 	if (defined $exception_timezones{$in{'zip'}})
 	{
