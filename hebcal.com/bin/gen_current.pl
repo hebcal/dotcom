@@ -30,7 +30,7 @@ for (my $i = 0; $i < @events; $i++)
 	    open(OUT,">$outfile") || die;
 	    $parsha =~ s/ /&nbsp;/g;
 	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
-	    print OUT "href=\"$href\">$parsha</a></b><br>$stime";
+	    print OUT "href=\"$href?tag=fp.ql\">$parsha</a></b><br>$stime";
 	    close(OUT);
 	    $wrote_parsha = 1;
 	}
@@ -93,7 +93,7 @@ for (my $i = 0; $i < @events; $i++)
 				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 	    $holiday =~ s/ /&nbsp;/g;
 	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
-	    print OUT "href=\"$href\">$holiday</a></b><br>$stime\n";
+	    print OUT "href=\"$href?tag=fp.ql\">$holiday</a></b><br>$stime\n";
 	}
     }
 }
@@ -159,7 +159,7 @@ foreach my $city (sort keys %Hebcal::city_tz)
 	    $ucity =~ s/ /+/g;
 	    my $acity = lc($city);
 	    $acity =~ s/ /_/g;
-	    print OUT qq{<tr><td><a name="$acity" href="/shabbat?geo=city;city=$ucity">$city</a></td><td>$stime</td></tr>\n};
+	    print OUT qq{<tr><td><a name="$acity" href="/shabbat/?geo=city;city=$ucity;tag=wc">$city</a></td><td>$stime</td></tr>\n};
 	}
     }
 }
