@@ -96,7 +96,7 @@ if ($q->param('v'))
 
     # email is OK, write canonicalized version
     $email = Email::Valid->address($email);
-    $q->param('em', $email);
+    $q->param('em', lc($email));
 }
 else
 {
