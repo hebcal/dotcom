@@ -9,24 +9,26 @@ use Hebcal ();
 
 my $site = "hebcal.com";
 my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+my $usage = "usage: $0 unsub|bounce email-addr";
 
 sub main() {
     my($op,$addr) = @ARGV;
 
-    my $usage = "usage: $0 unsub email-addr";
+    $op = lc($op);
+    $addr = lc($addr);
 
-    if (!defined $op) {
-	die "$usage\n";
-    } elsif ($op =~ /^unsub/i && $addr) {
-	unsubscribe(lc($addr));
+    if ($op eq "unsub") {
+	unsubscribe($addr, $op, "unsubscribed");
+    } elsif ($op eq "bounce") {
+	unsubscribe($addr, $op, "bounce");
     } else {
 	die "$usage\n";
     }
 }
 
-sub unsubscribe($)
+sub unsubscribe($$$)
 {
-    my($email) = @_;
+    my($email,$op,$new_status) = @_;
 
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
@@ -54,16 +56,17 @@ EOD
 	return 0;
     }
 
-    shabbat_log(1, "unsub", $email);
-
     $sql = <<EOD
 UPDATE hebcal1.hebcal_shabbat_email
-SET email_status='unsubscribed'
+SET email_status='$new_status'
 WHERE email_address = '$email'
 EOD
 ;
     $dbh->do($sql);
     $dbh->disconnect;
+
+    shabbat_log(1, $op, $email);
+    return unless $op eq "unsub";
 
     my($body) = qq{Hello,
 
@@ -102,6 +105,7 @@ sub shabbat_log
     }
 }
 
+die "$usage\n" unless @ARGV == 2;
 main();
 exit(0);
 
