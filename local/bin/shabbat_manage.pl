@@ -194,6 +194,14 @@ shabbat-unsubscribe\@hebcal.com
 	 'Precedence' => 'bulk',
          );
 
+    if ($header) {
+	my $mid = $header->get('Message-Id');
+	if ($mid) {
+	    chomp($mid);
+	    $headers{'In-Reply-To'} = $mid;
+	}
+
+    }
     &Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
@@ -273,6 +281,14 @@ hebcal.com};
          'Subject' => 'You have been unsubscribed from hebcal',
          );
 
+    if ($header) {
+	my $mid = $header->get('Message-Id');
+	if ($mid) {
+	    chomp($mid);
+	    $headers{'In-Reply-To'} = $mid;
+	}
+    }
+
     &Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
 
@@ -303,6 +319,14 @@ hebcal.com};
          'Content-Type' => 'text/plain',
          'Subject' => 'Unable to process your message',
          );
+
+    if ($header) {
+	my $mid = $header->get('Message-Id');
+	if ($mid) {
+	    chomp($mid);
+	    $headers{'In-Reply-To'} = $mid;
+	}
+    }
 
     &Hebcal::sendmail_v2($return_path,\%headers,$body);
 }
