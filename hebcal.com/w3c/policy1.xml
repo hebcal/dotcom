@@ -81,10 +81,10 @@ Cookies are used to store information like your zip code and time zone, and also
     </DATA-GROUP>
 </STATEMENT>
 
-    <!-- Statement for group "1-Click Shabbat Email Subscriptions" -->
+    <!-- Statement for group "Email Subscriptions (optional)" -->
     <STATEMENT>
         <EXTENSION optional="yes">
-            <GROUP-INFO xmlns="http://www.software.ibm.com/P3P/editor/extension-1.0.html" name="1-Click Shabbat Email Subscriptions"/>
+            <GROUP-INFO xmlns="http://www.software.ibm.com/P3P/editor/extension-1.0.html" name="Email Subscriptions (optional)"/>
         </EXTENSION>
 
     <!-- Consequence -->
