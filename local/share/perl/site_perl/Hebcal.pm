@@ -578,13 +578,13 @@ my(%sedrot) = (
 		    'Isaiah 6:1 - 7:6; 9:5 - 9:6', 'Isaiah 6:1 - 6:13',
 		    ],
  "Mishpatim"	=> [
-		    '/5760/mishpatim.shtml', 'Exodus 21:1 - 24:18',
+		    '/5761/mishpatim.shtml', 'Exodus 21:1 - 24:18',
 		    '/jpstext/mishpatim.shtml',
 		    'מִּשְׁפָּטִים',
 		    'Jeremiah 34:8 - 34:22; 33:25 - 33:26', '',
 		    ],
  "Terumah"	=> [
-		    '/5760/terumah.shtml', 'Exodus 25:1 - 27:19',
+		    '/5761/terumah.shtml', 'Exodus 25:1 - 27:19',
 		    '/jpstext/terumah.shtml',
 		    'תְּרוּמָה',
 		    'I Kings 5:26 - 6:13', '',
@@ -1058,7 +1058,7 @@ sub get_holiday_anchor($$)
 
 	if (defined $holidays{$subj_copy})
 	{
-	    $href = "/michael/projects/hebcal/defaults.html#" .
+	    $href = "/hebcal/help/defaults.html#" .
 		$holidays{$subj_copy}->[$HOLIDAY_IDX_ANCHOR];
 
 	    if (defined $holidays{$subj_copy}->[$HOLIDAY_IDX_TITLE_HE])
