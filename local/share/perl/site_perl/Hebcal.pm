@@ -696,7 +696,7 @@ sub html_footer($$)
     return qq{
 <hr noshade size="1"><font size=-2 face=Arial>
 }, &html_copyright($q), qq{
-<br>This website uses <a href="http://www.sadinoff.com/hebcal/">hebcal
+<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.2 for UNIX</a>, Copyright &copy; 1994 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
 </font></body></html>
