@@ -106,7 +106,7 @@ sub format_items
 	my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
 
-	my $stime = sprintf("%2d %s &nbsp;%d:%02dp", 
+	my $stime = sprintf("%2d %s &nbsp;%d:%02d",
 			    $mday, $Hebcal::MoY_short[$mon], $hour, $min);
 	$stime =~ s/^ /&nbsp;/;
 	push(@items, $stime);
