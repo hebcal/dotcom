@@ -6,7 +6,6 @@ use Hebcal;
 use Getopt::Std;
 use XML::Simple;
 use Data::Dumper;
-use POSIX qw(strftime);
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -37,23 +36,76 @@ if (! -d $outdir) {
 my($mtime) = (stat($infile))[9];
 my($hhmts) = "Last modified:\n" . localtime($mtime);
 
-my(%combined) = 
-    (
-     'Vayakhel' => 'Vayakhel-Pekudei',
-     'Pekudei' => 'Vayakhel-Pekudei',
-     'Tazria' => 'Tazria-Metzora',
-     'Metzora' => 'Tazria-Metzora',
-     'Achrei Mot' => 'Achrei Mot-Kedoshim',
-     'Kedoshim' => 'Achrei Mot-Kedoshim',
-     'Behar' => 'Behar-Bechukotai',
-     'Bechukotai' => 'Behar-Bechukotai',
-     'Chukat' => 'Chukat-Balak',
-     'Balak' => 'Chukat-Balak',
-     'Matot' => 'Matot-Masei',
-     'Masei' => 'Matot-Masei',
-     'Nitzavim' => 'Nitzavim-Vayeilech',
-     'Vayeilech' => 'Nitzavim-Vayeilech',
-     );
+my(@combined) = ('Vayakhel-Pekudei',
+		 'Tazria-Metzora',
+		 'Achrei Mot-Kedoshim',
+		 'Behar-Bechukotai',
+		 'Chukat-Balak',
+		 'Matot-Masei',
+		 'Nitzavim-Vayeilech');
+
+my(@all_inorder) =
+    ("Bereshit",
+     "Noach",
+     "Lech-Lecha",
+     "Vayera",
+     "Chayei Sara",
+     "Toldot",
+     "Vayetzei",
+     "Vayishlach",
+     "Vayeshev",
+     "Miketz",
+     "Vayigash",
+     "Vayechi",
+     "Shemot",
+     "Vaera",
+     "Bo",
+     "Beshalach",
+     "Yitro",
+     "Mishpatim",
+     "Terumah",
+     "Tetzaveh",
+     "Ki Tisa",
+     "Vayakhel",
+     "Pekudei",
+     "Vayikra",
+     "Tzav",
+     "Shmini",
+     "Tazria",
+     "Metzora",
+     "Achrei Mot",
+     "Kedoshim",
+     "Emor",
+     "Behar",
+     "Bechukotai",
+     "Bamidbar",
+     "Nasso",
+     "Beha'alotcha",
+     "Sh'lach",
+     "Korach",
+     "Chukat",
+     "Balak",
+     "Pinchas",
+     "Matot",
+     "Masei",
+     "Devarim",
+     "Vaetchanan",
+     "Eikev",
+     "Re'eh",
+     "Shoftim",
+     "Ki Teitzei",
+     "Ki Tavo",
+     "Nitzavim",
+     "Vayeilech",
+     "Ha'Azinu",
+     "Vezot Haberakhah");
+
+my(%combined);
+foreach (@combined) {
+    my($p1,$p2) = split(/-/);
+    $combined{$p1} = $_;
+    $combined{$p2} = $_;
+}
 
 my($hebrew_year);
 if ($opts{'H'}) {
@@ -129,41 +181,45 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
     next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
     my $h = $1;
 
+    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+    my $stime = sprintf("%02d %s %04d",
+			$events[$i]->[$Hebcal::EVT_IDX_MDAY],
+			$Hebcal::MoY_long{$month},
+			$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+
     if (defined $combined{$h})
     {
 	my $variation = $cycle_option{$h} . "." . $year;
 	my $a = $triennial_aliyot{$h}->{$variation};
 	die unless defined $a;
-	$readings{$h}->[$year] = $a;
+	$readings{$h}->[$year] = [$a, $stime, $h];
     }
     elsif (defined $triennial_aliyot{$h}->{$year})
     {
 	my $a = $triennial_aliyot{$h}->{$year};
 	die unless defined $a;
+
+	$readings{$h}->[$year] = [$a, $stime, $h];
+
 	if ($h =~ /^([^-]+)-(.+)$/ &&
 	    defined $combined{$1} && defined $combined{$2})
 	{
-	    $readings{$1}->[$year] = $a;
-	    $readings{$2}->[$year] = $a;
-	}
-	else
-	{
-	    $readings{$h}->[$year] = $a;
+	    $readings{$1}->[$year] = [$a, $stime, $h];
+	    $readings{$2}->[$year] = [$a, $stime, $h];
 	}
     }
     elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
     {
 	my $a = $triennial_aliyot{$h}->{"Y.$year"};
 	die unless defined $a;
+
+	$readings{$h}->[$year] = [$a, $stime, $h];
+
 	if ($h =~ /^([^-]+)-(.+)$/ &&
 	    defined $combined{$1} && defined $combined{$2})
 	{
-	    $readings{$1}->[$year] = $a;
-	    $readings{$2}->[$year] = $a;
-	}
-	else
-	{
-	    $readings{$h}->[$year] = $a;
+	    $readings{$1}->[$year] = [$a, $stime, $h];
+	    $readings{$2}->[$year] = [$a, $stime, $h];
 	}
     }
     else
@@ -172,9 +228,27 @@ for (my $i = $bereshit_idx; $i < @events; $i++)
     }
 }
 
+my(%prev,%next,$h2);
+foreach my $h (@all_inorder)
+{
+    $prev{$h} = $h2;
+    $h2 = $h;
+}
+
+$h2 = undef;
+foreach my $h (reverse @all_inorder)
+{
+    $next{$h} = $h2;
+    $h2 = $h;
+}
+
 foreach my $h (keys %readings)
 {
-    &write_sedra_page($h,undef,undef,$readings{$h});
+    &write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
+}
+{
+    my $h = "Vezot Haberakhah";
+    &write_sedra_page($h,$prev{$h},$next{$h},$readings{$h});
 }
 
 exit(0);
@@ -183,15 +257,7 @@ sub calc_variation_options
 {
     my($parshiot,$option) = @_;
 
-    foreach my $parsha (
-			'Vayakhel-Pekudei',
-			'Tazria-Metzora',
-			'Achrei Mot-Kedoshim',
-			'Behar-Bechukotai',
-			'Chukat-Balak',
-			'Matot-Masei',
-			'Nitzavim-Vayeilech',
-			)
+    foreach my $parsha (@combined)
     {
 	my($p1,$p2) = split(/-/, $parsha);
 	my $pat = '';
@@ -266,9 +332,6 @@ sub read_aliyot_metadata
 sub write_sedra_page {
     my($h,$prev,$next,$triennial) = @_;
 
-    my($sedrot_h) = $h;
-    $h =~ s/^Combined //;
-
     my %read_on;
 
     my $date = defined $read_on{$h} ? $read_on{$h} : '';
@@ -337,7 +400,7 @@ sub write_sedra_page {
 <html><head><title>Torah Readings: $h</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
+<base href="http://www.hebcal.com/tmp/$anchor.html" target="_top">
 <link rev="made" href="mailto:webmaster\@hebcal.com">
 <link rel="stylesheet" href="/style.css" type="text/css">
 <link rel="p3pv1" href="http://www.hebcal.com/w3c/p3p.xml">
@@ -348,6 +411,21 @@ EOHTML
     	if $prev_anchor;
     print OUT2 qq{<link rel="next" href="$next_anchor" title="Parashat $next">\n}
     	if $next_anchor;
+
+    my @tri_date;
+    if ($h eq 'Vezot Haberakhah')
+    {
+	$tri_date[1] = $tri_date[2] = $tri_date[3] =
+	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
+    }
+    else
+    {
+	foreach (1 .. 3)
+	{
+	    $tri_date[$_] = (defined $triennial->[$_]) ?
+		$triennial->[$_]->[1] : '(read separately)';
+	}
+    }
 
     print OUT2 <<EOHTML;
 </head>
@@ -373,12 +451,19 @@ lang="he">$hebrew</h1></td>
 </table>
 <h3><a name="torah">Torah Portion:</a>
 <a href="$torah_href"\ntitle="Translation from JPS Tanakh">$torah</a></h3>
-<table border="1">
+&nbsp;
+<table border="1" cellpadding="5" title="Shabbat Aliyot">
 <tr>
-<th>Full Kriyah</th>
-<th>Triennial Year I</th>
-<th>Triennial Year II</th>
-<th>Triennial Year III</th>
+<td align="center" width="25%"><b>Full Kriyah<b></td>
+<td align="center" width="25%"><b>Triennial Year I</b>
+<br><small>$tri_date[1]</small>
+</td>
+<td align="center" width="25%"><b>Triennial Year II</b>
+<br><small>$tri_date[2]</small>
+</td>
+<td align="center" width="25%"><b>Triennial Year III</b>
+<br><small>$tri_date[3]</small>
+</td>
 </tr>
 <tr>
 <td>
@@ -400,7 +485,7 @@ EOHTML
 	}
 
 	if ($a->{'numverses'}) {
-	    $info .= "\n<span class=\"psukim\">(" .
+	    $info .= "\n<span class=\"tiny\">(" .
 		$a->{'numverses'} . " p'sukim)</span>";
 	}
 
@@ -421,9 +506,54 @@ EOHTML
 
     foreach my $yr (1 .. 3)
     {
-	print OUT2 "<td>\n<dl compact>\n";
+	print OUT2 "<td>\n";
+
+	if ($h eq 'Vezot Haberakhah')
+	{
+	    print OUT2 "&nbsp;</td>\n";
+	    next;
+	}
+	elsif (! defined $triennial->[$yr])
+	{
+	    my($p1,$p2) = split(/-/, $h);
+
+	    print OUT2 "Read separately.  See:\n<ul>\n";
+
+	    my($anchor) = lc($p1);
+	    $anchor =~ s/[^\w]//g;
+	    print OUT2 "<li><a href=\"$anchor.html\">$p1</a>\n";
+
+	    $anchor = lc($p2);
+	    $anchor =~ s/[^\w]//g;
+	    print OUT2 "<li><a href=\"$anchor.html\">$p2</a>\n";
+	    print OUT2 "</ul>\n";
+
+	    print OUT2 "</td>\n";
+	    next;
+	}
+	elsif ($triennial->[$yr]->[2] ne $h)
+	{
+	    my($h_combined) = $triennial->[$yr]->[2];
+	    my($p1,$p2) = split(/-/, $h_combined);
+
+	    my($other) = ($p1 eq $h) ? $p2 : $p1;
+
+	    print OUT2 "Read together with<br>\nParashat $other.<br>\n";
+
+	    my($anchor) = lc($h_combined);
+	    $anchor =~ s/[^\w]//g;
+	    print OUT2 "See <a href=\"$anchor.html\">$h_combined</a>\n";
+
+	    print OUT2 "</td>\n";
+	    next;
+	}
+
 	my %tri;
-	foreach my $a (@{$triennial->[$yr]})
+	die "no aliyot array for $h (year $yr)"
+	    unless defined $triennial->[$yr]->[0];
+
+
+	foreach my $a (@{$triennial->[$yr]->[0]})
 	{
 	    my($c1,$v1) = ($a->{'begin'} =~ /^(\d+):(\d+)$/);
 	    my($c2,$v2) = ($a->{'end'}   =~ /^(\d+):(\d+)$/);
@@ -437,6 +567,7 @@ EOHTML
 	    $tri{$a->{'num'}} = $info;
 	}
 
+	print OUT2 "<dl compact>\n";
 	foreach (1 .. 7, 'M')
 	{
 	    my($info) = $tri{$_};
@@ -494,7 +625,7 @@ EOHTML
     print OUT2 <<EOHTML;
 <p>
 <hr noshade size="1">
-<font size=-2 face=Arial>Copyright
+<span class="tiny">Copyright
 &copy; $this_year Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
@@ -502,7 +633,7 @@ EOHTML
 <br>
 $hhmts
 ($rcsrev)
-</font>
+</span>
 </body></html>
 EOHTML
 ;
