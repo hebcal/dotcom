@@ -340,7 +340,7 @@ Include candle lighting times</label><br>
 ";
 	print STDOUT &city_select_html();
 	print STDOUT "
-&nbsp;&nbsp;(OR select by <a href=\"${cgipath}?geo=zip\">Zip Code</a>)
+&nbsp;&nbsp;(OR select by <a href=\"$cgipath\">Zip Code</a>)
 <br>
 ";
     }
