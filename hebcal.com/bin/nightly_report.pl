@@ -1,8 +1,9 @@
 #!/usr/local/bin/perl5 -w
 
 use DB_File;
+use strict;
 
-%known_timezones =
+my(%known_timezones) =
     (
      '99692', -10, # west alaska
      '996', '??',		# west AK
@@ -71,26 +72,36 @@ use DB_File;
      'PR', -5,
      );
 
-$dbmfile = '/home/web/radwin.org/docs/hebcal/zips.db';
+my(%DB);
+my($dbmfile) = '/home/web/radwin.org/docs/hebcal/zips.db';
 tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 die unless defined $DB{"95051"};
 
-$yesterday = time - (60 * 60 * 24);
+my($apache_date);
+if (defined $ARGV[0])
+{
+    $apache_date = $ARGV[0];
+}
+else
+{
+    my($yesterday) = time - (60 * 60 * 24);
 
-(undef,undef,undef,$mday,$mon,$year,undef,undef,undef) =
-    localtime($yesterday);
+    my(undef,undef,undef,$mday,$mon,$year,undef,undef,undef) =
+	localtime($yesterday);
 
-@MoY = ('Jan','Feb','Mar','Apr','May','Jun',
-	'Jul','Aug','Sep','Oct','Nov','Dec');
+    my(@MoY) = ('Jan','Feb','Mar','Apr','May','Jun',
+		'Jul','Aug','Sep','Oct','Nov','Dec');
 
-$apache_date = sprintf("%02d/%s/%4d", $mday, $MoY[$mon], $year + 1900);
+    $apache_date = sprintf("%02d/%s/%4d", $mday, $MoY[$mon], $year + 1900);
+}
 
-$home = $faq = $holidays = $doc_other = $queries =
-    $candle = $zip = $city = $pos = $yhoo = $download = $dba = $csv = 0;
-$unk_zip = $unk_tz = 0;
-%unk_zip = ();
-%unk_tz = ();
+my($home) = my($faq) = my($holidays) = my($doc_other) = my($queries) =
+    my($candle) = my($zip) = my($city) = my($pos) = my($yhoo) =
+    my($download) = my($dba) = my($csv) = 0;
+my($unk_zip) = my($unk_tz) = 0;
+my(%unk_zip) = ();
+my(%unk_tz) = ();
 
 while(<STDIN>)
 {
@@ -150,8 +161,8 @@ while(<STDIN>)
 	    }
 	    elsif (/zip=(\d\d\d\d\d)/)
 	    {
-		$zipcode = $1;
-		$val = $DB{$zipcode};
+		my($zipcode) = $1;
+		my($val) = $DB{$zipcode};
 		$zip++;
 
 		if (!defined $val) {
@@ -163,10 +174,10 @@ while(<STDIN>)
 		}
 		else
 		{
-		    (undef,$state) = split(/\0/, substr($val,6));
+		    my(undef,$state) = split(/\0/, substr($val,6));
 		    if (/=auto/)
 		    {
-			$ok = 0;
+			my($ok) = 0;
 			if (defined $known_timezones{$zipcode})
 			{
 			    if ($known_timezones{$zipcode} ne '??')
@@ -227,7 +238,7 @@ if ($unk_zip + $unk_tz > 0) {
     }
 
     foreach (sort keys %unk_tz) {
-	($zip_city,$state) = split(/\0/, substr($DB{$_},6));
+	my($zip_city,$state) = split(/\0/, substr($DB{$_},6));
 	printf "%s, %s %s (%d pv)\n", $zip_city, $state, $_, $unk_tz{$_};
     }
 }
