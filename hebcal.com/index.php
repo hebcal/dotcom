@@ -22,6 +22,8 @@ Jewish Calendar Tools</small></td>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span style="font-family: Verdana,Arial,Helvetica,Geneva,sans-serif">
+<span style="font-weight: bold; font-style: italic; color: #cc9966">Chag
+Orim Sameach!</span> &nbsp; - &nbsp;
 <!--#config timefmt="%a, %d %B %Y" --><!--#echo var="DATE_LOCAL" -->
 &nbsp; - &nbsp; <!--#include file="today.inc" --></span>
 <table border="0" cellpadding="1" cellspacing="0" width="100%">
