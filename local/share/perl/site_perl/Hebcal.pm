@@ -736,7 +736,8 @@ sub navbar2($$$$$)
 	qq{<tt>-&gt;</tt>\n<a\nhref="$parent_href">$parent_title</a>\n} :
 	'';
 
-    return "<table width=\"100%\"\nclass=\"navbar\">" .
+    return "\n<!--htdig_noindex-->\n" .
+	"<table width=\"100%\"\nclass=\"navbar\">" .
 	"<tr><td><small>" .
 	"<strong><a\nhref=\"/\">" . $server_name . "</a></strong>\n" .
 	$parent_html .
@@ -745,7 +746,8 @@ sub navbar2($$$$$)
 	"<td align=\"right\"><small><a\n" .
 	$help_html .
 	"href=\"/search/\">Search</a></small>\n" .
-	"</td></tr></table>";
+	"</td></tr></table>\n" .
+	"<!--htdig_noindex-->\n";
 }
 
 sub start_html($$$$$)
