@@ -41,7 +41,7 @@ $html_footer = "<hr noshade size=\"1\">
 
 <small>
 <!-- hhmts start -->
-Last modified: Tue Apr 13 09:19:29 PDT 1999
+Last modified: Tue Apr 13 13:47:42 PDT 1999
 <!-- hhmts end -->
 ($rcsrev)
 </small>
@@ -119,38 +119,105 @@ foreach (@opts)
 $havdalah = 72;
 $havdalah = $in{'m'} if (defined $in{'m'} && $in{'m'} =~ /^\d+$/);
 
-&form($default_zip, '') if (!defined $in{'zip'});
+if (! defined $in{'zip'} &&
+    ! defined $in{'city'} &&
+    (! defined $in{'lodeg'} ||
+     ! defined $in{'lomin'} ||
+     ! defined $in{'lodir'} ||
+     ! defined $in{'ladeg'} ||
+     ! defined $in{'lamin'} ||
+     ! defined $in{'ladir'}))
+{
+    &form($default_zip, '');
+}
+    
+$cmd  = "/home/users/mradwin/bin/hebcal";
 
-&form($in{'zip'},
-      "<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
-      "Zip Code.</font></em></p>")
-    if $in{'zip'} =~ /^\s*$/;
+if (defined $in{'city'} && $in{'city'} !~ /^\s*$/)
+{
+    $cmd .= " -C $in{'city'}";
 
-&form($in{'zip'},
-      "<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does not\n" .
-      "appear to be a 5-digit Zip Code.</font></em></p>")
-    unless $in{'zip'} =~ /^\d\d\d\d\d$/;
+    $city_descr = $in{'city'};
+    $lat_descr  = '';
+    $long_descr = '';
 
-dbmopen(%DB, "zips", 0400) ||
-    &CgiDie("Script Error: Database Unavailable",
-	    "\nThe database is unavailable right now.\n" .
-	    "Please <a href=\"${cgipath}?" .
-	    $ENV{'QUERY_STRING'} .
-	    "\">try again</a>.");
+    delete $in{'tz'};
+    delete $in{'dst'};
+}
+elsif (defined $in{'lodeg'} && defined $in{'lomin'} && defined $in{'lodir'} &&
+       defined $in{'ladeg'} && defined $in{'lamin'} && defined $in{'ladir'})
+{
+    ($long_deg) = ($in{'lodeg'} =~ /^\s*(\d+)\s*$/);
+    ($long_min) = ($in{'lomin'} =~ /^\s*(\d+)\s*$/);
+    ($lat_deg)  = ($in{'ladeg'} =~ /^\s*(\d+)\s*$/);
+    ($lat_min)  = ($in{'lamin'} =~ /^\s*(\d+)\s*$/);
 
-$val = $DB{$in{'zip'}};
-dbmclose(%DB);
+    $long_deg   = 0 unless defined $long_deg;
+    $long_min   = 0 unless defined $long_min;
+    $lat_deg    = 0 unless defined $lat_deg;
+    $lat_min    = 0 unless defined $lat_min;
 
-&form($in{'zip'},
-      "<p><em><font color=\"#ff0000\">Sorry, can't find <b>$in{'zip'}</b>\n" .
-      "in the Zip Code database.</font></em></p>")
-    unless defined $val;
+    $in{'lodir'} = 'w' unless ($in{'lodir'} eq 'e');
+    $in{'ladir'} = 'n' unless ($in{'ladir'} eq 's');
 
-($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
-($city,$state) = split(/\0/, substr($val,6));
+    $city_descr = "Geographic Position";
+    $lat_descr  = "${lat_deg}d${lat_min}' \U$in{'ladir'}\E latitude";
+    $long_descr = "${long_deg}d${long_min}' \U$in{'lodir'}\E longitude";
 
-$cmd  = "/home/users/mradwin/bin/hebcal" .
-    " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+    # don't multiply minutes by -1 since hebcal does it internally
+    $long_deg *= -1  if ($in{'lodir'} eq 'e');
+    $lat_deg  *= -1  if ($in{'ladir'} eq 's');
+
+    $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+}
+elsif (defined $in{'zip'})
+{
+    $in{'dst'} = 'usa' unless defined $in{'dst'};
+
+    &form($in{'zip'},
+	  "<p><em><font color=\"#ff0000\">Please specify a 5-digit\n" .
+	  "Zip Code.</font></em></p>")
+	if $in{'zip'} =~ /^\s*$/;
+
+    &form($in{'zip'},
+	  "<p><em><font color=\"#ff0000\">Sorry, <b>$in{'zip'}</b> does not\n" .
+	  "appear to be a 5-digit Zip Code.</font></em></p>")
+	unless $in{'zip'} =~ /^\d\d\d\d\d$/;
+
+    dbmopen(%DB,$dbmfile, 0400) ||
+	&CgiDie("Script Error: Database Unavailable",
+		"\nThe database is unavailable right now.\n" .
+		"Please <a href=\"${cgipath}?" .
+		$ENV{'QUERY_STRING'} .
+		"\">try again</a>.");
+
+    $val = $DB{$in{'zip'}};
+    dbmclose(%DB);
+
+    &form($in{'zip'},
+	  "<p><em><font color=\"#ff0000\">Sorry, can't find <b>$in{'zip'}</b>" .
+	  "\nin the Zip Code database.</font></em></p>")
+	unless defined $val;
+
+    ($long_deg,$long_min,$lat_deg,$lat_min) = unpack('ncnc', $val);
+    ($city,$state) = split(/\0/, substr($val,6));
+
+    @city = split(/([- ])/, $city);
+    $city = '';
+    foreach (@city)
+    {
+	$_ = "\L$_\E";
+	$_ = "\u$_";
+	$city .= $_;
+    }
+    undef(@city);
+
+    $city_descr = "$city, $state $in{'zip'}";
+    $lat_descr  = "${lat_deg}d${lat_min}' N latitude";
+    $long_descr = "${long_deg}d${long_min}' W latitude";
+
+    $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+}
 
 foreach (@opts)
 {
@@ -169,10 +236,6 @@ if (defined $in{'dst'} && $in{'dst'} ne '')
 {
     $cmd .= " -Z $in{'dst'}";
 }
-else
-{
-    $cmd .= ' -Z usa';
-}
 
 if (defined $in{'month'} && $in{'month'} ne '')
 {
@@ -180,6 +243,7 @@ if (defined $in{'month'} && $in{'month'} ne '')
 }
 
 $cmd .= " $year";
+
 
 &download() unless defined $ENV{'PATH_INFO'};
 
@@ -249,16 +313,17 @@ id=\"year\" value=\"$year\" size=\"4\" maxlength=\"4\">
     print STDOUT "
 </select>
 <br>
-<small><em>
+<small>
 Use all digits to specify a year.  You probably aren't
 interested in 93, but rather 1993.
-</em></small>
+</small>
 <br><br>
 
 <input type=\"checkbox\" name=\"c\" id=\"c\"$opts_chk{'c'}><label for=\"c\">
 Include candle lighting times</label><br>
 
 <blockquote>
+<input type=\"hidden\" name=\"geo\" value=\"zip\">
 <label for=\"zip\">5-digit Zip Code: </label><input type=\"text\" name=\"zip\"
 id=\"zip\" value=\"$zip\" size=\"5\" maxlength=\"5\"><br>
 
@@ -329,7 +394,6 @@ Use ashkenazis hebrew</label><br>
 
 <input type=\"submit\" value=\"Get Calendar\">
 </form>
-<hr noshade size=\"1\">
 
 <p><small>
 Caveat: this is beta software; my apologies if it doesn't work for you.
@@ -362,15 +426,6 @@ sub download
     
     print STDOUT "Content-Type: text/html\015\012\015\012";
 
-    @city = split(/([- ])/, $city);
-    $city = '';
-    foreach (@city)
-    {
-	$_ = "\L$_\E";
-	$_ = "\u$_";
-	$city .= $_;
-    }
-
     print STDOUT "$html_header
 <strong><big>
 <a href=\"/\">radwin.org</a> :
@@ -379,9 +434,9 @@ $date
 </big></strong>
 
 <p>
-$city, $state $in{'zip'}<br>
-${lat_deg}d${lat_min}' N latitude<br>
-${long_deg}d${long_min}' W longitude<br>
+$city_descr<br>
+$lat_descr<br>
+$long_descr<br>
 <small>
 Daylight Savings Time: $in{'dst'}<br>
 Time Zone: GMT $in{'tz'}:00
