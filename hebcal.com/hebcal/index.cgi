@@ -179,11 +179,11 @@ elsif ($q->path_info() =~ /[^\/]+\.dba$/)
 {
     &dba_display();
 }
-#elsif ($q->path_info() =~ /[^\/]+\.vcs$/)
-#{
+elsif ($q->path_info() =~ /[^\/]+\.vcs$/)
+{
     # text/x-vCalendar
-#    &vcalendar_display();
-#}
+    &vcalendar_display();
+}
 elsif (defined $q->param('cfg') && $q->param('cfg') eq 'e')
 {
     &javascript_events();
@@ -256,6 +256,34 @@ sub javascript_events() {
     }
 }
 
+
+sub vcalendar_display() {
+    my($loc) = (defined $city_descr && $city_descr ne '') ?
+	"in $city_descr" : '';
+    $loc =~ s/\s*&nbsp;\s*/ /g;
+
+    my(@events) = &Hebcal::invoke_hebcal($cmd, $loc,
+	 defined $q->param('i') && $q->param('i') =~ /^on|1$/);
+    my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    my($path_info) = $q->path_info();
+    $path_info =~ s,^.*/,,;
+    print $q->header(-type => "text/x-vCalendar; filename=\"$path_info\"",
+		     -content_disposition =>
+		     "inline; filename=$path_info",
+		     -last_modified => &Hebcal::http_date($time));
+
+    my($endl) = "\012";			# default Netscape and others
+    if (defined $q->user_agent() && $q->user_agent() !~ /^\s*$/)
+    {
+	$endl = "\015\012"
+	    if $q->user_agent() =~ /Microsoft Internet Explorer/;
+	$endl = "\015\012" if $q->user_agent() =~ /MSP?IM?E/;
+    }
+
+    &Hebcal::vcalendar_write_contents(\@events, $endl);
+}
 
 sub dba_display() {
     my($loc) = (defined $city_descr && $city_descr ne '') ?
