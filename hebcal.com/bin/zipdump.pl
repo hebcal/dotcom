@@ -2,7 +2,7 @@
 
 use DB_File;
 
-$dbmfile = 'zips.db';
+$dbmfile = @ARGV ? $ARGV[0] : 'zips.db';
 tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 while (($key,$val) = each(%DB))
