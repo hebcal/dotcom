@@ -5,6 +5,7 @@
 use Hebcal;
 use Getopt::Std;
 use XML::Simple;
+use Time::Local;
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -130,7 +131,7 @@ if ($opts{'H'}) {
 } else {
     $hebrew_year = `./hebcal -t`;
     chomp($hebrew_year);
-    $hebrew_year =~ s/^.+, (\d{4})/$1/;
+    $hebrew_year =~ s/^.+, (\d\d\d\d)/$1/;
 }
 
 # year I in triennial cycle was 5756
@@ -268,7 +269,9 @@ if ($opts{'f'}) {
 }
 
 my(%read_on);
-&readings_for_current_year(\%read_on);
+my(%parsha_time);
+my($saturday) = &get_saturday();
+&readings_for_current_year(\%read_on, \%parsha_time);
 
 if ($opts{'f'}) {
     close(CSV);
@@ -659,7 +662,7 @@ EOHTML
 ;
 
     my $c_year = '';
-    if ($drash_href =~ m,/(\d{4})/,) {
+    if ($drash_href =~ m,/(\d\d\d\d)/,) {
 	$c_year = " for $1";
     }
 
@@ -727,14 +730,10 @@ sub get_parsha_info
 	$haftarah = $parshiot->{'parsha'}->{$p2}->{'haftara'};
 	$haftarah_seph = $parshiot->{'parsha'}->{$p2}->{'sephardic'};
 
-	my $links = $parshiot->{'parsha'}->{$p1}->{'links'}->{'link'};
+	my $links = $parshiot->{'parsha'}->{$p2}->{'links'}->{'link'};
 	foreach my $l (@{$links})
 	{
-	    if ($l->{'rel'} eq 'drash')
-	    {
-		$drash_href = $l->{'href'};
-	    }
-	    elsif ($l->{'rel'} eq 'torah')
+	    if ($l->{'rel'} eq 'torah')
 	    {
 		$torah_href = $l->{'href'};
 	    }
@@ -742,6 +741,27 @@ sub get_parsha_info
 
 	$haftarah_href = $torah_href;
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+
+	# for now, link torah reading to first part
+	$links = $parshiot->{'parsha'}->{$p1}->{'links'}->{'link'};
+	foreach my $l (@{$links})
+	{
+	    if ($l->{'rel'} eq 'torah')
+	    {
+		$torah_href = $l->{'href'};
+	    }
+	}
+
+	# grab drash for the combined reading
+	$links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
+	foreach my $l (@{$links})
+	{
+	    if ($l->{'rel'} eq 'drash')
+	    {
+		$drash_href = $l->{'href'};
+	    }
+	}
+
     }
     else
     {
@@ -769,13 +789,19 @@ sub get_parsha_info
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
     }
 
+    if ($drash_href =~ m,/\d\d\d\d/,) {
+	if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
+	    $drash_href =~ s,/\d\d\d\d/,/$hebrew_year/,;
+	}
+    }
+
     ($hebrew,$torah,$haftarah,$haftarah_seph,
      $torah_href,$haftarah_href,$drash_href);
 }
 
 sub readings_for_current_year
 {
-    my($current) = @_;
+    my($current,$parsha_time) = @_;
 
     my(@events) = &Hebcal::invoke_hebcal('./hebcal -s -h -x -H', '');
     my($i);
@@ -785,12 +811,19 @@ sub readings_for_current_year
 	my $h = $1;
 
 	my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+
 	my $stime = sprintf("%02d %s %04d",
 			    $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 			    $Hebcal::MoY_long{$month},
 			    $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
 	$current->{$h} = $stime;
+	$parsha_time->{$h} = &Time::Local::timelocal
+	    (1,0,0,
+	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+	     $events[$i]->[$Hebcal::EVT_IDX_MON],
+	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+	     '','','');
 
 	next unless $opts{'f'};
 
@@ -816,4 +849,14 @@ sub readings_for_current_year
 		$aliyah->{'numverses'};
 	}
     }
+}
+
+sub get_saturday
+{
+    my($now) = time();
+    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	localtime($now);
+
+    ($wday == 6) ? $now + (60 * 60 * 24) :
+	$now + ((6 - $wday) * 60 * 60 * 24);
 }
