@@ -570,7 +570,6 @@ sub results_page()
 {
     my($date);
     my($filename) = 'hebcal_' . $q->param('year');
-    my($ycal) = (defined($q->param('y')) && $q->param('y') eq '1') ? 1 : 0;
     my($prev_url,$next_url,$prev_title,$next_title);
 
     if ($q->param('month') =~ /^\d+$/ &&
@@ -666,7 +665,7 @@ sub results_page()
 	$next_title = ($q->param('year') + 1);
     }
 
-    my($goto) = "<p class=\"goto\"><b>" .
+    my($goto_prefix) = "<p class=\"goto\"><b>" .
 	"<a\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
 	$date . "\n" .
 	"<a\nhref=\"$next_url\">&gt;&gt;</a></b>";
@@ -697,47 +696,65 @@ sub results_page()
     print STDOUT $Hebcal::gregorian_warning
 	if ($q->param('year') <= 1752);
 
+    my($geographic_info) = '';
+
     if ($q->param('c') && $q->param('c') ne 'off')
     {
-	print STDOUT "<dl>\n<dt><big>", $city_descr, "</big>\n";
-	print STDOUT "<dd>", $lat_descr, "\n"
+	$geographic_info = "<dl>\n<dt><big>" . $city_descr . "</big>\n";
+	$geographic_info .= "<dd>" . $lat_descr . "\n"
 	    if $lat_descr ne '';
-	print STDOUT "<dd>", $long_descr, "\n"
+	$geographic_info .= "<dd>" . $long_descr . "\n"
 	    if $long_descr ne '';
-	print STDOUT "<dd>", $dst_tz_descr, "\n"
+	$geographic_info .= "<dd>" . $dst_tz_descr . "\n"
 	    if $dst_tz_descr ne '';
-	print STDOUT "</dl>\n";
+	$geographic_info .= "</dl>\n";
 
-	print STDOUT $Hebcal::indiana_warning
-	    if ($city_descr =~ / IN &nbsp;/);
     }
 
-    print STDOUT
-"<div><small>
-<p>Your personal <a href=\"http://calendar.yahoo.com/\">Yahoo!
-Calendar</a> is a free web-based calendar that can synchronize with Palm
-Pilot, Outlook, etc.</p>
-<ul>
-<li>If you wish to upload <strong>all</strong> of the below holidays to
-your Yahoo!  Calendar, do the following:
-<ol>
-<li>Click the \"Download as an Outlook CSV file\" link at the bottom of
-this page.
-<li>Save the hebcal CSV file on your computer.
-<li>Go to <a
-href=\"http://calendar.yahoo.com/?v=81\">Import/Export page</a> of
-Yahoo! Calendar.
-<li>Find the \"Import from Outlook\" section and choose \"Import Now\"
-to import your CSV file to your online calendar.
-</ol>
-<li>To import selected holidays <strong>one at a time</strong>, use
-the \"add\" links below.  These links will pop up a new browser window
-so you can keep this window open.
-</ul></small></div>
-" if $ycal;
+    print STDOUT $geographic_info;
+
+    print STDOUT $Hebcal::indiana_warning
+	if ($city_descr =~ / IN &nbsp;/);
 
     # toggle month/full year and event list/calendar grid
-    $goto .= "\n&nbsp;&nbsp;&nbsp; <small>change view: [ ";
+    $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
+
+    # download links
+    my($download) = "";
+
+    $download .= qq{<p class="goto">Advanced options:\n<small>[ <a href="} .
+	$script_name;
+    $download .= "index.html" if $q->script_name() =~ m,/index.html$,;
+    $download .= "/$filename.csv?dl=1";
+
+    foreach my $key ($q->param())
+    {
+	my($val) = $q->param($key);
+	$download .= ";$key=" . &Hebcal::url_escape($val);
+    }
+    $download .= ";filename=$filename.csv";
+    $download .= "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
+
+    # only offer DBA export when we know timegm() will work
+    if ($q->param('year') > 1969 && $q->param('year') < 2038 &&
+	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
+    {
+	$download .= "\n- <a href=\"" . $script_name;
+	$download .= "index.html" if $q->script_name() =~ m,/index.html$,;
+	$download .= "/$filename.dba?dl=1";
+
+	foreach my $key ($q->param())
+	{
+	    my($val) = $q->param($key);
+	    $download .= ";$key=" . &Hebcal::url_escape($val);
+	}
+	$download .= ";filename=$filename.dba";
+	$download .= "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
+    }
+
+    $download .= "\n]</small></p>\n";
+
+    my($goto) = "<small>change view: [ ";
 
     if ($q->param('vis'))
     {
@@ -777,7 +794,7 @@ so you can keep this window open.
 		qq{;tz=}, $q->param('tz'),
 		qq{;m=}, $q->param('m'),
 		qq{;.from=interactive},
-		qq{">1-Click Shabbat for $city_descr</a>.</p>\n},
+		qq{">1-Click Shabbat for $city_descr</a>.\n},
 		);
 	}
 	elsif (defined $q->param('city') && $q->param('city') !~ /^\s*$/)
@@ -789,15 +806,15 @@ so you can keep this window open.
 		qq{;m=}, $q->param('m'),
 		qq{;.from=interactive},
 		qq{">1-Click Shabbat for }, $q->param('city'),
-		qq{</a>.</p>\n},
+		qq{</a>.\n},
 		);
 	}
     }
 
-    $goto .= "</p>\n";
+    print STDOUT $goto_prefix, $goto, "</p>"
+	unless $q->param('vis');
 
-    print STDOUT $goto;
-#	unless $q->param('vis');
+    print STDOUT $download;
 
     my($cmd_pretty) = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -833,11 +850,6 @@ so you can keep this window open.
 	my($mday) = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
 	my($line) = '';
-
-	$line .= qq{<a target="_calendar" href="} .
-	    &Hebcal::yahoo_calendar_link($events[$i], $city_descr) .
-	    qq{">add</a> }
-		if ($ycal);
 
 	my($href,$hebrew,$memo,$torah_href,$haftarah_href,$drash_href)
 	    = &Hebcal::get_holiday_anchor($subj,0,undef);
@@ -890,7 +902,8 @@ so you can keep this window open.
 			     $Hebcal::MoY_long{$mon} . ' ' .
 			     $q->param('year') . "\n" .
 			     "<a class=\"goto\"\n" .
-			     "href=\"$next_url\">&gt;&gt;</a></h2>");
+			     "href=\"$next_url\">&gt;&gt;</a></h2>" .
+			     '<span class="goto">' . $goto . '</span>');
 	    }
 
 	    my($cal_subj) = $subj;
@@ -932,51 +945,11 @@ so you can keep this window open.
 	print STDOUT "<center>", $cal->as_HTML(), 
 	    "</center></body></html>\n";
 
-	$ycal = 1;
 #	return 1;
     }
 
     print STDOUT "</p>" unless $q->param('vis');
-    print STDOUT $goto;
-
-    # download links
-    print STDOUT qq{<p class="goto">Advanced options:\n<small>[ <a href="},
-	$script_name;
-    print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
-    print STDOUT "/$filename.csv?dl=1";
-
-    foreach my $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	print STDOUT ";$key=", &Hebcal::url_escape($val);
-    }
-    print STDOUT ";filename=$filename.csv";
-    print STDOUT "\">Download&nbsp;Outlook&nbsp;CSV&nbsp;file</a>";
-
-    # only offer DBA export when we know timegm() will work
-    if ($q->param('year') > 1969 && $q->param('year') < 2038 &&
-	(!defined($q->param('dst')) || $q->param('dst') ne 'israel'))
-    {
-	print STDOUT "\n- <a href=\"", $script_name;
-	print STDOUT "index.html" if $q->script_name() =~ m,/index.html$,;
-	print STDOUT "/$filename.dba?dl=1";
-
-	foreach my $key ($q->param())
-	{
-	    my($val) = $q->param($key);
-	    print STDOUT ";$key=", &Hebcal::url_escape($val);
-	}
-	print STDOUT ";filename=$filename.dba";
-	print STDOUT "\">Download&nbsp;Palm&nbsp;Date&nbsp;Book&nbsp;Archive&nbsp;(.DBA)</a>";
-    }
-
-    if ($ycal == 0)
-    {
-	print STDOUT "\n- <a href=\"", &self_url($q, {}), ';y=1';
-	print STDOUT "\">Show&nbsp;Yahoo!&nbsp;Calendar&nbsp;links</a>";
-    }
-    print STDOUT "\n]</small></p>\n";
-
+    print STDOUT $goto_prefix, $goto, "</p>", $download;
     print STDOUT &Hebcal::html_footer($q,$rcsrev);
 
     1;
