@@ -133,8 +133,7 @@ sub form
 
 <body>
 <!-- mjrhead start -->
-  <a href=\"/michael/\"><img width=60 height=59 src=\"/michael/face.gif\"
-  border=1 align=right alt=\"\"></a><tt><strong><a
+  <tt><strong><a
   href=\"/cgi-bin/hebcal\"><font size=\"+3\" color=\"#000000\">hebcal web interface</font></a></strong></tt>
   <br><br><small>mjr:&nbsp;<a
   href=\"/michael/\">home</a>&nbsp;||&nbsp;<a
@@ -142,7 +141,6 @@ sub form
   href=\"/michael/projects/\">projects</a>&nbsp;||&nbsp;<a
   href=\"/mvhs-alumni/\">mvhs&nbsp;alumni</a>&nbsp;||&nbsp;<a
   href=\"/michael/about.html\">about&nbsp;me</a></small>
-  <br clear=all>
   <hr noshade size=1>
 <!-- mjrhead end -->
 
@@ -229,8 +227,7 @@ sub download
 
 <body>
 <!-- mjrhead start -->
-  <a href=\"/michael/\"><img width=60 height=59 src=\"/michael/face.gif\"
-  border=1 align=right alt=\"\"></a><tt><strong><a
+  <tt><strong><a
   href=\"/cgi-bin/hebcal\"><font size=\"+3\" color=\"#000000\">hebcal web interface</font></a></strong></tt>
   <br><br><small>mjr:&nbsp;<a
   href=\"/michael/\">home</a>&nbsp;||&nbsp;<a
@@ -238,7 +235,6 @@ sub download
   href=\"/michael/projects/\">projects</a>&nbsp;||&nbsp;<a
   href=\"/mvhs-alumni/\">mvhs&nbsp;alumni</a>&nbsp;||&nbsp;<a
   href=\"/michael/about.html\">about&nbsp;me</a></small>
-  <br clear=all>
   <hr noshade size=1>
 <!-- mjrhead end -->
 
