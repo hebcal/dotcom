@@ -995,6 +995,64 @@ sub yahoo_calendar_link($$)
 }
 
 
+########################################################################
+# export to vCalendar
+########################################################################
+
+sub vcalendar_write_contents($$)
+{
+    my($events,$endl) = @_;
+    my($numEntries) = scalar(@{$events});
+
+    print STDOUT qq{BEGIN:VCALENDAR$endl}, qq{VERSION:1.0$endl},
+    qq{PRODID:Hebcal Generated$endl};
+
+    my($i);
+    for ($i = 0; $i < $numEntries; $i++)
+    {
+	print STDOUT qq{BEGIN:VEVENT$endl};
+
+	print STDOUT qq{SUMMARY:},
+	    $events->[$i]->[$Hebcal::EVT_IDX_SUBJ], $endl;
+	print STDOUT qq{DESCRIPTION:},
+	    $events->[$i]->[$Hebcal::EVT_IDX_MEMO], $endl;
+
+	my($date) = sprintf("%04d%02d%02d",
+			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR],
+			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
+			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    );
+	my($end_date) = $date;
+
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	{
+	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+
+	    $hour += 12 if $hour < 12;
+	    $date .= sprintf("T%02d%02d00", $hour, $min);
+
+	    $min += $events->[$i]->[$Hebcal::EVT_IDX_DUR];
+	    if ($min >= 60)
+	    {
+		$hour++;
+		$min -= 60;
+	    }
+
+	    $end_date .= sprintf("T%02d%02d00", $hour, $min);
+	}
+
+	print STDOUT qq{DTSTART:$date$endl}, qq{DTEND:$end_date$endl},
+	qq{CATEGORIES:HOLIDAY$endl};
+
+	print STDOUT qq{END:VEVENT$endl};
+    }
+
+    print STDOUT qq{END:VCALENDAR$endl};
+
+    1;
+}
+
 
 ########################################################################
 # export to Outlook CSV
