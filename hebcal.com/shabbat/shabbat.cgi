@@ -848,7 +848,7 @@ sub display_html
 
     &Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
 		      "See all of <a href=\"$url\">this\n",
-		      "month's</a> candle lighting times\n");
+		      "month's calendar</a>\n");
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
