@@ -823,7 +823,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
  hebrew="חֲנוּכָּה"
  yomtov="0">
  <about href="http://www.jewfaq.org/holiday7.htm">
- Festival of Lights
+ The Jewish festival of rededication, also known as the Festival of
+ Lights. Sometimes spelled Chanukkah, Hanukkah, Hanukah, Hannukah
  </about>
 </festival>
 <festival id="Chanukah: 1 Candle"
@@ -880,8 +881,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Purim
- Katan"
+<festival id="Purim Katan"
  hebrew="פּוּרִים קָטָן"
  yomtov="0">
  <about href="http://www.hebcal.com/help/purim-katan.html">
@@ -1033,6 +1033,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <!-- Rosh Chodesh -->
 <festival id="Shabbat Rosh Chodesh"
  hebrew="(NEEDS_TRANSLATION)">
+ <about attr="dummy">When Shabbat falls on Rosh Chodesh</about>
  <kriyah>
   <torah href="http://learn.jtsa.edu/topics/parashah/jpstext/holidays_maf.shtml#roshhodesh_maf" />
   <haft reading="Isaiah 66:1 - 66:24"
@@ -1042,6 +1043,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Shabbat Machar Chodesh"
  hebrew="(NEEDS_TRANSLATION)">
+ <about attr="dummy">When Shabbat falls the day before Rosh Chodesh</about>
  <kriyah>
   <haft reading="I Samuel 20:18 - 20:42"
    href="http://learn.jtsa.edu/topics/parashah/jpstext/maharhodesh_haft.shtml" />
