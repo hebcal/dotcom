@@ -141,7 +141,8 @@ sub csv_display
 {
     my(@events) = &my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 
-    &Hebcal::csv_write_contents($q, \@events);
+    my $euro = defined $q->param('euro') ? 1 : 0;
+    Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
 sub my_invoke_hebcal {
@@ -299,6 +300,11 @@ if ($numEntries > 0) {
     &Hebcal::out_html($cfg,
 		      qq{<p class="goto"><span class="sm-grey">&gt;</span>
 <a href="#export">Export calendar to Palm &amp; Outlook</a></p>\n});
+
+    &Hebcal::out_html($cfg,
+		      qq{<p>All yahrzeits, birthdays and anniversaries
+begin the evening before the date specified. This is because the Jewish
+day actually begins at sundown on the previous night.</p>\n});
 }
 
 &Hebcal::out_html($cfg, "<pre>") unless ($q->param('yizkor'));
@@ -359,7 +365,7 @@ sub form
 	 "After clicking the <b>Compute Calendar</b> button, you\n",
 	 "will also be able to download the results.</p>",
 	 "<p>For example, you might enter <b>October 20, 1994</b>\n",
-	 "to calculate <b>Reb Shlomo Carlebach's</b> yahrzeit.</p>\n");
+	 "to calculate <b>Reb Shlomo Carlebach</b>'s yahrzeit.</p>\n");
 
     &Hebcal::out_html
 	($cfg, qq{<form name="f1" id="f1"\naction="$script_name">});
