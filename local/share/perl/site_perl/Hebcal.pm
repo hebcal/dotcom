@@ -670,7 +670,8 @@ sub get_holiday_anchor($$$)
 	    $hebrew = $HOLIDAYS{"$subj_copy:hebrew"};
 	}
 
-	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/)
+	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
+	    $subj ne 'No sunset today.')
 	{
 	    $subj_copy =~ s/ \(CH\'\'M\)$//;
 	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
