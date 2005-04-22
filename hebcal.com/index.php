@@ -40,6 +40,7 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
+<span class="fpgreeting">Chag Kasher v'Sameach!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
 <?php if ($rosh_chodesh) { ?>
@@ -139,6 +140,10 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/holidays/pesach.html?tag=fp.tmp">Pesach</a></b><br>23
+April 2005<br>at sundown
+<br><br>   
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
