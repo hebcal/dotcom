@@ -74,7 +74,7 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
     unless (-d $dir) {
 	system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed";
     }
-    my @events = Hebcal::invoke_hebcal("$HEBCAL -S $syear", "", 0);
+    my @events = Hebcal::invoke_hebcal("$HEBCAL -o -S $syear", "", 0);
 
     my $outfile = "$dir/$syear.inc";
     open(OUT,">$outfile") || die;
