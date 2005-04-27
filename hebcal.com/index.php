@@ -46,6 +46,9 @@ Jewish Calendar Tools</small></td>
 <?php if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
 <?php } ?>
+<!-- omer -->
+&nbsp; - &nbsp; <?php include("./omer.inc") ?>
+<!-- end omer -->
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
@@ -140,10 +143,6 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
-<span class="sm-grey">&gt;</span>&nbsp;<b><a
-href="/holidays/pesach.html?tag=fp.tmp">Pesach</a></b><br>23
-April 2005<br>at sundown
-<br><br>   
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
