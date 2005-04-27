@@ -297,6 +297,8 @@ function hebcal_make_anchor($str)
 	return hebcal_make_sedra_anchor(substr($str, 9));
     } elseif (strncmp($str, "Parshas", 7) == 0) {
 	return hebcal_make_sedra_anchor(substr($str, 8));
+    } elseif (preg_match('/^\d+\w+ day of the Omer$/', $str)) {
+	return "/holidays/days-of-the-omer.html";
     } elseif ($str != "Candle lighting" && $str != "No sunset today." &&
 	      strncmp($str, "Havdalah", 8) != 0) {
 	$str_copy = $str;
