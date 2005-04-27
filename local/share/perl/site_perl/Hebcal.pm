@@ -430,7 +430,11 @@ sub invoke_hebcal($$$)
 
 	next if $subj eq 'Havdalah (0 min)';
 
-	my($memo2) = (Hebcal::get_holiday_anchor($subj,$want_sephardic,undef))[2];
+	my $memo2;
+	if ($untimed) {
+	    $memo2 = (Hebcal::get_holiday_anchor($subj,$want_sephardic,
+						 undef))[2];
+	}
 
 	push(@events,
 	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
@@ -1278,9 +1282,12 @@ Jewish Calendar events into your desktop software.</p>};
 
     my $ical_href = download_href($q, $filename, 'ics');
 
+    my $subical_href = $ical_href;
+    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
+
     $s .= "<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
 	"Export iCalendar file:\n" .
-	"<a href=\"webcal://" . $q->virtual_host() . $ical_href .
+	"<a href=\"webcal://" . $q->virtual_host() . $subical_href .
 	    "\">subscribe</a> or\n" .
 	"<a href=\"" .
 	$ical_href .
@@ -1344,60 +1351,6 @@ sub get_browser_endl($)
     }
 
     $endl;
-}
-
-########################################################################
-# Yahoo! Calendar link
-########################################################################
-
-sub yahoo_calendar_link($$)
-{
-    my($event,$city_descr) = @_;
-
-    my($subj) = $event->[$Hebcal::EVT_IDX_SUBJ];
-
-    my($min) = $event->[$Hebcal::EVT_IDX_MIN];
-    my($hour) = $event->[$Hebcal::EVT_IDX_HOUR];
-    $hour -= 12 if $hour > 12;
-
-    my($year) = $event->[$Hebcal::EVT_IDX_YEAR];
-    my($mon) = $event->[$Hebcal::EVT_IDX_MON] + 1;
-    my($mday) = $event->[$Hebcal::EVT_IDX_MDAY];
-
-    my($desc);
-
-    my($ST) = sprintf("%04d%02d%02d", $year, $mon, $mday);
-    if ($event->[$Hebcal::EVT_IDX_UNTIMED] == 0)
-    {
-	$desc = (defined $city_descr && $city_descr ne '') ?
-	    "in $city_descr" : '';
-	$desc =~ s/\s*&nbsp;\s*/ /g;
-
-	$ST .= sprintf("T%02d%02d00",
-		       ($hour < 12 && $hour > 0) ? $hour + 12 : $hour,
-		       $min);
-
-#  	if ($q->param('tz') ne '')
-#  	{
-#  	    my($abstz) = ($q->param('tz') >= 0) ?
-#  		$q->param('tz') : -$q->param('tz');
-#  	    my($signtz) = ($q->param('tz') < 0) ? '-' : '';
-
-#  	    $ST .= sprintf("Z%s%02d00", $signtz, $abstz);
-#  	}
-
-	$ST .= "&amp;DUR=00" . $event->[$Hebcal::EVT_IDX_DUR];
-    }
-    else
-    {
-	$desc = (Hebcal::get_holiday_anchor($subj,undef,undef))[2];
-    }
-
-    $ST .= "&amp;DESC=" . &url_escape($desc)
-	if $desc ne '';
-
-    "http://calendar.yahoo.com/?v=60&amp;TYPE=16&amp;ST=$ST&amp;TITLE=" .
-	&url_escape($subj) . "&amp;VIEW=d";
 }
 
 sub macintosh_datebook($$)
@@ -1770,7 +1723,7 @@ sub csv_write_contents($$$)
 	$memo =~ s/\"/''/g;
 
 	my $loc = 'Jewish Holidays';
-	if ($memo =~ /^in (.+)/)
+	if ($memo =~ /^in (.+)\s*$/)
 	{
 	    $memo = '';
 	    $loc = $1;
