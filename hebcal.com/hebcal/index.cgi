@@ -825,9 +825,9 @@ sub results_page
     }
 
     my $goto_prefix = "<p class=\"goto\"><b>" .
-	"<a title=\"$prev_title\"\nhref=\"$prev_url\">&lt;&lt;</a>\n" .
+	"<a title=\"$prev_title\"\nhref=\"$prev_url\">&laquo;</a>\n" .
 	$date . "\n" .
-	"<a title=\"$next_title\"\nhref=\"$next_url\">&gt;&gt;</a></b>";
+	"<a title=\"$next_title\"\nhref=\"$next_url\">&raquo;</a></b>";
 
     my @head = (
 		qq{<meta http-equiv="Content-Type" content="$content_type">},
@@ -1149,10 +1149,10 @@ sub new_html_cal
 
     $cal->header("<h2 style=\"margin: 0.2em;\" align=\"center\">" .
 		 "<a class=\"goto\" title=\"$prev_title\"\n" .
-		 "href=\"$prev_url\">&lt;&lt;</a>\n" .
+		 "href=\"$prev_url\">&laquo;</a>\n" .
 		 sprintf("%s %04d\n", $Hebcal::MoY_long{$month}, $year) .
 		 "<a class=\"goto\" title=\"$next_title\"\n" .
-		 "href=\"$next_url\">&gt;&gt;</a></h2>\n" .
+		 "href=\"$next_url\">&raquo;</a></h2>\n" .
 		 '<div align="center" class="goto">' . $goto . "</div>");
 
 
