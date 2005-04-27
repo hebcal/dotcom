@@ -10,17 +10,18 @@ RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
 RedirectMatch ^/_vti http://www.hebcal.com/
 Redirect /MSOffice/cltreq.asp http://www.hebcal.com/
 
-# cut down on robots pushing us over resource limits
-#BrowserMatch ^DAVKit/ is_a_robot
-#Order Deny,Allow
-#Deny from env=is_a_robot
-Deny from 24.225.252.135 68.202.8.234
-
 # for WAP 1-click shabbat
 RewriteEngine on
 RewriteCond %{HTTP_ACCEPT} text\/vnd\.wap\.wml
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ /wap-shabbat.php [L]
+
+# cut down on robots pushing us over resource limits
+#BrowserMatch ^DAVKit/ is_a_robot
+#Order Deny,Allow
+#Deny from env=is_a_robot
+#Deny from 24.225.252.135 68.202.8.234
+RewriteRule hebcal_2004_sep_07936.ics - [F]
 
 AddType application/x-javascript js
 AddType text/css css
