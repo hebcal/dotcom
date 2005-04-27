@@ -157,7 +157,7 @@ form("Please select at least one event option.")
 	(!defined $q->param("d") || $q->param("d") eq "off") &&
 	(!defined $q->param("s") || $q->param("s") eq "off"));
 
-my($cmd_extra,$city_descr,$lat_descr,$long_descr,$dst_tz_descr) =
+my($cmd_extra,$cconfig) =
     get_candle_config($q);
 
 $cmd .= $cmd_extra if $cmd_extra;
@@ -215,6 +215,11 @@ else
 }
 
 my $pi = $q->path_info();
+
+my $g_loc = (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") ?
+    "in " . $cconfig->{"city"} : "";
+my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
+
 if (! defined $pi)
 {
 #    my $cache = Hebcal::cache_begin($q);
@@ -253,12 +258,8 @@ exit(0);
 
 sub javascript_events
 {
-    my $loc = (defined $city_descr && $city_descr ne "") ?
-	"in $city_descr" : "";
-    $loc =~ s/\s*&nbsp;\s*/ /g;
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
 
-    my @events = Hebcal::invoke_hebcal($cmd, $loc,
-	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
 
@@ -317,8 +318,7 @@ sub javascript_events
 
 sub macintosh_datebook_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, "",
-	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
+    my @events = Hebcal::invoke_hebcal($cmd, "", $g_seph);
 
     Hebcal::macintosh_datebook($q, \@events);
 }
@@ -326,24 +326,20 @@ sub macintosh_datebook_display
 sub vcalendar_display
 {
     my($date) = @_;
-    my $loc = (defined $city_descr && $city_descr ne "") ?
-	"in $city_descr" : "";
-    $loc =~ s/\s*&nbsp;\s*/ /g;
-    $loc =~ s/Large City: //;
 
-    my @events = Hebcal::invoke_hebcal($cmd, $loc,
-	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
 
     my $tz = $q->param("tz");
     my $state;
 
-    if ($city_descr =~ /^Large City: (.+)$/)
+    if (defined $q->param("geo") && $q->param("geo") eq "city" &&
+	defined $q->param("city") && $q->param("city") ne "")
     {
 	$tz = $Hebcal::city_tz{$q->param("city")};
     }
-    elsif ($city_descr =~ /^.+, (\w\w) &nbsp;\d{5}$/)
+    elsif (defined $cconfig->{"state"})
     {
-	$state = $1;
+	$state = $cconfig->{"state"};
     }
 
     Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $date);
@@ -351,13 +347,7 @@ sub vcalendar_display
 
 sub dba_display
 {
-    my $loc = (defined $city_descr && $city_descr ne "") ?
-	"in $city_descr" : "";
-    $loc =~ s/\s*&nbsp;\s*/ /g;
-    $loc =~ s/Large City: //;
-
-    my @events = Hebcal::invoke_hebcal($cmd, $loc,
-	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
 
     my $dst = (defined($q->param("dst")) && $q->param("dst") eq "usa") ? 1 : 0;
     my $tz = $q->param("tz");
@@ -379,13 +369,7 @@ sub dba_display
 
 sub csv_display
 {
-    my $loc = (defined $city_descr && $city_descr ne "") ?
-	"in $city_descr" : "";
-    $loc =~ s/\s*&nbsp;\s*/ /g;
-    $loc =~ s/Large City: //;
-
-    my @events = Hebcal::invoke_hebcal($cmd, $loc,
-	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
@@ -876,17 +860,12 @@ sub results_page
     my $message = referred_by_websearch($q, "form", "/hebcal/");
     Hebcal::out_html(undef, $message) if $message;
 
-    my $loc2 = (defined $city_descr && $city_descr ne "") ?
-	"in $city_descr" : "";
-    $loc2 =~ s/\s*&nbsp;\s*/ /g;
-    $loc2 =~ s/Large City: //;
-
     my $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
     Hebcal::out_html(undef, "<!-- $cmd_pretty -->\n");
 
-    my @events = Hebcal::invoke_hebcal($cmd, $loc2,
-	defined $q->param("i") && $q->param("i") =~ /^on|1$/);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+
     my $numEntries = scalar(@events);
 
     my($greg_year1,$greg_year2) = (0,0);
@@ -903,19 +882,19 @@ sub results_page
 
     if ($q->param("c") && $q->param("c") ne "off")
     {
-	$geographic_info = "<h3>" . $city_descr . "</h3>\n";
-	$geographic_info .= $lat_descr . "<br>\n"
-	    if $lat_descr ne "";
-	$geographic_info .= $long_descr . "<br>\n"
-	    if $long_descr ne "";
-	$geographic_info .= $dst_tz_descr . "<br>\n"
-	    if $dst_tz_descr ne "";
+	$geographic_info = "<h3>" . $cconfig->{"title"} . "</h3>\n";
+	$geographic_info .= $cconfig->{"lat_descr"} . "<br>\n"
+	    if $cconfig->{"lat_descr"};
+	$geographic_info .= $cconfig->{"long_descr"} . "<br>\n"
+	    if $cconfig->{"long_descr"};
+	$geographic_info .= $cconfig->{"dst_tz_descr"} . "<br>\n"
+	    if $cconfig->{"dst_tz_descr"} ne "";
     }
 
     Hebcal::out_html(undef, $geographic_info);
 
     Hebcal::out_html(undef, $Hebcal::indiana_warning)
-	if ($city_descr =~ / IN &nbsp;/);
+	if (defined $cconfig->{"state"} && $cconfig->{"state"} eq "IN");
 
     # toggle month/full year and event list/calendar grid
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
@@ -1191,8 +1170,8 @@ sub get_candle_config
 {
     my($q) = @_;
 
-    my($city_descr,$lat_descr,$long_descr,$dst_tz_descr) = ("","","","");
     my $cmd_extra;
+    my %config;
 
     if ($q->param("c") && $q->param("c") ne "off" &&
 	defined $q->param("city"))
@@ -1212,10 +1191,12 @@ sub get_candle_config
 	$q->delete("lodir");
 	$q->delete("ladir");
 
-	$city_descr = "Large City: " . $q->param("city");
-	$cmd_extra = " -C '" . $q->param("city") . "'";
+	my $city = $q->param("city");
+	$config{"title"} = "Large City: $city";
+	$config{"city"} = $city;
+	$cmd_extra = " -C '$city'";
 
-	if ($Hebcal::city_dst{$q->param("city")} eq "israel")
+	if ($Hebcal::city_dst{$city} eq "israel")
 	{
 	    $q->param("i","on");
 	}
@@ -1243,7 +1224,7 @@ sub get_candle_config
 	    $q->delete("tz");
 	    $q->delete("m");
 
-	    return (undef,$city_descr,$lat_descr,$long_descr,$dst_tz_descr);
+	    return (undef,\%config);
 	}
 
 	form("Sorry, all latitude/longitude\narguments must be numeric.")
@@ -1281,14 +1262,15 @@ sub get_candle_config
 	    unless $q->param("tz");
 	$q->param("geo","pos");
 
-	$city_descr = "Geographic Position";
-	$lat_descr  = "${lat_deg}d${lat_min}' " .
+	$config{"title"} = "Geographic Position";
+	$config{"lat_descr"} = "${lat_deg}d${lat_min}' " .
 	    uc($q->param("ladir")) . " latitude";
-	$long_descr = "${long_deg}d${long_min}' " .
+	$config{"long_descr"} = "${long_deg}d${long_min}' " .
 	    uc($q->param("lodir")) . " longitude";
 	my $dst_text = ($q->param("dst") eq "none") ? "none" :
 	    "automatic for " . $Hebcal::dst_names{$q->param("dst")};
-	$dst_tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param("tz")} .
+	$config{"dst_tz_descr"} =
+	    "Time zone: " . $Hebcal::tz_names{$q->param("tz")} .
 	    "\n<br>Daylight Saving Time: $dst_text";
 
 	# don't multiply minutes by -1 since hebcal does it internally
@@ -1328,14 +1310,17 @@ sub get_candle_config
 	$tz = $q->param("tz")
 	    if (defined $q->param("tz") && $q->param("tz") =~ /^-?\d+$/);
 
-	$city_descr = "$city, $state &nbsp;" . $q->param("zip");
+	$config{"title"} = "$city, $state &nbsp;" . $q->param("zip");
+	$config{"city"} = $city;
+	$config{"state"} = $state;
+	$config{"zip"} = $q->param("zip");
 
 	if ($tz eq "?")
 	{
 	    $q->param("tz_override", "1");
 
 	    form("Sorry, can't auto-detect\n" .
-		 "timezone for <b>" . $city_descr . "</b>\n",
+		 "timezone for <b>" . $config{"title"} . "</b>\n",
 		 "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
@@ -1357,11 +1342,12 @@ sub get_candle_config
 	    $q->param("dst","none");
 	}
 
-#	$lat_descr  = "${lat_deg}d${lat_min}' N latitude";
-#	$long_descr = "${long_deg}d${long_min}' W longitude";
+#	$config{"lat_descr"} = "${lat_deg}d${lat_min}' N latitude";
+#	$config{"long_descr"} = "${long_deg}d${long_min}' W longitude";
 	my $dst_text = ($q->param("dst") eq "none") ? "none" :
 	    "automatic for " . $Hebcal::dst_names{$q->param("dst")};
-	$dst_tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param("tz")} .
+	$config{"dst_tz_descr"} =
+	    "Time zone: " . $Hebcal::tz_names{$q->param("tz")} .
 	    "\n<br>Daylight Saving Time: $dst_text";
 
 	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
@@ -1385,7 +1371,7 @@ sub get_candle_config
 	$cmd_extra = undef;
     }
 
-    return ($cmd_extra,$city_descr,$lat_descr,$long_descr,$dst_tz_descr);
+    return ($cmd_extra,\%config);
 }
 
 # local variables:
