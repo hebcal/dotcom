@@ -888,7 +888,7 @@ sub results_page
 	$geographic_info .= $cconfig->{"long_descr"} . "<br>\n"
 	    if $cconfig->{"long_descr"};
 	$geographic_info .= $cconfig->{"dst_tz_descr"} . "<br>\n"
-	    if $cconfig->{"dst_tz_descr"} ne "";
+	    if $cconfig->{"dst_tz_descr"};
     }
 
     Hebcal::out_html(undef, $geographic_info);
