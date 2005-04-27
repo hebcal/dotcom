@@ -224,16 +224,25 @@ sub write_contents($$$)
 		       ($events->[$i]->[$Palm::DBA::EVT_IDX_DUR] * 60));
 	}
 
+	# location hack
+	my $subj = $events->[$i]->[$Palm::DBA::EVT_IDX_SUBJ];
+	my $memo = $events->[$i]->[$Palm::DBA::EVT_IDX_MEMO];
+	if ($memo && $memo =~ /^in (.+)\s*$/)
+	{
+	    $subj .= " ($1)";
+	    $memo = "";
+	}
+
 	write_int($PALM_DBA_CSTRING);
 	write_int(0);		# always zero
-	write_cstring($events->[$i]->[$Palm::DBA::EVT_IDX_SUBJ]);
+	write_cstring($subj);
 
 	write_int($PALM_DBA_INTEGER);
 	write_int(0);		# duration
 
 	write_int($PALM_DBA_CSTRING);
 	write_int(0);		# always zero
-	write_cstring($events->[$i]->[$Palm::DBA::EVT_IDX_MEMO]);
+	write_cstring($memo);
 
 	write_int($PALM_DBA_BOOL);
 	write_int($events->[$i]->[$Palm::DBA::EVT_IDX_UNTIMED] ? 1 : 0);
