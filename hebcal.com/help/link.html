@@ -27,15 +27,36 @@ Linking
 <p>Yes, you can link to hebcal.com.  You can also add some hebcal.com
 content directly to your website using the following instructions.</p>
 
-<h3><a name="tags"></a>How can my synagogue put 1-Click Shabbat
-candle-lighting times on its own website?</h3>
+<h3><a name="tags"></a>Displaying Shabbat candle-lighting times on
+your website</h3>
 
-<p>You can use the <a href="/link/">Link to 1-Click Shabbat</a> page to
-generate HTML tags to insert weekly candle-lighting times
-directly on your web page.</p>
+<p>Our <a href="/link/">Add Shabbat Times to your Website</a> tool lets
+you create custom HTML tags to which display weekly candle-lighting
+times directly on your web page. The result looks something like
+this:</p>
 
-<h3><a name="cal-tags"></a>How can my synagogue display a Jewish Calendar on
-its own web site?</h3>
+<blockquote>
+<table border="1" cellpadding="8">
+<tr><td><span class="fpsubhead">Shabbat times for Chicago, IL</span>
+<dl>
+<dt class="candles">Candle lighting:
+<b>4:08pm</b> on Friday, 02 January 2004</dt>
+<dt class="parashat">This week's Torah portion is <a target="_top"
+href="http://www.hebcal.com/sedrot/vayigash.html">Parashat Vayigash</a></dt>
+<dt class="havdalah">Havdalah (72 min):
+<b>5:39pm</b> on Saturday, 03 January 2004</dt>
+</dl>
+<span class="tiny"><a target="_top"
+href="http://www.hebcal.com/shabbat/">1-Click
+Shabbat</a> Copyright &copy; 2004
+Michael J. Radwin. All rights reserved.</a>
+</span>
+</td></tr>
+</table>
+</blockquote>
+
+<h3><a name="cal-tags"></a>Displaying a Jewish Calendar on your
+website</h3>
 
 <p>You can use the HTML tags below, courtesy of <a
 href="http://calendar.ilsen.net/">Kevin Ilsen' JavaScript Event
@@ -72,9 +93,38 @@ For example, </p>
 &lt;/script&gt;
 </pre>
 
-<h3><a name="yahrzeit-tags"></a>How can my synagogue link to the
-Yahrzeit, Birthday and Anniversary Calendar from its own
-website?</h3>
+<h3><a name="hdate"></a>Displaying today's Hebrew date on your
+website</h3>
+
+<p>To display today's Hebrew date in Hebrew or in English
+transliteration (i.e. <b><script type="text/javascript"
+language="JavaScript" src="http://www.hebcal.com/etc/hdate-he.js"></b>
+or <b><script type="text/javascript"
+language="JavaScript" src="http://www.hebcal.com/etc/hdate-en.js"></b>)
+on your site, use one of these two tags:</p>
+
+<p>Hebrew:</p>
+
+<form action="/">
+<textarea cols="60" rows="3">
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/etc/hdate-en.js"&gt;
+&lt;/script&gt;
+</textarea>
+</form>
+
+<p>English transliteration:</p>
+
+<form action="/">
+<textarea cols="60" rows="3">
+&lt;script type="text/javascript" language="JavaScript"
+ src="http://www.hebcal.com/etc/hdate-en.js"&gt;
+&lt;/script&gt;
+</textarea>
+</form>
+
+<h3><a name="yahrzeit-tags"></a>Customizing Yahrzeit, Birthday and
+Anniversary Calendar for your website</h3>
 
 <p>You can use these HTML tags to insert a small form directly on your
 web page, with a reverse link back to your site:</p>
@@ -134,7 +184,7 @@ class="hl">ref_text</span> value fields with with your own synagogue's.</p>
 <a href="/donations/">Donate</a>
 <br>
 <!-- hhmts start -->
-Last modified: Tue Jan  4 11:22:18 PST 2005
+Last modified: Fri Apr 29 11:51:26 PDT 2005
 <!-- hhmts end -->
 ($Revision$)
 </span>
