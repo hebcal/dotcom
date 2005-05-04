@@ -70,7 +70,10 @@ href="/help/">Help</a> -
 </td></tr></table><h1>Add Shabbat Times to your Website</h1>
 
 <p>You can use these HTML tags to add weekly Shabbat candle-lighting
-times and Torah portion directly on your synagogue's website.</p>
+times and Torah portion directly on your synagogue's website. To 
+display other information on your site (such as today's Hebrew date 
+or a full Jewish Calendar, see our <a href="/help/link.html">Linking
+from your Synagogue to Hebcal</a> page.</p>
 
 <p>The following
 tags are for <b><?php echo $descr ?></b>
