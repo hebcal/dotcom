@@ -842,8 +842,29 @@ sub html_copyright2($$$)
     my($br) = $break ? '<br>' : '';
     my($tgt) = $target ? $target : '_top';
 
-    return qq{<a name="copyright"></a>Copyright &copy; $this_year
-Michael J. Radwin. All rights reserved.$br
+    return qq{<!--
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+ <license rdf:resource="http://creativecommons.org/licenses/by/2.0/" />
+</Work>
+<License rdf:about="http://creativecommons.org/licenses/by/2.0/">
+ <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+ <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+ <requires rdf:resource="http://web.resource.org/cc/Notice" />
+ <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+ <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+</License>
+</rdf:RDF>
+-->
+<a rel="license" href="http://creativecommons.org/licenses/by/2.0/"><img
+src="http://www.hebcal.com/i/somerights20.png" width="88" height="31"
+alt="Creative Commons License" border="0" align="right"></a>
+<a name="copyright"></a>Copyright &copy; $this_year
+Michael J. Radwin. This work is licensed under a <a rel="license"
+href="http://creativecommons.org/licenses/by/2.0/">Creative Commons
+License</a>.$br
 <a target="$tgt" href="$prefix/privacy/">Privacy Policy</a> -
 <a target="$tgt" href="$prefix/help/">Help</a> -
 <a target="$tgt" href="$prefix/contact/">Contact</a> -
