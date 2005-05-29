@@ -500,7 +500,14 @@ EOHTML
     {
 	foreach my $part (@{$SUBFESTIVALS{$f}})
 	{
-	    my $anchor = Hebcal::make_anchor($part);
+	    my $part2;
+	    if ($part =~ /^$f(.*)/i) {
+		$part2 = "reading$1";
+	    } else {
+		$part2 = $part;
+	    }
+
+	    my $anchor = Hebcal::make_anchor($part2);
 	    $anchor =~ s/\.html$//;
 
 	    print OUT2 qq{\n<h2><a name="$anchor"></a>$part};
