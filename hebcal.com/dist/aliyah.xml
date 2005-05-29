@@ -886,7 +886,7 @@
  <aliyah num="7" begin="20:15" end="20:23" numverses="9" />
  <aliyah num="M" begin="20:19" end="20:23" numverses="5" />
 </fullkriyah>
-<triennial descr="full parashah with Ten Commandments every year">
+<triennial-alt descr="full parashah with Ten Commandments every year">
 <year variation="Y.1">
  <aliyah num="1" begin="18:1" end="18:12" numverses="12" />
  <aliyah num="2" begin="18:13" end="18:23" numverses="11" />
@@ -899,8 +899,8 @@
 </year>
 <year variation="Y.2" sameas="Y.1" />
 <year variation="Y.3" sameas="Y.1" />
-</triennial>
-<triennial-alt descr="triennial divisions with Ten Commandments in years two and three">
+</triennial-alt>
+<triennial descr="triennial divisions with Ten Commandments in years two and three">
 <year variation="Y.1">
  <aliyah num="1" begin="18:1" end="18:4" />
  <aliyah num="2" begin="18:5" end="18:8" />
@@ -922,7 +922,7 @@
  <aliyah num="M" begin="20:21" end="20:23" />
 </year>
 <year variation="Y.3" sameas="Y.2" />
-</triennial-alt>
+</triennial>
 </parsha>
 <parsha id="Mishpatim" num="18"
  hebrew="מִּשְׁפָּטִים"
