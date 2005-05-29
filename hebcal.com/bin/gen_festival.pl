@@ -322,7 +322,7 @@ sub write_festival_part
 	    }
 	}
 
-	print OUT2 "</p>\n";
+#	print OUT2 "</p>\n";
     }
 
     my $haft = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'reading'};
