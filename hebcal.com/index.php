@@ -45,9 +45,6 @@ Jewish Calendar Tools</small></td>
 <?php if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
 <?php } ?>
-<!-- omer -->
-&nbsp; - &nbsp; <?php include("./omer.inc") ?>
-<!-- end omer -->
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
