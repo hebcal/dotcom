@@ -40,8 +40,21 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
+use Getopt::Std ();
 use LWP::UserAgent;
 use strict;
+
+$0 =~ s,.*/,,;  # basename
+my($usage) = "usage: $0 [-h] file [...]
+    -h        Display usage information.
+    -v        Verbose mode.
+    -p pat    Only check URLs that patch pattern <pat>
+";
+
+my %opts;
+Getopt::Std::getopts("hp:v", \%opts) || die $usage;
+$opts{"h"} && die $usage;
+@ARGV  || die $usage;
 
 my $ua = LWP::UserAgent->new(keep_alive => 1, timeout => 30);
 $| = 1;
@@ -54,7 +67,11 @@ foreach my $f (@ARGV) {
 	    my $url = $1;
 	    next if $url =~ /(www\.bible\.ort\.org|amazon\.com|hebcal\.com)/;
 	    next if $checked{$url};
-	    my $req = HTTP::Request->new('GET', $url);
+	    if ($opts{"p"}) {
+		next unless $_ =~ $opts{"p"};
+	    }
+	    print "Testing $url\n" if $opts{"v"};
+	    my $req = HTTP::Request->new("GET", $url);
 	    my $res = $ua->request($req);
 
 	    # Check the outcome of the response
