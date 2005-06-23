@@ -172,13 +172,14 @@ foreach my $yr (($start_year - 3) .. ($start_year + 6))
 if ($opts{'t'})
 {
     my $fn = $opts{'t'};
-    open(CSV, ">$fn") || die "$fn: $!\n";
+    open(CSV, ">$fn.$$") || die "$fn.$$: $!\n";
     print CSV qq{"Date","Parsha","Aliyah","Triennial Reading"\015\012};
 
     triennial_csv($axml,$events1,$bereshit_idx1,\%readings1);
     triennial_csv($axml,$events2,$bereshit_idx2,\%readings2);
 
     close(CSV);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
 }
 
 my(%parsha_dates);
@@ -319,7 +320,8 @@ sub write_index_page
 {
     my($parshiot,$read_on) = @_;
 
-    open(OUT1, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
+    my $fn = "$outdir/index.html";
+    open(OUT1, ">$fn.$$") || die "$fn.$$: $!\n";
 
     my $hy1 = $hebrew_year + 1;
     my $hy2 = $hebrew_year + 2;
@@ -394,6 +396,7 @@ EOHTML
     print OUT1 $html_footer;
 
     close(OUT1);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
 
     1;
 }
@@ -519,7 +522,8 @@ sub write_sedra_page
 	    qq{title="$title">$next&nbsp;&raquo;</a>};
     }
 
-    open(OUT2, ">$outdir/$anchor.html") || die "$outdir/$anchor.html: $!\n";
+    my $fn = "$outdir/$anchor.html";
+    open(OUT2, ">$fn.$$") || die "$fn.$$: $!\n";
 
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
@@ -840,6 +844,7 @@ EOHTML
     print OUT2 $html_footer;
 
     close(OUT2);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
 }
 
 
@@ -1187,7 +1192,7 @@ sub readings_for_current_year
     }
 
     if ($opts{'f'}) {
-	open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
+	open(CSV, ">$opts{'f'}.$$") || die "$opts{'f'}.$$: $!\n";
 	print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
     }
 
@@ -1277,6 +1282,7 @@ sub readings_for_current_year
 
     if ($opts{'f'}) {
 	close(CSV);
+	rename("$opts{'f'}.$$", $opts{'f'}) || die "$opts{'f'}: $!\n";
     }
 }
 
