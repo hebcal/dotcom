@@ -279,8 +279,8 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=900" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=6" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5765/toldot65.htm" />
- <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/toledot.shtml"/>
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/toledot.shtml" />
+ <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/toldot.shtml"/>
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/toldot.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="25:19" end="26:5" numverses="21" />
@@ -495,7 +495,7 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=905" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=10" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5765/miketz65.htm" />
- <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/miketz.shtml" />
+ <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/mikketz.shtml" />
  <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/mikketz.shtml" />
 </links>
 <fullkriyah>
@@ -1218,7 +1218,7 @@
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=31" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5763/pekudei63.htm" />
  <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/pkudei.shtml" />
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/pekudey.shtml" />
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/pkudei.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="38:21" end="39:1" numverses="12" />
@@ -1323,7 +1323,7 @@
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=42" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5765/tzav65.htm" />
  <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/tzav.shtml" />
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/tsav.shtml" />
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/tzav.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="6:1" end="6:11" numverses="11" />
@@ -1588,7 +1588,7 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=925" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=48" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5763/kedoshim63.htm" />
- <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/kdoshim.shtml" />
+ <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/kedoshim.shtml" />
  <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/kedoshim.shtml" />
 </links>
 <fullkriyah>
@@ -1754,7 +1754,7 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=928" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=51" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5763/bechukotai63.htm" />
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5763/behukkotai.shtml" />
+ <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/behukkotai.shtml" />
  <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/behukkotai.shtml" />
 </links>
 <fullkriyah>
@@ -1801,8 +1801,8 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=929" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=61" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5764/bamidbar64.htm" />
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5764/bemidbar.shtml" />
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/bemidbar.shtml" />
+ <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5765/bamidbar.shtml" />
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/bamidbar.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="1:1" end="1:19" numverses="19" />
@@ -2342,7 +2342,7 @@
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=71" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5764/matmas64.htm" />
  <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5764/mattotmaseei.shtml" />
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/maseei.shtml" />
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/masei.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="33:1" end="33:10" numverses="10" />
@@ -2634,8 +2634,8 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=944" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=85" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5764/shoftim64.htm" />
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5764/shofetim.shtml" />
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/shofetim.shtml" />
+ <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5764/shoftim.shtml" />
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/shoftim.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="16:18" end="17:13" numverses="18" />
@@ -2688,8 +2688,8 @@
  <link rel="drash4" href="http://judaism.uj.edu/Content/InfoUnits.asp?CID=945" />
  <link rel="drash3" href="http://www.torah.org/learning/parsha/parsha.html?id1=86" />
  <link rel="drash2" href="http://www.ou.org/torah/ti/5764/kiteitzei64.htm" />
- <link rel="drash" href="http://learn.jtsa.edu/topics/parashah/5764/kitetse.shtml" />
- <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/kitetse.shtml" />
+ <link rel="drash" href="http://www.jtsa.edu/community/parashah/archives/5764" />
+ <link rel="torah" href="http://www.jtsa.edu/community/parashah/jpstext/kitetzei.shtml" />
 </links>
 <fullkriyah>
  <aliyah num="1" begin="21:10" end="21:21" numverses="12" />
