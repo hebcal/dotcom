@@ -39,8 +39,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-require("HTML/Form.php");
-require("./hebnum.inc");
+require("./HTML/Form.php");
+require("../pear/Hebcal/hebnum.inc");
 require("../pear/Hebcal/common.inc");
 
 $VER = '$Revision$';
