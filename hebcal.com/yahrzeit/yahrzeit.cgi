@@ -344,8 +344,8 @@ if ($numEntries > 0) {
 
     # http://yizkor.ort.org/html/pp-lighting.shtml
     Hebcal::out_html($cfg,
-		      qq{<p>All yahrzeits, birthdays and anniversaries
-begin the evening before the date specified. This is because the Jewish
+		      qq{<p>Yahrzeit candles should be lit
+the evening before the date specified. This is because the Jewish
 day actually begins at sundown on the previous night.</p>\n});
 }
 
