@@ -64,11 +64,8 @@ $loc
 Shabbat Shalom,
 hebcal.com
 
-To modify your subscription, visit:
+To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
-
-To unsubscribe from this list, send an email to:
-shabbat-unsubscribe\@hebcal.com
 };
 
     my $email_mangle = $to;
@@ -84,7 +81,7 @@ shabbat-unsubscribe\@hebcal.com
 	 "MIME-Version" => "1.0",
 	 "Content-Type" => "text/plain",
 	 "Subject" => "$subject Candles $lighting",
-	 "List-Unsubscribe" => "<$unsub_url>",
+	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
 	 "Errors-To" => $return_path,
 	 "Precedence" => "bulk",
 	 );
