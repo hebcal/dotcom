@@ -786,9 +786,9 @@ sub zipcode_fields($)
     $longitude =~ s/^\+//;
 
     # in hebcal, negative longitudes are EAST (this is backwards)
-    $longitude *= -1.0;
+    my $long_hebcal = $longitude * -1.0;
 
-    my($long_deg,$long_min) = split(/\./, $longitude, 2);
+    my($long_deg,$long_min) = split(/\./, $long_hebcal, 2);
     my($lat_deg,$lat_min) = split(/\./, $latitude, 2);
 
     if (defined $long_min && $long_min ne '')
@@ -832,7 +832,8 @@ sub zipcode_fields($)
 	$dst = 0;
     }
 
-    ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
+    ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
+     $latitude,$longitude);
 }
 
 sub html_copyright2($$$)
@@ -1529,6 +1530,7 @@ sub vcalendar_write_contents($$$$$)
 
 	if ($is_icalendar) {
 	    print STDOUT qq{CATEGORIES:Holidays$endl};
+#	    print STDOUT qq{STATUS:CONFIRMED$endl};
 	} else {
 	    print STDOUT qq{CATEGORIES:HOLIDAY$endl};
 	}
@@ -1613,7 +1615,13 @@ sub vcalendar_write_contents($$$$$)
 	}
 
 	print STDOUT qq{DTSTART};
-	print STDOUT ";TZID=$tzid" if $tzid;
+	if ($is_icalendar) {
+	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
+		print STDOUT ";VALUE=DATE";
+	    } elsif ($tzid) {
+		print STDOUT ";TZID=$tzid";
+	    }
+	}
 	print STDOUT qq{:$date$endl};
 
 	if ($is_icalendar && $events->[$i]->[$Hebcal::EVT_IDX_UNTIMED])
@@ -1661,7 +1669,7 @@ sub vcalendar_write_contents($$$$$)
 	    }
 
 	    print STDOUT qq{UID:$uid$endl};
-	    print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
+#	    print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
 	}
 
 	print STDOUT qq{END:VEVENT$endl};
@@ -1895,7 +1903,8 @@ sub sendmail_v2($$$)
 
 
 ########################################################################
-# imported from Sadinoff's Hebcal.pm
+# imported from hebcal-perl-3.2.2
+# Copyright (C) 1994-1998  Danny Sadinoff
 ########################################################################
 
 my $NISAN = 1;
