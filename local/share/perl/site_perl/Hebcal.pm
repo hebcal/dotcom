@@ -517,6 +517,38 @@ sub build_hebrew_date($$$)
 	$monthnames{$hm} . " " . hebnum_to_string($hy);
 }
 
+sub hebrew_strip_nikkud($) {
+    my($str) = @_;
+
+    eval "use Unicode::String";
+    my $u = Unicode::String::utf8($str);
+    my @characters = $u->unpack();
+    my @result = ();
+
+    foreach my $c (@characters)
+    {
+	# skip hebrew punctuation range
+	next if $c > 0x0590 && $c < 0x05D0;
+
+#	if ($c == 0x0028)
+#	{
+#	    push(@result, 0x0029); # reverse parens
+#	}
+#	elsif ($c == 0x0029)
+#	{
+#	    push(@result, 0x0028); # reverse parens
+#	}
+#	else
+#	{
+	    push(@result, $c);
+#	}
+    }
+
+    $u->pack(@result);
+    return $u->utf8();
+}
+
+
 sub make_anchor($)
 {
     my($f) = @_;
@@ -1543,7 +1575,8 @@ sub vcalendar_write_contents($$$$$)
 
 	if ($is_icalendar && $hebrew &&
 	    defined $q->param('heb') && $q->param('heb') =~ /^on|1$/) {
-	    $subj .= " / $hebrew";
+	    my $hebrew2 = Hebcal::hebrew_strip_nikkud($hebrew);
+	    $subj .= " / $hebrew2";
 	}
 
 	print STDOUT qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl};
