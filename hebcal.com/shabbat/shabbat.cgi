@@ -67,11 +67,11 @@ my($items) = format_items($q,$evts);
 
 my $cache = Hebcal::cache_begin($q);
 
-if (defined $cfg && $cfg =~ /^[ijrw]$/)
+if (defined $cfg && $cfg =~ /^[ijrwx]$/)
 {
     display_wml($items) if ($cfg eq 'w');
     display_rss($items) if ($cfg eq 'r');
-    display_javascript($items) if ($cfg eq 'j' || $cfg eq 'i');
+    display_javascript($items) if ($cfg  =~ /^[ijx]$/);
 }
 else
 {
@@ -579,7 +579,7 @@ sub display_javascript
 
     my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
 
-    if ($cfg eq 'i') {
+    if ($cfg eq "i" || $cfg eq "x") {
 	print $q->header();
 	Hebcal::out_html
 	    ($cfg, Hebcal::start_html($q, $title, undef, undef, undef));
@@ -588,10 +588,19 @@ sub display_javascript
     }
 
     my($url) = self_url();
-    $url .= ";tag=" . 
-	($q->param('.from') ?
-	 Hebcal::url_escape($q->param('.from')) :
-	 "js.1c");
+
+    my $tag;
+    if ($cfg eq "i") {
+	$tag = "iframe.1c";
+    } elsif ($cfg eq "x") {
+	$tag = "widget";
+    } elsif ($q->param('.from')) {
+	$tag = Hebcal::url_escape($q->param('.from'));
+    } else {
+	$tag = "js.1c";
+    }
+
+    $url .= ";tag=$tag";
 
     Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
 		     qq{<h3>Shabbat times for $city_descr</h3>\n});
@@ -600,7 +609,13 @@ sub display_javascript
     {
 	if ($items->[$i]->{'link'} && $items->[$i]->{'link'} =~ /\.html$/)
 	{
-	    $items->[$i]->{'link'} .= "?tag=js.1c";
+	    $items->[$i]->{'link'} .= "?tag=$tag";
+	}
+
+	if ($cfg eq "x" && $items->[$i]->{'link'})
+	{
+	    $items->[$i]->{'link'} = "javascript:widget.openURL('" .
+		$items->[$i]->{'link'} . "');";
 	}
     }
 
@@ -609,14 +624,16 @@ sub display_javascript
     my($this_year) = (localtime)[5];
     $this_year += 1900;
 
+    if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
     Hebcal::out_html($cfg, qq{<font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 </div>
 });
+    }
 
-    if ($cfg eq 'i') {
+    if ($cfg eq "i" || $cfg eq "x") {
 	Hebcal::out_html($cfg, "</body></html>\n");
     }
 
