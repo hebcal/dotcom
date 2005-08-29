@@ -60,6 +60,7 @@ $script_name =~ s,/[^/]+$,/,;
 
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
+my($latitude,$longitude);
 my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 my($items) = format_items($q,$evts);
@@ -311,7 +312,9 @@ sub process_args
 	      "<ul><li>Please try a nearby zip code</li></ul>")
 	    unless defined $val;
 
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
+	($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
+	 $latitude,$longitude) =
 	    Hebcal::zipcode_fields($val);
 
 	# allow CGI args to override
@@ -483,7 +486,8 @@ sub display_rss
 
     Hebcal::out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
 <channel>
 <title>$title</title>
 <link>$url</link>
@@ -507,8 +511,16 @@ qq{<item>
 <description>$items->[$i]->{'date'}</description>
 <dc:subject>$items->[$i]->{'class'}</dc:subject>
 <dc:date>$items->[$i]->{'dc:date'}</dc:date> 
-</item>
 });
+
+	if ($items->[$i]->{'class'} eq "candles" && defined $latitude) {
+	    Hebcal::out_html($cfg,
+qq{<geo:lat>$latitude</geo:lat>
+<geo:long>$longitude</geo:long>
+});
+      }
+
+	Hebcal::out_html($cfg, "</item>\n");
     }
 
     Hebcal::out_html($cfg, "</channel>\n</rss>\n");
