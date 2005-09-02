@@ -43,18 +43,18 @@
 ########################################################################
 
 # optimize common case
-BEGIN {
-    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}) {
-	if (open(F,"/home/mradwin/web/hebcal.com/hebcal/default.html")) {
-	    print "Content-Type: text/html\n\n";
-	    while(read(F,$_,8192)) {
-		print;
-	    }
-	    close(F);
-	    exit(0);
-	}
-    }
-}
+#BEGIN {
+#    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}) {
+#	if (open(F,"/home/mradwin/web/hebcal.com/hebcal/default.html")) {
+#	    print "Content-Type: text/html\n\n";
+#	    while(read(F,$_,8192)) {
+#		print;
+#	    }
+#	    close(F);
+#	    exit(0);
+#	}
+#    }
+#}
 
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
@@ -699,7 +699,7 @@ sub referred_by_websearch
     my($q,$form_text,$form_href) = @_;
 
     # don't show ad to repeat users
-    if (defined $cookies->{"c"})
+    if (defined $cookies->{"C"})
     {
 	return "";
     }
@@ -709,14 +709,20 @@ sub referred_by_websearch
 
     if (defined $ref && $ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)/.*calend[ae]r,i)
     {
-	my $asin = "1569374074";
+	my @ads = (
+		   ["The Jewish Calendar 5766", "0789312395", 80, 110],
+		   ["The Jewish Calendar 2006", "0883634074", 110, 80],
+		   ["Jewish Year 5766", "0789312735", 110, 110],
+		   );
+	my($title,$asin,$width,$height) = @{$ads[int(rand($#ads+1))]};
+
 	$message=<<MESSAGE_END;
 <blockquote class="welcome">
-<a title="Hebrew Illuminations 2005 Calendar from Amazon.com"
+<a title="$title"
 href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20"><img
 src="http://www.hebcal.com/i/$asin.01.TZZZZZZZ.jpg" border="0"
-width="89" height="90" hspace="8" vspace="8" align="right"
-alt="Hebrew Illuminations 2005 Calendar from Amazon.com"></a>
+width="$width" height="$height" hspace="8" align="right"
+alt="$title from Amazon.com"></a>
 
 Hebcal.com offers a free personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
@@ -724,10 +730,10 @@ and Torah readings. We also offer export to Palm, Microsoft Outlook, and
 Apple iCal. To customize your calendar, fill out the <a
 href="$form_href">$form_text</a> and click the Get Calendar button.
 
-<p>If you are looking for a full-color printed 2005 calendar,
-consider the <a
-href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">Hebrew
-Illuminations 2005 Calendar</a> from Amazon.com.
+<p>If you are looking for a full-color printed 2006 calendar,
+consider <a
+href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
+from Amazon.com.
 </blockquote>
 MESSAGE_END
 ;
