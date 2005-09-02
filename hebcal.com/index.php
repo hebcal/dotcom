@@ -50,13 +50,14 @@ Jewish Calendar Tools</small></td>
 $ref = getenv("HTTP_REFERER");
 $pattern = '/^http:\/\/(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)\/.*calend[ae]r/i';
 if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref)) {
+#if ($ref && preg_match($pattern, $ref)) {
     echo "<blockquote class=\"welcome\">\n";
 
-    # disable Amazon advertisement for now
-    if (false) {
-    $cal[] = array("Jewish Traditions 2005 Calendar", "1559499265", 90, 70);
-    $cal[] = array("Hebrew Illuminations 2005 Calendar", "1569374074", 89, 90);
-    $cal[] = array("Jewish Year 5765 Wall Calendar", "0789311224", 90, 90);
+    $show_amazon = true;
+    if ($show_amazon) {
+    $cal[] = array("The Jewish Calendar 5766", "0789312395", 80, 110);
+    $cal[] = array("The Jewish Calendar 2006", "0883634074", 110, 80);
+    $cal[] = array("Jewish Year 5766", "0789312735", 110, 110);
     shuffle($cal);
     list($title,$asin,$width,$height) = $cal[0];
 
@@ -64,7 +65,7 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref)) {
 <a title="$title from Amazon.com"
 href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20"><img
 src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
-width="$width" height="$height" hspace="8" vspace="8" align="right"
+width="$width" height="$height" hspace="8" align="right"
 alt="$title from Amazon.com"></a>
 MESSAGE_END;
     }
@@ -76,9 +77,9 @@ and Torah readings. We also offer export to Palm, Microsoft Outlook, and
 Apple iCal. <a href="/hebcal/">Customize your calendar</a>.
 MESSAGE_END;
 
-    if (false) {
+    if ($show_amazon) {
 	echo <<<MESSAGE_END
-<p>If you are looking for a full-color printed 2005 calendar
+<p>If you are looking for a full-color printed 2006 calendar
 with Jewish holidays, consider the <a
 href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.com.
