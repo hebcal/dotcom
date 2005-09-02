@@ -1145,7 +1145,7 @@ sub new_html_cal
 					    "month" => $month);
     $cal->width("97%");
     $cal->border(1);
-    $cal->todaycellclass("today");
+#    $cal->todaycellclass("today");
 
     $cal->header("<h2 style=\"margin: 0.2em;\" align=\"center\">" .
 		 "<a class=\"goto\" title=\"$prev_title\"\n" .
