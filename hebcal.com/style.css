@@ -72,6 +72,14 @@ A:hover {
  padding: 10px;    	
 }
 
+.welcome:after {
+ content: ".";
+ display: block;
+ height: 0;
+ clear: both;
+ visibility: hidden;
+}
+
 .tiny {
  font-size: x-small;
  font-family: Arial,Helvetica,Geneva,sans-serif;
