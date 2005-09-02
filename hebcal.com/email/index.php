@@ -89,10 +89,10 @@ else
     form($param);
 }
 
-if ($param["submit_modify"]) {
+if ($param["modify"]) {
     subscribe($param);
 }
-elseif ($param["submit_unsubscribe"]) {
+elseif ($param["unsubscribe"]) {
     unsubscribe($param);
 }
 else {
@@ -337,10 +337,10 @@ Contact me occasionally about changes to the hebcal.com website.
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?> 
 <br>
-<input type="submit" name="submit_modify" value="<?php
+<input type="submit" name="modify" value="<?php
   echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?>">
 or
-<input type="submit" name="submit_unsubscribe" value="Unsubscribe">
+<input type="submit" name="unsubscribe" value="Unsubscribe">
 </form>
 
 <p><hr noshade size="1">
