@@ -80,7 +80,7 @@ MESSAGE_END;
     if ($show_amazon) {
 	echo <<<MESSAGE_END
 <p>If you are looking for a full-color printed 2006 calendar
-with Jewish holidays, consider the <a
+with Jewish holidays, consider <a
 href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.com.
 MESSAGE_END;
