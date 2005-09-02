@@ -14,7 +14,7 @@ $(DBDIR)/sedrot.db: sedrot_db.pl $(XMLDIR)/aliyah.xml
 	./sedrot_db.pl $(XMLDIR)/aliyah.xml $@
 
 $(DBDIR)/holidays.db: gen_holidays.pl holidays.ini
-	./gen_holidays.pl holidays.ini /dev/null $@
+	./gen_holidays.pl holidays.ini $@
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XMLDIR)/aliyah.xml $(XMLDIR)/festival.xml
 	mkdir -p $(SEDROT)
