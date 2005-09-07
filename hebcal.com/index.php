@@ -140,6 +140,10 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/holidays/rosh-hashana.html?tag=fp.tmp">Rosh&nbsp;Hashana&nbsp;5766</a></b><br>03
+October 2005<br>at sundown
+<br><br>   
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
@@ -149,8 +153,8 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp
 <!-- Begin temp holiday2 -->
 <!-- End temp holiday2 -->
 <br><span class="sm-grey">&gt;</span>&nbsp;<b>Major&nbsp;Holidays</b><br>for
-<a href="/hebcal/?v=1;year=2005;month=x;nh=on;tag=fp.ql">2005</a> |
-<a href="/hebcal/?v=1;year=5765;yt=H;month=x;nh=on;tag=fp.ql">5765</a><br>
+<a href="/hebcal/?v=1;year=2006;month=x;nh=on;tag=fp.ql">2006</a> |
+<a href="/hebcal/?v=1;year=5766;yt=H;month=x;nh=on;tag=fp.ql">5766</a><br>
 <br><hr noshade size="1">
 <form action="/shabbat/">
 <input type="hidden" name="geo" value="zip">
