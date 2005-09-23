@@ -1,6 +1,7 @@
 IndexOptions +SuppressHTMLPreamble +NameWidth=* +IconWidth=20 +IconHeight=22
 HeaderName HEADER.html
 ReadmeName README.html
+IndexIgnore RCS
 
 AddType text/plain;charset=UTF-8 ini
 
