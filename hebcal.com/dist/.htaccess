@@ -1,8 +1,11 @@
-IndexOptions +SuppressHTMLPreamble +NameWidth=* +IconWidth=20 +IconHeight=22
+IndexOptions +SuppressHTMLPreamble +IconWidth=20 +IconHeight=22 \
+	+NameWidth=* +DescriptionWidth=*
 HeaderName HEADER.html
 ReadmeName README.html
 IndexIgnore RCS
 
 AddType text/plain;charset=UTF-8 ini
 
-RemoveHandler .php .pl
+AddDescription "Perl and PHP source code" hebcal-dot-com.tar.gz
+AddDescription "Triennial Torah Readings" triennial.csv
+AddDescription "Full Kriyah Torah Readings" fullkriyah.csv
