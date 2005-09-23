@@ -37,6 +37,7 @@ release: $(DISTDIR)/hebcal-dot-com.tar.gz
 $(DISTDIR)/hebcal-dot-com.tar.gz:
 	cd ../../.. && \
 	tar -cvf $(DISTDIR)/hebcal-dot-com.tar \
+		web/hebcal.com/dist/ChangeLog.txt \
 		web/hebcal.com/hebcal/*.cgi \
 		web/hebcal.com/shabbat/*.cgi \
 		web/hebcal.com/yahrzeit/*.cgi \
