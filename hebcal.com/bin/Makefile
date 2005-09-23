@@ -38,6 +38,7 @@ $(DISTDIR)/hebcal-dot-com.tar.gz:
 	cd ../../.. && \
 	tar -cvf $(DISTDIR)/hebcal-dot-com.tar \
 		web/hebcal.com/dist/ChangeLog.txt \
+		web/hebcal.com/dist/*.xml \
 		web/hebcal.com/hebcal/*.cgi \
 		web/hebcal.com/shabbat/*.cgi \
 		web/hebcal.com/yahrzeit/*.cgi \
