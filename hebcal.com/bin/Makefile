@@ -1,5 +1,6 @@
-XMLDIR = ../dist
-CSVDIR = ../dist
+DISTDIR = $(CURDIR)/../dist
+XMLDIR = $(DISTDIR)
+CSVDIR = $(DISTDIR)
 SEDROT = ../sedrot
 DBDIR = ../hebcal
 HOLIDAYS = ../holidays
@@ -30,3 +31,25 @@ $(DBDIR)/zips99.db: zips2db.pl zip99/zipnov99.csv zip99/c_01au03.csv
 	rm -f zip99new.db
 	./zips2db.pl zip99new.db zip99/zipnov99.csv zip99/c_01au03.csv
 	mv zip99new.db $@
+
+release: $(DISTDIR)/hebcal-dot-com.tar.gz
+
+$(DISTDIR)/hebcal-dot-com.tar.gz:
+	cd ../../.. && \
+	tar -cvf $(DISTDIR)/hebcal-dot-com.tar \
+		web/hebcal.com/hebcal/*.cgi \
+		web/hebcal.com/shabbat/*.cgi \
+		web/hebcal.com/yahrzeit/*.cgi \
+		web/hebcal.com/bin/Makefile \
+		web/hebcal.com/bin/*.pl \
+		web/hebcal.com/bin/*.ini \
+		local/share/perl/site_perl/Hebcal.pm \
+		local/share/perl/site_perl/Palm/DBA.pm \
+		web/hebcal.com/pear/Hebcal/*.inc \
+		web/hebcal.com/shabbat/*.php \
+		web/hebcal.com/wap-shabbat.php \
+		web/hebcal.com/converter/index.php \
+		web/hebcal.com/link/index.php \
+		web/hebcal.com/email/index.php \
+		$(NULL)
+	gzip -9 $(DISTDIR)/hebcal-dot-com.tar
