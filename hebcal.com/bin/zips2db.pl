@@ -47,6 +47,9 @@ use strict;
 
 $0 =~ s,.*/,,;  # basename
 
+## zipnov99.csv comes from US Census Bureau "Zip Code" Data 
+## http://www.census.gov/geo/www/gazetteer/places2k.html
+
 my($usage) = "usage: $0 [-h] output.db zipnov99.csv c_22mr02.csv
     -h        Display usage information.
 ";
@@ -57,7 +60,8 @@ $opts{'h'} && die "$usage\n";
 (@ARGV == 3) || die "$usage";
 
 ## National Weather Service county-timezone data comes from a file named
-## c_DDmmYY.zip from http://isl715.nws.noaa.gov/mapdata/newcat/amdc/county/
+## c_DDmmYY.zip from
+## http://www.nws.noaa.gov/geodata/catalog/county/html/county.htm
 ##
 ## In this data, timezone is a single letter like, P, M, C, E or p, m,
 ## c, e.  Uppercase indicates the county observes DST, lowercase
