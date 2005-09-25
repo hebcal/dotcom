@@ -302,6 +302,7 @@ function hebcal_make_anchor($str)
     } elseif ($str != "Candle lighting" && $str != "No sunset today." &&
 	      strncmp($str, "Havdalah", 8) != 0) {
 	$str_copy = $str;
+	$str_copy = preg_replace('/ \d{4}$/', '', $str_copy);
 	$str_copy = preg_replace('/ \(CH\'\'M\)$/', '', $str_copy);
 	$str_copy = preg_replace('/ \(Hoshana Raba\)$/', '', $str_copy);
 	$str_copy = preg_replace('/ [IV]+$/', '', $str_copy);
