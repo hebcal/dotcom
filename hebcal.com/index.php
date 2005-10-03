@@ -40,6 +40,7 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
+<span class="fpgreeting">Shana Tova!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
 <?php if ($rosh_chodesh) { ?>
@@ -141,7 +142,7 @@ style="padding-left: 10px; padding-right: 5px">
 <hr noshade size="1">
 <!-- Begin temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
-href="/holidays/rosh-hashana.html?tag=fp.tmp">Rosh&nbsp;Hashana&nbsp;5766</a></b><br>03
+href="/holidays/rosh-hashana.html?tag=fp.tmp">Rosh&nbsp;Hashanah&nbsp;5766</a></b><br>03
 October 2005<br>at sundown
 <br><br>   
 <!-- End temp holiday -->
