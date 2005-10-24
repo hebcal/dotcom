@@ -599,7 +599,10 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
+	    if (defined $SEDROT{"$sedra:hebrew"})
+	    {
 	    $hebrew .= $SEDROT{"$sedra:hebrew"};
+	    }
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
 	       (defined $SEDROT{$1} || defined $SEDROT{$Hebcal::ashk2seph{$1}}))
@@ -619,11 +622,14 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
+	    if (defined $SEDROT{"$p1:hebrew"} && defined $SEDROT{"$p2:hebrew"})
+	    {
 	    $hebrew .= $SEDROT{"$p1:hebrew"};
 
 	    # hypenate hebrew reading
 	    # '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
 	    $hebrew .= "\xD6\xBE" . $SEDROT{"$p2:hebrew"};
+	    }
 	}
     }
     elsif ($subj =~ /^(\d+)\w+ day of the Omer$/)
