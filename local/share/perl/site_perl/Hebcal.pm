@@ -293,49 +293,49 @@ $Hebcal::EVT_IDX_DUR = 7;		# duration in minutes
 $Hebcal::EVT_IDX_MEMO = 8;		# memo text
 $Hebcal::EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
 
-my(%num2heb) =
+my %num2heb =
 (
-1 => 'א',
-2 => 'ב',
-3 => 'ג',
-4 => 'ד',
-5 => 'ה',
-6 => 'ו',
-7 => 'ז',
-8 => 'ח',
-9 => 'ט',
-10 => 'י',
-20 => 'כ',
-30 => 'ל',
-40 => 'מ',
-50 => 'נ',
-60 => 'ס',
-70 => 'ע',
-80 => 'פ',
-90 => 'צ',
-100 => 'ק',
-200 => 'ר',
-300 => 'ש',
-400 => 'ת',
+ 1	=> "\x{5D0}",
+ 2	=> "\x{5D1}",
+ 3	=> "\x{5D2}",
+ 4	=> "\x{5D3}",
+ 5	=> "\x{5D4}",
+ 6	=> "\x{5D5}",
+ 7	=> "\x{5D6}",
+ 8	=> "\x{5D7}",
+ 9	=> "\x{5D8}",
+ 10	=> "\x{5D9}",
+ 20	=> "\x{5DB}",
+ 30	=> "\x{5DC}",
+ 40	=> "\x{5DE}",
+ 50	=> "\x{5E0}",
+ 60	=> "\x{5E1}",
+ 70	=> "\x{5E2}",
+ 80	=> "\x{5E4}",
+ 90	=> "\x{5E6}",
+ 100	=> "\x{5E7}",
+ 200	=> "\x{5E8}",
+ 300	=> "\x{5E9}",
+ 400	=> "\x{5EA}",
 );
 
-my(%monthnames) =
-(
-'Nisan'		=> 'נִיסָן',
-'Iyyar'		=> 'אִיָיר',
-'Sivan'		=> 'סִיוָן',
-'Tamuz'		=> 'תָּמוּז',
-'Av'		=> 'אָב',
-'Elul'		=> 'אֱלוּל',
-'Tishrei'	=> 'תִּשְׁרֵי',
-'Cheshvan'	=> 'חֶשְׁוָן',
-'Kislev'	=> 'כִּסְלֵו',
-'Tevet'		=> 'טֵבֵת',
-"Sh'vat"	=> 'שְׁבָט',
-'Adar'		=> 'אַדָר',
-'Adar I'	=> 'אַדָר א׳',
-'Adar II'	=> 'אַדָר ב׳',
-);
+my %monthnames =
+    (
+     "Nisan"	=> "\x{5E0}\x{5B4}\x{5D9}\x{5E1}\x{5B8}\x{5DF}",
+     "Iyyar"	=> "\x{5D0}\x{5B4}\x{5D9}\x{5B8}\x{5D9}\x{5E8}",
+     "Sivan"	=> "\x{5E1}\x{5B4}\x{5D9}\x{5D5}\x{5B8}\x{5DF}",
+     "Tamuz"	=> "\x{5EA}\x{5BC}\x{5B8}\x{5DE}\x{5D5}\x{5BC}\x{5D6}",
+     "Av"	=> "\x{5D0}\x{5B8}\x{5D1}",
+     "Elul"	=> "\x{5D0}\x{5B1}\x{5DC}\x{5D5}\x{5BC}\x{5DC}",
+     "Tishrei"	=> "\x{5EA}\x{5BC}\x{5B4}\x{5E9}\x{5C1}\x{5B0}\x{5E8}\x{5B5}\x{5D9}",
+     "Cheshvan"	=> "\x{5D7}\x{5B6}\x{5E9}\x{5C1}\x{5B0}\x{5D5}\x{5B8}\x{5DF}",
+     "Kislev"	=> "\x{5DB}\x{5BC}\x{5B4}\x{5E1}\x{5B0}\x{5DC}\x{5B5}\x{5D5}",
+     "Tevet"	=> "\x{5D8}\x{5B5}\x{5D1}\x{5B5}\x{5EA}",
+     "Sh'vat"	=> "\x{5E9}\x{5C1}\x{5B0}\x{5D1}\x{5B8}\x{5D8}",
+     "Adar"	=> "\x{5D0}\x{5B7}\x{5D3}\x{5B8}\x{5E8}",
+     "Adar I"	=> "\x{5D0}\x{5B7}\x{5D3}\x{5B8}\x{5E8} \x{5D0}\x{5F3}",
+     "Adar II"	=> "\x{5D0}\x{5B7}\x{5D3}\x{5B8}\x{5E8} \x{5D1}\x{5F3}",
+     );
 
 ########################################################################
 # invoke hebcal unix app and create perl array of output
@@ -498,14 +498,14 @@ sub hebnum_to_string {
 
     if ($digits == 1)
     {
-	$result = $num2heb{$array[0]} . '׳'; # geresh
+	$result = $num2heb{$array[0]} . "\x{5F3}"; # geresh
     }
     else
     {
 	$result = '';
 	for (my $i = 0; $i < $digits; $i++)
 	{
-	    $result .= '״' if (($i + 1) == $digits); # gershayim
+	    $result .= "\x{5F4}" if (($i + 1) == $digits); # gershayim
 	    $result .= $num2heb{$array[$i]};
 	}
     }
@@ -517,7 +517,7 @@ sub build_hebrew_date($$$)
 {
     my($hm,$hd,$hy) = @_;
 
-    hebnum_to_string($hd) . " \327\221\326\274\326\260" .
+    hebnum_to_string($hd) . " \x{5D1}\x{5BC}\x{5B0}" .
 	$monthnames{$hm} . " " . hebnum_to_string($hy);
 }
 
@@ -590,7 +590,7 @@ sub get_holiday_anchor($$$)
 	my($sedra) = $2;
 
 	# Unicode for "parashat
-	$hebrew = "\x{05E4}\x{05E8}\x{05E9}\x{05EA} ";
+	$hebrew = "\x{5E4}\x{5E8}\x{5E9}\x{5EA} ";
 
 	$sedra = $Hebcal::ashk2seph{$sedra} if (defined $Hebcal::ashk2seph{$sedra});
 
@@ -633,7 +633,7 @@ sub get_holiday_anchor($$$)
 
 	    # hypenate hebrew reading
 	    # HEBREW PUNCTUATION MAQAF (U+05BE)
-	    $hebrew .= "\x{05BE}" . $SEDROT{"$p2:hebrew"};
+	    $hebrew .= "\x{5BE}" . $SEDROT{"$p2:hebrew"};
 	    }
 	}
     }
