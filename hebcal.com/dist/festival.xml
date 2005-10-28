@@ -786,9 +786,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Eighth Day of Assembly
  </about>
  <kriyah>
-  <torah href="http://www.jtsa.edu/community/parashah/jpstext/shminiatzeret.shtml" />
+  <torah href="http://www.jtsa.edu/community/parashah/jpstext/sheminiatzeret.shtml" />
   <haft reading="I Kings 8:54 - 8:66"
-   href="http://www.jtsa.edu/community/parashah/jpstext/shminiatzeret_haft.shtml" />
+   href="http://www.jtsa.edu/community/parashah/jpstext/sheminiatzeret_haft.shtml" />
   <aliyah parsha="47" num="1" book="Deuteronomy" begin="14:22" end="14:29" />
   <aliyah parsha="47" num="2" book="Deuteronomy" begin="15:1" end="15:18" />
   <aliyah parsha="47" num="3" book="Deuteronomy" begin="15:19" end="16:3" />
@@ -940,7 +940,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <festival id="Shushan Purim"
  hebrew="שׁוּשָׁן פּוּרִים"
  yomtov="0">
- <about href="http://aish.com/holidays/purim/shushan_purim.asp">
+ <about href="http://www.ou.org/chagim/purim/when.htm">
  Purim celebrated in Jerusalem and walled cities
  </about>
  <kriyah>
