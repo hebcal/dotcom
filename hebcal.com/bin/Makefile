@@ -33,7 +33,6 @@ RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
 		web/hebcal.com/yahrzeit/*.cgi \
 		web/hebcal.com/bin/Makefile \
 		web/hebcal.com/bin/*.pl \
-		web/hebcal.com/bin/*.ini \
 		local/share/perl/site_perl/Hebcal.pm \
 		local/share/perl/site_perl/Palm/DBA.pm \
 		web/hebcal.com/pear/Hebcal/*.inc \
