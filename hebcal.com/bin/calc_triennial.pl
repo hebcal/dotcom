@@ -47,10 +47,14 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
+require 5.008_001;
+
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 
 use strict;
+use utf8;
+use open ":utf8";
 use Hebcal ();
 use Date::Calc ();
 use Getopt::Std ();
@@ -953,7 +957,7 @@ sub get_parsha_info
 {
     my($parshiot,$h) = @_;
 
-    my $parashat = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA";  # UTF-8 for "parashat"
+    my $parashat = "\x{05E4}\x{05E8}\x{05E9}\x{05EA}";  # Unicode for "parashat"
 
     my($hebrew);
     my($torah,$haftarah,$haftarah_seph);
@@ -968,11 +972,11 @@ sub get_parsha_info
     {
 	my($p1,$p2) = ($1,$2);
 
-	# UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
+	# HEBREW PUNCTUATION MAQAF (U+05BE)
 	$hebrew = sprintf("%s %s%s%s",
 			  $parashat,
 			  $parshiot->{'parsha'}->{$p1}->{'hebrew'},
-			  "\xD6\xBE", 
+			  "\x{05BE}", 
 			  $parshiot->{'parsha'}->{$p2}->{'hebrew'});
 
 	my $torah_end = $parshiot->{'parsha'}->{$p2}->{'verse'};
