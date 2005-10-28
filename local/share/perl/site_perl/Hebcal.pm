@@ -53,13 +53,13 @@ use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
 use Date::Calc ();
 use DB_File;
+use XML::Simple ();
 
 ########################################################################
 # constants
 ########################################################################
 
-my $sedrotfn = '/home/mradwin/web/hebcal.com/hebcal/sedrot.db';
-my(%SEDROT);
+my $SEDROT_XML = "/home/mradwin/web/hebcal.com/dist/aliyah.xml";
 
 my $holidaysfn = '/home/mradwin/web/hebcal.com/hebcal/holidays.db';
 my(%HOLIDAYS);
@@ -567,6 +567,9 @@ sub make_anchor($)
     "$anchor.html";
 }
 
+my $sedrot_init = 0;
+my %SEDROT;
+
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;
@@ -574,9 +577,18 @@ sub get_holiday_anchor($$$)
     my($hebrew) = '';
     my($memo) = '';
 
-    unless(tied(%SEDROT)) {
-	tie(%SEDROT, 'DB_File', $sedrotfn, O_RDONLY, 0444, $DB_File::DB_HASH)
-	    || die "Can't tie $sedrotfn";
+    unless ($sedrot_init)
+    {
+	my $axml = XML::Simple::XMLin($SEDROT_XML);
+	foreach my $h (keys %{$axml->{'parsha'}})
+	{
+	    if (defined $axml->{'parsha'}->{$h}->{'hebrew'})
+	    {
+		$SEDROT{$h} = 1;
+		$SEDROT{"$h:hebrew"} = $axml->{'parsha'}->{$h}->{'hebrew'};
+	    }
+	}
+	$sedrot_init = 1;
     }
 
     unless(tied(%HOLIDAYS)) {
@@ -604,10 +616,7 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    if (defined $SEDROT{"$sedra:hebrew"})
-	    {
 	    $hebrew .= $SEDROT{"$sedra:hebrew"};
-	    }
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
 	       (defined $SEDROT{$1} || defined $SEDROT{$Hebcal::ashk2seph{$1}}))
@@ -617,7 +626,7 @@ sub get_holiday_anchor($$$)
 	    $p1 = $Hebcal::ashk2seph{$p1} if (defined $Hebcal::ashk2seph{$p1});
 	    $p2 = $Hebcal::ashk2seph{$p2} if (defined $Hebcal::ashk2seph{$p2});
 
-	    die "sedrot.db missing $p2!" unless defined $SEDROT{$p2};
+	    die "aliyah.xml missing $p2!" unless defined $SEDROT{$p2};
 
 	    my($anchor) = "$p1-$p2";
 	    $anchor = lc($anchor);
@@ -627,20 +636,17 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    if (defined $SEDROT{"$p1:hebrew"} && defined $SEDROT{"$p2:hebrew"})
-	    {
 	    $hebrew .= $SEDROT{"$p1:hebrew"};
 
 	    # hypenate hebrew reading
 	    # HEBREW PUNCTUATION MAQAF (U+05BE)
 	    $hebrew .= "\x{5BE}" . $SEDROT{"$p2:hebrew"};
-	    }
 	}
     }
     elsif ($subj =~ /^(\d+)\w+ day of the Omer$/)
     {
 	$hebrew = hebnum_to_string($1) .
-	" בְּעוֹמֶר";
+	    " \x{5D1}\x{5BC}\x{5B0}\x{5E2}\x{5D5}\x{5B9}\x{5DE}\x{5B6}\x{5E8}";
     }
     elsif ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     {
