@@ -7,12 +7,9 @@ HOLIDAYS = ../holidays
 
 all: sedrot holidays
 
-holidays: $(HOLIDAYS)/purim.html $(DBDIR)/holidays.db
+holidays: $(HOLIDAYS)/purim.html
 
 sedrot: $(SEDROT)/bereshit.html
-
-$(DBDIR)/holidays.db: gen_holidays.pl holidays.ini
-	./gen_holidays.pl holidays.ini $@
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XMLDIR)/aliyah.xml $(XMLDIR)/festival.xml
 	mkdir -p $(SEDROT)
