@@ -100,7 +100,7 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
     }
 
     write_subjects($prev_isodate, \@subjects);
-    print OUT ");\n";
+    print OUT ");\n?>\n";
     close(OUT);
 }
 
