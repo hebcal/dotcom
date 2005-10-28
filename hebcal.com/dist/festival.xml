@@ -4,9 +4,9 @@
 <groups>
  <group>Rosh Hashana
   <li>Rosh Hashana</li>
-  <li>Rosh Hashana 1</li>
-  <li>Rosh Hashana 1 (on Shabbat)</li>
-  <li>Rosh Hashana 2</li>
+  <li>Rosh Hashana I</li>
+  <li>Rosh Hashana I (on Shabbat)</li>
+  <li>Rosh Hashana II</li>
  </group>
  <group>Tzom Gedaliah</group>
  <group>Shabbat Shuva</group>
@@ -17,9 +17,9 @@
  </group>
  <group>Sukkot
   <li>Sukkot</li>
-  <li>Sukkot 1</li>
-  <li>Sukkot 1 (on Shabbat)</li>
-  <li>Sukkot 2</li>
+  <li>Sukkot I</li>
+  <li>Sukkot I (on Shabbat)</li>
+  <li>Sukkot II</li>
   <li>Sukkot Chol ha-Moed Day 1</li>
   <li>Sukkot Chol ha-Moed Day 2</li>
   <li>Sukkot Chol ha-Moed Day 3</li>
@@ -77,18 +77,18 @@
  <group>Ta'anit Bechorot</group>
  <group>Pesach
   <li>Pesach</li>
-  <li>Pesach 1</li>
-  <li>Pesach 1 (on Shabbat)</li>
-  <li>Pesach 2</li>
+  <li>Pesach I</li>
+  <li>Pesach I (on Shabbat)</li>
+  <li>Pesach II</li>
   <li>Pesach Chol ha-Moed Day 1</li>
   <li>Pesach Chol ha-Moed Day 2</li>
   <li>Pesach Chol ha-Moed Day 3</li>
   <li>Pesach Chol ha-Moed Day 4</li>
   <li>Pesach Shabbat Chol ha-Moed</li>
-  <li>Pesach 7</li>
-  <li>Pesach 7 (on Shabbat)</li>
-  <li>Pesach 8</li>
-  <li>Pesach 8 (on Shabbat)</li>
+  <li>Pesach VII</li>
+  <li>Pesach VII (on Shabbat)</li>
+  <li>Pesach VIII</li>
+  <li>Pesach VIII (on Shabbat)</li>
  </group>
  <group>Days of the Omer</group>
  <group>Yom HaShoah</group>
@@ -100,9 +100,9 @@
  <group>Rosh Chodesh Sivan</group>
  <group>Shavuot
   <li>Shavuot</li>
-  <li>Shavuot 1</li>
-  <li>Shavuot 2</li>
-  <li>Shavuot 2 (on Shabbat)</li>
+  <li>Shavuot I</li>
+  <li>Shavuot II</li>
+  <li>Shavuot II (on Shabbat)</li>
  </group>
  <group>Rosh Chodesh Tamuz</group>
  <group>Tzom Tammuz</group>
@@ -132,7 +132,7 @@ every other day (e.g. fast days): 3
  Passover, the Feast of Unleavened Bread
  </about>
 </festival>
-<festival id="Pesach 1"
+<festival id="Pesach I"
  hebrew="פֶּסַח יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
@@ -150,7 +150,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
-<festival id="Pesach 1 (on Shabbat)"
+<festival id="Pesach I (on Shabbat)"
  hebrew="פֶּסַח יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
@@ -170,7 +170,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10" />
  </kriyah>
 </festival>
-<festival id="Pesach 2"
+<festival id="Pesach II"
  hebrew="פֶּסַח יוֹם ב׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
@@ -269,7 +269,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
-<festival id="Pesach 7"
+<festival id="Pesach VII"
  hebrew="פֶּסַח יוֹם ז׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
@@ -287,7 +287,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
-<festival id="Pesach 7 (on Shabbat)"
+<festival id="Pesach VII (on Shabbat)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -306,7 +306,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
-<festival id="Pesach 8"
+<festival id="Pesach VIII"
  hebrew="פֶּסַח יוֹם ח׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
@@ -324,7 +324,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7" />
  </kriyah>
 </festival>
-<festival id="Pesach 8 (on Shabbat)"
+<festival id="Pesach VIII (on Shabbat)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -350,7 +350,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Feast of Pentecost
  </about>
 </festival>
-<festival id="Shavuot 1"
+<festival id="Shavuot I"
  hebrew="שָׁבוּעוֹת יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidayc.htm">
@@ -368,7 +368,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
-<festival id="Shavuot 2"
+<festival id="Shavuot II"
  hebrew="שָׁבוּעוֹת יוֹם ב׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidayc.htm">
@@ -386,7 +386,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6" />
  </kriyah>
 </festival>
-<festival id="Shavuot 2 (on Shabbat)"
+<festival id="Shavuot II (on Shabbat)"
  hebrew="שָׁבוּעוֹת יוֹם ב׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidayc.htm">
@@ -513,7 +513,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
 </festival>
 
-<festival id="Rosh Hashana 1"
+<festival id="Rosh Hashana I"
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday2.htm">
@@ -531,7 +531,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:1" end="29:6" numverses="6" />
  </kriyah>
 </festival>
-<festival id="Rosh Hashana 1 (on Shabbat)"
+<festival id="Rosh Hashana I (on Shabbat)"
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday2.htm">
@@ -551,7 +551,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:1" end="29:6" numverses="6" />
  </kriyah>
 </festival>
-<festival id="Rosh Hashana 2"
+<festival id="Rosh Hashana II"
  hebrew="רֹאשׁ הַשָּׁנָה יוֹם ב׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday2.htm">
@@ -630,7 +630,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Feast of Tabernacles
  </about>
 </festival>
-<festival id="Sukkot 1"
+<festival id="Sukkot I"
  hebrew="סוּכּוֹת יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday5.htm">
@@ -648,7 +648,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:12" end="29:16" numverses="5" />
  </kriyah>
 </festival>
-<festival id="Sukkot 1 (on Shabbat)"
+<festival id="Sukkot I (on Shabbat)"
  hebrew="סוּכּוֹת יוֹם א׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday5.htm">
@@ -668,7 +668,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:12" end="29:16" numverses="5" />
  </kriyah>
 </festival>
-<festival id="Sukkot 2"
+<festival id="Sukkot II"
  hebrew="סוּכּוֹת יוֹם ב׳"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday5.htm">
