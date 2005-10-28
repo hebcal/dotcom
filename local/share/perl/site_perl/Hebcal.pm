@@ -55,14 +55,14 @@ use Date::Calc ();
 use DB_File;
 use XML::Simple ();
 
+binmode(STDOUT, ":utf8");
+
 ########################################################################
 # constants
 ########################################################################
 
 my $SEDROT_XML = "/home/mradwin/web/hebcal.com/dist/aliyah.xml";
-
-my $holidaysfn = '/home/mradwin/web/hebcal.com/hebcal/holidays.db';
-my(%HOLIDAYS);
+my $HOLIDAYS_XML = "/home/mradwin/web/hebcal.com/dist/festival.xml";
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -341,6 +341,32 @@ my %monthnames =
 # invoke hebcal unix app and create perl array of output
 ########################################################################
 
+my $holidays_init = 0;
+my %HOLIDAYS;
+
+sub init_holidays
+{
+    return 1 if $holidays_init;
+
+    my $fxml = XML::Simple::XMLin($HOLIDAYS_XML);
+    foreach my $f (keys %{$fxml->{"festival"}})
+    {
+	if (defined $fxml->{"festival"}->{$f}->{"hebrew"})
+	{
+	    $HOLIDAYS{$f} = 1;
+	    $HOLIDAYS{"$f:hebrew"} = $fxml->{"festival"}->{$f}->{"hebrew"};
+	}
+
+	if (defined $fxml->{"festival"}->{$f}->{"yomtov"})
+	{
+	    $HOLIDAYS{$f} = 1;
+	    $HOLIDAYS{"$f:yomtov"} = $fxml->{"festival"}->{$f}->{"yomtov"};
+	}
+    }
+
+    $holidays_init = 1;
+}
+
 sub parse_date_descr($$)
 {
     my($date,$descr) = @_;
@@ -380,10 +406,7 @@ sub parse_date_descr($$)
 	if defined $Hebcal::ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-    unless(tied(%HOLIDAYS)) {
-	tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
-	    || warn "Can't tie $holidaysfn";
-    }
+    init_holidays();
 
     $yomtov = 1  if $HOLIDAYS{"$subj_copy:yomtov"};
 
@@ -524,32 +547,16 @@ sub build_hebrew_date($$$)
 sub hebrew_strip_nikkud($) {
     my($str) = @_;
 
-    eval "use Unicode::String";
-    my $u = Unicode::String::utf8($str);
-    my @characters = $u->unpack();
-    my @result = ();
+    my $result = "";
 
-    foreach my $c (@characters)
+    foreach my $c (split(//, $str))
     {
 	# skip hebrew punctuation range
-	next if $c > 0x0590 && $c < 0x05D0;
-
-#	if ($c == 0x0028)
-#	{
-#	    push(@result, 0x0029); # reverse parens
-#	}
-#	elsif ($c == 0x0029)
-#	{
-#	    push(@result, 0x0028); # reverse parens
-#	}
-#	else
-#	{
-	    push(@result, $c);
-#	}
+	next if ord($c) > 0x0590 && ord($c) < 0x05D0;
+	$result .= $c;
     }
 
-    $u->pack(@result);
-    return $u->utf8();
+    return $result;
 }
 
 
@@ -580,28 +587,25 @@ sub get_holiday_anchor($$$)
     unless ($sedrot_init)
     {
 	my $axml = XML::Simple::XMLin($SEDROT_XML);
-	foreach my $h (keys %{$axml->{'parsha'}})
+	foreach my $h (keys %{$axml->{"parsha"}})
 	{
-	    if (defined $axml->{'parsha'}->{$h}->{'hebrew'})
+	    if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
 	    {
 		$SEDROT{$h} = 1;
-		$SEDROT{"$h:hebrew"} = $axml->{'parsha'}->{$h}->{'hebrew'};
+		$SEDROT{"$h:hebrew"} = $axml->{"parsha"}->{$h}->{"hebrew"};
 	    }
 	}
 	$sedrot_init = 1;
     }
 
-    unless(tied(%HOLIDAYS)) {
-	tie(%HOLIDAYS, 'DB_File', $holidaysfn, O_RDONLY, 0444, $DB_File::DB_HASH)
-	    || die "Can't tie $holidaysfn";
-    }
+    init_holidays();
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
 	my($parashat) = $1;
 	my($sedra) = $2;
 
-	# Unicode for "parashat
+	# Unicode for "parashat"
 	$hebrew = "\x{5E4}\x{5E8}\x{5E9}\x{5EA} ";
 
 	$sedra = $Hebcal::ashk2seph{$sedra} if (defined $Hebcal::ashk2seph{$sedra});
