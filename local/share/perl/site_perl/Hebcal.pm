@@ -41,8 +41,12 @@
 ########################################################################
 
 package Hebcal;
-require 5.000;
+
+require 5.008_001;
+
 use strict;
+use utf8;
+use open ":utf8";
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/home/mradwin/local/share/perl";
@@ -585,8 +589,9 @@ sub get_holiday_anchor($$$)
 	my($parashat) = $1;
 	my($sedra) = $2;
 
-	# 'פרשת ' == UTF-8 for "parashat "
-	$hebrew = "\xD7\xA4\xD7\xA8\xD7\xA9\xD7\xAA ";
+	# Unicode for "parashat
+	$hebrew = "\x{05E4}\x{05E8}\x{05E9}\x{05EA} ";
+
 	$sedra = $Hebcal::ashk2seph{$sedra} if (defined $Hebcal::ashk2seph{$sedra});
 
 	if (defined $SEDROT{$sedra})
@@ -627,8 +632,8 @@ sub get_holiday_anchor($$$)
 	    $hebrew .= $SEDROT{"$p1:hebrew"};
 
 	    # hypenate hebrew reading
-	    # '־' == UTF-8 for HEBREW PUNCTUATION MAQAF (U+05BE)
-	    $hebrew .= "\xD6\xBE" . $SEDROT{"$p2:hebrew"};
+	    # HEBREW PUNCTUATION MAQAF (U+05BE)
+	    $hebrew .= "\x{05BE}" . $SEDROT{"$p2:hebrew"};
 	    }
 	}
     }
