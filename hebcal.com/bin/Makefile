@@ -9,10 +9,7 @@ all: sedrot holidays
 
 holidays: $(HOLIDAYS)/purim.html $(DBDIR)/holidays.db
 
-sedrot: $(SEDROT)/bereshit.html $(DBDIR)/sedrot.db
-
-$(DBDIR)/sedrot.db: sedrot_db.pl $(XMLDIR)/aliyah.xml
-	./sedrot_db.pl $(XMLDIR)/aliyah.xml $@
+sedrot: $(SEDROT)/bereshit.html
 
 $(DBDIR)/holidays.db: gen_holidays.pl holidays.ini
 	./gen_holidays.pl holidays.ini $@
