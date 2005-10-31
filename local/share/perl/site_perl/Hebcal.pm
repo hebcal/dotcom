@@ -51,7 +51,9 @@ use Date::Calc ();
 use DB_File;
 use XML::Simple ();
 
-binmode(STDOUT, ":utf8");
+if ($^V && $^V ge v5.8.1) {
+    binmode(STDOUT, ":utf8");
+}
 
 ########################################################################
 # constants
@@ -749,7 +751,10 @@ sub cache_begin($)
     if (!open(CACHE, ">$cache")) {
 	$cache = undef;
     }
-    binmode(CACHE, ":utf8");
+
+    if ($^V && $^V ge v5.8.1) {
+	binmode(CACHE, ":utf8");
+    }
 
     $cache;
 }
