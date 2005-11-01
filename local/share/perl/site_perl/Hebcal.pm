@@ -1920,6 +1920,7 @@ sub sendmail_v2($$$)
 
     my @recip = keys %recipients;
 
+    $smtp->hello($HOSTNAME);
     unless ($smtp->mail($return_path)) {
         warn "smtp mail() failure for @recip\n"
 	    if $verbose;
