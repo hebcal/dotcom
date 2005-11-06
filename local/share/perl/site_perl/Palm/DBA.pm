@@ -107,6 +107,10 @@ sub write_header($)
 {
     my($filename) = @_;
 
+    if ($^V && $^V ge v5.8.1) {
+	binmode(STDOUT, ":raw");
+    }
+
     write_int($PALM_DBA_MAGIC);
     write_cstring($filename);
     write_byte(0);
@@ -136,6 +140,10 @@ sub write_contents($$$)
     my($events,$tz,$dst) = @_;
     my($nevents) = scalar(@{$events});
     my($startTime,$i,$secsEast,$local2local);
+
+    if ($^V && $^V ge v5.8.1) {
+	binmode(STDOUT, ":raw");
+    }
 
     # compute diff seconds between GMT and whatever our local TZ is
     # pick 1990/01/15 as a date that we're certain is standard time
