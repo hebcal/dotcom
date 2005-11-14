@@ -902,6 +902,10 @@ sub results_page
     Hebcal::out_html(undef, $Hebcal::indiana_warning)
 	if (defined $cconfig->{"state"} && $cconfig->{"state"} eq "IN");
 
+    Hebcal::out_html(undef, $Hebcal::usno_warning)
+	if (defined $cconfig->{"lat_deg"} &&
+	    ($cconfig->{"lat_deg"} >= 60.0 || $cconfig->{"lat_deg"} <= -60.0));
+
     # toggle month/full year and event list/calendar grid
     $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
 
@@ -1284,6 +1288,11 @@ sub get_candle_config
 	$lat_deg  *= -1  if ($q->param("ladir") eq "s");
 
 	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+
+	$config{"long_deg"} = $long_deg;
+	$config{"long_min"} = $long_min;
+	$config{"lat_deg"} = $lat_deg;
+	$config{"lat_min"} = $lat_min;
     }
     elsif ($q->param("c") && $q->param("c") ne "off" &&
 	   defined $q->param("zip") && $q->param("zip") ne "")
@@ -1357,6 +1366,11 @@ sub get_candle_config
 	    "\n<br>Daylight Saving Time: $dst_text";
 
 	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+
+	$config{"long_deg"} = $long_deg;
+	$config{"long_min"} = $long_min;
+	$config{"lat_deg"} = $lat_deg;
+	$config{"lat_min"} = $lat_min;
     }
     else
     {
