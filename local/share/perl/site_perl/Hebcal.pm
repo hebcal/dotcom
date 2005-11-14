@@ -86,9 +86,10 @@ rules.</span><br>Please check <a
 href=\"http://www.mccsc.edu/time.html#WHAT\">What time is it in
 Indiana?</a> to make sure the above settings are correct.</p>";
 
-$Hebcal::usno_warning = "<p style=\"color: red\">WARNING:
+$Hebcal::usno_warning = "<p><span style=\"color: red\">WARNING:
 Candle-lighting times are guaranteed to be wrong at extreme
-northern or southern latitudes.</p>";
+northern or southern latitudes.</span><br>Please consult your
+local halachic authority for correct candle-lighting times.</p>";
 
 # boolean options
 @Hebcal::opts = ('c','o','s','i','a','d','D');
