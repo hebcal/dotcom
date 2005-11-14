@@ -671,6 +671,9 @@ sub display_html
     Hebcal::out_html($cfg, $Hebcal::indiana_warning)
 	if ($city_descr =~ / IN /);
 
+    Hebcal::out_html(undef, $Hebcal::usno_warning)
+	if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
+
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
 	if ($items->[$i]->{'link'} && $items->[$i]->{'link'} =~ /\.html$/)
