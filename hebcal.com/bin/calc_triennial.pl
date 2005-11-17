@@ -571,8 +571,10 @@ EOHTML
 	$fk_date = '&nbsp;';
     }
 
-    my($amazon_link) =
+    my $amazon_link1 =
 	"http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20";
+    my $amazon_link2 =
+	"http://www.amazon.com/exec/obidos/ASIN/0899060145/hebcal-20";
 
     print OUT2 <<EOHTML;
 </head>
@@ -606,10 +608,11 @@ $next_link
 <h3>Torah Portion: <a name="torah"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
-<a href="$amazon_link"><img
-src="/i/0827607121.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
+<a title="The Chumash: The Stone Edition (Artscroll Series)"
+href="$amazon_link2"><img
+src="/i/0899060145.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
 hspace="3" vspace="3"
-alt="Etz Hayim: Torah and Commentary" align="right"></a>
+alt="The Chumash: The Stone Edition (Artscroll Series)" align="right"></a>
 &nbsp;
 <table border="1" cellpadding="5">
 <tr>
@@ -716,6 +719,11 @@ EOHTML
     print OUT2 <<EOHTML;
 </tr>
 </table>
+<a title="Etz Hayim: Torah and Commentary"
+href="$amazon_link1"><img
+src="/i/0827607121.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
+hspace="3" vspace="3"
+alt="Etz Hayim: Torah and Commentary" align="right"></a>
 <h3>Haftarah$ashk: <a name="haftara"
 href="$haftarah_href"
 title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
@@ -813,7 +821,7 @@ EOHTML
     print OUT2 <<EOHTML;
 <h3><a name="ref"></a>References</h3>
 <dl>
-<dt><em><a href="$amazon_link">Etz
+<dt><em><a href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001.
 <dt><em><a
