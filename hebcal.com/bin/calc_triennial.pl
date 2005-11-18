@@ -821,9 +821,12 @@ EOHTML
     print OUT2 <<EOHTML;
 <h3><a name="ref"></a>References</h3>
 <dl>
+<dt><em><a href="$amazon_link2">The
+Chumash: The Stone Edition (Artscroll Series)</a></em>
+<dd>Nosson Scherman, Mesorah Publications, 1993
 <dt><em><a href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
-<dd>David L. Lieber et. al., Jewish Publication Society, 2001.
+<dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a
 href="http://learn.jtsa.edu/topics/diduknow/responsa/trichart.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
