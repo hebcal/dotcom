@@ -712,7 +712,14 @@ sub display_html
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
     Hebcal::out_html($cfg,"|\nprintable page of <a href=\"$url\">this year's times</a>\n",
-		     "<span class=\"hl\"><b>NEW!</b></span>\n");
+		     "(post it on your refrigerator)\n");
+
+    # Mac OS X
+    $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
+    Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
+		     "Mac OS X users: <a href=\"$url\">Dashboard Widget</a>\n",
+		     "by Mark Saper &nbsp;<b class=\"hl\">NEW!</b>\n");
+
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
