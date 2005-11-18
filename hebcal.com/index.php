@@ -115,6 +115,11 @@ Shabbat candle lighting times and Torah Readings, updated weekly
 <a href="/email/?tag=fp">Subscribe by Email</a> |
 <a href="/link/?type=shabbat&amp;tag=fp">Add Shabbat times to your synagogue
 website</a>
+<br><span class="sm-grey">&gt;</span>
+<a href="http://www.apple.com/downloads/dashboard/reference/hebcal.html">Mac
+OS X Dashboard Widget</a> by Mark Saper
+&nbsp;
+<b class="hl">NEW!</b>
 <h4><a href="/holidays/">Jewish Holidays</a></h4>
 <span class="sm-grey">&gt;</span>
 Dates for the next few years and special Torah readings
