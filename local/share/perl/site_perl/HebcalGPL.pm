@@ -29,6 +29,9 @@
 
 package HebcalGPL;
 
+use strict;
+use Date::Calc ();
+
 my $NISAN = 1;
 my $IYYAR = 2;
 my $SIVAN = 3;
