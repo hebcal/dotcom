@@ -34,6 +34,7 @@ RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
 		web/hebcal.com/bin/Makefile \
 		web/hebcal.com/bin/*.pl \
 		local/share/perl/site_perl/Hebcal.pm \
+		local/share/perl/site_perl/HebcalGPL.pm \
 		local/share/perl/site_perl/Palm/DBA.pm \
 		web/hebcal.com/pear/Hebcal/*.inc \
 		web/hebcal.com/shabbat/*.php \
