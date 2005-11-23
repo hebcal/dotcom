@@ -56,6 +56,7 @@ use strict;
 use utf8;
 use open ":utf8";
 use Hebcal ();
+use HebcalGPL ();
 use Date::Calc ();
 use Getopt::Std ();
 use XML::Simple ();
@@ -143,7 +144,7 @@ if ($opts{'H'}) {
     $hebrew_year = $opts{'H'};
 } else {
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
+    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     $hebrew_year = $hebdate->{'yy'};
 }
 
