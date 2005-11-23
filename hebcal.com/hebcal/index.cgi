@@ -65,6 +65,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Date::Calc ();
 use Hebcal ();
+use HebcalGPL ();
 use HTML::CalendarMonthSimple ();
 use Palm::DBA ();
 
@@ -391,7 +392,7 @@ sub form
     my($message,$help) = @_;
     my($key,$val,$JSCRIPT);
 
-    my $hebdate = Hebcal::greg2hebrew($this_year,$this_mon,$this_day);
+    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     my $hyear = $hebdate->{"yy"};
 
     $JSCRIPT=<<JSCRIPT_END;
@@ -1000,7 +1001,7 @@ qq{<p class="goto"><span class="sm-grey">&gt;</span>
 		my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
 		my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 		my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
-		my $hebdate = Hebcal::greg2hebrew($year,$mon,$mday);
+		my $hebdate = HebcalGPL::greg2hebrew($year,$mon,$mday);
 		$hyear = $hebdate->{"yy"};
 		$url .= ";year=" . $hyear;
 	    }
