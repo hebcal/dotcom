@@ -12,8 +12,16 @@ use POSIX qw(strftime);
 use MIME::Base64 ();
 use Time::Local ();
 use DBI ();
+use Net::SMTP ();
 
 die "usage: $0 {-all | address ...}\n" unless @ARGV;
+
+my $VERSION = '$Revision$$';
+if ($VERSION =~ /(\d+)\.(\d+)/) {
+    $VERSION = "$1.$2";
+}
+
+my($LOGIN) = getlogin() || getpwuid($<) || "UNKNOWN";
 
 my $now = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
@@ -40,6 +48,17 @@ while (my($to,$cfg) = each(%SUBS))
     next if $cfg =~ /^type=alt/;
     parse_config($cfg);
 }
+
+my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
+		      $ENV{"HOME"}, $year, $mon+1, $mday);
+open(LOG, ">>$logfile") || die "$logfile: $!";
+
+my $smtp = smtp_connect("mail.hebcal.com");
+$smtp || die "Can't connect to SMTP server";
+
+my $HOSTNAME = `/bin/hostname -f`;
+chomp($HOSTNAME);
+$smtp->hello($HOSTNAME);
 
 while (my($to,$cfg) = each(%SUBS))
 {
@@ -87,15 +106,28 @@ $unsub_url
 	 );
 
     # try 3 times to avoid intermittent failures
-    my($status) = 0;
+    my $status = 0;
     for (my $i = 0; $status == 0 && $i < 3; $i++)
     {
-	$status = Hebcal::sendmail_v2($return_path,\%headers,$body);
-	sleep(2);
+	$status = my_sendmail($smtp,$return_path,\%headers,$body,1);
+	sleep(1);
+
+	if ($status == 0)
+	{
+	    $smtp->quit;
+	    $smtp = smtp_connect("mail.hebcal.com");
+	}
     }
 
-#    warn "$0: unable to email $to\n" if ($status == 0);
+    print LOG join(":", time(), $status, $to,
+		   defined $args->{"zip"} 
+		   ? $args->{"zip"} : $args->{"city"}), "\n";
 }
+
+close(LOG);
+
+$smtp->quit();
+undef $smtp;
 
 Hebcal::zipcode_close_db($ZIPS);
 undef($ZIPS);
@@ -202,7 +234,7 @@ sub load_subs
 
     my $all_sql = "";
     if ($ARGV[0] ne "-all") {
-	$all_sql = "AND email_address = '$ARGV[0]'";
+	$all_sql = "AND email_address IN ('" . join("','", @ARGV) . "')";
     }
 
     my $sql = <<EOD
@@ -288,4 +320,77 @@ sub parse_config
     ($cmd,$city_descr,\%args);
 }
 
+sub smtp_connect
+{
+    my($s) = @_;
+
+    # try 3 times to avoid intermittent failures
+    for (my $i = 0; $i < 3; $i++)
+    {
+	my $smtp = Net::SMTP->new($s, Timeout => 20);
+	if ($smtp)
+	{
+	    return $smtp;
+	}
+	else
+	{
+	    my $sec = 5;
+	    warn "Could not connect to $s, retry in $sec seconds\n";
+	    sleep($sec);
+	}
+    }
+    
+    undef;
+}
+
+sub my_sendmail
+{
+    my($smtp,$return_path,$headers,$body,$verbose) = @_;
+    
+    $headers->{"X-Sender"} = "$LOGIN\@$HOSTNAME";
+    $headers->{"X-Mailer"} = "hebcal mail v$VERSION";
+    $headers->{"Message-ID"} = "<HEBCAL.$VERSION." . time() .
+	".$$\@$HOSTNAME>";
+
+    my $message = "";
+    while (my($key,$val) = each %{$headers})
+    {
+	while (chomp($val)) {}
+	$message .= "$key: $val\n";
+    }
+    $message .= "\n" . $body;
+
+    my $to = $headers->{"To"};
+    unless ($smtp->mail($return_path)) {
+        warn "smtp mail() failure for $to\n"
+	    if $verbose;
+        return 0;
+    }
+
+    unless($smtp->to($to)) {
+	warn "smtp to() failure for $to\n"
+	    if $verbose;
+	return 0;
+    }
+
+    unless($smtp->data()) {
+        warn "smtp data() failure for $to\n"
+	    if $verbose;
+        return 0;
+    }
+
+    unless($smtp->datasend($message)) {
+        warn "smtp datasend() failure for $to\n"
+	    if $verbose;
+        return 0;
+    }
+
+    unless($smtp->dataend()) {
+        warn "smtp dataend() failure for $to\n"
+	    if $verbose;
+        return 0;
+    }
+
+    1;
+}
 
