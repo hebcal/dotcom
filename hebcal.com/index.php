@@ -145,6 +145,9 @@ style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
 <!-- Begin temp holiday -->
+<span class="sm-grey">&gt;</span>&nbsp;<b><a
+href="/holidays/chanukah.html?tag=fp.tmp">Chanukah</a></b>
+<br>25 December 2005<br>(at sunset)<br><br>
 <!-- End temp holiday -->
 <span class="sm-grey">&gt;</span>&nbsp;<b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.q2">Current&nbsp;Calendar</a></b><br><?php 
