@@ -11,6 +11,10 @@ if (is_array($lines)) {
 	    $rosh_chodesh = true;
 	    break;
 	}
+	if (strstr($line, "Chanukah:") !== false) {
+	    $chanukah = true;
+	    break;
+	}
     }
 }
 unset($lines);
@@ -40,11 +44,12 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
-<span class="fpgreeting">Chag Orim Sameach!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
 <?php if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
+<?php } elseif ($chanukah) { ?>
+&nbsp; - &nbsp; <span class="fpgreeting">Chag Orim Sameach!</span>
 <?php } ?>
 </span>
 <?php
