@@ -49,7 +49,7 @@ Jewish Calendar Tools</small></td>
 <?php if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
 <?php } elseif ($chanukah) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Chag Orim Sameach!</span>
+&nbsp; - &nbsp; <span class="fpgreeting">Chag Urim Sameach!</span>
 <?php } ?>
 </span>
 <?php
