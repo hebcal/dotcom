@@ -54,9 +54,8 @@ Jewish Calendar Tools</small></td>
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
-$pattern = '/^http:\/\/(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)\/.*calend[ae]r/i';
-if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref)) {
-#if ($ref && preg_match($pattern, $ref)) {
+$pattern = '/^http:\/\/(www\.google|(\w+\.)*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)\/.*calend[ae]r/i';
+if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
     echo "<blockquote class=\"welcome\">\n";
 
     $show_amazon = true;
@@ -67,12 +66,15 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref)) {
     shuffle($cal);
     list($title,$asin,$width,$height) = $cal[0];
 
+    $amazon_dom = (isset($matches) && isset($matches[3])) ?
+	$matches[3] : "com";
+
 	echo <<<MESSAGE_END
-<a title="$title from Amazon.com"
-href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20"><img
+<a title="$title from Amazon.$amazon_dom"
+href="http://www.amazon.$amazon_dom/exec/obidos/ASIN/$asin/hebcal-20"><img
 src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
 width="$width" height="$height" hspace="8" align="right"
-alt="$title from Amazon.com"></a>
+alt="$title from Amazon.$amazon_dom"></a>
 MESSAGE_END;
     }
 
@@ -87,8 +89,8 @@ MESSAGE_END;
 	echo <<<MESSAGE_END
 <p>If you are looking for a full-color printed 2006 calendar
 with Jewish holidays, consider <a
-href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
-from Amazon.com.
+href="http://www.amazon.$amazon_dom/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
+from Amazon.$amazon_dom.
 MESSAGE_END;
     }
 
