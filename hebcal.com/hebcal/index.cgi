@@ -708,8 +708,9 @@ sub referred_by_websearch
     my $message = "";
     my $ref = $q->referer();
 
-    if (defined $ref && $ref =~ m,^http://(www\.google|search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca)/.*calend[ae]r,i)
+    if (defined $ref && $ref =~ m,^http://(www\.google|(\w+\.)*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)/.*calend[ae]r,i)
     {
+	my $tld = $3 ? $3 : "com";
 	my @ads = (
 		   ["The Jewish Calendar 5766", "0789312395", 80, 110],
 		   ["The Jewish Calendar 2006", "0883634074", 110, 80],
@@ -720,10 +721,10 @@ sub referred_by_websearch
 	$message=<<MESSAGE_END;
 <blockquote class="welcome">
 <a title="$title"
-href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20"><img
+href="http://www.amazon.$tld/exec/obidos/ASIN/$asin/hebcal-20"><img
 src="http://www.hebcal.com/i/$asin.01.TZZZZZZZ.jpg" border="0"
 width="$width" height="$height" hspace="8" align="right"
-alt="$title from Amazon.com"></a>
+alt="$title from Amazon.$tld"></a>
 
 Hebcal.com offers a free personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
@@ -733,8 +734,8 @@ href="$form_href">$form_text</a> and click the Get Calendar button.
 
 <p>If you are looking for a full-color printed 2006 calendar,
 consider <a
-href="http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
-from Amazon.com.
+href="http://www.amazon.$tld/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
+from Amazon.$tld.
 </blockquote>
 MESSAGE_END
 ;
