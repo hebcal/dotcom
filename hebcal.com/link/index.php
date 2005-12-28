@@ -51,6 +51,13 @@ if ($param["city"]) {
     $zip = htmlspecialchars($zip);
 }
 
+if (isset($param["a"]) && ($param["a"] == "1" || $param["a"] == "on")) {
+    $geo_link .= ";a=on";
+    $ashk = " checked";
+} else {
+    $ashk = "";
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -132,6 +139,10 @@ value="<?php echo $zip ?>"></label>
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m1">
 </label>
 
+<br><label for="a"><input type="checkbox"
+name="a" id="a"<?php echo $ashk ?>>
+Use Ashkenazis Hebrew transliterations</label>
+
 <input type="hidden" name="type" value="shabbat">
 
 <br>
@@ -155,6 +166,10 @@ echo HTML_Form::returnSelect("city", $entries,
 <br><label for="m2">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m2">
 </label>
+
+<br><label for="a2"><input type="checkbox"
+name="a" id="a2"<?php echo $ashk ?>>
+Use Ashkenazis Hebrew transliterations</label>
 
 <input type="hidden" name="type" value="shabbat">
 
