@@ -67,31 +67,31 @@ unless ($from) {
 
 unless (defined $to) {
     shabbat_log(0, "needto");
-    error_email($from,$err_needto);
+    error_email($err_needto);
     exit(0);
 }
 
 if ($to =~ /shabbat-subscribe\@/i) {
     shabbat_log(0, "subscribe_useweb"); 
-    error_email($from,$err_useweb);
+    error_email($err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@/i) {
     shabbat_log(0, "subscribe_useweb");
-    error_email($from,$err_useweb);
+    error_email($err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@/i) {
-    subscribe($from,lc($1));
+    subscribe(lc($1));
 } elsif ($to =~ /shabbat-unsubscribe\@/i) {
-    unsubscribe($from);
+    unsubscribe();
 } else {
     shabbat_log(0, "badto");
-    error_email($from,$err_needto);
+    error_email($err_needto);
 }
 exit(0);
 
 sub subscribe
 {
-    my($from,$encoded) = @_;
+    my($encoded) = @_;
 
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
@@ -112,6 +112,9 @@ EOD
 	$dbh->disconnect;
 	return 0;
     }
+
+    # update global addr to match the addr stored in the DB
+    $from = $email;
 
     if ($status eq "active") {
 	shabbat_log(0, "subscribe_twice");
@@ -194,7 +197,7 @@ sub my_url_escape
 
 sub unsubscribe
 {
-    my($email) = @_;
+    my $email = $from;
 
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
@@ -215,7 +218,7 @@ EOD
 
 	$dbh->disconnect;
 
-	error_email($email,$err_notsub);
+	error_email($err_notsub);
 	return 0;
     }
 
@@ -224,7 +227,7 @@ EOD
 
 	$dbh->disconnect;
 
-	error_email($email,$err_notsub);
+	error_email($err_notsub);
 	return 0;
     }
 
@@ -274,8 +277,9 @@ $site};
 
 sub error_email
 {
-    my($email,$error) = @_;
+    my($error) = @_;
 
+    my $email = $from;
     return 0 unless $email;
 
     my $addr = ($to ? $to : "shabbat-unsubscribe\@$site");
