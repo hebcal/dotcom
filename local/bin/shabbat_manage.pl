@@ -178,7 +178,7 @@ shabbat-unsubscribe\@$site
 	my $mid = $header->get("Message-Id");
 	if ($mid) {
 	    chomp($mid);
-	    $headers{"In-Reply-To"} = $mid;
+	    $headers{"References"} = $headers{"In-Reply-To"} = $mid;
 	}
 
     }
@@ -268,7 +268,7 @@ $site};
 	my $mid = $header->get("Message-Id");
 	if ($mid) {
 	    chomp($mid);
-	    $headers{"In-Reply-To"} = $mid;
+	    $headers{"References"} = $headers{"In-Reply-To"} = $mid;
 	}
     }
 
@@ -309,7 +309,7 @@ $site};
 	my $mid = $header->get("Message-Id");
 	if ($mid) {
 	    chomp($mid);
-	    $headers{"In-Reply-To"} = $mid;
+	    $headers{"References"} = $headers{"In-Reply-To"} = $mid;
 	}
     }
 
