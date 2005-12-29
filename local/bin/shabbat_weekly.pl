@@ -92,6 +92,7 @@ $unsub_url
     my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
 
     my $lighting = get_friday_candles(\@events);
+    my $msgid = $args->{"id"} . "." . time();
 
     my %headers =
 	(
@@ -103,6 +104,7 @@ $unsub_url
 	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
 	 "Errors-To" => $return_path,
 	 "Precedence" => "bulk",
+	 "Message-ID" => "<$msgid\@hebcal.com>",
 	 );
 
     # try 3 times to avoid intermittent failures
@@ -119,7 +121,7 @@ $unsub_url
 	}
     }
 
-    print LOG join(":", time(), $status, $to,
+    print LOG join(":", $msgid, $status, $to,
 		   defined $args->{"zip"} 
 		   ? $args->{"zip"} : $args->{"city"}), "\n";
 }
@@ -349,8 +351,6 @@ sub my_sendmail
     
     $headers->{"X-Sender"} = "$LOGIN\@$HOSTNAME";
     $headers->{"X-Mailer"} = "hebcal mail v$VERSION";
-    $headers->{"Message-ID"} = "<HEBCAL.$VERSION." . time() .
-	".$$\@$HOSTNAME>";
 
     my $message = "";
     while (my($key,$val) = each %{$headers})
