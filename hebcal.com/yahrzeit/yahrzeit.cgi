@@ -424,6 +424,12 @@ sub form
 	 "to calculate <b>Reb Shlomo Carlebach</b>'s yahrzeit.</p>\n");
 
     Hebcal::out_html
+	($cfg,
+	 "<p>If you know the Hebrew but not the Gregorian date, use the <a\n",
+	 "href=\"/converter/\">Hebrew Date Converter</a> to get the\n",
+	 "Gregorian date and then come back to this page.</p>\n");
+
+    Hebcal::out_html
 	($cfg, qq{<form name="f1" id="f1" method="post"\naction="$script_name">});
 
     for (my $i = 1; $i <= $count; $i++)
