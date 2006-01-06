@@ -118,6 +118,7 @@ $unsub_url
 	{
 	    $smtp->quit;
 	    $smtp = smtp_connect("mail.hebcal.com");
+	    $smtp || die "Can't reconnect to SMTP server";
 	}
     }
 
