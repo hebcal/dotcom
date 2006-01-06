@@ -477,14 +477,14 @@ sub display_json
 {
     my($items) = @_;
 
-    print "Content-Type: text/plain\015\012\015\012";
+    print "Content-Type: text/json\015\012\015\012";
 
     my $url = self_url();
     $url =~ s,/,\\/,g;
 
     my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
 
-    Hebcal::out_html($cfg, qq'var myJSONObject = {
+    Hebcal::out_html($cfg, qq'{
  "title": "$city_descr",
  "link": "$url",
  "date": "$dc_date",
