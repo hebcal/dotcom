@@ -67,14 +67,17 @@ my($items) = format_items($q,$evts);
 
 my $cache = Hebcal::cache_begin($q);
 
-if (defined $cfg && $cfg =~ /^[ijrwx]$/)
+if (defined $cfg && $cfg =~ /^[ijrw]$/ ||
+    $cfg eq "widget" || $cfg eq "json")
 {
     display_wml($items) if ($cfg eq 'w');
     display_rss($items) if ($cfg eq 'r');
-    display_javascript($items) if ($cfg  =~ /^[ijx]$/);
+    display_javascript($items) if ($cfg  =~ /^[ij]$/ || $cfg eq "widget");
+    display_json($items) if ($cfg eq "json");
 }
 else
 {
+    undef($cfg);
     display_html($items);
 }
 
@@ -470,6 +473,62 @@ qq{<?xml version="1.0"?>
 }
 
 
+sub display_json
+{
+    my($items) = @_;
+
+    print "Content-Type: text/plain\015\012\015\012";
+
+    my $url = self_url();
+    $url =~ s,/,\\/,g;
+
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
+
+    Hebcal::out_html($cfg, qq'var myJSONObject = {
+ "title": "$city_descr",
+ "link": "$url",
+ "date": "$dc_date",
+');
+
+    if (defined $latitude) {
+	Hebcal::out_html($cfg, qq' "latitude": $latitude,
+ "longitude": $longitude,
+');
+    }
+
+    Hebcal::out_html($cfg, qq' "items": [\n');
+
+    for (my $i = 0; $i < scalar(@{$items}); $i++)
+    {
+	my $subj = $items->[$i]->{'subj'};
+	if (defined $items->[$i]->{'time'}) { 
+	    $subj .= ": " . $items->[$i]->{'time'};
+	}
+
+	my $class = $items->[$i]->{'class'};
+	my $date =  $items->[$i]->{'dc:date'};
+
+	Hebcal::out_html($cfg,
+			 qq'  {
+   "title": "$subj",
+   "subject": "$class",
+   "date": "$date"');
+
+	if ($class =~ /^(parashat|holiday)$/) {
+	    my $link =  $items->[$i]->{'link'};
+	    $link =~ s,/,\\/,g;
+	    Hebcal::out_html($cfg, qq',\n   "link": "$link"');
+	}
+
+	Hebcal::out_html($cfg, "\n  }");
+	Hebcal::out_html($cfg, ",") unless $i+1 == scalar(@{$items});
+	Hebcal::out_html($cfg, "\n");
+    }
+
+    Hebcal::out_html($cfg, " ]\n}\n");
+}
+
+
 sub display_rss
 {
     my($items) = @_;
@@ -579,7 +638,7 @@ sub display_javascript
 
     my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
 
-    if ($cfg eq "i" || $cfg eq "x") {
+    if ($cfg eq "i" || $cfg eq "widget") {
 	print $q->header();
 	Hebcal::out_html
 	    ($cfg, Hebcal::start_html($q, $title, undef, undef, undef));
@@ -592,7 +651,7 @@ sub display_javascript
     my $tag;
     if ($cfg eq "i") {
 	$tag = "iframe.1c";
-    } elsif ($cfg eq "x") {
+    } elsif ($cfg eq "widget") {
 	$tag = "widget";
     } elsif ($q->param('.from')) {
 	$tag = Hebcal::url_escape($q->param('.from'));
@@ -612,7 +671,7 @@ sub display_javascript
 	    $items->[$i]->{'link'} .= "?tag=$tag";
 	}
 
-	if ($cfg eq "x" && $items->[$i]->{'link'})
+	if ($cfg eq "widget" && $items->[$i]->{'link'})
 	{
 	    $items->[$i]->{'link'} = "javascript:widget.openURL('" .
 		$items->[$i]->{'link'} . "');";
@@ -626,6 +685,12 @@ sub display_javascript
 
     if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
+
+    if ($cfg eq "widget")
+    {
+	$url = "javascript:widget.openURL('" . $url . "');";
+    }
+
     Hebcal::out_html($cfg, qq{<font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
@@ -633,7 +698,7 @@ Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 });
     }
 
-    if ($cfg eq "i" || $cfg eq "x") {
+    if ($cfg eq "i" || $cfg eq "widget") {
 	Hebcal::out_html($cfg, "</body></html>\n");
     }
 
