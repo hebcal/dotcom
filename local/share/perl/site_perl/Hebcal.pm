@@ -845,6 +845,10 @@ sub zipcode_fields($)
     $latitude =~ s/^\+//;
     $longitude =~ s/^\+//;
 
+    # remove any leading zeros
+    $latitude =~ s/^(-?)0+/$1/;
+    $longitude =~ s/^(-?)0+/$1/;
+
     # in hebcal, negative longitudes are EAST (this is backwards)
     my $long_hebcal = $longitude * -1.0;
 
