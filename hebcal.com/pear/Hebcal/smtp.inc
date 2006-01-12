@@ -3,6 +3,9 @@
 // $Id$
 // $Source: /Users/mradwin/hebcal-copy/hebcal.com/pear/Hebcal/RCS/smtp.inc,v $
 
+$incpath = get_include_path();
+set_include_path("$incpath:/home/mradwin/web/hebcal.com/pear");
+
 require "Mail.php";
 require "Mail/RFC822.php";
 require "Net/SMTP.php";
