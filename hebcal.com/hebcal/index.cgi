@@ -43,18 +43,18 @@
 ########################################################################
 
 # optimize common case
-#BEGIN {
-#    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}) {
-#	if (open(F,"/home/mradwin/web/hebcal.com/hebcal/default.html")) {
-#	    print "Content-Type: text/html\n\n";
-#	    while(read(F,$_,8192)) {
-#		print;
-#	    }
-#	    close(F);
-#	    exit(0);
-#	}
-#    }
-#}
+BEGIN {
+    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}) {
+	if (open(F,"/home/mradwin/web/hebcal.com/hebcal/default.html")) {
+	    print "Content-Type: text/html\n\n";
+	    while(read(F,$_,8192)) {
+		print;
+	    }
+	    close(F);
+	    exit(0);
+	}
+    }
+}
 
 use lib "/home/mradwin/local/share/perl";
 use lib "/home/mradwin/local/share/perl/site_perl";
