@@ -6,8 +6,8 @@ eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
 # $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_bounce.pl,v $
 # $Id$
 
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use DBI ();
