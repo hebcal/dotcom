@@ -130,7 +130,7 @@ EOD
 sub shabbat_log
 {
     my($status,$code,$to) = @_;
-    if (open(LOG, ">>$ENV{'HOME'}/.shabbat-log"))
+    if (open(LOG, ">>$ENV{'HOME'}/local/var/log/subscribers.log"))
     {
 	my $t = time();
 	print LOG "status=$status to=$to code=$code time=$t\n";
