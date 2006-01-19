@@ -13,12 +13,30 @@ use MIME::Base64 ();
 use Time::Local ();
 use DBI ();
 use Net::SMTP ();
-
-die "usage: $0 {-all | address ...}\n" unless @ARGV;
+use Getopt::Long ();
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)\.(\d+)/) {
     $VERSION = "$1.$2";
+}
+
+my $opt_all = 0;
+my $opt_help;
+my $opt_verbose = 0;
+
+if (!Getopt::Long::GetOptions
+    ("help|h" => \$opt_help,
+     "all" => \$opt_all,
+     "verbose|v" => \$opt_verbose)) {
+    usage();
+}
+
+$opt_help && usage();
+usage() if !@ARGV && !$opt_all;
+
+my %SUBS = load_subs();
+if (! keys(%SUBS) && !$opt_all) {
+    die "$ARGV[0]: not found.\n";
 }
 
 my($LOGIN) = getlogin() || getpwuid($<) || "UNKNOWN";
@@ -36,11 +54,6 @@ my $subject = strftime("[shabbat] %b %d",
 
 my $ZIPS = Hebcal::zipcode_open_db("/home/mradwin/web/hebcal.com/hebcal/zips99.db");
 
-my(%SUBS) = load_subs();
-if (! keys(%SUBS) && ($ARGV[0] ne "-all")) {
-    die "$ARGV[0]: not found.\n";
-}
-
 # walk through subs to make sure there are no errors first
 while (my($to,$cfg) = each(%SUBS))
 {
@@ -51,12 +64,19 @@ while (my($to,$cfg) = each(%SUBS))
 
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
 		      $ENV{"HOME"}, $year, $mon+1, $mday);
-if (open(LOG, "<$logfile")) {
-    while(<LOG>) {
-	my($msgid,$status,$to,$loc) = split(/:/);
-	delete $SUBS{$to} if $status;
+if ($opt_all) {
+    if (open(LOG, "<$logfile")) {
+	my $count;
+	while(<LOG>) {
+	    my($msgid,$status,$to,$loc) = split(/:/);
+	    if ($status) {
+		delete $SUBS{$to};
+		$count++;
+	    }
+	}
+	close(LOG);
+	warn "Skipping $count users from $logfile\n" if $opt_verbose;
     }
-    close(LOG);
 }
 open(LOG, ">>$logfile") || die "$logfile: $!";
 
@@ -118,11 +138,12 @@ $unsub_url
     my $status = 0;
     for (my $i = 0; $status == 0 && $i < 3; $i++)
     {
-	$status = my_sendmail($smtp,$return_path,\%headers,$body,1);
+	$status = my_sendmail($smtp,$return_path,\%headers,$body);
 	sleep(1);
 
 	if ($status == 0)
 	{
+	    warn "mail to $to failed, reconnecting...\n" if $opt_verbose;
 	    $smtp->quit;
 	    $smtp = smtp_connect("mail.hebcal.com");
 	    $smtp || die "Can't reconnect to SMTP server";
@@ -243,7 +264,7 @@ sub load_subs
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $all_sql = "";
-    if ($ARGV[0] ne "-all") {
+    if (!$opt_all) {
 	$all_sql = "AND email_address IN ('" . join("','", @ARGV) . "')";
     }
 
@@ -262,6 +283,7 @@ EOD
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
+    my $count = 0;
     while (my($email,$id,$zip,$city,$havdalah) = $sth->fetchrow_array) {
 	my $cfg = "id=$id;m=$havdalah";
 	if ($zip) {
@@ -270,9 +292,13 @@ EOD
 	    $cfg .= ";city=$city";
 	}
 	$subs{$email} = $cfg;
+	$count++;
     }
 
     $dbh->disconnect;
+
+    warn "Loaded $count users\n" if $opt_verbose;
+
     %subs;
 }
 
@@ -355,7 +381,7 @@ sub smtp_connect
 
 sub my_sendmail
 {
-    my($smtp,$return_path,$headers,$body,$verbose) = @_;
+    my($smtp,$return_path,$headers,$body) = @_;
     
     $headers->{"X-Sender"} = "$LOGIN\@$HOSTNAME";
     $headers->{"X-Mailer"} = "hebcal mail v$VERSION";
@@ -371,34 +397,38 @@ sub my_sendmail
     my $to = $headers->{"To"};
     unless ($smtp->mail($return_path)) {
         warn "smtp mail() failure for $to\n"
-	    if $verbose;
+	    if $opt_verbose;
         return 0;
     }
 
     unless($smtp->to($to)) {
 	warn "smtp to() failure for $to\n"
-	    if $verbose;
+	    if $opt_verbose;
 	return 0;
     }
 
     unless($smtp->data()) {
         warn "smtp data() failure for $to\n"
-	    if $verbose;
+	    if $opt_verbose;
         return 0;
     }
 
     unless($smtp->datasend($message)) {
         warn "smtp datasend() failure for $to\n"
-	    if $verbose;
+	    if $opt_verbose;
         return 0;
     }
 
     unless($smtp->dataend()) {
         warn "smtp dataend() failure for $to\n"
-	    if $verbose;
+	    if $opt_verbose;
         return 0;
     }
 
     1;
+}
+
+sub usage {
+    die "usage: $0 {-all | address ...}\n";
 }
 
