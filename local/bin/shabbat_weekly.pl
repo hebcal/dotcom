@@ -3,8 +3,8 @@
 # $Source: /Users/mradwin/hebcal-copy/local/bin/RCS/shabbat_weekly.pl,v $
 # $Id$
 
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use Hebcal ();
@@ -52,7 +52,7 @@ my $sat_year = (localtime($saturday))[5] + 1900;
 my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
-my $ZIPS = Hebcal::zipcode_open_db("/home/mradwin/web/hebcal.com/hebcal/zips99.db");
+my $ZIPS = Hebcal::zipcode_open_db("/home/hebcal/web/hebcal.com/hebcal/zips99.db");
 
 # walk through subs to make sure there are no errors first
 while (my($to,$cfg) = each(%SUBS))
@@ -306,7 +306,7 @@ sub parse_config
 {
     my($config) = @_;
 
-    my($cmd) = "/home/mradwin/web/hebcal.com/bin/hebcal";
+    my($cmd) = "/home/hebcal/web/hebcal.com/bin/hebcal";
 
     my %args;
     foreach my $kv (split(/;/, $config)) {
