@@ -51,6 +51,13 @@ while (my($to,$cfg) = each(%SUBS))
 
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
 		      $ENV{"HOME"}, $year, $mon+1, $mday);
+if (open(LOG, "<$logfile")) {
+    while(<LOG>) {
+	my($msgid,$status,$to,$loc) = split(/:/);
+	delete $SUBS{$to} if $status;
+    }
+    close(LOG);
+}
 open(LOG, ">>$logfile") || die "$logfile: $!";
 
 my $smtp = smtp_connect("mail.hebcal.com");
