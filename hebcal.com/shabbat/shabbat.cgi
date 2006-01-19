@@ -67,8 +67,8 @@ my($items) = format_items($q,$evts);
 
 my $cache = Hebcal::cache_begin($q);
 
-if (defined $cfg && $cfg =~ /^[ijrw]$/ ||
-    $cfg eq "widget" || $cfg eq "json")
+if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
+		     $cfg eq "widget" || $cfg eq "json"))
 {
     display_wml($items) if ($cfg eq 'w');
     display_rss($items) if ($cfg eq 'r');
