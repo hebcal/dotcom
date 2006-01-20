@@ -49,8 +49,8 @@
 
 require 5.008_001;
 
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use utf8;
