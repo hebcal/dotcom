@@ -42,15 +42,15 @@
 
 require 5.008_001;
 
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use open ":utf8";
 use Hebcal ();
 use Date::Calc ();
 
-my $WEBDIR = '/home/mradwin/web/hebcal.com';
+my $WEBDIR = '/home/hebcal/web/hebcal.com';
 my $HEBCAL = "$WEBDIR/bin/hebcal";
 
 my($syear,$smonth,$sday) = upcoming_dow(6); # saturday
