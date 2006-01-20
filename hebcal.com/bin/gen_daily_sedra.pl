@@ -40,15 +40,15 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use Hebcal ();
 use Date::Calc ();
 use Getopt::Std ();
 
-my $WEBDIR = "/home/mradwin/web/hebcal.com";
+my $WEBDIR = "/home/hebcal/web/hebcal.com";
 my $HEBCAL = "$WEBDIR/bin/hebcal";
 
 $0 =~ s,.*/,,;  # basename
