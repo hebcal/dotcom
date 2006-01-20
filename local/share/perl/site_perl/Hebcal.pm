@@ -45,8 +45,8 @@ package Hebcal;
 use strict;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
 use DB_File;
 use XML::Simple ();
@@ -59,8 +59,8 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
-my $SEDROT_XML = "/home/mradwin/web/hebcal.com/dist/aliyah.xml";
-my $HOLIDAYS_XML = "/home/mradwin/web/hebcal.com/dist/festival.xml";
+my $SEDROT_XML = "/home/hebcal/web/hebcal.com/dist/aliyah.xml";
+my $HOLIDAYS_XML = "/home/hebcal/web/hebcal.com/dist/festival.xml";
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
