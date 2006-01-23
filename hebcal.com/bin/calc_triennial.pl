@@ -339,6 +339,7 @@ sub write_index_page
 <html><head><title>Hebcal: Torah Readings</title>
 <base href="http://www.hebcal.com/sedrot/" target="_top">
 <link rel="stylesheet" href="/style.css" type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/sedrot/index.xml">
 </head>
 <body>
 <table width="100%" class="navbar">
@@ -349,7 +350,10 @@ Torah Readings
 <td align="right"><small><a
 href="/search/">Search</a></small>
 </td></tr></table>
-<h1>Torah Readings</h1>
+<h1><a href="http://www.hebcal.com/sedrot/index.xml"><img
+src="/i/xml.gif" border="0" alt="View the raw XML source" align="right"
+width="36" height="14"></a>
+Torah Readings</h1>
 <p>Readings for future years:
 <a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on">$hy1</a> -
 <a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on">$hy2</a> -
@@ -542,6 +546,7 @@ sub write_sedra_page
 <base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
 <meta name="keywords" content="$keyword,parsha,parshat,parashat,parshas,hashavua,hashavuah,leyning,aliya,aliyah,aliyot,torah,haftarah,haftorah,drash">
 <link rel="stylesheet" href="/style.css" type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/sedrot/index.xml">
 EOHTML
 ;
 
