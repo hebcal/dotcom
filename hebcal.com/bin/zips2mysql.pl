@@ -1,11 +1,13 @@
 #!/usr/local/bin/perl -w
 
 ########################################################################
-# zips2db.pl - generate zips.db file from Gazeteer zips.txt
+#
+# zips2mysql.pl - load MySQL with Gazeteer zips.txt
 # part of the Hebcal Interactive Jewish Calendar, www.hebcal.com
+#
 # $Id$
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2006  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
