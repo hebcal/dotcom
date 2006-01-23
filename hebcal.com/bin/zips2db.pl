@@ -1,8 +1,10 @@
 #!/usr/local/bin/perl -w
 
 ########################################################################
+#
 # zips2db.pl - generate zips.db file from Gazeteer zips.txt
 # part of the Hebcal Interactive Jewish Calendar, www.hebcal.com
+#
 # $Id$
 #
 # Copyright (c) 2005  Michael J. Radwin.
