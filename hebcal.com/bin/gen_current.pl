@@ -49,6 +49,7 @@ use strict;
 use open ":utf8";
 use Hebcal ();
 use Date::Calc ();
+use POSIX qw(strftime);
 
 my $WEBDIR = '/home/hebcal/web/hebcal.com';
 my $HEBCAL = "$WEBDIR/bin/hebcal";
@@ -71,11 +72,37 @@ for (my $i = 0; $i < @events; $i++)
 	    my $stime = sprintf("%02d %s %d",
 				$sday, Date::Calc::Month_to_Text($smonth), $syear);
 	    open(OUT,">$outfile") || die;
-	    $parsha =~ s/ /&nbsp;/g;
+	    my $parsha2 = $parsha;
+	    $parsha2 =~ s/ /&nbsp;/g;
 	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
-	    print OUT "href=\"$href?tag=fp.ql\">$parsha</a></b><br>$stime";
+	    print OUT "href=\"$href?tag=fp.ql\">$parsha2</a></b><br>$stime";
 	    close(OUT);
 	    $wrote_parsha = 1;
+
+	    my $parsha_date = sprintf("%04d-%02d-%02d", $syear,$smonth,$sday)
+		. "T00:00:00-00:00";
+	    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time()))
+		. "-00:00";
+	    open(RSS,">$WEBDIR/sedrot/index.xml") || die;
+	    print RSS qq{<?xml version="1.0" ?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+<title>Hebcal Parsha of the Week</title>
+<link>http://www.hebcal.com/sedrot/</link>
+<description>Weekly Torah Readings from Hebcal.com</description>
+<dc:language>en-us</dc:language>
+<dc:rights>Copyright &#169; $syear Michael J. Radwin. All rights reserved.</dc:rights>
+<dc:date>$dc_date</dc:date>
+<item>
+<title>$parsha</title>
+<link>http://www.hebcal.com$href?tag=rss</link>
+<description>$stime</description>
+<dc:date>$parsha_date</dc:date> 
+</item>
+</channel>
+</rss>
+};
+	    close(RSS);
 	}
 
 	last;
