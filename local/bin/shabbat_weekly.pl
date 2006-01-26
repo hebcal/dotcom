@@ -116,6 +116,8 @@ if ($opt_all) {
     }
 }
 open(LOG, ">>$logfile") || die "$logfile: $!";
+select LOG;
+$| = 1;
 
 my $smtp = smtp_connect("mail.hebcal.com");
 $smtp || die "Can't connect to SMTP server";
@@ -124,6 +126,7 @@ my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 $smtp->hello($HOSTNAME);
 
+my $count = 0;
 while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
@@ -190,9 +193,11 @@ $unsub_url
     print LOG join(":", $msgid, $status, $to,
 		   defined $args->{"zip"} 
 		   ? $args->{"zip"} : $args->{"city"}), "\n";
+    $count++;
 }
 
 close(LOG);
+warn "Successfully mailed $count users\n" if $opt_verbose;
 
 $smtp->quit();
 undef $smtp;
