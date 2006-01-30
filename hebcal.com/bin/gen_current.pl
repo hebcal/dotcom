@@ -99,7 +99,7 @@ for (my $i = 0; $i < @events; $i++)
 <link>http://www.hebcal.com/sedrot/</link>
 <description>Weekly Torah Readings from Hebcal.com</description>
 <language>en-us</language>
-<dc:rights>Copyright &#169; $syear Michael J. Radwin. All rights reserved.</dc:rights>
+<copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$parsha</title>
