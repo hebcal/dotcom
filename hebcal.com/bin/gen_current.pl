@@ -81,8 +81,16 @@ for (my $i = 0; $i < @events; $i++)
 
 	    my $parsha_date = sprintf("%04d-%02d-%02d", $syear,$smonth,$sday)
 		. "T00:00:00-00:00";
-	    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time()))
-		. "-00:00";
+	    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
+				   gmtime(time()));
+
+	    my $dow = $Hebcal::DoW[Hebcal::get_dow($syear, $smonth, $sday)];
+	    my $parsha_pubDate = sprintf("%s, %02d %s %d 00:00:00 GMT",
+					 $dow,
+					 $sday,
+					 Date::Calc::Month_to_Text($smonth),
+					 $syear);
+
 	    open(RSS,">$WEBDIR/sedrot/index.xml") || die;
 	    print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -90,14 +98,15 @@ for (my $i = 0; $i < @events; $i++)
 <title>Hebcal Parsha of the Week</title>
 <link>http://www.hebcal.com/sedrot/</link>
 <description>Weekly Torah Readings from Hebcal.com</description>
-<dc:language>en-us</dc:language>
+<language>en-us</language>
 <dc:rights>Copyright &#169; $syear Michael J. Radwin. All rights reserved.</dc:rights>
-<dc:date>$dc_date</dc:date>
+<lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$parsha</title>
 <link>http://www.hebcal.com$href?tag=rss</link>
 <description>$stime</description>
 <dc:date>$parsha_date</dc:date> 
+<pubDate>$parsha_pubDate</pubDate>
 </item>
 </channel>
 </rss>
