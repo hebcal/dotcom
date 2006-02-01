@@ -136,6 +136,9 @@ sub get_candidates
 sub deactivate_subs
 {
     my($dbh) = @_;
+
+    return undef unless @ids;
+
     foreach my $e (@addrs)
     {
 	my $sql = <<EOD
