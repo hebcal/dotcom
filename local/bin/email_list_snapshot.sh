@@ -46,6 +46,7 @@ HCHOME=/home/hebcal
   --host=mysql.hebcal.com --user=mradwin_hebcal --password=xxxxxxxx \
   hebcal1 hebcal_shabbat_email \
   > $HCHOME/local/etc/hebcalsubs.sql.tmp && \
+nice /usr/bin/co -q -l $HCHOME/local/etc/hebcalsubs.sql && \
 /bin/mv $HCHOME/local/etc/hebcalsubs.sql.tmp $HCHOME/local/etc/hebcalsubs.sql && \
-nice /usr/bin/ci -q -m'daily checkin' -l $HCHOME/local/etc/hebcalsubs.sql
+nice /usr/bin/ci -q -m'daily checkin' -u $HCHOME/local/etc/hebcalsubs.sql
 
