@@ -100,7 +100,7 @@ while (my($to,$cfg) = each(%SUBS))
 }
 
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
-		      $ENV{"HOME"}, $year, $mon+1, $mday);
+		      "/home/hebcal", $year, $mon+1, $mday);
 if ($opt_all) {
     if (open(LOG, "<$logfile")) {
 	my $count;
