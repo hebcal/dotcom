@@ -1,4 +1,6 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
+
+# no warnings -- Mail::Delivery::BounceParser has tons of undef
 
 ########################################################################
 #
