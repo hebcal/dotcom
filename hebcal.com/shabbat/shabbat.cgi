@@ -4,7 +4,7 @@
 # 1-Click Shabbat generates weekly Shabbat candle lighting times and
 # Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2006  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -538,7 +538,7 @@ sub display_rss
     my($url) = self_url();
     my $title = '1-Click Shabbat: ' . $city_descr;
 
-    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
+    my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
     my($this_year) = (localtime)[5];
     $this_year += 1900;
@@ -551,9 +551,9 @@ xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
 <title>$title</title>
 <link>$url</link>
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
-<dc:language>en-us</dc:language>
-<dc:rights>Copyright &#169; $this_year Michael J. Radwin. All rights reserved.</dc:rights>
-<dc:date>$dc_date</dc:date>
+<language>en-us</language>
+<copyright>Copyright (c) $this_year Michael J. Radwin. All rights reserved.</copyright>
+<lastBuildDate>$lastBuildDate</lastBuildDate>
 <!-- $cmd_pretty -->
 });
 
@@ -765,8 +765,8 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
     $url .= ';tag=1c';
 
-    Hebcal::out_html($cfg,"<p><span class=\"sm-grey\">&gt;</span>\n",
-		      "See all of <a href=\"$url\">this\n",
+    Hebcal::out_html($cfg,"<p><ul class=\"gtl\">\n",
+		      "<li>See all of <a\nhref=\"$url\">this\n",
 		      "month's calendar</a>\n");
 
     # Fridge calendar
@@ -776,13 +776,14 @@ sub display_html
     } else {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
-    Hebcal::out_html($cfg,"|\nprintable page of <a href=\"$url\">this year's times</a>\n",
+    Hebcal::out_html($cfg,"| printable page of <a\n",
+		     "href=\"$url\">this year's times</a>\n",
 		     "(post it on your refrigerator)\n");
 
     # Mac OS X
     $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
-    Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
-		     "Mac OS X users: <a href=\"$url\">Dashboard Widget</a>\n",
+    Hebcal::out_html($cfg,"<li>",
+		     "Mac OS X users: <a\nhref=\"$url\">Dashboard Widget</a>\n",
 		     "by Mark Saper &nbsp;<b class=\"hl\">NEW!</b>\n");
 
 
@@ -799,8 +800,8 @@ sub display_html
     $url .= "&amp;m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    Hebcal::out_html($cfg,"<br><span class=\"sm-grey\">&gt;</span>\n",
-		      "Email: <a href=\"$url\">subscribe</a>\n",
+    Hebcal::out_html($cfg,"<li>",
+		      "Email: <a\nhref=\"$url\">subscribe</a>\n",
 		      "to weekly candle lighting times\n");
 
     # Synagogues link
@@ -814,11 +815,10 @@ sub display_html
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
     $url .= "&amp;type=shabbat";
 
-    Hebcal::out_html($cfg, "<br>");
-    Hebcal::out_html($cfg,"<span class=\"sm-grey\">&gt;</span>\n",
-		      "Synagogues: <a href=\"$url\">include</a>\n",
+    Hebcal::out_html($cfg,"<li>",
+		      "Synagogues: <a\nhref=\"$url\">include</a>\n",
 		      "1-Click Shabbat candle-lighting times on your\n",
-		      "web site</p>\n");
+		      "web site\n</ul><p>");
  
     form($cfg,0,'','');
 }
