@@ -103,71 +103,87 @@ MESSAGE_END;
 <?php } ?>
 <tr><td valign="top">
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
-<span class="sm-grey">&gt;</span>
+<ul class="gtl">
+<li>
 generate a calendar of Jewish holidays for any year 0001-9999
-<br><span class="sm-grey">&gt;</span>
+<li>
 customize candle lighting times to your zip code, city, or latitude/longitude
-<br><span class="sm-grey">&gt;</span>
+<li>
 export to <a href="/help/import.html#dba">Palm</a>,
 <a href="/help/import.html#csv">Outlook</a>, and
 <a href="/help/import.html#ical">iCal</a>
+</ul>
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
-<span class="sm-grey">&gt;</span>
+<ul class="gtl">
+<li>
 convert between Hebrew and Gregorian dates
-<br><span class="sm-grey">&gt;</span>
+<li>
 find out Torah reading for any date in the future
+</ul>
 <h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
-<span class="sm-grey">&gt;</span>
+<ul class="gtl">
+<li>
 Shabbat candle lighting times and Torah Readings, updated weekly
-<br><span class="sm-grey">&gt;</span>
+<li>
 <a href="/email/?tag=fp">Subscribe by Email</a> |
 <a href="/link/?type=shabbat&amp;tag=fp">Add Shabbat times to your synagogue
 website</a>
-<br><span class="sm-grey">&gt;</span>
+<li>
 <a href="http://www.apple.com/downloads/dashboard/reference/hebcal.html">Mac
 OS X Dashboard Widget</a> by Mark Saper
 &nbsp;
 <b class="hl">NEW!</b>
+</ul>
 <h4><a href="/holidays/">Jewish Holidays</a></h4>
-<span class="sm-grey">&gt;</span>
+<ul class="gtl">
+<li>
 Dates for the next few years and special Torah readings
+</ul>
 <h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
 Calendar</a></h4>
-<span class="sm-grey">&gt;</span>
+<ul class="gtl">
+<li>
 generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries
+</ul>
 <h4><a href="/sedrot/">Torah Readings</a></h4>
-<span class="sm-grey">&gt;</span>
+<ul class="gtl">
+<li>
 aliyah-by-aliyah breakdown for weekly parshiyot
+</ul>
 <h4>About Us</h4>
-<a href="/help/">Help</a>
-<br><a href="/news/">News</a>
-<br><a href="/privacy/">Privacy Policy</a>
-<br><a href="/search/">Search</a>
-<br><a href="/donations/">Donate</a>
-<br><a href="/contact/">Contact Information</a>
+<ul class="gtl">
+<li><a href="/news/">News</a>
+<li><a href="/privacy/">Privacy Policy</a>
+<li><a href="/contact/">Contact Information</a>
+<li><a href="/donations/">Donate</a>
+<li><a href="/search/">Site Search</a>
+<li><a href="/help/">Help and Frequently Asked Questions</a>
+</ul>
 </td>
 <td>&nbsp;&nbsp;</td>
 <td valign="top" bgcolor="#ffddaa"
 style="padding-left: 10px; padding-right: 5px">
 <h4>Quick Links</h4>
 <hr noshade size="1">
+<ul class="gtl">
 <!-- Begin temp holiday -->
 <!-- End temp holiday -->
-<span class="sm-grey">&gt;</span>&nbsp;<b><a
+<li><b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.q2">Current&nbsp;Calendar</a></b><br><?php 
   echo date("F Y");
   include("./holiday.inc");
   include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
 <!-- End temp holiday2 -->
-<br><span class="sm-grey">&gt;</span>&nbsp;<b>Major&nbsp;Holidays</b><br>for
+<br><li><b>Major&nbsp;Holidays</b><br>for
 <a href="/hebcal/?v=1;year=2006;month=x;nh=on;tag=fp.ql">2006</a> |
 <a href="/hebcal/?v=1;year=5766;yt=H;month=x;nh=on;tag=fp.ql">5766</a><br>
+</ul>
 <br><hr noshade size="1">
 <form action="/shabbat/">
 <input type="hidden" name="geo" value="zip">
-<span class="sm-grey">&gt;</span>&nbsp;<b>Candle lighting</b>
+<b>Candle lighting</b>
 <small>
 <br><label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5"
