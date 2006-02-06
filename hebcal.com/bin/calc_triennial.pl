@@ -677,17 +677,16 @@ EOHTML
 					 $sp_verse{$fest},1);
 		print OUT2 <<EOHTML;
 <br>On <b>$fest</b><br>
-$info<br>
+$info
+<ul class="tiny gtl">
 EOHTML
 ;
 		foreach my $stime2 (@{$sp_dates{$fest}}) {
 		    $stime2 =~ s/-/ /g;
-		    print OUT2 <<EOHTML;
-&nbsp;&nbsp<span class="tiny"><span class="sm-grey">&gt;</span>
-$stime2</span><br>
-EOHTML
-;
+		    print OUT2 "<li>$stime2\n";
 		}
+
+		print OUT2 "</ul>\n";
 	    }
 	}
     }
@@ -745,7 +744,7 @@ EOHTML
 		    print OUT2 <<EOHTML;
 When Parashat $h coincides with a special Shabbat, we read a
 different Haftarah:
-<ul>
+<ul class="gtl">
 EOHTML
 ;
 		    $did_special = 1;
@@ -774,7 +773,7 @@ EOHTML
 
     if ($has_drash)
     {
-	print OUT2 qq{<h3><a name="drash"></a>Commentary</h3>\n<ul>\n};
+	print OUT2 qq{<h3><a name="drash"></a>Commentary</h3>\n<ul class="gtl">\n};
     }
 
     if ($drash_jts)
@@ -815,7 +814,7 @@ EOHTML
 	print OUT2 <<EOHTML;
 <h3><a name="dates"></a>List of Dates</h3>
 Parashat $h is read in the Diaspora on:
-<ul>
+<ul class="gtl">
 EOHTML
 	;
 	foreach my $stime (@{$read_on->{$h}}) {
