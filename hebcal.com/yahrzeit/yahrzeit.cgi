@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2006  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -337,10 +337,9 @@ my $numEntries = scalar(@events);
 
 if ($numEntries > 0) {
     Hebcal::out_html($cfg,
-		      qq{<p class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm &amp; Outlook</a>
-<br><span class="sm-grey">&gt;</span>
-<a href="#form">Enter more dates and names</a></p>\n});
+		      qq{<p class="goto"><ul class="gtl">
+<li><a href="#export">Export calendar to Palm &amp; Outlook</a>
+<li><a href="#form">Enter more dates and names</a></ul></p>\n});
 
     # http://yizkor.ort.org/html/pp-lighting.shtml
     Hebcal::out_html($cfg,
