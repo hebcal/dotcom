@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2006  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -953,12 +953,12 @@ sub results_page
     if ($numEntries > 0)
     {
 	Hebcal::out_html(undef,
-qq{<p class="goto"><span class="sm-grey">&gt;</span>
-<a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>});
+qq{<p class="goto"><ul class="gtl">
+<li><a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>});
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
 	    Hebcal::out_html(undef,
-	    "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "\n<li>",
 	    "<a href=\"", Hebcal::self_url($q, {"v" => 0, "tag" => "cal.cust"}),
 	    "\">Customize\ncalendar options</a>");
 	}
@@ -981,7 +981,7 @@ qq{<p class="goto"><span class="sm-grey">&gt;</span>
 	    $url .= "&amp;tag=interactive";
 
 	    Hebcal::out_html(undef,
-	    "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "\n<li>",
 	    "<a href=\"$url\">Subscribe\nto weekly candle lighting times via email</a>");
 
 	    # Fridge
@@ -1010,12 +1010,12 @@ qq{<p class="goto"><span class="sm-grey">&gt;</span>
 	    $url .= ";tag=interactive";
 
 	    Hebcal::out_html(undef,
-	    "<br>\n<span class=\"sm-grey\">&gt;</span>\n",
+	    "\n<li>",
 	    "<a href=\"$url\">Printable\npage of candle-lighting times for $hyear</a>");
 #	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
-	Hebcal::out_html(undef, "</p>\n");
+	Hebcal::out_html(undef, "\n</ul></p>\n");
     }
     else
     {    
