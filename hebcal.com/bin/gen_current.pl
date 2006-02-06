@@ -74,7 +74,7 @@ for (my $i = 0; $i < @events; $i++)
 	    open(OUT,">$outfile") || die;
 	    my $parsha2 = $parsha;
 	    $parsha2 =~ s/ /&nbsp;/g;
-	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
+	    print OUT "\n<br><br><li><b><a\n";
 	    print OUT "href=\"$href?tag=fp.ql\">$parsha2</a></b><br>$stime";
 	    close(OUT);
 	    $wrote_parsha = 1;
@@ -171,7 +171,7 @@ for (my $i = 0; $i < @events; $i++)
 				$Hebcal::MoY_long{$month},
 				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 	    $holiday =~ s/ /&nbsp;/g;
-	    print OUT "<br><br><span class=\"sm-grey\">&gt;</span>&nbsp;<b><a\n";
+	    print OUT "\n<br><br><li><b><a\n";
 	    print OUT "href=\"$href?tag=fp.ql\">$holiday</a></b><br>$stime\n";
 	}
     }
