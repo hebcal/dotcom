@@ -128,7 +128,7 @@ synagogue's web page.</p>
 
 <table cellpadding="8"><tr><td class="box">
 <h4>Zip Code</h4>
-
+<br>
 <form action="/link/" method="get">
 <input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
@@ -139,17 +139,20 @@ value="<?php echo $zip ?>"></label>
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m1">
 </label>
 
-<br><label for="a"><input type="checkbox"
+<br>&nbsp;&nbsp;<span class="tiny">(enter "0" to turn off Havdalah times)</span>
+
+<br><br><label for="a"><input type="checkbox"
 name="a" id="a"<?php echo $ashk ?>>
 Use Ashkenazis Hebrew transliterations</label>
 
 <input type="hidden" name="type" value="shabbat">
 
-<br>
+<br><br>
 <input type="submit" value="Get new link">
 </form>
 </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="box">
 <h4>Major City</h4>
+<br>
 <form name="f2" id="f2" action="/link/">
 <input type="hidden" name="geo" value="city">
 <label for="city">Closest City:
@@ -167,13 +170,15 @@ echo HTML_Form::returnSelect("city", $entries,
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m2">
 </label>
 
-<br><label for="a2"><input type="checkbox"
+<br>&nbsp;&nbsp;<span class="tiny">(enter "0" to turn off Havdalah times)</span>
+
+<br><br><label for="a2"><input type="checkbox"
 name="a" id="a2"<?php echo $ashk ?>>
 Use Ashkenazis Hebrew transliterations</label>
 
 <input type="hidden" name="type" value="shabbat">
 
-<br>
+<br><br>
 <input type="submit" value="Get new link">
 </form>
 </td></tr></table>
