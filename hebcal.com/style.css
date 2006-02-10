@@ -31,6 +31,19 @@ H1, H2, H3, H4, H5, H6 {
  color: #666666;
 }
 
+ul.gtl {
+ margin: 0;
+ padding: 0;
+ list-style: none;
+}
+
+.gtl li:before {
+ content: "> ";
+ margin-right: 2px;
+ color: #999;
+ font-size: xx-small;
+}
+
 .sm-grey {
  font-size: xx-small;
  color: #999999;
