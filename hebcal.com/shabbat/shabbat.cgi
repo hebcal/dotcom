@@ -563,10 +563,17 @@ xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
 	if (defined $items->[$i]->{'time'}) { 
 	    $subj .= ": " . $items->[$i]->{'time'};
 	}
+
+	my $link = $items->[$i]->{'link'};
+	if ($link =~ /\.html$/)
+	{
+	    $link .= "?tag=rss";
+	}
+
 	Hebcal::out_html($cfg, 
 qq{<item>
 <title>$subj</title>
-<link>$items->[$i]->{'link'}</link>
+<link>$link</link>
 <description>$items->[$i]->{'date'}</description>
 <dc:subject>$items->[$i]->{'class'}</dc:subject>
 <dc:date>$items->[$i]->{'dc:date'}</dc:date> 
