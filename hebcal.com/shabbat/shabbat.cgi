@@ -135,6 +135,14 @@ sub format_items
 			$hour + 12,$min,0,
 			$tz > 0 ? "+" : "-",
 			abs($tz));
+
+	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
+	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d00",
+				       $dow, $mday,
+				       $Hebcal::MoY_short[$mon - 1],
+				       $year, $hour + 12, $min,
+				       $tz > 0 ? "+" : "-",
+				       abs($tz));
 	}
 	else
 	{
@@ -142,6 +150,14 @@ sub format_items
 	    $item{'dc:date'} .= sprintf("T00:00:00%s%02d:00",
 					$tz > 0 ? "+" : "-",
 					abs($tz));
+	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
+	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 %s%02d00",
+				       $dow,
+				       $mday,
+				       $Hebcal::MoY_short[$mon - 1],
+				       $year,
+				       $tz > 0 ? "+" : "-",
+				       abs($tz));
 	}
 
 	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
@@ -545,8 +561,7 @@ sub display_rss
 
     Hebcal::out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
-xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
 <channel>
 <title>$title</title>
 <link>$url</link>
@@ -575,8 +590,8 @@ qq{<item>
 <title>$subj</title>
 <link>$link</link>
 <description>$items->[$i]->{'date'}</description>
-<dc:subject>$items->[$i]->{'class'}</dc:subject>
-<dc:date>$items->[$i]->{'dc:date'}</dc:date> 
+<category>$items->[$i]->{'class'}</category>
+<pubDate>$items->[$i]->{'pubDate'}</pubDate> 
 });
 
 	if ($items->[$i]->{'class'} eq "candles" && defined $latitude) {
