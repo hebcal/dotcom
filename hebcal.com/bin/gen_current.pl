@@ -79,8 +79,6 @@ for (my $i = 0; $i < @events; $i++)
 	    close(OUT);
 	    $wrote_parsha = 1;
 
-	    my $parsha_date = sprintf("%04d-%02d-%02d", $syear,$smonth,$sday)
-		. "T00:00:00-00:00";
 	    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
 				   gmtime(time()));
 
@@ -88,12 +86,12 @@ for (my $i = 0; $i < @events; $i++)
 	    my $parsha_pubDate = sprintf("%s, %02d %s %d 00:00:00 GMT",
 					 $dow,
 					 $sday,
-					 Date::Calc::Month_to_Text($smonth),
+					 $Hebcal::MoY_short[$smonth - 1],
 					 $syear);
 
 	    open(RSS,">$WEBDIR/sedrot/index.xml") || die;
 	    print RSS qq{<?xml version="1.0" ?>
-<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rss version="2.0">
 <channel>
 <title>Hebcal Parsha of the Week</title>
 <link>http://www.hebcal.com/sedrot/</link>
@@ -105,7 +103,6 @@ for (my $i = 0; $i < @events; $i++)
 <title>$parsha</title>
 <link>http://www.hebcal.com$href?tag=rss</link>
 <description>$stime</description>
-<dc:date>$parsha_date</dc:date> 
 <pubDate>$parsha_pubDate</pubDate>
 </item>
 </channel>
