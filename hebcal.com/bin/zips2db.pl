@@ -44,7 +44,7 @@
 ########################################################################
 
 use DB_File;
-use Getopt::Std;
+use Getopt::Std ();
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -52,13 +52,13 @@ $0 =~ s,.*/,,;  # basename
 ## zipnov99.csv comes from US Census Bureau "Zip Code" Data 
 ## http://www.census.gov/geo/www/gazetteer/places2k.html
 
-my($usage) = "usage: $0 [-h] output.db zipnov99.csv c_22mr02.csv
+my $usage = "usage: $0 [-h] output.db zipnov99.csv c_22mr02.csv
     -h        Display usage information.
 ";
 
-my(%opts);
-&getopts('h', \%opts) || die "$usage\n";
-$opts{'h'} && die "$usage\n";
+my %opts;
+Getopt::Std::getopts("h", \%opts) || die "$usage\n";
+$opts{"h"} && die "$usage\n";
 (@ARGV == 3) || die "$usage";
 
 ## National Weather Service county-timezone data comes from a file named
@@ -72,27 +72,27 @@ $opts{'h'} && die "$usage\n";
 
 my(%tz_abbrev) =
     (
-     'E' => '-5,1',    # Eastern (i.e. New York)
-     'e' => '-5,0',    # Eastern no DST (i.e. Indianapolis)
-     'C' => '-6,1',    # Central (i.e. Chicago)
-     'c' => '-6,0',    # Central no DST (i.e. Regina)
-     'M' => '-7,1',    # Mountain (i.e. Denver)
-     'm' => '-7,0',    # Mountain now DST (i.e. Phoenix)
-     'P' => '-8,1',    # Pacific (i.e. Los Angeles)
-     'p' => undef,     # (doesn't appear)
-     'A' => '-9,1',    # Alaska (i.e. Anchorage)
-     'a' => undef,     # (doesn't appear)
-     'h' => undef,     # (doesn't appear)
-     'H' => '-10,0',   # Hawaii (i.e. Honolulu)
-     'AH' => '-10,1',  # Aleutians West, AK
-     'V' => '-4,0',    # Puerto Rico
-     'G' => '10,0',    # Guam
-     'S' => '-11,0',   # Pago Pago
-     'CE' => '?,1',    # county split between Central and Eastern
-     'CM' => '?,1',    # county split between Central and Mountain
-     'MC' => '?,1',    # county split between Mountain and Central
-     'MP' => '?,1',    # county split between Mountain and Pacific
-     '?' => '?,?',     # for unknown
+     "E" => "-5,1",    # Eastern (i.e. New York)
+     "e" => "-5,0",    # Eastern no DST (i.e. Indianapolis)
+     "C" => "-6,1",    # Central (i.e. Chicago)
+     "c" => "-6,0",    # Central no DST (i.e. Regina)
+     "M" => "-7,1",    # Mountain (i.e. Denver)
+     "m" => "-7,0",    # Mountain now DST (i.e. Phoenix)
+     "P" => "-8,1",    # Pacific (i.e. Los Angeles)
+     "p" => undef,     # (doesn't appear)
+     "A" => "-9,1",    # Alaska (i.e. Anchorage)
+     "a" => undef,     # (doesn't appear)
+     "h" => undef,     # (doesn't appear)
+     "H" => "-10,0",   # Hawaii (i.e. Honolulu)
+     "AH" => "-10,1",  # Aleutians West, AK
+     "V" => "-4,0",    # Puerto Rico
+     "G" => "10,0",    # Guam
+     "S" => "-11,0",   # Pago Pago
+     "CE" => "?,1",    # county split between Central and Eastern
+     "CM" => "?,1",    # county split between Central and Mountain
+     "MC" => "?,1",    # county split between Mountain and Central
+     "MP" => "?,1",    # county split between Mountain and Pacific
+     "?" => "?,?",     # for unknown
      );
 
 my($dbmfile,$zips_file,$weather_file) = @ARGV;
@@ -127,7 +127,7 @@ print "read $count counties from $weather_file\n";
 open(IN,$zips_file) || die "$zips_file: $!\n";
 
 my %DB;
-tie(%DB, 'DB_File', $dbmfile, O_RDWR|O_CREAT, 0644, $DB_File::DB_HASH)
+tie(%DB, "DB_File", $dbmfile, O_RDWR|O_CREAT, 0644, $DB_File::DB_HASH)
     || die "Can't tie $dbmfile: $!\n";
 
 print "reading zipcodes from $zips_file, writing to $dbmfile\n";
@@ -163,8 +163,8 @@ while(<IN>)
     else
     {
 	warn "$zips_file:$.: unknown timezone for FIPS $fips (zipcode $zip_code)\n";
-	$tz = '?';
-	$us_state = '??';
+	$tz = "?";
+	$us_state = "??";
     }
 
     if (defined $seen{$zip_code})
@@ -182,7 +182,7 @@ while(<IN>)
 	die "no tz_abbrev for $tz";
     }
 
-    $DB{$zip_code} = join(',', $latitude,$longitude,
+    $DB{$zip_code} = join(",", $latitude,$longitude,
 			  $tz_abbrev{$tz},$poname,$us_state);
     $count++;
 }
