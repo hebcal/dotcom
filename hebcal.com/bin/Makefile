@@ -21,9 +21,9 @@ $(HOLIDAYS)/purim.html: gen_festival.pl $(XMLDIR)/festival.xml
 	mkdir -p $(HOLIDAYS)
 	./gen_festival.pl $(XMLDIR)/festival.xml $(HOLIDAYS)
 
-$(DBDIR)/zips99.db: zips2db.pl zip99/zipnov99.csv zip99/c_01au03.csv
+$(DBDIR)/zips99.db: zips2db.pl zip99/zipnov99.csv zip99/c_10fe06.csv
 	rm -f zip99new.db
-	./zips2db.pl zip99new.db zip99/zipnov99.csv zip99/c_01au03.csv
+	./zips2db.pl zip99new.db zip99/zipnov99.csv zip99/c_10fe06.csv
 	mv zip99new.db $@
 
 RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
