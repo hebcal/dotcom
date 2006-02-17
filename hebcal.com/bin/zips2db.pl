@@ -162,7 +162,7 @@ while(<IN>)
     }
     else
     {
-	warn "$zips_file:$.: unknown timezone for FIPS $fips\n";
+	warn "$zips_file:$.: unknown timezone for FIPS $fips (zipcode $zip_code)\n";
 	$tz = '?';
 	$us_state = '??';
     }
