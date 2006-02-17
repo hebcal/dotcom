@@ -43,23 +43,27 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-use Getopt::Std;
-use DBI;
+use Getopt::Std ();
+use DBI ();
 use strict;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-h] zipnov99.csv c_22mr02.csv
+## zipnov99.csv comes from US Census Bureau "Zip Code" Data 
+## http://www.census.gov/geo/www/gazetteer/places2k.html
+
+my $usage = "usage: $0 [-h] zipnov99.csv c_22mr02.csv
     -h        Display usage information.
 ";
 
-my(%opts);
-&getopts('h', \%opts) || die "$usage\n";
-$opts{'h'} && die "$usage\n";
+my %opts;
+Getopt::Std::getopts("h", \%opts) || die "$usage\n";
+$opts{"h"} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
 ## National Weather Service county-timezone data comes from a file named
-## c_DDmmYY.zip from http://www.nws.noaa.gov/geodata/catalog/county/data/
+## c_DDmmYY.zip from
+## http://www.nws.noaa.gov/geodata/catalog/county/html/county.htm
 ##
 ## In this data, timezone is a single letter like, P, M, C, E or p, m,
 ## c, e.  Uppercase indicates the county observes DST, lowercase
@@ -68,27 +72,27 @@ $opts{'h'} && die "$usage\n";
 
 my(%tz_abbrev) =
     (
-     'E' => '-5,1',    # Eastern (i.e. New York)
-     'e' => '-5,0',    # Eastern no DST (i.e. Indianapolis)
-     'C' => '-6,1',    # Central (i.e. Chicago)
-     'c' => '-6,0',    # Central no DST (i.e. Regina)
-     'M' => '-7,1',    # Mountain (i.e. Denver)
-     'm' => '-7,0',    # Mountain now DST (i.e. Phoenix)
-     'P' => '-8,1',    # Pacific (i.e. Los Angeles)
-     'p' => undef,     # (doesn't appear)
-     'A' => '-9,1',    # Alaska (i.e. Anchorage)
-     'a' => undef,     # (doesn't appear)
-     'h' => undef,     # (doesn't appear)
-     'H' => '-10,0',   # Hawaii (i.e. Honolulu)
-     'AH' => '-10,1',  # Aleutians West, AK
-     'V' => '-4,0',    # Puerto Rico
-     'G' => '10,0',    # Guam
-     'S' => '-11,0',   # Pago Pago
-     'CE' => '?,1',    # county split between Central and Eastern
-     'CM' => '?,1',    # county split between Central and Mountain
-     'MC' => '?,1',    # county split between Mountain and Central
-     'MP' => '?,1',    # county split between Mountain and Pacific
-     '?' => '?,?',     # for unknown
+     "E" => "-5,1",    # Eastern (i.e. New York)
+     "e" => "-5,0",    # Eastern no DST (i.e. Indianapolis)
+     "C" => "-6,1",    # Central (i.e. Chicago)
+     "c" => "-6,0",    # Central no DST (i.e. Regina)
+     "M" => "-7,1",    # Mountain (i.e. Denver)
+     "m" => "-7,0",    # Mountain now DST (i.e. Phoenix)
+     "P" => "-8,1",    # Pacific (i.e. Los Angeles)
+     "p" => undef,     # (doesn't appear)
+     "A" => "-9,1",    # Alaska (i.e. Anchorage)
+     "a" => undef,     # (doesn't appear)
+     "h" => undef,     # (doesn't appear)
+     "H" => "-10,0",   # Hawaii (i.e. Honolulu)
+     "AH" => "-10,1",  # Aleutians West, AK
+     "V" => "-4,0",    # Puerto Rico
+     "G" => "10,0",    # Guam
+     "S" => "-11,0",   # Pago Pago
+     "CE" => "?,1",    # county split between Central and Eastern
+     "CM" => "?,1",    # county split between Central and Mountain
+     "MC" => "?,1",    # county split between Mountain and Central
+     "MP" => "?,1",    # county split between Mountain and Pacific
+     "?" => "?,?",     # for unknown
      );
 
 my $zips_file = shift;
@@ -123,14 +127,37 @@ print "read $count counties from $weather_file\n";
 
 open(IN,$zips_file) || die "$zips_file: $!\n";
 
-my $dsn = 'DBI:mysql:database=hebcal1;host=mysql.hebcal.com';
-my $dbh = DBI->connect($dsn, 'mradwin_hebcal', 'xxxxxxxx');
-
 print "reading zipcodes from $zips_file, writing to MySQL\n";
 
 $count = 0;
 my $matched = 0;
 my(%seen);
+
+my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
+
+my $sql = qq{DROP TABLE IF EXISTS hebcal_zips};
+$dbh->do($sql) or die $dbh->errstr;
+
+$sql = qq{
+CREATE TABLE hebcal_zips (
+    zips_zipcode VARCHAR(5) NOT NULL,
+    zips_latitude VARCHAR(12) NOT NULL,
+    zips_longitude VARCHAR(12) NOT NULL,
+    zips_timezone tinyint NOT NULL,
+    zips_dst tinyint(1) NOT NULL,
+    zips_city VARCHAR(64) NOT NULL,
+    zips_state VARCHAR(2) NOT NULL,
+    PRIMARY KEY (zips_zipcode)			 
+)};
+$dbh->do($sql) or die $dbh->errstr;
+
+$sql = "INSERT INTO hebcal_zips"
+    . " (zips_zipcode,zips_latitude,zips_longitude,zips_timezone,zips_dst,"
+    .   "zips_city,zips_state)"
+    . " VALUES (?,?,?,?,?,?,?)";
+
+my $sth = $dbh->prepare($sql) or die $dbh->errstr;
 
 $_ = <IN>;			# ignore header
 while(<IN>)
@@ -158,14 +185,14 @@ while(<IN>)
     }
     else
     {
-	warn "$zips_file: zipcode $zip_code (line $.) unknown timezone for FIPS $fips\n";
-	$tz = '?';
-	$us_state = '??';
+	warn "$zips_file:$.: unknown timezone for FIPS $fips (zipcode $zip_code)\n";
+	$tz = "?";
+	$us_state = "??";
     }
 
     if (defined $seen{$zip_code})
     {
-	warn "$zips_file: zipcode $zip_code (line $.) duplicate (already seen on line $seen{$zip_code})\n";
+	warn "$zips_file:$.: duplicate zipcode $zip_code (already seen on line $seen{$zip_code})\n";
 	next;
     }
     else
@@ -180,13 +207,8 @@ while(<IN>)
 
     my($tztz,$tzdst) = split(/,/, $tz_abbrev{$tz});
 
-    $poname =~ s/\'/\\\'/g;
-
-    my $sql = "INSERT INTO hebcal_zips";
-    $sql .= " (zips_zipcode, zips_latitude, zips_longitude, zips_timezone, zips_dst, zips_city, zips_state)";
-    $sql .= " VALUES ('$zip_code', '$latitude', '$longitude', '$tztz', '$tzdst', '$poname', '$us_state');";
-
-    $dbh->do($sql);
+    $sth->execute($zip_code,$latitude,$longitude,$tztz,$tzdst,
+		  $poname,$us_state) or die $dbh->errstr;
     $count++;
 }
 close(IN);
