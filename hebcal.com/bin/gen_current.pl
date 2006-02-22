@@ -83,7 +83,7 @@ for (my $i = 0; $i < @events; $i++)
 				   gmtime(time()));
 
 	    my $dow = $Hebcal::DoW[Hebcal::get_dow($syear, $smonth, $sday)];
-	    my $parsha_pubDate = sprintf("%s, %02d %s %d 00:00:00 GMT",
+	    my $parsha_pubDate = sprintf("%s, %02d %s %d 12:00:00 GMT",
 					 $dow,
 					 $sday,
 					 $Hebcal::MoY_short[$smonth - 1],
