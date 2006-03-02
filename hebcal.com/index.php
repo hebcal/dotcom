@@ -24,7 +24,7 @@ unset($lines);
 <!-- $Id$ -->
 <html lang="en">
 <head>
-<title>hebcal.com: Interactive Jewish Calendar Tools</title>
+<title>Jewish Calendar, Hebrew Date Converter, Holidays, Candle-lighting Times, Yahrzeit Calculator - Hebcal.com</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
