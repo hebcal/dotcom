@@ -250,6 +250,15 @@ EOHTML
 	die "no descr for $f" unless $descr;
 
 	print OUT3 qq{<dt><a href="$anchor">$f</a>\n};
+
+	if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[1]) {
+	    my $stime = $OBSERVED{$f}->[1];
+	    if ($stime =~ /^(\d+)\s+(\w+)\s+(\d+)/) {
+		my($d,$m,$y) = ($1,$2,$3);
+		print OUT3 "- $d $m $y\n";
+	    }
+	}
+
 	print OUT3 qq{<dd>$descr\n} unless $descr eq $prev_descr;
 	$prev_descr = $descr;
     }
