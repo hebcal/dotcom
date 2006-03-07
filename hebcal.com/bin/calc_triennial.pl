@@ -656,6 +656,15 @@ EOHTML
 	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
     }
 
+    print OUT2 "</td>\n";
+
+    foreach my $yr (1 .. 3)
+    {
+	print_tri_cell($tri1,$h,$yr,$torah);
+    }
+
+    print OUT2 "</tr>\n";
+
     if (defined $parsha_stime2{$h}) {
 	my(%sp_dates,%sp_verse);
 	foreach my $stime2 (@{$parsha_stime2{$h}}) {
@@ -670,13 +679,15 @@ EOHTML
 	}
 
 	if (keys %sp_verse) {
+	    my $count = 0;
+	    print OUT2 qq{<tr><td valign="top" colspan="4">\n};
 	    foreach my $fest (sort keys %sp_verse) {
 		my $aliyah = get_special_maftir($fest);
 		my $info = format_aliyah($aliyah,
 					 $all_inorder[$aliyah->{'parsha'}-1],
 					 $sp_verse{$fest},1);
 		print OUT2 <<EOHTML;
-<br>On <b>$fest</b><br>
+On <b>$fest</b><br>
 $info
 <ul class="tiny gtl">
 EOHTML
@@ -687,21 +698,15 @@ EOHTML
 		}
 
 		print OUT2 "</ul>\n";
+		print OUT2 "<br>\n" if $count++;
 	    }
+	    print OUT2 "</td></tr>\n";
 	}
-    }
-
-    print OUT2 "</td>\n";
-
-    foreach my $yr (1 .. 3)
-    {
-	print_tri_cell($tri1,$h,$yr,$torah);
     }
 
     if ($opts{'2'})
     {
 	print OUT2 <<EOHTML;
-</tr>
 <tr>
 <td align="center"><b>Triennial Year I</b>
 <br><small>$tri_date2[1]</small>
@@ -723,7 +728,6 @@ EOHTML
     }
 
     print OUT2 <<EOHTML;
-</tr>
 </table>
 <a title="Etz Hayim: Torah and Commentary"
 href="$amazon_link1"><img
