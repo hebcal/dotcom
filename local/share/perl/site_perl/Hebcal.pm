@@ -1501,6 +1501,166 @@ sub macintosh_datebook($$)
 # export to vCalendar
 ########################################################################
 
+my %VTIMEZONE =
+(
+"US/Eastern" =>
+"BEGIN:VTIMEZONE
+TZID:US/Eastern
+LAST-MODIFIED:20060309T044821Z
+BEGIN:STANDARD
+DTSTART:20051030T060000
+TZOFFSETTO:-0500
+TZOFFSETFROM:+0000
+TZNAME:EST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20060402T010000
+TZOFFSETTO:-0400
+TZOFFSETFROM:-0500
+TZNAME:EDT
+END:DAYLIGHT
+END:VTIMEZONE
+",
+"US/Central" =>
+"BEGIN:VTIMEZONE
+TZID:US/Central
+LAST-MODIFIED:20060309T044821Z
+BEGIN:STANDARD
+DTSTART:20051030T070000
+TZOFFSETTO:-0600
+TZOFFSETFROM:+0000
+TZNAME:CST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20060402T010000
+TZOFFSETTO:-0500
+TZOFFSETFROM:-0600
+TZNAME:CDT
+END:DAYLIGHT
+END:VTIMEZONE
+",
+"US/Mountain" =>
+"BEGIN:VTIMEZONE
+TZID:US/Mountain
+LAST-MODIFIED:20060309T044821Z
+BEGIN:STANDARD
+DTSTART:20051030T080000
+TZOFFSETTO:-0700
+TZOFFSETFROM:+0000
+TZNAME:MST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20060402T010000
+TZOFFSETTO:-0600
+TZOFFSETFROM:-0700
+TZNAME:MDT
+END:DAYLIGHT
+END:VTIMEZONE
+",
+"US/Pacific" =>
+"BEGIN:VTIMEZONE
+TZID:US/Pacific
+LAST-MODIFIED:20060309T044821Z
+BEGIN:DAYLIGHT
+DTSTART:20050403T100000
+TZOFFSETTO:-0700
+TZOFFSETFROM:+0000
+TZNAME:PDT
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20051030T020000
+TZOFFSETTO:-0800
+TZOFFSETFROM:-0700
+TZNAME:PST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20060402T010000
+TZOFFSETTO:-0700
+TZOFFSETFROM:-0800
+TZNAME:PDT
+END:DAYLIGHT
+END:VTIMEZONE
+",
+"US/Alaska" =>
+"BEGIN:VTIMEZONE
+TZID:US/Alaska
+LAST-MODIFIED:20060309T044821Z
+BEGIN:STANDARD
+DTSTART:20051030T100000
+TZOFFSETTO:-0900
+TZOFFSETFROM:+0000
+TZNAME:AKST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20060402T010000
+TZOFFSETTO:-0800
+TZOFFSETFROM:-0900
+TZNAME:AKDT
+END:DAYLIGHT
+END:VTIMEZONE
+",
+"US/Hawaii" =>
+"BEGIN:VTIMEZONE
+TZID:US/Hawaii
+LAST-MODIFIED:20060309T044821Z
+BEGIN:DAYLIGHT
+DTSTART:19330430T123000
+TZOFFSETTO:-0930
+TZOFFSETFROM:+0000
+TZNAME:HDT
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:19330521T020000
+TZOFFSETTO:-1030
+TZOFFSETFROM:-0930
+TZNAME:HST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19420209T020000
+TZOFFSETTO:-0930
+TZOFFSETFROM:-1030
+TZNAME:HWT
+END:DAYLIGHT
+BEGIN:DAYLIGHT
+DTSTART:19450814T133000
+TZOFFSETTO:-0930
+TZOFFSETFROM:-0930
+TZNAME:HPT
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:19450930T020000
+TZOFFSETTO:-1030
+TZOFFSETFROM:-0930
+TZNAME:HST
+END:STANDARD
+BEGIN:STANDARD
+DTSTART:19470608T020000
+TZOFFSETTO:-1000
+TZOFFSETFROM:-1030
+TZNAME:HST
+END:STANDARD
+END:VTIMEZONE
+",
+"US/Aleutian" =>
+"BEGIN:VTIMEZONE
+TZID:US/Aleutian
+LAST-MODIFIED:20060309T050405Z
+BEGIN:STANDARD
+DTSTART:20051030T110000
+TZOFFSETTO:-1000
+TZOFFSETFROM:+0000
+TZNAME:HAST
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20060402T010000
+TZOFFSETTO:-0900
+TZOFFSETFROM:-1000
+TZNAME:HADT
+END:DAYLIGHT
+END:VTIMEZONE
+",
+ );
+
 sub vcalendar_write_contents($$$$$)
 {
     my($q,$events,$tz,$state,$title) = @_;
@@ -1519,24 +1679,7 @@ sub vcalendar_write_contents($$$$$)
     $tz = 0 unless defined $tz;
 
     if ($is_icalendar) {
-    if (defined $state) {
-	if ($state eq 'AK') {
-	    if ($tz == -10) {
-		$tzid = 'US/Aleutian';
-	    } else {
-		$tzid = 'US/Alaska';
-	    }
-	} elsif ($state eq 'AZ') {
-	    $tzid = 'US/Arizona';
-	} elsif ($state eq 'HI') {
-	    $tzid = 'US/Hawaii';
-	} elsif ($state eq 'IN') {
-	    # TODO: figure out which one of these to use
-	    $tzid = 'US/East-Indiana';
-	    $tzid = 'US/Indiana-Starke';
-	} elsif ($state eq 'MI') {
-	    $tzid = 'US/Michigan';
-	} elsif ($tz == -5) {
+	if ($tz == -5) {
 	    $tzid = 'US/Eastern';
 	} elsif ($tz == -6) {
 	    $tzid = 'US/Central';
@@ -1546,24 +1689,11 @@ sub vcalendar_write_contents($$$$$)
 	    $tzid = 'US/Pacific';
 	} elsif ($tz == -9) {
 	    $tzid = 'US/Alaska';
+	} elsif (defined $state && $state eq 'AK' && $tz == -10) {
+	    $tzid = 'US/Aleutian';
 	} elsif ($tz == -10) {
 	    $tzid = 'US/Hawaii';
-	} else {
-	    $tzid = 'US/Unknown';
 	}
-    } elsif ($tz == -5) {
-	$tzid = 'US/Eastern';
-    } elsif ($tz == -6) {
-	$tzid = 'US/Central';
-    } elsif ($tz == -7) {
-	$tzid = 'US/Mountain';
-    } elsif ($tz == -8) {
-	$tzid = 'US/Pacific';
-    } elsif ($tz == -9) {
-	$tzid = 'US/Alaska';
-    } elsif ($tz == -10) {
-	$tzid = 'US/Hawaii';
-    }
     }
 
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
@@ -1583,6 +1713,11 @@ sub vcalendar_write_contents($$$$$)
 
     if ($tzid) {
 	print STDOUT qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl};
+	if (defined $VTIMEZONE{$tzid}) {
+	    my $vt = $VTIMEZONE{$tzid};
+	    $vt =~ s/\n/$endl/g;
+	    print STDOUT $vt;
+	}
     }
 
     my($i);
