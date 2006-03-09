@@ -24,7 +24,7 @@ unset($lines);
 <!-- $Id$ -->
 <html lang="en">
 <head>
-<title>Jewish Calendar, Hebrew Date Converter, Holidays, Candle-lighting Times, Yahrzeit Calculator - Hebcal.com</title>
+<title>Jewish Calendar, Hebrew Date Converter, Shabbat Times - Hebcal.com</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
@@ -44,6 +44,7 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
+<span class="fpgreeting">Purim Sameach!</span> &nbsp; - &nbsp; 
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
 <?php if ($rosh_chodesh) { ?>
@@ -168,6 +169,9 @@ style="padding-left: 10px; padding-right: 5px">
 <hr noshade size="1">
 <ul class="gtl">
 <!-- Begin temp holiday -->
+<li><b><a
+href="/holidays/purim.html?tag=fp.tmp">Purim</a></b>
+<br>13 March 2006<br>(at sunset)<br><br>
 <!-- End temp holiday -->
 <li><b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.q2">Current&nbsp;Calendar</a></b><br><?php 
