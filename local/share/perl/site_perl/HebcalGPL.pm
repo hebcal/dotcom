@@ -1,7 +1,7 @@
 # This package is derived from Danny Sadinoff's hebcal-perl-3.2.2, which
 # is licensed under GPL. His original licensing notice follows:
 
-# #
+# /*
 #    Hebcal - A Jewish Calendar Generator
 #    Copyright (C) 1994  Danny Sadinoff
 
@@ -19,12 +19,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-#    Danny Sadinoff can be reached at 
-#    1 Cove La.
-#    Great Neck, NY
-#    11024
-
-#    sadinoff@pobox.com 
+#    Danny Sadinoff can be reached at hebcal@sadinoff.com
 #  */
 
 package HebcalGPL;
