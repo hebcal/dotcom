@@ -44,7 +44,6 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
-<span class="fpgreeting">Purim Sameach!</span> &nbsp; - &nbsp; 
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
 <?php if ($rosh_chodesh) { ?>
