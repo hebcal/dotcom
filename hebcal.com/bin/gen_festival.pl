@@ -158,8 +158,8 @@ sub get_var
 {
     my($festivals,$f,$name) = @_;
 
-    my $sub = $SUBFESTIVALS{$f}->[0];
-    my $value = $festivals->{'festival'}->{$sub}->{$name};
+    my $subf = $SUBFESTIVALS{$f}->[0];
+    my $value = $festivals->{'festival'}->{$subf}->{$name};
 
     if (! defined $value) {
 	warn "ERROR: no $name for $f";
@@ -418,7 +418,11 @@ EOHTML
     	if $next_anchor;
 
     my $hebrew = get_var($festivals, $f, 'hebrew');
-    $hebrew = '' unless $hebrew;
+    if ($hebrew) {
+	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
+    } else {
+	$hebrew = "";
+    }
 
     my($strassfeld_link) =
 	"http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
@@ -512,6 +516,32 @@ EOHTML
     ;
     }
 
+    if (1)
+    {
+	my $subf = $SUBFESTIVALS{$f}->[0];
+	my $books = $festivals->{"festival"}->{$subf}->{"books"}->{"book"};
+	if ($books) {
+	    if (ref($books) eq 'HASH') {
+		$books = [ $books ];
+	    }
+
+	    print OUT2 qq{<h3><a name="books"></a>Recommended Books</h3>\n<table border="1" cellpadding="6"><tr>\n};
+	    foreach my $book (@{$books}) {
+		my $asin = $book->{"ASIN"};
+
+#		print OUT2 qq{<iframe src="http://rcm.amazon.com/e/cm?t=hebcal-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0966474007&amp;fc1=000000&amp;IS2=1&amp;lt1=_blank&amp;lc1=0000ff&amp;bc1=000000&amp;bg1=ffffff&amp;f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>\n};
+
+
+		my $bktitle = trim($book->{"content"});
+		my $link = "http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20";
+		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="http://images.amazon.com/images/P/$asin.01.MZZZZZZZ.jpg" alt="$bktitle" border="0" hspace="4" vspace="4"></a><br><a href="$link">$bktitle</a></td>\n};
+	    }
+
+	    print OUT2 qq{</tr></table>\n};
+	}
+    }
+
+
     if (@{$SUBFESTIVALS{$f}} == 1)
     {
 	write_festival_part($festivals, $SUBFESTIVALS{$f}->[0]);
@@ -534,6 +564,7 @@ EOHTML
 	    my $part_hebrew = $festivals->{'festival'}->{$part}->{'hebrew'};
 	    if ($part_hebrew)
 	    {
+		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
 		print OUT2 qq{\n<br><span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
 	    print OUT2 qq{</h2>\n<div style="padding-left:20px;">};
