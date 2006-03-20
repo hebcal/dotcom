@@ -131,6 +131,15 @@ every other day (e.g. fast days): 3
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
  </about>
+ <books>
+  <book ASIN="0060675535">
+  Keeping Passover : Everything You Need to Know to Bring the Ancient
+  Tradition to Life and Create Your Own Passover Celebration
+  </book>
+  <book ASIN="0966474007">
+  A Different Night, The Family Participation Haggadah
+  </book>
+ </books>
 </festival>
 <festival id="Pesach I"
  hebrew="פֶּסַח יוֹם א׳"
@@ -921,6 +930,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  calendar. It commemorates a time when the Jewish people living in
  Persia were saved from extermination
  </about>
+ <books>
+  <book ASIN="0764122681">
+  It's Party Time! : A Purim Story 
+  </book>
+ </books>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0217.htm#8" />
   <aliyah parsha="16" num="1" book="Exodus" begin="17:8" end="17:10" />
