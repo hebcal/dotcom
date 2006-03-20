@@ -132,12 +132,15 @@ every other day (e.g. fast days): 3
  Passover, the Feast of Unleavened Bread
  </about>
  <books>
-  <book ASIN="0060675535">
+  <book ASIN="0899061788" author="Scherkan Zlotowitz">
+  Family Haggadah (Artscroll Mesorah Series)
+  </book>
+  <book ASIN="0966474007" author="David Dishon and Noam Zion">
+  A Different Night, The Family Participation Haggadah
+  </book>
+  <book ASIN="0060675535" author="Ira Steingroot">
   Keeping Passover : Everything You Need to Know to Bring the Ancient
   Tradition to Life and Create Your Own Passover Celebration
-  </book>
-  <book ASIN="0966474007">
-  A Different Night, The Family Participation Haggadah
   </book>
  </books>
 </festival>
@@ -931,7 +934,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Persia were saved from extermination
  </about>
  <books>
-  <book ASIN="0764122681">
+  <book ASIN="0764122681" author="Jonny Zucker">
   It's Party Time! : A Purim Story 
   </book>
  </books>
