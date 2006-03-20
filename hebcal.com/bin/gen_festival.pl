@@ -541,13 +541,14 @@ EOHTML
 
 		my $image = new Image::Magick;
 		$image->Read($filename);
-		my($w,$h) = $image->Get("width", "height");
+		my($width,$height) = $image->Get("width", "height");
 
-#		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="http://images.amazon.com/images/P/$asin.01.MZZZZZZZ.jpg" alt="$bktitle" border="0" hspace="4" vspace="4"></a><br><a href="$link">$bktitle</a></td>\n};
-
-		print OUT2 qq{<td>\n};
-		print OUT2 qq{<iframe\nsrc="http://rcm.amazon.com/e/cm?t=hebcal-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=$asin&amp;fc1=000000&amp;IS2=1&amp;lt1=_top&amp;lc1=0000ff&amp;bc1=000000&amp;bg1=ffffff&amp;f=ifr"\nstyle="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0"\nframeborder="0"></iframe>\n};
-		print OUT2 qq{</td>\n};
+		my $bktitle = trim($book->{"content"});
+		my $shorttitle = $bktitle;
+		$shorttitle =~ s/\s*:.+//;
+		my $author = $book->{"author"};
+		my $link = "http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20";
+		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a title="$bktitle" href="$link">$shorttitle</a><br>by $author</td>\n};
 	    }
 
 	    print OUT2 qq{</tr></table>\n};
