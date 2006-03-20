@@ -51,6 +51,8 @@ use utf8;
 use open ":utf8";
 use Getopt::Std ();
 use XML::Simple ();
+use LWP::UserAgent;
+use Image::Magick;
 use Hebcal ();
 use strict;
 
@@ -125,6 +127,7 @@ my(%PREV,%NEXT);
 my %OBSERVED;
 holidays_observed(\%OBSERVED);
 
+my $ua;
 foreach my $f (@FESTIVALS)
 {
     write_festival_page($fxml,$f);
@@ -525,16 +528,26 @@ EOHTML
 		$books = [ $books ];
 	    }
 
-	    print OUT2 qq{<h3><a name="books"></a>Recommended Books</h3>\n<table border="1" cellpadding="6"><tr>\n};
+	    print OUT2 qq{<h3><a name="books"></a>Recommended Books</h3>\n<table border="0" cellpadding="6"><tr>\n};
 	    foreach my $book (@{$books}) {
 		my $asin = $book->{"ASIN"};
+		my $img = "$asin.01.MZZZZZZZ.jpg";
+		my $filename = $outdir . "/../i/" . $img;
+		if (! -e $filename) {
+		    $ua = LWP::UserAgent->new unless $ua;
+		    $ua->mirror("http://images.amazon.com/images/P/$img",
+				$filename);
+		}
 
-#		print OUT2 qq{<iframe src="http://rcm.amazon.com/e/cm?t=hebcal-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=0966474007&amp;fc1=000000&amp;IS2=1&amp;lt1=_blank&amp;lc1=0000ff&amp;bc1=000000&amp;bg1=ffffff&amp;f=ifr" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>\n};
+		my $image = new Image::Magick;
+		$image->Read($filename);
+		my($w,$h) = $image->Get("width", "height");
 
+#		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="http://images.amazon.com/images/P/$asin.01.MZZZZZZZ.jpg" alt="$bktitle" border="0" hspace="4" vspace="4"></a><br><a href="$link">$bktitle</a></td>\n};
 
-		my $bktitle = trim($book->{"content"});
-		my $link = "http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20";
-		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="http://images.amazon.com/images/P/$asin.01.MZZZZZZZ.jpg" alt="$bktitle" border="0" hspace="4" vspace="4"></a><br><a href="$link">$bktitle</a></td>\n};
+		print OUT2 qq{<td>\n};
+		print OUT2 qq{<iframe\nsrc="http://rcm.amazon.com/e/cm?t=hebcal-20&amp;o=1&amp;p=8&amp;l=as1&amp;asins=$asin&amp;fc1=000000&amp;IS2=1&amp;lt1=_top&amp;lc1=0000ff&amp;bc1=000000&amp;bg1=ffffff&amp;f=ifr"\nstyle="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0"\nframeborder="0"></iframe>\n};
+		print OUT2 qq{</td>\n};
 	    }
 
 	    print OUT2 qq{</tr></table>\n};
