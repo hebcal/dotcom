@@ -173,7 +173,7 @@ href="/holidays/pesach.html?tag=fp.tmp">Pesach (Passover)</a></b>
 <br>12 April 2006<br>(at sunset)<br><br>
 <!-- End temp holiday -->
 <li><b><a
-href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.q2">Current&nbsp;Calendar</a></b><br><?php 
+href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
   echo date("F Y");
   include("./holiday.inc");
   include("./current.inc"); ?><br>
