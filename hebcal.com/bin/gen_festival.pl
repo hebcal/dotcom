@@ -77,7 +77,8 @@ if (! -d $outdir) {
 my $fxml = XML::Simple::XMLin($festival_in);
 
 if ($opts{'f'}) {
-    open(CSV, ">$opts{'f'}") || die "$opts{'f'}: $!\n";
+    my $fn = $opts{"f"};
+    open(CSV, ">$fn.$$") || die "$fn.$$: $!\n";
     print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
 }
 
@@ -136,6 +137,7 @@ foreach my $f (@FESTIVALS)
 
 if ($opts{'f'}) {
     close(CSV);
+    rename("$opts{'f'}.$$", $opts{'f'}) || die "$opts{'f'}: $!\n";
 }
 
 write_index_page($fxml);
@@ -208,7 +210,8 @@ sub write_index_page
 {
     my($festivals) = @_;
 
-    open(OUT3, ">$outdir/index.html") || die "$outdir/index.html: $!\n";
+    my $fn = "$outdir/index.html";
+    open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
 
     print OUT3 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -270,6 +273,7 @@ EOHTML
     print OUT3 $html_footer;
 
     close(OUT3);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
 }
 
 sub write_festival_part
@@ -379,7 +383,8 @@ sub write_festival_page
     }
     warn "$f: missing About description\n" unless $descr;
 
-    open(OUT2, ">$outdir/$anchor") || die "$outdir/$anchor: $!\n";
+    my $fn = "$outdir/$anchor";
+    open(OUT2, ">$fn.$$") || die "$fn.$$: $!\n";
 
     print OUT2 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -641,6 +646,7 @@ EOHTML
     print OUT2 $html_footer;
 
     close(OUT2);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
 }
 
 sub print_aliyah
