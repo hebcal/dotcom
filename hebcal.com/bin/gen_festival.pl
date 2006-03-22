@@ -464,10 +464,6 @@ $next_link
 </td>
 </tr>
 </table>
-<a href="$strassfeld_link"><img
-src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
-alt="The Jewish Holidays: A Guide &amp; Commentary"
-vspace="5" width="75" height="90" align="right"></a>
 <p>$descr.
 EOHTML
 ;
@@ -602,6 +598,11 @@ EOHTML
     }
 
     print OUT2 qq{
+<a title="The Jewish Holidays: A Guide &amp; Commentary"
+href="$strassfeld_link"><img
+src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
+alt="The Jewish Holidays: A Guide &amp; Commentary"
+vspace="5" width="75" height="90" align="right"></a>
 <h3><a name="ref"></a>References</h3>
 <dl>
 <dt><em><a
