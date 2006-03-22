@@ -554,9 +554,13 @@ sub hebrew_strip_nikkud($) {
 
     foreach my $c (split(//, $str))
     {
-	# skip hebrew punctuation range
-	next if ord($c) > 0x0590 && ord($c) < 0x05D0;
-	$result .= $c;
+	if (ord($c) == 0x05BE) {
+	    $result .= $c;
+	} elsif (ord($c) > 0x0590 && ord($c) < 0x05D0) {
+	    # skip hebrew punctuation range
+	} else {
+	    $result .= $c;
+	}
     }
 
     return $result;
