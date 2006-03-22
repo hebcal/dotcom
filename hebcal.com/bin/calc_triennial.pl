@@ -494,6 +494,10 @@ sub write_sedra_page
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
        $drash_reform,$drash_torah,$drash_uj) = get_parsha_info($parshiot,$h);
 
+    if ($hebrew) {
+	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
+    }
+
     my $seph = '';
     my $ashk = '';
 
