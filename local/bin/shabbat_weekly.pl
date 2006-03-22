@@ -154,6 +154,21 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
+    # hack for pesach
+    if ($subject eq "[shabbat] Mar 24") {
+	$body = 
+"Pesach begins April 12 at sundown. If you're in search of a
+Haggadah for your Seder, Hebcal.com recommends the following
+traditional and liberal Haggadot:
+
+  \"Family Haggadah (Artscroll Mesorah Series)\" by Scherkan Zlotowitz
+  http://www.amazon.com/exec/obidos/ASIN/0899061788/hebcal-20
+  \"A Different Night\" by David Dishon and Noam Zion
+  http://www.amazon.com/exec/obidos/ASIN/0966474007/hebcal-20
+
+" . $body;
+    }
+
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
