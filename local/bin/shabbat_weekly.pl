@@ -157,8 +157,7 @@ $unsub_url
     # hack for pesach
     if ($subject eq "[shabbat] Mar 24") {
 	$body = 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Pesach begins April 12 at sundown. If you're in search of a
+"Pesach begins April 12 at sundown. If you're in search of a
 Haggadah for your Seder, Hebcal.com recommends the following
 traditional and liberal Haggadot:
 
@@ -166,7 +165,7 @@ traditional and liberal Haggadot:
   http://www.amazon.com/exec/obidos/ASIN/0899061788/hebcal-20
   \"A Different Night\" by David Dishon and Noam Zion
   http://www.amazon.com/exec/obidos/ASIN/0966474007/hebcal-20
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 " . $body;
     }
