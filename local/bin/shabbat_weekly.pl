@@ -161,9 +161,9 @@ $unsub_url
 Haggadah for your Seder, Hebcal.com recommends the following
 traditional and liberal Haggadot:
 
-  \"Family Haggadah (Artscroll Mesorah Series)\" by Scherkan Zlotowitz
+  Family Haggadah (Artscroll Mesorah Series) by Scherkan Zlotowitz
   http://www.amazon.com/exec/obidos/ASIN/0899061788/hebcal-20
-  \"A Different Night\" by David Dishon and Noam Zion
+  A Different Night by David Dishon and Noam Zion
   http://www.amazon.com/exec/obidos/ASIN/0966474007/hebcal-20
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
