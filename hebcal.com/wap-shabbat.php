@@ -4,14 +4,12 @@
 header("Content-Type: text/vnd.wap.wml");
 echo '<?xml version="1.0"?>', "\n";
 
-global $HTTP_SERVER_VARS;
-global $HTTP_GET_VARS;
-if ($HTTP_SERVER_VARS['HTTP_X_UP_SUBNO'])
+if ($_SERVER['HTTP_X_UP_SUBNO'])
 {
     $id = dba_open("shabbat/wap.db", "r", "db3");
     if ($id)
     {
-	$val = dba_fetch($HTTP_SERVER_VARS['HTTP_X_UP_SUBNO'], $id);
+	$val = dba_fetch($_SERVER['HTTP_X_UP_SUBNO'], $id);
 	dba_close($id);
     }
 }
