@@ -155,7 +155,7 @@ $unsub_url
 };
 
     # hack for pesach
-    if ($subject eq "[shabbat] Mar 24") {
+    if ($sat_year == 2006 && $subject eq "[shabbat] Mar 24") {
 	$body = 
 "Pesach begins April 12 at sundown. If you're in search of a
 Haggadah for your Seder, Hebcal.com recommends the following
@@ -189,6 +189,11 @@ traditional and liberal Haggadot:
 	 "Precedence" => "bulk",
 	 "Message-ID" => "<$msgid\@hebcal.com>",
 	 );
+
+    # hack for pesach
+    if ($sat_year == 2006 && $subject eq "[shabbat] Apr 14") {
+	$headers{"Subject"} = "[shabbat] Apr 12 Special Pesach Edition";
+    }
 
     # try 3 times to avoid intermittent failures
     my $status = 0;
@@ -267,6 +272,7 @@ sub gen_body
 
     my $body = "";
 
+    my %holiday_seen;
     my($numEntries) = scalar(@{$events});
     my($i);
     for ($i = 0; $i < $numEntries; $i++)
@@ -308,6 +314,11 @@ sub gen_body
 	else
 	{
 	    $body .= "Holiday: $subj on $strtime\n";
+	    my $hanchor = Hebcal::get_holiday_anchor($subj,undef,undef);
+	    if ($hanchor && !$holiday_seen{$hanchor}) {
+		$body .= "  http://www.hebcal.com" . $hanchor . "\n";
+		$holiday_seen{$hanchor} = 1;
+	    }
 	}
     }
 
