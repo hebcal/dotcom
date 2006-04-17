@@ -169,9 +169,6 @@ style="padding-left: 10px; padding-right: 5px">
 <hr noshade size="1">
 <ul class="gtl">
 <!-- Begin temp holiday -->
-<li><b><a
-href="/holidays/pesach.html?tag=fp.tmp">Pesach (Passover)</a></b>
-<br>12 April 2006<br>(at sunset)<br><br>
 <!-- End temp holiday -->
 <li><b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
