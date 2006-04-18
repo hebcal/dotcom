@@ -695,6 +695,10 @@ sub get_holiday_anchor($$$)
 	}
     }
 
+    if ($hebrew) {
+	$hebrew = hebrew_strip_nikkud($hebrew);
+    }
+
     return (wantarray()) ?
 	($href,$hebrew,$memo)
 	: $href;
@@ -1747,8 +1751,7 @@ sub vcalendar_write_contents($$$$$)
 
 	if ($is_icalendar && $hebrew &&
 	    defined $q->param('heb') && $q->param('heb') =~ /^on|1$/) {
-	    my $hebrew2 = Hebcal::hebrew_strip_nikkud($hebrew);
-	    $subj .= " / $hebrew2";
+	    $subj .= " / $hebrew";
 	}
 
 	print STDOUT qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl};
