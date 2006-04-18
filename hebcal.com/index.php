@@ -17,6 +17,10 @@ if (is_array($lines)) {
 	}
     }
 }
+$lines = @file("./omer.inc");
+if (is_array($lines) && $lines[0]) {
+    $omer = $lines[0];
+}
 unset($lines);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -46,8 +50,12 @@ Jewish Calendar Tools</small></td>
 <!-- holiday greeting -->
 <span class="fpgreeting">Chag Kasher v'Sameach!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
-<?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php include("./today.inc") ?>
-<?php if ($rosh_chodesh) { ?>
+<?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
+include("./today.inc");
+if (isset($omer)) {
+    echo "&nbsp; - &nbsp; $omer\n";
+}
+if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
 <?php } elseif ($chanukah) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chag Urim Sameach!</span>
