@@ -48,7 +48,6 @@ Jewish Calendar Tools</small></td>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
 <!-- holiday greeting -->
-<span class="fpgreeting">Chag Kasher v'Sameach!</span> &nbsp; - &nbsp;
 <!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
 include("./today.inc");
