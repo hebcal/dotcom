@@ -32,17 +32,23 @@ H1, H2, H3, H4, H5, H6 {
 }
 
 ul.gtl {
- margin: 0;
  padding: 0;
+ margin: 0 0 0 1em;
+ list-style-position: inside;
+ list-style: circle;
+/*
  list-style: none;
+*/
 }
 
+/*
 .gtl li:before {
  content: "> ";
  margin-right: 2px;
  color: #999;
  font-size: xx-small;
 }
+*/ww
 
 .sm-grey {
  font-size: xx-small;
