@@ -131,20 +131,20 @@ MESSAGE_END;
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <ul class="gtl">
 <li>
-generate a calendar of Jewish holidays for any year 0001-9999
+Generate a calendar of Jewish holidays for any year 0001-9999
 <li>
-customize candle lighting times to your zip code, city, or latitude/longitude
+Customize candle lighting times to your zip code, city, or latitude/longitude
 <li>
-export to <a href="/help/import.html#dba">Palm</a>,
+Export to <a href="/help/import.html#dba">Palm</a>,
 <a href="/help/import.html#csv">Outlook</a>, and
 <a href="/help/import.html#ical">iCal</a>
 </ul>
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <ul class="gtl">
 <li>
-convert between Hebrew and Gregorian dates
+Convert between Hebrew and Gregorian dates
 <li>
-find out Torah reading for any date in the future
+Find out Torah reading for any date in the future
 </ul>
 <h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
 <ul class="gtl">
@@ -169,13 +169,13 @@ Dates for the next few years and special Torah readings
 Calendar</a></h4>
 <ul class="gtl">
 <li>
-generate a list of Yahrzeit (memorial) and Yizkor dates, or
+Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries
 </ul>
 <h4><a href="/sedrot/">Torah Readings</a></h4>
 <ul class="gtl">
 <li>
-aliyah-by-aliyah breakdown for weekly parshiyot
+Aliyah-by-aliyah breakdown for weekly parshiyot
 </ul>
 <h4>About Us</h4>
 <ul class="gtl">
