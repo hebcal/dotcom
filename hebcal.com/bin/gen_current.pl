@@ -49,6 +49,7 @@ use strict;
 use open ":utf8";
 use Hebcal ();
 use Date::Calc ();
+use Time::Local ();
 use POSIX qw(strftime);
 
 my $WEBDIR = '/home/hebcal/web/hebcal.com';
@@ -129,14 +130,6 @@ open(OUT,">$outfile") || die;
 print OUT "$hdate\n";
 close(OUT);
 
-my $omer = `$HEBCAL -T | grep Omer`;
-chomp($omer);
-
-$outfile = "$WEBDIR/omer.inc";
-open(OUT,">$outfile") || die;
-print OUT "$omer\n";
-close(OUT);
-
 $outfile = "$WEBDIR/etc/hdate-en.js";
 open(OUT,">$outfile") || die;
 print OUT "document.write(\"$hdate\");\n";
@@ -155,10 +148,31 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
 $outfile = "$WEBDIR/holiday.inc";
 open(OUT,">$outfile") || die;
-@events = Hebcal::invoke_hebcal("$HEBCAL -t", '', 0);
+@events = Hebcal::invoke_hebcal($HEBCAL, '', 0);
+
+my($midnight,$saturday);
+{
+    my $now = time;
+    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	localtime($now);
+    $year += 1900;
+
+    $midnight = Time::Local::timelocal
+	(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
+    $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
+}
+
 for (my $i = 0; $i < @events; $i++)
 {
-    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] !~ / of /) {
+    # holiday is at 12:00:01 am
+    my $time = Time::Local::timelocal
+	(1,0,0,
+	 $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+	 $events[$i]->[$Hebcal::EVT_IDX_MON],
+	 $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+	 "","","");
+
+    if ($time >= $midnight && $time <= $saturday) {
 	my $holiday = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my $href = Hebcal::get_holiday_anchor($holiday,undef,undef);
 	if ($href) {
