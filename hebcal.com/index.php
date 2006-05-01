@@ -27,6 +27,11 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	if (strncmp($subj, "Chanukah:", 9) == 0) {
 	    $chanukah = true;
 	}
+	if (strncmp($subj, "Sukkot", 6) == 0
+	    || strncmp($subj, "Pesach", 6) == 0
+	    || strncmp($subj, "Shavuot", 7) == 0) {
+	    $shalosh_regalim = true;
+	}
 	if (strstr($subj, "day of the Omer") !== false) {
 	    $omer = $subj;
 	}
@@ -69,6 +74,8 @@ if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
 <?php } elseif ($chanukah) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chag Urim Sameach!</span>
+<?php } elseif ($shalosh_regalim) { ?>
+&nbsp; - &nbsp; <span class="fpgreeting">Moadim L'Simcha!</span>
 <?php } ?>
 </span>
 <?php
