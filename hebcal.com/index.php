@@ -3,25 +3,36 @@ if (isset($_COOKIE["C"])) {
     header("Cache-Control: private");
     parse_str($_COOKIE["C"], $param);
 }
+
 # Is today Rosh Chodesh?
-$lines = @file("./holiday.inc");
-if (is_array($lines)) {
-    foreach ($lines as $line) {
-	if (strstr($line, "Rosh&nbsp;Chodesh") !== false) {
+list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+$gm = $mon + 1;
+$gd = $mday;
+$gy = $year + 1900;
+$century = substr($gy, 0, 2);
+$fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
+@include($fn);
+$iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
+if (isset($sedra) && isset($sedra[$iso])) {
+    if (is_array($sedra[$iso])) {
+	$events = $sedra[$iso];
+    } else {
+	$events = array($sedra[$iso]);
+    }
+
+    foreach ($events as $subj) {
+	if (strncmp($subj, "Rosh Chodesh", 12) == 0) {
 	    $rosh_chodesh = true;
-	    break;
 	}
-	if (strstr($line, "Chanukah:") !== false) {
+	if (strncmp($subj, "Chanukah:", 9) == 0) {
 	    $chanukah = true;
-	    break;
+	}
+	if (strstr($subj, "day of the Omer") !== false) {
+	    $omer = $subj;
 	}
     }
 }
-$lines = @file("./omer.inc");
-if (is_array($lines) && $lines[0]) {
-    $omer = $lines[0];
-}
-unset($lines);
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
