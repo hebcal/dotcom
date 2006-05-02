@@ -583,9 +583,9 @@ EOHTML
     }
 
     my $amazon_link1 =
-	"http://www.amazon.com/exec/obidos/ASIN/0827607121/hebcal-20";
+	"http://www.amazon.com/o/ASIN/0827607121/hebcal-20";
     my $amazon_link2 =
-	"http://www.amazon.com/exec/obidos/ASIN/0899060145/hebcal-20";
+	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
     print OUT2 <<EOHTML;
 </head>
