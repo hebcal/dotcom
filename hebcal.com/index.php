@@ -97,7 +97,7 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
 
 	echo <<<MESSAGE_END
 <a title="$title from Amazon.$amazon_dom"
-href="http://www.amazon.$amazon_dom/exec/obidos/ASIN/$asin/hebcal-20"><img
+href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20"><img
 src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
 width="$width" height="$height" hspace="8" align="right"
 alt="$title from Amazon.$amazon_dom"></a>
@@ -115,7 +115,7 @@ MESSAGE_END;
 	echo <<<MESSAGE_END
 <p>If you are looking for a full-color printed 2006 calendar
 with Jewish holidays, consider <a
-href="http://www.amazon.$amazon_dom/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
+href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$amazon_dom.
 MESSAGE_END;
     }
