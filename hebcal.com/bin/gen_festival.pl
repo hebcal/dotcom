@@ -235,7 +235,7 @@ href="/search/">Search</a></small>
 <!--/htdig_noindex-->
 <h1>Jewish Holidays</h1>
 <a title="Jewish Year 5766 from Amazon.com"
-href="http://www.amazon.com/exec/obidos/ASIN/0789312735/hebcal-20"><img
+href="http://www.amazon.com/o/ASIN/0789312735/hebcal-20"><img
 src="http://www.hebcal.com/i/0789312735.01.TZZZZZZZ.jpg" border="0"
 width="110" height="110" hspace="8" vspace="8" align="right"
 alt="Jewish Year 5766 from Amazon.com"></a>
@@ -433,7 +433,7 @@ EOHTML
     }
 
     my($strassfeld_link) =
-	"http://www.amazon.com/exec/obidos/ASIN/0062720082/hebcal-20";
+	"http://www.amazon.com/o/ASIN/0062720082/hebcal-20";
 
     print OUT2 <<EOHTML;
 </head>
@@ -548,7 +548,7 @@ EOHTML
 		my $shorttitle = $bktitle;
 		$shorttitle =~ s/\s*:.+//;
 		my $author = $book->{"author"};
-		my $link = "http://www.amazon.com/exec/obidos/ASIN/$asin/hebcal-20";
+		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
 		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a title="$bktitle" href="$link">$shorttitle</a><br>by $author</td>\n};
 	    }
 
@@ -611,7 +611,7 @@ Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dd>Rabbi Michael Strassfeld
 <dt><em><a
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
-href="http://www.amazon.com/exec/obidos/ASIN/0827602529/hebcal-20">Tanakh:
+href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
 <dd>Jewish Publication Society
 };
