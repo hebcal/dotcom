@@ -725,7 +725,7 @@ sub referred_by_websearch
 	$message=<<MESSAGE_END;
 <blockquote class="welcome">
 <a title="$title"
-href="http://www.amazon.$tld/exec/obidos/ASIN/$asin/hebcal-20"><img
+href="http://www.amazon.$tld/o/ASIN/$asin/hebcal-20"><img
 src="http://www.hebcal.com/i/$asin.01.TZZZZZZZ.jpg" border="0"
 width="$width" height="$height" hspace="8" align="right"
 alt="$title from Amazon.$tld"></a>
@@ -738,7 +738,7 @@ href="$form_href">$form_text</a> and click the Get Calendar button.
 
 <p>If you are looking for a full-color printed 2006 calendar,
 consider <a
-href="http://www.amazon.$tld/exec/obidos/ASIN/$asin/hebcal-20">$title</a>
+href="http://www.amazon.$tld/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$tld.
 </blockquote>
 MESSAGE_END
