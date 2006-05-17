@@ -205,6 +205,8 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp
 <br><li><b>Major&nbsp;Holidays</b><br>for
 <a href="/hebcal/?v=1;year=2006;month=x;nh=on;tag=fp.ql">2006</a> |
 <a href="/hebcal/?v=1;year=5766;yt=H;month=x;nh=on;tag=fp.ql">5766</a><br>
+for <a href="/hebcal/?v=1;year=2007;month=x;nh=on;tag=fp.ql">2007</a> |
+<a href="/hebcal/?v=1;year=5767;yt=H;month=x;nh=on;tag=fp.ql">5767</a><br>
 </ul>
 <br><hr noshade size="1">
 <form action="/shabbat/">
