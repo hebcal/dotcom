@@ -162,6 +162,7 @@ my($midnight,$saturday);
     $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 }
 
+my %seen;
 for (my $i = 0; $i < @events; $i++)
 {
     # holiday is at 12:00:01 am
@@ -176,6 +177,7 @@ for (my $i = 0; $i < @events; $i++)
 	my $holiday = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my $href = Hebcal::get_holiday_anchor($holiday,undef,undef);
 	if ($href) {
+	    next if $seen{$href};
 	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	    my $stime = sprintf("%02d %s %04d",
 				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
@@ -184,6 +186,7 @@ for (my $i = 0; $i < @events; $i++)
 	    $holiday =~ s/ /&nbsp;/g;
 	    print OUT "\n<br><br><li><b><a\n";
 	    print OUT "href=\"$href?tag=fp.ql\">$holiday</a></b><br>$stime\n";
+	    $seen{$href} = 1;
 	}
     }
 }
