@@ -1061,39 +1061,37 @@ qq{<p class="goto"><ul class="gtl">
 
 	if ($q->param("vis"))
 	{
-	    my $style = ($q->param("month") eq "x" && $prev_mon > 1) ?
-		' style="page-break-before: always"' : "";
-
 	    if ($prev_mon != $mon)
 	    {
 		if (defined $cal)
 		{
 		    # display previously created calendar
+		    my $style = ($q->param("month") eq "x" && $prev_mon > 1) ?
+			' style="page-break-before: always"' : "";
 		    Hebcal::out_html(undef,
 		    "<div align=\"center\" class=\"cal\"$style>",
 		    $cal->as_HTML(), 
 		    "</div><br><br>");
-		}
 
-		# grotty hack to display empty months
-		if ($prev_mon+1 != $mon)
-		{
-		    for (my $j = $prev_mon+1; $j < $mon; $j++)
+		    # grotty hack to display empty months
+		    if ($prev_mon != 0 && ($prev_mon+1 != $mon))
 		    {
-			$cal = new_html_cal($year,$j,$goto,
-					    $prev_title,$prev_url,
-					    $next_title,$next_url);
-			Hebcal::out_html(undef,
+			for (my $j = $prev_mon+1; $j < $mon; $j++)
+			{
+			    $cal = new_html_cal($year,$j,$goto,
+						$prev_title,$prev_url,
+						$next_title,$next_url);
+			    Hebcal::out_html(undef,
 			    "<div align=\"center\" class=\"cal\"$style>",
 			    $cal->as_HTML(), 
 			    "</div><br><br>");
+			}
 		    }
 		}
 
 		$prev_mon = $mon;
 		$cal = new_html_cal($year,$mon,$goto,
-				    $prev_title,$prev_url,
-				    $next_title,$next_url);
+				    $prev_title,$prev_url,$next_title,$next_url);
 	    }
 
 	    my $cal_subj = $subj;
