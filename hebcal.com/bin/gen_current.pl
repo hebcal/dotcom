@@ -130,20 +130,66 @@ open(OUT,">$outfile") || die;
 print OUT "$hdate\n";
 close(OUT);
 
-$outfile = "$WEBDIR/etc/hdate-en.js";
-open(OUT,">$outfile") || die;
-print OUT "document.write(\"$hdate\");\n";
-close(OUT);
-
 if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 {
     my($hm,$hd,$hy) = ($2,$1,$3);
     my $hebrew = Hebcal::build_hebrew_date($hm,$hd,$hy);
 
+    $outfile = "$WEBDIR/etc/hdate-en.js";
+    open(OUT,">$outfile") || die;
+    print OUT "document.write(\"$hdate\");\n";
+    close(OUT);
+
     $outfile = "$WEBDIR/etc/hdate-he.js";
     open(OUT,">$outfile") || die;
     print OUT "document.write(\"$hebrew\");\n";
     close(OUT);
+
+    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
+
+    $hm =~ s/[^A-Za-z]+//g;
+
+    open(RSS,">$WEBDIR/etc/hdate-en.xml") || die;
+    print RSS qq{<?xml version="1.0" ?>
+<rss version="2.0">
+<channel>
+<title>Hebrew Date</title>
+<link>http://www.hebcal.com/converter/</link>
+<description>Today\'s Hebrew Date from Hebcal.com</description>
+<language>en-us</language>
+<copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
+<lastBuildDate>$pubDate</lastBuildDate>
+<item>
+<title>$hdate</title>
+<link>http://www.hebcal.com/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;tag=rss</link>
+<description>$hdate</description>
+<pubDate>$pubDate</pubDate>
+</item>
+</channel>
+</rss>
+};
+    close(RSS);
+
+    open(RSS,">$WEBDIR/etc/hdate-he.xml") || die;
+    print RSS qq{<?xml version="1.0" ?>
+<rss version="2.0">
+<channel>
+<title>Hebrew Date</title>
+<link>http://www.hebcal.com/converter/</link>
+<description>Today\'s Hebrew Date from Hebcal.com</description>
+<language>he</language>
+<copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
+<lastBuildDate>$pubDate</lastBuildDate>
+<item>
+<title>$hebrew</title>
+<link>http://www.hebcal.com/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss</link>
+<description>$hebrew</description>
+<pubDate>$pubDate</pubDate>
+</item>
+</channel>
+</rss>
+};
+    close(RSS);
 }
 
 $outfile = "$WEBDIR/holiday.inc";
