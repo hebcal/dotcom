@@ -115,7 +115,9 @@ MESSAGE_END;
 Hebcal.com offers a free personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
 and Torah readings. We also offer export to Palm, Microsoft Outlook, and
-Apple iCal. <a href="/hebcal/">Customize your calendar</a>.
+Apple iCal.
+
+<p>Get started <a href="/hebcal/">customizing your calendar</a>.
 MESSAGE_END;
 
     if ($show_amazon) {
