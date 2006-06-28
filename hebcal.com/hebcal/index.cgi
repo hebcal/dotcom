@@ -44,7 +44,8 @@
 
 # optimize common case
 BEGIN {
-    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}) {
+    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}
+	&& !$ENV{"HTTP_REFERER"}) {
 	if (open(F,"/home/hebcal/web/hebcal.com/hebcal/default.html")) {
 	    print "Content-Type: text/html\n\n";
 	    while(read(F,$_,8192)) {
@@ -437,7 +438,7 @@ JSCRIPT_END
     }
     elsif (defined $q->referer())
     {
-	$message = referred_by_websearch($q, "form below", "#form");
+	$message = referred_by_websearch($q, "form below", "");
     }
 
     Hebcal::out_html(undef,
@@ -716,11 +717,18 @@ sub referred_by_websearch
     {
 	my $tld = $3 ? $3 : "com";
 	my @ads = (
-		   ["The Jewish Calendar 5766", "0789312395", 80, 110],
-		   ["The Jewish Calendar 2006", "0883634074", 110, 80],
-		   ["Jewish Year 5766", "0789312735", 110, 110],
+#		   ["The Jewish Calendar 5766", "0789312395", 80, 110],
+#		   ["The Jewish Calendar 2006", "0883634074", 110, 80],
+#		   ["Jewish Year 5766", "0789312735", 110, 110],
+		   ["A Calendar for the Jewish Year 5767", "0789314495", 110, 109],
+		   ["The Jewish Calendar 2007", "0883634082", 110, 80],
+		   ["The Jewish Engagement Calendar 2007", "0883634090", 72, 110],
+		   ["The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110],
 		   );
 	my($title,$asin,$width,$height) = @{$ads[int(rand($#ads+1))]};
+
+	my $form_link = $form_href ? qq{<a\nhref="$form_href">$form_text</a>} :
+	    $form_text;
 
 	$message=<<MESSAGE_END;
 <blockquote class="welcome">
@@ -733,8 +741,10 @@ alt="$title from Amazon.$tld"></a>
 Hebcal.com offers a free personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
 and Torah readings. We also offer export to Palm, Microsoft Outlook, and
-Apple iCal. To customize your calendar, fill out the <a
-href="$form_href">$form_text</a> and click the Get Calendar button.
+Apple iCal.
+
+<p>To customize your calendar, fill out the $form_link
+and click the Get Calendar button.
 
 <p>If you are looking for a full-color printed 2006 calendar,
 consider <a
