@@ -75,7 +75,7 @@ if ($rosh_chodesh) { ?>
 <?php } elseif ($chanukah) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chag Urim Sameach!</span>
 <?php } elseif ($shalosh_regalim) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Moadim L'Simcha!</span>
+&nbsp; - &nbsp; <span class="fpgreeting">Moadim L&#39;Simcha!</span>
 <?php } ?>
 </span>
 <?php
@@ -86,9 +86,16 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
 
     $show_amazon = true;
     if ($show_amazon) {
-    $cal[] = array("The Jewish Calendar 5766", "0789312395", 80, 110);
-    $cal[] = array("The Jewish Calendar 2006", "0883634074", 110, 80);
-    $cal[] = array("Jewish Year 5766", "0789312735", 110, 110);
+//    $cal[] = array("The Jewish Calendar 5766", "0789312395", 80, 110);
+//    $cal[] = array("The Jewish Calendar 2006", "0883634074", 110, 80);
+//    $cal[] = array("Jewish Year 5766", "0789312735", 110, 110);
+
+    // other 2007 calendars include 0764935178 0764934562 1594901988
+    $cal[] = array("A Calendar for the Jewish Year 5767", "0789314495", 110, 109);
+    $cal[] = array("The Jewish Calendar 2007", "0883634082", 110, 80);
+    $cal[] = array("The Jewish Engagement Calendar 2007", "0883634090", 72, 110);
+    $cal[] = array("The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110);
+
     shuffle($cal);
     list($title,$asin,$width,$height) = $cal[0];
 
