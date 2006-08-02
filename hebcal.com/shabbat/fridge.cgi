@@ -223,11 +223,12 @@ sub process_args
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
-	form($cfg,1,
-	      "Sorry, can't find\n".  "<b>" . $q->param('zip') .
-	      "</b> in the zip code database.\n",
-	      "<ul><li>Please try a nearby zip code</li></ul>")
-	    unless defined $val;
+	unless (defined $val) {
+	    print "Status: 400 Bad Request\r\n",
+	    "Content-Type: text/plain\r\n\r\n",
+	    "Can't find zip code ", $q->param('zip'), " in the DB.\n";
+	    exit(0);
+	}
 
 	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    Hebcal::zipcode_fields($val);
