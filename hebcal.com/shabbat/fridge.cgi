@@ -243,6 +243,13 @@ sub process_args
 	    $q->param('tz', $tz);
 	}
 
+	if ($tz eq '?') {
+	    print "Status: 500 Internal Server Error\r\n",
+	    "Content-Type: text/plain\r\n\r\n",
+	    "No timezone for zip code ", $q->param('zip'), "\n";
+	    exit(0);
+	}
+
 	$city_descr = "$city, $state";
 
 	# allow CGI args to override
