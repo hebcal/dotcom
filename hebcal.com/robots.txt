@@ -6,3 +6,7 @@ Disallow: /shabbat
 
 User-Agent: OmniExplorer_Bot
 Disallow: /hebcal/
+
+User-Agent: Googlebot
+Disallow: /cgi-bin/
+Disallow: /hebcal/index.cgi/*.ics
