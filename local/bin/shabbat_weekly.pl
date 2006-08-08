@@ -345,6 +345,7 @@ SELECT email_address,
        email_candles_havdalah
 FROM hebcal1.hebcal_shabbat_email
 WHERE hebcal1.hebcal_shabbat_email.email_status = 'active'
+AND hebcal1.hebcal_shabbat_email.email_ip IS NOT NULL
 $all_sql
 EOD
 ;
