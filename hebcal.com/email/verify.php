@@ -128,6 +128,45 @@ EOD;
 
     mysql_query($sql, $db)
 	or die("Invalid query 2: " . mysql_error());
+
+    $from_name = "Hebcal Subscription Notification";
+    $from_addr = "shabbat-owner@hebcal.com";
+    $return_path = "shabbat-return-" . strtr($info["em"], "@", "=") .
+	"@hebcal.com";
+    $subject = "Your subscription to hebcal is complete";
+
+    $ip = $_SERVER["REMOTE_ADDR"];
+
+    $unsub_url = "http://www.hebcal.com/email/?e=" .
+	urlencode(base64_encode($info["em"]));
+
+    $headers = array("From" => "\"$from_name\" <$from_addr>",
+		     "To" => $info["em"],
+		     "Reply-To" => $from_addr,
+		     "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
+		     "MIME-Version" => "1.0",
+		     "Content-Type" => "text/plain",
+		     "X-Sender" => $sender,
+		     "Precedence" => "bulk",
+		     "X-Mailer" => "hebcal web v$VER",
+		     "Message-ID" =>
+		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
+		     "X-Originating-IP" => "[$ip]",
+		     "Subject" => $subject);
+
+    $body = <<<EOD
+Hello,
+
+Your subscription request for hebcal is complete.
+
+Regards,
+hebcal.com
+
+To modify your subscription or to unsubscribe completely, visit:
+$unsub_url
+EOD;
+
+    $err = smtp_send($return_path, $info["em"], $headers, $body);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -211,9 +250,8 @@ offers.</p>
 
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
-
 EOD
-	     ;
+ ;
 
  echo $html;
  my_footer();
