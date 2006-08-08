@@ -217,10 +217,10 @@ function write_staging_info($param, $old_encoded)
 REPLACE INTO hebcal1.hebcal_shabbat_email
 (email_id, email_address, email_status, email_created,
  email_candles_havdalah, email_optin_announce,
- $location_name)
+ $location_name, email_ip)
 VALUES ('$encoded', '$param[em]', 'pending', NOW(),
 	'$param[m]', '$optin_announce',
-	'$location_value')
+	'$location_value', '$_SERVER[REMOTE_ADDR]')
 EOD;
 
     $result = mysql_query($sql, $db)
@@ -533,16 +533,15 @@ EOD
     $encoded = write_staging_info($param, $old_encoded);
 
     $from_name = "Hebcal Subscription Notification";
-    $from_addr = "shabbat-subscribe-$encoded@hebcal.com";
     $return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
 	"@hebcal.com";
+    $from_addr = "no-reply@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
     $ip = $_SERVER["REMOTE_ADDR"];
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $param["em"],
-		     "Reply-To" => $from_addr,
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
 		     "X-Sender" => $sender,
@@ -559,7 +558,9 @@ We have received your request to receive weekly Shabbat
 candle lighting time information from hebcal.com for
 $city_descr.
 
-Please confirm your request by replying to this message.
+Please confirm your request by clicking on this link:
+
+http://www.hebcal.com/email/verify.php?$encoded
 
 If you did not request (or do not want) weekly Shabbat
 candle lighting time information, please accept our
@@ -567,6 +568,8 @@ apologies and ignore this message.
 
 Regards,
 hebcal.com
+
+[$_SERVER[REMOTE_ADDR]]
 EOD;
 
     $err = smtp_send($return_path, $param["em"], $headers, $body);
@@ -579,7 +582,7 @@ EOD;
 candle lighting times and parsha information.</p>
 <p>A confirmation message has been sent
 to <b>$html_email</b>.<br>
-Simply reply to that message to confirm your subscription.</p>
+Click the link within that message to confirm your subscription.</p>
 <p>If you do not receive this acknowledgment message within an hour
 or two, then the most likely problem is that you made a typo
 in your email address.  If you do not get the confirmation message,
@@ -613,7 +616,7 @@ function sql_unsub($em) {
     $db = my_open_db();
     $sql = <<<EOD
 UPDATE hebcal1.hebcal_shabbat_email
-SET email_status='unsubscribed'
+SET email_status='unsubscribed',email_ip='$_SERVER[REMOTE_ADDR]'
 WHERE email_address = '$em'
 EOD;
 
