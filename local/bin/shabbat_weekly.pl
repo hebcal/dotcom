@@ -436,6 +436,7 @@ sub smtp_connect
 	my $smtp = Net::SMTP->new($s, Timeout => 20);
 	if ($smtp)
 	{
+	    $smtp->auth("hebcal", "xxxxxxxx");
 	    return $smtp;
 	}
 	else
