@@ -492,7 +492,8 @@ sub write_sedra_page
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
-       $drash_reform,$drash_torah,$drash_uj) = get_parsha_info($parshiot,$h);
+       $drash_reform,$drash_torah,$drash_uj,
+       $drash_ajr) = get_parsha_info($parshiot,$h);
 
     if ($hebrew) {
 	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
@@ -777,7 +778,7 @@ EOHTML
     }
 
     my $has_drash = $drash_jts || $drash_ou ||
-	$drash_torah || $drash_uj;
+	$drash_torah || $drash_uj || $drash_ajr;
 
     if ($has_drash)
     {
@@ -810,6 +811,11 @@ EOHTML
     if ($drash_uj)
     {
 	print OUT2 qq{<li><a title="Parashat $h commentary from UJ"\nhref="$drash_uj">University of Judaism</a>\n};
+    }
+
+    if ($drash_ajr)
+    {
+	print OUT2 qq{<li><a title="Parashat $h commentary from AJR"\nhref="$drash_ajr">Academy for Jewish Religion</a>\n};
     }
 
     if ($has_drash)
@@ -1122,8 +1128,18 @@ sub get_parsha_info
     # urj site still broken. :-(
     my $drash4 = '';
 
+    my $anchor = lc($h);
+    $anchor =~ s/[^\w]//g;
+    my $drash_ajr = "http://ajrsem.org/index.php?pg=$anchor";
+    if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
+	$drash_ajr .= $hebrew_year;
+    } else {
+	$drash_ajr .= $hebrew_year - 1;
+    }
+
     ($hebrew,$torah,$haftarah,$haftarah_seph,
-     $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3,$drash_uj);
+     $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3,$drash_uj,
+     $drash_ajr);
 }
 
 sub get_special_maftir
