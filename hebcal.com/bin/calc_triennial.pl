@@ -848,7 +848,7 @@ Chumash: The Stone Edition (Artscroll Series)</a></em>
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a
-href=http://www.jtsa.edu/community/parashah/triennial.shtml">A
+href="http://www.jtsa.edu/community/parashah/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
 <dt><em><a href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
