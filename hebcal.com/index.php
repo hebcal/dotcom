@@ -21,6 +21,10 @@ if (isset($sedra) && isset($sedra[$iso])) {
     }
 
     foreach ($events as $subj) {
+	if (strncmp($subj, "Erev ", 5) == 0) {
+	    $subj = substr($subj, 5); 
+	}
+
 	if (strncmp($subj, "Rosh Chodesh", 12) == 0) {
 	    $rosh_chodesh = true;
 	}
@@ -111,9 +115,6 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
 
     $show_amazon = true;
     if ($show_amazon) {
-//    $cal[] = array("The Jewish Calendar 5766", "0789312395", 80, 110);
-//    $cal[] = array("The Jewish Calendar 2006", "0883634074", 110, 80);
-//    $cal[] = array("Jewish Year 5766", "0789312735", 110, 110);
 
     // other 2007 calendars include 0764935178 0764934562 1594901988
     $cal[] = array("A Calendar for the Jewish Year 5767", "0789314495", 110, 109);
@@ -147,7 +148,7 @@ MESSAGE_END;
 
     if ($show_amazon) {
 	echo <<<MESSAGE_END
-<p>If you are looking for a full-color printed 2006 calendar
+<p>If you are looking for a full-color printed 2007 calendar
 with Jewish holidays, consider <a
 href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$amazon_dom.
