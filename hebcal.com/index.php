@@ -32,12 +32,29 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	    || strncmp($subj, "Shavuot", 7) == 0) {
 	    $shalosh_regalim = true;
 	}
+	if (strncmp($subj, "Rosh Hashana", 12) == 0) {
+	    $shana_tova = true;
+	}
+	if (strncmp($subj, "Tzom", 4) == 0
+	    || strncmp($subj, "Asara", 5) == 0
+	    || strncmp($subj, "Ta'anit", 7) == 0) {
+	    $minor_fast = true;
+	}
 	if (strstr($subj, "day of the Omer") !== false) {
 	    $omer = $subj;
 	}
     }
 }
 
+# Yamim Nora'im
+$jd = gregoriantojd($gm, $gd, $gy);
+$hebdate = jdtojewish($jd); 
+list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
+if ($hmnum == 13 && $hd > 13) {
+    $shana_tova = true;		# month 13 == Elul
+} elseif ($hmnum == 1 && $hd <= 10) {
+    $gmar_tov = true;		# month 1 == Tishrei
+}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -76,6 +93,14 @@ if ($rosh_chodesh) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chag Urim Sameach!</span>
 <?php } elseif ($shalosh_regalim) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Moadim L&#39;Simcha!</span>
+<?php } elseif ($minor_fast) { ?>
+&nbsp; - &nbsp; <span class="fpgreeting">Tzom Kal</span>
+<?php } elseif ($shana_tova) { ?>
+<br><span class="fpgreeting">Shanah Tovah! Hebcal.com wishes you a happy
+and healthy New Year.</span>
+<?php } elseif ($gmar_tov) { ?>
+<br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
+you a good inscription in the Book of Life.</span>
 <?php } ?>
 </span>
 <?php
