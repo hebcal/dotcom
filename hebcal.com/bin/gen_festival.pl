@@ -547,9 +547,11 @@ EOHTML
 		my $bktitle = trim($book->{"content"});
 		my $shorttitle = $bktitle;
 		$shorttitle =~ s/\s*:.+//;
-		my $author = $book->{"author"};
 		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
-		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a title="$bktitle" href="$link">$shorttitle</a><br>by $author</td>\n};
+		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a title="$bktitle" href="$link">$shorttitle</a>};
+		my $author = $book->{"author"};
+		print OUT2 qq{<br>by $author} if $author;
+		print OUT2 qq{</td>\n};
 	    }
 
 	    print OUT2 qq{</tr></table>\n};
