@@ -746,8 +746,8 @@ Apple iCal.
 <p>To customize your calendar, fill out the $form_link
 and click the Get Calendar button.
 
-<p>If you are looking for a full-color printed 2006 calendar,
-consider <a
+<p>If you are looking for a full-color printed 2007 calendar with
+Jewish holidays, consider <a
 href="http://www.amazon.$tld/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$tld.
 </blockquote>
