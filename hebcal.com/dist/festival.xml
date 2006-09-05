@@ -523,6 +523,20 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
+ <books>
+  <book ASIN="0789314495" author="">
+  A Calendar for the Jewish Year 5767
+  </book>
+  <book ASIN="0883634082" author="">
+  The Jewish Calendar 2007
+  </book>
+  <book ASIN="0883634090" author="">
+  The Jewish Engagement Calendar 2007
+  </book>
+  <book ASIN="0789314053" author="">
+  The Jewish Calendar 5767 : 2006-2007 Engagement Calendar
+  </book>
+ </books>
 </festival>
 
 <festival id="Rosh Hashana I"
