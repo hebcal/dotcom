@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2006  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -433,12 +433,26 @@ sub invoke_hebcal($$$)
     local($_);
     local(*HEBCAL);
 
+    my $cmd_smashed = $cmd;
+    $cmd_smashed =~ s/^\S+//;
+    $cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
+    $cmd_smashed =~ s/\s+//g;
+    $cmd_smashed =~ s/\'//g;
+
+    my $hccache;
+    my $hccache_file = "/tmp/hebcal_cmd/$cmd_smashed";
     @events = ();
-    open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
+    if (open(HEBCAL,"<$hccache_file")) {
+	# will read data from cachefile, not pipe
+    } else {
+	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
+	$hccache = open(HCCACHE,">$hccache_file.$$");
+    }
 
     $prev = '';
     while (<HEBCAL>)
     {
+	print HCCACHE $_ if $hccache;
 	next if $_ eq $prev;
 	$prev = $_;
 	chop;
@@ -471,6 +485,10 @@ sub invoke_hebcal($$$)
 	      ($untimed ? $memo2 : $memo),$yomtov]);
     }
     close(HEBCAL);
+    if ($hccache) {
+	close(HCCACHE);
+	rename("$hccache_file.$$", $hccache_file);
+    }
 
     @events;
 }
