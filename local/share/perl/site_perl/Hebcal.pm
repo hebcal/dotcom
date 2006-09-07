@@ -71,6 +71,8 @@ if ($VERSION =~ /(\d+)\.(\d+)/) {
 }
 
 my $HOSTNAME;
+my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || "/home/hebcal/web/hebcal.com";
+$CACHE_DIR .= "/cache/";
 
 $Hebcal::gregorian_warning = "<p><span style=\"color: red\">WARNING:
 Results for year 1752 C.E. and before may not be accurate.</span>
@@ -440,7 +442,7 @@ sub invoke_hebcal($$$)
     $cmd_smashed =~ s/\'//g;
 
     my $hccache;
-    my $hccache_dir = $ENV{"DOCUMENT_ROOT"} . "/cache/cmd";
+    my $hccache_dir = $CACHE_DIR . "cmd";
     unless (-d $hccache_dir) {
 	system("/bin/mkdir", "-p", $hccache_dir);
     }
@@ -778,7 +780,7 @@ sub cache_begin($)
     $qs =~ s/\%20/+/g;
     $qs =~ s/[\<\>\s\"\'\`\?\*\$\|\[\]\{\}\\\~]//g; # unsafe chars
 
-    my $dir = $ENV{"DOCUMENT_ROOT"} . "/cache/" . $script_name;
+    my $dir = $CACHE_DIR . $script_name;
     unless (-d $dir) {
 	system("/bin/mkdir", "-p", $dir) == 0 or return undef;
     }
