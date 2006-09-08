@@ -1117,7 +1117,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 
 <!-- Rosh Chodesh -->
 <festival id="Shabbat Rosh Chodesh"
- hebrew="(NEEDS_TRANSLATION)">
+ hebrew="שבת ראש חדש">
  <about attr="dummy">When Shabbat falls on Rosh Chodesh</about>
  <kriyah>
   <torah href="http://www.jtsa.edu/community/parashah/jpstext/holidays_maf.shtml#roshhodesh_maf" />
@@ -1127,7 +1127,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shabbat Machar Chodesh"
- hebrew="(NEEDS_TRANSLATION)">
+ hebrew="שבת מכר חדש">
  <about attr="dummy">When Shabbat falls the day before Rosh Chodesh</about>
  <kriyah>
   <haft reading="I Samuel 20:18 - 20:42"
