@@ -71,7 +71,7 @@ if ($VERSION =~ /(\d+)\.(\d+)/) {
 }
 
 my $HOSTNAME;
-my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || "/home/hebcal/web/hebcal.com";
+my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
 $CACHE_DIR .= "/cache/";
 
 $Hebcal::gregorian_warning = "<p><span style=\"color: red\">WARNING:
