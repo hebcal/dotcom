@@ -230,7 +230,7 @@ style="padding-left: 10px; padding-right: 5px">
 <ul class="gtl">
 <!-- Begin temp holiday -->
 <li><b><a
-href="/holidays/rosh-hashana.html?tag=fp.tmp">Rosh&nbsp;Hashana&nbsp;5767</a></b><br>22
+href="/holidays/rosh-hashana.html?tag=fp.tmp">Rosh&nbsp;Hashanah&nbsp;5767</a></b><br>22
 September 2006<br>at sundown
 <br><br>
 <!-- End temp holiday -->
