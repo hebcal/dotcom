@@ -23,6 +23,7 @@ RewriteRule ^ /wap-shabbat.php [L]
 #Deny from 24.225.252.135 68.202.8.234
 RewriteRule hebcal_2004_sep_07936.ics - [F]
 
+AddType image/vnd.microsoft.icon ico
 AddType application/x-javascript js
 AddType text/css css
 AddType text/xml xml rdf rss vxml
@@ -44,6 +45,4 @@ Redirect /hebcal.html http://www.hebcal.com/hebcal/
 Redirect /shabbat.html http://www.hebcal.com/shabbat/
 Redirect /help/defaults.html http://www.hebcal.com/holidays/
 
-Redirect /michael/hebcal http://www.hebcal.com/hebcal
-Redirect /michael/projects/hebcal.pl http://www.hebcal.com/dist/hebcal.pl
-Redirect /michael/projects/hebcal-ChangeLog.txt http://www.hebcal.com/dist/ChangeLog.txt
+Redirect /TARGET=BLANK http://www.hebcal.com/
