@@ -500,6 +500,13 @@ sub display_json
 
     my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
 
+    my $cb = $q->param('callback');
+    if ($cb && $cb =~ /^[A-Za-z_]\w*$/) {
+	Hebcal::out_html($cfg, $cb, "(");
+    } else {
+	$cb = undef;
+    }
+
     Hebcal::out_html($cfg, qq'{
  "title": "$city_descr",
  "link": "$url",
@@ -542,6 +549,8 @@ sub display_json
     }
 
     Hebcal::out_html($cfg, " ]\n}\n");
+
+    Hebcal::out_html($cfg, ")") if $cb;
 }
 
 
