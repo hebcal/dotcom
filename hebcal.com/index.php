@@ -241,11 +241,16 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp
   include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
 <!-- End temp holiday2 -->
-<br><li><b>Major&nbsp;Holidays</b><br>for
-<a href="/hebcal/?v=1;year=2006;month=x;nh=on;tag=fp.ql">2006</a> |
-<a href="/hebcal/?v=1;year=5766;yt=H;month=x;nh=on;tag=fp.ql">5766</a><br>
-for <a href="/hebcal/?v=1;year=2007;month=x;nh=on;tag=fp.ql">2007</a> |
-<a href="/hebcal/?v=1;year=5767;yt=H;month=x;nh=on;tag=fp.ql">5767</a><br>
+<br><li><b>Major&nbsp;Holidays</b>
+<?php
+$hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
+$gregyear = ($gm > 9) ? $gy + 1 : $gy;
+?>
+<br>for
+<a href="/hebcal/?v=1;year=<?php
+  echo $gregyear ?>;month=x;nh=on;tag=fp.ql"><?php echo $gregyear ?></a> |
+<a href="/hebcal/?v=1;year=<?php
+  echo $hebyear ?>;yt=H;month=x;nh=on;tag=fp.ql"><?php echo $hebyear ?></a>
 </ul>
 <br><hr noshade size="1">
 <form action="/shabbat/">
@@ -283,7 +288,7 @@ this site going!</small>
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
-&copy; <?php echo date("Y") ?> Michael J. Radwin. All rights reserved.
+&copy; <?php echo $gy ?> Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/contact/">Contact</a> -
