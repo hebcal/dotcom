@@ -395,6 +395,7 @@ sub form
 
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     my $hyear = $hebdate->{"yy"};
+    $hyear++ if $hebdate->{"mm"} == 6; # Elul
 
     $JSCRIPT=<<JSCRIPT_END;
 var d=document;
