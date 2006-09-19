@@ -20,6 +20,18 @@ $matches = array();
 if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
     $VER = $matches[1] . "." . $matches[2];
 }
+
+list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+$gm = $mon + 1;
+$gd = $mday;
+$gy = $year + 1900;
+$jd = gregoriantojd($gm, $gd, $gy);
+$hebdate = jdtojewish($jd); 
+list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
+if ($hmnum == 13) {
+    $hy++;
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -74,6 +86,7 @@ id="zip"></label>
 &nbsp;&nbsp;<small>(or select by <a
 href="/shabbat/fridge.php?geo=city">closest city</a></small>)
 <?php } ?>
+<input type="hidden" name="year" value="<?php echo $hy ?>">
 </form>
 </blockquote>
 
