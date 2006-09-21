@@ -524,17 +524,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
  <books>
+  <book ASIN="0805210482" />
+  <book ASIN="0827608217" />
+  <book ASIN="1580232396" />
+  <book ASIN="0316739081" />
   <book ASIN="0789314495" author="">
   A Calendar for the Jewish Year 5767
-  </book>
-  <book ASIN="0883634082" author="">
-  The Jewish Calendar 2007
-  </book>
-  <book ASIN="0883634090" author="">
-  The Jewish Engagement Calendar 2007
-  </book>
-  <book ASIN="0789314053" author="">
-  The Jewish Calendar 5767 : 2006-2007 Engagement Calendar
   </book>
  </books>
 </festival>
@@ -613,6 +608,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="29" num="6" book="Leviticus" begin="16:31" end="16:34" />
   <aliyah parsha="41" num="M" book="Numbers" begin="29:7" end="29:11" numverses="5" />
  </kriyah>
+ <books>
+  <book ASIN="0805210482" />
+  <book ASIN="0827608217" />
+  <book ASIN="0316739081" />
+  <book ASIN="158023271X" />
+ </books>
 </festival>
 <festival id="Yom Kippur (on Shabbat)"
  hebrew="יוֹם כִּפּוּר"
