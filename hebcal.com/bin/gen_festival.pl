@@ -55,6 +55,8 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Image::Magick;
 use Hebcal ();
+use Date::Calc;
+use HebcalGPL ();
 use strict;
 
 $0 =~ s,.*/,,;  # basename
@@ -748,9 +750,10 @@ sub holidays_observed
 {
     my($current) = @_;
 
-    my $heb_yr = `./hebcal -t -x -h | grep -v Omer`;
-    chomp($heb_yr);
-    $heb_yr =~ s/^.+, (\d\d\d\d)/$1/;
+    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+    my $heb_yr = $hebdate->{"yy"};
+    $heb_yr++ if $hebdate->{"mm"} == 6; # Elul
 
     my $extra_years = 5;
     my @years;
