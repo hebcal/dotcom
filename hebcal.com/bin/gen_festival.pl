@@ -52,6 +52,7 @@ use open ":utf8";
 use Getopt::Std ();
 use XML::Simple ();
 use LWP::UserAgent;
+use HTTP::Request;
 use Image::Magick;
 use Hebcal ();
 use strict;
@@ -536,6 +537,7 @@ EOHTML
 		my $filename = $outdir . "/../i/" . $img;
 		if (! -e $filename) {
 		    $ua = LWP::UserAgent->new unless $ua;
+		    $ua->timeout(10);
 		    $ua->mirror("http://images.amazon.com/images/P/$img",
 				$filename);
 		}
@@ -544,12 +546,40 @@ EOHTML
 		$image->Read($filename);
 		my($width,$height) = $image->Get("width", "height");
 
-		my $bktitle = trim($book->{"content"});
+		my $bktitle = $book->{"content"};
+		my $author = $book->{"author"};
+
+		if (!$bktitle)
+		{
+		    $ua = LWP::UserAgent->new unless $ua;
+		    $ua->timeout(10);
+		    my $url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=15X7F0YJNN5FCYC7CGR2&Operation=ItemLookup&ItemId=$asin&Version=2005-10-13";
+		    my $request = HTTP::Request->new("GET", $url);
+		    my $response = $ua->request($request);
+		    my $rxml = XML::Simple::XMLin($response->content);
+
+		    if (defined $rxml->{"Items"}->{"Item"}->{"ASIN"}
+			&& $rxml->{"Items"}->{"Item"}->{"ASIN"} eq $asin)
+		    {
+			my $attrs = $rxml->{"Items"}->{"Item"}->{"ItemAttributes"};
+			$bktitle = $attrs->{"Title"};
+			if (ref($attrs->{"Author"}) eq "ARRAY") {
+			    $author = $attrs->{"Author"}->[0];
+			} elsif (defined $attrs->{"Author"}) {
+			    $author = $attrs->{"Author"};
+			}
+		    }
+		}
+		else
+		{
+		    $author = trim($author) if $author;
+		    $bktitle = trim($bktitle) if $bktitle;
+		}
+
 		my $shorttitle = $bktitle;
 		$shorttitle =~ s/\s*:.+//;
 		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
 		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a title="$bktitle" href="$link">$shorttitle</a>};
-		my $author = $book->{"author"};
 		print OUT2 qq{<br>by $author} if $author;
 		print OUT2 qq{</td>\n};
 	    }
