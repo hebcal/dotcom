@@ -131,6 +131,7 @@ UPDATE hebcal1.hebcal_shabbat_email
 SET email_status='active',
     $geo_sql,
     email_candles_havdalah='$param[m]',
+    email_ip='$_SERVER[REMOTE_ADDR]',
     email_optin_announce='$optin_announce'
 WHERE email_address = '$param[em]'
 EOD;
