@@ -196,7 +196,7 @@ $outfile = "$WEBDIR/holiday.inc";
 open(OUT,">$outfile") || die;
 @events = Hebcal::invoke_hebcal($HEBCAL, '', 0);
 
-my($midnight,$saturday);
+my($midnight,$nextweek);
 {
     my $now = time;
     my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
@@ -205,7 +205,8 @@ my($midnight,$saturday);
 
     $midnight = Time::Local::timelocal
 	(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
-    $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
+#    $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
+    $nextweek = $midnight + (5 * 60 * 60 * 24);
 }
 
 my %seen;
@@ -219,7 +220,7 @@ for (my $i = 0; $i < @events; $i++)
 	 $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 	 "","","");
 
-    if ($time >= $midnight && $time <= $saturday) {
+    if ($time >= $midnight && $time <= $nextweek) {
 	my $holiday = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my $href = Hebcal::get_holiday_anchor($holiday,undef,undef);
 	if ($href) {
