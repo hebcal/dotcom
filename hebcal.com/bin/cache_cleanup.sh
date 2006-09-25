@@ -7,5 +7,5 @@ HEBCAL_WEB=/home/hebcal/web/hebcal.com
 
 if [ -d $HEBCAL_WEB/cache ]; then
     /bin/mv -f $HEBCAL_WEB/cache $HEBCAL_WEB/cache.$$
-    /bin/rm -rf $HEBCAL_WEB/cache.$$
+    nice /bin/rm -rf $HEBCAL_WEB/cache.$$
 fi
