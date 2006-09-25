@@ -449,7 +449,9 @@ sub invoke_hebcal($$$)
     my $hccache_file = "$hccache_dir/$cmd_smashed";
 
     @events = ();
-    if (open(HEBCAL,"<$hccache_file")) {
+    if ($cmd_smashed eq "") {
+	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
+    } elsif (open(HEBCAL,"<$hccache_file")) {
 	# will read data from cachefile, not pipe
     } else {
 	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
