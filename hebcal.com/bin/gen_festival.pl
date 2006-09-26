@@ -578,7 +578,9 @@ EOHTML
 		else
 		{
 		    $author = trim($author) if $author;
-		    $bktitle = trim($bktitle) if $bktitle;
+		    $bktitle = trim($bktitle);
+		    $bktitle =~ s/\n/ /g;
+		    $bktitle =~ s/\s+/ /g;
 		}
 
 		my $shorttitle = $bktitle;
