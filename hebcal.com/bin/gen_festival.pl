@@ -395,7 +395,7 @@ sub write_festival_page
     print OUT2 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>$f (Jewish Holiday) - $short_descr</title>
+<html><head><title>$f - $short_descr</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/holidays/$anchor" target="_top">
 <meta name="description" content="$f: $descr">
