@@ -1165,7 +1165,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shabbat Machar Chodesh"
- hebrew="שבת מכר חדש">
+ hebrew="שבת מחר חדש">
  <about attr="dummy">When Shabbat falls the day before Rosh Chodesh</about>
  <kriyah>
   <haft reading="I Samuel 20:18 - 20:42"
