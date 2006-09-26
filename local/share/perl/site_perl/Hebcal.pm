@@ -1415,19 +1415,12 @@ Jewish Calendar events into your desktop software.</p>};
 	    "\">download</a>\n";
     $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
 
-    $s .= "<h4>Palm Desktop 2.6.3 for Macintosh</h4>\n<ol><li>" .
-	"Export Mac Palm Calendar:\n" .
-	"<a href=\"" .
-	download_href($q, $filename, 'tsv') .
-	    "\">$filename.tsv</a>\n";
-    $s .= "<li>(this feature is currently experimental)</ol>\n";
-
     $s .= "<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
 	"<a href=\"" .
 	download_href($q, $filename, 'vcs') .
 	    "\">$filename.vcs</a>\n";
-    $s .= "<li>(this feature is currently experimental)</ol>\n";
+    $s .= "<li>(this download option is less reliable than other choices)</ol>\n";
 
     $s .= "</div>\n";
 
