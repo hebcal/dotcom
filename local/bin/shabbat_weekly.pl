@@ -121,12 +121,11 @@ open(LOG, ">>$logfile") || die "$logfile: $!";
 select LOG;
 $| = 1;
 
-my $smtp = smtp_connect("mail.hebcal.com");
-$smtp || die "Can't connect to SMTP server";
-
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
-$smtp->hello($HOSTNAME);
+
+my $smtp = smtp_connect("mail.hebcal.com");
+$smtp || die "Can't connect to SMTP server";
 
 my $count = 0;
 while (my($to,$cfg) = each(%SUBS))
@@ -438,6 +437,7 @@ sub smtp_connect
 	my $smtp = Net::SMTP->new($s, Timeout => 20);
 	if ($smtp)
 	{
+	    $smtp->hello($HOSTNAME);
 	    $smtp->auth("hebcal", "xxxxxxxx");
 	    return $smtp;
 	}
