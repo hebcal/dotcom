@@ -524,10 +524,20 @@ the readings for the third, fourth, and fifth days are moved ahead.
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
  <books>
-  <book ASIN="0805210482" />
-  <book ASIN="0827608217" />
-  <book ASIN="1580232396" />
-  <book ASIN="0316739081" />
+  <book ASIN="0805210482" author="Shmuel Yosef Agnon">
+  Days of Awe: A Treasury of Jewish Wisdom for Reflection, Repentance, and
+  Renewal on the High Holy Days
+  </book>
+  <book ASIN="0827608217" author="Reuven Hammer">
+  Entering the High Holy Days: A Guide to Origins, Themes, and Prayers
+  </book>
+  <book ASIN="1580232396" author="Dov Peretz Elkins">
+  Rosh Hashanah Readings: Inspiration, Information And Contemplation
+  </book>
+  <book ASIN="0316739081" author="Alan Lew">
+  This Is Real and You Are Completely Unprepared: The Days of Awe as a
+  Journey of Transformation
+  </book>
   <book ASIN="0789314495" author="">
   A Calendar for the Jewish Year 5767
   </book>
@@ -609,10 +619,20 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:7" end="29:11" numverses="5" />
  </kriyah>
  <books>
-  <book ASIN="0805210482" />
-  <book ASIN="0827608217" />
-  <book ASIN="0316739081" />
-  <book ASIN="158023271X" />
+  <book ASIN="0805210482" author="Shmuel Yosef Agnon">
+  Days of Awe: A Treasury of Jewish Wisdom for Reflection, Repentance, and
+  Renewal on the High Holy Days
+  </book>
+  <book ASIN="0827608217" author="Reuven Hammer">
+  Entering the High Holy Days: A Guide to Origins, Themes, and Prayers
+  </book>
+  <book ASIN="0316739081" author="Alan Lew">
+  This Is Real and You Are Completely Unprepared: The Days of Awe as a
+  Journey of Transformation
+  </book>
+  <book ASIN="158023271X" author="Dov Peretz Elkins">
+  Yom Kippur Readings: Inspiration, Information And Contemplation
+  </book>
  </books>
 </festival>
 <festival id="Yom Kippur (on Shabbat)"
@@ -656,6 +676,20 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
  </about>
+ <books>
+  <book ASIN="0827603029" author="Philip Goodman">
+  The Sukkot/Simhat Torah Anthology
+  </book>
+  <book ASIN="0827607423" author="Judith Z. Abrams">
+  Ecclesiastes: The Traditional Hebrew Text with the New JPS Translation
+  </book>
+  <book ASIN="0929371755" author="Judith Z. Abrams">
+  Sukkot: A Family Seder
+  </book>
+  <book ASIN="1580130186" author="Judyth Saypol Groner">
+  All About Sukkot
+  </book>
+ </books>
 </festival>
 <festival id="Sukkot I"
  hebrew="סוּכּוֹת יוֹם א׳"
@@ -957,6 +991,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   </book>
   <book ASIN="0827607881" author="J. T. Waldman">
   Megillat Esther
+  </book>
+  <book ASIN="0827606990" author="Adele Berlin">
+  JPS Commentary on Esther
   </book>
  </books>
  <kriyah>
