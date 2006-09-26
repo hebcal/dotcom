@@ -83,8 +83,10 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
 $year += 1900;
 
-my $friday = Time::Local::timelocal(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
+my $midnight = Time::Local::timelocal(0,0,0,
+				      $mday,$mon,$year,$wday,$yday,$isdst);
 my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
+my $endofweek = $midnight + (5 * 60 * 60 * 24);
 my $sat_year = (localtime($saturday))[5] + 1900;
 my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
@@ -250,7 +252,7 @@ sub get_friday_candles
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 		       "","","");
-	next if $time < $friday || $time > $saturday;
+	next if $time < $midnight || $time > $endofweek;
 
 	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	if ($subj eq "Candle lighting")
@@ -283,7 +285,7 @@ sub gen_body
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
 		       "","","");
-	next if $time < $friday || $time > $saturday;
+	next if $time < $midnight || $time > $endofweek;
 
 	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my($year) = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
