@@ -84,8 +84,6 @@ Jewish Calendar Tools</small></td>
 </form>
 <h1>hebcal.com: Jewish Calendar Tools</h1>
 <span class="fpsubhead">
-<!-- holiday greeting -->
-<!-- end holiday greeting -->
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
 include("./today.inc");
 if (isset($omer)) {
