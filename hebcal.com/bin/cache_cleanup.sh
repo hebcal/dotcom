@@ -5,7 +5,11 @@
 
 HEBCAL_WEB=/home/hebcal/web/hebcal.com
 
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH
+
 if [ -d $HEBCAL_WEB/cache ]; then
-    /bin/mv -f $HEBCAL_WEB/cache $HEBCAL_WEB/cache.$$
-    nice /bin/rm -rf $HEBCAL_WEB/cache.$$
+    mv -f $HEBCAL_WEB/cache $HEBCAL_WEB/cache.$$
+    find $HEBCAL_WEB/cache.$$ -type f -print | xargs -n 100 rm -f
+    rm -rf $HEBCAL_WEB/cache.$$
 fi
