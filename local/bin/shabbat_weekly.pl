@@ -176,7 +176,7 @@ traditional and liberal Haggadot:
 	if (defined $args->{"zip"}) {
 	    $geo = "zip=" . $args->{"zip"};
 	} else {
-	    $geo = "city=" . $args->{"zip"};
+	    $geo = "city=" . $args->{"city"};
 	    $geo =~ s/ /%20/g;
 	}
 
