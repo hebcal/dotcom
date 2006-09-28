@@ -171,6 +171,25 @@ traditional and liberal Haggadot:
 " . $body;
     }
 
+    if ($sat_year == 2006 && $subject eq "[shabbat] Oct 06") {
+	my $geo;
+	if (defined $args->{"zip"}) {
+	    $geo = "zip=" . $args->{"zip"};
+	} else {
+	    $geo = "city=" . $args->{"zip"};
+	    $geo =~ s/ /%20/g;
+	}
+
+	$body = 
+"It's 5767! Print out candle lighting times for the entire year
+and post them on your refrigerator:
+  http://www.hebcal.com/shabbat/fridge.cgi?$geo
+
+" . $body;
+    }
+
+
+
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
