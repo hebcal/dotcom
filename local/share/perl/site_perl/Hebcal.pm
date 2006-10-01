@@ -442,7 +442,9 @@ sub invoke_hebcal($$$)
     $cmd_smashed =~ s/\'//g;
 
     my $hccache;
-    my $hccache_dir = $CACHE_DIR . "cmd";
+    my $login = getlogin() || getpwuid($<) || "UNKNOWN";
+    my $hccache_dir = "/tmp/${login}-cache/cmd";
+
     unless (-d $hccache_dir) {
 	system("/bin/mkdir", "-p", $hccache_dir);
     }
