@@ -227,10 +227,6 @@ style="padding-left: 10px; padding-right: 5px">
 <hr noshade size="1">
 <ul class="gtl">
 <!-- Begin temp holiday -->
-<li><b><a
-href="/holidays/yom-kippur.html?tag=fp.tmp">Yom&nbsp;Kippur</a></b><br>1
-October 2006<br>at sundown
-<br><br>
 <!-- End temp holiday -->
 <li><b><a
 href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
