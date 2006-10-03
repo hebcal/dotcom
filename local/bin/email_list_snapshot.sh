@@ -40,13 +40,14 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-HCHOME=/home/hebcal
+BACKUP=/home/hebcal/local/etc/hebcalsubs.sql
+
 /usr/bin/mysqldump \
   --skip-opt \
   --host=mysql.hebcal.com --user=mradwin_hebcal --password=xxxxxxxx \
   hebcal1 hebcal_shabbat_email \
-  > $HCHOME/local/etc/hebcalsubs.sql.tmp && \
-nice /usr/bin/co -q -l $HCHOME/local/etc/hebcalsubs.sql && \
-/bin/mv $HCHOME/local/etc/hebcalsubs.sql.tmp $HCHOME/local/etc/hebcalsubs.sql && \
-nice /usr/bin/ci -q -m'daily checkin' -u $HCHOME/local/etc/hebcalsubs.sql
+  > $BACKUP.$$ && \
+nice /usr/bin/co -q -l $BACKUP && \
+/bin/mv $BACKUP.$$ $BACKUP && \
+nice /usr/bin/ci -q -m'daily checkin' -u $BACKUP
 
