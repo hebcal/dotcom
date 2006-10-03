@@ -916,6 +916,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="1" num="7" book="Genesis" begin="1:1" end="2:3" />
   <aliyah parsha="41" num="M" book="Numbers" begin="29:35" end="30:1" numverses="6" />
  </kriyah>
+ <books>
+  <book ASIN="0827603029" author="Philip Goodman">
+  The Sukkot/Simhat Torah Anthology
+  </book>
+ </books>
 </festival>
 
 <!--
