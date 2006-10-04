@@ -623,7 +623,7 @@ EOHTML
 	    if ($part_hebrew)
 	    {
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
-		print OUT2 qq{\n<br><span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
+		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
 	    print OUT2 qq{</h2>\n<div style="padding-left:20px;">};
 
