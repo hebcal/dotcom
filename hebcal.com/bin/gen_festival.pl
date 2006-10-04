@@ -403,7 +403,6 @@ sub write_festival_page
 <html><head><title>$f - $short_descr</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/holidays/$anchor" target="_top">
-<meta name="description" content="$f: $descr">
 <meta name="keywords" content="$keyword,jewish,holidays,holiday,festival,chag,hag">
 <link rel="stylesheet" href="/style.css" type="text/css">
 EOHTML
