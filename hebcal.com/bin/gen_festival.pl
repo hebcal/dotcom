@@ -131,6 +131,8 @@ my(%PREV,%NEXT);
 my %OBSERVED;
 holidays_observed(\%OBSERVED);
 
+my %seph2ashk = reverse %Hebcal::ashk2seph;
+
 my $ua;
 foreach my $f (@FESTIVALS)
 {
@@ -392,6 +394,9 @@ sub write_festival_page
     my $short_descr = $descr;
     $short_descr =~ s/\..*//;
 
+    my $keyword = $f;
+    $keyword .= ",$seph2ashk{$f}" if defined $seph2ashk{$f};
+
     print OUT2 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -399,7 +404,7 @@ sub write_festival_page
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/holidays/$anchor" target="_top">
 <meta name="description" content="$f: $descr">
-<meta name="keywords" content="$f,jewish,holidays,holiday,festival,chag,hag">
+<meta name="keywords" content="$keyword,jewish,holidays,holiday,festival,chag,hag">
 <link rel="stylesheet" href="/style.css" type="text/css">
 EOHTML
 ;
