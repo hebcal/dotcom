@@ -163,7 +163,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <festival id="Pesach I (on Shabbat)"
- hebrew="פֶּסַח יוֹם א׳"
+ hebrew="פֶּסַח יוֹם א׳ (בְּשַׁבָּת)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -399,7 +399,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Shavuot II (on Shabbat)"
- hebrew="שָׁבוּעוֹת יוֹם ב׳"
+ hebrew="שָׁבוּעוֹת יוֹם ב׳ (בְּשַׁבָּת)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holidayc.htm">
  Feast of Pentecost
@@ -563,7 +563,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Rosh Hashana I (on Shabbat)"
- hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳"
+ hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳ (בְּשַׁבָּת)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
@@ -636,7 +636,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </books>
 </festival>
 <festival id="Yom Kippur (on Shabbat)"
- hebrew="יוֹם כִּפּוּר"
+ hebrew="יוֹם כִּפּוּר (בְּשַׁבָּת)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday4.htm">
  Day of Atonement
@@ -710,7 +710,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Sukkot I (on Shabbat)"
- hebrew="סוּכּוֹת יוֹם א׳"
+ hebrew="סוּכּוֹת יוֹם א׳ (בְּשַׁבָּת)"
  yomtov="1">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
