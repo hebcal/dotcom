@@ -60,10 +60,12 @@ if ($VERSION =~ /(\d+)\.(\d+)/) {
 my $opt_all = 0;
 my $opt_help;
 my $opt_verbose = 0;
+my $opt_log = 1;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "all" => \$opt_all,
+     "log!" => \$opt_log,
      "verbose|v" => \$opt_verbose)) {
     usage();
 }
@@ -101,6 +103,7 @@ while (my($to,$cfg) = each(%SUBS))
     parse_config($cfg);
 }
 
+if ($opt_log) {
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
 		      "/home/hebcal", $year, $mon+1, $mday);
 if ($opt_all) {
@@ -120,6 +123,7 @@ if ($opt_all) {
 open(LOG, ">>$logfile") || die "$logfile: $!";
 select LOG;
 $| = 1;
+}
 
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
@@ -155,6 +159,9 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
+# hacks for pesach, rosh hashana
+=begin comment
+
     # hack for pesach
     if ($sat_year == 2006 && $subject eq "[shabbat] Mar 24") {
 	$body = 
@@ -188,7 +195,9 @@ and post them on your refrigerator:
 " . $body;
     }
 
+=end comment
 
+=cut
 
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
@@ -231,13 +240,15 @@ and post them on your refrigerator:
 	}
     }
 
+    if ($opt_log) {
     print LOG join(":", $msgid, $status, $to,
 		   defined $args->{"zip"} 
 		   ? $args->{"zip"} : $args->{"city"}), "\n";
+    }
     $count++;
 }
 
-close(LOG);
+close(LOG) if $opt_log;
 warn "Successfully mailed $count users\n" if $opt_verbose;
 
 $smtp->quit();
