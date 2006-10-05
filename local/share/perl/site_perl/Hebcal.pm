@@ -982,9 +982,9 @@ sub html_copyright($$$)
     return html_copyright2("http://$server_name", $break, $tgt);
 }
 
-sub html_footer($$)
+sub html_footer
 {
-    my($q,$rcsrev) = @_;
+    my($q,$rcsrev,$noclosebody) = @_;
 
     my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -993,14 +993,20 @@ sub html_footer($$)
 
     my($hhmts) = "Software last updated:\n" . localtime($mtime);
 
-    return qq{
+    my $str = qq{
 <hr noshade size="1"><span class="tiny">
-}, html_copyright($q, 0, undef), qq{
+} . html_copyright($q, 0, undef) . qq{
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
 <br>$hhmts ($rcsrev)
-</span></body></html>
+</span>
 };
+
+    if ($noclosebody) {
+	return $str;
+    } else {
+	return $str . "</body></html>\n";
+    }
 }
 
 sub navbar2($$$$$)
