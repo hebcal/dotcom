@@ -42,8 +42,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-use lib "/home/mradwin/local/share/perl";
-use lib "/home/mradwin/local/share/perl/site_perl";
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use CGI qw(-no_xhtml);
