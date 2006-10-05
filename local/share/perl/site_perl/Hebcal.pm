@@ -50,6 +50,7 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
 use DB_File;
 use XML::Simple ();
+use Digest::MD5 ();
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -792,6 +793,7 @@ sub cache_begin($)
     $cache = "$dir/$qs.$$";
     if (!open(CACHE, ">$cache")) {
 	$cache = undef;
+	return undef;
     }
 
     if ($^V && $^V ge v5.8.1) {
@@ -1409,8 +1411,10 @@ Jewish Calendar events into your desktop software.</p>};
 	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
     }
 
-    my $ical_href = download_href($q, $filename, 'ics');
-
+    my $ical1 = download_href($q, $filename, "ics");
+    $ical1 =~ /\?(.+)$/;
+    my $args = $1;
+    my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
 
@@ -1698,6 +1702,43 @@ END:VTIMEZONE
 ",
  );
 
+sub get_munged_qs
+{
+    my($args) = @_;
+
+    my $qs;
+    if ($args) {
+	$qs = $args;
+    } elsif ($ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/) {
+	$qs = $1;
+    } else {
+	$qs = "bogus";
+    }
+
+    $qs =~ s/[&;]?(tag|set|vis|subscribe|dl)=[^&;]+//g;
+    $qs =~ s/[&;]?\.(from|cgifields|s)=[^&;]+//g;
+    $qs =~ s/[&;]/,/g;
+    $qs =~ s/^,+//g;
+    $qs =~ s/\./_/g;
+    $qs =~ s/\//-/g;
+    $qs =~ s/\%20/+/g;
+    $qs =~ s/[\<\>\s\"\'\`\?\*\$\|\[\]\{\}\\\~]//g; # unsafe chars
+
+    return $qs;
+}
+
+sub get_vcalendar_cache_fn
+{
+    my($args) = @_;
+
+    my $qs = get_munged_qs($args);
+    my $digest = Digest::MD5::md5_hex($qs);
+    my $dir = substr($digest, 0, 2);
+    my $fn = substr($digest, 2) . ".ics";
+
+    return "/export/$dir/$fn";
+}
+
 sub vcalendar_write_contents($$$$$)
 {
     my($q,$events,$tz,$state,$title) = @_;
@@ -1705,6 +1746,19 @@ sub vcalendar_write_contents($$$$$)
     my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
 
     if ($is_icalendar) {
+	$cache = $ENV{"DOCUMENT_ROOT"} . get_vcalendar_cache_fn() . ".$$";
+	my $dir = $cache;
+	$dir =~ s,/[^/]+$,,;	# dirname
+	unless (-d $dir) {
+	    system("/bin/mkdir", "-p", $dir);
+	}
+	if (open(CACHE, ">$cache")) {
+	    if ($^V && $^V ge v5.8.1) {
+		binmode(CACHE, ":utf8");
+	    }
+	} else {
+	    $cache = undef;
+	}
 	export_http_header($q, 'text/calendar; charset=UTF-8');
     } else {
 	export_http_header($q, 'text/x-vCalendar');
@@ -1735,25 +1789,25 @@ sub vcalendar_write_contents($$$$$)
 
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
 
-    print STDOUT qq{BEGIN:VCALENDAR$endl};
+    out_html(undef, qq{BEGIN:VCALENDAR$endl});
 
     if ($is_icalendar) {
-	print STDOUT qq{VERSION:2.0$endl},
+	out_html(undef, qq{VERSION:2.0$endl},
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl},
-	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl};
+	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl});
     } else {
-	print STDOUT qq{VERSION:1.0$endl};
+	out_html(undef, qq{VERSION:1.0$endl});
     }
 
-    print STDOUT qq{METHOD:PUBLISH$endl};
+    out_html(undef, qq{METHOD:PUBLISH$endl});
 
     if ($tzid) {
-	print STDOUT qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl};
+	out_html(undef, qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl});
 	if (defined $VTIMEZONE{$tzid}) {
 	    my $vt = $VTIMEZONE{$tzid};
 	    $vt =~ s/\n/$endl/g;
-	    print STDOUT $vt;
+	    out_html(undef, $vt);
 	}
     }
 
@@ -1761,14 +1815,14 @@ sub vcalendar_write_contents($$$$$)
     my($numEntries) = scalar(@{$events});
     for ($i = 0; $i < $numEntries; $i++)
     {
-	print STDOUT qq{BEGIN:VEVENT$endl};
-	print STDOUT qq{DTSTAMP:$dtstamp$endl};
+	out_html(undef, qq{BEGIN:VEVENT$endl});
+	out_html(undef, qq{DTSTAMP:$dtstamp$endl});
 
 	if ($is_icalendar) {
-	    print STDOUT qq{CATEGORIES:Holidays$endl};
-#	    print STDOUT qq{STATUS:CONFIRMED$endl};
+	    out_html(undef, qq{CATEGORIES:Holidays$endl});
+#	    out_html(undef, qq{STATUS:CONFIRMED$endl});
 	} else {
-	    print STDOUT qq{CATEGORIES:HOLIDAY$endl};
+	    out_html(undef, qq{CATEGORIES:HOLIDAY$endl});
 	}
 
 	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1782,13 +1836,13 @@ sub vcalendar_write_contents($$$$$)
 	    $subj .= " / $hebrew";
 	}
 
-	print STDOUT qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl};
+	out_html(undef, qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl});
 
 	if ($is_icalendar && $href) {
 	    if ($href =~ /\.html$/) {
 		$href .= "?tag=ical";
 	    }
-	    print STDOUT qq{URL;VALUE=URI:$href$endl};
+	    out_html(undef, qq{URL;VALUE=URI:$href$endl});
 	}
 
  	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
@@ -1798,12 +1852,11 @@ sub vcalendar_write_contents($$$$$)
 
  	    if ($memo =~ /^in (.+)\s*$/)
  	    {
- 		print STDOUT qq{LOCATION:$1$endl};
+ 		out_html(undef, qq{LOCATION:$1$endl});
  	    }
  	    else
  	    {
- 		print STDOUT qq{DESCRIPTION:},
- 		$memo, $endl;
+ 		out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
  	    }
 	}
 
@@ -1850,35 +1903,35 @@ sub vcalendar_write_contents($$$$$)
 	    }
 	}
 
-	print STDOUT qq{DTSTART};
+	out_html(undef, qq{DTSTART});
 	if ($is_icalendar) {
 	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
-		print STDOUT ";VALUE=DATE";
+		out_html(undef, ";VALUE=DATE");
 	    } elsif ($tzid) {
-		print STDOUT ";TZID=$tzid";
+		out_html(undef, ";TZID=$tzid");
 	    }
 	}
-	print STDOUT qq{:$date$endl};
+	out_html(undef, qq{:$date$endl});
 
 	if ($is_icalendar && $events->[$i]->[$Hebcal::EVT_IDX_UNTIMED])
 	{
 	    # avoid using DTEND since Apple iCal and Lotus Notes
 	    # seem to interpret all-day events differently
-	    print STDOUT qq{DURATION:P1D$endl};
+	    out_html(undef, qq{DURATION:P1D$endl});
 	}
 	else
 	{
-	    print STDOUT qq{DTEND};
-	    print STDOUT ";TZID=$tzid" if $tzid;
-	    print STDOUT qq{:$end_date$endl};
+	    out_html(undef, qq{DTEND});
+	    out_html(undef, ";TZID=$tzid") if $tzid;
+	    out_html(undef, qq{:$end_date$endl});
         }
 	
 	if ($is_icalendar) {
 	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
 		$events->[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
-		print STDOUT "TRANSP:OPAQUE$endl"; # show as busy
+		out_html(undef, "TRANSP:OPAQUE$endl"); # show as busy
 	    } else {
-		print STDOUT "TRANSP:TRANSPARENT$endl"; # show as free
+		out_html(undef, "TRANSP:TRANSPARENT$endl"); # show as free
 	    }
 
 	    my $subj_copy = lc($subj);
@@ -1904,15 +1957,16 @@ sub vcalendar_write_contents($$$$$)
 		$uid .= '-' . $loc;
 	    }
 
-	    print STDOUT qq{UID:$uid$endl};
-#	    print STDOUT qq{ORGANIZER:mailto:nobody\@hebcal.com$endl};
+	    out_html(undef, qq{UID:$uid$endl});
+#	    out_html(undef, qq{ORGANIZER:mailto:nobody\@hebcal.com$endl});
 	}
 
-	print STDOUT qq{END:VEVENT$endl};
+	out_html(undef, qq{END:VEVENT$endl});
     }
 
-    print STDOUT qq{END:VCALENDAR$endl};
+    out_html(undef, qq{END:VCALENDAR$endl});
 
+    cache_end();
     1;
 }
 
