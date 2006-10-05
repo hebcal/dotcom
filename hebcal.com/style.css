@@ -129,14 +129,16 @@ A:hover {
  margin-top: 0;
 }
 
-#main {
- position:relative;
- margin-right:136px;
-}
+@media screen {
+ #main {
+  position:relative;
+  margin-right:176px;
+ }
 
-#sky {
- position:absolute;
- top:4em;
- right:1em;
- width:125px;
+ #sky {
+  position:absolute;
+  top:4em;
+  right:1em;
+  width:166px;
+ }
 }
