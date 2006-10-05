@@ -128,3 +128,15 @@ A:hover {
 .cal p {
  margin-top: 0;
 }
+
+#main {
+ position:relative;
+ margin-right:136px;
+}
+
+#sky {
+ position:absolute;
+ top:4em;
+ right:1em;
+ width:125px;
+}
