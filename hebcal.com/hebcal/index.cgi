@@ -693,11 +693,43 @@ JSCRIPT_END
 	       "-override"=>1),
     "</form>\n");
 
-    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev));
+    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
+    Hebcal::out_html(undef, "</div>\n");
+
+    Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
     exit(0);
     1;
+}
+
+sub skyscraper_ad
+{
+    # don't show ad to repeat users
+#    if (defined $cookies->{"C"})
+#    {
+#	return "";
+#    }
+
+    my $message=<<MESSAGE_END;
+<div id="sky">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+google_alternate_color = "ffffff";
+google_ad_width = 160;
+google_ad_height = 600;
+google_ad_format = "160x600_as";
+google_ad_type = "text";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+MESSAGE_END
+;
+
+    return $message;
 }
 
 
@@ -874,6 +906,7 @@ sub results_page
 		       undef,
 		       undef
 			),
+    "\n<div id=\"main\">",
     Hebcal::navbar2($q, $date, 1,
 		     "Interactive\nCalendar", Hebcal::self_url($q, {"v" => "0"})));
 
@@ -968,7 +1001,7 @@ sub results_page
     if ($numEntries > 0)
     {
 	Hebcal::out_html(undef,
-qq{<p class="goto"><ul class="gtl">
+qq{<p class="goto"><ul class="gtl goto">
 <li><a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>});
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
@@ -1158,7 +1191,13 @@ qq{<p class="goto"><ul class="gtl">
     if ($numEntries > 0) {
 	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
     }
-    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev));
+    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
+    Hebcal::out_html(undef, "</div>\n");
+
+    my $ad = skyscraper_ad();
+    Hebcal::out_html(undef, $ad) if $ad;
+
+    Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
     1;
