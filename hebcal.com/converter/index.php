@@ -388,15 +388,34 @@ function my_footer() {
     global $VER;
 
     $html = <<<EOD
-<p>Reference: <em><a
-href="http://www.amazon.com/exec/obidos/ASIN/0521777526/ref=nosim/hebcal-20">Calendrical
-Calculations</a></em>, Edward M. Reingold, Nachum Dershowitz,
-Cambridge University Press, 2001.</p>
-
 <p>See also the Hebcal <a href="/yahrzeit/">Yahrzeit, Birthday and
 Anniversary Calendar</a> which will calculate dates ten years into the
 future and optionally export to Palm, Outlook, or iCal.</p>
+EOD
+	;
 
+if (!isset($_COOKIE["C"])) {
+    $html .= <<<EOD
+<center class="goto">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+google_alternate_color = "ffffff";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+//2006-10-05: converter
+google_ad_channel ="0073211120";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</center>
+EOD
+	;
+}
+
+    $html .= <<<EOD
 <hr noshade size="1"><span class="tiny">
 <a name="copyright"></a>Copyright &copy; $year
 Michael J. Radwin. All rights reserved.
