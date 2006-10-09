@@ -190,8 +190,6 @@ website</a>
 <li>
 <a href="http://www.apple.com/downloads/dashboard/reference/hebcal.html">Mac
 OS X Dashboard Widget</a> by Mark Saper
-&nbsp;
-<b class="hl">NEW!</b>
 </ul>
 <h4><a href="/holidays/">Jewish Holidays</a></h4>
 <ul class="gtl">
@@ -223,7 +221,7 @@ Aliyah-by-aliyah breakdown for weekly parshiyot
 <td>&nbsp;&nbsp;</td>
 <td valign="top" bgcolor="#ffddaa"
 style="padding-left: 10px; padding-right: 5px">
-<h4>Quick Links</h4>
+<h3>Quick Links</h3>
 <hr noshade size="1">
 <ul class="gtl">
 <!-- Begin temp holiday -->
@@ -246,12 +244,12 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
 <a href="/hebcal/?v=1;year=<?php
   echo $hebyear ?>;yt=H;month=x;nh=on;tag=fp.ql"><?php echo $hebyear ?></a>
 </ul>
-<br><hr noshade size="1">
+<br>
 <form action="/shabbat/">
 <input type="hidden" name="geo" value="zip">
-<b>Candle lighting</b>
-<small>
-<br><label for="zip">Zip code:</label>
+<h4>Candle lighting</h4>
+<hr noshade size="1">
+<small><label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5"
 <?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
 id="zip">&nbsp;<input type="submit" value="Go">
@@ -260,24 +258,6 @@ id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="tag" value="fp.ql">
 <br>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
-<hr noshade size="1">
-<center>
-<!-- Begin PayPal Logo -->
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_xclick">
-<input type="hidden" name="business" value="webmaster&#64;hebcal.com">
-<input type="hidden" name="item_name" value="Donation to hebcal.com">
-<input type="hidden" name="no_note" value="1">
-<input type="hidden" name="no_shipping" value="1">
-<input type="image" name="submit"
-src="/i/x-click-but04.gif"
-alt="Make payments with PayPal - it's fast, free and secure!">
-</form>
-<!-- End PayPal Logo -->
-<small>This is a free service.<br>
-Your contributions keep<br>
-this site going!</small>
-</center>
 </td></tr></table>
 <p>
 <hr noshade size="1">
