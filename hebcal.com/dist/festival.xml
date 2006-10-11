@@ -887,13 +887,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
  <kriyah>
   <torah href="http://www.jtsa.edu/community/parashah/jpstext/simhattorah.shtml" />
-  <haft reading="Joshua 1:1 - 1:18"
-   href="http://www.jtsa.edu/community/parashah/jpstext/simhattorah_haft.shtml" />
   <aliyah parsha="54" num="1" book="Deuteronomy" begin="33:1" end="33:7" />
   <aliyah parsha="54" num="2" book="Deuteronomy" begin="33:8" end="33:12" />
   <aliyah parsha="54" num="3" book="Deuteronomy" begin="33:13" end="33:17" />
-  <aliyah parsha="54" num="4" book="Deuteronomy" begin="33:18" end="33:21" />
-  <aliyah parsha="54" num="5" book="Deuteronomy" begin="33:22" end="33:26" />
  </kriyah>
  <books>
   <book ASIN="0827603029" author="Philip Goodman">
