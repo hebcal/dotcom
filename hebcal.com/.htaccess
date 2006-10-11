@@ -6,8 +6,6 @@ Header set PICS-Label '(pics-1.1 "http://www.rsac.org/ratingsv01.html" l gen tru
 
 ErrorDocument 404 /err404.shtml
 
-RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
-
 RedirectMatch ^/_vti http://www.hebcal.com/
 Redirect /MSOffice/cltreq.asp http://www.hebcal.com/
 
