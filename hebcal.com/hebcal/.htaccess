@@ -5,3 +5,24 @@ Redirect /hebcal/hebcal.htm http://www.hebcal.com/hebcal/
 Redirect /hebcal/hebcal.pl http://www.hebcal.com/hebcal/
 Redirect /hebcal/index.html http://www.hebcal.com/hebcal/
 Redirect /hebcal/index.pl http://www.hebcal.com/hebcal/
+
+RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
+
+RewriteEngine on
+RewriteBase /hebcal
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2007\.ics$ http://www.hebcal.com/export/34/956a6f117cfa4a71a65633c65b3acf.ics?subscribe=1;v=1;year=2007;month=x;nh=on;c=off [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2006\.ics$ http://www.hebcal.com/export/6b/323b2f2e603c149c65a58d54998aa2.ics?subscribe=1;v=1;year=2006;month=x;nh=on;c=off [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_5766H_sydney\.ics$ http://www.hebcal.com/export/2b/814352bbca4818e61d4abbffce91f7.ics?subscribe=1;year=5766;v=1;month=x;yt=H;nh=on;nx=on;i=off;vis=0;c=on;geo=city;city=Sydney;m=72 [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2007_10021\.ics$ http://www.hebcal.com/export/af/1f4f21e60e1eaf414da88f85146abb.ics?subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=zip;zip=10021;m=72;tz=-5;dst=usa [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2006_10021\.ics$ http://www.hebcal.com/export/c1/08e0b101ecf3868df36b1edbf484c5.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=zip;zip=10021;m=72;tz=-5;dst=usa [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2006_06117\.ics$ http://www.hebcal.com/export/a8/0cfea3d5e47b06960aa929b02b07bd.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=zip;zip=06117;m=72;tz=-5;dst=usa [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2006_toronto\.ics$ http://www.hebcal.com/export/0c/1bf6485c204c87c70f1cfc8c040495.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Toronto;m=72 [R,NE]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2007_washington_dc\.ics$ http://www.hebcal.com/export/2e/16fcaed106747fc6ef565ac0945d4c.ics?subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Washington+DC;m=72 [R,NE]
