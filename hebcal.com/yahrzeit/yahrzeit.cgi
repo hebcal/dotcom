@@ -338,7 +338,7 @@ my $numEntries = scalar(@events);
 if ($numEntries > 0) {
     Hebcal::out_html($cfg,
 		      qq{<p class="goto"><ul class="gtl">
-<li><a href="#export">Export calendar to Palm &amp; Outlook</a>
+<li><a href="#export">Export dates to Palm, Outlook, iCal, etc.</a>
 <li><a href="#form">Enter more dates and names</a></ul></p>\n});
 
     # http://yizkor.ort.org/html/pp-lighting.shtml
@@ -389,6 +389,7 @@ for (my $i = 0; $i < $numEntries; $i++)
 Hebcal::out_html($cfg, "</pre>\n");
 
 if ($numEntries > 0) {
+    $q->param("v", "yahrzeit");
     Hebcal::out_html($cfg, Hebcal::download_html($q, "yahrzeit", \@events));
 }
 
