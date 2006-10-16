@@ -1,5 +1,4 @@
 ExpiresActive On
-ExpiresByType image/gif A63072000
-ExpiresByType image/jpeg A63072000
-ExpiresByType image/png A63072000
-
+ExpiresDefault A63072000
+FileETag None
+Header unset P3P
