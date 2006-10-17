@@ -796,7 +796,8 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
     $url .= ';tag=1c';
 
-    Hebcal::out_html($cfg,"<p><ul class=\"gtl\">\n",
+    Hebcal::out_html($cfg,"<h5>More from hebcal.com</h5>\n",
+		     "<ul class=\"gtl\">\n",
 		      "<li>See all of <a\nhref=\"$url\">this\n",
 		      "month's calendar</a>\n");
 
@@ -815,7 +816,7 @@ sub display_html
     $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
     Hebcal::out_html($cfg,"<li>",
 		     "Mac OS X users: <a\nhref=\"$url\">Dashboard Widget</a>\n",
-		     "by Mark Saper &nbsp;<b class=\"hl\">NEW!</b>\n");
+		     "by Mark Saper\n");
 
 
     # Email
