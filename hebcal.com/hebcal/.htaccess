@@ -36,6 +36,8 @@ RewriteRule ^index\.cgi/hebcal_2007\.ics$ http://www.hebcal.com/export/34/956a6f
 
 RewriteCond %{QUERY_STRING} ^subscribe=1;v=1;year=2006;month=x;nx=on;nh=on;vis=on;c=off$
 RewriteRule ^index\.cgi/hebcal_2006\.ics$ http://www.hebcal.com/export/99/853afd9f9b3345a7e1d623c2c91211.ics?dl=1;v=1;year=2006;month=x;nx=on;nh=on;vis=on;c=off [R,NE]
+RewriteCond %{QUERY_STRING} ^subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;i=off;c=off;geo=none$
+RewriteRule ^index\.cgi/hebcal_2006\.ics$ http://www.hebcal.com/export/99/853afd9f9b3345a7e1d623c2c91211.ics?dl=1;v=1;year=2006;month=x;nx=on;nh=on;vis=on;c=off [R,NE]
 
 RewriteCond %{QUERY_STRING} ^subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;i=off;vis=on;c=on;geo=zip;zip=30309;m=72;tz=-5;dst=usa$
 RewriteRule ^index\.cgi/hebcal_2006_30309\.ics$ http://www.hebcal.com/export/ea/de5b7c838b8c40854dd229ace428fc.ics?dl=1;year=2006;v=1;month=x;yt=G;nh=on;i=off;vis=on;c=on;geo=zip;zip=30309;m=72;tz=-5;dst=usa [R,NE]
