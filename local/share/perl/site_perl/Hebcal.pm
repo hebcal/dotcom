@@ -695,6 +695,11 @@ sub get_holiday_anchor($$$)
 
 	$hebrew = build_hebrew_date($hm,$hd,$hy);
     }
+    elsif ($subj =~ /^Yizkor \(.+\)$/ ||
+	   $subj =~ /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/)
+    {
+	# don't generate holiday anchors for yahrzeit calendar
+    }
     else
     {
 	my($subj_copy) = $subj;
