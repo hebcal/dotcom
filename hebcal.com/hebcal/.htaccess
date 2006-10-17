@@ -26,3 +26,16 @@ RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.cgi/hebcal_2006_toronto\.ics$ http://www.hebcal.com/export/0c/1bf6485c204c87c70f1cfc8c040495.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Toronto;m=72 [R,NE]
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.cgi/hebcal_2007_washington_dc\.ics$ http://www.hebcal.com/export/2e/16fcaed106747fc6ef565ac0945d4c.ics?subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Washington+DC;m=72 [R,NE]
+
+#### with parameters
+RewriteCond %{QUERY_STRING} ^subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;o=on;i=off;vis=on;D=on;c=off;geo=zip$
+RewriteRule ^index\.cgi/hebcal_2007\.ics$ http://www.hebcal.com/export/33/6dc4d291f1df6fe833793562b320bb.ics?dl=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;o=on;i=off;vis=on;D=on;c=off;geo=zip [R,NE]
+
+RewriteCond %{QUERY_STRING} ^subscribe=1;v=1;year=2007;month=x;nh=on;tag=fp.ql;c=off$
+RewriteRule ^index\.cgi/hebcal_2007\.ics$ http://www.hebcal.com/export/34/956a6f117cfa4a71a65633c65b3acf.ics?dl=1;v=1;year=2007;month=x;nh=on;tag=fp.ql;c=off [R,NE]
+
+RewriteCond %{QUERY_STRING} ^subscribe=1;v=1;year=2006;month=x;nx=on;nh=on;vis=on;c=off$
+RewriteRule ^index\.cgi/hebcal_2006\.ics$ http://www.hebcal.com/export/99/853afd9f9b3345a7e1d623c2c91211.ics?dl=1;v=1;year=2006;month=x;nx=on;nh=on;vis=on;c=off [R,NE]
+
+RewriteCond %{QUERY_STRING} ^subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;i=off;vis=on;c=on;geo=zip;zip=30309;m=72;tz=-5;dst=usa$
+RewriteRule ^index\.cgi/hebcal_2006_30309\.ics$ http://www.hebcal.com/export/ea/de5b7c838b8c40854dd229ace428fc.ics?dl=1;year=2006;v=1;month=x;yt=G;nh=on;i=off;vis=on;c=on;geo=zip;zip=30309;m=72;tz=-5;dst=usa [R,NE]
