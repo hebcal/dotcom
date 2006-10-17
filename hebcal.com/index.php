@@ -14,6 +14,11 @@ $fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
 @include($fn);
 $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 if (isset($sedra) && isset($sedra[$iso])) {
+    $other_holidays = array(
+	"Tu B'Shvat", "Purim", "Shushan Purim", "Yom HaAtzma'ut",
+	"Lag B'Omer", "Shmini Atzeret", "Simchat Torah"
+	);
+
     if (is_array($sedra[$iso])) {
 	$events = $sedra[$iso];
     } else {
@@ -46,6 +51,9 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	}
 	if (strstr($subj, "day of the Omer") !== false) {
 	    $omer = $subj;
+	}
+	if (isset($other_holidays[$subj])) {
+	    $chag_sameach = $subj;
 	}
     }
 }
@@ -103,6 +111,8 @@ and healthy New Year.</span>
 <?php } elseif ($gmar_tov) { ?>
 <br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
 you a good inscription in the Book of Life.</span>
+<?php } elseif (isset($chag_sameach)) { ?>
+&nbsp; - &nbsp; <span class="fpgreeting">Chag Sameach!</span>
 <?php } ?>
 </span>
 <?php
