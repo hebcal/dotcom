@@ -3,7 +3,7 @@
 ########################################################################
 # Convert between hebrew and gregorian calendar dates.
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2006  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -371,7 +371,6 @@ type="submit" value="Compute Gregorian Date"></td>
 <?php global $hebfont; if ($hebfont) { echo " checked "; } ?>
 id="heb">
 Show date in Hebrew font</label>
-<br><small>(requires minimum of IE 4 or Netscape 6)</small>
 </center>
 </form>
 <?php
