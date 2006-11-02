@@ -304,14 +304,14 @@ echo HTML_Form::returnSelect("city", $entries,
 			     "", false, 'id="city"');
 ?>
 &nbsp;&nbsp;<small>(or select by <a
-href="/email/?geo=zip">zip code</a></small>)
+href="/email/?geo=zip">zip code</a>)</small>
 <?php } else { ?>
 <input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
-href="/email/?geo=city">closest city</a></small>)
+href="/email/?geo=city">closest city</a>)</small>
 <?php } ?>
 
 <br><label for="m1">Havdalah minutes past sundown:
