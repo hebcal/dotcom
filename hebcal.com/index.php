@@ -255,7 +255,7 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
   echo $hebyear ?>;yt=H;month=x;nh=on;tag=fp.ql"><?php echo $hebyear ?></a>
 </ul>
 <br>
-<form action="/shabbat/">
+<form action="/shabbat/" method="get">
 <input type="hidden" name="geo" value="zip">
 <h4>Candle lighting</h4>
 <hr noshade size="1">
