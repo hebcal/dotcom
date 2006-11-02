@@ -901,7 +901,7 @@ sub results_page
 			    -type => $content_type);
 
     Hebcal::out_html(undef,
-    Hebcal::start_html($q, "Hebcal: Jewish Calendar $date",
+    Hebcal::start_html($q, "Jewish Calendar $date - hebcal.com",
 		       \@head,
 		       undef,
 		       undef
@@ -1077,6 +1077,7 @@ qq{<p class="goto"><ul class="gtl goto">
     my $cal;
     my $prev_mon = 0;
 
+    my @html_cals;
     for (my $i = 0; $i < $numEntries; $i++)
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1093,7 +1094,8 @@ qq{<p class="goto"><ul class="gtl goto">
 	if ($hebrew ne "" && defined $q->param("heb") &&
 	    $q->param("heb") =~ /^on|1$/)
 	{
-	    $subj .= qq{\n<br><span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
+	    $subj .= $q->param("vis") ? "\n<br>" : "\n/ ";
+	    $subj .= qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
 	}
 
 	if (defined $href && $href ne "")
@@ -1107,35 +1109,22 @@ qq{<p class="goto"><ul class="gtl goto">
 	{
 	    if ($prev_mon != $mon)
 	    {
-		if (defined $cal)
+		# grotty hack to display empty months
+		if ($prev_mon != 0 && ($prev_mon+1 != $mon))
 		{
-		    # display previously created calendar
-		    my $style = ($q->param("month") eq "x" && $prev_mon > 1) ?
-			' style="page-break-before: always"' : "";
-		    Hebcal::out_html(undef,
-		    "<div align=\"center\" class=\"cal\"$style>",
-		    $cal->as_HTML(), 
-		    "</div><br><br>");
-
-		    # grotty hack to display empty months
-		    if ($prev_mon != 0 && ($prev_mon+1 != $mon))
+		    for (my $j = $prev_mon+1; $j < $mon; $j++)
 		    {
-			for (my $j = $prev_mon+1; $j < $mon; $j++)
-			{
-			    $cal = new_html_cal($year,$j,$goto,
-						$prev_title,$prev_url,
-						$next_title,$next_url);
-			    Hebcal::out_html(undef,
-			    "<div align=\"center\" class=\"cal\"$style>",
-			    $cal->as_HTML(), 
-			    "</div><br><br>");
-			}
+			$cal = new_html_cal($year,$j,$goto,
+					    $prev_title,$prev_url,
+					    $next_title,$next_url);
+			push(@html_cals, $cal);
 		    }
 		}
 
 		$prev_mon = $mon;
 		$cal = new_html_cal($year,$mon,$goto,
 				    $prev_title,$prev_url,$next_title,$next_url);
+		push(@html_cals, $cal);
 	    }
 
 	    my $cal_subj = $subj;
@@ -1176,14 +1165,19 @@ qq{<p class="goto"><ul class="gtl goto">
 	}
     }
 
-    if ($q->param("vis") && defined $cal)
-    {
-	my $style = ($q->param("month") eq "x" && $prev_mon > 1) ?
-	    ' style="page-break-before: always"' : "";
+    if (@html_cals) {
+	my $cal2 = shift(@html_cals);
 	Hebcal::out_html(undef,
-			 "<div align=\"center\" class=\"cal\"$style>",
-			 $cal->as_HTML(), 
-			 "</div>\n");
+			 qq{\n<div align="center" class="cal">\n},
+			 $cal2->as_HTML(), 
+			 qq{</div>\n});
+
+	foreach $cal2 (@html_cals) {
+	    Hebcal::out_html(undef,
+			     qq{\n<br><br>\n<div align="center" class="cal" style="page-break-before: always">\n},
+			     $cal2->as_HTML(), 
+			     qq{</div>\n});
+	}
     }
 
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
