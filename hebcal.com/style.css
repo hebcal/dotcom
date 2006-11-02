@@ -1,132 +1,63 @@
+/* Copyright (c) 2006, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.net/yui/license.txt version: 0.11.3 */
+body {background:#fff;color:#000;font:14px arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
+table {font-size:inherit;font:100%;}
+select, input, textarea {font:99% arial,helvetica,clean,sans-serif;}
+pre, code {font:115% monospace;*font-size:100%;}
+body * {line-height:1.31em;}
+
 @media print {
   .navbar { display: none }
   .goto { display: none }
 }
 
-body {
- background: #ffffff;
- color: #000000;
-}
-
 .navbar {
- color: #000000;
- background: #ffddaa;
- padding: 2px;
- border-width: thin;
- border-style: none none solid none;
- border-color: #ffbb99;
- font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
+ color:#000;
+ background:#fda;
+ padding:2px;
+ border-width:thin;
+ border-style:none none solid none;
+ border-color:#fb9;
+ font-family:Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
 }
 
 H1, H2, H3, H4, H5, H6 {
- font-family: Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
- margin-bottom: 0;
+ font-family:Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
+ margin-bottom:0;
 }
 
-.hl { 
- background: #ffff99;
-}
-
-.dim {
- color: #666666;
-}
+.hl {background:#ff9;}
+.dim {color:#666;}
+.sm-grey {font-size:xx-small; color:#999;}
+.hebrew {font-family:Arial;}
+A:hover {color:red;text-decoration:underline;}
+.tiny {font-size:x-small;font-family:Arial,Helvetica,Geneva,sans-serif;}
+.box {border:solid;border-width:thin;}
+.cal p {margin-top:0;}
+.fpsubhead {font-family:Verdana,Arial,Helvetica,Geneva,sans-serif;}
+.fpgreeting {font-weight:bold;font-style:italic;color:#c96;}
 
 ul.gtl {
- padding: 0;
- margin: 0 0 0 1em;
- list-style-position: inside;
- list-style: circle;
-/*
- list-style: none;
-*/
-}
-
-/*
-.gtl li:before {
- content: "> ";
- margin-right: 2px;
- color: #999;
- font-size: xx-small;
-}
-*/ww
-
-.sm-grey {
- font-size: xx-small;
- color: #999999;
-}
-
-.hebrew-big {
- font-size: xx-large;
- font-family: David,'Times New Roman',serif;
-}
-
-.hebrew {
- font-family: David,'Times New Roman',serif;
-}
-
-.hebrew-big-ltr {
- font-size: xx-large;
- font-family: David,'Times New Roman',serif;
- direction: ltr;
- unicode-bidi: bidi-override;
-}
-
-.hebrew-ltr {
- font-family: David,'Times New Roman',serif;
- direction: ltr;
- unicode-bidi: bidi-override;
-}
-
-A:hover { 
- color: red;
- text-decoration: underline;
+ padding:0;
+ margin:0 0 0 1em;
+ list-style-position:inside;
+ list-style:circle;
 }
 
 .welcome {
- font-size: small;
- font-family: Arial,Helvetica,Geneva,sans-serif;
- border: solid;
- border-width: thin;
- border-color: red;
- padding: 10px;    	
+ font-size:small;
+ font-family:Arial,Helvetica,Geneva,sans-serif;
+ border:solid;
+ border-width:thin;
+ border-color:red;
+ padding:10px;    	
 }
 
 .welcome:after {
- content: ".";
- display: block;
- height: 0;
- clear: both;
- visibility: hidden;
-}
-
-.tiny {
- font-size: x-small;
- font-family: Arial,Helvetica,Geneva,sans-serif;
-}
-
-.box {
- border: solid;
- border-width: thin;
-}
-
-.today {
- border: solid;
- border-width: thin;
- border-color: red;
-}
-
-.fpsubhead {
- font-family: Verdana,Arial,Helvetica,Geneva,sans-serif;
-}
-
-.fpgreeting {
- font-weight: bold;
- font-style: italic;
- color: #c96;
-}
-
-.cal p {
- margin-top: 0;
+ content:".";
+ display:block;
+ height:0;
+ clear:both;
+ visibility:hidden;
 }
 
 @media screen {
