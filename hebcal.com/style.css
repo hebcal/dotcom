@@ -29,6 +29,7 @@ H1, H2, H3, H4, H5, H6 {
 .dim {color:#666;}
 .sm-grey {font-size:xx-small; color:#999;}
 .hebrew {font-family:Arial;}
+.hebrew-big {font-family:Arial;font-size: xx-large;}
 A:hover {color:red;text-decoration:underline;}
 .tiny {font-size:x-small;font-family:Arial,Helvetica,Geneva,sans-serif;}
 .box {border:solid;border-width:thin;}
