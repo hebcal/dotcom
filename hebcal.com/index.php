@@ -178,6 +178,8 @@ Generate a calendar of Jewish holidays for any year 0001-9999
 <li>
 Customize candle lighting times to your zip code, city, or latitude/longitude
 <li>
+Torah readings for Israel and Diaspora
+<li>
 Export to <a href="/help/import.html#dba">Palm</a>,
 <a href="/help/import.html#csv">Outlook</a>, and
 <a href="/help/import.html#ical">iCal</a>
@@ -187,7 +189,7 @@ Export to <a href="/help/import.html#dba">Palm</a>,
 <li>
 Convert between Hebrew and Gregorian dates
 <li>
-Find out Torah reading for any date in the future
+See date in Hebrew font
 </ul>
 <h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
 <ul class="gtl">
@@ -259,14 +261,14 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
 <input type="hidden" name="geo" value="zip">
 <h4>Candle lighting</h4>
 <hr noshade size="1">
-<small><label for="zip">Zip code:</label>
+<label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5"
 <?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
 id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <input type="hidden" name="tag" value="fp.ql">
-<br>or <a href="/shabbat/cities.html">select world city</a></small>
+<br><small>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
 </td></tr></table>
 <p>
