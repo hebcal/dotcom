@@ -40,14 +40,14 @@ if ($hmnum == 13) {
 <base href="http://www.hebcal.com/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
-class="navbar"><tr><td><small><strong><a
+class="navbar"><tr><td><strong><a
 href="/">hebcal.com</a></strong>
 <tt>-&gt;</tt>
 <a href="/shabbat/">1-Click Shabbat</a>
 <tt>-&gt;</tt>
-Fridge</small></td><td align="right"><small><a
+Fridge</td><td align="right"><a
 href="/help/">Help</a> -
-<a href="/search/">Search</a></small>
+<a href="/search/">Search</a>
 </td></tr></table>
 <h1>Printable Shabbat Times</h1>
 
