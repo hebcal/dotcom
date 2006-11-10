@@ -610,7 +610,7 @@ $prev_link
 </td>
 <td align="center" width="70%">
 <h1><a name="top"></a>Parashat $h<br><span
-class="hebrew" lang="he">$hebrew</span></h1>
+dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 </td>
 <td align="right" width="15%">
 $next_link
