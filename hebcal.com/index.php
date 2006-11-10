@@ -83,10 +83,9 @@ if ($hmnum == 13 && $hd > 13) {
 </head>
 <body>
 <form action="/cgi-bin/htsearch" method="get">
-<table width="100%" class="navbar">
-<tr><td><small><b>hebcal.com:</b>
-Jewish Calendar Tools</small></td>
-<td align="right"><input type="text" name="words" size="30">
+<table width="100%" class="navbar"><tr><td><strong>hebcal.com:</strong>
+Jewish Calendar Tools</td><td
+align="right"><input type="text" name="words" size="30">
 <input type="hidden" name="config" value="hebcal">
 <input type="submit" value="Search"></td></tr></table>
 </form>
