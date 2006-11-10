@@ -201,7 +201,8 @@ my $g_date;
 my $g_filename = "hebcal_" . $q->param("year");
 $g_filename .= "H"
     if $q->param("yt") && $q->param("yt") eq "H";
-if ($q->param("month") =~ /^\d+$/ &&
+if (defined $q->param("month") && defined $q->param("year") &&
+    $q->param("month") =~ /^\d+$/ &&
     $q->param("month") >= 1 && $q->param("month") <= 12)
 {
     $g_filename .= "_" . lc($Hebcal::MoY_short[$q->param("month")-1]);
