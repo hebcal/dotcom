@@ -467,7 +467,7 @@ $prev_link
 </td>
 <td align="center" width="70%">
 <h1 align="center"><a name="top"></a>$f<br><span
-class="hebrew" lang="he">$hebrew</span></h1>
+dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 </td>
 <td align="right" width="15%">
 $next_link
@@ -623,7 +623,7 @@ EOHTML
 	    if ($part_hebrew)
 	    {
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
-		print OUT2 qq{\n- <span class="hebrew"\nlang="he">$part_hebrew</span>};
+		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
 	    print OUT2 qq{</h2>\n<div style="padding-left:20px;">};
 
