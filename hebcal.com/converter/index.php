@@ -234,7 +234,7 @@ if ($hebfont) {
     }
 
     $hebrew = build_hebrew_date($month_name, $hd, $hy);
-    echo "<br><span lang=\"he\" class=\"hebrew-big\">",
+    echo "<br><span dir=\"rtl\" lang=\"he\" class=\"hebrew-big\">",
 	$hebrew, "</span>\n";
 }
 if ($gy >= 1900 && $gy <= 2099) {
@@ -308,14 +308,14 @@ function my_header() {
 <head><title>Hebrew Date Converter</title>
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
-</head><body><table width="100%"
-class="navbar"><tr><td><small><strong><a
-href="/">hebcal.com</a></strong>
-<tt>-&gt;</tt>
-Hebrew Date Converter</small></td><td align="right"><small><a
-href="/help/">Help</a> -
-<a href="/search/">Search</a></small>
-</td></tr></table><h1>Hebrew Date Converter</h1>
+</head>
+<body>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+Hebrew Date Converter
+</td><td align="right"><a href="/help/">Help</a> -
+<a href="/search/">Search</a></td></tr></table>
+<h1>Hebrew Date Converter</h1>
 <?php
 }
 
