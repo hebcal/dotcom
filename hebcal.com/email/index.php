@@ -10,16 +10,15 @@ $sender = "webmaster@hebcal.com";
 <head><title>Hebcal Shabbat Candle Lighting Times by Email</title>
 <base href="http://www.hebcal.com/email/" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
-</head><body><table width="100%"
-class="navbar"><tr><td><small><strong><a
-href="/">hebcal.com</a></strong>
-<tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a>
-<tt>-&gt;</tt>
-Email</small></td><td align="right"><small><a
-href="/help/">Help</a> -
-<a href="/search/">Search</a></small>
-</td></tr></table><h1>Shabbat Candle Lighting Times by Email</h1>
+</head>
+<body>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<a href="/shabbat/">1-Click Shabbat</a> <tt>-&gt;</tt>
+Email
+</td><td align="right"><a href="/help/">Help</a> -
+<a href="/search/">Search</a></td></tr></table>
+<h1>Shabbat Candle Lighting Times by Email</h1>
 <?php
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
