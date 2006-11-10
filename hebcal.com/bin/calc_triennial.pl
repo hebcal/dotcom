@@ -342,14 +342,13 @@ sub write_index_page
 <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/sedrot/index.xml">
 </head>
 <body>
-<table width="100%" class="navbar">
-<tr><td><small>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<!--htdig_noindex-->
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
 Torah Readings
-</small></td>
-<td align="right"><small><a
-href="/search/">Search</a></small>
-</td></tr></table>
+</td><td align="right"><a href="/help/">Help</a> - <a
+href="/search/">Search</a></td></tr></table>
+<!--/htdig_noindex-->
 <h1><a href="http://www.hebcal.com/sedrot/index.xml"><img
 src="/i/xml.gif" border="0" alt="View the raw XML source" align="right"
 width="36" height="14"></a>
@@ -592,15 +591,12 @@ EOHTML
 </head>
 <body>
 <!--htdig_noindex-->
-<table width="100%" class="navbar">
-<tr><td><small>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
 <a href="/sedrot/">Torah Readings</a> <tt>-&gt;</tt>
 $h
-</small></td>
-<td align="right"><small><a
-href="/search/">Search</a></small>
-</td></tr></table>
+</td><td align="right"><a href="/help/">Help</a> - <a
+href="/search/">Search</a></td></tr></table>
 <!--/htdig_noindex-->
 <br>
 <table width="100%">
