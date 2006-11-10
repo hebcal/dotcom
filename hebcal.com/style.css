@@ -18,6 +18,7 @@ body * {line-height:1.31em;}
  border-style:none none solid none;
  border-color:#fb9;
  font-family:Tahoma,Verdana,Arial,Helvetica,Geneva,sans-serif;
+ font-size:small;
 }
 
 H1, H2, H3, H4, H5, H6 {
@@ -28,8 +29,8 @@ H1, H2, H3, H4, H5, H6 {
 .hl {background:#ff9;}
 .dim {color:#666;}
 .sm-grey {font-size:xx-small; color:#999;}
-.hebrew {font-family:Arial;}
-.hebrew-big {font-family:Arial;font-size: xx-large;}
+.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
+.hebrew-big {font-family:'SBL Hebrew',Arial;font-size: xx-large;direction:rtl}
 A:hover {color:red;text-decoration:underline;}
 .tiny {font-size:x-small;font-family:Arial,Helvetica,Geneva,sans-serif;}
 .box {border:solid;border-width:thin;}
