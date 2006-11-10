@@ -687,11 +687,12 @@ JSCRIPT_END
 
     Hebcal::out_html(undef,
     "</td></tr></table>\n",
-    $q->submit(-name => ".s",-value => "Get Calendar"),
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "nh", "set"],
+	       -values => ["nx", "nh"],
 	       "-override"=>1),
-    "</form>\n");
+    "\n",
+    $q->submit(-name => ".s",-value => "Get Calendar"),
+    "\n</form>\n");
 
     Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
     Hebcal::out_html(undef, "</div>\n");
