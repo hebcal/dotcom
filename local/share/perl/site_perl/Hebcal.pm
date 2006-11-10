@@ -1031,14 +1031,14 @@ sub navbar2($$$$$)
 
     return "\n<!--htdig_noindex-->\n" .
 	"<table width=\"100%\"\nclass=\"navbar\">" .
-	"<tr><td><small>" .
+	"<tr><td>" .
 	"<strong><a\nhref=\"/\">" . $server_name . "</a></strong>\n" .
 	$parent_html .
 	"<tt>-&gt;</tt>\n" .
-	$title . "</small></td>" .
-	"<td align=\"right\"><small><a\n" .
+	$title . "</td>" .
+	"<td align=\"right\"><a\n" .
 	$help_html .
-	"href=\"/search/\">Search</a></small>\n" .
+	"href=\"/search/\">Search</a>\n" .
 	"</td></tr></table>\n" .
 	"<!--/htdig_noindex-->\n";
 }
