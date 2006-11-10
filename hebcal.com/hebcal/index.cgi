@@ -1097,7 +1097,7 @@ qq{<p class="goto"><ul class="gtl goto">
 	    $q->param("heb") =~ /^on|1$/)
 	{
 	    $subj .= $q->param("vis") ? "\n<br>" : "\n/ ";
-	    $subj .= qq{<span lang="he" class="hebrew">$hebrew</span>};
+	    $subj .= qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
 	}
 
 	if (defined $href && $href ne "")
