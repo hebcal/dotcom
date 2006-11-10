@@ -1023,14 +1023,14 @@ sub navbar2($$$$$)
     my($server_name) = $q->virtual_host();
     $server_name =~ s/^www\.//;
 
-    my($help_html) = ($help) ? "href=\"/help/\">Help</a> -\n<a\n" : '';
+    my($help_html) = ($help) ? "href=\"/help/\">Help</a> -<a\n" : '';
 
     my($parent_html) = ($parent_title && $parent_href) ? 
 	qq{<tt>-&gt;</tt>\n<a\nhref="$parent_href">$parent_title</a>\n} :
 	'';
 
     return "\n<!--htdig_noindex-->\n" .
-	"<table width=\"100%\"\nclass=\"navbar\">" .
+	"<table width=\"100%\" class=\"navbar\">" .
 	"<tr><td>" .
 	"<strong><a\nhref=\"/\">" . $server_name . "</a></strong>\n" .
 	$parent_html .
