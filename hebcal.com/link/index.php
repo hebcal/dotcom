@@ -65,16 +65,15 @@ if (isset($param["a"]) && ($param["a"] == "1" || $param["a"] == "on")) {
 <head><title>Add weekly Shabbat candle-lighting times to your synagogue website</title>
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
-</head><body><table width="100%"
-class="navbar"><tr><td><small><strong><a
-href="/">hebcal.com</a></strong>
-<tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a>
-<tt>-&gt;</tt>
-Link</small></td><td align="right"><small><a
-href="/help/">Help</a> -
-<a href="/search/">Search</a></small>
-</td></tr></table><h1>Add Shabbat Times to your Website</h1>
+</head>
+<body>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<a href="/shabbat/">1-Click Shabbat</a> <tt>-&gt;</tt>
+Link
+</td><td align="right"><a href="/help/">Help</a> -
+<a href="/search/">Search</a></td></tr></table>
+<h1>Add Shabbat Times to your Website</h1>
 
 <p>You can use these HTML tags to add weekly Shabbat candle-lighting
 times and Torah portion directly on your synagogue's website. To 
