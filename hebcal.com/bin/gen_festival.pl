@@ -227,17 +227,13 @@ sub write_index_page
 </head>
 <body>
 <!--htdig_noindex-->
-<table width="100%" class="navbar">
-<tr><td><small>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
 Jewish Holidays
-</small></td>
-<td align="right"><small><a href="/help/">Help</a> - <a
-href="/search/">Search</a></small>
-</td></tr></table>
-
-<a name="top"></a>
+</td><td align="right"><a href="/help/">Help</a> - <a
+href="/search/">Search</a></td></tr></table>
 <!--/htdig_noindex-->
+<a name="top"></a>
 <h1>Jewish Holidays</h1>
 <a title="Jewish Year 5767 from Amazon.com"
 href="http://www.amazon.com/o/ASIN/0789314495/hebcal-20"><img
@@ -449,15 +445,12 @@ EOHTML
 </head>
 <body>
 <!--htdig_noindex-->
-<table width="100%" class="navbar">
-<tr><td><small>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
 <a href="/holidays/">Jewish Holidays</a> <tt>-&gt;</tt>
 $f
-</small></td>
-<td align="right"><small><a href="/help/">Help</a> - <a
-href="/search/">Search</a></small>
-</td></tr></table>
+</td><td align="right"><a href="/help/">Help</a> - <a
+href="/search/">Search</a></td></tr></table>
 <!--/htdig_noindex-->
 <br>
 <table width="100%">
