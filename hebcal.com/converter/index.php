@@ -234,7 +234,7 @@ if ($hebfont) {
     }
 
     $hebrew = build_hebrew_date($month_name, $hd, $hy);
-    echo "<br><span dir=\"rtl\" lang=\"he\"\nclass=\"hebrew-big\">",
+    echo "<br><span lang=\"he\" class=\"hebrew-big\">",
 	$hebrew, "</span>\n";
 }
 if ($gy >= 1900 && $gy <= 2099) {
