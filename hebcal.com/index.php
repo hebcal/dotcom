@@ -265,7 +265,6 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
 <dt><a href="webcal://www.hebcal.com/export/c9/6f626568632ac3b95e28db17305042.ics?subscribe=1;v=1;year=5767;yt=H;month=x;nh=on;tag=fp.ql;c=off">5767</a>
 </dl>
 </ul>
-<br>
 <form action="/shabbat/" method="get">
 <input type="hidden" name="geo" value="zip">
 <h4>Candle lighting</h4>
