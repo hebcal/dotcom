@@ -45,6 +45,12 @@ ul.gtl {
  list-style:circle;
 }
 
+#ical dt a {
+ background: url(http://www.hebcal.com/i/globaliconical12x12.gif) left top no-repeat;
+ display: block;
+ padding: 0 0 4px 18px;
+}
+
 .welcome {
  font-size:small;
  font-family:Arial,Helvetica,Geneva,sans-serif;
