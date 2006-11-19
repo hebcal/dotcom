@@ -128,6 +128,28 @@ my(%PREV,%NEXT);
     }
 }
 
+my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+my $HEB_YR = $hebdate->{"yy"};
+$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+my %GREG2HEB;
+my $NUM_YEARS = 5;
+foreach my $i (0 .. $NUM_YEARS) {
+    my $yr = $HEB_YR + $i - 1;
+    my @events = Hebcal::invoke_hebcal("./hebcal -d -x -h -H $yr", '', 0);
+
+    for (my $i = 0; $i < @events; $i++) {
+	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	if ($subj =~ /^\d+\w+ of [^,]+, \d+$/) {
+	    my $isotime = sprintf("%04d%02d%02d",
+				  $events[$i]->[$Hebcal::EVT_IDX_YEAR],
+				  $events[$i]->[$Hebcal::EVT_IDX_MON] + 1,
+				  $events[$i]->[$Hebcal::EVT_IDX_MDAY]);
+	    $GREG2HEB{$isotime} = $subj;
+	}
+    }
+}
+
 my %OBSERVED;
 holidays_observed(\%OBSERVED);
 
@@ -259,11 +281,14 @@ EOHTML
 	print OUT3 qq{<dt><a href="$anchor">$f</a>\n};
 
 	if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[1]) {
-	    my $stime = $OBSERVED{$f}->[1];
-	    if ($stime =~ /^(\d+)\s+(\w+)\s+(\d+)/) {
-		my($d,$m,$y) = ($1,$2,$3);
-		print OUT3 "- $d $m $y\n";
-	    }
+	    my $evt = $OBSERVED{$f}->[1];
+	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
+		($evt->[$Hebcal::EVT_IDX_YEAR],
+		 $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		 $evt->[$Hebcal::EVT_IDX_MDAY],
+		 -1);
+	    printf OUT3 "- %02d %s %04d at sundown\n",
+	    	$gd, $Hebcal::MoY_long{$gm}, $gy;
 	}
 
 	print OUT3 qq{<dd>$descr\n} unless $descr eq $prev_descr;
@@ -500,25 +525,28 @@ EOHTML
     {
 	print OUT2 <<EOHTML;
 <h3><a name="dates"></a>List of Dates</h3>
-$f is observed on:
+$f begins at sundown in the Diaspora on:
 <ul>
 EOHTML
 	;
-	foreach my $stime (@{$OBSERVED{$f}}) {
-	    next unless defined $stime;
-	    if ($stime =~ /^(\d+)\s+(\w+)\s+(\d+)(.*)$/) {
-		my($d,$m,$y,$rest) = ($1,$2,$3,$4);
-		my %rev = reverse %Hebcal::MoY_long;
-		print OUT2 "<li><a href=\"/hebcal/?v=1;year=$y;month=",
-		    $rev{$m}, ";nx=on;nh=on;vis=on;tag=hol.obs\">$d $m $y</a>",
-		    $rest, "\n";
-	    }
+	foreach my $evt (@{$OBSERVED{$f}}) {
+	    next unless defined $evt;
+	    my $isotime = sprintf("%04d%02d%02d",
+				  $evt->[$Hebcal::EVT_IDX_YEAR],
+				  $evt->[$Hebcal::EVT_IDX_MON] + 1,
+				  $evt->[$Hebcal::EVT_IDX_MDAY]);
+	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
+		($evt->[$Hebcal::EVT_IDX_YEAR],
+		 $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		 $evt->[$Hebcal::EVT_IDX_MDAY],
+		 -1);
+	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
+		";nx=on;nh=on;vis=on;tag=hol.obs\">%02d %s %04d</a> (%s)\n",
+		$gy, $gm,
+		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
 	}
 	print OUT2 <<EOHTML;
 </ul>
-<p>All Jewish Holidays begin the evening before the date specified. This
-is because the Jewish day actually begins at sundown on the previous
-night.</p>
 EOHTML
     ;
     }
@@ -752,43 +780,15 @@ sub holidays_observed
 {
     my($current) = @_;
 
-    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-    my $heb_yr = $hebdate->{"yy"};
-    $heb_yr++ if $hebdate->{"mm"} == 6; # Elul
-
-    my $extra_years = 5;
     my @years;
-    foreach my $i (0 .. $extra_years)
+    foreach my $i (0 .. $NUM_YEARS)
     {
-	my $yr = $heb_yr + $i - 1;
+	my $yr = $HEB_YR + $i - 1;
 	my @ev = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
 	$years[$i] = \@ev;
     }
 
-    my %greg2heb;
-    foreach my $i (0 .. $extra_years)
-    {
-	my $yr = $heb_yr + $i - 1;
-	my @events = Hebcal::invoke_hebcal("./hebcal -d -x -h -H $yr", '', 0);
-
-	for (my $i = 0; $i < @events; $i++)
-	{
-	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	    my $stime = sprintf("%02d %s %04d",
-				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
-				$Hebcal::MoY_long{$month},
-				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-
-	    if ($subj =~ /^\d+\w+ of [^,]+, \d+$/)
-	    {
-		$greg2heb{$stime} = $subj;
-	    }
-	}
-    }
-
-    for (my $yr = 0; $yr < $extra_years; $yr++)
+    for (my $yr = 0; $yr < $NUM_YEARS; $yr++)
     {
 	my @events = @{$years[$yr]};
 	for (my $i = 0; $i < @events; $i++)
@@ -799,12 +799,6 @@ sub holidays_observed
 	    # Since Chanukah doesn't have an Erev, skip a day
 	    next if $subj =~ /^Chanukah: 1 Candle$/;
 
-	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	    my $stime = sprintf("%02d %s %04d",
-				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
-				$Hebcal::MoY_long{$month},
-				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-
 	    my $subj_copy = $subj;
 	    $subj_copy =~ s/ \d{4}$//;
 	    $subj_copy =~ s/ \(CH\'\'M\)$//;
@@ -813,11 +807,7 @@ sub holidays_observed
 	    $subj_copy =~ s/: \d Candles?$//;
 	    $subj_copy =~ s/: 8th Day$//;
 
-	    my $text = $stime;
-	    $text .= " ($greg2heb{$stime})"
-		if (defined $greg2heb{$stime});
-
-	    $current->{$subj_copy}->[$yr] = $text
+	    $current->{$subj_copy}->[$yr] = $events[$i]
 		unless (defined $current->{$subj_copy} &&
 			defined $current->{$subj_copy}->[$yr]);
 	}
