@@ -1023,7 +1023,7 @@ sub navbar2($$$$$)
     my($server_name) = $q->virtual_host();
     $server_name =~ s/^www\.//;
 
-    my($help_html) = ($help) ? "href=\"/help/\">Help</a> -<a\n" : '';
+    my($help_html) = ($help) ? "href=\"/help/\">Help</a> - <a\n" : '';
 
     my($parent_html) = ($parent_title && $parent_href) ? 
 	qq{<tt>-&gt;</tt>\n<a\nhref="$parent_href">$parent_title</a>\n} :
