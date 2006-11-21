@@ -11,6 +11,8 @@ RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
 RewriteEngine on
 RewriteBase /hebcal
 RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^index\.cgi/hebcal_2008\.ics$ http://www.hebcal.com/export/cd/c53151cc2790b88fc502fd1840bcc3.ics?subscribe=1;v=1;year=2008;month=x;nh=on;c=off [R,NE]
+RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.cgi/hebcal_2007\.ics$ http://www.hebcal.com/export/34/956a6f117cfa4a71a65633c65b3acf.ics?subscribe=1;v=1;year=2007;month=x;nh=on;c=off [R,NE]
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.cgi/hebcal_2006\.ics$ http://www.hebcal.com/export/6b/323b2f2e603c149c65a58d54998aa2.ics?subscribe=1;v=1;year=2006;month=x;nh=on;c=off [R,NE]
