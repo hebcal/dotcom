@@ -12,3 +12,11 @@ AddDescription "Full Kriyah Torah Readings" fullkriyah.csv
 AddDescription "Palm Date Book Archive export" Palm-DBA.pm
 AddDescription "GPL-licensed source code" HebcalGPL.pm
 AddDescription "Release notes" ChangeLog.txt
+
+Redirect gone /dist/gen_holidays.pl
+Redirect gone /dist/shabbat.pl
+Redirect gone /dist/calc_triennial.pl
+Redirect gone /dist/yahrzeit.pl
+Redirect gone /dist/hebcal.pl
+Redirect gone /dist/zips2db.pl
+Redirect gone /dist/del_cookie.pl
