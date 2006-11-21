@@ -427,6 +427,13 @@ Michael J. Radwin. All rights reserved.
 3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
 <br>Software last updated: $date (Revision: $VER) 
 </span>
+<script src="http://www.google-analytics.com/urchin.js"
+type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-967247-1";
+urchinTracker();
+</script>
 </body></html>
 EOD
 	;
