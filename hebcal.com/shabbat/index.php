@@ -83,11 +83,15 @@ if ($qs) {
 }
 if (!$status) {
     virtual($url);
-    if ($cfg != "j") {
+    if ($cfg == "j") {
+	echo "// cache miss\n";
+    } else {
 	echo "<!-- cache miss -->\n";
     }
 } else {
-    if ($cfg != "j") {
+    if ($cfg == "j") {
+	echo "// cache hit\n";
+    } else {
 	echo "<!-- cache hit -->\n";
     }
 }
