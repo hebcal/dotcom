@@ -89,8 +89,8 @@ tags are for <b><?php echo $descr ?></b>
 the appropriate place in your HTML:</p>
 
 <form>
-<textarea cols="72" rows="12" readonly wrap="virtual">
-&lt;script type="text/javascript" language="JavaScript"
+<textarea cols="84" rows="12" readonly wrap="virtual">
+&lt;script type="text/javascript"
 src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j"&gt;
 &lt;/script&gt;
 &lt;noscript&gt;
@@ -106,7 +106,7 @@ courtesy of hebcal.com.
 <p>The result will look like this:</p>
 
 <blockquote>
-<script type="text/javascript" language="JavaScript"
+<script type="text/javascript"
 src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j">
 </script>
 <noscript>
@@ -191,7 +191,7 @@ CSS stylesheet like this to the
 page:</p>
 
 <form>
-<textarea cols="80" rows="16">
+<textarea cols="84" rows="16">
 &lt;style type="text/css"&gt;
 &lt;!--
 #hebcal {
