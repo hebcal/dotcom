@@ -929,7 +929,7 @@ sub form($$$$)
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
-	"\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off\nHavdalah times)</small>",
+	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off\nHavdalah times)</small>",
 	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
 
