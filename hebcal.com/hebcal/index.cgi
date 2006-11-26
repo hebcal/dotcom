@@ -678,7 +678,7 @@ JSCRIPT_END
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
-	"\n<br>&nbsp;&nbsp;<small>(enter \"0\" to turn off Havdalah\n",
+	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off Havdalah\n",
 	"times)</small>\n\n");
 
 	Hebcal::out_html(undef, "<br><br>&nbsp;&nbsp;<small><a\n",
