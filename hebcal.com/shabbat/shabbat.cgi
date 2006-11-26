@@ -930,7 +930,7 @@ sub form($$$$)
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
 	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off\nHavdalah times)</small>",
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>});
+	qq{<br><br><input\ntype="submit" value="Get Shabbat Times"></form>});
 
 
     Hebcal::out_html($cfg,
@@ -955,7 +955,7 @@ sub form($$$$)
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
 	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off\nHavdalah times)</small>",
-	qq{<br><input\ntype="submit" value="Get Shabbat Times"></form>},
+	qq{<br><br><input\ntype="submit" value="Get Shabbat Times"></form>},
 	qq{</td></tr></table>});
 
     Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
