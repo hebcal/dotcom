@@ -40,6 +40,12 @@ function smtp_send($return_path, $recipients, $headers, $body)
     if (!$smtp->connect()) {
 	return ('unable to connect to smtp server');
     }
+
+    $passfile = file("./hebcal-email-pass.cgi");
+    $password = trim($passfile[0]);
+    if (!$smtp->auth("hebcal", $password)) {
+	return ('unable to authenticate to smtp server');
+    }
     
     list($from, $text_headers) = $mail->prepareHeaders($headers);
     if (!isset($from)) {
