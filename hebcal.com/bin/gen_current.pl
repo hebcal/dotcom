@@ -253,14 +253,12 @@ print OUT <<EOHTML;
 </head>
 <body>
 <!--htdig_noindex-->
-<table width="100%" class="navbar">
-<tr><td><small>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
+<table width="100%" class="navbar"><tr><td><strong><a
+href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
 <a href="/shabbat/">1-Click Shabbat</a> <tt>-&gt;</tt>
-World Cities
-</small></td>
-<td align="right"><small><a
-href="/search/">Search</a></small>
+World Cities</td><td align="right"><a
+href="/help/">Help</a> - <a
+href="/search/">Search</a>
 </td></tr></table>
 <!--/htdig_noindex-->
 <h1>Candle lighting times for world cities</h1>
