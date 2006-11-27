@@ -297,7 +297,6 @@ foreach my $city (sort keys %Hebcal::city_tz)
     }
 }
 
-my $copyright = Hebcal::html_copyright2('',0,undef);
 print OUT <<EOHTML;
 </table>
 </td>
@@ -317,13 +316,12 @@ print OUT <<EOHTML;
 </tr>
 </table>
 <p>
-<hr noshade size="1">
-<span class="tiny">$copyright
-</span>
-</body></html>
 EOHTML
 ;
 
+my $rcsrev = '$Revision$'; #'
+my $mtime = (stat(__FILE__))[9];
+print OUT Hebcal::html_footer_lite($rcsrev,$mtime);
 close(OUT);
 
 sub upcoming_dow
