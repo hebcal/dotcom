@@ -320,8 +320,7 @@ EOHTML
 ;
 
 my $rcsrev = '$Revision$'; #'
-my $mtime = (stat(__FILE__))[9];
-print OUT Hebcal::html_footer_lite($rcsrev,$mtime);
+print OUT Hebcal::html_footer_lite($rcsrev,time());
 close(OUT);
 
 sub upcoming_dow
