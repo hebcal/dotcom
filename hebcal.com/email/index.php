@@ -97,7 +97,8 @@ elseif ($param["unsubscribe"]) {
 else {
     form($param);
 }
-my_footer();
+echo html_footer_lite();
+exit();
 
 function get_password() {
     $passfile = file("../hebcal-db-pass.cgi");
@@ -233,40 +234,6 @@ EOD;
     return $encoded;
 }
 
-
-function my_footer() {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $year = strftime("%Y", time());
-    $date = strftime("%c", $stat[9]);
-    global $VER;
-
-    $html = <<<EOD
-<hr noshade size="1"><span class="tiny">
-<a name="copyright"></a>Copyright &copy; $year
-Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a> -
-<a href="/news/">News</a> -
-<a href="/donations/">Donate</a>
-<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-<br>Software last updated: $date (Revision: $VER) 
-</span>
-<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct = "UA-967247-1";
-urchinTracker();
-</script>
-</body></html>
-EOD
-	;
-    echo $html;
-    exit();
-}
-
 function form($param, $message = "", $help = "") {
     if ($message != "") {
 	$message = '<hr noshade size="1"><p><font' . "\n" .
@@ -361,7 +328,8 @@ offers.</p>
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 
 <?php
-    my_footer();
+    echo html_footer_lite();
+    exit();
 }
 
 function subscribe($param) {
