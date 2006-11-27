@@ -216,39 +216,6 @@ href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 
 <?php
-    my_footer();
-
-function my_footer() {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $year = strftime("%Y", time());
-    $date = strftime("%c", $stat[9]);
-    global $VER;
-
-    $html = <<<EOD
-<hr noshade size="1"><span class="tiny">
-<a name="copyright"></a>Copyright &copy; $year
-Michael J. Radwin. All rights reserved.
-<a target="_top" href="http://www.hebcal.com/privacy/">Privacy Policy</a> -
-<a target="_top" href="http://www.hebcal.com/help/">Help</a> -
-<a target="_top" href="http://www.hebcal.com/contact/">Contact</a> -
-<a target="_top" href="http://www.hebcal.com/news/">News</a> -
-<a target="_top" href="http://www.hebcal.com/donations/">Donate</a>
-<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-<br>Software last updated: $date (Revision: $VER) 
-</span>
-<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct = "UA-967247-1";
-urchinTracker();
-</script>
-</body></html>
-EOD
-	;
-    echo $html;
+    echo html_footer_lite();
     exit();
-}
-
 ?>
