@@ -756,24 +756,8 @@ sub html_footer
     my($file) = @_;
 
     my($rcsrev) = '$Revision$'; #'
-    $rcsrev =~ s/\s*\$//g;
-
-    my($mtime) = (stat($file))[9];
-    my($hhmts) = "Last modified:\n" . localtime($mtime);
-
-    my($copyright) = Hebcal::html_copyright2('',0,undef);
-    my($html_footer) = <<EOHTML;
-<p>
-<hr noshade size="1">
-<span class="tiny">$copyright
-<br>
-$hhmts
-($rcsrev)
-</span>
-</body></html>
-EOHTML
-;
-    $html_footer;
+    my $mtime = (stat($file))[9];
+    return Hebcal::html_footer_lite($rcsrev,$mtime);
 }
 
 sub holidays_observed
