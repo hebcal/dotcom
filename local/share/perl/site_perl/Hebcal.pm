@@ -989,6 +989,33 @@ sub html_copyright($$$)
     return html_copyright2("http://$server_name", $break, $tgt);
 }
 
+sub html_footer_lite {
+    my($rcsrev,$mtime) = @_;
+
+    $rcsrev =~ s/\s*\$//g;
+
+    my $hhmts = "Last modified:\n" . localtime($mtime);
+    my $copyright = Hebcal::html_copyright2('',0,undef);
+    my $html_footer = <<EOHTML;
+<hr noshade size="1">
+<span class="tiny">$copyright
+<br>
+$hhmts
+($rcsrev)
+</span>
+<script src="http://www.google-analytics.com/urchin.js"
+type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-967247-1";
+urchinTracker();
+</script>
+</body></html>
+EOHTML
+;
+    $html_footer;
+}
+
 sub html_footer
 {
     my($q,$rcsrev,$noclosebody) = @_;
