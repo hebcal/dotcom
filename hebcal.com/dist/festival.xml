@@ -973,6 +973,26 @@ the readings for the third, fourth, and fifth days are moved ahead.
  hebrew="חֲנוּכָּה: יוֹם ח׳"
  yomtov="0">
 </festival>
+<festival id="Shabbat Chanukah"
+ yomtov="0">
+ <kriyah>
+  <torah href="http://www.jtsa.edu/community/parashah/jpstext/hanukkah.shtml" />
+  <haft reading="Zechariah 2:14-4:7"
+   href="http://www.jtsa.edu/community/parashah/jpstext/hanukkah_haft.shtml" />
+  <!-- hack for 2006 -->
+  <aliyah parsha="35" num="M" book="Numbers" begin="7:18" end="7:29" />
+ </kriyah>
+</festival>
+<festival id="Shabbat Chanukah II"
+ yomtov="0">
+ <kriyah>
+  <torah href="http://www.jtsa.edu/community/parashah/jpstext/hanukkah.shtml" />
+  <haft reading="I Kings 7:40-50"
+   href="http://www.jtsa.edu/community/parashah/jpstext/hanukkah2_haft.shtml" />
+  <!-- hack for 2006 -->
+  <aliyah parsha="35" num="M" book="Numbers" begin="7:54" end="8:4" />
+ </kriyah>
+</festival>
 
 <!--  Strassfeld p. 232 -->
 <festival id="Purim"
