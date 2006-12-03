@@ -1831,7 +1831,9 @@ sub vcalendar_write_contents($$$$$)
     out_html(undef, qq{BEGIN:VCALENDAR$endl});
 
     if ($is_icalendar) {
-	out_html(undef, qq{VERSION:2.0$endl},
+	out_html(undef, 
+	qq{X-LOTUS-CHARSET:UTF-8$endl},
+	qq{VERSION:2.0$endl},
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl},
 	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl});
