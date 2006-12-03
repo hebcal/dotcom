@@ -993,6 +993,18 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="M" book="Numbers" begin="7:54" end="8:4" />
  </kriyah>
 </festival>
+<festival id="Shabbat Rosh Chodesh Chanukah"
+ yomtov="0">
+ <kriyah>
+  <torah href="http://www.jtsa.edu/community/parashah/jpstext/hanukkah.shtml" />
+  <haft reading="Zechariah 2:14-4:7"
+   href="http://www.jtsa.edu/community/parashah/jpstext/hanukkah_haft.shtml" />
+  <!-- this is not quite right. Num 28:9-15 is aliyah 7, and maftir is
+       regular Chanukah reading for the day -->
+  <aliyah parsha="41" num="7" book="Numbers" begin="28:9" end="28:15" numverses="7" />
+  <aliyah parsha="41" num="M" book="Numbers" begin="28:9" end="28:15" numverses="7" />
+ </kriyah>
+</festival>
 
 <!--  Strassfeld p. 232 -->
 <festival id="Purim"
