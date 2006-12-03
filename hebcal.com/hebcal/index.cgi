@@ -345,7 +345,7 @@ sub vcalendar_display
 	$state = $cconfig->{"state"};
     }
 
-    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $date);
+    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $date, $cconfig);
 }
 
 sub dba_display
