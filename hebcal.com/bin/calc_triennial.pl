@@ -687,6 +687,7 @@ EOHTML
 		my $info = format_aliyah($aliyah,
 					 $all_inorder[$aliyah->{'parsha'}-1],
 					 $sp_verse{$fest},1);
+		print OUT2 "<br>\n" if $count++;
 		print OUT2 <<EOHTML;
 On <b>$fest</b><br>
 $info
@@ -699,7 +700,6 @@ EOHTML
 		}
 
 		print OUT2 "</ul>\n";
-		print OUT2 "<br>\n" if $count++;
 	    }
 	    print OUT2 "</td></tr>\n";
 	}
@@ -1171,17 +1171,25 @@ sub special_readings
 	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	my $day = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
 
-	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-
 	my $stime2 = sprintf("%02d-%s-%04d",
 			     $day, $Hebcal::MoY_short[$month - 1], $year);
 
 	next if defined $haftara->{$stime2};
 	next if defined $maftir->{$stime2};
 
+	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+
 	my $h = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	# hack! for Shabbat Rosh Chodesh
-	if ($dow == 6 && $h =~ /^Rosh Chodesh/) {
+	if ($dow == 6 && $h =~ /^Rosh Chodesh/
+	    && defined $events->[$i+1]
+	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d+)/
+	    && $1 > 1
+	    && $year == $events->[$i+1]->[$Hebcal::EVT_IDX_YEAR]
+	    && $month == $events->[$i+1]->[$Hebcal::EVT_IDX_MON] + 1
+	    && $day == $events->[$i+1]->[$Hebcal::EVT_IDX_MDAY]) {
+	    $h = "Shabbat Rosh Chodesh Chanukah";
+	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
 	} elsif ($dow == 7 && $h =~ /^Rosh Chodesh/) {
 	    # even worse hack!
@@ -1194,6 +1202,13 @@ sub special_readings
 	    next if defined $maftir->{$stime2};
 	} elsif ($dow != 6) {
 	    next;
+	}
+
+	# since dow == 6, this is only for Shabbat
+	if ($h eq "Chanukah: 8th Day") {
+	    $h = "Shabbat Chanukah II";
+	} elsif ($h =~ /^Chanukah: (\d+)/ && $1 > 1) {
+	    $h = "Shabbat Chanukah";
 	}
 
 	if (defined $fxml->{'festival'}->{$h}) {
