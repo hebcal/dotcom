@@ -1778,9 +1778,9 @@ sub get_vcalendar_cache_fn
     return "/export/$dir/$fn";
 }
 
-sub vcalendar_write_contents($$$$$)
+sub vcalendar_write_contents
 {
-    my($q,$events,$tz,$state,$title) = @_;
+    my($q,$events,$tz,$state,$title,$cconfig) = @_;
 
     my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
 
@@ -1886,19 +1886,16 @@ sub vcalendar_write_contents($$$$$)
 	    out_html(undef, qq{URL;VALUE=URI:$href$endl});
 	}
 
- 	if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0
+	    && defined $cconfig
+	    && defined $cconfig->{"city"})
+	{
+	    out_html(undef, qq{LOCATION:}, $cconfig->{"city"}, $endl);
+	}
+	elsif ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
  	{
- 	    my $memo = $events->[$i]->[$Hebcal::EVT_IDX_MEMO];
- 	    $memo =~ s/,/\\,/g;
-
- 	    if ($memo =~ /^in (.+)\s*$/)
- 	    {
- 		out_html(undef, qq{LOCATION:$1$endl});
- 	    }
- 	    else
- 	    {
- 		out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
- 	    }
+	    out_html(undef, qq{DESCRIPTION:},
+		     $events->[$i]->[$Hebcal::EVT_IDX_MEMO], $endl);
 	}
 
 	my($date) = sprintf("%04d%02d%02d",
@@ -1985,17 +1982,30 @@ sub vcalendar_write_contents($$$$$)
 
 	    my $uid = "hebcal-$date_copy-$subj_copy";
 
-	    if ($events->[$i]->[$Hebcal::EVT_IDX_MEMO] &&
-		$events->[$i]->[$Hebcal::EVT_IDX_MEMO] =~ /^in (.+)\s*$/) {
-		my $loc = lc($1);
-		if ($loc =~ /\s+(\d{5})\s*$/) {
-		    $loc = $1;
+	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0
+		&& defined $cconfig) {
+		my $loc;
+		if (defined $cconfig->{"zip"}) {
+		    $loc = $cconfig->{"zip"};
+		} elsif (defined $cconfig->{"city"}) {
+		    $loc = lc($cconfig->{"city"});
+		    $loc =~ s/[^\w]/-/g;
+		    $loc =~ s/-+/-/g;
+		    $loc =~ s/-$//g;
+		} elsif (defined $cconfig->{"long_deg"}
+			 && defined $cconfig->{"long_min"}
+			 && defined $cconfig->{"lat_deg"}
+			 && defined $cconfig->{"lat_min"}) {
+		    $loc = join("-", "pos",
+				$cconfig->{"long_deg"},
+				$cconfig->{"long_min"},
+				$cconfig->{"lat_deg"},
+				$cconfig->{"lat_min"});
 		}
-		$loc =~ s/[^\w]/-/g;
-		$loc =~ s/-+/-/g;
-		$loc =~ s/-$//g;
 
-		$uid .= '-' . $loc;
+		if ($loc) {
+		    $uid .= "-" . $loc;
+		}
 	    }
 
 	    out_html(undef, qq{UID:$uid$endl});
