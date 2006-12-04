@@ -168,11 +168,13 @@ my %readings1 = cycle_readings($bereshit_idx1,$events1,\%cycle_option1);
 my %readings2 = cycle_readings($bereshit_idx2,$events2,\%cycle_option2);
 
 my %special_maftir;
+my %special_maftir_anode;
 my %special_haftara;
-foreach my $yr (($start_year - 3) .. ($start_year + 6))
+foreach my $yr (($start_year - 3) .. ($start_year + 10))
 {
     my(@ev) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
-    special_readings(\@ev, \%special_maftir, \%special_haftara);
+    special_readings(\@ev, \%special_maftir, \%special_maftir_anode,
+		     \%special_haftara);
 }
 
 if ($opts{'t'})
@@ -667,26 +669,22 @@ EOHTML
     print OUT2 "</tr>\n";
 
     if (defined $parsha_stime2{$h}) {
-	my(%sp_dates,%sp_verse);
+	my %sp_dates;
 	foreach my $stime2 (@{$parsha_stime2{$h}}) {
-	    if (defined $stime2 && defined $special_maftir{$stime2} &&
-		$special_maftir{$stime2} =~ /^(.+) \((.+)\)$/) {
-		my $verse = $1;
-		my $fest = $2;
-
+	    if (defined $stime2 && defined $special_maftir_anode{$stime2}) {
+		my $fest = $special_maftir_anode{$stime2}->[1];
 		push(@{$sp_dates{$fest}}, $stime2);
-		$sp_verse{$fest} = $verse;
 	    }
 	}
 
-	if (keys %sp_verse) {
+	if (keys %sp_dates) {
 	    my $count = 0;
 	    print OUT2 qq{<tr><td valign="top" colspan="4">\n};
-	    foreach my $fest (sort keys %sp_verse) {
-		my $aliyah = get_special_maftir($fest);
+	    foreach my $fest (sort keys %sp_dates) {
+		my $aliyah = $special_maftir_anode{$sp_dates{$fest}->[0]}->[0];
 		my $info = format_aliyah($aliyah,
 					 $all_inorder[$aliyah->{'parsha'}-1],
-					 $sp_verse{$fest},1);
+					 undef,1);
 		print OUT2 "<br>\n" if $count++;
 		print OUT2 <<EOHTML;
 On <b>$fest</b><br>
@@ -950,6 +948,7 @@ sub format_aliyah
 	$info = "$c1:$v1-$c2:$v2";
     }
 
+    $torah ||= $aliyah->{"book"}; # special maftirs
     $torah =~ s/\s+.+$//;
 
     if ($show_book) {
@@ -1164,7 +1163,7 @@ sub get_special_maftir
 
 sub special_readings
 {
-    my($events,$maftir,$haftara) = @_;
+    my($events,$maftir,$maftir_anode,$haftara) = @_;
 
     for (my $i = 0; $i < @{$events}; $i++) {
 	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
@@ -1180,14 +1179,16 @@ sub special_readings
 	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
 
 	my $h = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $chanukah_day = 0;
 	# hack! for Shabbat Rosh Chodesh
 	if ($dow == 6 && $h =~ /^Rosh Chodesh/
 	    && defined $events->[$i+1]
-	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d+)/
+	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d) Candles/
 	    && $1 > 1
 	    && $year == $events->[$i+1]->[$Hebcal::EVT_IDX_YEAR]
 	    && $month == $events->[$i+1]->[$Hebcal::EVT_IDX_MON] + 1
 	    && $day == $events->[$i+1]->[$Hebcal::EVT_IDX_MDAY]) {
+	    $chanukah_day = $1 - 1;
 	    $h = "Shabbat Rosh Chodesh Chanukah";
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
@@ -1206,8 +1207,10 @@ sub special_readings
 
 	# since dow == 6, this is only for Shabbat
 	if ($h eq "Chanukah: 8th Day") {
+	    $chanukah_day = 8;
 	    $h = "Shabbat Chanukah II";
-	} elsif ($h =~ /^Chanukah: (\d+)/ && $1 > 1) {
+	} elsif ($h =~ /^Chanukah: (\d)/ && $1 > 1) {
+	    $chanukah_day = $1 - 1;
 	    $h = "Shabbat Chanukah";
 	}
 
@@ -1218,13 +1221,29 @@ sub special_readings
 		$haftara->{$stime2} = "$haft ($h)";
 	    }
 
-	    my $a = get_special_maftir($h);
+	    my $a;
+	    if ($chanukah_day) {
+		my $a2 = $fxml->{"festival"}->{"Chanukah (Day $chanukah_day)"}->{"kriyah"}->{"aliyah"};
+		$a = {
+		    "book" => $a2->[0]->{"book"},
+		    "parsha" => $a2->[0]->{"parsha"},
+		    "begin" => $a2->[0]->{"begin"},
+		    "end" => $a2->[2]->{"end"},
+		    "num" => "M",
+		};
+	    } else {
+		$a = get_special_maftir($h);
+	    }
 	    if ($a) {
+		if ($chanukah_day) {
+		    $h .= " - Day $chanukah_day";
+		}
 		$maftir->{$stime2} = sprintf("%s %s - %s (%s)",
 					     $a->{'book'},
 					     $a->{'begin'},
 					     $a->{'end'},
 					     $h);
+		$maftir_anode->{$stime2} = [$a,$h];
 	    }
 	}
     }
@@ -1238,7 +1257,7 @@ sub readings_for_current_year
 
     my $heb_yr = $hebrew_year - 1;
 
-    my $extra_years = 5;
+    my $extra_years = 10;
     my @years;
     foreach my $i (0 .. $extra_years)
     {
