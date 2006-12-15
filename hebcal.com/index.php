@@ -243,11 +243,6 @@ href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp
   include("./holiday.inc");
   include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
-<br>
-<li><b><a
-href="/holidays/chanukah.html?tag=fp.tmp">Chanukah</a></b><br>15
-December 2006<br>at sundown
-<br>
 <!-- End temp holiday2 -->
 <br><li><b>Major&nbsp;Holidays</b>
 <?php
