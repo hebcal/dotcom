@@ -238,7 +238,7 @@ style="padding-left: 10px; padding-right: 5px">
 <!-- Begin temp holiday -->
 <!-- End temp holiday -->
 <li><b><a
-href="/hebcal/?v=1;year=now;month=now;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
+href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
   echo date("F Y");
   include("./holiday.inc");
   include("./current.inc"); ?><br>
