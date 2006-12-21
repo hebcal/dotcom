@@ -126,8 +126,9 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
     // other 2007 calendars include 0764935178 0764934562 1594901988
     $cal[] = array("A Calendar for the Jewish Year 5767", "0789314495", 110, 109);
     $cal[] = array("The Jewish Calendar 2007", "0883634082", 110, 80);
-    $cal[] = array("The Jewish Engagement Calendar 2007", "0883634090", 72, 110);
-    $cal[] = array("The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110);
+    $cal[] = array("The Jewish Museum 2007 Calendar", "0764934562", 110, 102);
+//    $cal[] = array("The Jewish Engagement Calendar 2007", "0883634090", 72, 110);
+//    $cal[] = array("The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110);
 
     shuffle($cal);
     list($title,$asin,$width,$height) = $cal[0];
