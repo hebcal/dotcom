@@ -757,8 +757,9 @@ sub referred_by_websearch
 #		   ["Jewish Year 5766", "0789312735", 110, 110],
 		   ["A Calendar for the Jewish Year 5767", "0789314495", 110, 109],
 		   ["The Jewish Calendar 2007", "0883634082", 110, 80],
-		   ["The Jewish Engagement Calendar 2007", "0883634090", 72, 110],
-		   ["The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110],
+		   ["The Jewish Museum 2007 Calendar", "0764934562", 110, 102],
+#		   ["The Jewish Engagement Calendar 2007", "0883634090", 72, 110],
+#		   ["The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110],
 		   );
 	my($title,$asin,$width,$height) = @{$ads[int(rand($#ads+1))]};
 
