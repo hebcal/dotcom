@@ -1476,7 +1476,7 @@ sub export_http_header($$)
 
     print $q->header(-type => "$mime; filename=\"$path_info\"",
                      -content_disposition =>
-                     "filename=$path_info",
+                     "attachment; filename=$path_info",
                      -last_modified => http_date($time));
 }
 
