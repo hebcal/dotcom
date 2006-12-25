@@ -337,8 +337,8 @@ function form($head, $message, $help = "") {
 ?>
 <form name="f1" id="f1" action="<?php echo $action ?>">
 <center><table cellpadding="4">
-<tr align="center"><td class="box"><table>
-<tr><td colspan="3">Gregorian to Hebrew</td></tr>
+<tr align="center" valign="top"><td class="box"><table>
+<tr><td colspan="3"><h4 align="center">Gregorian to Hebrew</h4></td></tr>
 <tr><td>Day</td><td>Month</td><td>Year</td></tr>
 <tr><td><input type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd"></td>
 <td><?php
@@ -354,7 +354,7 @@ type="submit" value="Compute Hebrew Date"></td></tr>
 </table></td>
 <td>&nbsp;&nbsp;&nbsp</td>
 <td class="box"><table>
-<tr><td colspan="3">Hebrew to Gregorian</td></tr>
+<tr><td colspan="3"><h4 align="center">Hebrew to Gregorian</h4></td></tr>
 <tr><td>Day</td><td>Month</td><td>Year</td></tr>
 <tr><td><input type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd"></td>
 <td><?php
