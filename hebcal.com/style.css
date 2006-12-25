@@ -33,16 +33,15 @@ H1, H2, H3, H4, H5, H6 {
 .hebrew-big {font-family:'SBL Hebrew',Arial;font-size: xx-large;direction:rtl}
 A:hover {color:red;text-decoration:underline;}
 .tiny {font-size:x-small;font-family:Arial,Helvetica,Geneva,sans-serif;}
-.box {border:solid;border-width:thin;}
+.box {border:solid;border-width:thin;border-color:#999;padding:1em;}
 .cal p {margin-top:0;}
 .fpsubhead {font-family:Verdana,Arial,Helvetica,Geneva,sans-serif;}
 .fpgreeting {font-weight:bold;font-style:italic;color:#c96;}
 
 ul.gtl {
- padding:0;
- margin:0 0 0 1em;
- list-style-position:inside;
- list-style:circle;
+ padding:0 0 0 1em;
+ margin:0;
+ list-style:square;
 }
 
 #ical dt a {
