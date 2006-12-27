@@ -266,7 +266,8 @@ sub javascript_events
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
 
-    print STDOUT $q->header(-type => "application/x-javascript",
+    print STDOUT $q->header(-type => "text/javascript",
+			    -charset => "UTF-8",
 			    -last_modified => Hebcal::http_date($time),
 			    -expires => $http_expires,
 			    );
@@ -303,9 +304,15 @@ sub javascript_events
 	    }
 	}
 
-	my $href = Hebcal::get_holiday_anchor($subj,0,$q);
+	my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
 	if ($href && $href =~ /\.html$/) {
 	    $href .= "?tag=js.cal";
+	}
+
+	if ($hebrew ne "" && defined $q->param("heb") &&
+	    $q->param("heb") =~ /^on|1$/)
+	{
+	    $subj .= qq{<br><span dir='rtl' lang='he' class='hebrew'>$hebrew</span>};
 	}
 
 	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
