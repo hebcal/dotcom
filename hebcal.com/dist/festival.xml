@@ -1362,13 +1362,21 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday8.htm">
  New Year for Trees
  </about>
+ <books>
+  <book ASIN="0881230081" />
+  <book ASIN="0930494393" />
+  <book ASIN="0827607172" />
+  <book ASIN="0807405361" />
+  <book ASIN="1580130658" />
+  <book ASIN="1580131220" />
+ </books>
 </festival>
 
 <!-- New Holidays -->
 <festival id="Yom HaAtzma'ut"
  hebrew="יוֹם הָעַצְמָאוּת"
  yomtov="0">
- <about href="http://www.zipple.com/holidays/yomhaatzmaut.shtml">
+ <about href="http://en.wikipedia.org/wiki/Yom_Ha%27atzmaut">
  Israel Independence Day
  </about>
 </festival>
