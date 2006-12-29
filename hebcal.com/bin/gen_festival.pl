@@ -282,13 +282,23 @@ EOHTML
 
 	if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[1]) {
 	    my $evt = $OBSERVED{$f}->[1];
-	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
-		($evt->[$Hebcal::EVT_IDX_YEAR],
-		 $evt->[$Hebcal::EVT_IDX_MON] + 1,
-		 $evt->[$Hebcal::EVT_IDX_MDAY],
-		 -1);
-	    printf OUT3 "- %02d %s %04d at sundown\n",
-	    	$gd, $Hebcal::MoY_long{$gm}, $gy;
+	    my($gy,$gm,$gd,$rise_or_set);
+	    if ($f =~ /^(Tzom|Asara|Ta\'anit) /) {
+		($gy,$gm,$gd) =
+		    ($evt->[$Hebcal::EVT_IDX_YEAR],
+		     $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		     $evt->[$Hebcal::EVT_IDX_MDAY]);
+		$rise_or_set = "dawn";
+	    } else {
+		($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
+		    ($evt->[$Hebcal::EVT_IDX_YEAR],
+		     $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		     $evt->[$Hebcal::EVT_IDX_MDAY],
+		     -1);
+		$rise_or_set = "sundown";
+	    }
+	    printf OUT3 "- %02d %s %04d at %s\n",
+	    	$gd, $Hebcal::MoY_long{$gm}, $gy, $rise_or_set;
 	}
 
 	print OUT3 qq{<dd>$descr\n} unless $descr eq $prev_descr;
@@ -523,9 +533,12 @@ EOHTML
 
     if (defined $OBSERVED{$f})
     {
+	my $rise_or_set = ($f =~ /^(Tzom|Asara|Ta\'anit) /) ?
+	    "dawn" : "sundown";
+
 	print OUT2 <<EOHTML;
 <h3><a name="dates"></a>List of Dates</h3>
-$f begins at sundown in the Diaspora on:
+$f begins at $rise_or_set in the Diaspora on:
 <ul>
 EOHTML
 	;
@@ -535,11 +548,19 @@ EOHTML
 				  $evt->[$Hebcal::EVT_IDX_YEAR],
 				  $evt->[$Hebcal::EVT_IDX_MON] + 1,
 				  $evt->[$Hebcal::EVT_IDX_MDAY]);
-	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
-		($evt->[$Hebcal::EVT_IDX_YEAR],
-		 $evt->[$Hebcal::EVT_IDX_MON] + 1,
-		 $evt->[$Hebcal::EVT_IDX_MDAY],
-		 -1);
+	    my($gy,$gm,$gd);
+	    if ($f =~ /^(Tzom|Asara|Ta\'anit) /) {
+		($gy,$gm,$gd) =
+		    ($evt->[$Hebcal::EVT_IDX_YEAR],
+		     $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		     $evt->[$Hebcal::EVT_IDX_MDAY]);
+	    } else {
+		($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
+		    ($evt->[$Hebcal::EVT_IDX_YEAR],
+		     $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		     $evt->[$Hebcal::EVT_IDX_MDAY],
+		     -1);
+	    }
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
 		";nx=on;nh=on;vis=on;tag=hol.obs\">%02d %s %04d</a> (%s)\n",
 		$gy, $gm,
