@@ -45,3 +45,7 @@ Redirect /shabbat.html http://www.hebcal.com/shabbat/
 Redirect /help/defaults.html http://www.hebcal.com/holidays/
 
 Redirect /TARGET=BLANK http://www.hebcal.com/
+
+Redirect /shabbat/favicon.ico http://www.hebcal.com/favicon.ico
+Redirect /sedrot/favicon.ico http://www.hebcal.com/favicon.ico
+Redirect /news/favicon.ico http://www.hebcal.com/favicon.ico
