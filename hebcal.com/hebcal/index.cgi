@@ -487,7 +487,7 @@ JSCRIPT_END
     Hebcal::out_html(undef,
     "<p><table border=\"0\" cellpadding=\"0\"\n",
     "cellspacing=\"0\" style=\"margin-bottom: 10px\">",
-    "<tr valign=\"top\"><td>\n");
+    "<tr valign=\"top\"><td style=\"padding-right:10px\">\n");
 
     Hebcal::out_html(undef,
     "<b>Include events</b>",
@@ -562,8 +562,8 @@ JSCRIPT_END
     $q->param("c","off") unless defined $q->param("c");
     $q->param("geo","zip") unless defined $q->param("geo");
 
-    Hebcal::out_html(undef, "</td><td><img src=\"/i/black-1x1.gif\"\n",
-    "width=\"1\" height=\"250\" hspace=\"10\" alt=\"\"></td><td>\n");
+    Hebcal::out_html(undef, "</td><td\n",
+		"style=\"border-left: thin solid grey;padding-left:10px\">\n");
 
     Hebcal::out_html(undef,
     $q->hidden(-name => "c",
