@@ -84,7 +84,16 @@ if ($cfg eq "i" || $cfg eq "j") {
 } elsif (defined $q->param("count") && $q->param("count") =~ /^\d+$/) {
     $count = $q->param("count");
 } else {
-    $count = 5;
+    $count = 1;
+    foreach my $key ($q->param()) {
+	if ($key =~ /^[dy](\d+)$/) {
+	    my $n = $1;
+	    if ($q->param($key) =~ /^\d+$/) {
+		$count = $n if $n > $count;
+	    }
+	}
+    }
+    $count += 5;
 }
 
 my %yahrzeits = ();
@@ -215,9 +224,9 @@ sub my_invoke_hebcal {
 	    my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	    my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 	
-	    if ($subj =~ /,\s+\d{4}\s*$/)
+	    if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
 	    {
-		$greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $subj;
+		$greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $1;
 		next;
 	    }
 
@@ -444,7 +453,6 @@ sub form
     "</label><br>",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
-    $q->hidden(-name => "count", -default => 5), "\n",
 #    $q->hidden(-name => "cfg"),
 #    $q->hidden(-name => "rand",-value => time(),-override => 1),
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
