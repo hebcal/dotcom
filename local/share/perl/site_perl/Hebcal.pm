@@ -1817,6 +1817,9 @@ sub vcalendar_write_contents
     out_html(undef, qq{BEGIN:VCALENDAR$endl});
 
     if ($is_icalendar) {
+	if (defined $cconfig && defined $cconfig->{"city"}) {
+	    $title .= " " . $cconfig->{"city"};
+	}
 	out_html(undef, 
 	qq{X-LOTUS-CHARSET:UTF-8$endl},
 	qq{VERSION:2.0$endl},
