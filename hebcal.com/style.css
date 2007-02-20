@@ -1,8 +1,7 @@
-/* Copyright (c) 2006, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.net/yui/license.txt version: 0.11.3 */
-body {background:#fff;color:#000;font:14px arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
-table {font-size:inherit;font:100%;}
-select, input, textarea {font:99% arial,helvetica,clean,sans-serif;}
-pre, code {font:115% monospace;*font-size:100%;}
+@import "/i/yui-0.12.2/fonts/fonts-min.css";
+
+/* my overrides to YUI fonts */
+tt {font:115% monospace;*font-size:100%;}
 body * {line-height:1.31em;}
 
 @media print {
