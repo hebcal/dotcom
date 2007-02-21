@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -236,7 +236,7 @@ sub my_invoke_hebcal {
 		my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
 
 		$subj2 .= " ($greg2heb{$isodate})"
-		    if (defined $greg2heb{$isodate});
+		    if ($q->param("hebdate") && defined $greg2heb{$isodate});
 
 		push(@events2,
 		     [$subj2,
@@ -350,7 +350,6 @@ if ($numEntries > 0) {
 <li><a href="#export">Export dates to Palm, Outlook, iCal, etc.</a>
 <li><a href="#form">Enter more dates and names</a></ul></p>\n});
 
-    # http://yizkor.ort.org/html/pp-lighting.shtml
     Hebcal::out_html($cfg,
 		      qq{<p>Yahrzeit candles should be lit
 the evening before the date specified. This is because the Jewish
@@ -446,7 +445,13 @@ sub form
 	show_row($q,$cfg,$i,\%Hebcal::MoY_long);
     }
 
-    Hebcal::out_html($cfg, "<label\nfor=\"yizkor\">",
+    Hebcal::out_html($cfg, "<label\nfor=\"hebdate\">",
+    $q->checkbox(-name => "hebdate",
+		 -id => "hebdate",
+		 -checked => "checked",
+		 -label => "\nInclude Hebrew dates"),
+    "</label><br>",
+    "<label\nfor=\"yizkor\">",
     $q->checkbox(-name => "yizkor",
 		 -id => "yizkor",
 		 -label => "\nInclude Yizkor dates"),
@@ -455,6 +460,9 @@ sub form
     $q->hidden(-name => "ref_text"), "\n",
 #    $q->hidden(-name => "cfg"),
 #    $q->hidden(-name => "rand",-value => time(),-override => 1),
+    $q->hidden(-name => ".cgifields",
+	       -values => ["hebdate", "yizkor"],
+	       -override => 1), "\n",
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
 
     Hebcal::out_html($cfg, qq{</div>\n});
