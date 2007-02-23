@@ -1826,6 +1826,21 @@ sub vcalendar_write_contents
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl},
 	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl});
+
+	# include an iCal description if it's not the yahrzeit calendar 
+	if (defined $q->param("v") && $q->param("v") eq "1")
+	{
+	    my $desc_url =  "http://" . $q->virtual_host() . "/hebcal/";
+	    my $sep = "?";
+	    foreach my $key ($q->param())
+	    {
+		next if $key =~ /^(subscribe|download|tag)$/o;
+		my $val = $q->param($key);
+		$desc_url .= "$sep$key=" . Hebcal::url_escape($val);
+		$sep = ";" if $sep eq "?";
+	    }
+	    out_html(undef, qq{X-WR-CALDESC:$desc_url$endl});
+	}
     } else {
 	out_html(undef, qq{VERSION:1.0$endl});
     }
