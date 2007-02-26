@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1424,16 +1424,22 @@ Jewish Calendar events into your desktop software.</p>};
     $s .= qq{<li><a href="/help/import.html#csv">How to import CSV file into Outlook</a></ol>};
 
     # only offer DBA export when we know timegm() will work
+    $s .= "<h4>Palm Desktop for Windows</h4>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($q->param('dst')) || $q->param('dst') eq 'usa'
 	 || $q->param('dst') eq 'none'))
     {
-	$s .= "<h4>Palm Desktop for Windows</h4>\n<ol><li>" .
+	$s .= "<ol><li>" .
 	    "Export Palm Date Book Archive:\n" .
 	    "<a href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
 	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
+    }
+    else
+    {
+	$s .= "<p>Sorry, the Palm Date Book Archive format is not\n" .
+	    "compatible with events in the Gregorian year $greg_year2.</p>\n";
     }
 
     my $ical1 = download_href($q, $filename, "ics");
