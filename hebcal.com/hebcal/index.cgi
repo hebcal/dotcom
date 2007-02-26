@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -942,6 +942,23 @@ sub results_page
 
 	Hebcal::out_html(undef, $Hebcal::gregorian_warning)
 	    if ($greg_year1 <= 1752);
+
+	if ($greg_year1 >= 3762
+	    && (!defined $q->param("yt") || $q->param("yt") eq "G"))
+	{
+	    my $future_years = $greg_year1 - $this_year;
+	    my $new_url = Hebcal::self_url($q, 
+					   {"yt" => "H", "month" => "x"});
+	    Hebcal::out_html(undef, "<p><span style=\"color: red\">NOTE:
+You are viewing a calendar for <b>Gregorian</b> year $greg_year1, which
+is $future_years years <em>in the future</em>.</span><br>
+Did you really mean to do this? Perhaps you intended to get the calendar
+for <a href=\"$new_url\">Hebrew year $greg_year1</a>?<br>
+If you really intended to use Gregorian year $greg_year1, please
+continue. Hebcal.com results this far in the future should be
+accurate.</p>
+");
+	}
     }
 
     my $geographic_info = "";
