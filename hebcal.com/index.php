@@ -260,8 +260,8 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
   echo $hebyear ?>;yt=H;month=x;nh=on;tag=fp.ql"><?php echo $hebyear ?></a>
 <br><br><li><b>Downloads for iCal</b>
 <dl id="ical">
-<dt><a href="webcal://www.hebcal.com/export/34/956a6f117cfa4a71a65633c65b3acf.ics?subscribe=1;v=1;year=2007;month=x;nh=on;tag=fp.ql;c=off">2007</a>
-<dt><a href="webcal://www.hebcal.com/export/c9/6f626568632ac3b95e28db17305042.ics?subscribe=1;v=1;year=5767;yt=H;month=x;nh=on;tag=fp.ql;c=off">5767</a>
+<dt><a href="webcal://www.hebcal.com/ical/jewish-holidays.ics">Jewish
+Holidays</a>
 </dl>
 </ul>
 <form action="/shabbat/" method="get">
