@@ -4,7 +4,7 @@ X-WR-CALNAME:Jewish Holidays
 PRODID:-//hebcal.com/NONSGML Hebcal Calendar v1.258//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALDESC:http://www.hebcal.com/ical/
+X-WR-CALDESC:http://www.hebcal.com/
 BEGIN:VEVENT
 DTSTAMP:20061121T044202Z
 CATEGORIES:Holidays
