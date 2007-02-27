@@ -15,3 +15,6 @@ Disallow: /hebcal/index.cgi/*.vcs
 Disallow: /hebcal/index.cgi/*.csv
 Disallow: /hebcal/index.cgi/*.dba
 Disallow: /shabbat/fridge.cgi
+
+User-agent: ShopWiki
+Disallow: /
