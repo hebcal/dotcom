@@ -191,6 +191,9 @@ if ($q->param("yt") && $q->param("yt") eq "H")
     $cmd .= " -H";
 }
 
+$q->param("month", "x")
+    if (defined $q->param("cfg") && $q->param("cfg") eq "e");
+
 $cmd .= " " . $q->param("month")
     if (defined $q->param("month") && $q->param("month") =~ /^\d+$/ &&
 	$q->param("month") >= 1 && $q->param("month") <= 12);
@@ -338,6 +341,17 @@ sub vcalendar_display
     my($date) = @_;
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+
+    if (defined $q->param("month") && $q->param("month") eq "x")
+    {
+	for (my $i = 1; $i < 5; $i++)
+	{
+	    my $cmd2 = $cmd;
+	    $cmd2 =~ s/(\d+)$/$1+$i/e;
+	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph);
+	    push(@events, @ev2);
+	}
+    }
 
     my $tz = $q->param("tz");
     my $state;
