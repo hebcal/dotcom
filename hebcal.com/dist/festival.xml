@@ -1410,4 +1410,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
  7 weeks from the second night of Pesach to the day before Shavuot
  </about>
 </festival>
+<festival id="Erev Pesach" hebrew="עֶרֶב פֶּסַח" />
+<festival id="Erev Shavuot" hebrew="עֶרֶב שָׁבוּעוֹת" />
+<festival id="Erev Rosh Hashana" hebrew="עֶרֶב רֹאשׁ הַשָּׁנָה" />
+<festival id="Erev Sukkot" hebrew="עֶרֶב סוּכּוֹת" />
+<festival id="Erev Yom Kippur" hebrew="עֶרֶב יוֹם כִּפּוּר" />
 </festivals>
