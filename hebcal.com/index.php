@@ -241,11 +241,8 @@ style="padding-left: 10px; padding-right: 5px">
 <li><b><a
 href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
   echo date("F Y");
-  include("./holiday.inc");
-  include("./current.inc"); ?><br>
-<!-- Begin temp holiday2 -->
-<!-- End temp holiday2 -->
-<br><li><b>Major&nbsp;Holidays</b>
+?>
+<br><br><li><b>Major&nbsp;Holidays</b>
 <?php
 $hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
 $gregyear = ($gm > 9) ? $gy + 1 : $gy;
@@ -255,11 +252,13 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
   echo $gregyear ?>;month=x;nh=on;tag=fp.ql"><?php echo $gregyear ?></a> |
 <a href="/hebcal/?v=1;year=<?php
   echo $hebyear ?>;yt=H;month=x;nh=on;tag=fp.ql"><?php echo $hebyear ?></a>
-<br><br><li><b>Downloads for iCal</b>
-<dl id="ical">
-<dt><a href="webcal://www.hebcal.com/ical/jewish-holidays.ics">Jewish
-Holidays</a>
-</dl>
+<br><img src="/i/globaliconical12x12.gif" alt="" width="12"
+height="12">&nbsp;<a href="/ical/">Downloads for iCal</a>
+<?php
+  include("./holiday.inc");
+  include("./current.inc"); ?><br>
+<!-- Begin temp holiday2 -->
+<!-- End temp holiday2 -->
 </ul>
 <form action="/shabbat/" method="get">
 <input type="hidden" name="geo" value="zip">
