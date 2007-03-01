@@ -244,9 +244,6 @@ href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;vi
   include("./holiday.inc");
   include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
-<br><li><b><a
-href="/holidays/purim.html?tag=fp.tmp">Purim</a></b>
-<br>03 March 2007<br>(at sunset)<br>
 <!-- End temp holiday2 -->
 <br><li><b>Major&nbsp;Holidays</b>
 <?php
