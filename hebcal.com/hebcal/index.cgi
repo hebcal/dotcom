@@ -379,7 +379,7 @@ sub dba_display
     if (defined $q->param("geo") && $q->param("geo") eq "city" &&
 	defined $q->param("city") && $q->param("city") ne "")
     {
-	$dst = $Hebcal::city_dst{$q->param("city")} eq "none" ? 0 : 1;
+	$dst = $Hebcal::city_dst{$q->param("city")} eq "usa" ? 1 : 0;
 	$tz = $Hebcal::city_tz{$q->param("city")};
     }
 
