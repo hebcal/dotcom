@@ -1424,7 +1424,8 @@ Jewish Calendar events into your desktop software.</p>};
     $s .= qq{<li><a href="/help/import.html#csv">How to import CSV file into Outlook</a></ol>};
 
     my $dst;
-    if ($q->param("geo") && $q->param("geo") ne "off")
+    if ($q->param("geo") && $q->param("geo") ne "off"
+	&& $q->param("c") && $q->param("c") ne "off")
     {
 	if (defined $q->param("dst") && $q->param("dst") ne "")
 	{
