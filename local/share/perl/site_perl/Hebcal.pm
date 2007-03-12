@@ -147,7 +147,7 @@ $Hebcal::havdalah_min = 72;
      'Denver'		=>	[-7,'usa'],
      'Detroit'		=>	[-5,'usa'],
      'Eilat'		=>	[2,'israel'],
-     'Gibraltar'	=>	[-10,'usa'],
+     'Gibraltar'	=>	[-10,'eu'],
      'Haifa'		=>	[2,'israel'],
      'Hawaii'		=>	[-10,'none'],
      'Houston'		=>	[-6,'usa'],
@@ -1423,11 +1423,24 @@ Jewish Calendar events into your desktop software.</p>};
 
     $s .= qq{<li><a href="/help/import.html#csv">How to import CSV file into Outlook</a></ol>};
 
+    my $dst;
+    if ($q->param("geo") && $q->param("geo") ne "off")
+    {
+	if (defined $q->param("dst") && $q->param("dst") ne "")
+	{
+	    $dst = $q->param("dst");
+	}
+	elsif ($q->param("geo") eq "city" && $q->param("city")
+	       && defined $Hebcal::city_dst{$q->param("city")})
+	{
+	    $dst = $Hebcal::city_dst{$q->param("city")};
+	}
+    }
+
     # only offer DBA export when we know timegm() will work
     $s .= "<h4>Palm Desktop for Windows</h4>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-	(!defined($q->param('dst')) || $q->param('dst') eq 'usa'
-	 || $q->param('dst') eq 'none'))
+	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
     {
 	$s .= "<ol><li>" .
 	    "Export Palm Date Book Archive:\n" .
@@ -1438,8 +1451,13 @@ Jewish Calendar events into your desktop software.</p>};
     }
     else
     {
-	$s .= "<p>Sorry, the Palm Date Book Archive format is not\n" .
-	    "compatible with events in the Gregorian year $greg_year2.</p>\n";
+	$s .= "<p>Sorry, the Palm Date Book Archive format is not\n"
+	    . "compatible with "
+	    . (($greg_year1 <= 1969 || $greg_year2 >= 2038)
+	       ? "events in the Gregorian year $greg_year2"
+	       : "the <b>" . $Hebcal::dst_names{$dst}
+	       . "</b> Daylight Saving Time scheme")
+	    . ".</p>\n";
     }
 
     my $ical1 = download_href($q, $filename, "ics");
