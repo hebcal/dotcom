@@ -36,10 +36,12 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	if (strncmp($subj, "Chanukah:", 9) == 0) {
 	    $chanukah = true;
 	}
-	if (strncmp($subj, "Sukkot", 6) == 0
+	if (strpos($subj, "(CH''M)") !== false) {
+	    $shalosh_regalim = true;
+	} elseif (strncmp($subj, "Sukkot", 6) == 0
 	    || strncmp($subj, "Pesach", 6) == 0
 	    || strncmp($subj, "Shavuot", 7) == 0) {
-	    $shalosh_regalim = true;
+	    $chag_sameach = $subj;
 	}
 	if (strncmp($subj, "Rosh Hashana", 12) == 0) {
 	    $shana_tova = true;
@@ -66,6 +68,9 @@ if ($hmnum == 13 && $hd > 13) {
     $shana_tova = true;		# month 13 == Elul
 } elseif ($hmnum == 1 && $hd <= 10) {
     $gmar_tov = true;		# month 1 == Tishrei
+} elseif ($hmnum == 8 && $hd >= 7 && $hd <= 15) {
+    # for a week before Pesach, show greeting
+    $chag_kasher = true;	# month 8 == Nisan
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -110,6 +115,8 @@ and healthy New Year.</span>
 <?php } elseif ($gmar_tov) { ?>
 <br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
 you a good inscription in the Book of Life.</span>
+<?php } elseif ($chag_kasher) { ?>
+&nbsp; - &nbsp; <span class="fpgreeting">Chag Kasher v&#39;Sameach!</span>
 <?php } elseif (isset($chag_sameach)) { ?>
 &nbsp; - &nbsp; <span class="fpgreeting">Chag Sameach!</span>
 <?php } ?>
