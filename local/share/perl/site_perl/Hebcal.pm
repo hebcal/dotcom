@@ -2152,6 +2152,8 @@ sub csv_write_contents($$$)
 # for managing email shabbat list
 ########################################################################
 
+my $SENDMAIL_PASS;
+
 sub sendmail_v2($$$)
 {
     my($return_path,$headers,$body,$verbose) = @_;
@@ -2199,6 +2201,17 @@ sub sendmail_v2($$$)
     unless ($smtp) {
         return 0;
     }
+
+    unless ($SENDMAIL_PASS) {
+	if (open(PASSFILE,
+		 "/home/hebcal/web/hebcal.com/email/hebcal-email-pass.cgi")) {
+	    $SENDMAIL_PASS = <PASSFILE>;
+	    chop $SENDMAIL_PASS;
+	    close(PASSFILE);
+	}
+    }
+
+    $smtp->auth("hebcal", $SENDMAIL_PASS);
 
     my $message = '';
     while (my($key,$val) = each %{$headers})
