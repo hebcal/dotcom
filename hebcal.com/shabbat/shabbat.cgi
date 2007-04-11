@@ -92,6 +92,7 @@ sub format_items
     my(@items);
 
     my $tz = 0;
+    my $dst = $q->param("dst");
     if ($q->param('tz'))
     {
 	$tz = $q->param('tz');
@@ -101,7 +102,9 @@ sub format_items
 	   defined($Hebcal::city_tz{$q->param('city')}))
     {
 	$tz = $Hebcal::city_tz{$q->param('city')};
+	$dst = $Hebcal::city_dst{$q->param("city")};
     }
+    my $tz_save = $tz;
 
     for (my $i = 0; $i < scalar(@{$events}); $i++)
     {
@@ -126,6 +129,12 @@ sub format_items
 	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
 	$item{'date'} = strftime($format, localtime($time));
+
+	my $tz = $tz_save;
+	if (defined $dst && $dst eq "usa") {
+	    my($isdst) = (localtime($time))[8];
+	    $tz++ if $isdst;
+	}
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
