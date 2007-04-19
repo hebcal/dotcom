@@ -58,26 +58,12 @@ my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
 
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
-my $to = $header->get("To");
 
 my($email_address,$bounce_reason);
 my($std_reason);
-if ($to) {
-    chomp($to);
-    if ($to =~ /^[^<]*<([^>]+)>/) {
-	$to = $1;
-    }
-    if (Email::Valid->address($to)) {
-	$to = Email::Valid->address($to);
-    } else {
-	warn $Email::Valid::Details;
-    }
 
-    if ($to =~ /shabbat-return-([^\@]+)\@/i) {
-	$email_address = $1;
-	$email_address =~ s/=/\@/;
-    }
-}
+$email_address = extract_return_addr($header->get("X-Original-To"));
+$email_address ||= extract_return_addr($header->get("To"));
 
 if (!$email_address) {
     die "can't find email address in message";
@@ -135,4 +121,28 @@ $dbh->do($sql);
 
 $dbh->disconnect;
 exit(0);
+
+sub extract_return_addr {
+    my($to) = @_;
+    my $email_address;
+
+    if ($to) {
+	chomp($to);
+	if ($to =~ /^[^<]*<([^>]+)>/) {
+	    $to = $1;
+	}
+	if (Email::Valid->address($to)) {
+	    $to = Email::Valid->address($to);
+	} else {
+	    warn $Email::Valid::Details;
+	}
+
+	if ($to =~ /shabbat-return-([^\@]+)\@/i) {
+	    $email_address = $1;
+	    $email_address =~ s/=/\@/;
+	}
+    }
+
+    $email_address;
+}
 
