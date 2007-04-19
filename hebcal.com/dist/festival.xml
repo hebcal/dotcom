@@ -1382,11 +1382,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  hebrew="יוֹם הָעַצְמָאוּת"
  yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Yom_Ha%27atzmaut">
- Israel Independence Day. Note that Hebcal displays modern holidays like
+ Israeli Independence Day. Commemorates the declaration of independence
+ of Israel in 1948. Note that Hebcal displays modern holidays like
  Yom HaAtzma'ut according to the Israeli schedule. Although Yom
  HaAtzma'ut is normally observed on the 5th of Iyyar, it may be moved a
  day day earlier or postponed if observance of the holiday (or Yom
- HaZikaron, which always preceeds it) would conflict with Shabbat.
+ HaZikaron, which always preceeds it) would conflict with Shabbat
  </about>
 </festival>
 <festival id="Yom HaShoah"
@@ -1400,11 +1401,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  hebrew="יוֹם הַזִּכָּרוֹן"
  yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Yom_Hazikaron">
- Israel's Memorial Day. Note that Hebcal displays modern holidays like
+ Israeli Memorial Day. Note that Hebcal displays modern holidays like
  Yom HaZikaron according to the Israeli schedule. Although Yom Hazikaron
  is normally observed on the 4th of Iyyar, it may be moved a day day
  earlier or postponed if observance of the holiday (or Yom HaAtzma'ut,
- which always follows it) would conflict with Shabbat.
+ which always follows it) would conflict with Shabbat
  </about>
 </festival>
 <festival id="Yom Yerushalayim"
