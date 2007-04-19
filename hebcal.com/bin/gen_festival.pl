@@ -297,7 +297,9 @@ EOHTML
 		     -1);
 		$rise_or_set = "sundown";
 	    }
-	    printf OUT3 "- %02d %s %04d at %s\n",
+	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
+	    printf OUT3 "- %s, %02d %s %04d at %s\n",
+		$Hebcal::DoW[$dow],
 	    	$gd, $Hebcal::MoY_long{$gm}, $gy, $rise_or_set;
 	}
 
@@ -563,9 +565,11 @@ EOHTML
 		     $evt->[$Hebcal::EVT_IDX_MDAY],
 		     -1);
 	    }
+	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
-		";nx=on;nh=on;vis=on;tag=hol.obs\">%02d %s %04d</a> (%s)\n",
+		";nx=on;nh=on;vis=on;tag=hol.obs\">%s, %02d %s %04d</a> (%s)\n",
 		$gy, $gm,
+		$Hebcal::DoW[$dow],
 		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
 	}
 	print OUT2 <<EOHTML;
