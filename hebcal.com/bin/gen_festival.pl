@@ -517,6 +517,8 @@ EOHTML
 		    $more = '';
 		} elsif ($more eq 'jewfaq.org') {
 		    $more = " from Judaism 101";
+		} elsif ($more eq "en.wikipedia.org") {
+		    $more = " from Wikipedia";
 		} else {
 		    $more = " from $more";
 		}
