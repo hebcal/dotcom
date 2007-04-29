@@ -109,8 +109,8 @@ foreach my $key ($q->param())
     my $val = $q->param($key);
     $val = "" unless defined $val;
     $val =~ s/[^\w\.\s-]//g;
-    $val =~ s/^\s*//g;		# nuke leading
-    $val =~ s/\s*$//g;		# and trailing whitespace
+    $val =~ s/^\s+//g;		# nuke leading
+    $val =~ s/\s+$//g;		# and trailing whitespace
     $q->param($key,$val);
 }
 
@@ -194,9 +194,15 @@ if ($q->param("yt") && $q->param("yt") eq "H")
 $q->param("month", "x")
     if (defined $q->param("cfg") && $q->param("cfg") eq "e");
 
-$cmd .= " " . $q->param("month")
-    if (defined $q->param("month") && $q->param("month") =~ /^\d+$/ &&
-	$q->param("month") >= 1 && $q->param("month") <= 12);
+if (defined $q->param("month") && $q->param("month") =~ /^\d+$/ &&
+    $q->param("month") >= 1 && $q->param("month") <= 12)
+{
+    $cmd .= " " . $q->param("month");
+}
+else
+{
+    $q->param("month", "x");
+}
 
 $cmd .= " " . $q->param("year");
 
