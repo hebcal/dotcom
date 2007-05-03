@@ -740,6 +740,11 @@ sub skyscraper_ad
 #	return "";
 #    }
 
+    # slow down Mediapartners-Google/2.1 so it doesn't crawl us so fast
+    if (defined $ENV{"REMOTE_ADDR"} && $ENV{"REMOTE_ADDR"} =~ /^66\.249\./) {
+	sleep(2);
+    }
+
     my $message=<<MESSAGE_END;
 <div id="sky">
 <script type="text/javascript"><!--
