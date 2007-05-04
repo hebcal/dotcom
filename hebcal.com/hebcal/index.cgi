@@ -742,7 +742,7 @@ sub skyscraper_ad
 
     # slow down Mediapartners-Google/2.1 so it doesn't crawl us so fast
     if (defined $ENV{"REMOTE_ADDR"} && $ENV{"REMOTE_ADDR"} =~ /^66\.249\./) {
-	sleep(2);
+	sleep(3);
     }
 
     my $message=<<MESSAGE_END;
