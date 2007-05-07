@@ -343,6 +343,15 @@ my %monthnames =
      "Adar II"	=> "\x{5D0}\x{5B7}\x{5D3}\x{5B8}\x{5E8} \x{5D1}\x{5F3}",
      );
 
+my $URCHIN = qq{<script src="http://www.google-analytics.com/urchin.js"
+type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-967247-1";
+urchinTracker();
+</script>
+};
+
 ########################################################################
 # invoke hebcal unix app and create perl array of output
 ########################################################################
@@ -1003,6 +1012,7 @@ sub html_footer_lite {
 $hhmts
 ($rcsrev)
 </span>
+$URCHIN
 </body></html>
 EOHTML
 ;
@@ -1028,6 +1038,8 @@ sub html_footer
 <br>$hhmts ($rcsrev)
 </span>
 };
+
+    $str .= $URCHIN;
 
     if ($noclosebody) {
 	return $str;
