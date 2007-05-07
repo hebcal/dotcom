@@ -1357,7 +1357,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <festival id="Lag B'Omer"
  hebrew="ל״ג בְּעוֹמֶר"
  yomtov="0">
- <about href="http://learn.jtsa.edu/lagbaomer/">
+ <about href="http://en.wikipedia.org/wiki/Lag_Ba%27omer">
  33rd day of counting the Omer
  </about>
 </festival>
@@ -1393,7 +1393,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <festival id="Yom HaShoah"
  hebrew="יוֹם הַשּׁוֹאָה"
  yomtov="0">
- <about href="http://learn.jtsa.edu/yomhashoah/">
+ <about href="http://en.wikipedia.org/wiki/Yom_HaShoah">
  Holocaust Memorial Day
  </about>
 </festival>
