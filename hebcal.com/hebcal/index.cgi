@@ -691,7 +691,7 @@ JSCRIPT_END
 	"<br><label for=\"dst\">Daylight Saving Time:</label>\n",
 	$q->popup_menu(-name => "dst",
 		       -id => "dst",
-		       -values => ["usa","eu","israel","aunz","none"],
+		       -values => ["usa","mx","eu","israel","aunz","none"],
 		       -default => "none",
 		       -labels => \%Hebcal::dst_names));
     }
