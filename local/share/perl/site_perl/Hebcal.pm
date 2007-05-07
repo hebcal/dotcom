@@ -121,7 +121,8 @@ $Hebcal::havdalah_min = 72;
 %Hebcal::dst_names =
     (
      'none'    => 'none',
-     'usa'     => 'USA, Mexico, Canada',
+     'usa'     => 'USA and Canada',
+     'mx'     =>  'Mexico',
      'israel'  => 'Israel',
      'eu'      => 'European Union',
      'aunz'    => 'Australia and NZ',
@@ -159,7 +160,7 @@ $Hebcal::havdalah_min = 72;
      'Los Angeles'	=>	[-8,'usa'],
      'Miami'		=>	[-5,'usa'],
      'Melbourne'	=>	[10,'aunz'],
-     'Mexico City'	=>	[-6,'usa'],
+     'Mexico City'	=>	[-6,'mx'],
      'Montreal'		=>	[-5,'usa'],
      'Moscow'		=>	[3,'eu'],
      'New York'		=>	[-5,'usa'],
@@ -412,6 +413,7 @@ sub parse_date_descr($$)
 	$subj = $descr;
 	$subj =~ s/Channukah/Chanukah/; # make spelling consistent
 	$subj =~ s/Purim Koson/Purim Koton/;
+	$subj =~ s/ Chazon/ Hazon/; # temporary
     }
 
     my($yomtov) = 0;
@@ -430,10 +432,10 @@ sub parse_date_descr($$)
 
     my($mon,$mday,$year) = split(/\//, $date);
 
-    if (($subj eq 'Yom HaZikaron' || $subj eq "Yom HaAtzma'ut") &&
-	($year == 2004)) {
-	$mday++;
-    }
+#    if (($subj eq 'Yom HaZikaron' || $subj eq "Yom HaAtzma'ut") &&
+#	($year == 2004)) {
+#	$mday++;
+#    }
 
     ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur,$yomtov);
 }
