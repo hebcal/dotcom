@@ -42,21 +42,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-# optimize common case
-BEGIN {
-    if (!$ENV{"QUERY_STRING"} && !$ENV{"PATH_INFO"} && !$ENV{"HTTP_COOKIE"}
-	&& !$ENV{"HTTP_REFERER"}) {
-	if (open(F,"/home/hebcal/web/hebcal.com/hebcal/default.html")) {
-	    print "Content-Type: text/html\n\n";
-	    while(read(F,$_,8192)) {
-		print;
-	    }
-	    close(F);
-	    exit(0);
-	}
-    }
-}
-
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
