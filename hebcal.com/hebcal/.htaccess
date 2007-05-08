@@ -11,6 +11,11 @@ RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
 RewriteEngine on
 RewriteBase /hebcal
 
+# use static HTML page for common case with no args
+RewriteCond %{QUERY_STRING}  ^$
+RewriteCond %{HTTP_COOKIE}   !C=t=
+RewriteRule ^$               /hebcal/default.html [L]
+
 # no-arg redirects
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.cgi/hebcal_2008\.ics$ http://www.hebcal.com/export/cd/c53151cc2790b88fc502fd1840bcc3.ics?subscribe=1;v=1;year=2008;month=x;nh=on;c=off [R=301,NE]
@@ -21,7 +26,7 @@ RewriteRule ^index\.cgi/hebcal_2007_10021\.ics$ http://www.hebcal.com/export/af/
 RewriteRule ^index\.cgi/hebcal_2006_10021\.ics$ http://www.hebcal.com/export/c1/08e0b101ecf3868df36b1edbf484c5.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=zip;zip=10021;m=72;tz=-5;dst=usa [R=301,NE]
 RewriteRule ^index\.cgi/hebcal_2006_06117\.ics$ http://www.hebcal.com/export/a8/0cfea3d5e47b06960aa929b02b07bd.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=zip;zip=06117;m=72;tz=-5;dst=usa [R=301,NE]
 RewriteRule ^index\.cgi/hebcal_2006_toronto\.ics$ http://www.hebcal.com/export/0c/1bf6485c204c87c70f1cfc8c040495.ics?subscribe=1;year=2006;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Toronto;m=72 [R=301,NE]
-RewriteRule ^index\.cgi/hebcal_2007_washington_dc\.ics$ http://www.hebcal.com/export/2e/16fcaed106747fc6ef565ac0945d4c.ics?subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Washington+DC;m=72 [R=301,NE]
+RewriteRule ^index\.cgi/hebcal_2007_washington_dc\.ics$ http://www.hebcal.com/export/2e/16fcaed106747fc6ef565ac0945d4c.ics?subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;s=on;i=off;vis=on;c=on;geo=city;city=Washington+DC;m=72 [R=301,NE,L]
 
 #### with parameters
 RewriteCond %{QUERY_STRING} ^subscribe=1;year=2007;v=1;month=x;yt=G;nh=on;nx=on;o=on;i=off;vis=on;D=on;c=off;geo=zip$
