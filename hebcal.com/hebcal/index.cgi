@@ -906,15 +906,6 @@ sub results_page
 
     my @head = (
 		qq{<meta http-equiv="Content-Type" content="$content_type">},
-		$q->Link({-rel => "prev",
-			  -href => $prev_url,
-			  -title => $prev_title}),
-		$q->Link({-rel => "next",
-			  -href => $next_url,
-			  -title => $next_title}),
-		$q->Link({-rel => "start",
-			  -href => $script_name,
-			  -title => "Hebcal Interactive Jewish Calendar"}),
 		);
 
     print STDOUT $q->header(-expires => $http_expires,
