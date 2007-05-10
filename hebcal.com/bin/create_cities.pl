@@ -20,3 +20,5 @@ while(<HEBCAL>)
     }
 }
 close(HEBCAL);
+
+print "    );\n";
