@@ -475,7 +475,7 @@ sub smtp_connect
 				  Timeout => 20);
 	if ($smtp)
 	{
-	    $smtp->auth("hebcal", "xxxxxxxx");
+	    $smtp->auth("hebcron", "xxxxxxxx");
 	    return $smtp;
 	}
 	else
