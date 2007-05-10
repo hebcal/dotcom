@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -51,6 +51,7 @@ use Time::Local ();
 use DBI ();
 use Net::SMTP ();
 use Getopt::Long ();
+use List::Util ();
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)\.(\d+)/) {
@@ -96,11 +97,13 @@ my $subject = strftime("[shabbat] %b %d",
 my $ZIPS = Hebcal::zipcode_open_db("/home/hebcal/web/hebcal.com/hebcal/zips99.db");
 
 # walk through subs to make sure there are no errors first
+my @SUBS;
 while (my($to,$cfg) = each(%SUBS))
 {
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     parse_config($cfg);
+    push(@SUBS, $to);
 }
 
 if ($opt_log) {
@@ -132,8 +135,10 @@ my $smtp = smtp_connect("mail.hebcal.com");
 $smtp || die "Can't connect to SMTP server";
 
 my $count = 0;
-while (my($to,$cfg) = each(%SUBS))
+@SUBS = List::Util::shuffle(@SUBS);
+foreach my $to (@SUBS)
 {
+    my $cfg = $SUBS{$to};
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = parse_config($cfg);
@@ -229,7 +234,12 @@ and post them on your refrigerator:
     for (my $i = 0; $status == 0 && $i < 3; $i++)
     {
 	$status = my_sendmail($smtp,$return_path,\%headers,$body);
-	sleep(1);
+	if ($opt_log) {
+	    print LOG join(":", $msgid, $status, $to,
+			   defined $args->{"zip"} 
+			   ? $args->{"zip"} : $args->{"city"}), "\n";
+	}
+	sleep(20); # dh limiting to 200 emails an hour
 
 	if ($status == 0)
 	{
@@ -240,11 +250,6 @@ and post them on your refrigerator:
 	}
     }
 
-    if ($opt_log) {
-    print LOG join(":", $msgid, $status, $to,
-		   defined $args->{"zip"} 
-		   ? $args->{"zip"} : $args->{"city"}), "\n";
-    }
     $count++;
 }
 
@@ -464,10 +469,11 @@ sub smtp_connect
     # try 3 times to avoid intermittent failures
     for (my $i = 0; $i < 3; $i++)
     {
-	my $smtp = Net::SMTP->new($s, Timeout => 20);
+	my $smtp = Net::SMTP->new($s,
+				  Hello => $HOSTNAME,
+				  Timeout => 20);
 	if ($smtp)
 	{
-	    $smtp->hello($HOSTNAME);
 	    $smtp->auth("hebcal", "xxxxxxxx");
 	    return $smtp;
 	}
