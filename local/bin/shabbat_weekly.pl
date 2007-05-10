@@ -139,6 +139,7 @@ my $count = 0;
 foreach my $to (@SUBS)
 {
     my $cfg = $SUBS{$to};
+    next unless $cfg;
     next if $cfg =~ /^action=/;
     next if $cfg =~ /^type=alt/;
     my($cmd,$loc,$args) = parse_config($cfg);
