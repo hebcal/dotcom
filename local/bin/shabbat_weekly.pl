@@ -240,7 +240,7 @@ and post them on your refrigerator:
 			   defined $args->{"zip"} 
 			   ? $args->{"zip"} : $args->{"city"}), "\n";
 	}
-	sleep(20); # dh limiting to 200 emails an hour
+	sleep(20) if $opt_all; # dh limiting to 200 emails an hour
 
 	if ($status == 0)
 	{
