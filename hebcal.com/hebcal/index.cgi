@@ -179,9 +179,12 @@ if ($q->param("yt") && $q->param("yt") eq "H")
 $q->param("month", "x")
     if (defined $q->param("cfg") && $q->param("cfg") eq "e");
 
-if (defined $q->param("month") && $q->param("month") =~ /^\d+$/ &&
+if (defined $q->param("month") && $q->param("month") =~ /^\d{1,2}$/ &&
     $q->param("month") >= 1 && $q->param("month") <= 12)
 {
+    my $m = $q->param("month");
+    $m =~ s/^0//;
+    $q->param("month", $m);
     $cmd .= " " . $q->param("month");
 }
 else
@@ -196,7 +199,7 @@ my $g_filename = "hebcal_" . $q->param("year");
 $g_filename .= "H"
     if $q->param("yt") && $q->param("yt") eq "H";
 if (defined $q->param("month") && defined $q->param("year") &&
-    $q->param("month") =~ /^\d+$/ &&
+    $q->param("month") =~ /^\d{1,2}$/ &&
     $q->param("month") >= 1 && $q->param("month") <= 12)
 {
     $g_filename .= "_" . lc($Hebcal::MoY_short[$q->param("month")-1]);
@@ -858,7 +861,7 @@ sub results_page
     }
 
     # next and prev urls
-    if ($q->param("month") =~ /^\d+$/ &&
+    if ($q->param("month") =~ /^\d{1,2}$/ &&
 	$q->param("month") >= 1 && $q->param("month") <= 12)
     {
 	my($pm,$nm,$py,$ny);
