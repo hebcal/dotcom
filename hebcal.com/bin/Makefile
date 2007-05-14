@@ -1,25 +1,36 @@
 DISTDIR = $(CURDIR)/../dist
 XMLDIR = $(DISTDIR)
+XML_ALIYAH = $(XMLDIR)/aliyah.xml
+XML_FESTIVAL = $(XMLDIR)/festival.xml
+SITE_PERL = /home/hebcal/local/share/perl/site_perl
 CSVDIR = $(DISTDIR)
 SEDROT = ../sedrot
 DBDIR = ../hebcal
 HOLIDAYS = ../holidays
 
-all: sedrot holidays
+all: xml2perl sedrot holidays
 
 holidays: $(HOLIDAYS)/purim.html
 
 sedrot: $(SEDROT)/bereshit.html
 
-$(SEDROT)/bereshit.html: calc_triennial.pl $(XMLDIR)/aliyah.xml $(XMLDIR)/festival.xml
+xml2perl: $(SITE_PERL)/aliyah.pl $(SITE_PERL)/festival.pl
+
+$(SITE_PERL)/aliyah.pl: $(XML_ALIYAH) xml2dump.pl
+	./xml2dump.pl $(XML_ALIYAH) $(SITE_PERL)/aliyah.pl
+
+$(SITE_PERL)/festival.pl: $(XML_FESTIVAL) xml2dump.pl
+	./xml2dump.pl $(XML_FESTIVAL) $(SITE_PERL)/festival.pl
+
+$(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
 	./calc_triennial.pl -f $(CSVDIR)/fullkriyah.csv \
 		-t $(CSVDIR)/triennial.csv \
 		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)
 
-$(HOLIDAYS)/purim.html: gen_festival.pl $(XMLDIR)/festival.xml
+$(HOLIDAYS)/purim.html: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
-	./gen_festival.pl $(XMLDIR)/festival.xml $(HOLIDAYS)
+	./gen_festival.pl $(XML_FESTIVAL) $(HOLIDAYS)
 
 $(DBDIR)/zips99.db: zips2db.pl zip99/zipnov99.csv zip99/c_10fe06.csv
 	rm -f zip99new.db
