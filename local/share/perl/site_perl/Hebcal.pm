@@ -451,6 +451,15 @@ sub invoke_hebcal($$$)
     local($_);
     local(*HEBCAL);
 
+    # exec hebcal with entire years, but only return events matching
+    # the month requested
+    my $month_filter;
+    if ($cmd =~ /^(.+)\s+(\d{1,2})\s+(\d+)$/)
+    {
+	$month_filter = $2;
+	$cmd = "$1 $3";
+    }
+
     my $cmd_smashed = $cmd;
     $cmd_smashed =~ s/^\S+//;
     $cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
@@ -487,6 +496,8 @@ sub invoke_hebcal($$$)
 	my($date,$descr) = split(/ /, $_, 2);
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    parse_date_descr($date,$descr);
+
+	next if $month_filter && $month_filter != $mon+1;
 
 	# if Candle lighting and Havdalah are on the same day it is
 	# a bug in hebcal for unix involving shabbos and chag overlap.
