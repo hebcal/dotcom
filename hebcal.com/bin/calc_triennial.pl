@@ -60,7 +60,6 @@ use Hebcal ();
 use HebcalGPL ();
 use Date::Calc ();
 use Getopt::Std ();
-use XML::Simple ();
 use Time::Local ();
 use POSIX qw(strftime);
 
@@ -91,8 +90,8 @@ $| = 1;
 print "Loading XML...";
 
 ## load aliyah.xml data to get parshiot
-my $axml = XML::Simple::XMLin($aliyah_in);
-my $fxml = XML::Simple::XMLin($festival_in);
+my $axml = eval("require 'aliyah.pl'");
+my $fxml = eval("require 'festival.pl'");
 
 my %triennial_aliyot;
 read_aliyot_metadata($axml, \%triennial_aliyot);
