@@ -77,7 +77,7 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
-my $fxml = XML::Simple::XMLin($festival_in);
+my $fxml = eval("require 'festival.pl'");
 
 if ($opts{'f'}) {
     my $fn = $opts{"f"};
