@@ -426,7 +426,7 @@ sub parse_date_descr($$)
 	if defined $Hebcal::ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-    init_holidays();
+    init_holidays() unless $holidays_init;
 
     $yomtov = 1  if $HOLIDAYS{"$subj_copy:yomtov"};
 
@@ -660,7 +660,7 @@ sub get_holiday_anchor($$$)
 	$sedrot_init = 1;
     }
 
-    init_holidays();
+    init_holidays() unless $holidays_init;
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
@@ -2186,8 +2186,8 @@ sub sendmail_v2($$$)
 {
     my($return_path,$headers,$body,$verbose) = @_;
 
-    use Email::Valid;
-    use Net::SMTP;
+    eval("use Email::Valid");
+    eval("use Net::SMTP");
     
     if (! Email::Valid->address($return_path))
     {
