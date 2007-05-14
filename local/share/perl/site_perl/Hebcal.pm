@@ -49,7 +49,6 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
 use DB_File;
-use XML::Simple ();
 use Digest::MD5 ();
 
 if ($^V && $^V ge v5.8.1) {
@@ -368,7 +367,7 @@ sub init_holidays
 {
     return 1 if $holidays_init;
 
-    my $fxml = XML::Simple::XMLin($HOLIDAYS_XML);
+    my $fxml = eval("require 'festival.pl'");
     foreach my $f (keys %{$fxml->{"festival"}})
     {
 	if (defined $fxml->{"festival"}->{$f}->{"hebrew"})
@@ -649,7 +648,7 @@ sub get_holiday_anchor($$$)
 
     unless ($sedrot_init)
     {
-	my $axml = XML::Simple::XMLin($SEDROT_XML);
+	my $axml = eval("require 'aliyah.pl'");
 	foreach my $h (keys %{$axml->{"parsha"}})
 	{
 	    if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
