@@ -400,14 +400,7 @@ sub process_args
 	$city_descr = $q->param('city');
     }
 
-    $cmd .= " -z " . $q->param('tz')
-	if (defined $q->param('tz') && $q->param('tz') ne '');
-
-    $cmd .= " -Z " . $q->param('dst')
-	if (defined $q->param('dst') && $q->param('dst') ne '');
-
-    $cmd .= " -m " . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+    $cmd .= ' -c -s';
 
     foreach ('a', 'i')
     {
@@ -418,10 +411,17 @@ sub process_args
     # don't do holidays or rosh chodesh for WML
     if (defined $cfg && $cfg eq 'w')
     {
-	$cmd .= ' -x -h';
+	$cmd .= ' -h -x';
     }
 
-    $cmd .= ' -s -c';
+    $cmd .= " -m " . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+    $cmd .= " -z " . $q->param('tz')
+	if (defined $q->param('tz') && $q->param('tz') ne '');
+
+    $cmd .= " -Z " . $q->param('dst')
+	if (defined $q->param('dst') && $q->param('dst') ne '');
 
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
