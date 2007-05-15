@@ -443,21 +443,12 @@ sub parse_date_descr($$)
     ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur,$yomtov);
 }
 
-sub invoke_hebcal($$$)
+sub invoke_hebcal
 {
-    my($cmd,$memo,$want_sephardic) = @_;
+    my($cmd,$memo,$want_sephardic,$month_filter) = @_;
     my(@events,$prev);
     local($_);
     local(*HEBCAL);
-
-    # exec hebcal with entire years, but only return events matching
-    # the month requested
-    my $month_filter;
-    if ($cmd =~ /^(.+)\s+(\d{1,2})\s+(\d+)$/)
-    {
-	$month_filter = $2;
-	$cmd = "$1 $3";
-    }
 
     my $cmd_smashed = $cmd;
     $cmd_smashed =~ s/^\S+//;
@@ -496,6 +487,8 @@ sub invoke_hebcal($$$)
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    parse_date_descr($date,$descr);
 
+	# exec hebcal with entire years, but only return events matching
+	# the month requested
 	next if $month_filter && $month_filter != $mon+1;
 
 	# if Candle lighting and Havdalah are on the same day it is
