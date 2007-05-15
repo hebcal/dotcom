@@ -179,13 +179,15 @@ if ($q->param("yt") && $q->param("yt") eq "H")
 $q->param("month", "x")
     if (defined $q->param("cfg") && $q->param("cfg") eq "e");
 
+my $g_month;
+
 if (defined $q->param("month") && $q->param("month") =~ /^\d{1,2}$/ &&
     $q->param("month") >= 1 && $q->param("month") <= 12)
 {
     my $m = $q->param("month");
     $m =~ s/^0//;
     $q->param("month", $m);
-    $cmd .= " " . $q->param("month");
+    $g_month = $m;
 }
 else
 {
@@ -258,7 +260,7 @@ exit(0);
 
 sub javascript_events
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
 
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
@@ -325,7 +327,7 @@ sub javascript_events
 
 sub macintosh_datebook_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, "", $g_seph);
+    my @events = Hebcal::invoke_hebcal($cmd, "", $g_seph, $g_month);
 
     Hebcal::macintosh_datebook($q, \@events);
 }
@@ -334,7 +336,7 @@ sub vcalendar_display
 {
     my($date) = @_;
 
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
 
     if (defined $q->param("month") && $q->param("month") eq "x")
     {
@@ -365,7 +367,7 @@ sub vcalendar_display
 
 sub dba_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
 
     my $dst = (defined($q->param("dst")) && $q->param("dst") eq "usa") ? 1 : 0;
     my $tz = $q->param("tz");
@@ -387,7 +389,7 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
@@ -934,7 +936,7 @@ sub results_page
     $cmd_pretty =~ s,.*/,,; # basename
     Hebcal::out_html(undef, "<!-- $cmd_pretty -->\n");
 
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
 
     my $numEntries = scalar(@events);
 
