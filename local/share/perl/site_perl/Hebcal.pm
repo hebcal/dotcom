@@ -484,12 +484,17 @@ sub invoke_hebcal
 	chop;
 
 	my($date,$descr) = split(/ /, $_, 2);
-	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
-	    parse_date_descr($date,$descr);
 
 	# exec hebcal with entire years, but only return events matching
 	# the month requested
-	next if $month_filter && $month_filter != $mon+1;
+	if ($month_filter)
+	{
+	    my($mon,$mday,$year) = split(/\//, $date);
+	    next if $month_filter != $mon;
+	}
+
+	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
+	    parse_date_descr($date,$descr);
 
 	# if Candle lighting and Havdalah are on the same day it is
 	# a bug in hebcal for unix involving shabbos and chag overlap.
@@ -506,8 +511,9 @@ sub invoke_hebcal
 
 	my $memo2;
 	if ($untimed) {
-	    $memo2 = (Hebcal::get_holiday_anchor($subj,$want_sephardic,
-						 undef))[2];
+#	    $memo2 = (Hebcal::get_holiday_anchor($subj,$want_sephardic,
+#						 undef))[2];
+	    $memo2 = "";
 	}
 
 	push(@events,
@@ -632,27 +638,30 @@ sub make_anchor($)
 my $sedrot_init = 0;
 my %SEDROT;
 
+sub init_sedrot
+{
+    return 1 if $sedrot_init;
+
+    my $axml = eval("require 'aliyah.pl'");
+    foreach my $h (keys %{$axml->{"parsha"}})
+    {
+	if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
+	{
+	    $SEDROT{$h} = 1;
+	    $SEDROT{"$h:hebrew"} = $axml->{"parsha"}->{$h}->{"hebrew"};
+	}
+    }
+
+    $sedrot_init = 1;
+}
+
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;
     my($href) = '';
     my($hebrew) = '';
-    my($memo) = '';
 
-    unless ($sedrot_init)
-    {
-	my $axml = eval("require 'aliyah.pl'");
-	foreach my $h (keys %{$axml->{"parsha"}})
-	{
-	    if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
-	    {
-		$SEDROT{$h} = 1;
-		$SEDROT{"$h:hebrew"} = $axml->{"parsha"}->{$h}->{"hebrew"};
-	    }
-	}
-	$sedrot_init = 1;
-    }
-
+    init_sedrot() unless $sedrot_init;
     init_holidays() unless $holidays_init;
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
@@ -753,7 +762,7 @@ sub get_holiday_anchor($$$)
     }
 
     return (wantarray()) ?
-	($href,$hebrew,$memo)
+	($href,$hebrew,"")
 	: $href;
 }
     
