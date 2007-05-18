@@ -74,7 +74,8 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
 
-my %SUBS = load_subs();
+my %SUBS;
+load_subs();
 if (! keys(%SUBS) && !$opt_all) {
     die "$ARGV[0]: not found.\n";
 }
@@ -94,21 +95,12 @@ my $sat_year = (localtime($saturday))[5] + 1900;
 my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
-my $ZIPS = Hebcal::zipcode_open_db("/home/hebcal/web/hebcal.com/hebcal/zips99.db");
-
-# walk through subs to make sure there are no errors first
-my @SUBS;
-while (my($to,$cfg) = each(%SUBS))
-{
-    next if $cfg =~ /^action=/;
-    next if $cfg =~ /^type=alt/;
-    parse_config($cfg);
-    push(@SUBS, $to);
-}
+my $HOME = "/home/hebcal";
+my $ZIPS = Hebcal::zipcode_open_db("$HOME/web/hebcal.com/hebcal/zips99.db");
 
 if ($opt_log) {
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
-		      "/home/hebcal", $year, $mon+1, $mday);
+		      $HOME, $year, $mon+1, $mday);
 if ($opt_all) {
     if (open(LOG, "<$logfile")) {
 	my $count;
@@ -128,25 +120,57 @@ select LOG;
 $| = 1;
 }
 
+# walk through subs to make sure there are no errors first
+while (my($to,$cfg) = each(%SUBS))
+{
+    parse_config($cfg);		# will croak if missing candle data
+}
+
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
 my $smtp = smtp_connect("mail.hebcal.com");
 $smtp || die "Can't connect to SMTP server";
 
-my $count = 0;
-@SUBS = List::Util::shuffle(@SUBS);
-foreach my $to (@SUBS)
+for (;;)
 {
+    my @addrs = keys %SUBS;
+    my $count =  scalar(@addrs);
+    last if $count == 0;
+
+    warn "About to mail $count users\n" if $opt_verbose;
+
+    @addrs = List::Util::shuffle(@addrs);
+    foreach my $to (@addrs)
+    {
+	my $success = mail_user($to);
+	delete $SUBS{$to} if $success;
+	sleep(20) if $opt_all; # dh limiting to 200 emails an hour
+    }
+}
+
+close(LOG) if $opt_log;
+
+$smtp->quit();
+undef $smtp;
+
+Hebcal::zipcode_close_db($ZIPS);
+undef($ZIPS);
+
+exit(0);
+
+sub mail_user
+{
+    my($to) = @_;
+
     my $cfg = $SUBS{$to};
-    next unless $cfg;
-    next if $cfg =~ /^action=/;
-    next if $cfg =~ /^type=alt/;
+    die "invalid user $to" unless $cfg;
+
     my($cmd,$loc,$args) = parse_config($cfg);
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
     if ($sat_year != $year) {
 	# Happens when Friday is Dec 31st and Sat is Jan 1st
-	my @ev2 = Hebcal::invoke_hebcal("$cmd 12 $year","",undef);
+	my @ev2 = Hebcal::invoke_hebcal("$cmd $year","",undef);
 	@events = (@ev2, @events);
     }
 
@@ -240,7 +264,6 @@ and post them on your refrigerator:
 			   defined $args->{"zip"} 
 			   ? $args->{"zip"} : $args->{"city"}), "\n";
 	}
-	sleep(20) if $opt_all; # dh limiting to 200 emails an hour
 
 	if ($status == 0)
 	{
@@ -251,19 +274,8 @@ and post them on your refrigerator:
 	}
     }
 
-    $count++;
+    $status;
 }
-
-close(LOG) if $opt_log;
-warn "Successfully mailed $count users\n" if $opt_verbose;
-
-$smtp->quit();
-undef $smtp;
-
-Hebcal::zipcode_close_db($ZIPS);
-undef($ZIPS);
-
-exit(0);
 
 sub my_url_escape
 {
@@ -364,8 +376,6 @@ sub gen_body
 
 sub load_subs
 {
-    my(%subs);
-
     my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
@@ -398,22 +408,21 @@ EOD
 	} elsif ($city) {
 	    $cfg .= ";city=$city";
 	}
-	$subs{$email} = $cfg;
+	$SUBS{$email} = $cfg;
 	$count++;
     }
 
     $dbh->disconnect;
 
     warn "Loaded $count users\n" if $opt_verbose;
-
-    %subs;
+    $count;
 }
 
 sub parse_config
 {
     my($config) = @_;
 
-    my($cmd) = "/home/hebcal/web/hebcal.com/bin/hebcal";
+    my $cmd = "$HOME/web/hebcal.com/bin/hebcal";
 
     my %args;
     foreach my $kv (split(/;/, $config)) {
