@@ -3,7 +3,7 @@
 ########################################################################
 # Convert between hebrew and gregorian calendar dates.
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -186,20 +186,6 @@ else
     list($gm, $gd, $gy) = explode("/", $greg, 3);
 }
 
-my_header();
-
-if ($gy < 1752) {
-?>
-<p><span style="color: red">WARNING:
-Results for year 1752 C.E. and before may not be accurate.</span>
-Hebcal does not take into account a correction of ten days that
-was introduced by Pope Gregory XIII known as the Gregorian
-Reformation. For more information, read about the <a
-href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_outside_of_Roman_Catholic_nations">adoption
-of the Gregorian Calendar</a>.</p>
-<?php
-}
-
 if ($gy > 1969 && $gy < 2038)
 {
     $t = mktime(12, 12, 12, $gm, $gd, $gy);
@@ -214,13 +200,26 @@ if ($type == "g2h")
 {
     $first = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
     $second = format_hebrew_date($hd, $hm, $hy);
+    my_header($second);
 }
 else
 {
     $first = format_hebrew_date($hd, $hm, $hy);
     $second = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
+    my_header($first);
 }
 
+if ($gy < 1752) {
+?>
+<p><span style="color: red">WARNING:
+Results for year 1752 C.E. and before may not be accurate.</span>
+Hebcal does not take into account a correction of ten days that
+was introduced by Pope Gregory XIII known as the Gregorian
+Reformation. For more information, read about the <a
+href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_outside_of_Roman_Catholic_nations">adoption
+of the Gregorian Calendar</a>.</p>
+<?php
+}
 ?>
 <p align="center"><span style="font-size: large">
 <?php echo "$first = <b>$second</b>"; ?>
@@ -300,12 +299,12 @@ function display_hebrew_event($h) {
 }
 
 
-function my_header() {
+function my_header($hebdate) {
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
-<head><title>Hebrew Date Converter</title>
+<head><title>Hebrew Date Converter - <?php echo $hebdate ?></title>
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head>
@@ -323,7 +322,7 @@ function form($head, $message, $help = "") {
     global $gm, $gd, $gy, $hm, $hd, $hy, $hmstr_to_hebcal;
 
     if ($head) {
-	my_header();
+	my_header($message);
     }
 
     if ($message) {
