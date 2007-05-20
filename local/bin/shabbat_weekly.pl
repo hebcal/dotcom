@@ -145,7 +145,7 @@ for (;;)
     {
 	my $success = mail_user($to);
 	delete $SUBS{$to} if $success;
-	sleep(20) if $opt_all; # dh limiting to 200 emails an hour
+	sleep(8) if $opt_all; # dh limit 500 emails an hour
     }
 }
 
