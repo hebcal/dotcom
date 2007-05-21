@@ -336,7 +336,6 @@ Michael J. Radwin. All rights reserved.
 type="text/javascript">
 </script>
 <script type="text/javascript">
-_uctm=0;
 _uacct="UA-967247-1";
 urchinTracker();
 </script>
