@@ -14,13 +14,10 @@ holidays: $(HOLIDAYS)/purim.html
 
 sedrot: $(SEDROT)/bereshit.html
 
-xml2perl: $(SITE_PERL)/aliyah.pl $(SITE_PERL)/festival.pl
+xml2perl: $(SITE_PERL)/HebcalConst.pm
 
-$(SITE_PERL)/aliyah.pl: $(XML_ALIYAH) xml2dump.pl
-	./xml2dump.pl $(XML_ALIYAH) $(SITE_PERL)/aliyah.pl
-
-$(SITE_PERL)/festival.pl: $(XML_FESTIVAL) xml2dump.pl
-	./xml2dump.pl $(XML_FESTIVAL) $(SITE_PERL)/festival.pl
+$(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) gen_const.pl
+	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
