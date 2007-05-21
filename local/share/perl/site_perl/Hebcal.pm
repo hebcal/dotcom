@@ -59,9 +59,6 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
-my $SEDROT_XML = "/home/hebcal/web/hebcal.com/dist/aliyah.xml";
-my $HOLIDAYS_XML = "/home/hebcal/web/hebcal.com/dist/festival.xml";
-
 my($this_year) = (localtime)[5];
 $this_year += 1900;
 
@@ -359,30 +356,12 @@ urchinTracker();
 # invoke hebcal unix app and create perl array of output
 ########################################################################
 
-my $holidays_init = 0;
-my %HOLIDAYS;
-
-sub init_holidays
+my $translations_init = 0;
+sub init_translations
 {
-    return 1 if $holidays_init;
-
-    my $fxml = eval("require 'festival.pl'");
-    foreach my $f (keys %{$fxml->{"festival"}})
-    {
-	if (defined $fxml->{"festival"}->{$f}->{"hebrew"})
-	{
-	    $HOLIDAYS{$f} = 1;
-	    $HOLIDAYS{"$f:hebrew"} = $fxml->{"festival"}->{$f}->{"hebrew"};
-	}
-
-	if (defined $fxml->{"festival"}->{$f}->{"yomtov"})
-	{
-	    $HOLIDAYS{$f} = 1;
-	    $HOLIDAYS{"$f:yomtov"} = $fxml->{"festival"}->{$f}->{"yomtov"};
-	}
-    }
-
-    $holidays_init = 1;
+    return 1 if $translations_init;
+    eval("use HebcalConst");
+    $translations_init = 1;
 }
 
 sub parse_date_descr($$)
@@ -425,9 +404,9 @@ sub parse_date_descr($$)
 	if defined $Hebcal::ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-    init_holidays() unless $holidays_init;
+    init_translations() unless $translations_init;
 
-    $yomtov = 1  if $HOLIDAYS{"$subj_copy:yomtov"};
+    $yomtov = 1 if $HebcalConst::YOMTOV{$subj_copy};
 
     $subj =~ s/\"/''/g;
     $subj =~ s/\s*:\s*$//g;
@@ -634,34 +613,13 @@ sub make_anchor($)
     "$anchor.html";
 }
 
-my $sedrot_init = 0;
-my %SEDROT;
-
-sub init_sedrot
-{
-    return 1 if $sedrot_init;
-
-    my $axml = eval("require 'aliyah.pl'");
-    foreach my $h (keys %{$axml->{"parsha"}})
-    {
-	if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
-	{
-	    $SEDROT{$h} = 1;
-	    $SEDROT{"$h:hebrew"} = $axml->{"parsha"}->{$h}->{"hebrew"};
-	}
-    }
-
-    $sedrot_init = 1;
-}
-
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;
     my($href) = '';
     my($hebrew) = '';
 
-    init_sedrot() unless $sedrot_init;
-    init_holidays() unless $holidays_init;
+    init_translations() unless $translations_init;
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
@@ -673,7 +631,7 @@ sub get_holiday_anchor($$$)
 
 	$sedra = $Hebcal::ashk2seph{$sedra} if (defined $Hebcal::ashk2seph{$sedra});
 
-	if (defined $SEDROT{$sedra})
+	if (defined $HebcalConst::SEDROT{$sedra})
 	{
 	    my($anchor) = $sedra;
 	    $anchor = lc($anchor);
@@ -683,17 +641,18 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    $hebrew .= $SEDROT{"$sedra:hebrew"};
+	    $hebrew .= $HebcalConst::SEDROT{$sedra};
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
-	       (defined $SEDROT{$1} || defined $SEDROT{$Hebcal::ashk2seph{$1}}))
+	       (defined $HebcalConst::SEDROT{$1}
+		|| defined $HebcalConst::SEDROT{$Hebcal::ashk2seph{$1}}))
 	{
 	    my($p1,$p2) = ($1,$2);
 
 	    $p1 = $Hebcal::ashk2seph{$p1} if (defined $Hebcal::ashk2seph{$p1});
 	    $p2 = $Hebcal::ashk2seph{$p2} if (defined $Hebcal::ashk2seph{$p2});
 
-	    die "aliyah.xml missing $p2!" unless defined $SEDROT{$p2};
+	    die "aliyah.xml missing $p2!" unless defined $HebcalConst::SEDROT{$p2};
 
 	    my($anchor) = "$p1-$p2";
 	    $anchor = lc($anchor);
@@ -703,11 +662,11 @@ sub get_holiday_anchor($$$)
 		if ($q);
 	    $href .= "/sedrot/$anchor.html";
 
-	    $hebrew .= $SEDROT{"$p1:hebrew"};
+	    $hebrew .= $HebcalConst::SEDROT{$p1};
 
 	    # hypenate hebrew reading
 	    # HEBREW PUNCTUATION MAQAF (U+05BE)
-	    $hebrew .= "\x{5BE}" . $SEDROT{"$p2:hebrew"};
+	    $hebrew .= "\x{5BE}" . $HebcalConst::SEDROT{$p2};
 	}
     }
     elsif ($subj =~ /^(\d+)\w+ day of the Omer$/)
@@ -735,9 +694,9 @@ sub get_holiday_anchor($$$)
 
 	$subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
-	if (defined $HOLIDAYS{$subj_copy} && defined $HOLIDAYS{"$subj_copy:hebrew"})
+	if (defined $HebcalConst::HOLIDAYS{$subj_copy})
 	{
-	    $hebrew = $HOLIDAYS{"$subj_copy:hebrew"};
+	    $hebrew = $HebcalConst::HOLIDAYS{$subj_copy};
 	}
 
 	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
