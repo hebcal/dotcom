@@ -15,12 +15,8 @@ RewriteCond %{HTTP_ACCEPT} text\/vnd\.wap\.wml
 RewriteCond %{REQUEST_URI} ^/$
 RewriteRule ^ /wap-shabbat.php [L]
 
-# cut down on robots pushing us over resource limits
-#BrowserMatch ^DAVKit/ is_a_robot
-#Order Deny,Allow
-#Deny from env=is_a_robot
-#Deny from 24.225.252.135 68.202.8.234
-RewriteRule hebcal_2004_sep_07936.ics - [F]
+# virus-infected host
+Deny from 203.231.0.1
 
 AddType image/vnd.microsoft.icon ico
 AddType application/x-javascript js
