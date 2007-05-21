@@ -19,7 +19,34 @@ $fxml || die $HOLIDAYS_XML;
 open(O,">$outfile") || die "$outfile: $!\n";
 binmode(O, ":utf8");
 
-print O "package HebcalConst;\n";
+print O "package HebcalConst;\n\n";
+
+print O "use utf8;\n\n";
+
+print O "%HebcalConst::SEDROT = (\n";
+foreach my $h (sort keys %{$axml->{"parsha"}})
+{
+    if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
+    {
+	my $k = $h;
+	$k =~ s/\'/\\\'/g;
+	print O "'$k' => '", $axml->{"parsha"}->{$h}->{"hebrew"}, "',\n";
+    }
+}
+print O ");\n\n";
+
+print O "%HebcalConst::HOLIDAYS = (\n";
+foreach my $f (sort keys %{$fxml->{"festival"}})
+{
+    if (defined $fxml->{"festival"}->{$f}->{"hebrew"})
+    {
+	my $k = $f;
+	$k =~ s/\'/\\\'/g;
+	print O "'$k' => '", $fxml->{"festival"}->{$f}->{"hebrew"}, "',\n";
+    }
+}
+print O ");\n\n";
+
 print O "%HebcalConst::YOMTOV = (\n";
 foreach my $f (sort keys %{$fxml->{"festival"}})
 {
@@ -32,32 +59,6 @@ foreach my $f (sort keys %{$fxml->{"festival"}})
     }
 }
 print O ");\n\n";
-
-print O "%HebcalConst::HEBREW = (\n";
-
-foreach my $h (sort keys %{$axml->{"parsha"}})
-{
-    if (defined $axml->{"parsha"}->{$h}->{"hebrew"})
-    {
-	my $k = $h;
-	$k =~ s/\'/\\\'/g;
-	print O "'$k' => '", $axml->{"parsha"}->{$h}->{"hebrew"}, "',\n";
-    }
-}
-
-print O "\n\n";
-
-foreach my $f (sort keys %{$fxml->{"festival"}})
-{
-    if (defined $fxml->{"festival"}->{$f}->{"hebrew"})
-    {
-	my $k = $f;
-	$k =~ s/\'/\\\'/g;
-	print O "'$k' => '", $fxml->{"festival"}->{$f}->{"hebrew"}, "',\n";
-    }
-}
-
-print O ");\n";
 
 print O "1;\n";
 
