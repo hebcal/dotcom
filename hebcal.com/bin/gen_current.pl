@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -60,7 +60,7 @@ my($syear,$smonth,$sday) = upcoming_dow(6); # saturday
 my $outfile = "$WEBDIR/current.inc";
 my $wrote_parsha = 0;
 
-my(@events) = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $smonth $syear", '', 0);
+my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $syear", "", 0, $smonth);
 my $parsha = '';
 for (my $i = 0; $i < @events; $i++)
 {
@@ -274,8 +274,8 @@ EOHTML
 
 foreach my $city (sort keys %Hebcal::city_tz)
 {
-    @events = Hebcal::invoke_hebcal("$HEBCAL -C '$city' -m 0 -c -h -x $fmonth $fyear",
-				    '', 0);
+    @events = Hebcal::invoke_hebcal("$HEBCAL -C '$city' -m 0 -c -h -x $fyear",
+				    "", 0, $fmonth);
     for (my $i = 0; $i < @events; $i++)
     {
 	if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $fday &&
