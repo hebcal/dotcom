@@ -59,32 +59,6 @@ EOD;
     return $val;
 }
 
-function my_footer() {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $year = strftime("%Y", time());
-    $date = strftime("%c", $stat[9]);
-    global $VER;
-
-    $html = <<<EOD
-<hr noshade size="1"><span class="tiny">
-<a name="copyright"></a>Copyright &copy; $year
-Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a> -
-<a href="/news/">News</a> -
-<a href="/donations/">Donate</a>
-<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-<br>Software last updated: $date (Revision: $VER) 
-</span>
-</body></html>
-EOD
-	;
-    echo $html;
-    exit();
-}
-
 $VER = '$Revision$';
 $matches = array();
 if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
@@ -175,21 +149,22 @@ EOD;
 <base href="http://www.hebcal.com/email/verify.php" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
-class="navbar"><tr><td><small><strong><a
+class="navbar"><tr><td><strong><a
 href="/">hebcal.com</a></strong>
 <tt>-&gt;</tt>
 <a href="/shabbat/">1-Click Shabbat</a>
 <tt>-&gt;</tt>
-Email</small></td><td align="right"><small><a
+Email</td><td align="right"><a
 href="/help/">Help</a> -
-<a href="/search/">Search</a></small>
+<a href="/search/">Search</a>
 </td></tr></table><h1>Email Subscription Confirmed</h1>
 <p>Thank you for your interest in weekly
 candle lighting times and parsha information.</p>
 <p>A confirmation message has been sent
 to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
 <?php
-     my_footer();
+    echo html_footer_lite();
+    exit();
 } else {
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
 	$password = get_password();
@@ -217,14 +192,14 @@ to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
 <base href="http://www.hebcal.com/email/verify.php" target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head><body><table width="100%"
-class="navbar"><tr><td><small><strong><a
+class="navbar"><tr><td><strong><a
 href="/">hebcal.com</a></strong>
 <tt>-&gt;</tt>
 <a href="/shabbat/">1-Click Shabbat</a>
 <tt>-&gt;</tt>
-Email</small></td><td align="right"><small><a
+Email</td><td align="right"><a
 href="/help/">Help</a> -
-<a href="/search/">Search</a></small>
+<a href="/search/">Search</a>
 </td></tr></table><h1>Confirm Email Subscription</h1>
 <?php
 	$html = <<<EOD
@@ -254,6 +229,7 @@ EOD
  ;
 
  echo $html;
- my_footer();
+ echo html_footer_lite();
+ exit();
 }
 ?>
