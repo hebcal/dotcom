@@ -409,28 +409,14 @@ sub alt_candles_text
 sub form
 {
     my($message,$help) = @_;
-    my($key,$val,$JSCRIPT);
+    my($key,$val);
 
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     my $hyear = $hebdate->{"yy"};
     $hyear++ if $hebdate->{"mm"} == 6; # Elul
 
-    $JSCRIPT=<<JSCRIPT_END;
-var d=document;
-function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
-d.f1.submit();return false;}
-function s2(){if(d.f1.nh.checked==false){d.f1.nx.checked=false;}return false;}
-function s5(){if(d.f1.nx.checked==true){d.f1.nh.checked=true;}return false;}
-function s6(val){
-if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
-if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
-return false;}
-JSCRIPT_END
-
     my @head = (
     qq{<meta http-equiv="Content-Type" content="$content_type">},
-    qq{<script language="JavaScript" type="text/javascript"><!--\n} .
-    $JSCRIPT . qq{// --></script>},
     );
 
     print STDOUT $q->header(-type => $content_type);
@@ -505,7 +491,6 @@ JSCRIPT_END
     $q->checkbox(-name => "nh",
 		 -id => "nh",
 		 -checked => "checked",
-		 -onClick => "s2()",
 		 -label => "\nAll default Holidays"),
     "</label> <small>(<a\n",
     "href=\"/holidays/\">What\n",
@@ -514,7 +499,6 @@ JSCRIPT_END
     $q->checkbox(-name => "nx",
 		 -id => "nx",
 		 -checked => "checked",
-		 -onClick => "s5()",
 		 -label => "\nRosh Chodesh"),
     "</label>",
     "<br><label\nfor=\"o\">",
@@ -711,6 +695,22 @@ JSCRIPT_END
     "\n",
     $q->submit(-name => ".s",-value => "Get Calendar"),
     "\n</form>\n");
+
+    my $js=<<JSCRIPT_END;
+<script type="text/javascript">
+var d=document;
+function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
+d.f1.submit();return false;}
+function s6(val){
+if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
+if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
+return false;}
+d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
+d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+</script>
+JSCRIPT_END
+	;
+    Hebcal::out_html(undef, $js);
 
     Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
     Hebcal::out_html(undef, "</div>\n");
