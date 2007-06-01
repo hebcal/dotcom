@@ -350,6 +350,12 @@ type="text/javascript">
 _uacct="UA-967247-1";
 urchinTracker();
 </script>
+<script type="text/javascript">
+fraudwall_id="hebcal";
+</script>
+<script src="http://track.fraudwall.net/track-min.js"
+type="text/javascript">
+</script>
 };
 
 ########################################################################
