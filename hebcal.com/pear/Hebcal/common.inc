@@ -339,6 +339,16 @@ type="text/javascript">
 _uacct="UA-967247-1";
 urchinTracker();
 </script>
+<script type="text/javascript">
+fraudwall_id="hebcal";
+</script>
+<script src="http://track.fraudwall.net/track-min.js"
+type="text/javascript">
+</script>
+<noscript>
+<img alt="" width="1" height="1"
+src="http://track.fraudwall.net/servlet/pix/nojs.gif?id=hebcal">
+</noscript>
 </body></html>
 EOD
 	;
