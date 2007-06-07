@@ -4,6 +4,9 @@ use strict;
 use XML::Simple;
 use utf8;
 
+my $dir = $0;
+$dir =~ s,/[^/]+$,,;
+
 my $outfile = shift;
 die "usage: $0 outfile.pm\n" unless $outfile;
 
@@ -16,7 +19,7 @@ $axml || die $SEDROT_XML;
 my $fxml = XMLin($HOLIDAYS_XML);
 $fxml || die $HOLIDAYS_XML;
 
-open(O,">$outfile") || die "$outfile: $!\n";
+open(O,">$outfile.$$") || die "$outfile.$$: $!\n";
 binmode(O, ":utf8");
 
 print O "package HebcalConst;\n\n";
@@ -60,8 +63,27 @@ foreach my $f (sort keys %{$fxml->{"festival"}})
 }
 print O ");\n\n";
 
+print O "%HebcalConst::CITIES = (\n";
+open(HEBCAL,"$dir/hebcal cities |") || die;
+while(<HEBCAL>)
+{
+    chop;
+    if (/^(.+) \(\d+d\d+\' . lat, \d+d\d+\' . long, GMT (.)(\d+):00, (.+)\)/)
+    {
+	my($city,$sign,$tz,$dst) = ($1,$2,$3,$4);
+	$sign = "" if $sign eq "+";
+	print O "'$city' => [$sign$tz,'$dst'],\n";
+    }
+}
+close(HEBCAL);
+
+print O ");\n\n";
+
 print O "1;\n";
 
 close(O);
+rename("$outfile.$$", $outfile) || die "$outfile: $!\n";
+
+exit(0);
 
 
