@@ -352,8 +352,7 @@ urchinTracker();
 if(document.getElementsByTagName){var e1=document.getElementById("export");
 if(e1){var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
-var pg=e2[i].getAttribute("href");e2[i].onclick=function(){
-urchinTracker(pg);}}}}}}
+if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
 </script>
 <script type="text/javascript">
 fraudwall_id="hebcal";
@@ -1417,12 +1416,12 @@ Jewish Calendar events into your desktop software.</p>};
 
     $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
 	"<ul><li>USA date format (month/day/year):\n" .
-	"<a class=\"download\" href=\"" .
+	"<a class=\"download\" id=\"${filename}_usa.csv\" href=\"" .
 	download_href($q, "${filename}_usa", 'csv') .
 	"\">${filename}_usa.csv</a>\n";
 
     $s .= "<li>European date format (day/month/year):\n" .
-	"<a class=\"download\" href=\"" .
+	"<a class=\"download\" id=\"${filename}_eur.csv\" href=\"" .
 	download_href($q, "${filename}_eur", 'csv') .
 	";euro=1\">${filename}_eur.csv</a></ul>\n";
 
@@ -1450,7 +1449,7 @@ Jewish Calendar events into your desktop software.</p>};
     {
 	$s .= "<ol><li>" .
 	    "Export Palm Date Book Archive:\n" .
-	    "<a class=\"download\" href=\"" .
+	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
 	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
@@ -1475,17 +1474,17 @@ Jewish Calendar events into your desktop software.</p>};
 
     $s .= "<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
 	"Export iCalendar file:\n" .
-	"<a class=\"download\" href=\"webcal://" .
+	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
 	$q->virtual_host() . $subical_href .
 	    "\">subscribe</a> or\n" .
-	"<a class=\"download\" href=\"" .
+	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
 	$ical_href .
 	    "\">download</a>\n";
     $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
 
     $s .= "<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
-	"<a class=\"download\" href=\"" .
+	"<a class=\"download\" id=\"${filename}.vcs\" href=\"" .
 	download_href($q, $filename, 'vcs') .
 	    "\">$filename.vcs</a>\n";
     $s .= "<li>(this download option is less reliable than other choices)</ol>\n";
