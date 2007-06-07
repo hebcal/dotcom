@@ -49,6 +49,7 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
 use DB_File;
+use HebcalConst;
 use Digest::MD5 ();
 
 if ($^V && $^V ge v5.8.1) {
@@ -124,64 +125,6 @@ $Hebcal::havdalah_min = 72;
      'aunz'    => 'Australia and NZ',
      );
 
-%Hebcal::cities =
-    (
-     'Ashdod'		=>	[2,'israel'],
-     'Atlanta'		=>	[-5,'usa'],
-     'Austin'		=>	[-6,'usa'],
-     'Baghdad'		=>	[3,'eu'],
-     'Beer Sheva'	=>	[2,'israel'],
-     'Berlin'		=>	[1,'eu'],
-     'Baltimore'	=>	[-5,'usa'],
-     'Bogota'		=>	[-5,'none'],
-     'Boston'		=>	[-5,'usa'],
-     'Buenos Aires'	=>	[-3,'none'],
-     'Buffalo'		=>	[-5,'usa'],
-     'Chicago'		=>	[-6,'usa'],
-     'Cincinnati'	=>	[-5,'usa'],
-     'Cleveland'	=>	[-5,'usa'],
-     'Dallas'		=>	[-6,'usa'],
-     'Denver'		=>	[-7,'usa'],
-     'Detroit'		=>	[-5,'usa'],
-     'Eilat'		=>	[2,'israel'],
-     'Gibraltar'	=>	[-10,'eu'],
-     'Haifa'		=>	[2,'israel'],
-     'Hawaii'		=>	[-10,'none'],
-     'Houston'		=>	[-6,'usa'],
-     'Jerusalem'	=>	[2,'israel'],
-     'Johannesburg'	=>	[2,'none'],
-     'Kiev'		=>	[2,'eu'],
-     'La Paz'		=>	[-4,'none'],
-     'Livingston'	=>	[-5,'usa'],
-     'London'		=>	[0,'eu'],
-     'Los Angeles'	=>	[-8,'usa'],
-     'Miami'		=>	[-5,'usa'],
-     'Melbourne'	=>	[10,'aunz'],
-     'Mexico City'	=>	[-6,'mx'],
-     'Montreal'		=>	[-5,'usa'],
-     'Moscow'		=>	[3,'eu'],
-     'New York'		=>	[-5,'usa'],
-     'Omaha'		=>	[-6,'usa'],
-     'Ottawa'		=>	[-5,'usa'],
-     'Panama City'	=>	[-5,'none'],
-     'Paris'		=>	[1,'eu'],
-     'Petach Tikvah'	=>	[2,'israel'],
-     'Philadelphia'	=>	[-5,'usa'],
-     'Phoenix'		=>	[-7,'none'],
-     'Pittsburgh'	=>	[-5,'usa'],
-     'Saint Louis'	=>	[-6,'usa'],
-     'Saint Petersburg'	=>	[3,'eu'],
-     'San Francisco'	=>	[-8,'usa'],
-     'Seattle'		=>	[-8,'usa'],
-     'Sydney'		=>	[10,'aunz'],
-     'Tel Aviv'		=>	[2,'israel'],
-     'Tiberias'		=>	[2,'israel'],
-     'Toronto'		=>	[-5,'usa'],
-     'Vancouver'	=>	[-8,'usa'],
-     'White Plains'	=>	[-5,'usa'],
-     'Washington DC'	=>	[-5,'usa'],
-     );
-
 %Hebcal::city_tz =
     (
      );
@@ -190,7 +133,7 @@ $Hebcal::havdalah_min = 72;
     (
      );
 
-while (my($key,$val) = each %Hebcal::cities)
+while (my($key,$val) = each %HebcalConst::CITIES)
 {
     $Hebcal::city_tz{$key} = $val->[0];
     $Hebcal::city_dst{$key} = $val->[1];
@@ -370,14 +313,6 @@ src="http://track.fraudwall.net/servlet/pix/nojs.gif?id=hebcal">
 # invoke hebcal unix app and create perl array of output
 ########################################################################
 
-my $translations_init = 0;
-sub init_translations
-{
-    return 1 if $translations_init;
-    eval("use HebcalConst");
-    $translations_init = 1;
-}
-
 sub parse_date_descr($$)
 {
     my($date,$descr) = @_;
@@ -417,8 +352,6 @@ sub parse_date_descr($$)
     $subj_copy = $Hebcal::ashk2seph{$subj_copy}
 	if defined $Hebcal::ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
-
-    init_translations() unless $translations_init;
 
     $yomtov = 1 if $HebcalConst::YOMTOV{$subj_copy};
 
@@ -632,8 +565,6 @@ sub get_holiday_anchor($$$)
     my($subj,$want_sephardic,$q) = @_;
     my($href) = '';
     my($hebrew) = '';
-
-    init_translations() unless $translations_init;
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
