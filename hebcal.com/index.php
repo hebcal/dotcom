@@ -301,10 +301,23 @@ type="text/javascript">
 _uacct="UA-967247-1";
 urchinTracker();
 </script>
-<script type="text/javascript">
-fraudwall_id="hebcal";
+<!-- Start CFN Code Block -->
+<script language="javascript">
+var adId = 'na';
 </script>
-<script src="http://track.fraudwall.net/track-min.js"
-type="text/javascript">
-</script>
+<script language="javascript"
+src="http://tagiq.clickforensics.com/tag1.js"
+type="text/javascript"></script>
+<script language="vbscript"
+src="http://tagiq.clickforensics.com/tag2.vbs"
+type="text/vbscript"></script>
+<script language="javascript"
+src="http://tagiq.clickforensics.com/tag3.js"
+type="text/javascript"></script>
+<noscript>
+<img src="http://tagiq.clickforensics.com/tag.exe?action=noscript"
+alt="" />
+</noscript>
+<!-- Copyright Click Forensics, Inc. 2007 -->
+<!-- End CFN Code Block -->
 </body></html>
