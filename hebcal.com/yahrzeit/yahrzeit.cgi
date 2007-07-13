@@ -327,6 +327,19 @@ sub results_page {
 			      "Yahrzeit, Birthday and Anniversary\nCalendar",
 			      1, undef, undef),
 	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
+	Hebcal::out_html($cfg, qq{
+<br>
+<!-- Begin: AdBrite -->
+<script type="text/javascript">
+var AdBrite_Title_Color = '0000FF';
+var AdBrite_Text_Color = '000000';
+var AdBrite_Background_Color = 'FFFFFF';
+var AdBrite_Border_Color = 'FFFFFF';
+</script>
+<span style="white-space:nowrap;"><script src="http://ads.adbrite.com/mb/text_group.php?sid=378369&zs=3732385f3930" type="text/javascript"></script><!--
+--><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=378369&afsid=1"><img src="http://files.adbrite.com/mb/images/adbrite-your-ad-here-leaderboard.gif" style="background-color:#FFFFFF" alt="Your Ad Here" width="14" height="90" border="0" /></a></span>
+<!-- End: AdBrite -->
+});
     }
 
     if ($q->param("ref_url"))
@@ -483,19 +496,7 @@ sub form
 	Hebcal::out_html($cfg,
 	qq{<p class="goto"><a href="/help/link.html#yahrzeit-tags">How\n},
 	qq{can my synagogue link to the Yahrzeit, Birthday and Anniversary\n},
-	qq{Calendar from its own website?</a></p>
-
-<!-- Begin: AdBrite -->
-<script type="text/javascript">
-var AdBrite_Title_Color = '0000FF';
-var AdBrite_Text_Color = '000000';
-var AdBrite_Background_Color = 'FFFFFF';
-var AdBrite_Border_Color = 'FFFFFF';
-</script>
-<span style="white-space:nowrap;"><script src="http://ads.adbrite.com/mb/text_group.php?sid=378369&zs=3732385f3930" type="text/javascript"></script><!--
---><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=378369&afsid=1"><img src="http://files.adbrite.com/mb/images/adbrite-your-ad-here-leaderboard.gif" style="background-color:#FFFFFF" alt="Your Ad Here" width="14" height="90" border="0" /></a></span>
-<!-- End: AdBrite -->
-});
+	qq{Calendar from its own website?</a></p>});
 
 	Hebcal::out_html($cfg, Hebcal::html_footer($q,$rcsrev));
     }
