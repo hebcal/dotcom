@@ -123,7 +123,7 @@ you a good inscription in the Book of Life.</span>
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
-$pattern = '/^http:\/\/(www\.google|(\w+\.)*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)\/.*calend[ae]r/i';
+$pattern = '/^http:\/\/(www\.google|(\w+\.)*search\.yahoo|search\.msn|search\.live|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)\/.*calend[ae]r/i';
 if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
     echo "<blockquote class=\"welcome\">\n";
 
