@@ -329,16 +329,17 @@ sub results_page {
 	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
 	Hebcal::out_html($cfg, qq{
 <br>
+<div align="center">
 <!-- Begin: AdBrite -->
-<script type="text/javascript">
-var AdBrite_Title_Color = '0000FF';
-var AdBrite_Text_Color = '000000';
-var AdBrite_Background_Color = 'FFFFFF';
-var AdBrite_Border_Color = 'FFFFFF';
+<style type="text/css">
+   .adHeadline {font: bold 10pt Arial; text-decoration: underline; color: #0000FF;}
+   .adText {font: normal 10pt Arial; text-decoration: none; color: #000000;}
+</style>
+<script type="text/javascript" src="http://ads.adbrite.com/mb/text_group.php?sid=403865&br=1&dk=63616c6c696e672063617264735f355f325f776562&col=3">
 </script>
-<span style="white-space:nowrap;"><script src="http://ads.adbrite.com/mb/text_group.php?sid=378369&zs=3732385f3930" type="text/javascript"></script><!--
---><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=378369&afsid=1"><img src="http://files.adbrite.com/mb/images/adbrite-your-ad-here-leaderboard.gif" style="background-color:#FFFFFF" alt="Your Ad Here" width="14" height="90" border="0" /></a></span>
+<div><a class="adHeadline" target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=403865&afsid=1">Your Ad Here</a></div>
 <!-- End: AdBrite -->
+</div>
 });
     }
 
