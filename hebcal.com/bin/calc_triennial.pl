@@ -771,6 +771,8 @@ EOHTML
 	}
     }
 
+    undef $drash_jts;
+
     my $has_drash = $drash_jts || $drash_ou ||
 	$drash_torah || $drash_uj || $drash_ajr;
 
