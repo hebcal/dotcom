@@ -556,10 +556,10 @@ sub write_sedra_page
 EOHTML
 ;
 
-    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="Parashat $prev">\n}
-    	if $prev_anchor;
-    print OUT2 qq{<link rel="next" href="$next_anchor" title="Parashat $next">\n}
-    	if $next_anchor;
+#    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="Parashat $prev">\n}
+#    	if $prev_anchor;
+#    print OUT2 qq{<link rel="next" href="$next_anchor" title="Parashat $next">\n}
+#    	if $next_anchor;
 
     my @tri_date;
     my @tri_date2;
