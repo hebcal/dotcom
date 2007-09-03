@@ -532,13 +532,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
   Days of Awe: A Treasury of Jewish Wisdom for Reflection, Repentance, and
   Renewal on the High Holy Days
   </book>
-  <book ASIN="0827608217" author="Reuven Hammer">
+  <book ASIN="0827608217" author="Rabbi Reuven Hammer">
   Entering the High Holy Days: A Guide to Origins, Themes, and Prayers
   </book>
-  <book ASIN="1580232396" author="Dov Peretz Elkins">
+  <book ASIN="1580232396" author="Rabbi Dov Peretz Elkins">
   Rosh Hashanah Readings: Inspiration, Information And Contemplation
   </book>
-  <book ASIN="0316739081" author="Alan Lew">
+  <book ASIN="0316739081" author="Rabbi Alan Lew">
   This Is Real and You Are Completely Unprepared: The Days of Awe as a
   Journey of Transformation
   </book>
@@ -627,14 +627,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
   Days of Awe: A Treasury of Jewish Wisdom for Reflection, Repentance, and
   Renewal on the High Holy Days
   </book>
-  <book ASIN="0827608217" author="Reuven Hammer">
+  <book ASIN="0827608217" author="Rabbi Reuven Hammer">
   Entering the High Holy Days: A Guide to Origins, Themes, and Prayers
   </book>
-  <book ASIN="0316739081" author="Alan Lew">
+  <book ASIN="0316739081" author="Rabi Alan Lew">
   This Is Real and You Are Completely Unprepared: The Days of Awe as a
   Journey of Transformation
   </book>
-  <book ASIN="158023271X" author="Dov Peretz Elkins">
+  <book ASIN="158023271X" author="Rabbi Dov Peretz Elkins">
   Yom Kippur Readings: Inspiration, Information And Contemplation
   </book>
  </books>
@@ -940,6 +940,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  The Jewish festival of rededication, also known as the Festival of
  Lights. Sometimes spelled Hanukkah, Chanukkah, Hanukah, or Hannukah
  </about>
+ <books>
+  <book ASIN="0899061869" />
+  <book ASIN="156512538X" />
+  <book ASIN="0807409103" />
+  <book ASIN="0807578630" />
+ </books>
 </festival>
 <festival id="Chanukah: 1 Candle"
  hebrew="חֲנוּכָּה: א׳ נֵר"
