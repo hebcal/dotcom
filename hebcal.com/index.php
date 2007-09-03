@@ -132,6 +132,9 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
 
     $cal[] = array("A Calendar for the Jewish Year 5768", "0789316366", 110, 110);
     $cal[] = array("The Jewish 2008 Calendar", "0883634104", 110, 80);
+    $cal[] = array("Jewish Celebrations 2008 Calendar", "0764938401", 110, 102);
+    $cal[] = array("The Jewish Museum 2008 Calendar", "0764938606", 110, 102);
+    $cal[] = array("Hebrew Illuminations 2008 Calendar", "1569379319", 110, 110);
 
     shuffle($cal);
     list($title,$asin,$width,$height) = $cal[0];
@@ -240,6 +243,9 @@ style="padding-left: 10px; padding-right: 5px">
 <hr noshade size="1">
 <ul class="gtl">
 <!-- Begin temp holiday -->
+<li><b><a
+href="http://www.hebcal.com/holidays/rosh-hashana.html?tag=fp.tmp">Rosh
+Hashanah</a></b><br>12 September 2007<br>at sundown<br><br>
 <!-- End temp holiday -->
 <li><b><a
 href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
