@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -427,13 +427,23 @@ sub write_festival_page
     my $short_descr = $descr;
     $short_descr =~ s/\..*//;
 
+    my $page_title = "$f - $short_descr";
+
     my $keyword = $f;
     $keyword .= ",$seph2ashk{$f}" if defined $seph2ashk{$f};
+
+    my $hebrew = get_var($festivals, $f, 'hebrew');
+    if ($hebrew) {
+	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
+	$page_title .= " - $hebrew";
+    } else {
+	$hebrew = "";
+    }
 
     print OUT2 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>$f - $short_descr</title>
+<html><head><title>$page_title</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com/holidays/$anchor" target="_top">
 <meta name="keywords" content="$keyword,jewish,holidays,holiday,festival,chag,hag">
@@ -467,13 +477,6 @@ EOHTML
 #    	if $prev_anchor;
 #    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
 #    	if $next_anchor;
-
-    my $hebrew = get_var($festivals, $f, 'hebrew');
-    if ($hebrew) {
-	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
-    } else {
-	$hebrew = "";
-    }
 
     my($strassfeld_link) =
 	"http://www.amazon.com/o/ASIN/0062720082/hebcal-20";
