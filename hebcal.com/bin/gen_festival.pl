@@ -590,13 +590,17 @@ EOHTML
 	    print OUT2 qq{<h3><a name="books"></a>Recommended Books</h3>\n<table border="0" cellpadding="6"><tr>\n};
 	    foreach my $book (@{$books}) {
 		my $asin = $book->{"ASIN"};
-		my $img = "$asin.01.MZZZZZZZ.jpg";
-		my $filename = $outdir . "/../i/" . $img;
-		if (! -e $filename) {
-		    $ua = LWP::UserAgent->new unless $ua;
-		    $ua->timeout(10);
-		    $ua->mirror("http://images.amazon.com/images/P/$img",
-				$filename);
+		my $img;
+		my $filename;
+		foreach my $type (qw(T M)) {
+		    $img = "$asin.01.${type}ZZZZZZZ.jpg";
+		    $filename = $outdir . "/../i/" . $img;
+		    if (! -e $filename) {
+			$ua = LWP::UserAgent->new unless $ua;
+			$ua->timeout(10);
+			$ua->mirror("http://images.amazon.com/images/P/$img",
+				    $filename);
+		    }
 		}
 
 		my $image = new Image::Magick;
