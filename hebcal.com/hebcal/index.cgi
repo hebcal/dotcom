@@ -774,14 +774,11 @@ sub referred_by_websearch
     {
 	my $tld = $3 ? $3 : "com";
 	my @ads = (
-#		   ["The Jewish Calendar 5766", "0789312395", 80, 110],
-#		   ["The Jewish Calendar 2006", "0883634074", 110, 80],
-#		   ["Jewish Year 5766", "0789312735", 110, 110],
-		   ["A Calendar for the Jewish Year 5767", "0789314495", 110, 109],
-		   ["The Jewish Calendar 2007", "0883634082", 110, 80],
-		   ["The Jewish Museum 2007 Calendar", "0764934562", 110, 102],
-#		   ["The Jewish Engagement Calendar 2007", "0883634090", 72, 110],
-#		   ["The Jewish Calendar 5767 : 2006-2007 Engagement Calendar", "0789314053", 80, 110],
+		   ["A Calendar for the Jewish Year 5768", "0789316366", 110, 110],
+		   ["The Jewish 2008 Calendar", "0883634104", 110, 80],
+		   ["Jewish Celebrations 2008 Calendar", "0764938401", 110, 102],
+		   ["The Jewish Museum 2008 Calendar", "0764938606", 110, 102],
+		   ["Hebrew Illuminations 2008 Calendar", "1569379319", 110, 110],
 		   );
 	my($title,$asin,$width,$height) = @{$ads[int(rand($#ads+1))]};
 
