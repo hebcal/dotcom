@@ -463,10 +463,10 @@ EOHTML
 	    qq{title="$title">$next&nbsp;&raquo;</a>};
     }
 
-    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
-    	if $prev_anchor;
-    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
-    	if $next_anchor;
+#    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
+#    	if $prev_anchor;
+#    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
+#    	if $next_anchor;
 
     my $hebrew = get_var($festivals, $f, 'hebrew');
     if ($hebrew) {
