@@ -4,7 +4,7 @@
 # 1-Click Shabbat generates weekly Shabbat candle lighting times and
 # Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -48,7 +48,9 @@ use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use DB_File;
 use Time::Local ();
+use Date::Calc ();
 use Hebcal ();
+use HebcalGPL ();
 use POSIX qw(strftime);
 
 my($rcsrev) = '$Revision$'; #'
@@ -57,6 +59,11 @@ my($rcsrev) = '$Revision$'; #'
 my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/[^/]+$,/,;
+
+my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+my $hyear = $hebdate->{"yy"};
+$hyear++ if $hebdate->{"mm"} == 6; # Elul
 
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
@@ -574,9 +581,6 @@ sub display_rss
 
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
-    my($this_year) = (localtime)[5];
-    $this_year += 1900;
-
     Hebcal::out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
@@ -720,9 +724,6 @@ sub display_javascript
 
     display_html_common($items);
 
-    my($this_year) = (localtime)[5];
-    $this_year += 1900;
-
     if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
@@ -805,7 +806,7 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
     $url .= ';tag=1c';
 
-    Hebcal::out_html($cfg,"<h5>More from hebcal.com</h5>\n",
+    Hebcal::out_html($cfg,"<h4>More from hebcal.com</h4>\n",
 		     "<ul class=\"gtl\">\n",
 		      "<li>See all of <a\nhref=\"$url\">this\n",
 		      "month's calendar</a>\n");
@@ -817,16 +818,10 @@ sub display_html
     } else {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
-    Hebcal::out_html($cfg,"| printable page of <a\n",
-		     "href=\"$url\">this year's times</a>\n",
-		     "(post it on your refrigerator)\n");
-
-    # Mac OS X
-    $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
-    Hebcal::out_html($cfg,"<li>",
-		     "Mac OS X users: <a\nhref=\"$url\">Dashboard Widget</a>\n",
-		     "by Mark Saper\n");
-
+    $url .= ";year=" . $hyear;
+    Hebcal::out_html($cfg,"<li><a\n",
+		     "href=\"$url\">Print times for Hebrew year $hyear</a>\n",
+		     "and post it on your refrigerator\n");
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
@@ -859,8 +854,16 @@ sub display_html
     Hebcal::out_html($cfg,"<li>",
 		      "Synagogues: <a\nhref=\"$url\">include</a>\n",
 		      "1-Click Shabbat candle-lighting times on your\n",
-		      "web site\n</ul><p>");
+		     "web site\n");
  
+    # Mac OS X
+    $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
+    Hebcal::out_html($cfg,"<li>",
+		     "Mac OS X users: <a\nhref=\"$url\">Dashboard Widget</a>\n",
+		     "by Mark Saper\n");
+
+    Hebcal::out_html($cfg,"</ul>\n<p>\n");
+
     form($cfg,0,'','');
 }
 
