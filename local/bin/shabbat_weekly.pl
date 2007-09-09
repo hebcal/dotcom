@@ -189,6 +189,28 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
+    # hack for Rosh Hashana 5768
+    if ($sat_year == 2007 && $subject eq "[shabbat] Sep 14") {
+	$subject = "[shabbat] Sep 12 Rosh Hashana";
+
+	my $geo;
+	if (defined $args->{"zip"}) {
+	    $geo = "zip=" . $args->{"zip"};
+	} else {
+	    $geo = "city=" . $args->{"city"};
+	    $geo =~ s/ /%20/g;
+	}
+
+	$body = 
+"Shanah Tovah! Hebcal.com wishes you a happy and healthy New Year.
+
+Print out candle lighting times for the entire year and post them
+on your refrigerator:
+  http://www.hebcal.com/shabbat/fridge.cgi?$geo&year=5768
+
+" . $body;
+    }
+
 # hacks for pesach, rosh hashana
 =begin comment
 
@@ -204,23 +226,6 @@ traditional and liberal Haggadot:
   A Different Night by David Dishon and Noam Zion
   http://www.amazon.com/exec/obidos/ASIN/0966474007/hebcal-20
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-" . $body;
-    }
-
-    if ($sat_year == 2006 && $subject eq "[shabbat] Oct 06") {
-	my $geo;
-	if (defined $args->{"zip"}) {
-	    $geo = "zip=" . $args->{"zip"};
-	} else {
-	    $geo = "city=" . $args->{"city"};
-	    $geo =~ s/ /%20/g;
-	}
-
-	$body = 
-"It's 5767! Print out candle lighting times for the entire year
-and post them on your refrigerator:
-  http://www.hebcal.com/shabbat/fridge.cgi?$geo
 
 " . $body;
     }
