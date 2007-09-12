@@ -243,9 +243,6 @@ style="padding-left: 10px; padding-right: 5px">
 <hr noshade size="1">
 <ul class="gtl">
 <!-- Begin temp holiday -->
-<li><b><a
-href="http://www.hebcal.com/holidays/rosh-hashana.html?tag=fp.tmp">Rosh
-Hashanah</a></b><br>12 September 2007<br>at sundown<br><br>
 <!-- End temp holiday -->
 <li><b><a
 href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
@@ -267,6 +264,9 @@ height="12">&nbsp;<a href="/ical/">Downloads for iCal</a>
   include("./holiday.inc");
   include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
+<br><li><b><a
+href="http://www.hebcal.com/holidays/yom-kippur.html?tag=fp.tmp">Yom
+Kippur</a></b><br>21 September 2007<br>at sundown
 <!-- End temp holiday2 -->
 </ul>
 <form action="/shabbat/" method="get">
