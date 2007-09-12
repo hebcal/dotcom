@@ -12,7 +12,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2007  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -147,6 +147,7 @@ if ($opts{'H'}) {
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     $hebrew_year = $hebdate->{'yy'};
+    $hebrew_year++ if $hebdate->{"mm"} == 6; # Elul
 }
 
 # year I in triennial cycle was 5756
