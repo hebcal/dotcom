@@ -264,9 +264,6 @@ height="12">&nbsp;<a href="/ical/">Downloads for iCal</a>
   include("./holiday.inc");
   include("./current.inc"); ?><br>
 <!-- Begin temp holiday2 -->
-<br><li><b><a
-href="http://www.hebcal.com/holidays/yom-kippur.html?tag=fp.tmp">Yom
-Kippur</a></b><br>21 September 2007<br>at sundown
 <!-- End temp holiday2 -->
 </ul>
 <form action="/shabbat/" method="get">
