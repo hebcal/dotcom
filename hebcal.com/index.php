@@ -4,19 +4,28 @@ if (isset($_COOKIE["C"])) {
     parse_str($_COOKIE["C"], $param);
 }
 
-# Is today Rosh Chodesh?
-list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
-$gm = $mon + 1;
-$gd = $mday;
-$gy = $year + 1900;
+require("./pear/Hebcal/common.inc");
+
+# Determine today's holidays (if any)
+if (isset($_GET["gm"]) && isset($_GET["gd"]) && isset($_GET["gy"])) {
+    $gm = $_GET["gm"];
+    $gd = $_GET["gd"];
+    $gy = $_GET["gy"];
+} else {
+    list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+    $gm = $mon + 1;
+    $gd = $mday;
+    $gy = $year + 1900;
+}
 $century = substr($gy, 0, 2);
 $fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
 @include($fn);
 $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 if (isset($sedra) && isset($sedra[$iso])) {
     $other_holidays = array(
-	"Tu B'Shvat", "Purim", "Shushan Purim", "Yom HaAtzma'ut",
-	"Lag B'Omer", "Shmini Atzeret", "Simchat Torah"
+	"Tu B'Shvat" => true, "Purim" => true, "Shushan Purim" => true,
+	"Yom HaAtzma'ut" => true, "Lag B'Omer" => true,
+	"Shmini Atzeret" => true, "Simchat Torah" => true,
 	);
 
     if (is_array($sedra[$iso])) {
@@ -37,11 +46,15 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	    $chanukah = true;
 	}
 	if (strpos($subj, "(CH''M)") !== false) {
-	    $shalosh_regalim = true;
+	    $pos = strpos($subj, " ");
+	    if ($pos === false) { $pos = strlen($subj); }
+	    $shalosh_regalim = substr($subj, 0, $pos);
 	} elseif (strncmp($subj, "Sukkot", 6) == 0
 	    || strncmp($subj, "Pesach", 6) == 0
 	    || strncmp($subj, "Shavuot", 7) == 0) {
-	    $chag_sameach = $subj;
+	    $pos = strpos($subj, " ");
+	    if ($pos === false) { $pos = strlen($subj); }
+	    $chag_sameach = substr($subj, 0, $pos);
 	}
 	if (strncmp($subj, "Rosh Hashana", 12) == 0) {
 	    $shana_tova = true;
@@ -50,9 +63,6 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	    || strncmp($subj, "Asara", 5) == 0
 	    || strncmp($subj, "Ta'anit", 7) == 0) {
 	    $minor_fast = true;
-	}
-	if (strstr($subj, "day of the Omer") !== false) {
-	    $omer = $subj;
 	}
 	if (isset($other_holidays[$subj])) {
 	    $chag_sameach = $subj;
@@ -98,17 +108,26 @@ align="right"><input type="text" name="words" size="30">
 <span class="fpsubhead">
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
 include("./today.inc");
-if (isset($omer)) {
-    echo "&nbsp; - &nbsp; $omer\n";
+if (isset($events)) {
+    foreach ($events as $h) {
+	if (strncmp($h, "Parashat ", 9) != 0) {
+	    $anchor = hebcal_make_anchor($h);
+	    echo "&nbsp; - &nbsp; <a href=\"", $anchor, "\">", $h, "</a>\n";
+	}
+    }
 }
 if ($rosh_chodesh) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Chodesh Tov!</span>
+<br><span class="fpgreeting">Chodesh Tov! Hebcal.com wishes you
+a good new month.</span>
 <?php } elseif ($chanukah) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Chag Urim Sameach!</span>
-<?php } elseif ($shalosh_regalim) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Moadim L&#39;Simcha!</span>
+<br><span class="fpgreeting">Chag Urim Sameach! Hebcal.com wishes you
+a happy Chanukah.</span>
+<?php } elseif (isset($shalosh_regalim)) { ?>
+<br><span class="fpgreeting">Moadim L&#39;Simcha! Hebcal.com wishes you
+a happy <?php echo $shalosh_regalim ?>.</span>
 <?php } elseif ($minor_fast) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Tzom Kal</span>
+<br><span class="fpgreeting">Tzom Kal. Hebcal.com wishes you an easy
+fast.</span>
 <?php } elseif ($shana_tova) { ?>
 <br><span class="fpgreeting">Shanah Tovah! Hebcal.com wishes you a happy
 and healthy New Year.</span>
@@ -116,9 +135,11 @@ and healthy New Year.</span>
 <br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
 you a good inscription in the Book of Life.</span>
 <?php } elseif ($chag_kasher) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Chag Kasher v&#39;Sameach!</span>
+<br><span class="fpgreeting">Chag Kasher v&#39;Sameach! Hebcal.com
+wishes you a happy Passover.</span>
 <?php } elseif (isset($chag_sameach)) { ?>
-&nbsp; - &nbsp; <span class="fpgreeting">Chag Sameach!</span>
+<br><span class="fpgreeting">Chag Sameach! Hebcal.com wishes you
+a happy <?php echo $chag_sameach ?>.</span>
 <?php } ?>
 </span>
 <?php
