@@ -807,7 +807,7 @@ EOHTML
 
     if ($drash_uj)
     {
-	print OUT2 qq{<li><a title="Parashat $h commentary from UJ"\nhref="$drash_uj">University of Judaism</a>\n};
+	print OUT2 qq{<li><a title="Parashat $h commentary from AJULA"\nhref="$drash_uj">American Jewish University</a>\n};
     }
 
     if ($drash_ajr)
