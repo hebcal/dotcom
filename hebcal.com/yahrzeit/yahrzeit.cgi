@@ -327,20 +327,6 @@ sub results_page {
 			      "Yahrzeit, Birthday and Anniversary\nCalendar",
 			      1, undef, undef),
 	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
-	Hebcal::out_html($cfg, qq{
-<br>
-<div align="center">
-<!-- Begin: AdBrite -->
-<style type="text/css">
-   .adHeadline {font: bold 10pt Arial; text-decoration: underline; color: #0000FF;}
-   .adText {font: normal 10pt Arial; text-decoration: none; color: #000000;}
-</style>
-<script type="text/javascript" src="http://ads.adbrite.com/mb/text_group.php?sid=403865&br=1&dk=63616c6c696e672063617264735f355f325f776562&col=3">
-</script>
-<div><a class="adHeadline" target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=403865&afsid=1">Your Ad Here</a></div>
-<!-- End: AdBrite -->
-</div>
-});
     }
 
     if ($q->param("ref_url"))
