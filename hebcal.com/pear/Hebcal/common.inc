@@ -313,7 +313,7 @@ function hebcal_make_anchor($str)
     }
 }
 
-function html_footer_lite() {
+function html_footer_lite($last_updated = true) {
     $stat = stat($_SERVER["SCRIPT_FILENAME"]);
     $year = strftime("%Y", time());
     $date = strftime("%c", $stat[9]);
@@ -330,7 +330,14 @@ Michael J. Radwin. All rights reserved.
 <a href="/donations/">Donate</a>
 <br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
 3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-<br>Software last updated: $date (Revision: $VER) 
+EOD
+	;
+
+    if ($last_updated) {
+	$html .= "\n<br>Software last updated: $date (Revision: $VER)\n"; 
+    }
+
+    $html .= <<<EOD
 </span>
 <script src="http://www.google-analytics.com/urchin.js"
 type="text/javascript">
