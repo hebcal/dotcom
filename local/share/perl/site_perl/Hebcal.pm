@@ -297,16 +297,6 @@ if(e1){var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
 if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
 </script>
-<script type="text/javascript">
-fraudwall_id="hebcal";
-</script>
-<script src="http://track.fraudwall.net/track-min.js"
-type="text/javascript">
-</script>
-<noscript>
-<img alt="" width="1" height="1"
-src="http://track.fraudwall.net/servlet/pix/nojs.gif?id=hebcal">
-</noscript>
 };
 
 ########################################################################
