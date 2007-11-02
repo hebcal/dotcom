@@ -302,42 +302,6 @@ id="zip">&nbsp;<input type="submit" value="Go">
 </form>
 </td></tr></table>
 <p>
-<hr noshade size="1">
-<span class="tiny">Copyright
-&copy; <?php echo $gy ?> Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a> -
-<a href="/news/">News</a> -
-<a href="/donations/">Donate</a>
-<br>This website uses <a
-href="http://sourceforge.net/projects/hebcal/">hebcal 3.7 for UNIX</a>,
-Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-</span>
-<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct="UA-967247-1";
-urchinTracker();
-</script>
-<!-- Start CFN Code Block -->
-<script language="javascript">
-var adId = 'na';
-</script>
-<script language="javascript"
-src="http://tagiq.clickforensics.com/tag1.js"
-type="text/javascript"></script>
-<script language="vbscript"
-src="http://tagiq.clickforensics.com/tag2.vbs"
-type="text/vbscript"></script>
-<script language="javascript"
-src="http://tagiq.clickforensics.com/tag3.js"
-type="text/javascript"></script>
-<noscript>
-<img src="http://tagiq.clickforensics.com/tag.exe?action=noscript"
-alt="" />
-</noscript>
-<!-- Copyright Click Forensics, Inc. 2007 -->
-<!-- End CFN Code Block -->
-</body></html>
+<?php
+echo html_footer_lite(false);
+?>
