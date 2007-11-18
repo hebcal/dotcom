@@ -432,6 +432,7 @@ sub form
 		       },
 		       undef
 		   ),
+    "\n<div id=\"main\">",
     Hebcal::navbar2($q, "Interactive Calendar", 1, undef, undef),
     "<h1>Hebcal\nInteractive Jewish Calendar</h1>");
 
@@ -1093,7 +1094,7 @@ qq{<p class="goto"><ul class="gtl goto">
 #	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
-	Hebcal::out_html(undef, "\n</ul></p>\n");
+	Hebcal::out_html(undef, "\n</ul>\n");
     }
     else
     {    
