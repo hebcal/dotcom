@@ -1935,7 +1935,8 @@ sub vcalendar_write_contents
 	    my $date_copy = $date;
 	    $date_copy =~ s/T\d+$//;
 
-	    my $uid = "hebcal-$date_copy-$subj_copy";
+	    my $digest = Digest::MD5::md5_hex($subj_copy);
+	    my $uid = "hebcal-$date_copy-$digest";
 
 	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0
 		&& defined $cconfig) {
