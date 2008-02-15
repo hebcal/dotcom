@@ -1927,15 +1927,11 @@ sub vcalendar_write_contents
 		out_html(undef, "TRANSP:TRANSPARENT$endl"); # show as free
 	    }
 
-	    my $subj_copy = lc($subj);
-	    $subj_copy =~ s/[^\w]/-/g;
-	    $subj_copy =~ s/-+/-/g;
-	    $subj_copy =~ s/-$//g;
-
 	    my $date_copy = $date;
 	    $date_copy =~ s/T\d+$//;
 
-	    my $digest = Digest::MD5::md5_hex($subj_copy);
+	    my $digest =
+		Digest::MD5::md5_hex($events->[$i]->[$Hebcal::EVT_IDX_SUBJ]);
 	    my $uid = "hebcal-$date_copy-$digest";
 
 	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0
