@@ -1811,6 +1811,8 @@ sub vcalendar_write_contents
     my($numEntries) = scalar(@{$events});
     for ($i = 0; $i < $numEntries; $i++)
     {
+	my $evt = $events->[$i];
+
 	out_html(undef, qq{BEGIN:VEVENT$endl});
 	out_html(undef, qq{DTSTAMP:$dtstamp$endl});
 
@@ -1821,7 +1823,7 @@ sub vcalendar_write_contents
 	    out_html(undef, qq{CATEGORIES:HOLIDAY$endl});
 	}
 
-	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
 	my($href,$hebrew,$dummy_memo) = Hebcal::get_holiday_anchor($subj,0,$q);
 
@@ -1841,34 +1843,34 @@ sub vcalendar_write_contents
 	    out_html(undef, qq{URL;VALUE=URI:$href$endl});
 	}
 
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0
+	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
 	    && defined $cconfig
 	    && defined $cconfig->{"city"})
 	{
 	    out_html(undef, qq{LOCATION:}, $cconfig->{"city"}, $endl);
 	}
-	elsif ($events->[$i]->[$Hebcal::EVT_IDX_MEMO])
+	elsif ($evt->[$Hebcal::EVT_IDX_MEMO])
  	{
 	    out_html(undef, qq{DESCRIPTION:},
-		     $events->[$i]->[$Hebcal::EVT_IDX_MEMO], $endl);
+		     $evt->[$Hebcal::EVT_IDX_MEMO], $endl);
 	}
 
 	my($date) = sprintf("%04d%02d%02d",
-			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR],
-			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
-			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    $evt->[$Hebcal::EVT_IDX_YEAR],
+			    $evt->[$Hebcal::EVT_IDX_MON] + 1,
+			    $evt->[$Hebcal::EVT_IDX_MDAY],
 			    );
 	my($end_date) = $date;
 
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
-	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
+	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
 
 	    $hour += 12 if $hour < 12;
 	    $date .= sprintf("T%02d%02d00", $hour, $min);
 
-	    $min += $events->[$i]->[$Hebcal::EVT_IDX_DUR];
+	    $min += $evt->[$Hebcal::EVT_IDX_DUR];
 	    if ($min >= 60)
 	    {
 		$hour++;
@@ -1880,9 +1882,9 @@ sub vcalendar_write_contents
 	else
 	{
 	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
-		($events->[$i]->[$Hebcal::EVT_IDX_YEAR],
-		 $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
-		 $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+		($evt->[$Hebcal::EVT_IDX_YEAR],
+		 $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		 $evt->[$Hebcal::EVT_IDX_MDAY],
 		 1);
 	    $end_date = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 
@@ -1898,7 +1900,7 @@ sub vcalendar_write_contents
 
 	out_html(undef, qq{DTSTART});
 	if ($is_icalendar) {
-	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
+	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
 		out_html(undef, ";VALUE=DATE");
 	    } elsif ($tzid) {
 		out_html(undef, ";TZID=$tzid");
@@ -1906,7 +1908,7 @@ sub vcalendar_write_contents
 	}
 	out_html(undef, qq{:$date$endl});
 
-	if ($is_icalendar && $events->[$i]->[$Hebcal::EVT_IDX_UNTIMED])
+	if ($is_icalendar && $evt->[$Hebcal::EVT_IDX_UNTIMED])
 	{
 	    # avoid using DTEND since Apple iCal and Lotus Notes
 	    # seem to interpret all-day events differently
@@ -1920,8 +1922,8 @@ sub vcalendar_write_contents
         }
 	
 	if ($is_icalendar) {
-	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
-		$events->[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
+		$evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
 		out_html(undef, "TRANSP:OPAQUE$endl"); # show as busy
 	    } else {
 		out_html(undef, "TRANSP:TRANSPARENT$endl"); # show as free
@@ -1930,11 +1932,10 @@ sub vcalendar_write_contents
 	    my $date_copy = $date;
 	    $date_copy =~ s/T\d+$//;
 
-	    my $digest =
-		Digest::MD5::md5_hex($events->[$i]->[$Hebcal::EVT_IDX_SUBJ]);
+	    my $digest = Digest::MD5::md5_hex($evt->[$Hebcal::EVT_IDX_SUBJ]);
 	    my $uid = "hebcal-$date_copy-$digest";
 
-	    if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0
+	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
 		&& defined $cconfig) {
 		my $loc;
 		if (defined $cconfig->{"zip"}) {
