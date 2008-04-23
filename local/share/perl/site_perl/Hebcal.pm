@@ -1968,7 +1968,7 @@ sub vcalendar_write_contents
 	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
 		out_html(undef, "BEGIN:VALARM${endl}",
 			 "ACTION:AUDIO${endl}",
-			 "TRIGGER:PT21H${endl}",
+			 "TRIGGER:-PT3H${endl}",
 			 "ATTACH;VALUE=URI:Basso${endl}",
 			 "END:VALARM${endl}");
 	    }
