@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1963,6 +1963,15 @@ sub vcalendar_write_contents
 
 	    out_html(undef, qq{UID:$uid$endl});
 #	    out_html(undef, qq{ORGANIZER:mailto:nobody\@hebcal.com$endl});
+
+	    # 9pm Omer alarm
+	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
+		out_html(undef, "BEGIN:VALARM${endl}",
+			 "ACTION:AUDIO${endl}",
+			 "TRIGGER:PT21H${endl}",
+			 "ATTACH;VALUE=URI:Basso${endl}",
+			 "END:VALARM${endl}");
+	    }
 	}
 
 	out_html(undef, qq{END:VEVENT$endl});
