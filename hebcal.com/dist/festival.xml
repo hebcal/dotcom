@@ -368,6 +368,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidayc.htm">
  Feast of Pentecost
  </about>
+ <books>
+  <book ASIN="0822572257">
+  </book>
+  <book ASIN="1430488980">
+  </book>
+  <book ASIN="0807408492">
+  </book>
+ </books>
 </festival>
 <festival id="Shavuot I"
  hebrew="שָׁבוּעוֹת יוֹם א׳"
