@@ -96,6 +96,11 @@ if ($cfg eq "i" || $cfg eq "j") {
     $count += 5;
 }
 
+my $num_years = 10;
+if (defined $q->param("years") && $q->param("years") =~ /^\d+$/) {
+    $num_years = $q->param("years");
+}
+
 my %yahrzeits = ();
 my %ytype = ();
 foreach my $key (1 .. $count)
@@ -213,7 +218,7 @@ sub my_invoke_hebcal {
 
     my %greg2heb = ();
 
-    foreach my $year ($this_year .. ($this_year + 10))
+    foreach my $year ($this_year .. ($this_year + $num_years))
     {
 	my @events = Hebcal::invoke_hebcal("$cmd $year", "", undef);
 	my $numEntries = scalar(@events);
@@ -456,6 +461,7 @@ sub form
 		 -id => "yizkor",
 		 -label => "\nInclude Yizkor dates"),
     "</label><br>",
+    $q->hidden(-name => "years", -default => $num_years), "\n",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
 #    $q->hidden(-name => "cfg"),
