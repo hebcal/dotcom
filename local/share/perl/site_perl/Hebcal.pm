@@ -1364,7 +1364,7 @@ Jewish Calendar events into your desktop software.</p>};
     }
 
     # only offer DBA export when we know timegm() will work
-    $s .= "<h4>Palm Desktop for Windows</h4>\n";
+    $s .= "<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
     {
@@ -1373,7 +1373,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop</a></ol>};
+	$s .= qq{<li><a href="/help/import.html#dba">How to import DBA file into Palm Desktop 4.1.4</a></ol>};
     }
     else
     {
