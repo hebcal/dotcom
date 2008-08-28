@@ -189,10 +189,7 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
-    # hack for Rosh Hashana 5768
-    if ($sat_year == 2007 && $subject eq "[shabbat] Sep 14") {
-	$subject = "[shabbat] Sep 12 Rosh Hashana";
-
+    if ($sat_year == 2007 && $subject eq "[shabbat] Sep 21") {
 	my $geo;
 	if (defined $args->{"zip"}) {
 	    $geo = "zip=" . $args->{"zip"};
