@@ -246,6 +246,7 @@ traditional and liberal Haggadot:
 	 "Content-Type" => "text/plain",
 	 "Subject" => "$subject Candles $lighting",
 	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
+	 "List-Id" => "<shabbat.hebcal.com>",
 	 "Errors-To" => $return_path,
 	 "Precedence" => "bulk",
 	 "Message-ID" => "<$msgid\@hebcal.com>",
