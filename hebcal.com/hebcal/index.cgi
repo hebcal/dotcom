@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -775,11 +775,11 @@ sub referred_by_websearch
     {
 	my $tld = $3 ? $3 : "com";
 	my @ads = (
-		   ["A Calendar for the Jewish Year 5768", "0789316366", 110, 110],
-		   ["The Jewish 2008 Calendar", "0883634104", 110, 80],
-		   ["Jewish Celebrations 2008 Calendar", "0764938401", 110, 102],
-		   ["The Jewish Museum 2008 Calendar", "0764938606", 110, 102],
-		   ["Hebrew Illuminations 2008 Calendar", "1569379319", 110, 110],
+		   ["Jewish Museum 2009 Wall Calendar", "0764943537", 110, 110],
+		   ["Hebrew Illuminations 2009 16-Month Wall Calendar", "1602370737", 110, 110],
+		   ["Jewish Calendar 5769", "0789317206", 110, 110],
+		   ["Jewish Calendar 2009", "0789317494", 110, 110],
+		   ["Jewish Celebrations 2009 Wall Calendar", "0764942913", 110, 110],
 		   );
 	my($title,$asin,$width,$height) = @{$ads[int(rand($#ads+1))]};
 
