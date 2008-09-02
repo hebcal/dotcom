@@ -169,6 +169,7 @@ href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20"><img
 src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
 width="$width" height="$height" hspace="8" align="right"
 alt="$title from Amazon.$amazon_dom"></a>
+
 MESSAGE_END;
     }
 
@@ -179,14 +180,16 @@ and Torah readings. We also offer export to Palm, Microsoft Outlook, and
 Apple iCal.
 
 <p>Get started <a href="/hebcal/">customizing your calendar</a>.
+
 MESSAGE_END;
 
     if ($show_amazon) {
 	echo <<<MESSAGE_END
-<p>If you are looking for a full-color printed 2007 calendar
+<p>If you are looking for a full-color printed 2009 calendar
 with Jewish holidays, consider <a
 href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$amazon_dom.
+
 MESSAGE_END;
     }
 
