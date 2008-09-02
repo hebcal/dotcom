@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -257,11 +257,11 @@ href="/search/">Search</a></td></tr></table>
 <!--/htdig_noindex-->
 <a name="top"></a>
 <h1>Jewish Holidays</h1>
-<a title="Jewish Year 5768 from Amazon.com"
-href="http://www.amazon.com/o/ASIN/0789316366/hebcal-20"><img
-src="http://www.hebcal.com/i/0789316366.01.TZZZZZZZ.jpg" border="0"
-width="110" height="110" hspace="8" vspace="8" align="right"
-alt="Jewish Year 5768 from Amazon.com"></a>
+<a title="Jewish Museum 2009 Wall Calendar from Amazon.com"
+href="http://www.amazon.com/o/ASIN/0764943537/hebcal-20"><img
+src="http://www.hebcal.com/i/0764943537.01.TZZZZZZZ.jpg" border="0"
+width="110" height="102" hspace="8" vspace="8" align="right"
+alt="Jewish Museum 2009 Wall Calendar from Amazon.com"></a>
 <dl>
 EOHTML
 ;
