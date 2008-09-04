@@ -74,8 +74,15 @@ if (isset($sedra) && isset($sedra[$iso])) {
 $jd = gregoriantojd($gm, $gd, $gy);
 $hebdate = jdtojewish($jd); 
 list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
-if ($hmnum == 13 && $hd > 13) {
+if ($hmnum == 13 && $hd >= 1) {
     $shana_tova = true;		# month 13 == Elul
+    $rh_jd = jewishtojd(13, 29, $hy);
+    $rh_cal = cal_from_jd($rh_jd, CAL_GREGORIAN);
+    $erev_rh = sprintf("%s, %s %s %s",
+		       $rh_cal["abbrevdayname"],
+		       $rh_cal["day"],
+		       $rh_cal["monthname"],
+		       $rh_cal["year"]);
 } elseif ($hmnum == 1 && $hd <= 10) {
     $gmar_tov = true;		# month 1 == Tishrei
 } elseif ($hmnum == 8 && $hd >= 7 && $hd <= 15) {
@@ -131,6 +138,10 @@ fast.</span>
 <?php } elseif ($shana_tova) { ?>
 <br><span class="fpgreeting">Shanah Tovah! Hebcal.com wishes you a happy
 and healthy New Year.</span>
+<?php     if (isset($erev_rh)) { ?>
+<br><span class="fpgreeting"><a href="/holidays/rosh-hashana.html">Rosh Hashana <?php echo $hy + 1 ?></a>
+begins at sundown on <?php echo $erev_rh ?>.</span>
+<?php     } ?>
 <?php } elseif ($gmar_tov) { ?>
 <br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
 you a good inscription in the Book of Life.</span>
