@@ -95,7 +95,7 @@ if ($hmnum == 13 && $hd >= 1) {
 <!-- $Id$ -->
 <html lang="en">
 <head>
-<title>Jewish Calendar, Hebrew Date Converter, Shabbat Times - Hebcal.com</title>
+<title>Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com</title>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
@@ -215,9 +215,9 @@ MESSAGE_END;
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <ul class="gtl">
 <li>
-Generate a calendar of Jewish holidays for any year 0001-9999
+Generate a calendar of Jewish holidays and events for any year 0001-9999
 <li>
-Customize candle lighting times to your zip code, city, or latitude/longitude
+Customize Shabbat and holiday candle lighting times to your zip code, city, or latitude/longitude
 <li>
 Torah readings for Israel and Diaspora
 <li>
@@ -232,6 +232,11 @@ Convert between Hebrew and Gregorian dates
 <li>
 See date in Hebrew font
 </ul>
+<h4><a href="/holidays/">Jewish Holidays</a></h4>
+<ul class="gtl">
+<li>
+Dates for the next few years and special Torah readings
+</ul>
 <h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
 <ul class="gtl">
 <li>
@@ -243,11 +248,6 @@ website</a>
 <li>
 <a href="http://www.apple.com/downloads/dashboard/reference/hebcal.html">Mac
 OS X Dashboard Widget</a> by Mark Saper
-</ul>
-<h4><a href="/holidays/">Jewish Holidays</a></h4>
-<ul class="gtl">
-<li>
-Dates for the next few years and special Torah readings
 </ul>
 <h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
 Calendar</a></h4>
