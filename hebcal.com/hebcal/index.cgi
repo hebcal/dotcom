@@ -911,11 +911,16 @@ sub results_page
 		qq{<meta http-equiv="Content-Type" content="$content_type">},
 		);
 
+    my $results_title = "Jewish Calendar $date";
+    if (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") {
+	$results_title .= " "  . $cconfig->{"city"};
+    }
+
     print STDOUT $q->header(-expires => $http_expires,
 			    -type => $content_type);
 
     Hebcal::out_html(undef,
-    Hebcal::start_html($q, "Jewish Calendar $date - hebcal.com",
+    Hebcal::start_html($q, "$results_title - hebcal.com",
 		       \@head,
 		       undef,
 		       undef
