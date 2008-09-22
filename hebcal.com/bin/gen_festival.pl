@@ -258,6 +258,7 @@ href="/search/">Search</a></td></tr></table>
 <a name="top"></a>
 <h1>Jewish Holidays</h1>
 <a title="Jewish Museum 2009 Wall Calendar from Amazon.com"
+class="amzn" id="h1-calendar-1"
 href="http://www.amazon.com/o/ASIN/0764943537/hebcal-20"><img
 src="http://www.hebcal.com/i/0764943537.01.TZZZZZZZ.jpg" border="0"
 width="110" height="102" hspace="8" vspace="8" align="right"
@@ -645,7 +646,7 @@ EOHTML
 		my $shorttitle = $bktitle;
 		$shorttitle =~ s/\s*:.+//;
 		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
-		print OUT2 qq{<td width="200" align="center" valign="top"><a title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a title="$bktitle" href="$link">$shorttitle</a>};
+		print OUT2 qq{<td width="200" align="center" valign="top"><a class="amzn" id="bk-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a class="amzn" id="bk-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
 		print OUT2 qq{<br>by $author} if $author;
 		print OUT2 qq{</td>\n};
 	    }
@@ -697,17 +698,18 @@ EOHTML
 
     print OUT2 qq{
 <a title="The Jewish Holidays: A Guide &amp; Commentary"
+class="amzn" id="strassfeld-1"
 href="$strassfeld_link"><img
 src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
 alt="The Jewish Holidays: A Guide &amp; Commentary"
 vspace="5" width="75" height="90" align="right"></a>
 <h3><a name="ref"></a>References</h3>
 <dl>
-<dt><em><a
+<dt><em><a class="amzn" id="strassfeld-2"
 href="$strassfeld_link">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dd>Rabbi Michael Strassfeld
-<dt><em><a
+<dt><em><a class="amzn" id="jps-tanakh-1"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
 href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
