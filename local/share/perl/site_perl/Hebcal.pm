@@ -292,7 +292,13 @@ type="text/javascript">
 <script type="text/javascript">
 _uacct="UA-967247-1";
 urchinTracker();
-if(document.getElementsByTagName){var e1=document.getElementById("export");
+if(document.getElementsByTagName){
+var e3=document.getElementsByTagName("a");
+if(e3&&e3.length){
+for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="amzn"){
+if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
+}}}
+var e1=document.getElementById("export");
 if(e1){var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
 if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
