@@ -620,6 +620,7 @@ $next_link
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
 <a title="The Chumash: The Stone Edition (Artscroll Series)"
+class="amzn" id="chumash-1"
 href="$amazon_link2"><img
 src="/i/0899060145.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
 hspace="3" vspace="3"
@@ -730,6 +731,7 @@ EOHTML
     print OUT2 <<EOHTML;
 </table>
 <a title="Etz Hayim: Torah and Commentary"
+class="amzn" id="etz-hayim-1"
 href="$amazon_link1"><img
 src="/i/0827607121.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
 hspace="3" vspace="3"
@@ -838,10 +840,12 @@ EOHTML
     print OUT2 <<EOHTML;
 <h3><a name="ref"></a>References</h3>
 <dl>
-<dt><em><a href="$amazon_link2">The
+<dt><em><a class="amzn" id="chumash-2"
+href="$amazon_link2">The
 Chumash: The Stone Edition (Artscroll Series)</a></em>
 <dd>Nosson Scherman, Mesorah Publications, 1993
-<dt><em><a href="$amazon_link1">Etz
+<dt><em><a class="amzn" id="etz-hayim-2"
+href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a
