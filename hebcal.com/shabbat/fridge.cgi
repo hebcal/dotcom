@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -60,10 +60,15 @@ my $cfg;
 my($evts,undef,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
 
-my $hebrew_year = '';
-if ($evts->[0]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Rosh Hashana (\d{4})$/)
+my $hebrew_year = 0;
+my $numEntries2 = scalar(@{$evts});
+for (my $i = 0; $i < $numEntries2; $i++)
 {
-    $hebrew_year = $1;
+    if ($evts->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Rosh Hashana (\d{4})$/)
+    {
+	$hebrew_year = $1;
+	last;
+    }
 }
 
 my($title) = "Refrigerator Shabbos Times for $hebrew_year";
