@@ -162,11 +162,10 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
     $show_amazon = true;
     if ($show_amazon) {
 
-    $cal[] = array("Jewish Museum 2009 Wall Calendar", "0764943537", 110, 110);
     $cal[] = array("Hebrew Illuminations 2009 16-Month Wall Calendar", "1602370737", 110, 110);
-    $cal[] = array("Jewish Calendar 5769", "0789317206", 110, 110);
-    $cal[] = array("Jewish Calendar 2009", "0789317494", 110, 110);
-    $cal[] = array("Jewish Celebrations 2009 Wall Calendar", "0764942913", 110, 110);
+    $cal[] = array("Jewish Calendar 5769", "0789317206", 80, 110);
+    $cal[] = array("Jewish Calendar 2009", "0789317494", 110, 81);
+    $cal[] = array("Jewish Celebrations 2009 Wall Calendar", "0764942913", 110, 102);
 
     shuffle($cal);
     list($title,$asin,$width,$height) = $cal[0];
