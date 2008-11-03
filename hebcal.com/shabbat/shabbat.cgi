@@ -705,7 +705,16 @@ sub display_javascript
 
     $url .= ";tag=$tag";
 
+    my $loc_class = '';
+    if (defined $q->param('zip') && $q->param('zip') ne '') {
+	$loc_class = $q->param('zip');
+    } else {
+	$loc_class = lc($q->param('city'));
+	$loc_class =~ s/\s+/-/g; 
+    }
+
     Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
+		     qq{<div id="hebcal-$loc_class">\n},
 		     qq{<h3>Shabbat times for $city_descr</h3>\n});
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
@@ -732,11 +741,11 @@ sub display_javascript
 	$url = "javascript:widget.openURL('" . $url . "');";
     }
 
-    Hebcal::out_html($cfg, qq{<span class="copyright">
+    Hebcal::out_html($cfg, qq{<div class="copyright">
 <font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
-</span>
+</div></div>
 </div>
 });
     }
