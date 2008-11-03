@@ -732,9 +732,11 @@ sub display_javascript
 	$url = "javascript:widget.openURL('" . $url . "');";
     }
 
-    Hebcal::out_html($cfg, qq{<font size="-2" face="Arial"><a target="$tgt"
+    Hebcal::out_html($cfg, qq{<span class="copyright">
+<font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
+</span>
 </div>
 });
     }
