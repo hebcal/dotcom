@@ -1970,11 +1970,20 @@ sub vcalendar_write_contents
 	    out_html(undef, qq{UID:$uid$endl});
 #	    out_html(undef, qq{ORGANIZER:mailto:nobody\@hebcal.com$endl});
 
-	    # 9pm Omer alarm
+	    my $alarm;
 	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
+		$alarm = "3H";	# 9pm Omer alarm evening before
+	    }
+	    elsif ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Yizkor \(.+\)$/ ||
+		   $evt->[$Hebcal::EVT_IDX_SUBJ] =~
+		   /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/) {
+		$alarm = "12H";	# noon the day before
+	    }
+
+	    if (defined $alarm) {
 		out_html(undef, "BEGIN:VALARM${endl}",
 			 "ACTION:AUDIO${endl}",
-			 "TRIGGER:-PT3H${endl}",
+			 "TRIGGER:-PT${alarm}${endl}",
 			 "ATTACH;VALUE=URI:Basso${endl}",
 			 "END:VALARM${endl}");
 	    }
