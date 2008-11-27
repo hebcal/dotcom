@@ -54,7 +54,7 @@ use Email::Valid ();
 use MIME::Base64 ();
 
 my $site = "hebcal.com";
-my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
@@ -168,7 +168,7 @@ EOD
     }
 
     $sql = <<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='active'
 WHERE email_address = '$email'
 EOD
@@ -271,7 +271,7 @@ EOD
     shabbat_log(1, "unsub");
 
     $sql = <<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='unsubscribed'
 WHERE email_address = '$email'
 EOD
