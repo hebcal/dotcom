@@ -101,14 +101,14 @@ EOF
 sub get_candidates
 {
     my $site = "hebcal.com";
-    my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+    my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $sql = qq{
 	SELECT DISTINCT a.bounce_address,r.bounce_id,count(r.bounce_id)
-	FROM hebcal1.hebcal_shabbat_email e,
-	     hebcal1.hebcal_shabbat_bounce_address a,
-	     hebcal1.hebcal_shabbat_bounce_reason r
+	FROM hebcal_shabbat_email e,
+	     hebcal_shabbat_bounce_address a,
+	     hebcal_shabbat_bounce_reason r
 	WHERE r.bounce_id = a.bounce_id
 	AND a.bounce_address = e.email_address
 	AND e.email_status = 'active'
@@ -142,7 +142,7 @@ sub deactivate_subs
     foreach my $e (@addrs)
     {
 	my $sql = <<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='bounce'
 WHERE email_address = '$e'
 EOD
@@ -158,11 +158,11 @@ EOD
 	$id_sql .= " OR bounce_id = '$id'";
     }
 
-    my $sql = "DELETE from hebcal1.hebcal_shabbat_bounce_reason WHERE "
+    my $sql = "DELETE from hebcal_shabbat_bounce_reason WHERE "
 	. $id_sql;
     $dbh->do($sql);
 
-    $sql = "DELETE from hebcal1.hebcal_shabbat_bounce_address WHERE "
+    $sql = "DELETE from hebcal_shabbat_bounce_address WHERE "
 	. $id_sql;
     $dbh->do($sql);
 }
