@@ -44,8 +44,8 @@ BACKUP=/home/hebcal/local/etc/hebcalsubs.sql
 
 /usr/bin/mysqldump \
   --skip-opt \
-  --host=mysql.hebcal.com --user=mradwin_hebcal --password=xxxxxxxx \
-  hebcal1 hebcal_shabbat_email \
+  --host=mysql5.hebcal.com --user=mradwin_hebcal --password=xxxxxxxx \
+  hebcal5 hebcal_shabbat_email \
   > $BACKUP.$$ && \
 nice /usr/bin/co -q -l $BACKUP && \
 /bin/mv $BACKUP.$$ $BACKUP && \
