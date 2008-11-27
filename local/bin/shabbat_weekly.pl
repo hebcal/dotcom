@@ -379,7 +379,7 @@ sub gen_body
 
 sub load_subs
 {
-    my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+    my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $all_sql = "";
@@ -393,9 +393,9 @@ SELECT email_address,
        email_candles_zipcode,
        email_candles_city,
        email_candles_havdalah
-FROM hebcal1.hebcal_shabbat_email
-WHERE hebcal1.hebcal_shabbat_email.email_status = 'active'
-AND hebcal1.hebcal_shabbat_email.email_ip IS NOT NULL
+FROM hebcal_shabbat_email
+WHERE hebcal_shabbat_email.email_status = 'active'
+AND hebcal_shabbat_email.email_ip IS NOT NULL
 $all_sql
 EOD
 ;
