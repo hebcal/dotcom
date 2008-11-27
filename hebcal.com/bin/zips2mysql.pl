@@ -133,7 +133,7 @@ $count = 0;
 my $matched = 0;
 my(%seen);
 
-my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
 my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
 my $sql = qq{DROP TABLE IF EXISTS hebcal_zips};
