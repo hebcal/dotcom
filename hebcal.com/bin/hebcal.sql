@@ -1,4 +1,4 @@
-create table hebcal1.hebcal_shabbat_email (
+create table hebcal_shabbat_email (
     email_address varchar(200) not null primary key,
     email_id char(24) not null,
     email_status varchar(16) not null,
@@ -13,7 +13,7 @@ create table hebcal1.hebcal_shabbat_email (
     index (email_status)
 );
 
-create table hebcal1.hebcal_shabbat_bounce_address (
+create table hebcal_shabbat_bounce_address (
     bounce_id int NOT NULL auto_increment,
     bounce_address varchar(200) NOT NULL,
     bounce_std_reason varchar(16),
@@ -22,14 +22,14 @@ create table hebcal1.hebcal_shabbat_bounce_address (
     unique (bounce_address)
 );
 
-create table hebcal1.hebcal_shabbat_bounce_reason (
+create table hebcal_shabbat_bounce_reason (
     bounce_id int NOT NULL,
     bounce_time datetime not null,
     bounce_reason varchar(200),
     index (bounce_id)
 );
 
-create table hebcal1.hebcal_zips (
+create table hebcal_zips (
     zips_zipcode varchar(5) not null primary key,
     zips_latitude varchar(12) not null,
     zips_longitude varchar(12) not null,
