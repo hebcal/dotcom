@@ -31,35 +31,14 @@ if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
 }
 
 $param = array();
-if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"]))
+if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"])
+    && isset($_COOKIE["C"]))
 {
-    if (isset($_COOKIE["C"]))
-    {
-	parse_str($_COOKIE["C"], $param);
-    }
+    parse_str($_COOKIE["C"], $param);
 }
 
 foreach($_REQUEST as $key => $value) {
     $param[$key] = trim($value);
-}
-
-if (isset($param["e"]))
-{
-    $param["em"] = base64_decode($param["e"]);
-    $info = get_sub_info($param["em"]);
-    if (isset($info["status"]) && $info["status"] == "active") {
-	foreach ($info as $k => $v) {
-	    if ($k == "upd") {
-		$param[$k] = ($v == "1") ? "on" : "";
-	    } else {
-		$param[$k] = $v;
-	    }
-	}
-	if (isset($param["city"])) {
-	    $param["geo"] = "city";
-	}
-	$is_update = true;
-    }
 }
 
 if ($param["v"])
@@ -85,6 +64,27 @@ if ($param["v"])
 }
 else
 {
+    if (isset($param["e"])) {
+	$param["em"] = base64_decode($param["e"]);
+    }
+
+    if (isset($param["em"])) {
+	$info = get_sub_info($param["em"]);
+	if (isset($info["status"]) && $info["status"] == "active") {
+	    foreach ($info as $k => $v) {
+		if ($k == "upd") {
+		    $param[$k] = ($v == "1") ? "on" : "";
+		} else {
+		    $param[$k] = $v;
+		}
+	    }
+	    if (isset($param["city"])) {
+		$param["geo"] = "city";
+	    }
+	    $is_update = true;
+	}
+    }
+
     form($param);
 }
 
@@ -107,13 +107,28 @@ function get_password() {
 }
 
 function my_open_db() {
-    $db = mysql_pconnect("mysql.hebcal.com", "mradwin_hebcal", get_password())
-	or die("Could not connect: " . mysql_error());
-    return $db;
+    global $db;
+    global $db_open;
+    if (!isset($db_open)) {
+	$dbpass = get_password();
+	$db = mysql_pconnect("mysql5.hebcal.com", "mradwin_hebcal", $dbpass);
+	if (!$db) {
+	    error_log("Could not connect: " . mysql_error());
+	    die();
+	}
+	$dbname = "hebcal5";
+	if (!mysql_select_db($dbname, $db)) {
+	    error_log("Could not USE $dbname: " . mysql_error());
+	    die();
+	}
+	$db_open = true;
+    }
+    return true;
 }
 
 function write_sub_info($param) {
-    $db = my_open_db();
+    global $db;
+    my_open_db();
 
     if ($param["geo"] == "zip")
     {
@@ -127,7 +142,7 @@ function write_sub_info($param) {
     $optin_announce = $param["upd"] ? 1 : 0;
 
     $sql = <<<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='active',
     $geo_sql,
     email_candles_havdalah='$param[m]',
@@ -140,19 +155,27 @@ EOD;
 }
 
 function get_sub_info($email) {
-    $db = my_open_db();
+    global $db;
+    error_log("get_sub_info($email);");
+    my_open_db();
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
        email_candles_havdalah, email_optin_announce
-FROM hebcal1.hebcal_shabbat_email
-WHERE hebcal1.hebcal_shabbat_email.email_address = '$email'
+FROM hebcal_shabbat_email
+WHERE hebcal_shabbat_email.email_address = '$email'
 EOD;
 
-    $result = mysql_query($sql, $db)
-	or die("Invalid query 1: " . mysql_error());
+    error_log($sql);
+    $result = mysql_query($sql, $db);
+    if (!$result) {
+	error_log("Invalid query 1: " . mysql_error());
+	return array();
+    }
 
-    if (mysql_num_rows($result) != 1) {
+    $num_rows = mysql_num_rows($result);
+    if ($num_rows != 1) {
+	error_log("get_sub_info got $num_rows rows, expected 1");
 	return array();
     }
 
@@ -177,6 +200,7 @@ EOD;
 
 function write_staging_info($param, $old_encoded)
 {
+    global $db;
     if ($old_encoded)
     {
 	$encoded = $old_encoded;
@@ -199,7 +223,7 @@ function write_staging_info($param, $old_encoded)
 	$encoded = bin2hex($rand);
     }
 
-    $db = my_open_db();
+    my_open_db();
 
     if ($param["geo"] == "zip")
     {
@@ -215,7 +239,7 @@ function write_staging_info($param, $old_encoded)
     $optin_announce = $param["upd"] ? 1 : 0;
 
     $sql = <<<EOD
-REPLACE INTO hebcal1.hebcal_shabbat_email
+REPLACE INTO hebcal_shabbat_email
 (email_id, email_address, email_status, email_created,
  email_candles_havdalah, email_optin_announce,
  $location_name, email_ip)
@@ -588,9 +612,10 @@ EOD
 }
 
 function sql_unsub($em) {
-    $db = my_open_db();
+    global $db;
+    my_open_db();
     $sql = <<<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='unsubscribed',email_ip='$_SERVER[REMOTE_ADDR]'
 WHERE email_address = '$em'
 EOD;
