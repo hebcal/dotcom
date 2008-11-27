@@ -48,7 +48,7 @@ use DBI ();
 use Hebcal ();
 
 my $site = "hebcal.com";
-my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
 my $usage = "usage: $0 unsub|bounce email-addr";
 
 sub main() {
@@ -97,7 +97,7 @@ EOD
     }
 
     $sql = <<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='$new_status'
 WHERE email_address = '$email'
 EOD
