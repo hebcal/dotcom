@@ -222,6 +222,8 @@ EOD;
     list($latitude,$longitude,$tz,$dst,$city,$state) =
 	mysql_fetch_row($result);
 
+    mysql_free_result($result);
+
     if (!$state)  {
 	return null;
     }
