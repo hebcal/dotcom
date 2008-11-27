@@ -206,13 +206,13 @@ $hebcal_tz_names = array(
 
 function hebcal_get_zipcode_fields($zip, $password)
 {
-    $db = mysql_pconnect("mysql.hebcal.com", "mradwin_hebcal", $password)
+    $db = mysql_pconnect("mysql5.hebcal.com", "mradwin_hebcal", $password)
 	or die("Could not connect: " . mysql_error());
 
     $sql = <<<EOD
 SELECT zips_latitude, zips_longitude,
        zips_timezone, zips_dst, zips_city, zips_state
-FROM hebcal1.hebcal_zips
+FROM hebcal5.hebcal_zips
 WHERE zips_zipcode = '$zip'
 EOD;
 
