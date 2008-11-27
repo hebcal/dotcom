@@ -65,6 +65,8 @@ EOD;
 	"t" => $created,
 	);
 
+    mysql_free_result($result);
+
     return $val;
 }
 
