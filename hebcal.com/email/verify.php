@@ -18,8 +18,17 @@ function get_password() {
 }
 
 function my_open_db() {
-    $db = mysql_pconnect("mysql.hebcal.com", "mradwin_hebcal", get_password())
-	or die("Could not connect: " . mysql_error());
+    $dbpass = get_password();
+    $db = mysql_pconnect("mysql5.hebcal.com", "mradwin_hebcal", $dbpass);
+    if (!$db) {
+	error_log("Could not connect: " . mysql_error());
+	die();
+    }
+    $dbname = "hebcal5";
+    if (!mysql_select_db($dbname, $db)) {
+	error_log("Could not USE $dbname: " . mysql_error());
+	die();
+    }
     return $db;
 }
 
@@ -29,8 +38,8 @@ function get_sub_info($id) {
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
        email_candles_havdalah, email_optin_announce
-FROM hebcal1.hebcal_shabbat_email
-WHERE hebcal1.hebcal_shabbat_email.email_id = '$id'
+FROM hebcal_shabbat_email
+WHERE hebcal_shabbat_email.email_id = '$id'
 EOD;
 
     $result = mysql_query($sql, $db)
@@ -94,7 +103,7 @@ if (!isset($info["em"])) {
 if (isset($param["commit"]) && $param["commit"] == "1") {
     $db = my_open_db();
     $sql = <<<EOD
-UPDATE hebcal1.hebcal_shabbat_email
+UPDATE hebcal_shabbat_email
 SET email_status='active',
     email_ip='$_SERVER[REMOTE_ADDR]'
 WHERE email_id = '$info[id]'
