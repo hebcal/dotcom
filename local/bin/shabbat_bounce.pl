@@ -54,7 +54,7 @@ use Email::Valid ();
 use Mail::DeliveryStatus::BounceParser ();
 
 my $site = "hebcal.com";
-my $dsn = "DBI:mysql:database=hebcal1;host=mysql.hebcal.com";
+my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
 
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
@@ -94,15 +94,15 @@ my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
 my $sql = <<EOD
 SELECT bounce_id
-FROM hebcal1.hebcal_shabbat_bounce_address
-WHERE hebcal1.hebcal_shabbat_bounce_address.bounce_address = '$email_address'
+FROM hebcal_shabbat_bounce_address
+WHERE hebcal_shabbat_bounce_address.bounce_address = '$email_address'
 EOD
 ;
 
 my($id) = $dbh->selectrow_array($sql);
 if (!$id) {
     $sql = <<EOD
-INSERT INTO hebcal1.hebcal_shabbat_bounce_address
+INSERT INTO hebcal_shabbat_bounce_address
        (bounce_address, bounce_id, bounce_std_reason)
 VALUES ('$email_address', NULL, '$std_reason')
 EOD
@@ -112,7 +112,7 @@ EOD
 }
 
 $sql = <<EOD
-INSERT INTO hebcal1.hebcal_shabbat_bounce_reason
+INSERT INTO hebcal_shabbat_bounce_reason
        (bounce_id, bounce_time, bounce_reason)
 VALUES ($id, NOW(), '$bounce_reason')
 EOD
