@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -51,9 +51,9 @@ my $COUNT_DEFAULT = 7;
 
 my $PROG = "shabbat_deactivate.pl";
 my $VER = '$Revision$$';
-if ($VER =~ /(\d+)\.(\d+)/)
+if ($VER =~ /(\d+)/)
 {
-    $VER = "$1.$2";
+    $VER = $1;
 }
 
 my $opt_help;
@@ -92,7 +92,7 @@ Options:
   -quiet        Quiet mode (do not print commands)
   -count <n>    Threshold is <n> for bounces (default $COUNT_DEFAULT)
 
-Version: $PROG $VER
+Version: $PROG r$VER
 EOF
 ;
     exit(1);

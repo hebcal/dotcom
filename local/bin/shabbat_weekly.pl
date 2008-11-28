@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -54,8 +54,8 @@ use Getopt::Long ();
 use List::Util ();
 
 my $VERSION = '$Revision$$';
-if ($VERSION =~ /(\d+)\.(\d+)/) {
-    $VERSION = "$1.$2";
+if ($VERSION =~ /(\d+)/) {
+    $VERSION = $1;
 }
 
 my $opt_all = 0;
