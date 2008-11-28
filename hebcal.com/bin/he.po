@@ -1,0 +1,162 @@
+msgid "Balak"
+msgstr "בָּלָק"
+
+msgid "Tzav"
+msgstr "צַו"
+
+msgid "Vaera"
+msgstr "וָאֵרָא"
+
+msgid "Yitro"
+msgstr "יִתְרוֹ"
+
+msgid "Bechukotai"
+msgstr "בְּחֻקֹּתַי"
+
+msgid "Emor"
+msgstr "אֱמוֹר"
+
+msgid "Nasso"
+msgstr "נָשׂא"
+
+msgid "Metzora"
+msgstr "מְּצֹרָע"
+
+msgid "Vayetzei"
+msgstr "וַיֵּצֵא"
+
+msgid "Sh'lach"
+msgstr "שְׁלַח־לְךָ"
+
+msgid "Beha'alotcha"
+msgstr "בְּהַעֲלֹתְךָ"
+
+msgid "Vayikra"
+msgstr "וַיִּקְרָא"
+
+msgid "Achrei Mot"
+msgstr "אַחֲרֵי מוֹת"
+
+msgid "Beshalach"
+msgstr "בְּשַׁלַּח"
+
+msgid "Shoftim"
+msgstr "שׁוֹפְטִים"
+
+msgid "Miketz"
+msgstr "מִקֵּץ"
+
+msgid "Masei"
+msgstr "מַסְעֵי"
+
+msgid "Matot"
+msgstr "מַּטּוֹת"
+
+msgid "Vayigash"
+msgstr "וַיִּגַּשׁ"
+
+msgid "Devarim"
+msgstr "דְּבָרִים"
+
+msgid "Vayeilech"
+msgstr "וַיֵּלֶךְ"
+
+msgid "Re'eh"
+msgstr "רְאֵה"
+
+msgid "Chayei Sara"
+msgstr "חַיֵּי שָֹרָה"
+
+msgid "Lech-Lecha"
+msgstr "לֶךְ־לְךָ"
+
+msgid "Toldot"
+msgstr "תּוֹלְדוֹת"
+
+msgid "Ha'Azinu"
+msgstr "הַאֲזִינוּ"
+
+msgid "Ki Teitzei"
+msgstr "כִּי־תֵצֵא"
+
+msgid "Eikev"
+msgstr "עֵקֶב"
+
+msgid "Shmini"
+msgstr "שְּׁמִינִי"
+
+msgid "Kedoshim"
+msgstr "קְדשִׁים"
+
+msgid "Nitzavim"
+msgstr "נִצָּבִים"
+
+msgid "Vayera"
+msgstr "וַיֵּרָא"
+
+msgid "Noach"
+msgstr "נֹחַ"
+
+msgid "Bo"
+msgstr "בֹּא"
+
+msgid "Pinchas"
+msgstr "פִּינְחָס"
+
+msgid "Vayishlach"
+msgstr "וַיִּשְׁלַח"
+
+msgid "Korach"
+msgstr "קוֹרַח"
+
+msgid "Tetzaveh"
+msgstr "תְּצַוֶּה"
+
+msgid "Tazria"
+msgstr "תַזְרִיעַ"
+
+msgid "Mishpatim"
+msgstr "מִּשְׁפָּטִים"
+
+msgid "Behar"
+msgstr "בְּהַר"
+
+msgid "Ki Tisa"
+msgstr "כִּי תִשָּׂא"
+
+msgid "Bereshit"
+msgstr "בְּרֵאשִׁית"
+
+msgid "Vayeshev"
+msgstr "וַיֵּשֶׁב"
+
+msgid "Vezot Haberakhah"
+msgstr "וְזֹאת הַבְּרָכָה"
+
+msgid "Vaetchanan"
+msgstr "וָאֶתְחַנַּן"
+
+msgid "Vayechi"
+msgstr "וַיְחִי"
+
+msgid "Chukat"
+msgstr "חֻקַּת"
+
+msgid "Bamidbar"
+msgstr "בְּמִדְבַּר"
+
+msgid "Pekudei"
+msgstr "פְקוּדֵי"
+
+msgid "Shemot"
+msgstr "שְׁמוֹת"
+
+msgid "Vayakhel"
+msgstr "וַיַּקְהֵל"
+
+msgid "Ki Tavo"
+msgstr "כִּי־תָבוֹא"
+
+msgid "Terumah"
+msgstr "תְּרוּמָה"
+
