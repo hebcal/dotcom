@@ -17,8 +17,8 @@ if (isset($_GET["zip"]) && is_numeric($_GET["zip"])) {
 
 $VER = '$Revision$';
 $matches = array();
-if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
-    $VER = $matches[1] . "." . $matches[2];
+if (preg_match('/(\d+)/', $VER, $matches)) {
+    $VER = $matches[1];
 }
 
 list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();

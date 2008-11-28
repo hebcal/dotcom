@@ -45,8 +45,8 @@ require("../pear/Hebcal/common.inc");
 
 $VER = '$Revision$';
 $matches = array();
-if (preg_match('/(\d+)\.(\d+)/', $VER, $matches)) {
-    $VER = $matches[1] . "." . $matches[2];
+if (preg_match('/(\d+)/', $VER, $matches)) {
+    $VER = $matches[1];
 }
 
 $calinf = cal_info(CAL_GREGORIAN);
