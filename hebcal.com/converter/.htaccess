@@ -1,5 +1,3 @@
-DirectoryIndex index.cgi
-
 Redirect /converter/converter.html http://www.hebcal.com/converter/
 Redirect /converter/converter.htm http://www.hebcal.com/converter/
 Redirect /converter/converter.pl http://www.hebcal.com/converter/
