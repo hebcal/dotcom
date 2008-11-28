@@ -1,0 +1,2684 @@
+<?xml version="1.0" encoding="utf-8"   ?>
+<xsl:stylesheet version="1.0" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+<xsl:strip-space elements="*"/>
+<!-- Copyright C.V.Kimball 2004 -->
+<!--
+
+                            XSL file to provide displays of the XML Unicode Tanach.
+                            
+             Two types of files are displayed:
+             
+             1. The index file, Tanach.xml, which contains the index item.
+                    
+             2. Book files, such as Genesis.xml, which contains the tanach item.
+             
+                a: Book files contain a single book element and have continguous 
+                   chapters and verses. Excerpting provided. The file
+                   name of a book file is the book name.
+                b: Multibook files mave multiple books with possibly 
+                   non-contiguous chapter and verses. No excerpting.
+                   The file name of a multibook file MUST BE the
+                   /Tanach/header/name. 
+         
+ Either type of file is initially displayed with $template= 'Unspecified".   Subsequent
+ JavaScript processing re-displays the data by setting  $template to another value.
+
+-->
+<!--========================================================================-->
+
+<!-- Variables controlling display                                          -->
+
+<!-- Variable counters indicates whether counters are be active.            -->
+<!-- Replace the word "true" with "false" to turn counters off.             -->
+<!-- Page counts motivate the transcriber to maintain this resource.        -->
+<xsl:variable name="counters">true</xsl:variable> 
+
+<!-- Variable xsldate is the date of this xsl file.                         -->
+<xsl:variable name="xsldate">15 Aug 2004</xsl:variable>  
+
+<!-- Variable template chooses which template to apply.                     -->
+<xsl:variable name="template" >Unspecified</xsl:variable>  
+
+<!-- Variable bookname defines the current book in the Multibook mode.      -->
+<xsl:variable name="bookname" >Unspecified</xsl:variable>  
+<!-- Variable booknumber gives the book index for the current book in the
+    Multibook mode.                                                         -->
+<xsl:variable name="booknumber" >Unspecified</xsl:variable> 
+
+<!-- Chapter:Verse.Word specification -->
+<xsl:variable name="chapter" >1</xsl:variable>  
+<xsl:variable name="verse" >1</xsl:variable>  
+<xsl:variable name="word" >1</xsl:variable>  
+
+<!-- LastChapter:LastVerse.LastWord specification -->
+<xsl:variable name="lastchapter" >1</xsl:variable>  
+<xsl:variable name="lastverse" >11</xsl:variable>  
+<xsl:variable name="lastword" >1</xsl:variable>
+
+<!-- Variable format chooses how to display text.                     -->
+<!-- Currently allowable: Verses and Chapter.                         -->
+<xsl:variable name="format">Verses</xsl:variable>  
+
+<!-- Variable format chooses how to display chapter content.               -->
+<!-- Currently allowable: Verses, Chapter and Simplified.                         -->
+<xsl:variable name="content">Accents</xsl:variable>  
+
+<!-- Variable fontfamily gives the family name of the Hebrew fonts.         -->
+<xsl:variable name="fontfamily" >SBL Hebrew</xsl:variable> 
+
+<!-- Variable fontsize gives the size of the Hebrew fonts.                  -->
+<xsl:variable name="fontsize">200%</xsl:variable> 
+
+<!-- Variable consonants contains consonants plus inverted nun, maqaf and sof pasuq. -->
+<xsl:variable   name="consonants">&#x05d0;&#x05d1;&#x05d2;&#x05d3;&#x05d4;&#x05d5;&#x05d6;&#x05d7;&#x05d8;&#x05d9;&#x05da;&#x05db;&#x05dc;&#x05dd;&#x05de;&#x05df;&#x05e0;&#x05e1;&#x05e2;&#x05e3;&#x05e4;&#x05e5;&#x05e6;&#x05e7;&#x05e8;&#x05e9;&#x05ea;&#x05c3;&#x05be;&#xf300;</xsl:variable>  
+<!-- Variable vowels contains vowels plus shin/sin dots. -->
+<xsl:variable   name="vowels">&#x05b0;&#x05b1;&#x05b2;&#x05b3;&#x05b4;&#x05b5;&#x05b6;&#x05b7;&#x05b8;&#x05b9;&#x05ba;&#x05bb;&#x05bc;&#x05c1;&#x05c2;</xsl:variable>  
+<!-- Variable accents contains accents including ZWJ and blank. -->
+<xsl:variable name="accents"> &#x0591;&#x0592;&#x0593;&#x0594;&#x0595;&#x0596;&#x0596;&#x0597;&#x0598;&#x0599;&#x059a;&#x059b;&#x059c;&#x059d;&#x059e;&#x059f;&#x05a0;&#x05a1;&#x05a2;&#x05a3;&#x05a4;&#x05a5;&#x05a6;&#x05a7;&#x05a8;&#x05a9;&#x05aa;&#x05ab;&#x05ac;&#x05ad;&#x05ae;&#x05af;&#x05bd;&#x05bf;&#x05c0;&#x05c4;&#x0397;&#x0323;&#x200d;</xsl:variable>
+<!-- Variable mdivider contains the morphogical divider, /. -->
+<xsl:variable name="mdivider">/</xsl:variable>
+
+<!-- Variable all contains all of the above. -->
+<xsl:variable name="all" select="concat($consonants, $vowels, $accents, $mdivider)"/>
+<!-- Variable no morphology eliminates the /. -->
+<xsl:variable name="nomorphology" select="concat($consonants, $vowels, $accents)"/>
+<!-- Variable no accents eliminates the accents. -->
+<xsl:variable name="noaccents" select="concat($consonants, $vowels)"/>
+
+<!--========================================================================-->
+<!--
+
+          Dispatching template for /Tanach
+          
+ -->
+<!--========================================================================-->
+<xsl:template match="/Tanach">
+
+<!--<html><body><xsl:value-of select="$template"/></body></html>-->
+    <xsl:choose>
+        <xsl:when test="$template='Unspecified'"> 
+            <xsl:choose>
+                <xsl:when test="count(tanach)=0"> <!-- No tanach entry -> Index -->
+                    <xsl:call-template name="Index"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="count(tanach/book) = 1">
+                        <xsl:call-template name="Book"/>
+                        </xsl:if>
+                    <xsl:if test="count(tanach/book) > 1">
+                        <xsl:call-template name="Multibook"/>
+                        </xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$template='ChapterText'"> 
+            <xsl:call-template name="ChapterText"/>
+        </xsl:when>
+        <xsl:when test="$template='ExtractText'"> 
+            <xsl:call-template name="ExtractText"/>
+        </xsl:when>
+        <xsl:when test="$template='Syntax'"> 
+            <xsl:call-template name="Syntax"/>
+        </xsl:when>
+        <xsl:when test="$template='About'"> 
+            <xsl:call-template name="About"/>
+        </xsl:when>
+        <xsl:when test="$template='Coding'"> 
+            <xsl:call-template name="Coding"/>
+        </xsl:when>
+        <xsl:when test="$template='Notes'"> 
+            <xsl:call-template name="Notes"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <html>
+                <title>Error in template!</title>
+                <body>
+                    <center>
+                        <h1>Incorrect template name: 
+                        <xsl:value-of select="$template"/> </h1>
+                    </center>
+                </body>
+                </html>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- Central display, loads Tanach.xml, provides an index of books 
+     and a link to about.                                                   -->
+
+<!--========================================================================-->
+<xsl:template name="Index"> 
+
+<html>
+<title><xsl:value-of select="header/name"/></title>  
+
+<META NAME="description" CONTENT="{/Tanach/header/description}"/>
+<META NAME="keywords" CONTENT="Bible, Hebrew, Tanach, XML "/>
+
+<head>
+<SCRIPT language="JavaScript" type="text/javascript" src="Sarissa.js"></SCRIPT>
+
+<SCRIPT language="JavaScript" type="text/javascript">
+    var xml = Sarissa.getDomDocument() ;
+    var xsl = Sarissa.getDomDocument() ;
+    var loaded = false ;
+    XMLXSLload("Tanach.xml", "Tanach.xsl.xml") ;
+            
+    function showTemplate(Template){
+        setXSLVariable("template", Template) ;
+        xsl.selectSingleNode("//xsl:variable[@name='template']").text = Template ; 
+        display = window.open() ;
+        display.document.write(xml.transformNode(xsl)) ;
+        display.document.close() ;
+        }
+    function setXSLVariable( name, value ) {
+        var c = xsl.selectSingleNode("//xsl:variable[@name=\'" + name + "\']") ;
+        var t = c.firstChild;
+        var newt = xsl.createTextNode(value) ; // Not working for int.
+        c.replaceChild(newt, t) ;
+        }
+    function XMLXSLload(xmlfile, xslfile){
+        if (!loaded){ 
+            xml.async = false ;
+            xml.load(xmlfile) ;
+            xsl.async = false ;
+            xsl.load(xslfile) ;
+            xsl.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'") ;
+            xsl.setProperty("SelectionLanguage", "XPath") ;
+            loaded=true ;
+            }
+        }
+</SCRIPT>
+
+</head>
+<body bgcolor="#fffff8" >
+
+<xsl:if test="$counters = 'true'">
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.Index.dat&amp;sh=F"/> -->
+    </xsl:if>
+    
+<table>
+  <tr>
+    <td width="20%">
+      <table align="center" width="100%">
+        <tr>
+          <td align="left" valign="top">
+<!---       <img src="WHIbanner.gif" alt="Westminister Hebrew Institute" border="0"/> -->
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td width="60%">
+      <table align="center">
+        <tr>
+          <td align="center">
+            <span style="font-family:Times;font-size:16">
+              <a target="_blank" href="http://whi.wts.edu/WHI">
+                <xsl:value-of select="header/title"/>
+              </a>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td align="center"><span style="font-family:Times;font-weight:bold;font-size:200%">
+            <xsl:value-of select="header/name"/>
+            <xsl:text> - </xsl:text></span>
+            <span align="left" style="font-family:{$fontfamily};font-size:250%">
+              <xsl:value-of select="header/hebrewname"/>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <span style="font-family:Times;font-size:14">
+              <xsl:value-of select="/Tanach/header/shortdescription"/><br/>
+              <xsl:text>[</xsl:text><xsl:value-of select="/Tanach/header/date"/>
+              <xsl:text>]</xsl:text>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table align="right">
+        <tr>
+          <td align="right">
+            <a href="JavaScript:showTemplate('About')" title="More information about this document.">About</a>
+          </td>
+        </tr> 
+        <tr>
+          <td align="right">
+            <a href="JavaScript:showTemplate('Notes')" title="Transcription notes.">Notes</a>
+          </td>
+        </tr> 
+        <tr>
+          <td align="right">
+            <a href="JavaScript:showTemplate('Coding')" title="MC/Unicode coding table.">Coding</a>
+          </td>
+        </tr> 
+      </table>
+    </td>
+  </tr>
+</table>
+<center>
+<table border="2" cellpadding="2">
+<tr><td><center><b><a href="../DH/Tanach.xml" target="_blank">Torah</a><sup>*</sup></b></center></td>
+    <td><center><b>Prophets</b></center></td>
+    <td colspan="2"><center><b>Minor prophets</b></center></td>
+    <td colspan="2"><center><b>Writings</b></center></td></tr>
+
+<tr><td><a target="_blank" href="Genesis.xml">Genesis</a></td>
+    <td><a target="_blank" href="Joshua.xml">Joshua</a></td>
+    <td><a target="_blank" href="Hosea.xml">Hosea</a></td>
+    <td><a target="_blank" href="Nahum.xml">Nahum</a></td>
+    <td><a target="_blank" href="Psalms.xml">Psalms</a></td>
+    <td><a target="_blank" href="Ecclesiastes.xml">Ecclesiastes</a></td></tr>
+    
+<tr><td><a target="_blank" href="Exodus.xml">Exodus</a></td>
+    <td><a target="_blank" href="Judges.xml">Judges</a></td>
+    <td><a target="_blank" href="Joel.xml">Joel</a></td>
+    <td><a target="_blank" href="Habakkuk.xml">Habakkuk</a></td>
+    <td><a target="_blank" href="Proverbs.xml">Proverbs</a></td>
+    <td><a target="_blank" href="Esther.xml">Esther</a></td></tr>
+    
+<tr><td><a target="_blank" href="Leviticus.xml">Leviticus</a></td>
+    <td><a target="_blank" href="Samuel 1.xml">1 Samuel</a></td>
+    <td><a target="_blank" href="Amos.xml">Amos</a></td>
+    <td><a target="_blank" href="Zephaniah.xml">Zephaniah</a></td>
+    <td><a target="_blank" href="Job.xml">Job</a></td>
+    <td><a target="_blank" href="Daniel.xml">Daniel</a></td></tr>
+
+<tr><td><a target="_blank" href="Numbers.xml">Numbers</a></td>
+    <td><a target="_blank" href="Samuel 2.xml">2 Samuel</a></td>
+    <td><a target="_blank" href="Obadiah.xml">Obadiah</a></td>
+    <td><a target="_blank" href="Haggai.xml">Haggai</a></td>
+    <td><a target="_blank" href="Song of Songs.xml">Song of songs</a></td>
+    <td><a target="_blank" href="Ezra.xml">Ezra</a></td></tr>
+    
+<tr><td><a target="_blank" href="Deuteronomy.xml">Deuteronomy</a></td>
+    <td><a target="_blank" href="Kings 1.xml">1 Kings</a></td>
+    <td><a target="_blank" href="Jonah.xml">Jonah</a></td>
+    <td><a target="_blank" href="Zechariah.xml">Zechariah</a></td>
+    <td><a target="_blank" href="Ruth.xml">Ruth</a></td>
+    <td><a target="_blank" href="Nehemiah.xml">Nehemiah</a></td></tr>
+    
+<tr><td>&#160;</td>
+    <td><a target="_blank" href="Kings 2.xml">2 Kings</a></td>
+    <td><a target="_blank" href="Micah.xml">Micah</a></td>
+    <td><a target="_blank" href="Malachi.xml">Malachi</a></td>
+    <td><a target="_blank" href="Lamentations.xml">Lamentations</a></td>
+    <td><a target="_blank" href="Chronicles 1.xml">1 Chronicles</a></td></tr>
+
+<tr><td>&#160;</td>
+    <td><a target="_blank" href="Isaiah.xml">Isaiah</a></td>
+    <td colspan="3">&#160;</td>
+    <td><a target="_blank" href="Chronicles 2.xml">2 Chronicles</a></td></tr>
+    
+    
+<tr><td>&#160;</td>
+    <td><a target="_blank" href="Jeremiah.xml">Jeremiah</a></td>
+    <td colspan="4">&#160;</td></tr>
+    
+<tr><td>&#160;</td>
+    <td><a target="_blank" href="Ezekiel.xml">Ezekiel</a></td>
+    <td colspan="4">&#160;</td></tr>
+<tr><td colspan="6"><sup>*</sup><b>Torah</b> with Documentary Hypothesis source markings.</td></tr>
+</table>
+</center>
+<table width="100%">
+<tr><td align="left">
+           
+    <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+    <td align="center"><i><span style="color:red">Your <a 
+title="Send your suggestions." style="color:red" href="mailto:mail@cvkimball.com">suggestions</a> 
+     will improve this resource.</span></i></td>
+<td align="right"><font size="-1">
+    <a title="XML date."><xsl:value-of select="header/transcriptiondate"/></a>
+    <xsl:text> / </xsl:text><a title="XSL date."><xsl:value-of select="$xsldate"/></a>
+    </font></td></tr>
+</table>
+<hr/>
+</body>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<xsl:template name="Book">
+
+<!--========================================================================-->
+<html>
+<head>
+
+<SCRIPT language="JavaScript" type="text/javascript" src="Sarissa.js"></SCRIPT>
+
+<SCRIPT language="JavaScript" type="text/javascript">
+    var xml = Sarissa.getDomDocument() ;
+    var xsl = Sarissa.getDomDocument() ;
+    var loaded = false ;
+    XMLXSLload("<xsl:value-of select="/Tanach/tanach/book/names/filename"/>"+".xml", "Tanach.xsl.xml") ;
+    setXSLVariable("template", "ChapterText") ;
+            
+    function showTemplate(Template){
+        setXSLVariable("template", Template) ;
+        xsl.selectSingleNode("//xsl:variable[@name='template']").text = Template ; 
+        display = window.open() ;
+        display.document.write(xml.transformNode(xsl)) ;
+        display.document.close() ;
+        }
+    function showSyntax() {
+        var inputTemplate = getXSLVariable("template") ;
+        showTemplate("Syntax") ;
+        setXSLVariable("template", inputTemplate ) ;
+        }
+    function showChapter(BookName, BookNumber, Chapter){
+        setXSLVariable("template", "ChapterText") ;
+        setXSLVariable("bookname", BookName ) ;
+        setXSLVariable("booknumber", BookNumber ) ;
+        setXSLVariable("chapter", Chapter) ;
+        transformToElement("textarea") ;
+        statusbarmessage("Loading " 
+                   + BookName
+                   + ", Chapter " + Chapter
+                   + " ...") ;
+        }
+    function showExtract(){
+        setXSLVariable("template", "ExtractText") ;
+        transformToElement("textarea") ;
+        statusbarmessage("Loading excerpt of " 
+            + '<xsl:value-of select="/Tanach/tanach/book/names/name"/>'
+            + " " + getXSLVariable("chapter") + ":" 
+                  + getXSLVariable("verse") + "."
+                  + getXSLVariable("word") + " - "
+            + getXSLVariable("lastchapter") + ":" 
+                  + getXSLVariable("lastverse") + "."
+                  + getXSLVariable("lastword") 
+                  + " ...") ;
+        }
+    function setXSLVariable( name, value ) {
+        var c = xsl.selectSingleNode("//xsl:variable[@name=\'" + name + "\']") ;
+        var t = c.firstChild;
+        var newt = xsl.createTextNode(value) ; // Not working for int.
+        c.replaceChild(newt, t) ;
+        }
+    function transformToElement(ID){
+        myarea = document.getElementById(ID) ;
+        try{
+            myarea.innerHTML = xml.transformNode(xsl) ;
+            }
+        catch(e){
+            alert("Failed to transform inner document.") ;
+            throw e;
+            }
+        }
+    function setElement(ID, value){
+        myarea = document.getElementById(ID) ;
+        myarea.innerHTML = value ;
+        }
+    function clearstatusbar(){
+        defaultStatus = "" ;
+        }
+    function statusbarmessage(c){
+        defaultStatus = c ;
+        setTimeout("clearstatusbar();", 3000) ;
+        }
+    function getXSLVariable( name ) {
+        var c = xsl.selectSingleNode("//xsl:variable[@name=\'" + name + "\']") ;
+        var t = c.firstChild;
+        return t.nodeValue ;
+        }
+    function getBookName() {
+        bookstring = "/Tanach/tanach/book/names/name" ;
+        var name = xml.selectSingleNode(bookstring)  ;
+        if (name == null){
+           alert("getBookName: Node " + bookstring + " not found.") ;
+           return ""  ;
+           }
+        else{
+           var t = name.firstChild;
+           return t.nodeValue ;
+           }
+        }
+    function XMLXSLload(xmlfile, xslfile){
+        if (!loaded){ 
+            xml.async = false ;
+            xml.load(xmlfile) ;
+            xsl.async = false ;
+            xsl.load(xslfile) ;
+            xsl.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'") ;
+            xsl.setProperty("SelectionLanguage", "XPath") ;
+            loaded=true ;
+            }
+        }
+    function showNote(Code){
+        var codes = xml.selectNodes("/Tanach/notes/note/code") ;
+        var notes = xml.selectNodes("/Tanach/notes/note/note") ;
+        var Found = false ;
+        var text ;
+        for( var loopIndex = 0 ; loopIndex != notes.length; loopIndex++){  
+            var c = codes[loopIndex] ;
+            if( c.firstChild.nodeValue == Code.toLowerCase() ){
+                Found = true ;
+                break;
+                }
+           }
+        if(Found){
+            text = notes[loopIndex].firstChild.nodeValue  ; 
+            }
+        else{
+            text = "Transcription note for " + Code + " not found!" ;
+            }
+        alert(text) ;   
+        }
+    function changeView(){
+        var current = getXSLVariable("format");
+        if (current=='Verses'){
+            setXSLVariable("format", "Chapter") ;
+            setElement("view", "Chapter") ;
+            }
+        if (current=='Chapter'){
+            setXSLVariable("format", "Simplified") ;
+            setElement("view", "Simplified") ;
+            }
+        if (current=='Simplified'){
+            setXSLVariable("format", "Verses") ;
+            setElement("view", "Verses") ;
+            }
+        transformToElement("textarea") ;
+        }
+    function changeContent(){
+        var current = getXSLVariable("content");
+        if (current=='Accents'){
+            setXSLVariable("content", "Vowels") ;
+            setElement("content", "Vowels") ;
+            }
+        if (current=='Vowels'){
+            setXSLVariable("content", "Consonants") ;
+            setElement("content", "Consonants") ;
+            }
+        if (current=='Consonants'){
+            setXSLVariable("content", "Morphology") ;
+            setElement("content", "Morphology") ;
+            }
+        if (current=='Morphology'){
+            setXSLVariable("content", "Accents") ;
+            setElement("content", "Accents") ;
+            }
+        transformToElement("textarea") ;
+        }
+    function changeFontFamily(){
+        var current = getXSLVariable("fontfamily");
+        if (current=='Ezra SIL'){
+            setXSLVariable("fontfamily", "SBL Hebrew") ;
+            setElement("fontfamily", "SBL Hebrew") ;
+            }
+        if (current=='SBL Hebrew'){
+            setXSLVariable("fontfamily", "Ezra SIL") ;
+            setElement("fontfamily", "Ezra SIL") ;
+            }
+        transformToElement("textarea") ;
+        }
+    function changeFontSize(){
+        var current = getXSLVariable("fontsize");
+        if (current=='400%'){
+            setXSLVariable("fontsize", "100%") ;
+            setElement("size", "100%") ;
+            }
+        if (current=='300%'){
+            setXSLVariable("fontsize", "400%") ;
+            setElement("size", "400%") ;
+            }
+        if (current=='250%'){
+            setXSLVariable("fontsize", "300%") ;
+            setElement("size", "300%") ;
+            }
+        if (current=='200%'){
+            setXSLVariable("fontsize", "250%") ;
+            setElement("size", "250%") ;
+            }
+        if (current=='150%'){
+            setXSLVariable("fontsize", "200%") ;
+            setElement("size", "200%") ;
+            }
+        if (current=='100%'){
+            setXSLVariable("fontsize", "150%") ;
+            setElement("size", "150%") ;
+            }
+        transformToElement("textarea") ;
+        }
+<!-- Returns int maximum number of chapters.  -->
+function getMaxChapters() {
+        chaptersstring = "/Tanach/tanach/book/c" ;
+        var chapters = xml.selectNodes(chaptersstring)  ;
+        if (chapters == null){
+           alert("getMaxChapters: Node " + chaptersstring + " not found.") ;
+           return ""  ;
+           }
+        else{
+           var ccount = chapters.length ;
+//           alert("Number of chapters  = " + ccount ) ;
+           return ccount ;
+           }
+        }
+<!-- Enter with String giving chapter; returns int maximum number of verses.  -->
+function getMaxVerses( chapter ) {
+        var c = parseInt(chapter) - 1 ;  
+        chaptersstring = "/Tanach/tanach/book/c" ;
+        var chapters = xml.selectNodes(chaptersstring)  ;
+        if (chapters == null){
+           alert("getMaxVerses: Node " + chaptersstring + " not found.") ;
+           return ""  ;
+           }
+        else{
+           verses = chapters[c].getElementsByTagName("v") ;
+           var vcount = verses.length ;
+//           alert("Number of verses in chapter " + chapter + " = " + vcount ) ;
+           return vcount ;
+           }
+        }
+<!-- Enter with Strings giving chapter, and verse returns int maximum number of words.  -->
+function getMaxWords( chapter, verse) {
+        var c = parseInt(chapter) - 1 ;  
+        var v = parseInt(verse) - 1 ; 
+        chaptersstring = "/Tanach/tanach/book/c" ;
+        var chapters = xml.selectNodes(chaptersstring)  ;
+        if (chapters == null){
+           alert("getMaxWords: Node " + chaptersstring + " not found.") ;
+           return ""  ;
+           }
+        else{
+           verses = chapters[c].getElementsByTagName("v") ;
+           ws = verses[v].getElementsByTagName("w")  ;
+           qs = verses[v].getElementsByTagName("q")  ;
+           ks = verses[v].getElementsByTagName("k")  ;
+           ps = verses[v].getElementsByTagName("pe")  ;
+           ss = verses[v].getElementsByTagName("samekh")  ;
+           var words = ws.length + qs.length + ks.length + ps.length + ss.length ;
+//           alert("Number of graphical objects  in " + chapter +":" + verse+" = " + words ) ;
+           return words ;
+           }
+        }
+<!--*********************************************************************-->
+<!-- Gets the excerpt -->
+    function getExcerpt(){
+        document.getElementById("textarea").innerHTML = " " ;
+        document.getElementById("excerpterror").innerHTML = " " ;
+        var input = document.excerptinput.textfield.value ;
+        FullReg=/^\s*\d{1,3}:\d{1,2}.\d{1,2}\s*-\s*\d{1,3}:\d{1,2}.\d{1,2}\s*$/g ;
+        OneChapterReg=/^\s*\d{1,3}\s*$/g ;
+        ChapterRangeReg=/^\d{1,3}\s*-\s*\d{1,3}\s*$/g ;
+        OneChapterVerseReg=/^\s*\d{1,3}:\d{1,2}\s*$/g ;
+        ChapterVerseRangeReg=/^\s*\d{1,3}:\d{1,2}\s*-\s*\d{1,3}:\d{1,2}\s*$/g ;
+        OneWordReg=/^\s*\d{1,3}:\d{1,2}.\d{1,2}\s*$/g ;
+        NumberReg=/\d{1,3}/g ;
+        var maxchapters = getMaxChapters() ;
+        var book = getBookName() ;
+<!-- ***** Full ******************************************************* -->
+        if( input.search(FullReg) == 0 ){
+            numbers = input.match(NumberReg) ;
+<!-- Checking the input values. -->
+<!-- Check the chapter number. -->
+            var chapterno = parseInt(numbers[0]) ;
+            if(chapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "First chapter, " + chapterno + ", not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }   
+<!-- Check the verse number. -->
+            var maxverses = getMaxVerses(numbers[0]) ;
+            var verseno = parseInt(numbers[1]) ;
+            if(verseno > maxverses){
+                document.getElementById("excerpterror").innerHTML = 
+                    "First verse, " + verseno + ", not found in " + book 
+                     + " chapter "+numbers[0] + " which has only " 
+                        + maxverses +" verses." ;
+                return ;
+                }   
+<!-- Check the word number. -->
+            var maxwords = getMaxWords(numbers[0], numbers[1]) ;
+            var wordno = parseInt(numbers[2]) ;
+            if(wordno > maxwords){
+                document.getElementById("excerpterror").innerHTML = 
+                    "First word, "+wordno+", not found in " + book + " " + numbers[0] + ":" +
+                    + numbers[1] + " which has only " + maxwords + " words." ;
+                return ;
+                }   
+<!-- Check the last chapter number. -->
+            var lastchapterno = parseInt(numbers[3]) ;
+            if(lastchapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Last chapter, " + lastchapterno + ", not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }
+            if(chapterno > lastchapterno){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Chapters out of order." ;
+                return ;
+                }
+<!-- Check the last verse number. -->
+            maxverses = getMaxVerses(numbers[3])  ;
+            var lastverseno = parseInt(numbers[4]) ;
+            if(chapterno == lastchapterno){
+                if(verseno > lastverseno){
+                    document.getElementById("excerpterror").innerHTML = 
+                       "Verses out of order in same chapter." ;
+                    return ;
+                    }
+                } 
+            if(lastverseno > maxverses){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Last verse, " + lastverseno + ", not found in " + book 
+                     + " chapter "+numbers[3] + " which has only " 
+                        + maxverses +" verses." ;
+                return ;
+                }  
+<!-- Check the last word number. -->
+            var maxwords = getMaxWords(numbers[3], numbers[4]) ;
+            var lastwordno = parseInt(numbers[5]) ;
+            if(lastwordno > maxwords){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Last word, "+lastwordno+", not found in " + book + " " + numbers[3] + ":" +
+                    + numbers[4] + " which has only " + maxwords + " words." ;
+                return ;
+                }
+            if(chapterno == lastchapterno){
+               if (verseno == lastverseno){
+                  if(wordno > lastwordno){
+                      document.getElementById("excerpterror").innerHTML = 
+                          "Words out of order in same chapter and verse." ;
+                      return ;
+                      }
+                  }
+               }      
+<!-- All checks out, load the XSL file variables and show the extract. -->
+            document.getElementById("excerpterror").innerHTML = " " ;
+            setXSLVariable("chapter", numbers[0]) ;
+            setXSLVariable("verse", numbers[1]) ;
+            setXSLVariable("word", numbers[2]) ;
+            setXSLVariable("lastchapter", numbers[3]) ;
+            setXSLVariable("lastverse", numbers[4]) ;
+            setXSLVariable("lastword", numbers[5]) ;
+            showExtract() ;
+            }
+<!-- ***** OneChapter ******************************************************* -->
+        else if(input.search(OneChapterReg) == 0 ){
+            numbers = input.match(NumberReg) ;
+<!-- Checking the input values. -->
+<!-- Check the chapter number. -->
+            var chapterno = parseInt(numbers[0]) ;
+            if(chapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Chapter " + chapterno + " not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }                  
+<!-- All checks out, load the XSL file variables and show the extract. -->
+            document.getElementById("excerpterror").innerHTML = " " ;
+            var lastverse = getMaxVerses(numbers[0]).toString() ;
+            var lastword = getMaxWords(numbers[0], lastverse).toString();
+            setXSLVariable("chapter", numbers[0]) ;
+            setXSLVariable("verse", "1") ;
+            setXSLVariable("word", "1") ;
+            setXSLVariable("lastchapter", numbers[0]) ;
+            setXSLVariable("lastverse", lastverse) ;
+            setXSLVariable("lastword", lastword) ;
+            showExtract() ;
+           }
+<!-- ***** ChapterRange ******************************************************* -->
+        else if(input.search(ChapterRangeReg) == 0 ){
+            numbers = input.match(NumberReg) ;
+<!-- Checking the input values. -->
+<!-- Check the chapter number. -->
+            var chapterno = parseInt(numbers[0]) ;
+            if(chapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "First chapter, " + chapterno + ", not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }   
+<!-- Check the last chapter number. -->
+            var lastchapterno = parseInt(numbers[1]) ;
+            if(lastchapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Last chapter, " + lastchapterno + ", not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }
+            if(chapterno > lastchapterno){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Chapters out of order." ;
+                return ;
+                }
+<!-- All checks out, load the XSL file variables and show the extract. -->
+            document.getElementById("excerpterror").innerHTML = " " ;
+            var lastverse = getMaxVerses(numbers[1]).toString() ;
+            var lastword = getMaxWords(numbers[1], lastverse).toString();
+            setXSLVariable("chapter", numbers[0]) ;
+            setXSLVariable("verse", "1") ;
+            setXSLVariable("word", "1") ;
+            setXSLVariable("lastchapter", numbers[1]) ;
+            setXSLVariable("lastverse", lastverse) ;
+            setXSLVariable("lastword", lastword) ;
+            showExtract() ;
+            }
+<!-- ***** OneChapterVerse *************************************************-->
+         else if(input.search(OneChapterVerseReg) == 0 ){
+            numbers = input.match(NumberReg) ;
+<!-- Checking the input values. -->
+<!-- Check the chapter number. -->
+            var chapterno = parseInt(numbers[0]) ;
+            if(chapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Chapter " + chapterno + " not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }   
+<!-- Check the verse number. -->
+            var maxverses = getMaxVerses(numbers[0]) ;
+            var verseno = parseInt(numbers[1]) ;
+            if(verseno > maxverses){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Verse " + verseno + " not found in " + book 
+                     + " chapter "+ numbers[0] + " which has only " 
+                        + maxverses +" verses." ;
+                return ;
+                }   
+<!-- All checks out, load the XSL file variables and show the extract. -->
+            document.getElementById("excerpterror").innerHTML = " " ;
+            var lastword = getMaxWords(numbers[0], numbers[1]).toString() ;
+            setXSLVariable("chapter", numbers[0]) ;
+            setXSLVariable("verse", numbers[1]) ;
+            setXSLVariable("word", "1") ;
+            setXSLVariable("lastchapter", numbers[0]) ;
+            setXSLVariable("lastverse", numbers[1]) ;
+            setXSLVariable("lastword", lastword) ;
+            showExtract() ;
+            }
+<!-- ***** ChapterVerseRange *****************************************      -->
+        else if(input.search(ChapterVerseRangeReg) == 0 ){
+            numbers = input.match(NumberReg) ;                                 
+<!-- Checking the input values. -->
+<!-- Check the chapter number. -->
+            var chapterno = parseInt(numbers[0]) ;
+            if(chapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "First chapter, " + chapterno + ", not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }   
+<!-- Check the verse number. -->
+            var maxverses = getMaxVerses(numbers[0]) ;
+            var verseno = parseInt(numbers[1]) ;
+            if(verseno > maxverses){
+                document.getElementById("excerpterror").innerHTML = 
+                    "First verse, " + verseno + ", not found in " + book 
+                     + " chapter "+ numbers[0] + " which has only " 
+                        + maxverses +" verses." ;
+                return ;
+                }   
+<!-- Check the last chapter number. -->
+            var lastchapterno = parseInt(numbers[2]) ;
+            if(lastchapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Last chapter, " + lastchapterno + ", not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }
+            if(chapterno > lastchapterno){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Chapters out of order." ;
+                return ;
+                }
+<!-- Check the last verse number. -->
+            maxverses = getMaxVerses(numbers[2])  ;
+            var lastverseno = parseInt(numbers[3]) ;
+            if(chapterno == lastchapterno){
+                if(verseno > lastverseno){
+                    document.getElementById("excerpterror").innerHTML = 
+                       "Verses out of order in same chapter." ;
+                    return ;
+                    } 
+                }  
+            if(lastverseno > maxverses){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Last verse, "+lastverseno+", not found in " +
+                    book + " chapter "
+                        +numbers[2] + " of " 
+                        + maxverses +" verses." ;
+                return ;
+                }   
+<!-- All checks out, load the XSL file variables and show the extract. -->
+            document.getElementById("excerpterror").innerHTML = " " ;
+            var lastword = getMaxWords(numbers[2], numbers[3]) ;
+            setXSLVariable("chapter", numbers[0]) ;
+            setXSLVariable("verse", numbers[1]) ;
+            setXSLVariable("word", "1") ;
+            setXSLVariable("lastchapter", numbers[2]) ;
+            setXSLVariable("lastverse", numbers[3]) ;
+            setXSLVariable("lastword", lastword) ;
+            showExtract() ;
+            }
+<!-- ***** OneWord *****************************************      -->
+        else if(input.search(OneWordReg) == 0 ){
+            numbers = input.match(NumberReg) ;
+<!-- Checking the input values. -->
+<!-- Check the chapter number. -->
+            var chapterno = parseInt(numbers[0]) ;
+            if(chapterno > maxchapters){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Chapter " + chapterno + " not found in " + book + " which has only "
+                    + maxchapters + " chapters." ;
+                return ;
+                }   
+<!-- Check the verse number. -->
+            var maxverses = getMaxVerses(numbers[0]) ;
+            var verseno = parseInt(numbers[1]) ;
+            if(verseno > maxverses){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Verse " + verseno + " not found in " + book 
+                     + " chapter "+ numbers[0] + " which has only " 
+                        + maxverses +" verses." ;
+                return ;
+                }   
+<!-- Check the word number. -->
+            var maxwords = getMaxWords(numbers[0], numbers[1]) ;
+            var wordno = parseInt(numbers[2]) ;
+            if(wordno > maxwords){
+                document.getElementById("excerpterror").innerHTML = 
+                    "Word "+wordno+" not found in " + book + " " + numbers[0] + ":" +
+                    + numbers[1] + " which has only " + maxwords + " words." ;
+                return ;
+                }   
+<!-- All checks out, load the XSL file variables and show the extract. -->
+            document.getElementById("excerpterror").innerHTML = " " ;
+            setXSLVariable("chapter", numbers[0]) ;
+            setXSLVariable("verse", numbers[1]) ;
+            setXSLVariable("word", numbers[2]) ;
+            setXSLVariable("lastchapter", numbers[0]) ;
+            setXSLVariable("lastverse", numbers[1]) ;
+            setXSLVariable("lastword", numbers[2]) ;
+            showExtract() ;
+            }
+<!-- ***** Bad syntax!  *****************************************      -->
+        else{
+            document.getElementById("excerpterror").innerHTML = 
+               "Incorrect excerpt specification!" ;
+            alert("The excerpt syntax was incorrect. \n"
+                  + "Click on the \"Syntax\" link to see \n"
+                  + "how to specify an excerpt.") ;
+            }
+<!-- ********************************************************      -->
+        }
+</SCRIPT>
+ 
+</head>
+<body bgcolor="#fffff8">
+
+<xsl:if test="$counters = 'true'">
+    <!-- This is a hidden hit counter maintained at the serving web site. -->
+    <!-- It can be removed by other users.                                -->
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.Books.dat&amp;sh=F"/> -->
+    </xsl:if>
+    
+<xsl:for-each select="tanach/book">
+<xsl:if test="$counters = 'true'">
+    <!-- This is a hidden hit counter maintained at the serving web site. -->
+    <!-- It can be removed by other users.                                -->
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.{names/name}.dat&amp;sh=F"/> -->
+    </xsl:if>
+    
+<table width="100%">
+<tr>
+<td valign="top"><table align="left">
+    <tr><td align="left" ><a  target="_blank" href="Tanach.xml"
+        title="Tanach index.">Tanach</a></td></tr>
+    </table></td>
+
+<td>
+    <table align="center">
+    <tr><td align="center">
+         <span style="font-family:Times;font-size:14">
+             <xsl:value-of select="/Tanach/header/title"/></span>    
+    </td></tr>
+    <tr><td align="center">
+    <span style="font-family:Times;font-size:14">
+    <xsl:value-of select="title"/></span>
+    <a name="#{names/name}">
+            <span style="font-size:250%;font-style:bold">
+            <xsl:value-of select= "names/name"/><xsl:text>  -  </xsl:text></span>
+               <span  style="font-family:{$fontfamily};font-size:250%">
+                   <xsl:value-of select= "names/hebrewname"/> </span></a>
+    </td></tr>
+    <tr><td align="center">
+        <span style="font-family:Times;font-size:14">
+            <xsl:value-of select="/Tanach/header/shortdescription"/></span></td></tr>
+    <tr><td align="center">
+    <span style="font-family:Times;font-size:14">
+        <xsl:text>[</xsl:text><xsl:value-of select="/Tanach/header/date"/>
+        <xsl:text>]</xsl:text></span>
+    </td></tr>
+    </table></td>
+    
+<td valign="top"><table align="right" >
+    <tr><td align="left" >Layout: <a id="view" href="JavaScript:changeView()"
+    title="Change text presentation."><xsl:value-of select="$format"/></a></td></tr> 
+    <tr><td align="left" >Content: <a id="content" href="JavaScript:changeContent()"
+    title="Change marking."><xsl:value-of select="$content"/></a></td></tr> 
+    <tr><td align="left">Font family: <a id="fontfamily" href="JavaScript:changeFontFamily()"
+       title="Change the Hebrew font."><xsl:value-of select="$fontfamily"/></a></td></tr> 
+    <tr><td align="left">Relative font size: <a id="size" href="JavaScript:changeFontSize()"
+     title="Change font size."><xsl:value-of select="$fontsize"/></a></td></tr> 
+    </table></td>
+</tr></table>
+
+<p/>
+    <table cellpadding="2">
+    <tr>    
+        
+        <td width="15%" align="left"><span style="font-family:Times;font-weight:bold;font-size:20">Chapters: </span></td> 
+        <td>
+            <table cellpadding="2">
+            <xsl:for-each select="./c">                
+                <xsl:choose>
+                <xsl:when test="position() mod 20 = 1">
+                    <tr/><td align="right"><span style="font-family:Times;font-weight:bold;font-size:16">
+                    <a href='JavaScript:showChapter("{../names/name}", 1, {./@n})'><xsl:value-of select="./@n"/></a>
+                    </span></td></xsl:when>
+                <xsl:when test="position() mod 20 = 0">
+                    <td align="right"><span style="font-family:Times;font-weight:bold;font-size:16">
+                    <a href='JavaScript:showChapter("{../names/name}", 1, {./@n})'><xsl:value-of select="./@n"/></a>
+                    </span></td><tr/>
+                   </xsl:when>
+                <xsl:otherwise>
+                    <td align="right"><span style="font-family:Times;font-weight:bold;font-size:16">
+                    <a href='JavaScript:showChapter("{../names/name}", 1, {./@n})'><xsl:value-of select="./@n"/></a>
+                    </span></td>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+            </table>
+            </td></tr>
+    </table>
+<p/>
+
+<form name="excerptinput">
+<table>
+<tr>
+     <td><span style="font-family:Times;font-weight:bold;font-size:20">
+        Excerpt: </span></td>
+     <td>
+        <input type="TEXT" style="font-weight:bold;font-family:Times;font-weight:bold;font-size:20" 
+            name="textfield" maxlength="30" /></td>
+     <td align="left"><input type="BUTTON" value="Get excerpt" style="color:blue" name="go" 
+            onclick="getExcerpt()"/></td></tr>
+<tr>
+     <td><a href="JavaScript:showSyntax()">Syntax</a></td>
+     <td colspan="2"><b>
+         <div style="color:red"
+                id="excerpterror"> </div></b></td>
+     </tr>
+</table>
+</form>
+<p/>
+    <div id="textarea"><center><h4><i>Please choose a chapter or specify an excerpt.</i></h4></center></div>
+</xsl:for-each>
+<table width="100%">
+<tr><td align="left">      
+    <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+<td align="right"><font size="-1">
+    <xsl:value-of select="header/transcriptiondate"/>
+    <xsl:text> / </xsl:text><xsl:value-of select="$xsldate"/>
+    </font></td></tr>
+</table>
+    <hr/>
+</body>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<xsl:template name="Multibook">
+
+<!--========================================================================-->
+<html>
+<head>
+
+<SCRIPT language="JavaScript" type="text/javascript" src="Sarissa.js"></SCRIPT>
+
+<SCRIPT language="JavaScript" type="text/javascript">
+    var xml = Sarissa.getDomDocument() ;
+    var xsl = Sarissa.getDomDocument() ;
+    var loaded = false ;
+    XMLXSLload("<xsl:value-of select="/Tanach/header/name"/>"+".xml", "Tanach.xsl.xml") ;
+    setXSLVariable("template", "ChapterText") ;
+            
+    function showTemplate(Template){
+        setXSLVariable("template", Template) ;
+        xsl.selectSingleNode("//xsl:variable[@name='template']").text = Template ; 
+        display = window.open() ;
+        display.document.write(xml.transformNode(xsl)) ;
+        display.document.close() ;
+        }
+    function showChapter(BookName, BookNumber, Chapter){
+        setXSLVariable("template", "ChapterText") ;
+        setXSLVariable("bookname", BookName ) ;
+        setXSLVariable("booknumber", BookNumber ) ;
+        setXSLVariable("chapter", Chapter) ;
+        transformToElement("textarea") ;
+        statusbarmessage("Loading " 
+                   + BookName
+                   + ", Chapter " + Chapter
+                   + " ...") ;
+        }
+    function setXSLVariable( name, value ) {
+        var c = xsl.selectSingleNode("//xsl:variable[@name=\'" + name + "\']") ;
+        var t = c.firstChild;
+        var newt = xsl.createTextNode(value) ; // Not working for int.
+        c.replaceChild(newt, t) ;
+        }
+    function transformToElement(ID){
+        myarea = document.getElementById(ID) ;
+        try{
+            myarea.innerHTML = xml.transformNode(xsl) ;
+            }
+        catch(e){
+            alert("Failed to transform inner document.") ;
+            throw e;
+            }
+        }
+    function setElement(ID, value){
+        myarea = document.getElementById(ID) ;
+        myarea.innerHTML = value ;
+        }
+    function clearstatusbar(){
+        defaultStatus = "" ;
+        }
+    function statusbarmessage(c){
+        defaultStatus = c ;
+        setTimeout("clearstatusbar();", 3000) ;
+        }
+    function getXSLVariable( name ) {
+        var c = xsl.selectSingleNode("//xsl:variable[@name=\'" + name + "\']") ;
+        var t = c.firstChild;
+        return t.nodeValue ;
+        }
+    function getBookName() {
+        bookname = getXSLVariable("bookname") ;
+        alert("Book : " + bookname) ;
+        return bookname ;
+        }
+    function XMLXSLload(xmlfile, xslfile){
+        if (!loaded){ 
+            xml.async = false ;
+            xml.load(xmlfile) ;
+            xsl.async = false ;
+            xsl.load(xslfile) ;
+            xsl.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'") ;
+            xsl.setProperty("SelectionLanguage", "XPath") ;
+            loaded=true ;
+            }
+        }
+    function showNote(Code){
+        var codes = xml.selectNodes("/Tanach/notes/note/code") ;
+        var notes = xml.selectNodes("/Tanach/notes/note/note") ;
+        var Found = false ;
+        var text ;
+        for( var loopIndex = 0 ; loopIndex != notes.length; loopIndex++){  
+            var c = codes[loopIndex] ;
+            if( c.firstChild.nodeValue == Code.toLowerCase() ){
+                Found = true ;
+                break;
+                }
+           }
+        if(Found){
+            text = notes[loopIndex].firstChild.nodeValue  ; 
+            }
+        else{
+            text = "Transcription note for " + Code + " not found!" ;
+            }
+        alert(text) ;   
+        }
+    function changeView(){
+        var current = getXSLVariable("format");
+        if (current=='Verses'){
+            setXSLVariable("format", "Chapter") ;
+            setElement("view", "Chapter") ;
+            }
+        if (current=='Chapter'){
+            setXSLVariable("format", "Simplified") ;
+            setElement("view", "Simplified") ;
+            }
+        if (current=='Simplified'){
+            setXSLVariable("format", "Verses") ;
+            setElement("view", "Verses") ;
+            }
+        transformToElement("textarea") ;
+        }
+    function changeContent(){
+        var current = getXSLVariable("content");
+        if (current=='Accents'){
+            setXSLVariable("content", "Vowels") ;
+            setElement("content", "Vowels") ;
+            }
+        if (current=='Vowels'){
+            setXSLVariable("content", "Consonants") ;
+            setElement("content", "Consonants") ;
+            }
+        if (current=='Consonants'){
+            setXSLVariable("content", "Morphology") ;
+            setElement("content", "Morphology") ;
+            }
+        if (current=='Morphology'){
+            setXSLVariable("content", "Accents") ;
+            setElement("content", "Accents") ;
+            }
+        transformToElement("textarea") ;
+        }
+    function changeFontFamily(){
+        var current = getXSLVariable("fontfamily");
+        if (current=='Ezra SIL'){
+            setXSLVariable("fontfamily", "SBL Hebrew") ;
+            setElement("fontfamily", "SBL Hebrew") ;
+            }
+        if (current=='SBL Hebrew'){
+            setXSLVariable("fontfamily", "Ezra SIL") ;
+            setElement("fontfamily", "Ezra SIL") ;
+            }
+        transformToElement("textarea") ;
+        }
+    function changeFontSize(){
+        var current = getXSLVariable("fontsize");
+        if (current=='400%'){
+            setXSLVariable("fontsize", "100%") ;
+            setElement("size", "100%") ;
+            }
+        if (current=='300%'){
+            setXSLVariable("fontsize", "400%") ;
+            setElement("size", "400%") ;
+            }
+        if (current=='250%'){
+            setXSLVariable("fontsize", "300%") ;
+            setElement("size", "300%") ;
+            }
+        if (current=='200%'){
+            setXSLVariable("fontsize", "250%") ;
+            setElement("size", "250%") ;
+            }
+        if (current=='150%'){
+            setXSLVariable("fontsize", "200%") ;
+            setElement("size", "200%") ;
+            }
+        if (current=='100%'){
+            setXSLVariable("fontsize", "150%") ;
+            setElement("size", "150%") ;
+            }
+        transformToElement("textarea") ;
+        }
+</SCRIPT>
+ 
+</head>
+<body bgcolor="#fffff8">
+<xsl:if test="$counters = 'true'">
+    <!-- This is a hidden hit counter maintained at the serving web site. -->
+    <!-- It can be removed by other users.                                -->
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.Books.dat&amp;sh=F"/> -->
+    </xsl:if>
+    
+<table width="100%">
+<tr>
+<td valign="top"></td>
+
+<td>
+    <table align="center">
+    <tr><td align="center">
+         <span style="font-family:Times;font-size:14">
+             <xsl:value-of select="/Tanach/header/title"/></span>    
+    </td></tr>
+    <tr><td align="center">
+    <span style="font-family:Times;font-size:14">
+    <xsl:value-of select="title"/></span>
+            <xsl:if test="count(/Tanach/tanach/book)= 1">
+               <a name="#{names/name}">
+                    <span style="font-size:250%;font-style:bold">
+                        <xsl:value-of select= "/Tanach/tanach/book/names/name"/><xsl:text>  -  </xsl:text></span>
+                    <span  style="font-family:{$fontfamily};font-size:250%">
+                        <xsl:value-of select= "/Tanach/tanach/book/names/hebrewname"/> </span>
+               </a>
+            </xsl:if>
+            <xsl:if test="count(/Tanach/tanach/book)>1">
+                    <span style="font-size:250%;font-style:bold">
+                        <xsl:value-of select= "/Tanach/header/name"/><xsl:text>  -  </xsl:text></span>
+                    <span  style="font-family:{$fontfamily};font-size:250%">
+                        <xsl:value-of select= "/Tanach/header/hebrewname"/> </span>
+            </xsl:if>
+    </td></tr>
+    <tr><td align="center">
+        <span style="font-family:Times;font-size:14">
+            <xsl:value-of select="/Tanach/header/shortdescription"/></span></td></tr>
+    <tr><td align="center">
+    <span style="font-family:Times;font-size:14">
+        <xsl:text>[</xsl:text><xsl:value-of select="/Tanach/header/date"/>
+        <xsl:text>]</xsl:text></span>
+    </td></tr>
+    </table></td>
+    
+<td valign="top"><table align="right" >
+    <tr><td align="left" >Layout: <a id="view" href="JavaScript:changeView()"
+    title="Change text presentation."><xsl:value-of select="$format"/></a></td></tr> 
+    <tr><td align="left" >Content: <a id="content" href="JavaScript:changeContent()"
+    title="Change marking."><xsl:value-of select="$content"/></a></td></tr> 
+    <tr><td align="left">Font family: <a id="fontfamily" href="JavaScript:changeFontFamily()"
+       title="Change the Hebrew font."><xsl:value-of select="$fontfamily"/></a></td></tr> 
+    <tr><td align="left">Relative font size: <a id="size" href="JavaScript:changeFontSize()"
+     title="Change font size."><xsl:value-of select="$fontsize"/></a></td></tr> 
+    </table></td>
+</tr></table>
+
+    
+<xsl:for-each select="tanach/book">
+    <xsl:variable name="localbooknumber" select="position()"/>
+    <xsl:variable name="localbookname" select="names/name"/>
+<p/>
+    <table cellpadding="2">
+    <tr>    
+        
+        <td width="25%" align="left">
+            <span style="font-family:Times;font-weight:bold;font-size:26">
+                <a name="#{names/name}"><xsl:value-of select="names/name"/></a></span><br/>
+                <span style="font-family:{fontfamily};font-weight:bold;font-size:26">
+                <xsl:value-of select="names/hebrewname"/></span>
+        </td> 
+        <td>
+            <table cellpadding="2">
+            <xsl:for-each select="./c">                
+                <xsl:choose>
+                <xsl:when test="position() mod 20 = 1">
+                    <tr/><td align="right"><span style="font-family:Times;font-weight:bold;font-size:20">
+                    <a href='JavaScript:showChapter("{$localbookname}", {$localbooknumber},{./@n})'><xsl:value-of select="./@n"/></a>
+                    </span></td></xsl:when>
+                <xsl:when test="position() mod 20 = 0">
+                    <td align="right"><span style="font-family:Times;font-weight:bold;font-size:20">
+                    <a href='JavaScript:showChapter("{$localbookname}",{$localbooknumber}, {./@n})'><xsl:value-of select="./@n"/></a>
+                    </span></td><tr/>
+                   </xsl:when>
+                <xsl:otherwise>
+                    <td align="right"><span style="font-family:Times;font-weight:bold;font-size:20">
+                    <a href='JavaScript:showChapter("{$localbookname}", {$localbooknumber}, {./@n})'><xsl:value-of select="./@n"/></a>
+                    </span></td>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+            </table>
+            </td></tr>
+    </table>
+</xsl:for-each>
+
+<p/>
+    <div id="textarea"><center><h4><i>Please choose a chapter.</i></h4></center></div>
+
+<table width="100%">
+<tr><td align="left">      
+    <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+<td align="right"><font size="-1">
+    <xsl:value-of select="header/transcriptiondate"/>
+    <xsl:text> / </xsl:text><xsl:value-of select="$xsldate"/>
+    </font></td></tr>
+</table>
+<hr/>
+</body>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<xsl:template name="ChapterText">
+
+<!--========================================================================-->
+<html>
+<!-- chapter = Verses or Chapter -->
+     
+     
+<!-- Loop over books -->    
+    <xsl:for-each select="tanach/book">
+        <xsl:if test="names/name=$bookname">
+            <xsl:variable name="localfirstchapter" select="c/@n"/>
+            <xsl:variable name="locallastchapter" select="c[last()]/@n"/>
+        
+<!-- Loop over chapters -->       
+            <xsl:for-each select='c'>
+                <xsl:if test='@n=$chapter'>
+                    <xsl:variable name="previousposition" select="position()-1"/>
+                    <xsl:variable name="followingposition" select="position()+1"/>
+ 
+     <hr/>
+     <table width="100%"><tr>
+        <td width="20%" align="left">
+            <xsl:if test="not(normalize-space(@n)=normalize-space($localfirstchapter))">
+                <xsl:variable name="previouschapter" select="../c[$previousposition]/@n"/>
+                <a href='JavaScript:showChapter( "{$bookname}", {$booknumber}, {$previouschapter} )'><i>Previous chapter</i></a>
+            </xsl:if>
+        </td>
+        <td align="center">
+            <span style="font-size:150%;font-style:bold">
+            <xsl:value-of select= "../names/name"/><xsl:text> - </xsl:text></span>
+            <span style="font-size:200%;font-style:bold">
+            <xsl:value-of select="$chapter"/>
+            <xsl:text> - </xsl:text>
+            </span>
+            <span  style="font-family:{$fontfamily};font-size:150%"><xsl:text>       </xsl:text>
+                   <xsl:value-of select= "../names/hebrewname"/> </span>        
+        </td>
+        <td width="20%" align="right">
+            <xsl:if test="not(@n=$locallastchapter)">
+                <xsl:variable name="nextchapter" select="../c[$followingposition]/@n"/>
+                <i><a href='JavaScript:showChapter( "{$bookname}", {$booknumber}, {$nextchapter})'>Next chapter</a></i>
+            </xsl:if>
+        </td>
+    </tr></table>
+            
+    <center>
+    <table cellpadding="10">
+    <tr>    
+        
+        <td width="15%" align="left"><span style="font-family:Times;font-weight:bold;font-size:20">Verses: </span></td> 
+        <td>
+            <table  cellpadding="2">
+            <xsl:for-each select="./v">                
+                <xsl:choose>
+                <xsl:when test="position() mod 20 = 1">
+                    <tr/><td><span style="font-family:Times;font-weight:bold;font-size:16">
+                    <a href="#{../../names/abbrev}.{../@n}:{./@n}"><xsl:value-of select="./@n"/></a>
+                    </span></td></xsl:when>
+                <xsl:when test="position() mod 20 = 0">
+                    <td><span style="font-family:Times;font-weight:bold;font-size:16">
+                    <a href="#{../../names/abbrev}.{../@n}:{./@n}"><xsl:value-of select="./@n"/></a>
+                    </span></td><tr/>
+                   </xsl:when>
+                <xsl:otherwise>
+                    <td><span style="font-family:Times;font-weight:bold;font-size:16">
+                    <a href="#{../../names/abbrev}.{../@n}:{./@n}"><xsl:value-of select="./@n"/></a>
+                    </span></td>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+            </table>
+            </td></tr>
+    </table>
+    </center>
+        <xsl:choose>
+            <xsl:when test="$format = 'Verses'">
+                <table border="1" cellpadding="6" width="100%">
+                    <xsl:call-template name="Verses">
+                        <xsl:with-param name="first" select="1"/>
+                        <xsl:with-param name="last" select="vs"/>
+                    </xsl:call-template>
+                </table>
+            </xsl:when>
+            <xsl:when test="$format = 'Chapter'">
+                <xsl:call-template name="Chapter"/>
+            </xsl:when>
+            <xsl:when test="$format = 'Simplified'">
+                <xsl:call-template name="Chapter"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <h4>No template to display the chapter verses.</h4>
+            </xsl:otherwise>
+        </xsl:choose>
+        
+     <table width="100%"><tr>
+        <td width="20%" align="left">
+            <xsl:if test="not(normalize-space(@n)=normalize-space($localfirstchapter))">
+                <xsl:variable name="previouschapter" select="../c[$previousposition]/@n"/>
+                <a href='JavaScript:showChapter( "{$bookname}", {$booknumber}, {$previouschapter} )'><i>Previous chapter</i></a>
+            </xsl:if>
+        </td>
+        <td align="center">
+            <span style="font-size:150%;font-style:bold">
+            <xsl:value-of select= "../names/name"/><xsl:text> - </xsl:text></span>
+            <span style="font-size:200%;font-style:bold">
+            <xsl:value-of select="$chapter"/>
+            <xsl:text> - </xsl:text>
+            </span>
+            <span  style="font-family:{$fontfamily};font-size:150%"><xsl:text>       </xsl:text>
+                   <xsl:value-of select= "../names/hebrewname"/> </span>        
+        </td>
+        <td width="20%" align="right">
+            <xsl:if test="not(@n=$locallastchapter)">
+                <xsl:variable name="nextchapter" select="../c[$followingposition]/@n"/>
+                <i><a href='JavaScript:showChapter( "{$bookname}", {$booknumber}, {$nextchapter})'>Next chapter</a></i>
+            </xsl:if>
+        </td>
+    </tr></table>
+    
+                </xsl:if> <!-- Loop over chapters -->
+            </xsl:for-each>
+        </xsl:if>  <!-- Loop over books -->
+    </xsl:for-each>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- Displays a Chapter in Verses as separate table elements. -->
+
+<!--========================================================================-->
+<xsl:template name="Verses">
+    <table border="1" cellpadding="6" width="100%">
+        <xsl:for-each select="v">
+            <tr>
+                <td  width="90%"><a name="{../../names/abbrev}.{../@n}:{./@n}"></a>
+                    <div align="right" dir="rtl" style="font-family:{$fontfamily};font-size:{$fontsize}">
+                        <xsl:call-template name="v">
+                            <xsl:with-param name="markers" select="true()"/> 
+                        </xsl:call-template>  
+                        <xsl:text>&#160;</xsl:text>
+                    </div>        
+                </td>
+
+                <td align="center">
+                    <table>
+                        <tr><td>
+                            <div align="center" 
+                                style="font-family:Times;font-weight:normal">
+                                <a href="#{../../names/name}">
+                                <b><xsl:value-of select="../../names/abbrev"/></b></a>
+                            </div>
+                        </td></tr>
+                        <tr><td>
+                            <div align="center" 
+                                style="font-family:Times;font-weight:bold">
+                                <xsl:value-of select="../@n"/>:<xsl:value-of select="./@n"/>
+                            </div>
+                        </td></tr>
+                    </table>
+                </td>
+            </tr>
+        </xsl:for-each>
+    </table>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- Displays a Chapter as a single element. -->
+
+<!--========================================================================-->
+<xsl:template name="Chapter">
+    <table><tr>
+    <td align="right">
+    <xsl:for-each select="v">
+        <span align="right" style="font-family:{$fontfamily};font-size:{$fontsize}">
+            <xsl:if test="$format!='Simplified'">
+                <a name="{../../names/abbrev}.{../@n}:{./@n}">
+                    <span style="color:green">
+                        <sup>&#x200f;<xsl:value-of select="../@n"/>:<xsl:value-of select="@n"/>
+                        </sup> 
+                    </span><xsl:text> </xsl:text>
+                </a>
+            </xsl:if>            
+            <xsl:if test="$format='Simplified'">
+                <a name="{../../names/abbrev}.{../@n}:{./@n}"><xsl:text> </xsl:text></a>
+            </xsl:if>
+
+<!-- No EOL markers -->            
+            <xsl:call-template name="v">
+                <xsl:with-param name="markers" select="true()"/> 
+            </xsl:call-template>  
+        </span>        
+    </xsl:for-each>
+    </td></tr>
+    </table>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to process verses with or without markers.                    -->
+<!-- Enter with a verse (v) context node.                                   -->
+<!-- Parameter "markers" should be true() or false().                       -->
+
+<!--========================================================================-->
+<xsl:template name="v">
+   <xsl:param name="markers" select="true()"/>
+
+<xsl:for-each select="child::node()">
+
+<!--    Process a non-KW word (w)  -->
+
+        <xsl:if test="self::w">
+            <xsl:call-template name="w"/>
+        </xsl:if>
+
+<!--    Process a Ketib (k)  -->
+
+        <xsl:if test="self::k">
+            <xsl:call-template name="k"/>
+        </xsl:if>
+            
+<!--    Process a Qere (q)  -->
+
+        <xsl:if test="self::q">
+           <xsl:call-template name="q"/>
+        </xsl:if>
+            
+<!--    Process a pe, samek, or EOL  -->
+
+        <xsl:if test="$markers">
+            
+            <xsl:if test="self::pe">
+                 <xsl:call-template name="pe"/>
+            </xsl:if>
+            <xsl:if test="self::samekh">
+                <xsl:call-template name="samekh"/>
+            </xsl:if>
+        </xsl:if>
+
+    </xsl:for-each>            
+</xsl:template> 
+<!--========================================================================-->
+<!--========================================================================-->
+<!-- Extraction templates follow -->
+<!--========================================================================-->
+<!--========================================================================-->
+
+<xsl:template name="ExtractText">
+
+<!--  Begins the extraction and display of the text 
+      $chapter:$verse.$word to $lastchapter:$lastverse.$lastword.
+      -->
+<!--========================================================================-->
+
+<html>
+<hr/>
+<!-- Start label -->
+    <center><span style="font-size:150%;font-style:bold">
+            <xsl:value-of select= "tanach/book/names/name"/><xsl:text>        </xsl:text></span>
+            <span style="font-size:200%;font-style:bold">
+            <xsl:value-of select="$chapter"/>:<xsl:value-of select="$verse"/>.<xsl:value-of select="$word"/>
+            <xsl:text> - </xsl:text>
+            <xsl:value-of select="$lastchapter"/>:<xsl:value-of select="$lastverse"/>.<xsl:value-of select="$lastword"/>
+            </span>
+            <span  style="font-family:{$fontfamily};font-size:150%"><xsl:text>       </xsl:text>
+                   <xsl:value-of select= "tanach/book/names/hebrewname"/> </span>
+    </center>
+
+<!-- Verse format -->
+    
+<xsl:choose>
+<xsl:when test="$format='Verses'">
+    <table border="1" cellpadding="6" width="100%">
+    <xsl:call-template name="GetChapters"/>
+    </table>
+</xsl:when>
+
+<!-- Chapter format -->
+
+<xsl:when test="$format='Chapter' or $format='Simplified'">
+         <table width="100%" align="center" cellpadding="10"><tr><td align="right">
+         <span align="right" dir="rtl" style="font-family:{$fontfamily};font-size:{$fontsize}">
+         
+            <xsl:call-template name="GetChapters"/>
+            
+         </span>
+         </td></tr>
+         </table>
+<p/>
+</xsl:when>
+<!-- End label -->
+</xsl:choose>
+    <center><span style="font-size:150%;font-style:bold">
+            <xsl:value-of select= "tanach/book/names/name"/><xsl:text>        </xsl:text></span>
+            <span style="font-size:200%;font-style:bold">
+            <xsl:value-of select="$chapter"/>:<xsl:value-of select="$verse"/>.<xsl:value-of select="$word"/>
+            <xsl:text> - </xsl:text>
+            <xsl:value-of select="$lastchapter"/>:<xsl:value-of select="$lastverse"/>.<xsl:value-of select="$lastword"/>
+            </span>
+            <span  style="font-family:{$fontfamily};font-size:150%"><xsl:text>       </xsl:text>
+                   <xsl:value-of select= "tanach/book/names/hebrewname"/> </span>
+    </center>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<xsl:template name="GetChapters">
+
+<!--========================================================================-->
+    <xsl:for-each  select="tanach/book/c[@n &gt;=$chapter and @n &lt;= $lastchapter]">
+        <xsl:choose>
+<!-- A first chapter with other chapters. -->
+        <xsl:when test="@n = $chapter and @n != $lastchapter">
+            <xsl:call-template name="GetVerses">
+                <xsl:with-param name="type" select="'first'"/>
+                </xsl:call-template>
+        </xsl:when>
+<!-- A full chapter. -->
+        <xsl:when test="@n != $chapter and @n != $lastchapter">
+            <xsl:call-template name="GetVerses">
+                <xsl:with-param name="type" select="'full'"/>
+                </xsl:call-template>
+        </xsl:when>
+<!-- An end chapter. -->
+        <xsl:when test="@n != $chapter and @n = $lastchapter">
+            <xsl:call-template name="GetVerses">
+                <xsl:with-param name="type" select="'last'"/>
+                </xsl:call-template>
+        </xsl:when>
+<!-- An single chapter. -->
+        <xsl:when test="@n = $chapter and @n = $lastchapter">
+            <xsl:call-template name="GetVerses">
+                <xsl:with-param name="type" select="'single'"/>
+                </xsl:call-template>
+        </xsl:when>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- Shows a chapter in Verse format. -->
+
+<!--========================================================================-->
+<xsl:template name="GetVerses">
+    <xsl:param name="type" select ="'full'"/>
+    
+    <xsl:choose>
+<!-- A full chapter show all the verses -->
+        <xsl:when test="$type='full'">
+            <xsl:for-each select="v">
+                <xsl:call-template name="ShowVerse" >
+                    <xsl:with-param name="type" select="'full'"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+        </xsl:when>
+<!-- A first chapter -->
+        <xsl:when test="$type='first'">
+            <xsl:for-each select="v[@n = $verse]">
+                <xsl:call-template name="ShowVerse" >
+                    <xsl:with-param name="type" select="'start'"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+            <xsl:for-each select="v[@n =$verse]/following-sibling::v">
+                <xsl:call-template name="ShowVerse" >
+                    <xsl:with-param name="type" select="'full'"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+        </xsl:when>
+<!-- A last chapter -->
+        <xsl:when test="$type='last'">
+            <xsl:for-each select="v[@n=$lastverse]/preceding-sibling::v">
+                <xsl:call-template name="ShowVerse" >
+                    <xsl:with-param name="type" select="'full'"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+            <xsl:for-each select="v[@n=$lastverse]">
+                <xsl:call-template name="ShowVerse" >
+                    <xsl:with-param name="type" select="'last'"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+        </xsl:when>
+<!-- A single chapter show all the verses -->
+        <xsl:when test="$type='single'">
+             <xsl:choose>    
+                 <xsl:when test="$verse = $lastverse">
+                     <xsl:for-each select="v[@n=$verse]">
+                         <xsl:call-template name="ShowVerse">
+                             <xsl:with-param name="type" select="'single'"/>
+                             </xsl:call-template>
+                         </xsl:for-each>
+                  </xsl:when>
+<!-- Chapter has at least two verses -->       
+                 <xsl:otherwise>
+                     <xsl:for-each select="v[@n= $verse]">
+                         <xsl:call-template name="ShowVerse">
+                             <xsl:with-param name="type" select="'start'"/>
+                             </xsl:call-template>
+                         </xsl:for-each>
+                     <xsl:for-each select="v[@n &gt; $verse and @n &lt; $lastverse]">
+                         <xsl:call-template name="ShowVerse" >
+                             <xsl:with-param name="type" select="'full'"/>
+                             </xsl:call-template>
+                         </xsl:for-each>
+                
+                     <xsl:for-each select="v[@n=$lastverse]">
+                         <xsl:call-template name="ShowVerse" >
+                             <xsl:with-param name="type" select="'last'"/>
+                             </xsl:call-template>
+                        </xsl:for-each>
+             
+                 </xsl:otherwise>
+             </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- Shows a verse in Verse format, that is, as part of a table. -->
+
+<!--========================================================================-->
+<xsl:template name="ShowVerse">
+   <xsl:param name="type" select ="'full'"/>
+      
+   <xsl:choose>
+   <xsl:when test="$format='Verses'">
+      <tr><td  width="90%"><a name="{../../names/abbrev}.{../@n}:{./@n}"></a>
+          <div align="right" dir="rtl" style="font-family:{$fontfamily};font-size:{$fontsize}">
+              <xsl:call-template name="GetVerse">
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="markers" select="true()"/>
+                  </xsl:call-template>
+                  
+              <xsl:text>&#160;</xsl:text>
+          </div>        
+      </td>
+
+      <td align="center">
+      <table>
+          <tr><td>
+          <div align="center" style="font-family:Times;font-weight:normal">
+              <a href="#{../../names/name}">
+                  <b><xsl:value-of select="../../names/abbrev"/></b></a>
+              </div>
+          </td></tr>
+          <tr><td>
+              <div align="center" style="font-family:Times;font-weight:bold">
+                  <xsl:value-of select="../@n"/>:<xsl:value-of select="./@n"/>
+              </div>
+          </td></tr>
+      </table>
+      </td></tr>
+      </xsl:when>
+      
+   <xsl:when test="$format='Chapter' or $format='Simplified'">
+          <xsl:if test="$format!='Simplified'">
+              <span style="color:green">
+                   <sup>&#x200f;<xsl:value-of select="../@n"/>:<xsl:value-of select="@n"/>
+                   </sup></span>
+              </xsl:if>     
+                                 <xsl:call-template name="GetVerse">
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="markers" select="true()"/>
+                  </xsl:call-template>
+      
+   </xsl:when>     
+   </xsl:choose>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- Extracts verses. -->
+
+<!--========================================================================-->
+<xsl:template name="GetVerse">
+    <xsl:param name="type" select ="'full'"/>
+    <xsl:param name="markers" select ="true()"/>
+                    <xsl:choose>
+                        <xsl:when test="$type='full'">
+                                <xsl:call-template name="Show" >
+                                    <xsl:with-param name="first" select="1"/>
+                                    <xsl:with-param name="last" select="1000"/>
+                                    <xsl:with-param name="markers" select="$markers"/> 
+                                </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="$type='start'">
+                                <xsl:call-template name="Show" >
+                                    <xsl:with-param name="first" select="$word"/>
+                                    <xsl:with-param name="last" select="1000"/>
+                                    <xsl:with-param name="markers" select="$markers"/> 
+                                </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="$type='last'">
+                                <xsl:call-template name="Show" >
+                                    <xsl:with-param name="first" select="1"/>
+                                    <xsl:with-param name="last" select="$lastword"/>
+                                    <xsl:with-param name="markers" select="true()"/> 
+                                </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="$type='single'">
+                                <xsl:call-template name="Show" >
+                                    <xsl:with-param name="first" select="$word"/>
+                                    <xsl:with-param name="last" select="$lastword"/>
+                                    <xsl:with-param name="markers" select="true()"/> 
+                                </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                                <xsl:text>Bad type for GetVerse!</xsl:text><xsl:value-of select ="$type"/>
+                        </xsl:otherwise>
+                     </xsl:choose>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to process verses with or without markers.                    -->
+<!-- Enter with a verse (v) context node.                                   -->
+<!-- Parameter "markers" should be true() or false().                       -->
+
+<!--========================================================================-->
+<xsl:template name="Show">
+   <xsl:param name="first" select="1"/>
+   <xsl:param name="last" select="1000"/>
+   <xsl:param name="markers" select="true()"/>
+   
+   <xsl:if test="$first!=1">
+       <xsl:text> ... </xsl:text>
+       </xsl:if>
+   
+<xsl:for-each select="child::node()[ position() &gt;= $first and position() &lt;= $last]">
+
+<!--    Process a non-KW word (w)  -->
+
+        <xsl:if test="self::w">
+            <xsl:call-template name="w"/>
+        </xsl:if>
+
+<!--    Process a Ketib (k)  -->
+
+        <xsl:if test="self::k">
+            <xsl:call-template name="k"/>
+        </xsl:if>
+            
+<!--    Process a Qere (q)  -->
+
+        <xsl:if test="self::q">
+           <xsl:call-template name="q"/>
+        </xsl:if>
+            
+<!--    Process a pe, samek, or EOL  -->
+
+        <xsl:if test="$markers">
+            <xsl:if test="self::pe">
+                 <xsl:call-template name="pe"/>
+            </xsl:if>
+            <xsl:if test="self::samekh">
+                <xsl:call-template name="samekh"/>
+            </xsl:if>
+        </xsl:if>
+
+    </xsl:for-each>
+
+    <xsl:if test="$last &lt; count(child::node())">
+        <xsl:text> ... </xsl:text>
+        </xsl:if>
+             
+</xsl:template> 
+<!--========================================================================-->
+<!--========================================================================-->
+<!-- End of extract templates -->
+<!--========================================================================-->
+<!--========================================================================-->
+
+<xsl:template name="About">
+
+<!--========================================================================-->
+<html>
+<SCRIPT language="JavaScript" type="text/javascript" src="Sarissa.js"></SCRIPT>
+
+<SCRIPT language="JavaScript" type="text/javascript">
+    var xml = Sarissa.getDomDocument() ;
+    var xsl = Sarissa.getDomDocument() ;
+    var loaded = false ;
+    XMLXSLload("Tanach.xml", "Tanach.xsl.xml") ;
+            
+    function showTemplate(Template){
+        setXSLVariable("template", Template) ;
+        xsl.selectSingleNode("//xsl:variable[@name='template']").text = Template ; 
+        display = window.open() ;
+        display.document.write(xml.transformNode(xsl)) ;
+        display.document.close() ;
+        }
+    function setXSLVariable( name, value ) {
+        var c = xsl.selectSingleNode("//xsl:variable[@name=\'" + name + "\']") ;
+        var t = c.firstChild;
+        var newt = xsl.createTextNode(value) ; // Not working for int.
+        c.replaceChild(newt, t) ;
+        }
+    function XMLXSLload(xmlfile, xslfile){
+        if (!loaded){ 
+            xml.async = false ;
+            xml.load(xmlfile) ;
+            xsl.async = false ;
+            xsl.load(xslfile) ;
+            xsl.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'") ;
+            xsl.setProperty("SelectionLanguage", "XPath") ;
+            loaded=true ;
+            }
+        }
+</SCRIPT>
+<head>
+<title>About Tanach</title>
+</head>
+
+<body bgcolor="#fffff8">
+<xsl:if test="$counters = 'true'">
+    <!-- This is a hidden hit counter maintained at the serving web site. -->
+    <!-- It can be removed by other users.                                -->
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.About.dat&amp;sh=F"/> -->
+    </xsl:if>
+<span style="font-family:Times;font-weight:bold;font-size:200%">About <xsl:value-of select="header/name"/></span>
+<p/>
+
+<table>
+<tr><td>The Hebrew bible, the <b>Tanach</b>, is presented in a form which
+facilitates machine analysis, allows rapid access
+to any verse, and can be displayed in large fonts for the visually-impaired. 
+Hebrew text may be highlighted, copied, and pasted into UTF-8 compatible applications. 
+The <a target="_blank" href="Tanach.License.html">license of use</a> is very generous.
+<p/>
+<xsl:for-each select="header/description">
+    <xsl:value-of select="."/>
+    <p/>
+    </xsl:for-each>
+<h4>Installation</h4>
+A high-quality Hebrew font such as 
+<a target="_blank" 
+href="http://www.sbl-site.org/Resources/Resources_BiblicalFonts.aspx">SBL Hebrew</a> 
+(<a target="_blank" href="SBL_Hbrw.ttf"><b><tt>SBL_Hbrw.ttf</tt></b></a>) or
+<a target="_blank" href="http://www.sil.org/computing/fonts/silhebruni/">EZRA SIL</a> 
+(<b><tt>SILEOT.ttf</tt></b>) 
+should be installed.  <b><tt>SBL_Hbrw.ttf</tt></b> and its associated license agreement, 
+<a target="_blank" href="SBL_Hebrew_readme.txt"><b><tt>SBL_Hebrew_readme.txt</tt></b></a>, are included
+in <b><tt>Tanach.zip</tt></b>.
+<p/>
+<i>At present the Netscape 7.1, Mozilla 1.6, or Mozilla Firefox 0.8 browsers provide 
+the best rendering of the Hebrew characters.</i> Internet Explorer 6+ can be used if 
+necessary, however. 
+<p/>
+<blockquote>
+For <i>any</i> browser running on Microsoft operating systems the quality of the display for either font 
+depends on an elusive "Unicode Script Processor" file, 
+<b><tt>usp10.dll</tt></b>.
+Obsolete versions of this file render accents on top of each other and 
+produce very ugly text. One version of this file is provided by Microsoft with its systems,
+however, the file is <i>not</i> updated by "Service Packs" or "Hotfix" updates. 
+With much work, an up-to-date version can be obtained by joining the 
+<a target="_blank" href="http://groups.msn.com/MicrosoftVOLTuserscommunity/homepage.msnw?pgmarket=en-us">
+Microsoft "MSVolt" workgroup</a>. 
+Install the <b><tt>usp10.dll</tt></b> file
+by placing it in the same directory as your browser's executable file, i.e. <b><tt>firefox.exe</tt></b>,
+<b><tt>IEXPLORE.EXE</tt></b>, <b><tt>mozilla.exe</tt></b>, or   <b><tt>Netscp.exe</tt></b>.
+</blockquote>
+
+Occasionally, a combination of Unicode characters will not be rendered properly.  When this happens, 
+a dotted circle is drawn.  This is not <i>necessarily</i> an error in the XML file.
+
+<h4>Technical format</h4>
+The technical format of the Tanach is XML with 
+<a target="_blank" href="http://www.unicode.org/charts/PDF/U0590.pdf">Unicode</a> coding of 
+the Hebrew characters. The XML files are 
+<b><tt><a target="_blank" href="Tanach.xml">Tanach.xml</a></tt></b>, the index file,
+and 39 book files, <b><tt><a target="_blank" href="Genesis.xml">Genesis.xml</a>
+ ... <a target="_blank" href="Chronicles 2.xml">Chronicles 2.xml</a></tt></b>.  
+The XML files are the result of processing the WLC text with a Java application,
+<b><tt>WLC2XML</tt></b>. The sources, class files, and instructions for <b><tt>WLC2XML</tt></b> are contained 
+in the Java Archive file <a href="WLC2XML.jar" ><b><tt>WLC2XML.jar</tt></b></a>. A detailed table of the coding 
+can be obtained by clicking on the "Coding" link of the index page. Books are accessed either 
+by clicking on the links on the 
+<b><tt><a target="_blank" href="Tanach.xml">Tanach.xml</a></tt></b> index file or by directly accessing 
+the book file (i.e. <b><tt><a target="_blank" href="Genesis.xml">Genesis.xml</a></tt></b>).
+<p/>
+Although
+the XML texts are viewable by themselves, a far more useful display
+of the text is obtained with the XSL file 
+<a target="_blank" href="Tanach.xsl.xml"><b><tt>Tanach.xsl.xml</tt></b></a>. 
+<b><tt>Tanach.xsl.xml</tt></b> loads a JavaScript file,
+<b><tt>Sarissa.js</tt></b>, to provide compatibility 
+among browsers and <b><tt>Sarissa.js</tt></b> must be in the same directory as <b><tt>Tanach.xsl.xml</tt></b>.
+Users can create their own displays by carefully modifying <b><tt>Tanach.xsl.xml</tt></b>.
+Also provided is an XML-Schema file, 
+<a target="_blank" href="Tanach.xsd"><b><tt>Tanach.xsd</tt></b></a>, which precisely defines 
+the format of the Tanach for computer analyses and alternative displays of the text.  
+All XML files are <i>validated</i> XML files. 
+<p/>
+Changes are documented in <a target="_blank" href="Tanach.Version.html">
+<b><tt>Tanach.Version.html</tt></b></a>. Page counts at this site are given in
+<a target="_blank" href="Tanach.Counts.html"><b><tt>Tanach.Counts.html</tt></b></a>.
+ The license of use is in
+<a target="_blank" href="Tanach.License.html"><b><tt>Tanach.License.html</tt></b></a>
+which is accompanied by the Creative Commons logo <a target="_blank" href="CC.somerights.gif">
+<b><tt>CC.somerights.gif</tt></b></a>. 
+The contents of the site and the <a href="Tanach.zip"><b><tt>Tanach.zip</tt></b></a> file are given in 
+<a target="_blank" href="Tanach.Contents.html"><b><tt>Tanach.Contents.html</tt></b></a>. The <a target="_blank" href="WHIbanner.gif">Westminister Hebrew Institute banner</a> is 
+included in the distribution.  <p/>
+
+For efficient off-line viewing all 
+52 files can be downloaded from a WinZIP file,
+<a href="Tanach.zip"><b><tt>Tanach.zip</tt></b></a>, of about 2 megabytes.  
+When fully expanded (and <i>including</i>  <b><tt> Tanach.zip</tt></b>) the site occupies about 12.5 MB.
+<p/>
+<h4>Acknowledgements</h4>
+Many people have provided <i>pro gratis</i> support for this transcription.  Their invaluable help 
+is gratefully acknowledged in alphabetical order.
+<p/>
+<table align="center" cellpadding="5">
+<tr><td><b>Emmanuil Batsis</b></td><td>Netsmart S.A., Greece</td></tr>
+<tr><td><b>Renier de Blois</b></td><td>United Bible Societies</td></tr>
+<tr><td><b>John Hudson</b></td><td>Tiro Typeworks, Canada</td></tr>
+<tr><td><b>Peter Kirk</b></td><td>Qaya.org, UK</td></tr>
+<tr><td><b>Kirk Lowery</b></td><td>Westminister Theological Seminary, USA</td></tr>
+<tr><td><b>Giuseppe Regalzi</b></td><td>Rome, Italy</td></tr>
+<tr><td><b>Andrew Sperlin</b></td><td>Portland, Oregon, USA</td></tr>
+</table>
+<p/>
+Their contribution does not constitute an endorsement of the transcription.
+<p/>
+<center>
+<table border="5" cellpadding="20">
+<tr><td>
+<span style="color:blue">
+<i>This transcription is dedicated to my Hebrew teachers.</i>
+</span>
+</td></tr>
+</table>
+</center>
+<p/>
+</td></tr>
+</table>
+<p/>
+<table width="100%">
+<tr><td align="left">    
+    <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+<td align="right"><font size="-1">
+    <xsl:value-of select="header/transcriptiondate"/>
+    <xsl:text> / </xsl:text><xsl:value-of select="$xsldate"/>
+    </font></td></tr>
+</table>
+<hr/>
+</body>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- html template to show Unicode coding -->
+
+<!--========================================================================-->
+<xsl:template name="Coding">
+    <html>
+    <head>
+    <title>Coding of ASCII characters to Unicode characters</title>
+    </head>
+    
+    <body bgcolor="#fffff8">
+<xsl:if test="$counters = 'true'">
+    <!-- This is a hidden hit counter maintained at the serving web site. -->
+    <!-- It can be removed by other users.                                -->
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.Coding.dat&amp;sh=F"/> -->
+    </xsl:if>
+    <span style="font-family:Times;font-weight:bold;font-size:200%">
+             Coding of ASCII characters to Unicode characters </span>
+    <p/>
+    The transcription is based on the
+          <a target="_blank" href="http://wts.edu/hebrew/whmcodemanual.html">"Supplement to the code manual for 
+          the Michigan Old Testament"</a> by Alan Groves and the <a target="_blank" href="http://www.unicode.org/charts/PDF/U0590.pdf">
+          "Unicode Standard, Version 4.0, Hebrew. Range: 0590 to 05FF"</a>.  
+    <p/>
+    Only the characters given below can appear in the text fields of word, qere, or ketiv
+    elements in the XML files.  The marks are ordered by the specified <i>non-standard</i>
+    combining groups in the table.  This ordering is a minor expansion of the custom mark ordering
+    proposed by John Hudson of 
+    <a target="_blank" href="http://www.tiro.com"><b>www.tiro.com</b></a> in his 
+    <a target="_blank" href="http://www.sbl-site.org/Resources/Resources_BiblicalFonts.aspx">
+    SBL Hebrew Hebrew Font User Manual</a> that is part of the SBL Hebrew font release. Marks
+    with lower values appear closer to the preceding consonant.  Marks having the same combining class
+    appear in the order in which they appear in the WLC text.
+    <p/>
+    Although the WLC text specifies three types of meteg (left (75), center (35), right (95) ), Unicode
+    has a single symbol for all metegs.  Proper meteg positioning is obtained by providing
+    different combining class values to the different metegs and by prefacing the Unicode
+    meteg with a special Unicode character, a Zero Width Joiner (ZWJ, \u200d), to obtain a
+    center meteg.  This approach was also suggested by John Hudson. 
+     <p/>
+     Each paseq is preceded by a space to produce a more legible text.
+     <p/>
+     The column "Content type" indicates whether the character will be displayed for a
+     given choice of "Content" on the book page.  If "Content" 
+     is set to Accents, characters marked Accent, Vowel, and Consonant will be displayed.
+     If "Content" is set to Vowels, characters marked Vowel and Consonant 
+     will be displayed. If "Content" 
+     is set to Consonants, only characters marked consonant will be displayed.
+     If "Content"
+     is set to Morphology, characters marked M. divider, Accent, Vowel, and Consonant will be displayed.
+     <i>If more than one Content type is listed for a given character, an error has been made in the
+     </i><b><tt>Tanach.xsl.xml</tt></b><i> file.</i>
+     
+     <p/>
+    <xsl:for-each select="coding">
+    <table cellpadding="1" border="1" width="100%">
+        <tr><th>Char</th><th>Hex</th><th>Name</th><th>WLC code(s)</th>
+            <th>with &#1505;</th><th>Combining<br/>group</th><th>Content<br/>type</th><th>Equivalent</th>
+            <th>Notes</th></tr>
+        <xsl:for-each select="char">
+            <xsl:if test="./value!='?'">
+                <tr>
+                <td><div align="center" style="font-family:{$fontfamily};font-size:{$fontsize};font-weight:bold">
+                  <xsl:value-of select="value"/></div></td>
+                <td align="right"><b><xsl:value-of select="hexvalue"/></b></td>
+                
+                <td><b><xsl:value-of select="name"/></b></td>
+                <td><b>
+                    <xsl:if test="./mccode!=''">
+                        <center><xsl:value-of select="mccode"/></center>
+                    </xsl:if>
+                    <xsl:if test="./mccode=''">
+                        &#160;
+                    </xsl:if>
+                </b></td>
+                
+                
+                <td>
+                    <xsl:choose>
+                        <xsl:when test="./type = 'Accent'">
+                            <div align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              &#1505;<xsl:value-of select="value"/></div>
+                        </xsl:when>
+                        <xsl:when test="./type = 'Point'">
+                            <div align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              &#1505;<xsl:value-of select="value"/></div>
+                        </xsl:when>
+                        <xsl:when test="./type = 'Mark'">
+                            <div align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              &#1505;<xsl:value-of select="value"/></div>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           &#160;
+                        </xsl:otherwise>
+                    </xsl:choose>     
+                </td>     
+                <td><b>
+                    <xsl:if test="./group!=''">
+                        <center><xsl:value-of select="group"/></center>
+                    </xsl:if>
+                    <xsl:if test="./group=''">
+                        &#160;
+                    </xsl:if>
+                </b></td>
+                <td align="center"><b>
+                    <xsl:if test="contains($accents, ./value)">Accent</xsl:if> 
+                    <xsl:if test="contains($vowels, ./value)">Vowel</xsl:if> 
+                    <xsl:if test="contains($consonants, ./value)">Consonant</xsl:if> 
+                    <xsl:if test="contains($mdivider, ./value)">M. divider</xsl:if> 
+                    &#160;
+                 </b></td>
+                <td>
+                    <xsl:if test="./equivalents!=''">
+                        <xsl:value-of select="equivalents"/>
+                    </xsl:if>
+                    <xsl:if test="./equivalents=''">
+                        &#160;
+                    </xsl:if>
+                </td>
+                <td>
+                    <xsl:if test="./notes!=''">
+                        <xsl:value-of select="notes"/>
+                    </xsl:if>
+                    <xsl:if test="./notes=''">
+                        &#160;
+                    </xsl:if>
+                </td>
+                </tr>
+            </xsl:if>
+        </xsl:for-each>
+        
+        
+        <xsl:for-each select="specialchar">
+            <xsl:if test="./value!='?'">
+                <tr>
+                <td>
+                    <xsl:if test="./value!=''">
+                        <xsl:choose>
+                           <xsl:when test="./value=' '">
+                               &#160;
+                           </xsl:when>
+                           <xsl:otherwise>
+                               <div align="center" 
+                                   style="font-family:{$fontfamily};font-size:{$fontsize};font-weight:bold">
+                                   <xsl:value-of select="value"/>
+                               </div>
+                           </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                    <xsl:if test="./value=''">
+                        &#160;
+                    </xsl:if>
+                </td>    
+                <td align="right"><b><xsl:value-of select="hexvalue"/></b></td>
+                
+                <td><b><xsl:value-of select="name"/></b></td>
+                <td><b>
+                    <xsl:if test="./mccode!=''">
+                        <center><xsl:value-of select="mccode"/></center>
+                    </xsl:if>
+                    <xsl:if test="./mccode=''">
+                        &#160;
+                    </xsl:if>
+                </b></td>
+                <td align="center">
+                    <xsl:choose>
+                        <xsl:when test="./type = 'Accent'">
+                            <div align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              &#1505;<xsl:value-of select="value"/></div>
+                        </xsl:when>
+                        <xsl:when test="./type = 'Point'">
+                            <div align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              &#1505;<xsl:value-of select="value"/></div>
+                        </xsl:when>
+                        <xsl:when test="./type = 'PrepositiveMark'">
+                            <div dir="rtl" align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              <xsl:value-of select="value"/>&#1505;</div>
+                        </xsl:when>
+                        <xsl:when test="./type = 'Mark'">
+                            <div dir="rtl" align="center" style="font-family:{$fontfamily};font-size:{$fontsize}; font-weight:bold">
+                              &#1505;<xsl:value-of select="value"/></div>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           &#160;
+                        </xsl:otherwise>
+                    </xsl:choose>     
+                </td>     
+                <td><b>
+                    <xsl:if test="./group!=''">
+                        <center><xsl:value-of select="group"/></center>
+                    </xsl:if>
+                    <xsl:if test="./group=''">
+                        &#160;
+                    </xsl:if>
+                </b></td>
+                <td align="center"><b>
+                    <xsl:choose>
+                    <xsl:when test="./value=''">
+                        <xsl:if test="contains($accents, ' ')">Accent</xsl:if> 
+                        <xsl:if test="contains($vowels, ' ')">Vowel</xsl:if> 
+                        <xsl:if test="contains($consonants, ' ')">Consonant</xsl:if> 
+                        <xsl:if test="contains($mdivider, ' ')">M. divider</xsl:if> 
+                     </xsl:when>
+                    <xsl:otherwise>
+                       <xsl:if test="contains($accents, ./value)">Accent</xsl:if> 
+                       <xsl:if test="contains($vowels, ./value)">Vowel</xsl:if> 
+                       <xsl:if test="contains($consonants, ./value)">Consonant</xsl:if> 
+                       <xsl:if test="contains($mdivider, ./value)">M. divider</xsl:if> 
+                    </xsl:otherwise>
+                    </xsl:choose>
+                         &#160;
+                 </b></td>
+                <td>
+                    <xsl:if test="./equivalents!=''">
+                        <xsl:value-of select="equivalents"/>
+                    </xsl:if>
+                    <xsl:if test="./equivalents=''">
+                        &#160;
+                    </xsl:if>
+                </td>
+                <td>
+                    <xsl:if test="./notes!=''">
+                        <xsl:value-of select="notes"/>
+                    </xsl:if>
+                    <xsl:if test="./notes=''">
+                        &#160;
+                    </xsl:if>
+                </td>
+                </tr>
+            </xsl:if>
+        </xsl:for-each>
+    </table>
+    </xsl:for-each>
+<p/>
+<table width="100%">
+<tr><td align="left">    
+    <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+<td align="right"><font size="-1">
+    <xsl:value-of select="header/transcriptiondate"/>
+    <xsl:text> / </xsl:text><xsl:value-of select="$xsldate"/>
+    </font></td></tr>
+</table>
+    <hr/>
+    </body>
+    </html>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- html template to show excerpt syntax -->
+
+<!--========================================================================-->
+<xsl:template name="Syntax">
+
+    <html>
+    <title>Syntax for excerpts</title>
+
+    <body bgcolor="#fffff8">
+        <span style="font-family:Times;font-weight:bold;font-size:200%">
+            Syntax for excerpts</span>
+    <p/>
+Six different formats are available to specify an excerpt of the text.  Only these
+formats are accepted, all others will produce error messages. The basic format is
+<b>c:v.w</b> where <b>c</b> is the chapter, <b>v</b> is the verse, and <b>w</b> is the word.
+A dash, "<b>-</b>", indicates a range of values. If the specified chapter, verse,
+or word doesn't exist, an error message is also given.  This message also gives the limits
+on the chapters, verses, or words in the specification.  Indicies are positive, starting at 1,
+not zero.
+<p/>
+<table align="center" width="90%" border="1">
+    <th align="center">Syntax</th>
+    <th align="center">Syntax name</th>
+    <th align="center">yields...</th>
+<tr>
+    <td align="center"><b>4</b></td>
+    <td>Single chapter</td>
+    <td>Chapter 4.</td></tr> 
+<tr>
+    <td align="center"><b>4.5</b></td>
+    <td>Single verse</td>
+    <td>Chapter 4, verse 5.</td></tr> 
+<tr>
+    <td align="center"><b>4:5.6</b></td>
+    <td>Single word</td>
+    <td>Chapter 4, verse 5, word 6.</td></tr> 
+<tr>
+    <td align="center"><b>1 - 4</b></td>
+    <td>Chapter range</td>
+    <td>Chapters 1 through 4. <i>Caution: Wide ranges are slow to display!</i></td></tr> 
+<tr>
+    <td align="center"><b>1:2 - 4:5 </b></td>
+    <td>Chapter:Verse range</td>
+    <td>From chapter 1, verse 2 to chapter 4, verse 5.</td></tr> 
+<tr>
+    <td align="center"><b>1:2.3 - 4:5.6 </b></td>
+    <td>Chapter:Verse.Word range</td>
+    <td>From chapter 1, verse 2, word 3 to chapter 4, verse 5, word 6.</td></tr> 
+</table>
+<h4>Specifying a "word" position:</h4>
+Verses in the Tanach are sequences of 5 "graphical objects", words, qere words,
+ketib words, samekh markers, and pe markers.  Consonants joined by a maqaf (&#x05be;) 
+are considered to be one word. A word's index 
+is its position from the start of the verse (index 1) <i>counting 
+all of these graphical objects</i>.   The best way to determine the position of a word for a given 
+verse is to excerpt the entire verse, i.e. <b>4:5</b>, then count the <i>all</i>
+graphical objects from the righthand side of the verse. Then try to excerpt the 
+word itself for confirmation, i.e. <b>4:5.6</b>. Do not count words in the "Simplified" 
+layout because ketib and pe/samekh objects are not shown in the "Simplified" layout.
+<p/>
+<table width="100%">
+    <tr><td align="left">    
+    <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+        <td align="right"><font size="-1">
+            <xsl:value-of select="header/transcriptiondate"/>
+                <xsl:text> / </xsl:text><xsl:value-of select="$xsldate"/>
+                    </font></td>
+    </tr>
+</table>
+<hr/>
+</body>
+</html>
+</xsl:template>
+<!--========================================================================-->
+
+<!-- html template to show transcription notes -->
+
+<!--========================================================================-->
+<xsl:template name="Notes">
+
+    <html>
+    <title>Transcription notes</title>
+
+    <body bgcolor="#fffff8">
+<xsl:if test="$counters = 'true'">
+    <!-- This is a hidden hit counter maintained at the serving web site. -->
+    <!-- It can be removed by other users.                                -->
+<!--     <img src="http://users.ntplx.net/cgi-bin/count.cgi?df=kimball.Tanach.Notes.dat&amp;sh=F"/> -->
+    </xsl:if>
+        <span style="font-family:Times;font-weight:bold;font-size:200%">
+            Transcription notes</span>
+    <p/>
+     
+    Based on 
+          <a target="_blank" href="http://wts.edu/hebrew/whmcodemanual.html">"Supplement to the code manual for 
+          the Michigan Old Testament"</a> by Alan Groves.
+    <p/>
+    <xsl:for-each select="notes">
+    <table cellpadding="1" border="1" width="100%">
+        <tr><th>Code</th><th>Note</th></tr>
+        <xsl:for-each select="note">
+            <tr>
+                <td><center><b><xsl:value-of select="code"/></b></center></td>
+                <td><xsl:value-of select="note"/></td>
+            </tr>
+        </xsl:for-each>
+    </table>
+    </xsl:for-each>
+<p/>
+<table width="100%">
+    <tr><td align="left">    
+        <a target="_blank" href="Tanach.License.html" alt="License information">
+            <img src="CC.somerights.gif" alt="License information" border="0"/>
+    </a>
+</td>
+        <td align="right"><font size="-1">
+            <xsl:value-of select="header/transcriptiondate"/>
+                <xsl:text> / </xsl:text><xsl:value-of select="$xsldate"/>
+                    </font></td>
+    </tr>
+</table>
+<hr/>
+</body>
+</html>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to display non-KQ words (w).                                  -->
+<!-- Enter with a child of a verse (v) context node known to be a 'w'.      -->
+
+<!--========================================================================-->
+<xsl:template name="w">
+    <xsl:for-each select="child::node()">
+        <xsl:choose>
+            <xsl:when test="self::x">
+                <xsl:call-template name="x"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="showCharacters"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+<!-- Formerly 200F was added after <xsl:text>. Add in a non-directional blank. -->    
+<xsl:text> </xsl:text> <!-- Add in a non-directional blank. --></xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to display ketib words.                                      -->
+<!-- Enter with a child of a verse (v) context node known to be a 'k'.     -->
+
+<!--========================================================================-->
+<xsl:template name="k">
+    <xsl:if test="$format!='Simplified'">
+    <xsl:for-each select="child::node()">
+        <sup>
+            <xsl:choose>
+                <xsl:when test="self::x">
+                    <xsl:call-template name="x"/>
+                </xsl:when>
+                    
+                <xsl:otherwise>
+                   
+                    <xsl:if test="not(name(../preceding-sibling::node()[1])='k')">
+                        <xsl:if test="not(name(preceding-sibling::node()[1])='x')"> 
+ <!-- This forces the [ to be a right to left character.  Was 200f before (  -->
+                            <span style="color:brown;dir:rtl">(</span>
+                        </xsl:if>
+                    </xsl:if>
+                    
+                    <xsl:choose>
+                        <xsl:when test="not(name(../following-sibling::node()[1])='k')">
+                            <xsl:if test="not(name(following-sibling::node()[1])='x')"> 
+                                <span style="color:brown">
+<!-- This code eliminates the trailing blank before a closing bracket.  
+                                    <xsl:value-of select="substring-before(.,' ')"/>  -->
+                                    <xsl:call-template name="showCharacters"/>
+                                 </span>   
+<!-- This forces the ] to be a right to left character was 200F before ) and before blank.     -->
+                                  <span style="color:brown"><xsl:text>) </xsl:text></span>
+                            </xsl:if>
+                            <xsl:if test="name(following-sibling::node()[1])='x'"> 
+                                <span style="color:brown">
+                                    <xsl:call-template name="showCharacters"/>
+                                 </span>   
+                             </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <span style="color:brown">
+                                <xsl:value-of select="."/>
+                                <!-- Was 200F before blank.  -->
+                                <xsl:text> </xsl:text> <!-- Add in a non-directional blank. -->
+                            </span>
+                        </xsl:otherwise>   
+                    </xsl:choose>                  
+                         
+                </xsl:otherwise>    
+            </xsl:choose>
+        </sup>
+    </xsl:for-each>
+    </xsl:if>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to display qere words (q).                                   -->
+<!-- Enter with a child of a verse (v) context node known to be a 'q'.     -->
+
+<!--========================================================================-->
+<xsl:template name="q">
+    <xsl:for-each select="child::node()">
+        <xsl:choose>
+        <xsl:when test="$format!='Simplified'">
+        <span style="color:blue">
+            <xsl:choose>
+                <xsl:when test="self::x">
+                    <xsl:call-template name="x"/>
+                </xsl:when>    
+                <xsl:otherwise>
+                    <xsl:call-template name="showCharacters"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </span>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="self::x">
+                    <xsl:call-template name="x"/>
+                </xsl:when>    
+                <xsl:otherwise>
+                    <xsl:call-template name="showCharacters"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each> 
+    <!-- was 200f before blank. -->
+    <xsl:text> </xsl:text> <!-- Add in a non-directional blank. -->
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to display notes (x).                                    -->
+<!-- Enter with a child of a word or KQ context node known to be an x.      -->
+
+<!--========================================================================-->
+<xsl:template name="x">
+        <xsl:if test="$format!='Simplified'">
+            <xsl:variable name="code" select="."/>
+            <xsl:text>&#x2006;</xsl:text>
+            <a style="text-decoration:none;vertical-align:super;color:red;
+                  font-family:Times;font-weight:bold;font-size:50%" 
+                      href="JavaScript:showNote('{$code}')">
+                <xsl:value-of select="."/></a>
+            <xsl:if test="count(following-sibling::node()[1])=0"> 
+                <xsl:text> </xsl:text>
+                </xsl:if>
+            <xsl:if test="name(following-sibling::node()[1])='x'"> 
+                <xsl:text>,</xsl:text>
+                </xsl:if>
+            </xsl:if>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to display pe markers (pe).                                   -->
+<!-- Enter with a child verse node known to be a pe.                        -->
+
+<!--========================================================================-->
+<xsl:template name="pe">
+    <xsl:if test="$format!='Simplified'">
+        <span style="font-family:{$fontfamily};font-size:75%"> &#1508; </span>
+        <xsl:if test="$format='Chapter'">
+            <br/>
+            </xsl:if>
+        </xsl:if>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to display samekh markers (samekh).                           -->
+<!-- Enter with a child verse node known to be a samekh.                    -->
+
+<!--========================================================================-->
+<xsl:template name="samekh">
+    <xsl:if test="$format!='Simplified'">
+        <span style="font-family:{$fontfamily};font-size:75%"> &#1505; </span>
+        <xsl:if test="$format='Chapter'">
+            <xsl:text>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</xsl:text>
+            </xsl:if>
+        </xsl:if>
+</xsl:template>
+<!-- ====================================================================== -->
+
+<!-- Template to show characters after translation.                                  -->
+<!-- Enter with a child of a verse as a context node.      -->
+
+<!--========================================================================-->
+<xsl:template name="showCharacters">
+   <xsl:choose>
+   <xsl:when test="$content='Accents'">
+       <xsl:value-of select="translate(.,$all,$nomorphology)"/>
+       </xsl:when>
+   <xsl:when test="$content='Vowels'">
+       <xsl:value-of select="translate(.,$all,$noaccents)"/>
+       </xsl:when>
+   <xsl:when test="$content='Consonants'">
+       <xsl:value-of select="translate(.,$all, $consonants)"/>
+       </xsl:when>
+   <xsl:when test="$content='Morphology'">
+       <xsl:value-of select="."/>
+       </xsl:when>
+   </xsl:choose>
+</xsl:template> 
+<!--========================================================================-->
+<!--========================================================================-->
+
+<!-- Template for MC translation test. -->
+
+<!--========================================================================-->
+<xsl:template match="/Test">
+<html>
+<head>
+<title>Translation of MC coding to Unicode</title>
+</head>
+<body>
+<h1>Translation of MC coding to Unicode</h1>
+<table  align="center" cellpadding="10">
+<tr><td><h4>MC code: </h4></td>
+    <td><h2><xsl:value-of select="mc"/></h2></td></tr>
+
+<tr><td><h4>Translated text: </h4></td>
+    <td><h2><span style="font-family:SBL Hebrew;font-size:40">
+        <xsl:value-of select="w"/></span></h2></td></tr>
+</table>
+<hr/>
+
+</body>
+</html>
+</xsl:template> 
+<!--========================================================================-->
+<!--========================================================================-->
+</xsl:stylesheet>

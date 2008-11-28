@@ -1,0 +1,1275 @@
+<!-- This document was created with HomeSite v2.0 -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>DAT-Format (English)</TITLE>
+</HEAD>
+
+<BODY bgcolor="#C0C0C0">
+Version: 0.3 - Date: 25.01.97 08:28:12
+<h1>Remarks</h1>
+<p>I don´t know if my english is good enough to make the text understandable for everyone... If you have any questions, you can send me a <a href="mailto:nseessle@mail.hh.provi.de">mail</a>.
+</p>
+<p>In the folowing text I use the following variable-types:</p>
+<p><dl>
+	<dt>CString 
+	<dd>a CString is a String preceeded by it´s length if stored to a file. If it´s a short string, the length is stored as a single byte, if the string is longer than 255 chars, the first byte is 0xff and is followed by the string length (short). A String-length of zero is stored in the file.
+</dl>
+</p>
+
+Jump to: <a href="#memopad">Memopad</a> - <a href="#todolist">Todolist</a> - <a href="#addressbook">Addressbook</a> - <a href="#datebook">Datebook</a> - <A HREF="#user">USERS.DAT</A> - <a href="#changes">Changes</a>
+
+
+<!-- MEMOPAD ----------------------------------------------------------->
+<h1><a name="memopad">Memopad</a></h1>
+The Memopad is stored as follows:
+<table border=1>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td><a href="#header">General Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td><a href="#showheader">Show-Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td><a href="#categories">Categories</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td><a href="#tabledesc">Table-description</a></td>
+	<td>(1,1,1,5,6,1)</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>long</td>
+	<td>number of entries (*6)</td>
+</tr>
+<tr>
+	<td>6 .. (P.5 / 6)</td>
+	<td><a href="#mpentry">Memopad-Entry</a></td>
+	<td>-</td>
+</tr>
+</table>
+Note that the number of enries is multiplied with the number of fields per record (in the case of Memopad is this 6)!
+
+<!--------------------------------------------------------------------->
+<h1><a name="mpentry">Memopad-Entry</a></h1>
+a Memopad-Entry is stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>long</td>
+	<td>record id</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td>long</td>
+	<td>status flag</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td>6</td>
+	<td>long</td>
+	<td>position</td>
+</tr>
+<tr>
+	<td>7</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td>8</td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td>9</td>
+	<td>CString</td>
+	<td>Memo-Text</td>
+</tr>
+<tr>
+	<td>10</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td>11</td>
+	<td>long</td>
+	<td>flag: 1 if private, 0 if not</td>
+</tr>
+<tr>
+	<td>12</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td>13</td>
+	<td>long</td>
+	<td>category number</td>
+</tr>
+</table>	
+
+<!-- TODOLIST ----------------------------------------------------------->
+<h1><a name="todolist">Todolist-entries</a></h1>
+The Todolist-entries are stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td><a href="#header">General Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td><a href="#showheader">Show-Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td><a href="#categories">Categories</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td><a href="#tabledesc">Table-description</a></td>
+	<td>(1,1,1,5,3,6,1,6,1,5)</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>long</td>
+	<td>number of entries (*10)</td>
+</tr>
+<tr>
+	<td>6 .. (P.5 / 10)</td>
+	<td><a href="#tdentry">Todo-Entry</a></td>
+	<td>-</td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="tdentry">Todo-Entry</a></h1>
+a Todo-Entry is stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>record-id</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>status</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>position</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>description</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (3)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>time_t</td>
+	<td>due-date</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>completed</td>
+	<td>flag: 1 if completed, 0 if not.</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>priority</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>private</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Category</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Note</td>
+</tr>
+</table>
+
+<!-- ADDRESSBOOK --------------------------------------------------------->
+<h1><a name="addressbook">Addressbook-entries</a></h1>
+The Addressbook-entries are stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td><a href="#header">General Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>CString</td>
+	<td>User-Defined 1</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td>CString</td>
+	<td>User-Defined 2</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td>CString</td>
+	<td>User-Defined 3</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>CString</td>
+	<td>User-Defined 4</td>
+</tr>
+<tr>
+	<td>6</td>
+	<td><a href="#showheader">Show-Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>7</td>
+	<td><a href="#categories">Categories</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>8</td>
+	<td><a href="#tabledesc">Table-description</a></td>
+	<td>(1,1,1,5,5,5,5,1,5,1,5,1,5,1,5,1,5,5,5,5,5,5,5,6,1,5,5,5,5,1)</td>
+</tr>
+<tr>
+	<td>9</td>
+	<td>long</td>
+	<td>number of entries (*30)</td>
+</tr>
+<tr>
+	<td>10 .. (P.9 / 30)</td>
+	<td><a href="#abentry">Addressbook-Entry</a></td>
+	<td>-</td>
+</tr>
+</table>
+<!--------------------------------------------------------------------->
+<h1><a name="abentry">Addressbook-Entry</a></h1>
+a Addressbook-Entry is stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>record-id</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>status-field</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>position</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Name</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>First</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Title</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Company</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Phone 1 Label ID</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Phone 1 String</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Phone 2 Label ID</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Phone 2 String</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Phone 3 Label ID</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Phone 3 String</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Phone 4 Label ID</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Phone 4 String</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Phone 5 Label ID</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Phone 5 String</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Address</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>City</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>State</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Zip-Code</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Country</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Note</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>private</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Category</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Custom 1</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Custom 2</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Custom 3</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>Custom 4</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>display Phone</td>
+</tr>
+</table>
+
+<!-- DATEBOOK ----------------------------------------------------------->
+<h1><a name="datebook">Datebook-Entries</a></h1>
+The Datebook-entries are stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td><a href="#header">General Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td><a href="#showheader">Show-Header</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td><a href="#categories">Categories</a></td>
+	<td>-</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td><a href="#tabledesc">Table-description</a></td>
+	<td>(1,1,1,3,1,5,1,5,6,6,1,6,1,1,8)</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>long</td>
+	<td>number of entries (*15)</td>
+</tr>
+<tr>
+	<td>6 .. (P.5 / 15)</td>
+	<td><a href="#dbentry">Datebook-Entry</a></td>
+	<td>-</td>
+</tr>
+</table>
+
+<!-- DATEBOOK ----------------------------------------------------------->
+<h1><a name="dbentry">Datebook-Entry</a></h1>
+a Memopad-Entry is stored as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>record-id</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>status-field</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>position</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (3)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>time_t</td>
+	<td>Start-time</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>time_t</td>
+	<td>End-Time</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>description</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Duration</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (5)</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td>always zero</td>
+</tr>
+<tr>
+	<td></td>
+	<td>CString</td>
+	<td>note</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>untimed</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>private</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>category</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (6)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>alarm-set?</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Alarm-Adv. Time (units)</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (1)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>long</td>
+	<td>Alarm Adv. Type (0-Minutes / 1-Hours / 2-Days)</td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td><a href="#field">Field-Type</a> (8)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>RepeatEvent</td>
+	<td><a href="#repeat">Repeat-Event</a></td>
+</tr>
+
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="tag">Tag</a></h1>
+All files have a tag:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>file</td>
+	<td>tag</td>
+</th>
+<tr>
+	<td></td>
+	<td>Memopad</td>
+	<td>0x00 0x01 0x50 0x4d (MP10)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>Todolist</td>
+	<td>0x00 0x01 0x42 0x41 (AB10) (Bug?)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>Addressbook</td>
+	<td>0x00 0x01 0x42 0x41 (AB10)</td>
+</tr>
+<tr>
+	<td></td>
+	<td>Datebook</td>
+	<td>0x00 0x01 0x42 0x44 (DB10)</td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="header">General Header</a></h1>
+All of the files have a general header as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>CString</td>
+	<td>The filename of the actual file</td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="showheader">Show-Header</a></h1>
+The Show-Header is a Header describing the currently shown category, entry, ... on the Desktop.
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>CString</td>
+	<td>Show-Header (description follows - different for every file)</td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="categories">Categories</a></h1>
+The categories available for the current file-type. First there is a 'main'-Header:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td>unknown</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>long</td>
+	<td>number of Categories</td>
+</tr>
+</table>
+<!--------------------------------------------------------------------->
+Afterwards there is a seperate entry for all of the available categories (2nd entry in th e previous table):
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td>index</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>long</td>
+	<td>id</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td>long</td>
+	<td>name dirty</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td>CString</td>
+	<td>Long name of category</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>CString</td>
+	<td>Short name of Category</td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="tabledesc">Table-description</a></h1>
+A description of the fields stored in the file:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td>unknown</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>long</td>
+	<td>number of fields</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td>long</td>
+	<td>unknown</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td>long</td>
+	<td>unknown</td>
+</tr>
+<tr>
+	<td>5</td>
+	<td>long</td>
+	<td>unknown</td>
+</tr>
+<tr>
+	<td>6</td>
+	<td>short</td>
+	<td>number of fields</td>
+</tr>
+<tr>
+	<td>7 - ...</td>
+	<td>short</td>
+	<td><a href="#field">Field-Type</a></td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="field">Field-Type</a></h1>
+The following field-types are defined:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>number</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td></td>
+	<td>0</td>
+	<td>None</td>
+</tr>
+<tr>
+	<td></td>
+	<td>1</td>
+	<td>Integer</td>
+</tr>
+<tr>
+	<td></td>
+	<td>2</td>
+	<td>Float</td>
+</tr>
+<tr>
+	<td></td>
+	<td>3</td>
+	<td>Date</td>
+</tr>
+<tr>
+	<td></td>
+	<td>4</td>
+	<td>Alpha</td>
+</tr>
+<tr>
+	<td></td>
+	<td>5</td>
+	<td>CString</td>
+</tr>
+<tr>
+	<td></td>
+	<td>6</td>
+	<td>Bool</td>
+</tr>
+<tr>
+	<td></td>
+	<td>7</td>
+	<td>BitFlag</td>
+</tr>
+<tr>
+	<td></td>
+	<td>8</td>
+	<td>RepeatEvent</td>
+</tr>
+</table>
+
+<!--------------------------------------------------------------------->
+<h1><a name="repeat">Repeat-Event</a></h1>
+The Repeat-Event is defined as follows:
+<table border=1 cellspacing=1 cellpadding=0>
+<th>
+	<td>number</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td>zero, if no repeat-event</td>
+</tr>
+<tr>
+	<td></td>
+	<td>OR</td>
+	<td></td>
+</tr>
+<tr>
+	<td>1</td>
+	<td>long</td>
+	<td></td>
+</tr>
+</table>
+
+<!-- USERS.DAT ----------------------------------------------------------->
+<h1><a name="user">USERS.DAT</a></h1>
+The USERS.DAT is stored as follows:
+<table border=1>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>short</td>
+	<td>count of users</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>14 Bytes</td>
+	<td>garbage from Visual C++-</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td><a href="#userentry">User-Entry</a></td>
+	<td>repeated count (pos.1) times</td>
+</tr>
+</table>
+
+<!-- UserEntry ----------------------------------------------------------->
+<h1><a name="userentry">UserEntry</a></h1>
+The UserEntry is stored as follows:
+<table border=1>
+<th>
+	<td>type</td>
+	<td>descr.</td>
+</th>
+<tr>
+	<td>1</td>
+	<td>CString</td>
+	<td>Long Name of User</td>
+</tr>
+<tr>
+	<td>2</td>
+	<td>CString</td>
+	<td>Short Name of User</td>
+</tr>
+<tr>
+	<td>3</td>
+	<td>short</td>
+	<td>1, if this is the active User</td>
+</tr>
+<tr>
+	<td>4</td>
+	<td>7 * short</td>
+	<td>unknown</td>
+</tr>
+</table>
+
+<a name="changes"></a>
+<h1>Changes</h1>
+<h2>V0.2 -> V0.3</h2>
+* Some of the CStrings in datebook are preceeded by an long that is always zero. (Thanks to Matthias Eichstaedt)
+* The name of USER.DAT should have been USERS.DAT (Thanks to ..?)
+
+</BODY>
+</HTML>

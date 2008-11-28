@@ -1,0 +1,678 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="Tanach.xsl.xml"?>
+<Tanach xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation ="Tanach.xsd">
+<!-- Copyright C.V.Kimball 2004 -->
+<header>
+  <name>Tanach</name>
+  <hebrewname>תנ״ך</hebrewname>
+  <title>The Westminster Leningrad Codex (WLC)</title>
+  <shortdescription>from the electronic version of the Leningrad Codex maintained by the Westminster Hebrew Institute.</shortdescription>
+  <description>This text began as an electronic transcription by Whitaker and Parunak of the 1983 printed edition of Biblia Hebraica Stuttgartensia (BHS). The transcription is called the Michigan-Claremont electronic text and was archived at the Oxford Text Archive (OTA) in 1987. Since that time, the text has been modified to conform to the photo-facsimile of the Leningrad Codex, Firkovich B19A, residing at the Russian National Library, St. Petersberg; hence the change of name.This version contains all 6 of the textual elements of the OTA document: consonants, vowels, cantillation marks, "paragraph" (pe, samekh) markers, ketib-qere variants, and morphological divisions. </description>
+  <description>The BHS so-called "paragraph" markers (pe and samekh) do not actually occur in the Leningrad Codex. The editors of BHS use them to indicate open space deliberately left blank by the scribe. Pe ("open" paragraph) represents a space between verses, where the new verse begins on a new column line. This represents a major section of the text. Samekh ("closed" paragraph) represents a space of less than a line between verses. This is understood to be a subdivision of the corresponding "open" section. Since these markers represent an actual physical feature of the text, they have been retained. </description>
+  <description>The transcription was based on the "Supplement to the code manual for the Michigan Old Testament" by Alan Groves and includes the transcription notes defined there. A listing of these notes can be obtained by clicking on the "Notes" link of the index page. Transcription notes appear as superscripts and can be viewed by clicking on them.</description>
+  <description>The book names in English and Hebrew of the Jewish Publication Society (JPS) Tanach have been added.</description>
+  <date>5 March 2004</date>
+  <transcriptiondate>17 Jun 2004</transcriptiondate>
+  <copyright>© C. V. Kimball 2004</copyright>
+  <filename>C:\kimball\JavaProjects\WLC2XML\WLC\wlc20040305.txt</filename>
+</header>
+<tanach>
+  <book>
+    <names>
+      <name>Haggai</name>
+      <abbrev>Hag</abbrev>
+      <number>24</number>
+      <filename>Haggai</filename>
+      <hebrewname>חגי</hebrewname>
+    </names>
+    <c n="1">
+      <v n="1">
+        <w>בִּ/שְׁנַ֤ת</w>
+        <w>שְׁתַּ֙יִם֙</w>
+        <w>לְ/דָרְיָ֣וֶשׁ</w>
+        <w>הַ/מֶּ֔לֶךְ</w>
+        <w>בַּ/חֹ֙דֶשׁ֙</w>
+        <w>הַ/שִּׁשִּׁ֔י</w>
+        <w>בְּ/יֹ֥ום</w>
+        <w>אֶחָ֖ד</w>
+        <w>לַ/חֹ֑דֶשׁ</w>
+        <w>הָיָ֨ה</w>
+        <w>דְבַר־יְהוָ֜ה</w>
+        <w>בְּ/יַד־חַגַּ֣י</w>
+        <w>הַ/נָּבִ֗יא</w>
+        <w>אֶל־זְרֻבָּבֶ֤ל</w>
+        <w>בֶּן־שְׁאַלְתִּיאֵל֙</w>
+        <w>פַּחַ֣ת</w>
+        <w>יְהוּדָ֔ה</w>
+        <w>וְ/אֶל־יְהֹושֻׁ֧עַ</w>
+        <w>בֶּן־יְהֹוצָדָ֛ק</w>
+        <w>הַ/כֹּהֵ֥ן</w>
+        <w>הַ/גָּדֹ֖ול</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="2">
+        <w>כֹּ֥ה</w>
+        <w>אָמַ֛ר</w>
+        <w>יְהוָ֥ה</w>
+        <w>צְבָאֹ֖ות</w>
+        <w>לֵ/אמֹ֑ר</w>
+        <w>הָ/עָ֤ם</w>
+        <w>הַ/זֶּה֙</w>
+        <w>אָֽמְר֔וּ</w>
+        <w>לֹ֥א</w>
+        <w>עֶת־בֹּ֛א</w>
+        <w>עֶת־בֵּ֥ית</w>
+        <w>יְהוָ֖ה</w>
+        <w>לְ/הִבָּנֹֽות׃</w>
+        <pe/>
+      </v>
+      <v n="3">
+        <w>וַֽ/יְהִי֙</w>
+        <w>דְּבַר־יְהוָ֔ה</w>
+        <w>בְּ/יַד־חַגַּ֥י</w>
+        <w>הַ/נָּבִ֖יא</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="4">
+        <w>הַ/עֵ֤ת</w>
+        <w>לָ/כֶם֙</w>
+        <w>אַתֶּ֔ם</w>
+        <w>לָ/שֶׁ֖בֶת</w>
+        <w>בְּ/בָתֵּי/כֶ֣ם</w>
+        <w>סְפוּנִ֑ים</w>
+        <w>וְ/הַ/בַּ֥יִת</w>
+        <w>הַ/זֶּ֖ה</w>
+        <w>חָרֵֽב׃</w>
+      </v>
+      <v n="5">
+        <w>וְ/עַתָּ֕ה</w>
+        <w>כֹּ֥ה</w>
+        <w>אָמַ֖ר</w>
+        <w>יְהוָ֣ה</w>
+        <w>צְבָאֹ֑ות</w>
+        <w>שִׂ֥ימוּ</w>
+        <w>לְבַבְ/כֶ֖ם</w>
+        <w>עַל־דַּרְכֵי/כֶֽם׃</w>
+      </v>
+      <v n="6">
+        <w>זְרַעְתֶּ֨ם</w>
+        <w>הַרְבֵּ֜ה</w>
+        <w>וְ/הָבֵ֣א</w>
+        <w>מְעָ֗ט</w>
+        <w>אָכֹ֤ול</w>
+        <w>וְ/אֵין־לְ/שָׂבְעָה֙</w>
+        <w>שָׁתֹ֣ו</w>
+        <w>וְ/אֵין־לְ/שָׁכְרָ֔/ה</w>
+        <w>לָבֹ֖ושׁ</w>
+        <w>וְ/אֵין־לְ/חֹ֣ם</w>
+        <w>לֹ֑/ו</w>
+        <w>וְ/הַ֨/מִּשְׂתַּכֵּ֔ר</w>
+        <w>מִשְׂתַּכֵּ֖ר</w>
+        <w>אֶל־צְרֹ֥ור</w>
+        <w>נָקֽוּב׃</w>
+        <pe/>
+      </v>
+      <v n="7">
+        <w>כֹּ֥ה</w>
+        <w>אָמַ֖ר</w>
+        <w>יְהוָ֣ה</w>
+        <w>צְבָאֹ֑ות</w>
+        <w>שִׂ֥ימוּ</w>
+        <w>לְבַבְ/כֶ֖ם</w>
+        <w>עַל־דַּרְכֵי/כֶֽם׃</w>
+      </v>
+      <v n="8">
+        <w>עֲל֥וּ</w>
+        <w>הָ/הָ֛ר</w>
+        <w>וַ/הֲבֵאתֶ֥ם</w>
+        <w>עֵ֖ץ</w>
+        <w>וּ/בְנ֣וּ</w>
+        <w>הַ/בָּ֑יִת</w>
+        <w>וְ/אֶרְצֶה־בֹּ֥/ו</w>
+        <k>וְ/אֶכָּבֵד</k>
+        <q>וְ/אֶכָּבְדָ֖ה</q>
+        <w>אָמַ֥ר</w>
+        <w>יְהוָֽה׃</w>
+      </v>
+      <v n="9">
+        <w>פָּנֹ֤ה</w>
+        <w>אֶל־הַרְבֵּה֙</w>
+        <w>וְ/הִנֵּ֣ה</w>
+        <w>לִ/מְעָ֔ט</w>
+        <w>וַ/הֲבֵאתֶ֥ם</w>
+        <w>הַ/בַּ֖יִת</w>
+        <w>וְ/נָפַ֣חְתִּי</w>
+        <w>בֹ֑/ו</w>
+        <w>יַ֣עַן</w>
+        <w>מֶ֗ה</w>
+        <w>נְאֻם֙</w>
+        <w>יְהוָ֣ה</w>
+        <w>צְבָאֹ֔ות</w>
+        <w>יַ֗עַן</w>
+        <w>בֵּיתִ/י֙</w>
+        <w>אֲשֶׁר־ה֣וּא</w>
+        <w>חָרֵ֔ב</w>
+        <w>וְ/אַתֶּ֥ם</w>
+        <w>רָצִ֖ים</w>
+        <w>אִ֥ישׁ</w>
+        <w>לְ/בֵיתֹֽ/ו׃</w>
+      </v>
+      <v n="10">
+        <w>עַל־כֵּ֣ן</w>
+        <w>עֲלֵי/כֶ֔ם</w>
+        <w>כָּלְא֥וּ</w>
+        <w>שָׁמַ֖יִם</w>
+        <w>מִ/טָּ֑ל</w>
+        <w>וְ/הָ/אָ֖רֶץ</w>
+        <w>כָּלְאָ֥ה</w>
+        <w>יְבוּלָֽ/הּ׃</w>
+      </v>
+      <v n="11">
+        <w>וָ/אֶקְרָ֨א</w>
+        <w>חֹ֜רֶב</w>
+        <w>עַל־הָ/אָ֣רֶץ</w>
+        <w>וְ/עַל־הֶ/הָרִ֗ים</w>
+        <w>וְ/עַל־הַ/דָּגָן֙</w>
+        <w>וְ/עַל־הַ/תִּירֹ֣ושׁ</w>
+        <w>וְ/עַל־הַ/יִּצְהָ֔ר</w>
+        <w>וְ/עַ֛ל</w>
+        <w>אֲשֶׁ֥ר</w>
+        <w>תֹּוצִ֖יא</w>
+        <w>הָ/אֲדָמָ֑ה</w>
+        <w>וְ/עַל־הָֽ/אָדָם֙</w>
+        <w>וְ/עַל־הַ/בְּהֵמָ֔ה</w>
+        <w>וְ/עַ֖ל</w>
+        <w>כָּל־יְגִ֥יעַ</w>
+        <w>כַּפָּֽיִם׃</w>
+        <samekh/>
+      </v>
+      <v n="12">
+        <w>וַ/יִּשְׁמַ֣ע</w>
+        <w>זְרֻבָּבֶ֣ל ׀</w>
+        <w>בֶּֽן־שַׁלְתִּיאֵ֡ל</w>
+        <w>וִ/יהֹושֻׁ֣עַ</w>
+        <w>בֶּן־יְהֹוצָדָק֩</w>
+        <w>הַ/כֹּהֵ֨ן</w>
+        <w>הַ/גָּדֹ֜ול</w>
+        <w>וְ/כֹ֣ל ׀</w>
+        <w>שְׁאֵרִ֣ית</w>
+        <w>הָ/עָ֗ם</w>
+        <w>בְּ/קֹול֙</w>
+        <w>יְהוָ֣ה</w>
+        <w>אֱלֹֽהֵי/הֶ֔ם</w>
+        <w>וְ/עַל־דִּבְרֵי֙</w>
+        <w>חַגַּ֣י</w>
+        <w>הַ/נָּבִ֔יא</w>
+        <w>כַּ/אֲשֶׁ֥ר</w>
+        <w>שְׁלָחֹ֖/ו</w>
+        <w>יְהוָ֣ה</w>
+        <w>אֱלֹהֵי/הֶ֑ם</w>
+        <w>וַ/יִּֽירְא֥וּ</w>
+        <w>הָ/עָ֖ם</w>
+        <w>מִ/פְּנֵ֥י</w>
+        <w>יְהוָֽה׃</w>
+      </v>
+      <v n="13">
+        <w>וַ֠/יֹּאמֶר</w>
+        <w>חַגַּ֞י</w>
+        <w>מַלְאַ֧ךְ</w>
+        <w>יְהוָ֛ה</w>
+        <w>בְּ/מַלְאֲכ֥וּת</w>
+        <w>יְהוָ֖ה</w>
+        <w>לָ/עָ֣ם</w>
+        <w>לֵ/אמֹ֑ר</w>
+        <w>אֲנִ֥י</w>
+        <w>אִתְּ/כֶ֖ם</w>
+        <w>נְאֻם־יְהוָֽה׃</w>
+      </v>
+      <v n="14">
+        <w>וַ/יָּ֣עַר</w>
+        <w>יְהוָ֡ה</w>
+        <w>אֶת־רוּחַ֩</w>
+        <w>זְרֻבָּבֶ֨ל</w>
+        <w>בֶּן־שַׁלְתִּיאֵ֜ל</w>
+        <w>פַּחַ֣ת</w>
+        <w>יְהוּדָ֗ה</w>
+        <w>וְ/אֶת־ר֙וּחַ֙</w>
+        <w>יְהֹושֻׁ֤עַ</w>
+        <w>בֶּן־יְהֹוצָדָק֙</w>
+        <w>הַ/כֹּהֵ֣ן</w>
+        <w>הַ/גָּדֹ֔ול</w>
+        <w>וְֽ/אֶת־ר֔וּחַ</w>
+        <w>כֹּ֖ל</w>
+        <w>שְׁאֵרִ֣ית</w>
+        <w>הָ/עָ֑ם</w>
+        <w>וַ/יָּבֹ֙אוּ֙</w>
+        <w>וַ/יַּעֲשׂ֣וּ</w>
+        <w>מְלָאכָ֔ה</w>
+        <w>בְּ/בֵית־יְהוָ֥ה</w>
+        <w>צְבָאֹ֖ות</w>
+        <w>אֱלֹהֵי/הֶֽם׃</w>
+        <pe/>
+      </v>
+      <v n="15">
+        <w>בְּ/יֹ֨ום</w>
+        <w>עֶשְׂרִ֧ים</w>
+        <w>וְ/אַרְבָּעָ֛ה</w>
+        <w>לַ/חֹ֖דֶשׁ</w>
+        <w>בַּ/שִּׁשִּׁ֑י</w>
+        <w>בִּ/שְׁנַ֥ת</w>
+        <w>שְׁתַּ֖יִם</w>
+        <w>לְ/דָרְיָ֥וֶשׁ</w>
+        <w>הַ/מֶּֽלֶךְ׃</w>
+      </v>
+      <vs>15</vs>
+    </c>
+    <c n="2">
+      <v n="1">
+        <w>בַּ/שְּׁבִיעִ֕י</w>
+        <w>בְּ/עֶשְׂרִ֥ים</w>
+        <w>וְ/אֶחָ֖ד</w>
+        <w>לַ/חֹ֑דֶשׁ</w>
+        <w>הָיָה֙</w>
+        <w>דְּבַר־יְהוָ֔ה</w>
+        <w>בְּ/יַד־חַגַּ֥י</w>
+        <w>הַ/נָּבִ֖יא</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="2">
+        <w>אֱמָר־נָ֗א</w>
+        <w>אֶל־זְרֻבָּבֶ֤ל</w>
+        <w>בֶּן־שַׁלְתִּיאֵל֙</w>
+        <w>פַּחַ֣ת</w>
+        <w>יְהוּדָ֔ה</w>
+        <w>וְ/אֶל־יְהֹושֻׁ֥עַ</w>
+        <w>בֶּן־יְהֹוצָדָ֖ק</w>
+        <w>הַ/כֹּהֵ֣ן</w>
+        <w>הַ/גָּדֹ֑ול</w>
+        <w>וְ/אֶל־שְׁאֵרִ֥ית</w>
+        <w>הָ/עָ֖ם</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="3">
+        <w>מִ֤י</w>
+        <w>בָ/כֶם֙</w>
+        <w>הַ/נִּשְׁאָ֔ר</w>
+        <w>אֲשֶׁ֤ר</w>
+        <w>רָאָה֙</w>
+        <w>אֶת־הַ/בַּ֣יִת</w>
+        <w>הַ/זֶּ֔ה</w>
+        <w>בִּ/כְבֹודֹ֖/ו</w>
+        <w>הָ/רִאשֹׁ֑ון</w>
+        <w>וּ/מָ֨ה</w>
+        <w>אַתֶּ֜ם</w>
+        <w>רֹאִ֤ים</w>
+        <w>אֹתֹ/ו֙</w>
+        <w>עַ֔תָּה</w>
+        <w>הֲ/לֹ֥וא</w>
+        <w>כָמֹ֛/הוּ</w>
+        <w>כְּ/אַ֖יִן</w>
+        <w>בְּ/עֵינֵי/כֶֽם׃</w>
+      </v>
+      <v n="4">
+        <w>וְ/עַתָּ֣ה</w>
+        <w>חֲזַ֣ק</w>
+        <w>זְרֻבָּבֶ֣ל ׀</w>
+        <w>נְאֻם־יְהוָ֡ה</w>
+        <w>וַ/חֲזַ֣ק</w>
+        <w>יְהֹושֻׁ֣עַ</w>
+        <w>בֶּן־יְהֹוצָדָק֩</w>
+        <w>הַ/כֹּהֵ֨ן</w>
+        <w>הַ/גָּדֹ֜ול</w>
+        <w>וַ/חֲזַ֨ק</w>
+        <w>כָּל־עַ֥ם</w>
+        <w>הָ/אָ֛רֶץ</w>
+        <w>נְאֻם־יְהוָ֖ה</w>
+        <w>וַֽ/עֲשׂ֑וּ</w>
+        <w>כִּֽי־אֲנִ֣י</w>
+        <w>אִתְּ/כֶ֔ם</w>
+        <w>נְאֻ֖ם</w>
+        <w>יְהוָ֥ה</w>
+        <w>צְבָאֹֽות׃</w>
+      </v>
+      <v n="5">
+        <w>אֶֽת־הַ/דָּבָ֞ר</w>
+        <w>אֲשֶׁר־כָּרַ֤תִּי</w>
+        <w>אִתְּ/כֶם֙</w>
+        <w>בְּ/צֵאתְ/כֶ֣ם</w>
+        <w>מִ/מִּצְרַ֔יִם</w>
+        <w>וְ/רוּחִ֖/י</w>
+        <w>עֹמֶ֣דֶת</w>
+        <w>בְּ/תֹוכְ/כֶ֑ם</w>
+        <w>אַל־תִּירָֽאוּ׃</w>
+        <samekh/>
+      </v>
+      <v n="6">
+        <w>כִּ֣י</w>
+        <w>כֹ֤ה</w>
+        <w>אָמַר֙</w>
+        <w>יְהוָ֣ה</w>
+        <w>צְבָאֹ֔ות</w>
+        <w>עֹ֥וד</w>
+        <w>אַחַ֖ת</w>
+        <w>מְעַ֣ט</w>
+        <w>הִ֑יא</w>
+        <w>וַ/אֲנִ֗י</w>
+        <w>מַרְעִישׁ֙</w>
+        <w>אֶת־הַ/שָּׁמַ֣יִם</w>
+        <w>וְ/אֶת־הָ/אָ֔רֶץ</w>
+        <w>וְ/אֶת־הַ/יָּ֖ם</w>
+        <w>וְ/אֶת־הֶ/חָרָבָֽה׃</w>
+      </v>
+      <v n="7">
+        <w>וְ/הִרְעַשְׁתִּי֙</w>
+        <w>אֶת־כָּל־הַ/גֹּויִ֔ם</w>
+        <w>וּ/בָ֖אוּ</w>
+        <w>חֶמְדַּ֣ת</w>
+        <w>כָּל־הַ/גֹּויִ֑ם</w>
+        <w>וּ/מִלֵּאתִ֞י</w>
+        <w>אֶת־הַ/בַּ֤יִת</w>
+        <w>הַ/זֶּה֙</w>
+        <w>כָּבֹ֔וד</w>
+        <w>אָמַ֖ר</w>
+        <w>יְהוָ֥ה</w>
+        <w>צְבָאֹֽות׃</w>
+      </v>
+      <v n="8">
+        <w>לִ֥/י</w>
+        <w>הַ/כֶּ֖סֶף</w>
+        <w>וְ/לִ֣/י</w>
+        <w>הַ/זָּהָ֑ב</w>
+        <w>נְאֻ֖ם</w>
+        <w>יְהוָ֥ה</w>
+        <w>צְבָאֹֽות׃</w>
+      </v>
+      <v n="9">
+        <w>גָּדֹ֣ול</w>
+        <w>יִֽהְיֶ֡ה</w>
+        <w>כְּבֹוד֩</w>
+        <w>הַ/בַּ֨יִת</w>
+        <w>הַ/זֶּ֤ה</w>
+        <w>הָ/אַֽחֲרֹון֙</w>
+        <w>מִן־הָ֣/רִאשֹׁ֔ון</w>
+        <w>אָמַ֖ר</w>
+        <w>יְהוָ֣ה</w>
+        <w>צְבָאֹ֑ות</w>
+        <w>וּ/בַ/מָּקֹ֤ום</w>
+        <w>הַ/זֶּה֙</w>
+        <w>אֶתֵּ֣ן</w>
+        <w>שָׁלֹ֔ום</w>
+        <w>נְאֻ֖ם</w>
+        <w>יְהוָ֥ה</w>
+        <w>צְבָאֹֽות׃</w>
+        <pe/>
+      </v>
+      <v n="10">
+        <w>בְּ/עֶשְׂרִ֤ים</w>
+        <w>וְ/אַרְבָּעָה֙</w>
+        <w>לַ/תְּשִׁיעִ֔י</w>
+        <w>בִּ/שְׁנַ֥ת</w>
+        <w>שְׁתַּ֖יִם</w>
+        <w>לְ/דָרְיָ֑וֶשׁ</w>
+        <w>הָיָה֙</w>
+        <w>דְּבַר־יְהוָ֔ה</w>
+        <w>אֶל־חַגַּ֥י</w>
+        <w>הַ/נָּבִ֖יא</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="11">
+        <w>כֹּ֥ה</w>
+        <w>אָמַ֖ר</w>
+        <w>יְהוָ֣ה</w>
+        <w>צְבָאֹ֑ות</w>
+        <w>שְׁאַל־נָ֧א</w>
+        <w>אֶת־הַ/כֹּהֲנִ֛ים</w>
+        <w>תֹּורָ֖ה</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="12">
+        <w>הֵ֣ן ׀</w>
+        <w>יִשָּׂא־אִ֨ישׁ</w>
+        <w>בְּשַׂר־קֹ֜דֶשׁ</w>
+        <w>בִּ/כְנַ֣ף</w>
+        <w>בִּגְדֹ֗/ו</w>
+        <w>וְ/נָגַ֣ע</w>
+        <w>בִּ֠/כְנָפֹ/ו</w>
+        <w>אֶל־הַ/לֶּ֨חֶם</w>
+        <w>וְ/אֶל־הַ/נָּזִ֜יד</w>
+        <w>וְ/אֶל־הַ/יַּ֧יִן</w>
+        <w>וְ/אֶל־שֶׁ֛מֶן</w>
+        <w>וְ/אֶל־כָּל־מַאֲכָ֖ל</w>
+        <w>הֲ/יִקְדָּ֑שׁ</w>
+        <w>וַ/יַּעֲנ֧וּ</w>
+        <w>הַ/כֹּהֲנִ֛ים</w>
+        <w>וַ/יֹּאמְר֖וּ</w>
+        <w>לֹֽא׃</w>
+      </v>
+      <v n="13">
+        <w>וַ/יֹּ֣אמֶר</w>
+        <w>חַגַּ֔י</w>
+        <w>אִם־יִגַּ֧ע</w>
+        <w>טְמֵא־נֶ֛פֶשׁ</w>
+        <w>בְּ/כָל־אֵ֖לֶּה</w>
+        <w>הֲ/יִטְמָ֑א</w>
+        <w>וַ/יַּעֲנ֧וּ</w>
+        <w>הַ/כֹּהֲנִ֛ים</w>
+        <w>וַ/יֹּאמְר֖וּ</w>
+        <w>יִטְמָֽא׃</w>
+      </v>
+      <v n="14">
+        <w>וַ/יַּ֨עַן</w>
+        <w>חַגַּ֜י</w>
+        <w>וַ/יֹּ֗אמֶר</w>
+        <w>כֵּ֣ן</w>
+        <w>הָֽ/עָם־הַ֠/זֶּה</w>
+        <w>וְ/כֵן־הַ/גֹּ֨וי</w>
+        <w>הַ/זֶּ֤ה</w>
+        <w>לְ/פָנַי֙</w>
+        <w>נְאֻם־יְהוָ֔ה</w>
+        <w>וְ/כֵ֖ן</w>
+        <w>כָּל־מַעֲשֵׂ֣ה</w>
+        <w>יְדֵי/הֶ֑ם</w>
+        <w>וַ/אֲשֶׁ֥ר</w>
+        <w>יַקְרִ֛יבוּ</w>
+        <w>שָׁ֖ם</w>
+        <w>טָמֵ֥א</w>
+        <w>הֽוּא׃</w>
+      </v>
+      <v n="15">
+        <w>וְ/עַתָּה֙</w>
+        <w>שִֽׂימוּ־נָ֣א</w>
+        <w>לְבַבְ/כֶ֔ם</w>
+        <w>מִן־הַ/יֹּ֥ום</w>
+        <w>הַ/זֶּ֖ה</w>
+        <w>וָ/מָ֑עְלָ/ה</w>
+        <w>מִ/טֶּ֧רֶם</w>
+        <w>שֽׂוּם־אֶ֛בֶן</w>
+        <w>אֶל־אֶ֖בֶן</w>
+        <w>בְּ/הֵיכַ֥ל</w>
+        <w>יְהוָֽה׃</w>
+      </v>
+      <v n="16">
+        <w>מִֽ/הְיֹותָ֥/ם</w>
+        <w>בָּא֙</w>
+        <w>אֶל־עֲרֵמַ֣ת</w>
+        <w>עֶשְׂרִ֔ים</w>
+        <w>וְ/הָיְתָ֖ה</w>
+        <w>עֲשָׂרָ֑ה</w>
+        <w>בָּ֣א</w>
+        <w>אֶל־הַ/יֶּ֗קֶב</w>
+        <w>לַ/חְשֹׂף֙</w>
+        <w>חֲמִשִּׁ֣ים</w>
+        <w>פּוּרָ֔ה</w>
+        <w>וְ/הָיְתָ֖ה</w>
+        <w>עֶשְׂרִֽים׃</w>
+      </v>
+      <v n="17">
+        <w>הִכֵּ֨יתִי</w>
+        <w>אֶתְ/כֶ֜ם</w>
+        <w>בַּ/שִּׁדָּפֹ֤ון</w>
+        <w>וּ/בַ/יֵּֽרָקֹון֙</w>
+        <w>וּ/בַ/בָּרָ֔ד</w>
+        <w>אֵ֖ת</w>
+        <w>כָּל־מַעֲשֵׂ֣ה</w>
+        <w>יְדֵי/כֶ֑ם</w>
+        <w>וְ/אֵין־אֶתְ/כֶ֥ם</w>
+        <w>אֵלַ֖/י</w>
+        <w>נְאֻם־יְהוָֽה׃</w>
+      </v>
+      <v n="18">
+        <w>שִׂימוּ־נָ֣א</w>
+        <w>לְבַבְ/כֶ֔ם</w>
+        <w>מִן־הַ/יֹּ֥ום</w>
+        <w>הַ/זֶּ֖ה</w>
+        <w>וָ/מָ֑עְלָ/ה</w>
+        <w>מִ/יֹּום֩</w>
+        <w>עֶשְׂרִ֨ים</w>
+        <w>וְ/אַרְבָּעָ֜ה</w>
+        <w>לַ/תְּשִׁיעִ֗י</w>
+        <w>לְ/מִן־הַ/יֹּ֛ום</w>
+        <w>אֲשֶׁר־יֻסַּ֥ד</w>
+        <w>הֵֽיכַל־יְהוָ֖ה</w>
+        <w>שִׂ֥ימוּ</w>
+        <w>לְבַבְ/כֶֽם׃</w>
+      </v>
+      <v n="19">
+        <w>הַ/עֹ֤וד</w>
+        <w>הַ/זֶּ֙רַע֙</w>
+        <w>בַּ/מְּגוּרָ֔ה</w>
+        <w>וְ/עַד־הַ/גֶּ֨פֶן</w>
+        <w>וְ/הַ/תְּאֵנָ֧ה</w>
+        <w>וְ/הָ/רִמֹּ֛ון</w>
+        <w>וְ/עֵ֥ץ</w>
+        <w>הַ/זַּ֖יִת</w>
+        <w>לֹ֣א</w>
+        <w>נָשָׂ֑א</w>
+        <w>מִן־הַ/יֹּ֥ום</w>
+        <w>הַ/זֶּ֖ה</w>
+        <w>אֲבָרֵֽךְ׃</w>
+        <samekh/>
+      </v>
+      <v n="20">
+        <w>וַ/יְהִ֨י</w>
+        <w>דְבַר־יְהוָ֤ה ׀</w>
+        <w>שֵׁנִית֙</w>
+        <w>אֶל־חַגַּ֔י</w>
+        <w>בְּ/עֶשְׂרִ֧ים</w>
+        <w>וְ/אַרְבָּעָ֛ה</w>
+        <w>לַ/חֹ֖דֶשׁ</w>
+        <w>לֵ/אמֹֽר׃</w>
+      </v>
+      <v n="21">
+        <w>אֱמֹ֕ר</w>
+        <w>אֶל־זְרֻבָּבֶ֥ל</w>
+        <w>פַּֽחַת־יְהוּדָ֖ה</w>
+        <w>לֵ/אמֹ֑ר</w>
+        <w>אֲנִ֣י</w>
+        <w>מַרְעִ֔ישׁ</w>
+        <w>אֶת־הַ/שָּׁמַ֖יִם</w>
+        <w>וְ/אֶת־הָ/אָֽרֶץ׃</w>
+      </v>
+      <v n="22">
+        <w>וְ/הָֽפַכְתִּי֙</w>
+        <w>כִּסֵּ֣א</w>
+        <w>מַמְלָכֹ֔ות</w>
+        <w>וְ/הִ֨שְׁמַדְתִּ֔י</w>
+        <w>חֹ֖זֶק</w>
+        <w>מַמְלְכֹ֣ות</w>
+        <w>הַ/גֹּויִ֑ם</w>
+        <w>וְ/הָפַכְתִּ֤י</w>
+        <w>מֶרְכָּבָה֙</w>
+        <w>וְ/רֹ֣כְבֶ֔י/הָ</w>
+        <w>וְ/יָרְד֤וּ</w>
+        <w>סוּסִים֙</w>
+        <w>וְ/רֹ֣כְבֵי/הֶ֔ם</w>
+        <w>אִ֖ישׁ</w>
+        <w>בְּ/חֶ֥רֶב</w>
+        <w>אָחִֽי/ו׃</w>
+      </v>
+      <v n="23">
+        <w>בַּ/יֹּ֣ום</w>
+        <w>הַ/ה֣וּא</w>
+        <w>נְאֻם־יְהוָ֣ה</w>
+        <w>צְבָאֹ֡ות</w>
+        <w>אֶ֠קָּחֲ/ךָ</w>
+        <w>זְרֻבָּבֶ֨ל</w>
+        <w>בֶּן־שְׁאַלְתִּיאֵ֤ל</w>
+        <w>עַבְדִּ/י֙</w>
+        <w>נְאֻם־יְהוָ֔ה</w>
+        <w>וְ/שַׂמְתִּ֖י/ךָ</w>
+        <w>כַּֽ/חֹותָ֑ם</w>
+        <w>כִּֽי־בְ/ךָ֣</w>
+        <w>בָחַ֔רְתִּי</w>
+        <w>נְאֻ֖ם</w>
+        <w>יְהוָ֥ה</w>
+        <w>צְבָאֹֽות׃</w>
+      </v>
+      <vs>23</vs>
+    </c>
+    <vs>38</vs>
+    <cs>2</cs>
+  </book>
+</tanach>
+<notes>
+  <note>
+    <code>1</code>
+    <note>BHS has been faithful to the Leningrad Codex where 
+there might be a question of the validity of the form 
+and we keep the same form as BHS.</note>
+  </note>
+  <note>
+    <code>2</code>
+    <note>We have added a sop pasuq where L and BHC omit it.
+(The added sof pasuq often is missing from the text.)</note>
+  </note>
+  <note>
+    <code>3</code>
+    <note>We read or understand L differently than BHC (1983 Edition). 
+Often this notation indicates a typographical error in BHS.</note>
+  </note>
+  <note>
+    <code>4</code>
+    <note>Puncta Extraordaria -- 
+a \u05c4 is used to mark such marks in the text
+when they are above the line and
+a \u0323 when they are below the line.</note>
+  </note>
+  <note>
+    <code>5</code>
+    <note>Large letter(s).</note>
+  </note>
+  <note>
+    <code>6</code>
+    <note>Small letter(s).</note>
+  </note>
+  <note>
+    <code>7</code>
+    <note>Suspended letter(s).</note>
+  </note>
+  <note>
+    <code>8</code>
+    <note>Inverted nun in the text.</note>
+  </note>
+  <note>
+    <code>9</code>
+    <note>BHS has abandoned L and we concur. 
+All of these occurrences are ketib/qere problems.</note>
+  </note>
+  <note>
+    <code>a</code>
+    <note>Adaptations to a Qere which L and BHS, by their design, do not indicate.</note>
+  </note>
+  <note>
+    <code>m</code>
+    <note>Miscellaneous notes to the text and occasions 
+where more than one bracket category applies.</note>
+  </note>
+  <note>
+    <code>q</code>
+    <note>We have abandoned or added a ketib/qere relative to BHS. 
+In doing this we agree with L against BHS.</note>
+  </note>
+  <note>
+    <code>y</code>
+    <note>Yathir readings in L which we have designated as Qeres 
+when both Dothan and BHS list a Qere.</note>
+  </note>
+</notes>
+</Tanach>

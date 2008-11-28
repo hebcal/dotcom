@@ -1,0 +1,7 @@
+URI: index
+
+URI: index.php
+Content-Type: text/html; qs=0.8
+
+URI: wap-shabbat.php
+Content-Type: text/vnd.wap.wml; qs=0.5

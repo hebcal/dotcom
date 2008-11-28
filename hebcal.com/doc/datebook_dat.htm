@@ -1,0 +1,550 @@
+<HTML>
+<HEAD>
+<TITLE>PalmPilot desktop Datebook.dat and Datebook.dba File Format</TITLE>
+<META content=PalmPilot,DateBook,Programing name=KeyWords>
+</HEAD>
+<BODY bgColor=#ffffff>
+<!-- HTML Markup startspan -->
+<!-- BEGIN LINKEXCHANGE CODE --> 
+<center><iframe src="http://leader.linkexchange.com/4/X420876/showiframe?" width=468 height=60 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no>
+<a href="http://leader.linkexchange.com/4/X420876/clickle" target="_top"><img width=468 height=60 border=0 ismap alt="" src="http://leader.linkexchange.com/4/X420876/showle?"></a></iframe><br><a href="http://leader.linkexchange.com/4/X420876/clicklogo" target="_top"><img src="http://leader.linkexchange.com/4/X420876/showlogo?" width=468 height=16 border=0 ismap alt=""></a><br></center>
+<!-- END LINKEXCHANGE CODE -->
+
+<!-- HTML Markup endspan -->
+<p>
+<center>
+<font size="-2" face="Arial,Helvetica">
+<a href="palmrecs.htm">[Introduction]</a>
+<a href="address_dat.htm">[Address.Dat]</a>
+[Datebook.Dat]
+<a href="memopad_dat.htm">[Memopad.Dat]</a>
+<a href="todo_dat.htm">[Todo.Dat]</a>
+<a href="users_dat.htm">[Users.Dat]</a>
+<a href="index.html">[Home]</a>
+<br>
+</font></center>
+<h2>Palm Desktop Software DATEBOOK.DAT and DATEBOOK.DBA File Structure</h2>
+
+<ul>
+<li>These formats apply to the Windows version of the Palm Desktop software.
+<li>The information presented here may or may not be accurate, the
+author makes no representation as to the accuracy of any information
+supplied.
+<li>Palm does not recommend that you program to the structure of the
+desktop data files. They have publicly stated that these files are
+subject to change at any time. Use this information at your own risk!
+</ul>
+<p>
+
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Field Name</TH>
+    <TH vAlign=top>Type</TH>
+    <TH vAlign=top>Size</TH>
+    <TH vAlign=top>Comments</TH></TR>
+  <TR>
+    <TD vAlign=top>Version Tag</TD>
+    <TD vAlign=top>Char</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>0x00 0x01 0x42 0x44 (DB10) for Datebook</TD></TR>
+  <TR>
+    <TD vAlign=top>File Name</TD>
+    <TD vAlign=top>CString</TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>Fully Qualified Filename of file on PC</TD></TR>
+  <TR>
+    <TD vAlign=top>Table String</TD>
+    <TD vAlign=top>CString</TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>Custom show header</TD></TR>
+  <TR>
+    <TD vAlign=top>Next Free</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Next Free Category ID</TD></TR>
+  <TR>
+    <TD vAlign=top>Category Count</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Count - 1 of the number of category entries (does not include Unfiled category)</TD></TR>
+  <TR>
+    <TD vAlign=top>Category entries</TD>
+    <TD vAlign=top><a href="#category">Category-Entry</a></TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>Occurs category count times (Note: the standard Palm datebook doesn't use categories, but the feature is actually
+          supported. 3rd party software may rely on categories, so you should allow for the possibility in your programming.)</TD></TR>
+  <TR>
+    <TD vAlign=top>Resource ID</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Schema Resource ID</TD></TR>
+  <TR>
+    <TD vAlign=top>Fields per Row</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Schema Fields per row. Will be 15 for datebook.</TD></TR>
+  <TR>
+    <TD vAlign=top>Rec ID Pos</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Schema Record ID Position (index to field table entry that contains record id)</TD></TR>
+  <TR>
+    <TD vAlign=top>Rec Status Pos</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Schema Record Status Position (index to field table entry that contains record status)</TD></TR>
+  <TR>
+    <TD vAlign=top>Placement Pos</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Schema Placement Position (index to field table entry that contains record placement position)</TD></TR>
+  <TR>
+    <TD vAlign=top>Field Count</TD>
+    <TD vAlign=top>Short</TD>
+    <TD vAlign=top>2*Byte</TD>
+    <TD vAlign=top>Schema Field Count (number of fields in schema) <font color=red>Corrected April 19, 2000</font></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Entry</TD>
+    <TD vAlign=top>Short</TD>
+    <TD vAlign=top>2*Byte</TD>
+    <TD vAlign=top>Schema field entry occurs field count times. For datebook the entries will
+     be 1,1,1,3,1,5,1,5,6,6,1,6,1,1,8 <font color=red>Corrected April 19, 2000</font></TD></TR>
+  <TR>
+    <TD vAlign=top>Num Entries</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Record count * 15 (number of field entries in entire file, as noted, divide by 15 to arrive at actual record count)</TD></TR>
+  <TR>
+
+    <TD vAlign=top>Datebook entry</TD>
+    <TD vAlign=top><a href="#datebook">Datebook-Entry</a></TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>Occurs with record count (note, these records may be sorted in a specific order. It looks like the repeating events are first in the file. If you are adding
+          records to the file, you may need to insert the records in the proper sort order)</TD></TR>
+</TBODY></TABLE>
+
+<p>
+
+<a name="category"></a>
+<h2>Category-Entry</h2>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Field Name</TH>
+    <TH vAlign=top>Type</TH>
+    <TH vAlign=top>Size</TH>
+    <TH vAlign=top>Comments</TH></TR>
+  <TR>
+    <TD vAlign=top>Index</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Category Index</TD></TR>
+  <TR>
+    <TD vAlign=top>ID</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Category ID</TD></TR>
+  <TR>
+    <TD vAlign=top>Dirty Flag</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Category Dirty Flag</TD></TR>
+  <TR>
+    <TD vAlign=top>Long Name</TD>
+    <TD vAlign=top>Cstring</TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>Long Category Name</TD></TR>
+  <TR>
+    <TD vAlign=top>Short Name</TD>
+    <TD vAlign=top>Cstring</TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>Short Category Name</TD></TR>
+</TBODY></TABLE>
+
+
+
+<p>
+<a name="datebook"></a>
+<h2>Datebook-Entry</h2>
+
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Field Name</TH>
+    <TH vAlign=top>Type</TH>
+    <TH vAlign=top>Size</TH>
+    <TH vAlign=top>Comments</TH></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Record ID</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Status Field</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Bitwise Record Status: Pending = 0x08, Add = 0x01, Update = 0x02, Delete = 0x04, Archive = 0x80 </TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Position</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 3 Date</TD></TR>
+  <TR>
+    <TD vAlign=top>Start Time</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Number of non-leap seconds since Jan 1, 1970 GMT</TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>End Time</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Number of non-leap seconds since Jan 1, 1970 GMT</TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 5 Cstring</TD></TR>
+  <TR>
+    <TD vAlign=top>Padding</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Always Zero <font color=red>Correction as of Nov 16, 1999<font></TD></TR>
+  <TR>
+    <TD vAlign=top>Description</TD>
+    <TD vAlign=top>Cstring</TD>
+    <TD vAlign=top></TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Duration</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 5 Cstring</TD></TR>
+  <TR>
+    <TD vAlign=top>Padding</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Always Zero <font color=red>Correction as of Nov 16, 1999<font></TD></TR>
+  <TR>
+    <TD vAlign=top>Note</TD>
+    <TD vAlign=top>Cstring</TD>
+    <TD vAlign=top></TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 6 Boolean</TD></TR>
+  <TR>
+    <TD vAlign=top>Untimed</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 6 Boolean</TD></TR>
+  <TR>
+    <TD vAlign=top>Private</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Category</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 6 Boolean</TD></TR>
+  <TR>
+    <TD vAlign=top>Alarm Set</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top></TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Alarm Adv Units</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Alarm Advance time units</TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 1 Integer</TD></TR>
+  <TR>
+    <TD vAlign=top>Alarm Adv Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>0-Minutes, 1-Hours, 2-Days</TD></TR>
+  <TR>
+    <TD vAlign=top>Field Type</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>value 8 Repeat event</TD></TR>
+  <TR>
+    <TD vAlign=top>Repeat Event</TD>
+    <TD vAlign=top><a href="#repeat">Repeat-Event</a></TD>
+    <TD vAlign=top></TD>
+    <TD vAlign=top>&nbsp;</TD></TR>
+</TBODY>
+</TABLE>
+
+<a name="repeat"></a>
+<h2>Repeat-Event</h2>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Field Name</TH>
+    <TH vAlign=top>Type</TH>
+    <TH vAlign=top>Size</TH>
+    <TH vAlign=top>Comments</TH></TR>
+  <TR>
+    <TD vAlign=top>Date Exceptions</TD>
+    <TD vAlign=top>Short</TD>
+    <TD vAlign=top>2*Byte</TD>
+    <TD vAlign=top>Count of any date exception entries <font color=red>Corrected Nov 16, 1999</font></TD></TR>
+  <TR>
+    <TD vAlign=top>Exception entry</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>date exception entry, occurs with Date Exceptions. If date exceptions is zero, there will be no entries here.</TD></TR>
+  <TR>
+    <TD vAlign=top>Repeat Event Flag</TD>
+    <TD vAlign=top>Short</TD>
+    <TD vAlign=top>2*Byte</TD>
+    <TD vAlign=top><font color=red>IMPORTANT</font> 0xFFFF means that a class name record follows.<br>
+                                  0x0000 that nothing further follows, you should stop reading the record.<br>
+                                  Any other value will be the brand of the repeat event or'd with 0x8000</TD></TR>
+  <TR>
+    <TD vAlign=top>Class entry</TD>
+    <TD vAlign=top><a href="#class">Class-Entry</a></TD>
+    <TD vAlign=top>&nbsp;</TD>
+    <TD vAlign=top>This field is present ONLY if the repeat event flag is 0xFFFF</TD></TR>
+  <TR>
+    <TD vAlign=top>Brand</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>The Brand of the repeat event. Possible values are:<br>
+                   1 = Daily<br>
+                   2 = Weekly<br>
+                   3 = MonthlybyDay<br>
+                   4 = MonthlybyDate<br>
+                   5 = YearlybyDate<br>
+                   6 = YearlybyDay<br>
+                   Note that this field is present ONLY if the repeat event flag was NOT 0x0000
+                   </TD></TR>
+  <TR>
+    <TD vAlign=top>Interval</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Note that this field is present ONLY if the repeat event flag was NOT 0x0000</TD></TR>
+  <TR>
+    <TD vAlign=top>End Date</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Note that this field is present ONLY if the repeat event flag was NOT 0x0000</TD></TR>
+  <TR>
+    <TD vAlign=top>First Day of Week</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Note that this field is present ONLY if the repeat event flag was NOT 0x0000</TD></TR>
+  <TR>
+    <TD vAlign=top>Brand Data</TD>
+    <TD vAlign=top><a href="#brand">Brand-Data</a></TD>
+    <TD vAlign=top></TD>
+    <TD vAlign=top>Variable brand data that depends upon the value of the Brand field<br>
+            Note that this field is present ONLY if the repeat event flag was NOT 0x0000</TD></TR>
+
+</TBODY></TABLE>
+
+<p>
+
+<a name="class"></a>
+<h2>Class-Entry</h2>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Field Name</TH>
+    <TH vAlign=top>Type</TH>
+    <TH vAlign=top>Size</TH>
+    <TH vAlign=top>Comments</TH></TR>
+  <TR>
+    <TD vAlign=top>Constant</TD>
+    <TD vAlign=top>Short</TD>
+    <TD vAlign=top>2*Byte</TD>
+    <TD vAlign=top>Constant 1</TD></TR>
+  <TR>
+    <TD vAlign=top>Length</TD>
+    <TD vAlign=top>Short</TD>
+    <TD vAlign=top>2*Byte</TD>
+    <TD vAlign=top>Length of Class Name</TD></TR>
+  <TR>
+    <TD vAlign=top>Class Name</TD>
+    <TD vAlign=top>Char</TD>
+    <TD vAlign=top>Byte</TD>
+    <TD vAlign=top>Class name of length specified. </TD></TR>
+</TBODY></TABLE>
+
+<a name="brand"></a>
+<h2>Brand-Data</h2>
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Field Name</TH>
+    <TH vAlign=top>Type</TH>
+    <TH vAlign=top>Size</TH>
+    <TH vAlign=top>Comments</TH></TR>
+  <TR>
+    <TD vAlign=top>Day Index</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Present ONLY for Brand = 1 or Brand = 2 or Brand = 3</TD></TR>
+  <TR>
+    <TD vAlign=top>Days Mask</TD>
+    <TD vAlign=top>Char</TD>
+    <TD vAlign=top>1*Byte</TD>
+    <TD vAlign=top>Present ONLY for Brand = 2</TD></TR>
+  <TR>
+    <TD vAlign=top>Week Index</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Present ONLY for Brand = 3</TD></TR>
+  <TR>
+    <TD vAlign=top>Day Number</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Present ONLY for Brand = 4 or Brand = 5</TD></TR>
+  <TR>
+    <TD vAlign=top>Month Index</TD>
+    <TD vAlign=top>Long</TD>
+    <TD vAlign=top>4*Byte</TD>
+    <TD vAlign=top>Present ONLY for Brand = 5</TD></TR>
+</TBODY></TABLE>
+
+
+
+<P>
+<h2>Cstrings</h2>
+Cstrings are stored as follows:<br>
+<ol>
+<li> Strings less than 255 bytes are stored with the length specified
+     in the first byte followed by the actual string.
+<li> Zero length strings are stored with a 0x00 byte.
+<li> Strings 255 bytes or longer are stored with a flag byte set to
+     0xFF followed by a short (2*Byte) that specifies the length of
+     the string, followed by the actual string.
+</ol>
+
+<P>
+<h2>Date Fields</h2>
+Date fields are stored as a long that represents the number of non-leap seconds since
+January 1, 1970 GMT. Note that this differs from the capabilities of the PalmOS
+representation on the handheld, which uses a 32 bit unsigned integer to represent the
+number of seconds since January 1, 1904.
+
+<p>
+<a name="ftypes"></a>
+<h2>Field Types</h2>
+The schema mechanism uses field types to identify the data. The
+meanings of the field types are in the table below.
+<TABLE border=1>
+  <TBODY>
+  <TR>
+    <TH vAlign=top>Number</TH>
+    <TH vAlign=top>Meaning</TH>
+  <TR>
+    <TD vAlign=top>0</TD>
+    <TD vAlign=top>None</TD>
+  <TR>
+    <TD vAlign=top>1</TD>
+    <TD vAlign=top>Integer</TD>
+  <TR>
+    <TD vAlign=top>2</TD>
+    <TD vAlign=top>Float</TD>
+  <TR>
+    <TD vAlign=top>3</TD>
+    <TD vAlign=top>Date</TD>
+  <TR>
+    <TD vAlign=top>4</TD>
+    <TD vAlign=top>Alpha</TD>
+  <TR>
+    <TD vAlign=top>5</TD>
+    <TD vAlign=top>Cstring</TD>
+  <TR>
+    <TD vAlign=top>6</TD>
+    <TD vAlign=top>Boolean</TD>
+  <TR>
+    <TD vAlign=top>7</TD>
+    <TD vAlign=top>Bitflag</TD>
+  <TR>
+    <TD vAlign=top>8</TD>
+    <TD vAlign=top>RepeatEvent</TD>
+</TBODY></TABLE>
+
+
+<p>
+<hr>
+<P><CENTER><A HREF="http://bannernetwork.palmpilotarchives.com/" TARGET="_clear"><IMG SRC="http://bannernetwork.palmpilotarchives.com/homebannerpalm.gif" WIDTH=60 HEIGHT=60 ALT="PalmPilotArchives.com Banner Network" BORDER=0></A><IFRAME SRC="http://bannernetwork.palmpilotarchives.com/ads.pl?iframe;member=helphand" MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=NO WIDTH=468 HEIGHT=60><A HREF="http://bannernetwork.palmpilotarchives.com/ads.pl?member=helphand;banner=NonSSI;page=05" TARGET="_clear"><IMG SRC="http://bannernetwork.palmpilotarchives.com/ads.pl?member=helphand;page=05" WIDTH=468 HEIGHT=60 ALT="PalmPilotArchives.com Banner Network" BORDER=0></A></IFRAME></CENTER>
+<p>
+Last updated: October 25, 2000<br>
+Copyright 1999-2000 (C) <a href="http://www.geocities.com/helphand1/">Scott Leighton</a>
+<a href="mailto:helphand@pacbell.net">helphand@pacbell.net</a>
+<center>
+Visits <IMG SRC=http://visit.geocities.com/counter.gif>
+</center>
+
+
+
+</BODY>
+</HTML>
+<!-- text below generated by server. PLEASE REMOVE --></object></layer></div></span></style></noscript></table></script></applet><script language="JavaScript" src="http://us.geocities.com/js_source/geov2.js"></script><script language="javascript">geovisit();</script><noscript><img src="http://visit.geocities.com/visit.gif?1006361547" border=0 width=1 height=1></noscript>
+<IMG SRC="http://geo.yahoo.com/serv?s=76001068&t=1006361547" ALT=1 WIDTH=1 HEIGHT=1>

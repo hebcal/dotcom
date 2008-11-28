@@ -1,0 +1,880 @@
+
+# DBtest.pl    (c) 1999-2000 Scott Leighton
+# Example code for accessing the Palm datebook.dat file
+# By: Scott Leighton    December 12, 1999
+# Permission granted to freely distribute provided that no
+# money changes hands, otherwise contact me: helphand@pacbell.net
+#
+#      IMPORTANT NOTE REGARDING PORTABILITY
+#The code, as written, works fine on Intel systems, but is not portable 
+#to systems that are not little endian. To make the code portable, follow
+#the advice of Beat Seeliger as noted below... thanks Beat for the
+#pointer <g>.    Scott
+#
+#  
+#"By the way I run the script on a Sparc machine with Debian Linux, and
+#a found a little portability problem, that produces strange errors"
+#
+#"To read / write Short and Long values in binary format, you use 
+#(un)pack with the "l" or "s" Format String. This works as long as you
+#are on an little endian byte order system (like Intel). If you would
+#be compatible to other systems use v for shorts and V for longs. This
+#produces you on every sytem a little endian binary."
+#
+#                         Beat Seeliger  April 2000
+
+  use Strict;
+  use Time::Local;
+  use Date::DateCalc qw( dates_difference check_date calc_new_date day_of_week);
+
+  print "DBTest - (c) 2000 Scott Leighton \n";
+
+  $debug = 1;
+
+# date support
+
+  my ($l_min, $l_hour, $l_year, $l_yday) = (localtime $^T)[1, 2, 5, 7];
+  my ($g_min, $g_hour, $g_year, $g_yday) = (   gmtime $^T)[1, 2, 5, 7];
+  my $tzval = sprintf("%05d",(($l_min - $g_min)/60 + $l_hour - $g_hour +
+      24 * ($l_year <=> $g_year || $l_yday <=> $g_yday)) * 100);
+
+  @Month = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+              "Sep", "Oct", "Nov", "Dec");
+  @Day = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+  @Date = localtime();
+  $Date[5] += 1900;
+
+# conversion routines
+
+  sub GetCstring {
+    my $len, $x, $str = "";
+    read (CF, $len, 1) or die "unable to get cstring length: $!\n";
+    $x = unpack "C", $len;
+      if ($x == 0xFF) {
+          read (CF, $x, 2) or die "unable to get long on Cstring: $!\n";
+          $len .=$x;
+          $x = unpack "s", $x;
+      };
+    read (CF, $str, $x) or die "unable to get Cstring contents: $!\n" unless ($x == 0);
+    return ($len, $str);
+  }
+
+  sub GetLong {
+    my $long, $x = "";
+    read (CF, $long, 4) or die "unable to get long: $!\n";
+    $x = unpack "l", $long;
+    return ($long, $x);
+  }
+
+  sub GetShort {
+    my $short, $x = "";
+    read (CF, $short, 2) or die "unable to get short: $!\n";
+    $x = unpack "s", $short;
+    return ($short, $x);
+  }
+
+
+# Unpack the incoming detail file and load into the hashes
+
+  my $fdir = ".\\";
+
+# Grab input file, you should copy it out of your palm\username\datebook
+# directory and work only with a copy.
+
+  $buf = "";
+
+  print "Opening your datebook.dat file.. ";
+  open(CF, "<${fdir}datebook.dat") or die "Can't open datebook.dat : $!\n";
+  print "OK\n";
+  binmode (CF);
+
+# Arrays to stash the various header and appinfo data
+
+  @ci=();
+  @cid=();
+  @cname_dirty=();
+  @clong_name=();
+  @cshort_name=();
+  $p_version_tag = pack "l", 0x0001;
+  $p_version_tag .= "BD";
+  $long_version = 1145176320;
+  $packed_true = pack "l", "1";
+  $packed_arch = pack "l", 0x80;
+  $packed_del  = pack "l", 0x04;
+
+# Read the file headers and stash them to $buf until we hit the number of
+# entries field.
+
+  print "Reading version tag ..";
+  read (CF, $tag, 4) or die "unable to get Tag: $!\n";
+     $buf .=$tag;
+  $x = unpack "l", $tag;
+  if ($x == $long_version) {
+     print "OK\n";
+  } else {
+     printf "expected $long_version, got %d\n", $x;
+  }
+  print "Reading file name ..";
+  ($fn_l, $fn) = GetCstring();
+     $buf .= $fn_l . $fn;
+     print "Got file name $fn \n" if $debug;
+  print "$fn\n";
+  print "Reading table string..";
+  ($ts_l, $ts) = GetCstring();
+     $buf .= $ts_l . $ts;
+     print "Got table string $ts \n" if $debug;
+  print "$ts\n";
+  print "Reading next category id..";
+  ($cnextid, $x) = GetLong();
+     $buf .= $cnextid;
+     print "Got Next Category ID $x \n" if $debug;
+  if ($x == 130) {
+      print "OK, got $x\n";
+  } elsif ($x == 128) {
+      print "OK, got $x\n";
+  } else {
+      print "Unexpected value, wanted 130 got $x\n";
+  }
+  print "Reading category count..";
+  ($c_n, $x) = GetLong();
+     $buf .= $c_n;
+     print "Got Category Count $x \n" if $debug;
+  print "OK, got $x\n";
+     $c_n = unpack "l", $c_n;
+
+# iterate thru the categories (if present)
+
+  print "Reading $x categories..\n" unless $x == 0;
+  $i = 0;
+  while ($i < $c_n) {
+       print "  Reading category $i index..";
+      ($ci[$i], $x) = GetLong();
+         $buf .=$ci[$i];
+         print "   Got Category Index $x \n" if $debug;
+         print "OK, got $x\n";
+       print "     Reading category $i ID..";
+      ($cid[$i], $x) = GetLong();
+         $buf .=$cid[$i];
+         print "   Got Category ID $x \n" if $debug;
+         print "OK, got $x\n";
+       print "     Reading category $i Dirty Flag..";
+      ($cname_dirty[$i], $x) = GetLong();
+         $buf .=$cname_dirty[$i];
+         print "   Got Category Dirty Flag $x \n" if $debug;
+         if ($x == 0) {
+            print "OK, got $x FALSE\n";
+         } elsif ($x == 1) {
+            print "OK, got $x TRUE\n";
+         } else {
+            print "Unexpected result, got $x wanted 1 or 0\n";
+         }
+       print "     Reading category $i long name..";
+      ($cl, $clong_name[$i]) = GetCstring();
+         $buf .=$cl;
+         $buf .=$clong_name[$i];
+         print "   Got Category Long Name $clong_name[$i] \n" if $debug;
+         print "$clong_name[$i]\n";
+       print "     Reading category $i short name..";
+      ($cs, $cshort_name[$i]) = GetCstring();
+         $buf .=$cs;
+         $buf .=$cshort_name[$i];
+         print "   Got Category Short Name $cshort_name[$i] \n" if $debug;
+         print "$cshort_name[$i]\n";
+      $i++;
+  };
+
+  print "Reading resource ID..";
+
+  ($resid, $x) = GetLong();
+     $buf .= $resid;
+     print "Got Resource ID $x \n" if $debug;
+  if ($x == 54) {
+       print "OK, got $x\n";
+  } else {
+       print "Expected 54 got $x\n";
+  }
+
+  print "Reading schema fields per row..";
+
+  ($fpr, $x) = GetLong();
+     $buf .= $fpr;
+     print "Got Fields per row $x \n" if $debug;
+  if ($x = 15) {
+     print "OK, got $x\n";
+  } else {
+     print "Expected 15 got $x\n";
+  }
+
+  print "Reading schema record ID position..";
+
+  ($recidpos, $x) = GetLong();
+     $buf .= $recidpos;
+     print "Got Record ID Position $x \n" if $debug;
+  if ($x = 1) {
+     print "OK, got $x\n";
+  } else {
+     print "Expected 1 got $x\n";
+  }
+
+  print "Reading schema record status position..";
+
+  ($recstpos, $x) = GetLong();
+     $buf .= $recstpos;
+     print "Got Record Status Position $x \n" if $debug;
+  if ($x = 2) {
+     print "OK, got $x\n";
+  } else {
+     print "Expected 2 got $x\n";
+  }
+
+  print "Reading schema record placement position..";
+
+  ($placepos, $x) = GetLong();
+     $buf .= $placepos;
+     print "Got Placement Position $x \n" if $debug;
+  if ($x = 3) {
+     print "OK, got $x\n";
+  } else {
+     print "Expected 3 got $x\n";
+  }
+
+  print "Reading schema field count..";
+
+  ($sfldcnt, $x) = GetShort();
+     $buf .= $sfldcnt;
+     print "Got Schema Field Count $x \n" if $debug;
+  $td_nf = $x;
+  if ($x = 15) {
+     print "OK, got $x\n";
+  } else {
+     print "Expected 15 got $x\n";
+  }
+     
+  $i = 0;
+  @schema_tab = (1,1,1,3,1,5,1,5,6,6,1,6,1,1,8);
+
+# iterate thru schema fields
+
+  print "Reading schema fields...\n";
+
+  while ($i < $td_nf) {
+      print "  schema field $i...";
+      ($schema_ft[$i], $x) = GetShort();
+         print "   schema_ft $i is $x: $!\n" if $debug;
+         $buf .=$schema_ft[$i];
+      if ($x == $schema_tab[$i]) {
+         print "OK, got $x\n";
+      } else {
+         print "expected $schema_tab[$i] got $x\n";
+      }
+      $i++;
+  };
+
+#  $buf has all header entries pre-loaded to this point. We stop
+#  at entry_size in case we are going to add entries to the
+#  file.
+
+  print "Reading entry size..";
+
+  ($entry_size, $x) = GetLong();
+     print "Got Entry Size $x \n" if $debug;
+     $entry_size = $x;
+  print "OK, got $entry_size\n";
+  $entries = $entry_size / 15;
+     print "Number of entries is $entries \n" if $debug;
+
+
+  print "Completed reading header, starting on datebook records\n";
+
+  print "Expecting $entries records on the file\n\n\n";
+
+# The following arrays hold the incoming records in discrete
+# arrays for each field.
+
+# The field types
+  @db_ft1 = ();
+  @db_ft2 = ();
+  @db_ft3 = ();
+  @db_ft4 = ();
+  @db_ft5 = ();
+  @db_ft6 = ();
+  @db_ft7 = ();
+  @db_ft8 = ();
+  @db_ft9 = ();
+  @db_ft10 = ();
+  @db_ft11 = ();
+  @db_ft12 = ();
+  @db_ft13 = ();
+  @db_ft14 = ();
+  @db_ft15 = ();
+
+# The fields
+  @db_record_id = ();
+  @db_status = ();
+  @db_position = ();
+  @db_start_time=();
+  @db_end_time=();
+  @db_always_zero = ();
+  @db_description = ();
+  @db_duration = ();
+  @db_note = ();
+  @db_untimed = ();
+  @db_private = ();
+  @db_category = ();
+  @db_alarm_set = ();
+  @db_alarm_adv_time = ();
+  @db_alarm_adv_type = ();
+  @db_date_exception = ();
+  @db_date_except_table = ();
+
+# Repeat Event Data , These fields vary depending upon the brand
+# of the repeat
+
+  @db_repeat_event = ();
+  @db_re_class  = ();
+  @db_re_length = ();
+  @db_re_string = ();
+  @db_re_brand    = ();
+  @db_re_interval = ();
+  @db_re_enddate  = ();
+  @db_re_firstdow = ();
+  @db_re_usecount = ();
+  @db_re_dayindex = ();
+  @db_re_daysmask = ();
+  @db_re_weekidx  = ();
+  @db_re_daynum   = ();
+  @db_re_monthidx = ();
+
+
+  @repeat_event = qw ( norepeat daily weekly monthlybyday
+                       monthlybydate yearlybydate yearlybydate );
+
+
+  $i = 0;
+  @curbuf = ();
+  @lastbuf = ();
+
+  while ($i < $entries) {
+      @lastbuf = @curbuf;
+      @curbuf=();
+      $err = 0;
+      push @curbuf, "entry $i \n";
+
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft1[$i], $x) = GetLong();
+      print "** db_ft1 $i is $x   ***\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+
+      push @curbuf, "Reading record id..";
+
+      ($db_record_id[$i], $x) = GetLong();
+      print "   db_record_id $i is $x\n" if $debug;
+      push @curbuf, "OK, record is is $x\n";
+
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft2[$i], $x) = GetLong();
+      print "   db_ft2 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+
+      push @curbuf, "Reading record status..";
+
+      ($db_status[$i], $x) = GetLong();
+      print "   db_status $i is $x\n" if $debug;
+      if (($x !=0) and $debug) {
+           print " PENDING" if ($x & 0x08);
+           print " ADD"     if ($x & 0x01);
+           print " UPDATE"  if ($x & 0x02);
+           print " DELETE"  if ($x & 0x04);
+           print " ARCHIVE" if ($x & 0x80);
+           print "\n";
+      }
+      push @curbuf, "OK, got $x\n";
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft3[$i], $x) = GetLong();
+      print "   db_ft3 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+      push @curbuf, "Reading record position..";
+
+      ($db_position[$i], $x) = GetLong();
+      print "   db_position $i is $x\n" if $debug;
+      push @curbuf, "OK, got $x\n";
+
+      push @curbuf, "Reading field type..";
+      ($db_ft4[$i], $x) = GetLong();
+      print "   db_ft4 $i is $x\n" if $debug;
+      if ($x == 3) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 3 got $x\n";
+      }
+
+      push @curbuf, "Reading entry start time..";
+
+      ($db_start_time[$i], $x) = GetLong();
+      print "   db_start_time $i is $x\n" if $debug;
+             @Date = localtime(unpack "l",$db_start_time[$i]);
+             $Date[5] += 1900;
+      print "Date:                       $Day[$Date[6]], $Date[3] $Month[$Date[4]] $Date[5] " . sprintf("%02d:%02d:%02d $tzval\n",  $Date[2], $Date[1], $Date[0]) if $debug;
+      push @curbuf, "OK, got $Day[$Date[6]], $Date[3] $Month[$Date[4]] $Date[5] " . sprintf("%02d:%02d:%02d $tzval\n",  $Date[2], $Date[1], $Date[0]) . "\n";
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft5[$i], $x) = GetLong();
+      print "   db_ft5 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+      push @curbuf, "Reading entry end time..";
+
+      ($db_end_time[$i], $x) = GetLong();
+      print "   db_end_time $i is $x\n" if $debug;
+             @Date = localtime(unpack "l",$db_end_time[$i]);
+             $Date[5] += 1900;
+      print "Date:                       $Day[$Date[6]], $Date[3] $Month[$Date[4]] $Date[5] " . sprintf("%02d:%02d:%02d $tzval\n",  $Date[2], $Date[1], $Date[0]) if $debug;
+      push @curbuf, "OK, got $Day[$Date[6]], $Date[3] $Month[$Date[4]] $Date[5] " . sprintf("%02d:%02d:%02d $tzval\n",  $Date[2], $Date[1], $Date[0]) . "\n";
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft6[$i], $x) = GetLong();
+      print "   db_ft6 $i is $x\n" if $debug;
+      if ($x == 5) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 5 got $x\n";
+      }
+
+      
+      push @curbuf, "Reading padding..";
+
+      ($db_always_zero[$i], $x) = GetLong();
+      print "   db_always_zero $i is $x\n" if $debug;
+      if ($x == 0) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 0 got $x\n";
+      }
+
+      push @curbuf, "Reading description..";
+
+      ($x, $db_description[$i]) = GetCstring();
+      print "   db_description $i is $db_description[$i]\n" if $debug;
+      push @curbuf, "OK, got $db_description[$i]\n";
+
+
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft7[$i], $x) = GetLong();
+      print "   db_ft7 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+      push @curbuf, "Reading duration..";
+
+      ($db_duration[$i], $x) = GetLong();
+      print "   db_duration $i is $x\n" if $debug;
+      push @curbuf, "OK, got $x\n";
+
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft8[$i], $x) = GetLong();
+      print "   db_ft8 $i is $x\n" if $debug;
+      if ($x == 5) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 5 got $x\n";
+      }
+
+      push @curbuf, "Reading padding..";
+
+      ($db_always_zero[$i], $x) = GetLong();
+      print "   db_always_zero $i is $x\n" if $debug;
+      if ($x == 0) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 0 got $x\n";
+      }
+
+      push @curbuf, "Reading Note..";
+
+      ($x, $db_note[$i]) = GetCstring();
+      print "   db_note $i is $db_note[$i]\n" if $debug;
+      push @curbuf, "OK, got $db_note[$i]\n";
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft9[$i], $x) = GetLong();
+      print "   get db_ft9 $i is $x\n" if $debug;
+      if ($x == 6) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 6 got $x\n";
+      }
+
+      push @curbuf, "Reading untimed..";
+
+      ($db_untimed[$i], $x) = GetLong();
+      print "   db_untimed $i is $x\n" if $debug;
+      if ($x == 0) {
+         push @curbuf, "OK, got $x FALSE\n";
+      } elsif ($x == 1) {
+         push @curbuf, "OK, got $x TRUE\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 0 or 1 got $x\n";
+      }
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft10[$i], $x) = GetLong();
+      print "   db_ft10 $i is $x\n" if $debug;
+      if ($x == 6) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 6 got $x\n";
+      }
+
+      push @curbuf, "Reading private..";
+
+      ($db_private[$i], $x) = GetLong();
+      print "   db_private $i is $x\n" if $debug;
+      if ($x == 0) {
+         push @curbuf, "OK, got $x FALSE\n";
+      } elsif ($x == 1) {
+         push @curbuf, "OK, got $x TRUE\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 0 or 1 got $x\n";
+      }
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft11[$i], $x) = GetLong();
+      print "   db_ft11 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+      
+      push @curbuf, "Reading category..";
+
+      ($db_category[$i], $x) = GetLong();
+      print "   db_category $i is $x\n" if $debug;
+      push @curbuf, "OK, got $x\n";
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft12[$i], $x) = GetLong();
+      print "   db_ft12 $i is $x\n" if $debug;
+      if ($x == 6) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 6 got $x\n";
+      }
+
+      push @curbuf, "Reading alarm set..";
+
+      ($db_alarm_set[$i], $x) = GetLong();
+      print "   db_alarm_set $i is $x\n" if $debug;
+      if ($x == 0) {
+         push @curbuf, "OK, got $x FALSE\n";
+      } elsif ($x == 1) {
+         push @curbuf, "OK, got $x TRUE\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 0 or 1 got $x\n";
+      }
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft13[$i], $x) = GetLong();
+      print "   db_ft13 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+      push @curbuf, "Reading alarm advance time..";
+
+      ($db_alarm_adv_time[$i], $x) = GetLong();
+      print "   db_alarm_adv_time $i is $x\n" if $debug;
+      push @curbuf, "OK, got $x\n";
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft14[$i], $x) = GetLong();
+      print "   db_ft14 $i is $x\n" if $debug;
+      if ($x == 1) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 1 got $x\n";
+      }
+
+      push @curbuf, "Reading alarm advance units..";
+
+      ($db_alarm_adv_type[$i], $x) = GetLong();
+      print "   db_alarm_adv_type $i is $x\n" if $debug;
+      if ($x == 0) {
+         push @curbuf, "OK, got $x MINUTES\n";
+      } elsif ($x == 1) {
+         push @curbuf, "OK, got $x HOURS\n";
+      } elsif ($x == 2) {
+         push @curbuf, "OK, got $x DAYS\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 0 or 1 or 2 got $x\n";
+      }
+
+      push @curbuf, "Reading field type..";
+
+      ($db_ft15[$i], $x) = GetLong();
+      print "   db_ft15 $i is $x\n" if $debug;
+      if ($x == 8) {
+         push @curbuf, "OK, got $x\n";
+      } else {
+         $err++;
+         push @curbuf, "Expected 8 got $x\n";
+      }
+
+
+      push @curbuf, "Reading REPEAT EVENT STRUCTURE\n";
+
+      push @curbuf, "Reading REPEAT EVENT Date exceptions..\n";
+
+      ($db_date_exception[$i], $x) = GetShort();
+      print "   db_date_exception $i is $x\n" if $debug;
+      $de = $x;
+      if ($de) {
+           print "** Found date exceptions, index is $de\n" if $debug;
+           push @curbuf, "OK, found $x exceptions\n";
+           while ($de) {
+               push @curbuf, "  Exception $de..";
+               ($deitem, $x) = GetLong();
+               $db_date_except_table[$i] .= $deitem;
+               @Date = localtime(unpack "l",$deitem);
+               $Date[5] += 1900;
+               push @curbuf, "OK, got $Day[$Date[6]], $Date[3] $Month[$Date[4]] $Date[5] " . sprintf("%02d:%02d:%02d $tzval\n",  $Date[2], $Date[1], $Date[0]) . "\n";
+               $de--;
+           }
+      } else {
+           push @curbuf, "OK, none found.\n";
+      }
+
+
+      push @curbuf, "Reading REPEAT EVENT flag..\n";
+
+      ($db_repeat_event[$i], $re) = GetShort();
+      print "   db_repeat_event $i is $re\n" if $debug;
+      push @curbuf, "OK, got $re\n";
+
+      if ($re) {
+         
+         push @curbuf, "   Examining type of RE\n";
+
+         if ($re == -1) {
+
+            push @curbuf, "   Getting Class Name Record..";
+
+            ($db_re_c1[$i], $x) = GetShort();
+            print "    db_re_c1 $i is $x\n" if $debug;
+            if ($x == 1 ) {
+               push @curbuf, "OK, constant 1 found\n";
+            } else {
+               push @curbuf, "Expected 1 found $x\n";
+            }
+
+            push @curbuf, "   Getting Class Name length..";
+
+            ($db_re_cll[$i], $x) = GetShort();
+            push @curbuf, "OK, got $x\n";
+            print "    db_re_cll $i is $x\n" if $debug;
+            push @curbuf, "   reading class name of length $x...";
+            read (CF, $db_re_class[$i], $x) or die "unable to get db_re_class $i: $!\n";
+            print "    db_re_class $i is $db_re_class[$i]\n" if $debug;
+            push @curbuf, "OK, got $db_re_class[$i]\n";
+         }
+
+SWITCH:  {
+
+         if ($re == 0) {last SWITCH;}
+
+         push @curbuf, "   Getting RE Brand..";
+
+         ($db_re_brand[$i], $x) = GetLong();
+         print "    db_re_brand $i is $x\n" if $debug;
+         if ($x < 7 and $x > 0) {
+            push @curbuf, "OK, got $x $repeat_event[$x]\n";
+         } else {
+            $err++;
+            push @curbuf, "Expected 1 - 6 only, got $x\n";
+         }
+
+         $re = $x;
+
+         push @curbuf, "   Getting RE interval..";
+
+         ($db_re_interval[$i], $x) = GetLong();
+         print "    db_re_interval $i is $x\n" if $debug;
+         push @curbuf, "OK, got $x \n";
+
+
+         push @curbuf, "   Getting RE end date..";
+
+         ($db_re_enddate[$i], $x) = GetLong();
+         print "    db_re_enddate $i is $x\n" if $debug;
+         @Date = localtime(unpack "l",$db_re_enddate[$i]);
+         $Date[5] += 1900;
+         push @curbuf, "OK, got $Day[$Date[6]], $Date[3] $Month[$Date[4]] $Date[5] " . sprintf("%02d:%02d:%02d $tzval\n",  $Date[2], $Date[1], $Date[0]) . "\n";
+
+
+         push @curbuf, "   Getting RE first dow..";
+
+         ($db_re_firstdow[$i], $x) = GetLong();
+         print "    db_re_firstdow $i is $x\n" if $debug;
+         if ($x < 7 and $x >= 0) {
+            push @curbuf, "OK, got $x\n";
+         } else {
+            $err++;
+            push @curbuf, "Expected 0 - 6 only, got $x\n";
+         }
+
+
+         if ($re == 1) {
+
+             push @curbuf, "   Getting RE day index..";
+
+             ($db_re_dayindex[$i], $x) = GetLong();
+             print "    db_re_dayindex $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             last SWITCH;
+         }
+
+         if ($re == 2) {
+
+             push @curbuf, "   Getting RE day index..";
+
+             ($db_re_dayindex[$i], $x) = GetLong();
+             print "    db_re_dayindex $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             push @curbuf, "   Getting RE days mask..";
+             read (CF, $db_re_daysmask[$i], 1) or die "unable to get db_re_daysmask $i: $!\n";
+             $x = unpack "C", $db_re_daysmask[$i];
+             print "    db_re_daysmask $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             last SWITCH;
+         }
+
+         if ($re == 3) {
+
+             push @curbuf, "   Getting RE day index..";
+
+             ($db_re_dayindex[$i], $x) = GetLong();
+             print "    db_re_dayindex $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             push @curbuf, "   Getting RE week index..";
+             ($db_re_weekidx[$i], $x) = GetLong();
+             print "    db_re_weekidx $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             last SWITCH;
+         }
+
+         if ($re == 4) {
+
+             push @curbuf, "   Getting RE day number..";
+
+             ($db_re_daynum[$i], $x) = GetLong();
+             print "    db_re_daynum $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             last SWITCH;
+         }
+
+         if ($re == 5) {
+
+             push @curbuf, "   Getting RE day number..";
+
+             ($db_re_daynum[$i], $x) = GetLong();
+             push @curbuf, "OK, got $x\n";
+             print "    db_re_daynum $i is $x\n" if $debug;
+             push @curbuf, "   Getting RE month index..";
+             ($db_re_monthidx[$i], $x) = GetLong();
+             print "    db_re_monthidx $i is $x\n" if $debug;
+             push @curbuf, "OK, got $x\n";
+             last SWITCH;
+         }
+
+         if ($re == 6) {
+             last SWITCH;
+         }
+
+         }; # SWITCH
+
+      }; # end if RE
+
+      if ($err > 0) {
+         print "************  Last good record follows..... ************\n";
+         print @lastbuf;
+         print "\n************ ERRORS START ON THIS RECORD ************\n";
+         print @curbuf;
+      } else {
+         print "Record $i, OK\n";
+      }
+      $i++;
+
+  }; #end while
+
+  if ($entries == $i) {
+     print "All $entries entries were read\n";
+  } else {
+     print "Expected $entries entries, found $i entries\n";
+  }
+
+  close (CF);
+
+  exit;
