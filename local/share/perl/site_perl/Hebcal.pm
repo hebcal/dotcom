@@ -64,8 +64,8 @@ my($this_year) = (localtime)[5];
 $this_year += 1900;
 
 my($VERSION) = '$Revision$$';
-if ($VERSION =~ /(\d+)\.(\d+)/) {
-    $VERSION = "$1.$2";
+if ($VERSION =~ /(\d+)/) {
+    $VERSION = $1;
 }
 
 my $HOSTNAME;
