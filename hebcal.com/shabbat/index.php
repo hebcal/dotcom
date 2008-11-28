@@ -1,6 +1,6 @@
 <?php
 # $Id$
-# $Source: /Users/mradwin/hebcal-copy/hebcal.com/shabbat/RCS/index.php,v $
+# $URL$
 
 require "../pear/Hebcal/common.inc";
 

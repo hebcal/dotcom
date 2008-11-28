@@ -1,7 +1,7 @@
 <?php
 
 // $Id$
-// $Source: /Users/mradwin/hebcal-copy/hebcal.com/pear/Hebcal/RCS/smtp.inc,v $
+// $URL$
 
 $incpath = get_include_path();
 set_include_path("$incpath:/home/hebcal/web/hebcal.com/pear");

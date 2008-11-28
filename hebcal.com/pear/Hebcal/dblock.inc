@@ -1,7 +1,7 @@
 <?php
 
 // $Id$
-// $Source: /Users/mradwin/hebcal-copy/hebcal.com/pear/Hebcal/RCS/dblock.inc,v $
+// $URL$
 
 function dba_lock_open($path, $mode, $handler) {
     $lockfile = $path . ".lock";

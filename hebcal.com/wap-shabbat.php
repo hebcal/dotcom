@@ -1,6 +1,6 @@
 <?php
 // $Id$
-// $Source: /Users/mradwin/hebcal-copy/hebcal.com/RCS/wap-shabbat.php,v $
+// $URL$
 header("Content-Type: text/vnd.wap.wml");
 echo '<?xml version="1.0"?>', "\n";
 

@@ -1,6 +1,6 @@
 <?php
 // $Id$
-// $Source: /Users/mradwin/hebcal-copy/hebcal.com/shabbat/RCS/fridge.php,v $
+// $URL$
 require "../pear/Hebcal/common.inc";
 require "../pear/HTML/Form.php";
 

@@ -1,6 +1,6 @@
 <?php
 // $Id$
-// $Source: /Users/mradwin/hebcal-copy/hebcal.com/email/RCS/index.php,v $
+// $URL$
 header("Cache-Control: private");
 $sender = "webmaster@hebcal.com";
 ?>

@@ -1,6 +1,6 @@
 <?php
 // $Id$
-// $Source: /Users/mradwin/hebcal-copy/hebcal.com/email/RCS/verify.php,v $
+// $URL$
 
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";

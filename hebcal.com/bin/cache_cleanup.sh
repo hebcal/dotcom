@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # $Id$
-# $Source: /Users/mradwin/hebcal-copy/hebcal.com/bin/RCS/cache_cleanup.sh,v $
+# $URL$
 
 HEBCAL_WEB=/home/hebcal/web/hebcal.com
 
