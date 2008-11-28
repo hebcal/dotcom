@@ -1,1 +1,0 @@
-../hebcal-db-pass.cgi
