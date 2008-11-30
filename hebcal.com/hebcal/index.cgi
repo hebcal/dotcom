@@ -426,7 +426,7 @@ sub form
 		       \@head,
 			{
 		       "description" =>
-		       "Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Palm, Outlook, iCal, etc.",
+		       "Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.",
 		       "keywords" =>
 		       "hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff",
 		       },
@@ -796,8 +796,8 @@ alt="$title from Amazon.$tld"></a>
 
 Hebcal.com offers a free personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
-and Torah readings. We also offer export to Palm, Microsoft Outlook, and
-Apple iCal.
+and Torah readings. We also offer export to Microsoft Outlook,
+Apple iCal, Google Calendar, and Palm.
 
 <p>To customize your calendar, fill out the $form_link
 and click the Get Calendar button.
@@ -1038,7 +1038,7 @@ accurate.</p>
     {
 	Hebcal::out_html(undef,
 qq{<p class="goto"><ul class="gtl goto">
-<li><a href="#export">Export calendar to Palm, Outlook, iCal, etc.</a>});
+<li><a href="#export">Export calendar to Outlook, Apple iCal, Google, Palm, etc.</a>});
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
 	    Hebcal::out_html(undef,

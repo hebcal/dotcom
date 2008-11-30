@@ -1369,6 +1369,29 @@ Jewish Calendar events into your desktop software.</p>};
 	}
     }
 
+    my $ical1 = download_href($q, $filename, "ics");
+    $ical1 =~ /\?(.+)$/;
+    my $args = $1;
+    my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
+    my $subical_href = $ical_href;
+    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
+
+    $s .= "<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
+	"Export iCalendar file:\n" .
+	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
+	$q->virtual_host() . $subical_href .
+	    "\">subscribe</a> or\n" .
+	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
+	$ical_href .
+	    "\">download</a>\n";
+    $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
+
+    my $gcal_href = Hebcal::url_escape("http://"
+				       . $q->virtual_host()
+				       . $subical_href);
+    $s .= "<h4>Google Calendar</h4>\n"
+	. "<a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"http://www.google.com/calendar/images/ext/gc_button6.gif\" border=\"0\" alt=\"Add to Google Calendar\"></a>";
+
     # only offer DBA export when we know timegm() will work
     $s .= "<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
@@ -1391,23 +1414,6 @@ Jewish Calendar events into your desktop software.</p>};
 	       . "</b> Daylight Saving Time scheme")
 	    . ".</p>\n";
     }
-
-    my $ical1 = download_href($q, $filename, "ics");
-    $ical1 =~ /\?(.+)$/;
-    my $args = $1;
-    my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
-    my $subical_href = $ical_href;
-    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
-
-    $s .= "<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
-	"Export iCalendar file:\n" .
-	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
-	$q->virtual_host() . $subical_href .
-	    "\">subscribe</a> or\n" .
-	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
-	$ical_href .
-	    "\">download</a>\n";
-    $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
 
     $s .= "<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
