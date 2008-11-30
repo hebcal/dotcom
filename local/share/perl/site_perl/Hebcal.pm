@@ -1341,7 +1341,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    "#export\">Hebrew Year $heb_year</a> events.</p>\n";
     }
 
-    $s .= "<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
+    $s .= "\n<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
 	"<ul><li>USA date format (month/day/year):\n" .
 	"<a class=\"download\" id=\"${filename}_usa.csv\" href=\"" .
 	download_href($q, "${filename}_usa", 'csv') .
@@ -1376,7 +1376,7 @@ Jewish Calendar events into your desktop software.</p>};
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
 
-    $s .= "<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
+    $s .= "\n<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
 	"Export iCalendar file:\n" .
 	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
 	$q->virtual_host() . $subical_href .
@@ -1389,11 +1389,11 @@ Jewish Calendar events into your desktop software.</p>};
     my $gcal_href = Hebcal::url_escape("http://"
 				       . $q->virtual_host()
 				       . $subical_href);
-    $s .= "<h4>Google Calendar</h4>\n"
-	. "<a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"http://www.google.com/calendar/images/ext/gc_button6.gif\" border=\"0\" alt=\"Add to Google Calendar\"></a>";
+    $s .= "\n<h4>Google Calendar</h4>\n"
+	. "<blockquote><a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"http://www.google.com/calendar/images/ext/gc_button6.gif\" border=\"0\" alt=\"Add to Google Calendar\"></a></blockquote>";
 
     # only offer DBA export when we know timegm() will work
-    $s .= "<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
+    $s .= "\n<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
     {
@@ -1415,7 +1415,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    . ".</p>\n";
     }
 
-    $s .= "<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
+    $s .= "\n<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
 	"Export vCalendar file:\n" .
 	"<a class=\"download\" id=\"${filename}.vcs\" href=\"" .
 	download_href($q, $filename, 'vcs') .
