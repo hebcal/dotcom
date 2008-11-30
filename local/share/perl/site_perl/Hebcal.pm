@@ -1390,7 +1390,7 @@ Jewish Calendar events into your desktop software.</p>};
 				       . $q->virtual_host()
 				       . $subical_href);
     $s .= "\n<h4>Google Calendar</h4>\n"
-	. "<blockquote><a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"http://www.google.com/calendar/images/ext/gc_button6.gif\" border=\"0\" alt=\"Add to Google Calendar\"></a></blockquote>";
+	. "<ol><li><a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"http://www.google.com/calendar/images/ext/gc_button6.gif\" border=\"0\" alt=\"Add to Google Calendar\"></a></ol>";
 
     # only offer DBA export when we know timegm() will work
     $s .= "\n<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
