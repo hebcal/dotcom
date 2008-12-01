@@ -12,6 +12,7 @@ AddDescription "Full Kriyah Torah Readings" fullkriyah.csv
 AddDescription "Palm Date Book Archive export" Palm-DBA.pm
 AddDescription "GPL-licensed source code" HebcalGPL.pm
 AddDescription "Release notes" ChangeLog.txt
+AddDescription "BerkleyDB db_dump of zips99.db" zips99.dbdump.txt
 
 Redirect gone /dist/gen_holidays.pl
 Redirect gone /dist/shabbat.pl
