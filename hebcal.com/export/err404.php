@@ -6,14 +6,18 @@ if ($args !== false) {
     if (isset($param["v"]) && $param["v"] == "1") {
 	header("HTTP/1.1 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
-	$url = "/hebcal/index.cgi/export.ics" . $args;
-	virtual($url);
+	$url = "http://www.hebcal.com/hebcal/index.cgi/export.ics" . $args;
+	$ch = curl_init($url);
+	curl_exec($ch);
+	curl_close($ch);
 	exit();
     } elseif (isset($param["v"]) && $param["v"] == "yahrzeit") {
 	header("HTTP/1.1 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
-	$url = "/yahrzeit/yahrzeit.cgi/export.ics" . $args;
-	virtual($url);
+	$url = "http://www.hebcal.com/yahrzeit/yahrzeit.cgi/export.ics" . $args;
+	$ch = curl_init($url);
+	curl_exec($ch);
+	curl_close($ch);
 	exit();
     }
 }
