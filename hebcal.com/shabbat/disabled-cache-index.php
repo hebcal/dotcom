@@ -39,7 +39,7 @@ if (!$qs && isset($_COOKIE["C"])) {
     }
 }
 
-$url = "/shabbat/shabbat.cgi";
+$url = "http://www.hebcal.com/shabbat/shabbat.cgi";
 if ($qs) {
     $now = time();
     $lt = localtime($now);
@@ -82,7 +82,9 @@ if ($qs) {
     $status = false;
 }
 if (!$status) {
-    virtual($url);
+    $ch = curl_init($url);
+    curl_exec($ch);
+    curl_close($ch);
     if ($cfg == "j") {
 	echo "// cache miss\n";
     } else {

@@ -1,4 +1,5 @@
-DirectoryIndex shabbat.cgi
+#DirectoryIndex shabbat.cgi
+DirectoryIndex index.php
 
 Redirect /shabbat/shabbat.html http://www.hebcal.com/shabbat/
 Redirect /shabbat/shabbat.htm http://www.hebcal.com/shabbat/
