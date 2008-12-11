@@ -5,6 +5,7 @@ if ($args !== false) {
     parse_str($arg2, $param);
     if (isset($param["v"]) && $param["v"] == "1") {
 	header("HTTP/1.1 200 OK");
+	header("Status: 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
 	$url = "http://www.hebcal.com/hebcal/index.cgi/export.ics" . $args;
 	$ch = curl_init($url);
@@ -13,6 +14,7 @@ if ($args !== false) {
 	exit();
     } elseif (isset($param["v"]) && $param["v"] == "yahrzeit") {
 	header("HTTP/1.1 200 OK");
+	header("Status: 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
 	$url = "http://www.hebcal.com/yahrzeit/yahrzeit.cgi/export.ics" . $args;
 	$ch = curl_init($url);
@@ -23,6 +25,7 @@ if ($args !== false) {
 }
 
 header("HTTP/1.1 404 Not Found");
+header("Status: 404 Not Found");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
