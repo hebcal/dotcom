@@ -186,8 +186,8 @@ MESSAGE_END;
     echo <<<MESSAGE_END
 Hebcal.com offers a free personalized Jewish calendar for any year
 0001-9999. You can get a list of Jewish holidays, candle lighting times,
-and Torah readings. We also offer export to Palm, Microsoft Outlook, and
-Apple iCal.
+and Torah readings. We also offer export to Microsoft Outlook, Apple iCal,
+Google, and Palm.
 
 <p>Get started <a href="/hebcal/">customizing your calendar</a>.
 
@@ -220,9 +220,11 @@ Customize Shabbat and holiday candle lighting times to your zip code, city, or l
 <li>
 Torah readings for Israel and Diaspora
 <li>
-Export to <a href="/help/import.html#dba">Palm</a>,
-<a href="/help/import.html#csv">Outlook</a>, and
-<a href="/help/import.html#ical">iCal</a>
+Export to
+<a href="/help/import.html#csv">Outlook</a>,
+<a href="/help/import.html#ical">Apple iCal</a>,
+<a href="/help/import.html#gcal">Google Calendar</a>, and
+<a href="/help/import.html#dba">Palm</a>
 </ul>
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <ul class="gtl">
