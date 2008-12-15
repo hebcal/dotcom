@@ -202,7 +202,7 @@ use utf8;
 'Denver' => [-7,'usa'],
 'Detroit' => [-5,'usa'],
 'Eilat' => [2,'israel'],
-'Gibraltar' => [-10,'eu'],
+'Gibraltar' => [1,'eu'],
 'Haifa' => [2,'israel'],
 'Hawaii' => [-10,'none'],
 'Houston' => [-6,'usa'],
