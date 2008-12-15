@@ -16,7 +16,7 @@ sedrot: $(SEDROT)/bereshit.html
 
 xml2perl: $(SITE_PERL)/HebcalConst.pm
 
-$(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) gen_const.pl
+$(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) gen_const.pl hebcal
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
