@@ -3,7 +3,7 @@
 ########################################################################
 # Convert between hebrew and gregorian calendar dates.
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2008  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -300,11 +300,13 @@ function display_hebrew_event($h) {
 
 
 function my_header($hebdate) {
+    header("Content-Type: text/html; charset=UTF-8");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head><title>Hebrew Date Converter - <?php echo $hebdate ?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
 </head>
