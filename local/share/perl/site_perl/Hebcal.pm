@@ -72,7 +72,7 @@ my $HOSTNAME;
 my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
 $CACHE_DIR .= "/cache/";
 
-$Hebcal::gregorian_warning = "<p><span style=\"color: red\">WARNING:
+$Hebcal::gregorian_warning = "<p><span style=\"color:red;font-size:large\">WARNING:
 Results for year 1752 C.E. and before may not be accurate.</span>
 Hebcal does not take into account a correction of ten days that
 was introduced by Pope Gregory XIII known as the Gregorian
