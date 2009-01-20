@@ -1,0 +1,48 @@
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+MAILTO=michael@radwin.org
+
+# debug
+# * * * * * nice touch /tmp/croncheck.hebcron.tmp
+
+################## Hebcal ######################
+
+HEBCAL_WEB=/home/hebcal/web/hebcal.com
+HEBCAL_BIN=/home/hebcal/local/bin
+
+# update static page at the beginning of each month
+0 0 1 * * lynx -source 'http://www.hebcal.com/hebcal/?bogus=bogus' | perl -pi -e 's/\?bogus=bogus//g' > $HEBCAL_WEB/hebcal/default.new && mv -f $HEBCAL_WEB/hebcal/default.new $HEBCAL_WEB/hebcal/default.html
+
+# update hebcal.com holiday.inc for front page at midnight
+0 0 * * * nice $HEBCAL_WEB/bin/gen_current.pl
+
+# update hebcal.com commentary at 11am on wednesday
+11 11 * * 3 touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null
+
+# shabbat: emails at 1:30am pacific on thursdays
+30 1 * * 4 nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+
+47 9 17 10 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+
+# special YK 5769 - 7 Oct 2009 at 8:30pm
+#30 20 7 10 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# special Rosh Hashana 5768 - 11 Sep 2007 at 8:30pm
+#30 20 11 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+#15 9 26 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+#30 22 2 10 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+
+# special pesach mailing on 11 April 2006 at 8:30pm
+#30 20 11 4 * nice $HEBCAL_BIN/shabbat_weekly.pl -all
+
+# clear bounces at 3am on friday
+3 3 * * 5 nice $HEBCAL_BIN/shabbat_deactivate.pl -count 5
+
+# MySQL backups
+30 0 * * * nice $HEBCAL_BIN/email_list_snapshot.sh
+
+# SVN backup
+13 0 * * * $HEBCAL_BIN/s3backup.sh
+
+# clean cmd cache monthly
+0 0 1 * * mv /tmp/hebcron-cache /tmp/hebcron-cache.$$ && rm -rf /tmp/hebcron-cache.$$
+

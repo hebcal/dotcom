@@ -1,0 +1,11 @@
+SHELL=/bin/sh
+MAILTO=michael@radwin.org
+HEBCAL_WEB=/home/hebcal/web/hebcal.com
+
+# debug
+#* * * * * nice touch /tmp/croncheck.hebcal.tmp
+
+0 0 * * * nice $HEBCAL_WEB/bin/cache_cleanup.sh
+
+# monthly cache cleanup
+0 0 1 * * mv /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
