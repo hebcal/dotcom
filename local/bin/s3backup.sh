@@ -20,3 +20,5 @@ export AWS_SECRET_ACCESS_KEY
 cd $S3SYNCDIR
 ruby s3sync.rb -r ${BACKUPDIR} hebcal:
 
+dotlockfile -u $LOCKFILE
+
