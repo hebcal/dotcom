@@ -35,7 +35,8 @@ Michael&nbsp;J.&nbsp;Radwin.</p>
 
 <table border="0" cellpadding="5"><tr>
 <td align="center">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<form id="d5" name="d5" class="paypal"
+action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="image" src="/i/x-click-but04.gif"
 border="0" name="submit"
@@ -48,7 +49,8 @@ src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </td>
 
 <td align="center">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<form id="d10" name="d10" class="paypal"
+action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="image" src="/i/x-click-but04.gif"
 border="0" name="submit"
@@ -61,7 +63,8 @@ src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </td>
 
 <td align="center">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<form id="d18" name="d18" class="paypal"
+action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="image" src="/i/x-click-but04.gif"
 border="0" name="submit"
@@ -141,7 +144,7 @@ width="126"></a></td>
 <a href="/news/">News</a>
 <br>
 <!-- hhmts start -->
-Last modified: Sun May 20 19:26:01 PDT 2007
+Last modified: Tue Mar 10 13:27:25 PDT 2009
 <!-- hhmts end -->
 </span>
 <script src="http://www.google-analytics.com/urchin.js"
@@ -150,5 +153,21 @@ type="text/javascript">
 <script type="text/javascript">
 _uacct="UA-967247-1";
 urchinTracker();
+function hcEsc(s) {
+if(typeof encodeURIComponent=="function"){return encodeURIComponent(s);}
+else{return escape(s);}
+}
+function hcImg(n) {
+var img=new Image(1,1),dt=new Date(),ref=document.referrer;
+var s="/i/black-1x1.gif?n="+n+";t="+dt.getTime();
+if(ref&&ref.substring(0,4).toLowerCase()=="http"){s+=";r="+hcEsc(ref);}
+img.src=s;
+}
+if(document.getElementsByTagName){
+var e3=document.getElementsByTagName("form");
+if(e3&&e3.length){
+for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="paypal"){
+if(e3[i].id){e3[i].onclick=function(){hcImg(this.id);urchinTracker("/paypal/"+this.id);}}
+}}}}
 </script>
 </body></html>
