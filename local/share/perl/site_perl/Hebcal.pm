@@ -1988,9 +1988,9 @@ sub vcalendar_write_contents
 
 	    if (defined $alarm) {
 		out_html(undef, "BEGIN:VALARM${endl}",
+			 "X-WR-ALARMUID:${uid}-alarm${endl}",
 			 "ACTION:AUDIO${endl}",
 			 "TRIGGER:-PT${alarm}${endl}",
-			 "ATTACH;VALUE=URI:Basso${endl}",
 			 "END:VALARM${endl}");
 	    }
 	}
