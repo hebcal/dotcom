@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2009  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1784,11 +1784,12 @@ sub vcalendar_write_contents
 	    $title .= " " . $cconfig->{"city"};
 	}
 	out_html(undef, 
-	qq{X-LOTUS-CHARSET:UTF-8$endl},
 	qq{VERSION:2.0$endl},
+	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl},
 	qq{CALSCALE:GREGORIAN$endl},
-	qq{X-WR-CALNAME:Hebcal $title$endl},
-	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl});
+	qq{METHOD:PUBLISH$endl},
+	qq{X-LOTUS-CHARSET:UTF-8$endl},
+	qq{X-WR-CALNAME:Hebcal $title$endl});
 
 	# include an iCal description if it's not the yahrzeit calendar 
 	if (defined $q->param("v") && $q->param("v") eq "1")
@@ -1805,10 +1806,9 @@ sub vcalendar_write_contents
 	    out_html(undef, qq{X-WR-CALDESC:$desc_url$endl});
 	}
     } else {
-	out_html(undef, qq{VERSION:1.0$endl});
+	out_html(undef, qq{VERSION:1.0$endl},
+		 qq{METHOD:PUBLISH$endl});
     }
-
-    out_html(undef, qq{METHOD:PUBLISH$endl});
 
     if ($tzid) {
 	out_html(undef, qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl});
