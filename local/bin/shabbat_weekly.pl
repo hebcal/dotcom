@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2009  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -167,6 +167,8 @@ sub mail_user
     die "invalid user $to" unless $cfg;
 
     my($cmd,$loc,$args) = parse_config($cfg);
+    return 0 unless $cmd;
+
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
     if ($sat_year != $year) {
 	# Happens when Friday is Dec 31st and Sat is Jan 1st
@@ -436,9 +438,11 @@ sub parse_config
     my $city_descr;
     if (defined $args{"zip"}) {
 	my($zipinfo) = $ZIPS->{$args{"zip"}};
-	die "unknown zipcode [$config]" unless defined $zipinfo;
-    
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	unless(defined $zipinfo) {
+	    warn "unknown zipcode [$config]";
+	    return undef;
+	}
+    	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    Hebcal::zipcode_fields($zipinfo);
 
 	$city_descr = "These times are for:";
@@ -464,7 +468,8 @@ sub parse_config
 	    if ($Hebcal::city_dst{$city_descr} eq "israel");
 	$city_descr = "These times are for $city_descr.";
     } else {
-	die "no geographic key in [$config]";
+	warn "no geographic key in [$config]";
+	return undef;
     }
 
     $cmd .= " -m " . $args{"m"}
