@@ -120,12 +120,6 @@ select LOG;
 $| = 1;
 }
 
-# walk through subs to make sure there are no errors first
-while (my($to,$cfg) = each(%SUBS))
-{
-    parse_config($cfg);		# will croak if missing candle data
-}
-
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
