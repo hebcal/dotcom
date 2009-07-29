@@ -106,7 +106,7 @@
  <group>Rosh Chodesh Tamuz</group>
  <group>Tzom Tammuz</group>
  <group>Rosh Chodesh Av</group>
- <group>Shabbat Hazon</group>
+ <group>Shabbat Chazon</group>
  <group>Tish'a B'Av</group>
  <group>Shabbat Nachamu</group>
  <group>Rosh Chodesh Elul</group>
@@ -1176,7 +1176,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Shabbat Hazon"
+<festival id="Shabbat Chazon"
  hebrew="שַׁבָּת הַזוֹן"
  yomtov="0">
  <about href="http://www.ou.org/yerushalayim/tishabav/chazon.html">

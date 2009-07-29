@@ -187,7 +187,7 @@ while (my($key,$val) = each %HebcalConst::CITIES)
   "Shabbas Parah"		=>	"Shabbat Parah",
   "Shabbas HaChodesh"		=>	"Shabbat HaChodesh",
   "Shabbas HaGadol"		=>	"Shabbat HaGadol",
-  "Shabbas Hazon"		=>	"Shabbat Hazon",
+  "Shabbas Chazon"		=>	"Shabbat Chazon",
   "Shabbas Nachamu"		=>	"Shabbat Nachamu",
   "Shabbos Shuvah"		=>	"Shabbat Shuva",
   "Shabbos Shekalim"		=>	"Shabbat Shekalim",
@@ -195,7 +195,7 @@ while (my($key,$val) = each %HebcalConst::CITIES)
   "Shabbos Parah"		=>	"Shabbat Parah",
   "Shabbos HaChodesh"		=>	"Shabbat HaChodesh",
   "Shabbos HaGadol"		=>	"Shabbat HaGadol",
-  "Shabbos Hazon"		=>	"Shabbat Hazon",
+  "Shabbos Chazon"		=>	"Shabbat Chazon",
   "Shabbos Nachamu"		=>	"Shabbat Nachamu",
   );
 
@@ -339,7 +339,6 @@ sub parse_date_descr($$)
 	$subj = $descr;
 	$subj =~ s/Channukah/Chanukah/; # make spelling consistent
 	$subj =~ s/Purim Koson/Purim Koton/;
-	$subj =~ s/ Chazon/ Hazon/; # temporary
     }
 
     my($yomtov) = 0;
