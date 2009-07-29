@@ -793,7 +793,12 @@ sub html_footer
 
     my($rcsrev) = '$Revision$'; #'
     my $mtime = (stat($file))[9];
-    return Hebcal::html_footer_lite($rcsrev,$mtime);
+    my $LINK_ENHANCER = qq{<script type="text/javascript"
+src="http://www.assoc-amazon.com/s/link-enhancer?tag=hebcal-20&o=1">
+</script>
+};
+    return Hebcal::html_footer_lite($rcsrev,$mtime,1) .
+	$LINK_ENHANCER . "</body></html>\n";
 }
 
 sub holidays_observed
