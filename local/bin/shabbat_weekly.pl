@@ -161,7 +161,7 @@ sub mail_user
     die "invalid user $to" unless $cfg;
 
     my($cmd,$loc,$args) = parse_config($cfg);
-    return 0 unless $cmd;
+    return 1 unless $cmd;
 
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
     if ($sat_year != $year) {
