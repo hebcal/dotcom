@@ -8,11 +8,11 @@
 #
 # Calculates triennial according to
 #   A Complete Triennial System for Reading the Torah
-#   http://www.jtsa.edu/community/parashah/triennial.shtml
+#   http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
 # $Id$
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2009  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -849,7 +849,7 @@ href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a
-href="http://www.jtsa.edu/community/parashah/triennial.shtml">A
+href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
 <dt><em><a href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
