@@ -14,7 +14,7 @@ RewriteBase /hebcal
 # custom amzn advertisement for Sep 2008
 RewriteCond %{QUERY_STRING}  ^$
 RewriteCond %{HTTP_COOKIE}   !C=t=
-RewriteCond %{HTTP_REFERER}  (www\.google|\w+\.*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)/.*calend[ae]r
+RewriteCond %{HTTP_REFERER}  (www\.google|\w+\.*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9|www\.bing)\.(com|ca|co\.uk)/.*calend[ae]r
 RewriteRule ^$               /hebcal/amzn.html [L]
 
 # use static HTML page for common case with no args
