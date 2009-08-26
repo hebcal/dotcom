@@ -155,7 +155,7 @@ a happy <?php echo $chag_sameach ?>.</span>
 </span>
 <?php
 $ref = getenv("HTTP_REFERER");
-$pattern = '/^http:\/\/(www\.google|(\w+\.)*search\.yahoo|search\.msn|search\.live|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)\/.*calend[ae]r/i';
+$pattern = '/^http:\/\/(www\.google|(\w+\.)*search\.yahoo|search\.msn|search\.live|aolsearch\.aol|www\.aolsearch|a9|www\.bing)\.(com|ca|co\.uk)\/.*calend[ae]r/i';
 if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
     echo "<blockquote class=\"welcome\">\n";
 

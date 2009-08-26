@@ -771,7 +771,7 @@ sub referred_by_websearch
     my $message = "";
     my $ref = $q->referer();
 
-    if (defined $ref && $ref =~ m,^http://(www\.google|(\w+\.)*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9)\.(com|ca|co\.uk)/.*calend[ae]r,i)
+    if (defined $ref && $ref =~ m,^http://(www\.google|(\w+\.)*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9|www\.bing)\.(com|ca|co\.uk)/.*calend[ae]r,i)
     {
 	my $tld = $3 ? $3 : "com";
 	my @ads = (
