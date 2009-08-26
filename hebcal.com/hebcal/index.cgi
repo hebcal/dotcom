@@ -802,7 +802,7 @@ Apple iCal, Google Calendar, and Palm.
 <p>To customize your calendar, fill out the $form_link
 and click the Get Calendar button.
 
-<p>If you are looking for a full-color printed 2007 calendar with
+<p>If you are looking for a full-color printed 2010 calendar with
 Jewish holidays, consider <a
 href="http://www.amazon.$tld/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$tld.
