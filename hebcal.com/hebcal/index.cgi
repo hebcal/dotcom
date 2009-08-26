@@ -442,10 +442,6 @@ sub form
 	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
 	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
     }
-    elsif (defined $q->referer())
-    {
-	$message = referred_by_websearch($q, "form below", "");
-    }
 
     Hebcal::out_html(undef,
     $message, "\n",
@@ -757,63 +753,6 @@ MESSAGE_END
     return $message;
 }
 
-
-sub referred_by_websearch
-{
-    my($q,$form_text,$form_href) = @_;
-
-    # don't show ad to repeat users
-    if (defined $cookies->{"C"})
-    {
-	return "";
-    }
-
-    my $message = "";
-    my $ref = $q->referer();
-
-    if (defined $ref && $ref =~ m,^http://(www\.google|(\w+\.)*search\.yahoo|search\.msn|aolsearch\.aol|www\.aolsearch|a9|www\.bing)\.(com|ca|co\.uk)/.*calend[ae]r,i)
-    {
-	my $tld = $3 ? $3 : "com";
-	my @ads = (
-		   ["The Jewish Calendar 2010 Wall: From the Collection of the Jewish Historical Museum Amsterdam", "0789319411", 110, 110],
-		   ["The Jewish Museum 2010 Calendar", "0764947753", 110, 102],
-		   ["Illuminations 2010 Calendar", "0764947702", 110, 102],
-		   ["Jewish Celebrations 2010 Calendar", "0764947613", 110, 102],
-		   ["Hebrew Illuminations 2010 Wall Calendar: A 16 Month Calendar - 5769/5770", "1602372659", 110, 110],
-		   );
-	my($title,$asin,$width,$height) = @{$ads[int(rand($#ads+1))]};
-
-	my $form_link = $form_href ? qq{<a\nhref="$form_href">$form_text</a>} :
-	    $form_text;
-
-	$message=<<MESSAGE_END;
-<blockquote class="welcome">
-<a title="$title"
-href="http://www.amazon.$tld/o/ASIN/$asin/hebcal-20"><img
-src="http://www.hebcal.com/i/$asin.01.TZZZZZZZ.jpg" border="0"
-width="$width" height="$height" hspace="8" align="right"
-alt="$title from Amazon.$tld"></a>
-
-Hebcal.com offers a free personalized Jewish calendar for any year
-0001-9999. You can get a list of Jewish holidays, candle lighting times,
-and Torah readings. We also offer export to Microsoft Outlook,
-Apple iCal, Google Calendar, and Palm.
-
-<p>To customize your calendar, fill out the $form_link
-and click the Get Calendar button.
-
-<p>If you are looking for a full-color printed calendar with
-Jewish holidays, consider <a
-href="http://www.amazon.$tld/o/ASIN/$asin/hebcal-20">$title</a>
-from Amazon.$tld.
-</blockquote>
-MESSAGE_END
-;
-    }
-
-    $message;
-}
-
 sub results_page
 {
     my($date,$filename) = @_;
@@ -931,9 +870,6 @@ sub results_page
 
     Hebcal::out_html(undef, "<h1>Jewish\nCalendar $date</h1>\n")
 	unless ($q->param("vis"));
-
-    my $message = referred_by_websearch($q, "form", "/hebcal/");
-    Hebcal::out_html(undef, $message) if $message;
 
     my $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
