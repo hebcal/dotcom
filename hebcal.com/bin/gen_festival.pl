@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2009  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -54,6 +54,9 @@ use XML::Simple ();
 use LWP::UserAgent;
 use HTTP::Request;
 use Image::Magick;
+use URI::Escape qw(uri_escape_utf8);
+use POSIX qw(strftime);
+use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
 use Date::Calc;
 use HebcalGPL ();
@@ -257,12 +260,11 @@ href="/search/">Search</a></td></tr></table>
 <!--/htdig_noindex-->
 <a name="top"></a>
 <h1>Jewish Holidays</h1>
-<a title="Jewish Museum 2009 Wall Calendar from Amazon.com"
-class="amzn" id="h1-calendar-1"
-href="http://www.amazon.com/o/ASIN/0764943537/hebcal-20"><img
-src="http://www.hebcal.com/i/0764943537.01.TZZZZZZZ.jpg" border="0"
-width="110" height="102" hspace="8" vspace="8" align="right"
-alt="Jewish Museum 2009 Wall Calendar from Amazon.com"></a>
+<a title="The Jewish Museum 2010 Calendar from Amazon.com"
+href="http://www.amazon.com/o/ASIN/0764947753/hebcal-20"><img
+src="/i/0764947753.01.TZZZZZZZ.jpg" border="0"
+width="110" height="102" hspace="8" align="right"
+alt="The Jewish Museum 2010 Calendar from Amazon.com"></a>
 <dl>
 EOHTML
 ;
@@ -618,7 +620,23 @@ EOHTML
 		{
 		    $ua = LWP::UserAgent->new unless $ua;
 		    $ua->timeout(10);
-		    my $url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=15X7F0YJNN5FCYC7CGR2&Operation=ItemLookup&ItemId=$asin&Version=2005-10-13";
+		    my $endpoint = "ecs.amazonaws.com";
+		    my $request_uri = "/onca/xml";
+		    my $aws_secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+		    my %params = (
+				  "Service" => "AWSECommerceService",
+				  "AWSAccessKeyId" => "15X7F0YJNN5FCYC7CGR2",
+				  "Operation" => "ItemLookup",
+				  "ItemId" => $asin,
+				  "ResponseGroup" => "ItemAttributes",
+				  "Version" => "2009-01-06",
+				  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime());
+				  );
+		    my $query_string = join("&", map { $_ . "=" . uri_escape_utf8($params{$_}) } sort keys %params);
+		    my $tosign = join("\n", "GET", $endpoint, $request_uri, $query_string);
+		    my $signature = hmac_sha256_base64($tosign, $aws_secret_key);
+		    $signature .= "=" while length($signature) % 4;    # padding required
+		    my $url = join("", "http://", $endpoint, $request_uri, "?", $query_string, "&Signature=", $signature);
 		    my $request = HTTP::Request->new("GET", $url);
 		    my $response = $ua->request($request);
 		    my $rxml = XML::Simple::XMLin($response->content);
