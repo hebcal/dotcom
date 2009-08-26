@@ -630,7 +630,7 @@ EOHTML
 				  "ItemId" => $asin,
 				  "ResponseGroup" => "ItemAttributes",
 				  "Version" => "2009-01-06",
-				  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime());
+				  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
 				  );
 		    my $query_string = join("&", map { $_ . "=" . uri_escape_utf8($params{$_}) } sort keys %params);
 		    my $tosign = join("\n", "GET", $endpoint, $request_uri, $query_string);
@@ -638,6 +638,9 @@ EOHTML
 		    my $signature = '';
 		    $signature .= "=" while length($signature) % 4;    # padding required
 		    my $url = join("", "http://", $endpoint, $request_uri, "?", $query_string, "&Signature=", $signature);
+
+		    # use the old API for now
+                    $url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=15X7F0YJNN5FCYC7CGR2&Operation=ItemLookup&ItemId=$asin&Version=2005-10-13";
 		    my $request = HTTP::Request->new("GET", $url);
 		    my $response = $ua->request($request);
 		    my $rxml = XML::Simple::XMLin($response->content);
