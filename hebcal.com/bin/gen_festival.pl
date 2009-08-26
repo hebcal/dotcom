@@ -56,7 +56,7 @@ use HTTP::Request;
 use Image::Magick;
 use URI::Escape qw(uri_escape_utf8);
 use POSIX qw(strftime);
-use Digest::SHA qw(hmac_sha256_base64);
+#use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
 use Date::Calc;
 use HebcalGPL ();
@@ -634,7 +634,8 @@ EOHTML
 				  );
 		    my $query_string = join("&", map { $_ . "=" . uri_escape_utf8($params{$_}) } sort keys %params);
 		    my $tosign = join("\n", "GET", $endpoint, $request_uri, $query_string);
-		    my $signature = hmac_sha256_base64($tosign, $aws_secret_key);
+#		    my $signature = hmac_sha256_base64($tosign, $aws_secret_key);
+		    my $signature = '';
 		    $signature .= "=" while length($signature) % 4;    # padding required
 		    my $url = join("", "http://", $endpoint, $request_uri, "?", $query_string, "&Signature=", $signature);
 		    my $request = HTTP::Request->new("GET", $url);
