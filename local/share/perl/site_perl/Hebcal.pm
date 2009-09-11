@@ -1385,9 +1385,11 @@ Jewish Calendar events into your desktop software.</p>};
 	    "\">download</a>\n";
     $s .= qq{<li><a href="/help/import.html#ical">How to import ICS file into Apple iCal</a></ol>};
 
+    my $gcal_subical_href = $subical_href;
+    $gcal_subical_href =~ s/;/&/g;
     my $gcal_href = Hebcal::url_escape("http://"
 				       . $q->virtual_host()
-				       . $subical_href);
+				       . $gcal_subical_href);
     $s .= "\n<h4>Google Calendar</h4>\n"
 	. "<blockquote><a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"/i/gc_button6.gif\" width=\"114\" height=\"36\" border=\"0\" alt=\"Add to Google Calendar\"></a></blockquote>";
 
