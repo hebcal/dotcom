@@ -349,6 +349,7 @@ _uacct="UA-967247-1";
 urchinTracker();
 </script>
 </body></html>
+
 EOD
 	;
     return $html;
