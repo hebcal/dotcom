@@ -155,21 +155,6 @@ else
     }
 }
 
-$hebfont = false;
-$qs = $_SERVER["QUERY_STRING"];
-if ($qs) {
-    if (isset($_GET["heb"]) && ($_GET["heb"] == "on" || $_GET["heb"] == "1")) {
-	$hebfont = true;
-    }
-} else {
-    if (isset($_COOKIE["C"])) {
-	parse_str($_COOKIE["C"], $ck);
-	if (isset($ck["heb"]) && ($ck["heb"] == "on" || $ck["heb"] == "1")) {
-	    $hebfont = true;
-	}
-    }
-}
-
 if ($type == "g2h")
 {
     $jd = gregoriantojd($gm, $gd, $gy);
@@ -222,20 +207,29 @@ of the Gregorian Calendar</a>.</p>
 }
 ?>
 <p align="center"><span style="font-size: large">
+<a href="/etc/hdate-en.xml"
+title="Today's Hebrew Date in English Transliteration RSS"><img
+src="/i/xml.gif" border="0" align="right" width="36" height="14"
+alt="Today's Hebrew Date in English Transliteration RSS"></a>
 <?php echo "$first = <b>$second</b>"; ?>
 </span>
+<br>
+<a href="/etc/hdate-he.xml"
+title="Today's Hebrew Date in Hebrew RSS"><img
+src="/i/xml.gif" border="0" align="right" width="36" height="14"
+alt="Today's Hebrew Date in Hebrew RSS"></a>
+<span dir="rtl" lang="he" class="hebrew-big">
 <?php
-if ($hebfont) {
-    if ($hm == "Adar1" && !is_leap_year($hy)) {
-	$month_name = "Adar";
-    } else {
-	$month_name = $hmstr_to_hebcal[$hm];
-    }
-
-    $hebrew = build_hebrew_date($month_name, $hd, $hy);
-    echo "<br><span dir=\"rtl\" lang=\"he\" class=\"hebrew-big\">",
-	$hebrew, "</span>\n";
+if ($hm == "Adar1" && !is_leap_year($hy)) {
+    $month_name = "Adar";
+} else {
+    $month_name = $hmstr_to_hebcal[$hm];
 }
+$hebrew = build_hebrew_date($month_name, $hd, $hy);
+echo $hebrew, "\n";
+?>
+</span>
+<?php
 if ($gy >= 1900 && $gy <= 2099) {
     $century = substr($gy, 0, 2);
     $f = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
@@ -309,6 +303,7 @@ function my_header($hebdate) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base target="_top">
 <link type="text/css" rel="stylesheet" href="/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/etc/hdate-en.xml">
 </head>
 <body>
 <table width="100%" class="navbar"><tr><td><strong><a
@@ -367,11 +362,6 @@ type="submit" value="Compute Gregorian Date"></td>
 </tr></table>
 </td></tr>
 </table>
-<label for="heb">
-<input type="checkbox" name="heb" value="on"
-<?php global $hebfont; if ($hebfont) { echo " checked "; } ?>
-id="heb">
-Show date in Hebrew font</label>
 </center>
 </form>
 <?php
