@@ -85,6 +85,13 @@ if ($hmnum == 13 && $hd >= 1) {
 		       $rh_cal["year"]);
 } elseif ($hmnum == 1 && $hd <= 10) {
     $gmar_tov = true;		# month 1 == Tishrei
+    $rh_jd = jewishtojd(1, 9, $hy);
+    $rh_cal = cal_from_jd($rh_jd, CAL_GREGORIAN);
+    $erev_yk = sprintf("%s, %s %s %s",
+		       $rh_cal["abbrevdayname"],
+		       $rh_cal["day"],
+		       $rh_cal["monthname"],
+		       $rh_cal["year"]);
 } elseif ($hmnum == 8 && $hd >= 7 && $hd <= 15) {
     # for a week before Pesach, show greeting
     $chag_kasher = true;	# month 8 == Nisan
@@ -145,6 +152,10 @@ begins at sundown on <?php echo $erev_rh ?>.</span>
 <?php } elseif ($gmar_tov) { ?>
 <br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
 you a good inscription in the Book of Life.</span>
+<?php     if (isset($erev_yk)) { ?>
+<br><span class="fpgreeting"><a href="/holidays/yom-kippur.html">Yom Kippur</a>
+begins at sundown on <?php echo $erev_yk ?>.</span>
+<?php     } ?>
 <?php } elseif ($chag_kasher) { ?>
 <br><span class="fpgreeting">Chag Kasher v&#39;Sameach! Hebcal.com
 wishes you a happy Passover.</span>
