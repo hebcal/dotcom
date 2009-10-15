@@ -96,7 +96,8 @@ my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
 my $HOME = "/home/hebcal";
-my $ZIPS = Hebcal::zipcode_open_db("$HOME/web/hebcal.com/hebcal/zips99.db");
+my $dbfile = "$HOME/web/hebcal.com/hebcal/zips.sqlite3";
+my $ZIPS_DBH = Hebcal::zipcode_open_db($dbfile);
 
 if ($opt_log) {
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
@@ -148,8 +149,7 @@ close(LOG) if $opt_log;
 $smtp->quit();
 undef $smtp;
 
-Hebcal::zipcode_close_db($ZIPS);
-undef($ZIPS);
+Hebcal::zipcode_close_db($ZIPS_DBH);
 
 exit(0);
 
@@ -431,13 +431,12 @@ sub parse_config
 
     my $city_descr;
     if (defined $args{"zip"}) {
-	my($zipinfo) = $ZIPS->{$args{"zip"}};
-	unless(defined $zipinfo) {
+    	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    Hebcal::zipcode_get_zip_fields($ZIPS_DBH, $args{"zip"});
+	unless (defined $state) {
 	    warn "unknown zipcode [$config]";
 	    return undef;
 	}
-    	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    Hebcal::zipcode_fields($zipinfo);
 
 	$city_descr = "These times are for:";
 	$city_descr .= "\n  $city, $state " . $args{"zip"};

@@ -48,7 +48,7 @@ use POSIX qw(strftime);
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
-use DB_File;
+use DBI;
 use HebcalConst;
 use Digest::MD5 ();
 
@@ -780,33 +780,46 @@ sub out_html
 
 sub zipcode_open_db
 {
-    use DB_File;
-
-    my($dbmfile) = $_[0] ? $_[0] : 'zips99.db';
-    my(%DB);
-    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-	|| die "Can't tie $dbmfile: $!\n";
-
-    \%DB;
+    my($file) = $_[0] ? $_[0] : "zips.sqlite";
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$file", "", "")
+	or die $DBI::errstr;
+    $dbh;
 }
 
 sub zipcode_close_db($)
 {
-    use DB_File;
-
-    my($DB) = @_;
-    untie(%{$DB});
+    my($dbh) = @_;
+    $dbh->disconnect();
 }
 
-sub zipcode_fields($)
+sub zipcode_get_zip($$)
 {
-    my($value) = @_;
+    my($dbh,$zipcode) = @_;
 
-    my($latitude,$longitude,$tz,$dst,$city,$state) = split(/,/, $value);
+    my $sql = qq{
+SELECT zips_latitude, zips_longitude, zips_timezone, zips_dst, zips_city, zips_state
+FROM hebcal_zips
+WHERE zips_zipcode = ?
+};
+
+    my $sth = $dbh->prepare($sql) or die $dbh->errstr;
+    $sth->execute($zipcode) or die $dbh->errstr;
+
+    my($latitude,$longitude,$tz,$dst,$city,$state) = $sth->fetchrow_array;
+    $sth->finish;
+    ($latitude,$longitude,$tz,$dst,$city,$state);
+}
+
+sub zipcode_get_zip_fields($$)
+{
+    my($dbh,$zipcode) = @_;
+
+    my($latitude,$longitude,$tz,$dst,$city,$state) =
+	zipcode_get_zip($dbh,$zipcode);
 
     if (! defined $state)
     {
-	warn "zips99: bad data for $value";
+	warn "zipcode_get_zip_fields: $zipcode Not Found";
 	return undef;
     }
 

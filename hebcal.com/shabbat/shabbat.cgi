@@ -337,7 +337,9 @@ sub process_args
 	}
 
 	my $DB = Hebcal::zipcode_open_db();
-	my($val) = $DB->{$q->param('zip')};
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
+	   $latitude, $longitude) =
+	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
@@ -345,12 +347,7 @@ sub process_args
 	      "Sorry, can't find\n".  "<b>" . $q->param('zip') .
 	      "</b> in the zip code database.\n",
 	      "<ul><li>Please try a nearby zip code</li></ul>")
-	    unless defined $val;
-
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
-	($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
-	 $latitude,$longitude) =
-	    Hebcal::zipcode_fields($val);
+	    unless defined $state;
 
 	# allow CGI args to override
 	$tz = $q->param('tz')

@@ -409,7 +409,6 @@ sub alt_candles_text
 sub form
 {
     my($message,$help) = @_;
-    my($key,$val);
 
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     my $hyear = $hebdate->{"yy"};
@@ -1326,7 +1325,8 @@ sub get_candle_config
 	    unless $q->param("zip") =~ /^\d\d\d\d\d$/;
 
 	my $DB = Hebcal::zipcode_open_db();
-	my $val = $DB->{$q->param("zip")};
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
@@ -1338,10 +1338,7 @@ sub get_candle_config
 	     "?c=on;geo=city\">city</a> or\n" .
 	     "<a href=\"" . $script_name .
 	     "?c=on;geo=pos\">latitude/longitude</a></li></ul>")
-	    unless defined $val;
-
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    Hebcal::zipcode_fields($val);
+	    unless defined $state;
 
 	# allow CGI args to override
 	$tz = $q->param("tz")

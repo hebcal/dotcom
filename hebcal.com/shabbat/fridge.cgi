@@ -224,19 +224,17 @@ sub process_args
 	}
 
 	my $DB = Hebcal::zipcode_open_db();
-	my($val) = $DB->{$q->param('zip')};
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
-	unless (defined $val) {
+	unless (defined $state) {
 	    print "Status: 400 Bad Request\r\n",
 	    "Content-Type: text/plain\r\n\r\n",
 	    "Can't find zip code ", $q->param('zip'), " in the DB.\n";
 	    exit(0);
 	}
-
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    Hebcal::zipcode_fields($val);
 
 	# allow CGI args to override
 	if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/)
