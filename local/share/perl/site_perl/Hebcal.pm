@@ -60,10 +60,14 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
+my $WEBDIR = "/home/hebcal/web/hebcal.com";
+my $EMAIL_PASSFILE = "$WEBDIR/email/hebcal-email-pass.cgi";
+my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
+
 my($this_year) = (localtime)[5];
 $this_year += 1900;
 
-my($VERSION) = '$Revision$$';
+my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)/) {
     $VERSION = $1;
 }
@@ -449,6 +453,130 @@ sub invoke_hebcal
     @events;
 }
 
+sub events_to_dict
+{
+    my($events,$cfg,$q,$friday,$saturday) = @_;
+
+    my $tz = 0;
+    my $dst = $q->param("dst");
+    if ($q->param('tz'))
+    {
+	$tz = $q->param('tz');
+	$tz = 0 if $tz eq 'auto';
+    }
+    elsif ($q->param('city') && 
+	   defined($Hebcal::city_tz{$q->param('city')}))
+    {
+	$tz = $Hebcal::city_tz{$q->param('city')};
+	$dst = $Hebcal::city_dst{$q->param("city")};
+    }
+    my $tz_save = $tz;
+
+    my $url = self_url($q);
+    my @items;
+    for (my $i = 0; $i < scalar(@{$events}); $i++)
+    {
+	# holiday is at 12:00:01 am
+	my($time) = Time::Local::timelocal(1,0,0,
+		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
+		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+		       '','','');
+	next if ($friday && $time < $friday) || ($saturday && $time > $saturday);
+
+	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
+	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+
+	my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+	my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	$hour -= 12 if $hour > 12;
+
+	my %item;
+	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
+	    "%A, %d %b %Y" : "%A, %d %B %Y";
+	$item{'date'} = strftime($format, localtime($time));
+
+	my $tz = $tz_save;
+	if (defined $dst && $dst eq "usa") {
+	    my($isdst) = (localtime($time))[8];
+	    $tz++ if $isdst;
+	}
+
+	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	{
+	    $item{'dc:date'} =
+		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
+			$year,$mon,$mday,
+			$hour + 12,$min,0,
+			$tz > 0 ? "+" : "-",
+			abs($tz));
+
+	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
+	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d00",
+				       $dow, $mday,
+				       $Hebcal::MoY_short[$mon - 1],
+				       $year, $hour + 12, $min,
+				       $tz > 0 ? "+" : "-",
+				       abs($tz));
+	}
+	else
+	{
+	    $item{'dc:date'} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
+	    $item{'dc:date'} .= sprintf("T00:00:00%s%02d:00",
+					$tz > 0 ? "+" : "-",
+					abs($tz));
+	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
+	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 %s%02d00",
+				       $dow,
+				       $mday,
+				       $Hebcal::MoY_short[$mon - 1],
+				       $year,
+				       $tz > 0 ? "+" : "-",
+				       abs($tz));
+	}
+
+	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
+	$anchor =~ s/[^\w]/_/g;
+	$anchor =~ s/_+/_/g;
+	$anchor =~ s/_$//g;
+	$item{'about'} = $url . "#" . $anchor;
+	$item{'subj'} = $subj;
+
+	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
+	{
+	    $item{'class'} = ($subj eq 'Candle lighting') ?
+		'candles' : 'havdalah';
+	    $item{'time'} = sprintf("%d:%02dpm", $hour, $min);
+	    $item{'link'} = $url . "#" . $anchor;
+	}
+	elsif ($subj eq 'No sunset today.')
+	{
+	    $item{'class'} = 'candles';
+	    $item{'link'} = self_url($q);
+	    $item{'time'} = '';
+	}
+	else
+	{
+	    if ($subj =~ /^(Parshas|Parashat)\s+/)
+	    {
+		$item{'class'} = 'parashat';
+	    }
+	    else
+	    {
+		$item{'class'} = 'holiday';
+	    }
+
+	    $item{'link'} = Hebcal::get_holiday_anchor($subj,0,$q);
+	}
+
+	push(@items, \%item);
+    }
+
+    \@items;
+}
+
 sub get_dow($$$)
 {
     my($year,$mon,$mday) = @_;
@@ -780,7 +908,7 @@ sub out_html
 
 sub zipcode_open_db
 {
-    my($file) = $_[0] ? $_[0] : "zips.sqlite";
+    my($file) = $_[0] ? $_[0] : $ZIP_SQLITE_FILE;
     my $dbh = DBI->connect("dbi:SQLite:dbname=$file", "", "")
 	or die $DBI::errstr;
     $dbh;
@@ -2171,8 +2299,7 @@ sub sendmail_v2($$$)
     }
 
     unless ($SENDMAIL_PASS) {
-	if (open(PASSFILE,
-		 "/home/hebcal/web/hebcal.com/email/hebcal-email-pass.cgi")) {
+	if (open(PASSFILE, $EMAIL_PASSFILE)) {
 	    $SENDMAIL_PASS = <PASSFILE>;
 	    chop $SENDMAIL_PASS;
 	    close(PASSFILE);

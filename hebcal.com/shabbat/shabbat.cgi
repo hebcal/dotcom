@@ -70,7 +70,7 @@ my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 my($latitude,$longitude);
 my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
     process_args($q);
-my($items) = format_items($q,$evts);
+my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday);
 
 my $cache = Hebcal::cache_begin($q);
 
@@ -90,131 +90,6 @@ else
 
 Hebcal::cache_end() if $cache;
 exit(0);
-
-sub format_items
-{
-    my($q,$events) = @_;
-
-    my($url) = self_url();
-    my(@items);
-
-    my $tz = 0;
-    my $dst = $q->param("dst");
-    if ($q->param('tz'))
-    {
-	$tz = $q->param('tz');
-	$tz = 0 if $tz eq 'auto';
-    }
-    elsif ($q->param('city') && 
-	   defined($Hebcal::city_tz{$q->param('city')}))
-    {
-	$tz = $Hebcal::city_tz{$q->param('city')};
-	$dst = $Hebcal::city_dst{$q->param("city")};
-    }
-    my $tz_save = $tz;
-
-    for (my $i = 0; $i < scalar(@{$events}); $i++)
-    {
-	# holiday is at 12:00:01 am
-	my($time) = Time::Local::timelocal(1,0,0,
-		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
-		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       '','','');
-	next if $time < $friday || $time > $saturday;
-
-	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my($year) = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my($mon) = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my($mday) = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
-
-	my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
-	$hour -= 12 if $hour > 12;
-
-	my(%item);
-	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
-	    "%A, %d %b %Y" : "%A, %d %B %Y";
-	$item{'date'} = strftime($format, localtime($time));
-
-	my $tz = $tz_save;
-	if (defined $dst && $dst eq "usa") {
-	    my($isdst) = (localtime($time))[8];
-	    $tz++ if $isdst;
-	}
-
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
-	{
-	    $item{'dc:date'} =
-		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
-			$year,$mon,$mday,
-			$hour + 12,$min,0,
-			$tz > 0 ? "+" : "-",
-			abs($tz));
-
-	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
-	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d00",
-				       $dow, $mday,
-				       $Hebcal::MoY_short[$mon - 1],
-				       $year, $hour + 12, $min,
-				       $tz > 0 ? "+" : "-",
-				       abs($tz));
-	}
-	else
-	{
-	    $item{'dc:date'} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-	    $item{'dc:date'} .= sprintf("T00:00:00%s%02d:00",
-					$tz > 0 ? "+" : "-",
-					abs($tz));
-	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
-	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 %s%02d00",
-				       $dow,
-				       $mday,
-				       $Hebcal::MoY_short[$mon - 1],
-				       $year,
-				       $tz > 0 ? "+" : "-",
-				       abs($tz));
-	}
-
-	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
-	$anchor =~ s/[^\w]/_/g;
-	$anchor =~ s/_+/_/g;
-	$anchor =~ s/_$//g;
-	$item{'about'} = $url . "#" . $anchor;
-	$item{'subj'} = $subj;
-
-	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
-	{
-	    $item{'class'} = ($subj eq 'Candle lighting') ?
-		'candles' : 'havdalah';
-	    $item{'time'} = sprintf("%d:%02dpm", $hour, $min);
-	    $item{'link'} = $url . "#" . $anchor;
-	}
-	elsif ($subj eq 'No sunset today.')
-	{
-	    $item{'class'} = 'candles';
-	    $item{'link'} = self_url();
-	    $item{'time'} = '';
-	}
-	else
-	{
-	    if ($subj =~ /^(Parshas|Parashat)\s+/)
-	    {
-		$item{'class'} = 'parashat';
-	    }
-	    else
-	    {
-		$item{'class'} = 'holiday';
-	    }
-
-	    $item{'link'} = Hebcal::get_holiday_anchor($subj,0,$q);
-	}
-
-	push(@items, \%item);
-    }
-
-    \@items;
-}
 
 sub process_args
 {

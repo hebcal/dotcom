@@ -248,6 +248,10 @@ elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
 {
     javascript_events();
 }
+elsif (defined $q->param("cfg") && $q->param("cfg") eq "json")
+{
+    json_events();
+}
 else
 {
 #    my $cache = Hebcal::cache_begin($q);
@@ -257,6 +261,13 @@ else
 
 close(STDOUT);
 exit(0);
+
+sub json_events
+{
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my $cfg = $q->param("cfg");
+    my $items = Hebcal::events_to_dict(\@events,$cfg,$q,0,0);
+}
 
 sub javascript_events
 {

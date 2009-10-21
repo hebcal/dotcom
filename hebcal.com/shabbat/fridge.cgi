@@ -184,7 +184,7 @@ sub process_args
 	$q->param($key,$val);
     }
 
-    my($cmd)  = './hebcal -c -H';
+    my($cmd)  = './hebcal -s -x -c -H';
 
     my($city_descr,$dst_descr,$tz_descr);
     if (defined $q->param('city'))

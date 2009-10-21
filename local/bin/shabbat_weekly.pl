@@ -96,8 +96,7 @@ my $subject = strftime("[shabbat] %b %d",
 		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
 my $HOME = "/home/hebcal";
-my $dbfile = "$HOME/web/hebcal.com/hebcal/zips.sqlite3";
-my $ZIPS_DBH = Hebcal::zipcode_open_db($dbfile);
+my $ZIPS_DBH = Hebcal::zipcode_open_db();
 
 if ($opt_log) {
 my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
