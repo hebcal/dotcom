@@ -1006,11 +1006,11 @@ sub zipcode_get_zip($$)
     my $sql = qq{
 SELECT zips_latitude, zips_longitude, zips_timezone, zips_dst, zips_city, zips_state
 FROM hebcal_zips
-WHERE zips_zipcode = ?
+WHERE zips_zipcode = '$zipcode'
 };
 
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
-    $sth->execute($zipcode) or die $dbh->errstr;
+    $sth->execute() or die $dbh->errstr;
 
     my($latitude,$longitude,$tz,$dst,$city,$state) = $sth->fetchrow_array;
     $sth->finish;
