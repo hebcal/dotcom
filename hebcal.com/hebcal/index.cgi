@@ -265,8 +265,13 @@ exit(0);
 sub json_events
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
-    my $cfg = $q->param("cfg");
-    my $items = Hebcal::events_to_dict(\@events,$cfg,$q,0,0);
+    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0);
+
+    print STDOUT $q->header(-type => "text/javascript",
+			    -charset => "UTF-8",
+			    );
+
+    Hebcal::items_to_json($items);
 }
 
 sub javascript_events

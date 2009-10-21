@@ -472,7 +472,7 @@ sub events_to_dict
     }
     my $tz_save = $tz;
 
-    my $url = self_url($q);
+    my $url = "http://" . $q->virtual_host() . self_url($q, {"cfg" => ""});
     my @items;
     for (my $i = 0; $i < scalar(@{$events}); $i++)
     {
@@ -554,21 +554,24 @@ sub events_to_dict
 	elsif ($subj eq "No sunset today.")
 	{
 	    $item{"class"} = "candles";
-	    $item{"link"} = self_url($q);
+	    $item{"link"} = self_url($q, {"cfg" => ""});
 	    $item{"time"} = "";
 	}
 	else
 	{
-	    if ($subj =~ /^(Parshas|Parashat)\s+/)
-	    {
+	    if ($subj =~ /^(Parshas|Parashat)\s+/) {
 		$item{"class"} = "parashat";
-	    }
-	    else
-	    {
+	    } elsif ($subj =~ /^(\d+)\w+ day of the Omer$/) {
+		$item{"class"} = "omer";
+	    } elsif ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/) {
+		$item{"class"} = "hebdate";
+	    } else {
 		$item{"class"} = "holiday";
 	    }
 
-	    $item{"link"} = Hebcal::get_holiday_anchor($subj,0,$q);
+	    my($href,$hebrew) = get_holiday_anchor($subj,0,$q);
+	    $item{"link"} = $href if $href;
+	    $item{"hebrew"} = $hebrew if $hebrew;
 	}
 
 	push(@items, \%item);
@@ -591,7 +594,7 @@ sub items_to_json
 	my $date =  $items->[$i]->{"dc:date"};
 
 	out_html(undef, qq'{"title":"$subj",
-"subject":"$class",
+"category":"$class",
 "date":"$date"');
 
 	if ($class =~ /^(parashat|holiday)$/) {
