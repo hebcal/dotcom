@@ -383,34 +383,7 @@ sub display_json
 
     print "Content-Type: text/json; charset=UTF-8\015\012\015\012";
 
-    my $url = self_url();
-    $url =~ s,/,\\/,g;
-
-    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
-
-    my $cb = $q->param('callback');
-    if ($cb && $cb =~ /^[A-Za-z_]\w*$/) {
-	Hebcal::out_html($cfg, $cb, "(");
-    } else {
-	$cb = undef;
-    }
-
-    Hebcal::out_html($cfg, qq'{"title":"$city_descr",
-"link":"$url",
-"date":"$dc_date",
-');
-
-    if (defined $latitude) {
-	Hebcal::out_html($cfg, qq'"latitude":$latitude,
-"longitude":$longitude,
-');
-    }
-
-    Hebcal::out_html($cfg, qq'"items":[\n');
-    Hebcal::items_to_json($items);
-    Hebcal::out_html($cfg, "]\n}\n");
-
-    Hebcal::out_html($cfg, ")\n") if $cb;
+    Hebcal::items_to_json($items,$q,$city_descr,$latitude,$longitude);
 }
 
 

@@ -271,7 +271,7 @@ sub json_events
 			    -charset => "UTF-8",
 			    );
 
-    Hebcal::items_to_json($items);
+    Hebcal::items_to_json($items,$q,"Hebcal");
 }
 
 sub javascript_events

@@ -589,6 +589,42 @@ sub events_to_dict
 
 sub items_to_json
 {
+    my($items,$q,$city_descr,$latitude,$longitude) = @_;
+
+    my $url = "http://" . $q->virtual_host() . self_url($q, {"cfg" => undef});
+    $url =~ s,/,\\/,g;
+
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
+
+    my $cb = $q->param("callback");
+    if ($cb && $cb =~ /^[A-Za-z_]\w*$/) {
+	out_html(undef, $cb, "(");
+    } else {
+	$cb = undef;
+    }
+
+    out_html(undef, qq'{"title":"$city_descr",
+"link":"$url",
+"date":"$dc_date",
+');
+
+    if (defined $latitude) {
+	out_html(undef, qq'"latitude":$latitude,
+"longitude":$longitude,
+');
+    }
+
+    out_html(undef, qq'"items":[\n');
+    items_to_json($items);
+    out_html(undef, "]\n}\n");
+
+    out_html(undef, ")\n") if $cb;
+
+    items_to_json_inner($items);
+}
+
+sub items_to_json_inner
+{
     my($items) = @_;
 
     for (my $i = 0; $i < scalar(@{$items}); $i++) {
