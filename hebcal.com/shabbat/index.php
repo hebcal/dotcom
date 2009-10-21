@@ -87,17 +87,11 @@ if (!$status) {
     $ch = curl_init($url);
     curl_exec($ch);
     curl_close($ch);
-    if ($cfg == "j") {
-	echo "// cache miss\n";
-    } else {
-	echo "<!-- cache miss -->\n";
-    }
+}
+if ($cfg == "j" || $cfg == "json") {
+    echo "// cache miss\n";
 } else {
-    if ($cfg == "j") {
-	echo "// cache hit\n";
-    } else {
-	echo "<!-- cache hit -->\n";
-    }
+    echo "<!-- cache miss -->\n";
 }
 exit();
 ?>
