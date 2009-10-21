@@ -615,12 +615,10 @@ sub items_to_json
     }
 
     out_html(undef, qq'"items":[\n');
-    items_to_json($items);
+    items_to_json_inner($items);
     out_html(undef, "]\n}\n");
 
     out_html(undef, ")\n") if $cb;
-
-    items_to_json_inner($items);
 }
 
 sub items_to_json_inner
