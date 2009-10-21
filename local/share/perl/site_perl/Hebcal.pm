@@ -459,15 +459,15 @@ sub events_to_dict
 
     my $tz = 0;
     my $dst = $q->param("dst");
-    if ($q->param('tz'))
+    if ($q->param("tz"))
     {
-	$tz = $q->param('tz');
-	$tz = 0 if $tz eq 'auto';
+	$tz = $q->param("tz");
+	$tz = 0 if $tz eq "auto";
     }
-    elsif ($q->param('city') && 
-	   defined($Hebcal::city_tz{$q->param('city')}))
+    elsif ($q->param("city") && 
+	   defined($Hebcal::city_tz{$q->param("city")}))
     {
-	$tz = $Hebcal::city_tz{$q->param('city')};
+	$tz = $Hebcal::city_tz{$q->param("city")};
 	$dst = $Hebcal::city_dst{$q->param("city")};
     }
     my $tz_save = $tz;
@@ -481,7 +481,7 @@ sub events_to_dict
 		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
 		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
 		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       '','','');
+		       "","","");
 	next if ($friday && $time < $friday) || ($saturday && $time > $saturday);
 
 	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -496,7 +496,7 @@ sub events_to_dict
 	my %item;
 	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
-	$item{'date'} = strftime($format, localtime($time));
+	$item{"date"} = strftime($format, localtime($time));
 
 	my $tz = $tz_save;
 	if (defined $dst && $dst eq "usa") {
@@ -506,7 +506,7 @@ sub events_to_dict
 
 	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    $item{'dc:date'} =
+	    $item{"dc:date"} =
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
 			$year,$mon,$mday,
 			$hour + 12,$min,0,
@@ -523,8 +523,8 @@ sub events_to_dict
 	}
 	else
 	{
-	    $item{'dc:date'} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-	    $item{'dc:date'} .= sprintf("T00:00:00%s%02d:00",
+	    $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
+	    $item{"dc:date"} .= sprintf("T00:00:00%s%02d:00",
 					$tz > 0 ? "+" : "-",
 					abs($tz));
 	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
@@ -541,34 +541,34 @@ sub events_to_dict
 	$anchor =~ s/[^\w]/_/g;
 	$anchor =~ s/_+/_/g;
 	$anchor =~ s/_$//g;
-	$item{'about'} = $url . "#" . $anchor;
-	$item{'subj'} = $subj;
+	$item{"about"} = $url . "#" . $anchor;
+	$item{"subj"} = $subj;
 
-	if ($subj eq 'Candle lighting' || $subj =~ /Havdalah/)
+	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
-	    $item{'class'} = ($subj eq 'Candle lighting') ?
-		'candles' : 'havdalah';
-	    $item{'time'} = sprintf("%d:%02dpm", $hour, $min);
-	    $item{'link'} = $url . "#" . $anchor;
+	    $item{"class"} = ($subj eq "Candle lighting") ?
+		"candles" : "havdalah";
+	    $item{"time"} = sprintf("%d:%02dpm", $hour, $min);
+	    $item{"link"} = $url . "#" . $anchor;
 	}
-	elsif ($subj eq 'No sunset today.')
+	elsif ($subj eq "No sunset today.")
 	{
-	    $item{'class'} = 'candles';
-	    $item{'link'} = self_url($q);
-	    $item{'time'} = '';
+	    $item{"class"} = "candles";
+	    $item{"link"} = self_url($q);
+	    $item{"time"} = "";
 	}
 	else
 	{
 	    if ($subj =~ /^(Parshas|Parashat)\s+/)
 	    {
-		$item{'class'} = 'parashat';
+		$item{"class"} = "parashat";
 	    }
 	    else
 	    {
-		$item{'class'} = 'holiday';
+		$item{"class"} = "holiday";
 	    }
 
-	    $item{'link'} = Hebcal::get_holiday_anchor($subj,0,$q);
+	    $item{"link"} = Hebcal::get_holiday_anchor($subj,0,$q);
 	}
 
 	push(@items, \%item);
@@ -576,6 +576,36 @@ sub events_to_dict
 
     \@items;
 }
+
+sub items_to_json
+{
+    my($items) = @_;
+
+    for (my $i = 0; $i < scalar(@{$items}); $i++) {
+	my $subj = $items->[$i]->{"subj"};
+	if (defined $items->[$i]->{"time"}) { 
+	    $subj .= ": " . $items->[$i]->{"time"};
+	}
+
+	my $class = $items->[$i]->{"class"};
+	my $date =  $items->[$i]->{"dc:date"};
+
+	out_html(undef, qq'{"title":"$subj",
+"subject":"$class",
+"date":"$date"');
+
+	if ($class =~ /^(parashat|holiday)$/) {
+	    my $link =  $items->[$i]->{"link"};
+	    $link =~ s,/,\\/,g;
+	    out_html(undef, qq',\n"link":"$link"');
+	}
+
+	out_html(undef, "\n}");
+	out_html(undef, ",") unless $i+1 == scalar(@{$items});
+	out_html(undef, "\n");
+    }
+}
+
 
 sub get_dow($$$)
 {

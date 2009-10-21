@@ -395,50 +395,22 @@ sub display_json
 	$cb = undef;
     }
 
-    Hebcal::out_html($cfg, qq'{
- "title": "$city_descr",
- "link": "$url",
- "date": "$dc_date",
+    Hebcal::out_html($cfg, qq'{"title":"$city_descr",
+"link":"$url",
+"date":"$dc_date",
 ');
 
     if (defined $latitude) {
-	Hebcal::out_html($cfg, qq' "latitude": $latitude,
- "longitude": $longitude,
+	Hebcal::out_html($cfg, qq'"latitude":$latitude,
+"longitude":$longitude,
 ');
     }
 
-    Hebcal::out_html($cfg, qq' "items": [\n');
+    Hebcal::out_html($cfg, qq'"items":[\n');
+    Hebcal::items_to_json($items);
+    Hebcal::out_html($cfg, "]\n}\n");
 
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	my $subj = $items->[$i]->{'subj'};
-	if (defined $items->[$i]->{'time'}) { 
-	    $subj .= ": " . $items->[$i]->{'time'};
-	}
-
-	my $class = $items->[$i]->{'class'};
-	my $date =  $items->[$i]->{'dc:date'};
-
-	Hebcal::out_html($cfg,
-			 qq'  {
-   "title": "$subj",
-   "subject": "$class",
-   "date": "$date"');
-
-	if ($class =~ /^(parashat|holiday)$/) {
-	    my $link =  $items->[$i]->{'link'};
-	    $link =~ s,/,\\/,g;
-	    Hebcal::out_html($cfg, qq',\n   "link": "$link"');
-	}
-
-	Hebcal::out_html($cfg, "\n  }");
-	Hebcal::out_html($cfg, ",") unless $i+1 == scalar(@{$items});
-	Hebcal::out_html($cfg, "\n");
-    }
-
-    Hebcal::out_html($cfg, " ]\n}\n");
-
-    Hebcal::out_html($cfg, ")") if $cb;
+    Hebcal::out_html($cfg, ")\n") if $cb;
 }
 
 
