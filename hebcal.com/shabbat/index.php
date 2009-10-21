@@ -6,7 +6,7 @@ require "../pear/Hebcal/common.inc";
 
 $qs = $_SERVER["QUERY_STRING"];
 $matches = array();
-if ($qs && preg_match('/\bcfg=([a-z])/', $qs, $matches)) {
+if ($qs && preg_match('/\bcfg=([^;&]+)/', $qs, $matches)) {
     $cfg = $matches[1];
 } else {
     $cfg = "";
@@ -14,6 +14,8 @@ if ($qs && preg_match('/\bcfg=([a-z])/', $qs, $matches)) {
 
 if ($cfg == "j") {
     header("Content-Type: application/x-javascript");
+} elseif ($cfg == "json") {
+    header("Content-Type: text/json; charset=UTF-8");
 } elseif ($cfg == "r" ) {
     header("Content-Type: text/xml");
 } elseif ($cfg == "w") {
