@@ -472,7 +472,14 @@ sub events_to_dict
     }
     my $tz_save = $tz;
 
-    my $url = "http://" . $q->virtual_host() . self_url($q, {"cfg" => ""});
+    my $url = "http://" . $q->virtual_host() .
+	self_url($q, {"cfg" => undef,
+		      "c" => undef,
+		      "nh" => undef,
+		      "nx" => undef,
+		      "tz" => undef,
+		      "dst" => undef,
+		      });
     my @items;
     for (my $i = 0; $i < scalar(@{$events}); $i++)
     {
@@ -554,7 +561,7 @@ sub events_to_dict
 	elsif ($subj eq "No sunset today.")
 	{
 	    $item{"class"} = "candles";
-	    $item{"link"} = self_url($q, {"cfg" => ""});
+	    $item{"link"} = $url . "#top";
 	    $item{"time"} = "";
 	}
 	else
@@ -601,6 +608,11 @@ sub items_to_json
 	    my $link =  $items->[$i]->{"link"};
 	    $link =~ s,/,\\/,g;
 	    out_html(undef, qq',\n"link":"$link"');
+	}
+
+	if (defined $items->[$i]->{"hebrew"}) {
+	    my $hebrew = $items->[$i]->{"hebrew"};
+	    out_html(undef, qq',\n"hebrew":"$hebrew"');
 	}
 
 	out_html(undef, "\n}");
@@ -1426,27 +1438,29 @@ sub self_url($$)
 {
     my($q,$override) = @_;
 
-    my $script_name = Hebcal::script_name($q);
-
-    my($url) = $script_name;
-    my($sep) = '?';
+    my $url = Hebcal::script_name($q);
+    my $sep = "?";
 
     foreach my $key ($q->param())
     {
-	next if $key eq 'tag' && !defined $override->{$key};
-
+	# delete "tag" params unless explicitly specified
+	next if $key eq "tag" && !exists $override->{"tag"};
+	# ignore undef entries in the override hash
+	next if exists $override->{$key} && !defined $override->{$key};
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
 	$url .= "$sep$key=" . Hebcal::url_escape($val);
-	$sep = ';' if $sep eq '?';
+	$sep = ";";
     }
 
     foreach my $key (keys %{$override})
     {
+	# ignore undef entries in the override hash
+	next unless defined $override->{$key};
 	unless (defined $q->param($key))
 	{
 	    $url .= "$sep$key=" . Hebcal::url_escape($override->{$key});
-	    $sep = ';' if $sep eq '?';
+	    $sep = ";";
 	}
     }
 
