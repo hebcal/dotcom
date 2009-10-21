@@ -4,6 +4,14 @@
 
 require "../pear/Hebcal/common.inc";
 
+function cache_comment($cfg, $status) {
+    if ($cfg == "j" || $cfg == "json") {
+	echo "// cache ", $status, "\n";
+    } else {
+	echo "<!-- cache ", $status, " -->\n";
+    }
+}
+
 $qs = $_SERVER["QUERY_STRING"];
 $matches = array();
 if ($qs && preg_match('/\bcfg=([^;&]+)/', $qs, $matches)) {
@@ -87,11 +95,9 @@ if (!$status) {
     $ch = curl_init($url);
     curl_exec($ch);
     curl_close($ch);
-}
-if ($cfg == "j" || $cfg == "json") {
-    echo "// cache miss\n";
+    cache_comment($cfg, "miss");
 } else {
-    echo "<!-- cache miss -->\n";
+    cache_comment($cfg, "hit");
 }
 exit();
 ?>
