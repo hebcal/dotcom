@@ -381,7 +381,7 @@ sub display_json
 {
     my($items) = @_;
 
-    print "Content-Type: text/json\015\012\015\012";
+    print "Content-Type: text/json; charset=UTF-8\015\012\015\012";
 
     my $url = self_url();
     $url =~ s,/,\\/,g;
