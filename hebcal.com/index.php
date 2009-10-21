@@ -175,7 +175,7 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
 
     $cal[] = array("The Jewish Calendar 2010 Wall: From the Collection of the Jewish Historical Museum Amsterdam", "0789319411", 110, 110);
     $cal[] = array("The Jewish Museum 2010 Calendar", "0764947753", 110, 102);
-    $cal[] = array("Illuminations 2010 Calendar", "0764947702", 110, 102);
+    //$cal[] = array("Illuminations 2010 Calendar", "0764947702", 110, 102);
     $cal[] = array("Jewish Celebrations 2010 Calendar", "0764947613", 110, 102);
     $cal[] = array("Hebrew Illuminations 2010 Wall Calendar: A 16 Month Calendar - 5769/5770", "1602372659", 110, 110);
 
@@ -187,6 +187,7 @@ if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
 
 	echo <<<MESSAGE_END
 <a title="$title from Amazon.$amazon_dom"
+class="amzn" id="bk-$asin-searchref-1"
 href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20"><img
 src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
 width="$width" height="$height" hspace="8" align="right"
@@ -209,6 +210,7 @@ MESSAGE_END;
 	echo <<<MESSAGE_END
 <p>If you are looking for a full-color printed calendar
 with Jewish holidays, consider <a
+class="amzn" id="bk-$asin-searchref-2"
 href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20">$title</a>
 from Amazon.$amazon_dom.
 

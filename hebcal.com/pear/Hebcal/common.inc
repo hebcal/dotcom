@@ -5,7 +5,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2009  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -347,6 +347,13 @@ type="text/javascript">
 <script type="text/javascript">
 _uacct="UA-967247-1";
 urchinTracker();
+if(document.getElementsByTagName){
+var e3=document.getElementsByTagName("a");
+if(e3&&e3.length){
+for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="amzn"){
+if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
+}}}
+}
 </script>
 </body></html>
 
