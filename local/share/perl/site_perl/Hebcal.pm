@@ -1081,7 +1081,7 @@ sub zipcode_get_zip_fields($$)
 
     if (($state eq 'HI' || $state eq 'AZ') && $dst == 1)
     {
-	warn "[$city, $state] had DST=1 but should be 0";
+	warn "[$city, $state, $zipcode] had DST=1 but should be 0";
 	$dst = 0;
     }
 
