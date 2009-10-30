@@ -290,27 +290,35 @@ sub get_friday_candles
     my($events) = @_;
     my($numEntries) = scalar(@{$events});
     my($i);
+    my $retval = "";
     for ($i = 0; $i < $numEntries; $i++)
     {
-	my($time) = Time::Local::timelocal(1,0,0,
-		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
-		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       "","","");
+	my $time = Hebcal::event_to_time($events->[$i]);
 	next if $time < $midnight || $time > $endofweek;
 
-	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	if ($subj eq "Candle lighting")
+	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
+	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $dow = Hebcal::get_dow($year, $mon, $mday);
+
+	if ($dow == 5 && $subj eq "Candle lighting")
 	{
 	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
 	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	    $hour -= 12 if $hour > 12;
 
-	    return sprintf("%d:%02dpm", $hour, $min);
+	    $retval .= sprintf("%d:%02dpm", $hour, $min);
+	}
+	elsif ($dow == 6 && $subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
+	{
+	    my $parashat = $1;
+	    my $sedra = $2;
+	    $retval .= " - $parashat $sedra";
 	}
     }
 
-    return "";
+    return $retval;
 }
 
 sub gen_body
@@ -325,11 +333,7 @@ sub gen_body
     for ($i = 0; $i < $numEntries; $i++)
     {
 	# holiday is at 12:00:01 am
-	my($time) = Time::Local::timelocal(1,0,0,
-		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
-		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       "","","");
+	my $time = Hebcal::event_to_time($events->[$i]);
 	next if $time < $midnight || $time > $endofweek;
 
 	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];

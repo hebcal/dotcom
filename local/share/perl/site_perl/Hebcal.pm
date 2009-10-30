@@ -453,6 +453,17 @@ sub invoke_hebcal
     @events;
 }
 
+sub event_to_time
+{
+    my($evt) = @_;
+    # holiday is at 12:00:01 am
+    return Time::Local::timelocal(1,0,0,
+				  $evt->[$Hebcal::EVT_IDX_MDAY],
+				  $evt->[$Hebcal::EVT_IDX_MON],
+				  $evt->[$Hebcal::EVT_IDX_YEAR] - 1900,
+				  "","","");
+}
+
 sub events_to_dict
 {
     my($events,$cfg,$q,$friday,$saturday) = @_;
@@ -483,12 +494,7 @@ sub events_to_dict
     my @items;
     for (my $i = 0; $i < scalar(@{$events}); $i++)
     {
-	# holiday is at 12:00:01 am
-	my($time) = Time::Local::timelocal(1,0,0,
-		       $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-		       $events->[$i]->[$Hebcal::EVT_IDX_MON],
-		       $events->[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-		       "","","");
+	my $time = event_to_time($events->[$i]);
 	next if ($friday && $time < $friday) || ($saturday && $time > $saturday);
 
 	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
