@@ -314,7 +314,7 @@ sub get_friday_candles
 	{
 	    my $parashat = $1;
 	    my $sedra = $2;
-	    $retval .= " - $parashat $sedra";
+	    $retval .= " - $sedra";
 	}
     }
 
