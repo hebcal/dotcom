@@ -2214,6 +2214,9 @@ sub vcalendar_write_contents
 		   /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/) {
 		$alarm = "12H";	# noon the day before
 	    }
+	    elsif ($evt->[$Hebcal::EVT_IDX_SUBJ] eq 'Candle lighting') {
+		$alarm = "10M";	# ten minutes
+	    }
 
 	    if (defined $alarm) {
 		out_html(undef, "BEGIN:VALARM${endl}",
