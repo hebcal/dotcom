@@ -95,6 +95,16 @@ if ($hmnum == 13 && $hd >= 1) {
 } elseif ($hmnum == 8 && $hd >= 7 && $hd <= 15) {
     # for a week before Pesach, show greeting
     $chag_kasher = true;	# month 8 == Nisan
+} elseif ($hmnum == 3 && $hd >= 10 && $hd <= 24) {
+    # for two weeks before Chanukah, show greeting
+    $chanukah_jd = jewishtojd(3, 24, $hy); # month 3 == Kislev
+    $chanukah_cal = cal_from_jd($chanukah_jd, CAL_GREGORIAN);
+    $chanukah_upcoming = sprintf("%s sundown on %s, %s %s %s",
+	       $chanukah_cal["abbrevdayname"] == "Fri" ? "before" : "at",
+		       $chanukah_cal["abbrevdayname"],
+		       $chanukah_cal["day"],
+		       $chanukah_cal["monthname"],
+		       $chanukah_cal["year"]);
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -136,6 +146,11 @@ a good new month.</span>
 <?php } elseif ($chanukah) { ?>
 <br><span class="fpgreeting">Chag Urim Sameach! Hebcal.com wishes you
 a happy Chanukah.</span>
+<?php } elseif (isset($chanukah_upcoming)) { ?>
+<br><span class="fpgreeting">Light the first <a
+title="Chanukah, the Festival of Lights"
+href="/holidays/chanukah.html?tag=fp">Hanukkah</a> candle
+<?php echo $chanukah_upcoming ?>.</span>
 <?php } elseif (isset($shalosh_regalim)) { ?>
 <br><span class="fpgreeting">Moadim L&#39;Simcha! Hebcal.com wishes you
 a happy <?php echo $shalosh_regalim ?>.</span>
@@ -146,15 +161,17 @@ fast.</span>
 <br><span class="fpgreeting">Shanah Tovah! Hebcal.com wishes you a happy
 and healthy New Year.</span>
 <?php     if (isset($erev_rh)) { ?>
-<br><span class="fpgreeting"><a href="/holidays/rosh-hashana.html">Rosh Hashana <?php echo $hy + 1 ?></a>
-begins at sundown on <?php echo $erev_rh ?>.</span>
+<br><span class="fpgreeting"><a href="/holidays/rosh-hashana.html?tag=fp">Rosh
+Hashana <?php echo $hy + 1 ?></a> begins at sundown
+on <?php echo $erev_rh ?>.</span>
 <?php     } ?>
 <?php } elseif ($gmar_tov) { ?>
 <br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
 you a good inscription in the Book of Life.</span>
 <?php     if (isset($erev_yk)) { ?>
-<br><span class="fpgreeting"><a href="/holidays/yom-kippur.html">Yom Kippur</a>
-begins at sundown on <?php echo $erev_yk ?>.</span>
+<br><span class="fpgreeting"><a href="/holidays/yom-kippur.html?tag=fp">Yom
+Kippur</a> begins at sundown
+on <?php echo $erev_yk ?>.</span>
 <?php     } ?>
 <?php } elseif ($chag_kasher) { ?>
 <br><span class="fpgreeting">Chag Kasher v&#39;Sameach! Hebcal.com
