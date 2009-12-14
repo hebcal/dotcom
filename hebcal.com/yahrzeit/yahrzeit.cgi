@@ -469,7 +469,6 @@ sub form
     $q->hidden(-name => ".cgifields",
 	       -values => ["hebdate", "yizkor"],
 	       -override => 1), "\n",
-    $q->hidden(-name => "yahrzeit", -value => 1), "\n",
     qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
 
     Hebcal::out_html($cfg, qq{</div>\n});
