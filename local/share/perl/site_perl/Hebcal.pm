@@ -1620,6 +1620,10 @@ Jewish Calendar events into your desktop software.</p>};
 				       . $gcal_subical_href);
     $s .= "\n<h4>Google Calendar</h4>\n"
 	. "<blockquote><a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"/i/gc_button6.gif\" width=\"114\" height=\"36\" border=\"0\" alt=\"Add to Google Calendar\"></a></blockquote>";
+    $s .= "Alternate option:\n" .
+	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
+	$ical_href . "\">download</a> and then follow\n" .
+	"<a href=\"http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118\">Google's import instructions</a>.\n";
 
     # only offer DBA export when we know timegm() will work
     $s .= "\n<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
