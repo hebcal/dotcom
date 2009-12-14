@@ -2024,10 +2024,11 @@ sub vcalendar_write_contents
 	qq{X-LOTUS-CHARSET:UTF-8$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl});
 
-	# include an iCal description if it's not the yahrzeit calendar 
-	if (defined $q->param("v") && $q->param("v") eq "1")
+	# include an iCal description
+	if (defined $q->param("v"))
 	{
-	    my $desc_url =  "http://" . $q->virtual_host() . "/hebcal/";
+	    my $desc_url = "http://" . $q->virtual_host() .
+		(($q->param("v") eq "yahrzeit") ? "/yahrzeit/" : "/hebcal/");
 	    my $sep = "?";
 	    foreach my $key ($q->param())
 	    {
