@@ -252,10 +252,10 @@ Customize Shabbat and holiday candle lighting times to your zip code, city, or l
 Torah readings for Israel and Diaspora
 <li>
 Export to
-<a href="/help/import.html#csv">Outlook</a>,
-<a href="/help/import.html#ical">Apple iCal</a>,
-<a href="/help/import.html#gcal">Google Calendar</a>, and
-<a href="/help/import.html#dba">Palm</a>
+<a href="/help/import-outlook.html">Outlook</a>,
+<a href="/help/import-ical.html">Apple iCal</a>,
+<a href="/help/import-gcal.html">Google Calendar</a>, and
+<a href="/help/import-palm.html">Palm</a>
 </ul>
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
 <ul class="gtl">
