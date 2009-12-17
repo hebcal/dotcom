@@ -1579,7 +1579,7 @@ Jewish Calendar events into your desktop software.</p>};
 	download_href($q, "${filename}_eur", 'csv') .
 	";euro=1\">${filename}_eur.csv</a></ul>\n";
 
-    $s .= qq{<li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a></ol>};
+    $s .= qq{<li><a href="/help/import-outlook.html">How to import CSV file into Outlook</a></ol>};
 
     my $dst;
     if ($q->param("geo") && $q->param("geo") ne "off"
@@ -1611,7 +1611,7 @@ Jewish Calendar events into your desktop software.</p>};
 	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
 	$ical_href .
 	    "\">download</a>\n";
-    $s .= qq{<li><a href="/help/import-ical.html#ical">How to import ICS file into Apple iCal</a></ol>};
+    $s .= qq{<li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a></ol>};
 
     my $gcal_subical_href = $subical_href;
     $gcal_subical_href =~ s/;/&/g;
@@ -1635,7 +1635,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a href="/help/import-palm.html#dba">How to import DBA file into Palm Desktop 4.1.4</a></ol>};
+	$s .= qq{<li><a href="/help/import-palm.html">How to import DBA file into Palm Desktop 4.1.4</a></ol>};
     }
     else
     {
