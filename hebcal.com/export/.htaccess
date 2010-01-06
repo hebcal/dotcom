@@ -1,5 +1,4 @@
 ErrorDocument 404 /export/err404.php
-AddType text/calendar;charset=UTF-8 ics
 
 # fix some broken versions of Apple iCal
 RewriteEngine on

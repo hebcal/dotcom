@@ -27,6 +27,7 @@ RewriteRule ^etc/hdate-en.xml - [F,L]
 # virus-infected host
 Deny from 203.231.0.1
 
+AddType text/calendar;charset=UTF-8 ics
 AddType image/vnd.microsoft.icon ico
 AddType application/x-javascript js
 AddType text/css css
