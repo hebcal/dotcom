@@ -42,8 +42,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-require 5.008_001;
+require 5.008_004;
 
+use lib "/home/hebcal/local/lib/perl/5.8.4";
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
@@ -56,11 +57,16 @@ use HTTP::Request;
 use Image::Magick;
 use URI::Escape qw(uri_escape_utf8);
 use POSIX qw(strftime);
-#use Digest::SHA qw(hmac_sha256_base64);
+use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
 use Date::Calc;
 use HebcalGPL ();
+use RequestSignatureHelper;
 use strict;
+
+use constant myAWSId    => '15X7F0YJNN5FCYC7CGR2';
+use constant myAWSSecret    => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+use constant myEndPoint    => 'ecs.amazonaws.com';
 
 $0 =~ s,.*/,,;  # basename
 my($usage) = "usage: $0 [-h] festival.xml output-dir
@@ -157,6 +163,14 @@ my %OBSERVED;
 holidays_observed(\%OBSERVED);
 
 my %seph2ashk = reverse %Hebcal::ashk2seph;
+
+# Set up the helper
+my $helper = new RequestSignatureHelper (
+    +RequestSignatureHelper::kAWSAccessKeyId => myAWSId,
+    +RequestSignatureHelper::kAWSSecretKey => myAWSSecret,
+    +RequestSignatureHelper::kEndPoint => myEndPoint,
+					 );
+
 
 my $ua;
 foreach my $f (@FESTIVALS)
@@ -620,30 +634,28 @@ EOHTML
 		{
 		    $ua = LWP::UserAgent->new unless $ua;
 		    $ua->timeout(10);
-		    my $endpoint = "ecs.amazonaws.com";
-		    my $request_uri = "/onca/xml";
-		    my $aws_secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 		    my %params = (
 				  "Service" => "AWSECommerceService",
-				  "AWSAccessKeyId" => "15X7F0YJNN5FCYC7CGR2",
 				  "Operation" => "ItemLookup",
 				  "ItemId" => $asin,
 				  "ResponseGroup" => "ItemAttributes",
 				  "Version" => "2009-01-06",
 				  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
 				  );
-		    my $query_string = join("&", map { $_ . "=" . uri_escape_utf8($params{$_}) } sort keys %params);
-		    my $tosign = join("\n", "GET", $endpoint, $request_uri, $query_string);
-#		    my $signature = hmac_sha256_base64($tosign, $aws_secret_key);
-		    my $signature = '';
-		    $signature .= "=" while length($signature) % 4;    # padding required
-		    my $url = join("", "http://", $endpoint, $request_uri, "?", $query_string, "&Signature=", $signature);
-
-		    # use the old API for now
-                    $url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=15X7F0YJNN5FCYC7CGR2&Operation=ItemLookup&ItemId=$asin&Version=2005-10-13";
+		    my $signedRequest = $helper->sign(\%params);
+		    my $queryString = $helper->canonicalize($signedRequest);
+		    my $url = "http://" . myEndPoint . "/onca/xml?" . $queryString;
 		    my $request = HTTP::Request->new("GET", $url);
 		    my $response = $ua->request($request);
 		    my $rxml = XML::Simple::XMLin($response->content);
+		    if (!$response->is_success()) {
+			my $error = findError($rxml);
+			if (defined $error) {
+			    print STDERR "Error: " . $error->{Code} . ": " . $error->{Message} . "\n";
+			} else {
+			    print STDERR "Unknown Error!\n";
+			}
+		    }
 
 		    if (defined $rxml->{"Items"}->{"Item"}->{"ASIN"}
 			&& $rxml->{"Items"}->{"Item"}->{"ASIN"} eq $asin)
@@ -859,4 +871,19 @@ sub holidays_observed
 			defined $current->{$subj_copy}->[$yr]);
 	}
     }
+}
+
+sub findError {
+    my $xml = shift;
+    
+    return undef unless ref($xml) eq 'HASH';
+
+    if (exists $xml->{Error}) { return $xml->{Error}; };
+
+    for (keys %$xml) {
+	my $error = findError($xml->{$_});
+	return $error if defined $error;
+    }
+
+    return undef;
 }
