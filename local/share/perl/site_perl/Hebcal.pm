@@ -307,6 +307,9 @@ if(e1){var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
 if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
 </script>
+<script src="http://clearmark.anchorintelligence.com/j9999/track.js"
+type="text/javascript">
+</script>
 };
 
 ########################################################################

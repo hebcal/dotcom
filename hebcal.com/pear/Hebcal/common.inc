@@ -355,6 +355,9 @@ if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
 }}}
 }
 </script>
+<script src="http://clearmark.anchorintelligence.com/j9999/track.js"
+type="text/javascript">
+</script>
 </body></html>
 
 EOD
