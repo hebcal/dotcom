@@ -1144,24 +1144,29 @@ sub html_copyright($$$)
 }
 
 sub html_footer_lite {
-    my($rcsrev,$mtime) = @_;
+    my($rcsrev,$mtime,$noclosebody) = @_;
 
     $rcsrev =~ s/\s*\$//g;
 
     my $hhmts = "Last modified:\n" . localtime($mtime);
     my $copyright = Hebcal::html_copyright2('',0,undef);
-    my $html_footer = <<EOHTML;
+    my $str = <<EOHTML;
 <hr noshade size="1">
 <span class="tiny">$copyright
 <br>
 $hhmts
 ($rcsrev)
 </span>
-$URCHIN
-</body></html>
 EOHTML
 ;
-    $html_footer;
+
+    $str .= $URCHIN;
+
+    if ($noclosebody) {
+	return $str;
+    } else {
+	return $str . "</body></html>\n";
+    }
 }
 
 sub html_footer
