@@ -348,6 +348,9 @@ id="zip">&nbsp;<input type="submit" value="Go">
 </form>
 </td></tr></table>
 <p>
+<script type="text/javascript">
+var _aipt = 'l';
+</script>
 <?php
 echo html_footer_lite(false);
 ?>

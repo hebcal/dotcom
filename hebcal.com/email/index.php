@@ -97,6 +97,12 @@ elseif ($param["unsubscribe"]) {
 else {
     form($param);
 }
+?>
+<script type="text/javascript">
+var _aipt = 'v';
+var _airev = 0.12;
+</script>
+<?php
 echo html_footer_lite();
 exit();
 
