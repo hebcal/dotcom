@@ -2,7 +2,7 @@ BEGIN:VCALENDAR
 X-LOTUS-CHARSET:UTF-8
 VERSION:2.0
 CALSCALE:GREGORIAN
-X-WR-CALNAME:Hebrew calendar dates
+X-WR-CALNAME:Hebrew calendar dates (en)
 PRODID:-//hebcal.com/NONSGML Hebcal Calendar v2802//EN
 X-WR-CALDESC:Displays the Hebrew date (such as "18th of Tevet, 5770") every day of the week
 METHOD:PUBLISH

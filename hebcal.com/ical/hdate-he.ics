@@ -4,7 +4,7 @@ PRODID:-//hebcal.com/NONSGML Hebcal Calendar v2878//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-LOTUS-CHARSET:UTF-8
-X-WR-CALNAME:Hebrew calendar dates
+X-WR-CALNAME:Hebrew calendar dates (he)
 X-WR-CALDESC:Displays the Hebrew date (such as "י״ח בטבת תש״ע") every day of the week
 BEGIN:VEVENT
 DTSTAMP:20100106T194958Z
