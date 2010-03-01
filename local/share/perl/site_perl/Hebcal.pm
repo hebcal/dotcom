@@ -1648,10 +1648,11 @@ href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
 import instructions</a>.
 <h3>Yahoo! Calendar</h3>
-<form>
+<form id="GrabLinkForm">
 <ol>
 <li>Copy the entire iCal URL here:
 <label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
+onfocus="this.select();" onKeyPress="return false;"
 value="${full_http_href}"></small></label>
 <li>Go to your <a href="http://calendar.yahoo.com/">Yahoo! Calendar</a>,
 and click the "<b>+</b>" button next to "Calendars" on the left side of the page
