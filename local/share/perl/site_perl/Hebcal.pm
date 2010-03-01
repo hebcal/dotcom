@@ -1554,7 +1554,7 @@ sub download_html
     $title = '' unless $title;
 
     my($s) = qq{<div class="goto" id="export"><a name="export"></a><hr>\n} .
-    qq{<h3>Export $title calendar</h3>\n};
+    qq{<h2>Export $title calendar</h2>\n};
 
     $s .= qq{<p>By clicking the links below, you can download 
 Jewish Calendar events into your desktop software.</p>};
@@ -1576,7 +1576,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    "#export\">Hebrew Year $heb_year</a> events.</p>\n";
     }
 
-    $s .= "\n<h4>Microsoft Outlook</h4>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
+    $s .= "\n<h3>Microsoft Outlook</h3>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
 	"<ul><li>USA date format (month/day/year):\n" .
 	"<a class=\"download\" id=\"${filename}_usa.csv\" href=\"" .
 	download_href($q, "${filename}_usa", 'csv') .
@@ -1611,7 +1611,7 @@ Jewish Calendar events into your desktop software.</p>};
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
 
-    $s .= "\n<h4>Apple iCal (and other iCalendar-enabled applications)</h4>\n<ol><li>" .
+    $s .= "\n<h3>Apple iCal (and other iCalendar-enabled applications)</h3>\n<ol><li>" .
 	"Export iCalendar file:\n" .
 	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
 	$q->virtual_host() . $subical_href .
@@ -1623,18 +1623,51 @@ Jewish Calendar events into your desktop software.</p>};
 
     my $gcal_subical_href = $subical_href;
     $gcal_subical_href =~ s/;/&/g;
-    my $gcal_href = Hebcal::url_escape("http://"
-				       . $q->virtual_host()
-				       . $gcal_subical_href);
-    $s .= "\n<h4>Google Calendar</h4>\n"
-	. "<blockquote><a title=\"Add to Google Calendar\" href=\"http://www.google.com/calendar/render?cid=${gcal_href}\"><img src=\"/i/gc_button6.gif\" width=\"114\" height=\"36\" border=\"0\" alt=\"Add to Google Calendar\"></a></blockquote>";
-    $s .= "Alternate option:\n" .
-	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
-	$ical_href . "\">download</a> and then follow\n" .
-	"<a href=\"http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118\">Google's import instructions</a>.\n";
+    my $full_http_href = "http://" . $q->virtual_host() . $gcal_subical_href;
+    my $gcal_href = Hebcal::url_escape($full_http_href);
+    my $title_esc = Hebcal::url_escape("Hebcal $title");
+
+    $s .= <<EOHTML;
+<h3>Google Calendar, Windows Live Calendar</h3>
+<table cellpadding="5"><tr>
+<td><a title="Add to Google Calendar"
+href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
+src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
+</td>
+<td align="center"><a
+title="Add to Windows Live Calendar"
+href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
+src="/i/64px-Windows_Live_Calendar_logo.png"
+width="64" height="64" border="0"
+alt="Add to Windows Live Calendar"></a>
+</td>
+</tr></table>
+Alternate option:
+<a class="download" id="${filename}_dl.ics"
+href="${ical_href}">download</a> and then follow <a
+href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
+import instructions</a>.
+<h3>Yahoo! Calendar</h3>
+<form>
+<ol>
+<li>Copy the entire iCal URL here:
+<label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
+value="${full_http_href}"></small></label>
+<li>Go to your <a href="http://calendar.yahoo.com/">Yahoo! Calendar</a>,
+and click the "<b>+</b>" button next to "Calendars" on the left side of the page
+<li>Click <b>Subscribe to Calendar</b>
+<li>Paste the web address into the "Email or iCal address" window
+<li>Click <b>Next</b> at the top of the page
+<li>Type a name for the calendar in the window after "Display as."
+<li>Choose a color for the calendar in the "Color:" pull-down menu
+<li>Click <b>Save</b> at the top of the page
+</ol>
+</form>
+EOHTML
+;
 
     # only offer DBA export when we know timegm() will work
-    $s .= "\n<h4>Palm Desktop 4.1.4 for Windows</h4>\n";
+    $s .= "\n<h3>Palm Desktop 4.1.4 for Windows</h3>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
     {
@@ -1656,7 +1689,7 @@ Jewish Calendar events into your desktop software.</p>};
 	    . ".</p>\n";
     }
 
-    $s .= "\n<h4>vCalendar (some older desktop applications)</h4>\n<ol><li>" .
+    $s .= "\n<h3>vCalendar (some older desktop applications)</h3>\n<ol><li>" .
 	"Export vCalendar file:\n" .
 	"<a class=\"download\" id=\"${filename}.vcs\" href=\"" .
 	download_href($q, $filename, 'vcs') .
