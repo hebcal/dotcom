@@ -44,18 +44,18 @@ src="/i/ical-64x64.png" width="64" height="64"
 alt="Subscribe to <?php echo $title ?> in iCal"
 border="0"></a></td>
 <td align="center"><a
-title="Add <?php echo $title ?> to Google Calendar"
-href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
-src="http://www.google.com/calendar/images/ext/gc_button6.gif"
-width="114" height="36" border="0"
-alt="Add <?php echo $title ?> to Google Calendar"></a>
-</td>
-<td align="center"><a
 title="Add <?php echo $title ?> to Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=<?php echo $webcal_esc ?>&name=<?php echo urlencode($title) ?>"><img
 src="/i/64px-Windows_Live_Calendar_logo.png"
 width="64" height="64" border="0"
 alt="Add <?php echo $title ?> to Windows Live Caledar"></a>
+</td>
+<td align="center"><a
+title="Add <?php echo $title ?> to Google Calendar"
+href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
+src="http://www.google.com/calendar/images/ext/gc_button6.gif"
+width="114" height="36" border="0"
+alt="Add <?php echo $title ?> to Google Calendar"></a>
 </td>
 <td><b><?php echo $title ?></b>
 <br><?php echo $subtitle ?></td>
