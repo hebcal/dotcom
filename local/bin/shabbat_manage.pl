@@ -59,9 +59,6 @@ my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
 my $err_notsub =
 "The email address used to send your message is not subscribed
 to the Shabbat candle lighting time list.";
-my $err_needto =
-"We can't accept Bcc: email messages ($site address missing
-from the To: header).";
 my $err_useweb =
 "We currently cannot handle email subscription requests.  Please
 use the web interface to subscribe:
@@ -104,7 +101,6 @@ unless ($from) {
 
 unless (defined $to) {
     shabbat_log(0, "needto");
-    error_email($err_needto);
     exit(0);
 }
 
@@ -122,7 +118,6 @@ if ($to =~ /shabbat-subscribe\@/i) {
     unsubscribe();
 } else {
     shabbat_log(0, "badto");
-    error_email($err_needto);
 }
 exit(0);
 
