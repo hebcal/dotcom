@@ -92,8 +92,8 @@ if ($hmnum == 13 && $hd >= 1) {
 		       $rh_cal["day"],
 		       $rh_cal["monthname"],
 		       $rh_cal["year"]);
-} elseif ($hmnum == 8 && $hd >= 7 && $hd <= 15) {
-    # for a week before Pesach, show greeting
+} elseif ($hmnum == 8 && $hd >= 2 && $hd <= 15) {
+    # for two weeks before Pesach, show greeting
     $chag_kasher = true;	# month 8 == Nisan
 } elseif ($hmnum == 3 && $hd >= 10 && $hd <= 24) {
     # for two weeks before Chanukah, show greeting
@@ -175,7 +175,7 @@ on <?php echo $erev_yk ?>.</span>
 <?php     } ?>
 <?php } elseif ($chag_kasher) { ?>
 <br><span class="fpgreeting">Chag Kasher v&#39;Sameach! Hebcal.com
-wishes you a happy Passover.</span>
+wishes you a happy <a href="/holidays/pesach.html?tag=fp">Passover</a>.</span>
 <?php } elseif (isset($chag_sameach)) { ?>
 <br><span class="fpgreeting">Chag Sameach! Hebcal.com wishes you
 a happy <?php echo $chag_sameach ?>.</span>
