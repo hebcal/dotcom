@@ -1637,8 +1637,8 @@ src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Ca
 <td align="center"><a
 title="Add to Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
-src="/i/64px-Windows_Live_Calendar_logo.png"
-width="64" height="64" border="0"
+src="/i/wlive-150x20.png"
+width="150" height="20" border="0"
 alt="Add to Windows Live Calendar"></a>
 </td>
 </tr></table>
