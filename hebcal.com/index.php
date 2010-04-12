@@ -254,7 +254,8 @@ Torah readings for Israel and Diaspora
 Export to
 <a href="/help/import-outlook.html">Outlook</a>,
 <a href="/help/import-ical.html">Apple iCal</a>,
-<a href="/help/import-gcal.html">Google Calendar</a>, and
+<a href="/help/import-gcal.html">Google Calendar</a>,
+Windows Live Calendar, and
 <a href="/help/import-palm.html">Palm</a>
 </ul>
 <h4><a href="/converter/">Hebrew Date Converter</a></h4>
