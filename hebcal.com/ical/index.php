@@ -46,8 +46,8 @@ border="0"></a></td>
 <td align="center"><a
 title="Add <?php echo $title ?> to Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=<?php echo $webcal_esc ?>&name=<?php echo urlencode($title) ?>"><img
-src="/i/64px-Windows_Live_Calendar_logo.png"
-width="64" height="64" border="0"
+src="/i/wlive-180x24.png"
+width="180" height="24" border="0"
 alt="Add <?php echo $title ?> to Windows Live Caledar"></a>
 </td>
 <td align="center"><a
