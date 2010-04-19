@@ -1628,25 +1628,25 @@ Jewish Calendar events into your desktop software.</p>};
     my $title_esc = Hebcal::url_escape("Hebcal $title");
 
     $s .= <<EOHTML;
-<h3>Google Calendar, Windows Live Calendar</h3>
-<table cellpadding="5"><tr>
-<td><a title="Add to Google Calendar"
+<h3>Google Calendar</h3>
+<blockquote>
+<a title="Add to Google Calendar"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
-</td>
-<td align="center"><a
-title="Add to Windows Live Calendar"
-href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
-src="/i/wlive-150x20.png"
-width="150" height="20" border="0"
-alt="Add to Windows Live Calendar"></a>
-</td>
-</tr></table>
+</blockquote>
 Alternate option:
 <a class="download" id="${filename}_dl.ics"
 href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
 import instructions</a>.
+<h3>Windows Live Calendar</h3>
+<blockquote>
+<a title="Add to Windows Live Calendar"
+href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
+src="/i/wlive-150x20.png"
+width="150" height="20" border="0"
+alt="Add to Windows Live Calendar"></a>
+</blockquote>
 <h3>Yahoo! Calendar</h3>
 <form id="GrabLinkForm">
 <ol>
