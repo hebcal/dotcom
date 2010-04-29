@@ -5,8 +5,10 @@ tt {font:115% monospace;*font-size:100%;}
 body * {line-height:1.31em;}
 
 @media print {
-  .navbar { display: none }
-  .goto { display: none }
+ .navbar {display:none}
+ .goto {display:none}
+ .evt {font-size:11px}
+ #sky {display:none}
 }
 
 .navbar {
