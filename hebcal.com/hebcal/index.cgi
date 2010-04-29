@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2009  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -155,6 +155,8 @@ foreach (@Hebcal::opts)
 	if defined $q->param($_) && $q->param($_) =~ /^on|1$/
 }
 
+$cmd .= " -a"
+    if defined $q->param("lg") && $q->param("lg") =~ /^a/;
 $cmd .= " -h" if !defined $q->param("nh") || $q->param("nh") eq "off";
 $cmd .= " -x" if !defined $q->param("nx") || $q->param("nx") eq "off";
 
@@ -324,11 +326,7 @@ sub javascript_events
 	    $href .= "?tag=js.cal";
 	}
 
-	if ($hebrew ne "" && defined $q->param("heb") &&
-	    $q->param("heb") =~ /^on|1$/)
-	{
-	    $subj .= qq{<br><span dir='rtl' lang='he' class='hebrew'>$hebrew</span>};
-	}
+	$subj = translate_subject($q,$subj,$hebrew);
 
 	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
@@ -338,6 +336,25 @@ sub javascript_events
 
 	printf("DefineEvent(%04d%02d%02d, \"%s\", \"%s\", \"%s\", %d, %d);\015\012",
 	       $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
+    }
+}
+
+sub translate_subject
+{
+    my($q,$subj,$hebrew) = @_;
+
+    my $lang = $q->param("lg") || "s";
+    if ($lang eq "s" || $lang eq "a" || !$hebrew) {
+	return $subj;
+    } elsif ($lang eq "h") {
+	return $hebrew;
+    } elsif ($lang eq "ah" || $lang eq "sh") {
+	my $subj2 = $subj;
+	$subj2 .= $q->param("vis") ? "\n<br>" : "\n/ ";
+	$subj2 .= qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
+	return $subj2;
+    } else {
+	die "unknown lang \"$lang\" for $subj";
     }
 }
 
@@ -489,8 +506,8 @@ sub form
 		    -default => "G",
 		    -onClick => "s6(this.value)",
 		    -labels =>
-		    {"G" => "\nGregorian (common era) ",
-		     "H" => "\nHebrew Year "}));
+		    {"G" => " Gregorian (common era) ",
+		     "H" => " Hebrew Year "}));
 
     Hebcal::out_html(undef,
     "<p><table border=\"0\" cellpadding=\"0\"\n",
@@ -535,17 +552,18 @@ sub form
     "is the difference?</a>)</small>");
 
     Hebcal::out_html(undef,
+    "<p><label\nfor=\"lg\"><b>Event titles:</b> </label>\n",
+    $q->popup_menu(-name => "lg",
+		   -id => "lg",
+		   -values => ["s", "sh", "a", "ah", "h"],
+		   -default => "s",
+		   -labels => \%Hebcal::lang_names),
     "<p><b>Other options</b>",
     "<br><label\nfor=\"vis\">",
     $q->checkbox(-name => "vis",
 		 -id => "vis",
 		 -checked => "checked",
 		 -label => "\nDisplay visual calendar grid"),
-    "</label>",
-    "<br><label\nfor=\"a\">",
-    $q->checkbox(-name => "a",
-		 -id => "a",
-		 -label => "\nUse Ashkenazis Hebrew transliterations"),
     "</label>",
     "<br><label\nfor=\"Dsome\">",
     $q->checkbox(-name => "D",
@@ -558,11 +576,6 @@ sub form
 		 -label => "\nShow Hebrew date for entire date range"),
     "</label>",
     $q->hidden(-name => "set", -value => "on"),
-    "<br><label\nfor=\"heb\">",
-    $q->checkbox(-name => "heb",
-		 -id => "heb",
-		 -label => "\nShow Hebrew event names"),
-    "</label>",
     "\n");
 
     $q->param("c","off") unless defined $q->param("c");
@@ -1078,12 +1091,8 @@ qq{<p class="goto"><ul class="gtl goto">
 	my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 
 	my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-	if ($hebrew ne "" && defined $q->param("heb") &&
-	    $q->param("heb") =~ /^on|1$/)
-	{
-	    $subj .= $q->param("vis") ? "\n<br>" : "\n/ ";
-	    $subj .= qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
-	}
+
+	$subj = translate_subject($q,$subj,$hebrew);
 
 	if (defined $href && $href ne "")
 	{

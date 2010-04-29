@@ -119,6 +119,15 @@ $Hebcal::havdalah_min = 72;
 	     12  => 'December',
 	     );
 
+%Hebcal::lang_names =
+    (
+     "s"  => "Sephardic transliterations",
+     "sh" => "Sephardic translit. + Hebrew",
+     "a"  => "Ashkenazis transliterations",
+     "ah" => "Ashkenazis translit. + Hebrew",
+     "h"  => "Hebrew only",
+     );
+
 %Hebcal::dst_names =
     (
      'none'    => 'none',
@@ -1352,13 +1361,9 @@ sub gen_cookie($)
     $retval .= '&nx=off'
 	if !defined $q->param('nx') || $q->param('nx') eq 'off';
 
-    if (defined $q->param('heb') && $q->param('heb') ne '')
+    if (defined $q->param("lg") && $q->param("lg") ne '')
     {
-	$retval .= "&heb=" . $q->param('heb');
-    }
-    else
-    {
-	$retval .= '&heb=off';
+	$retval .= "&lg=" . $q->param("lg");
     }
 
     $retval;
@@ -1472,8 +1477,8 @@ sub process_cookie($$)
 	if (! defined $q->param('nh') && defined $c->param('nh'));
     $q->param('nx',$c->param('nx'))
 	if (! defined $q->param('nx') && defined $c->param('nx'));
-    $q->param('heb',$c->param('heb'))
-	if (! defined $q->param('heb') && defined $c->param('heb'));
+    $q->param("lg",$c->param("lg"))
+	if (! defined $q->param("lg") && defined $c->param("lg"));
 
     $c;
 }
@@ -2117,9 +2122,8 @@ sub vcalendar_write_contents
 
 	$subj =~ s/,/\\,/g;
 
-	if ($is_icalendar && $hebrew &&
-	    defined $q->param('heb') && $q->param('heb') =~ /^on|1$/) {
-	    $subj .= " / $hebrew";
+	if ($is_icalendar) {
+	    $subj = translate_subject($q,$subj,$hebrew);
 	}
 
 	out_html(undef, qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl});
@@ -2283,6 +2287,21 @@ sub vcalendar_write_contents
     1;
 }
 
+sub translate_subject
+{
+    my($q,$subj,$hebrew) = @_;
+
+    my $lang = $q->param("lg") || "s";
+    if ($lang eq "s" || $lang eq "a" || !$hebrew) {
+	return $subj;
+    } elsif ($lang eq "h") {
+	return $hebrew;
+    } elsif ($lang eq "ah" || $lang eq "sh") {
+	return "$subj / $hebrew";
+    } else {
+	die "unknown lang \"$lang\" for $subj";
+    }
+}
 
 ########################################################################
 # export to Outlook CSV
