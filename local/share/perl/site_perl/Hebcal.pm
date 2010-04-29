@@ -857,11 +857,22 @@ sub get_holiday_anchor($$$)
 	$subj_copy = $Hebcal::ashk2seph{$subj_copy}
 	    if defined $Hebcal::ashk2seph{$subj_copy};
 
-	$subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
+	# fix Rosh Hashana and Havdalah
+	my $subj_suffix;
+	if ($subj_copy =~ / (\d{4})$/) {
+	    $subj_suffix = " $1";
+	    $subj_copy =~ s/ \d{4}$//;
+	} elsif ($subj_copy =~ /^Havdalah \((\d+) min\)$/) {
+	    $subj_copy = "Havdalah";
+	    $subj_suffix = " - $1 \x{05D3}\x{05E7}\x{05D5}\x{05EA}";
+    	}
 
 	if (defined $HebcalConst::HOLIDAYS{$subj_copy})
 	{
 	    $hebrew = $HebcalConst::HOLIDAYS{$subj_copy};
+	    if ($subj_suffix) {
+		$hebrew .= $subj_suffix;
+	    }
 	}
 
 	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
