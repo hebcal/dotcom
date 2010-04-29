@@ -347,15 +347,21 @@ sub translate_subject
     if ($lang eq "s" || $lang eq "a" || !$hebrew) {
 	return $subj;
     } elsif ($lang eq "h") {
-	return $hebrew;
+	return hebrew_span($hebrew);
     } elsif ($lang eq "ah" || $lang eq "sh") {
 	my $subj2 = $subj;
 	$subj2 .= $q->param("vis") ? "\n<br>" : "\n/ ";
-	$subj2 .= qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
+	$subj2 .= hebrew_span($hebrew);
 	return $subj2;
     } else {
 	die "unknown lang \"$lang\" for $subj";
     }
+}
+
+sub hebrew_span
+{
+    my($hebrew) = @_;
+    return qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
 }
 
 sub macintosh_datebook_display
@@ -1133,20 +1139,20 @@ qq{<p class="goto"><ul class="gtl goto">
 	    $cal->addcontent($mday, "<br>\n")
 		if $cal->getcontent($mday) ne "";
 
-	    my $class = "";
+	    my $class = "evt";
 	    if ($events[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1)
 	    {
-		$class = ' class="hl"';
+		$class .= " hl";
 	    }
 	    elsif (($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
 		    /^\d+\w+.+, \d{4,}$/) ||
 		   ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
 		    /^\d+\w+ day of the Omer$/))
 	    {
-		$class = ' class="dim"';
+		$class .= " dim";
 	    }
 
-	    $cal->addcontent($mday, "<small$class>$cal_subj</small>");
+	    $cal->addcontent($mday, qq{<span class="$class">$cal_subj</span>});
 	}
 	else
 	{
