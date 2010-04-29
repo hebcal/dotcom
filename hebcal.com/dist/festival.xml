@@ -679,7 +679,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="4" book="Numbers" begin="29:17" end="29:22"/>
  </kriyah>
 </festival>
-<festival id="Sukkot IV (CH''M)" hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0">
+<festival id="Sukkot IV (CH''M)" hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0"/>
 <festival id="Sukkot Chol ha-Moed Day 2" hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
@@ -705,7 +705,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="4" book="Numbers" begin="29:23" end="29:28"/>
  </kriyah>
 </festival>
-<festival id="Sukkot VI (CH''M)" hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0">
+<festival id="Sukkot VI (CH''M)" hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0"/>
 <festival id="Sukkot Chol ha-Moed Day 4" hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
