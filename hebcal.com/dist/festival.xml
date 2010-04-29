@@ -1236,6 +1236,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <festival id="Erev Rosh Hashana" hebrew="עֶרֶב רֹאשׁ הַשָּׁנָה"/>
 <festival id="Erev Sukkot" hebrew="עֶרֶב סוּכּוֹת"/>
 <festival id="Erev Yom Kippur" hebrew="עֶרֶב יוֹם כִּפּוּר"/>
-<festival id="Candle lighting" hebrew="הדלקת נרות שבת"/>
+<festival id="Candle lighting" hebrew="הדלקת נרות"/>
 <festival id="Havdalah" hebrew="הַבדָלָה"/>
 </festivals>
