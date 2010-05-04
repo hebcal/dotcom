@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2009  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1592,7 +1592,21 @@ Jewish Calendar events into your desktop software.</p>};
 	    "#export\">Hebrew Year $heb_year</a> events.</p>\n";
     }
 
-    $s .= "\n<h3>Microsoft Outlook</h3>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
+    my $ical1 = download_href($q, $filename, "ics");
+    $ical1 =~ /\?(.+)$/;
+    my $args = $1;
+    my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
+    my $subical_href = $ical_href;
+    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
+
+    $s .= "\n<h3>Outlook 2007, Outlook 2010</h3>\n<ol><li>" .
+	"Internet Calendar Subscription:\n" .
+	"<a class=\"download\" id=\"${filename}_ol.ics\" href=\"webcal://" .
+	$q->virtual_host() . $subical_href .
+	"\">Jewish Calendar $title.ics</a>\n";
+    $s .= qq{<li><a href="/help/import-outlook.html#ical">How to import ICS file into Outlook</a></ol>};
+
+    $s .= "\n<h3>Outlook 97, 98, 2000, 2002, 2003</h3>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
 	"<ul><li>USA date format (month/day/year):\n" .
 	"<a class=\"download\" id=\"${filename}_usa.csv\" href=\"" .
 	download_href($q, "${filename}_usa", 'csv') .
@@ -1603,7 +1617,7 @@ Jewish Calendar events into your desktop software.</p>};
 	download_href($q, "${filename}_eur", 'csv') .
 	";euro=1\">${filename}_eur.csv</a></ul>\n";
 
-    $s .= qq{<li><a href="/help/import-outlook.html">How to import CSV file into Outlook</a></ol>};
+    $s .= qq{<li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a></ol>};
 
     my $dst;
     if ($q->param("geo") && $q->param("geo") ne "off"
@@ -1620,22 +1634,14 @@ Jewish Calendar events into your desktop software.</p>};
 	}
     }
 
-    my $ical1 = download_href($q, $filename, "ics");
-    $ical1 =~ /\?(.+)$/;
-    my $args = $1;
-    my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
-    my $subical_href = $ical_href;
-    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
-
     $s .= "\n<h3>Apple iCal (and other iCalendar-enabled applications)</h3>\n<ol><li>" .
-	"Export iCalendar file:\n" .
+	"Subscribe to:\n" .
 	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
 	$q->virtual_host() . $subical_href .
-	    "\">subscribe</a> or\n" .
-	"<a class=\"download\" id=\"${filename}_dl.ics\" href=\"" .
-	$ical_href .
-	    "\">download</a>\n";
+	"\">Jewish Calendar $title.ics</a>\n";
     $s .= qq{<li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a></ol>};
+    $s .= "<p>Alternate option: <a class=\"download\" id=\"${filename}_dl.ics\"\n"
+	. "href=\"$ical_href\">download</a> and then impport manually into Apple iCal.\n";
 
     my $gcal_subical_href = $subical_href;
     $gcal_subical_href =~ s/;/&/g;
@@ -1693,7 +1699,8 @@ EOHTML
 	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a href="/help/import-palm.html">How to import DBA file into Palm Desktop 4.1.4</a></ol>};
+	$s .= qq{<li><a href="/help/import-palm.html">How to import DBA file into Palm Desktop 4.1.4</a>};
+	$s .= qq{<li>Note: Palm Desktop 6.2 export is not yet supported.</ol>};
     }
     else
     {
