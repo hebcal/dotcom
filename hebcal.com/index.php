@@ -347,7 +347,7 @@ id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="tag" value="fp.ql">
 <br><small>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
-<br><br><hr>
+<br><br><hr noshade size="1">
 <iframe
 src="http://www.facebook.com/plugins/likebox.php?id=126124787404001&amp;width=200&amp;connections=0&amp;stream=false&amp;header=false&amp;height=62"
 scrolling="no" frameborder="0"
