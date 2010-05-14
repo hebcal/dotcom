@@ -237,7 +237,7 @@ MESSAGE_END;
     echo "</blockquote>\n";
 }
 ?>
-<table border="0" cellpadding="1" cellspacing="0" width="100%">
+<table border="0" cellpadding="1" cellspacing="0">
 <?php if (!isset($asin)) { ?>
 <tr><td class="tiny">&nbsp;</td></tr>
 <?php } ?>
@@ -347,6 +347,12 @@ id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="tag" value="fp.ql">
 <br><small>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
+<br><br><hr>
+<iframe
+src="http://www.facebook.com/plugins/likebox.php?id=126124787404001&amp;width=200&amp;connections=0&amp;stream=false&amp;header=false&amp;height=62"
+scrolling="no" frameborder="0"
+style="border:none; overflow:hidden; width:200px; height:62px;"
+allowTransparency="true"></iframe>
 </td></tr></table>
 <p>
 <script type="text/javascript">
