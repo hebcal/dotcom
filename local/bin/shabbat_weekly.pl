@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2009  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -49,7 +49,7 @@ use POSIX qw(strftime);
 use MIME::Base64 ();
 use Time::Local ();
 use DBI ();
-use Net::SMTP ();
+use Net::SMTP::SSL ();
 use Getopt::Long ();
 use List::Util ();
 
@@ -483,12 +483,13 @@ sub smtp_connect
     # try 3 times to avoid intermittent failures
     for (my $i = 0; $i < 3; $i++)
     {
-	my $smtp = Net::SMTP->new($s,
-				  Hello => $HOSTNAME,
-				  Timeout => 20);
+	my $smtp = Net::SMTP::SSL->new($s,
+				       Hello => $HOSTNAME,
+				       Port => 465,
+				       Timeout => 20);
 	if ($smtp)
 	{
-	    $smtp->auth("hebcron", "xxxxxxxx");
+	    $smtp->auth("hebcron\@hebcal.com", "xxxxxxxx");
 	    return $smtp;
 	}
 	else
@@ -518,31 +519,24 @@ sub my_sendmail
     $message .= "\n" . $body;
 
     my $to = $headers->{"To"};
-    unless ($smtp->mail($return_path)) {
+    my $rv = $smtp->mail($return_path);
+    unless ($rv) {
         warn "smtp mail() failure for $to\n"
 	    if $opt_verbose;
         return 0;
     }
 
-    unless($smtp->to($to)) {
+    $rv = $smtp->to($to);
+    unless ($rv) {
 	warn "smtp to() failure for $to\n"
 	    if $opt_verbose;
 	return 0;
     }
 
-    unless($smtp->data()) {
-        warn "smtp data() failure for $to\n"
-	    if $opt_verbose;
-        return 0;
-    }
-
-    unless($smtp->datasend($message)) {
-        warn "smtp datasend() failure for $to\n"
-	    if $opt_verbose;
-        return 0;
-    }
-
-    unless($smtp->dataend()) {
+    $rv = $smtp->data();
+    $rv = $smtp->datasend($message);
+    $rv = $smtp->dataend();
+    unless ($rv) {
         warn "smtp dataend() failure for $to\n"
 	    if $opt_verbose;
         return 0;
