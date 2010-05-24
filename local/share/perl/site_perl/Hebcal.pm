@@ -1689,6 +1689,14 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 EOHTML
 ;
 
+    $s .= "\n<h3>Palm Desktop 6.2 for Windows</h3>\n<ol><li>" .
+	"Export vCal file:\n" .
+	"<a class=\"download\" id=\"${filename}.vcs\" href=\"" .
+	download_href($q, $filename, 'vcs') .
+	    "\">$filename.vcs</a>\n";
+    $s .= qq{<li><a href="/help/import-palm.html#vcs">How to import VCS file into Palm Desktop 6.2</a>\n};
+    $s .= qq{</ol>\n};
+
     # only offer DBA export when we know timegm() will work
     $s .= "\n<h3>Palm Desktop 4.1.4 for Windows</h3>\n";
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
@@ -1699,8 +1707,8 @@ EOHTML
 	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a href="/help/import-palm.html">How to import DBA file into Palm Desktop 4.1.4</a>};
-	$s .= qq{<li>Note: Palm Desktop 6.2 export is not yet supported.</ol>};
+	$s .= qq{<li><a href="/help/import-palm.html#dba">How to import DBA file into Palm Desktop 4.1.4</a>};
+	$s .= qq{</ol>\n};
     }
     else
     {
@@ -1712,13 +1720,6 @@ EOHTML
 	       . "</b> Daylight Saving Time scheme")
 	    . ".</p>\n";
     }
-
-    $s .= "\n<h3>vCalendar (some older desktop applications)</h3>\n<ol><li>" .
-	"Export vCalendar file:\n" .
-	"<a class=\"download\" id=\"${filename}.vcs\" href=\"" .
-	download_href($q, $filename, 'vcs') .
-	    "\">$filename.vcs</a>\n";
-    $s .= "<li>(this download option is less reliable than other choices)</ol>\n";
 
     $s .= "</div>\n";
 
