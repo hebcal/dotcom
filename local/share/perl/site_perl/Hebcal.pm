@@ -303,13 +303,24 @@ my $URCHIN = qq{<script src="http://www.google-analytics.com/urchin.js"
 type="text/javascript">
 </script>
 <script type="text/javascript">
+function tvis(id) {var e=document.getElementById(id);
+if(e.style.display=="block"){e.style.display="none"}
+else{e.style.display="block"}}
 _uacct="UA-967247-1";
 urchinTracker();
 if(document.getElementsByTagName){
 var e3=document.getElementsByTagName("a");
 if(e3&&e3.length){
-for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="amzn"){
-if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
+for(var i=0;i<e3.length;i++){
+if(e3[i]&&e3[i].className=="amzn"){
+if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}}
+if(e3[i]&&e3[i].className=="dlhead"){
+if(e3[i].id){e3[i].onclick=function(){tvis(this.id+"-body")}}}
+}}
+var e4=document.getElementsByTagName("div");
+if(e4&&e4.length){
+for(var i=0;i<e4.length;i++){if(e4[i]&&e4[i].className=="dlinstr"){
+if(e4[i].id){e4[i].style.display="none"}
 }}}
 var e1=document.getElementById("export");
 if(e1){var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
@@ -1609,8 +1620,8 @@ Jewish Calendar events into your desktop software.</p>};
     my $title_esc = Hebcal::url_escape("Hebcal $title");
 
     $s .= <<EOHTML;
-<h3>Outlook 2007, Outlook 2010</h3>
-<div class="dlinstr" id="ol-ics">
+<div><a class="dlhead" href="#ol-ics" id="ol-ics">Outlook 2007, Outlook 2010</a></div>
+<div class="dlinstr" id="ol-ics-body">
 <ol>
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
@@ -1618,8 +1629,8 @@ id="${filename}_ol.ics">Jewish Calendar $title.ics</a>
 <li><a href="/help/import-outlook.html#ical">How to import ICS file into Outlook</a>
 </ol>
 </div>
-<h3>Outlook 97, 98, 2000, 2002, 2003</h3>
-<div class="dlinstr" id="ol-csv">
+<div><a class="dlhead" href="#ol-csv" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003</a></div>
+<div class="dlinstr" id="ol-csv-body">
 <ol>
 <li>Export Outlook CSV file. Select one of:
 <ul>
@@ -1633,8 +1644,8 @@ id="${filename}_eur.csv">${filename}_eur.csv</a>
 <li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a>
 </ol>
 </div>
-<h3>Apple iCal</h3>
-<div class="dlinstr" id="ical">
+<div><a class="dlhead" href="#ical" id="ical">Apple iCal</a></div>
+<div class="dlinstr" id="ical-body">
 <ol>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
@@ -1646,8 +1657,8 @@ href="webcal://$vhost$ical_href"
 id="${filename}_dl.ics">download Jewish Calendar $title.ics</a>
 and then import manually into Apple iCal.</p>
 </div>
-<h3>Google Calendar</h3>
-<div class="dlinstr" id="gcal">
+<div><a class="dlhead" href="#gcal" id="gcal">Google Calendar</a></div>
+<div class="dlinstr" id="gcal-body">
 <blockquote>
 <a title="Add to Google Calendar"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
@@ -1659,8 +1670,8 @@ href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
 import instructions</a>.
 </div>
-<h3>Windows Live Calendar</h3>
-<div class="dlinstr" id="wlive">
+<div><a class="dlhead" href="#wlive" id="wlive">Windows Live Calendar</a></div>
+<div class="dlinstr" id="wlive-body">
 <blockquote>
 <a title="Add to Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
@@ -1669,8 +1680,8 @@ width="150" height="20" border="0"
 alt="Add to Windows Live Calendar"></a>
 </blockquote>
 </div>
-<h3>Yahoo! Calendar</h3>
-<div class="dlinstr" id="ycal">
+<div><a class="dlhead" href="#ycal" id="ycal">Yahoo! Calendar</a></div>
+<div class="dlinstr" id="ycal-body">
 <form id="GrabLinkForm">
 <ol>
 <li>Copy the entire iCal URL here:
@@ -1688,8 +1699,8 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 </ol>
 </form>
 </div>
-<h3>Palm Desktop 6.2 for Windows</h3>
-<div class="dlinstr" id="vcs">
+<div><a class="dlhead" href="#vcs" id="vcs">Palm Desktop 6.2 for Windows</a></div>
+<div class="dlinstr" id="vcs-body">
 <ol>
 <li>Export vCal file: <a class="download"
 href="$href_vcs"
@@ -1716,8 +1727,8 @@ EOHTML
     }
 
     # only offer DBA export when we know timegm() will work
-    $s .= "\n<h3>Palm Desktop 4.1.4 for Windows</h3>\n";
-    $s .= qq{<div class="dlinstr" id="dba">\n};
+    $s .= qq{\n<div><a class="dlhead" href="#dba" id="dba">Palm Desktop 4.1.4 for Windows</a></div>\n};
+    $s .= qq{<div class="dlinstr" id="dba-body">\n};
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
     {
