@@ -1598,59 +1598,56 @@ Jewish Calendar events into your desktop software.</p>};
     my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
-
-    $s .= "\n<h3>Outlook 2007, Outlook 2010</h3>\n<ol><li>" .
-	"Internet Calendar Subscription:\n" .
-	"<a class=\"download\" id=\"${filename}_ol.ics\" href=\"webcal://" .
-	$q->virtual_host() . $subical_href .
-	"\">Jewish Calendar $title.ics</a>\n";
-    $s .= qq{<li><a href="/help/import-outlook.html#ical">How to import ICS file into Outlook</a></ol>};
-
-    $s .= "\n<h3>Outlook 97, 98, 2000, 2002, 2003</h3>\n<ol><li>Export Outlook CSV file.\nSelect one of:\n" .
-	"<ul><li>USA date format (month/day/year):\n" .
-	"<a class=\"download\" id=\"${filename}_usa.csv\" href=\"" .
-	download_href($q, "${filename}_usa", 'csv') .
-	"\">${filename}_usa.csv</a>\n";
-
-    $s .= "<li>European date format (day/month/year):\n" .
-	"<a class=\"download\" id=\"${filename}_eur.csv\" href=\"" .
-	download_href($q, "${filename}_eur", 'csv') .
-	";euro=1\">${filename}_eur.csv</a></ul>\n";
-
-    $s .= qq{<li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a></ol>};
-
-    my $dst;
-    if ($q->param("geo") && $q->param("geo") ne "off"
-	&& $q->param("c") && $q->param("c") ne "off")
-    {
-	if (defined $q->param("dst") && $q->param("dst") ne "")
-	{
-	    $dst = $q->param("dst");
-	}
-	elsif ($q->param("geo") eq "city" && $q->param("city")
-	       && defined $Hebcal::city_dst{$q->param("city")})
-	{
-	    $dst = $Hebcal::city_dst{$q->param("city")};
-	}
-    }
-
-    $s .= "\n<h3>Apple iCal (and other iCalendar-enabled applications)</h3>\n<ol><li>" .
-	"Subscribe to:\n" .
-	"<a class=\"download\" id=\"${filename}_sub.ics\" href=\"webcal://" .
-	$q->virtual_host() . $subical_href .
-	"\">Jewish Calendar $title.ics</a>\n";
-    $s .= qq{<li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a></ol>};
-    $s .= "<p>Alternate option: <a class=\"download\" id=\"${filename}_dl.ics\"\n"
-	. "href=\"$ical_href\">download</a> and then impport manually into Apple iCal.\n";
-
+    my $vhost = $q->virtual_host();
+    my $href_ol_usa = download_href($q, "${filename}_usa", "csv");
+    my $href_ol_eur = download_href($q, "${filename}_eur", "csv") . ";euro=1";
+    my $href_vcs = download_href($q, $filename, "vcs");
     my $gcal_subical_href = $subical_href;
     $gcal_subical_href =~ s/;/&/g;
-    my $full_http_href = "http://" . $q->virtual_host() . $gcal_subical_href;
+    my $full_http_href = "http://" . $vhost . $gcal_subical_href;
     my $gcal_href = Hebcal::url_escape($full_http_href);
     my $title_esc = Hebcal::url_escape("Hebcal $title");
 
     $s .= <<EOHTML;
+<h3>Outlook 2007, Outlook 2010</h3>
+<div class="dlinstr" id="ol-ics">
+<ol>
+<li>Internet Calendar Subscription: <a class="download"
+href="webcal://$vhost$subical_href"
+id="${filename}_ol.ics">Jewish Calendar $title.ics</a>
+<li><a href="/help/import-outlook.html#ical">How to import ICS file into Outlook</a>
+</ol>
+</div>
+<h3>Outlook 97, 98, 2000, 2002, 2003</h3>
+<div class="dlinstr" id="ol-csv">
+<ol>
+<li>Export Outlook CSV file. Select one of:
+<ul>
+<li>USA date format (month/day/year): <a class="download"
+href="$href_ol_usa"
+id="${filename}_usa.csv">${filename}_usa.csv</a>
+<li>European date format (day/month/year): <a class="download"
+href="$href_ol_eur"
+id="${filename}_eur.csv">${filename}_eur.csv</a>
+</ul>
+<li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a>
+</ol>
+</div>
+<h3>Apple iCal</h3>
+<div class="dlinstr" id="ical">
+<ol>
+<li>Subscribe to: <a class="download"
+href="webcal://$vhost$subical_href"
+id="${filename}_sub.ics">Jewish Calendar $title.ics</a>
+<li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a>
+</ol>
+<p>Alternate option: <a class="download"
+href="webcal://$vhost$ical_href"
+id="${filename}_dl.ics">download Jewish Calendar $title.ics</a>
+and then import manually into Apple iCal.</p>
+</div>
 <h3>Google Calendar</h3>
+<div class="dlinstr" id="gcal">
 <blockquote>
 <a title="Add to Google Calendar"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
@@ -1661,7 +1658,9 @@ Alternate option:
 href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
 import instructions</a>.
+</div>
 <h3>Windows Live Calendar</h3>
+<div class="dlinstr" id="wlive">
 <blockquote>
 <a title="Add to Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
@@ -1669,7 +1668,9 @@ src="/i/wlive-150x20.png"
 width="150" height="20" border="0"
 alt="Add to Windows Live Calendar"></a>
 </blockquote>
+</div>
 <h3>Yahoo! Calendar</h3>
+<div class="dlinstr" id="ycal">
 <form id="GrabLinkForm">
 <ol>
 <li>Copy the entire iCal URL here:
@@ -1686,19 +1687,37 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 <li>Click <b>Save</b> at the top of the page
 </ol>
 </form>
+</div>
+<h3>Palm Desktop 6.2 for Windows</h3>
+<div class="dlinstr" id="vcs">
+<ol>
+<li>Export vCal file: <a class="download"
+href="$href_vcs"
+id="${filename}.vcs">${filename}.vcs</a>
+<li><a href="/help/import-palm.html#vcs">How to import VCS file into Palm Desktop 6.2</a>
+</ol>
+</div>
 EOHTML
 ;
 
-    $s .= "\n<h3>Palm Desktop 6.2 for Windows</h3>\n<ol><li>" .
-	"Export vCal file:\n" .
-	"<a class=\"download\" id=\"${filename}.vcs\" href=\"" .
-	download_href($q, $filename, 'vcs') .
-	    "\">$filename.vcs</a>\n";
-    $s .= qq{<li><a href="/help/import-palm.html#vcs">How to import VCS file into Palm Desktop 6.2</a>\n};
-    $s .= qq{</ol>\n};
+    my $dst;
+    if ($q->param("geo") && $q->param("geo") ne "off"
+	&& $q->param("c") && $q->param("c") ne "off")
+    {
+	if (defined $q->param("dst") && $q->param("dst") ne "")
+	{
+	    $dst = $q->param("dst");
+	}
+	elsif ($q->param("geo") eq "city" && $q->param("city")
+	       && defined $Hebcal::city_dst{$q->param("city")})
+	{
+	    $dst = $Hebcal::city_dst{$q->param("city")};
+	}
+    }
 
     # only offer DBA export when we know timegm() will work
     $s .= "\n<h3>Palm Desktop 4.1.4 for Windows</h3>\n";
+    $s .= qq{<div class="dlinstr" id="dba">\n};
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
     {
@@ -1720,6 +1739,7 @@ EOHTML
 	       . "</b> Daylight Saving Time scheme")
 	    . ".</p>\n";
     }
+    $s .= qq{</div>\n};
 
     $s .= "</div>\n";
 
