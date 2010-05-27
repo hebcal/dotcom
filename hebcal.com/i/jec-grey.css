@@ -1,0 +1,115 @@
+@CHARSET "UTF-8";
+
+/* "Global" settings for the calendar table */
+table.greyCalendar {
+  border-collapse: collapse;
+  border: 1px solid #000000;
+  font-size: 12px;
+  font-family: Arial, Verdana;
+}
+
+/* "Global" settings for all table cells in the calendar table */
+table.greyCalendar th, table.greyCalendar td {
+  border: 1px solid #000000;
+  padding: 2px;
+  width: 14%;   /* this makes all of the days the same width (note: 7 * 14% = 98%) */
+}
+
+/* Settings for cells in the body of the calendar (i.e., the days) */
+table.greyCalendar tbody td {
+  vertical-align: top;
+}
+
+/* Formatting of the events when they appear in a day cell */
+table.greyCalendar td div.events {
+  font-size: 9px;
+  line-height: 10px;
+}
+
+table.greyCalendar td.dayHasEvent div.events a:active, table.greyCalendar td.dayHasEvent div.events a:focus {
+  outline: 0; /* remove the dotted border from the active link */
+}
+
+/* Formatting of the year/month banner */
+table.greyCalendar thead th {
+  background-color: #696969;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+/* Formatting of the weekday names */
+table.greyCalendar tbody th {
+  background-color: #c0c0c0;
+  font-size: 8px;
+  font-weight: bold;  
+  margin: 3px;
+}
+
+/* Formatting of the footer cells (with links to other months) */
+table.greyCalendar tfoot th {
+  background-color: #a9a9a9;
+  border: none;
+  border-top: 1px solid #000000;
+}
+
+table.greyCalendar tfoot th a {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+}
+
+table.greyCalendar tfoot th a:visited {
+  color: white;
+}
+
+table.greyCalendar tfoot th a:hover {
+  color: #333;
+  background-color: #d3d3d3;
+}
+
+/* Formatting of the day cells */
+table.greyCalendar td {
+  background-color: #ffffff;
+}
+
+table.greyCalendar td.dayBlank {
+  background-color: #d3d3d3;
+}
+
+table.greyCalendar td.dayToday {
+  background-color: #dcdcdc;
+  border: 3px solid #000000;
+}
+
+/* Formatting of the date that appears in each calendar day cell */
+table.greyCalendar td div.date {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+
+table.greyCalendar td.dayToday div.date {
+  color: #000000;
+  font-weight: bold;
+}
+
+table.greyCalendar td.dayHasEvent div.date {
+  color: #008000;
+  font-weight: bold;
+}
+
+table.greyCalendar td.dayHasEvent div.events a {
+  color: #808080;
+  text-decoration: none;
+}
+
+table.greyCalendar td.dayHasEvent div.events a:visited {
+  color: #808080;
+}
+
+table.greyCalendar td.dayHasEvent div.events a:hover {
+  color: #808080;
+  text-decoration: underline;
+}

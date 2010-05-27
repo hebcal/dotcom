@@ -39,6 +39,11 @@ A:hover {color:red;text-decoration:underline;}
 .fpsubhead {font-family:Verdana,Arial,Helvetica,Geneva,sans-serif;}
 .fpgreeting {font-weight:bold;font-style:italic;color:#c96;}
 
+.dlhead {
+ font-family:Georgia,"times new roman",serif;
+ font-size:large
+}
+
 ul.gtl {
  padding:0 0 0 1em;
  margin:0;
