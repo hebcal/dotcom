@@ -305,7 +305,8 @@ type="text/javascript">
 <script type="text/javascript">
 function tvis(id) {var e=document.getElementById(id);
 if(e.style.display=="block"){e.style.display="none"}
-else{e.style.display="block"}}
+else{e.style.display="block"}
+return false}
 _uacct="UA-967247-1";
 urchinTracker();
 if(document.getElementsByTagName){
@@ -315,7 +316,7 @@ for(var i=0;i<e3.length;i++){
 if(e3[i]&&e3[i].className=="amzn"){
 if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}}
 if(e3[i]&&e3[i].className=="dlhead"){
-if(e3[i].id){e3[i].onclick=function(){tvis(this.id+"-body")}}}
+if(e3[i].id){e3[i].onclick=function(){return tvis(this.id+"-body")}}}
 }}
 var e4=document.getElementsByTagName("div");
 if(e4&&e4.length){
@@ -323,7 +324,8 @@ for(var i=0;i<e4.length;i++){if(e4[i]&&e4[i].className=="dlinstr"){
 if(e4[i].id){e4[i].style.display="none"}
 }}}
 var e1=document.getElementById("export");
-if(e1){var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
+if(e1){e1.style.display="none";
+var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
 if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
 </script>
@@ -1578,30 +1580,7 @@ sub download_html
 	$greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
     }
 
-    $title = '' unless $title;
-
-    my($s) = qq{<div class="goto" id="export"><a name="export"></a><hr>\n} .
-    qq{<h2>Export $title calendar</h2>\n};
-
-    $s .= qq{<p>By clicking the links below, you can download 
-Jewish Calendar events into your desktop software.</p>};
-
-    if ($title && defined $q->param('month') && $q->param('month') ne 'x')
-    {
-	my $end_day = Date::Calc::Days_in_Month($q->param('year'),
-						$q->param('month'));
-	my $hebdate = HebcalGPL::greg2hebrew($q->param('year'),
-					  $q->param('month'),
-					  $end_day);
-	my $heb_year = $hebdate->{'yy'};
-
-	$s .= "<p>Note: you may also download <a\n" .
-	    "href=\"" . Hebcal::self_url($q, {'month' => 'x'})
-	    . "#export\">all of " . $q->param('year') . "</a> or <a\n" .
-	    "href=\"" .
-	    Hebcal::self_url($q, {'yt' => 'H', 'month' => 'x', 'year' => $heb_year}) .
-	    "#export\">Hebrew Year $heb_year</a> events.</p>\n";
-    }
+    my $s = qq{<div class="goto" id="export">\n};
 
     my $ical1 = download_href($q, $filename, "ics");
     $ical1 =~ /\?(.+)$/;
@@ -1617,7 +1596,9 @@ Jewish Calendar events into your desktop software.</p>};
     $gcal_subical_href =~ s/;/&/g;
     my $full_http_href = "http://" . $vhost . $gcal_subical_href;
     my $gcal_href = Hebcal::url_escape($full_http_href);
-    my $title_esc = Hebcal::url_escape("Hebcal $title");
+    my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
+	: Hebcal::url_escape("Hebcal $filename");
+    my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
 
     $s .= <<EOHTML;
 <div><a class="dlhead" href="#ol-ics" id="ol-ics">Outlook 2007, Outlook 2010</a></div>
@@ -1625,7 +1606,7 @@ Jewish Calendar events into your desktop software.</p>};
 <ol>
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
-id="${filename}_ol.ics">Jewish Calendar $title.ics</a>
+id="${filename}_ol.ics">$ics_title</a>
 <li><a href="/help/import-outlook.html#ical">How to import ICS file into Outlook</a>
 </ol>
 </div>
@@ -1649,12 +1630,12 @@ id="${filename}_eur.csv">${filename}_eur.csv</a>
 <ol>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
-id="${filename}_sub.ics">Jewish Calendar $title.ics</a>
+id="${filename}_sub.ics">$ics_title</a>
 <li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a>
 </ol>
 <p>Alternate option: <a class="download"
 href="webcal://$vhost$ical_href"
-id="${filename}_dl.ics">download Jewish Calendar $title.ics</a>
+id="${filename}_dl.ics">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 </div>
 <div><a class="dlhead" href="#gcal" id="gcal">Google Calendar</a></div>
