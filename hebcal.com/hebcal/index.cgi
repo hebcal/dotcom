@@ -1006,9 +1006,8 @@ accurate.</p>
 
     if ($numEntries > 0)
     {
-	Hebcal::out_html(undef,
-qq{<p class="goto"><ul class="gtl goto">
-<li><a href="#export">Export calendar to Outlook, Apple iCal, Google, Palm, etc.</a>});
+	Hebcal::out_html(undef, qq{<div class="goto"><br><ul class="gtl goto">});
+
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
 	    Hebcal::out_html(undef,
@@ -1069,7 +1068,9 @@ qq{<p class="goto"><ul class="gtl goto">
 #	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
-	Hebcal::out_html(undef, "\n</ul>\n");
+	Hebcal::out_html(undef, qq{<li><a href="#export" onclick="tvis('export'); return false">Export to Outlook, Apple iCal, Google, Palm, etc.</a>});
+	Hebcal::out_html(undef, "\n</ul></div>\n");
+	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
     }
     else
     {    
@@ -1184,9 +1185,6 @@ qq{<p class="goto"><ul class="gtl goto">
 
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
     Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
-    if ($numEntries > 0) {
-	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
-    }
     Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
     Hebcal::out_html(undef, "</div>\n");
 
