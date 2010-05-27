@@ -352,8 +352,10 @@ my $numEntries = scalar(@events);
 if ($numEntries > 0) {
     Hebcal::out_html($cfg,
 		      qq{<p class="goto"><ul class="gtl">
-<li><a href="#export">Export dates to Outlook, Apple iCal, Google, Palm, etc.</a>
-<li><a href="#form">Enter more dates and names</a></ul></p>\n});
+<li><a href="#form">Enter more dates and names</a>
+<li><a href="#export" onclick="return tvis('export')">Export dates to Outlook, Apple iCal, Google, Palm, etc.</a>
+</ul></p>\n});
+    Hebcal::out_html($cfg, Hebcal::download_html($q, "yahrzeit", \@events));
 
     Hebcal::out_html($cfg,
 		      qq{<p>Yahrzeit candles should be lit
@@ -403,7 +405,6 @@ Hebcal::out_html($cfg, "</pre>\n");
 
 if ($numEntries > 0) {
     $q->param("v", "yahrzeit");
-    Hebcal::out_html($cfg, Hebcal::download_html($q, "yahrzeit", \@events));
 }
 
 Hebcal::out_html($cfg,
