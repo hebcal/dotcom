@@ -38,6 +38,7 @@ A:hover {color:red;text-decoration:underline;}
 .cal p {margin-top:0;}
 .fpsubhead {font-family:Verdana,Arial,Helvetica,Geneva,sans-serif;}
 .fpgreeting {font-weight:bold;font-style:italic;color:#c96;}
+#export {margin-left:20px}
 
 ul.gtl {
  padding:0 0 0 1em;
