@@ -1645,20 +1645,21 @@ and then import manually into Apple iCal.</p>
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
 </blockquote>
-Alternate option:
+<p>Alternate option:
 <a class="download" id="${filename}_dl.ics"
 href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
-import instructions</a>.
+import instructions</a>.</p>
 </div>
 <div><a class="dlhead" href="#wlive" id="wlive">Windows Live Calendar</a></div>
 <div class="dlinstr" id="wlive-body">
 <blockquote>
-<a title="Add to Windows Live Calendar"
+Add to&nbsp;&nbsp;
+<a title="Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
 src="/i/wlive-150x20.png"
 width="150" height="20" border="0"
-alt="Add to Windows Live Calendar"></a>
+alt="Windows Live Calendar"></a>
 </blockquote>
 </div>
 <div><a class="dlhead" href="#ycal" id="ycal">Yahoo! Calendar</a></div>
