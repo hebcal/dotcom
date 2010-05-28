@@ -1068,7 +1068,7 @@ accurate.</p>
 #	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
-	Hebcal::out_html(undef, qq{<li><a href="#export" onclick="tvis('export'); return false">Export to Outlook, Apple iCal, Google, Palm, etc.</a>});
+	Hebcal::out_html(undef, qq{<li><a href="#export" onclick="return tvis('export')">Export to Outlook, Apple iCal, Google, Palm, etc.</a>});
 	Hebcal::out_html(undef, "\n</ul></div>\n");
 	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
     }
@@ -1169,15 +1169,20 @@ accurate.</p>
     }
 
     if (@html_cals) {
+	my $lang = $q->param("lg");
+	my $dir = "";
+	if ($lang && $lang eq "h") {
+	    $dir = qq{ dir="rtl"};
+	}
 	my $cal2 = shift(@html_cals);
 	Hebcal::out_html(undef,
-			 qq{\n<div align="center" class="cal">\n},
+			 qq{\n<div align="center" class="cal"$dir>\n},
 			 $cal2->as_HTML(), 
 			 qq{</div>\n});
 
 	foreach $cal2 (@html_cals) {
 	    Hebcal::out_html(undef,
-			     qq{\n<br><br>\n<div align="center" class="cal" style="page-break-before: always">\n},
+			     qq{\n<br><br>\n<div align="center" class="cal" style="page-break-before: always"$dir>\n},
 			     $cal2->as_HTML(), 
 			     qq{</div>\n});
 	}
