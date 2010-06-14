@@ -1626,7 +1626,7 @@ id="${filename}_sub.ics">$ics_title</a>
 <li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a>
 </ol>
 <p>Alternate option: <a class="download"
-href="webcal://$vhost$ical_href"
+href="${ical_href}"
 id="${filename}_dl.ics">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 </div>
