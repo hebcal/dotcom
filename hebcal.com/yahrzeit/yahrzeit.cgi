@@ -350,6 +350,8 @@ my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
 my $numEntries = scalar(@events);
 
 if ($numEntries > 0) {
+    $q->param("v", "yahrzeit");
+
     Hebcal::out_html($cfg,
 		      qq{<p class="goto"><ul class="gtl">
 <li><a href="#form">Enter more dates and names</a>
@@ -402,10 +404,6 @@ for (my $i = 0; $i < $numEntries; $i++)
 }
 
 Hebcal::out_html($cfg, "</pre>\n");
-
-if ($numEntries > 0) {
-    $q->param("v", "yahrzeit");
-}
 
 Hebcal::out_html($cfg,
 		  "<div class=\"goto\"><hr><a name=\"form\"></a>\n",
