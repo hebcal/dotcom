@@ -318,19 +318,11 @@ if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}}
 if(e3[i]&&e3[i].className=="dlhead"){
 if(e3[i].id){e3[i].onclick=function(){return tvis(this.id+"-body")}}}
 }}
-var e4=document.getElementsByTagName("div");
-if(e4&&e4.length){
-for(var i=0;i<e4.length;i++){if(e4[i]&&e4[i].className=="dlinstr"){
-if(e4[i].id){e4[i].style.display="none"}
-}}}
 var e1=document.getElementById("export");
-if(e1){e1.style.display="none";
+if(e1){
 var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
 if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
-</script>
-<script src="http://clearmark.anchorintelligence.com/j9999/track.js"
-type="text/javascript">
 </script>
 };
 
@@ -1580,7 +1572,7 @@ sub download_html
 	$greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
     }
 
-    my $s = qq{<div class="goto" id="export">\n};
+    my $s = qq{<div class="goto" id="export" style="display:none">\n};
 
     my $ical1 = download_href($q, $filename, "ics");
     $ical1 =~ /\?(.+)$/;
