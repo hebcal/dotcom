@@ -98,10 +98,6 @@ else {
     form($param);
 }
 ?>
-<script type="text/javascript">
-var _aipt = 'v';
-var _airev = 0.12;
-</script>
 <?php
 echo html_footer_lite();
 exit();
@@ -358,11 +354,6 @@ offers.</p>
 
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
-
-<script type="text/javascript">
-var _aipt = 'v';
-var _airev = 0.06;
-</script>
 
 <?php
     echo html_footer_lite();

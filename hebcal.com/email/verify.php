@@ -173,10 +173,6 @@ href="/help/">Help</a> -
 candle lighting times and parsha information.</p>
 <p>A confirmation message has been sent
 to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
-<script type="text/javascript">
-var _aipt = 'v';
-var _airev = 1.00;
-</script>
 <?php
     echo html_footer_lite();
     exit();
@@ -240,10 +236,6 @@ offers.</p>
 
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
-<script type="text/javascript">
-var _aipt = 'v';
-var _airev = 0.12;
-</script>
 EOD
  ;
 
