@@ -355,15 +355,6 @@ style="border:none; overflow:hidden; width:200px; height:62px;"
 allowTransparency="true"></iframe>
 </td></tr></table>
 <p>
-<script type="text/javascript">
-var _aipt = 'l';
-var _aik = "batman pez dispenser";
-var _aia = "12345";
-var _aipn = "Bing";
-var _aipf = "Business_Unit_1";
-var _aicp = "Collectibles";
-var _aiag = "Pez Dispensers";
-</script>
 <?php
 echo html_footer_lite(false);
 ?>
