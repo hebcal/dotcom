@@ -39,16 +39,17 @@ function smtp_send($return_path, $recipients, $headers, $body)
     $username = "hebcal@hebcal.com";
     $passfile = file("./hebcal-email-pass.cgi");
     $password = trim($passfile[0]);
-    $smtp = Mail::factory("smtp",
-			  array("host" => $host,
-				"port" => $port,
-				"auth" => true,
-				"username" => $username,
-				"password" => $password));
-    if (!$smtp) {
+    if (!($smtp = new Net_SMTP($host, $port))) {
 	return ('unable to instantiate Net_SMTP object');
     }
+    if (!$smtp->connect()) {
+	return ('unable to connect to smtp server');
+    }
 
+    if (!$smtp->auth($username, $password)) {
+	return ('unable to authenticate to smtp server');
+    }
+    
     list($from, $text_headers) = $mail->prepareHeaders($headers);
     if (!isset($from)) {
 	return ('No from address given');
