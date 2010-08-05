@@ -500,7 +500,7 @@ sub form
     $q->popup_menu(-name => "month",
 		   -id => "month",
 		   -values => ["x",1..12],
-		   -default => $this_mon,
+		   -default => "x",
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
     "<br>",
