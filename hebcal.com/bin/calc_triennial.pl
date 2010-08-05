@@ -1132,7 +1132,7 @@ sub get_parsha_info
 
     my $anchor = lc($h);
     $anchor =~ s/[^\w]//g;
-    my $drash_ajr = "http://ajrsem.org/index.php?pg=$anchor";
+    my $drash_ajr = "http://ajrsem.org/$anchor";
     if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
 	$drash_ajr .= $hebrew_year;
     } else {
