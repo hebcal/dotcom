@@ -286,7 +286,7 @@ width="148" height="160" hspace="8" align="right"
 alt="The Jewish Museum 2011 Calendar from Amazon.com"></a>
 <p>Holidays for:
 <a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;nh=on;nx=on">$hy0</a> -
-$hebrew_year -
+$HEB_YR -
 <a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;nh=on;nx=on">$hy1</a> -
 <a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;nh=on;nx=on">$hy2</a> -
 <a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;nh=on;nx=on">$hy3</a></p>
