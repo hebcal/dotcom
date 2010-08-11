@@ -257,6 +257,11 @@ sub write_index_page
     my $fn = "$outdir/index.html";
     open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
 
+    my $hy0 = $HEB_YR - 1;
+    my $hy1 = $HEB_YR + 1;
+    my $hy2 = $HEB_YR + 2;
+    my $hy3 = $HEB_YR + 3;
+
     print OUT3 <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
@@ -274,11 +279,17 @@ href="/search/">Search</a></td></tr></table>
 <!--/htdig_noindex-->
 <a name="top"></a>
 <h1>Jewish Holidays</h1>
-<a title="The Jewish Museum 2010 Calendar from Amazon.com"
-href="http://www.amazon.com/o/ASIN/0764947753/hebcal-20"><img
-src="/i/0764947753.01.TZZZZZZZ.jpg" border="0"
-width="110" height="102" hspace="8" align="right"
-alt="The Jewish Museum 2010 Calendar from Amazon.com"></a>
+<a title="The Jewish Museum 2011 Calendar from Amazon.com"
+href="http://www.amazon.com/o/ASIN/076495315X/hebcal-20"><img
+src="/i/076495315X.01.MZZZZZZZ.jpg" border="0"
+width="148" height="160" hspace="8" align="right"
+alt="The Jewish Museum 2011 Calendar from Amazon.com"></a>
+<p>Holidays for:
+<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;nh=on;nx=on">$hy0</a> -
+$hebrew_year -
+<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;nh=on;nx=on">$hy1</a> -
+<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;nh=on;nx=on">$hy2</a> -
+<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;nh=on;nx=on">$hy3</a></p>
 <dl>
 EOHTML
 ;
