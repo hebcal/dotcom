@@ -332,6 +332,7 @@ sub write_index_page
     my $fn = "$outdir/index.html";
     open(OUT1, ">$fn.$$") || die "$fn.$$: $!\n";
 
+    my $hy0 = $hebrew_year - 1;
     my $hy1 = $hebrew_year + 1;
     my $hy2 = $hebrew_year + 2;
     my $hy3 = $hebrew_year + 3;
@@ -356,12 +357,14 @@ href="/search/">Search</a></td></tr></table>
 src="/i/xml.gif" border="0" alt="View the raw XML source" align="right"
 width="36" height="14"></a>
 Torah Readings</h1>
-<p>Readings for future years:
+<p>Readings for:
+<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on">$hy0</a> -
+$hebrew_year -
 <a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on">$hy1</a> -
 <a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on">$hy2</a> -
 <a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on">$hy3</a></p>
 <p>Leyning coordinators: <a
-href="/help/sedra.html#download">download</a> spreadsheet with
+href="/help/sedra.html#download">download parsha spreadheet</a> with
 aliyah-by-aliyah breakdowns.</p>
 <h3>Genesis</h3>
 <dl>
