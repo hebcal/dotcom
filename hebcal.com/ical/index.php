@@ -57,7 +57,7 @@ src="http://www.google.com/calendar/images/ext/gc_button6.gif"
 width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
 </td>
-<td><b><?php echo $title ?></b>
+<td><b><big><?php echo $title ?></big></b>
 <br><?php echo $subtitle ?></td>
 </tr>
 <?php
@@ -99,7 +99,7 @@ and holidays, Torah readings, etc, follow these instructions:</p>
 <p>
 <hr noshade size="1">
 <span class="tiny">Copyright
-&copy; 2009 Michael J. Radwin. All rights reserved.
+&copy; 2010 Michael J. Radwin. All rights reserved.
 <a href="/privacy/">Privacy Policy</a> -
 <a href="/help/">Help</a> -
 <a href="/news/">News</a> -
