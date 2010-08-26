@@ -1,15 +1,18 @@
-HCHOME=/home/hebcal
+# $Id$
+# $URL$
+
 SHELL=/bin/sh
 VERBOSE=off
 LOGFILE=$HOME/.procmail.log
+HCBIN=/home/hebcal/local/bin
 
 :0
 * ^TO(shabbat-subscribe|shabbat-unsubscribe)
-| $HCHOME/local/bin/shabbat_manage.pl
+| $HCBIN/shabbat_manage.pl
 
 :0
 * ^TO(shabbat-return)
-| $HCHOME/local/bin/shabbat_bounce.pl
+| $HCBIN/shabbat_bounce.pl
 
 :0
 /dev/null

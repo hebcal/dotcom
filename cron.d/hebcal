@@ -1,3 +1,6 @@
+# $Id$
+# $URL$
+
 SHELL=/bin/sh
 MAILTO=michael@radwin.org
 HEBCAL_WEB=/home/hebcal/web/hebcal.com

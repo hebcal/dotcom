@@ -1,3 +1,6 @@
+# $Id$
+# $URL$
+
 SHELL=/bin/sh
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 MAILTO=michael@radwin.org
@@ -46,3 +49,5 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # clean cmd cache monthly
 0 0 1 * * mv /tmp/hebcron-cache /tmp/hebcron-cache.$$ && rm -rf /tmp/hebcron-cache.$$
 
+# restart fetchmail if it got killed
+10 0 * * * /home/hebcal/local/bin/fetchmail -s

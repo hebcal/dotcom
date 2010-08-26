@@ -1,0 +1,16 @@
+# $Id$
+# $URL$
+
+set daemon 300
+set postmaster postmaster@hebcal.com
+set logfile ./fetchmail.log
+
+poll mail.hebcal.com
+proto pop3
+
+user rwodz1mzr1wnbtrq@hebcal.com
+pass 2aM7K2wzB35oSFcb
+options ssl
+mda /usr/bin/procmail
+fetchall
+flush
