@@ -10,6 +10,6 @@ export PATH
 
 if [ -d $HEBCAL_WEB/cache ]; then
     mv -f $HEBCAL_WEB/cache $HEBCAL_WEB/cache.$$
-    find $HEBCAL_WEB/cache.$$ -type f -print | xargs -n 100 rm -f
+    find $HEBCAL_WEB/cache.$$ -type f -delete
     rm -rf $HEBCAL_WEB/cache.$$
 fi
