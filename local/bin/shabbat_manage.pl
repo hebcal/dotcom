@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2006  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -104,118 +104,16 @@ unless (defined $to) {
     exit(0);
 }
 
-if ($to =~ /shabbat-subscribe\@/i) {
+if ($to =~ /shabbat-subscribe/i) {
     shabbat_log(0, "subscribe_useweb"); 
     error_email($err_useweb);
     exit(0);
-} elsif ($to =~ /shabbat-subscribe[\-\+](\d{5})\@/i) {
-    shabbat_log(0, "subscribe_useweb");
-    error_email($err_useweb);
-    exit(0);
-} elsif ($to =~ /shabbat-subscribe[\-\+]([^\@]+)\@/i) {
-    subscribe(lc($1));
 } elsif ($to =~ /shabbat-unsubscribe\@/i) {
     unsubscribe();
 } else {
     shabbat_log(0, "badto");
 }
 exit(0);
-
-sub subscribe
-{
-    my($encoded) = @_;
-
-    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
-
-    my $sql = <<EOD
-SELECT email_address,email_status
-FROM   hebcal_shabbat_email
-WHERE  email_id = '$encoded'
-EOD
-;
-    my $sth = $dbh->prepare($sql);
-    my $rv = $sth->execute
-	or die "can't execute the query: " . $sth->errstr;
-    my($email,$status) = $sth->fetchrow_array;
-    $sth->finish;
-
-    unless ($status) {
-	shabbat_log(0, "subscribe_notfound");
-	$dbh->disconnect;
-	return 0;
-    }
-
-    # update global addr to match the addr stored in the DB
-    $from = $email;
-
-    if ($status eq "active") {
-	shabbat_log(0, "subscribe_twice");
-	$dbh->disconnect;
-	return 0;
-    }
-
-    shabbat_log(1, "subscribe");
-
-    unless ($email) {
-	$dbh->disconnect;
-	warn "skipping $encoded: no email";
-	return 0;
-    }
-
-    $sql = <<EOD
-UPDATE hebcal_shabbat_email
-SET email_status='active'
-WHERE email_address = '$email'
-EOD
-;
-    $dbh->do($sql);
-    $dbh->disconnect;
-
-    my $b64 = MIME::Base64::encode_base64($email);
-    chomp($b64);
-    my $unsub_url = "http://www.$site/email/?" .
-	"e=" . my_url_escape($b64);
-
-    my($body) = qq{Hello,
-
-Your subscription request for hebcal is complete.
-
-Regards,
-$site
-
-To modify your subscription, visit:
-$unsub_url
-
-To unsubscribe from this list, send an email to:
-shabbat-unsubscribe\@$site
-};
-
-    my $email_mangle = $email;
-    $email_mangle =~ s/\@/=/g;
-    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
-
-    my %headers =
-	(
-	 "From" =>
-	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
-	 "To" => $email,
-	 "MIME-Version" => "1.0",
-	 "Content-Type" => "text/plain",
-	 "Subject" => "Your subscription to hebcal is complete",
-	 "List-Unsubscribe" => "<mailto:shabbat-unsubscribe\@$site>",
-	 "Precedence" => "bulk",
-	 );
-
-    if ($header) {
-	my $mid = $header->get("Message-Id");
-	if ($mid) {
-	    chomp($mid);
-	    $headers{"References"} = $headers{"In-Reply-To"} = $mid;
-	}
-
-    }
-    Hebcal::sendmail_v2($return_path,\%headers,$body);
-}
 
 sub my_url_escape
 {
@@ -358,5 +256,4 @@ sub shabbat_log
 	close(LOG);
     }
 }
-
 
