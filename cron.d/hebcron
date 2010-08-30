@@ -50,4 +50,4 @@ HEBCAL_BIN=/home/hebcal/local/bin
 0 0 1 * * mv /tmp/hebcron-cache /tmp/hebcron-cache.$$ && rm -rf /tmp/hebcron-cache.$$
 
 # don't run fetchmail as a daemon, run it from cron
-*/6 * * * * /home/hebcal/local/bin/fetchmail -s
+*/6 * * * * /home/hebcal/local/bin/fetchmail
