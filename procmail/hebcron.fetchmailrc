@@ -1,7 +1,6 @@
 # $Id$
 # $URL$
 
-set daemon 300
 set postmaster postmaster@hebcal.com
 set logfile ./fetchmail.log
 
