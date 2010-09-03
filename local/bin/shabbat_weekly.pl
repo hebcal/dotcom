@@ -103,7 +103,7 @@ my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
 		      $HOME, $year, $mon+1, $mday);
 if ($opt_all) {
     if (open(LOG, "<$logfile")) {
-	my $count;
+	my $count = 0;
 	while(<LOG>) {
 	    my($msgid,$status,$to,$loc) = split(/:/);
 	    if ($status) {
