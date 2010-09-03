@@ -2278,7 +2278,6 @@ sub vcalendar_write_contents
 	    }
 
 	    out_html(undef, qq{UID:$uid$endl});
-#	    out_html(undef, qq{ORGANIZER:mailto:nobody\@hebcal.com$endl});
 
 	    my $alarm;
 	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
@@ -2486,7 +2485,10 @@ sub sendmail_v2($$$)
 	}
     }
 
-    $smtp->auth("hebcal", $SENDMAIL_PASS);
+    my $username = "e73z5ikvo4cpsh2q";
+    my $dom = "hebcal.com";
+    my $sendmail_user = $username . '@' . $dom;
+    $smtp->auth($sendmail_user, $SENDMAIL_PASS);
 
     my $message = '';
     while (my($key,$val) = each %{$headers})

@@ -36,7 +36,7 @@ function smtp_send($return_path, $recipients, $headers, $body)
     }
     $host = "ssl://mail.hebcal.com";
     $port = 465;
-    $username = "hebcal@hebcal.com";
+    $username = "e73z5ikvo4cpsh2q@hebcal.com";
     $passfile = file("./hebcal-email-pass.cgi");
     $password = trim($passfile[0]);
     if (!($smtp = new Net_SMTP($host, $port))) {
