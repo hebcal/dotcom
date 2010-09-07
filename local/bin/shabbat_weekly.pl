@@ -126,22 +126,7 @@ chomp($HOSTNAME);
 my $smtp = smtp_connect("mail.hebcal.com");
 $smtp || die "Can't connect to SMTP server";
 
-for (;;)
-{
-    my @addrs = keys %SUBS;
-    my $count =  scalar(@addrs);
-    last if $count == 0;
-
-    warn "About to mail $count users\n" if $opt_verbose;
-
-    @addrs = List::Util::shuffle(@addrs);
-    foreach my $to (@addrs)
-    {
-	my $success = mail_user($to);
-	delete $SUBS{$to} if $success;
-	sleep(8) if $opt_all; # dh limit 500 emails an hour
-    }
-}
+mail_all();
 
 close(LOG) if $opt_log;
 
@@ -151,6 +136,30 @@ undef $smtp;
 Hebcal::zipcode_close_db($ZIPS_DBH);
 
 exit(0);
+
+sub mail_all
+{
+    my $MAX_FAILURES = 30;
+    my $failures = 0;
+    for (;;) {
+	my @addrs = keys %SUBS;
+	my $count =  scalar(@addrs);
+	last if $count == 0;
+	warn "About to mail $count users\n" if $opt_verbose;
+	# randomize the list to avoid same time-of-day each day
+	@addrs = List::Util::shuffle(@addrs);
+	foreach my $to (@addrs) {
+	    my $success = mail_user($to);
+	    if ($success) {
+		delete $SUBS{$to};
+	    } elsif ($failures++ > $MAX_FAILURES) {
+		warn "Got $failures failures, giving up.\n";
+		return;
+	    }
+	    sleep(36) if $opt_all; # dh limit 100 emails an hour
+	}
+    }
+}
 
 sub mail_user
 {
