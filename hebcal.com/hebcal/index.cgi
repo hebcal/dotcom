@@ -375,6 +375,7 @@ sub vcalendar_display
 {
     my($date) = @_;
 
+    my $title = $date;
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
 
     if (defined $q->param("month") && $q->param("month") eq "x")
@@ -386,6 +387,7 @@ sub vcalendar_display
 	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph);
 	    push(@events, @ev2);
 	}
+	$title = sprintf("%d-%d", $date, $date + 4);
     }
 
     my $tz = $q->param("tz");
@@ -401,7 +403,7 @@ sub vcalendar_display
 	$state = $cconfig->{"state"};
     }
 
-    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $date, $cconfig);
+    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $title, $cconfig);
 }
 
 sub dba_display
