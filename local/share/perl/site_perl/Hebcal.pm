@@ -1992,6 +1992,16 @@ TZNAME:HADT
 END:DAYLIGHT
 END:VTIMEZONE
 ",
+"America/Phoenix" =>
+"BEGIN:VTIMEZONE
+TZID:America/Phoenix
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETTO:-0700
+TZOFFSETFROM:-0700
+END:STANDARD
+END:VTIMEZONE
+",
  );
 
 sub get_munged_qs
@@ -2062,7 +2072,11 @@ sub vcalendar_write_contents
     $tz = 0 unless defined $tz;
 
     if ($is_icalendar) {
-	if ($tz == -5) {
+	if (defined $state && $state eq 'AK' && $tz == -10) {
+	    $tzid = 'US/Aleutian';
+	} elsif (defined $state && $state eq 'AZ' && $tz == -7) {
+	    $tzid = 'America/Phoenix';
+	} elsif ($tz == -5) {
 	    $tzid = 'US/Eastern';
 	} elsif ($tz == -6) {
 	    $tzid = 'US/Central';
@@ -2072,8 +2086,6 @@ sub vcalendar_write_contents
 	    $tzid = 'US/Pacific';
 	} elsif ($tz == -9) {
 	    $tzid = 'US/Alaska';
-	} elsif (defined $state && $state eq 'AK' && $tz == -10) {
-	    $tzid = 'US/Aleutian';
 	} elsif ($tz == -10) {
 	    $tzid = 'US/Hawaii';
 	}
@@ -2565,11 +2577,17 @@ sub sendmail_v2($$$)
 # avoid warnings
 if ($^W && 0)
 {
-    $_ = $Hebcal::tz_names{'foo'};
-    $_ = $Hebcal::city_tz{'foo'};
-    $_ = $Hebcal::city_dst{'foo'};
-    $_ = $Hebcal::MoY_long{'foo'};
-    $_ = $Hebcal::ashk2seph{'foo'};
+    my $unused;
+    $unused = $Hebcal::tz_names{'foo'};
+    $unused = $Hebcal::city_tz{'foo'};
+    $unused = $Hebcal::city_dst{'foo'};
+    $unused = $Hebcal::MoY_long{'foo'};
+    $unused = $Hebcal::ashk2seph{'foo'};
+    $unused = $Hebcal::usno_warning;
+    $unused = $Hebcal::gregorian_warning;
+    $unused = $Hebcal::indiana_warning;
+    $unused = $Hebcal::lang_names{'foo'};
+    $unused = $Hebcal::havdalah_min;
 }
 
 1;
