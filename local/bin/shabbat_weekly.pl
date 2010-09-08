@@ -51,7 +51,6 @@ use Time::Local ();
 use DBI ();
 use Net::SMTP::SSL ();
 use Getopt::Long ();
-use List::Util ();
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)/) {
@@ -147,7 +146,7 @@ sub mail_all
 	last if $count == 0;
 	warn "About to mail $count users\n" if $opt_verbose;
 	# randomize the list to avoid same time-of-day each day
-	@addrs = List::Util::shuffle(@addrs);
+	@addrs = sort by_latlong @addrs;
 	foreach my $to (@addrs) {
 	    my $success = mail_user($to);
 	    if ($success) {
@@ -158,6 +157,34 @@ sub mail_all
 	    }
 	    sleep(36) if $opt_all; # dh limit 100 emails an hour
 	}
+	warn "Done ($failures failures)\n" if $opt_verbose;
+    }
+}
+
+sub get_latlong {
+    my($id) = @_;
+    my $cfg = $SUBS{$id};
+    my($cmd,$loc,$args) = parse_config($cfg);
+    if (defined $args->{"zip"}) {
+    	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	    Hebcal::zipcode_get_zip_fields($ZIPS_DBH, $args->{"zip"});
+	return (($lat_deg + ($lat_min / 60.0)), ($long_deg + ($long_min / 60.0)), $city);
+    } else {
+	return (0.0, 0.0, $args->{"city"});
+    }
+}
+
+sub by_latlong {
+    my($lat_a,$long_a,$city_a) = get_latlong($a);
+    my($lat_b,$long_b,$city_b) = get_latlong($b);
+    if ($long_a == $long_b) {
+	if ($lat_a == $lat_b) {
+	    return $city_a cmp $city_b;
+	} else {
+	    return $lat_a <=> $lat_b;
+	}
+    } else {
+	return $long_a <=> $long_b;
     }
 }
 
