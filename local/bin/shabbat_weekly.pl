@@ -125,6 +125,8 @@ chomp($HOSTNAME);
 my $smtp = smtp_connect("mail.hebcal.com");
 $smtp || die "Can't connect to SMTP server";
 
+my %CONFIG;
+my %ZIP_CACHE;
 mail_all();
 
 close(LOG) if $opt_log;
@@ -138,6 +140,12 @@ exit(0);
 
 sub mail_all
 {
+    warn "Loading config\n" if $opt_verbose;
+    while(my($to,$cfg) = each(%SUBS)) {
+	my($cmd,$loc,$args) = parse_config($cfg);
+	$CONFIG{$to} = [$cmd,$loc,$args];
+    }
+
     my $MAX_FAILURES = 30;
     my $failures = 0;
     for (;;) {
@@ -145,8 +153,8 @@ sub mail_all
 	my $count =  scalar(@addrs);
 	last if $count == 0;
 	warn "About to mail $count users\n" if $opt_verbose;
-	# randomize the list to avoid same time-of-day each day
-	@addrs = sort by_latlong @addrs;
+	# sort the addresses by timezone so we mail eastern users first
+	@addrs = sort by_timezone @addrs;
 	foreach my $to (@addrs) {
 	    my $success = mail_user($to);
 	    if ($success) {
@@ -163,20 +171,26 @@ sub mail_all
 
 sub get_latlong {
     my($id) = @_;
-    my $cfg = $SUBS{$id};
-    my($cmd,$loc,$args) = parse_config($cfg);
+    my $args = $CONFIG{$id}->[2];
     if (defined $args->{"zip"}) {
     	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    Hebcal::zipcode_get_zip_fields($ZIPS_DBH, $args->{"zip"});
-	return (($lat_deg + ($lat_min / 60.0)), ($long_deg + ($long_min / 60.0)), $city);
+	    get_zipinfo($args->{"zip"});
+	return (($lat_deg + ($lat_min / 60.0)),
+		($long_deg + ($long_min / 60.0)),
+		$tz, $city);
     } else {
-	return (0.0, 0.0, $args->{"city"});
+	return (0.0, 0.0,
+		$Hebcal::city_tz{$args->{"city"}},
+		$args->{"city"});
     }
 }
 
-sub by_latlong {
-    my($lat_a,$long_a,$city_a) = get_latlong($a);
-    my($lat_b,$long_b,$city_b) = get_latlong($b);
+sub by_timezone {
+    my($lat_a,$long_a,$tz_a,$city_a) = get_latlong($a);
+    my($lat_b,$long_b,$tz_b,$city_b) = get_latlong($b);
+    if ($tz_a != $tz_b) {
+	return $tz_b <=> $tz_a;
+    }
     if ($long_a == $long_b) {
 	if ($lat_a == $lat_b) {
 	    return $city_a cmp $city_b;
@@ -435,6 +449,7 @@ $all_sql
 EOD
 ;
 
+    warn "$sql\n" if $opt_verbose;
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
@@ -456,6 +471,19 @@ EOD
     $count;
 }
 
+sub get_zipinfo
+{
+    my($zip) = @_;
+
+    if (defined $ZIP_CACHE{$zip}) {
+	return @{$ZIP_CACHE{$zip}};
+    } else {
+	my @f = Hebcal::zipcode_get_zip_fields($ZIPS_DBH, $zip);
+	$ZIP_CACHE{$zip} = \@f;
+	return @f;
+    }
+}
+
 sub parse_config
 {
     my($config) = @_;
@@ -471,7 +499,7 @@ sub parse_config
     my $city_descr;
     if (defined $args{"zip"}) {
     	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    Hebcal::zipcode_get_zip_fields($ZIPS_DBH, $args{"zip"});
+	    get_zipinfo($args{"zip"});
 	unless (defined $state) {
 	    warn "unknown zipcode [$config]";
 	    return undef;
