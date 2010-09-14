@@ -98,32 +98,46 @@ my $HOME = "/home/hebcal";
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
 
 if ($opt_log) {
-my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
-		      $HOME, $year, $mon+1, $mday);
-if ($opt_all) {
-    if (open(LOG, "<$logfile")) {
-	my $count = 0;
-	while(<LOG>) {
-	    my($msgid,$status,$to,$loc) = split(/:/);
-	    if ($status) {
-		delete $SUBS{$to};
-		$count++;
+    my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
+			  $HOME, $year, $mon+1, $mday);
+    if ($opt_all) {
+	if (open(LOG, "<$logfile")) {
+	    my $count = 0;
+	    while(<LOG>) {
+		my($msgid,$status,$to,$loc) = split(/:/);
+		if ($status && defined $to && defined $SUBS{$to}) {
+		    delete $SUBS{$to};
+		    $count++;
+		}
 	    }
+	    close(LOG);
+	    warn "Skipping $count users from $logfile\n" if $opt_verbose;
 	}
-	close(LOG);
-	warn "Skipping $count users from $logfile\n" if $opt_verbose;
     }
-}
-open(LOG, ">>$logfile") || die "$logfile: $!";
-select LOG;
-$| = 1;
+    open(LOG, ">>$logfile") || die "$logfile: $!";
+    select LOG;
+    $| = 1;
+    select STDOUT;
 }
 
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
-my $smtp = smtp_connect("mail.hebcal.com");
-$smtp || die "Can't connect to SMTP server";
+my %AUTH =
+    (
+     'lw7d08fj2u7guglw@hebcal.com' => 'xxxxxxxxxxxxxxxx',
+     'hebcal-shabbat-weekly@hebcal.com' => 'xxxxxxxxxxxxxxxx',
+     );
+my @SMTP;
+my $SMTP_HOST = "mail.hebcal.com";
+while(my($user,$password) = each(%AUTH)) {
+    my $smtp = smtp_connect($SMTP_HOST, $user, $password)
+	or die "Can't connect to $SMTP_HOST as $user";
+    push(@SMTP, $smtp);
+}
+my $SMTP_NUM_CONNECTIONS = scalar(@SMTP);
+# dh limit 100 emails an hour per authenticated user
+my $SMTP_SLEEP_TIME = int(36 / $SMTP_NUM_CONNECTIONS);
 
 my %CONFIG;
 my %ZIP_CACHE;
@@ -131,8 +145,9 @@ mail_all();
 
 close(LOG) if $opt_log;
 
-$smtp->quit();
-undef $smtp;
+foreach my $smtp (@SMTP) {
+    $smtp->quit();
+}
 
 Hebcal::zipcode_close_db($ZIPS_DBH);
 
@@ -155,15 +170,17 @@ sub mail_all
 	warn "About to mail $count users\n" if $opt_verbose;
 	# sort the addresses by timezone so we mail eastern users first
 	@addrs = sort by_timezone @addrs;
-	foreach my $to (@addrs) {
-	    my $success = mail_user($to);
+	for (my $i = 0; $i < $count; $i++) {
+	    my $to = $addrs[$i];
+	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
+	    my $success = mail_user($to, $SMTP[$server_num]);
 	    if ($success) {
 		delete $SUBS{$to};
 	    } elsif ($failures++ > $MAX_FAILURES) {
 		warn "Got $failures failures, giving up.\n";
 		return;
 	    }
-	    sleep(36) if $opt_all; # dh limit 100 emails an hour
+	    sleep($SMTP_SLEEP_TIME) if $opt_all;
 	}
 	warn "Done ($failures failures)\n" if $opt_verbose;
     }
@@ -204,12 +221,12 @@ sub by_timezone {
 
 sub mail_user
 {
-    my($to) = @_;
+    my($to,$smtp) = @_;
 
     my $cfg = $SUBS{$to};
     die "invalid user $to" unless $cfg;
 
-    my($cmd,$loc,$args) = parse_config($cfg);
+    my($cmd,$loc,$args) = @{$CONFIG{$to}};
     return 1 unless $cmd;
 
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
@@ -302,24 +319,11 @@ traditional and liberal Haggadot:
 	$headers{"Subject"} = "[shabbat] Apr 12 Special Pesach Edition";
     }
 
-    # try 3 times to avoid intermittent failures
-    my $status = 0;
-    for (my $i = 0; $status == 0 && $i < 3; $i++)
-    {
-	$status = my_sendmail($smtp,$return_path,\%headers,$body);
-	if ($opt_log) {
-	    print LOG join(":", $msgid, $status, $to,
-			   defined $args->{"zip"} 
-			   ? $args->{"zip"} : $args->{"city"}), "\n";
-	}
-
-	if ($status == 0)
-	{
-	    warn "mail to $to failed, reconnecting...\n" if $opt_verbose;
-	    $smtp->quit;
-	    $smtp = smtp_connect("mail.hebcal.com");
-	    $smtp || die "Can't reconnect to SMTP server";
-	}
+    my $status = my_sendmail($smtp,$return_path,\%headers,$body);
+    if ($opt_log) {
+	print LOG join(":", $msgid, $status, $to,
+		       defined $args->{"zip"} 
+		       ? $args->{"zip"} : $args->{"city"}), "\n";
     }
 
     $status;
@@ -542,7 +546,7 @@ sub parse_config
 
 sub smtp_connect
 {
-    my($s) = @_;
+    my($s,$user,$password) = @_;
 
     # try 3 times to avoid intermittent failures
     for (my $i = 0; $i < 3; $i++)
@@ -553,7 +557,7 @@ sub smtp_connect
 				       Timeout => 20);
 	if ($smtp)
 	{
-	    $smtp->auth('lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx');
+	    $smtp->auth($user, $password);
 	    return $smtp;
 	}
 	else
