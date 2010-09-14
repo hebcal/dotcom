@@ -29,6 +29,9 @@ $(HOLIDAYS)/purim.html: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
 	./gen_festival.pl $(XML_FESTIVAL) $(HOLIDAYS)
 
+../converter/sedra/19/1900.inc converter: gen_daily_sedra.pl hebcal
+	./gen_daily_sedra.pl 1900 2099
+
 RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
 		web/hebcal.com/dist/*.xml \
 		web/hebcal.com/hebcal/*.cgi \
