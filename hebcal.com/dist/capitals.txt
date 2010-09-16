@@ -1,3 +1,17 @@
+AU	Melbourne	-37.8167	144.9667	Australia/Melbourne	10	1
+AU	Sydney	-33.8833	151.2167	Australia/Sydney	10	1
+BR	Sao Paulo	-23.5333	-46.6167	America/Sao_Paulo	-3	1
+CA	Montreal	45.5000	-73.5833	America/Montreal	-5	1
+CA	Toronto	43.6667	-79.4167	America/Toronto	-6	1
+FR	Marseilles	47.0667	3.0000	Europe/Paris	1	1
+IN	Bangalore	12.9833	77.5833		Asia/Calcutta	5	0
+IN	Bombay	18.9750	72.8258	Asia/Calcutta	5	0
+IN	Calcutta	22.5697	88.3697	Asia/Calcutta	5	0
+IN	Cochin	9.9667	76.2333	Asia/Calcutta	5	0
+IN	Dehli	28.6667	77.2167	Asia/Calcutta	5	0
+MX	Mexico	19.4342	-99.1386	America/Mexico_City	-6	1
+RU	Saint Petersburg	59.8944	30.2642	Europe/Moscow	3	1
+
 AD	Andorra La Vella	42.5000	1.5167	Europe/Andorra	1	1
 AE	Abu Dhabi	24.4667	54.3667	Asia/Dubai	4	0
 AF	Kabul	34.5167	69.1833	Asia/Kabul	4	0
@@ -30,7 +44,7 @@ BT	Thimphu	27.4833	89.6000	Asia/Thimphu	6	0
 BW	Gaborone	-24.6464	25.9119	Africa/Gaborone	2	0
 BY	Minsk	53.9000	27.5667	Europe/Minsk	2	1
 BZ	Belmopan	17.2500	-88.7667	America/Belize	-6	0
-CA	Ottawa	45.4167	-75.7000	America/Rainy_River	-6	1
+CA	Ottawa	45.4167	-75.7000	America/Toronto	-6	1
 CD	Kinshasa	-4.3000	15.3000	Africa/Kinshasa	1	0
 CF	Bangui	4.3667	18.5833	Africa/Bangui	1	0
 CG	Brazzaville	-4.2592	15.2847	Africa/Brazzaville	1	0
