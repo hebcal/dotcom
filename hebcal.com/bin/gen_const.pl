@@ -12,6 +12,7 @@ die "usage: $0 outfile.pm\n" unless $outfile;
 
 my $SEDROT_XML = "/home/hebcal/web/hebcal.com/dist/aliyah.xml";
 my $HOLIDAYS_XML = "/home/hebcal/web/hebcal.com/dist/festival.xml";
+my $CITIES_TXT = "/home/hebcal/web/hebcal.com/dist/capitals.txt";
 
 my $axml = XMLin($SEDROT_XML);
 $axml || die $SEDROT_XML;
@@ -19,12 +20,25 @@ $axml || die $SEDROT_XML;
 my $fxml = XMLin($HOLIDAYS_XML);
 $fxml || die $HOLIDAYS_XML;
 
+open(CITIES, $CITIES_TXT) || die $CITIES_TXT;
+binmode(CITIES, ":utf8");
+
 open(O,">$outfile.$$") || die "$outfile.$$: $!\n";
 binmode(O, ":utf8");
 
 print O "package HebcalConst;\n\n";
 
 print O "use utf8;\n\n";
+
+print O "\@HebcalConst::CITIES = (\n";
+while(<CITIES>) {
+    chomp;
+    my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
+    $city =~ s/\'/\\\'/g;
+    print O "['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst],\n";
+}
+close(CITIES);
+print O ");\n\n";
 
 print O "%HebcalConst::SEDROT = (\n";
 foreach my $h (sort keys %{$axml->{"parsha"}})

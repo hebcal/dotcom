@@ -2,6 +2,7 @@ DISTDIR = $(CURDIR)/../dist
 XMLDIR = $(DISTDIR)
 XML_ALIYAH = $(XMLDIR)/aliyah.xml
 XML_FESTIVAL = $(XMLDIR)/festival.xml
+CAPITALS_TXT = $(XMLDIR)/capitals.txt
 SITE_PERL = /home/hebcal/local/share/perl/site_perl
 CSVDIR = $(DISTDIR)
 SEDROT = ../sedrot
@@ -16,7 +17,7 @@ sedrot: $(SEDROT)/bereshit.html
 
 xml2perl: $(SITE_PERL)/HebcalConst.pm
 
-$(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) gen_const.pl hebcal
+$(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CAPITALS_TXT) gen_const.pl hebcal
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
