@@ -123,15 +123,17 @@ if ($opt_log) {
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
-my %AUTH =
+my @AUTH =
     (
-     'lw7d08fj2u7guglw@hebcal.com' => 'xxxxxxxxxxxxxxxx',
-     'hebcal-shabbat-weekly@hebcal.com' => 'xxxxxxxxxxxxxxxx',
+     ['lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
+     ['hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
      );
 my @SMTP;
 my $SMTP_HOST = "mail.hebcal.com";
-while(my($user,$password) = each(%AUTH)) {
-    my $smtp = smtp_connect($SMTP_HOST, $user, $password)
+foreach my $auth (@AUTH) {
+    my $user = $auth->[0];
+    my $password = $auth->[1];
+    my $smtp = smtp_connect($SMTP_HOST, $user, $password, 0)
 	or die "Can't connect to $SMTP_HOST as $user";
     push(@SMTP, $smtp);
 }
@@ -176,9 +178,18 @@ sub mail_all
 	    my $success = mail_user($to, $SMTP[$server_num]);
 	    if ($success) {
 		delete $SUBS{$to};
-	    } elsif ($failures++ > $MAX_FAILURES) {
-		warn "Got $failures failures, giving up.\n";
-		return;
+	    } else {
+		if (++$failures >= $MAX_FAILURES) {
+		    warn "Got $failures failures, giving up.\n";
+		    return;
+		}
+		# reconnect in debug mode
+		my $user = $AUTH[$server_num]->[0];
+		my $password = $AUTH[$server_num]->[1];
+		$SMTP[$server_num]->quit();
+		my $smtp = smtp_connect($SMTP_HOST, $user, $password, 1)
+		    or die "Can't connect to $SMTP_HOST as $user";
+		$SMTP[$server_num] = $smtp;
 	    }
 	    sleep($SMTP_SLEEP_TIME) if $opt_all;
 	}
@@ -546,7 +557,7 @@ sub parse_config
 
 sub smtp_connect
 {
-    my($s,$user,$password) = @_;
+    my($s,$user,$password,$debug) = @_;
 
     # try 3 times to avoid intermittent failures
     for (my $i = 0; $i < 3; $i++)
@@ -554,7 +565,8 @@ sub smtp_connect
 	my $smtp = Net::SMTP::SSL->new($s,
 				       Hello => $HOSTNAME,
 				       Port => 465,
-				       Timeout => 20);
+				       Timeout => 20,
+				       Debug => $debug);
 	if ($smtp)
 	{
 	    $smtp->auth($user, $password);
