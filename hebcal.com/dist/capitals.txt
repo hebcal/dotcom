@@ -1,17 +1,3 @@
-AU	Melbourne	-37.8167	144.9667	Australia/Melbourne	10	1
-AU	Sydney	-33.8833	151.2167	Australia/Sydney	10	1
-BR	Sao Paulo	-23.5333	-46.6167	America/Sao_Paulo	-3	1
-CA	Montreal	45.5000	-73.5833	America/Montreal	-5	1
-CA	Toronto	43.6667	-79.4167	America/Toronto	-6	1
-FR	Marseilles	47.0667	3.0000	Europe/Paris	1	1
-IN	Bangalore	12.9833	77.5833		Asia/Calcutta	5	0
-IN	Bombay	18.9750	72.8258	Asia/Calcutta	5	0
-IN	Calcutta	22.5697	88.3697	Asia/Calcutta	5	0
-IN	Cochin	9.9667	76.2333	Asia/Calcutta	5	0
-IN	Dehli	28.6667	77.2167	Asia/Calcutta	5	0
-MX	Mexico	19.4342	-99.1386	America/Mexico_City	-6	1
-RU	Saint Petersburg	59.8944	30.2642	Europe/Moscow	3	1
-
 AD	Andorra La Vella	42.5000	1.5167	Europe/Andorra	1	1
 AE	Abu Dhabi	24.4667	54.3667	Asia/Dubai	4	0
 AF	Kabul	34.5167	69.1833	Asia/Kabul	4	0
@@ -24,6 +10,8 @@ AR	Buenos Aires	-34.5875	-58.6725	America/Argentina/Buenos_Aires	-3	0
 AS	Pago Pago	-14.2393	-170.7221	US/Samoa	-11	0
 AT	Vienna	48.2000	16.3667	Europe/Vienna	1	1
 AU	Canberra	-35.2833	149.2167	Australia/Canberra	10	1
+AU	Melbourne	-37.8167	144.9667	Australia/Melbourne	10	1
+AU	Sydney	-33.8833	151.2167	Australia/Sydney	10	1
 AW	Oranjestad	12.5167	-70.0333	America/Aruba	-4	0
 AZ	Baku	40.3953	49.8822	Asia/Baku	4	1
 BA	Sarajevo	43.8500	18.3833	Europe/Sarajevo	1	1
@@ -39,12 +27,16 @@ BM	Hamilton	32.2942	-64.7839	Atlantic/Bermuda	-4	1
 BN	Bandar Seri Begawan	4.8833	114.9333	Asia/Brunei	8	0
 BO	La Paz	-16.5000	-68.1500	America/La_Paz	-4	0
 BR	Brasília	-15.7833	-47.9167	America/Sao_Paulo	-3	1
+BR	Sao Paulo	-23.5333	-46.6167	America/Sao_Paulo	-3	1
 BS	Nassau	25.0833	-77.3500	America/Nassau	-5	1
 BT	Thimphu	27.4833	89.6000	Asia/Thimphu	6	0
 BW	Gaborone	-24.6464	25.9119	Africa/Gaborone	2	0
 BY	Minsk	53.9000	27.5667	Europe/Minsk	2	1
 BZ	Belmopan	17.2500	-88.7667	America/Belize	-6	0
+CA	Montreal	45.5000	-73.5833	America/Montreal	-5	1
 CA	Ottawa	45.4167	-75.7000	America/Toronto	-6	1
+CA	Toronto	43.6667	-79.4167	America/Toronto	-6	1
+CA	Vancouver	49.2500	-123.1333	America/Vancouver	-8	1
 CD	Kinshasa	-4.3000	15.3000	Africa/Kinshasa	1	0
 CF	Bangui	4.3667	18.5833	Africa/Bangui	1	0
 CG	Brazzaville	-4.2592	15.2847	Africa/Brazzaville	1	0
@@ -75,6 +67,7 @@ FI	Helsinki	60.1756	24.9342	Europe/Helsinki	2	1
 FJ	Suva	-18.1333	178.4167	Pacific/Fiji	12	0
 FK	Stanley	-51.7000	-57.8500	Atlantic/Stanley	-4	1
 FO	Tórshavn	62.0167	-6.7667	Atlantic/Faeroe	0	1
+FR	Marseilles	47.0667	3.0000	Europe/Paris	1	1
 FR	Paris	48.8667	2.3333	Europe/Paris	1	1
 GA	Libreville	0.3833	9.4500	Africa/Libreville	1	0
 GB	London	51.5002	-0.1262	Europe/London	0	1
@@ -95,8 +88,17 @@ HT	Port-au-prince	18.5392	-72.3350	America/Port-au-Prince	-5	0
 HU	Budapest	47.5000	19.0833	Europe/Budapest	1	1
 ID	Jakarta	-6.1744	106.8294	Asia/Jakarta	7	0
 IE	Dublin	53.3331	-6.2489	Europe/Dublin	0	1
+IL	Ashdod	31.7333	34.6500	Asia/Jerusalem	2	1
+IL	Eilat	29.5611	34.9517	Asia/Jerusalem	2	1
+IL	Haifa	32.8156	34.9892	Asia/Jerusalem	2	1
 IL	Jerusalem	31.7800	35.2300	Asia/Jerusalem	2	1
+IL	Tel Aviv	32.0667	34.7667	Asia/Jerusalem	2	1
+IL	Tiberias	32.7956	35.5286	Asia/Jerusalem	2	1
 IM	Douglas	54.1500	-4.4833	Europe/Isle_of_Man	0	1
+IN	Bangalore	12.9833	77.5833		Asia/Calcutta	5	0
+IN	Bombay	18.9750	72.8258	Asia/Calcutta	5	0
+IN	Calcutta	22.5697	88.3697	Asia/Calcutta	5	0
+IN	Cochin	9.9667	76.2333	Asia/Calcutta	5	0
 IN	New Delhi	28.6000	77.2000	Asia/Calcutta	5	0
 IQ	Baghdad	33.3386	44.3939	Asia/Baghdad	3	0
 IR	Tehran	35.6719	51.4244	Asia/Tehran	3	1
@@ -137,6 +139,7 @@ MS	Plymouth	16.7000	-62.2167	America/Montserrat	-4	0
 MT	Valletta	35.8997	14.5147	Europe/Malta	1	1
 MU	Port Louis	-20.1619	57.4989	Indian/Mauritius	4	0
 MW	Lilongwe	-13.9833	33.7833	Africa/Blantyre	2	0
+MX	Mexico	19.4342	-99.1386	America/Mexico_City	-6	1
 MY	Kuala Lumpur	3.1667	101.7000	Asia/Kuala_Lumpur	8	0
 MZ	Maputo	-25.9653	32.5892	Africa/Maputo	2	0
 NA	Windhoek	-22.5700	17.0836	Africa/Windhoek	1	1
@@ -164,6 +167,7 @@ QA	Doha	25.2867	51.5333	Asia/Qatar	3	0
 RO	Bucharest	44.4333	26.1000	Europe/Bucharest	2	1
 RS	Belgrade	44.8186	20.4681	Europe/Belgrade	1	1
 RU	Moscow	55.7522	37.6156	Europe/Moscow	3	1
+RU	Saint Petersburg	59.8944	30.2642	Europe/Moscow	3	1
 RW	Kigali	-1.9536	30.0606	Africa/Kigali	2	0
 SA	Riyadh	24.6408	46.7728	Asia/Riyadh	3	0
 SB	Honiara	-9.4333	159.9500	Pacific/Guadalcanal	11	0
@@ -195,7 +199,35 @@ TW	Taipei	25.0392	121.5250	Asia/Taipei	8	0
 TZ	Dodoma	-6.1833	35.7500	Africa/Dar_es_Salaam	3	0
 UA	Kiev	50.4333	30.5167	Europe/Kiev	2	1
 UG	Kampala	0.3156	32.5656	Africa/Kampala	3	0
+US	Atlanta, GA	33.8477	-84.2814	America/New_York	-5	1
+US	Austin, TX	30.2058	-97.8002	America/Chicago	-6	1
+US	Baltimore, MD	39.3181	-76.6140	America/New_York	-5	1
+US	Boston, MA	42.3496	-71.0746	America/New_York	-5	1
+US	Buffalo, NY	42.9864	-78.7279	America/New_York	-5	1
+US	Chicago, IL	41.9288	-87.6315	America/Chicago	-6	1
+US	Cincinnati, OH	39.1666	-84.5465	America/New_York	-5	1
+US	Cleveland, OH	41.4379	-81.5366	America/New_York	-5	1
+US	Dallas, TX	32.7825	-96.8207	America/Chicago	-6	1
+US	Denver, CO	39.7525	-104.9995	America/Denver	-7	1
+US	Detroit, MI	42.3679	-83.1386	America/New_York	-5	1
+US	Houston, TX	29.8688	-95.5380	America/Chicago	-6	1
+US	Las Vegas, NV	36.1100	-115.2118	America/Los_Angeles	-8	1
+US	Livingston, NY	42.1415	-73.7782	America/New_York	-5	1
+US	Los Angeles, CA	34.0396	-118.2661	America/Los_Angeles	-8	1
+US	Miami, FL	25.9388	-80.2144	America/New_York	-5	1
+US	Minneapolis, MN	45.0059	-93.4305	America/Chicago	-6	1
+US	New York, NY	40.7528	-73.9725	America/New_York	-5	1
+US	Omaha, NE	41.2079	-96.1183	America/Chicago	-6	1
+US	Philadelphia, PA	39.9524	-75.1653	America/New_York	-5	1
+US	Phoenix, AZ	33.5586	-112.0955	America/Phoenix	-7	0
+US	Pittsburgh, PA	40.4495	-79.9880	America/New_York	-5	1
+US	Portland, OR	45.4691	-122.5535	America/Los_Angeles	-8	1
+US	Saint Louis, MO	38.6182	-90.3467	America/Chicago	-6	1
+US	San Diego, CA	32.9014	-117.2079	America/Los_Angeles	-8	1
+US	San Francisco, CA	37.7312	-122.3826	America/Los_Angeles	-8	1
+US	Seattle, WA	47.6026	-122.3284	America/Los_Angeles	-8	1
 US	Washington, DC	38.8749	-77.0325	America/New_York	-5	1
+US	White Plains, NY	41.0291	-73.7580	America/New_York	-5	1
 UY	Montevideo	-34.8581	-56.1708	America/Montevideo	-3	1
 UZ	Tashkent	41.3167	69.2500	Asia/Tashkent	5	0
 VC	Kingstown	13.1333	-61.2167	America/St_Vincent	-4	0
@@ -204,6 +236,7 @@ VG	Road Town	18.4167	-64.6167	America/Tortola	-4	0
 VN	Hanoi	21.0333	105.85	Asia/Phnom_Penh	7	0
 WS	Apia	-13.8333	-171.7333	Pacific/Samoa	-11	0
 YT	Mamoudzou	-12.7794	45.2272	Indian/Mayotte	3	0
+ZA	Johannesburg	-26.2000	28.0833	Africa/Johannesburg	2	0 
 ZA	Pretoria	-25.7069	28.2294	Africa/Johannesburg	2	0
 ZM	Lusaka	-15.4167	28.2833	Africa/Lusaka	2	0
 ZW	Harare	-17.8178	31.0447	Africa/Harare	2	0
