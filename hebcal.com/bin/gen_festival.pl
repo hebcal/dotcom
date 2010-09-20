@@ -44,7 +44,6 @@
 
 require 5.008_004;
 
-use lib "/home/hebcal/local/lib/perl/5.8.4";
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
