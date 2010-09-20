@@ -1394,7 +1394,7 @@ sub gen_cookie($)
     }
 
     foreach (qw(ss mf)) {
-	if (defined $q->param($_) {
+	if (defined $q->param($_)) {
 	    $retval .= "&$_=" . $q->param($_);
 	} elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
 	    $retval .= "&$_=off";
