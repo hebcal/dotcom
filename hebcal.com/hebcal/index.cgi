@@ -223,8 +223,8 @@ my $pi = $q->path_info();
 my $g_loc = (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") ?
     "in " . $cconfig->{"city"} : "";
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
-my $g_nmf = (defined $q->param("nmf") && $q->param("nmf") =~ /^on|1$/) ? 1 : 0;
-my $g_nss = (defined $q->param("nss") && $q->param("nss") =~ /^on|1$/) ? 1 : 0;
+my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
+my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
 
 if (! defined $pi)
 {
@@ -545,15 +545,15 @@ sub form
 		 -checked => "checked",
 		 -label => "\nRosh Chodesh"),
     "</label>",
-    "<br><label\nfor=\"nmf\">",
-    $q->checkbox(-name => "nmf",
-		 -id => "nmf",
+    "<br><label\nfor=\"mf\">",
+    $q->checkbox(-name => "mf",
+		 -id => "mf",
 		 -checked => "checked",
 		 -label => "\nMinor Fasts"),
     "</label>",
-    "<br><label\nfor=\"nss\">",
-    $q->checkbox(-name => "nss",
-		 -id => "nss",
+    "<br><label\nfor=\"ss\">",
+    $q->checkbox(-name => "ss",
+		 -id => "ss",
 		 -checked => "checked",
 		 -label => "\nSpecial Shabbatot"),
     "</label>",
@@ -742,7 +742,7 @@ sub form
     Hebcal::out_html(undef,
     "</td></tr></table>\n",
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "nh", "nmf", "nss"],
+	       -values => ["nx", "nh", "mf", "ss"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",-value => "Get Calendar"),
@@ -759,8 +759,8 @@ if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
 d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
 d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
-d.getElementById("nmf").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
-d.getElementById("nss").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+d.getElementById("mf").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+d.getElementById("ss").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
 </script>
 JSCRIPT_END
 	;
