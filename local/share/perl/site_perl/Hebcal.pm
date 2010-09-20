@@ -386,7 +386,7 @@ sub parse_date_descr($$)
 
 sub invoke_hebcal
 {
-    my($cmd,$memo,$want_sephardic,$month_filter) = @_;
+    my($cmd,$memo,$want_sephardic,$month_filter,$no_minor_fasts,$no_special_shabbat) = @_;
     my(@events,$prev);
     local($_);
     local(*HEBCAL);
@@ -436,6 +436,21 @@ sub invoke_hebcal
 
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    parse_date_descr($date,$descr);
+
+	# not typically used
+	if ($no_special_shabbat || $no_minor_fasts) {
+	    my $subj_copy = $subj;
+	    $subj_copy = $Hebcal::ashk2seph{$subj_copy}
+		if defined $Hebcal::ashk2seph{$subj_copy};
+	    if ($no_special_shabbat) {
+		next if $subj_copy =~ /^Shabbat /;
+	    }
+	    if ($no_minor_fasts) {
+		next if $subj_copy =~ /^Tzom /;
+		next if $subj_copy =~ /^Ta\'anit /;
+		next if $subj_copy eq "Asara B'Tevet";
+	    }
+	}
 
 	# if Candle lighting and Havdalah are on the same day it is
 	# a bug in hebcal for unix involving shabbos and chag overlap.

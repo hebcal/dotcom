@@ -223,6 +223,8 @@ my $pi = $q->path_info();
 my $g_loc = (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") ?
     "in " . $cconfig->{"city"} : "";
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
+my $g_nmf = (defined $q->param("nmf") && $q->param("nmf") =~ /^on|1$/) ? 1 : 0;
+my $g_nss = (defined $q->param("nss") && $q->param("nss") =~ /^on|1$/) ? 1 : 0;
 
 if (! defined $pi)
 {
@@ -266,7 +268,8 @@ exit(0);
 
 sub json_events
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0);
 
     print STDOUT $q->header(-type => "text/json",
@@ -278,7 +281,8 @@ sub json_events
 
 sub javascript_events
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
 
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
@@ -376,7 +380,8 @@ sub vcalendar_display
     my($date) = @_;
 
     my $title = $date;
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
 
     if (defined $q->param("month") && $q->param("month") eq "x")
     {
@@ -408,7 +413,8 @@ sub vcalendar_display
 
 sub dba_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
 
     my $dst = (defined($q->param("dst")) && $q->param("dst") eq "usa") ? 1 : 0;
     my $tz = $q->param("tz");
@@ -430,7 +436,8 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
@@ -537,6 +544,18 @@ sub form
 		 -id => "nx",
 		 -checked => "checked",
 		 -label => "\nRosh Chodesh"),
+    "</label>",
+    "<br><label\nfor=\"nmf\">",
+    $q->checkbox(-name => "nmf",
+		 -id => "nmf",
+		 -checked => "checked",
+		 -label => "\nMinor Fasts"),
+    "</label>",
+    "<br><label\nfor=\"nss\">",
+    $q->checkbox(-name => "nss",
+		 -id => "nss",
+		 -checked => "checked",
+		 -label => "\nSpecial Shabbatot"),
     "</label>",
     "<br><label\nfor=\"o\">",
     $q->checkbox(-name => "o",
@@ -723,7 +742,7 @@ sub form
     Hebcal::out_html(undef,
     "</td></tr></table>\n",
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "nh"],
+	       -values => ["nx", "nh", "nmf", "nss"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",-value => "Get Calendar"),
@@ -740,6 +759,8 @@ if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
 d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
 d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+d.getElementById("nmf").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+d.getElementById("nss").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
 </script>
 JSCRIPT_END
 	;
@@ -911,7 +932,8 @@ sub results_page
     $cmd_pretty =~ s,.*/,,; # basename
     Hebcal::out_html(undef, "<!-- $cmd_pretty -->\n");
 
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
 
     my $numEntries = scalar(@events);
 
