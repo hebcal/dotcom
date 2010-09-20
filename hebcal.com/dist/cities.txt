@@ -7,7 +7,7 @@ woe2214662	AM	Yerevan	40.1811	44.5136	Asia/Yerevan	4	1
 woe152045	AN	Willemstad	12.1000	-68.9167	America/Curacao	-4	0
 woe1261906	AO	Luanda	-8.8383	13.2344	Africa/Luanda	1	0
 woe468739	AR	Buenos Aires	-34.5875	-58.6725	America/Argentina/Buenos_Aires	-3	0
-woeUNKNOWN	AS	Pago Pago	-14.2393	-170.7221	US/Samoa	-11	0
+woe1062841	AS	Pago Pago	-14.2393	-170.7221	US/Samoa	-11	0
 woe551801	AT	Vienna	48.2000	16.3667	Europe/Vienna	1	1
 woe1100968	AU	Canberra	-35.2833	149.2167	Australia/Canberra	10	1
 woe1103816	AU	Melbourne	-37.8167	144.9667	Australia/Melbourne	10	1
@@ -73,7 +73,7 @@ woe1324195	GA	Libreville	0.3833	9.4500	Africa/Libreville	1	0
 woe44418	GB	London	51.5002	-0.1262	Europe/London	0	1
 woe1965878	GE	Tbilisi	41.7250	44.7908	Asia/Tbilisi	4	0
 woe1326075	GH	Accra	5.5500	-0.2167	Africa/Accra	0	0
-woeUNKNOWN	GI	Gibraltar	36.1333	-5.3500	Europe/Gibraltar	1	1
+woe472800	GI	Gibraltar	36.1333	-5.3500	Europe/Gibraltar	1	1
 woe472856	GL	Nuuk	64.1833	-51.7500	America/Godthab	-3	1
 woe1321151	GM	Banjul	13.4531	-16.5775	Africa/Banjul	0	0
 woe1334760	GN	Conakry	9.5092	-13.7122	Africa/Conakry	0	0
@@ -94,7 +94,7 @@ woe1967449	IL	Haifa	32.8156	34.9892	Asia/Jerusalem	2	1
 woe56126011	IL	Jerusalem	31.7800	35.2300	Asia/Jerusalem	2	1
 woe1968212	IL	Tel Aviv	32.0667	34.7667	Asia/Jerusalem	2	1
 woe1968033	IL	Tiberias	32.7956	35.5286	Asia/Jerusalem	2	1
-woeUNKNOWN	IM	Douglas	54.1500	-4.4833	Europe/Isle_of_Man	0	1
+woe538629	IM	Douglas	54.1500	-4.4833	Europe/Isle_of_Man	0	1
 woe2295420	IN	Bangalore	12.9833	77.5833		Asia/Calcutta	5
 woe2295411	IN	Bombay	18.9750	72.8258	Asia/Calcutta	5	0
 woe2295386	IN	Calcutta	22.5697	88.3697	Asia/Calcutta	5	0
@@ -112,6 +112,7 @@ woe1969888	KG	Bishkek	42.8731	74.6003	Asia/Bishkek	6	0
 woe1020985	KH	Phnom Penh	11.5500	104.9167	Asia/Phnom_Penh	7	0
 woe1306106	KM	Moroni	-11.7042	43.2403	Indian/Comoro	3	0
 woe161849	KN	Basseterre	17.3000	-62.7167	America/St_Kitts	-4	0
+woe1079132	KP	Pyongyang	39.014221	125.776299	Asia/Pyongyang	9	0
 woe1132599	KR	Seoul	37.5664	126.9997	Asia/Seoul	9	0
 woe1940631	KW	Kuwait	29.3697	47.9783	Asia/Kuwait	3	0
 woe57596	KY	George Town	19.3000	-81.3833	America/Cayman	-5	0
@@ -128,14 +129,14 @@ woe854823	LV	Riga	56.9500	24.1000	Europe/Riga	2	1
 woe1353281	LY	Tripoli	32.8925	13.1800	Africa/Tripoli	2	0
 woe56120059	MA	Rabat	34.0253	-6.8361	Africa/Casablanca	0	0
 woe480793	MD	Chisinau	47.0056	28.8575	Europe/Chisinau	2	1
-woeHASH(0x11da690)	ME	Podgorica	42.4411	19.2636	Europe/Podgorica	1	1
+woe536010	ME	Podgorica	42.4411	19.2636	Europe/Podgorica	1	1
 woe1358594	MG	Antananarivo	-18.9167	47.5167	Indian/Antananarivo	3	0
 woe482940	MK	Skopje	42.0000	21.4333	Europe/Skopje	1	1
 woe1369729	ML	Bamako	12.6500	-8.0000	Africa/Bamako	0	0
 woe2266535	MN	Ulaanbaatar	47.9167	106.9167	Asia/Choibalsan	8	0
-woeUNKNOWN	MP	Saipan	15.1819	145.7567	Pacific/Saipan	10	0
+woe1062826	MP	Saipan	15.1819	145.7567	Pacific/Saipan	10	0
 woe1504735	MR	Nouakchott	18.0864	-15.9753	Africa/Nouakchott	0	0
-woeUNKNOWN	MS	Plymouth	16.7000	-62.2167	America/Montserrat	-4	0
+woe110875	MS	Plymouth	16.7000	-62.2167	America/Montserrat	-4	0
 woe483559	MT	Valletta	35.8997	14.5147	Europe/Malta	1	1
 woe1377436	MU	Port Louis	-20.1619	57.4989	Indian/Mauritius	4	0
 woe1367476	MW	Lilongwe	-13.9833	33.7833	Africa/Blantyre	2	0
@@ -160,7 +161,7 @@ woe1062005	PG	Port Moresby	-9.4647	147.1925	Pacific/Port_Moresby	10	0
 woe1199477	PH	Manila	14.6042	120.9822	Asia/Manila	8	0
 woe2211027	PK	Islamabad	33.7000	73.1667	Asia/Karachi	5	1
 woe523920	PL	Warsaw	52.2500	21.0000	Europe/Warsaw	1	1
-woeUNKNOWN	PR	San Juan	18.4504	-66.0849	America/Puerto_Rico	-4	0
+woe161685	PR	San Juan	18.4504	-66.0849	America/Puerto_Rico	-4	0
 woe742676	PT	Lisbon	38.7167	-9.1333	Europe/Lisbon	0	1
 woe379176	PY	Asunción	-25.2667	-57.6667	America/Asuncion	-4	1
 woe1940517	QA	Doha	25.2867	51.5333	Asia/Qatar	3	0
