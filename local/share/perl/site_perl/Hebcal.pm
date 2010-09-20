@@ -1388,9 +1388,17 @@ sub gen_cookie($)
 	    if defined $q->param($_) && $q->param($_) ne '';
     }
 
-    foreach (qw(nh nx ss mf)) {
+    foreach (qw(nh nx)) {
 	$retval .= "&$_=off"
 	    if !defined $q->param($_) || $q->param($_) eq 'off';
+    }
+
+    foreach (qw(ss mf)) {
+	if (defined $q->param($_) {
+	    $retval .= "&$_=" . $q->param($_);
+	} elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
+	    $retval .= "&$_=off";
+	}
     }
 
     if (defined $q->param("lg") && $q->param("lg") ne '')
