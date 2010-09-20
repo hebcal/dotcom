@@ -1387,10 +1387,11 @@ sub gen_cookie($)
 	$retval .= "&$_=" . $q->param($_)
 	    if defined $q->param($_) && $q->param($_) ne '';
     }
-    $retval .= '&nh=off'
-	if !defined $q->param('nh') || $q->param('nh') eq 'off';
-    $retval .= '&nx=off'
-	if !defined $q->param('nx') || $q->param('nx') eq 'off';
+
+    foreach (qw(nh nx ss mf)) {
+	$retval .= "&$_=off"
+	    if !defined $q->param($_) || $q->param($_) eq 'off';
+    }
 
     if (defined $q->param("lg") && $q->param("lg") ne '')
     {
@@ -1499,17 +1500,10 @@ sub process_cookie($$)
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 
-#    $q->param('nh','off')
-#	if (defined $c->param('h') && $c->param('h') eq 'on');
-#    $q->param('nx','off')
-#	if (defined $c->param('x') && $c->param('x') eq 'on');
-
-    $q->param('nh',$c->param('nh'))
-	if (! defined $q->param('nh') && defined $c->param('nh'));
-    $q->param('nx',$c->param('nx'))
-	if (! defined $q->param('nx') && defined $c->param('nx'));
-    $q->param("lg",$c->param("lg"))
-	if (! defined $q->param("lg") && defined $c->param("lg"));
+    foreach (qw(nh nx ss mf lg)) {
+	$q->param($_, $c->param($_))
+	    if (! defined $q->param($_) && defined $c->param($_));
+    }
 
     $c;
 }
