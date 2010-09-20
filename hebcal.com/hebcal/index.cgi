@@ -370,7 +370,8 @@ sub hebrew_span
 
 sub macintosh_datebook_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, "", $g_seph, $g_month);
+    my @events = Hebcal::invoke_hebcal($cmd, "", $g_seph, $g_month,
+				       $g_nmf, $g_nss);
 
     Hebcal::macintosh_datebook($q, \@events);
 }
@@ -389,7 +390,8 @@ sub vcalendar_display
 	{
 	    my $cmd2 = $cmd;
 	    $cmd2 =~ s/(\d+)$/$1+$i/e;
-	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph);
+	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
+					    $g_nmf, $g_nss);
 	    push(@events, @ev2);
 	}
 	$title = sprintf("%d-%d", $date, $date + 4);
