@@ -285,11 +285,11 @@ src="/i/076495315X.01.MZZZZZZZ.jpg" border="0"
 width="148" height="160" hspace="8" align="right"
 alt="The Jewish Museum 2011 Calendar from Amazon.com"></a>
 <p>Holidays for:
-<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;nh=on;nx=on">$hy0</a> -
+<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;nh=on;nx=on;mf=on;ss=on">$hy0</a> -
 $HEB_YR -
-<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;nh=on;nx=on">$hy1</a> -
-<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;nh=on;nx=on">$hy2</a> -
-<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;nh=on;nx=on">$hy3</a></p>
+<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;nh=on;nx=on;mf=on;ss=on">$hy1</a> -
+<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;nh=on;nx=on;mf=on;ss=on">$hy2</a> -
+<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;nh=on;nx=on;mf=on;ss=on">$hy3</a></p>
 <dl>
 EOHTML
 ;
@@ -598,7 +598,7 @@ EOHTML
 	    }
 	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
-		";nx=on;nh=on;vis=on;tag=hol.obs\">%s, %02d %s %04d</a> (%s)\n",
+		";nx=on;mf=on;ss=on;nh=on;vis=on;tag=hol.obs\">%s, %02d %s %04d</a> (%s)\n",
 		$gy, $gm,
 		$Hebcal::DoW[$dow],
 		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
