@@ -255,10 +255,10 @@ woe1582504	ZA	Johannesburg	-26.2000	28.0833	Africa/Johannesburg	2	0
 woe1586638	ZA	Pretoria	-25.7069	28.2294	Africa/Johannesburg	2	0
 woe1569006	ZM	Lusaka	-15.4167	28.2833	Africa/Lusaka	2	0
 woe1467052	ZW	Harare	-17.8178	31.0447	Africa/Harare	2	0
-woe44544	UK	Belfast	54.595798	-5.934940	Europe/London	0	1
-woe19344	UK	Edinburgh	55.954151	-3.202770	Europe/London	0	1
-woe15127	UK	Cardiff	51.481258	-3.180670	Europe/London	0	1
-woe28218	UK	Manchester	53.479599	-2.248810	Europe/London	0	1
+woe44544	GB	Belfast	54.595798	-5.934940	Europe/London	0	1
+woe19344	GB	Edinburgh	55.954151	-3.202770	Europe/London	0	1
+woe15127	GB	Cardiff	51.481258	-3.180670	Europe/London	0	1
+woe28218	GB	Manchester	53.479599	-2.248810	Europe/London	0	1
 woe2458410	US	New Haven, CT	41.307129	-72.924980	America/New_York	-5	1
 woe676757	DE	Munich	48.136410	11.577530	Europe/Berlin	1	1
 woe2348079	NZ	Auckland	-36.884109	174.770416	Pacific/Auckland	12	1
