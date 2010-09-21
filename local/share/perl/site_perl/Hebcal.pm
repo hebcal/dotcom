@@ -51,6 +51,7 @@ use Date::Calc ();
 use DBI;
 use HebcalConst;
 use Digest::MD5 ();
+use Locale::Country ();
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -1263,6 +1264,56 @@ sub navbar2($$$$$)
 	"href=\"/search/\">Search</a>\n" .
 	"</td></tr></table>\n" .
 	"<!--/htdig_noindex-->\n";
+}
+
+sub woe_city
+{
+    my($woe) = @_;
+    return $HebcalConst::CITIES_NEW{$woe}->[1];
+}
+
+sub woe_country
+{
+    my($woe) = @_;
+    my $country_name = Locale::Country::code2country($HebcalConst::CITIES_NEW{$woe}->[0]);
+    $country_name =~ s/,\s+.+$//;
+    $country_name;
+}
+
+sub sort_city_info
+{
+    return woe_city($a) . ", " . woe_country($a)
+	cmp woe_city($b) . ", " . woe_country($b);
+}
+
+sub html_city_select
+{
+    my $retval = "<select>\n";
+    my %groups;
+    my @other;
+    while(my($woe,$info) = each(%HebcalConst::CITIES_NEW)) {
+	my($country,$city,$latitude,$longitude,$tzName) = @{$info};
+	if ($country eq "US" || $country eq "CA" || $country eq "IL") {
+	    $groups{$country} = [] unless defined $groups{$country};
+	    push(@{$groups{$country}}, $woe);
+	} else {
+	    push(@other, $woe);
+	}
+    }
+    foreach my $country (qw(US CA IL)) {
+	$retval .= "<optgroup label=\"" . Locale::Country::code2country($country) . "\">\n";
+	foreach my $woe (sort sort_city_info @{$groups{$country}}) {
+	    $retval .= sprintf "<option value=\"%s\">%s</option>\n", $woe, woe_city($woe);
+	}
+	$retval .= "</optgroup>\n";
+    }
+    $retval .= "<optgroup label=\"World Cities\">\n";
+    foreach my $woe (sort sort_city_info @other) {
+	$retval .= sprintf "<option value=\"%s\">%s, %s</option>\n", $woe, woe_city($woe), woe_country($woe);
+    }
+    $retval .= "</optgroup>\n";
+    $retval .= "</select>\n";
+    $retval;
 }
 
 sub start_html($$$$$)
