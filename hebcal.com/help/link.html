@@ -11,6 +11,18 @@
 <script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushXml.js"></script>
 <link type="text/css" rel="stylesheet" href="/i/sh-3.0.83/styles/shCoreDefault.css"/>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
+<script type="text/javascript"
+src="http://www.hebcal.com/i/calendar-2.0-min.js"></script>
+<script type="text/javascript"
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e2;nh=on;nx=on;year=now;month=x;ss=on;mf=on;c=on;zip=90210;m=72;s=on">
+</script>
+<link rel="stylesheet" href="http://www.hebcal.com/i/jec-grey.css"
+type="text/css">
+<style type="text/css">
+#myCalendarContainer table { width: 800px }
+#myCalendarContainer table td.dayHasEvent { height: 80px }
+#myCalendarContainer table td.dayBlank { height: 80px }
+</style>
 </head>
 <body>
 <!--htdig_noindex-->
@@ -89,53 +101,53 @@ website</h3>
 href="http://calendar.ilsen.net/">Kevin Ilsen' JavaScript Event
 Calendar</a> to put a calendar on your website.</p>
 
+<p>Put these tags in the <code>&lt;head&gt;</code> section of the page:</p>
+
 <pre class="brush: html">
-&lt;div style="font-family: Verdana,Arial,Helvetica"&gt;
 &lt;script type="text/javascript"
- src="http://www.hebcal.com/i/calendar.js"&gt;
-&lt;/script&gt;
+src="http://www.hebcal.com/i/calendar-2.0-min.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript"
- src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x"&gt;
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e2;nh=on;nx=on;year=now;month=x;ss=on;mf=on"&gt;
 &lt;/script&gt;
+&lt;link rel="stylesheet" href="http://www.hebcal.com/i/jec-grey.css"
+type="text/css"&gt;
+&lt;style type="text/css"&gt;
+#myCalendarContainer table { width: 800px }
+#myCalendarContainer table td.dayHasEvent { height: 80px }
+#myCalendarContainer table td.dayBlank { height: 80px }
+&lt;/style&gt;
+</pre>
+
+<p>Then, where you want the calendar to appear, use these tags:</p>
+
+<pre class="brush: html">
+&lt;div id="myCalendarContainer"&gt;&lt;/div&gt;
 &lt;script type="text/javascript"&gt;
- &lt;!--
-  SpecialDay=7;
-  FontSize="+1";
-  Calendar();
- // --&gt;
+var myCalendar = new JEC("myCalendarContainer", {tableClass: "greyCalendar", linkNewWindow: false});
+myCalendar.defineEvents(HEBCAL.jec2events);
+myCalendar.showCalendar();
 &lt;/script&gt;
-&lt;/div&gt;
 </pre>
 
 <p>To add candle-lighting times for your town, you can add
-<code>;c=on;zip=90210;m=72;s=on</code> to the end of the 2nd URL (be
+<code>;c=on;zip=90210;m=72;s=on</code> to the end of the hebcal script URL (be
 sure to change <span class="hl">90210</span> to your shul's zip code).
 For example, </p>
 
 <pre class="brush:html">
 &lt;script type="text/javascript"
- src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x;c=on;zip=90210;m=72;s=on"&gt;
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e2;nh=on;nx=on;year=now;month=x;ss=on;mf=on;c=on;zip=90210;m=72;s=on"&gt;
 &lt;/script&gt;
 </pre>
 
 <p>Here's a preview of what it will look like:</p>
 
-<div style="font-family: Verdana,Arial,Helvetica">
-<script type="text/javascript"
- src="http://www.hebcal.com/i/calendar.js">
-</script>
-<script type="text/javascript"
- src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x;c=on;zip=90210;m=72;s=on">
-</script>
+<div id="myCalendarContainer"></div>
 <script type="text/javascript">
- <!--
-  SpecialDay=7;
-  FontSize="+1";
-  Calendar();
- // -->
+var myCalendar = new JEC("myCalendarContainer", {tableClass: "greyCalendar", linkNewWindow: false});
+myCalendar.defineEvents(HEBCAL.jec2events);
+myCalendar.showCalendar();
 </script>
-</div>
-
 
 <h3><a name="hdate"></a>Displaying today's Hebrew date on your
 website</h3>
@@ -267,7 +279,7 @@ are required for reuse of the content.</p>
 <a href="/donations/">Donate</a>
 <br>
 <!-- hhmts start -->
-Last modified: Tue Sep 21 09:39:13 PDT 2010
+Last modified: Tue Sep 21 16:38:45 PDT 2010
 <!-- hhmts end -->
 ($Revision$)
 </span>
