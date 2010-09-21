@@ -34,6 +34,7 @@ while(<CITIES>) {
     print O ",\n" unless $first;
     $first = 0;
     my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
+    $woeid =~ s/^woe//;
     print O "\"$woeid\":[\"$country\",\"$city\",$latitude,$longitude,\"$tzName\"]";
 }
 close(CITIES);
