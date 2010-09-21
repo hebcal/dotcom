@@ -6,6 +6,11 @@
 <base href="http://www.hebcal.com/help/link.html" target="_top">
 <title>Linking from your Synagogue to Hebcal</title>
 <link rel="stylesheet" href="/style.css" type="text/css">
+<script type="text/javascript" src="/i/sh-3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="/i/sh-3.0.83/styles/shCoreDefault.css"/>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
 </head>
 <body>
 <!--htdig_noindex-->
@@ -84,8 +89,7 @@ website</h3>
 href="http://calendar.ilsen.net/">Kevin Ilsen' JavaScript Event
 Calendar</a> to put a calendar on your website.</p>
 
-<form action="/">
-<textarea cols="84" rows="16">
+<pre class="brush: html">
 &lt;div style="font-family: Verdana,Arial,Helvetica"&gt;
 &lt;script type="text/javascript"
  src="http://www.hebcal.com/i/calendar.js"&gt;
@@ -101,17 +105,16 @@ Calendar</a> to put a calendar on your website.</p>
  // --&gt;
 &lt;/script&gt;
 &lt;/div&gt;
-</textarea>
-</form>
+</pre>
 
 <p>To add candle-lighting times for your town, you can add
 <code>;c=on;zip=90210;m=72;s=on</code> to the end of the 2nd URL (be
 sure to change <span class="hl">90210</span> to your shul's zip code).
 For example, </p>
 
-<pre>
+<pre class="brush:html">
 &lt;script type="text/javascript"
- src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x<span class="hl">;c=on;zip=90210;m=72;s=on</span>"&gt;
+ src="http://www.hebcal.com/hebcal/?v=1;cfg=e;nh=on;nx=on;year=now;month=x;c=on;zip=90210;m=72;s=on"&gt;
 &lt;/script&gt;
 </pre>
 
@@ -138,31 +141,25 @@ For example, </p>
 website</h3>
 
 <p>To display today's Hebrew date in Hebrew or in English
-transliteration (i.e. <b><script type="text/javascript"
-src="http://www.hebcal.com/etc/hdate-he.js"></script></b>
-or <b><script type="text/javascript"
-src="http://www.hebcal.com/etc/hdate-en.js"></script></b>)
-on your site, use one of these two tags:</p>
+transliteration, on your site, use one of these two tags:</p>
 
-<p>Hebrew:</p>
-
-<form action="/">
-<textarea cols="60" rows="3">
+<h4>Hebrew</h4>
+<pre class="brush:html">
 &lt;script type="text/javascript"
  src="http://www.hebcal.com/etc/hdate-he.js"&gt;
 &lt;/script&gt;
-</textarea>
-</form>
+</pre>
+<p>Preview: <span class="hebrew"><script type="text/javascript"
+src="http://www.hebcal.com/etc/hdate-he.js"></script></span></p>
 
-<p>English transliteration:</p>
-
-<form action="/">
-<textarea cols="60" rows="3">
+<h4>English transliteration</h4>
+<pre class="brush:html">
 &lt;script type="text/javascript"
  src="http://www.hebcal.com/etc/hdate-en.js"&gt;
 &lt;/script&gt;
-</textarea>
-</form>
+</pre>
+<p>Preview: <span><script type="text/javascript"
+src="http://www.hebcal.com/etc/hdate-en.js"></script></span></p>
 
 <h3><a name="rss"></a>RSS Feeds of Hebcal.com content</h3>
 
@@ -184,13 +181,15 @@ on your site, use one of these two tags:</p>
 Anniversary Calendar for your website</h3>
 
 <p>You may use these HTML tags to insert a small form directly on your
-web page, with a reverse link back to your site:</p>
+web page, with a reverse link back to your site:</p
 
-<table border="1" cellpadding="8">
-<tr><td><pre>
+<p>Make sure you replace both the <span class="hl">ref_url</span> and <span
+class="hl">ref_text</span> value fields with with your own synagogue's.</p>
+
+<pre class="brush:html">
 &lt;form action="http://www.hebcal.com/yahrzeit/"&gt;
-&lt;input type="hidden" name="ref_url" value="<span class="hl">http://www.tbala.org</span>"&gt;
-&lt;input type="hidden" name="ref_text" value="<span class="hl">Temple Beth Am</span>"&gt;
+&lt;input type="hidden" name="ref_url" value="http://www.tbala.org"&gt;
+&lt;input type="hidden" name="ref_text" value="Temple Beth Am"&gt;
 &lt;select name="t1"&gt;
 &lt;option value="Yahrzeit"&gt;Yahrzeit&lt;/option&gt;
 &lt;option value="Birthday"&gt;Birthday&lt;/option&gt;
@@ -225,11 +224,7 @@ Name:
 &lt;label for="yizkor"&gt;Include Yizkor dates&lt;/label&gt;&lt;br&gt;
 &lt;input type="submit" value="Compute Calendar"&gt;
 &lt;/form&gt;
-</pre></td></tr>
-</table>
-
-<p>Make sure you replace both the <span class="hl">ref_url</span> and <span
-class="hl">ref_text</span> value fields with with your own synagogue's.</p>
+</pre>
 
 <h3><a name="content"></a>May I reproduce hebcal.com content in another
 form (e.g. printed calendars, another website, email newsletter,
@@ -272,7 +267,7 @@ are required for reuse of the content.</p>
 <a href="/donations/">Donate</a>
 <br>
 <!-- hhmts start -->
-Last modified: Thu Jun 26 22:14:59 PDT 2008
+Last modified: Tue Sep 21 09:39:13 PDT 2010
 <!-- hhmts end -->
 ($Revision$)
 </span>
