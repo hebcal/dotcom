@@ -2,17 +2,21 @@
 
 use strict;
 use utf8;
-use Locale::Country ();
+use XML::Simple;
 
 my $dir = $0;
 $dir =~ s,/[^/]+$,,;
 
-my $infile = shift;
+my $citiesTxt = shift;
+my $countryXml = shift;
 my $outfile = shift;
-die "usage: $0 cities.txt outfile.js\n" unless $outfile;
+die "usage: $0 cities.txt opencountrycodes.xml outfile.js\n" unless $outfile;
 
-open(CITIES, $infile) || die $infile;
+open(CITIES, $citiesTxt) || die $citiesTxt;
 binmode(CITIES, ":utf8");
+
+my $axml = XMLin($countryXml, KeyAttr => [ "code" ]);
+$axml || die $countryXml;
 
 open(O,">$outfile.$$") || die "$outfile.$$: $!\n";
 binmode(O, ":utf8");
@@ -34,18 +38,25 @@ while(<CITIES>) {
 }
 close(CITIES);
 
-print O "\n}\n";
+print O "\n};\n";
 
 print O "HEBCAL.countries={\n";
 $first = 1;
-foreach my $cc (Locale::Country::all_country_codes()) {
-    my $name = Locale::Country::code2country($cc);
+foreach my $cc (keys %{$axml->{"country"}}) {
+    my $name = $axml->{"country"}->{$cc}->{"name"};
     $name =~ s/,\s+.+$//;
+    $name = "Laos" if $cc eq "LA";
+    $name = "Vietnam" if $cc eq "VN";
+    $name = "Democratic Congo" if $cc eq "CD";
+    $name = "North Korea" if $cc eq "KP";
+    $name = "Russia" if $cc eq "RU";
+    $name = "U.S. Virgin Islands" if $cc eq "VI";
+    $name = "British Virgin Islands" if $cc eq "VG";
     print O ",\n" unless $first;
     $first = 0;
     printf O "\"%s\":\"%s\"", uc($cc), $name;
 }
-print O "\n}\n";
+print O "\n};\n";
 
 close(O);
 rename("$outfile.$$", $outfile) || die "$outfile: $!\n";

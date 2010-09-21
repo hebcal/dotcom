@@ -24,7 +24,7 @@ $(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_con
 json: $(CITIES_JSON)
 
 $(CITIES_JSON): $(CITIES_TXT) gen_cities_json.pl
-	./gen_cities_json.pl $(CITIES_TXT) $(CITIES_JSON)
+	./gen_cities_json.pl $(CITIES_TXT) opencountrycodes.xml $(CITIES_JSON)
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
