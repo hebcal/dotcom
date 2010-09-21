@@ -141,7 +141,7 @@ woe110875	MS	Plymouth	16.7000	-62.2167	America/Montserrat	-4	0
 woe483559	MT	Valletta	35.8997	14.5147	Europe/Malta	1	1
 woe1377436	MU	Port Louis	-20.1619	57.4989	Indian/Mauritius	4	0
 woe1367476	MW	Lilongwe	-13.9833	33.7833	Africa/Blantyre	2	0
-woe116545	MX	Mexico	19.4342	-99.1386	America/Mexico_City	-6	1
+woe116545	MX	Mexico City	19.4342	-99.1386	America/Mexico_City	-6	1
 woe1154781	MY	Kuala Lumpur	3.1667	101.7000	Asia/Kuala_Lumpur	8	0
 woe1550363	MZ	Maputo	-25.9653	32.5892	Africa/Maputo	2	0
 woe1466719	NA	Windhoek	-22.5700	17.0836	Africa/Windhoek	1	1
