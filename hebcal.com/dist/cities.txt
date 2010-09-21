@@ -37,6 +37,7 @@ woe3534	CA	Montreal	45.5000	-73.5833	America/Montreal	-5	1
 woe3369	CA	Ottawa	45.4167	-75.7000	America/Toronto	-6	1
 woe4118	CA	Toronto	43.6667	-79.4167	America/Toronto	-6	1
 woe9807	CA	Vancouver	49.2500	-123.1333	America/Vancouver	-8	1
+woe2972	CA	Winnipeg	49.899441	-97.140793	America/Winnipeg	-6	1
 woe1290062	CD	Kinshasa	-4.3000	15.3000	Africa/Kinshasa	1	0
 woe1306666	CF	Bangui	4.3667	18.5833	Africa/Bangui	1	0
 woe1279685	CG	Brazzaville	-4.2592	15.2847	Africa/Brazzaville	1	0
@@ -207,26 +208,39 @@ woe2367105	US	Boston, MA	42.3496	-71.0746	America/New_York	-5	1
 woe2371464	US	Buffalo, NY	42.9864	-78.7279	America/New_York	-5	1
 woe2379574	US	Chicago, IL	41.9288	-87.6315	America/Chicago	-6	1
 woe2380358	US	Cincinnati, OH	39.1666	-84.5465	America/New_York	-5	1
+woe2383660	US	Columbus, OH	39.961960	-83.002983	America/New_York	-5	1
 woe2381475	US	Cleveland, OH	41.4379	-81.5366	America/New_York	-5	1
 woe2388929	US	Dallas, TX	32.7825	-96.8207	America/Chicago	-6	1
 woe2391279	US	Denver, CO	39.7525	-104.9995	America/Denver	-7	1
-woe2391585	US	Detroit, MI	42.3679	-83.1386	America/New_York	-5	1
+woe2391585	US	Detroit, MI	42.3679	-83.1386	America/Detroit	-5	1
+woe2418244	US	Hartford, CT	41.763321	-72.674072	America/New_York	-5	1
 woe2424766	US	Houston, TX	29.8688	-95.5380	America/Chicago	-6	1
+woe2435795	US	Lakewood, NJ	40.093250	-74.213577	America/New_York	-5	1
 woe2436704	US	Las Vegas, NV	36.1100	-115.2118	America/Los_Angeles	-8	1
 woe2440577	US	Livingston, NY	42.1415	-73.7782	America/New_York	-5	1
 woe2442047	US	Los Angeles, CA	34.0396	-118.2661	America/Los_Angeles	-8	1
+woe2449323	US	Memphis, TN	35.149681	-90.048920	America/Chicago	-6	1
 woe2450022	US	Miami, FL	25.9388	-80.2144	America/New_York	-5	1
-woe2452078	US	Minneapolis, MN	45.0059	-93.4305	America/Chicago	-6	1
+woe2451822	US	Milwaukee, WI	43.041809	-87.906837	America/Chicago	-6	1
+woe2453086	US	Monsey, NY	41.109428	-74.069107	America/New_York	-5	1
 woe2459115	US	New York, NY	40.7528	-73.9725	America/New_York	-5	1
 woe2465512	US	Omaha, NE	41.2079	-96.1183	America/Chicago	-6	1
+woe2466256	US	Orlando, FL	28.538231	-81.377388	America/New_York	-5	1
+woe2469037	US	Passaic, NJ	40.860340	-74.123741	America/New_York	-5	1
 woe2471217	US	Philadelphia, PA	39.9524	-75.1653	America/New_York	-5	1
 woe2471390	US	Phoenix, AZ	33.5586	-112.0955	America/Phoenix	-7	0
 woe2473224	US	Pittsburgh, PA	40.4495	-79.9880	America/New_York	-5	1
 woe2475687	US	Portland, OR	45.4691	-122.5535	America/Los_Angeles	-8	1
+woe2477058	US	Providence, RI	41.823872	-71.411987	America/New_York	-5	1
+woe2480894	US	Richmond, VA	37.540699	-77.433647	America/New_York	-5	1
+woe2482949	US	Rochester, NY	43.155499	-77.616028	America/New_York	-5	1
 woe2486982	US	Saint Louis, MO	38.6182	-90.3467	America/Chicago	-6	1
-woe2487889	US	San Diego, CA	32.9014	-117.2079	America/Los_Angeles	-8	1
-woe2487956	US	San Francisco, CA	37.7312	-122.3826	America/Los_Angeles	-8	1
+woe2487129	US	Saint Paul, MN	44.943821	-93.093323	America/Chicago	-6	1
+woe2487889	US	San Diego, CA	32.715679	-117.161720	America/Los_Angeles	-8	1
+woe2487956	US	San Francisco, CA	37.779598	-122.420143	America/Los_Angeles	-8	1
 woe2490383	US	Seattle, WA	47.6026	-122.3284	America/Los_Angeles	-8	1
+woe2493761	US	Silver Spring, MD	38.996681	-77.028870	America/New_York	-5	1
+woe2504498	US	Teaneck, NJ	40.884701	-74.006683	America/New_York	-5	1
 woe2514815	US	Washington, DC	38.8749	-77.0325	America/New_York	-5	1
 woe2519492	US	White Plains, NY	41.0291	-73.7580	America/New_York	-5	1
 woe468052	UY	Montevideo	-34.8581	-56.1708	America/Montevideo	-3	1

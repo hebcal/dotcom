@@ -10,9 +10,9 @@ $dir =~ s,/[^/]+$,,;
 my $outfile = shift;
 die "usage: $0 outfile.pm\n" unless $outfile;
 
-my $SEDROT_XML = "/home/hebcal/web/hebcal.com/dist/aliyah.xml";
-my $HOLIDAYS_XML = "/home/hebcal/web/hebcal.com/dist/festival.xml";
-my $CITIES_TXT = "/home/hebcal/web/hebcal.com/dist/capitals.txt";
+my $SEDROT_XML = "../dist/aliyah.xml";
+my $HOLIDAYS_XML = "../dist/festival.xml";
+my $CITIES_TXT = "../dist/cities.txt";
 
 my $axml = XMLin($SEDROT_XML);
 $axml || die $SEDROT_XML;
@@ -30,12 +30,12 @@ print O "package HebcalConst;\n\n";
 
 print O "use utf8;\n\n";
 
-print O "\@HebcalConst::CITIES = (\n";
+print O "\%HebcalConst::CITIES_NEW = (\n";
 while(<CITIES>) {
     chomp;
-    my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
+    my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
     $city =~ s/\'/\\\'/g;
-    print O "['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst],\n";
+    print O "'$woeid' => ['$country','$city',$latitude,$longitude,'$tzName'],\n";
 }
 close(CITIES);
 print O ");\n\n";
