@@ -250,7 +250,11 @@ elsif ($pi =~ /[^\/]+\.[vi]cs$/)
 }
 elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
 {
-    javascript_events();
+    javascript_events(0);
+}
+elsif (defined $q->param("cfg") && $q->param("cfg") eq "e2")
+{
+    javascript_events(1);
 }
 elsif (defined $q->param("cfg") && $q->param("cfg") eq "json")
 {
@@ -281,8 +285,14 @@ sub json_events
 
 sub javascript_events
 {
+    my($v2) = @_;
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
+    my $cmd2 = $cmd;
+    $cmd2 =~ s/(\d+)$/$1+1/e;
+    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
+				    $g_nmf, $g_nss);
+    push(@events, @ev2);
 
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
@@ -293,6 +303,14 @@ sub javascript_events
 			    -expires => $http_expires,
 			    );
 
+    if ($v2) {
+	print STDOUT <<EOJS;
+if(typeof HEBCAL=="undefined"||!HEBCAL){var HEBCAL={};}
+HEBCAL.jec2events=[
+EOJS
+;
+    }
+    my $first = 1;
     for (my $i = 0; $i < @events; $i++)
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -332,14 +350,32 @@ sub javascript_events
 
 	$subj = translate_subject($q,$subj,$hebrew);
 
-	#DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
 	    $subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj);
 	}
 
-	printf("DefineEvent(%04d%02d%02d, \"%s\", \"%s\", \"%s\", %d, %d);\015\012",
-	       $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
+	if ($v2) {
+	    print STDOUT ",\n" unless $first;
+	    $first = 0;
+	    printf STDOUT "{eventDate:%04d%02d%02d,eventDescription:\"%s\"",
+	    $year, $mon, $mday, $subj;
+	    if ($href) {
+		print STDOUT ",eventLink:\"$href\"";
+	    }
+	    if ($img_url) {
+		printf STDOUT ",image:\"%s\",imageWidth:%d,imageHeight:%d",
+	    	$img_url, $img_w, $img_h;
+	    }
+	    print STDOUT "}";
+	} else {
+	    #DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
+	    printf("DefineEvent(%04d%02d%02d, \"%s\", \"%s\", \"%s\", %d, %d);\015\012",
+		   $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
+	}
+    }
+    if ($v2) {
+	print STDOUT "\n];\n";
     }
 }
 
