@@ -28,10 +28,10 @@ RewriteRule ^etc/hdate-en.xml - [F,L]
 Deny from 203.231.0.1
 
 AddType text/calendar;charset=UTF-8 ics
+AddType text/javascript;charset=UTF-8 js
+AddType text/xml;charset=UTF-8 xml rdf rss vxml
 AddType image/vnd.microsoft.icon ico
-AddType application/x-javascript js
 AddType text/css css
-AddType text/xml xml rdf rss vxml
 AddType text/x-csv csv
 AddEncoding x-gzip .gz
 
