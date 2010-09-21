@@ -3,13 +3,14 @@ XMLDIR = $(DISTDIR)
 XML_ALIYAH = $(XMLDIR)/aliyah.xml
 XML_FESTIVAL = $(XMLDIR)/festival.xml
 CITIES_TXT = $(XMLDIR)/cities.txt
+CITIES_JSON = ../etc/cities.js
 SITE_PERL = /home/hebcal/local/share/perl/site_perl
 CSVDIR = $(DISTDIR)
 SEDROT = ../sedrot
 DBDIR = ../hebcal
 HOLIDAYS = ../holidays
 
-all: xml2perl sedrot holidays
+all: xml2perl sedrot holidays json
 
 holidays: $(HOLIDAYS)/purim.html
 
@@ -19,6 +20,11 @@ xml2perl: $(SITE_PERL)/HebcalConst.pm
 
 $(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
+
+json: $(CITIES_JSON)
+
+$(CITIES_JSON): $(CITIES_TXT) gen_cities_json.pl
+	./gen_cities_json.pl $(CITIES_TXT) $(CITIES_JSON)
 
 $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
@@ -30,7 +36,9 @@ $(HOLIDAYS)/purim.html: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
 	./gen_festival.pl $(XML_FESTIVAL) $(HOLIDAYS)
 
-../converter/sedra/19/1900.inc converter: gen_daily_sedra.pl hebcal
+converter: ../converter/sedra/19/1900.inc
+
+../converter/sedra/19/1900.inc: gen_daily_sedra.pl hebcal
 	./gen_daily_sedra.pl 1900 2099
 
 RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
