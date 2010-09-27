@@ -51,6 +51,7 @@ use Time::Local ();
 use DBI ();
 use Net::SMTP::SSL ();
 use Getopt::Long ();
+use Log::Message::Simple qw[:STD :CARP];
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)/) {
@@ -76,7 +77,7 @@ usage() if !@ARGV && !$opt_all;
 my %SUBS;
 load_subs();
 if (! keys(%SUBS) && !$opt_all) {
-    die "$ARGV[0]: not found.\n";
+    croak "$ARGV[0]: not found";
 }
 
 my($LOGIN) = getlogin() || getpwuid($<) || "UNKNOWN";
@@ -111,10 +112,10 @@ if ($opt_log) {
 		}
 	    }
 	    close(LOG);
-	    warn "Skipping $count users from $logfile\n" if $opt_verbose;
+	    msg("Skipping $count users from $logfile", $opt_verbose);
 	}
     }
-    open(LOG, ">>$logfile") || die "$logfile: $!";
+    open(LOG, ">>$logfile") || croak "$logfile: $!";
     select LOG;
     $| = 1;
     select STDOUT;
@@ -130,14 +131,12 @@ my @AUTH =
      );
 my @SMTP;
 my $SMTP_HOST = "mail.hebcal.com";
-foreach my $auth (@AUTH) {
-    my $user = $auth->[0];
-    my $password = $auth->[1];
-    my $smtp = smtp_connect($SMTP_HOST, $user, $password, 0)
-	or die "Can't connect to $SMTP_HOST as $user";
-    push(@SMTP, $smtp);
+my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
+msg("Connecting via SMTP", $opt_verbose);
+for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
+    $SMTP[$i] = undef;
+    smtp_reconnect($i, 0);
 }
-my $SMTP_NUM_CONNECTIONS = scalar(@SMTP);
 # dh limit 100 emails an hour per authenticated user
 my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
 
@@ -147,6 +146,7 @@ mail_all();
 
 close(LOG) if $opt_log;
 
+msg("Disconnecting from SMTP", $opt_verbose);
 foreach my $smtp (@SMTP) {
     $smtp->quit();
 }
@@ -157,19 +157,21 @@ exit(0);
 
 sub mail_all
 {
-    warn "Loading config\n" if $opt_verbose;
+    msg("Loading config", $opt_verbose);
     while(my($to,$cfg) = each(%SUBS)) {
 	my($cmd,$loc,$args) = parse_config($cfg);
 	$CONFIG{$to} = [$cmd,$loc,$args];
     }
 
     my $MAX_FAILURES = 30;
+    my $RECONNECT_INTERVAL = 20;
     my $failures = 0;
     for (;;) {
 	my @addrs = keys %SUBS;
 	my $count =  scalar(@addrs);
 	last if $count == 0;
-	warn "About to mail $count users\n" if $opt_verbose;
+	msg("About to mail $count users ($failures previous failures)",
+	    $opt_verbose);
 	# sort the addresses by timezone so we mail eastern users first
 	@addrs = sort by_timezone @addrs;
 	for (my $i = 0; $i < $count; $i++) {
@@ -178,23 +180,22 @@ sub mail_all
 	    my $success = mail_user($to, $SMTP[$server_num]);
 	    if ($success) {
 		delete $SUBS{$to};
+		# reconnect every so often
+		if (($i % $RECONNECT_INTERVAL) == ($RECONNECT_INTERVAL - 1)) {
+		    smtp_reconnect($server_num, 0);
+		}
 	    } else {
 		if (++$failures >= $MAX_FAILURES) {
-		    warn "Got $failures failures, giving up.\n";
+		    carp "Got $failures failures, giving up";
 		    return;
 		}
 		# reconnect in debug mode
-		my $user = $AUTH[$server_num]->[0];
-		my $password = $AUTH[$server_num]->[1];
-		$SMTP[$server_num]->quit();
-		my $smtp = smtp_connect($SMTP_HOST, $user, $password, 1)
-		    or die "Can't connect to $SMTP_HOST as $user";
-		$SMTP[$server_num] = $smtp;
+		smtp_reconnect($server_num, 1);
 	    }
-	    sleep($SMTP_SLEEP_TIME) if $opt_all;
+	    sleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
 	}
-	warn "Done ($failures failures)\n" if $opt_verbose;
     }
+    msg("Done ($failures failures)", $opt_verbose);
 }
 
 sub get_latlong {
@@ -234,8 +235,7 @@ sub mail_user
 {
     my($to,$smtp) = @_;
 
-    my $cfg = $SUBS{$to};
-    die "invalid user $to" unless $cfg;
+    my $cfg = $SUBS{$to} or croak "invalid user $to";
 
     my($cmd,$loc,$args) = @{$CONFIG{$to}};
     return 1 unless $cmd;
@@ -464,10 +464,10 @@ $all_sql
 EOD
 ;
 
-    warn "$sql\n" if $opt_verbose;
+    msg($sql, $opt_verbose);
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
-	or die "can't execute the query: " . $sth->errstr;
+	or croak "can't execute the query: " . $sth->errstr;
     my $count = 0;
     while (my($email,$id,$zip,$city,$havdalah) = $sth->fetchrow_array) {
 	my $cfg = "id=$id;m=$havdalah";
@@ -482,7 +482,7 @@ EOD
 
     $dbh->disconnect;
 
-    warn "Loaded $count users\n" if $opt_verbose;
+    msg("Loaded $count users", $opt_verbose);
     $count;
 }
 
@@ -516,7 +516,7 @@ sub parse_config
     	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    get_zipinfo($args{"zip"});
 	unless (defined $state) {
-	    warn "unknown zipcode [$config]";
+	    carp "unknown zipcode [$config]";
 	    return undef;
 	}
 
@@ -543,7 +543,7 @@ sub parse_config
 	    if ($Hebcal::city_dst{$city_descr} eq "israel");
 	$city_descr = "These times are for $city_descr.";
     } else {
-	warn "no geographic key in [$config]";
+	carp "no geographic key in [$config]";
 	return undef;
     }
 
@@ -555,27 +555,43 @@ sub parse_config
     ($cmd,$city_descr,\%args);
 }
 
+sub smtp_reconnect
+{
+    my($server_num,$debug) = @_;
+
+    croak "server number $server_num too large"
+	if $server_num >= $SMTP_NUM_CONNECTIONS;
+
+    if (defined $SMTP[$server_num]) {
+	$SMTP[$server_num]->quit();
+	$SMTP[$server_num] = undef;
+    }
+    my $user = $AUTH[$server_num]->[0];
+    my $password = $AUTH[$server_num]->[1];
+    my $smtp = smtp_connect($SMTP_HOST, $user, $password, $debug)
+	or croak "Can't connect to $SMTP_HOST as $user";
+    $SMTP[$server_num] = $smtp;
+    return $smtp;
+}
+
 sub smtp_connect
 {
     my($s,$user,$password,$debug) = @_;
 
     # try 3 times to avoid intermittent failures
-    for (my $i = 0; $i < 3; $i++)
-    {
+    for (my $i = 0; $i < 3; $i++) {
 	my $smtp = Net::SMTP::SSL->new($s,
 				       Hello => $HOSTNAME,
 				       Port => 465,
 				       Timeout => 20,
 				       Debug => $debug);
-	if ($smtp)
-	{
-	    $smtp->auth($user, $password);
+	if ($smtp) {
+	    $smtp->auth($user, $password)
+		or carp "Can't authenticate as $user";
 	    return $smtp;
-	}
-	else
-	{
+	} else {
 	    my $sec = 5;
-	    warn "Could not connect to $s, retry in $sec seconds\n";
+	    carp "Could not connect to $s, retry in $sec seconds";
 	    sleep($sec);
 	}
     }
@@ -601,15 +617,13 @@ sub my_sendmail
     my $to = $headers->{"To"};
     my $rv = $smtp->mail($return_path);
     unless ($rv) {
-        warn "smtp mail() failure for $to\n"
-	    if $opt_verbose;
+        carp "smtp mail() failure for $to";
         return 0;
     }
 
     $rv = $smtp->to($to);
     unless ($rv) {
-	warn "smtp to() failure for $to\n"
-	    if $opt_verbose;
+	carp "smtp to() failure for $to";
 	return 0;
     }
 
@@ -617,8 +631,7 @@ sub my_sendmail
     $rv = $smtp->datasend($message);
     $rv = $smtp->dataend();
     unless ($rv) {
-        warn "smtp dataend() failure for $to\n"
-	    if $opt_verbose;
+        carp "smtp dataend() failure for $to";
         return 0;
     }
 
