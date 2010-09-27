@@ -139,7 +139,7 @@ foreach my $auth (@AUTH) {
 }
 my $SMTP_NUM_CONNECTIONS = scalar(@SMTP);
 # dh limit 100 emails an hour per authenticated user
-my $SMTP_SLEEP_TIME = int(36 / $SMTP_NUM_CONNECTIONS);
+my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
 
 my %CONFIG;
 my %ZIP_CACHE;
