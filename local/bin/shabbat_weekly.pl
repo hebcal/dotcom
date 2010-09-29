@@ -128,6 +128,7 @@ my @AUTH =
     (
      ['lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
      ['hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
+     ['shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
      );
 my @SMTP;
 my $SMTP_HOST = "mail.hebcal.com";
