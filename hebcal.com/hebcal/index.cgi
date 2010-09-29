@@ -274,7 +274,7 @@ sub param_true
 {
     my($k) = @_;
     my $v = $q->param($k);
-    return (defined $v && $v ne "off" && $v ne "0" && $v ne "") ? 1 : 0;
+    return ((defined $v) && ($v ne "off") && ($v ne "0") && ($v ne "")) ? 1 : 0;
 }
 
 sub json_events
@@ -882,7 +882,7 @@ sub results_page
 	}
     }
 
-    my $set_cookie = ! param_true("set");
+    my $set_cookie = param_true("set") || ! defined $q->param("set");
     if ($set_cookie) {
 	my $newcookie = Hebcal::gen_cookie($q);
 	if (! $C_cookie)
