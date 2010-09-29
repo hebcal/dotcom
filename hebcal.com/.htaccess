@@ -2,9 +2,6 @@ AddDefaultCharset UTF-8
 FileETag MTime Size
 DirectoryIndex index.php index.html
 
-Header set P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\", CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
-Header set PICS-Label '(pics-1.1 "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0))'
-
 ErrorDocument 404 /err404.shtml
 
 RedirectMatch ^/_vti http://www.hebcal.com/

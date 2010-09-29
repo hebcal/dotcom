@@ -4,7 +4,7 @@
 # 1-Click Shabbat generates weekly Shabbat candle lighting times and
 # Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -631,7 +631,7 @@ sub display_html
     $url .= ";m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on';
+    $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on;mf=on;ss=on';
     $url .= ';tag=1c';
 
     Hebcal::out_html($cfg,"<h4>More from hebcal.com</h4>\n",

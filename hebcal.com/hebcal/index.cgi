@@ -160,7 +160,7 @@ $cmd .= " -a"
 $cmd .= " -h" if !defined $q->param("nh") || $q->param("nh") eq "off";
 $cmd .= " -x" if !defined $q->param("nx") || $q->param("nx") eq "off";
 
-if ($q->param("c") && $q->param("c") ne "off")
+if (param_true("c"))
 {
     $cmd .= " -m " . $q->param("m")
 	if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
@@ -269,6 +269,13 @@ else
 
 close(STDOUT);
 exit(0);
+
+sub param_true
+{
+    my($k) = @_;
+    my $v = $q->param($k);
+    return (defined $v && $v ne "off" && $v ne "0" && $v ne "") ? 1 : 0;
+}
 
 sub json_events
 {
@@ -640,7 +647,6 @@ sub form
 		 -id => "dentire",
 		 -label => "\nShow Hebrew date for entire date range"),
     "</label>",
-    $q->hidden(-name => "set", -value => "on"),
     "\n");
 
     $q->param("c","off") unless defined $q->param("c");
@@ -848,12 +854,21 @@ MESSAGE_END
     return $message;
 }
 
+sub my_set_cookie
+{
+    my($str) = @_;
+    if ($str =~ /&/) {
+	print STDOUT "Cache-Control: private\015\012Set-Cookie: ",
+    	$str, "; expires=", $cookie_expires, "; path=/\015\012";
+    }
+}
+
 sub results_page
 {
     my($date,$filename) = @_;
     my($prev_url,$next_url,$prev_title,$next_title);
 
-    if ($q->param("c") && $q->param("c") ne "off")
+    if (param_true("c"))
     {
 	if (defined $q->param("zip"))
 	{
@@ -867,15 +882,12 @@ sub results_page
 	}
     }
 
-    # process cookie, delete before we generate next/prev URLS
-    if ($q->param("set")) {
+    my $set_cookie = ! param_true("set");
+    if ($set_cookie) {
 	my $newcookie = Hebcal::gen_cookie($q);
 	if (! $C_cookie)
 	{
-	    print STDOUT "Cache-Control: private\015\012",
-	    "Set-Cookie: ", $newcookie, "; expires=",
-	    $cookie_expires, "; path=/\015\012"
-		if $newcookie =~ /&/;
+	    my_set_cookie($newcookie);
 	}
 	else
 	{
@@ -885,13 +897,9 @@ sub results_page
 	    $cmp1 =~ s/^C=t=\d+\&?//;
 	    $cmp2 =~ s/^C=t=\d+\&?//;
 
-	    print STDOUT "Cache-Control: private\015\012",
-	    "Set-Cookie: ", $newcookie, "; expires=",
-	    $cookie_expires, "; path=/\015\012"
+	    my_set_cookie($newcookie)
 		if $cmp1 ne $cmp2;
 	}
-
-	$q->delete("set");
     }
 
     # next and prev urls
@@ -1004,7 +1012,7 @@ accurate.</p>
 
     my $geographic_info = "";
 
-    if ($q->param("c") && $q->param("c") ne "off")
+    if (param_true("c"))
     {
 	$geographic_info = "<h3>" . $cconfig->{"title"} . "</h3>\n";
 	$geographic_info .= $cconfig->{"lat_descr"} . "<br>\n"
@@ -1078,7 +1086,7 @@ accurate.</p>
 	    "\">Customize\ncalendar options</a>");
 	}
 
-	if ($q->param("c") && $q->param("c") ne "off" &&
+	if (param_true("c") &&
 	    $q->param("geo") && $q->param("geo") =~ /^city|zip$/)
 	{
 	    # Email
@@ -1300,8 +1308,7 @@ sub get_candle_config
     my $cmd_extra;
     my %config;
 
-    if ($q->param("c") && $q->param("c") ne "off" &&
-	defined $q->param("city"))
+    if (param_true("c") && defined $q->param("city"))
     {
 	form("Sorry, invalid city\n<b>" . $q->param("city") . "</b>.")
 	    unless defined($Hebcal::city_tz{$q->param("city")});
@@ -1411,7 +1418,7 @@ sub get_candle_config
 	$config{"lat_deg"} = $lat_deg;
 	$config{"lat_min"} = $lat_min;
     }
-    elsif ($q->param("c") && $q->param("c") ne "off" &&
+    elsif (param_true("c") &&
 	   defined $q->param("zip") && $q->param("zip") ne "")
     {
 	$q->param("geo","zip");

@@ -1,3 +1,5 @@
+Header set P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\", CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
+
 #DirectoryIndex shabbat.cgi
 DirectoryIndex index.php
 
