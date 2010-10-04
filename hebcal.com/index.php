@@ -309,7 +309,7 @@ style="padding-left: 10px; padding-right: 5px">
 <!-- Begin temp holiday -->
 <!-- End temp holiday -->
 <li><b><a
-href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
+href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;set=off;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
   echo date("F Y");
 ?>
 <br><br><li><b>Major&nbsp;Holidays</b>
@@ -319,9 +319,9 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
 ?>
 <br>for
 <a href="/hebcal/?v=1;year=<?php
-  echo $gregyear ?>;month=x;nh=on;tag=fp.ql"><?php echo $gregyear ?></a> |
+  echo $gregyear ?>;month=x;nh=on;set=off;tag=fp.ql"><?php echo $gregyear ?></a> |
 <a href="/hebcal/?v=1;year=<?php
-  echo $hebyear ?>;yt=H;month=x;nh=on;tag=fp.ql"><?php echo $hebyear ?></a>
+  echo $hebyear ?>;yt=H;month=x;nh=on;set=off;tag=fp.ql"><?php echo $hebyear ?></a>
 <br><img src="/i/globaliconical12x12.gif" alt="" width="12"
 height="12">&nbsp;<a href="/ical/">Downloads for iCal</a>
 <?php
