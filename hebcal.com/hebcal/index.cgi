@@ -313,7 +313,7 @@ sub javascript_events
     if ($v2) {
 	print STDOUT <<EOJS;
 if(typeof HEBCAL=="undefined"||!HEBCAL){var HEBCAL={};}
-HEBCAL.jec2events=[
+HEBCAL.evt2raw=[
 EOJS
 ;
     }
@@ -351,9 +351,6 @@ EOJS
 	}
 
 	my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
-	if ($href && $href =~ /\.html$/) {
-	    $href .= "?tag=js.cal";
-	}
 
 	$subj = translate_subject($q,$subj,$hebrew);
 
@@ -363,26 +360,40 @@ EOJS
 	}
 
 	if ($v2) {
-	    print STDOUT ",\n" unless $first;
+	    print STDOUT "," unless $first;
 	    $first = 0;
-	    printf STDOUT "{eventDate:%04d%02d%02d,eventDescription:\"%s\"",
+	    printf STDOUT "{d:%04d%02d%02d,s:\"%s\"",
 	    $year, $mon, $mday, $subj;
 	    if ($href) {
-		print STDOUT ",eventLink:\"$href\"";
+		my $href2 = $href;
+		$href2 =~ s,^http://www.hebcal.com/,,;
+		$href2 =~ s/\.html$//;
+		print STDOUT ",a:\"$href2\"";
 	    }
 	    if ($img_url) {
-		printf STDOUT ",image:\"%s\",imageWidth:%d,imageHeight:%d",
+		printf STDOUT ",is:\"%s\",iw:%d,ih:%d",
 	    	$img_url, $img_w, $img_h;
 	    }
 	    print STDOUT "}";
 	} else {
 	    #DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
-	    printf("DefineEvent(%04d%02d%02d, \"%s\", \"%s\", \"%s\", %d, %d);\015\012",
+	    if ($href && $href =~ /\.html$/) {
+		$href .= "?tag=js.cal";
+	    }
+	    printf("DefineEvent(%04d%02d%02d,\"%s\",\"%s\",\"%s\",%d,%d);\015\012",
 		   $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
 	}
     }
     if ($v2) {
-	print STDOUT "\n];\n";
+	print STDOUT <<EOJS;
+];
+HEBCAL.jec2events=[];
+for (var i=0;i<HEBCAL.evt2raw.length;i++){
+var e=HEBCAL.evt2raw[i],f={eventDate:e.d,eventDescription:e.s};
+if(e.a){f.eventLink="http://www.hebcal.com/"+e.a+".html?tag=js.cal"}
+HEBCAL.jec2events.push(f);}
+EOJS
+;
     }
 }
 
