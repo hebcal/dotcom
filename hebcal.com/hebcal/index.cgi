@@ -313,7 +313,7 @@ sub javascript_events
     if ($v2) {
 	print STDOUT <<EOJS;
 if(typeof HEBCAL=="undefined"||!HEBCAL){var HEBCAL={};}
-HEBCAL.evt2raw=[
+HEBCAL.eraw=[
 EOJS
 ;
     }
@@ -388,8 +388,8 @@ EOJS
 	print STDOUT <<EOJS;
 ];
 HEBCAL.jec2events=[];
-for (var i=0;i<HEBCAL.evt2raw.length;i++){
-var e=HEBCAL.evt2raw[i],f={eventDate:e.d,eventDescription:e.s};
+for (var i=0;i<HEBCAL.eraw.length;i++){
+var e=HEBCAL.eraw[i],f={eventDate:e.d,eventDescription:e.s};
 if(e.a){f.eventLink="http://www.hebcal.com/"+e.a+".html?tag=js.cal"}
 HEBCAL.jec2events.push(f);}
 EOJS
