@@ -24,7 +24,9 @@ sub debug_print {
 }
 
 sub debug_txt {
-    $debug_txt;
+    my $str = $debug_txt;
+    $debug_txt = "";
+    $str;
 }
 
 1;
