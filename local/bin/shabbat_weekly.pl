@@ -190,7 +190,6 @@ sub mail_all
 		    carp "Got $failures failures, giving up";
 		    return;
 		}
-		print STDERR $SMTP[$server_num]->debug_txt();
 		# reconnect to see if this helps
 		smtp_reconnect($server_num, 1);
 	    }
@@ -589,7 +588,7 @@ sub smtp_connect
 				       Debug => $debug);
 	if ($smtp) {
 	    $smtp->auth($user, $password)
-		or carp "Can't authenticate as $user";
+		or carp "Can't authenticate as $user\n" . $smtp->debug_txt();
 	    return $smtp;
 	} else {
 	    my $sec = 5;
@@ -619,13 +618,13 @@ sub my_sendmail
     my $to = $headers->{"To"};
     my $rv = $smtp->mail($return_path);
     unless ($rv) {
-        carp "smtp mail() failure for $to";
-        return 0;
+	carp "smtp mail() failure for $to\n" . $smtp->debug_txt();
+	return 0;
     }
 
     $rv = $smtp->to($to);
     unless ($rv) {
-	carp "smtp to() failure for $to";
+	carp "smtp to() failure for $to\n" . $smtp->debug_txt();
 	return 0;
     }
 
@@ -633,8 +632,8 @@ sub my_sendmail
     $rv = $smtp->datasend($message);
     $rv = $smtp->dataend();
     unless ($rv) {
-        carp "smtp dataend() failure for $to";
-        return 0;
+	carp "smtp dataend() failure for $to\n" . $smtp->debug_txt();
+	return 0;
     }
 
     1;
