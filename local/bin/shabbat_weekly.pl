@@ -49,7 +49,7 @@ use POSIX qw(strftime);
 use MIME::Base64 ();
 use Time::Local ();
 use DBI ();
-use Net::SMTP::SSL ();
+use Hebcal::SMTP;
 use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
 
@@ -136,7 +136,7 @@ my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
 msg("Connecting via SMTP", $opt_verbose);
 for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
     $SMTP[$i] = undef;
-    smtp_reconnect($i, 0);
+    smtp_reconnect($i, 1);
 }
 # dh limit 100 emails an hour per authenticated user
 my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
@@ -183,14 +183,15 @@ sub mail_all
 		delete $SUBS{$to};
 		# reconnect every so often
 		if (($i % $RECONNECT_INTERVAL) == ($RECONNECT_INTERVAL - 1)) {
-		    smtp_reconnect($server_num, 0);
+		    smtp_reconnect($server_num, 1);
 		}
 	    } else {
 		if (++$failures >= $MAX_FAILURES) {
 		    carp "Got $failures failures, giving up";
 		    return;
 		}
-		# reconnect in debug mode
+		print STDERR $SMTP[$server_num]->debug_txt();
+		# reconnect to see if this helps
 		smtp_reconnect($server_num, 1);
 	    }
 	    sleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
@@ -581,7 +582,7 @@ sub smtp_connect
 
     # try 3 times to avoid intermittent failures
     for (my $i = 0; $i < 3; $i++) {
-	my $smtp = Net::SMTP::SSL->new($s,
+	my $smtp = Hebcal::SMTP->new($s,
 				       Hello => $HOSTNAME,
 				       Port => 465,
 				       Timeout => 20,
