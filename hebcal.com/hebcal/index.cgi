@@ -448,7 +448,10 @@ sub vcalendar_display
 					    $g_nmf, $g_nss);
 	    push(@events, @ev2);
 	}
-	$title = sprintf("%d-%d", $date, $date + 4);
+	if ($date =~ /(\d+)/) {
+	    my $plus4 = $1 + 4;
+	    $title .= "-" . $plus4;
+	}
     }
 
     my $tz = $q->param("tz");
