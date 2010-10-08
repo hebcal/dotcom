@@ -1691,7 +1691,8 @@ id="${filename}_eur.csv">${filename}_eur.csv</a>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
 id="${filename}_sub.ics">$ics_title</a>
-<li><a href="/help/import-ical.html">How to import ICS file into Apple iCal</a>
+<li>How to import ICS file into <a href="/help/import-ical.html">Apple iCal</a>
+or <a href="/help/import-ical.html#iphone">iPhone / iPad</a>
 </ol>
 <p>Alternate option: <a class="download"
 href="${ical_href}"
