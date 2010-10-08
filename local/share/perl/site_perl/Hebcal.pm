@@ -2156,6 +2156,10 @@ sub vcalendar_write_contents
 	    $tzid = 'US/Alaska';
 	} elsif ($tz == -10) {
 	    $tzid = 'US/Hawaii';
+	} elsif (defined $q->param("geo") && $q->param("geo") eq "city"
+		 && $q->param("city") && defined $Hebcal::city_dst{$q->param("city")}
+		 && $Hebcal::city_dst{$q->param("city")} eq "israel") {
+	    $tzid = 'Asia/Jerusalem';
 	}
     }
 
@@ -2197,10 +2201,20 @@ sub vcalendar_write_contents
 
     if ($tzid) {
 	out_html(undef, qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl});
+	my $vtimezone_ics = $ENV{"DOCUMENT_ROOT"} . "/zoneinfo/" . $tzid . ".ics";
 	if (defined $VTIMEZONE{$tzid}) {
 	    my $vt = $VTIMEZONE{$tzid};
 	    $vt =~ s/\n/$endl/g;
 	    out_html(undef, $vt);
+	} elsif (open(VTZ,$vtimezone_ics)) {
+	    my $in_vtz = 0;
+	    while(<VTZ>) {
+		chomp;
+		$in_vtz = 1 if /^BEGIN:VTIMEZONE/;
+		out_html(undef, $_, $endl) if $in_vtz;
+		$in_vtz = 0 if /^END:VTIMEZONE/;
+	    }
+	    close(VTZ);
 	}
     }
 
