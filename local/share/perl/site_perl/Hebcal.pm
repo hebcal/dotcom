@@ -1685,7 +1685,7 @@ id="${filename}_eur.csv">${filename}_eur.csv</a>
 <li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a>
 </ol>
 </div>
-<div><a class="dlhead" href="#ical" id="ical">Apple iCal</a></div>
+<div><a class="dlhead" href="#ical" id="ical">Apple iCal, iPhone, iPad</a></div>
 <div class="dlinstr" id="ical-body">
 <ol>
 <li>Subscribe to: <a class="download"
