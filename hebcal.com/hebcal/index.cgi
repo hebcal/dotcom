@@ -521,26 +521,23 @@ sub form
     my $hyear = $hebdate->{"yy"};
     $hyear++ if $hebdate->{"mm"} == 6; # Elul
 
-    my @head = (
-    qq{<meta http-equiv="Content-Type" content="$content_type">},
-    );
-
     print STDOUT $q->header(-type => $content_type);
 
     Hebcal::out_html(undef,
-    Hebcal::start_html($q, "Hebcal Interactive Jewish Calendar",
-		       \@head,
-			{
-		       "description" =>
-		       "Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.",
-		       "keywords" =>
-		       "hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff",
-		       },
-		       undef
-		   ),
-    "\n<div id=\"main\">",
-    Hebcal::navbar2($q, "Interactive Calendar", 1, undef, undef),
-    "<h1>Hebcal\nInteractive Jewish Calendar</h1>");
+		     Hebcal::html_header("Interactive Calendar",
+					 "http://www.hebcal.com/hebcal/",
+					 "single single-post",
+					 qq{<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">\n<meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">\n})
+	);
+    my $head_divs = <<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Interactive Jewish Calendar</h1>
+<div class="entry-content">
+EOHTML
+;
+    Hebcal::out_html(undef, $head_divs);
 
     if ($message ne "")
     {
@@ -824,9 +821,7 @@ JSCRIPT_END
 	;
     Hebcal::out_html(undef, $js);
 
-    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
-    Hebcal::out_html(undef, "</div>\n");
-
+    Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
@@ -958,14 +953,7 @@ sub results_page
 	$next_title = sprintf("%04d", ($q->param("year") + 1));
     }
 
-    my $goto_prefix = "<p class=\"goto\"><b>" .
-	"<a title=\"$prev_title\"\nhref=\"$prev_url\">&laquo;</a>\n" .
-	$date . "\n" .
-	"<a title=\"$next_title\"\nhref=\"$next_url\">&raquo;</a></b>";
-
-    my @head = (
-		qq{<meta http-equiv="Content-Type" content="$content_type">},
-		);
+    my $goto_prefix = "<p class=\"goto\">\n";
 
     my $results_title = "Jewish Calendar $date";
     if (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") {
@@ -976,17 +964,23 @@ sub results_page
 			    -type => $content_type);
 
     Hebcal::out_html(undef,
-    Hebcal::start_html($q, "$results_title - hebcal.com",
-		       \@head,
-		       undef,
-		       undef
-			),
-    "\n<div id=\"main\">",
-    Hebcal::navbar2($q, $date, 1,
-		     "Interactive\nCalendar", Hebcal::self_url($q, {"v" => "0"})));
-
-    Hebcal::out_html(undef, "<h1>Jewish\nCalendar $date</h1>\n")
-	unless ($q->param("vis"));
+		     Hebcal::html_header($results_title,
+					 "http://www.hebcal.com/hebcal/",
+					 "single single-post")
+	);
+    my $head_divs = <<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div id="nav-above" class="navigation">
+<div class="nav-previous"><a href="$prev_url" rel="prev"><span class="meta-nav">&larr;</span> Jewish Calendar $prev_title</a></div>
+<div class="nav-next"><a href="$next_url" rel="next">Jewish Calendar $next_title <span class="meta-nav">&rarr;</span></a></div>
+</div><!-- #nav-above -->
+<div class="page type-page hentry">
+<h1 class="entry-title">Jewish Calendar $date</h1>
+<div class="entry-content">
+EOHTML
+;
+    Hebcal::out_html(undef, $head_divs);
 
     my $cmd_pretty = $cmd;
     $cmd_pretty =~ s,.*/,,; # basename
@@ -1047,7 +1041,6 @@ accurate.</p>
 	    ($cconfig->{"lat_deg"} >= 60.0 || $cconfig->{"lat_deg"} <= -60.0));
 
     # toggle month/full year and event list/calendar grid
-    $goto_prefix .= "\n&nbsp;&nbsp;&nbsp; ";
 
     my $goto = "<small>change view: [ ";
 
@@ -1068,25 +1061,24 @@ accurate.</p>
     }
     else
     {
-    $goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
+	$goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
 
-    if ($date !~ /^\d+$/)
-    {
-	$goto .= "<b>month</b> | " .
-	    "<a\nhref=\"" . Hebcal::self_url($q, {"month" => "x"}) .
-	    "\">entire\nyear</a> ]";
-    }
-    else
-    {
-	$goto .= "<a\nhref=\"" . Hebcal::self_url($q, {"month" => "1"}) .
-	    "\">month</a> |\n<b>entire year</b> ]";
-    }
+	if ($date !~ /^\d+$/)
+	{
+	    $goto .= "<b>month</b> | " .
+		"<a\nhref=\"" . Hebcal::self_url($q, {"month" => "x"}) .
+		"\">entire\nyear</a> ]";
+	}
+	else
+	{
+	    $goto .= "<a\nhref=\"" . Hebcal::self_url($q, {"month" => "1"}) .
+		"\">month</a> |\n<b>entire year</b> ]";
+	}
     }
 
     $goto .= "</small>\n";
 
-    Hebcal::out_html(undef, $goto_prefix, $goto, "</p>")
-	unless $q->param("vis");
+    Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
 
     if ($numEntries > 0)
     {
@@ -1163,6 +1155,7 @@ accurate.</p>
 	qq{for $date</h3>});
     }
 
+    Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
     Hebcal::out_html(undef, "<p>");
 
     my $cal;
@@ -1201,7 +1194,7 @@ accurate.</p>
 		{
 		    for (my $j = $prev_mon+1; $j < $mon; $j++)
 		    {
-			$cal = new_html_cal($year,$j,$goto,
+			$cal = new_html_cal($year,$j,
 					    $prev_title,$prev_url,
 					    $next_title,$next_url);
 			push(@html_cals, $cal);
@@ -1209,7 +1202,7 @@ accurate.</p>
 		}
 
 		$prev_mon = $mon;
-		$cal = new_html_cal($year,$mon,$goto,
+		$cal = new_html_cal($year,$mon,
 				    $prev_title,$prev_url,$next_title,$next_url);
 		push(@html_cals, $cal);
 	    }
@@ -1273,9 +1266,9 @@ accurate.</p>
     }
 
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
+    Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
     Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
-    Hebcal::out_html(undef, Hebcal::html_footer($q,$rcsrev,1));
-    Hebcal::out_html(undef, "</div>\n");
+    Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
 
     my $ad = skyscraper_ad();
     Hebcal::out_html(undef, $ad) if $ad;
@@ -1288,22 +1281,18 @@ accurate.</p>
 
 sub new_html_cal
 {
-    my($year,$month,$goto,$prev_title,$prev_url,$next_title,$next_url) = @_;
+    my($year,$month,$prev_title,$prev_url,$next_title,$next_url) = @_;
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
 					    "month" => $month);
     $cal->width("97%");
     $cal->border(1);
+#    $cal->cellclass("calcell");
 #    $cal->todaycellclass("today");
 
     $cal->header("<h2 style=\"margin: 0.2em;\" align=\"center\">" .
-		 "<a class=\"goto\" title=\"$prev_title\"\n" .
-		 "href=\"$prev_url\">&laquo;</a>\n" .
 		 sprintf("%s %04d\n", $Hebcal::MoY_long{$month}, $year) .
-		 "<a class=\"goto\" title=\"$next_title\"\n" .
-		 "href=\"$next_url\">&raquo;</a></h2>\n" .
-		 '<div align="center" class="goto">' . $goto . "</div>");
-
+		 "</h2>\n");
 
     my $end_day = Date::Calc::Days_in_Month($year, $month);
     for (my $mday = 1; $mday <= $end_day ; $mday++)
