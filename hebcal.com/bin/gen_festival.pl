@@ -263,8 +263,9 @@ sub write_index_page
     my $hy2 = $HEB_YR + 2;
     my $hy3 = $HEB_YR + 3;
 
-    print OUT3 html_header("Jewish Holidays", "http://www.hebcal.com/holidays/",
-			   "page page-template page-template-onecolumn-page-php");
+    print OUT3 Hebcal::html_header("Jewish Holidays",
+				   "http://www.hebcal.com/holidays/",
+				   "page page-template page-template-onecolumn-page-php");
     print OUT3 <<EOHTML;
 <div id="container" class="one-column">
 <div id="content" role="main">
@@ -471,8 +472,9 @@ sub write_festival_page
 	$hebrew = "";
     }
 
-    print OUT2 html_header($page_title, "http://www.hebcal.com/holidays/$anchor",
-			  "single single-post");
+    print OUT2 Hebcal::html_header($page_title,
+				   "http://www.hebcal.com/holidays/$anchor",
+				   "single single-post");
 
     my $prev = $PREV{$f};
     my($prev_link) = '';
@@ -811,36 +813,6 @@ sub print_aliyah
     }
 
     print OUT2 qq{<br>\n};
-}
-
-sub html_header
-{
-    my($title,$base_href,$body_class) = @_;
-    my $str = <<EOHTML;
-<!DOCTYPE html>
-<html><head><title>$title | Hebcal Jewish Calendar</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="$base_href" target="_top">
-<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
-</head>
-<body class="$body_class">
-<div id="wrapper" class="hfeed">
-<div id="header">
-<div id="masthead">
-<div id="branding" role="banner">
-<div id="site-title"><span><a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
-<div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
-</div><!-- #branding -->
-<div id="access" role="navigation">
-<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
-<div class="menu"><ul><li ><a href="http://www.hebcal.com/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="http://www.hebcal.com/hebcal/" title="Calendar + Holidays">Calendar + Holidays</a></li><li class="page_item page-item-104"><a href="http://www.hebcal.com/converter/" title="Date Converter">Date Converter</a></li><li class="page_item page-item-107"><a href="http://www.hebcal.com/yahrzeit/" title="Yahrzeit">Yahrzeit</a></li><li class="page_item page-item-105"><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72 current_page_ancestor current_page_parent"><a href="http://www.hebcal.com/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="http://www.hebcal.com/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73 current_page_item"><a href="http://www.hebcal.com/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-63"><a href="http://www.hebcal.com/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71"><a href="http://www.hebcal.com/home/support" title="Support">Support</a></li></ul></div>
-</div><!-- #access -->
-</div><!-- #masthead -->
-</div><!-- #header -->
-<div id="main">
-EOHTML
-;
-    return $str;
 }
 
 sub html_footer
