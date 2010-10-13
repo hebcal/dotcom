@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2009  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -41,8 +41,6 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
-
-require 5.008_004;
 
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
@@ -93,7 +91,11 @@ if ($opts{'f'}) {
     print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
 }
 
-my $html_footer = html_footer($festival_in);
+my $html_footer = html_footer();
+my $REVISION = '$Revision$'; #'
+$REVISION =~ s/\s*\$//g;
+my $MTIME = (stat($festival_in))[9];
+my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 my @FESTIVALS;
 my %SUBFESTIVALS;
@@ -261,23 +263,17 @@ sub write_index_page
     my $hy2 = $HEB_YR + 2;
     my $hy3 = $HEB_YR + 3;
 
+    print OUT3 html_header("Jewish Holidays", "http://www.hebcal.com/holidays/",
+			   "page page-template page-template-onecolumn-page-php");
     print OUT3 <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>Hebcal Jewish Holidays</title>
-<base href="http://www.hebcal.com/holidays/" target="_top">
-<link rel="stylesheet" href="/style.css" type="text/css">
-</head>
-<body>
-<!--htdig_noindex-->
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-Jewish Holidays
-</td><td align="right"><a href="/help/">Help</a> - <a
-href="/search/">Search</a></td></tr></table>
-<!--/htdig_noindex-->
-<a name="top"></a>
-<h1>Jewish Holidays</h1>
+<div id="container" class="one-column">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Jewish Holidays</h1>
+<div class="entry-meta">
+<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+</div><!-- .entry-meta -->
+<div class="entry-content">
 <a title="The Jewish Museum 2011 Calendar from Amazon.com"
 href="http://www.amazon.com/o/ASIN/076495315X/hebcal-20"><img
 src="/i/076495315X.01.MZZZZZZZ.jpg" border="0"
@@ -335,6 +331,13 @@ EOHTML
     }
 
     print OUT3 "</dl>\n";
+    print OUT3 <<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
     print OUT3 $html_footer;
 
     close(OUT3);
@@ -404,6 +407,7 @@ sub write_festival_part
 	}
 
 	if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
+	    print OUT2 "<p>";
 	    my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
 	    if (ref($aliyot) eq 'HASH') {
 		$aliyot = [ $aliyot ];
@@ -412,9 +416,9 @@ sub write_festival_part
 	    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}} @{$aliyot}) {
 		print_aliyah($aliyah);
 	    }
+	    print OUT2 "</p>\n";
 	}
 
-#	print OUT2 "</p>\n";
     }
 
     my $haft = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'reading'};
@@ -467,16 +471,8 @@ sub write_festival_page
 	$hebrew = "";
     }
 
-    print OUT2 <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>$page_title</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.hebcal.com/holidays/$anchor" target="_top">
-<meta name="keywords" content="$keyword,jewish,holidays,holiday,festival,chag,hag">
-<link rel="stylesheet" href="/style.css" type="text/css">
-EOHTML
-;
+    print OUT2 html_header($page_title, "http://www.hebcal.com/holidays/$anchor",
+			  "single single-post");
 
     my $prev = $PREV{$f};
     my($prev_link) = '';
@@ -485,8 +481,10 @@ EOHTML
     {
 	$prev_anchor = Hebcal::make_anchor($prev);
 	my $title = "Previous Holiday";
-	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
-	    qq{title="$title">&laquo;&nbsp;$prev</a>};
+	$prev_link = <<EOHTML
+<div class="nav-previous"><a href="$prev_anchor" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
+EOHTML
+;
     }
 
     my $next = $NEXT{$f};
@@ -496,44 +494,29 @@ EOHTML
     {
 	$next_anchor = Hebcal::make_anchor($next);
 	my $title = "Next Holiday";
-	$next_link = qq{<a name="next" href="$next_anchor"\n} .
-	    qq{title="$title">$next&nbsp;&raquo;</a>};
+	$next_link = <<EOHTML
+<div class="nav-next"><a href="$next_anchor" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
+EOHTML
+;
     }
-
-#    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="$prev">\n}
-#    	if $prev_anchor;
-#    print OUT2 qq{<link rel="next" href="$next_anchor" title="$next">\n}
-#    	if $next_anchor;
 
     my($strassfeld_link) =
 	"http://www.amazon.com/o/ASIN/0062720082/hebcal-20";
 
     print OUT2 <<EOHTML;
-</head>
-<body>
-<!--htdig_noindex-->
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-<a href="/holidays/">Jewish Holidays</a> <tt>-&gt;</tt>
-$f
-</td><td align="right"><a href="/help/">Help</a> - <a
-href="/search/">Search</a></td></tr></table>
-<!--/htdig_noindex-->
-<br>
-<table width="100%">
-<tr>
-<td align="left" width="15%">
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div id="nav-above" class="navigation">
 $prev_link
-</td>
-<td align="center" width="70%">
-<h1 align="center"><a name="top"></a>$f<br><span
-dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-</td>
-<td align="right" width="15%">
 $next_link
-</td>
-</tr>
-</table>
+</div><!-- #nav-above -->
+<div class="page type-page hentry">
+<h1 class="entry-title">$f / <span
+dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
+<div class="entry-meta">
+<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+</div><!-- .entry-meta -->
+<div class="entry-content">
 <p>$descr.
 EOHTML
 ;
@@ -725,7 +708,7 @@ EOHTML
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
 		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
-	    print OUT2 qq{</h2>\n<div style="padding-left:20px;">};
+	    print OUT2 qq{</h2>\n};
 
 	    my $part_about = $festivals->{'festival'}->{$part}->{'about'};
 	    if ($part_about) {
@@ -736,18 +719,18 @@ EOHTML
 	    }
 
 	    write_festival_part($festivals,$part);
-	    print OUT2 qq{</div>\n};
+	    print OUT2 qq{<!-- $anchor -->\n};
 	}
     }
 
     print OUT2 qq{
+<h3><a name="ref"></a>References</h3>
 <a title="The Jewish Holidays: A Guide &amp; Commentary"
 class="amzn" id="strassfeld-1"
 href="$strassfeld_link"><img
 src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
 alt="The Jewish Holidays: A Guide &amp; Commentary"
 vspace="5" width="75" height="90" align="right"></a>
-<h3><a name="ref"></a>References</h3>
 <dl>
 <dt><em><a class="amzn" id="strassfeld-2"
 href="$strassfeld_link">The
@@ -772,22 +755,21 @@ href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
     if ($prev_link || $next_link)
     {
 	print OUT2 <<EOHTML;
-<p>
-<hr noshade size="1"><p>
-<table width="100%">
-<tr>
-<td align="left" width="50%">
+<div id="nav-below" class="navigation">
 $prev_link
-</td>
-<td align="right" width="50%">
 $next_link
-</td>
-</tr>
-</table>
+</div><!-- #nav-below -->
 EOHTML
 ;
     }
 
+    print OUT2 <<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
     print OUT2 $html_footer;
 
     close(OUT2);
@@ -831,18 +813,56 @@ sub print_aliyah
     print OUT2 qq{<br>\n};
 }
 
+sub html_header
+{
+    my($title,$base_href,$body_class) = @_;
+    my $str = <<EOHTML;
+<!DOCTYPE html>
+<html><head><title>$title | Hebcal Jewish Calendar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="$base_href" target="_top">
+<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
+</head>
+<body class="$body_class">
+<div id="wrapper" class="hfeed">
+<div id="header">
+<div id="masthead">
+<div id="branding" role="banner">
+<div id="site-title"><span><a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
+<div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
+</div><!-- #branding -->
+<div id="access" role="navigation">
+<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+<div class="menu"><ul><li ><a href="http://www.hebcal.com/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="http://www.hebcal.com/hebcal/" title="Calendar + Holidays">Calendar + Holidays</a></li><li class="page_item page-item-104"><a href="http://www.hebcal.com/converter/" title="Date Converter">Date Converter</a></li><li class="page_item page-item-107"><a href="http://www.hebcal.com/yahrzeit/" title="Yahrzeit">Yahrzeit</a></li><li class="page_item page-item-105"><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72 current_page_ancestor current_page_parent"><a href="http://www.hebcal.com/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="http://www.hebcal.com/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73 current_page_item"><a href="http://www.hebcal.com/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-63"><a href="http://www.hebcal.com/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71"><a href="http://www.hebcal.com/home/support" title="Support">Support</a></li></ul></div>
+</div><!-- #access -->
+</div><!-- #masthead -->
+</div><!-- #header -->
+<div id="main">
+EOHTML
+;
+    return $str;
+}
+
 sub html_footer
 {
-    my($file) = @_;
+    my $str = <<EOHTML;
+</div><!-- #main -->
+<div id="footer" role="contentinfo">
+<div id="colophon">
+<div id="site-info">
+<a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">
+Hebcal Jewish Calendar</a>
+</div><!-- #site-info -->
+</div><!-- #colophon -->
+</div><!-- #footer -->
+</div><!-- #wrapper -->
+<script type="text/javascript" src="http://www.assoc-amazon.com/s/link-enhancer?tag=hebcal-20&o=1"></script>
+</body>
+</html>
+EOHTML
+;
 
-    my($rcsrev) = '$Revision$'; #'
-    my $mtime = (stat($file))[9];
-    my $LINK_ENHANCER = qq{<script type="text/javascript"
-src="http://www.assoc-amazon.com/s/link-enhancer?tag=hebcal-20&o=1">
-</script>
-};
-    return Hebcal::html_footer_lite($rcsrev,$mtime,1) .
-	$LINK_ENHANCER . "</body></html>\n";
+    return $str;
 }
 
 sub holidays_observed

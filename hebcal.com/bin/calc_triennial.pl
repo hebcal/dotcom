@@ -12,7 +12,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2009  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -47,8 +47,6 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
-
-require 5.008_001;
 
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
@@ -199,7 +197,12 @@ readings_for_current_year($axml, \%parsha_dates, \%parsha_time);
 
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
-my $html_footer = html_footer($aliyah_in);
+
+my $html_footer = html_footer();
+my $REVISION = '$Revision$'; #'
+$REVISION =~ s/\s*\$//g;
+my $MTIME = (stat($aliyah_in))[9];
+my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 foreach my $h (keys %readings1, "Vezot Haberakhah")
 {
@@ -337,26 +340,20 @@ sub write_index_page
     my $hy2 = $hebrew_year + 2;
     my $hy3 = $hebrew_year + 3;
 
+    print OUT1 html_header("Torah Readings", "http://www.hebcal.com/sedrot/",
+			   "page page-template page-template-onecolumn-page-php");
     print OUT1 <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>Hebcal: Torah Readings</title>
-<base href="http://www.hebcal.com/sedrot/" target="_top">
-<link rel="stylesheet" href="/style.css" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/sedrot/index.xml">
-</head>
-<body>
-<!--htdig_noindex-->
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-Torah Readings
-</td><td align="right"><a href="/help/">Help</a> - <a
-href="/search/">Search</a></td></tr></table>
-<!--/htdig_noindex-->
-<h1><a href="http://www.hebcal.com/sedrot/index.xml"><img
+<div id="container" class="one-column">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title"><a href="http://www.hebcal.com/sedrot/index.xml"><img
 src="/i/xml.gif" border="0" alt="View the raw XML source" align="right"
 width="36" height="14"></a>
 Torah Readings</h1>
+<div class="entry-meta">
+<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+</div><!-- .entry-meta -->
+<div class="entry-content">
 <p>Readings for:
 <a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on">$hy0</a> -
 $hebrew_year -
@@ -408,6 +405,13 @@ EOHTML
     }
 
     print OUT1 "</dl>\n";
+    print OUT1 <<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
     print OUT1 $html_footer;
 
     close(OUT1);
@@ -525,8 +529,10 @@ sub write_sedra_page
 	$prev_anchor .= ".html";
 
 	my $title = "Previous Parsha";
-	$prev_link = qq{<a name="prev" href="$prev_anchor"\n} .
-	    qq{title="$title">&laquo;&nbsp;$prev</a>};
+	$prev_link = <<EOHTML
+<div class="nav-previous"><a href="$prev_anchor" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
+EOHTML
+;
     }
 
     my($next_link) = '';
@@ -538,8 +544,10 @@ sub write_sedra_page
 	$next_anchor .= ".html";
 
 	my $title = "Next Parsha";
-	$next_link = qq{<a name="next" href="$next_anchor"\n} .
-	    qq{title="$title">$next&nbsp;&raquo;</a>};
+	$next_link = <<EOHTML
+<div class="nav-next"><a href="$next_anchor" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
+EOHTML
+;
     }
 
     my $fn = "$outdir/$anchor.html";
@@ -548,22 +556,9 @@ sub write_sedra_page
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
-    print OUT2 <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>Torah Readings: $h</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.hebcal.com/sedrot/$anchor.html" target="_top">
-<meta name="keywords" content="$keyword,parsha,parshat,parashat,parshas,hashavua,hashavuah,leyning,aliya,aliyah,aliyot,torah,haftarah,haftorah,drash">
-<link rel="stylesheet" href="/style.css" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/sedrot/index.xml">
-EOHTML
-;
-
-#    print OUT2 qq{<link rel="prev" href="$prev_anchor" title="Parashat $prev">\n}
-#    	if $prev_anchor;
-#    print OUT2 qq{<link rel="next" href="$next_anchor" title="Parashat $next">\n}
-#    	if $next_anchor;
+    print OUT2 html_header("$h | Torah Readings", "http://www.hebcal.com/sedrot/$anchor.html",
+			  "single single-post");
+#			   "page page-template page-template-onecolumn-page-php");
 
     my @tri_date;
     my @tri_date2;
@@ -594,41 +589,22 @@ EOHTML
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
     print OUT2 <<EOHTML;
-</head>
-<body>
-<!--htdig_noindex-->
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-<a href="/sedrot/">Torah Readings</a> <tt>-&gt;</tt>
-$h
-</td><td align="right"><a href="/help/">Help</a> - <a
-href="/search/">Search</a></td></tr></table>
-<!--/htdig_noindex-->
-<br>
-<table width="100%">
-<tr>
-<td align="left" width="15%">
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div id="nav-above" class="navigation">
 $prev_link
-</td>
-<td align="center" width="70%">
-<h1><a name="top"></a>Parashat $h<br><span
-dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-</td>
-<td align="right" width="15%">
 $next_link
-</td>
-</tr>
-</table>
+</div><!-- #nav-above -->
+<div class="page type-page hentry">
+<h1 class="entry-title">Parashat $h / <span
+dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
+<div class="entry-meta">
+<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+</div><!-- .entry-meta -->
+<div class="entry-content">
 <h3>Torah Portion: <a name="torah"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
-<a title="The Chumash: The Stone Edition (Artscroll Series)"
-class="amzn" id="chumash-1"
-href="$amazon_link2"><img
-src="/i/0899060145.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
-hspace="3" vspace="3"
-alt="The Chumash: The Stone Edition (Artscroll Series)" align="right"></a>
-&nbsp;
 <table border="1" cellpadding="5">
 <tr>
 <td align="center"><b>Full Kriyah</b>
@@ -733,12 +709,6 @@ EOHTML
 
     print OUT2 <<EOHTML;
 </table>
-<a title="Etz Hayim: Torah and Commentary"
-class="amzn" id="etz-hayim-1"
-href="$amazon_link1"><img
-src="/i/0827607121.01.MZZZZZZZ.jpg" width="95" height="140" border="0"
-hspace="3" vspace="3"
-alt="Etz Hayim: Torah and Commentary" align="right"></a>
 <h3>Haftarah$ashk: <a name="haftara"
 href="$haftarah_href"
 title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
@@ -843,18 +813,30 @@ EOHTML
     print OUT2 <<EOHTML;
 <h3><a name="ref"></a>References</h3>
 <dl>
-<dt><em><a class="amzn" id="chumash-2"
+<dt><a title="The Chumash: The Stone Edition (Artscroll Series)"
+class="amzn" id="chumash-1"
+href="$amazon_link2"><img
+src="/i/0899060145.01.87x110.jpg" width="87" height="110" border="0"
+hspace="3" vspace="3" align="right"
+alt="The Chumash: The Stone Edition (Artscroll Series)"></a>
+<em><a class="amzn" id="chumash-2"
 href="$amazon_link2">The
 Chumash: The Stone Edition (Artscroll Series)</a></em>
 <dd>Nosson Scherman, Mesorah Publications, 1993
-<dt><em><a class="amzn" id="etz-hayim-2"
-href="$amazon_link1">Etz
-Hayim: Torah and Commentary</a></em>
-<dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a
 href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
+<dt><a title="Etz Hayim: Torah and Commentary"
+class="amzn" id="etz-hayim-1"
+href="$amazon_link1"><img
+src="/i/0827607121.01.75x110.jpg" width="75" height="110" border="0"
+hspace="3" vspace="3" align="right"
+alt="Etz Hayim: Torah and Commentary"></a>
+<em><a class="amzn" id="etz-hayim-2"
+href="$amazon_link1">Etz
+Hayim: Torah and Commentary</a></em>
+<dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
 <dd>World ORT
 </dl>
@@ -864,22 +846,21 @@ EOHTML
     if ($prev_link || $next_link)
     {
 	print OUT2 <<EOHTML;
-<p>
-<hr noshade size="1"><p>
-<table width="100%">
-<tr>
-<td align="left" width="50%">
+<div id="nav-below" class="navigation">
 $prev_link
-</td>
-<td align="right" width="50%">
 $next_link
-</td>
-</tr>
-</table>
+</div><!-- #nav-below -->
 EOHTML
 ;
     }
 
+    print OUT2 <<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
     print OUT2 $html_footer;
 
     close(OUT2);
@@ -1459,11 +1440,53 @@ sub get_saturday
     $sat;
 }
 
+sub html_header
+{
+    my($title,$base_href,$body_class) = @_;
+    my $str = <<EOHTML;
+<!DOCTYPE html>
+<html><head><title>$title | Hebcal Jewish Calendar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="$base_href" target="_top">
+<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
+</head>
+<body class="$body_class">
+<div id="wrapper" class="hfeed">
+<div id="header">
+<div id="masthead">
+<div id="branding" role="banner">
+<div id="site-title"><span><a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
+<div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
+</div><!-- #branding -->
+<div id="access" role="navigation">
+<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+<div class="menu"><ul><li ><a href="http://www.hebcal.com/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="http://www.hebcal.com/hebcal/" title="Calendar + Holidays">Calendar + Holidays</a></li><li class="page_item page-item-104"><a href="http://www.hebcal.com/converter/" title="Date Converter">Date Converter</a></li><li class="page_item page-item-107"><a href="http://www.hebcal.com/yahrzeit/" title="Yahrzeit">Yahrzeit</a></li><li class="page_item page-item-105 current_page_item"><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72 current_page_ancestor current_page_parent"><a href="http://www.hebcal.com/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="http://www.hebcal.com/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73 current_page_item"><a href="http://www.hebcal.com/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-63"><a href="http://www.hebcal.com/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71"><a href="http://www.hebcal.com/home/support" title="Support">Support</a></li></ul></div>
+</div><!-- #access -->
+</div><!-- #masthead -->
+</div><!-- #header -->
+<div id="main">
+EOHTML
+;
+    return $str;
+}
+
 sub html_footer
 {
-    my($aliyah_in) = @_;
+    my $str = <<EOHTML;
+</div><!-- #main -->
+<div id="footer" role="contentinfo">
+<div id="colophon">
+<div id="site-info">
+<a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">
+Hebcal Jewish Calendar</a>
+</div><!-- #site-info -->
+</div><!-- #colophon -->
+</div><!-- #footer -->
+</div><!-- #wrapper -->
+</body>
+</html>
+EOHTML
+;
 
-    my($rcsrev) = '$Revision$'; #'
-    my $mtime = (stat($aliyah_in))[9];
-    return Hebcal::html_footer_lite($rcsrev,$mtime);
+    return $str;
 }
