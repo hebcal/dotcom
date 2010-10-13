@@ -1239,6 +1239,45 @@ sub html_footer
     }
 }
 
+sub html_footer_new
+{
+    my($q,$rcsrev,$noclosebody) = @_;
+
+    my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    $rcsrev =~ s/\s*\$//g;
+
+    my($hhmts) = "Software last updated:\n" . localtime($mtime);
+
+    my $str = <<EOHTML;
+</div><!-- #main -->
+<div id="footer" role="contentinfo">
+<div id="colophon">
+<div id="site-info">
+<a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">
+Hebcal Jewish Calendar</a>
+</div><!-- #site-info -->
+<div id="site-generator">
+$hhmts ($rcsrev)
+</div><!-- #site-generator -->
+</div><!-- #colophon -->
+</div><!-- #footer -->
+</div><!-- #wrapper -->
+EOHTML
+;
+
+    $str .= $URCHIN;
+
+    if ($noclosebody) {
+	return $str;
+    } else {
+	return $str . "</body></html>\n";
+    }
+}
+
+
+
 sub navbar2($$$$$)
 {
     my($q,$title,$help,$parent_title,$parent_href) = @_;
