@@ -1248,7 +1248,7 @@ sub html_footer_new
 
     $rcsrev =~ s/\s*\$//g;
 
-    my $hhmts = "Software updated:\n" . strftime("%d %B %Y", localtime($mtime));
+    my $hhmts = strftime("%d %B %Y", localtime($mtime));
 
     my $str = <<EOHTML;
 </div><!-- #main -->
