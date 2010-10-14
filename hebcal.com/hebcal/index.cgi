@@ -829,40 +829,6 @@ JSCRIPT_END
     1;
 }
 
-sub skyscraper_ad
-{
-    # don't show ad to repeat users
-#    if (defined $cookies->{"C"})
-#    {
-#	return "";
-#    }
-
-    # slow down Mediapartners-Google/2.1 so it doesn't crawl us so fast
-    if (defined $ENV{"REMOTE_ADDR"} && $ENV{"REMOTE_ADDR"} =~ /^66\.249\./) {
-	sleep(3);
-    }
-
-    my $message=<<MESSAGE_END;
-<div id="sky">
-<script type="text/javascript"><!--
-google_ad_client = "pub-7687563417622459";
-google_alternate_color = "ffffff";
-google_ad_width = 160;
-google_ad_height = 600;
-google_ad_format = "160x600_as";
-google_ad_type = "text";
-google_ad_channel = "";
-//--></script>
-<script type="text/javascript"
-  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-</div>
-MESSAGE_END
-;
-
-    return $message;
-}
-
 sub my_set_cookie
 {
     my($str) = @_;
@@ -978,6 +944,7 @@ sub results_page
 <div class="page type-page hentry">
 <h1 class="entry-title">Jewish Calendar $date</h1>
 <div class="entry-content">
+<div id="hebcal-results-header">
 EOHTML
 ;
     Hebcal::out_html(undef, $head_divs);
@@ -1082,7 +1049,7 @@ accurate.</p>
 
     if ($numEntries > 0)
     {
-	Hebcal::out_html(undef, qq{<div class="goto"><br><ul class="gtl goto">});
+	Hebcal::out_html(undef, qq{<div class="goto"><ul class="gtl goto">});
 
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
@@ -1154,6 +1121,30 @@ accurate.</p>
 	qq{<h3 style="color: red">No Hebrew Calendar events\n},
 	qq{for $date</h3>});
     }
+
+    Hebcal::out_html(undef, "</div><!-- #hebcal-results-header -->\n");
+
+    my $header_ad = <<EOHTML;
+<div id="hebcal-results-header-ad">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+/* 300x250, created 10/14/10 */
+google_ad_slot = "1140358973";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div><!-- #hebcal-results-header-ad -->
+EOHTML
+;
+    # slow down Mediapartners-Google/2.1 so it doesn't crawl us so fast
+    if (defined $ENV{"REMOTE_ADDR"} && $ENV{"REMOTE_ADDR"} =~ /^66\.249\./) {
+	sleep(3);
+    }
+    Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
     Hebcal::out_html(undef, "<p>");
@@ -1269,10 +1260,6 @@ accurate.</p>
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
     Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
     Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
-
-    my $ad = skyscraper_ad();
-    Hebcal::out_html(undef, $ad) if $ad;
-
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
