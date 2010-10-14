@@ -198,9 +198,8 @@ readings_for_current_year($axml, \%parsha_dates, \%parsha_time);
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
-my $html_footer = html_footer();
 my $REVISION = '$Revision$'; #'
-$REVISION =~ s/\s*\$//g;
+my $html_footer = Hebcal::html_footer_new(undef, $REVISION, 0);
 my $MTIME = (stat($aliyah_in))[9];
 my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
@@ -1439,25 +1438,4 @@ sub get_saturday
     }
 
     $sat;
-}
-
-sub html_footer
-{
-    my $str = <<EOHTML;
-</div><!-- #main -->
-<div id="footer" role="contentinfo">
-<div id="colophon">
-<div id="site-info">
-<a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">
-Hebcal Jewish Calendar</a>
-</div><!-- #site-info -->
-</div><!-- #colophon -->
-</div><!-- #footer -->
-</div><!-- #wrapper -->
-</body>
-</html>
-EOHTML
-;
-
-    return $str;
 }
