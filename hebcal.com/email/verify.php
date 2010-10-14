@@ -152,29 +152,24 @@ $unsub_url
 EOD;
 
     $err = smtp_send($return_path, $info["em"], $headers, $body);
+    echo html_header_new("Email Subscription Confirmed",
+			 "http://www.hebcal.com/email/verify.php");
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head><title>Email Subscription Confirmed</title>
-<base href="http://www.hebcal.com/email/verify.php" target="_top">
-<link type="text/css" rel="stylesheet" href="/style.css">
-</head><body><table width="100%"
-class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong>
-<tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a>
-<tt>-&gt;</tt>
-Email</td><td align="right"><a
-href="/help/">Help</a> -
-<a href="/search/">Search</a>
-</td></tr></table><h1>Email Subscription Confirmed</h1>
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Email Subscription Confirmed</h1>
+<div class="entry-content">
 <p>Thank you for your interest in weekly
 candle lighting times and parsha information.</p>
 <p>A confirmation message has been sent
 to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
 <?php
-    echo html_footer_lite();
+    echo html_footer_new();
     exit();
 } else {
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
@@ -195,52 +190,40 @@ to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
 	$dst_descr = "";
 	unset($info["zip"]);
     }
+    echo html_header_new("Confirm Email Subscription",
+			 "http://www.hebcal.com/email/verify.php");
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head><title>Confirm Email Subscription</title>
-<base href="http://www.hebcal.com/email/verify.php" target="_top">
-<link type="text/css" rel="stylesheet" href="/style.css">
-</head><body><table width="100%"
-class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong>
-<tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a>
-<tt>-&gt;</tt>
-Email</td><td align="right"><a
-href="/help/">Help</a> -
-<a href="/search/">Search</a>
-</td></tr></table><h1>Confirm Email Subscription</h1>
-<?php
-	$html = <<<EOD
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Confirm Email Subscription</h1>
+<div class="entry-content">
 <p>Please confirm your subscription to hebcal.com weekly Shabbat Candle
 Lighting Times.</p>
-<p>Email: <b>$info[em]</b>
-<br>Location: $city_descr
-<br><small>&nbsp;&nbsp;$tz_descr
-<br>&nbsp;&nbsp;$dst_descr
+<p>Email: <b><?php echo $info["em"] ?></b>
+<br>Location: <?php echo $city_descr ?>
+<br><small>&nbsp;&nbsp;<?php echo $tz_descr ?>
+<br>&nbsp;&nbsp;<?php echo $dst_descr ?>
 </small></p>
 <p>
-<form method="post" name="f1" id="f1" action="/email/verify.php">
-<input type="hidden" name="k" value="$info[id]">
+<form method="post" name="f1" id="f1" action="<?php echo $_SERVER["PHP_SELF"] ?>">
+<input type="hidden" name="k" value="<?php echo $info["id"] ?>">
 <input type="hidden" name="commit" value="1">
 <input type="submit" name="sub1" id="sub1" value="Confirm Subscription">
 </form>
 </p>
-<h4>Email Privacy Policy</h4>
-
+<h3>Email Privacy Policy</h3>
 <p>We will never sell or give your email address to anyone.
 <br>We will never use your email address to send you unsolicited
 offers.</p>
-
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
-EOD
- ;
-
- echo $html;
- echo html_footer_lite();
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+<?php
+ echo html_footer_new();
  exit();
 }
 ?>

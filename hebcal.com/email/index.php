@@ -3,23 +3,7 @@
 // $URL$
 header("Cache-Control: private");
 $sender = "webmaster@hebcal.com";
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head><title>Hebcal Shabbat Candle Lighting Times by Email</title>
-<base href="http://www.hebcal.com/email/" target="_top">
-<link type="text/css" rel="stylesheet" href="/style.css">
-</head>
-<body>
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a> <tt>-&gt;</tt>
-Email
-</td><td align="right"><a href="/help/">Help</a> -
-<a href="/search/">Search</a></td></tr></table>
-<h1>Shabbat Candle Lighting Times by Email</h1>
-<?php
+
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 require "../pear/HTML/Form.php";
@@ -29,6 +13,16 @@ $matches = array();
 if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
+
+echo html_header_new("Shabbat Candle Lighting Times by Email",
+		     "http://www.hebcal.com/email/");
+?>
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Shabbat Candle Lighting Times by Email</h1>
+<div class="entry-content">
+<?php
 
 $param = array();
 if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"])
@@ -99,7 +93,7 @@ else {
 }
 ?>
 <?php
-echo html_footer_lite();
+my_footer();
 exit();
 
 function get_password() {
@@ -286,8 +280,8 @@ function form($param, $message = "", $help = "") {
 lighting times and Torah portion.
 <br>Email is sent out every week on Thursday morning.</p>
 
-<form name="f1" id="f1" action="/email/" method="post">
-
+<div id="email-form">
+<form name="f1" id="f1" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
 <input type="hidden" name="geo" value="city">
 <label for="city">Closest City:</label>
@@ -305,47 +299,41 @@ echo HTML_Form::returnSelect("city", $entries,
 			     "", false, 'id="city"');
 ?>
 &nbsp;&nbsp;<small>(or select by <a
-href="/email/?geo=zip">zip code</a>)</small>
+href="<?php echo $_SERVER["PHP_SELF"] ?>?geo=zip">zip code</a>)</small>
 <?php } else { ?>
 <input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
-href="/email/?geo=city">closest city</a>)</small>
+href="<?php echo $_SERVER["PHP_SELF"] ?>?geo=city">closest city</a>)</small>
 <?php } ?>
-
 <br><label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
   echo htmlspecialchars($param["m"]) ?>" size="3" maxlength="3" id="m1">
 </label>
-
 <br><label for="em">E-mail address:
 <input type="text" name="em" size="30"
 value="<?php echo htmlspecialchars($param["em"]) ?>" id="em">
 </label>
-
 <br><label for="upd">
 <input type="checkbox" name="upd" value="on" <?php
   if ($param["upd"] == "on") { echo "checked"; } ?> id="upd">
 Contact me occasionally about changes to the hebcal.com website.
 </label>
-
-<br>
 <input type="hidden" name="v" value="1">
 <?php global $is_update;
     if ($is_update) { ?>
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?> 
-<br>
-<input type="submit" name="modify" value="<?php
+<br><input type="submit" name="modify" value="<?php
   echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?>">
 or
 <input type="submit" name="unsubscribe" value="Unsubscribe">
 </form>
+</div><!-- #email-form -->
 
-<p><hr noshade size="1">
 <h3><a name="privacy">Email Privacy Policy</a></h3>
 
 <p>We will never sell or give your email address to anyone.
@@ -356,8 +344,19 @@ offers.</p>
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 
 <?php
-    echo html_footer_lite();
+    my_footer();
     exit();
+}
+
+function my_footer() {
+    $html .= <<<EOD
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOD;
+    echo $html;
+    echo html_footer_new();
 }
 
 function subscribe($param) {

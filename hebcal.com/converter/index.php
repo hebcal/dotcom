@@ -294,37 +294,9 @@ function display_hebrew_event($h) {
 
 function my_header($hebdate) {
     header("Content-Type: text/html; charset=UTF-8");
+    echo html_header_new("Hebrew Date Converter - $hebdate",
+			 "http://www.hebcal.com/converter/");
 ?>
-<!DOCTYPE html>
-<html><head><title>Hebrew Date Converter - <?php echo $hebdate ?> | Hebcal Jewish Calendar</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- <base href="http://www.hebcal.com/converter/" target="_top"> -->
-<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/etc/hdate-en.xml">
-<style type="text/css">
-#converter-events ul {
- list-style-type: none;
-}
-#converter-form, #converter-results, #converter-ad {
-    text-align: center;
-}
-</style>
-</head>
-<body class="single single-post">
-<div id="wrapper" class="hfeed">
-<div id="header">
-<div id="masthead">
-<div id="branding" role="banner">
-<div id="site-title"><span><a href="/home/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
-<div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
-</div><!-- #branding -->
-<div id="access" role="navigation">
-<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
-<div class="menu"><ul><li ><a href="http://www.hebcal.com/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="http://www.hebcal.com/hebcal/" title="Calendar">Calendar</a></li><li class="page_item page-item-112"><a href="http://www.hebcal.com/holidays/" title="Holidays">Holidays</a></li><li class="page_item page-item-104"><a href="http://www.hebcal.com/converter/" title="Date Converter">Date Converter</a><ul class='children'><li class="page_item page-item-107"><a href="http://www.hebcal.com/yahrzeit/" title="Yahrzeit, Birthday, Anniversary">Yahrzeit, Birthday, Anniversary</a></li></ul></li><li class="page_item page-item-113"><a href="http://www.hebcal.com/shabbat/" title="Shabbat Times">Shabbat Times</a><ul class='children'><li class="page_item page-item-114"><a href="http://www.hebcal.com/email/" title="Email List">Email List</a></li><li class="page_item page-item-115"><a href="http://www.hebcal.com/home/shabbat-times/shabbat-widgets" title="Widgets">Widgets</a></li></ul></li><li class="page_item page-item-105"><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72"><a href="http://www.hebcal.com/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="http://www.hebcal.com/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73"><a href="http://www.hebcal.com/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-117"><a href="http://www.hebcal.com/news/" title="News">News</a></li><li class="page_item page-item-63"><a href="http://www.hebcal.com/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71 current_page_item"><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul></div>
-</div><!-- #access -->
-</div><!-- #masthead -->
-</div><!-- #header -->
-<div id="main">
 <div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
