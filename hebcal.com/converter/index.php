@@ -3,7 +3,7 @@
 ########################################################################
 # Convert between hebrew and gregorian calendar dates.
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -206,19 +206,18 @@ of the Gregorian Calendar</a>.</p>
 <?php
 }
 ?>
-<p align="center"><span style="font-size: large">
+<div id="converter-results">
+<p style="font-size: large">
 <a href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
 src="/i/xml.gif" border="0" align="right" width="36" height="14"
 alt="Today's Hebrew Date in English Transliteration RSS"></a>
-<?php echo "$first = <b>$second</b>"; ?>
-</span>
-<br>
+<?php echo "$first = <b>$second</b>"; ?></p>
+<p dir="rtl" lang="he" class="hebrew-big">
 <a href="/etc/hdate-he.xml"
 title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/xml.gif" border="0" align="right" width="36" height="14"
 alt="Today's Hebrew Date in Hebrew RSS"></a>
-<span dir="rtl" lang="he" class="hebrew-big">
 <?php
 if ($hm == "Adar1" && !is_leap_year($hy)) {
     $month_name = "Adar";
@@ -228,7 +227,7 @@ if ($hm == "Adar1" && !is_leap_year($hy)) {
 $hebrew = build_hebrew_date($month_name, $hd, $hy);
 echo $hebrew, "\n";
 ?>
-</span>
+</p>
 <?php
 if ($gy >= 1900 && $gy <= 2099) {
     $century = substr($gy, 0, 2);
@@ -236,6 +235,7 @@ if ($gy >= 1900 && $gy <= 2099) {
     @include($f);
     $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
     if (isset($sedra) && isset($sedra[$iso])) {
+	echo "<div id=\"converter-events\"><ul>\n";
 	if (is_array($sedra[$iso])) {
 	    foreach ($sedra[$iso] as $sed) {
 		display_hebrew_event($sed);
@@ -243,11 +243,10 @@ if ($gy >= 1900 && $gy <= 2099) {
 	} else {
 	    display_hebrew_event($sedra[$iso]);
 	}
+	echo "</ul></div><!-- #converter-events -->\n";
     }
 }
-?>
-</p>
-<?php
+echo "</div><!-- #converter-results -->\n";
 
 form(false, "", "");
 /*NOTREACHED*/
@@ -286,7 +285,7 @@ function format_hebrew_date($hd, $hm, $hy) {
 
 function display_hebrew_event($h) {
     $anchor = hebcal_make_anchor($h);
-    echo "<br><a href=\"$anchor\">", $h, "</a>\n";
+    echo "<li><a href=\"$anchor\">", $h, "</a>\n";
     if (strncmp($h, "Parashat", 8) == 0) {
 	echo "(in Diaspora)\n";
     }
@@ -296,22 +295,41 @@ function display_hebrew_event($h) {
 function my_header($hebdate) {
     header("Content-Type: text/html; charset=UTF-8");
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head><title>Hebrew Date Converter - <?php echo $hebdate ?></title>
+<!DOCTYPE html>
+<html><head><title>Hebrew Date Converter - <?php echo $hebdate ?> | Hebcal Jewish Calendar</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base target="_top">
-<link type="text/css" rel="stylesheet" href="/style.css">
+<!-- <base href="http://www.hebcal.com/converter/" target="_top"> -->
+<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.hebcal.com/etc/hdate-en.xml">
+<style type="text/css">
+#converter-events ul {
+ list-style-type: none;
+}
+#converter-form, #converter-results, #converter-ad {
+    text-align: center;
+}
+</style>
 </head>
-<body>
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-Hebrew Date Converter
-</td><td align="right"><a href="/help/">Help</a> -
-<a href="/search/">Search</a></td></tr></table>
-<h1>Hebrew Date Converter</h1>
+<body class="single single-post">
+<div id="wrapper" class="hfeed">
+<div id="header">
+<div id="masthead">
+<div id="branding" role="banner">
+<div id="site-title"><span><a href="/home/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
+<div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
+</div><!-- #branding -->
+<div id="access" role="navigation">
+<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+<div class="menu"><ul><li ><a href="http://www.hebcal.com/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="http://www.hebcal.com/hebcal/" title="Calendar">Calendar</a></li><li class="page_item page-item-112"><a href="http://www.hebcal.com/holidays/" title="Holidays">Holidays</a></li><li class="page_item page-item-104"><a href="http://www.hebcal.com/converter/" title="Date Converter">Date Converter</a><ul class='children'><li class="page_item page-item-107"><a href="http://www.hebcal.com/yahrzeit/" title="Yahrzeit, Birthday, Anniversary">Yahrzeit, Birthday, Anniversary</a></li></ul></li><li class="page_item page-item-113"><a href="http://www.hebcal.com/shabbat/" title="Shabbat Times">Shabbat Times</a><ul class='children'><li class="page_item page-item-114"><a href="http://www.hebcal.com/email/" title="Email List">Email List</a></li><li class="page_item page-item-115"><a href="http://www.hebcal.com/home/shabbat-times/shabbat-widgets" title="Widgets">Widgets</a></li></ul></li><li class="page_item page-item-105"><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72"><a href="http://www.hebcal.com/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="http://www.hebcal.com/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73"><a href="http://www.hebcal.com/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-117"><a href="http://www.hebcal.com/news/" title="News">News</a></li><li class="page_item page-item-63"><a href="http://www.hebcal.com/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71 current_page_item"><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul></div>
+</div><!-- #access -->
+</div><!-- #masthead -->
+</div><!-- #header -->
+<div id="main">
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Date Converter</h1>
+<div class="entry-content">
 <?php
 }
 
@@ -327,43 +345,29 @@ function form($head, $message, $help = "") {
 	    $message, "</p>", $help, "<hr noshade size=\"1\">";
     }
 
-#    global $PHP_SELF;
-#    $action = $PHP_SELF;
-    $action = "/converter/";
+    $action = $_SERVER["PHP_SELF"];
 ?>
+<div id="converter-form">
 <form name="f1" id="f1" action="<?php echo $action ?>">
-<center><table cellpadding="4">
-<tr align="center" valign="top"><td class="box"><table>
-<tr><td colspan="3"><h4 align="center">Gregorian to Hebrew</h4></td></tr>
-<tr><td>Day</td><td>Month</td><td>Year</td></tr>
-<tr><td><input type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd"></td>
-<td><?php
+<input type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
+<?php
 global $MoY_long;
 echo HTML_Form::returnSelect("gm", $MoY_long, $gm);
-?></td>
-<td><input type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy"></td></tr>
-<tr><td colspan="3">
+?>
+<input type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
 <label for="gs"><input type="checkbox" name="gs" value="on" id="gs">
 After sunset</label>
-<br><input name="g2h"
-type="submit" value="Compute Hebrew Date"></td></tr>
-</table></td>
-<td>&nbsp;&nbsp;&nbsp</td>
-<td class="box"><table>
-<tr><td colspan="3"><h4 align="center">Hebrew to Gregorian</h4></td></tr>
-<tr><td>Day</td><td>Month</td><td>Year</td></tr>
-<tr><td><input type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd"></td>
-<td><?php
-echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
-?></td>
-<td><input type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy"></td></tr>
-<tr><td colspan="3"><input name="h2g"
-type="submit" value="Compute Gregorian Date"></td>
-</tr></table>
-</td></tr>
-</table>
-</center>
+<input name="g2h" type="submit" value="Convert Gregorian to Hebrew date">
 </form>
+<form name="f2" id="f2" action="<?php echo $action ?>">
+<input type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
+<?php
+echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
+?>
+<input type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
+<input name="h2g" type="submit" value="Convert Hebrew to Gregorian date">
+</form>
+</div><!-- #converter-form -->
 <?php
 
     my_footer();
@@ -380,7 +384,7 @@ EOD
 
 if (!isset($_COOKIE["C"])) {
     $html .= <<<EOD
-<center class="goto">
+<div class="converter-ad">
 <script type="text/javascript"><!--
 google_ad_client = "pub-7687563417622459";
 google_alternate_color = "ffffff";
@@ -392,14 +396,21 @@ google_ad_type = "text";
 google_ad_channel ="0073211120";
 //--></script>
 <script type="text/javascript"
-  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-</center>
+</div><!-- #converter-ad -->
 EOD
 	;
 }
 
-    $html .= html_footer_lite();
+    $html .= <<<EOD
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOD;
+
+    $html .= html_footer_new();
     echo $html;
     exit();
 }

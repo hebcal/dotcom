@@ -5,7 +5,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2009  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -361,5 +361,53 @@ EOD
 	;
     return $html;
 }
+
+function html_footer_new($last_updated = true) {
+    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
+    $year = strftime("%Y", time());
+    $date = strftime("%d %B %Y", $stat[9]);
+    global $VER;
+
+    $site_generator_div = "";
+    if ($last_updated) {
+	$site_generator_div = <<<EOD
+<div id="site-generator">
+$date (Revision: $VER)
+</div><!-- #site-generator -->
+EOD;
+    }
+
+    $html = <<<EOD
+</div><!-- #main -->
+<div id="footer" role="contentinfo">
+<div id="colophon">
+<div id="site-info">
+<a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">
+Hebcal Jewish Calendar</a>
+</div><!-- #site-info -->
+$site_generator_div
+</div><!-- #colophon -->
+</div><!-- #footer -->
+</div><!-- #wrapper -->
+<script src="http://www.google-analytics.com/urchin.js"
+type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct="UA-967247-1";
+urchinTracker();
+if(document.getElementsByTagName){
+var e3=document.getElementsByTagName("a");
+if(e3&&e3.length){
+for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="amzn"){
+if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
+}}}
+}
+</script>
+</body></html>
+EOD;
+
+    return $html;
+}
+
 
 ?>
