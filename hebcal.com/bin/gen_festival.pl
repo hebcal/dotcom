@@ -251,20 +251,32 @@ sub write_csv
     print CSV "\n";
 }
 
+sub format_single_day {
+    my($gy,$gm,$gd) = @_;
+    return $Hebcal::MoY_short[$gm - 1] . " " . $gd;
+}
+
+sub format_single_day_html {
+    my($gy,$gm,$gd) = @_;
+    my($gy0,$gm0,$gd0) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
+    return "<span title=\"begins at sundown on " . format_single_day($gy0,$gm0,$gd0)
+	. "\">" . format_single_day($gy,$gm,$gd) . "</span>";
+}
+
 sub format_date_range {
     my($gy1,$gm1,$gd1,$gy2,$gm2,$gd2) = @_;
-    my $str = $Hebcal::MoY_short[$gm1 - 1] . " " . $gd1 . "-";
+    my $str = format_single_day_html($gy1,$gm1,$gd1) . "-";
     if ($gm1 == $gm2) {
 	$str .= $gd2;
     } else {
-	$str .= $Hebcal::MoY_short[$gm2 - 1] . " " . $gd2;
+	$str .= format_single_day($gy2,$gm2,$gd2);
     }
     $str;
 }
 
 sub format_date_plus_delta {
     my($gy1,$gm1,$gd1,$delta) = @_;
-    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy1, $gm1, $gd1, $delta);
+    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy1,$gm1,$gd1,$delta);
     return format_date_range($gy1,$gm1,$gd1,$gy2,$gm2,$gd2);
 }
 
@@ -287,8 +299,11 @@ sub write_index_page
 <span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
 </div><!-- .entry-meta -->
 <div class="entry-content">
-<p>All holidays begin at sundown on the date specified in the table below.
-Dates in <b>bold</b> are <em>yom tov</em>, so they have similar obligations
+<p>All holidays begin at sundown on the evening before the date
+specified in the table below. For example, if the dates for Rosh Hashana
+were listed as <b>Sep 19-20</b>, then the holiday begins at sundown on
+<b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.
+<p>Dates in <b>bold</b> are <em>yom tov</em>, so they have similar obligations
 and restrictions to Shabbat in the sense that normal "work" is forbidden.</p>
 <table id="hebcal-major-holidays">
 <tbody>
@@ -315,41 +330,40 @@ EOHTML
 
 	my $short_descr = $descr;
 	$short_descr =~ s/\..*//;
-	my $anchor = Hebcal::make_anchor($f);
+	my $slug = Hebcal::make_anchor($f);
 
-	print OUT3 qq{<tr><td><a href="$anchor" title="$short_descr">$f</a></td>\n};
+	print OUT3 qq{<tr><td><a href="$slug" title="$short_descr">$f</a></td>\n};
 	foreach my $i (0 .. $NUM_YEARS) {
 	    my $yr = $HEB_YR + $i - 1;
 	    print OUT3 "<td class=\"date-obs\">";
 	    if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[$i]) {
 		my $evt = $OBSERVED{$f}->[$i];
-		my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($evt->[$Hebcal::EVT_IDX_YEAR],
-							     $evt->[$Hebcal::EVT_IDX_MON] + 1,
-							     $evt->[$Hebcal::EVT_IDX_MDAY],
-							     -1);
+		my($gy,$gm,$gd) = ($evt->[$Hebcal::EVT_IDX_YEAR],
+				   $evt->[$Hebcal::EVT_IDX_MON] + 1,
+				   $evt->[$Hebcal::EVT_IDX_MDAY]);
 		if ($f eq "Chanukah") {
-		    print OUT3 format_date_plus_delta($gy, $gm, $gd, 8);
+		    print OUT3 format_date_plus_delta($gy, $gm, $gd, 7);
 		} elsif ($f eq "Purim" || $f eq "Tish'a B'Av") {
-		    print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
+		    print OUT3 format_single_day_html($gy, $gm, $gd);
 		} else {
-		    print OUT3 "<b>";
+		    print OUT3 "<b>"; # begin yomtov
 		    if ($f eq "Rosh Hashana" || $f eq "Shavuot") {
-			print OUT3 format_date_plus_delta($gy, $gm, $gd, 2);
-		    } elsif ($f eq "Yom Kippur" || $f eq "Shmini Atzeret" || $f eq "Simchat Torah") {
 			print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
+		    } elsif ($f eq "Yom Kippur" || $f eq "Shmini Atzeret" || $f eq "Simchat Torah") {
+			print OUT3 format_single_day_html($gy, $gm, $gd);
 		    } elsif ($f eq "Sukkot") {
-			print OUT3 format_date_plus_delta($gy, $gm, $gd, 2);
+			print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
 			print OUT3 "</b><br>";
-			my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 3);
+			my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
 			print OUT3 format_date_plus_delta($gy2, $gm2, $gd2, 4);
 		    } elsif ($f eq "Pesach") {
-			print OUT3 format_date_plus_delta($gy, $gm, $gd, 2);
+			print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
 			print OUT3 "</b><br>";
-			my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 3);
+			my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
 			print OUT3 format_date_plus_delta($gy2, $gm2, $gd2, 3);
 			print OUT3 "<br><b>";
 			my($gy3,$gm3,$gd3) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 6);
-			print OUT3 format_date_plus_delta($gy3, $gm3, $gd3, 2);
+			print OUT3 format_date_plus_delta($gy3, $gm3, $gd3, 1);
 		    }
 		    print OUT3 "</b>" unless $f eq "Sukkot";
 		}
@@ -378,8 +392,8 @@ sub write_festival_part
 {
     my($festivals,$f) = @_;
 
-    my $anchor = Hebcal::make_anchor($f);
-    $anchor =~ s/\.html$//;
+    my $slug = Hebcal::make_anchor($f);
+    $slug =~ s/\.html$//;
 
     my $torah;
     my $maftir;
@@ -424,8 +438,8 @@ sub write_festival_part
     if ($torah) {
 	my $torah_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'torah'}->{'href'};
 
-	print OUT2 qq{\n<h3>Torah Portion: };
-	print OUT2 qq{<a name="$anchor-torah"\nhref="$torah_href"\ntitle="Translation from JPS Tanakh">}
+	print OUT2 qq{\n<h3 id="$slug-torah">Torah Portion: };
+	print OUT2 qq{<a href="$torah_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($torah_href);
 	print OUT2 $torah;
 	print OUT2 qq{</a>}
@@ -455,8 +469,8 @@ sub write_festival_part
     if ($haft) {
 	my $haft_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'href'};
 
-	print OUT2 qq{\n<h3>Haftarah: };
-	print OUT2 qq{<a name="$anchor-haft"\nhref="$haft_href"\ntitle="Translation from JPS Tanakh">}
+	print OUT2 qq{\n<h3 id="$slug-haft">Haftarah: };
+	print OUT2 qq{<a href="$haft_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($haft_href);
 	print OUT2 $haft;
 	print OUT2 qq{</a>}
@@ -473,7 +487,7 @@ sub write_festival_page
 {
     my($festivals,$f) = @_;
 
-    my($anchor) = Hebcal::make_anchor($f);
+    my($slug) = Hebcal::make_anchor($f);
 
     my $descr;
     my $about = get_var($festivals, $f, 'about');
@@ -482,7 +496,7 @@ sub write_festival_page
     }
     warn "$f: missing About description\n" unless $descr;
 
-    my $fn = "$outdir/$anchor";
+    my $fn = "$outdir/$slug";
     open(OUT2, ">$fn.$$") || die "$fn.$$: $!\n";
 
     my $short_descr = $descr;
@@ -502,7 +516,7 @@ sub write_festival_page
     }
 
     print OUT2 Hebcal::html_header($page_title,
-				   "http://www.hebcal.com/holidays/$anchor",
+				   "http://www.hebcal.com/holidays/$slug",
 				   "single single-post");
 
     my $prev = $PREV{$f};
@@ -585,7 +599,7 @@ EOHTML
 	    "dawn" : "sundown";
 
 	print OUT2 <<EOHTML;
-<h3><a name="dates"></a>List of Dates</h3>
+<h3 id="dates">List of Dates</h3>
 $f begins at $rise_or_set in the Diaspora on:
 <ul>
 EOHTML
@@ -631,7 +645,7 @@ EOHTML
 		$books = [ $books ];
 	    }
 
-	    print OUT2 qq{<h3><a name="books"></a>Recommended Books</h3>\n<table border="0" cellpadding="6"><tr>\n};
+	    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<table border="0" cellpadding="6"><tr>\n};
 	    foreach my $book (@{$books}) {
 		my $asin = $book->{"ASIN"};
 		my $img;
@@ -729,10 +743,10 @@ EOHTML
 		$part2 = $part;
 	    }
 
-	    my $anchor = Hebcal::make_anchor($part2);
-	    $anchor =~ s/\.html$//;
+	    my $slug = Hebcal::make_anchor($part2);
+	    $slug =~ s/\.html$//;
 
-	    print OUT2 qq{\n<h2><a name="$anchor"></a>$part};
+	    print OUT2 qq{\n<h2 id="$slug">$part};
 	    my $part_hebrew = $festivals->{'festival'}->{$part}->{'hebrew'};
 	    if ($part_hebrew)
 	    {
@@ -750,12 +764,12 @@ EOHTML
 	    }
 
 	    write_festival_part($festivals,$part);
-	    print OUT2 qq{<!-- $anchor -->\n};
+	    print OUT2 qq{<!-- $slug -->\n};
 	}
     }
 
     print OUT2 qq{
-<h3><a name="ref"></a>References</h3>
+<h3 id="ref">References</h3>
 <a title="The Jewish Holidays: A Guide &amp; Commentary"
 class="amzn" id="strassfeld-1"
 href="$strassfeld_link"><img
