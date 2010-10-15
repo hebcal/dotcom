@@ -416,7 +416,6 @@ function html_header_new($title, $base_href) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
-</style>
 </head>
 <body class="single single-post">
 <div id="wrapper" class="hfeed">
