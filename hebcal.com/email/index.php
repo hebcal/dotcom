@@ -334,15 +334,14 @@ or
 </form>
 </div><!-- #email-form -->
 
-<h3><a name="privacy">Email Privacy Policy</a></h3>
-
+<div id="privacy-policy">
+<h3>Email Privacy Policy</h3>
 <p>We will never sell or give your email address to anyone.
 <br>We will never use your email address to send you unsolicited
 offers.</p>
-
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
-
+</div><!-- #privacy-policy -->
 <?php
     my_footer();
     exit();
