@@ -821,6 +821,14 @@ JSCRIPT_END
 	;
     Hebcal::out_html(undef, $js);
 
+    my $footer_divs=<<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
+    Hebcal::out_html(undef, $footer_divs);
     Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
@@ -918,8 +926,6 @@ sub results_page
 	$next_url = Hebcal::self_url($q, {"year" => ($q->param("year") + 1)});
 	$next_title = sprintf("%04d", ($q->param("year") + 1));
     }
-
-    my $goto_prefix = "<p class=\"goto\">\n";
 
     my $results_title = "Jewish Calendar $date";
     if (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") {
@@ -1045,7 +1051,7 @@ accurate.</p>
 
     $goto .= "</small>\n";
 
-    Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
+    Hebcal::out_html(undef, "<p class=\"goto\">", $goto, "</p>\n");
 
     if ($numEntries > 0)
     {
@@ -1258,7 +1264,15 @@ EOHTML
 
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
-    Hebcal::out_html(undef, $goto_prefix, $goto, "</p>");
+    Hebcal::out_html(undef, "<p class=\"goto\">", $goto, "</p>\n");
+    my $footer_divs=<<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
+    Hebcal::out_html(undef, $footer_divs);
     Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
