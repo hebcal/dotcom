@@ -535,21 +535,19 @@ padding:6px;
 .entry-content input, .entry-content select {
 margin:0;
 }
-/*
-form#f1 {
-font-size:14px;
-line-height:16px;
+form ol {
+list-style:none inside none;
+margin:0 0 12px 12px;
 }
-*/
-form#f1 ol {
-list-style-type:none;
-}
+#hebcal-form-left { float:left; width:48%;}
+#hebcal-form-right { float:right; width:48%;}
+#hebcal-form-bottom { clear:both; }
 </style>
 EOHTML
 ;
 
     Hebcal::out_html(undef,
-		     Hebcal::html_header("Interactive Calendar",
+		     Hebcal::html_header("Custom Calendar",
 					 $script_name,
 					 "single single-post",
 					 $xtra_head)
@@ -558,7 +556,7 @@ EOHTML
 <div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title">Interactive Jewish Calendar</h1>
+<h1 class="entry-title">Custom Calendar</h1>
 <div class="entry-content">
 EOHTML
 ;
@@ -576,6 +574,7 @@ EOHTML
     "<div id=\"form\">",
     "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
+    qq{<div id="hebcal-form-left">\n},
     qq{<fieldset><legend>Jewish Holidays for</legend>\n},
     "<ol><li><label for=\"year\">Year:\n",
     $q->textfield(-name => "year",
@@ -593,8 +592,8 @@ EOHTML
 		   -default => "x",
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
-    "<ul><li>", $q->small("Use all digits to specify a year.\nYou probably aren't",
-			  "interested in 93, but rather 1993.\n"), "</ul>",
+    "<ol><li>", $q->small("Use all digits to specify a year.\nYou probably aren't",
+			  "interested in 93, but rather 1993.\n"), "</ol>",
     "<li>Year type:\n",
     $q->radio_group(-name => "yt",
 		    -values => ["G", "H"],
@@ -610,7 +609,7 @@ EOHTML
     "<ol><li><label\nfor=\"nh\">",
     $q->checkbox(-name => "nh",
 		 -id => "nh",
-		 -checked => "checked",
+		 -checked => 1,
 		 -label => "\nAll default Holidays"),
     "</label> <small>(<a\n",
     "href=\"/holidays/\">What\n",
@@ -618,19 +617,19 @@ EOHTML
     "<li><label\nfor=\"nx\">",
     $q->checkbox(-name => "nx",
 		 -id => "nx",
-		 -checked => "checked",
+		 -checked => 1,
 		 -label => "\nRosh Chodesh"),
     "</label>",
     "<li><label\nfor=\"mf\">",
     $q->checkbox(-name => "mf",
 		 -id => "mf",
-		 -checked => "checked",
+		 -checked => 1,
 		 -label => "\nMinor Fasts"),
     "</label> <small>(Ta'anit Esther, Tzom Gedaliah, etc.)</small>",
     "<li><label\nfor=\"ss\">",
     $q->checkbox(-name => "ss",
 		 -id => "ss",
-		 -checked => "checked",
+		 -checked => 1,
 		 -label => "\nSpecial Shabbatot"),
     "</label> <small>(Shabbat Shekalim, Shabbat Zachor, etc.)</small>",
     "<li><label\nfor=\"o\">",
@@ -651,22 +650,27 @@ EOHTML
 		    {"off" => "\nDiaspora ",
 		     "on" => "\nIsrael "}),
     "\n&nbsp;<small>(<a\n",
-    "href=\"/help/sedra.html#scheme\">What\n",
-    "is the difference?</a>)</small></ol></ol>");
-    Hebcal::out_html(undef, qq{</fieldset>\n});
+    "href=\"/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes\">What\n",
+    "is the difference?</a>)</small></ol>");
 
     Hebcal::out_html(undef,
-    "<p><label\nfor=\"lg\"><b>Event titles:</b> </label>\n",
+    "<li><label\nfor=\"lg\">Event titles: </label>\n",
     $q->popup_menu(-name => "lg",
 		   -id => "lg",
 		   -values => ["s", "sh", "a", "ah", "h"],
 		   -default => "s",
-		   -labels => \%Hebcal::lang_names),
+		   -labels => \%Hebcal::lang_names));
+
+    Hebcal::out_html(undef, qq{</ol></fieldset>\n});
+    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-left -->\n});
+
+    Hebcal::out_html(undef, qq{<div id="hebcal-form-right">\n});
+    Hebcal::out_html(undef,
     "<fieldset><legend>Other options</legend>",
     "<ol><li><label\nfor=\"vis\">",
     $q->checkbox(-name => "vis",
 		 -id => "vis",
-		 -checked => "checked",
+		 -checked => 1,
 		 -label => "\nDisplay visual calendar grid"),
     "</label>",
     "<li><label\nfor=\"Dsome\">",
@@ -693,7 +697,7 @@ EOHTML
 	       -id => "geo"),
     "\n");
 
-    Hebcal::out_html(undef, "Specify by: <small>[\n");
+    Hebcal::out_html(undef, "<ol><li>Specify by: <small>[\n");
     foreach my $type ("none", "zip", "city", "pos")
     {
 	if ($type eq $q->param("geo")) {
@@ -706,7 +710,6 @@ EOHTML
 	}
     }
     Hebcal::out_html(undef, "\n]</small>\n");
-    Hebcal::out_html(undef, "<ol>\n");
 
     if ($q->param("geo") eq "city")
     {
@@ -757,8 +760,8 @@ EOHTML
 		       -labels => {"e" => "East Longitude",
 				   "w" => "West Longitude"}));
 	Hebcal::out_html(undef,
-	"<ul><li><small><a href=\"$latlong_url\">Search</a>\n",
-	"for the exact location of your city.</small></ul>\n");
+	"<ol><li><small><a href=\"$latlong_url\">Search</a>\n",
+	"for the exact location of your city.</small></ol>\n");
     }
     elsif ($q->param("geo") ne "none")
     {
@@ -804,23 +807,26 @@ EOHTML
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
-	"<ul><li><small>(enter\n\"0\" to turn off Havdalah\n",
-	"times)</small></ul>\n");
+	"<ol><li><small>(enter\n\"0\" to turn off Havdalah\n",
+	"times)</small></ol>\n");
 
-	Hebcal::out_html(undef, "<br>&nbsp;&nbsp;<small><a\n",
-			 "href=\"/help/candles.html#accurate\">How\n",
+	Hebcal::out_html(undef, "<li><small><a\n",
+			 "href=\"/home/94/how-accurate-are-candle-lighting-times\">How\n",
 			 "accurate are these times?</a></small>");
     }
 
     Hebcal::out_html(undef, qq{</ol></fieldset>\n});
+    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-right -->\n});
+    Hebcal::out_html(undef, qq{<div id="hebcal-form-bottom">\n});
     Hebcal::out_html(undef,
     $q->hidden(-name => ".cgifields",
 	       -values => ["nx", "nh", "mf", "ss"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",-value => "Get Calendar"),
-    "\n</form>\n");
-    Hebcal::out_html(undef, qq{</div><!-- #form -->\n});
+    qq{</div><!-- #hebcal-form-bottom -->\n},
+    qq{</form>\n},
+    qq{</div><!-- #form -->\n});
 
     my $js=<<JSCRIPT_END;
 <script type="text/javascript">
