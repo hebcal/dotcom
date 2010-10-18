@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -297,14 +297,35 @@ sub results_page {
     }
     else
     {
-	Hebcal::out_html
-	    ($cfg, Hebcal::start_html
-	     ($q,
-	      "Hebcal Yahrzeit, Birthday and Anniversary Calendar",
-	      [],
-	      { "keywords" => "yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish" },
-	      $target)
-	     );
+	my $xtra_head = <<EOHTML;
+<meta name="keywords" content="yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish">
+<style type="text/css">
+.entry-content input, .entry-content select {
+margin:0;
+}
+form ol {
+list-style:none inside none;
+margin:0 0 12px 12px;
+}
+</style>
+EOHTML
+;
+
+	Hebcal::out_html($cfg,
+			 Hebcal::html_header("Yahrzeit, Birthday and Anniversary Calendar",
+					     $script_name,
+					     "single single-post",
+					     $xtra_head)
+	    );
+	my $head_divs = <<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Yahrzeit, Birthday and Anniversary Calendar</h1>
+<div class="entry-content">
+EOHTML
+;
+	Hebcal::out_html($cfg, $head_divs);
     }
 
     if ($cfg eq "i" || $cfg eq "j")
@@ -323,15 +344,6 @@ sub results_page {
 	    ($cfg,
 	     "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
 	     "Birthday and Anniversary\nCalendar</a></h3>\n");
-    }
-    else
-    {
-	Hebcal::out_html
-	    ($cfg,
-	     Hebcal::navbar2($q,
-			      "Yahrzeit, Birthday and Anniversary\nCalendar",
-			      1, undef, undef),
-	     "<h1>Yahrzeit,\nBirthday and Anniversary Calendar</h1>\n");
     }
 
     if ($q->param("ref_url"))
@@ -371,14 +383,14 @@ for (my $i = 0; $i < $numEntries; $i++)
 	Hebcal::out_html($cfg,
 "<p><em>Note: the results below contain one or more anniversary in Adar.\n",
 "To learn more about how Hebcal handles these dates, read <a\n",
-"href=\"http://www.hebcal.com/help/anniv.html#adar\">How\n",
+"href=\"/home/54/how-does-hebcal-determine-an-anniversary-occurring-in-adar\">How\n",
 "does Hebcal determine an anniversary occurring in Adar?</a></em></p>\n",
 			  );
 	last;
     }
 }
 
-Hebcal::out_html($cfg, "<pre>") unless ($q->param("yizkor"));
+Hebcal::out_html($cfg, "<ul>") unless ($q->param("yizkor"));
 
 for (my $i = 0; $i < $numEntries; $i++)
 {
@@ -390,23 +402,23 @@ for (my $i = 0; $i < $numEntries; $i++)
     if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR] &&
 	$q->param("yizkor"))
     {
-	Hebcal::out_html($cfg, "</pre>") unless $i == 0;
-	Hebcal::out_html($cfg, "<h3>$year</h3><pre>");
+	Hebcal::out_html($cfg, "</ul>") unless $i == 0;
+	Hebcal::out_html($cfg, "<h3>$year</h3><ul>");
     }
 
     my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 
     Hebcal::out_html
 	($cfg,
-	 sprintf("%s%02d-%s-%04d  %s\n",
+	 sprintf("<li>%s%02d-%s-%04d  %s\n",
 		 $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
 		 Hebcal::html_entify($subj)));
 }
 
-Hebcal::out_html($cfg, "</pre>\n");
+Hebcal::out_html($cfg, "</ul>\n");
 
 Hebcal::out_html($cfg,
-		  "<div class=\"goto\"><hr><a name=\"form\"></a>\n",
+		  "<div id=\"form\" class=\"goto\">\n",
 		  "<h3>Enter more dates and names</h3></div>\n");
 
 form(0,"","");
@@ -441,25 +453,26 @@ sub form
 	 "href=\"/converter/\">Hebrew Date Converter</a> to get the\n",
 	 "Gregorian date and then come back to this page.</p>\n");
 
-    Hebcal::out_html
-	($cfg, qq{<form name="f1" id="f1" method="post"\naction="$script_name">});
+    Hebcal::out_html($cfg,
+		     qq{<form name="f1" id="f1" method="post"\naction="${script_name}a.cgi">},
+		     qq{<ol>\n});
 
     for (my $i = 1; $i <= $count; $i++)
     {
 	show_row($q,$cfg,$i,\%Hebcal::MoY_long);
     }
 
-    Hebcal::out_html($cfg, "<label\nfor=\"hebdate\">",
+    Hebcal::out_html($cfg, "<li><label\nfor=\"hebdate\">",
     $q->checkbox(-name => "hebdate",
 		 -id => "hebdate",
 		 -checked => "checked",
 		 -label => "\nInclude Hebrew dates"),
-    "</label><br>",
-    "<label\nfor=\"yizkor\">",
+    "</label>",
+    "<li><label\nfor=\"yizkor\">",
     $q->checkbox(-name => "yizkor",
 		 -id => "yizkor",
 		 -label => "\nInclude Yizkor dates"),
-    "</label><br>",
+    "</label>",
     $q->hidden(-name => "years", -default => $num_years), "\n",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
@@ -468,7 +481,7 @@ sub form
     $q->hidden(-name => ".cgifields",
 	       -values => ["hebdate", "yizkor"],
 	       -override => 1), "\n",
-    qq{<input\ntype="submit" value="Compute Calendar"></form>\n});
+    qq{<li><input\ntype="submit" value="Compute Calendar"></ol></form>\n});
 
     Hebcal::out_html($cfg, qq{</div>\n});
 
@@ -486,11 +499,20 @@ sub form
 	    ($cfg, qq{<hr class="goto" noshade size="1">\n});
 
 	Hebcal::out_html($cfg,
-	qq{<p class="goto"><a href="/help/link.html#yahrzeit-tags">How\n},
+	qq{<p class="goto"><a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">How\n},
 	qq{can my synagogue link to the Yahrzeit, Birthday and Anniversary\n},
 	qq{Calendar from its own website?</a></p>});
 
-	Hebcal::out_html($cfg, Hebcal::html_footer($q,$rcsrev));
+
+	my $footer_divs=<<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
+	Hebcal::out_html($cfg, $footer_divs);
+	Hebcal::out_html($cfg, Hebcal::html_footer_new($q,$rcsrev,0));
     }
 
     exit(0);
@@ -501,6 +523,7 @@ sub show_row {
 
     Hebcal::out_html
 	($cfg,
+	 "<li>",
 	 $q->popup_menu(-name => "t$i",
 			-id => "t$i",
 			-values => ["Yahrzeit","Birthday","Anniversary"]),
@@ -528,7 +551,7 @@ sub show_row {
 		      -id => "s$i",
 		      -label => "\nAfter sunset"),
 	 qq{</label></small>},
-	 "<br>\n",
+	 "\n",
 	 );
 }
 
