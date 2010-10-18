@@ -523,11 +523,36 @@ sub form
 
     print STDOUT $q->header(-type => $content_type);
 
+    my $xtra_head = <<EOHTML;
+<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">
+<meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
+<style type="text/css">
+.entry-content fieldset {
+border:1px solid #E7E7E7;
+margin:0 0 12px;
+padding:6px;
+}
+.entry-content input, .entry-content select {
+margin:0;
+}
+/*
+form#f1 {
+font-size:14px;
+line-height:16px;
+}
+*/
+form#f1 ol {
+list-style-type:none;
+}
+</style>
+EOHTML
+;
+
     Hebcal::out_html(undef,
 		     Hebcal::html_header("Interactive Calendar",
 					 $script_name,
 					 "single single-post",
-					 qq{<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">\n<meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">\n})
+					 $xtra_head)
 	);
     my $head_divs = <<EOHTML;
 <div id="container" class="single-attachment">
@@ -548,11 +573,11 @@ EOHTML
 
     Hebcal::out_html(undef,
     $message, "\n",
-    "<a name=\"form\"></a>",
+    "<div id=\"form\">",
     "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
-    "<b>Jewish Holidays for:</b>&nbsp;&nbsp;&nbsp;\n",
-    "<label for=\"year\">Year:\n",
+    qq{<fieldset><legend>Jewish Holidays for</legend>\n},
+    "<ol><li><label for=\"year\">Year:\n",
     $q->textfield(-name => "year",
 		  -id => "year",
 		  -default => $this_year,
@@ -568,10 +593,9 @@ EOHTML
 		   -default => "x",
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
-    "<br>",
-    $q->small("Use all digits to specify a year.\nYou probably aren't",
-	      "interested in 93, but rather 1993.\n"),
-    "<br>Year type:\n",
+    "<ul><li>", $q->small("Use all digits to specify a year.\nYou probably aren't",
+			  "interested in 93, but rather 1993.\n"), "</ul>",
+    "<li>Year type:\n",
     $q->radio_group(-name => "yt",
 		    -values => ["G", "H"],
 		    -default => "G",
@@ -579,15 +603,11 @@ EOHTML
 		    -labels =>
 		    {"G" => " Gregorian (common era) ",
 		     "H" => " Hebrew Year "}));
+    Hebcal::out_html(undef, qq{</ol></fieldset>\n});
 
+    Hebcal::out_html(undef, qq{<fieldset><legend>Include events</legend>\n});
     Hebcal::out_html(undef,
-    "<p><table border=\"0\" cellpadding=\"0\"\n",
-    "cellspacing=\"0\" style=\"margin-bottom: 10px\">",
-    "<tr valign=\"top\"><td style=\"padding-right:10px\">\n");
-
-    Hebcal::out_html(undef,
-    "<b>Include events</b>",
-    "<br><label\nfor=\"nh\">",
+    "<ol><li><label\nfor=\"nh\">",
     $q->checkbox(-name => "nh",
 		 -id => "nh",
 		 -checked => "checked",
@@ -595,35 +615,35 @@ EOHTML
     "</label> <small>(<a\n",
     "href=\"/holidays/\">What\n",
     "are the default Holidays?</a>)</small>",
-    "<br><label\nfor=\"nx\">",
+    "<li><label\nfor=\"nx\">",
     $q->checkbox(-name => "nx",
 		 -id => "nx",
 		 -checked => "checked",
 		 -label => "\nRosh Chodesh"),
     "</label>",
-    "<br><label\nfor=\"mf\">",
+    "<li><label\nfor=\"mf\">",
     $q->checkbox(-name => "mf",
 		 -id => "mf",
 		 -checked => "checked",
 		 -label => "\nMinor Fasts"),
     "</label> <small>(Ta'anit Esther, Tzom Gedaliah, etc.)</small>",
-    "<br><label\nfor=\"ss\">",
+    "<li><label\nfor=\"ss\">",
     $q->checkbox(-name => "ss",
 		 -id => "ss",
 		 -checked => "checked",
 		 -label => "\nSpecial Shabbatot"),
     "</label> <small>(Shabbat Shekalim, Shabbat Zachor, etc.)</small>",
-    "<br><label\nfor=\"o\">",
+    "<li><label\nfor=\"o\">",
     $q->checkbox(-name => "o",
 		 -id => "o",
 		 -label => "\nDays of the Omer"),
     "</label>",
-    "<br><label\nfor=\"s\">",
+    "<li><label\nfor=\"s\">",
     $q->checkbox(-name => "s",
 		 -id => "s",
 		 -label => "\nWeekly sedrot on Saturdays"),
     "</label>\n",
-    "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n",
+    "<ol><li>\n",
     $q->radio_group(-name => "i",
 		    -values => ["off", "on"],
 		    -default => "off",
@@ -632,7 +652,8 @@ EOHTML
 		     "on" => "\nIsrael "}),
     "\n&nbsp;<small>(<a\n",
     "href=\"/help/sedra.html#scheme\">What\n",
-    "is the difference?</a>)</small>");
+    "is the difference?</a>)</small></ol></ol>");
+    Hebcal::out_html(undef, qq{</fieldset>\n});
 
     Hebcal::out_html(undef,
     "<p><label\nfor=\"lg\"><b>Event titles:</b> </label>\n",
@@ -641,30 +662,28 @@ EOHTML
 		   -values => ["s", "sh", "a", "ah", "h"],
 		   -default => "s",
 		   -labels => \%Hebcal::lang_names),
-    "<p><b>Other options</b>",
-    "<br><label\nfor=\"vis\">",
+    "<fieldset><legend>Other options</legend>",
+    "<ol><li><label\nfor=\"vis\">",
     $q->checkbox(-name => "vis",
 		 -id => "vis",
 		 -checked => "checked",
 		 -label => "\nDisplay visual calendar grid"),
     "</label>",
-    "<br><label\nfor=\"Dsome\">",
+    "<li><label\nfor=\"Dsome\">",
     $q->checkbox(-name => "D",
 		 -id => "Dsome",
 		 -label => "\nShow Hebrew date for dates with some event"),
     "</label>",
-    "<br><label\nfor=\"dentire\">",
+    "<li><label\nfor=\"dentire\">",
     $q->checkbox(-name => "d",
 		 -id => "dentire",
 		 -label => "\nShow Hebrew date for entire date range"),
     "</label>",
-    "\n");
+    "</ol></fieldset>\n");
 
+    Hebcal::out_html(undef, qq{<fieldset><legend>Candle lighting times</legend>\n});
     $q->param("c","off") unless defined $q->param("c");
     $q->param("geo","zip") unless defined $q->param("geo");
-
-    Hebcal::out_html(undef, "</td><td\n",
-		"style=\"border-left: thin solid grey;padding-left:10px\">\n");
 
     Hebcal::out_html(undef,
     $q->hidden(-name => "c",
@@ -672,9 +691,9 @@ EOHTML
     $q->hidden(-name => "geo",
 	       -default => "zip",
 	       -id => "geo"),
-    "<b>Candle lighting times</b>\n");
+    "\n");
 
-    Hebcal::out_html(undef, "<br><small>[\n");
+    Hebcal::out_html(undef, "Specify by: <small>[\n");
     foreach my $type ("none", "zip", "city", "pos")
     {
 	if ($type eq $q->param("geo")) {
@@ -686,12 +705,13 @@ EOHTML
 	    Hebcal::out_html(undef, "\n| ");
 	}
     }
-    Hebcal::out_html(undef, "\n]</small><br><br>\n");
+    Hebcal::out_html(undef, "\n]</small>\n");
+    Hebcal::out_html(undef, "<ol>\n");
 
     if ($q->param("geo") eq "city")
     {
 	Hebcal::out_html(undef,
-	"<label\nfor=\"city\">Large City:</label>\n",
+	"<li><label\nfor=\"city\">Large City:</label>\n",
 	$q->popup_menu(-name => "city",
 		       -id => "city",
 		       -values => [sort keys %Hebcal::city_tz],
@@ -700,11 +720,7 @@ EOHTML
     elsif ($q->param("geo") eq "pos")
     {
 	Hebcal::out_html(undef,
-	"<small><a href=\"$latlong_url\">Search</a>\n",
-	"for the exact location of your city.</small><br><br>\n");
-	  
-	Hebcal::out_html(undef,
-	"<label\nfor=\"ladeg\">",
+	"<li><label\nfor=\"ladeg\">",
 	$q->textfield(-name => "ladeg",
 		      -id => "ladeg",
 		      -size => 3,
@@ -722,8 +738,7 @@ EOHTML
 		       -default => "n",
 		       -labels => {"n" => "North Latitude",
 				   "s" => "South Latitude"}),
-	"<br>",
-	"<label\nfor=\"lodeg\">",
+	"<li><label\nfor=\"lodeg\">",
 	$q->textfield(-name => "lodeg",
 		      -id => "lodeg",
 		      -size => 3,
@@ -741,12 +756,15 @@ EOHTML
 		       -default => "w",
 		       -labels => {"e" => "East Longitude",
 				   "w" => "West Longitude"}));
+	Hebcal::out_html(undef,
+	"<ul><li><small><a href=\"$latlong_url\">Search</a>\n",
+	"for the exact location of your city.</small></ul>\n");
     }
     elsif ($q->param("geo") ne "none")
     {
 	# default is Zip Code
 	Hebcal::out_html(undef,
-	"<label\nfor=\"zip\">Zip code:</label>\n",
+	"<li><label\nfor=\"zip\">Zip code:</label>\n",
 	$q->textfield(-name => "zip",
 		      -id => "zip",
 		      -size => 5,
@@ -756,7 +774,7 @@ EOHTML
     if ($q->param("geo") eq "pos" || $q->param("tz_override"))
     {
 	Hebcal::out_html(undef,
-	"<br><label for=\"tz\">Time zone:</label>\n",
+	"<li><label for=\"tz\">Time zone:</label>\n",
 	$q->popup_menu(-name => "tz",
 		       -id => "tz",
 		       -values =>
@@ -769,7 +787,7 @@ EOHTML
 		       (defined $q->param("geo") && $q->param("geo") eq "pos")
 		       ? 0 : "auto",
 		       -labels => \%Hebcal::tz_names),
-	"<br><label for=\"dst\">Daylight Saving Time:</label>\n",
+	"<li><label for=\"dst\">Daylight Saving Time:</label>\n",
 	$q->popup_menu(-name => "dst",
 		       -id => "dst",
 		       -values => ["usa","mx","eu","israel","aunz","none"],
@@ -779,29 +797,30 @@ EOHTML
 
     if ($q->param("geo") ne "none") {
 	Hebcal::out_html(undef,
-	"<br><label\nfor=\"m\">",
+	"<li><label\nfor=\"m\">",
 	"Havdalah minutes past sundown:</label>\n",
 	$q->textfield(-name => "m",
 		      -id => "m",
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
-	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off Havdalah\n",
-	"times)</small>\n\n");
+	"<ul><li><small>(enter\n\"0\" to turn off Havdalah\n",
+	"times)</small></ul>\n");
 
-	Hebcal::out_html(undef, "<br><br>&nbsp;&nbsp;<small><a\n",
+	Hebcal::out_html(undef, "<br>&nbsp;&nbsp;<small><a\n",
 			 "href=\"/help/candles.html#accurate\">How\n",
 			 "accurate are these times?</a></small>");
     }
 
+    Hebcal::out_html(undef, qq{</ol></fieldset>\n});
     Hebcal::out_html(undef,
-    "</td></tr></table>\n",
     $q->hidden(-name => ".cgifields",
 	       -values => ["nx", "nh", "mf", "ss"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",-value => "Get Calendar"),
     "\n</form>\n");
+    Hebcal::out_html(undef, qq{</div><!-- #form -->\n});
 
     my $js=<<JSCRIPT_END;
 <script type="text/javascript">
