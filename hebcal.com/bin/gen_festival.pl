@@ -84,6 +84,7 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
+print "Reading $festival_in...\n" if $opts{"v"};
 my $fxml = XML::Simple::XMLin($festival_in);
 
 if ($opts{'f'}) {
@@ -144,6 +145,7 @@ my $HEB_YR = $hebdate->{"yy"};
 $HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
 my %GREG2HEB;
 my $NUM_YEARS = 5;
+print "Gregorian-to-Hebrew date map...\n" if $opts{"v"};
 foreach my $i (0 .. $NUM_YEARS) {
     my $yr = $HEB_YR + $i - 1;
     my @events = Hebcal::invoke_hebcal("./hebcal -d -x -h -H $yr", '', 0);
@@ -161,6 +163,7 @@ foreach my $i (0 .. $NUM_YEARS) {
 }
 
 my %OBSERVED;
+print "Observed holidays...\n" if $opts{"v"};
 holidays_observed(\%OBSERVED);
 
 my %seph2ashk = reverse %Hebcal::ashk2seph;
@@ -176,6 +179,7 @@ my $helper = new RequestSignatureHelper (
 my $ua;
 foreach my $f (@FESTIVALS)
 {
+    print "   $f...\n" if $opts{"v"};
     write_festival_page($fxml,$f);
     write_csv($fxml,$f) if $opts{'f'};
 }
@@ -185,6 +189,7 @@ if ($opts{'f'}) {
     rename("$opts{'f'}.$$", $opts{'f'}) || die "$opts{'f'}: $!\n";
 }
 
+print "Index page...\n" if $opts{"v"};
 write_index_page($fxml);
 
 exit(0);
@@ -280,32 +285,10 @@ sub format_date_plus_delta {
     return format_date_range($gy1,$gm1,$gd1,$gy2,$gm2,$gd2);
 }
 
-sub write_index_page
-{
-    my($festivals) = @_;
-
-    my $fn = "$outdir/index.html";
-    open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
-
-    print OUT3 Hebcal::html_header("Major Jewish Holidays",
-				   "/holidays/",
-				   "single single-post");
+sub table_index {
+    my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Major Jewish Holidays</h1>
-<div class="entry-meta">
-<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
-</div><!-- .entry-meta -->
-<div class="entry-content">
-<p>All holidays begin at sundown on the evening before the date
-specified in the table below. For example, if the dates for Rosh Hashana
-were listed as <b>Sep 19-20</b>, then the holiday begins at sundown on
-<b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.
-<p>Dates in <b>bold</b> are <em>yom tov</em>, so they have similar obligations
-and restrictions to Shabbat in the sense that normal "work" is forbidden.</p>
-<table id="hebcal-major-holidays">
+<table id="$table_id">
 <tbody>
 EOHTML
 ;
@@ -319,8 +302,7 @@ EOHTML
     }
     print OUT3 "</tr>\n";
 
-    my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
-    foreach my $f (split(/,/, $major)) {
+    foreach my $f (@holidays) {
 	my $descr;
 	my $about = get_var($festivals, $f, 'about');
 	if ($about) {
@@ -344,6 +326,10 @@ EOHTML
 		if ($f eq "Chanukah") {
 		    print OUT3 format_date_plus_delta($gy, $gm, $gd, 7);
 		} elsif ($f eq "Purim" || $f eq "Tish'a B'Av") {
+		    print OUT3 format_single_day_html($gy, $gm, $gd);
+		} elsif (begins_at_dawn($f)) {
+		    print OUT3 format_single_day($gy, $gm, $gd);
+		} elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
 		    print OUT3 format_single_day_html($gy, $gm, $gd);
 		} else {
 		    print OUT3 "<b>"; # begin yomtov
@@ -376,6 +362,72 @@ EOHTML
     print OUT3 <<EOHTML;
 </tbody>
 </table>
+EOHTML
+;
+}
+
+sub write_index_page
+{
+    my($festivals) = @_;
+
+    my $fn = "$outdir/index.html";
+    open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
+
+    my $xtra_head = <<EOHTML;
+<style type="text/css">
+#hebcal-major-holidays tr td, #hebcal-major-holidays tr th, #hebcal-minor-holidays tr td, #hebcal-minor-holidays tr th {
+  padding: 4px;
+}
+#hebcal-major-holidays td.date-obs, #hebcal-minor-holidays td.date-obs {
+  font-size: 12px;
+  line-height:16px;
+}
+</style>
+EOHTML
+;
+
+    print OUT3 Hebcal::html_header("Major Jewish Holidays",
+				   "/holidays/",
+				   "single single-post",
+				   $xtra_head);
+    print OUT3 <<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Holidays</h1>
+<div class="entry-meta">
+<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+</div><!-- .entry-meta -->
+<div class="entry-content">
+<p>All holidays begin at sundown on the evening before the date
+specified in the tables below. For example, if the dates for Rosh
+Hashana were listed as <b>Sep 19-20</b>, then the holiday begins at
+sundown on <b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.</p>
+<p>Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
+obligations and restrictions to Shabbat in the sense that normal "work"
+is forbidden.</p>
+<p>The tables of holidays below include the current year and 4 years
+into the future for the Diaspora. <a href="/hebcal/">Create a custom
+calendar</a> for any year 0001-9999 and and export to your favorite
+desktop- or web-based calendar.</p>
+EOHTML
+;
+
+    my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
+    my @major = split(/,/, $major);
+    print OUT3 "<h2>Major holidays</h2>\n";
+    table_index($festivals, "hebcal-major-holidays", @major);
+
+    my %major = map { $_ => 1 } @major;
+    my @minor;
+    foreach my $f (@FESTIVALS) {
+	push(@minor, $f) unless defined $major{$f};
+    }
+
+    print OUT3 "<h2>Minor holidays, special Shabbatot, public fasts</h2>\n";
+    table_index($festivals, "hebcal-minor-holidays", @minor);
+
+    print OUT3 <<EOHTML;
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
@@ -481,6 +533,11 @@ sub write_festival_part
 	    warn "$f: missing Haft href\n";
 	}
     }
+}
+
+sub begins_at_dawn {
+    my($f) = @_;
+    return ($f =~ /^(Tzom|Asara|Ta\'anit) /) ? 1 : 0;
 }
 
 sub write_festival_page
@@ -595,8 +652,7 @@ EOHTML
 
     if (defined $OBSERVED{$f})
     {
-	my $rise_or_set = ($f =~ /^(Tzom|Asara|Ta\'anit) /) ?
-	    "dawn" : "sundown";
+	my $rise_or_set = begins_at_dawn($f) ? "dawn" : "sundown";
 
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>

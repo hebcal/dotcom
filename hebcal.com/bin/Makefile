@@ -34,7 +34,7 @@ $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 
 $(HOLIDAYS)/purim.html: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
-	./gen_festival.pl $(XML_FESTIVAL) $(HOLIDAYS)
+	./gen_festival.pl -v $(XML_FESTIVAL) $(HOLIDAYS)
 
 converter: ../converter/sedra/19/1900.inc
 
