@@ -454,7 +454,7 @@ sub form
 	 "Gregorian date and then come back to this page.</p>\n");
 
     Hebcal::out_html($cfg,
-		     qq{<form name="f1" id="f1" method="post"\naction="${script_name}a.cgi">},
+		     qq{<form name="f1" id="f1" method="post"\naction="${script_name}">},
 		     qq{<ol>\n});
 
     for (my $i = 1; $i <= $count; $i++)
