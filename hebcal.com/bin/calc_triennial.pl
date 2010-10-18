@@ -361,8 +361,8 @@ $hebrew_year -
 <a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on">$hy2</a> -
 <a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on">$hy3</a></p>
 <p>Leyning coordinators: <a
-href="/help/sedra.html#download">download parsha spreadheet</a> with
-aliyah-by-aliyah breakdowns.</p>
+href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
+parsha spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
 <h3>Genesis</h3>
 <dl>
 EOHTML
