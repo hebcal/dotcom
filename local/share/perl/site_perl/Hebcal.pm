@@ -1394,16 +1394,69 @@ sub start_html($$$$$)
 	 );
 }
 
+my $HTML_MENU_ITEMS =
+    [
+     [ "Home", "/" ],
+     [ "Calendar", "/hebcal/" ],
+     [ "Holidays", "/holidays/" ],
+     [ "Date Converter", "/converter/",
+       [ "Yahrzeit", "/yahrzeit/" ] ],
+     [ "Shabbat Times", "/shabbat/", 
+       [ "Email List", "/email/" ],
+       [ "Widgets", "/home/shabbat/widgets" ] ],
+     [ "Torah Readings", "/sedrot/" ],
+     [ "About Hebcal", "/home/about",
+       [ "Contact Us", "/home/about/contact" ],
+       [ "Donate", "/home/about/donate" ],
+       [ "News", "/news/" ],
+       [ "Privacy Policy", "/home/about/privacy-policy"] ],
+     [ "Help", "/home/help" ],
+    ];
+
+sub html_menu_item {
+    my($title,$path,$selected) = @_;
+    my @classes = ();
+    push(@classes, "page_item") unless $path eq "/";
+    push(@classes, "current_page_item") if $path eq $selected;
+    my $str = qq{<li};
+    if (@classes) {
+	my $classes = join(" ", @classes);
+	$str .= qq{ class="$classes"};
+    }
+    $str .= qq{><a href="$path" title="$title">$title</a>};
+}
+
+sub html_menu {
+    my($selected) = @_;
+    my $str = qq{<ul>};
+    foreach my $item (@{$HTML_MENU_ITEMS}) {
+	my $title = $item->[0];
+	my $path = $item->[1];
+	$str .= html_menu_item($title, $path, $selected);
+	if (defined $item->[2]) {
+	    $str .= qq{<ul class="children">};
+	    for (my $i = 2; defined $item->[$i]; $i++) {
+		$str .= html_menu_item($item->[$i]->[0], $item->[$i]->[1], $selected);
+		$str .= qq{</li>};
+	    }
+	    $str .= qq{</ul>};
+	}
+	$str .= qq{</li>};
+    }
+    $str .= qq{</ul>};
+    return $str;
+}
 
 sub html_header
 {
     my($title,$base_href,$body_class,$xtra_head) = @_;
     $xtra_head = "" unless $xtra_head;
+    my $menu = html_menu($base_href);
     my $str = <<EOHTML;
 <!DOCTYPE html>
 <html><head><title>$title | Hebcal Jewish Calendar</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="$base_href" target="_top">
+<base href="http://www.hebcal.com$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
 $xtra_head</head>
 <body class="$body_class">
@@ -1416,7 +1469,7 @@ $xtra_head</head>
 </div><!-- #branding -->
 <div id="access" role="navigation">
 <div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
-<div class="menu"><ul><li class="current_page_item"><a href="/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="/hebcal/" title="Calendar + Holidays">Calendar + Holidays</a></li><li class="page_item page-item-104"><a href="/converter/" title="Date Converter">Date Converter</a></li><li class="page_item page-item-107"><a href="/yahrzeit/" title="Yahrzeit">Yahrzeit</a></li><li class="page_item page-item-105"><a href="/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72"><a href="/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73"><a href="/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-63"><a href="/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71"><a href="/home/help" title="Help + FAQ">Help + FAQ</a></li></ul></div>
+<div class="menu">$menu</div>
 </div><!-- #access -->
 </div><!-- #masthead -->
 </div><!-- #header -->

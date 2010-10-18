@@ -340,13 +340,13 @@ sub write_index_page
     my $hy3 = $hebrew_year + 3;
 
     print OUT1 Hebcal::html_header("Torah Readings",
-				   "http://www.hebcal.com/sedrot/",
+				   "/sedrot/",
 				   "page page-template page-template-onecolumn-page-php");
     print OUT1 <<EOHTML;
 <div id="container" class="one-column">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title"><a href="http://www.hebcal.com/sedrot/index.xml"><img
+<h1 class="entry-title"><a href="index.xml"><img
 src="/i/xml.gif" border="0" alt="View the raw XML source" align="right"
 width="36" height="14"></a>
 Torah Readings</h1>
@@ -557,7 +557,7 @@ EOHTML
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
     print OUT2 Hebcal::html_header("$h | Torah Readings",
-				   "http://www.hebcal.com/sedrot/$anchor.html",
+				   "/sedrot/$anchor.html",
 				   "single single-post");
 
     my @tri_date;

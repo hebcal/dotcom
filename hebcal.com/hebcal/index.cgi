@@ -525,7 +525,7 @@ sub form
 
     Hebcal::out_html(undef,
 		     Hebcal::html_header("Interactive Calendar",
-					 "http://www.hebcal.com/hebcal/",
+					 $script_name,
 					 "single single-post",
 					 qq{<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">\n<meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">\n})
 	);
@@ -937,7 +937,7 @@ sub results_page
 
     Hebcal::out_html(undef,
 		     Hebcal::html_header($results_title,
-					 "http://www.hebcal.com/hebcal/",
+					 $script_name,
 					 "single single-post")
 	);
     my $head_divs = <<EOHTML;

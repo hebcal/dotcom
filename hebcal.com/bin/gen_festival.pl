@@ -288,7 +288,7 @@ sub write_index_page
     open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
 
     print OUT3 Hebcal::html_header("Major Jewish Holidays",
-				   "http://www.hebcal.com/holidays/",
+				   "/holidays/",
 				   "single single-post");
     print OUT3 <<EOHTML;
 <div id="container" class="single-attachment">
@@ -516,31 +516,31 @@ sub write_festival_page
     }
 
     print OUT2 Hebcal::html_header($page_title,
-				   "http://www.hebcal.com/holidays/$slug",
+				   "/holidays/$slug",
 				   "single single-post");
 
     my $prev = $PREV{$f};
     my($prev_link) = '';
-    my($prev_anchor);
+    my($prev_slug);
     if ($prev)
     {
-	$prev_anchor = Hebcal::make_anchor($prev);
+	$prev_slug = Hebcal::make_anchor($prev);
 	my $title = "Previous Holiday";
 	$prev_link = <<EOHTML
-<div class="nav-previous"><a href="$prev_anchor" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
+<div class="nav-previous"><a href="$prev_slug" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
 EOHTML
 ;
     }
 
     my $next = $NEXT{$f};
     my($next_link) = '';
-    my($next_anchor);
+    my($next_slug);
     if ($next)
     {
-	$next_anchor = Hebcal::make_anchor($next);
+	$next_slug = Hebcal::make_anchor($next);
 	my $title = "Next Holiday";
 	$next_link = <<EOHTML
-<div class="nav-next"><a href="$next_anchor" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
+<div class="nav-next"><a href="$next_slug" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
 EOHTML
 ;
     }
