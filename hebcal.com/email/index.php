@@ -348,7 +348,7 @@ href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.
 }
 
 function my_footer() {
-    $html .= <<<EOD
+    $html = <<<EOD
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
