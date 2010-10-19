@@ -587,26 +587,22 @@ and other applications.</p>},
 		  -size => 4,
 		  -maxlength => 4),
     "</label>\n",
-    $q->hidden(-name => "v",-value => 1,-override => 1),
-    "\n&nbsp;&nbsp;&nbsp;\n",
-    "<label for=\"month\">Month:\n",
-    $q->popup_menu(-name => "month",
-		   -id => "month",
-		   -values => ["x",1..12],
-		   -default => "x",
-		   -labels => \%Hebcal::MoY_long),
-    "</label>\n",
-    "<ol><li>", $q->small("Use all digits to specify a year.\nYou probably aren't",
-			  "interested in 93, but rather 1993.\n"), "</ol>",
-    "<li>Year type:\n",
+    "<ol><li>",
     $q->radio_group(-name => "yt",
 		    -values => ["G", "H"],
 		    -default => "G",
 		    -onClick => "s6(this.value)",
 		    -labels =>
 		    {"G" => " Gregorian (common era) ",
-		     "H" => " Hebrew Year "}));
-    Hebcal::out_html(undef, qq{</ol></fieldset>\n});
+		     "H" => " Hebrew Year"}),
+    "\n<li>", $q->small("Use all digits to specify a year.\nYou probably aren't",
+			"interested in 08, but rather 2008.\n"),
+    "</ol>",
+    "</ol>\n",
+    $q->hidden(-name => "month", -value => "x"),
+    $q->hidden(-name => "v",-value => 1,-override => 1),
+    qq{</fieldset>\n}
+    );
 
     Hebcal::out_html(undef, qq{<fieldset><legend>Include events</legend>\n});
     Hebcal::out_html(undef,
@@ -838,8 +834,8 @@ var d=document;
 function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
 d.f1.submit();return false;}
 function s6(val){
-if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
-if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
+if(val=='G'){d.f1.year.value=$this_year}
+if(val=='H'){d.f1.year.value=$hyear}
 return false;}
 d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
 d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
@@ -966,7 +962,9 @@ sub results_page
 
     my $xtra_head = <<EOHTML;
 <style type="text/css">
-.pbba { page-break-before: always; }
+.pbba { page-break-before: always }
+div.cal { margin-bottom: 18px }
+#hebcal-results table.month h2 { margin: 0.2em; text-align: center }
 </style>
 EOHTML
 ;
@@ -1316,7 +1314,6 @@ sub write_html_cal
     my $id = $cal_ids->[$i];
     my $class = "cal";
     if ($i != 0) {
-	Hebcal::out_html(undef, "<p>&nbsp;</p>\n");
 	$class .= " pbba";
     }
     if ($id eq sprintf("%04d-%02d", $this_year, $this_mon)) {
@@ -1334,14 +1331,9 @@ sub new_html_cal
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
 					    "month" => $month);
-    $cal->width("97%");
     $cal->border(1);
-#    $cal->cellclass("calcell");
-#    $cal->todaycellclass("today");
-
-    $cal->header("<h2 style=\"margin: 0.2em;\" align=\"center\">" .
-		 sprintf("%s %04d\n", $Hebcal::MoY_long{$month}, $year) .
-		 "</h2>\n");
+    $cal->tableclass("month");
+    $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
 
     my $end_day = Date::Calc::Days_in_Month($year, $month);
     for (my $mday = 1; $mday <= $end_day ; $mday++)
