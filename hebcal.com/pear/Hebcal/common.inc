@@ -409,14 +409,14 @@ EOD;
     return $html;
 }
 
-function html_header_new($title, $base_href) {
+function html_header_new($title, $base_href, $xtra_head="") {
     $html = <<<EOD
 <!DOCTYPE html>
 <html><head><title>$title | Hebcal Jewish Calendar</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
-</head>
+$xtra_head</head>
 <body class="single single-post">
 <div id="wrapper" class="hfeed">
 <div id="header">
