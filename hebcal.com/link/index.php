@@ -58,28 +58,35 @@ if (isset($param["a"]) && ($param["a"] == "1" || $param["a"] == "on")) {
     $ashk = "";
 }
 
+$xtra_head = <<<EOD
+<script type="text/javascript" src="/i/sh-3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushXml.js"></script>
+<script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushCss.js"></script>
+<link type="text/css" rel="stylesheet" href="/i/sh-3.0.83/styles/shCoreDefault.css">
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+EOD;
+
+echo html_header_new("Add weekly Shabbat candle-lighting times to your synagogue website",
+		     "http://www.hebcal.com/link/",
+		     $xtra_head);
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head><title>Add weekly Shabbat candle-lighting times to your synagogue website</title>
-<base target="_top">
-<link type="text/css" rel="stylesheet" href="/style.css">
-</head>
-<body>
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a> <tt>-&gt;</tt>
-Link
-</td><td align="right"><a href="/help/">Help</a> -
-<a href="/search/">Search</a></td></tr></table>
-<h1>Add Shabbat Times to your Website</h1>
+<!-- header -->
+
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Add Shabbat Times to your Website</h1>
+<div class="entry-content">
 
 <p>You can use these HTML tags to add weekly Shabbat candle-lighting
-times and Torah portion directly on your synagogue's website. To 
-display other information on your site (such as today's Hebrew date 
-or a full Jewish Calendar, see our <a href="/help/link.html">Linking
-from your Synagogue to Hebcal</a> page.</p>
+times and Torah portion directly on your synagogue's website. See related articles <a
+href="/home/40/displaying-todays-hebrew-date-on-your-website">Displaying
+today’s Hebrew date on your website</a> and <a
+href="/home/35/displaying-a-jewish-calendar-on-your-website">Displaying
+a Jewish Calendar on your website</a> and <a
+href="/home/42/rss-feeds-of-hebcal-com-content">RSS
+Feeds of Hebcal.com content</a> for other ways to include Hebcal
+content.</p>
 
 <p>The following
 tags are for <b><?php echo $descr ?></b>
@@ -88,8 +95,7 @@ tags are for <b><?php echo $descr ?></b>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML:</p>
 
-<form>
-<textarea cols="84" rows="12" readonly wrap="virtual">
+<pre class="brush:html">
 &lt;script type="text/javascript"
 src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j"&gt;
 &lt;/script&gt;
@@ -99,13 +105,11 @@ src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;c
 Candle Lighting times for <?php echo $descr ?>&lt;/a&gt;
 courtesy of hebcal.com.
 &lt;/noscript&gt;
-
-</textarea>
-</form>
+</pre>
 
 <p>The result will look like this:</p>
 
-<blockquote>
+<div>
 <script type="text/javascript"
 src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;cfg=j">
 </script>
@@ -115,7 +119,7 @@ src="http://www.hebcal.com/shabbat/?<?php echo $geo_link ?>;m=<?php echo $m ?>;c
 Candle Lighting times for <?php echo $descr ?></a>
 courtesy of hebcal.com.
 </noscript>
-</blockquote>
+</div>
 
 <p>You can also <a href="#fonts">customize the fonts</a> used.</p>
 
@@ -190,10 +194,8 @@ CSS stylesheet like this to the
 <tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
 page:</p>
 
-<form>
-<textarea cols="84" rows="16">
+<pre class="brush:html">
 &lt;style type="text/css"&gt;
-&lt;!--
 #hebcal {
  font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
  font-size: small;
@@ -205,17 +207,21 @@ page:</p>
 #hebcal .havdalah { color: green } 
 #hebcal .parashat { color: black; background: #ff9 }
 #hebcal .holiday { display: none }
---&gt;
 &lt;/style&gt;
-
-</textarea>
-</form>
+</pre>
 
 <p>Those fonts and colors are just an example.  <a
 href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 
 <?php
-    echo html_footer_lite();
+    $html = <<<EOD
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOD;
+    echo $html;
+    echo html_footer_new();
     exit();
 ?>
