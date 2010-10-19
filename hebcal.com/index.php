@@ -1,4 +1,10 @@
 <?php
+$VER = '$Revision$';
+$matches = array();
+if (preg_match('/(\d+)/', $VER, $matches)) {
+    $VER = $matches[1];
+}
+
 if (isset($_COOKIE["C"])) {
     header("Cache-Control: private");
     parse_str($_COOKIE["C"], $param);
@@ -120,7 +126,6 @@ echo html_header_new("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.
 <div id="container">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title">Home</h1>
 <div class="entry-content">
 <span class="fpsubhead">
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
@@ -342,6 +347,6 @@ id="zip">&nbsp;<input type="submit" value="Go">
 </ul>
 </div><!-- #primary .widget-area -->
 <?php
-echo html_footer_new(false);
+echo html_footer_new();
 ?>
 
