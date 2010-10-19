@@ -1,28 +1,19 @@
 <?php
+require "../pear/Hebcal/common.inc";
 header("Content-Type: text/html; charset=UTF-8");
+$VER = '$Revision$';
+$matches = array();
+if (preg_match('/(\d+)/', $VER, $matches)) {
+    $VER = $matches[1];
+}
+echo html_header_new("Jewish Calendar downloads for Apple iCal",
+		     "http://www.hebcal.com" . $_SERVER["REQUEST_URI"]);
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<!-- $Id$ -->
-<html lang="en">
-<head>
-<title>Jewish Calendar downloads for Apple iCal - hebcal.com</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<base href="http://www.hebcal.com/ical/" target="_top">
-<link rel="stylesheet" href="/style.css" type="text/css">
-</head><body>
-
-<table width="100%" class="navbar">
-<tr><td>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-Jewish Calendar downloads for Apple iCal
-</td>
-<td align="right">
-<a href="/help/">Help</a> -
-<a href="/search/">Search</a>
-</td></tr></table>
-
-<h1>Jewish Calendar downloads for Apple iCal</h1>
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Jewish Calendar downloads for Apple iCal</h1>
+<div class="entry-content">
 
 <h2>Quick Start</h2>
 
@@ -96,25 +87,8 @@ and holidays, Torah readings, etc, follow these instructions:</p>
 <li>Click <b>OK</b> in the next dialog box
 </ol>
 
-<p>
-<hr noshade size="1">
-<span class="tiny">Copyright
-&copy; 2010 Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/news/">News</a> -
-<a href="/donations/">Donate</a>
-<br>
-<!-- hhmts start -->
-Last modified: Fri Feb 26 14:56:03 PST 2010
-<!-- hhmts end -->
-($Revision$)
-</span>
-<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct="UA-967247-1";
-urchinTracker();
-</script>
-</body></html>
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+<?php echo html_footer_new(); ?>
