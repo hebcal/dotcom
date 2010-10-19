@@ -106,29 +106,22 @@ if ($hmnum == 13 && $hd >= 1) {
 		       $chanukah_cal["monthname"],
 		       $chanukah_cal["year"]);
 }
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<!-- $Id$ -->
-<html lang="en">
-<head>
-<title>Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com</title>
+$xtra_head = <<<EOD
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.classify.org/safesurf/" l r (SS~~000 1))'>
 <meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l gen true for "http://www.hebcal.com" r (n 0 s 0 v 0 l 0))'>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
-<link rel="stylesheet" href="/style.css" type="text/css">
-<base href="http://www.hebcal.com/" target="_top">
-</head>
-<body>
-<form action="/cgi-bin/htsearch" method="get">
-<table width="100%" class="navbar"><tr><td><strong>hebcal.com:</strong>
-Jewish Calendar Tools</td><td
-align="right"><input type="text" name="words" size="30">
-<input type="hidden" name="config" value="hebcal">
-<input type="submit" value="Search"></td></tr></table>
-</form>
-<h1>hebcal.com: Jewish Calendar Tools</h1>
+EOD;
+echo html_header_new("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
+		     "http://www.hebcal.com/",
+		     $xtra_head,
+		     false);
+?>
+<div id="container">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">Home</h1>
+<div class="entry-content">
 <span class="fpsubhead">
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
 include("./today.inc");
@@ -233,11 +226,6 @@ MESSAGE_END;
     echo "</blockquote>\n";
 }
 ?>
-<table border="0" cellpadding="1" cellspacing="0">
-<?php if (!isset($asin)) { ?>
-<tr><td class="tiny">&nbsp;</td></tr>
-<?php } ?>
-<tr><td valign="top">
 <h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
 <ul class="gtl">
 <li>
@@ -299,13 +287,20 @@ Aliyah-by-aliyah breakdown for weekly parshiyot
 <li><a href="/search/">Site Search</a>
 <li><a href="/help/">Help and Frequently Asked Questions</a>
 </ul>
-</td>
-<td>&nbsp;&nbsp;</td>
-<td valign="top" bgcolor="#ffddaa"
-style="padding-left: 10px; padding-right: 5px">
-<h3>Quick Links</h3>
-<hr noshade size="1">
-<ul class="gtl">
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+<div id="primary" class="widget-area" role="complementary">
+<ul class="xoxo">
+<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
+	<div><label class="screen-reader-text" for="s">Search for:</label>
+	<input type="text" value="" name="s" id="s" />
+	<input type="submit" id="searchsubmit" value="Search" />
+	</div>
+	</form></li>
+<li id="categories-3" class="widget-container widget_categories"><h3 class="widget-title">Quick links</h3>
+<ul>
 <!-- Begin temp holiday -->
 <!-- End temp holiday -->
 <li><b><a
@@ -330,10 +325,10 @@ height="12">&nbsp;<a href="/ical/">Downloads for iCal</a>
 <!-- Begin temp holiday2 -->
 <!-- End temp holiday2 -->
 </ul>
+</li>
+<li id="candles-3" class="widget-container widget_categories"><h3 class="widget-title">Candle lighting</h3>
 <form action="/shabbat/" method="get">
 <input type="hidden" name="geo" value="zip">
-<h4>Candle lighting</h4>
-<hr noshade size="1">
 <label for="zip">Zip code:</label>
 <input type="text" name="zip" size="5" maxlength="5"
 <?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
@@ -343,15 +338,10 @@ id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="tag" value="fp.ql">
 <br><small>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
-<br><br><hr noshade size="1">
-<iframe
-src="http://www.facebook.com/plugins/likebox.php?id=126124787404001&amp;width=200&amp;connections=0&amp;stream=false&amp;header=false&amp;height=62"
-scrolling="no" frameborder="0"
-style="border:none; overflow:hidden; width:200px; height:62px;"
-allowTransparency="true"></iframe>
-</td></tr></table>
-<p>
+</li>
+</ul>
+</div><!-- #primary .widget-area -->
 <?php
-echo html_footer_lite(false);
+echo html_footer_new(false);
 ?>
 

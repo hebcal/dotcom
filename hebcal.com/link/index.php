@@ -88,8 +88,6 @@ echo html_header_new("Add weekly Shabbat candle-lighting times to your synagogue
 		     "http://www.hebcal.com" . $_SERVER["REQUEST_URI"],
 		     $xtra_head);
 ?>
-<!-- header -->
-
 <div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
