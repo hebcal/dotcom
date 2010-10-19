@@ -452,13 +452,13 @@ sub display_html_common
     my($items) = @_;
 
     Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
-    Hebcal::out_html($cfg,"<dl>\n");
+    Hebcal::out_html($cfg,"<ul id=\"hebcal-results\">\n");
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
-	Hebcal::out_html($cfg,qq{<dt class="$items->[$i]->{'class'}">});
+	Hebcal::out_html($cfg,qq{<li class="$items->[$i]->{'class'}">});
 
 	my $anchor = '';
 	if (!$cfg)
@@ -487,10 +487,10 @@ $items->[$i]->{'date'}});
 target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
 	}
     
-	Hebcal::out_html($cfg,qq{</dt>\n});
+	Hebcal::out_html($cfg,qq{</li>\n});
     }
 
-    Hebcal::out_html($cfg,"</dl>\n");
+    Hebcal::out_html($cfg,"</ul>\n");
 }
 
 sub display_javascript
@@ -501,8 +501,13 @@ sub display_javascript
 
     if ($cfg eq "i" || $cfg eq "widget") {
 	print $q->header();
-	Hebcal::out_html
-	    ($cfg, Hebcal::start_html($q, $title, undef, undef, undef));
+	my $base = "http://" . $q->virtual_host() . $script_name;
+	print $q->start_html(
+	    -title => $title,
+	    -target => "_top",
+	    -xbase => $base,
+	    -style => { -verbatim => "ul#hebcal-results { list-style-type: none }" }
+	    );
     } else {
 	print "Content-Type: application/x-javascript\015\012\015\012";
     }
@@ -562,8 +567,9 @@ sub display_javascript
 <font size="-2" face="Arial"><a target="$tgt"
 href="$url">1-Click Shabbat</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
-</div></div>
-</div>
+</div><!-- .copyright -->
+</div><!-- #hebcal-$loc_class -->
+</div><!-- #hebcal -->
 });
     }
 
@@ -578,29 +584,11 @@ sub display_html
 {
     my($items) = @_;
 
-    my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
-    my $rss_href = self_url() . ";cfg=r";
+    my $title = "Shabbat Candle Lighting Times for $city_descr";
 
     print $q->header();
-    Hebcal::out_html($cfg,
-    Hebcal::start_html($q, $title,
-			[
-			 qq{<link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">},
-			 ],
-			undef, undef));
 
-    Hebcal::out_html($cfg,
-    Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
-    qq{<h1><a href="$rss_href"><img\nsrc="/i/xml.gif" border="0" alt="View the raw XML source" align="right" width="36" height="14"></a>\n},
-    "1-Click\nShabbat Candle Lighting Times</h1>\n");
-
-    Hebcal::out_html($cfg, "<h3>$city_descr</h3>\n");
-
-    if (defined $dst_descr && defined $tz_descr)
-    {
-	Hebcal::out_html
-	    ($cfg, "&nbsp;&nbsp;$tz_descr\n<br>&nbsp;&nbsp;$dst_descr\n");
-    }
+    my_head($title);
 
     Hebcal::out_html($cfg, $Hebcal::indiana_warning)
 	if ($city_descr =~ / IN /);
@@ -634,8 +622,8 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on;mf=on;ss=on';
     $url .= ';tag=1c';
 
-    Hebcal::out_html($cfg,"<h4>More from hebcal.com</h4>\n",
-		     "<ul class=\"gtl\">\n",
+    Hebcal::out_html($cfg,"<h3>More from hebcal.com</h3>\n",
+		     "<ul>\n",
 		      "<li>See all of <a\nhref=\"$url\">this\n",
 		      "month's calendar</a>\n");
 
@@ -695,19 +683,55 @@ sub display_html
     form($cfg,0,'','');
 }
 
+sub my_head {
+    my($title) = @_;
+    my $rss_href = self_url() . ";cfg=r";
+    my $xtra_head = <<EOHTML;
+<link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
+<style type="text/css">
+.entry-content fieldset {
+border:1px solid #E7E7E7;
+margin:0 0 12px;
+padding:6px;
+}
+.entry-content input, .entry-content select {
+margin:0;
+}
+form ol {
+list-style:none inside none;
+margin:0 0 12px 12px;
+}
+#hebcal-form-left { float:left; width:48%;}
+#hebcal-form-right { float:right; width:48%;}
+#hebcal-form-bottom { clear:both; }
+ul#hebcal-results { list-style-type: none }
+</style>
+EOHTML
+;
+	my $head_divs = <<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">$title</h1>
+<div class="entry-content">
+EOHTML
+;
+	Hebcal::out_html($cfg,
+			 Hebcal::html_header($title,
+					     $script_name,
+					     "single single-post",
+					     $xtra_head),
+			 $head_divs
+	    );
+}
+
 sub form($$$$)
 {
     my($cfg,$head,$message,$help) = @_;
 
-    if ($head)
-    {
+    if ($head) {
 	print $q->header();
-	Hebcal::out_html($cfg,
-	Hebcal::start_html($q, '1-Click Shabbat', undef, undef, undef));
-
-	Hebcal::out_html($cfg,
-	Hebcal::navbar2($q, "1-Click Shabbat", 1, undef, undef),
-	"<h1>1-Click\nShabbat Candle Lighting Times</h1>\n");
+	my_head("Shabbat Candle Lighting Times");
     }
 
     if (defined $cfg && $cfg eq 'w')
@@ -722,21 +746,20 @@ sub form($$$$)
     if ($message ne '')
     {
 	$help = '' unless defined $help;
-	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
-	    $message . "</p>" . $help;
+	$message = "<blockquote><p\nstyle=\"color: red\">" .
+	    $message . "</p>" . $help . "</blockquote>";
     }
 
     Hebcal::out_html($cfg,
 	qq{$message\n},
-	qq{<hr noshade size="1"><a name="change"></a><h3>Change City</h3>\n},
-	qq{<table cellpadding="8"><tr><td class="box">\n},
-	qq{<h4>Zip Code</h4>\n},
-	qq{<br>\n},
+	qq{<div id="hebcal-form-left">\n},
+	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
-	qq{<label for="zip">Zip code:\n},
+	qq{<ol>\n},
+	qq{<li><label for="zip">Zip code:\n},
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
 		      -size => 5,
@@ -746,13 +769,13 @@ sub form($$$$)
     if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
     {
 	Hebcal::out_html($cfg,
-	qq{&nbsp;&nbsp;&nbsp;&nbsp;<label\nfor="tz">Time zone:\n},
+	qq{<li><label\nfor="tz">Time zone:\n},
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
 		       -values => ['auto',-5,-6,-7,-8,-9,-10],
 		       -default => 'auto',
 		       -labels => \%Hebcal::tz_names),
-	qq{</label><br>Daylight Saving Time:\n},
+	qq{</label>\n<li>Daylight Saving Time:\n},
 	$q->radio_group(-name => 'dst',
 			-values => ['usa','none'],
 			-default => 'usa',
@@ -762,43 +785,52 @@ sub form($$$$)
     }
     
     Hebcal::out_html($cfg,
-	"<br><label\nfor=\"m1\">Havdalah minutes past sundown:\n",
+	"<li><label\nfor=\"m1\">Havdalah minutes past sundown:\n",
 	$q->textfield(-name => 'm',
 		      -id => 'm1',
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
-	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off\nHavdalah times)</small>",
-	qq{<br><br><input\ntype="submit" value="Get Shabbat Times"></form>});
+	"<ol><li><small>(enter\n\"0\" to turn off\nHavdalah times)</small></ol>",
+	qq{<li><input\ntype="submit" value="Get Shabbat Times">\n},
+	qq{</ol></fieldset></form>});
 
+    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-left -->\n});
+    Hebcal::out_html(undef, qq{<div id="hebcal-form-right">\n});
 
     Hebcal::out_html($cfg,
-	qq{</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class="box">\n},
-	qq{<h4>Major City</h4>},
-	qq{<br>\n},
 	qq{<form name="f2" id="f2"\naction="$script_name">},
+	qq{<fieldset><legend>Get Shabbat times by Major City</legend>\n},
 	$q->hidden(-name => 'geo',
 		   -value => 'city',
 		   -override => 1),
-	qq{<label\nfor="city">Closest City:\n},
+	qq{<ol><li>},
 	$q->popup_menu(-name => 'city',
 		       -id => 'city',
 		       -values => [sort keys %Hebcal::city_tz],
 		       -default => 'New York'),
-	qq{</label>},
-	"<br><label\nfor=\"m2\">Havdalah minutes past sundown:\n",
+	"<li><label\nfor=\"m2\">Havdalah minutes past sundown:\n",
 	$q->textfield(-name => 'm',
 		      -id => 'm2',
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
-	"<br>&nbsp;&nbsp;<small>(enter\n\"0\" to turn off\nHavdalah times)</small>",
-	qq{<br><br><input\ntype="submit" value="Get Shabbat Times"></form>},
-	qq{</td></tr></table>});
+	"<ol><li><small>(enter\n\"0\" to turn off\nHavdalah times)</small></ol>",
+	qq{<li><input\ntype="submit" value="Get Shabbat Times">\n},
+	qq{</ol></fieldset></form>});
+    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-right -->\n});
 
-    Hebcal::out_html($cfg,Hebcal::html_footer($q,$rcsrev));
+    my $footer_divs=<<EOHTML;
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
+    Hebcal::out_html(undef, $footer_divs);
+    Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev));
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
     Hebcal::cache_end() if $cache;
     exit(0);
