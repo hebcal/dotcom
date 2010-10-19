@@ -1403,6 +1403,7 @@ my $HTML_MENU_ITEMS =
        [ "Yahrzeit", "/yahrzeit/" ] ],
      [ "Shabbat Times", "/shabbat/", 
        [ "Email List", "/email/" ],
+       [ "Refrigerator candle lighting", "/home/shabbat/fridge" ],
        [ "Widgets", "/home/shabbat/widgets" ] ],
      [ "Torah Readings", "/sedrot/" ],
      [ "About Hebcal", "/home/about",
