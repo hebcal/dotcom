@@ -571,6 +571,10 @@ EOHTML
 
     Hebcal::out_html(undef,
     $message, "\n",
+    qq{<p>Select your calendar options and click the <b>Preview
+Calendar</b> button at the bottom of the form. Once you have created
+your custom calendar, you can export to Outlook, iCal, Google Calendar,
+and other applications.</p>},
     "<div id=\"form\">",
     "<form id=\"f1\" name=\"f1\"\naction=\"",
     $script_name, "\">",
@@ -823,7 +827,7 @@ EOHTML
 	       -values => ["nx", "nh", "mf", "ss"],
 	       "-override"=>1),
     "\n",
-    $q->submit(-name => ".s",-value => "Get Calendar"),
+    $q->submit(-name => ".s",-value => "Preview Calendar"),
     qq{</div><!-- #hebcal-form-bottom -->\n},
     qq{</form>\n},
     qq{</div><!-- #form -->\n});
@@ -960,10 +964,17 @@ sub results_page
     print STDOUT $q->header(-expires => $http_expires,
 			    -type => $content_type);
 
+    my $xtra_head = <<EOHTML;
+<style type="text/css">
+.pbba { page-break-before: always; }
+</style>
+EOHTML
+;
     Hebcal::out_html(undef,
 		     Hebcal::html_header($results_title,
 					 $script_name,
-					 "single single-post")
+					 "single single-post",
+					 $xtra_head)
 	);
     my $head_divs = <<EOHTML;
 <div id="container" class="single-attachment">
@@ -1178,12 +1189,12 @@ EOHTML
     Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
-    Hebcal::out_html(undef, "<p>");
 
     my $cal;
     my $prev_mon = 0;
 
     my @html_cals;
+    my @html_cal_ids;
     for (my $i = 0; $i < $numEntries; $i++)
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1220,6 +1231,7 @@ EOHTML
 					    $prev_title,$prev_url,
 					    $next_title,$next_url);
 			push(@html_cals, $cal);
+			push(@html_cal_ids, sprintf("%04d-%02d", $year, $j));
 		    }
 		}
 
@@ -1227,6 +1239,7 @@ EOHTML
 		$cal = new_html_cal($year,$mon,
 				    $prev_title,$prev_url,$next_title,$next_url);
 		push(@html_cals, $cal);
+		push(@html_cal_ids, sprintf("%04d-%02d", $year, $mon));
 	    }
 
 	    my $cal_subj = $subj;
@@ -1268,22 +1281,8 @@ EOHTML
     }
 
     if (@html_cals) {
-	my $lang = $q->param("lg");
-	my $dir = "";
-	if ($lang && $lang eq "h") {
-	    $dir = qq{ dir="rtl"};
-	}
-	my $cal2 = shift(@html_cals);
-	Hebcal::out_html(undef,
-			 qq{\n<div align="center" class="cal"$dir>\n},
-			 $cal2->as_HTML(), 
-			 qq{</div>\n});
-
-	foreach $cal2 (@html_cals) {
-	    Hebcal::out_html(undef,
-			     qq{\n<br><br>\n<div align="center" class="cal" style="page-break-before: always"$dir>\n},
-			     $cal2->as_HTML(), 
-			     qq{</div>\n});
+	for (my $i = 0; $i < @html_cals; $i++) {
+	    write_html_cal($q, \@html_cals, \@html_cal_ids, $i);
 	}
     }
 
@@ -1303,6 +1302,30 @@ EOHTML
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
     1;
+}
+
+sub write_html_cal
+{
+    my($q,$cals,$cal_ids,$i) = @_;
+    my $lang = $q->param("lg");
+    my $dir = "";
+    if ($lang && $lang eq "h") {
+	$dir = qq{ dir="rtl"};
+    }
+    my $cal = $cals->[$i];
+    my $id = $cal_ids->[$i];
+    my $class = "cal";
+    if ($i != 0) {
+	Hebcal::out_html(undef, "<p>&nbsp;</p>\n");
+	$class .= " pbba";
+    }
+    if ($id eq sprintf("%04d-%02d", $this_year, $this_mon)) {
+	Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
+    }
+    Hebcal::out_html(undef,
+		     qq{<div id="cal-$id" align="center" class="$class"$dir>\n},
+		     $cal->as_HTML(), 
+		     qq{</div><!-- #cal-$id -->\n});
 }
 
 sub new_html_cal
