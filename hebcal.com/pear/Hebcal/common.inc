@@ -409,13 +409,71 @@ EOD;
     return $html;
 }
 
+$HTML_MENU_ITEMS =
+    array(
+     array( "Home", "/" ),
+     array( "Calendar", "/hebcal/" ),
+     array( "Holidays", "/holidays/" ),
+     array( "Date Converter", "/converter/",
+       array( "Yahrzeit", "/yahrzeit/" ) ),
+     array( "Shabbat Times", "/shabbat/", 
+       array( "Email List", "/email/" ),
+       array( "Year at a glance", "/home/shabbat/fridge" ),
+       array( "Widgets", "/home/shabbat/widgets" ) ),
+     array( "Torah Readings", "/sedrot/" ),
+     array( "About Hebcal", "/home/about",
+       array( "Contact Us", "/home/about/contact" ),
+       array( "Donate", "/home/about/donate" ),
+       array( "News", "/home/category/news" ),
+       array( "Privacy Policy", "/home/about/privacy-policy") ),
+     array( "Help", "/home/help" ),
+    );
+
+
+function html_menu_item($title, $path, $selected) {
+    $classes = array();
+    if ($path != "/") {
+	$classes[] = "page_item";
+    }
+    if ($path == $selected) {
+	$classes[] = "current_page_item";
+    }
+    $str = "<li";
+    if (!empty($classes)) {
+	$str .= " class=\"" . implode(" ", $classes) . "\"";
+    }
+    $str .= "><a href=\"$path\" title=\"$title\">$title</a>";
+    return $str;
+}
+
+function html_menu($selected) {
+    global $HTML_MENU_ITEMS;
+    $str = "<ul>";
+    foreach ($HTML_MENU_ITEMS as $item) {
+	$title = $item[0];
+	$path = $item[1];
+	$str .= html_menu_item($title, $path, $selected);
+	if (isset($item[2])) {
+	    $str .= "<ul class=\"children\">";
+	    for ($i = 2; isset($item[$i]); $i++) {
+		$str .= html_menu_item($item[$i][0], $item[$i][1], $selected);
+		$str .= "</li>";
+	    }
+	    $str .= "</ul>";
+	}
+	$str .= "</li>";
+    }
+    $str .= "</ul>";
+    return $str;
+}
+
 function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
     if ($title_append_suffix) {
 	$title .= " | Hebcal Jewish Calendar";
     }
     $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $menu = html_menu($_SERVER["PHP_SELF"]);
     $html = <<<EOD
-<!DOCTYPE html>
 <html><head><title>$title</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="$base_href" target="_top">
@@ -431,7 +489,7 @@ $xtra_head</head>
 </div><!-- #branding -->
 <div id="access" role="navigation">
 <div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
-<div class="menu"><ul><li ><a href="http://www.hebcal.com/home/" title="Home">Home</a></li><li class="page_item page-item-103"><a href="http://www.hebcal.com/hebcal/" title="Calendar">Calendar</a></li><li class="page_item page-item-112"><a href="http://www.hebcal.com/holidays/" title="Holidays">Holidays</a></li><li class="page_item page-item-104"><a href="http://www.hebcal.com/converter/" title="Date Converter">Date Converter</a><ul class='children'><li class="page_item page-item-107"><a href="http://www.hebcal.com/yahrzeit/" title="Yahrzeit, Birthday, Anniversary">Yahrzeit, Birthday, Anniversary</a></li></ul></li><li class="page_item page-item-113"><a href="http://www.hebcal.com/shabbat/" title="Shabbat Times">Shabbat Times</a><ul class='children'><li class="page_item page-item-114"><a href="http://www.hebcal.com/email/" title="Email List">Email List</a></li><li class="page_item page-item-115"><a href="http://www.hebcal.com/home/shabbat-times/shabbat-widgets" title="Widgets">Widgets</a></li></ul></li><li class="page_item page-item-105"><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah Readings</a></li><li class="page_item page-item-72"><a href="http://www.hebcal.com/home/about-hebcal" title="About Hebcal">About Hebcal</a><ul class='children'><li class="page_item page-item-65"><a href="http://www.hebcal.com/home/about-hebcal/contact" title="Contact Us">Contact Us</a></li><li class="page_item page-item-73"><a href="http://www.hebcal.com/home/about-hebcal/donate" title="Donate">Donate</a></li><li class="page_item page-item-117"><a href="http://www.hebcal.com/news/" title="News">News</a></li><li class="page_item page-item-63"><a href="http://www.hebcal.com/home/about-hebcal/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li class="page_item page-item-71 current_page_item"><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul></div>
+<div class="menu">$menu</div>
 </div><!-- #access -->
 </div><!-- #masthead -->
 </div><!-- #header -->
