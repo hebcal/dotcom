@@ -1255,7 +1255,7 @@ sub html_footer_new
 <div id="footer" role="contentinfo">
 <div id="colophon">
 <div id="site-info">
-<a href="http://www.hebcal.com/home/" title="Hebcal Jewish Calendar" rel="home">
+<a href="http://www.hebcal.com/" title="Hebcal Jewish Calendar" rel="home">
 Hebcal Jewish Calendar</a>
 </div><!-- #site-info -->
 <div id="site-generator">
@@ -1466,7 +1466,7 @@ $xtra_head</head>
 <div id="header">
 <div id="masthead">
 <div id="branding" role="banner">
-<div id="site-title"><span><a href="/home/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
+<div id="site-title"><span><a href="/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
 <div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
 </div><!-- #branding -->
 <div id="access" role="navigation">
