@@ -32,23 +32,52 @@ AddType text/css css
 AddType text/x-csv csv
 AddEncoding x-gzip .gz
 
-Redirect /yahrtzeit http://www.hebcal.com/yahrzeit
-Redirect /yohrzeit http://www.hebcal.com/yahrzeit
-Redirect /yohrtzeit http://www.hebcal.com/yahrzeit
-Redirect /yartzeit http://www.hebcal.com/yahrzeit
-Redirect /yarzeit http://www.hebcal.com/yahrzeit
-Redirect /yortzeit http://www.hebcal.com/yahrzeit
-Redirect /yorzeit http://www.hebcal.com/yahrzeit
-Redirect /yizkor http://www.hebcal.com/yahrzeit
+Redirect permanent /yahrtzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yohrzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yohrtzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yartzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yarzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yortzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yorzeit http://www.hebcal.com/yahrzeit
+Redirect permanent /yizkor http://www.hebcal.com/yahrzeit
 
-Redirect /HEBCAL http://www.hebcal.com/hebcal
-Redirect /cgi-bin/hebcal http://www.hebcal.com/hebcal
-Redirect /hebcal.html http://www.hebcal.com/hebcal/
-Redirect /shabbat.html http://www.hebcal.com/shabbat/
-Redirect /help/defaults.html http://www.hebcal.com/holidays/
+Redirect permanent /HEBCAL http://www.hebcal.com/hebcal
+Redirect permanent /cgi-bin/hebcal http://www.hebcal.com/hebcal
+Redirect permanent /hebcal.html http://www.hebcal.com/hebcal/
+Redirect permanent /shabbat.html http://www.hebcal.com/shabbat/
+Redirect permanent /help/defaults.html http://www.hebcal.com/holidays/
 
-Redirect /TARGET=BLANK http://www.hebcal.com/
+Redirect permanent /TARGET=BLANK http://www.hebcal.com/
 
-Redirect /shabbat/favicon.ico http://www.hebcal.com/favicon.ico
-Redirect /sedrot/favicon.ico http://www.hebcal.com/favicon.ico
-Redirect /news/favicon.ico http://www.hebcal.com/favicon.ico
+Redirect permanent /shabbat/favicon.ico http://www.hebcal.com/favicon.ico
+Redirect permanent /sedrot/favicon.ico http://www.hebcal.com/favicon.ico
+Redirect permanent /news/favicon.ico http://www.hebcal.com/favicon.ico
+
+RedirectMatch permanent ^/privacy(/)?$ http://www.hebcal.com/home/about/privacy-policy
+RedirectMatch permanent ^/help(/)?$ http://www.hebcal.com/home/help
+RedirectMatch permanent ^/donations(/)?$ http://www.hebcal.com/home/about/donate
+RedirectMatch permanent ^/contact(/)?$ http://www.hebcal.com/home/about/contact
+
+Redirect permanent /shabbat/fridge.php http://www.hebcal.com/home/shabbat/fridge
+
+Redirect permanent /help/intro.html http://www.hebcal.com/home/category/general
+Redirect permanent /help/link.html http://www.hebcal.com/home/category/developers
+Redirect permanent /help/holidays2.html http://www.hebcal.com/home/category/observance
+Redirect permanent /help/sedra.html http://www.hebcal.com/home/category/sedrot
+Redirect permanent /help/anniv.html http://www.hebcal.com/home/54/how-does-hebcal-determine-an-anniversary-occurring-in-adar
+
+Redirect permanent /help/import.html http://www.hebcal.com/home/category/import
+Redirect permanent /help/import-outlook.html  http://www.hebcal.com/home/category/import/outlook
+Redirect permanent /help/import-ical.html  http://www.hebcal.com/home/category/import/apple
+Redirect permanent /help/import-gcal.html  http://www.hebcal.com/home/category/import/google
+Redirect permanent /help/import-palm.html http://www.hebcal.com/home/category/import/palm
+Redirect permanent /help/import-blackberry.html http://www.hebcal.com/home/80/blackberry-import-hebcal-jewish-calendar
+Redirect permanent /help/import-lotus.html http://www.hebcal.com/home/88/lotus-notes-6-import-hebcal-jewish-calendar
+
+Redirect permanent /help/candles.html http://www.hebcal.com/home/category/candle-lighting
+Redirect permanent /help/resources.html http://www.hebcal.com/home/category/general
+Redirect permanent /help/tech.html http://www.hebcal.com/home/category/developers
+
+Redirect permanent /help/sedrot.html http://www.hebcal.com/sedrot/
+Redirect permanent /help/holidays.html http://www.hebcal.com/holidays/
+

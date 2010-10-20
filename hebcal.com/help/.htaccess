@@ -1,3 +1,0 @@
-#SetHandler default-handler
-Redirect /help/sedrot.html http://www.hebcal.com/sedrot/
-Redirect /help/holidays.html http://www.hebcal.com/holidays/
