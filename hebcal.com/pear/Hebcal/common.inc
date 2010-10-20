@@ -41,85 +41,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-function hebcal_gen_cookie()
-{
-    if (isset($_COOKIE["C"])) {
-	parse_str($_COOKIE["C"], $param);
-    }
-
-    # can't use $_REQUEST or $_GET because we use ";" as string delim
-    # if we controlled our own ini file, we'd set
-    # arg_separator.input = "&;"
-    $qs = $_SERVER["QUERY_STRING"];
-    if ($qs) {
-	$kvs = split('[&;]', $qs);
-	foreach ($kvs as $kv) {
-	    $parts = explode("=", $kv, 2);
-	    $param[strip_tags(urldecode($parts[0]))] =
-		strip_tags(urldecode($parts[1]));
-	}
-    }
-
-    $retval = "C=t=" . time();
-
-    # candle-lighting options
-    if (isset($param["geo"])) {
-	if ($param["geo"] == "zip") {
-	    $retval .= "&zip=" . $param["zip"];
-	    if (isset($param["dst"]) && $param["dst"] != "") {
-		$retval .= "&dst=" . $param["dst"];
-	    }
-	    if (isset($param["tz"]) && $param["tz"] != "") {
-		$retval .= "&tz=" . $param["tz"];
-	    }
-	} elseif ($param["geo"] == "city") {
-	    $retval .= "&city=" . urlencode($param["city"]);
-	} elseif ($param["geo"] == "pos") {
-	    $retval .= "&lodeg=" . $param["lodeg"];
-	    $retval .= "&lomin=" . $param["lomin"];
-	    $retval .= "&lodir=" . $param["lodir"];
-	    $retval .= "&ladeg=" . $param["ladeg"];
-	    $retval .= "&lamin=" . $param["lamin"];
-	    $retval .= "&ladir=" . $param["ladir"];
-	    if (isset($param["dst"]) && $param["dst"] != "") {
-		$retval .= "&dst=" . $param["dst"];
-	    }
-	    if (isset($param["tz"]) && $param["tz"] != "") {
-		$retval .= "&tz=" . $param["tz"];
-	    }
-	}
-	if (isset($param["m"]) && $param["m"] != "") {
-	    $retval .= "&m=" . $param["m"];
-	}
-    }
-
-    # boolean options
-    $opts = array("o","s","i","a","d","D");
-    foreach ($opts as $o) {
-	if (isset($param[$o]) && $param[$o] != "") {
-	    $retval .= "&" . $o . "=" . $param[$o];
-	}
-    }
-
-    # hebcal interactive options
-    if (isset($_REQUEST["v"]) && $_REQUEST["v"] == "1") {
-	if (!isset($_REQUEST["nh"]) || $_REQUEST["nh"] == "off") {
-	    $retval .= "&nh=off";
-	}
-	if (!isset($_REQUEST["nx"]) || $_REQUEST["nx"] == "off") {
-	    $retval .= "&nx=off";
-	}
-
-	if (isset($param["heb"]) && $param["heb"] != "") {
-	    $retval .= "&heb=" . $param["heb"];
-	} else {
-	    $retval .= "&heb=off";
-	}
-    }
-
-    return $retval;
-}
-
 $hebcal_city_tz = array(
      "Ashdod"		=>	2,
      "Atlanta"		=>	-5,
@@ -313,53 +234,6 @@ function hebcal_make_anchor($str)
 	$str_copy = preg_replace('/^Erev /', '', $str_copy);
 	return hebcal_make_holiday_anchor($str_copy);
     }
-}
-
-function html_footer_lite($last_updated = true) {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $year = strftime("%Y", time());
-    $date = strftime("%c", $stat[9]);
-    global $VER;
-
-    $html = <<<EOD
-<hr noshade size="1"><span class="tiny">
-<a name="copyright"></a>Copyright &copy; $year
-Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a> -
-<a href="/news/">News</a> -
-<a href="/donations/">Donate</a>
-<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-EOD
-	;
-
-    if ($last_updated) {
-	$html .= "\n<br>Software last updated: $date (Revision: $VER)\n"; 
-    }
-
-    $html .= <<<EOD
-</span>
-<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct="UA-967247-1";
-urchinTracker();
-if(document.getElementsByTagName){
-var e3=document.getElementsByTagName("a");
-if(e3&&e3.length){
-for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="amzn"){
-if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
-}}}
-}
-</script>
-</body></html>
-
-EOD
-	;
-    return $html;
 }
 
 function html_footer_new($last_updated = true) {
