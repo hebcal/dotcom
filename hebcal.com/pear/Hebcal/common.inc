@@ -415,7 +415,7 @@ $HTML_MENU_ITEMS =
      array( "Calendar", "/hebcal/" ),
      array( "Holidays", "/holidays/" ),
      array( "Date Converter", "/converter/",
-       array( "Yahrzeit", "/yahrzeit/" ) ),
+       array( "Yahrzeit, Birthday and Anniversary Calendar", "/yahrzeit/" ) ),
      array( "Shabbat Times", "/shabbat/", 
        array( "Email List", "/email/" ),
        array( "Year at a glance", "/home/shabbat/fridge" ),

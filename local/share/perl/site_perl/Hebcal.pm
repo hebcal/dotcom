@@ -1400,7 +1400,7 @@ my $HTML_MENU_ITEMS =
      [ "Calendar", "/hebcal/" ],
      [ "Holidays", "/holidays/" ],
      [ "Date Converter", "/converter/",
-       [ "Yahrzeit", "/yahrzeit/" ] ],
+       [ "Yahrzeit, Birthday and Anniversary Calendar", "/yahrzeit/" ] ],
      [ "Shabbat Times", "/shabbat/", 
        [ "Email List", "/email/" ],
        [ "Year at a glance", "/home/shabbat/fridge" ],
