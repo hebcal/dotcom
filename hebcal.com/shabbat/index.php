@@ -5,10 +5,11 @@
 require "../pear/Hebcal/common.inc";
 
 function cache_comment($cfg, $status) {
+    global $qs;
     if ($cfg == "j" || $cfg == "json") {
-	echo "// cache ", $status, "\n";
+	echo "// cache $status ($qs)\n";
     } else {
-	echo "<!-- cache ", $status, " -->\n";
+	echo "<!-- cache $status ($qs) -->\n";
     }
 }
 
