@@ -1238,4 +1238,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 <festival id="Erev Yom Kippur" hebrew="עֶרֶב יוֹם כִּפּוּר"/>
 <festival id="Candle lighting" hebrew="הדלקת נרות"/>
 <festival id="Havdalah" hebrew="הַבדָלָה"/>
+<!-- for Israel -->
+<festival id="Pesach II (CH''M)" hebrew="פֶּסַח יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Sukkot II (CH''M)" hebrew="סוּכּוֹת יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0"/>
 </festivals>
