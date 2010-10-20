@@ -152,8 +152,7 @@ $unsub_url
 EOD;
 
     $err = smtp_send($return_path, $info["em"], $headers, $body);
-    echo html_header_new("Email Subscription Confirmed",
-			 "http://www.hebcal.com/email/verify.php");
+    echo html_header_new("Email Subscription Confirmed");
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">
@@ -190,8 +189,7 @@ to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
 	$dst_descr = "";
 	unset($info["zip"]);
     }
-    echo html_header_new("Confirm Email Subscription",
-			 "http://www.hebcal.com/email/verify.php");
+    echo html_header_new("Confirm Email Subscription");
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">

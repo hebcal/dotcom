@@ -409,10 +409,11 @@ EOD;
     return $html;
 }
 
-function html_header_new($title, $base_href, $xtra_head="", $title_append_suffix=true) {
+function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
     if ($title_append_suffix) {
 	$title .= " | Hebcal Jewish Calendar";
     }
+    $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
     $html = <<<EOD
 <!DOCTYPE html>
 <html><head><title>$title</title>

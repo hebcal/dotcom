@@ -119,7 +119,6 @@ $xtra_head = <<<EOD
 <meta name="author" content="Michael J. Radwin">
 EOD;
 echo html_header_new("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
-		     "http://www.hebcal.com/",
 		     $xtra_head,
 		     false);
 ?>

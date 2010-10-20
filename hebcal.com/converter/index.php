@@ -294,8 +294,7 @@ function display_hebrew_event($h) {
 
 function my_header($hebdate) {
     header("Content-Type: text/html; charset=UTF-8");
-    echo html_header_new("Hebrew Date Converter - $hebdate",
-			 "http://www.hebcal.com/converter/");
+    echo html_header_new("Hebrew Date Converter - $hebdate");
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">

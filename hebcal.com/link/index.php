@@ -85,7 +85,6 @@ ul#hebcal-results { list-style-type: none }
 EOD;
 
 echo html_header_new("Add weekly Shabbat candle-lighting times to your synagogue website",
-		     "http://www.hebcal.com" . $_SERVER["REQUEST_URI"],
 		     $xtra_head);
 ?>
 <div id="container" class="single-attachment">

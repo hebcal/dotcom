@@ -6,8 +6,14 @@ $matches = array();
 if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
-echo html_header_new("Jewish Calendar downloads for Apple iCal",
-		     "http://www.hebcal.com" . $_SERVER["REQUEST_URI"]);
+$xtra_head = <<<EOD
+<style type="text/css">
+#hebcal-ical tr td {
+  padding: 4px;
+}
+</style>
+EOD;
+echo html_header_new("Jewish Calendar downloads for Apple iCal", $xtra_head);
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">
@@ -24,9 +30,9 @@ for Jews living in the Diaspora (anywhere outside of modern Israel).</p>
 
 <?php
 function cal_row($path,$title,$subtitle) {
-    $webcal = "webcal://www.hebcal.com" . $path;
+    $webcal = "webcal://" . $_SERVER["HTTP_HOST"] . $path;
     $webcal_esc = urlencode($webcal);
-    $http_esc = urlencode("http://www.hebcal.com" . $path);
+    $http_esc = urlencode("http://" . $_SERVER["HTTP_HOST"] . $path);
 ?>
 <tr>
 <td><a title="Subscribe to <?php echo $title ?> in iCal"
@@ -54,7 +60,7 @@ alt="Add <?php echo $title ?> to Google Calendar"></a>
 <?php
 }
 ?>
-<table cellpadding="5">
+<table id="hebcal-ical" cellpadding="5">
 <?php
 cal_row("/ical/jewish-holidays.ics", "Jewish Holidays",
 	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah");

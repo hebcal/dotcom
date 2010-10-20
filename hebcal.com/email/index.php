@@ -14,8 +14,7 @@ if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
 
-echo html_header_new("Shabbat Candle Lighting Times by Email",
-		     "http://www.hebcal.com/email/");
+echo html_header_new("Shabbat Candle Lighting Times by Email");
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">
