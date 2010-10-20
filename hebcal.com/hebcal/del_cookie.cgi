@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -51,40 +51,54 @@ use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
 
 # process form params
-my($q) = new CGI;
+my $q = new CGI;
+my $rcsrev = '$Revision$'; #'
 
-my($rcsrev) = '$Revision$'; #'
-my($hhmts) = "<!-- hhmts start -->
-Last modified: Mon May  7 21:40:33 PDT 2001
-<!-- hhmts end -->";
-
+my $title;
+my $entry_content;
 if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} eq 'optout')
 {
-    print "Set-Cookie: C=opt_out; path=/; expires=Thu, 15 Apr 2010 20:00:00 GMT\015\012";
+    print "Set-Cookie: C=opt_out; path=/; expires=Thu, 15 Apr 2037 20:00:00 GMT\015\012";
     print "Expires: Thu, 01 Jan 1970 16:00:01 GMT\015\012",
     "Cache-Control: no-cache\015\012";
 
-    print $q->header(),
-    &Hebcal::start_html($q, 'Hebcal Opt-Out Complete', undef, undef),
-    &Hebcal::navbar2($q, "Opt-Out", 1),
-    "<h1>Hebcal\nOpt-Out Complete</h1>\n",
-    "<p>Opt-out completed successfully.</p>\n",
-    "<p>Your <b>hebcal.com</b> Cookie id is now set to opt_out.</p>\n",
-    &Hebcal::html_footer($q,$hhmts,$rcsrev);
+    $title = "Opt-Out Complete";
+    $entry_content=<<EOHTML;
+<p>Opt-out completed successfully.</p>
+<p>Your <b>hebcal.com</b> cookie id is now set to opt_out.</p>
+EOHTML
+;
 }
 else
 {
-print "Set-Cookie: C=0; expires=Thu, 01 Jan 1970 16:00:01 GMT; path=/\015\012";
-print "Expires: Thu, 01 Jan 1970 16:00:01 GMT\015\012",
-"Cache-Control: no-cache\015\012";
-print $q->header(),
-    &Hebcal::start_html($q, 'Hebcal Cookie Deleted', undef, undef),
-    &Hebcal::navbar2($q, "Cookie\nDeleted", 1),
-    "<h1>Hebcal\nCookie Deleted</h1>\n",
-    "<p>We deleted your cookie for the Hebcal Interactive Jewish\n",
-    "Calendar and 1-Click Shabbat.</p>\n",
-    &Hebcal::html_footer($q,$hhmts,$rcsrev);
+    print "Set-Cookie: C=0; expires=Thu, 01 Jan 1970 16:00:01 GMT; path=/\015\012";
+    print "Expires: Thu, 01 Jan 1970 16:00:01 GMT\015\012",
+	"Cache-Control: no-cache\015\012";
+
+    $title = "Cookie Deleted";
+    $entry_content=<<EOHTML;
+<p>We deleted your cookie for the Hebcal Jewish Calendar and
+Shabbat Candle Lighting Times.</p>
+EOHTML
+;
 }
 
+my $body=<<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">$title</h1>
+<div class="entry-content">
+$entry_content
+</div><!-- .entry-content -->
+</div><!-- #post-## -->
+</div><!-- #content -->
+</div><!-- #container -->
+EOHTML
+;
+print $q->header(),
+    Hebcal::html_header($title, Hebcal::script_name($q), "single single-post"),
+    $body,
+    Hebcal::html_footer_new($q,$rcsrev);
 exit(0);
 
