@@ -81,3 +81,6 @@ Redirect permanent /help/tech.html http://www.hebcal.com/home/category/developer
 Redirect permanent /help/sedrot.html http://www.hebcal.com/sedrot/
 Redirect permanent /help/holidays.html http://www.hebcal.com/holidays/
 
+Redirect permanent /news/index.rdf http://www.hebcal.com/home/feed
+Redirect permanent /news/index.xml http://www.hebcal.com/home/feed
+RedirectMatch permanent ^/news(/)?$ http://www.hebcal.com/home/category/news
