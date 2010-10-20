@@ -126,7 +126,7 @@ echo html_header_new("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.
 <div id="content" role="main">
 <div class="page type-page hentry">
 <div class="entry-content">
-<span class="fpsubhead">
+<p class="fpsubhead">
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
 include("./today.inc");
 if (isset($events)) {
@@ -177,120 +177,37 @@ wishes you a happy <a href="/holidays/pesach.html?tag=fp">Passover</a>.</span>
 <br><span class="fpgreeting">Chag Sameach! Hebcal.com wishes you
 a happy <?php echo $chag_sameach ?>.</span>
 <?php } ?>
-</span>
-<?php
-$ref = getenv("HTTP_REFERER");
-$pattern = '/^http:\/\/(www\.google|(\w+\.)*search\.yahoo|search\.msn|search\.live|aolsearch\.aol|www\.aolsearch|a9|www\.bing)\.(com|ca|co\.uk)\/.*calend[ae]r/i';
-if (!isset($_COOKIE["C"]) && $ref && preg_match($pattern, $ref, $matches)) {
-    echo "<blockquote class=\"welcome\">\n";
+</p><!-- .fpsubhead -->
 
-    $show_amazon = true;
-    if ($show_amazon) {
+<p>Hebcal.com offers a free <a title="Hebcal Custom Calendar" href="/hebcal/">Custom Jewish calendar</a>
+for any year 0001-9999. Included are <a title="Jewish Holidays" href="/holidays/">Jewish holidays</a>
+(major and minor), candle lighting times, and Torah readings.
+We also offer export to
+<a href="/home/category/import/outlook">Microsoft Outlook</a>,
+<a href="/home/category/import/apple">Apple iCal</a>,
+<a href="/home/category/import/google">Google Calendar</a>,
+<a href="/home/category/import/palm">Palm</a>,
+and Windows Live Calendar.</p>
 
-    $cal[] = array("Jewish Museum 2011 Wall Calendar", "076495315X", 102, 110);
+<p>Use our <a href="/converter/">Date Converter</a> to convert between
+Hebrew and Gregorian dates and see today's date in a Hebrew font. Our
+<a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary Calendar</a>
+lets you generate a list of Yahrzeit (memorial) and Yizkor dates, or
+Hebrew Birthdays and Anniversaries.</p>
 
-    shuffle($cal);
-    list($title,$asin,$width,$height) = $cal[0];
+<p>Join our <a href="/email/">Shabbat candle lighting times email
+list</a> to receive a weekly reminder of when to light candles and
+the parsha of the week.</p>
 
-    $amazon_dom = (isset($matches) && isset($matches[3])) ?
-	$matches[3] : "com";
+<p>This is a free service. Please <a title="Send money to Hebcal.com"
+href="/home/about/donate">donate</a> to help defray the cost of running
+this website.</p>
 
-	echo <<<MESSAGE_END
-<a title="$title from Amazon.$amazon_dom"
-class="amzn" id="bk-$asin-searchref-1"
-href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20"><img
-src="/i/$asin.01.TZZZZZZZ.jpg" border="0"
-width="$width" height="$height" hspace="8" align="right"
-alt="$title from Amazon.$amazon_dom"></a>
-
-MESSAGE_END;
-    }
-
-    echo <<<MESSAGE_END
-Hebcal.com offers a free personalized Jewish calendar for any year
-0001-9999. You can get a list of Jewish holidays, candle lighting times,
-and Torah readings. We also offer export to Microsoft Outlook, Apple iCal,
-Google, and Palm.
-
-<p>Get started <a href="/hebcal/">customizing your calendar</a>.
-
-MESSAGE_END;
-
-    if ($show_amazon) {
-	echo <<<MESSAGE_END
-<p>If you are looking for a full-color printed calendar
-with Jewish holidays, consider <a
-class="amzn" id="bk-$asin-searchref-2"
-href="http://www.amazon.$amazon_dom/o/ASIN/$asin/hebcal-20">$title</a>
-from Amazon.$amazon_dom.
-
-MESSAGE_END;
-    }
-
-    echo "</blockquote>\n";
-}
-?>
-<h4><a href="/hebcal/">Hebcal Interactive Jewish Calendar</a></h4>
-<ul class="gtl">
-<li>
-Generate a calendar of Jewish holidays and events for any year 0001-9999
-<li>
-Customize Shabbat and holiday candle lighting times to your zip code, city, or latitude/longitude
-<li>
-Torah readings for Israel and Diaspora
-<li>
-Export to
-<a href="/help/import-outlook.html">Outlook</a>,
-<a href="/help/import-ical.html">Apple iCal</a>,
-<a href="/help/import-gcal.html">Google Calendar</a>,
-Windows Live Calendar, and
-<a href="/help/import-palm.html">Palm</a>
-</ul>
-<h4><a href="/converter/">Hebrew Date Converter</a></h4>
-<ul class="gtl">
-<li>
-Convert between Hebrew and Gregorian dates
-<li>
-See date in Hebrew font
-</ul>
-<h4><a href="/holidays/">Jewish Holidays</a></h4>
-<ul class="gtl">
-<li>
-Dates for the next few years and special Torah readings
-</ul>
-<h4><a href="/shabbat/">1-Click Shabbat Candle Lighting Times</a></h4>
-<ul class="gtl">
-<li>
-Shabbat candle lighting times and Torah Readings, updated weekly
-<li>
-<a href="/email/?tag=fp">Subscribe by Email</a> |
-<a href="/link/?type=shabbat&amp;tag=fp">Add Shabbat times to your synagogue
-website</a>
-<li>
-<a href="http://www.apple.com/downloads/dashboard/reference/hebcal.html">Mac
-OS X Dashboard Widget</a> by Mark Saper
-</ul>
-<h4><a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary
-Calendar</a></h4>
-<ul class="gtl">
-<li>
-Generate a list of Yahrzeit (memorial) and Yizkor dates, or
-Hebrew Birthdays and Anniversaries
-</ul>
-<h4><a href="/sedrot/">Torah Readings</a></h4>
-<ul class="gtl">
-<li>
-Aliyah-by-aliyah breakdown for weekly parshiyot
-</ul>
-<h4>About Us</h4>
-<ul class="gtl">
-<li><a href="/news/">News</a>
-<li><a href="/privacy/">Privacy Policy</a>
-<li><a href="/contact/">Contact Information</a>
-<li><a href="/donations/">Donate</a>
-<li><a href="/search/">Site Search</a>
-<li><a href="/help/">Help and Frequently Asked Questions</a>
-</ul>
+<p>Developers: we offer <a
+title="Including hebcal.com content on other sites, advanced linking"
+href="http://www.hebcal.com/home/category/developers">APIs, RSS Feeds,
+Source Code and widgets</a> for inclusion on your synagogue or other
+website.</p>
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
@@ -343,6 +260,17 @@ id="zip">&nbsp;<input type="submit" value="Go">
 <br><small>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
 </li>
+<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+/* 200x200 */
+google_ad_slot = "8131407384";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></li>
 </ul>
 </div><!-- #primary .widget-area -->
 <?php
