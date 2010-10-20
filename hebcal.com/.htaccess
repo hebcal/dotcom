@@ -2,7 +2,9 @@ AddDefaultCharset UTF-8
 FileETag MTime Size
 DirectoryIndex index.php index.html
 
-ErrorDocument 404 /err404.shtml
+ErrorDocument 404 /missing.html
+
+RedirectMatch permanent ^/home(/)?$ http://www.hebcal.com/
 
 RedirectMatch ^/_vti http://www.hebcal.com/
 Redirect /MSOffice/cltreq.asp http://www.hebcal.com/
