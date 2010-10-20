@@ -653,20 +653,18 @@ and other applications.</p>},
     "href=\"/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes\">What\n",
     "is the difference?</a>)</small></ol>");
 
-    Hebcal::out_html(undef,
-    "<li><label\nfor=\"lg\">Event titles: </label>\n",
-    $q->popup_menu(-name => "lg",
-		   -id => "lg",
-		   -values => ["s", "sh", "a", "ah", "h"],
-		   -default => "s",
-		   -labels => \%Hebcal::lang_names));
-
     Hebcal::out_html(undef, qq{</ol></fieldset>\n});
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-left -->\n});
 
     Hebcal::out_html(undef, qq{<div id="hebcal-form-right">\n});
     Hebcal::out_html(undef,
     "<fieldset><legend>Other options</legend>",
+    "<li><label\nfor=\"lg\">Event titles: </label>\n",
+    $q->popup_menu(-name => "lg",
+		   -id => "lg",
+		   -values => ["s", "sh", "a", "ah", "h"],
+		   -default => "s",
+		   -labels => \%Hebcal::lang_names),
     "<ol><li><label\nfor=\"vis\">",
     $q->checkbox(-name => "vis",
 		 -id => "vis",
