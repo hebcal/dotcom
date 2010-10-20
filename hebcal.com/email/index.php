@@ -280,7 +280,7 @@ lighting times and Torah portion.
 <br>Email is sent out every week on Thursday morning.</p>
 
 <div id="email-form">
-<form name="f1" id="f1" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
+<form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
 <input type="hidden" name="geo" value="city">
 <label for="city">Closest City:</label>
@@ -298,14 +298,14 @@ echo HTML_Form::returnSelect("city", $entries,
 			     "", false, 'id="city"');
 ?>
 &nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $_SERVER["PHP_SELF"] ?>?geo=zip">zip code</a>)</small>
+href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=zip">zip code</a>)</small>
 <?php } else { ?>
 <input type="hidden" name="geo" value="zip">
 <label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $_SERVER["PHP_SELF"] ?>?geo=city">closest city</a>)</small>
+href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
 <?php } ?>
 <br><label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php

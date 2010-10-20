@@ -136,7 +136,7 @@ synagogue's web page.</p>
 
 <div id="hebcal-form-left">
 <fieldset><legend>Get Shabbat times by Zip Code</legend>
-<form name="f1" id="f1" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
+<form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
 <input type="hidden" name="geo" value="zip">
 <input type="hidden" name="type" value="shabbat">
 <ol>
@@ -153,7 +153,7 @@ Use Ashkenazis Hebrew transliterations</label>
 </div><!-- #hebcal-form-left -->
 
 <div id="hebcal-form-right">
-<form name="f2" id="f2" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
+<form name="f2" id="f2" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
 <fieldset><legend>Get Shabbat times by Major City</legend>
 <input type="hidden" name="geo" value="city">
 <input type="hidden" name="type" value="shabbat">

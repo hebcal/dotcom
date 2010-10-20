@@ -204,7 +204,7 @@ Lighting Times.</p>
 <br>&nbsp;&nbsp;<?php echo $dst_descr ?>
 </small></p>
 <p>
-<form method="post" name="f1" id="f1" action="<?php echo $_SERVER["PHP_SELF"] ?>">
+<form method="post" name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>">
 <input type="hidden" name="k" value="<?php echo $info["id"] ?>">
 <input type="hidden" name="commit" value="1">
 <input type="submit" name="sub1" id="sub1" value="Confirm Subscription">

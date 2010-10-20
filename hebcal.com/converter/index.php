@@ -316,7 +316,7 @@ function form($head, $message, $help = "") {
 	    $message, "</p>", $help, "<hr noshade size=\"1\">";
     }
 
-    $action = $_SERVER["PHP_SELF"];
+    $action = $_SERVER["SCRIPT_URL"];
 ?>
 <div id="converter-form">
 <form name="f1" id="f1" action="<?php echo $action ?>">
