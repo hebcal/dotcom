@@ -9,7 +9,8 @@ if (preg_match('/(\d+)/', $VER, $matches)) {
 $xtra_head = <<<EOD
 <style type="text/css">
 #hebcal-ical tr td {
-  padding: 4px;
+  padding: 8px;
+  vertical-align: middle;
 }
 </style>
 EOD;
