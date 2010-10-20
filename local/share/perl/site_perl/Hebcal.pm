@@ -1403,13 +1403,13 @@ my $HTML_MENU_ITEMS =
        [ "Yahrzeit", "/yahrzeit/" ] ],
      [ "Shabbat Times", "/shabbat/", 
        [ "Email List", "/email/" ],
-       [ "Refrigerator candle lighting", "/home/shabbat/fridge" ],
+       [ "Year at a glance", "/home/shabbat/fridge" ],
        [ "Widgets", "/home/shabbat/widgets" ] ],
      [ "Torah Readings", "/sedrot/" ],
      [ "About Hebcal", "/home/about",
        [ "Contact Us", "/home/about/contact" ],
        [ "Donate", "/home/about/donate" ],
-       [ "News", "/news/" ],
+       [ "News", "/home/category/news" ],
        [ "Privacy Policy", "/home/about/privacy-policy"] ],
      [ "Help", "/home/help" ],
     ];
@@ -1425,6 +1425,7 @@ sub html_menu_item {
 	$str .= qq{ class="$classes"};
     }
     $str .= qq{><a href="$path" title="$title">$title</a>};
+    return $str;
 }
 
 sub html_menu {
