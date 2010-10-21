@@ -848,7 +848,7 @@ alt="Etz Hayim: Torah and Commentary"></a>
 href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
-<dt><em><a class="sedra-out ort" href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
+<dt><em><a class="sedra-out" href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
 <dd>World ORT
 </dl>
 EOHTML
@@ -967,7 +967,7 @@ sub format_aliyah
 	elsif ($book eq 'numbers') { $bid = 4; }
 	elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-	$info = qq{<a class="sedra-out ort" title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+	$info = qq{<a class="sedra-out" title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
     }
 
     my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
