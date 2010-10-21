@@ -434,7 +434,7 @@ EOHTML
 </div><!-- #container -->
 EOHTML
 ;
-    print OUT3 $html_footer;
+    print OUT3 Hebcal::html_footer_new(undef, $REVISION);
 
     close(OUT3);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
