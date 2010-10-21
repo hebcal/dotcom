@@ -491,7 +491,7 @@ sub write_festival_part
 	my $torah_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'torah'}->{'href'};
 
 	print OUT2 qq{\n<h3 id="$slug-torah">Torah Portion: };
-	print OUT2 qq{<a href="$torah_href"\ntitle="Translation from JPS Tanakh">}
+	print OUT2 qq{<a class="sedra-out" href="$torah_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($torah_href);
 	print OUT2 $torah;
 	print OUT2 qq{</a>}
@@ -522,7 +522,7 @@ sub write_festival_part
 	my $haft_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'href'};
 
 	print OUT2 qq{\n<h3 id="$slug-haft">Haftarah: };
-	print OUT2 qq{<a href="$haft_href"\ntitle="Translation from JPS Tanakh">}
+	print OUT2 qq{<a class="sedra-out" href="$haft_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($haft_href);
 	print OUT2 $haft;
 	print OUT2 qq{</a>}
@@ -641,7 +641,7 @@ EOHTML
 		}
 	    }
 	    print OUT2 <<EOHTML;
-[<a title="Detailed information about holiday"
+[<a class="sedra-out" title="Detailed information about holiday"
 href="$about_href">more${more}...</a>]</p>
 EOHTML
 ;
@@ -845,7 +845,7 @@ The Holy Scriptures</a></em>
 };
 
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
-	print OUT2 qq{<dt><em><a
+	print OUT2 qq{<dt><em><a class="sedra-out ort"
 href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
 <dd>World ORT
 };
@@ -900,7 +900,7 @@ sub print_aliyah
     elsif ($book eq 'numbers') { $bid = 4; }
     elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-    $info = qq{<a title="Hebrew text and audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=} .
+    $info = qq{<a class="sedra-out ort" title="Hebrew text and audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=} .
     $aliyah->{'parsha'} . qq{">$info</a>};
 
     my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};

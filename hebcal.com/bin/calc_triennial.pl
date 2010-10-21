@@ -367,7 +367,8 @@ $hebrew_year -
 <a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on">$hy1</a> -
 <a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on">$hy2</a> -
 <a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on">$hy3</a></p>
-<p>Leyning coordinators: <a
+<p>Leyning coordinators:
+<a title="Can I download the aliyah-by-aliyah breakdown of Torah readings for Shabbat?"
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
 parsha spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
 <div id="hebcal-sedrot">
@@ -612,7 +613,7 @@ dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 <span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
 </div><!-- .entry-meta -->
 <div class="entry-content">
-<h3>Torah Portion: <a name="torah"
+<h3 id="torah">Torah Portion: <a class="sedra-out"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
 <table border="1" cellpadding="5">
@@ -719,7 +720,7 @@ EOHTML
 
     print OUT2 <<EOHTML;
 </table>
-<h3>Haftarah$ashk: <a name="haftara"
+<h3 id="haftarah">Haftarah$ashk: <a class="sedra-out"
 href="$haftarah_href"
 title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
@@ -744,7 +745,7 @@ EOHTML
 		    my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
 		    $stime2 =~ s/-/ /g;
 		    print OUT2 <<EOHTML;
-<li>$stime2 (<b>$sp_festival</b> / <a
+<li>$stime2 (<b>$sp_festival</b> / <a class="sedra-out"
 title="Special Haftara for $sp_festival"
 href="$sp_href">$sp_verse</a>)
 EOHTML
@@ -764,12 +765,12 @@ EOHTML
 
     if ($has_drash)
     {
-	print OUT2 qq{<h3><a name="drash"></a>Commentary</h3>\n<ul class="gtl">\n};
+	print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
     }
 
     if ($drash_jts)
     {
-	print OUT2 qq{<li><a title="Parashat $h commentary from JTS"\nhref="$drash_jts">};
+	print OUT2 qq{<li><a class="sedra-out" title="Parashat $h commentary from JTS"\nhref="$drash_jts">};
 	if ($drash_jts =~ /jtsa\.edu/)
 	{
 	    print OUT2 qq{Jewish\nTheological Seminary</a>\n};
@@ -782,22 +783,22 @@ EOHTML
 
     if ($drash_ou)
     {
-	print OUT2 qq{<li><a title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU\nTorah Insights</a>\n};
+	print OUT2 qq{<li><a class="sedra-out" title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU\nTorah Insights</a>\n};
     }
 
     if ($drash_torah)
     {
-	print OUT2 qq{<li><a title="Parashat $h commentary from Project Genesis"\nhref="$drash_torah">Torah.org</a>\n};
+	print OUT2 qq{<li><a class="sedra-out" title="Parashat $h commentary from Project Genesis"\nhref="$drash_torah">Torah.org</a>\n};
     }
 
     if ($drash_uj)
     {
-	print OUT2 qq{<li><a title="Parashat $h commentary from AJULA"\nhref="$drash_uj">American Jewish University</a>\n};
+	print OUT2 qq{<li><a class="sedra-out" title="Parashat $h commentary from AJULA"\nhref="$drash_uj">American Jewish University</a>\n};
     }
 
     if ($drash_ajr)
     {
-	print OUT2 qq{<li><a title="Parashat $h commentary from AJR"\nhref="$drash_ajr">Academy for Jewish Religion</a>\n};
+	print OUT2 qq{<li><a class="sedra-out" title="Parashat $h commentary from AJR"\nhref="$drash_ajr">Academy for Jewish Religion</a>\n};
     }
 
     if ($has_drash)
@@ -808,7 +809,7 @@ EOHTML
     if (defined $read_on->{$h})
     {
 	print OUT2 <<EOHTML;
-<h3><a name="dates"></a>List of Dates</h3>
+<h3 id="dates">List of Dates</h3>
 Parashat $h is read in the Diaspora on:
 <ul class="gtl">
 EOHTML
@@ -821,7 +822,7 @@ EOHTML
     }
     
     print OUT2 <<EOHTML;
-<h3><a name="ref"></a>References</h3>
+<h3 id="ref">References</h3>
 <dl>
 <dt><a title="The Chumash: The Stone Edition (Artscroll Series)"
 class="amzn" id="chumash-1"
@@ -833,7 +834,7 @@ alt="The Chumash: The Stone Edition (Artscroll Series)"></a>
 href="$amazon_link2">The
 Chumash: The Stone Edition (Artscroll Series)</a></em>
 <dd>Nosson Scherman, Mesorah Publications, 1993
-<dt><em><a
+<dt><em><a class="sedra-out"
 href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
@@ -847,7 +848,7 @@ alt="Etz Hayim: Torah and Commentary"></a>
 href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
-<dt><em><a href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
+<dt><em><a class="sedra-out ort" href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
 <dd>World ORT
 </dl>
 EOHTML
@@ -966,7 +967,7 @@ sub format_aliyah
 	elsif ($book eq 'numbers') { $bid = 4; }
 	elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-	$info = qq{<a title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+	$info = qq{<a class="sedra-out ort" title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
     }
 
     my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
