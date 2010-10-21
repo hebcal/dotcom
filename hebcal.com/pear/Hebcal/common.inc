@@ -366,7 +366,7 @@ $xtra_head</head>
 <div id="masthead">
 <div id="branding" role="banner">
 <div id="site-title"><span><a href="/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
-<div id="site-description">Jewish Calendar, Hebrew Date Converter, Holidays</div>
+<div id="site-description"></div>
 </div><!-- #branding -->
 <div id="access" role="navigation">
 <div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
