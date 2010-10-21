@@ -1614,7 +1614,7 @@ sub download_html
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
 id="${filename}_ol.ics">$ics_title</a>
-<li><a title="Outlook Internet Calendar Subscription – import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
+<li><a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import ICS file into Outlook</a>
 </ol>
 </div>
@@ -1630,7 +1630,7 @@ id="${filename}_usa.csv">${filename}_usa.csv</a>
 href="$href_ol_eur"
 id="${filename}_eur.csv">${filename}_eur.csv</a>
 </ul>
-<li><a title="Outlook CSV – import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
+<li><a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook</a>
 </ol>
 </div>
@@ -1640,9 +1640,9 @@ href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook<
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
 id="${filename}_sub_ical.ics">$ics_title</a>
-<li>How to import ICS file into <a title="Apple iCal – import Hebcal Jewish calendar"
+<li>How to import ICS file into <a title="Apple iCal - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">Apple iCal</a>
-or <a title="iPhone and iPad – import Hebcal Jewish calendar"
+or <a title="iPhone and iPad - import Hebcal Jewish calendar"
 href="/home/77/iphone-ipad-jewish-calendar">iPhone / iPad</a>
 </ol>
 <p>Alternate option: <a class="download"
@@ -1732,7 +1732,7 @@ EOHTML
 	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a title="Palm Desktop – import Hebcal Jewish calendar"
+	$s .= qq{<li><a title="Palm Desktop - import Hebcal Jewish calendar"
 href="/home/87/palm-desktop-import-hebcal-jewish-calendar">How to import DBA file into Palm Desktop 4.1.4</a>};
 	$s .= qq{<li>Please note: this DBA file will NOT work with Palm Desktop 6.2 by ACCESS};
 	$s .= qq{</ol>\n};
