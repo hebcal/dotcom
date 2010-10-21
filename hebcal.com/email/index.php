@@ -13,8 +13,24 @@ $matches = array();
 if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
-
-echo html_header_new("Shabbat Candle Lighting Times by Email");
+$xtra_head = <<<EOD
+<style type="text/css">
+.entry-content fieldset {
+border:1px solid #E7E7E7;
+margin:0 0 12px;
+padding:6px;
+}
+.entry-content input, .entry-content select {
+margin:4px;
+}
+form ol {
+list-style:none inside none;
+margin:0 0 12px 12px;
+}
+</style>
+EOD;
+echo html_header_new("Shabbat Candle Lighting Times by Email",
+		     $xtra_head);
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">
@@ -281,9 +297,10 @@ lighting times and Torah portion.
 
 <div id="email-form">
 <form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
+<fieldset><legend>Email list subscription</legend>
+<ol>
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
-<input type="hidden" name="geo" value="city">
-<label for="city">Closest City:</label>
+<li><label for="city">Closest City:</label>
 <?php
 global $hebcal_city_tz;
 $entries = array();
@@ -299,23 +316,24 @@ echo HTML_Form::returnSelect("city", $entries,
 ?>
 &nbsp;&nbsp;<small>(or select by <a
 href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=zip">zip code</a>)</small>
+<input type="hidden" name="geo" value="city">
 <?php } else { ?>
-<input type="hidden" name="geo" value="zip">
-<label for="zip">Zip code:
+<li><label for="zip">Zip code:
 <input type="text" name="zip" size="5" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
 href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
+<input type="hidden" name="geo" value="zip">
 <?php } ?>
-<br><label for="m1">Havdalah minutes past sundown:
+<li><label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
   echo htmlspecialchars($param["m"]) ?>" size="3" maxlength="3" id="m1">
 </label>
-<br><label for="em">E-mail address:
+<li><label for="em">E-mail address:
 <input type="text" name="em" size="30"
 value="<?php echo htmlspecialchars($param["em"]) ?>" id="em">
 </label>
-<br><label for="upd">
+<li><label for="upd">
 <input type="checkbox" name="upd" value="on" <?php
   if ($param["upd"] == "on") { echo "checked"; } ?> id="upd">
 Contact me occasionally about changes to the hebcal.com website.
@@ -326,10 +344,12 @@ Contact me occasionally about changes to the hebcal.com website.
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?> 
-<br><input type="submit" name="modify" value="<?php
+<li><input type="submit" name="modify" value="<?php
   echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?>">
 or
 <input type="submit" name="unsubscribe" value="Unsubscribe">
+</ol>
+</fieldset>
 </form>
 </div><!-- #email-form -->
 
