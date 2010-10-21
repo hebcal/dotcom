@@ -567,7 +567,7 @@ EOHTML
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
-    print OUT2 Hebcal::html_header("$h | Torah Readings",
+    print OUT2 Hebcal::html_header("Parashat $h ($torah)",
 				   "/sedrot/$anchor.html",
 				   "single single-post");
 
