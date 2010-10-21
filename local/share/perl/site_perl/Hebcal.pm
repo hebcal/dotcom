@@ -301,24 +301,7 @@ my %monthnames =
      );
 
 my $URCHIN = qq{<script type="text/javascript">
-function tvis(id){var e=document.getElementById(id);
-if(e.style.display=="block"){e.style.display="none"}
-else{e.style.display="block"}
-return false}
-if(document.getElementsByTagName){
-var e3=document.getElementsByTagName("a");
-if(e3&&e3.length){
-for(var i=0;i<e3.length;i++){
-if(e3[i]&&e3[i].className=="amzn"){
-if(e3[i].id){e3[i].onclick=function(){_gaq.push(['_trackPageview','/amzn/'+this.id]);}}}
-if(e3[i]&&e3[i].className=="dlhead"){
-if(e3[i].id){e3[i].onclick=function(){return tvis(this.id+"-body")}}}
-}}
-var e1=document.getElementById("export");
-if(e1){
-var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
-for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
-if(e2[i].id){e2[i].onclick=function(){_gaq.push(['_trackPageview','/export/'+this.id]);}}}}}}}
+function tvis(b){var a=document.getElementById(b);if(a.style.display=="block"){a.style.display="none"}else{a.style.display="block"}return false}(function(){if(document.getElementsByTagName){var d=document.getElementsByTagName("a");if(d&&d.length){for(var c=0;c<d.length;c++){if(d[c]&&d.className){if(d[c].className=="amzn"&&d[c].id){d[c].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}if(d[c].className=="dlhead"&&d[c].id){d[c].onclick=function(){return tvis(this.id+"-body")}}if(d[c].className=="sedra-out"){d[c].onclick=function(){var e=this.href;if(e&&e.indexOf("http://")===0){var f=e.indexOf("/",7);if(f>7){_gaq.push(["_trackEvent","outbound-article",e.substring(7,f)])}}}}}}}var b=document.getElementById("export");if(b){var a=b.getElementsByTagName("a");if(a&&a.length){for(var c=0;c<a.length;c++){if(a[c]&&a[c].className=="download"){if(a[c].id){a[c].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}}})();
 </script>
 };
 
