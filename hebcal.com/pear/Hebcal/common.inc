@@ -263,17 +263,12 @@ $site_generator_div
 </div><!-- #colophon -->
 </div><!-- #footer -->
 </div><!-- #wrapper -->
-<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
 <script type="text/javascript">
-_uacct="UA-967247-1";
-urchinTracker();
 if(document.getElementsByTagName){
 var e3=document.getElementsByTagName("a");
 if(e3&&e3.length){
 for(var i=0;i<e3.length;i++){if(e3[i]&&e3[i].className=="amzn"){
-if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}
+if(e3[i].id){e3[i].onclick=function(){_gaq.push(['_trackPageview','/amzn/'+this.id]);}}
 }}}
 }
 </script>
@@ -352,6 +347,16 @@ function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-967247-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
 $xtra_head</head>
 <body class="single single-post">
 <div id="wrapper" class="hfeed">

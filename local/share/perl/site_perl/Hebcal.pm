@@ -300,22 +300,17 @@ my %monthnames =
      "Adar II"	=> "\x{5D0}\x{5B7}\x{5D3}\x{5B8}\x{5E8} \x{5D1}\x{5F3}",
      );
 
-my $URCHIN = qq{<script src="http://www.google-analytics.com/urchin.js"
-type="text/javascript">
-</script>
-<script type="text/javascript">
-function tvis(id) {var e=document.getElementById(id);
+my $URCHIN = qq{<script type="text/javascript">
+function tvis(id){var e=document.getElementById(id);
 if(e.style.display=="block"){e.style.display="none"}
 else{e.style.display="block"}
 return false}
-_uacct="UA-967247-1";
-urchinTracker();
 if(document.getElementsByTagName){
 var e3=document.getElementsByTagName("a");
 if(e3&&e3.length){
 for(var i=0;i<e3.length;i++){
 if(e3[i]&&e3[i].className=="amzn"){
-if(e3[i].id){e3[i].onclick=function(){urchinTracker("/amzn/"+this.id);}}}
+if(e3[i].id){e3[i].onclick=function(){_gaq.push(['_trackPageview','/amzn/'+this.id]);}}}
 if(e3[i]&&e3[i].className=="dlhead"){
 if(e3[i].id){e3[i].onclick=function(){return tvis(this.id+"-body")}}}
 }}
@@ -323,7 +318,7 @@ var e1=document.getElementById("export");
 if(e1){
 var e2=e1.getElementsByTagName("a");if(e2&&e2.length){
 for(var i=0;i<e2.length;i++){if(e2[i]&&e2[i].className=="download"){
-if(e2[i].id){e2[i].onclick=function(){urchinTracker("/export/"+this.id);}}}}}}}
+if(e2[i].id){e2[i].onclick=function(){_gaq.push(['_trackPageview','/export/'+this.id]);}}}}}}}
 </script>
 };
 
@@ -1460,6 +1455,16 @@ sub html_header
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-967247-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
 $xtra_head</head>
 <body class="$body_class">
 <div id="wrapper" class="hfeed">
