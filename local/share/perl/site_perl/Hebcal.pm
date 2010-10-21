@@ -1794,64 +1794,6 @@ sub get_browser_endl($)
     $endl;
 }
 
-sub macintosh_datebook($$)
-{
-    my($q, $events) = @_;
-    my($numEntries) = scalar(@{$events});
-
-    export_http_header($q, 'text/tab-separated-values');
-
-    for (my $i = 0; $i < $numEntries; $i++)
-    {
-	my $date = 
-	    $Hebcal::MoY_long{$events->[$i]->[$Hebcal::EVT_IDX_MON] + 1} .
-	    ' ' .  $events->[$i]->[$Hebcal::EVT_IDX_MDAY] . ', ' .
-	    $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-
-	my $start_time = '';
-	my $end_time = '';
-	my $end_date = $date;
-	my $memo = '';
-
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
-	{
-	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
-	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-
-	    $hour -= 12 if $hour > 12;
-	    $start_time = sprintf("%d:%02d PM", $hour, $min);
-
-	    $hour += 12 if $hour < 12;
-	    $min += $events->[$i]->[$Hebcal::EVT_IDX_DUR];
-
-	    if ($min >= 60)
-	    {
-		$hour++;
-		$min -= 60;
-	    }
-
-	    $hour -= 12 if $hour > 12;
-	    $end_time = sprintf("%d:%02d PM", $hour, $min);
-	    $end_date = '';
-	    $memo = '';
-	}
-
-	# this is BROKEN
-	# general format is
-	# Hanukkah<B8>December 14, 1998<B8>December 14, 1998<B8><B8><B8>Jewish Holiday<B8><9B>
-	# Doc group mtg<B8>August 21, 2002<B8><B8>2:00 PM<B8>3:00 PM<B8><B8><9B>
-
-	print STDOUT join("\t",
-			  $events->[$i]->[$Hebcal::EVT_IDX_SUBJ],
-			  $date, $end_date,
-			  $start_time, $end_time,
-			  $memo,
-			  ), "\015";
-    }
-
-    1;
-}
-
 ########################################################################
 # export to vCalendar
 ########################################################################

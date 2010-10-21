@@ -150,10 +150,6 @@ elsif ($q->path_info() =~ /[^\/]+.dba$/)
 {
     dba_display();
 }
-elsif ($q->path_info() =~ /[^\/]+\.tsv$/)
-{
-    macintosh_datebook_display();
-}
 elsif ($q->path_info() =~ /[^\/]+\.[vi]cs$/)
 {
     # text/x-vCalendar
@@ -166,12 +162,6 @@ else
 
 close(STDOUT);
 exit(0);
-
-sub macintosh_datebook_display {
-    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
-
-    Hebcal::macintosh_datebook($q, \@events);
-}
 
 sub vcalendar_display
 {

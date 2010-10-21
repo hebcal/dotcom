@@ -240,10 +240,6 @@ elsif ($pi =~ /[^\/]+\.dba$/)
 {
     dba_display();
 }
-elsif ($pi =~ /[^\/]+\.tsv$/)
-{
-    macintosh_datebook_display();
-}
 elsif ($pi =~ /[^\/]+\.[vi]cs$/)
 {
     vcalendar_display($g_date);
@@ -420,14 +416,6 @@ sub hebrew_span
 {
     my($hebrew) = @_;
     return qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
-}
-
-sub macintosh_datebook_display
-{
-    my @events = Hebcal::invoke_hebcal($cmd, "", $g_seph, $g_month,
-				       $g_nmf, $g_nss);
-
-    Hebcal::macintosh_datebook($q, \@events);
 }
 
 sub vcalendar_display
