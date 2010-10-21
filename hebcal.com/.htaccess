@@ -84,3 +84,5 @@ Redirect permanent /help/holidays.html http://www.hebcal.com/holidays/
 Redirect permanent /news/index.rdf http://www.hebcal.com/home/feed
 Redirect permanent /news/index.xml http://www.hebcal.com/home/feed
 RedirectMatch permanent ^/news(/)?$ http://www.hebcal.com/home/category/news
+
+Redirect gone /shabbat/cities.html

@@ -257,7 +257,6 @@ id="zip">&nbsp;<input type="submit" value="Go">
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <input type="hidden" name="tag" value="fp.ql">
-<br><small>or <a href="/shabbat/cities.html">select world city</a></small>
 </form>
 </li>
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--

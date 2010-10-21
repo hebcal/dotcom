@@ -1134,106 +1134,6 @@ sub zipcode_get_zip_fields($$)
      $latitude,$longitude);
 }
 
-sub html_copyright2($$$)
-{
-    my($prefix,$break,$target) = @_;
-
-    my($br) = $break ? '<br>' : '';
-    my($tgt) = $target ? $target : '_top';
-
-    return qq{<!--
-<rdf:RDF xmlns="http://web.resource.org/cc/"
- xmlns:dc="http://purl.org/dc/elements/1.1/"
- xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<Work rdf:about="">
- <license rdf:resource="http://creativecommons.org/licenses/by/2.0/" />
-</Work>
-<License rdf:about="http://creativecommons.org/licenses/by/2.0/">
- <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
- <permits rdf:resource="http://web.resource.org/cc/Distribution" />
- <requires rdf:resource="http://web.resource.org/cc/Notice" />
- <requires rdf:resource="http://web.resource.org/cc/Attribution" />
- <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-</License>
-</rdf:RDF>
--->
-<a rel="license" href="http://creativecommons.org/licenses/by/2.0/"><img
-src="http://www.hebcal.com/i/somerights20.png" width="88" height="31"
-alt="Creative Commons License" border="0" align="right"></a>
-<a name="copyright"></a>Copyright &copy; $this_year
-Michael J. Radwin. This work is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by/2.0/">Creative Commons
-License</a>.$br
-<a target="$tgt" href="$prefix/privacy/">Privacy Policy</a> -
-<a target="$tgt" href="$prefix/help/">Help</a> -
-<a target="$tgt" href="$prefix/contact/">Contact</a> -
-<a target="$tgt" href="$prefix/news/">News</a> -
-<a target="$tgt" href="$prefix/donations/">Donate</a>};
-}
-
-sub html_copyright($$$)
-{
-    my($q,$break,$tgt) = @_;
-
-    my($server_name) = $q->virtual_host();
-    return html_copyright2("http://$server_name", $break, $tgt);
-}
-
-sub html_footer_lite {
-    my($rcsrev,$mtime,$noclosebody) = @_;
-
-    $rcsrev =~ s/\s*\$//g;
-
-    my $hhmts = "Last modified:\n" . localtime($mtime);
-    my $copyright = Hebcal::html_copyright2('',0,undef);
-    my $str = <<EOHTML;
-<hr noshade size="1">
-<span class="tiny">$copyright
-<br>
-$hhmts
-($rcsrev)
-</span>
-EOHTML
-;
-
-    $str .= $URCHIN;
-
-    if ($noclosebody) {
-	return $str;
-    } else {
-	return $str . "</body></html>\n";
-    }
-}
-
-sub html_footer
-{
-    my($q,$rcsrev,$noclosebody) = @_;
-
-    my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-
-    $rcsrev =~ s/\s*\$//g;
-
-    my($hhmts) = "Software last updated:\n" . localtime($mtime);
-
-    my $str = qq{
-<hr noshade size="1"><span class="tiny">
-} . html_copyright($q, 0, undef) . qq{
-<br>This website uses <a href="http://sourceforge.net/projects/hebcal/">hebcal
-3.7 for UNIX</a>, Copyright &copy; 2006 Danny Sadinoff. All rights reserved.
-<br>$hhmts ($rcsrev)
-</span>
-};
-
-    $str .= $URCHIN;
-
-    if ($noclosebody) {
-	return $str;
-    } else {
-	return $str . "</body></html>\n";
-    }
-}
-
 sub html_footer_new
 {
     my($q,$rcsrev,$noclosebody) = @_;
@@ -1821,24 +1721,25 @@ id="${filename}_eur.csv">${filename}_eur.csv</a>
 <ol>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
-id="${filename}_sub.ics">$ics_title</a>
+id="${filename}_sub_ical.ics">$ics_title</a>
 <li>How to import ICS file into <a href="/help/import-ical.html">Apple iCal</a>
 or <a href="/help/import-ical.html#iphone">iPhone / iPad</a>
 </ol>
 <p>Alternate option: <a class="download"
 href="${ical_href}"
-id="${filename}_dl.ics">download $ics_title</a>
+id="${filename}_dl_ical.ics">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 </div>
 <div><a class="dlhead" href="#gcal" id="gcal">Google Calendar</a></div>
 <div class="dlinstr" id="gcal-body">
 <blockquote>
 <a title="Add to Google Calendar"
+class="download" id="${filename}_sub_gcal.ics"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
 </blockquote>
 <p>Alternate option:
-<a class="download" id="${filename}_dl.ics"
+<a class="download" id="${filename}_dl_gcal.ics"
 href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
 import instructions</a>.</p>

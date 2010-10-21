@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2007  Michael J. Radwin.
+# Copyright (c) 2010  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -237,88 +237,6 @@ for (my $i = 0; $i < @events; $i++)
 	}
     }
 }
-close(OUT);
-
-my($fyear,$fmonth,$fday) = upcoming_dow(5); # friday
-$outfile = "$WEBDIR/shabbat/cities.html";
-open(OUT,">$outfile") || die;
-my $fmonth_text = Date::Calc::Month_to_Text($fmonth);
-print OUT <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head>
-<title>Candle lighting times for world cities - $fday $fmonth_text $fyear</title>
-<base href="http://www.hebcal.com/shabbat/cities.html" target="_top">
-<link rel="stylesheet" href="/style.css" type="text/css">
-</head>
-<body>
-<!--htdig_noindex-->
-<table width="100%" class="navbar"><tr><td><strong><a
-href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-<a href="/shabbat/">1-Click Shabbat</a> <tt>-&gt;</tt>
-World Cities</td><td align="right"><a
-href="/help/">Help</a> - <a
-href="/search/">Search</a>
-</td></tr></table>
-<!--/htdig_noindex-->
-<h1>Candle lighting times for world cities</h1>
-<h3>$parsha / $fday $fmonth_text $fyear</h3>
-<table border="0">
-<tr><td>
-<h4>International Cities</h4>
-<br>
-<table border="1" cellpadding="3">
-<tr><th>City</th><th>Candle lighting</th></tr>
-EOHTML
-;
-
-foreach my $city (sort keys %Hebcal::city_tz)
-{
-    @events = Hebcal::invoke_hebcal("$HEBCAL -C '$city' -m 0 -c -h -x $fyear",
-				    "", 0, $fmonth);
-    for (my $i = 0; $i < @events; $i++)
-    {
-	if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $fday &&
-	    $events[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Candle lighting')
-	{
-	    my $min = $events[$i]->[$Hebcal::EVT_IDX_MIN];
-	    my $hour = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
-	    $hour -= 12 if $hour > 12;
-	    my $stime = sprintf("%d:%02dpm", $hour, $min);
-
-	    my $ucity = $city;
-	    $ucity =~ s/ /+/g;
-	    my $acity = lc($city);
-	    $acity =~ s/ /_/g;
-	    print OUT qq{<tr><td><a name="$acity" href="/shabbat/?geo=city;city=$ucity;m=72;tag=wc">$city</a></td><td>$stime</td></tr>\n};
-	}
-    }
-}
-
-print OUT <<EOHTML;
-</table>
-</td>
-<td>&nbsp;&nbsp;&nbsp;</td>
-<td valign="top">
-<h4>United States</h4>
-<p>
-<form action="/shabbat/">
-<input type="hidden" name="geo" value="zip">
-<label for="zip">Enter Zip code:</label>
-<input type="text" name="zip" size="5" maxlength="5" id="zip">
-<input type="hidden" name="m" value="72">
-<input type="submit" value="Go">
-</form>
-</p>
-</td>
-</tr>
-</table>
-<p>
-EOHTML
-;
-
-my $rcsrev = '$Revision$'; #'
-print OUT Hebcal::html_footer_lite($rcsrev,time());
 close(OUT);
 
 sub upcoming_dow
