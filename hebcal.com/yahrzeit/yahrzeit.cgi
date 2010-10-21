@@ -286,10 +286,9 @@ sub my_invoke_hebcal {
 }
 
 sub results_page {
-    my $target = ($cfg eq "i") ? "" : "_top";
-    my $type =  ($cfg eq "j") ? "application/x-javascript" : "text/html";
+    my $type =  ($cfg eq "j") ? "text/javascript" : "text/html";
 
-    print STDOUT $q->header(-type => $type);
+    print STDOUT $q->header(-type => "$type;charset=UTF-8");
 
     if ($cfg eq "j")
     {

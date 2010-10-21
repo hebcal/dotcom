@@ -343,6 +343,8 @@ function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
     $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
     $menu = html_menu($_SERVER["SCRIPT_URL"]);
     $html = <<<EOD
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>$title</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="$base_href" target="_top">

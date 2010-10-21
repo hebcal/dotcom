@@ -1350,7 +1350,8 @@ sub html_header
     $xtra_head = "" unless $xtra_head;
     my $menu = html_menu($base_href);
     my $str = <<EOHTML;
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
 <html><head><title>$title | Hebcal Jewish Calendar</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com$base_href" target="_top">
@@ -1684,7 +1685,7 @@ sub download_html
     my $href_ol_eur = download_href($q, "${filename}_eur", "csv") . ";euro=1";
     my $href_vcs = download_href($q, $filename, "vcs");
     my $gcal_subical_href = $subical_href;
-    $gcal_subical_href =~ s/;/&/g;
+    $gcal_subical_href =~ s/;/&amp;/g;
     my $full_http_href = "http://" . $vhost . $gcal_subical_href;
     my $gcal_href = Hebcal::url_escape($full_http_href);
     my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
@@ -1749,7 +1750,7 @@ import instructions</a>.</p>
 <blockquote>
 Add to&nbsp;&nbsp;
 <a title="Windows Live Calendar"
-href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${gcal_href}&name=${title_esc}"><img
+href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"><img
 src="/i/wlive-150x20.png"
 width="150" height="20" border="0"
 alt="Windows Live Calendar"></a>
