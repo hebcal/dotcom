@@ -1154,35 +1154,6 @@ EOHTML
     }
 }
 
-
-
-sub navbar2($$$$$)
-{
-    my($q,$title,$help,$parent_title,$parent_href) = @_;
-
-    my($server_name) = $q->virtual_host();
-    $server_name =~ s/^www\.//;
-
-    my($help_html) = ($help) ? "href=\"/help/\">Help</a> - <a\n" : '';
-
-    my($parent_html) = ($parent_title && $parent_href) ? 
-	qq{<tt>-&gt;</tt>\n<a\nhref="$parent_href">$parent_title</a>\n} :
-	'';
-
-    return "\n<!--htdig_noindex-->\n" .
-	"<table width=\"100%\" class=\"navbar\">" .
-	"<tr><td>" .
-	"<strong><a\nhref=\"/\">" . $server_name . "</a></strong>\n" .
-	$parent_html .
-	"<tt>-&gt;</tt>\n" .
-	$title . "</td>" .
-	"<td align=\"right\"><a\n" .
-	$help_html .
-	"href=\"/search/\">Search</a>\n" .
-	"</td></tr></table>\n" .
-	"<!--/htdig_noindex-->\n";
-}
-
 sub woe_city
 {
     my($woe) = @_;
@@ -1231,45 +1202,6 @@ sub html_city_select
     $retval .= "</optgroup>\n";
     $retval .= "</select>\n";
     $retval;
-}
-
-sub start_html($$$$$)
-{
-    my($q,$title,$head,$meta,$target) = @_;
-
-    $q->default_dtd("-//W3C//DTD HTML 4.01 Transitional//EN\"\n" .
-		    "\t\"http://www.w3.org/TR/html4/loose.dtd");
-
-    $meta = {} unless defined $meta;
-    $head = [] unless defined $head;
-
-    my $script_name = Hebcal::script_name($q);
-    my $base = "http://" . $q->virtual_host() . $script_name;
-
-    if ($ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'})
-    {
-	my $qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
-	$qs =~ s/&/&amp;/g;
-
-	$base .= "?" . $qs;
-    }
-
-    $target = '_top' unless defined $target;
-    return $q->start_html
-	(
-	 -dir => 'ltr',
-	 -lang => 'en',
-	 -title => $title,
-	 -target => $target,
-	 -xbase => $base,
-	 -head => [
-		   $q->Link({-rel => 'stylesheet',
-			     -href => '/style.css',
-			     -type => 'text/css'}),
-		   @{$head},
-		   ],
-	 -meta => $meta,
-	 );
 }
 
 my $HTML_MENU_ITEMS =

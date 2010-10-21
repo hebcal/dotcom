@@ -71,11 +71,17 @@ for (my $i = 0; $i < $numEntries2; $i++)
     }
 }
 
-my($title) = "Refrigerator Shabbos Times for $hebrew_year";
+my $title = "Refrigerator Shabbos Times for $hebrew_year";
 
 print "Cache-Control: private\015\012";
-print $q->header(),
-    Hebcal::start_html($q, $title, [], undef, undef);
+print $q->header();
+my $base = "http://" . $q->virtual_host() . $script_name;
+print $q->start_html(
+    -title => $title,
+    -target => "_top",
+    -xbase => $base,
+    -style => { -verbatim => '@media print { .goto {display:none} }' }
+    );
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
@@ -149,12 +155,12 @@ sub format_items
 
     Hebcal::out_html($cfg,"<p><a class=\"goto\" title=\"Previous\" href=\"",
 		     Hebcal::self_url($q, {'year' => $hebrew_year - 1}),
-		     "\">&laquo;&nbsp;", $hebrew_year - 1,
+		     "\">&larr;&nbsp;", $hebrew_year - 1,
 		     "</a>&nbsp;&nbsp;&nbsp;",
 		     "Times in <b>bold</b> indicate holidays.",
 		     "&nbsp;&nbsp;&nbsp;<a class=\"goto\" title=\"Next\" href=\"",
 		     Hebcal::self_url($q, {'year' => $hebrew_year + 1}),
-		     "\">", $hebrew_year + 1, "&nbsp;&raquo;</a>",
+		     "\">", $hebrew_year + 1, "&nbsp;&rarr;</a>",
 		     "</p>\n");
 }
 
