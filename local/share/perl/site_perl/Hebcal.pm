@@ -1614,7 +1614,8 @@ sub download_html
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
 id="${filename}_ol.ics">$ics_title</a>
-<li><a href="/help/import-outlook.html#ical">How to import ICS file into Outlook</a>
+<li><a title="Outlook Internet Calendar Subscription – import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
+href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import ICS file into Outlook</a>
 </ol>
 </div>
 <div><a class="dlhead" href="#ol-csv" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003</a></div>
@@ -1629,7 +1630,8 @@ id="${filename}_usa.csv">${filename}_usa.csv</a>
 href="$href_ol_eur"
 id="${filename}_eur.csv">${filename}_eur.csv</a>
 </ul>
-<li><a href="/help/import-outlook.html#csv">How to import CSV file into Outlook</a>
+<li><a title="Outlook CSV – import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
+href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook</a>
 </ol>
 </div>
 <div><a class="dlhead" href="#ical" id="ical">Apple iCal, iPhone, iPad</a></div>
@@ -1638,8 +1640,10 @@ id="${filename}_eur.csv">${filename}_eur.csv</a>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
 id="${filename}_sub_ical.ics">$ics_title</a>
-<li>How to import ICS file into <a href="/help/import-ical.html">Apple iCal</a>
-or <a href="/help/import-ical.html#iphone">iPhone / iPad</a>
+<li>How to import ICS file into <a title="Apple iCal – import Hebcal Jewish calendar"
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">Apple iCal</a>
+or <a title="iPhone and iPad – import Hebcal Jewish calendar"
+href="/home/77/iphone-ipad-jewish-calendar">iPhone / iPad</a>
 </ol>
 <p>Alternate option: <a class="download"
 href="${ical_href}"
@@ -1673,7 +1677,7 @@ alt="Windows Live Calendar"></a>
 </div>
 <div><a class="dlhead" href="#ycal" id="ycal">Yahoo! Calendar</a></div>
 <div class="dlinstr" id="ycal-body">
-<form id="GrabLinkForm">
+<form id="GrabLinkForm" action="#">
 <ol>
 <li>Copy the entire iCal URL here:
 <label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
@@ -1690,13 +1694,13 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 </ol>
 </form>
 </div>
-<div><a class="dlhead" href="#vcs" id="vcs">Palm Desktop 6.2 for Windows</a></div>
+<div><a class="dlhead" href="#vcs" id="vcs">Palm Desktop 6.2 by ACCESS for Windows</a></div>
 <div class="dlinstr" id="vcs-body">
 <ol>
 <li>Export vCal file: <a class="download"
 href="$href_vcs"
 id="${filename}.vcs">${filename}.vcs</a>
-<li><a href="/help/import-palm.html#vcs">How to import VCS file into Palm Desktop 6.2</a>
+<li>Import VCS file into Palm Desktop 6.2 by ACCESS
 </ol>
 </div>
 EOHTML
@@ -1728,7 +1732,9 @@ EOHTML
 	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a href="/help/import-palm.html#dba">How to import DBA file into Palm Desktop 4.1.4</a>};
+	$s .= qq{<li><a title="Palm Desktop – import Hebcal Jewish calendar"
+href="/home/87/palm-desktop-import-hebcal-jewish-calendar">How to import DBA file into Palm Desktop 4.1.4</a>};
+	$s .= qq{<li>Please note: this DBA file will NOT work with Palm Desktop 6.2 by ACCESS};
 	$s .= qq{</ol>\n};
     }
     else
