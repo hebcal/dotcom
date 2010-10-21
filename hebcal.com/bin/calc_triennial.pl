@@ -339,11 +339,18 @@ sub write_index_page
     my $hy2 = $hebrew_year + 2;
     my $hy3 = $hebrew_year + 3;
 
+    my $xtra_head = <<EOHTML;
+<style type="text/css">
+#hebcal-sedrot ol { list-style: none }
+</style>
+EOHTML
+;
     print OUT1 Hebcal::html_header("Torah Readings",
 				   "/sedrot/",
-				   "page page-template page-template-onecolumn-page-php");
+				   "single single-post",
+				   $xtra_head);
     print OUT1 <<EOHTML;
-<div id="container" class="one-column">
+<div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
 <h1 class="entry-title"><a href="index.xml"><img
@@ -363,8 +370,9 @@ $hebrew_year -
 <p>Leyning coordinators: <a
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
 parsha spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
+<div id="hebcal-sedrot">
 <h3>Genesis</h3>
-<dl>
+<ol>
 EOHTML
     ;
 
@@ -377,34 +385,36 @@ EOHTML
 	my($anchor) = lc($h);
 	$anchor =~ s/[^\w]//g;
 
-	print OUT1 "</dl>\n<h3>$book</h3>\n<dl>\n"
+	print OUT1 "</ol>\n<h3>$book</h3>\n<ol>\n"
 	    if ($prev_book ne $book);
 	$prev_book = $book;
 
-	print OUT1 qq{<dt><a name="$anchor" },
-	qq{href="$anchor.html">Parashat\n$h</a>\n};
+	print OUT1 qq{<li><a name="$anchor" },
+	qq{href="$anchor.html">Parashat $h</a>};
 	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
-	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>\n};
+	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>};
 	}
+	print OUT1 qq{\n};
     }
 
-    print OUT1 "</dl>\n<h3>Doubled Parshiyot</h3>\n<dl>\n";
+    print OUT1 "</ol>\n<h3>Doubled Parshiyot</h3>\n<ol>\n";
 
     foreach my $h (@combined)
     {
 	my($anchor) = lc($h);
 	$anchor =~ s/[^\w]//g;
 
-	print OUT1 qq{<dt><a name="$anchor" },
-	qq{href="$anchor.html">Parashat\n$h</a>\n};
+	print OUT1 qq{<li><a name="$anchor" },
+	qq{href="$anchor.html">Parashat $h</a>};
 	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
-	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>\n};
+	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>};
 	}
+	print OUT1 qq{\n};
     }
 
-    print OUT1 "</dl>\n";
+    print OUT1 "</ol>\n</div><!-- #hebcal-sedrot -->\n";
     print OUT1 <<EOHTML;
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
