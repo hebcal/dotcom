@@ -58,33 +58,33 @@ my $HEBCAL = "$WEBDIR/bin/hebcal";
 my($syear,$smonth,$sday) = upcoming_dow(6); # saturday
 
 my $outfile = "$WEBDIR/current.inc";
-my $wrote_parsha = 0;
+my $wrote_parasha = 0;
 
 my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $syear", "", 0, $smonth);
-my $parsha = '';
+my $parasha = '';
 for (my $i = 0; $i < @events; $i++)
 {
     if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sday)
     {
-	$parsha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my $href = Hebcal::get_holiday_anchor($parsha,undef,undef);
+	$parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $href = Hebcal::get_holiday_anchor($parasha,undef,undef);
 	if ($href)
 	{
 	    my $stime = sprintf("%02d %s %d",
 				$sday, Date::Calc::Month_to_Text($smonth), $syear);
 	    open(OUT,">$outfile") || die;
-	    my $parsha2 = $parsha;
-	    $parsha2 =~ s/ /&nbsp;/g;
+	    my $parasha2 = $parasha;
+	    $parasha2 =~ s/ /&nbsp;/g;
 	    print OUT "\n<br><br><li><b><a\n";
-	    print OUT "href=\"$href?tag=fp.ql\">$parsha2</a></b><br>$stime";
+	    print OUT "href=\"$href?tag=fp.ql\">$parasha2</a></b><br>$stime";
 	    close(OUT);
-	    $wrote_parsha = 1;
+	    $wrote_parasha = 1;
 
 	    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
 				   gmtime(time()));
 
 	    my $dow = $Hebcal::DoW[Hebcal::get_dow($syear, $smonth, $sday)];
-	    my $parsha_pubDate = sprintf("%s, %02d %s %d 12:00:00 GMT",
+	    my $parasha_pubDate = sprintf("%s, %02d %s %d 12:00:00 GMT",
 					 $dow,
 					 $sday,
 					 $Hebcal::MoY_short[$smonth - 1],
@@ -94,17 +94,17 @@ for (my $i = 0; $i < @events; $i++)
 	    print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
-<title>Hebcal Parsha of the Week</title>
+<title>Hebcal Parsahat ha-Shavua</title>
 <link>http://www.hebcal.com/sedrot/</link>
-<description>Weekly Torah Readings from Hebcal.com</description>
+<description>Torah reading of the week from Hebcal.com</description>
 <language>en-us</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
-<title>$parsha</title>
+<title>$parasha</title>
 <link>http://www.hebcal.com$href?tag=rss</link>
 <description>$stime</description>
-<pubDate>$parsha_pubDate</pubDate>
+<pubDate>$parasha_pubDate</pubDate>
 </item>
 </channel>
 </rss>
@@ -116,8 +116,8 @@ for (my $i = 0; $i < @events; $i++)
     }
 }
 
-unless ($wrote_parsha) {
-    # no parsha this week, so create empty include file
+unless ($wrote_parasha) {
+    # no parasha this week, so create empty include file
     open(OUT,">$outfile") || die;
     close(OUT);
 }

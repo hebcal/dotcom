@@ -95,7 +95,7 @@ my $fxml = XML::Simple::XMLin($festival_in);
 my %triennial_aliyot;
 read_aliyot_metadata($axml, \%triennial_aliyot);
 
-my(@all_inorder,@combined,%combined,%parsha2id);
+my(@all_inorder,@combined,%combined,%parashah2id);
 foreach my $h (keys %{$axml->{'parsha'}})
 {
     my $num = $axml->{'parsha'}->{$h}->{'num'};
@@ -110,7 +110,7 @@ foreach my $h (keys %{$axml->{'parsha'}})
     else
     {
 	$all_inorder[$num - 1] = $h;
-	$parsha2id{$h} = $num;
+	$parashah2id{$h} = $num;
     }
 }
 
@@ -128,11 +128,11 @@ foreach my $h (reverse @all_inorder)
     $h2 = $h;
 }
 
-foreach my $parsha (@combined)
+foreach my $parashah (@combined)
 {
-    my($p1,$p2) = split(/-/, $parsha);
-    $next{$parsha} = $next{$p2};
-    $prev{$parsha} = $prev{$p1};
+    my($p1,$p2) = split(/-/, $parashah);
+    $next{$parashah} = $next{$p2};
+    $prev{$parashah} = $prev{$p1};
 }
 
 print " done.\n";
@@ -180,7 +180,7 @@ if ($opts{'t'})
 {
     my $fn = $opts{'t'};
     open(CSV, ">$fn.$$") || die "$fn.$$: $!\n";
-    print CSV qq{"Date","Parsha","Aliyah","Triennial Reading"\015\012};
+    print CSV qq{"Date","Parashah","Aliyah","Triennial Reading"\015\012};
 
     triennial_csv($axml,$events1,$bereshit_idx1,\%readings1);
     triennial_csv($axml,$events2,$bereshit_idx2,\%readings2);
@@ -189,11 +189,11 @@ if ($opts{'t'})
     rename("$fn.$$", $fn) || die "$fn: $!\n";
 }
 
-my(%parsha_dates);
-my(%parsha_stime2);
-my(%parsha_time);
+my(%parashah_dates);
+my(%parashah_stime2);
+my(%parashah_time);
 my($saturday) = get_saturday();
-readings_for_current_year($axml, \%parsha_dates, \%parsha_time);
+readings_for_current_year($axml, \%parashah_dates, \%parashah_time);
 
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
@@ -205,11 +205,11 @@ my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 foreach my $h (keys %readings1, "Vezot Haberakhah")
 {
-    write_sedra_page($axml,\%parsha_dates,$h,$prev{$h},$next{$h},
+    write_sedra_page($axml,\%parashah_dates,$h,$prev{$h},$next{$h},
 		     $readings1{$h},$readings2{$h});
 }
 
-write_index_page($axml,\%parsha_dates);
+write_index_page($axml,\%parashah_dates);
 
 exit(0);
 
@@ -370,7 +370,7 @@ $hebrew_year -
 <p>Leyning coordinators:
 <a title="Can I download the aliyah-by-aliyah breakdown of Torah readings for Shabbat?"
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
-parsha spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
+Parashat ha-Shavua spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
 <div id="hebcal-sedrot">
 <h3>Genesis</h3>
 <ol>
@@ -435,9 +435,9 @@ sub calc_variation_options
 {
     my($parshiot,$option,$patterns) = @_;
 
-    foreach my $parsha (@combined)
+    foreach my $parashah (@combined)
     {
-	my($p1,$p2) = split(/-/, $parsha);
+	my($p1,$p2) = split(/-/, $parashah);
 	my $pat = '';
 	foreach my $yr (0 .. 2) {
 	    $pat .= $patterns->{$p1}->[$yr];
@@ -445,26 +445,26 @@ sub calc_variation_options
 
 	if ($pat eq 'TTT')
 	{
-	    $option->{$parsha} = 'all-together';
+	    $option->{$parashah} = 'all-together';
 	}
 	else
 	{
 	    my $vars =
-		$parshiot->{'parsha'}->{$parsha}->{'variations'}->{'cycle'};
+		$parshiot->{'parsha'}->{$parashah}->{'variations'}->{'cycle'};
 	    foreach my $cycle (@{$vars}) {
 		if ($cycle->{'pattern'} eq $pat) {
-		    $option->{$parsha} = $cycle->{'option'};
+		    $option->{$parashah} = $cycle->{'option'};
 		    $option->{$p1} = $cycle->{'option'};
 		    $option->{$p2} = $cycle->{'option'};
 		    last;
 		}
 	    }
 
-	    die "can't find option for $parsha (pat == $pat)"
-		unless defined $option->{$parsha};
+	    die "can't find option for $parashah (pat == $pat)"
+		unless defined $option->{$parashah};
 	}
 
-	print "$parsha: $pat ($option->{$parsha})\n";
+	print "$parashah: $pat ($option->{$parashah})\n";
     }
 
     1;
@@ -475,19 +475,19 @@ sub read_aliyot_metadata
     my($parshiot,$aliyot) = @_;
 
     # build a lookup table so we don't have to follow num/variation/sameas
-    foreach my $parsha (keys %{$parshiot->{'parsha'}}) {
-	my $val = $parshiot->{'parsha'}->{$parsha};
+    foreach my $parashah (keys %{$parshiot->{'parsha'}}) {
+	my $val = $parshiot->{'parsha'}->{$parashah};
 	my $yrs = $val->{'triennial'}->{'year'};
 	
 	foreach my $y (@{$yrs}) {
 	    if (defined $y->{'num'}) {
-		$aliyot->{$parsha}->{$y->{'num'}} = $y->{'aliyah'};
+		$aliyot->{$parashah}->{$y->{'num'}} = $y->{'aliyah'};
 	    } elsif (defined $y->{'variation'}) {
 		if (! defined $y->{'sameas'}) {
-		    $aliyot->{$parsha}->{$y->{'variation'}} = $y->{'aliyah'};
+		    $aliyot->{$parashah}->{$y->{'variation'}} = $y->{'aliyah'};
 		}
 	    } else {
-		die "strange data for Parashat $parsha";
+		die "strange data for Parashat $parashah";
 	    }
 	}
 
@@ -495,10 +495,10 @@ sub read_aliyot_metadata
 	foreach my $y (@{$yrs}) {
 	    if (defined $y->{'variation'} && defined $y->{'sameas'}) {
 		my $sameas = $y->{'sameas'};
-		die "Bad sameas=$sameas for Parashat $parsha"
-		    unless defined $aliyot->{$parsha}->{$sameas};
-		$aliyot->{$parsha}->{$y->{'variation'}} =
-		    $aliyot->{$parsha}->{$sameas};
+		die "Bad sameas=$sameas for Parashat $parashah"
+		    unless defined $aliyot->{$parashah}->{$sameas};
+		$aliyot->{$parashah}->{$y->{'variation'}} =
+		    $aliyot->{$parashah}->{$sameas};
 	    }
 	}
     }
@@ -513,7 +513,7 @@ sub write_sedra_page
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
        $drash_reform,$drash_torah,$drash_uj,
-       $drash_ajr) = get_parsha_info($parshiot,$h);
+       $drash_ajr) = get_parashah_info($parshiot,$h);
 
     if ($hebrew) {
 	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
@@ -539,9 +539,9 @@ sub write_sedra_page
 	$prev_anchor =~ s/[^\w]//g;
 	$prev_anchor .= ".html";
 
-	my $title = "Previous Parsha";
+	my $title = "Previous Parashah";
 	$prev_link = <<EOHTML
-<div class="nav-previous"><a href="$prev_anchor" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
+<div class="nav-previous"><a title="$title" href="$prev_anchor" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
 EOHTML
 ;
     }
@@ -554,9 +554,9 @@ EOHTML
 	$next_anchor =~ s/[^\w]//g;
 	$next_anchor .= ".html";
 
-	my $title = "Next Parsha";
+	my $title = "Next Parashah";
 	$next_link = <<EOHTML
-<div class="nav-next"><a href="$next_anchor" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
+<div class="nav-next"><a title="$title" href="$next_anchor" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
 EOHTML
 ;
     }
@@ -660,9 +660,9 @@ EOHTML
 
     print OUT2 "</tr>\n";
 
-    if (defined $parsha_stime2{$h}) {
+    if (defined $parashah_stime2{$h}) {
 	my %sp_dates;
-	foreach my $stime2 (@{$parsha_stime2{$h}}) {
+	foreach my $stime2 (@{$parashah_stime2{$h}}) {
 	    if (defined $stime2 && defined $special_maftir_anode{$stime2}) {
 		my $fest = $special_maftir_anode{$stime2}->[1];
 		push(@{$sp_dates{$fest}}, $stime2);
@@ -726,9 +726,9 @@ title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
 
-    if (defined $parsha_stime2{$h}) {
+    if (defined $parashah_stime2{$h}) {
 	my $did_special;
-	foreach my $stime2 (@{$parsha_stime2{$h}}) {
+	foreach my $stime2 (@{$parashah_stime2{$h}}) {
 	    if (defined $stime2 && defined $special_haftara{$stime2}) {
 		if (!$did_special) {
 		    print OUT2 <<EOHTML;
@@ -957,7 +957,7 @@ sub format_aliyah
 	$info = "$torah $info";
     }
 
-    if (defined $parsha2id{$h}) {
+    if (defined $parashah2id{$h}) {
 	my $book = lc($torah);
 
 	my $bid = 0;
@@ -967,7 +967,7 @@ sub format_aliyah
 	elsif ($book eq 'numbers') { $bid = 4; }
 	elsif ($book eq 'deuteronomy') { $bid = 5; }
 
-	$info = qq{<a class="sedra-out" title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parsha2id{$h}">$info</a>};
+	$info = qq{<a class="sedra-out" title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parashah2id{$h}">$info</a>};
     }
 
     my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
@@ -981,7 +981,7 @@ sub format_aliyah
     $info;
 }
 
-sub get_parsha_info
+sub get_parashah_info
 {
     my($parshiot,$h) = @_;
 
@@ -1107,13 +1107,13 @@ sub get_parsha_info
     }
 
     if ($drash1 =~ m,/\d\d\d\d/, && $drash1_auto) {
-	if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
+	if (defined $parashah_time{$h} && $parashah_time{$h} < $saturday) {
 	    $drash1 =~ s,/\d\d\d\d/,/$hebrew_year/,;
 	}
     }
 
     if ($drash2 =~ m,/\d\d\d\d/, && $drash2_auto &&
-	defined $parsha_time{$h} && $parsha_time{$h} < $saturday)
+	defined $parashah_time{$h} && $parashah_time{$h} < $saturday)
     {
 	$drash2 =~ s,/\d\d\d\d/,/$hebrew_year/,;
 	if ($hebrew_year =~ /^\d\d(\d\d)$/) {
@@ -1128,7 +1128,7 @@ sub get_parsha_info
     my $anchor = lc($h);
     $anchor =~ s/[^\w]//g;
     my $drash_ajr = "http://ajrsem.org/$anchor";
-    if (defined $parsha_time{$h} && $parsha_time{$h} < $saturday) {
+    if (defined $parashah_time{$h} && $parashah_time{$h} < $saturday) {
 	$drash_ajr .= $hebrew_year;
     } else {
 	$drash_ajr .= $hebrew_year - 1;
@@ -1255,7 +1255,7 @@ sub special_readings
 
 sub readings_for_current_year
 {
-    my($parshiot,$current,$parsha_time) = @_;
+    my($parshiot,$current,$parashah_time) = @_;
 
     my $heb_yr = $hebrew_year - 1;
 
@@ -1270,7 +1270,7 @@ sub readings_for_current_year
 
     if ($opts{'f'}) {
 	open(CSV, ">$opts{'f'}.$$") || die "$opts{'f'}.$$: $!\n";
-	print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
+	print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
     }
 
     for (my $yr = 0; $yr < $extra_years; $yr++)
@@ -1291,7 +1291,7 @@ sub readings_for_current_year
 
 	$current->{$h}->[$yr] = $stime;
 
-	$parsha_time->{$h} = Time::Local::timelocal
+	$parashah_time->{$h} = Time::Local::timelocal
 	    (1,0,0,
 	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
 	     $events[$i]->[$Hebcal::EVT_IDX_MON],
@@ -1306,7 +1306,7 @@ sub readings_for_current_year
 			     $Hebcal::MoY_short[$month - 1],
 			     $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
-	$parsha_stime2{$h}->[$yr] = $stime2;
+	$parashah_stime2{$h}->[$yr] = $stime2;
 
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$book =~ s/\s+.+$//;
@@ -1443,7 +1443,7 @@ sub get_saturday
     ($wday == 6) ? $now + (60 * 60 * 24) :
 	$now + ((6 - $wday) * 60 * 60 * 24);
 
-    # don't bump parsha forward until Wednesday
+    # don't bump parashah forward until Wednesday
     if ($wday < 3) {
 	$sat -= (7 * 24 * 60 * 60);
     }

@@ -90,7 +90,7 @@ my $fxml = XML::Simple::XMLin($festival_in);
 if ($opts{'f'}) {
     my $fn = $opts{"f"};
     open(CSV, ">$fn.$$") || die "$fn.$$: $!\n";
-    print CSV qq{"Date","Parsha","Aliyah","Reading","Verses"\015\012};
+    print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
 }
 
 my $REVISION = '$Revision$'; #'
