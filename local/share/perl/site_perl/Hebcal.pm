@@ -1600,7 +1600,7 @@ sub download_html
     my $href_ol_eur = download_href($q, "${filename}_eur", "csv") . ";euro=1";
     my $href_vcs = download_href($q, $filename, "vcs");
     my $gcal_subical_href = $subical_href;
-    $gcal_subical_href =~ s/;/&amp;/g;
+    $gcal_subical_href =~ s/;/&/g;
     my $full_http_href = "http://" . $vhost . $gcal_subical_href;
     my $gcal_href = Hebcal::url_escape($full_http_href);
     my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
