@@ -196,8 +196,8 @@ lets you generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries.</p>
 
 <p>Join our <a href="/email/">Shabbat candle lighting times email
-list</a> to receive a weekly reminder of when to light candles and
-the parsha of the week.</p>
+list</a> to receive a weekly reminder of the Parashat ha-Shavua and
+when to light candles for your city.</p>
 
 <p>This is a free service. Please <a title="Send money to Hebcal.com"
 href="/home/about/donate">donate</a> to help defray the cost of running
