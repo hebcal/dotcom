@@ -575,6 +575,13 @@ and other applications.</p>},
 		  -size => 4,
 		  -maxlength => 4),
     "</label>\n",
+    "&nbsp;&nbsp;<label for=\"month\">Month:\n",
+    $q->popup_menu(-name => "month",
+		   -id => "month",
+		   -values => ["x",1..12],
+		   -default => "x",
+		   -labels => \%Hebcal::MoY_long),
+    "</label>\n",
     "<ol><li>",
     $q->radio_group(-name => "yt",
 		    -values => ["G", "H"],
@@ -587,7 +594,6 @@ and other applications.</p>},
 			"interested in 08, but rather 2008.\n"),
     "</ol>",
     "</ol>\n",
-    $q->hidden(-name => "month", -value => "x"),
     $q->hidden(-name => "v",-value => 1,-override => 1),
     qq{</fieldset>\n}
     );
@@ -821,8 +827,8 @@ var d=document;
 function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
 d.f1.submit();return false;}
 function s6(val){
-if(val=='G'){d.f1.year.value=$this_year}
-if(val=='H'){d.f1.year.value=$hyear}
+if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
+if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
 d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
 d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
@@ -961,13 +967,16 @@ EOHTML
 					 "single single-post",
 					 $xtra_head)
 	);
+
+    my $nav_inner = <<EOHTML;
+<div class="nav-previous"><a href="$prev_url" rel="prev"><span class="meta-nav">&larr;</span> Jewish Calendar $prev_title</a></div>
+<div class="nav-next"><a href="$next_url" rel="next">Jewish Calendar $next_title <span class="meta-nav">&rarr;</span></a></div>
+EOHTML
+    ;
+
     my $head_divs = <<EOHTML;
 <div id="container" class="single-attachment">
 <div id="content" role="main">
-<div id="nav-above" class="navigation">
-<div class="nav-previous"><a href="$prev_url" rel="prev"><span class="meta-nav">&larr;</span> Jewish Calendar $prev_title</a></div>
-<div class="nav-next"><a href="$next_url" rel="next">Jewish Calendar $next_title <span class="meta-nav">&rarr;</span></a></div>
-</div><!-- #nav-above -->
 <div class="page type-page hentry">
 <h1 class="entry-title">Jewish Calendar $date</h1>
 <div class="entry-content">
@@ -1174,6 +1183,7 @@ EOHTML
     Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
+    Hebcal::out_html(undef, qq{<div class="navigation">\n}, $nav_inner, qq{</div><!-- .navigation -->\n});
 
     my $cal;
     my $prev_mon = 0;
@@ -1273,8 +1283,10 @@ EOHTML
 
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
-    Hebcal::out_html(undef, "<p class=\"goto\">", $goto, "</p>\n");
+
     my $footer_divs=<<EOHTML;
+<div class="navigation">
+$nav_inner</div><!-- .navigation -->
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
