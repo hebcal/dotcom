@@ -771,10 +771,13 @@ EOHTML
 		    $bktitle =~ s/\s+/ /g;
 		}
 
+		my $slug2 = $slug;
+		$slug2 =~ s/\.html$//;
+
 		my $shorttitle = $bktitle;
 		$shorttitle =~ s/\s*:.+//;
 		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
-		print OUT2 qq{<td width="200" align="center" valign="top"><a class="amzn" id="bk-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a class="amzn" id="bk-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
+		print OUT2 qq{<td width="200" align="center" valign="top"><a class="amzn" id="$slug2-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a class="amzn" id="$slug2-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
 		print OUT2 qq{<br>by $author} if $author;
 		print OUT2 qq{</td>\n};
 	    }
