@@ -1616,7 +1616,7 @@ sub download_html
 <ol>
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
-id="${filename}_ol.ics">$ics_title</a>
+id="dl-ol-ics">$ics_title</a>
 <li><a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import ICS file into Outlook</a>
 </ol>
@@ -1628,10 +1628,10 @@ href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to imp
 <ul>
 <li>USA date format (month/day/year): <a class="download"
 href="$href_ol_usa"
-id="${filename}_usa.csv">${filename}_usa.csv</a>
+id="dl-ol-csv-usa">${filename}_usa.csv</a>
 <li>European date format (day/month/year): <a class="download"
 href="$href_ol_eur"
-id="${filename}_eur.csv">${filename}_eur.csv</a>
+id="dl-ol-csv-eur">${filename}_eur.csv</a>
 </ul>
 <li><a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook</a>
@@ -1642,7 +1642,7 @@ href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook<
 <ol>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
-id="${filename}_sub_ical.ics">$ics_title</a>
+id="dl-ical-sub">$ics_title</a>
 <li>How to import ICS file into <a title="Apple iCal - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">Apple iCal</a>
 or <a title="iPhone and iPad - import Hebcal Jewish calendar"
@@ -1650,19 +1650,19 @@ href="/home/77/iphone-ipad-jewish-calendar">iPhone / iPad</a>
 </ol>
 <p>Alternate option: <a class="download"
 href="${ical_href}"
-id="${filename}_dl_ical.ics">download $ics_title</a>
+id="dl-ical-alt">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 </div>
 <div><a class="dlhead" href="#gcal" id="gcal">Google Calendar</a></div>
 <div class="dlinstr" id="gcal-body">
 <blockquote>
 <a title="Add to Google Calendar"
-class="download" id="${filename}_sub_gcal.ics"
+class="download" id="dl-gcal-sub"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
 </blockquote>
 <p>Alternate option:
-<a class="download" id="${filename}_dl_gcal.ics"
+<a class="download" id="dl-gcal-alt"
 href="${ical_href}">download</a> and then follow <a
 href="http://www.google.com/support/calendar/bin/answer.py?hl=en&amp;answer=37118">Google&apos;s
 import instructions</a>.</p>
@@ -1671,7 +1671,7 @@ import instructions</a>.</p>
 <div class="dlinstr" id="wlive-body">
 <blockquote>
 Add to&nbsp;&nbsp;
-<a title="Windows Live Calendar"
+<a title="Windows Live Calendar" class="dl-wlive"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"><img
 src="/i/wlive-150x20.png"
 width="150" height="20" border="0"
@@ -1702,7 +1702,7 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 <ol>
 <li>Export vCal file: <a class="download"
 href="$href_vcs"
-id="${filename}.vcs">${filename}.vcs</a>
+id="dl-vcs">${filename}.vcs</a>
 <li>Import VCS file into Palm Desktop 6.2 by ACCESS
 </ol>
 </div>
@@ -1732,7 +1732,7 @@ EOHTML
     {
 	$s .= "<ol><li>" .
 	    "Export Palm Date Book Archive:\n" .
-	    "<a class=\"download\" id=\"${filename}.dba\" href=\"" .
+	    "<a class=\"download\" id=\"dl-dba\" href=\"" .
 	    download_href($q, $filename, 'dba') .
 	    "\">$filename.dba</a>\n";
 	$s .= qq{<li><a title="Palm Desktop - import Hebcal Jewish calendar"
