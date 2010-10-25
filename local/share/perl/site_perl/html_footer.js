@@ -19,14 +19,7 @@ function tvis(id) {
 			}
 		    }
 		}
-		if (anchorElems[i] && anchorElems[i].className == "dlhead") {
-		    if (anchorElems[i].id) {
-			anchorElems[i].onclick = function () {
-			    return tvis(this.id + "-body");
-			}
-		    }
-		}
-		if (anchorElems[i] && anchorElems[i].className == "sedra-out") {
+		if (anchorElems[i] && anchorElems[i].className == "outbound") {
 		    anchorElems[i].onclick = function () {
 			var href = this.href;
 			if (href && href.indexOf("http://") === 0) {
@@ -37,22 +30,21 @@ function tvis(id) {
 			}
 		    }
 		}
-	    }
-	}
-	var exportElem = document.getElementById("export");
-	if (exportElem) {
-            var exportAnchors = exportElem.getElementsByTagName("a");
-            if (exportAnchors && exportAnchors.length) {
-		for (var i = 0; i < exportAnchors.length; i++) {
-                    if (exportAnchors[i] && exportAnchors[i].className == "download") {
-			if (exportAnchors[i].id) {
-                            exportAnchors[i].onclick = function () {
-				_gaq.push(['_trackEvent', 'download', this.id]);
-                            }
+                if (anchorElems[i] && anchorElems[i].className == "download") {
+		    if (anchorElems[i].id) {
+                        anchorElems[i].onclick = function () {
+			    _gaq.push(['_trackEvent', 'download', this.id]);
+                        }
+		    }
+                }
+		if (anchorElems[i] && anchorElems[i].className == "dlhead") {
+		    if (anchorElems[i].id) {
+			anchorElems[i].onclick = function () {
+			    return tvis(this.id + "-body");
 			}
-                    }
+		    }
 		}
-            }
+	    }
 	}
     }
 })();  // end of the outer closure
