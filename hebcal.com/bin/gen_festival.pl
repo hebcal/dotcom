@@ -402,8 +402,8 @@ EOHTML
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <b>Sep 19-20</b>, then the holiday begins at
-sundown on <b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.</p>
-<p>Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
+sundown on <b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.
+Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
 <p>The tables of holidays below include the current year and 4 years
