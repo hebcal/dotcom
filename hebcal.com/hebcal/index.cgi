@@ -625,7 +625,7 @@ and other applications.</p>},
 		 -id => "ss",
 		 -checked => 1,
 		 -label => "\nSpecial Shabbatot"),
-    "</label> <small>(Shabbat Shekalim, Shabbat Zachor, etc.)</small>",
+    "</label> <small>(Shabbat Shekalim, Zachor, etc.)</small>",
     "<li><label\nfor=\"o\">",
     $q->checkbox(-name => "o",
 		 -id => "o",
@@ -690,7 +690,7 @@ and other applications.</p>},
 	       -id => "geo"),
     "\n");
 
-    Hebcal::out_html(undef, "<ol><li>Specify by: <small>[\n");
+    Hebcal::out_html(undef, "<ol><li><small>[\n");
     foreach my $type ("none", "zip", "city", "pos")
     {
 	if ($type eq $q->param("geo")) {
@@ -957,7 +957,15 @@ sub results_page
 <style type="text/css">
 .pbba { page-break-before: always }
 div.cal { margin-bottom: 18px }
-#hebcal-results table.month h2 { margin: 0.2em; text-align: center }
+#hebcal-results table.month h2 { 
+ color: #000;
+ font-family: "Helvetica Neue",Arial,Helvetica,"Nimbus Sans L",sans-serif;
+ font-size: 21px;
+ font-weight: bold;
+ line-height: 1.3em;
+ margin: 0.2em;
+ text-align: center;
+}
 </style>
 EOHTML
 ;
@@ -1240,6 +1248,9 @@ EOHTML
 	    my $cal_subj = $subj;
 	    $cal_subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj)
 		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+
+	    $cal_subj =~
+		s/ Havdalah \((\d+) min\)$/ Havdalah <small>($1 min)<\/small>/;
 
 	    $cal->setcontent($mday, "")
 		if $cal->getcontent($mday) eq "&nbsp;";
