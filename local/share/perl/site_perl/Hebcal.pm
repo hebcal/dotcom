@@ -1137,7 +1137,7 @@ sub html_footer_new
 Hebcal Jewish Calendar</a>
 </div><!-- #site-info -->
 <div id="site-generator">
-$hhmts ($rcsrev)
+$rcsrev ($hhmts)
 </div><!-- #site-generator -->
 </div><!-- #colophon -->
 </div><!-- #footer -->
