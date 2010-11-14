@@ -677,11 +677,10 @@ EOHTML
 		my $info = format_aliyah($aliyah,
 					 $all_inorder[$aliyah->{'parsha'}-1],
 					 undef,1);
-		print OUT2 "<br>\n" if $count++;
+#		print OUT2 "<br>\n" if $count++;
 		print OUT2 <<EOHTML;
 On <b>$fest</b><br>
-$info
-<ul class="gtl">
+$info<ul class="gtl">
 EOHTML
 ;
 		foreach my $stime2 (@{$sp_dates{$fest}}) {
