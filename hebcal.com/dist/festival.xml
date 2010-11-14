@@ -1013,7 +1013,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <festival id="Shabbat HaGadol" hebrew="שַׁבָּת הַגָּדוֹל" yomtov="0">
- <about href="http://www.chabad.org/holidays/passover/pesach.asp?AID=1667">
+ <about href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
  Shabbat before Pesach
  </about>
  <kriyah>
@@ -1222,7 +1222,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </about>
 </festival>
 <festival id="Yom Yerushalayim" hebrew="יוֹם יְרוּשָׁלַיִם" yomtov="0">
- <about href="http://aish.com/holidays/yom_yerushalayim/last/yom.asp">
+ <about href="http://en.wikipedia.org/wiki/Jerusalem_Day">
  Jerusalem Day.  Commemorates the re-unification of Jerusalem in 1967
  </about>
 </festival>
