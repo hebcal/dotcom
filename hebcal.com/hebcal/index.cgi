@@ -982,6 +982,24 @@ EOHTML
 EOHTML
     ;
 
+    my @entry_meta;
+    if (param_true("c")) {
+	push(@entry_meta, $cconfig->{"title"});
+	push(@entry_meta, $cconfig->{"lat_descr"})
+	    if $cconfig->{"lat_descr"};
+	push(@entry_meta, $cconfig->{"long_descr"})
+	    if $cconfig->{"long_descr"};
+	push(@entry_meta, split(/\n<br>/, $cconfig->{"dst_tz_descr"}))
+	    if $cconfig->{"dst_tz_descr"};
+    }
+
+    my $entry_meta = "";
+    if (@entry_meta) {
+	$entry_meta = qq{<div class="entry-meta">\n<div>}
+		. join("</div>\n<div>", @entry_meta)
+		. qq{</div>\n</div><!-- .entry-meta -->\n};
+    }
+
     my $head_divs = <<EOHTML;
 <div id="container" class="single-attachment">
 <div id="content" role="main">
@@ -989,6 +1007,7 @@ EOHTML
 <h1 class="entry-title">Jewish Calendar $date</h1>
 <div class="entry-content">
 <div id="hebcal-results-header">
+$entry_meta
 EOHTML
 ;
     Hebcal::out_html(undef, $head_divs);
@@ -1028,21 +1047,6 @@ accurate.</p>
 ");
 	}
     }
-
-    my $geographic_info = "";
-
-    if (param_true("c"))
-    {
-	$geographic_info = "<h3>" . $cconfig->{"title"} . "</h3>\n";
-	$geographic_info .= $cconfig->{"lat_descr"} . "<br>\n"
-	    if $cconfig->{"lat_descr"};
-	$geographic_info .= $cconfig->{"long_descr"} . "<br>\n"
-	    if $cconfig->{"long_descr"};
-	$geographic_info .= $cconfig->{"dst_tz_descr"} . "<br>\n"
-	    if $cconfig->{"dst_tz_descr"};
-    }
-
-    Hebcal::out_html(undef, $geographic_info);
 
     Hebcal::out_html(undef, $Hebcal::indiana_warning)
 	if (defined $cconfig->{"state"} && $cconfig->{"state"} eq "IN");
