@@ -681,7 +681,7 @@ EOHTML
 		print OUT2 <<EOHTML;
 On <b>$fest</b><br>
 $info
-<ul class="tiny gtl">
+<ul class="gtl">
 EOHTML
 ;
 		foreach my $stime2 (@{$sp_dates{$fest}}) {
@@ -974,8 +974,8 @@ sub format_aliyah
     $info = "$label: $info\n";
 
     if ($aliyah->{'numverses'}) {
-	$info .= "<span class=\"tiny\">(" . $aliyah->{'numverses'} .
-	    "&nbsp;p'sukim)</span>\n";
+	$info .= "<small>(" . $aliyah->{'numverses'} .
+	    "&nbsp;p'sukim)</small>\n";
     }
 
     $info;
