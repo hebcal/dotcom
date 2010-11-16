@@ -171,12 +171,6 @@ sub process_args
     # default setttings needed for cookie
     $q->param('c','on');
 
-    my($cookies) = Hebcal::get_cookies($q);
-    if (defined $cookies->{'C'})
-    {
-	Hebcal::process_cookie($q,$cookies->{'C'});
-    }
-
     # sanitize input to prevent people from trying to hack the site.
     # remove anthing other than word chars, white space, or hyphens.
     my($key);
