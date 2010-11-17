@@ -851,8 +851,8 @@ The Holy Scriptures</a></em>
 
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
 	print OUT2 qq{<dt><em><a class="outbound"
-href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
-<dd>World ORT
+href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
+<dd>Mechon Mamre
 };
     }
 
@@ -895,18 +895,8 @@ sub print_aliyah
 	$info .= "$c1:$v1-$c2:$v2";
     }
 
-    my $book = lc($aliyah->{'book'});
-    $book =~ s/\s+.+$//;
-
-    my $bid = 0;
-    if ($book eq 'genesis') { $bid = 1; } 
-    elsif ($book eq 'exodus') { $bid = 2; }
-    elsif ($book eq 'leviticus') { $bid = 3; }
-    elsif ($book eq 'numbers') { $bid = 4; }
-    elsif ($book eq 'deuteronomy') { $bid = 5; }
-
-    $info = qq{<a class="outbound" title="Hebrew text and audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=} .
-    $aliyah->{'parsha'} . qq{">$info</a>};
+    my $url = Hebcal::get_mechon_mamre_url($aliyah->{'book'}, $c1, $v1);
+    $info = qq{<a class="outbound" title="Hebrew-English bible text"\nhref="$url">$info</a>};
 
     my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
     print OUT2 qq{$label: $info};

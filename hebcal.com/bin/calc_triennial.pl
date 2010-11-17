@@ -847,8 +847,9 @@ alt="Etz Hayim: Torah and Commentary"></a>
 href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
-<dt><em><a class="outbound" href="http://www.bible.ort.org/">Navigating the Bible II</a></em>
-<dd>World ORT
+<dt><em><a class="outbound"
+href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
+<dd>Mechon Mamre
 </dl>
 EOHTML
 ;
@@ -957,16 +958,8 @@ sub format_aliyah
     }
 
     if (defined $parashah2id{$h}) {
-	my $book = lc($torah);
-
-	my $bid = 0;
-	if ($book eq 'genesis') { $bid = 1; } 
-	elsif ($book eq 'exodus') { $bid = 2; }
-	elsif ($book eq 'leviticus') { $bid = 3; }
-	elsif ($book eq 'numbers') { $bid = 4; }
-	elsif ($book eq 'deuteronomy') { $bid = 5; }
-
-	$info = qq{<a class="outbound" title="Audio from ORT"\nhref="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=$bid&amp;chapter=$c1&amp;verse=$v1&amp;portion=$parashah2id{$h}">$info</a>};
+	my $url = Hebcal::get_mechon_mamre_url($torah, $c1, $v1);
+	$info = qq{<a class="outbound" title="Hebrew-English bible text"\nhref="$url">$info</a>};
     }
 
     my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};

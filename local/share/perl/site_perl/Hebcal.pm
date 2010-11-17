@@ -898,7 +898,37 @@ sub get_holiday_anchor($$$)
 	($href,$hebrew,"")
 	: $href;
 }
-    
+
+sub get_torah_book_id {
+    my($book) = @_;
+    $book =~ s/\s+.+$//;
+    my $bid = 0;
+    if ($book =~ /^\d$/) {
+	$bid = $book;
+    } else {
+	$book = lc($book);
+	if ($book eq 'genesis') { $bid = 1; } 
+	elsif ($book eq 'exodus') { $bid = 2; }
+	elsif ($book eq 'leviticus') { $bid = 3; }
+	elsif ($book eq 'numbers') { $bid = 4; }
+	elsif ($book eq 'deuteronomy') { $bid = 5; }
+    }
+    return $bid;
+}
+
+sub get_mechon_mamre_url {
+    my($book,$chapter,$verse) = @_;
+    my $bid = get_torah_book_id($book);
+    return sprintf("http://www.mechon-mamre.org/p/pt/pt%02d%02d.htm#%s",
+		   $bid, $chapter, $verse);
+}
+
+sub get_bible_ort_org_url {
+    my($book,$chapter,$verse,$parsha_id) = @_;
+    my $bid = get_torah_book_id($book);
+    return sprintf("http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=%d&chapter=%d&verse=%d&portion=%d",
+		   $bid, $chapter, $verse, $parsha_id);
+}
 
 
 ########################################################################
