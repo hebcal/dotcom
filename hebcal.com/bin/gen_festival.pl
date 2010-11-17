@@ -386,7 +386,9 @@ sub write_index_page
 EOHTML
 ;
 
-    print OUT3 Hebcal::html_header("Jewish Holidays",
+    my $page_title = sprintf("Jewish Holidays %d-%d",
+    			     $this_year, $this_year + $NUM_YEARS);
+    print OUT3 Hebcal::html_header($page_title,
 				   "/holidays/",
 				   "single single-post",
 				   $xtra_head);
@@ -394,9 +396,9 @@ EOHTML
 <div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title">Jewish Holidays</h1>
+<h1 class="entry-title">$page_title</h1>
 <div class="entry-meta">
-<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+<span class="meta-prep">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
 </div><!-- .entry-meta -->
 <div class="entry-content">
 <p>All holidays begin at sundown on the evening before the date
