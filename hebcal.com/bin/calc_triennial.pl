@@ -958,8 +958,12 @@ sub format_aliyah
     }
 
     if (defined $parashah2id{$h}) {
-	my $url = Hebcal::get_mechon_mamre_url($torah, $c1, $v1);
-	$info = qq{<a class="outbound" title="Hebrew-English bible text"\nhref="$url">$info</a>};
+#	my $url = Hebcal::get_mechon_mamre_url($torah, $c1, $v1);
+#	my $title = "Hebrew-English bible text";
+	my $url = Hebcal::get_bible_ort_org_url($torah, $c1, $v1, $parashah2id{$h});
+	$url =~ s/&/&amp;/g;
+	my $title = "Hebrew-English bible text from ORT";
+	$info = qq{<a class="outbound" title="$title"\nhref="$url">$info</a>};
     }
 
     my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
