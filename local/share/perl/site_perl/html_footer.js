@@ -37,13 +37,6 @@ function tvis(id) {
                         }
 		    }
                 }
-		if (anchorElems[i] && anchorElems[i].className == "dlhead") {
-		    if (anchorElems[i].id) {
-			anchorElems[i].onclick = function () {
-			    return tvis(this.id + "-body");
-			}
-		    }
-		}
 	    }
 	}
     }
