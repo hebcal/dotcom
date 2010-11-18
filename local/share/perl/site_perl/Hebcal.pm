@@ -1641,7 +1641,7 @@ sub download_html
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
 
     $s .= <<EOHTML;
-<li><a class="dlhead" href="javascript:tvis('ol-ics-body')" id="ol-ics">Outlook 2007, Outlook 2010</a>
+<li><a class="dlhead" onclick="tvis('ol-ics-body')" id="ol-ics">Outlook 2007, Outlook 2010</a>
 <ol class="dlinstr" id="ol-ics-body">
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
@@ -1649,7 +1649,7 @@ id="dl-ol-ics">$ics_title</a>
 <li><a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import ICS file into Outlook</a>
 </ol>
-<li><a class="dlhead" href="javascript:tvis('ol-csv-body')" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003</a>
+<li><a class="dlhead" onclick="tvis('ol-csv-body')" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003</a>
 <ol class="dlinstr" id="ol-csv-body">
 <li>Export Outlook CSV file. Select one of:
 <ul>
@@ -1663,7 +1663,7 @@ id="dl-ol-csv-eur">${filename}_eur.csv</a>
 <li><a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook</a>
 </ol>
-<li><a class="dlhead" href="javascript:tvis('ical-body')" id="ical">Apple iCal (Mac OS X)</a>
+<li><a class="dlhead" onclick="tvis('ical-body')" id="ical">Apple iCal (Mac OS X)</a>
 <div class="dlinstr" id="ical-body">
 <ol>
 <li>Subscribe to: <a class="download"
@@ -1677,7 +1677,7 @@ href="${ical_href}"
 id="dl-ical-alt">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 </div><!-- #ical-body -->
-<li><a class="dlhead" href="javascript:tvis('ios-body')" id="ios">iPhone &amp; iPad (iOS 3.0 and higher)</a>
+<li><a class="dlhead" onclick="tvis('ios-body')" id="ios">iPhone &amp; iPad (iOS 3.0 and higher)</a>
 <ol class="dlinstr" id="ios-body">
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
@@ -1685,7 +1685,7 @@ id="dl-ios-sub">$ics_title</a>
 <li><a title="iPhone and iPad - import Hebcal Jewish calendar"
 href="/home/77/iphone-ipad-jewish-calendar">Step-by-step import instructions</a>
 </ol>
-<li><a class="dlhead" href="javascript:tvis('gcal-body')" id="gcal">Google Calendar</a>
+<li><a class="dlhead" onclick="tvis('gcal-body')" id="gcal">Google Calendar</a>
 <div class="dlinstr" id="gcal-body">
 <blockquote>
 <a title="Add to Google Calendar"
@@ -1700,7 +1700,7 @@ title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
 href="/home/59/google-calendar-alternative-instructions">follow
 our Google Calendar import instructions</a>.</p>
 </div><!-- #gcal-body -->
-<li><a class="dlhead" href="javascript:tvis('wlive-body')" id="wlive">Windows Live Calendar</a>
+<li><a class="dlhead" onclick="tvis('wlive-body')" id="wlive">Windows Live Calendar</a>
 <div class="dlinstr" id="wlive-body">
 <blockquote>
 Add to&nbsp;&nbsp;
@@ -1711,7 +1711,7 @@ width="150" height="20" border="0"
 alt="Windows Live Calendar"></a>
 </blockquote>
 </div><!-- #wlive-body -->
-<li><a class="dlhead" href="javascript:tvis('ycal-body')" id="ycal">Yahoo! Calendar</a>
+<li><a class="dlhead" onclick="tvis('ycal-body')" id="ycal">Yahoo! Calendar</a>
 <div class="dlinstr" id="ycal-body">
 <form id="GrabLinkForm" action="#">
 <ol>
@@ -1730,7 +1730,7 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 </ol>
 </form>
 </div><!-- #ycal-body -->
-<li><a class="dlhead" href="javascript:tvis('vcs-body')" id="vcs">Palm Desktop 6.2 by ACCESS for Windows</a>
+<li><a class="dlhead" onclick="tvis('vcs-body')" id="vcs">Palm Desktop 6.2 by ACCESS for Windows</a>
 <ol class="dlinstr" id="vcs-body">
 <li>Export vCal file: <a class="download"
 href="$href_vcs"
@@ -1756,7 +1756,7 @@ EOHTML
     }
 
     # only offer DBA export when we know timegm() will work
-    $s .= qq{\n<li><a class="dlhead" href="javascript:tvis('dba-body')" id="dba">Palm Desktop 4.1.4 for Windows</a>\n};
+    $s .= qq{\n<li><a class="dlhead" onclick="tvis('dba-body')" id="dba">Palm Desktop 4.1.4 for Windows</a>\n};
     $s .= qq{<div class="dlinstr" id="dba-body">\n};
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
 	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
