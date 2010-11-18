@@ -1159,9 +1159,9 @@ accurate.</p>
 #	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
-	Hebcal::out_html(undef, qq{<li><a href="#export" onclick="return tvis('export')">Export to Outlook, Apple iCal, Google, Palm, etc.</a>});
-	Hebcal::out_html(undef, "\n</ul></div>\n");
+	Hebcal::out_html(undef, qq{<li>Export to desktop, mobile or web-based calendar\n});
 	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
+	Hebcal::out_html(undef, "\n</ul></div>\n");
     }
     else
     {    

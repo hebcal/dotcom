@@ -354,11 +354,12 @@ if ($numEntries > 0) {
     $q->param("v", "yahrzeit");
 
     Hebcal::out_html($cfg,
-		      qq{<p class="goto"><ul class="gtl">
+		      qq{<div class="goto"><ul class="gtl">
 <li><a href="#form">Enter more dates and names</a>
-<li><a href="#export" onclick="return tvis('export')">Export dates to Outlook, Apple iCal, Google, Palm, etc.</a>
-</ul></p>\n});
+});
+    Hebcal::out_html($cfg, qq{<li>Export to desktop, mobile or web-based calendar\n});
     Hebcal::out_html($cfg, Hebcal::download_html($q, "yahrzeit", \@events));
+    Hebcal::out_html($cfg, "\n</ul></div>\n");
 
     Hebcal::out_html($cfg,
 		      qq{<p>Yahrzeit candles should be lit
