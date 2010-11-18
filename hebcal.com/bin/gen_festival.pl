@@ -906,8 +906,8 @@ sub print_aliyah
     print OUT2 qq{$label: $info};
 
     if ($aliyah->{'numverses'}) {
-	print OUT2 "\n<span class=\"tiny\">(",
-	$aliyah->{'numverses'}, "&nbsp;p'sukim)</span>";
+	print OUT2 "\n<small>(",
+	$aliyah->{'numverses'}, "&nbsp;p'sukim)</small>";
     }
 
     print OUT2 qq{<br>\n};
