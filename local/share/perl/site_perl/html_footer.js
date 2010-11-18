@@ -5,7 +5,7 @@ function tvis(id) {
     } else {
         e.style.display = "block";
     }
-    return false
+    return true;
 }
 (function() {
     if (document.getElementsByTagName) {
