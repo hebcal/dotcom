@@ -966,6 +966,13 @@ div.cal { margin-bottom: 18px }
  margin: 0.2em;
  text-align: center;
 }
+#change-view { font-size: small; margin-bottom: 0.4em }
+#results-links { font-size: small }
+.dlhead {
+ color: #0066cc;
+ text-decoration:underline;
+ cursor:pointer;
+}
 </style>
 EOHTML
 ;
@@ -1057,7 +1064,7 @@ accurate.</p>
 
     # toggle month/full year and event list/calendar grid
 
-    my $goto = "<small>change view: [ ";
+    my $goto = "change view: [ ";
 
     if ($q->param("vis"))
     {
@@ -1091,13 +1098,13 @@ accurate.</p>
 	}
     }
 
-    $goto .= "</small>\n";
+    $goto .= "\n";
 
-    Hebcal::out_html(undef, "<p class=\"goto\">", $goto, "</p>\n");
+    Hebcal::out_html(undef, "<div class=\"goto\" id=\"change-view\">", $goto, "</div>\n");
 
     if ($numEntries > 0)
     {
-	Hebcal::out_html(undef, qq{<div class="goto"><ul class="gtl goto">});
+	Hebcal::out_html(undef, qq{<div class="goto" id="results-links"><ul>});
 
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{

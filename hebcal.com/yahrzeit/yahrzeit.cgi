@@ -296,6 +296,12 @@ form ol {
 list-style:none inside none;
 margin:0 0 12px 12px;
 }
+#results-links { font-size: small }
+.dlhead {
+ color: #0066cc;
+ text-decoration:underline;
+ cursor:pointer;
+}
 </style>
 EOHTML
 ;
@@ -354,7 +360,7 @@ if ($numEntries > 0) {
     $q->param("v", "yahrzeit");
 
     Hebcal::out_html($cfg,
-		      qq{<div class="goto"><ul class="gtl">
+qq{<div class="goto" id="results-links"><ul class="gtl">
 <li><a href="#form">Enter more dates and names</a>
 });
     Hebcal::out_html($cfg, qq{<li>Export to desktop, mobile or web-based calendar\n});
