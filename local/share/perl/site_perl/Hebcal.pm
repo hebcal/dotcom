@@ -2098,7 +2098,7 @@ sub vcalendar_write_contents
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{METHOD:PUBLISH$endl},
 	qq{X-LOTUS-CHARSET:UTF-8$endl},
-	qq{X-PUBLISHED-TTL:PT30D$endl},
+	qq{X-PUBLISHED-TTL:PT7D$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl});
 
 	# include an iCal description
