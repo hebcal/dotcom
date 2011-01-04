@@ -1639,6 +1639,38 @@ sub download_html
     my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
 	: Hebcal::url_escape("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
+ 
+    # only offer DBA export when we know timegm() will work
+    my $palm_dba = "";
+    my $dst;
+    if ($q->param("geo") && $q->param("geo") ne "off"
+	&& $q->param("c") && $q->param("c") ne "off")
+    {
+	if (defined $q->param("dst") && $q->param("dst") ne "")
+	{
+	    $dst = $q->param("dst");
+	}
+	elsif ($q->param("geo") eq "city" && $q->param("city")
+	       && defined $Hebcal::city_dst{$q->param("city")})
+	{
+	    $dst = $Hebcal::city_dst{$q->param("city")};
+	}
+    }
+
+    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
+	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
+    {
+	my $dba_href = download_href($q, $filename, 'dba');
+	$palm_dba = <<EOHTML;
+<li>Palm Desktop 4.1.4 - Date Book Archive
+<ol>
+<li>Export <a class="download" id="dl-dba" href="$dba_href">$filename.dba</a>
+<li><a title="Palm Desktop - import Hebcal Jewish calendar"
+href="/home/87/palm-desktop-import-hebcal-jewish-calendar">How to import DBA file into Palm Desktop 4.1.4</a>
+</ol>
+EOHTML
+;
+    }
 
     $s .= <<EOHTML;
 <li><a class="dlhead" onclick="tvis('ol-ics-body')" id="ol-ics">Outlook 2007, Outlook 2010</a>
@@ -1730,60 +1762,18 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 </ol>
 </form>
 </div><!-- #ycal-body -->
-<li><a class="dlhead" onclick="tvis('vcs-body')" id="vcs">Palm Desktop 6.2 by ACCESS for Windows</a>
-<ol class="dlinstr" id="vcs-body">
-<li>Export vCal file: <a class="download"
-href="$href_vcs"
-id="dl-vcs">${filename}.vcs</a>
-<li>Import VCS file into Palm Desktop 6.2 by ACCESS
+<li><a class="dlhead" onclick="tvis('palm-body')" id="palm">Palm Desktop (Windows-only)</a>
+<ul class="dlinstr" id="palm-body">
+<li>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)
+<ol>
+<li>Export <a class="download" id="dl-vcs" href="$href_vcs">${filename}.vcs</a>
+<li>Import VCS file into Palm Desktop 6.2 for Windows
 </ol>
+$palm_dba
+</ul><!-- #palm-body -->
+</ul><!-- #export -->
 EOHTML
 ;
-
-    my $dst;
-    if ($q->param("geo") && $q->param("geo") ne "off"
-	&& $q->param("c") && $q->param("c") ne "off")
-    {
-	if (defined $q->param("dst") && $q->param("dst") ne "")
-	{
-	    $dst = $q->param("dst");
-	}
-	elsif ($q->param("geo") eq "city" && $q->param("city")
-	       && defined $Hebcal::city_dst{$q->param("city")})
-	{
-	    $dst = $Hebcal::city_dst{$q->param("city")};
-	}
-    }
-
-    # only offer DBA export when we know timegm() will work
-    $s .= qq{\n<li><a class="dlhead" onclick="tvis('dba-body')" id="dba">Palm Desktop 4.1.4 for Windows</a>\n};
-    $s .= qq{<div class="dlinstr" id="dba-body">\n};
-    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
-    {
-	$s .= "<ol><li>" .
-	    "Export Palm Date Book Archive:\n" .
-	    "<a class=\"download\" id=\"dl-dba\" href=\"" .
-	    download_href($q, $filename, 'dba') .
-	    "\">$filename.dba</a>\n";
-	$s .= qq{<li><a title="Palm Desktop - import Hebcal Jewish calendar"
-href="/home/87/palm-desktop-import-hebcal-jewish-calendar">How to import DBA file into Palm Desktop 4.1.4</a>};
-	$s .= qq{<li>Please note: this DBA file will NOT work with Palm Desktop 6.2 by ACCESS};
-	$s .= qq{</ol>\n};
-    }
-    else
-    {
-	$s .= "<p>Sorry, the Palm Date Book Archive format is not\n"
-	    . "compatible with "
-	    . (($greg_year1 <= 1969 || $greg_year2 >= 2038)
-	       ? "events in the Gregorian year $greg_year2"
-	       : "the <b>" . $Hebcal::dst_names{$dst}
-	       . "</b> Daylight Saving Time scheme")
-	    . ".</p>\n";
-    }
-    $s .= qq{</div><!-- #dba-body -->\n};
-
-    $s .= "</ul><!-- #export -->\n";
 
     $s;
 }
@@ -2108,6 +2098,7 @@ sub vcalendar_write_contents
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{METHOD:PUBLISH$endl},
 	qq{X-LOTUS-CHARSET:UTF-8$endl},
+	qq{X-PUBLISHED-TTL:PT30D$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl});
 
 	# include an iCal description
@@ -2601,6 +2592,7 @@ if ($^W && 0)
     $unused = $Hebcal::indiana_warning;
     $unused = $Hebcal::lang_names{'foo'};
     $unused = $Hebcal::havdalah_min;
+    $unused = $Hebcal::dst_names{'foo'};
 }
 
 1;
