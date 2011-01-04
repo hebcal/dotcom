@@ -5,7 +5,7 @@ CALSCALE:GREGORIAN
 X-WR-CALNAME:Hebrew calendar dates (en)
 PRODID:-//hebcal.com/NONSGML Hebcal Calendar v2802//EN
 X-WR-CALDESC:Displays the Hebrew date (such as "18th of Tevet, 5770") every day of the week
-X-PUBLISHED-TTL:PT30D
+X-PUBLISHED-TTL:PT7D
 METHOD:PUBLISH
 BEGIN:VEVENT
 DTSTAMP:20090211T204845Z

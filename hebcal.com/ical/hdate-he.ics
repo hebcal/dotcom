@@ -6,7 +6,7 @@ METHOD:PUBLISH
 X-LOTUS-CHARSET:UTF-8
 X-WR-CALNAME:Hebrew calendar dates (he)
 X-WR-CALDESC:Displays the Hebrew date (such as "י״ח בטבת תש״ע") every day of the week
-X-PUBLISHED-TTL:PT30D
+X-PUBLISHED-TTL:PT7D
 BEGIN:VEVENT
 DTSTAMP:20100106T194958Z
 CATEGORIES:Holidays
