@@ -164,7 +164,7 @@ sub mail_all
 	$CONFIG{$to} = [$cmd,$loc,$args];
     }
 
-    my $MAX_FAILURES = 30;
+    my $MAX_FAILURES = 100;
     my $RECONNECT_INTERVAL = 20;
     my $failures = 0;
     for (;;) {
