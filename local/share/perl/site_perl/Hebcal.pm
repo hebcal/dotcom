@@ -2150,7 +2150,7 @@ sub vcalendar_write_contents
 	out_html(undef, qq{DTSTAMP:$dtstamp$endl});
 
 	if ($is_icalendar) {
-	    out_html(undef, qq{CATEGORIES:Holidays$endl});
+	    out_html(undef, qq{CATEGORIES:Holiday$endl});
 #	    out_html(undef, qq{STATUS:CONFIRMED$endl});
 	} else {
 	    out_html(undef, qq{CATEGORIES:HOLIDAY$endl});
