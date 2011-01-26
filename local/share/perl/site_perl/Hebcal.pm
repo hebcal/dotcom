@@ -2257,8 +2257,10 @@ sub vcalendar_write_contents
 	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
 		$evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
 		out_html(undef, "TRANSP:OPAQUE$endl"); # show as busy
+		out_html(undef, "X-MICROSOFT-CDO-BUSYSTATUS:OOF$endl");
 	    } else {
 		out_html(undef, "TRANSP:TRANSPARENT$endl"); # show as free
+		out_html(undef, "X-MICROSOFT-CDO-BUSYSTATUS:FREE$endl");
 	    }
 
 	    my $date_copy = $date;
