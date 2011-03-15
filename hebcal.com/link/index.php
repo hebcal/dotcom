@@ -58,7 +58,7 @@ if (isset($param["a"]) && ($param["a"] == "1" || $param["a"] == "on")) {
     $ashk = "";
 }
 
-$url_base = "http://www.hebcal.com/shabbat/?${geo_link};m=${m};tgt=_top";
+$url_base = "http://www.hebcal.com/shabbat/?${geo_link};m=${m}";
 
 $xtra_head = <<<EOD
 <style type="text/css">
@@ -106,11 +106,11 @@ Hebrew date, a full Jewish Calendar, RSS feeds).</p>
 the appropriate place in your HTML:</p>
 <pre class="brush:html">
 &lt;script type="text/javascript"
-src="<?php echo $url_base ?>;cfg=j"&gt;
+src="<?php echo $url_base ?>;cfg=j;tgt=_top"&gt;
 &lt;/script&gt;
 &lt;noscript&gt;
 &lt;!-- this link seen by people who have JavaScript turned off --&gt;
-&lt;a href="<?php echo $url_base ?>"&gt;Shabbat
+&lt;a target="_top" href="<?php echo $url_base ?>"&gt;Shabbat
 Candle Lighting times for <?php echo $descr ?>&lt;/a&gt;
 courtesy of hebcal.com.
 &lt;/noscript&gt;
@@ -120,11 +120,11 @@ courtesy of hebcal.com.
 
 <div class="box">
 <script type="text/javascript"
-src="<?php echo $url_base ?>;cfg=j">
+src="<?php echo $url_base ?>;cfg=j;tgt=_top">
 </script>
 <noscript>
 <!-- this link seen by people who have JavaScript turned off -->
-<a href="<?php echo $url_base ?>">Shabbat
+<a target="_top" href="<?php echo $url_base ?>">Shabbat
 Candle Lighting times for <?php echo $descr ?></a>
 courtesy of hebcal.com.
 </noscript>
