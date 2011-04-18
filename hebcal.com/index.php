@@ -151,9 +151,6 @@ href="/holidays/chanukah.html?tag=fp">Hanukkah</a> candle
 <?php } elseif (isset($shalosh_regalim)) { ?>
 <br><span class="fpgreeting">Moadim L&#39;Simcha! Hebcal.com wishes you
 a happy <?php echo $shalosh_regalim ?>.</span>
-<?php } elseif ($minor_fast) { ?>
-<br><span class="fpgreeting">Tzom Kal. Hebcal.com wishes you an easy
-fast.</span>
 <?php } elseif ($shana_tova) { ?>
 <br><span class="fpgreeting">Shanah Tovah! Hebcal.com wishes you a happy
 and healthy New Year.</span>
@@ -176,6 +173,9 @@ wishes you a happy <a href="/holidays/pesach.html?tag=fp">Passover</a>.</span>
 <?php } elseif (isset($chag_sameach)) { ?>
 <br><span class="fpgreeting">Chag Sameach! Hebcal.com wishes you
 a happy <?php echo $chag_sameach ?>.</span>
+<?php } elseif ($minor_fast) { ?>
+<br><span class="fpgreeting">Tzom Kal. Hebcal.com wishes you an easy
+fast.</span>
 <?php } ?>
 </p><!-- .fpsubhead -->
 
