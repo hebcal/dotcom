@@ -77,6 +77,30 @@ foreach my $f (sort keys %{$fxml->{"festival"}})
 }
 print O ");\n\n";
 
+print O "%HebcalConst::HOLIDAY_DESCR = (\n";
+foreach my $f (sort keys %{$fxml->{"festival"}})
+{
+    my $value = $fxml->{"festival"}->{$f}->{"about"};
+    if (defined $value)
+    {
+	my $k = $f;
+	$k =~ s/\'/\\\'/g;
+	my $descr;
+	if (ref($value) eq 'SCALAR') {
+	  $descr = trim($value);
+	} elsif (defined $value->{"content"}) {
+	  $descr = trim($value->{"content"});
+	}
+	if (defined $descr) {
+	  my $short_descr = $descr;
+	  $short_descr =~ s/\..*//;
+	  $short_descr =~ s/\'/\\\'/g;
+	  print O "'$k' => '", $short_descr, "',\n";
+	}
+    }
+}
+print O ");\n\n";
+
 print O "%HebcalConst::CITIES = (\n";
 open(HEBCAL,"$dir/hebcal cities |") || die;
 while(<HEBCAL>)
@@ -100,4 +124,17 @@ rename("$outfile.$$", $outfile) || die "$outfile: $!\n";
 
 exit(0);
 
+sub trim
+{
+    my($value) = @_;
 
+    if ($value) {
+	local($/) = undef;
+	$value =~ s/^\s+//;
+	$value =~ s/\s+$//;
+	$value =~ s/\n/ /g;
+	$value =~ s/\s+/ /g;
+    }
+
+    $value;
+}
