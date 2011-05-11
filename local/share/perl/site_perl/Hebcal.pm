@@ -446,9 +446,8 @@ sub invoke_hebcal
 
 	my $memo2;
 	if ($untimed) {
-#	    $memo2 = (Hebcal::get_holiday_anchor($subj,$want_sephardic,
-#						 undef))[2];
-	    $memo2 = "";
+	    $memo2 = (Hebcal::get_holiday_anchor($subj,$want_sephardic,
+						 undef))[2];
 	}
 
 	push(@events,
@@ -784,6 +783,7 @@ sub get_holiday_anchor($$$)
     my($subj,$want_sephardic,$q) = @_;
     my($href) = '';
     my($hebrew) = '';
+    my $memo = "";
 
     if ($subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
     {
@@ -872,6 +872,10 @@ sub get_holiday_anchor($$$)
 	    if ($subj_suffix) {
 		$hebrew .= $subj_suffix;
 	    }
+
+	    if (defined $HebcalConst::HOLIDAY_DESCR{$subj_copy}) {
+		$memo = $HebcalConst::HOLIDAY_DESCR{$subj_copy};
+	    }
 	}
 
 	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
@@ -895,7 +899,7 @@ sub get_holiday_anchor($$$)
     }
 
     return (wantarray()) ?
-	($href,$hebrew,"")
+	($href,$hebrew,$memo)
 	: $href;
 }
 
@@ -2409,7 +2413,7 @@ sub csv_write_contents($$$)
 	}
 
 	$subj =~ s/,//g;
-	$memo =~ s/,//g;
+	$memo =~ s/,/;/g;
 
 	$subj =~ s/\"/''/g;
 	$memo =~ s/\"/''/g;
