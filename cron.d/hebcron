@@ -22,8 +22,8 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # update hebcal.com commentary at 11am on wednesday
 11 11 * * 3 touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null
 
-# shabbat: regular emails at 8:30pm pacific on Wednesdays
-30 20 * * 3 nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# shabbat: regular emails at 4:30pm pacific on Wednesdays
+30 16 * * 3 nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
 # special Rosh Hashana 5771 - 7 Sep 2010 at 1:30am
 #30 1 7 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
