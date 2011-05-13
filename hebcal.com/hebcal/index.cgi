@@ -1204,11 +1204,39 @@ EOHTML
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
     Hebcal::out_html(undef, qq{<div class="navigation">\n}, $nav_inner, qq{</div><!-- .navigation -->\n});
 
-    my $cal;
-    my $prev_mon = 0;
-
     my @html_cals;
+    my %html_cals;
     my @html_cal_ids;
+
+    # make blank calendar month objects for every month in the date range
+    if ($numEntries > 0 && $q->param("vis")) {
+	my $start_month;
+	my $start_year = $events[0]->[$Hebcal::EVT_IDX_YEAR];
+	my $end_month;
+	my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+
+	if ($q->param("month") eq "x" &&
+	    (! defined $q->param("yt") || $q->param("yt") eq "G")) {
+	    $start_month = 1;
+	    $end_month = 12;
+	} else {
+	    $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
+	    $end_month = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
+	}
+
+	my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
+	for (my @dt = ($start_year, $start_month, 1);
+	     Date::Calc::Date_to_Days(@dt) <= $end_days;
+	     @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1))
+	{
+	    my $cal = new_html_cal($dt[0], $dt[1]);
+	    my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
+	    push(@html_cals, $cal);
+	    push(@html_cal_ids, $cal_id);
+	    $html_cals{$cal_id} = $cal;
+	}
+    }
+
     for (my $i = 0; $i < $numEntries; $i++)
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1230,38 +1258,17 @@ EOHTML
 	    $subj = qq{<a href="$href">$subj</a>};
 	}
 
-	my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
-
 	if ($q->param("vis"))
 	{
-	    if ($prev_mon != $mon)
-	    {
-		# grotty hack to display empty months
-		if ($prev_mon != 0 && ($prev_mon+1 != $mon))
-		{
-		    for (my $j = $prev_mon+1; $j < $mon; $j++)
-		    {
-			$cal = new_html_cal($year,$j,
-					    $prev_title,$prev_url,
-					    $next_title,$next_url);
-			push(@html_cals, $cal);
-			push(@html_cal_ids, sprintf("%04d-%02d", $year, $j));
-		    }
-		}
-
-		$prev_mon = $mon;
-		$cal = new_html_cal($year,$mon,
-				    $prev_title,$prev_url,$next_title,$next_url);
-		push(@html_cals, $cal);
-		push(@html_cal_ids, sprintf("%04d-%02d", $year, $mon));
-	    }
-
 	    my $cal_subj = $subj;
 	    $cal_subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj)
 		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
 
 	    $cal_subj =~
 		s/ Havdalah \((\d+) min\)$/ Havdalah <small>($1 min)<\/small>/;
+
+	    my $cal_id = sprintf("%04d-%02d", $year, $mon);
+	    my $cal = $html_cals{$cal_id};
 
 	    $cal->setcontent($mday, "")
 		if $cal->getcontent($mday) eq "&nbsp;";
@@ -1286,6 +1293,7 @@ EOHTML
 	}
 	else
 	{
+	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 	    my $line = sprintf("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
 			       $dow, $mday, $Hebcal::MoY_short[$mon-1],
 			       $year, $subj);
@@ -1348,7 +1356,7 @@ sub write_html_cal
 
 sub new_html_cal
 {
-    my($year,$month,$prev_title,$prev_url,$next_title,$next_url) = @_;
+    my($year,$month) = @_;
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
 					    "month" => $month);
