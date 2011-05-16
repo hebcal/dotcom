@@ -216,6 +216,8 @@ else
 		    ($q->param("yt") && $q->param("yt") eq "H") ?
 		    "Hebrew Year " : "",
 		    $q->param("year"));
+    my $plus4 = $q->param("year") + 4;
+    $g_filename .= "_" . $plus4;
 }
 
 my $pi = $q->path_info();
@@ -242,7 +244,7 @@ elsif ($pi =~ /[^\/]+\.dba$/)
 }
 elsif ($pi =~ /[^\/]+\.[vi]cs$/)
 {
-    vcalendar_display($g_date);
+    vcalendar_display();
 }
 elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
 {
@@ -418,29 +420,35 @@ sub hebrew_span
     return qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
 }
 
-sub vcalendar_display
-{
-    my($date) = @_;
+sub plus4_events {
+    my($cmd,$title,$events) = @_;
 
-    my $title = $date;
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss);
-
-    if (defined $q->param("month") && $q->param("month") eq "x")
-    {
+    if (defined $q->param("month") && $q->param("month") eq "x") {
 	for (my $i = 1; $i < 5; $i++)
 	{
 	    my $cmd2 = $cmd;
 	    $cmd2 =~ s/(\d+)$/$1+$i/e;
 	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
 					    $g_nmf, $g_nss);
-	    push(@events, @ev2);
+	    push(@{$events}, @ev2);
 	}
-	if ($date =~ /(\d+)/) {
+	if ($g_date =~ /(\d+)/) {
 	    my $plus4 = $1 + 4;
-	    $title .= "-" . $plus4;
+	    ${$title} .= "-" . $plus4;
 	}
     }
+
+    1;
+}
+
+
+sub vcalendar_display
+{
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
+
+    my $title = $g_date;
+    plus4_events($cmd, \$title, \@events);
 
     my $tz = $q->param("tz");
     my $state;
@@ -485,6 +493,9 @@ sub csv_display
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
+
+    my $title = $g_date;
+    plus4_events($cmd, \$title, \@events);
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
@@ -1166,8 +1177,13 @@ accurate.</p>
 #	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
+	my $download_title = $date;
+	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/) {
+	    my $plus4 = $1 + 4;
+	    $download_title .= "-" . $plus4;
+	}
 	Hebcal::out_html(undef, qq{<li>Export to desktop, mobile or web-based calendar\n});
-	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $date));
+	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $download_title));
 	Hebcal::out_html(undef, "\n</ul></div>\n");
     }
     else
