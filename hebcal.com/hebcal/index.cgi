@@ -198,6 +198,11 @@ else
 
 $cmd .= " " . $q->param("year");
 
+my $EXTRA_YEARS = 4;
+if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") > 1) {
+    $EXTRA_YEARS = $q->param("ny") - 1;
+}
+
 my $g_date;
 my $g_filename = "hebcal_" . $q->param("year");
 $g_filename .= "H"
@@ -216,7 +221,7 @@ else
 		    ($q->param("yt") && $q->param("yt") eq "H") ?
 		    "Hebrew Year " : "",
 		    $q->param("year"));
-    my $plus4 = $q->param("year") + 4;
+    my $plus4 = $q->param("year") + $EXTRA_YEARS;
     $g_filename .= "_" . $plus4;
 }
 
@@ -424,7 +429,7 @@ sub plus4_events {
     my($cmd,$title,$events) = @_;
 
     if (defined $q->param("month") && $q->param("month") eq "x") {
-	for (my $i = 1; $i < 5; $i++)
+	for (my $i = 1; $i <= $EXTRA_YEARS; $i++)
 	{
 	    my $cmd2 = $cmd;
 	    $cmd2 =~ s/(\d+)$/$1+$i/e;
@@ -433,7 +438,7 @@ sub plus4_events {
 	    push(@{$events}, @ev2);
 	}
 	if ($g_date =~ /(\d+)/) {
-	    my $plus4 = $1 + 4;
+	    my $plus4 = $1 + $EXTRA_YEARS;
 	    ${$title} .= "-" . $plus4;
 	}
     }
@@ -1179,7 +1184,7 @@ accurate.</p>
 
 	my $download_title = $date;
 	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/) {
-	    my $plus4 = $1 + 4;
+	    my $plus4 = $1 + $EXTRA_YEARS;
 	    $download_title .= "-" . $plus4;
 	}
 	Hebcal::out_html(undef, qq{<li>Export to desktop, mobile or web-based calendar\n});
