@@ -73,6 +73,8 @@ cal_row("hdate-en", "Hebrew calendar dates (English transliteration)",
 	"Displays the Hebrew date (such as <b>18th of Tevet, 5770</b>) every day of the week");
 cal_row("hdate-he", "Hebrew calendar dates (Hebrew)",
 	"Displays the Hebrew date (such as <b>י״ח בטבת תש״ע</b>) every day of the week");
+cal_row("omer", "Days of the Omer",
+	"7 weeks from the second night of Pesach to the day before Shavuot");
 ?>
 </table>
 
