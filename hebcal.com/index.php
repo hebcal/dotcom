@@ -182,7 +182,7 @@ fast.</span>
 <p>Hebcal.com offers a free <a title="Hebcal Custom Calendar" href="/hebcal/">Custom Jewish calendar</a>
 for any year 0001-9999. Included are <a title="Jewish Holidays" href="/holidays/">Jewish holidays</a>
 (major and minor), candle lighting times, and Torah readings.
-We also offer export to
+We also offer <a href="/ical/">downloads</a> to
 <a href="/home/category/import/outlook">Microsoft Outlook</a>,
 <a href="/home/category/import/apple">Apple iCal</a>,
 <a href="/home/category/import/google">Google Calendar</a>,
