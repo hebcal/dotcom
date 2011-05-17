@@ -6,6 +6,7 @@ $matches = array();
 if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
+$page_title = "Jewish Holiday downloads for desktop, mobile and web-based calendars";
 $xtra_head = <<<EOD
 <style type="text/css">
 #hebcal-ical tr td {
@@ -14,20 +15,25 @@ $xtra_head = <<<EOD
 }
 </style>
 EOD;
-echo html_header_new("Jewish Calendar downloads for Apple iCal", $xtra_head);
+echo html_header_new($page_title, $xtra_head);
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title">Jewish Calendar downloads for Apple iCal</h1>
+<h1 class="entry-title"><?php echo $page_title ?></h1>
 <div class="entry-content">
 
-<h2>Quick Start</h2>
+<h3>Quick Start</h3>
 
-<p>Jewish holidays for 2007-2016 are available to <a
-href="http://www.apple.com/support/ical/">Apple iCal</a> or to
-any desktop program that supports iCalendar files. These holidays are
-for Jews living in the Diaspora (anywhere outside of modern Israel).</p>
+<p>Jewish holidays for the next 10 years are available for Apple iCal,
+iPhone, iPad, Google Calendar, or to any desktop program that supports
+iCalendar (.ics) files. These holidays are for Jews living in the
+Diaspora (anywhere outside of modern Israel). Click the icons below to
+subscribe in your device or web/desktop application.</p>
+
+<p>For advanced options such as candle-lighting times and Torah
+readings, visit our <a href="/hebcal/">custom Jewish calendar</a>
+page.</p>
 
 <?php
 function cal_row($path,$title,$subtitle) {
@@ -38,10 +44,10 @@ function cal_row($path,$title,$subtitle) {
 ?>
 <tr>
 <td><a class="download" id="quick-ical-<?php echo $path ?>"
-title="Subscribe to <?php echo $title ?> in iCal"
+title="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 href="<?php echo $webcal ?>"><img
 src="/i/ical-64x64.png" width="64" height="64"
-alt="Subscribe to <?php echo $title ?> in iCal"
+alt="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 border="0"></a></td>
 <td align="center"><a class="download" id="quick-wlive-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Windows Live Calendar"
@@ -78,24 +84,18 @@ cal_row("omer", "Days of the Omer",
 ?>
 </table>
 
-<h2>Customizing your iCal feed</h2>
+<h3 id="custom">Customizing your calendar feed</h3>
 
-<p>To get a customized iCal feed with candle lighting times for Shabbat
+<p>To get a customized feed with candle lighting times for Shabbat
 and holidays, Torah readings, etc, follow these instructions:</p>
 
 <ol>
 <li>Go to <a
     href="http://www.hebcal.com/hebcal/">http://www.hebcal.com/hebcal/</a>
-<li>Fill out the form with your preferences and click the "Get
+<li>Fill out the form with your preferences and click the "Preview
     Calendar" button
-<li>Click on the "Export calendar to Outlook, Apple iCal, Google, Palm,
-    etc." link
-<li>Click on the "subscribe" link in the "Apple iCal (and other
-    iCalendar-enabled applications)" section
-<li><a href="http://www.apple.com/support/ical/">Apple iCal</a>
-    will start up
-<li>Click <b>Subscribe</b> in the "Subscribe to:" dialog box
-<li>Click <b>OK</b> in the next dialog box
+<li>Under the "Export to desktop, mobile or web-based calendar" section,
+  follow the instructions for your favorite application or mobile device
 </ol>
 
 </div><!-- .entry-content -->
