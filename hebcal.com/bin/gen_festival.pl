@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2011  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -375,10 +375,14 @@ sub write_index_page
 
     my $xtra_head = <<EOHTML;
 <style type="text/css">
-#hebcal-major-holidays tr td, #hebcal-major-holidays tr th, #hebcal-minor-holidays tr td, #hebcal-minor-holidays tr th {
+#hebcal-major-holidays tr td, #hebcal-major-holidays tr th,
+#hebcal-minor-holidays tr td, #hebcal-minor-holidays tr th,
+#hebcal-rosh-chodesh tr td, #hebcal-rosh-chodesh tr th {
   padding: 4px;
 }
-#hebcal-major-holidays td.date-obs, #hebcal-minor-holidays td.date-obs {
+#hebcal-major-holidays td.date-obs,
+#hebcal-minor-holidays td.date-obs,
+#hebcal-rosh-chodesh td.date-obs {
   font-size: 12px;
   line-height:16px;
 }
@@ -417,17 +421,26 @@ EOHTML
 
     my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
     my @major = split(/,/, $major);
-    print OUT3 "<h2>Major holidays</h2>\n";
+    print OUT3 "<h3>Major holidays</h3>\n";
     table_index($festivals, "hebcal-major-holidays", @major);
 
     my %major = map { $_ => 1 } @major;
     my @minor;
+    my @rosh_chodesh;
     foreach my $f (@FESTIVALS) {
-	push(@minor, $f) unless defined $major{$f};
+	if ($f =~ /^Rosh Chodesh/) {
+	    push(@rosh_chodesh, $f);
+	} elsif (! defined $major{$f}) {
+	    push(@minor, $f);
+	}
     }
 
-    print OUT3 "<h2>Minor holidays, special Shabbatot, public fasts</h2>\n";
+    print OUT3 "<h3>Minor holidays, special Shabbatot, public fasts</h3>\n";
     table_index($festivals, "hebcal-minor-holidays", @minor);
+
+    print OUT3 "<h3>Rosh Chodesh</h3>\n";
+    table_index($festivals, "hebcal-rosh-chodesh", @rosh_chodesh);
+
 
     print OUT3 <<EOHTML;
 </div><!-- .entry-content -->
@@ -814,7 +827,7 @@ EOHTML
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
 		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
-	    print OUT2 qq{</h2>\n};
+	    print OUT2 qq{</h3>\n};
 
 	    my $part_about = $festivals->{'festival'}->{$part}->{'about'};
 	    if ($part_about) {
