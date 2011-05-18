@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2011 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1771,7 +1771,8 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 <li>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)
 <ol>
 <li>Export <a class="download" id="dl-vcs" href="$href_vcs">${filename}.vcs</a>
-<li>Import VCS file into Palm Desktop 6.2 for Windows
+<li><a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
+href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a>
 </ol>
 $palm_dba
 </ul><!-- #palm-body -->
