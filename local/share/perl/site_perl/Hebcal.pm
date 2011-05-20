@@ -1677,7 +1677,7 @@ EOHTML
     }
 
     $s .= <<EOHTML;
-<li><a class="dlhead" onclick="tvis('ol-ics-body')" id="ol-ics">Outlook 2007, Outlook 2010</a>
+<li><a class="dlhead" onclick="tvis('ol-ics-body')" id="ol-ics">Outlook 2007, Outlook 2010 (Windows)</a>
 <ol class="dlinstr" id="ol-ics-body">
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
@@ -1685,7 +1685,7 @@ id="dl-ol-ics">$ics_title</a>
 <li><a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import ICS file into Outlook</a>
 </ol>
-<li><a class="dlhead" onclick="tvis('ol-csv-body')" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003</a>
+<li><a class="dlhead" onclick="tvis('ol-csv-body')" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003 (Windows)</a>
 <ol class="dlinstr" id="ol-csv-body">
 <li>Export Outlook CSV file. Select one of:
 <ul>
@@ -1708,11 +1708,19 @@ id="dl-ical-sub">$ics_title</a>
 <li><a title="Apple iCal - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">How to import ICS file into Apple iCal</a>
 </ol>
-<p>Alternate option: <a class="download"
+Alternate option: <a class="download"
 href="${ical_href}"
 id="dl-ical-alt">download $ics_title</a>
-and then import manually into Apple iCal.</p>
+and then import manually into Apple iCal.
 </div><!-- #ical-body -->
+<li><a class="dlhead" onclick="tvis('ol-mac-body')" id="ol-mac">Outlook 2011 (Mac OS X)</a>
+<ol class="dlinstr" id="ol-mac-body">
+<li>Download <a class="download"
+href="${ical_href}"
+id="dl-ol-mac">$ics_title</a>
+<li><a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
+href="/home/186/outlook-2011-mac-import">How to import .ics file into Outlook 2011 for Mac OS X</a>
+</ol><!-- #ol-mac-body -->
 <li><a class="dlhead" onclick="tvis('ios-body')" id="ios">iPhone &amp; iPad (iOS 3.0 and higher)</a>
 <ol class="dlinstr" id="ios-body">
 <li>Subscribe to: <a class="download"
@@ -1729,12 +1737,12 @@ class="download" id="dl-gcal-sub"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
 </blockquote>
-<p>Alternate option:
+Alternate option:
 <a class="download" id="dl-gcal-alt"
 href="${ical_href}">download</a> and then <a
 title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
 href="/home/59/google-calendar-alternative-instructions">follow
-our Google Calendar import instructions</a>.</p>
+our Google Calendar import instructions</a>.
 </div><!-- #gcal-body -->
 <li><a class="dlhead" onclick="tvis('wlive-body')" id="wlive">Windows Live Calendar</a>
 <div class="dlinstr" id="wlive-body">
