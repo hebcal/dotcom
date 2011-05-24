@@ -1006,8 +1006,9 @@ EOHTML
     ;
 
     my @entry_meta;
+    my $h1_extra = "";
     if (param_true("c")) {
-	push(@entry_meta, $cconfig->{"title"});
+	$h1_extra = " &mdash; " . $cconfig->{"title"};
 	push(@entry_meta, $cconfig->{"lat_descr"})
 	    if $cconfig->{"lat_descr"};
 	push(@entry_meta, $cconfig->{"long_descr"})
@@ -1027,7 +1028,7 @@ EOHTML
 <div id="container" class="single-attachment">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title">Jewish Calendar $date</h1>
+<h1 class="entry-title">Jewish Calendar $date$h1_extra</h1>
 <div class="entry-content">
 <div id="hebcal-results-header">
 $entry_meta
@@ -1420,7 +1421,7 @@ sub get_candle_config
 	$q->delete("ladir");
 
 	my $city = $q->param("city");
-	$config{"title"} = "Large City: $city";
+	$config{"title"} = $city;
 	$config{"city"} = $city;
 	$cmd_extra = " -C '$city'";
 
@@ -1541,7 +1542,7 @@ sub get_candle_config
 	$tz = $q->param("tz")
 	    if (defined $q->param("tz") && $q->param("tz") =~ /^-?\d+$/);
 
-	$config{"title"} = "$city, $state &nbsp;" . $q->param("zip");
+	$config{"title"} = "$city, $state " . $q->param("zip");
 	$config{"city"} = $city;
 	$config{"state"} = $state;
 	$config{"zip"} = $q->param("zip");
