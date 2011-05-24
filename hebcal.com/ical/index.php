@@ -23,8 +23,6 @@ echo html_header_new($page_title, $xtra_head);
 <h1 class="entry-title"><?php echo $page_title ?></h1>
 <div class="entry-content">
 
-<h3>Quick Start</h3>
-
 <p>Jewish holidays for the next 10 years are available for Apple iCal,
 iPhone, iPad, Google Calendar, or to any desktop program that supports
 iCalendar (.ics) files. These holidays are for Jews living in the
@@ -83,8 +81,6 @@ cal_row("omer", "Days of the Omer",
 	"7 weeks from the second night of Pesach to the day before Shavuot");
 ?>
 </table>
-
-<h3 id="custom">Customizing your calendar feed</h3>
 
 <p>To get a customized feed with candle lighting times for Shabbat
 and holidays, Torah readings, etc, follow these instructions:</p>
