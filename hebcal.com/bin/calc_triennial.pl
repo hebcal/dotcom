@@ -199,7 +199,7 @@ if ($opts{'d'}) {
 		     { RaiseError => 1, AutoCommit => 0 })
     or croak $DBI::errstr;
   my @sql = ("DROP TABLE IF EXISTS leyning",
-	     "CREATE TABLE leyning (dt TEXT, parashah TEXT, num TEXT, reading TEXT)",
+	     "CREATE TABLE leyning (dt TEXT NOT NULL, parashah TEXT NOT NULL, num TEXT NOT NULL, reading TEXT NOT NULL)",
 	     "CREATE INDEX leyning_dt ON leyning (dt)",
 	     );
   foreach my $sql (@sql) {
@@ -1289,7 +1289,14 @@ sub csv_parasha_event
 			   $month,
 			   $evt->[$Hebcal::EVT_IDX_MDAY]);
 
-    my $book = $parshiot->{'parsha'}->{$h}->{'verse'};
+    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
+    if (defined $dbh) {
+      my $sth = $dbh->prepare("INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)");
+      my $rv = $sth->execute($date_sql, $h, "T", $verses)
+	or croak "can't execute the query: " . $sth->errstr;
+    }
+
+    my $book = $verses;
     $book =~ s/\s+.+$//;
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
