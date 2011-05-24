@@ -64,6 +64,7 @@ if ($^V && $^V ge v5.8.1) {
 my $WEBDIR = "/home/hebcal/web/hebcal.com";
 my $EMAIL_PASSFILE = "$WEBDIR/email/hebcal-email-pass.cgi";
 my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
+my $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -2153,6 +2154,16 @@ sub vcalendar_write_contents
 	}
     }
 
+    # don't raise error if we can't open DB
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "");
+    my $sth;
+    if (defined $dbh) {
+      $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+      if (! defined $sth) {
+	$dbh = undef;
+      }
+    }
+
     my($i);
     my($numEntries) = scalar(@{$events});
     for ($i = 0; $i < $numEntries; $i++)
@@ -2198,6 +2209,33 @@ sub vcalendar_write_contents
  	{
 	    out_html(undef, qq{DESCRIPTION:},
 		     $evt->[$Hebcal::EVT_IDX_MEMO], $endl);
+	}
+	elsif (defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/)
+	{
+	    my $date_sql = sprintf("%04d-%02d-%02d",
+				   $evt->[$Hebcal::EVT_IDX_YEAR],
+				   $evt->[$Hebcal::EVT_IDX_MON] + 1,
+				   $evt->[$Hebcal::EVT_IDX_MDAY]);
+	    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
+	    my $torah_reading;
+	    my $haftarah_reading;
+	    while(my($aliyah_num,$aliyah_reading) = $sth->fetchrow_array) {
+	      if ($aliyah_num eq "T") {
+		$torah_reading = $aliyah_reading;
+	      } elsif ($aliyah_num eq "H") {
+		$haftarah_reading = $aliyah_reading;
+	      }
+	    }
+	    $sth->finish;
+	    my $memo = "";
+	    if ($torah_reading) {
+	      $memo = $torah_reading;
+	      if ($haftarah_reading) {
+		$memo .= "\\n\\nHaftarah: ";
+		$memo .= $haftarah_reading;
+	      }
+	    }
+	    out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
 	}
 
 	my($date) = sprintf("%04d%02d%02d",
@@ -2336,6 +2374,10 @@ sub vcalendar_write_contents
     }
 
     out_html(undef, qq{END:VCALENDAR$endl});
+
+    if (defined $dbh) {
+      $dbh->disconnect();
+    }
 
     cache_end();
     1;
