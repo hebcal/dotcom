@@ -43,19 +43,14 @@ function cal_row($path,$title,$subtitle) {
     $http_esc = urlencode("http://" . $url_noproto);
 ?>
 <tr>
+<td><b><big><?php echo $title ?></big></b>
+<br><?php echo $subtitle ?></td>
 <td><a class="download" id="quick-ical-<?php echo $path ?>"
 title="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 href="<?php echo $webcal ?>"><img
 src="/i/ical-64x64.png" width="64" height="64"
 alt="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 border="0"></a></td>
-<td align="center"><a class="download" id="quick-wlive-<?php echo $path ?>"
-title="Add <?php echo $title ?> to Windows Live Calendar"
-href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=<?php echo $webcal_esc ?>&name=<?php echo urlencode($title) ?>"><img
-src="/i/wlive-150x20.png"
-width="150" height="20" border="0"
-alt="Add <?php echo $title ?> to Windows Live Calendar"></a>
-</td>
 <td align="center"><a class="download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
 href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
@@ -63,8 +58,13 @@ src="http://www.google.com/calendar/images/ext/gc_button6.gif"
 width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
 </td>
-<td><b><big><?php echo $title ?></big></b>
-<br><?php echo $subtitle ?></td>
+<td align="center"><a class="download" id="quick-wlive-<?php echo $path ?>"
+title="Add <?php echo $title ?> to Windows Live Calendar"
+href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=<?php echo $webcal_esc ?>&name=<?php echo urlencode($title) ?>"><img
+src="/i/wlive-150x20.png"
+width="150" height="20" border="0"
+alt="Add <?php echo $title ?> to Windows Live Calendar"></a>
+</td>
 </tr>
 <?php
 }
