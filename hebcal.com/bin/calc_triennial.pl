@@ -195,11 +195,17 @@ if ($opts{'t'})
 my $dbh;
 if ($opts{'d'}) {
   my $dbfile = $opts{'d'};
-  $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "")
+  $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
+		     { RaiseError => 1, AutoCommit => 0 })
     or croak $DBI::errstr;
-  my $sql = "CREATE TABLE leyning (date TEXT, parashah TEXT, num TEXT, reading TEXT)";
-  $dbh->do($sql)
-    or croak $DBI::errstr;
+  my @sql = ("DROP TABLE IF EXISTS leyning",
+	     "CREATE TABLE leyning (dt TEXT, parashah TEXT, num TEXT, reading TEXT)",
+	     "CREATE INDEX leyning_dt ON leyning (dt)",
+	     );
+  foreach my $sql (@sql) {
+    $dbh->do($sql)
+      or croak $DBI::errstr;
+  }
 }
 
 my(%parashah_dates);
@@ -1299,7 +1305,7 @@ sub csv_parasha_event
 		$aliyah->{'end'},
 		$aliyah->{'numverses'};
 	if (defined $dbh) {
-	  my $sth = $dbh->prepare("INSERT INTO leyning VALUES (?, ?, ?, ?)");
+	  my $sth = $dbh->prepare("INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)");
 	  my $aliyah_text = sprintf("%s %s - %s", $book, $aliyah->{'begin'}, $aliyah->{'end'});
 	  my $rv = $sth->execute($date_sql, $h, $aliyah->{'num'}, $aliyah_text)
 	    or croak "can't execute the query: " . $sth->errstr;
