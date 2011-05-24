@@ -30,6 +30,7 @@ $(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
 	./calc_triennial.pl -f $(CSVDIR)/fullkriyah.csv \
 		-t $(CSVDIR)/triennial.csv \
+		-d ./leyning.sqlite3 \
 		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)
 
 $(HOLIDAYS)/purim.html: gen_festival.pl $(XML_FESTIVAL)

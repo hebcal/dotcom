@@ -61,28 +61,31 @@ use Getopt::Std ();
 use XML::Simple ();
 use Time::Local ();
 use POSIX qw(strftime);
+use Carp;
+use DBI;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-h] [-H <year>] aliyah.xml festival.xml output-dir
+my($usage) = "usage: $0 [-h] [-H <year>] [-t t.csv] [-f f.csv] [-d d.sqlite3] aliyah.xml festival.xml output-dir
     -h        Display usage information.
     -2        Display two years of triennial on HTML pages
     -H <year> Start with hebrew year <year> (default this year)
     -t t.csv  Dump triennial readings to comma separated values
     -f f.csv  Dump full kriyah readings to comma separated values
+    -d DBFILE Write state to SQLite3 file 
 ";
 
 my(%opts);
-Getopt::Std::getopts('hH:c:t:f:2', \%opts) || die "$usage\n";
-$opts{'h'} && die "$usage\n";
-(@ARGV == 3) || die "$usage";
+Getopt::Std::getopts('hH:c:t:f:2d:', \%opts) || croak "$usage\n";
+$opts{'h'} && croak "$usage\n";
+(@ARGV == 3) || croak "$usage";
 
 my($aliyah_in) = shift;
 my($festival_in) = shift;
 my($outdir) = shift;
 
 if (! -d $outdir) {
-    die "$outdir: $!\n";
+    croak "$outdir: $!\n";
 }
 
 $| = 1;
@@ -179,14 +182,24 @@ foreach my $yr (($start_year - 3) .. ($start_year + 10))
 if ($opts{'t'})
 {
     my $fn = $opts{'t'};
-    open(CSV, ">$fn.$$") || die "$fn.$$: $!\n";
+    open(CSV, ">$fn.$$") || croak "$fn.$$: $!\n";
     print CSV qq{"Date","Parashah","Aliyah","Triennial Reading"\015\012};
 
     triennial_csv($axml,$events1,$bereshit_idx1,\%readings1);
     triennial_csv($axml,$events2,$bereshit_idx2,\%readings2);
 
     close(CSV);
-    rename("$fn.$$", $fn) || die "$fn: $!\n";
+    rename("$fn.$$", $fn) || croak "$fn: $!\n";
+}
+
+my $dbh;
+if ($opts{'d'}) {
+  my $dbfile = $opts{'d'};
+  $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "")
+    or croak $DBI::errstr;
+  my $sql = "CREATE TABLE leyning (date TEXT, parashah TEXT, num TEXT, reading TEXT)";
+  $dbh->do($sql)
+    or croak $DBI::errstr;
 }
 
 my(%parashah_dates);
@@ -210,6 +223,13 @@ foreach my $h (keys %readings1, "Vezot Haberakhah")
 }
 
 write_index_page($axml,\%parashah_dates);
+
+if ($opts{'d'}) {
+  $dbh->commit;
+  $dbh->disconnect;
+  $dbh = undef;
+}
+
 
 exit(0);
 
@@ -235,7 +255,7 @@ sub get_tri_events
 	}
     }
 
-    die "can't find Bereshit for Year I" unless defined $idx;
+    croak "can't find Bereshit for Year I" unless defined $idx;
 
     # determine triennial year patterns
     my %pattern;
@@ -287,13 +307,13 @@ sub cycle_readings
 	{
 	    my $variation = $option->{$h} . "." . $year;
 	    my $a = $triennial_aliyot{$h}->{$variation};
-	    die unless defined $a;
+	    croak unless defined $a;
 	    $readings{$h}->[$year] = [$a, $stime, $h];
 	}
 	elsif (defined $triennial_aliyot{$h}->{$year})
 	{
 	    my $a = $triennial_aliyot{$h}->{$year};
-	    die unless defined $a;
+	    croak unless defined $a;
 
 	    $readings{$h}->[$year] = [$a, $stime, $h];
 
@@ -307,7 +327,7 @@ sub cycle_readings
 	elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
 	{
 	    my $a = $triennial_aliyot{$h}->{"Y.$year"};
-	    die unless defined $a;
+	    croak unless defined $a;
 
 	    $readings{$h}->[$year] = [$a, $stime, $h];
 
@@ -320,7 +340,7 @@ sub cycle_readings
 	}
 	else
 	{
-	    die "can't find aliyot for $h, year $year";
+	    croak "can't find aliyot for $h, year $year";
 	}
     }
 
@@ -332,7 +352,7 @@ sub write_index_page
     my($parshiot,$read_on) = @_;
 
     my $fn = "$outdir/index.html";
-    open(OUT1, ">$fn.$$") || die "$fn.$$: $!\n";
+    open(OUT1, ">$fn.$$") || croak "$fn.$$: $!\n";
 
     my $hy0 = $hebrew_year - 1;
     my $hy1 = $hebrew_year + 1;
@@ -426,7 +446,7 @@ EOHTML
     print OUT1 $html_footer;
 
     close(OUT1);
-    rename("$fn.$$", $fn) || die "$fn: $!\n";
+    rename("$fn.$$", $fn) || croak "$fn: $!\n";
 
     1;
 }
@@ -460,7 +480,7 @@ sub calc_variation_options
 		}
 	    }
 
-	    die "can't find option for $parashah (pat == $pat)"
+	    croak "can't find option for $parashah (pat == $pat)"
 		unless defined $option->{$parashah};
 	}
 
@@ -487,7 +507,7 @@ sub read_aliyot_metadata
 		    $aliyot->{$parashah}->{$y->{'variation'}} = $y->{'aliyah'};
 		}
 	    } else {
-		die "strange data for Parashat $parashah";
+		croak "strange data for Parashat $parashah";
 	    }
 	}
 
@@ -495,7 +515,7 @@ sub read_aliyot_metadata
 	foreach my $y (@{$yrs}) {
 	    if (defined $y->{'variation'} && defined $y->{'sameas'}) {
 		my $sameas = $y->{'sameas'};
-		die "Bad sameas=$sameas for Parashat $parashah"
+		croak "Bad sameas=$sameas for Parashat $parashah"
 		    unless defined $aliyot->{$parashah}->{$sameas};
 		$aliyot->{$parashah}->{$y->{'variation'}} =
 		    $aliyot->{$parashah}->{$sameas};
@@ -562,7 +582,7 @@ EOHTML
     }
 
     my $fn = "$outdir/$anchor.html";
-    open(OUT2, ">$fn.$$") || die "$fn.$$: $!\n";
+    open(OUT2, ">$fn.$$") || croak "$fn.$$: $!\n";
 
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
@@ -875,7 +895,7 @@ EOHTML
     print OUT2 $html_footer;
 
     close(OUT2);
-    rename("$fn.$$", $fn) || die "$fn: $!\n";
+    rename("$fn.$$", $fn) || croak "$fn: $!\n";
 }
 
 
@@ -926,7 +946,7 @@ sub print_tri_cell
 	return;
     }
 
-    die "no aliyot array for $h (year $yr)"
+    croak "no aliyot array for $h (year $yr)"
 	unless defined $triennial->[$yr]->[0];
 
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
@@ -1249,6 +1269,83 @@ sub special_readings
     1;
 }
 
+sub csv_parasha_event
+{
+    my($evt,$h,$parshiot) = @_;
+
+    my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+    my $stime2 = sprintf("%02d-%s-%04d",
+			 $evt->[$Hebcal::EVT_IDX_MDAY],
+			 $Hebcal::MoY_short[$month - 1],
+			 $evt->[$Hebcal::EVT_IDX_YEAR]);
+    my $date_sql = sprintf("%04d-%02d-%02d",
+			   $evt->[$Hebcal::EVT_IDX_YEAR],
+			   $month,
+			   $evt->[$Hebcal::EVT_IDX_MDAY]);
+
+    my $book = $parshiot->{'parsha'}->{$h}->{'verse'};
+    $book =~ s/\s+.+$//;
+
+    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
+    my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } @{$aliyot};
+    foreach my $aliyah (@sorted_aliyot) {
+	next if $aliyah->{'num'} eq 'M' && defined $special_maftir{$stime2};
+	printf CSV
+		qq{%s,"%s",%s,"$book %s - %s",%s\015\012},
+		$stime2,
+		$h,
+		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
+		$aliyah->{'begin'},
+		$aliyah->{'end'},
+		$aliyah->{'numverses'};
+	if (defined $dbh) {
+	  my $sth = $dbh->prepare("INSERT INTO leyning VALUES (?, ?, ?, ?)");
+	  my $aliyah_text = sprintf("%s %s - %s", $book, $aliyah->{'begin'}, $aliyah->{'end'});
+	  my $rv = $sth->execute($date_sql, $h, $aliyah->{'num'}, $aliyah_text)
+	    or croak "can't execute the query: " . $sth->errstr;
+	}
+    }
+
+    if (defined $special_maftir{$stime2}) {
+      printf CSV
+	qq{%s,"%s","%s","%s",\015\012},
+	$stime2,
+	$h,
+	'maf',
+	$special_maftir{$stime2};
+      if (defined $dbh) {
+	my $sth = $dbh->prepare("INSERT INTO leyning VALUES (?, ?, ?, ?)");
+	my $rv = $sth->execute($date_sql, $h, "M", $special_maftir{$stime2})
+	  or croak "can't execute the query: " . $sth->errstr;
+      }
+    }
+
+    my $haft = (defined $special_haftara{$stime2}) ?
+      $special_haftara{$stime2} : $parshiot->{'parsha'}->{$h}->{'haftara'};
+
+    if (! defined $haft && $h =~ /^([^-]+)-(.+)$/ &&
+	defined $combined{$1} && defined $combined{$2}) {
+      my($p1,$p2) = ($1,$2);
+      my $ph = ($p1 eq 'Nitzavim') ? $p1 : $p2;
+      $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
+    }
+
+    printf CSV
+      qq{%s,"%s","%s","%s",\015\012},
+      $stime2,
+      $h,
+      'Haftara',
+      $haft;
+
+    if (defined $dbh) {
+      my $sth = $dbh->prepare("INSERT INTO leyning VALUES (?, ?, ?, ?)");
+      my $rv = $sth->execute($date_sql, $h, "H", $haft)
+	or croak "can't execute the query: " . $sth->errstr;
+    }
+
+    print CSV "\015\012";
+}
+
 sub readings_for_current_year
 {
     my($parshiot,$current,$parashah_time) = @_;
@@ -1265,97 +1362,45 @@ sub readings_for_current_year
     }
 
     if ($opts{'f'}) {
-	open(CSV, ">$opts{'f'}.$$") || die "$opts{'f'}.$$: $!\n";
+	open(CSV, ">$opts{'f'}.$$") || croak "$opts{'f'}.$$: $!\n";
 	print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
     }
 
-    for (my $yr = 0; $yr < $extra_years; $yr++)
-    {
-    my @events = @{$years[$yr]};
+    for (my $yr = 0; $yr < $extra_years; $yr++) {
+	my @events = @{$years[$yr]};
+	for (my $i = 0; $i < @events; $i++) {
+	    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
+	    my $h = $1;
+	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my $stime = sprintf("%02d %s %04d",
+				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				$Hebcal::MoY_long{$month},
+				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 
-    for (my $i = 0; $i < @events; $i++)
-    {
-	next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
-	my $h = $1;
+	    $current->{$h}->[$yr] = $stime;
 
-	my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-
-	my $stime = sprintf("%02d %s %04d",
-			    $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-			    $Hebcal::MoY_long{$month},
-			    $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-
-	$current->{$h}->[$yr] = $stime;
-
-	$parashah_time->{$h} = Time::Local::timelocal
-	    (1,0,0,
-	     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-	     $events[$i]->[$Hebcal::EVT_IDX_MON],
-	     $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-	     '','','')
+	    $parashah_time->{$h} = Time::Local::timelocal
+	      (1,0,0,
+	       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+	       $events[$i]->[$Hebcal::EVT_IDX_MON],
+	       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+	       '','','')
 		if $yr == 1;	# second year in array
 
-	next unless $opts{'f'};
-
-	my $stime2 = sprintf("%02d-%s-%04d",
-			     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-			     $Hebcal::MoY_short[$month - 1],
-			     $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-
-	$parashah_stime2{$h}->[$yr] = $stime2;
-
-	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
-	$book =~ s/\s+.+$//;
-
-	my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
-	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			    @{$aliyot})
-	{
-	    next if $aliyah->{'num'} eq 'M' && defined $special_maftir{$stime2};
-	    printf CSV
-		qq{%s,"%s",%s,"$book %s - %s",%s\015\012},
-		$stime2,
-		$h,
-		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
-		$aliyah->{'begin'},
-		$aliyah->{'end'},
-		$aliyah->{'numverses'};
+	    if ($opts{'f'}) {
+		my $stime2 = sprintf("%02d-%s-%04d",
+				     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				     $Hebcal::MoY_short[$month - 1],
+				     $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+		$parashah_stime2{$h}->[$yr] = $stime2;
+		csv_parasha_event($events[$i], $h, $parshiot);
+	    }
 	}
-
-	if (defined $special_maftir{$stime2}) {
-	    printf CSV
-		qq{%s,"%s","%s","%s",\015\012},
-		$stime2,
-		$h,
-		'maf',
-		$special_maftir{$stime2};
-	}
-
-	my $haft = (defined $special_haftara{$stime2}) ?
-	    $special_haftara{$stime2} : $parshiot->{'parsha'}->{$h}->{'haftara'};
-
-	if (! defined $haft && $h =~ /^([^-]+)-(.+)$/ &&
-	    defined $combined{$1} && defined $combined{$2})
-	{
-	    my($p1,$p2) = ($1,$2);
-	    my $ph = ($p1 eq 'Nitzavim') ? $p1 : $p2;
-	    $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
-	}
-
-	printf CSV
-	    qq{%s,"%s","%s","%s",\015\012},
-	    $stime2,
-	    $h,
-	    'Haftara',
-	    $haft;
-
-	print CSV "\015\012";
-    }
     }
 
     if ($opts{'f'}) {
 	close(CSV);
-	rename("$opts{'f'}.$$", $opts{'f'}) || die "$opts{'f'}: $!\n";
+	rename("$opts{'f'}.$$", $opts{'f'}) || croak "$opts{'f'}: $!\n";
     }
 }
 
