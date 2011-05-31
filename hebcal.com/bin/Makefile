@@ -12,9 +12,9 @@ HOLIDAYS = ../holidays
 
 all: xml2perl sedrot holidays json
 
-holidays: $(HOLIDAYS)/purim.html
+holidays: $(HOLIDAYS)/purim
 
-sedrot: $(SEDROT)/bereshit.html
+sedrot: $(SEDROT)/bereshit
 
 xml2perl: $(SITE_PERL)/HebcalConst.pm
 
@@ -26,14 +26,14 @@ json: $(CITIES_JSON)
 $(CITIES_JSON): $(CITIES_TXT) gen_cities_json.pl
 	./gen_cities_json.pl $(CITIES_TXT) opencountrycodes.xml $(CITIES_JSON)
 
-$(SEDROT)/bereshit.html: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
+$(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
 	./calc_triennial.pl -f $(CSVDIR)/fullkriyah.csv \
 		-t $(CSVDIR)/triennial.csv \
 		-d $(DBDIR)/luach.sqlite3 \
 		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)
 
-$(HOLIDAYS)/purim.html: gen_festival.pl $(XML_FESTIVAL)
+$(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
 	./gen_festival.pl -v $(XML_FESTIVAL) $(HOLIDAYS)
 

@@ -417,7 +417,7 @@ EOHTML
 	$prev_book = $book;
 
 	print OUT1 qq{<li><a name="$anchor" },
-	qq{href="$anchor.html">Parashat $h</a>};
+	qq{href="$anchor">Parashat $h</a>};
 	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
 	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>};
@@ -433,7 +433,7 @@ EOHTML
 	$anchor =~ s/[^\w]//g;
 
 	print OUT1 qq{<li><a name="$anchor" },
-	qq{href="$anchor.html">Parashat $h</a>};
+	qq{href="$anchor">Parashat $h</a>};
 	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
 	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>};
@@ -563,7 +563,6 @@ sub write_sedra_page
     {
 	$prev_anchor = lc($prev);
 	$prev_anchor =~ s/[^\w]//g;
-	$prev_anchor .= ".html";
 
 	my $title = "Previous Parashah";
 	$prev_link = <<EOHTML
@@ -578,7 +577,6 @@ EOHTML
     {
 	$next_anchor = lc($next);
 	$next_anchor =~ s/[^\w]//g;
-	$next_anchor .= ".html";
 
 	my $title = "Next Parashah";
 	$next_link = <<EOHTML
@@ -587,14 +585,14 @@ EOHTML
 ;
     }
 
-    my $fn = "$outdir/$anchor.html";
+    my $fn = "$outdir/$anchor";
     open(OUT2, ">$fn.$$") || croak "$fn.$$: $!\n";
 
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
     print OUT2 Hebcal::html_header("Parashat $h ($torah)",
-				   "/sedrot/$anchor.html",
+				   "/sedrot/$anchor",
 				   "single single-post");
 
     my @tri_date;
@@ -925,11 +923,11 @@ sub print_tri_cell
 
 	my($anchor) = lc($p1);
 	$anchor =~ s/[^\w]//g;
-	print OUT2 "<li><a href=\"$anchor.html\">$p1</a>\n";
+	print OUT2 "<li><a href=\"$anchor\">$p1</a>\n";
 
 	$anchor = lc($p2);
 	$anchor =~ s/[^\w]//g;
-	print OUT2 "<li><a href=\"$anchor.html\">$p2</a>\n";
+	print OUT2 "<li><a href=\"$anchor\">$p2</a>\n";
 	print OUT2 "</ul>\n";
 
 	print OUT2 "</td>\n";
@@ -946,7 +944,7 @@ sub print_tri_cell
 
 	my($anchor) = lc($h_combined);
 	$anchor =~ s/[^\w]//g;
-	print OUT2 "See <a href=\"$anchor.html\">$h_combined</a>\n";
+	print OUT2 "See <a href=\"$anchor\">$h_combined</a>\n";
 
 	print OUT2 "</td>\n";
 	return;
