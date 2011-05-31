@@ -203,7 +203,7 @@ function hebcal_make_holiday_anchor($str)
     $anchor = preg_replace('/^-/',	'', $anchor);
     $anchor = preg_replace('/-$/',	'', $anchor);
 
-    return "/holidays/$anchor.html";
+    return "/holidays/$anchor";
 }
 
 function hebcal_make_sedra_anchor($str)
@@ -211,7 +211,7 @@ function hebcal_make_sedra_anchor($str)
     $anchor = strtolower($str);
     $anchor = preg_replace('/[^\w]/',	'', $anchor);
 
-    return "/sedrot/$anchor.html";
+    return "/sedrot/$anchor";
 }
 
 function hebcal_make_anchor($str)
@@ -221,7 +221,7 @@ function hebcal_make_anchor($str)
     } elseif (strncmp($str, "Parshas", 7) == 0) {
 	return hebcal_make_sedra_anchor(substr($str, 8));
     } elseif (preg_match('/^\d+\w+ day of the Omer$/', $str)) {
-	return "/holidays/days-of-the-omer.html";
+	return "/holidays/days-of-the-omer";
     } elseif ($str != "Candle lighting" && $str != "No sunset today." &&
 	      strncmp($str, "Havdalah", 8) != 0) {
 	$str_copy = $str;
