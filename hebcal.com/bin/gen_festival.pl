@@ -413,9 +413,10 @@ Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
 <p>The tables of holidays below include the current year and 4 years
-into the future for the Diaspora. <a href="/hebcal/">Create a custom
-calendar</a> for any year 0001-9999 and and export to your favorite
-desktop- or web-based calendar.</p>
+into the future for the Diaspora. <a href="/ical/">Download</a> to your
+favorite desktop, mobile or web-based calendar, or <a href="/hebcal/">make
+a custom calendar</a> to select a different year or for advanced options
+such as candle-lighting times and Torah readings.</p>
 EOHTML
 ;
 
