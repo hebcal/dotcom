@@ -179,15 +179,13 @@ fast.</span>
 <?php } ?>
 </p><!-- .fpsubhead -->
 
-<p>Hebcal.com offers a free <a title="Hebcal Custom Calendar" href="/hebcal/">Custom Jewish calendar</a>
-for any year 0001-9999. Included are <a title="Jewish Holidays" href="/holidays/">Jewish holidays</a>
-(major and minor), candle lighting times, and Torah readings.
-We also offer <a href="/ical/">downloads</a> to
-<a href="/home/category/import/outlook">Microsoft Outlook</a>,
-<a href="/home/category/import/apple">Apple iCal</a>,
-<a href="/home/category/import/google">Google Calendar</a>,
-<a href="/home/category/import/palm">Palm</a>,
-and Windows Live Calendar.</p>
+<p>Make a free <a title="Hebcal Custom Calendar"
+href="/hebcal/">custom Jewish calendar</a> for any year 0001-9999 at
+Hebcal.com. Included are <a title="Jewish Holidays"
+href="/holidays/">Jewish holidays</a> (major and minor), candle
+lighting times, and Torah readings. <a href="/ical/">Download</a>
+your holiday calendar to Microsoft Outlook, Apple iCal, iPhone, iPad,
+Palm, or Android (via Google Calendar).</p>
 
 <p>Use our <a href="/converter/">Date Converter</a> to convert between
 Hebrew and Gregorian dates and see today's date in a Hebrew font. Our
@@ -200,8 +198,7 @@ list</a> to receive a weekly reminder of the Parashat ha-Shavua and
 when to light candles for your city.</p>
 
 <p>This is a free service. Please <a title="Send money to Hebcal.com"
-href="/home/about/donate">donate</a> to help defray the cost of running
-this website.</p>
+href="/home/about/donate">donate</a> to show your appreciation.</p>
 
 <p>Developers: we offer <a
 title="Including hebcal.com content on other sites, advanced linking"
