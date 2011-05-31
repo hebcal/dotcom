@@ -23,8 +23,8 @@ echo html_header_new($page_title, $xtra_head);
 <h1 class="entry-title"><?php echo $page_title ?></h1>
 <div class="entry-content">
 
-<p>Jewish holidays for the next 10 years are available for Apple iCal,
-iPhone, iPad, Android (via Google Calendar), Microsoft Outlook,
+<p>Jewish holidays for the next 10 years are available for Microsoft
+Outlook, Apple iCal, iPhone, iPad, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files. These holidays are for Jews living in the
 Diaspora (anywhere outside of modern Israel). Click the icons below to
