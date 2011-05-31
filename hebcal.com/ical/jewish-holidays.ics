@@ -12,7 +12,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20110120
 DURATION:P1D
@@ -25,7 +25,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim Katan
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan?tag=dl-major
 DESCRIPTION:Minor Purim celebration during Adar I on leap years
 DTSTART;VALUE=DATE:20110218
 DURATION:P1D
@@ -38,7 +38,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20110320
 DURATION:P1D
@@ -51,7 +51,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20110321
 DURATION:P1D
@@ -64,7 +64,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20110418
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -76,7 +76,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20110419
 DURATION:P1D
@@ -89,7 +89,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20110420
 DURATION:P1D
@@ -102,7 +102,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20110421
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -114,7 +114,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20110422
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -126,7 +126,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20110423
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -138,7 +138,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20110424
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -150,7 +150,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20110425
 DURATION:P1D
@@ -163,7 +163,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20110426
 DURATION:P1D
@@ -176,7 +176,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20110501
 DURATION:P1D
@@ -189,7 +189,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20110509
 DURATION:P1D
@@ -202,7 +202,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20110510
 DURATION:P1D
@@ -215,7 +215,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20110522
 DURATION:P1D
@@ -228,7 +228,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20110601
 DURATION:P1D
@@ -241,7 +241,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20110607
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -253,7 +253,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20110608
 DURATION:P1D
@@ -266,7 +266,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20110609
 DURATION:P1D
@@ -279,7 +279,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20110809
 DURATION:P1D
@@ -292,7 +292,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20110928
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -304,7 +304,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5772
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20110929
 DURATION:P1D
@@ -317,7 +317,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20110930
 DURATION:P1D
@@ -330,7 +330,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20111007
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -342,7 +342,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20111008
 DURATION:P1D
@@ -355,7 +355,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20111012
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -367,7 +367,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20111013
 DURATION:P1D
@@ -380,7 +380,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20111014
 DURATION:P1D
@@ -393,7 +393,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20111015
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -405,7 +405,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20111016
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -417,7 +417,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20111017
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -429,7 +429,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20111018
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -441,7 +441,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20111019
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -453,7 +453,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20111020
 DURATION:P1D
@@ -466,7 +466,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20111021
 DURATION:P1D
@@ -479,7 +479,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111220
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -491,7 +491,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111221
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -503,7 +503,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111222
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -515,7 +515,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111223
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -527,7 +527,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111224
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -539,7 +539,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111225
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -551,7 +551,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111226
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -563,7 +563,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111227
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -575,7 +575,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20111228
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -587,7 +587,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20120208
 DURATION:P1D
@@ -600,7 +600,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20120308
 DURATION:P1D
@@ -613,7 +613,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20120309
 DURATION:P1D
@@ -626,7 +626,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20120406
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -638,7 +638,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20120407
 DURATION:P1D
@@ -651,7 +651,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20120408
 DURATION:P1D
@@ -664,7 +664,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20120409
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -676,7 +676,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20120410
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -688,7 +688,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20120411
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -700,7 +700,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20120412
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -712,7 +712,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20120413
 DURATION:P1D
@@ -725,7 +725,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20120414
 DURATION:P1D
@@ -738,7 +738,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20120419
 DURATION:P1D
@@ -751,7 +751,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20120425
 DURATION:P1D
@@ -764,7 +764,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20120426
 DURATION:P1D
@@ -777,7 +777,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20120510
 DURATION:P1D
@@ -790,7 +790,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20120520
 DURATION:P1D
@@ -803,7 +803,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20120526
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -815,7 +815,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20120527
 DURATION:P1D
@@ -828,7 +828,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20120528
 DURATION:P1D
@@ -841,7 +841,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20120729
 DURATION:P1D
@@ -854,7 +854,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20120916
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -866,7 +866,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5773
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20120917
 DURATION:P1D
@@ -879,7 +879,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20120918
 DURATION:P1D
@@ -892,7 +892,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20120925
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -904,7 +904,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20120926
 DURATION:P1D
@@ -917,7 +917,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20120930
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -929,7 +929,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20121001
 DURATION:P1D
@@ -942,7 +942,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20121002
 DURATION:P1D
@@ -955,7 +955,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20121003
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -967,7 +967,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20121004
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -979,7 +979,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20121005
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -991,7 +991,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20121006
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1003,7 +1003,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20121007
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1015,7 +1015,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20121008
 DURATION:P1D
@@ -1028,7 +1028,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20121009
 DURATION:P1D
@@ -1041,7 +1041,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121208
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1053,7 +1053,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121209
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1065,7 +1065,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121210
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1077,7 +1077,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121211
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1089,7 +1089,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121212
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1101,7 +1101,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121213
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1113,7 +1113,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121214
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1125,7 +1125,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121215
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1137,7 +1137,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20121216
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1149,7 +1149,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20130126
 DURATION:P1D
@@ -1162,7 +1162,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20130224
 DURATION:P1D
@@ -1175,7 +1175,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20130225
 DURATION:P1D
@@ -1188,7 +1188,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20130325
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1200,7 +1200,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20130326
 DURATION:P1D
@@ -1213,7 +1213,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20130327
 DURATION:P1D
@@ -1226,7 +1226,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20130328
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1238,7 +1238,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20130329
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1250,7 +1250,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20130330
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1262,7 +1262,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20130331
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1274,7 +1274,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20130401
 DURATION:P1D
@@ -1287,7 +1287,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20130402
 DURATION:P1D
@@ -1300,7 +1300,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20130407
 DURATION:P1D
@@ -1313,7 +1313,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20130415
 DURATION:P1D
@@ -1326,7 +1326,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20130416
 DURATION:P1D
@@ -1339,7 +1339,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20130428
 DURATION:P1D
@@ -1352,7 +1352,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20130508
 DURATION:P1D
@@ -1365,7 +1365,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20130514
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1377,7 +1377,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20130515
 DURATION:P1D
@@ -1390,7 +1390,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20130516
 DURATION:P1D
@@ -1403,7 +1403,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20130716
 DURATION:P1D
@@ -1416,7 +1416,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20130904
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1428,7 +1428,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5774
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20130905
 DURATION:P1D
@@ -1441,7 +1441,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20130906
 DURATION:P1D
@@ -1454,7 +1454,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20130913
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1466,7 +1466,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20130914
 DURATION:P1D
@@ -1479,7 +1479,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20130918
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1491,7 +1491,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20130919
 DURATION:P1D
@@ -1504,7 +1504,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20130920
 DURATION:P1D
@@ -1517,7 +1517,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20130921
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1529,7 +1529,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20130922
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1541,7 +1541,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20130923
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1553,7 +1553,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20130924
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1565,7 +1565,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20130925
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1577,7 +1577,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20130926
 DURATION:P1D
@@ -1590,7 +1590,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20130927
 DURATION:P1D
@@ -1603,7 +1603,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131127
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1615,7 +1615,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131128
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1627,7 +1627,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131129
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1639,7 +1639,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131130
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1651,7 +1651,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131201
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1663,7 +1663,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131202
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1675,7 +1675,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131203
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1687,7 +1687,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131204
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1699,7 +1699,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20131205
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1711,7 +1711,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20140116
 DURATION:P1D
@@ -1724,7 +1724,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim Katan
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan?tag=dl-major
 DESCRIPTION:Minor Purim celebration during Adar I on leap years
 DTSTART;VALUE=DATE:20140214
 DURATION:P1D
@@ -1737,7 +1737,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20140316
 DURATION:P1D
@@ -1750,7 +1750,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20140317
 DURATION:P1D
@@ -1763,7 +1763,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20140414
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1775,7 +1775,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20140415
 DURATION:P1D
@@ -1788,7 +1788,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20140416
 DURATION:P1D
@@ -1801,7 +1801,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20140417
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1813,7 +1813,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20140418
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1825,7 +1825,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20140419
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1837,7 +1837,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20140420
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1849,7 +1849,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20140421
 DURATION:P1D
@@ -1862,7 +1862,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20140422
 DURATION:P1D
@@ -1875,7 +1875,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20140427
 DURATION:P1D
@@ -1888,7 +1888,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20140505
 DURATION:P1D
@@ -1901,7 +1901,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20140506
 DURATION:P1D
@@ -1914,7 +1914,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20140518
 DURATION:P1D
@@ -1927,7 +1927,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20140528
 DURATION:P1D
@@ -1940,7 +1940,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20140603
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -1952,7 +1952,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20140604
 DURATION:P1D
@@ -1965,7 +1965,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20140605
 DURATION:P1D
@@ -1978,7 +1978,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20140805
 DURATION:P1D
@@ -1991,7 +1991,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20140924
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2003,7 +2003,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5775
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20140925
 DURATION:P1D
@@ -2016,7 +2016,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20140926
 DURATION:P1D
@@ -2029,7 +2029,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20141003
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2041,7 +2041,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20141004
 DURATION:P1D
@@ -2054,7 +2054,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20141008
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2066,7 +2066,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20141009
 DURATION:P1D
@@ -2079,7 +2079,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20141010
 DURATION:P1D
@@ -2092,7 +2092,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20141011
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2104,7 +2104,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20141012
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2116,7 +2116,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20141013
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2128,7 +2128,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20141014
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2140,7 +2140,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20141015
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2152,7 +2152,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20141016
 DURATION:P1D
@@ -2165,7 +2165,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20141017
 DURATION:P1D
@@ -2178,7 +2178,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141216
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2190,7 +2190,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141217
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2202,7 +2202,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141218
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2214,7 +2214,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141219
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2226,7 +2226,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141220
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2238,7 +2238,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141221
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2250,7 +2250,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141222
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2262,7 +2262,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141223
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2274,7 +2274,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20141224
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2286,7 +2286,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20150204
 DURATION:P1D
@@ -2299,7 +2299,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20150305
 DURATION:P1D
@@ -2312,7 +2312,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20150306
 DURATION:P1D
@@ -2325,7 +2325,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20150403
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2337,7 +2337,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20150404
 DURATION:P1D
@@ -2350,7 +2350,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20150405
 DURATION:P1D
@@ -2363,7 +2363,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20150406
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2375,7 +2375,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20150407
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2387,7 +2387,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20150408
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2399,7 +2399,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20150409
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2411,7 +2411,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20150410
 DURATION:P1D
@@ -2424,7 +2424,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20150411
 DURATION:P1D
@@ -2437,7 +2437,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20150416
 DURATION:P1D
@@ -2450,7 +2450,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20150422
 DURATION:P1D
@@ -2463,7 +2463,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20150423
 DURATION:P1D
@@ -2476,7 +2476,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20150507
 DURATION:P1D
@@ -2489,7 +2489,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20150517
 DURATION:P1D
@@ -2502,7 +2502,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20150523
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2514,7 +2514,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20150524
 DURATION:P1D
@@ -2527,7 +2527,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20150525
 DURATION:P1D
@@ -2540,7 +2540,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20150726
 DURATION:P1D
@@ -2553,7 +2553,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20150913
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2565,7 +2565,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5776
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20150914
 DURATION:P1D
@@ -2578,7 +2578,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20150915
 DURATION:P1D
@@ -2591,7 +2591,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20150922
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2603,7 +2603,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20150923
 DURATION:P1D
@@ -2616,7 +2616,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20150927
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2628,7 +2628,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20150928
 DURATION:P1D
@@ -2641,7 +2641,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20150929
 DURATION:P1D
@@ -2654,7 +2654,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20150930
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2666,7 +2666,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20151001
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2678,7 +2678,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20151002
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2690,7 +2690,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20151003
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2702,7 +2702,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20151004
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2714,7 +2714,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20151005
 DURATION:P1D
@@ -2727,7 +2727,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20151006
 DURATION:P1D
@@ -2740,7 +2740,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151206
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2752,7 +2752,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151207
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2764,7 +2764,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151208
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2776,7 +2776,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151209
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2788,7 +2788,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151210
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2800,7 +2800,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151211
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2812,7 +2812,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151212
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2824,7 +2824,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151213
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2836,7 +2836,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20151214
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2848,7 +2848,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20160125
 DURATION:P1D
@@ -2861,7 +2861,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim Katan
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan?tag=dl-major
 DESCRIPTION:Minor Purim celebration during Adar I on leap years
 DTSTART;VALUE=DATE:20160223
 DURATION:P1D
@@ -2874,7 +2874,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20160324
 DURATION:P1D
@@ -2887,7 +2887,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20160325
 DURATION:P1D
@@ -2900,7 +2900,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20160422
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2912,7 +2912,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20160423
 DURATION:P1D
@@ -2925,7 +2925,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20160424
 DURATION:P1D
@@ -2938,7 +2938,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20160425
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2950,7 +2950,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20160426
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2962,7 +2962,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20160427
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2974,7 +2974,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20160428
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -2986,7 +2986,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20160429
 DURATION:P1D
@@ -2999,7 +2999,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20160430
 DURATION:P1D
@@ -3012,7 +3012,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20160505
 DURATION:P1D
@@ -3025,7 +3025,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20160511
 DURATION:P1D
@@ -3038,7 +3038,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20160512
 DURATION:P1D
@@ -3051,7 +3051,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20160526
 DURATION:P1D
@@ -3064,7 +3064,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20160605
 DURATION:P1D
@@ -3077,7 +3077,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20160611
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3089,7 +3089,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20160612
 DURATION:P1D
@@ -3102,7 +3102,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20160613
 DURATION:P1D
@@ -3115,7 +3115,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20160814
 DURATION:P1D
@@ -3128,7 +3128,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20161002
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3140,7 +3140,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5777
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20161003
 DURATION:P1D
@@ -3153,7 +3153,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20161004
 DURATION:P1D
@@ -3166,7 +3166,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20161011
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3178,7 +3178,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20161012
 DURATION:P1D
@@ -3191,7 +3191,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20161016
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3203,7 +3203,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20161017
 DURATION:P1D
@@ -3216,7 +3216,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20161018
 DURATION:P1D
@@ -3229,7 +3229,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20161019
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3241,7 +3241,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20161020
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3253,7 +3253,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20161021
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3265,7 +3265,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20161022
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3277,7 +3277,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20161023
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3289,7 +3289,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20161024
 DURATION:P1D
@@ -3302,7 +3302,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20161025
 DURATION:P1D
@@ -3315,7 +3315,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161224
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3327,7 +3327,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161225
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3339,7 +3339,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161226
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3351,7 +3351,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161227
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3363,7 +3363,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161228
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3375,7 +3375,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161229
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3387,7 +3387,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161230
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3399,7 +3399,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20161231
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3411,7 +3411,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20170101
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3423,7 +3423,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20170211
 DURATION:P1D
@@ -3436,7 +3436,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20170312
 DURATION:P1D
@@ -3449,7 +3449,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20170313
 DURATION:P1D
@@ -3462,7 +3462,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20170410
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3474,7 +3474,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20170411
 DURATION:P1D
@@ -3487,7 +3487,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20170412
 DURATION:P1D
@@ -3500,7 +3500,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20170413
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3512,7 +3512,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20170414
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3524,7 +3524,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20170415
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3536,7 +3536,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20170416
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3548,7 +3548,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20170417
 DURATION:P1D
@@ -3561,7 +3561,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20170418
 DURATION:P1D
@@ -3574,7 +3574,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20170423
 DURATION:P1D
@@ -3587,7 +3587,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20170501
 DURATION:P1D
@@ -3600,7 +3600,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20170502
 DURATION:P1D
@@ -3613,7 +3613,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20170514
 DURATION:P1D
@@ -3626,7 +3626,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20170524
 DURATION:P1D
@@ -3639,7 +3639,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20170530
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3651,7 +3651,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20170531
 DURATION:P1D
@@ -3664,7 +3664,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20170601
 DURATION:P1D
@@ -3677,7 +3677,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20170801
 DURATION:P1D
@@ -3690,7 +3690,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20170920
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3702,7 +3702,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5778
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20170921
 DURATION:P1D
@@ -3715,7 +3715,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20170922
 DURATION:P1D
@@ -3728,7 +3728,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20170929
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3740,7 +3740,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20170930
 DURATION:P1D
@@ -3753,7 +3753,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20171004
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3765,7 +3765,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20171005
 DURATION:P1D
@@ -3778,7 +3778,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20171006
 DURATION:P1D
@@ -3791,7 +3791,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20171007
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3803,7 +3803,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20171008
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3815,7 +3815,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20171009
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3827,7 +3827,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20171010
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3839,7 +3839,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20171011
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3851,7 +3851,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20171012
 DURATION:P1D
@@ -3864,7 +3864,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20171013
 DURATION:P1D
@@ -3877,7 +3877,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171212
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3889,7 +3889,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171213
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3901,7 +3901,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171214
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3913,7 +3913,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171215
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3925,7 +3925,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171216
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3937,7 +3937,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171217
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3949,7 +3949,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171218
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3961,7 +3961,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171219
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3973,7 +3973,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20171220
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -3985,7 +3985,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20180131
 DURATION:P1D
@@ -3998,7 +3998,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20180301
 DURATION:P1D
@@ -4011,7 +4011,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20180302
 DURATION:P1D
@@ -4024,7 +4024,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20180330
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4036,7 +4036,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20180331
 DURATION:P1D
@@ -4049,7 +4049,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20180401
 DURATION:P1D
@@ -4062,7 +4062,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20180402
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4074,7 +4074,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20180403
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4086,7 +4086,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20180404
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4098,7 +4098,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20180405
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4110,7 +4110,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20180406
 DURATION:P1D
@@ -4123,7 +4123,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20180407
 DURATION:P1D
@@ -4136,7 +4136,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20180412
 DURATION:P1D
@@ -4149,7 +4149,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20180418
 DURATION:P1D
@@ -4162,7 +4162,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20180419
 DURATION:P1D
@@ -4175,7 +4175,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20180503
 DURATION:P1D
@@ -4188,7 +4188,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20180513
 DURATION:P1D
@@ -4201,7 +4201,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20180519
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4213,7 +4213,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20180520
 DURATION:P1D
@@ -4226,7 +4226,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20180521
 DURATION:P1D
@@ -4239,7 +4239,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20180722
 DURATION:P1D
@@ -4252,7 +4252,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20180909
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4264,7 +4264,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5779
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20180910
 DURATION:P1D
@@ -4277,7 +4277,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20180911
 DURATION:P1D
@@ -4290,7 +4290,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20180918
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4302,7 +4302,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20180919
 DURATION:P1D
@@ -4315,7 +4315,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20180923
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4327,7 +4327,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20180924
 DURATION:P1D
@@ -4340,7 +4340,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20180925
 DURATION:P1D
@@ -4353,7 +4353,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20180926
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4365,7 +4365,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20180927
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4377,7 +4377,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20180928
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4389,7 +4389,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20180929
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4401,7 +4401,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20180930
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4413,7 +4413,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20181001
 DURATION:P1D
@@ -4426,7 +4426,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20181002
 DURATION:P1D
@@ -4439,7 +4439,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181202
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4451,7 +4451,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181203
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4463,7 +4463,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181204
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4475,7 +4475,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181205
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4487,7 +4487,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181206
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4499,7 +4499,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181207
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4511,7 +4511,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181208
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4523,7 +4523,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181209
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4535,7 +4535,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20181210
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4547,7 +4547,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20190121
 DURATION:P1D
@@ -4560,7 +4560,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim Katan
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim-katan?tag=dl-major
 DESCRIPTION:Minor Purim celebration during Adar I on leap years
 DTSTART;VALUE=DATE:20190219
 DURATION:P1D
@@ -4573,7 +4573,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20190321
 DURATION:P1D
@@ -4586,7 +4586,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20190322
 DURATION:P1D
@@ -4599,7 +4599,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20190419
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4611,7 +4611,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20190420
 DURATION:P1D
@@ -4624,7 +4624,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20190421
 DURATION:P1D
@@ -4637,7 +4637,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20190422
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4649,7 +4649,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20190423
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4661,7 +4661,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20190424
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4673,7 +4673,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20190425
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4685,7 +4685,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20190426
 DURATION:P1D
@@ -4698,7 +4698,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20190427
 DURATION:P1D
@@ -4711,7 +4711,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20190502
 DURATION:P1D
@@ -4724,7 +4724,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20190508
 DURATION:P1D
@@ -4737,7 +4737,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20190509
 DURATION:P1D
@@ -4750,7 +4750,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20190523
 DURATION:P1D
@@ -4763,7 +4763,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20190602
 DURATION:P1D
@@ -4776,7 +4776,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20190608
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4788,7 +4788,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20190609
 DURATION:P1D
@@ -4801,7 +4801,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20190610
 DURATION:P1D
@@ -4814,7 +4814,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20190811
 DURATION:P1D
@@ -4827,7 +4827,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20190929
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4839,7 +4839,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5780
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20190930
 DURATION:P1D
@@ -4852,7 +4852,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20191001
 DURATION:P1D
@@ -4865,7 +4865,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20191008
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4877,7 +4877,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20191009
 DURATION:P1D
@@ -4890,7 +4890,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20191013
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4902,7 +4902,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20191014
 DURATION:P1D
@@ -4915,7 +4915,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20191015
 DURATION:P1D
@@ -4928,7 +4928,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20191016
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4940,7 +4940,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20191017
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4952,7 +4952,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20191018
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4964,7 +4964,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20191019
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4976,7 +4976,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20191020
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -4988,7 +4988,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20191021
 DURATION:P1D
@@ -5001,7 +5001,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20191022
 DURATION:P1D
@@ -5014,7 +5014,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191222
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5026,7 +5026,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191223
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5038,7 +5038,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191224
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5050,7 +5050,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191225
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5062,7 +5062,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191226
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5074,7 +5074,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191227
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5086,7 +5086,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191228
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5098,7 +5098,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191229
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5110,7 +5110,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20191230
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5122,7 +5122,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tu B'Shvat
-URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tu-bshvat?tag=dl-major
 DESCRIPTION:New Year for Trees
 DTSTART;VALUE=DATE:20200210
 DURATION:P1D
@@ -5135,7 +5135,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/purim?tag=dl-major
 DESCRIPTION:Purim is one of the most joyous and fun holidays on the Jewish calendar
 DTSTART;VALUE=DATE:20200310
 DURATION:P1D
@@ -5148,7 +5148,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shushan Purim
-URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shushan-purim?tag=dl-major
 DESCRIPTION:Purim celebrated in Jerusalem and walled cities
 DTSTART;VALUE=DATE:20200311
 DURATION:P1D
@@ -5161,7 +5161,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Pesach
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20200408
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5173,7 +5173,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach I
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20200409
 DURATION:P1D
@@ -5186,7 +5186,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach II
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20200410
 DURATION:P1D
@@ -5199,7 +5199,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20200411
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5211,7 +5211,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20200412
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5223,7 +5223,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20200413
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5235,7 +5235,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DTSTART;VALUE=DATE:20200414
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5247,7 +5247,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20200415
 DURATION:P1D
@@ -5260,7 +5260,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Pesach VIII
-URL;VALUE=URI:http://www.hebcal.com/holidays/pesach.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/pesach?tag=dl-major
 DESCRIPTION:Passover, the Feast of Unleavened Bread
 DTSTART;VALUE=DATE:20200416
 DURATION:P1D
@@ -5273,7 +5273,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaShoah
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hashoah?tag=dl-major
 DESCRIPTION:Holocaust Memorial Day
 DTSTART;VALUE=DATE:20200421
 DURATION:P1D
@@ -5286,7 +5286,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaZikaron
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-hazikaron?tag=dl-major
 DESCRIPTION:Israeli Memorial Day
 DTSTART;VALUE=DATE:20200428
 DURATION:P1D
@@ -5299,7 +5299,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom HaAtzma'ut
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-haatzmaut?tag=dl-major
 DESCRIPTION:Israeli Independence Day
 DTSTART;VALUE=DATE:20200429
 DURATION:P1D
@@ -5312,7 +5312,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Lag B'Omer
-URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/lag-bomer?tag=dl-major
 DESCRIPTION:33rd day of counting the Omer
 DTSTART;VALUE=DATE:20200512
 DURATION:P1D
@@ -5325,7 +5325,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Yerushalayim
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-yerushalayim?tag=dl-major
 DESCRIPTION:Jerusalem Day
 DTSTART;VALUE=DATE:20200522
 DURATION:P1D
@@ -5338,7 +5338,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Shavuot
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DTSTART;VALUE=DATE:20200528
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5350,7 +5350,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20200529
 DURATION:P1D
@@ -5363,7 +5363,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shavuot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shavuot?tag=dl-major
 DESCRIPTION:Feast of Pentecost
 DTSTART;VALUE=DATE:20200530
 DURATION:P1D
@@ -5376,7 +5376,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Tish'a B'Av
-URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/tisha-bav?tag=dl-major
 DESCRIPTION:Fast commemorating the destruction of the two Temples
 DTSTART;VALUE=DATE:20200730
 DURATION:P1D
@@ -5389,7 +5389,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Rosh Hashana
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DTSTART;VALUE=DATE:20200918
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5401,7 +5401,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana 5781
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20200919
 DURATION:P1D
@@ -5414,7 +5414,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Rosh Hashana II
-URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/rosh-hashana?tag=dl-major
 DESCRIPTION:The Jewish New Year
 DTSTART;VALUE=DATE:20200920
 DURATION:P1D
@@ -5427,7 +5427,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DTSTART;VALUE=DATE:20200927
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5439,7 +5439,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Yom Kippur
-URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/yom-kippur?tag=dl-major
 DESCRIPTION:Day of Atonement
 DTSTART;VALUE=DATE:20200928
 DURATION:P1D
@@ -5452,7 +5452,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Erev Sukkot
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20201002
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5464,7 +5464,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot I
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20201003
 DURATION:P1D
@@ -5477,7 +5477,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot II
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DESCRIPTION:Feast of Tabernacles
 DTSTART;VALUE=DATE:20201004
 DURATION:P1D
@@ -5490,7 +5490,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot III (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20201005
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5502,7 +5502,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot IV (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20201006
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5514,7 +5514,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot V (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20201007
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5526,7 +5526,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VI (CH''M)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20201008
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5538,7 +5538,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Sukkot VII (Hoshana Raba)
-URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/sukkot?tag=dl-major
 DTSTART;VALUE=DATE:20201009
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5550,7 +5550,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Shmini Atzeret
-URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/shmini-atzeret?tag=dl-major
 DESCRIPTION:Eighth Day of Assembly
 DTSTART;VALUE=DATE:20201010
 DURATION:P1D
@@ -5563,7 +5563,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Simchat Torah
-URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/simchat-torah?tag=dl-major
 DESCRIPTION:Day of Celebrating the Torah
 DTSTART;VALUE=DATE:20201011
 DURATION:P1D
@@ -5576,7 +5576,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 1 Candle
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201210
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5588,7 +5588,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 2 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201211
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5600,7 +5600,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 3 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201212
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5612,7 +5612,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 4 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201213
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5624,7 +5624,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 5 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201214
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5636,7 +5636,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 6 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201215
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5648,7 +5648,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 7 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201216
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5660,7 +5660,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8 Candles
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201217
 DURATION:P1D
 TRANSP:TRANSPARENT
@@ -5672,7 +5672,7 @@ DTSTAMP:20110516T200234Z
 CATEGORIES:Holiday
 CLASS:PUBLIC
 SUMMARY:Chanukah: 8th Day
-URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah.html?tag=dl-major
+URL;VALUE=URI:http://www.hebcal.com/holidays/chanukah?tag=dl-major
 DTSTART;VALUE=DATE:20201218
 DURATION:P1D
 TRANSP:TRANSPARENT
