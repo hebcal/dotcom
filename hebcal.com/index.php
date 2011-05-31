@@ -183,9 +183,11 @@ fast.</span>
 href="/hebcal/">custom Jewish calendar</a> for any year 0001-9999 at
 Hebcal.com. Included are <a title="Jewish Holidays"
 href="/holidays/">Jewish holidays</a> (major and minor), candle
-lighting times, and Torah readings. <a href="/ical/">Download</a>
+lighting times, and Torah readings.</p>
+
+<p><a href="/ical/">Download</a>
 your holiday calendar to Microsoft Outlook, Apple iCal, iPhone, iPad,
-Palm, or Android (via Google Calendar).</p>
+BlackBerry, Palm, or Android (via Google Calendar).</p>
 
 <p>Use our <a href="/converter/">Date Converter</a> to convert between
 Hebrew and Gregorian dates and see today's date in a Hebrew font. Our
@@ -238,8 +240,6 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
   echo $gregyear ?>;month=x;nh=on;set=off;tag=fp.ql"><?php echo $gregyear ?></a> |
 <a href="/hebcal/?v=1;year=<?php
   echo $hebyear ?>;yt=H;month=x;nh=on;set=off;tag=fp.ql"><?php echo $hebyear ?></a>
-<br><img src="/i/globaliconical12x12.gif" alt="" width="12"
-height="12">&nbsp;<a href="/ical/">Downloads for iCal</a>
 <?php
   include("./holiday.inc");
   include("./current.inc"); ?><br>

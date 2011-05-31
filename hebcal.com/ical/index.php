@@ -24,14 +24,18 @@ echo html_header_new($page_title, $xtra_head);
 <div class="entry-content">
 
 <p>Jewish holidays for the next 10 years are available for Apple iCal,
-iPhone, iPad, Google Calendar, or to any desktop program that supports
+iPhone, iPad, Android (via Google Calendar), Outlook 2007 or later,
+or to any desktop program that supports
 iCalendar (.ics) files. These holidays are for Jews living in the
 Diaspora (anywhere outside of modern Israel). Click the icons below to
 subscribe in your device or web/desktop application.</p>
 
 <p>For advanced options such as candle-lighting times and Torah
 readings, visit our <a href="/hebcal/">custom Jewish calendar</a>
-page.</p>
+page. Other popular formats:
+<a href="/home/12/outlook-csv-jewish-calendar">Microsoft Outlook CSV</a> |
+<a href="/home/category/import/blackberry">BlackBerry</a> |
+<a href="/home/category/import/palm">Palm</a>.</p>
 
 <?php
 function cal_row($path,$title,$subtitle) {
