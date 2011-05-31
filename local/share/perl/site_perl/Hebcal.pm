@@ -776,7 +776,7 @@ sub make_anchor($)
     $anchor =~ s/^-//g;
     $anchor =~ s/-$//g;
 
-    "$anchor.html";
+    return $anchor;
 }
 
 sub get_holiday_anchor($$$)
@@ -804,7 +804,7 @@ sub get_holiday_anchor($$$)
 
 	    $href = 'http://' . $q->virtual_host()
 		if ($q);
-	    $href .= "/sedrot/$anchor.html";
+	    $href .= "/sedrot/$anchor";
 
 	    $hebrew .= $HebcalConst::SEDROT{$sedra};
 	}
@@ -825,7 +825,7 @@ sub get_holiday_anchor($$$)
 
 	    $href = 'http://' . $q->virtual_host()
 		if ($q);
-	    $href .= "/sedrot/$anchor.html";
+	    $href .= "/sedrot/$anchor";
 
 	    $hebrew .= $HebcalConst::SEDROT{$p1};
 
@@ -2193,7 +2193,7 @@ sub vcalendar_write_contents
 	out_html(undef, qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl});
 
 	if ($is_icalendar && $href) {
-	    if ($href =~ /\.html$/) {
+	    if ($href =~ m,/(sedrot|holidays)/.+,) {
 		$href .= "?tag=ical";
 	    }
 	    out_html(undef, qq{URL;VALUE=URI:$href$endl});
