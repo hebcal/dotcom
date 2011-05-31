@@ -1299,13 +1299,14 @@ sub html_menu {
 
 sub html_header
 {
-    my($title,$base_href,$body_class,$xtra_head) = @_;
+    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title) = @_;
     $xtra_head = "" unless $xtra_head;
     my $menu = html_menu($base_href);
+    my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $str = <<EOHTML;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>$title | Hebcal Jewish Calendar</title>
+<html><head><title>$title2</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <base href="http://www.hebcal.com$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">

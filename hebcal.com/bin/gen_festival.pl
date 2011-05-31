@@ -590,7 +590,9 @@ sub write_festival_page
 
     print OUT2 Hebcal::html_header($page_title,
 				   "/holidays/$slug",
-				   "single single-post");
+				   "single single-post",
+				   "",
+				   1);
 
     my $prev = $PREV{$f};
     my($prev_link) = '';

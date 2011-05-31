@@ -591,9 +591,11 @@ EOHTML
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
-    print OUT2 Hebcal::html_header("Parashat $h ($torah)",
+    print OUT2 Hebcal::html_header("$h - Torah Portion - $hebrew",
 				   "/sedrot/$anchor",
-				   "single single-post");
+				   "single single-post",
+				   "",
+				   1);
 
     my @tri_date;
     my @tri_date2;
