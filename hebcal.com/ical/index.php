@@ -24,7 +24,7 @@ echo html_header_new($page_title, $xtra_head);
 <div class="entry-content">
 
 <p>Jewish holidays for the next 10 years are available for Apple iCal,
-iPhone, iPad, Android (via Google Calendar), Outlook 2007 or later,
+iPhone, iPad, Android (via Google Calendar), Microsoft Outlook,
 or to any desktop program that supports
 iCalendar (.ics) files. These holidays are for Jews living in the
 Diaspora (anywhere outside of modern Israel). Click the icons below to
@@ -32,10 +32,8 @@ subscribe in your device or web/desktop application.</p>
 
 <p>For advanced options such as candle-lighting times and Torah
 readings, visit our <a href="/hebcal/">custom Jewish calendar</a>
-page. Other popular formats:
-<a href="/home/12/outlook-csv-jewish-calendar">Microsoft Outlook CSV</a> |
-<a href="/home/category/import/blackberry">BlackBerry</a> |
-<a href="/home/category/import/palm">Palm</a>.</p>
+page. See also <a href="/home/category/import">help importing into
+apps</a> for step-by-step instructions.</p>
 
 <?php
 function cal_row($path,$title,$subtitle) {
@@ -53,14 +51,20 @@ href="<?php echo $webcal ?>"><img
 src="/i/ical-64x64.png" width="64" height="64"
 alt="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 border="0"></a></td>
-<td align="center"><a class="download" id="quick-gcal-<?php echo $path ?>"
+<td><a class="download" id="quick-csv-<?php echo $path ?>"
+title="Download <?php echo $title ?> to Microsoft Outlook"
+href="<?php echo $path ?>.csv"><img
+src="/i/outlook-149x53.png" width="149" height="53"
+alt="Download <?php echo $title ?> to Microsoft Outlook"
+border="0"></a></td>
+<td><a class="download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
 href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
 src="http://www.google.com/calendar/images/ext/gc_button6.gif"
 width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
-</td>
-<td align="center"><a class="download" id="quick-wlive-<?php echo $path ?>"
+<br>
+<a class="download" id="quick-wlive-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Windows Live Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=<?php echo $webcal_esc ?>&name=<?php echo urlencode($title) ?>"><img
 src="/i/wlive-150x20.png"
