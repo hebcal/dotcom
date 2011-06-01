@@ -64,10 +64,7 @@
  <group>Ta'anit Esther</group>
  <group>Shabbat Zachor</group>
  <group>Purim Katan</group>
- <group>Purim
-  <li>Erev Purim</li>
-  <li>Purim</li>
- </group>
+ <group>Purim</group>
  <group>Shushan Purim</group>
  <group>Shabbat Parah</group>
  <group>Shabbat HaChodesh
@@ -110,10 +107,7 @@
  <group>Tzom Tammuz</group>
  <group>Rosh Chodesh Av</group>
  <group>Shabbat Chazon</group>
- <group>Tish'a B'Av
-  <li>Erev Tish'a B'Av</li>
-  <li>Tish'a B'Av</li>
- </group>
+ <group>Tish'a B'Av</group>
  <group>Shabbat Nachamu</group>
  <group>Rosh Chodesh Elul</group>
  <group>Shabbat Rosh Chodesh</group>
