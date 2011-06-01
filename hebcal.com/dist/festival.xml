@@ -64,7 +64,10 @@
  <group>Ta'anit Esther</group>
  <group>Shabbat Zachor</group>
  <group>Purim Katan</group>
- <group>Purim</group>
+ <group>Purim
+  <li>Erev Purim</li>
+  <li>Purim</li>
+ </group>
  <group>Shushan Purim</group>
  <group>Shabbat Parah</group>
  <group>Shabbat HaChodesh
@@ -107,7 +110,10 @@
  <group>Tzom Tammuz</group>
  <group>Rosh Chodesh Av</group>
  <group>Shabbat Chazon</group>
- <group>Tish'a B'Av</group>
+ <group>Tish'a B'Av
+  <li>Erev Tish'a B'Av</li>
+  <li>Tish'a B'Av</li>
+ </group>
  <group>Shabbat Nachamu</group>
  <group>Rosh Chodesh Elul</group>
  <group>Shabbat Rosh Chodesh</group>
@@ -452,6 +458,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
+<festival id="Erev Tish'a B'Av" hebrew="עֶרֶב תִּשְׁעָה בְּאָב" yomtov="0" />
 <festival id="Tish'a B'Av" hebrew="תִּשְׁעָה בְּאָב" yomtov="0">
  <about href="http://www.jewfaq.org/holidayd.htm">
  Fast commemorating the destruction of the two Temples
@@ -943,6 +950,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <!--  Strassfeld p. 232 -->
+<festival id="Erev Purim" hebrew="עֶרֶב פּוּרִים" yomtov="0" />
 <festival id="Purim" hebrew="פּוּרִים" yomtov="0">
  <about href="http://www.jewfaq.org/holiday9.htm">
  Purim is one of the most joyous and fun holidays on the Jewish
