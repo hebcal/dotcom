@@ -873,10 +873,6 @@ sub get_holiday_anchor($$$)
 	    if ($subj_suffix) {
 		$hebrew .= $subj_suffix;
 	    }
-
-	    if (defined $HebcalConst::HOLIDAY_DESCR{$subj_copy}) {
-		$memo = $HebcalConst::HOLIDAY_DESCR{$subj_copy};
-	    }
 	}
 
 	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
@@ -892,6 +888,10 @@ sub get_holiday_anchor($$$)
 	    $href = 'http://' . $q->virtual_host()
 		if ($q);
 	    $href .= "/holidays/" . make_anchor($subj_copy);
+	}
+
+	if (defined $HebcalConst::HOLIDAY_DESCR{$subj_copy}) {
+	    $memo = $HebcalConst::HOLIDAY_DESCR{$subj_copy};
 	}
     }
 
