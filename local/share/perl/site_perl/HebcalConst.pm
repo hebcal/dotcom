@@ -634,7 +634,7 @@ use utf8;
 'Pesach II (CH\'\'M)' => 'פֶּסַח יוֹם ב׳ (חֹל הַמוֹעד)',
 'Pesach III (CH\'\'M)' => 'פֶּסַח יוֹם ג׳ (חֹל הַמוֹעד)',
 'Pesach IV (CH\'\'M)' => 'פֶּסַח יוֹם ד׳ (חֹל הַמוֹעד)',
-'Pesach Shabbat Chol ha-Moed' => '(NEEDS_TRANSLATION)',
+'Pesach Shabbat Chol ha-Moed' => 'פֶּסַח שַׁבָּת חֹל הַמוֹעד',
 'Pesach V (CH\'\'M)' => 'פֶּסַח יוֹם ה׳ (חֹל הַמוֹעד)',
 'Pesach VI (CH\'\'M)' => 'פֶּסַח יוֹם ו׳ (חֹל הַמוֹעד)',
 'Pesach VII' => 'פֶּסַח יוֹם ז׳',
