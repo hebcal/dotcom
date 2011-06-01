@@ -249,7 +249,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Pesach Shabbat Chol ha-Moed" hebrew="(NEEDS_TRANSLATION)" yomtov="0">
+<festival id="Pesach Shabbat Chol ha-Moed" hebrew="פֶּסַח שַׁבָּת חֹל הַמוֹעד" yomtov="0">
 <!--
 Note: if Shabbat falls on the third day of Chol ha-Moed,
 the readings for the third, fourth, and fifth days are moved ahead.
