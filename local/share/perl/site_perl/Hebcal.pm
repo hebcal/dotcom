@@ -2093,9 +2093,9 @@ sub vcalendar_write_contents
 	} elsif ($tz == -10) {
 	    $tzid = 'US/Hawaii';
 	} elsif (defined $q->param("geo") && $q->param("geo") eq "city"
-		 && $q->param("city") && defined $Hebcal::city_dst{$q->param("city")}
-		 && $Hebcal::city_dst{$q->param("city")} eq "israel") {
-	    $tzid = 'Asia/Jerusalem';
+		 && $q->param("city")
+		 && defined $HebcalConst::CITY_TZID{$q->param("city")}) {
+	    $tzid = $HebcalConst::CITY_TZID{$q->param("city")};
 	}
     }
 
