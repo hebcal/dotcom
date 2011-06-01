@@ -94,6 +94,7 @@
  <group>Rosh Chodesh Iyyar</group>
  <group>Yom HaZikaron</group>
  <group>Yom HaAtzma'ut</group>
+ <group>Pesach Sheni</group>
  <group>Lag B'Omer</group>
  <group>Yom Yerushalayim</group>
  <group>Rosh Chodesh Sivan</group>
@@ -1179,6 +1180,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
  
 <!-- Other Hebcal holidays -->
+<festival id="Pesach Sheni" hebrew="פֶּסַח שני" yomtov="0">
+ <about href="http://en.wikipedia.org/wiki/Pesach_Sheni">
+ Second Passover, one month after Passover
+ </about>
+</festival>
 <festival id="Lag B'Omer" hebrew="ל״ג בְּעוֹמֶר" yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Lag_Ba%27omer">
  33rd day of counting the Omer
