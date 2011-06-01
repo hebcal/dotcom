@@ -31,13 +31,21 @@ print O "package HebcalConst;\n\n";
 print O "use utf8;\n\n";
 
 print O "\%HebcalConst::CITIES_NEW = (\n";
+my %city_tzName;
 while(<CITIES>) {
     chomp;
     my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
     $city =~ s/\'/\\\'/g;
     print O "'$woeid' => ['$country','$city',$latitude,$longitude,'$tzName'],\n";
+    $city_tzName{$city} = $tzName;
 }
 close(CITIES);
+print O ");\n\n";
+
+print O "\%HebcalConst::CITY_TZID = (\n";
+while(my($city,$tzName) = each(%city_tzName)) {
+    print O "'$city' => '$tzName',\n";
+}
 print O ");\n\n";
 
 print O "%HebcalConst::SEDROT = (\n";
