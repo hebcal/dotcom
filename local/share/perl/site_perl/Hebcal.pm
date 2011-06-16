@@ -548,9 +548,9 @@ sub events_to_dict
 	else
 	{
 	    $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-	    $item{"dc:date"} .= sprintf("T00:00:00%s%02d:00",
-					$tz > 0 ? "+" : "-",
-					abs($tz));
+#	    $item{"dc:date"} .= sprintf("T00:00:00%s%02d:00",
+#					$tz > 0 ? "+" : "-",
+#					abs($tz));
 	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
 	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 %s%02d00",
 				       $dow,
