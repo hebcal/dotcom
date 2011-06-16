@@ -290,7 +290,11 @@ sub json_events
 			    -charset => "UTF-8",
 			    );
 
-    Hebcal::items_to_json($items,$q,"Hebcal");
+    my $title = "Hebcal $g_date";
+    if (defined $cconfig->{"title"} && $cconfig->{"title"} ne "") {
+	$title .= " "  . $cconfig->{"title"};
+    }
+    Hebcal::items_to_json($items,$q,$title);
 }
 
 sub javascript_events
