@@ -370,7 +370,6 @@ EOJS
 	    if ($href) {
 		my $href2 = $href;
 		$href2 =~ s,^http://www.hebcal.com/,,;
-		$href2 =~ s/\.html$//;
 		print STDOUT ",a:\"$href2\"";
 	    }
 	    if ($img_url) {
@@ -380,9 +379,6 @@ EOJS
 	    print STDOUT "}";
 	} else {
 	    #DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
-	    if ($href && $href =~ /\.html$/) {
-		$href .= "?tag=js.cal";
-	    }
 	    printf("DefineEvent(%04d%02d%02d,\"%s\",\"%s\",\"%s\",%d,%d);\015\012",
 		   $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
 	}
@@ -393,7 +389,7 @@ EOJS
 HEBCAL.jec2events=[];
 for (var i=0;i<HEBCAL.eraw.length;i++){
 var e=HEBCAL.eraw[i],f={eventDate:e.d,eventDescription:e.s};
-if(e.a){f.eventLink="http://www.hebcal.com/"+e.a+".html?tag=js.cal"}
+if(e.a){f.eventLink="http://www.hebcal.com/"+e.a}
 HEBCAL.jec2events.push(f);}
 EOJS
 ;
