@@ -714,6 +714,10 @@ EOHTML
 <div class="page type-page hentry">
 <h1 class="entry-title">$title</h1>
 <div class="entry-content">
+<a title="RSS feed of $title"
+href="$rss_href"><img
+src="/i/xml.gif" border="0" align="right" width="36" height="14"
+alt="RSS feed of $title"></a>
 EOHTML
 ;
 	Hebcal::out_html($cfg,
