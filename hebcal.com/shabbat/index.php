@@ -6,7 +6,9 @@ require "../pear/Hebcal/common.inc";
 
 function cache_comment($cfg, $status) {
     global $qs;
-    if ($cfg == "j" || $cfg == "json") {
+    if ($cfg == "json") {
+	// json comments not supported
+    } elseif ($cfg == "j") {
 	echo "// cache $status ($qs)\n";
     } else {
 	echo "<!-- cache $status ($qs) -->\n";
