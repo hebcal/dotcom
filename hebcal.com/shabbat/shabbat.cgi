@@ -4,7 +4,7 @@
 # 1-Click Shabbat generates weekly Shabbat candle lighting times and
 # Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2011  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -212,8 +212,9 @@ sub process_args
 	}
 
 	my $DB = Hebcal::zipcode_open_db();
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
-	   $latitude, $longitude) =
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
+	# set global $latitude and $longitude
+	($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,$latitude,$longitude) =
 	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
