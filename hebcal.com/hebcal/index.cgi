@@ -294,7 +294,8 @@ sub json_events
     if (defined $cconfig->{"title"} && $cconfig->{"title"} ne "") {
 	$title .= " "  . $cconfig->{"title"};
     }
-    Hebcal::items_to_json($items,$q,$title);
+    Hebcal::items_to_json($items,$q,$title,
+			  $cconfig->{"latitude"},$cconfig->{"longitude"});
 }
 
 sub javascript_events
@@ -1523,7 +1524,7 @@ sub get_candle_config
 	    unless $q->param("zip") =~ /^\d\d\d\d\d$/;
 
 	my $DB = Hebcal::zipcode_open_db();
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,$latitude,$longitude) =
 	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
@@ -1588,6 +1589,8 @@ sub get_candle_config
 	$config{"long_min"} = $long_min;
 	$config{"lat_deg"} = $lat_deg;
 	$config{"lat_min"} = $lat_min;
+	$config{"latitude"} = $latitude;
+	$config{"longitude"} = $longitude;
     }
     else
     {
