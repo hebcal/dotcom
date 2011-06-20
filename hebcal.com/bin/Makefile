@@ -44,20 +44,24 @@ converter: ../converter/sedra/19/1900.inc
 
 RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
 		web/hebcal.com/dist/*.xml \
-		web/hebcal.com/hebcal/*.cgi \
-		web/hebcal.com/shabbat/*.cgi \
-		web/hebcal.com/yahrzeit/*.cgi \
+		web/hebcal.com/hebcal/index.cgi \
+		web/hebcal.com/hebcal/del_cookie.cgi \
+		web/hebcal.com/shabbat/index.php \
+		web/hebcal.com/shabbat/shabbat.cgi \
+		web/hebcal.com/shabbat/fridge.cgi \
+		web/hebcal.com/yahrzeit/yahrzeit.cgi \
 		web/hebcal.com/bin/Makefile \
 		web/hebcal.com/bin/*.pl \
 		local/share/perl/site_perl/Hebcal.pm \
 		local/share/perl/site_perl/HebcalConst.pm \
 		local/share/perl/site_perl/Palm/DBA.pm \
 		web/hebcal.com/pear/Hebcal/*.inc \
-		web/hebcal.com/shabbat/*.php \
 		web/hebcal.com/wap-shabbat.php \
 		web/hebcal.com/converter/index.php \
+		web/hebcal.com/ical/index.php \
 		web/hebcal.com/link/index.php \
 		web/hebcal.com/email/index.php \
+		web/hebcal.com/email/verify.php \
 		$(NULL)
 
 release: $(DISTDIR)/hebcal-dot-com.tar.gz
