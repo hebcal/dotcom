@@ -208,7 +208,7 @@ href="http://www.hebcal.com/home/category/developers">APIs, RSS Feeds,
 Source Code and widgets</a> for inclusion on your synagogue or other
 website.</p>
 
-<iframe src="http://www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FHebcal%2F173834466008787&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
+<iframe src="http://www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
 
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
