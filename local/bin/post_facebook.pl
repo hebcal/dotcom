@@ -55,7 +55,7 @@ my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $sat_year", "", 0, $sat_mon
 for (my $i = 0; $i < @events; $i++) {
     if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sat_day) {
 	my $parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my $email_subj = "This week's Torah portion is Parashat $parasha. Shabbat Shalom!";
+	my $email_subj = "This week's Torah portion is $parasha. Shabbat Shalom!";
 	my $return_path = "mradwin\@hebcal.com";
 	my %headers = (
 	   "From" => "Hebcal <$return_path>",
