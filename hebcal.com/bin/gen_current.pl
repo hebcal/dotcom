@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2011  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -55,7 +55,7 @@ use POSIX qw(strftime);
 my $WEBDIR = '/home/hebcal/web/hebcal.com';
 my $HEBCAL = "$WEBDIR/bin/hebcal";
 
-my($syear,$smonth,$sday) = upcoming_dow(6); # saturday
+my($syear,$smonth,$sday) = Hebcal::upcoming_dow(6); # saturday
 
 my $outfile = "$WEBDIR/current.inc";
 my $wrote_parasha = 0;
@@ -238,26 +238,3 @@ for (my $i = 0; $i < @events; $i++)
     }
 }
 close(OUT);
-
-sub upcoming_dow
-{
-    my($searching_dow) = @_;
-    my @today = Date::Calc::Today();
-    my $current_dow = Date::Calc::Day_of_Week(@today);
-
-    if ($searching_dow == $current_dow)
-    {
-	return @today;
-    }
-    elsif ($searching_dow > $current_dow)
-    {
-	return Date::Calc::Add_Delta_Days(@today,
-					  $searching_dow - $current_dow);
-    }
-    else
-    {
-	my @prev = Date::Calc::Add_Delta_Days(@today,
-				  $searching_dow - $current_dow);
-	return Date::Calc::Add_Delta_Days(@prev,+7);
-    }
-}

@@ -672,6 +672,28 @@ sub items_to_json_inner
     }
 }
 
+sub upcoming_dow
+{
+    my($searching_dow) = @_;
+    my @today = Date::Calc::Today();
+    my $current_dow = Date::Calc::Day_of_Week(@today);
+
+    if ($searching_dow == $current_dow)
+    {
+	return @today;
+    }
+    elsif ($searching_dow > $current_dow)
+    {
+	return Date::Calc::Add_Delta_Days(@today,
+					  $searching_dow - $current_dow);
+    }
+    else
+    {
+	my @prev = Date::Calc::Add_Delta_Days(@today,
+				  $searching_dow - $current_dow);
+	return Date::Calc::Add_Delta_Days(@prev,+7);
+    }
+}
 
 sub get_dow($$$)
 {
