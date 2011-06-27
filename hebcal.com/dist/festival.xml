@@ -1050,8 +1050,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <festival id="Shabbat Nachamu" hebrew="שַׁבָּת נַחֲמוּ" yomtov="0">
- <about href="http://www.bus.ualberta.ca/yreshef/shabbat/nachamu.html">
- Shabbat after Tish'a B'Av (Shabbat of Consolation)
+ <about href="http://www.jewfaq.org/special.htm#Nachamu">
+ Shabbat after Tish'a B'Av (Shabbat of Consolation).
+The first of seven Shabbatot leading up to Rosh Hashanah.
+Named after the Haftarah (from Isaiah 40) which begins
+with the verse 
+נַחֲמוּ נַחֲמוּ, עַמִּי
+("Comfort, oh comfort my people").
  </about>
 </festival>
 
