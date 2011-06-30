@@ -2525,7 +2525,7 @@ sub csv_write_contents($$$)
 
 my $SENDMAIL_PASS;
 
-sub sendmail_v2($$$)
+sub sendmail_v2
 {
     my($return_path,$headers,$body,$verbose) = @_;
 
