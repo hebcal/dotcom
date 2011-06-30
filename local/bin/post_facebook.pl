@@ -45,6 +45,22 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
 use Hebcal ();
+use Getopt::Long ();
+
+my $opt_help;
+my $opt_randsleep;
+
+if (!Getopt::Long::GetOptions
+    ("help|h" => \$opt_help,
+     "randsleep=i" => \$opt_randsleep)) {
+    usage();
+}
+
+$opt_help && usage();
+
+if ($opt_randsleep) {
+  sleep int(rand($opt_randsleep));
+}
 
 # get the date for this upcoming saturday
 my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
@@ -71,3 +87,7 @@ for (my $i = 0; $i < @events; $i++) {
 }
 
 exit(0);
+
+sub usage {
+    die "usage: $0 [--help] [--randsleep=MAXSECS]\n";
+}
