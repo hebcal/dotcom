@@ -46,12 +46,20 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use strict;
 use Hebcal ();
 use Getopt::Long ();
+use Log::Message::Simple qw[:STD :CARP];
+
+my $EMAIL_FROM = "mradwin\@hebcal.com";
+my $EMAIL_TO = "ammo626cion\@m.facebook.com";
+my $WEBDIR = "/home/hebcal/web/hebcal.com";
+my $HEBCAL = "$WEBDIR/bin/hebcal";
 
 my $opt_help;
+my $opt_verbose = 0;
 my $opt_randsleep;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
+     "verbose|v" => \$opt_verbose,
      "randsleep=i" => \$opt_randsleep)) {
     usage();
 }
@@ -59,35 +67,39 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 
 if ($opt_randsleep) {
-  sleep int(rand($opt_randsleep));
+  my $sleep = int(rand($opt_randsleep));
+  msg("Sleeping for $sleep seconds", $opt_verbose);
+  sleep($sleep);
 }
 
 # get the date for this upcoming saturday
 my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
+msg("Shabbat is $sat_year,$sat_month,$sat_day", $opt_verbose);
 
-my $WEBDIR = '/home/hebcal/web/hebcal.com';
-my $HEBCAL = "$WEBDIR/bin/hebcal";
 my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $sat_year", "", 0, $sat_month);
 for (my $i = 0; $i < @events; $i++) {
     if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sat_day) {
 	my $parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	msg("Found $parasha", $opt_verbose);
 	my $email_subj = "This week's Torah portion is $parasha. Shabbat Shalom!";
-	my $return_path = "mradwin\@hebcal.com";
 	my %headers = (
-	   "From" => "Hebcal <$return_path>",
-	   "To" => "ammo626cion\@m.facebook.com",
+	   "From" => "Hebcal <$EMAIL_FROM>",
+	   "To" => $EMAIL_TO,
 	   "MIME-Version" => "1.0",
 	   "Content-Type" => "text/plain",
 	   "Subject" => $email_subj,
 	 );
 
-	Hebcal::sendmail_v2($return_path, \%headers, "");
+	msg("Sending mail from $EMAIL_FROM to $EMAIL_TO...", $opt_verbose);
+	Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
+	    or croak "Can't send mail!";
 	last;
       }
 }
 
+msg("Done", $opt_verbose);
 exit(0);
 
 sub usage {
-    die "usage: $0 [--help] [--randsleep=MAXSECS]\n";
+    die "usage: $0 [--help] [--verbose] [--randsleep=MAXSECS]\n";
 }
