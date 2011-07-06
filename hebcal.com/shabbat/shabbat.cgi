@@ -1,8 +1,8 @@
 #!/usr/local/bin/perl -w
 
 ########################################################################
-# 1-Click Shabbat generates weekly Shabbat candle lighting times and
-# Parsha HaShavua from Hebcal information.
+# Hebcal Shabbat Times generates weekly Shabbat candle lighting times
+# and Parsha HaShavua from Hebcal information.
 #
 # Copyright (c) 2011  Michael J. Radwin.
 # All rights reserved.
@@ -338,7 +338,7 @@ sub display_wml
 {
     my($items) = @_;
 
-    my $title = '1-Click Shabbat';
+    my $title = 'Hebcal Shabbat Times';
 	
     print "Content-Type: text/vnd.wap.wml\015\012\015\012";
 
@@ -395,7 +395,7 @@ sub display_rss
     print "Content-Type: text/xml\015\012\015\012";
 
     my($url) = self_url();
-    my $title = '1-Click Shabbat: ' . $city_descr;
+    my $title = 'Shabbat Times for ' . $city_descr;
 
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
@@ -498,7 +498,7 @@ sub display_javascript
 {
     my($items) = @_;
 
-    my($title) = "1-Click Shabbat Candle Lighting Times for $city_descr";
+    my($title) = "Shabbat Times for $city_descr";
 
     if ($cfg eq "i" || $cfg eq "widget") {
 	print $q->header();
@@ -566,7 +566,7 @@ sub display_javascript
 
     Hebcal::out_html($cfg, qq{<div class="copyright">
 <font size="-2" face="Arial"><a target="$tgt"
-href="$url">1-Click Shabbat</a>
+href="$url">Hebcal Shabbat Times</a>
 Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
 </div><!-- .copyright -->
 </div><!-- #hebcal-$loc_class -->
@@ -670,7 +670,7 @@ sub display_html
 
     Hebcal::out_html($cfg,"<li>",
 		      "Synagogues: <a\nhref=\"$url\">include</a>\n",
-		      "1-Click Shabbat candle-lighting times on your\n",
+		      "Hebcal Shabbat Times on your\n",
 		     "web site\n");
  
     # Mac OS X
