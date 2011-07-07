@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2011  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -411,12 +411,12 @@ sub gen_body
 	my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
 
-	my $strtime = strftime("%A, %d %B %Y", localtime($time));
+	my $strtime = strftime("%A, %B %d", localtime($time));
 
 	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
-	    $body .= sprintf("%s for %s is at %d:%02dpm\n",
-			     $subj, $strtime, $hour, $min);
+	    $body .= sprintf("%s is at %d:%02dpm on %s\n",
+			     $subj, $hour, $min, $strtime);
 	}
 	elsif ($subj eq "No sunset today.")
 	{
