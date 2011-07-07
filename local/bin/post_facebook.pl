@@ -76,13 +76,27 @@ if ($opt_randsleep) {
 my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
 msg("Shabbat is $sat_year,$sat_month,$sat_day", $opt_verbose);
 
-my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $sat_year", "", 0, $sat_month);
+my @events = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
+my $parasha;
+my $special_shabbat;
 for (my $i = 0; $i < @events; $i++) {
-    if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sat_day) {
-	my $parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	msg("Found $parasha", $opt_verbose);
-	my $email_subj = "This week's Torah portion is $parasha. Shabbat Shalom!";
-	my %headers = (
+    next unless $events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sat_day;
+    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+    msg("Found $subj", $opt_verbose);
+    if ($subj =~ /^Parashat/) {
+	$parasha = $subj;
+    } elsif ($subj =~ /^Shabbat/) {
+	$special_shabbat = $subj;
+    }
+}
+
+if ($parasha) {
+    my $email_subj = "This week's Torah portion is $parasha";
+    if ($special_shabbat) {
+	$email_subj .= " ($special_shabbat)";
+    }
+    $email_subj .= ". Shabbat Shalom!";
+    my %headers = (
 	   "From" => "Hebcal <$EMAIL_FROM>",
 	   "To" => $EMAIL_TO,
 	   "MIME-Version" => "1.0",
@@ -90,11 +104,9 @@ for (my $i = 0; $i < @events; $i++) {
 	   "Subject" => $email_subj,
 	 );
 
-	msg("Sending mail from $EMAIL_FROM to $EMAIL_TO...", $opt_verbose);
-	Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
-	    or croak "Can't send mail!";
-	last;
-      }
+    msg("Sending mail from $EMAIL_FROM to $EMAIL_TO...", $opt_verbose);
+    Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
+	or croak "Can't send mail!";
 }
 
 msg("Done", $opt_verbose);
