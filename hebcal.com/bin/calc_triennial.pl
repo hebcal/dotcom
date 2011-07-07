@@ -366,6 +366,7 @@ sub write_index_page
     my $hy3 = $hebrew_year + 3;
 
     my $xtra_head = <<EOHTML;
+<link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
 <style type="text/css">
 #hebcal-sedrot ol { list-style: none }
 </style>
