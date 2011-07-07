@@ -294,7 +294,9 @@ function display_hebrew_event($h) {
 
 function my_header($hebdate) {
     header("Content-Type: text/html; charset=UTF-8");
-    echo html_header_new("Hebrew Date Converter - $hebdate");
+    $xtra_head =
+      "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"/etc/hdate-en.xml\">\n";
+    echo html_header_new("Hebrew Date Converter - $hebdate", $xtra_head);
 ?>
 <div id="container" class="single-attachment">
 <div id="content" role="main">
