@@ -847,12 +847,6 @@ EOHTML
 
     print OUT2 qq{
 <h3 id="ref">References</h3>
-<a title="The Jewish Holidays: A Guide &amp; Commentary"
-class="amzn" id="strassfeld-1"
-href="$strassfeld_link"><img
-src="/i/0062720082.01.TZZZZZZZ.jpg" border="0" hspace="5"
-alt="The Jewish Holidays: A Guide &amp; Commentary"
-vspace="5" width="75" height="90" align="right"></a>
 <dl>
 <dt><em><a class="amzn" id="strassfeld-2"
 href="$strassfeld_link">The
@@ -933,8 +927,10 @@ sub html_footer
 {
     my $str = Hebcal::html_footer_new(undef, $REVISION, 1);
 
+# remove the AMZN link enhancer for now if we're not going to get associate fees
+# <script type="text/javascript" src="http://www.assoc-amazon.com/s/link-enhancer?tag=hebcal-20&o=1"></script>
+
     $str .= <<EOHTML;
-<script type="text/javascript" src="http://www.assoc-amazon.com/s/link-enhancer?tag=hebcal-20&o=1"></script>
 </body>
 </html>
 EOHTML

@@ -849,13 +849,7 @@ EOHTML
     print OUT2 <<EOHTML;
 <h3 id="ref">References</h3>
 <dl>
-<dt><a title="The Chumash: The Stone Edition (Artscroll Series)"
-class="amzn" id="chumash-1"
-href="$amazon_link2"><img
-src="/i/0899060145.01.87x110.jpg" width="87" height="110" border="0"
-hspace="3" vspace="3" align="right"
-alt="The Chumash: The Stone Edition (Artscroll Series)"></a>
-<em><a class="amzn" id="chumash-2"
+<dt><em><a class="amzn" id="chumash-2"
 href="$amazon_link2">The
 Chumash: The Stone Edition (Artscroll Series)</a></em>
 <dd>Nosson Scherman, Mesorah Publications, 1993
@@ -863,13 +857,7 @@ Chumash: The Stone Edition (Artscroll Series)</a></em>
 href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
-<dt><a title="Etz Hayim: Torah and Commentary"
-class="amzn" id="etz-hayim-1"
-href="$amazon_link1"><img
-src="/i/0827607121.01.75x110.jpg" width="75" height="110" border="0"
-hspace="3" vspace="3" align="right"
-alt="Etz Hayim: Torah and Commentary"></a>
-<em><a class="amzn" id="etz-hayim-2"
+<dt><em><a class="amzn" id="etz-hayim-2"
 href="$amazon_link1">Etz
 Hayim: Torah and Commentary</a></em>
 <dd>David L. Lieber et. al., Jewish Publication Society, 2001
