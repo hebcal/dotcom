@@ -257,38 +257,79 @@ sub write_csv
 }
 
 sub format_single_day {
-    my($gy,$gm,$gd) = @_;
-    return $Hebcal::MoY_short[$gm - 1] . " " . $gd;
+    my($gy,$gm,$gd,$show_year) = @_;
+    my $str = $Hebcal::MoY_short[$gm - 1] . " " . $gd;
+    return $show_year ? ($str . ", " . $gy) : $str;
 }
 
 sub format_single_day_html {
-    my($gy,$gm,$gd) = @_;
+    my($gy,$gm,$gd,$show_year) = @_;
     my($gy0,$gm0,$gd0) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
-    return "<span title=\"begins at sundown on " . format_single_day($gy0,$gm0,$gd0)
-	. "\">" . format_single_day($gy,$gm,$gd) . "</span>";
+    return "<span title=\"begins at sundown on " . format_single_day($gy0,$gm0,$gd0,0)
+	. "\">" . format_single_day($gy,$gm,$gd,$show_year) . "</span>";
 }
 
 sub format_date_range {
-    my($gy1,$gm1,$gd1,$gy2,$gm2,$gd2) = @_;
-    my $str = format_single_day_html($gy1,$gm1,$gd1) . "-";
+    my($gy1,$gm1,$gd1,$gy2,$gm2,$gd2,$show_year) = @_;
+    my $str = format_single_day_html($gy1,$gm1,$gd1,0) . "-";
     if ($gm1 == $gm2) {
 	$str .= $gd2;
     } else {
-	$str .= format_single_day($gy2,$gm2,$gd2);
+	$str .= format_single_day($gy2,$gm2,$gd2,0);
     }
-    $str;
+    return $show_year ? ($str . ", " . $gy2) : $str;
 }
 
 sub format_date_plus_delta {
-    my($gy1,$gm1,$gd1,$delta) = @_;
+    my($gy1,$gm1,$gd1,$delta,$show_year) = @_;
     my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy1,$gm1,$gd1,$delta);
-    return format_date_range($gy1,$gm1,$gd1,$gy2,$gm2,$gd2);
+    return format_date_range($gy1,$gm1,$gd1,$gy2,$gm2,$gd2,$show_year);
+}
+
+sub table_cell_observed {
+    my($f,$evt,$show_year) = @_;
+    my($gy,$gm,$gd) = ($evt->[$Hebcal::EVT_IDX_YEAR],
+		       $evt->[$Hebcal::EVT_IDX_MON] + 1,
+		       $evt->[$Hebcal::EVT_IDX_MDAY]);
+    my $s = "";
+    if ($f eq "Chanukah") {
+	$s .= format_date_plus_delta($gy, $gm, $gd, 7, $show_year);
+    } elsif ($f eq "Purim" || $f eq "Tish'a B'Av") {
+	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
+    } elsif (begins_at_dawn($f)) {
+	$s .= format_single_day($gy, $gm, $gd, $show_year);
+    } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
+	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
+    } else {
+	$s .= "<b>"; # begin yomtov
+	if ($f eq "Rosh Hashana" || $f eq "Shavuot") {
+	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
+	} elsif ($f eq "Yom Kippur" || $f eq "Shmini Atzeret" || $f eq "Simchat Torah") {
+	    $s .= format_single_day_html($gy, $gm, $gd, $show_year);
+	} elsif ($f eq "Sukkot") {
+	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
+	    $s .= "</b><br>";
+	    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
+	    $s .= format_date_plus_delta($gy2, $gm2, $gd2, 4, $show_year);
+	} elsif ($f eq "Pesach") {
+	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
+	    $s .= "</b><br>";
+	    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
+	    $s .= format_date_plus_delta($gy2, $gm2, $gd2, 3, $show_year);
+	    $s .= "<br><b>";
+	    my($gy3,$gm3,$gd3) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 6);
+	    $s .= format_date_plus_delta($gy3, $gm3, $gd3, 1, $show_year);
+	}
+	$s .= "</b>" unless $f eq "Sukkot";
+    }
+    return $s;
 }
 
 sub table_index {
     my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
 <table id="$table_id">
+<col style="width:180px"><col><col><col><col><col><col>
 <tbody>
 EOHTML
 ;
@@ -298,7 +339,7 @@ EOHTML
 	my $yr = $HEB_YR + $i - 1;
 	my $greg_yr1 = $yr - 3761;
 	my $greg_yr2 = $greg_yr1 + 1;
-	print OUT3 "<th>$yr<br>($greg_yr1-$greg_yr2)</th>";
+	print OUT3 "<th><a href=\"$greg_yr1-$greg_yr2\">$yr<br>($greg_yr1-$greg_yr2)</a></th>";
     }
     print OUT3 "</tr>\n";
 
@@ -316,43 +357,10 @@ EOHTML
 
 	print OUT3 qq{<tr><td><a href="$slug" title="$short_descr">$f</a></td>\n};
 	foreach my $i (0 .. $NUM_YEARS) {
-	    my $yr = $HEB_YR + $i - 1;
 	    print OUT3 "<td class=\"date-obs\">";
 	    if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[$i]) {
 		my $evt = $OBSERVED{$f}->[$i];
-		my($gy,$gm,$gd) = ($evt->[$Hebcal::EVT_IDX_YEAR],
-				   $evt->[$Hebcal::EVT_IDX_MON] + 1,
-				   $evt->[$Hebcal::EVT_IDX_MDAY]);
-		if ($f eq "Chanukah") {
-		    print OUT3 format_date_plus_delta($gy, $gm, $gd, 7);
-		} elsif ($f eq "Purim" || $f eq "Tish'a B'Av") {
-		    print OUT3 format_single_day_html($gy, $gm, $gd);
-		} elsif (begins_at_dawn($f)) {
-		    print OUT3 format_single_day($gy, $gm, $gd);
-		} elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
-		    print OUT3 format_single_day_html($gy, $gm, $gd);
-		} else {
-		    print OUT3 "<b>"; # begin yomtov
-		    if ($f eq "Rosh Hashana" || $f eq "Shavuot") {
-			print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
-		    } elsif ($f eq "Yom Kippur" || $f eq "Shmini Atzeret" || $f eq "Simchat Torah") {
-			print OUT3 format_single_day_html($gy, $gm, $gd);
-		    } elsif ($f eq "Sukkot") {
-			print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
-			print OUT3 "</b><br>";
-			my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
-			print OUT3 format_date_plus_delta($gy2, $gm2, $gd2, 4);
-		    } elsif ($f eq "Pesach") {
-			print OUT3 format_date_plus_delta($gy, $gm, $gd, 1);
-			print OUT3 "</b><br>";
-			my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
-			print OUT3 format_date_plus_delta($gy2, $gm2, $gd2, 3);
-			print OUT3 "<br><b>";
-			my($gy3,$gm3,$gd3) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 6);
-			print OUT3 format_date_plus_delta($gy3, $gm3, $gd3, 1);
-		    }
-		    print OUT3 "</b>" unless $f eq "Sukkot";
-		}
+		print OUT3 table_cell_observed($f, $evt, 0);
 	    }
 	    print OUT3 "</td>\n";
 	}
@@ -364,6 +372,92 @@ EOHTML
 </table>
 EOHTML
 ;
+}
+
+sub table_one_year_only {
+    my($festivals,$table_id,$i,@holidays) = @_;
+    print OUT4 <<EOHTML;
+<table id="$table_id">
+<col style="width:180px"><col style="width:180px"><col>
+<tbody>
+EOHTML
+;
+
+    print OUT4 "<tr><th>Holiday</th>";
+    my $yr = $HEB_YR + $i - 1;
+    print OUT4 "<th>Hebrew Year $yr</th>";
+    print OUT4 "<th>Description</th>";
+    print OUT4 "</tr>\n";
+
+    foreach my $f (@holidays) {
+	my $descr;
+	my $about = get_var($festivals, $f, 'about');
+	if ($about) {
+	    $descr = trim($about->{'content'});
+	}
+	die "no descr for $f" unless $descr;
+
+	my $slug = Hebcal::make_anchor($f);
+	my $short_descr = $descr;
+	$short_descr =~ s/\..*//;
+
+	print OUT4 qq{<tr><td><a href="$slug">$f</a></td>\n};
+	print OUT4 "<td>";
+	if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[$i]) {
+	  my $evt = $OBSERVED{$f}->[$i];
+	  print OUT4 table_cell_observed($f, $evt, 1);
+	}
+	print OUT4 "</td>\n<td>$short_descr</td>\n";
+	print OUT4 "</tr>\n";
+    }
+
+    print OUT4 <<EOHTML;
+</tbody>
+</table>
+EOHTML
+;
+}
+
+sub get_index_body_preamble {
+    my($page_title,$do_multi_year) = @_;
+
+    my $str = <<EOHTML;
+<div id="container" class="single-attachment">
+<div id="content" role="main">
+<div class="page type-page hentry">
+<h1 class="entry-title">$page_title</h1>
+<div class="entry-meta">
+<span class="meta-prep">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
+</div><!-- .entry-meta -->
+<div class="entry-content">
+<p>All holidays begin at sundown on the evening before the date
+specified in the tables below. For example, if the dates for Rosh
+Hashana were listed as <b>Sep 19-20</b>, then the holiday begins at
+sundown on <b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.
+Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
+obligations and restrictions to Shabbat in the sense that normal "work"
+is forbidden.</p>
+<p>
+EOHTML
+;
+
+    if ($do_multi_year) {
+      $str .= <<EOHTML;
+The tables of holidays below include the current year and 4 years
+into the future for the Diaspora.
+EOHTML
+;
+    }
+
+    $str .= <<EOHTML;
+<a href="/ical/">Download</a> to your favorite desktop, mobile or
+web-based calendar, or <a href="/hebcal/">make a custom calendar</a>
+to select a different year or for advanced options such as
+candle-lighting times and Torah readings.</p>
+EOHTML
+;
+
+    return $str;
 }
 
 sub write_index_page
@@ -396,29 +490,8 @@ EOHTML
 				   "/holidays/",
 				   "single single-post",
 				   $xtra_head);
-    print OUT3 <<EOHTML;
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">$page_title</h1>
-<div class="entry-meta">
-<span class="meta-prep">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
-</div><!-- .entry-meta -->
-<div class="entry-content">
-<p>All holidays begin at sundown on the evening before the date
-specified in the tables below. For example, if the dates for Rosh
-Hashana were listed as <b>Sep 19-20</b>, then the holiday begins at
-sundown on <b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.
-Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
-obligations and restrictions to Shabbat in the sense that normal "work"
-is forbidden.</p>
-<p>The tables of holidays below include the current year and 4 years
-into the future for the Diaspora. <a href="/ical/">Download</a> to your
-favorite desktop, mobile or web-based calendar, or <a href="/hebcal/">make
-a custom calendar</a> to select a different year or for advanced options
-such as candle-lighting times and Torah readings.</p>
-EOHTML
-;
+
+    print OUT3 get_index_body_preamble($page_title, 1);
 
     my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
     my @major = split(/,/, $major);
@@ -443,17 +516,54 @@ EOHTML
     table_index($festivals, "hebcal-rosh-chodesh", @rosh_chodesh);
 
 
-    print OUT3 <<EOHTML;
+    my $body_divs_end = <<EOHTML;
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
 </div><!-- #container -->
 EOHTML
 ;
+
+    print OUT3 $body_divs_end;
     print OUT3 Hebcal::html_footer_new(undef, $REVISION);
 
     close(OUT3);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
+
+    # SEO - one page per year
+    foreach my $i (0 .. $NUM_YEARS) {
+	my $heb_year = $HEB_YR + $i - 1;
+	my $greg_yr1 = $heb_year - 3761;
+	my $greg_yr2 = $greg_yr1 + 1;
+
+	my $slug = "$greg_yr1-$greg_yr2";
+	$fn = "$outdir/$slug";
+	open(OUT4, ">$fn.$$") || die "$fn.$$: $!\n";
+
+	$page_title = "Jewish Holidays $slug";
+
+	print OUT4 Hebcal::html_header($page_title,
+				       "/holidays/$slug",
+				       "single single-post",
+				       $xtra_head);
+
+	print OUT4 get_index_body_preamble($page_title, 0);
+
+	print OUT4 "<h3>Major holidays</h3>\n";
+	table_one_year_only($festivals, "hebcal-major-holidays", $i, @major);
+
+	print OUT4 "<h3>Minor holidays, special Shabbatot, public fasts</h3>\n";
+	table_one_year_only($festivals, "hebcal-minor-holidays", $i, @minor);
+
+	print OUT4 "<h3>Rosh Chodesh</h3>\n";
+	table_one_year_only($festivals, "hebcal-rosh-chodesh", $i, @rosh_chodesh);
+
+	print OUT4 $body_divs_end;
+	print OUT4 Hebcal::html_footer_new(undef, $REVISION);
+
+	close(OUT4);
+	rename("$fn.$$", $fn) || die "$fn: $!\n";
+    }
 }
 
 sub write_festival_part
