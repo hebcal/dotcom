@@ -94,7 +94,9 @@ if ($opts{'f'}) {
 }
 
 my $REVISION = '$Revision$'; #'
-my $MTIME = (stat($festival_in))[9];
+my $mtime_festival = (stat($festival_in))[9];
+my $mtime_script = (stat($0))[9];
+my $MTIME = $mtime_script > $mtime_festival ? $mtime_script : $mtime_festival;
 my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 my $html_footer = html_footer();
 
