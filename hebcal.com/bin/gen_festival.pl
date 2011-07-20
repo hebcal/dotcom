@@ -142,7 +142,7 @@ my(%PREV,%NEXT);
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
 my $HEB_YR = $hebdate->{"yy"};
-$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+#$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
 my %GREG2HEB;
 my $NUM_YEARS = 5;
 print "Gregorian-to-Hebrew date map...\n" if $opts{"v"};
@@ -329,7 +329,7 @@ sub table_index {
     my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
 <table id="$table_id">
-<col style="width:180px"><col><col><col><col><col><col>
+<col style="width:180px"><col><col style="background-color:#FFFFE0"><col><col><col><col>
 <tbody>
 EOHTML
 ;
@@ -484,8 +484,7 @@ sub write_index_page
 EOHTML
 ;
 
-    my $page_title = sprintf("Jewish Holidays %d-%d",
-    			     $this_year, $this_year + $NUM_YEARS);
+    my $page_title = "Jewish Holidays";
     print OUT3 Hebcal::html_header($page_title,
 				   "/holidays/",
 				   "single single-post",
