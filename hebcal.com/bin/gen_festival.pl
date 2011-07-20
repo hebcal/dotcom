@@ -66,14 +66,15 @@ use constant myAWSSecret    => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 use constant myEndPoint    => 'ecs.amazonaws.com';
 
 $0 =~ s,.*/,,;  # basename
-my($usage) = "usage: $0 [-h] festival.xml output-dir
+my($usage) = "usage: $0 [-hy] [-H <year>] [f f.csv] festival.xml output-dir
     -h        Display usage information.
     -v        Verbose mode
+    -H <year> Start with hebrew year <year> (default this year)
     -f f.csv  Dump full kriyah readings to comma separated values
 ";
 
 my(%opts);
-Getopt::Std::getopts('hf:v', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hf:vH:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
@@ -141,10 +142,16 @@ my(%PREV,%NEXT);
     }
 }
 
-my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-my $HEB_YR = $hebdate->{"yy"};
-#$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+my $HEB_YR;
+if ($opts{'H'}) {
+    $HEB_YR = $opts{'H'};
+} else {
+    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+    $HEB_YR = $hebdate->{"yy"};
+#    $HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+}
+
 my %GREG2HEB;
 my $NUM_YEARS = 5;
 print "Gregorian-to-Hebrew date map...\n" if $opts{"v"};
@@ -549,6 +556,20 @@ EOHTML
 				       $xtra_head);
 
 	print OUT4 get_index_body_preamble($page_title, 0);
+
+	print OUT4 "<p>";
+	foreach my $j (0 .. $NUM_YEARS) {
+	    my $other_yr = $HEB_YR + $j - 1;
+	    my $other_greg_yr1 = $other_yr - 3761;
+	    my $other_greg_yr2 = $other_greg_yr1 + 1;
+	    my $other_slug = "$other_greg_yr1-$other_greg_yr2";
+
+	    print OUT4 qq{<a title="Hebrew Year $other_yr" href="$other_slug">} unless $i == $j;
+	    print OUT4 $other_slug;
+	    print OUT4 "</a>" unless $i == $j;
+	    print OUT4 " |\n" unless $j == $NUM_YEARS;
+	}
+	print OUT4 "</p>\n";
 
 	print OUT4 "<h3>Major holidays</h3>\n";
 	table_one_year_only($festivals, "hebcal-major-holidays", $i, @major);
