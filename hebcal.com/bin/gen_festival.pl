@@ -331,7 +331,7 @@ sub table_index {
     my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
 <table id="$table_id">
-<col style="width:180px"><col><col style="background-color:#FFFFE0"><col><col><col><col>
+<col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 <tbody>
 EOHTML
 ;
