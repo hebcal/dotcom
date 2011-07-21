@@ -50,6 +50,7 @@ use Log::Message::Simple qw[:STD :CARP];
 
 my $EMAIL_FROM = "mradwin\@hebcal.com";
 my $EMAIL_TO = "ammo626cion\@m.facebook.com";
+my $EMAIL_CC = "michael\@radwin.org";
 my $WEBDIR = "/home/hebcal/web/hebcal.com";
 my $HEBCAL = "$WEBDIR/bin/hebcal";
 
@@ -99,6 +100,7 @@ if ($parasha) {
     my %headers = (
 	   "From" => "Hebcal <$EMAIL_FROM>",
 	   "To" => $EMAIL_TO,
+	   "Cc" => $EMAIL_CC,
 	   "MIME-Version" => "1.0",
 	   "Content-Type" => "text/plain",
 	   "Subject" => $email_subj,
