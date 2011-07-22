@@ -154,6 +154,8 @@ if ($opts{'H'}) {
 
 my %GREG2HEB;
 my $NUM_YEARS = 5;
+my $meta_greg_yr1 = $HEB_YR - 3761 - 1;
+my $meta_greg_yr2 = $meta_greg_yr1 + $NUM_YEARS + 1;
 print "Gregorian-to-Hebrew date map...\n" if $opts{"v"};
 foreach my $i (0 .. $NUM_YEARS) {
     my $yr = $HEB_YR + $i - 1;
@@ -476,6 +478,11 @@ sub write_index_page
     my $fn = "$outdir/index.html";
     open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
 
+    my $meta = <<EOHTML;
+<meta name="description" content="Dates of major and minor Jewish holidays for years $meta_greg_yr1-$meta_greg_yr2. Links to pages describing observance and customs, recommended books, and holiday Torah Readings.">
+EOHTML
+;
+
     my $xtra_head = <<EOHTML;
 <style type="text/css">
 #hebcal-major-holidays tr td, #hebcal-major-holidays tr th,
@@ -497,7 +504,7 @@ EOHTML
     print OUT3 Hebcal::html_header($page_title,
 				   "/holidays/",
 				   "single single-post",
-				   $xtra_head);
+				   $meta . $xtra_head);
 
     print OUT3 get_index_body_preamble($page_title, 1);
 
@@ -550,10 +557,15 @@ EOHTML
 
 	$page_title = "Jewish Holidays $slug";
 
+	$meta = <<EOHTML;
+<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2. Links to pages describing observance and customs, recommended books, and holiday Torah Readings.">
+EOHTML
+;
+
 	print OUT4 Hebcal::html_header($page_title,
 				       "/holidays/$slug",
 				       "single single-post",
-				       $xtra_head);
+				       $meta . $xtra_head);
 
 	print OUT4 get_index_body_preamble($page_title, 0);
 
@@ -713,17 +725,24 @@ sub write_festival_page
     $keyword .= ",$seph2ashk{$f}" if defined $seph2ashk{$f};
 
     my $hebrew = get_var($festivals, $f, 'hebrew');
+    my $meta_hebrew;
     if ($hebrew) {
 	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
+	$meta_hebrew = " (Hebrew: $hebrew)";
 	$page_title .= " - $hebrew";
     } else {
-	$hebrew = "";
+	$meta_hebrew = $hebrew = "";
     }
+
+    my $meta = <<EOHTML;
+<meta name="description" content="Jewish holiday of $f$meta_hebrew. $descr. Dates of observance for years $meta_greg_yr1-$meta_greg_yr2, recommended books, holiday Torah Readings.">
+EOHTML
+;
 
     print OUT2 Hebcal::html_header($page_title,
 				   "/holidays/$slug",
 				   "single single-post",
-				   "",
+				   $meta,
 				   1);
 
     my $prev = $PREV{$f};
