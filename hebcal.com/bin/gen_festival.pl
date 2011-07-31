@@ -558,7 +558,7 @@ EOHTML
 	$page_title = "Jewish Holiday Calendar $slug";
 
 	$meta = <<EOHTML;
-<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_yr), observances and customs, holiday Torah readings, recommended books.">
+<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_year), observances and customs, holiday Torah readings, recommended books.">
 EOHTML
 ;
 
