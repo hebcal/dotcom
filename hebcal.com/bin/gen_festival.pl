@@ -479,7 +479,7 @@ sub write_index_page
     open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
 
     my $meta = <<EOHTML;
-<meta name="description" content="Dates of major and minor Jewish holidays for years $meta_greg_yr1-$meta_greg_yr2. Links to pages describing observance and customs, recommended books, and holiday Torah Readings.">
+<meta name="description" content="Dates of major and minor Jewish holidays for years $meta_greg_yr1-$meta_greg_yr2. Links to pages describing observance and customs, holiday Torah readings, recommended books.">
 EOHTML
 ;
 
@@ -555,17 +555,18 @@ EOHTML
 	$fn = "$outdir/$slug";
 	open(OUT4, ">$fn.$$") || die "$fn.$$: $!\n";
 
-	$page_title = "Jewish Holidays $slug";
+	$page_title = "Jewish Holiday Calendar $slug";
 
 	$meta = <<EOHTML;
-<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2. Links to pages describing observance and customs, recommended books, and holiday Torah Readings.">
+<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_yr), observances and customs, holiday Torah readings, recommended books.">
 EOHTML
 ;
 
 	print OUT4 Hebcal::html_header($page_title,
 				       "/holidays/$slug",
 				       "single single-post",
-				       $meta . $xtra_head);
+				       $meta . $xtra_head,
+				       1);
 
 	print OUT4 get_index_body_preamble($page_title, 0);
 
