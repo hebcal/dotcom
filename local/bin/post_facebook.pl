@@ -71,12 +71,6 @@ if (!Getopt::Long::GetOptions
 
 $opt_help && usage();
 
-if ($opt_randsleep) {
-  my $sleep = int(rand($opt_randsleep));
-  msg("Sleeping for $sleep seconds", $opt_verbose);
-  sleep($sleep);
-}
-
 my $email_subj;			# will be populated if there's an email to send
 
 if ($opt_shabbat) {
@@ -146,7 +140,14 @@ if ($opt_daily) {
 }
 
 if ($email_subj) {
-    msg("Email subjet is $email_subj", $opt_verbose);
+    msg("Email subject is $email_subj", $opt_verbose);
+
+    if ($opt_randsleep) {
+      my $sleep = int(rand($opt_randsleep));
+      msg("Sleeping for $sleep seconds before posting", $opt_verbose);
+      sleep($sleep);
+    }
+
     my %headers = (
 	   "From" => "Hebcal <$EMAIL_FROM>",
 	   "To" => $EMAIL_TO,
