@@ -56,11 +56,15 @@ my $HEBCAL = "$WEBDIR/bin/hebcal";
 
 my $opt_help;
 my $opt_verbose = 0;
+my $opt_shabbat;
+my $opt_daily;
 my $opt_randsleep;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "verbose|v" => \$opt_verbose,
+     "daily" => \$opt_daily,
+     "shabbat" => \$opt_shabbat,
      "randsleep=i" => \$opt_randsleep)) {
     usage();
 }
@@ -73,30 +77,76 @@ if ($opt_randsleep) {
   sleep($sleep);
 }
 
-# get the date for this upcoming saturday
-my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
-msg("Shabbat is $sat_year,$sat_month,$sat_day", $opt_verbose);
+my $email_subj;			# will be populated if there's an email to send
 
-my @events = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
-my $parasha;
-my $special_shabbat;
-for (my $i = 0; $i < @events; $i++) {
-    next unless $events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sat_day;
-    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+if ($opt_shabbat) {
+  # get the date for this upcoming saturday
+  my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
+  msg("Shabbat is $sat_year,$sat_month,$sat_day", $opt_verbose);
+
+  my @events = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
+  my $parasha;
+  my $special_shabbat;
+  for my $evt (@events) {
+    next unless $evt->[$Hebcal::EVT_IDX_MDAY] == $sat_day;
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
     msg("Found $subj", $opt_verbose);
     if ($subj =~ /^Parashat/) {
 	$parasha = $subj;
     } elsif ($subj =~ /^Shabbat/) {
 	$special_shabbat = $subj;
     }
-}
+  }
 
-if ($parasha) {
-    my $email_subj = "This week's Torah portion is $parasha";
+  if ($parasha) {
+    $email_subj = "This week's Torah portion is $parasha";
     if ($special_shabbat) {
 	$email_subj .= " ($special_shabbat)";
     }
     $email_subj .= ". Shabbat Shalom!";
+  }
+}
+
+if ($opt_daily) {
+  my @events = Hebcal::invoke_hebcal("$HEBCAL", "", 0);
+  my @today = Date::Calc::Today();
+  my @tomorrow = Date::Calc::Add_Delta_Days(@today, 1);
+  my $today_subj = "";
+  for my $evt (@events) {
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    if (event_date_matches($evt, @today)) {
+      msg("Today is $subj", $opt_verbose);
+      $today_subj = $subj;
+      if ($subj =~ /^Erev (.+)$/) {
+	my $holiday = $1;
+	$email_subj = "$holiday begins tonight at sundown.";
+	if ($holiday eq "Tish'a B'Av") {
+	  $email_subj .= " Tzom Kal. We wish you an easy fast.";
+	} elsif ($holiday eq "Yom Kippur") {
+	  $email_subj .= " G'mar Chatimah Tovah! We wish you a good inscription in the Book of Life.";
+	} elsif ($holiday eq "Pesach") {
+	  $email_subj .= " Chag Kasher v'Sameach! We wish you a happy Passover.";
+	} else {
+	  $email_subj .= " Chag Sameach!";
+	}
+      } elsif ($subj eq "Chanukah: 1 Candle") {
+	$email_subj = "Light the first Chanukah candle tonight at sundown. Chag Urim Sameach!";
+      }
+    } elsif (event_date_matches($evt, @tomorrow)) {
+      msg("Tomorrow is $subj", $opt_verbose);
+      if ($subj =~ /^Rosh Chodesh/ && $subj ne $today_subj) {
+	$email_subj = "$subj begins tonight at sundown. Chodesh Tov!";
+      } elsif ($subj eq "Shmini Atzeret") {
+	$email_subj = "$subj begins tonight at sundown. Chag Sameach!";
+      } elsif ($subj =~ /^(Tzom|Asara|Ta\'anit) /) {
+	$email_subj = "$subj begins tomorrow at dawn. Tzom Kal. We wish you an easy fast.";
+      }
+    }
+  }
+}
+
+if ($email_subj) {
+    msg("Email subjet is $email_subj", $opt_verbose);
     my %headers = (
 	   "From" => "Hebcal <$EMAIL_FROM>",
 	   "To" => $EMAIL_TO,
@@ -113,6 +163,13 @@ if ($parasha) {
 
 msg("Done", $opt_verbose);
 exit(0);
+
+sub event_date_matches {
+  my($evt,$gy,$gm,$gd) = @_;
+  return ($evt->[$Hebcal::EVT_IDX_YEAR] == $gy
+	  && $evt->[$Hebcal::EVT_IDX_MON] + 1 == $gm
+	  && $evt->[$Hebcal::EVT_IDX_MDAY] == $gd);
+}
 
 sub usage {
     die "usage: $0 [--help] [--verbose] [--randsleep=MAXSECS]\n";
