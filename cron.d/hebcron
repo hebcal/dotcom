@@ -27,7 +27,10 @@ HEBCAL_BIN=/home/hebcal/local/bin
 
 # shabbat: post to Facebook wall on Wednesday between 4:17-4:37pm Pacific
 # Sleep a random amount, not greater than 30 minutes
-17 16 * * 3 nice $HEBCAL_BIN/post_facebook.pl --randsleep=1800
+17 16 * * 3 nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
+
+# post to Facebook wall daily sometime between 6:03-6:33am Pacific
+3 6 * * 3 nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
 
 # special Rosh Hashana 5771 - 7 Sep 2010 at 1:30am
 #30 1 7 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
