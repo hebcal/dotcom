@@ -627,10 +627,10 @@ sub more_from_hebcal {
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on;mf=on;ss=on';
     $url .= ';tag=1c';
 
+    my $month_name = join(" ", $Hebcal::MoY_long{$this_mon}, $this_year);
     Hebcal::out_html($cfg, qq{<h3 class="widget-title">More from hebcal.com</h3>\n},
 		     "<ul>\n",
-		      "<li>See all of <a\nhref=\"$url\">this\n",
-		      "month's calendar</a>\n");
+		     "<li><a\nhref=\"$url\">$month_name</a> calendar\n");
 
     # Fridge calendar
     $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
