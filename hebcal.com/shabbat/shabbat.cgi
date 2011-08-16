@@ -607,6 +607,10 @@ sub display_html
 
     display_html_common($items);
 
+    form($cfg,0,'','');
+}
+
+sub more_from_hebcal {
     # link to hebcal full calendar
     my($url) = join('', "http://", $q->virtual_host(), "/hebcal/",
 			 "?v=1;geo=", $q->param('geo'), ";");
@@ -623,7 +627,7 @@ sub display_html
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on;mf=on;ss=on';
     $url .= ';tag=1c';
 
-    Hebcal::out_html($cfg,"<h3>More from hebcal.com</h3>\n",
+    Hebcal::out_html($cfg, qq{<h3 class="widget-title">More from hebcal.com</h3>\n},
 		     "<ul>\n",
 		      "<li>See all of <a\nhref=\"$url\">this\n",
 		      "month's calendar</a>\n");
@@ -654,8 +658,8 @@ sub display_html
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     Hebcal::out_html($cfg,"<li>",
-		      "Email: <a\nhref=\"$url\">subscribe</a>\n",
-		      "to weekly candle lighting times\n");
+		      "<a\nhref=\"$url\">Subscribe to weekly email</a>\n",
+		      "candle lighting times\n");
 
     # Synagogues link
     $url = join('', "http://", $q->virtual_host(), "/link/?");
@@ -669,19 +673,29 @@ sub display_html
     $url .= "&amp;type=shabbat";
 
     Hebcal::out_html($cfg,"<li>",
-		      "Synagogues: <a\nhref=\"$url\">include</a>\n",
-		      "Hebcal Shabbat Times on your\n",
-		     "web site\n");
+		     "Synagogues: <a\nhref=\"$url\">add\n",
+		     "Shabbat Times to your web site</a>\n");
  
     # Mac OS X
     $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
     Hebcal::out_html($cfg,"<li>",
-		     "Mac OS X users: <a\nhref=\"$url\">Dashboard Widget</a>\n",
+		     "<a\nhref=\"$url\">Mac OS X Dashboard Widget</a>\n",
 		     "by Mark Saper\n");
 
-    Hebcal::out_html($cfg,"</ul>\n<p>\n");
+    my $rss_href = self_url() . ";cfg=r";
+    my $rss_html = <<EOHTML;
+<li><a href="$rss_href">RSS feed</a>
+of candle lighting times
+<a title="RSS feed of candle lighting times"
+href="$rss_href"><img
+src="/i/xml.gif" border="0" width="36" height="14"
+alt="RSS feed of candle lighting times"></a>
+EOHTML
+;
 
-    form($cfg,0,'','');
+    Hebcal::out_html($cfg, $rss_html);
+
+    Hebcal::out_html($cfg,"</ul>\n");
 }
 
 sub my_head {
@@ -702,23 +716,20 @@ form ol {
 list-style:none inside none;
 margin:0 0 12px 12px;
 }
-#hebcal-form-left { float:left; width:48%;}
-#hebcal-form-right { float:right; width:48%;}
-#hebcal-form-bottom { clear:both; }
 ul#hebcal-results { list-style-type: none }
+#city-list  li { font-size:12px }
+#city-list ul li { display: inline }
+#city-list ul li:after { content:" | "}
+#city-list ul li.last:after { content:"" }
 </style>
 EOHTML
 ;
 	my $head_divs = <<EOHTML;
-<div id="container" class="single-attachment">
+<div id="container">
 <div id="content" role="main">
 <div class="page type-page hentry">
 <h1 class="entry-title">$title</h1>
 <div class="entry-content">
-<a title="RSS feed of $title"
-href="$rss_href"><img
-src="/i/xml.gif" border="0" align="right" width="36" height="14"
-alt="RSS feed of $title"></a>
 EOHTML
 ;
 	Hebcal::out_html($cfg,
@@ -757,7 +768,7 @@ sub form($$$$)
 
     Hebcal::out_html($cfg,
 	qq{$message\n},
-	qq{<div id="hebcal-form-left">\n},
+	qq{<div id="hebcal-form-zipcode">\n},
 	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
 	$q->hidden(-name => 'geo',
@@ -801,31 +812,29 @@ sub form($$$$)
 	qq{<li><input\ntype="submit" value="Get Shabbat Times">\n},
 	qq{</ol></fieldset></form>});
 
-    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-left -->\n});
-    Hebcal::out_html(undef, qq{<div id="hebcal-form-right">\n});
+    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-zipcode -->\n});
 
+
+#    Hebcal::out_html(undef, qq{<div id="hebcal-form-right">\n});
+#    more_from_hebcal();
+#    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-right -->\n});
+
+    Hebcal::out_html(undef, qq{<div id="hebcal-form-city">\n});
     Hebcal::out_html($cfg,
-	qq{<form name="f2" id="f2"\naction="$script_name">},
-	qq{<fieldset><legend>Get Shabbat times by Major City</legend>\n},
-	$q->hidden(-name => 'geo',
-		   -value => 'city',
-		   -override => 1),
-	qq{<ol><li>},
-	$q->popup_menu(-name => 'city',
-		       -id => 'city',
-		       -values => [sort keys %Hebcal::city_tz],
-		       -default => 'New York'),
-	"<li><label\nfor=\"m2\">Havdalah minutes past sundown:\n",
-	$q->textfield(-name => 'm',
-		      -id => 'm2',
-		      -size => 3,
-		      -maxlength => 3,
-		      -default => $Hebcal::havdalah_min),
-	"</label>",
-	"<ol><li><small>(enter\n\"0\" to turn off\nHavdalah times)</small></ol>",
-	qq{<li><input\ntype="submit" value="Get Shabbat Times">\n},
-	qq{</ol></fieldset></form>});
-    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-right -->\n});
+		     qq{<form>\n},
+		     qq{<fieldset><legend>Get Shabbat times by Major City</legend>\n},
+		     qq{<div id="city-list">\n},
+		     qq{<ul>\n});
+    foreach my $city_name (sort keys %Hebcal::city_tz) {
+	my $url = join('', $script_name, "?city=", Hebcal::url_escape($city_name));
+	$url .= ";m=" . $q->param('m')
+	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+	$city_name =~ s/ /&nbsp;/g;
+	Hebcal::out_html($cfg, qq{<li><a href="$url">$city_name</a></li>\n});
+    }
+    Hebcal::out_html($cfg, qq{</ul>\n</div><!-- .city-list -->\n});
+    Hebcal::out_html($cfg, qq{</fieldset></form>\n});
+    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
 
     my $footer_divs=<<EOHTML;
 </div><!-- .entry-content -->
@@ -835,6 +844,12 @@ sub form($$$$)
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs);
+
+    Hebcal::out_html(undef, qq{<div id="primary" class="widget-area" role="complementary">\n});
+    Hebcal::out_html(undef, qq{<ul class="xoxo">\n<li>\n});
+    more_from_hebcal();
+    Hebcal::out_html(undef, qq{</li>\n</ul><!-- .xoxo -->\n</div><!-- #primary .widget-area -->\n});
+
     Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev));
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
     Hebcal::cache_end() if $cache;
