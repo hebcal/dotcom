@@ -6,7 +6,7 @@ $matches = array();
 if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
-$page_title = "Jewish Holiday downloads for desktop, mobile and web-based calendars";
+$page_title = "Jewish Holiday downloads for desktop, mobile and web calendars";
 $xtra_head = <<<EOD
 <style type="text/css">
 #hebcal-ical tr td {
