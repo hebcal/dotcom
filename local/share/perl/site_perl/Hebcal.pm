@@ -2099,7 +2099,11 @@ sub vcalendar_write_contents
     $tz = 0 unless defined $tz;
 
     if ($is_icalendar) {
-	if (defined $state && $state eq 'AK' && $tz == -10) {
+	if (defined $q->param("geo") && $q->param("geo") eq "city"
+		 && $q->param("city")
+		 && defined $HebcalConst::CITY_TZID{$q->param("city")}) {
+	    $tzid = $HebcalConst::CITY_TZID{$q->param("city")};
+	} elsif (defined $state && $state eq 'AK' && $tz == -10) {
 	    $tzid = 'US/Aleutian';
 	} elsif (defined $state && $state eq 'AZ' && $tz == -7) {
 	    $tzid = 'America/Phoenix';
@@ -2115,10 +2119,6 @@ sub vcalendar_write_contents
 	    $tzid = 'US/Alaska';
 	} elsif ($tz == -10) {
 	    $tzid = 'US/Hawaii';
-	} elsif (defined $q->param("geo") && $q->param("geo") eq "city"
-		 && $q->param("city")
-		 && defined $HebcalConst::CITY_TZID{$q->param("city")}) {
-	    $tzid = $HebcalConst::CITY_TZID{$q->param("city")};
 	}
     }
 
