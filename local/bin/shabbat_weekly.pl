@@ -92,8 +92,6 @@ my $midnight = Time::Local::timelocal(0,0,0,
 my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 my $endofweek = $midnight + (5 * 60 * 60 * 24);
 my $sat_year = (localtime($saturday))[5] + 1900;
-my $subject = strftime("[shabbat] %b %d",
-		       localtime($now + ((5 - $wday) * 60 * 60 * 24)));
 
 my $HOME = "/home/hebcal";
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
@@ -264,48 +262,6 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
-    if ($sat_year == 2007 && $subject eq "[shabbat] Sep 21") {
-	my $geo;
-	if (defined $args->{"zip"}) {
-	    $geo = "zip=" . $args->{"zip"};
-	} else {
-	    $geo = "city=" . $args->{"city"};
-	    $geo =~ s/ /%20/g;
-	}
-
-	$body = 
-"Shanah Tovah! Hebcal.com wishes you a happy and healthy New Year.
-
-Print out candle lighting times for the entire year and post them
-on your refrigerator:
-  http://www.hebcal.com/shabbat/fridge.cgi?$geo&year=5768
-
-" . $body;
-    }
-
-# hacks for pesach, rosh hashana
-=begin comment
-
-    # hack for pesach
-    if ($sat_year == 2006 && $subject eq "[shabbat] Mar 24") {
-	$body = 
-"Pesach begins April 12 at sundown. If you're in search of a
-Haggadah for your Seder, Hebcal.com recommends the following
-traditional and liberal Haggadot:
-
-  Family Haggadah (Artscroll Mesorah Series) by Scherkan Zlotowitz
-  http://www.amazon.com/exec/obidos/ASIN/0899061788/hebcal-20
-  A Different Night by David Dishon and Noam Zion
-  http://www.amazon.com/exec/obidos/ASIN/0966474007/hebcal-20
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-" . $body;
-    }
-
-=end comment
-
-=cut
-
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
@@ -319,18 +275,13 @@ traditional and liberal Haggadot:
 	 "To" => $to,
 	 "MIME-Version" => "1.0",
 	 "Content-Type" => "text/plain",
-	 "Subject" => "$subject Candles $lighting",
+	 "Subject" => "[shabbat] Candles $lighting",
 	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
 	 "List-Id" => "<shabbat.hebcal.com>",
 	 "Errors-To" => $return_path,
 	 "Precedence" => "bulk",
 	 "Message-ID" => "<$msgid\@hebcal.com>",
 	 );
-
-    # hack for pesach
-    if ($sat_year == 2006 && $subject eq "[shabbat] Apr 14") {
-	$headers{"Subject"} = "[shabbat] Apr 12 Special Pesach Edition";
-    }
 
     my $status = my_sendmail($smtp,$return_path,\%headers,$body);
     if ($opt_log) {
