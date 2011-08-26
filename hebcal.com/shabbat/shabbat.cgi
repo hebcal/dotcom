@@ -565,9 +565,8 @@ sub display_javascript
     }
 
     Hebcal::out_html($cfg, qq{<div class="copyright">
-<font size="-2" face="Arial"><a target="$tgt"
-href="$url">Hebcal Shabbat Times</a>
-Copyright &copy; $this_year Michael J. Radwin. All rights reserved.</font>
+<small>Powered by <a target="$tgt"
+href="$url">Hebcal Shabbat Times</a></small>
 </div><!-- .copyright -->
 </div><!-- #hebcal-$loc_class -->
 </div><!-- #hebcal -->
