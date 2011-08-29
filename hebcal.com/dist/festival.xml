@@ -1118,7 +1118,7 @@ with the verse
 </festival>
 
 <!-- Rosh Chodesh -->
-<festival id="Shabbat Rosh Chodesh" hebrew="שבת ראש חדש">
+<festival id="Shabbat Rosh Chodesh" hebrew="שבת ראש חודש">
  <about attr="dummy">When Shabbat falls on Rosh Chodesh</about>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/holidays_maf.shtml#roshhodesh_maf"/>
@@ -1126,58 +1126,58 @@ with the verse
   <aliyah parsha="41" num="M" book="Numbers" begin="28:9" end="28:15" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Shabbat Machar Chodesh" hebrew="שבת מחר חדש">
+<festival id="Shabbat Machar Chodesh" hebrew="שבת מחר חודש">
  <about attr="dummy">When Shabbat falls the day before Rosh Chodesh</about>
  <kriyah>
   <haft reading="I Samuel 20:18 - 20:42" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/maharhodesh_haft.shtml"/>
  </kriyah>
 </festival>
-<festival id="Rosh Chodesh Adar" hebrew="רֹאשׁ חֹדֶשׁ אַדָר" yomtov="0">
+<festival id="Rosh Chodesh Adar" hebrew="רֹאשׁ חודש אַדָר" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
  The new Hebrew month of Adar
  </about>
 </festival>
-<festival id="Rosh Chodesh Adar I" hebrew="רֹאשׁ חֹדֶשׁ אַדָר א׳" yomtov="0">
+<festival id="Rosh Chodesh Adar I" hebrew="רֹאשׁ חודש אַדָר א׳" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
  The new Hebrew month of Adar I (on leap years)
  </about>
 </festival>
-<festival id="Rosh Chodesh Adar II" hebrew="רֹאשׁ חֹדֶשׁ אַדָר ב׳" yomtov="0">
+<festival id="Rosh Chodesh Adar II" hebrew="רֹאשׁ חודש אַדָר ב׳" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
  The new Hebrew month of Adar II (on leap years)
  </about>
 </festival>
-<festival id="Rosh Chodesh Av" hebrew="רֹאשׁ חֹדֶשׁ אָב" yomtov="0">
+<festival id="Rosh Chodesh Av" hebrew="רֹאשׁ חודש אָב" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/av/default.htm">
  The new Hebrew month of Av
  </about>
 </festival>
-<festival id="Rosh Chodesh Cheshvan" hebrew="רֹאשׁ חֹדֶשׁ חֶשְׁוָן" yomtov="0">
+<festival id="Rosh Chodesh Cheshvan" hebrew="רֹאשׁ חודש חֶשְׁוָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/marcheshvan/default.htm">
  The new Hebrew month of Cheshvan
  </about>
 </festival>
-<festival id="Rosh Chodesh Elul" hebrew="רֹאשׁ חֹדֶשׁ אֱלוּל" yomtov="0">
+<festival id="Rosh Chodesh Elul" hebrew="רֹאשׁ חודש אֱלוּל" yomtov="0">
  <about href="http://www.ou.org/chagim/elul/rchelul.htm">
  The new Hebrew month of Elul
  </about>
 </festival>
-<festival id="Rosh Chodesh Iyyar" hebrew="רֹאשׁ חֹדֶשׁ אִיָיר" yomtov="0">
+<festival id="Rosh Chodesh Iyyar" hebrew="רֹאשׁ חודש אִיָיר" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/iyar/roshch.htm">
  The new Hebrew month of Iyyar
  </about>
 </festival>
-<festival id="Rosh Chodesh Kislev" hebrew="רֹאשׁ חֹדֶשׁ כִּסְלֵו" yomtov="0">
+<festival id="Rosh Chodesh Kislev" hebrew="רֹאשׁ חודש כִּסְלֵו" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/kislev/default.htm">
  The new Hebrew month of Kislev
  </about>
 </festival>
-<festival id="Rosh Chodesh Nisan" hebrew="רֹאשׁ חֹדֶשׁ נִיסָן" yomtov="0">
+<festival id="Rosh Chodesh Nisan" hebrew="רֹאשׁ חודש נִיסָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/nisan/default.htm">
  The new Hebrew month of Nisan
  </about>
 </festival>
-<festival id="Rosh Chodesh Sh'vat" hebrew="רֹאשׁ חֹדֶשׁ שְׁבָט" yomtov="0">
+<festival id="Rosh Chodesh Sh'vat" hebrew="רֹאשׁ חודש שְׁבָט" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/shevat/default.htm">
  The new Hebrew month of Sh'vat
  </about>
@@ -1190,17 +1190,17 @@ with the verse
   <book ASIN="1580131220"/>
  </books>
 </festival>
-<festival id="Rosh Chodesh Sivan" hebrew="רֹאשׁ חֹדֶשׁ סִיוָן" yomtov="0">
+<festival id="Rosh Chodesh Sivan" hebrew="רֹאשׁ חודש סִיוָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm">
  The new Hebrew month of Sivan
  </about>
 </festival>
-<festival id="Rosh Chodesh Tamuz" hebrew="רֹאשׁ חֹדֶשׁ תָּמוּז" yomtov="0">
+<festival id="Rosh Chodesh Tamuz" hebrew="רֹאשׁ חודש תָּמוּז" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/tammuz/default.htm">
  The new Hebrew month of Tamuz
  </about>
 </festival>
-<festival id="Rosh Chodesh Tevet" hebrew="רֹאשׁ חֹדֶשׁ טֵבֵת" yomtov="0">
+<festival id="Rosh Chodesh Tevet" hebrew="רֹאשׁ חודש טֵבֵת" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/tevet/default.htm">
  The new Hebrew month of Tevet
  </about>
