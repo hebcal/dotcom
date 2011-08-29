@@ -847,7 +847,26 @@ EOHTML
     Hebcal::out_html(undef, qq{<div id="primary" class="widget-area" role="complementary">\n});
     Hebcal::out_html(undef, qq{<ul class="xoxo">\n<li>\n});
     more_from_hebcal();
-    Hebcal::out_html(undef, qq{</li>\n</ul><!-- .xoxo -->\n</div><!-- #primary .widget-area -->\n});
+    Hebcal::out_html(undef, qq{</li>\n});
+
+    my $advertisement=<<EOHTML;
+<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+/* 200x200 */
+google_ad_slot = "8131407384";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></li>
+EOHTML
+;
+    Hebcal::out_html(undef, $advertisement);
+
+    Hebcal::out_html(undef, qq{</ul><!-- .xoxo -->\n</div><!-- #primary .widget-area -->\n});
 
     Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev));
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
