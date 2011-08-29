@@ -75,8 +75,8 @@ for (my $i = 0; $i < @events; $i++)
 	    open(OUT,">$outfile") || die;
 	    my $parasha2 = $parasha;
 	    $parasha2 =~ s/ /&nbsp;/g;
-	    print OUT "\n<br><br><li><b><a\n";
-	    print OUT "href=\"$href?tag=fp.ql\">$parasha2</a></b><br>$stime";
+	    print OUT "\n<li><a\n";
+	    print OUT "href=\"$href?tag=fp.ql\">$parasha2</a><br>$stime";
 	    close(OUT);
 	    $wrote_parasha = 1;
 
@@ -231,8 +231,8 @@ for (my $i = 0; $i < @events; $i++)
 				$Hebcal::MoY_long{$month},
 				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
 	    $holiday =~ s/ /&nbsp;/g;
-	    print OUT "\n<br><br><li><b><a\n";
-	    print OUT "href=\"$href?tag=fp.ql\">$holiday</a></b><br>$stime\n";
+	    print OUT "\n<li><a\n";
+	    print OUT "href=\"$href?tag=fp.ql\">$holiday</a><br>$stime\n";
 	    $seen{$href} = 1;
 	}
     }

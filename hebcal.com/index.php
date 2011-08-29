@@ -224,13 +224,11 @@ website.</p>
 	</form></li>
 <li id="categories-3" class="widget-container widget_categories"><h3 class="widget-title">Quick links</h3>
 <ul>
-<!-- Begin temp holiday -->
-<!-- End temp holiday -->
-<li><b><a
-href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;set=off;tag=fp.ql">Current&nbsp;Calendar</a></b><br><?php 
+<li><a
+href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;set=off;tag=fp.ql">Current&nbsp;Calendar</a><br><?php 
   echo date("F Y");
 ?>
-<br><br><li><b>Major&nbsp;Holidays</b>
+<li>Major&nbsp;Holidays
 <?php
 $hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
 $gregyear = ($gm > 9) ? $gy + 1 : $gy;
@@ -242,9 +240,7 @@ $gregyear = ($gm > 9) ? $gy + 1 : $gy;
   echo $hebyear ?>;yt=H;month=x;nh=on;set=off;tag=fp.ql"><?php echo $hebyear ?></a>
 <?php
   include("./holiday.inc");
-  include("./current.inc"); ?><br>
-<!-- Begin temp holiday2 -->
-<!-- End temp holiday2 -->
+  include("./current.inc"); ?>
 </ul>
 </li>
 <li id="candles-3" class="widget-container widget_categories"><h3 class="widget-title">Candle lighting</h3>
