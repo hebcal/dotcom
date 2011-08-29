@@ -845,9 +845,9 @@ EOHTML
     Hebcal::out_html(undef, $footer_divs);
 
     Hebcal::out_html(undef, qq{<div id="primary" class="widget-area" role="complementary">\n});
-    Hebcal::out_html(undef, qq{<ul class="xoxo">\n<li>\n});
+    Hebcal::out_html(undef, qq{<ul class="xoxo">\n<li id="more-from-hebcal" class="widget-container">\n});
     more_from_hebcal();
-    Hebcal::out_html(undef, qq{</li>\n});
+    Hebcal::out_html(undef, qq{</li><!-- #more-from-hebcal -->\n});
 
     my $advertisement=<<EOHTML;
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
