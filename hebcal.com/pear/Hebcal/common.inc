@@ -275,7 +275,9 @@ EOD;
 $HTML_MENU_ITEMS =
     array(
      array( "Home", "/" ),
-     array( "Calendar", "/hebcal/" ),
+     array( "Calendar", "/hebcal/",
+       array( "Custom Calendar", "/hebcal/" ),
+       array( "Download", "/ical/" ) ),
      array( "Holidays", "/holidays/" ),
      array( "Date Converter", "/converter/",
        array( "Hebrew/Gregorian date converter", "/converter/" ),

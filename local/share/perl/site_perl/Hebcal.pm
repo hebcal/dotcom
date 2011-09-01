@@ -1264,7 +1264,9 @@ sub html_city_select
 my $HTML_MENU_ITEMS =
     [
      [ "Home", "/" ],
-     [ "Calendar", "/hebcal/" ],
+     [ "Calendar", "/hebcal/",
+       [ "Custom Calendar", "/hebcal/" ],
+       [ "Download", "/ical/" ] ],
      [ "Holidays", "/holidays/" ],
      [ "Date Converter", "/converter/",
        [ "Hebrew/Gregorian date converter", "/converter/" ],
