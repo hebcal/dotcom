@@ -97,6 +97,7 @@ if ($opts{'f'}) {
 my $REVISION = '$Revision$'; #'
 my $mtime_festival = (stat($festival_in))[9];
 my $mtime_script = (stat($0))[9];
+my $NOW = time();
 my $MTIME = $mtime_script > $mtime_festival ? $mtime_script : $mtime_festival;
 my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 my $html_footer = html_footer();
@@ -830,6 +831,7 @@ $f begins at $rise_or_set in the Diaspora on:
 <ul>
 EOHTML
 	;
+	my $displayed_upcoming = 0;
 	foreach my $evt (@{$OBSERVED{$f}}) {
 	    next unless defined $evt;
 	    my $isotime = sprintf("%04d%02d%02d",
@@ -850,8 +852,16 @@ EOHTML
 		     -1);
 	    }
 	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
+	    my $style = "";
+	    if (!$displayed_upcoming) {
+	      my $time = Hebcal::event_to_time($evt);
+	      if ($time >= $NOW) {
+		$style = qq{ style="background-color:#FFFFCC"};
+		$displayed_upcoming = 1;
+	      }
+	    }
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
-		";nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\">%s, %02d %s %04d</a> (%s)\n",
+		";nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\"$style>%s, %02d %s %04d</a> (%s)\n",
 		$gy, $gm,
 		$Hebcal::DoW[$dow],
 		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
