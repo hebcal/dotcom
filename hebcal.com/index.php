@@ -12,7 +12,7 @@ if (isset($_COOKIE["C"])) {
 
 require("./pear/Hebcal/common.inc");
 
-# Determine today's holidays (if any)
+// Determine today's holidays (if any)
 if (isset($_GET["gm"]) && isset($_GET["gd"]) && isset($_GET["gy"])) {
     $gm = $_GET["gm"];
     $gd = $_GET["gd"];
@@ -76,12 +76,12 @@ if (isset($sedra) && isset($sedra[$iso])) {
     }
 }
 
-# Yamim Nora'im
+// Yamim Nora'im
 $jd = gregoriantojd($gm, $gd, $gy);
 $hebdate = jdtojewish($jd); 
 list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
 if ($hmnum == 13 && $hd >= 1) {
-    $shana_tova = true;		# month 13 == Elul
+    $shana_tova = true;		// month 13 == Elul
     $rh_jd = jewishtojd(13, 29, $hy);
     $rh_cal = cal_from_jd($rh_jd, CAL_GREGORIAN);
     $erev_rh = sprintf("%s, %s %s %s",
@@ -90,7 +90,7 @@ if ($hmnum == 13 && $hd >= 1) {
 		       $rh_cal["monthname"],
 		       $rh_cal["year"]);
 } elseif ($hmnum == 1 && $hd <= 10) {
-    $gmar_tov = true;		# month 1 == Tishrei
+    $gmar_tov = true;		// month 1 == Tishrei
     $rh_jd = jewishtojd(1, 9, $hy);
     $rh_cal = cal_from_jd($rh_jd, CAL_GREGORIAN);
     $erev_yk = sprintf("%s, %s %s %s",
@@ -99,11 +99,11 @@ if ($hmnum == 13 && $hd >= 1) {
 		       $rh_cal["monthname"],
 		       $rh_cal["year"]);
 } elseif ($hmnum == 8 && $hd >= 2 && $hd <= 15) {
-    # for two weeks before Pesach, show greeting
-    $chag_kasher = true;	# month 8 == Nisan
+    // for two weeks before Pesach, show greeting
+    $chag_kasher = true;	// month 8 == Nisan
 } elseif ($hmnum == 3 && $hd >= 10 && $hd <= 24) {
-    # for two weeks before Chanukah, show greeting
-    $chanukah_jd = jewishtojd(3, 24, $hy); # month 3 == Kislev
+    // for two weeks before Chanukah, show greeting
+    $chanukah_jd = jewishtojd(3, 24, $hy); // month 3 == Kislev
     $chanukah_cal = cal_from_jd($chanukah_jd, CAL_GREGORIAN);
     $chanukah_upcoming = sprintf("%s sundown on %s, %s %s %s",
 	       $chanukah_cal["abbrevdayname"] == "Fri" ? "before" : "at",
@@ -225,19 +225,16 @@ website.</p>
 <li id="categories-3" class="widget-container widget_categories"><h3 class="widget-title">Quick links</h3>
 <ul>
 <li><a
-href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;set=off;tag=fp.ql">Current&nbsp;Calendar</a><br><?php 
+href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;set=off;tag=fp.ql"><?php
   echo date("F Y");
-?>
-<li>Major&nbsp;Holidays
+?> Calendar</a>
 <?php
-$hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
-$gregyear = ($gm > 9) ? $gy + 1 : $gy;
+  $hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
+  $greg_yr1 = $hebyear - 3761;
+  $greg_yr2 = $greg_yr1 + 1;
+  $greg_range = $greg_yr1 . "-" . $greg_yr2;
 ?>
-<br>for
-<a href="/hebcal/?v=1;year=<?php
-  echo $gregyear ?>;month=x;nh=on;set=off;tag=fp.ql"><?php echo $gregyear ?></a> |
-<a href="/hebcal/?v=1;year=<?php
-  echo $hebyear ?>;yt=H;month=x;nh=on;set=off;tag=fp.ql"><?php echo $hebyear ?></a>
+<li><a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?> Holidays</a>
 <?php
   include("./holiday.inc");
   include("./current.inc"); ?>
