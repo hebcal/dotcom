@@ -251,6 +251,13 @@ id="zip">&nbsp;<input type="submit" value="Go">
   if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <input type="hidden" name="tag" value="fp.ql">
 </form>
+<?php
+  if ($param["zip"]) {
+     echo "<ul><li><a title=\"Shabbat times for $hebyear\"\n", 
+        "href=\"/shabbat/fridge.cgi?zip=$param[zip];year=$hebyear\">Printable\n",
+        "page for $hebyear</a><br>year at a glance</li></ul>";
+  }
+?>
 </li>
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
