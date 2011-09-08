@@ -149,7 +149,7 @@ if ($opts{'H'}) {
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     $HEB_YR = $hebdate->{"yy"};
-#    $HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+    $HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
 }
 
 my %GREG2HEB;
