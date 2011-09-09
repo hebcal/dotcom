@@ -1667,6 +1667,9 @@ sub download_html
     $gcal_subical_href =~ s/;/&/g;
     my $full_http_href = "http://" . $vhost . $gcal_subical_href;
     my $gcal_href = Hebcal::url_escape($full_http_href);
+    my $ampersand_subical_href = $subical_href;
+    $ampersand_subical_href =~ s/;/&amp;/g;
+    my $ampersand_http_href = "http://" . $vhost . $ampersand_subical_href;
     my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
 	: Hebcal::url_escape("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
@@ -1789,7 +1792,7 @@ alt="Windows Live Calendar"></a>
 <li>Copy the entire iCal URL here:
 <label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
 onfocus="this.select();" onKeyPress="return false;"
-value="${full_http_href}"></small></label>
+value="${ampersand_http_href}"></small></label>
 <li>Go to your <a href="http://calendar.yahoo.com/">Yahoo! Calendar</a>,
 and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 <li>Click <b>Subscribe to Calendar</b>
