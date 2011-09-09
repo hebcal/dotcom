@@ -417,7 +417,7 @@ EOHTML
 	    if ($prev_book ne $book);
 	$prev_book = $book;
 
-	print OUT1 qq{<li><a name="$anchor" },
+	print OUT1 qq{<li><a id="$anchor" },
 	qq{href="$anchor">Parashat $h</a>};
 	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
@@ -433,7 +433,7 @@ EOHTML
 	my($anchor) = lc($h);
 	$anchor =~ s/[^\w]//g;
 
-	print OUT1 qq{<li><a name="$anchor" },
+	print OUT1 qq{<li><a id="$anchor" },
 	qq{href="$anchor">Parashat $h</a>};
 	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
 	{
