@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2011  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -47,6 +47,8 @@ use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Hebcal ();
+use Date::Calc;
+use HebcalGPL ();
 use POSIX ();
 
 my($rcsrev) = '$Revision$'; #'
@@ -304,8 +306,15 @@ sub process_args
 	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
     }
 
-    $cmd .= " " . $q->param('year')
-	if (defined $q->param('year') && $q->param('year') =~ /^\d+$/);
+    if (defined $q->param('year') && $q->param('year') =~ /^\d+$/) {
+	$cmd .= " " . $q->param('year');
+    } else {
+	my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+	my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+	my $HEB_YR = $hebdate->{"yy"};
+	$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+	$cmd .= " " . $HEB_YR;
+    }
 
     my(@events) = Hebcal::invoke_hebcal($cmd, '', 0);
     
