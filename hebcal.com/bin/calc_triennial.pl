@@ -381,7 +381,7 @@ EOHTML
 <div id="content" role="main">
 <div class="page type-page hentry">
 <h1 class="entry-title"><a href="index.xml"><img
-src="/i/xml.gif" border="0" alt="View the raw XML source" align="right"
+src="/i/xml.gif" style="border:none;float:right" alt="View the raw XML source"
 width="36" height="14"></a>
 Torah Readings</h1>
 <div class="entry-meta">
@@ -643,18 +643,18 @@ dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
-<table border="1" cellpadding="5">
+<table border="1" style="padding:5px">
 <tr>
-<td align="center"><b>Full Kriyah</b>
+<td style="text-align:center"><b>Full Kriyah</b>
 <br><small>$fk_date</small>
 </td>
-<td align="center"><b>Triennial Year I</b>
+<td style="text-align:center"><b>Triennial Year I</b>
 <br><small>$tri_date[1]</small>
 </td>
-<td align="center"><b>Triennial Year II</b>
+<td style="text-align:center"><b>Triennial Year II</b>
 <br><small>$tri_date[2]</small>
 </td>
-<td align="center"><b>Triennial Year III</b>
+<td style="text-align:center"><b>Triennial Year III</b>
 <br><small>$tri_date[3]</small>
 </td>
 </tr>
@@ -664,11 +664,11 @@ EOHTML
 
     if ($opts{'2'})
     {
-	print OUT2 qq{<td valign="top" rowspan="3">\n};
+	print OUT2 qq{<td style="vertical-align:top" rowspan="3">\n};
     }
     else
     {
-	print OUT2 qq{<td valign="top">\n};
+	print OUT2 qq{<td style="vertical-align:top">\n};
     }
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
@@ -698,7 +698,7 @@ EOHTML
 
 	if (keys %sp_dates) {
 	    my $count = 0;
-	    print OUT2 qq{<tr><td valign="top" colspan="4">\n};
+	    print OUT2 qq{<tr><td style="vertical-align:top" colspan="4">\n};
 	    foreach my $fest (sort keys %sp_dates) {
 		my $aliyah = $special_maftir_anode{$sp_dates{$fest}->[0]}->[0];
 		my $info = format_aliyah($aliyah,
@@ -725,13 +725,13 @@ EOHTML
     {
 	print OUT2 <<EOHTML;
 <tr>
-<td align="center"><b>Triennial Year I</b>
+<td style="text-align:center"><b>Triennial Year I</b>
 <br><small>$tri_date2[1]</small>
 </td>
-<td align="center"><b>Triennial Year II</b>
+<td style="text-align:center"><b>Triennial Year II</b>
 <br><small>$tri_date2[2]</small>
 </td>
-<td align="center"><b>Triennial Year III</b>
+<td style="text-align:center"><b>Triennial Year III</b>
 <br><small>$tri_date2[3]</small>
 </td>
 </tr>
@@ -898,7 +898,7 @@ sub print_tri_cell
 {
     my($triennial,$h,$yr,$torah) = @_;
 
-    print OUT2 "<td valign=\"top\">\n";
+    print OUT2 qq{<td style="vertical-align:top">\n};
     print OUT2 "<!-- tri $yr -->\n";
 
     if ($h eq 'Vezot Haberakhah')
