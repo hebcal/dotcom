@@ -1328,10 +1328,10 @@ sub html_header
     my $menu = html_menu($base_href);
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $str = <<EOHTML;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html><head><title>$title2</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title2</title>
 <base href="http://www.hebcal.com$base_href" target="_top">
 <link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
 <script type="text/javascript">
