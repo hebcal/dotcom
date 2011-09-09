@@ -1764,7 +1764,7 @@ href="/home/77/iphone-ipad-jewish-calendar">Step-by-step import instructions</a>
 <a title="Add to Google Calendar"
 class="download" id="dl-gcal-sub"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
-src="/i/gc_button6.gif" width="114" height="36" border="0" alt="Add to Google Calendar"></a>
+src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a>
 </blockquote>
 Alternate option:
 <a class="download" id="dl-gcal-alt"
@@ -1780,7 +1780,7 @@ Add to&nbsp;&nbsp;
 <a title="Windows Live Calendar" class="dl-wlive"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"><img
 src="/i/wlive-150x20.png"
-width="150" height="20" border="0"
+width="150" height="20" style="border:none"
 alt="Windows Live Calendar"></a>
 </blockquote>
 </div><!-- #wlive-body -->
