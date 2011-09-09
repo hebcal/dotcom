@@ -339,6 +339,7 @@ function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
 	$title .= " | Hebcal Jewish Calendar";
     }
     $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $base_href = preg_replace('/&/', '&amp;', $base_href);
     $menu = html_menu($_SERVER["SCRIPT_URL"]);
     $html = <<<EOD
 <!DOCTYPE html>
