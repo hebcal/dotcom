@@ -1190,8 +1190,7 @@ sub html_footer_new
 <div id="footer" role="contentinfo">
 <div id="colophon">
 <div id="site-info">
-<a href="http://www.hebcal.com/" title="Hebcal Jewish Calendar" rel="home">
-Hebcal Jewish Calendar</a>
+<a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a>
 </div><!-- #site-info -->
 <div id="site-generator">
 $rcsrev ($hhmts)
@@ -1351,7 +1350,7 @@ $xtra_head</head>
 <div id="header">
 <div id="masthead">
 <div id="branding" role="banner">
-<div id="site-title"><span><a href="/" title="Hebcal Jewish Calendar" rel="home">Hebcal Jewish Calendar</a></span></div>
+<div id="site-title"><span><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></span></div>
 <div id="site-description"></div>
 </div><!-- #branding -->
 <div id="access" role="navigation">
