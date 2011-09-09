@@ -881,7 +881,7 @@ EOHTML
 		$books = [ $books ];
 	    }
 
-	    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<table border="0" cellpadding="6"><tr>\n};
+	    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<table style="padding:6px"><tr>\n};
 	    foreach my $book (@{$books}) {
 		my $asin = $book->{"ASIN"};
 		my $img;
@@ -957,7 +957,7 @@ EOHTML
 		my $shorttitle = $bktitle;
 		$shorttitle =~ s/\s*:.+//;
 		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
-		print OUT2 qq{<td width="200" align="center" valign="top"><a class="amzn" id="$slug2-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" border="0" hspace="4" vspace="4"></a><br><a class="amzn" id="$slug2-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
+		print OUT2 qq{<td style="width:200px; text-align:center; vertical-align:top"><a class="amzn" id="$slug2-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" style="border:none; padding:4px"></a><br><a class="amzn" id="$slug2-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
 		print OUT2 qq{<br>by $author} if $author;
 		print OUT2 qq{</td>\n};
 	    }
@@ -992,7 +992,7 @@ EOHTML
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
 		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
-	    print OUT2 qq{</h3>\n};
+	    print OUT2 qq{</h2>\n};
 
 	    my $part_about = $festivals->{'festival'}->{$part}->{'about'};
 	    if ($part_about) {
