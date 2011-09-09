@@ -210,13 +210,13 @@ of the Gregorian Calendar</a>.</p>
 <p style="font-size: large">
 <a href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
-src="/i/xml.gif" border="0" align="right" width="36" height="14"
+src="/i/xml.gif" style="border:none;float:right" width="36" height="14"
 alt="Today's Hebrew Date in English Transliteration RSS"></a>
 <?php echo "$first = <b>$second</b>"; ?></p>
 <p dir="rtl" lang="he" class="hebrew-big">
 <a href="/etc/hdate-he.xml"
 title="Today's Hebrew Date in Hebrew RSS"><img
-src="/i/xml.gif" border="0" align="right" width="36" height="14"
+src="/i/xml.gif" style="border:none;float:right" width="36" height="14"
 alt="Today's Hebrew Date in Hebrew RSS"></a>
 <?php
 if ($hm == "Adar1" && !is_leap_year($hy)) {
@@ -351,7 +351,9 @@ function my_footer() {
     $html = <<<EOD
 <p>See also the Hebcal <a href="/yahrzeit/">Yahrzeit, Birthday and
 Anniversary Calendar</a> which will calculate dates ten years into the
-future and optionally export to Palm, Outlook, or iCal.</p>
+future and optionally export to Microsoft Outlook, Apple iCal, iPhone,
+iPad, Android (via Google Calendar), and other desktop, mobile and web
+calendars.</p>
 EOD
 	;
 
