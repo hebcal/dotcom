@@ -466,7 +466,7 @@ sub display_html_common
 	{
 	    $anchor = $items->[$i]->{'about'};
 	    $anchor =~ s/^.*#//;
-	    $anchor = qq{ name="$anchor"};
+	    $anchor = qq{ id="$anchor"};
 	}
 
 	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
@@ -687,7 +687,7 @@ sub more_from_hebcal {
 of candle lighting times
 <a title="RSS feed of candle lighting times"
 href="$rss_href"><img
-src="/i/xml.gif" border="0" width="36" height="14"
+src="/i/xml.gif" style="border:none" width="36" height="14"
 alt="RSS feed of candle lighting times"></a>
 EOHTML
 ;
@@ -768,8 +768,8 @@ sub form($$$$)
     Hebcal::out_html($cfg,
 	qq{$message\n},
 	qq{<div id="hebcal-form-zipcode">\n},
-	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
+	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
