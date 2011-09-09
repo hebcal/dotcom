@@ -399,7 +399,7 @@ $hebrew_year -
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
 Parashat ha-Shavua spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
 <div id="hebcal-sedrot">
-<h3>Genesis</h3>
+<h3 id="Genesis">Genesis</h3>
 <ol>
 EOHTML
     ;
@@ -413,7 +413,7 @@ EOHTML
 	my($anchor) = lc($h);
 	$anchor =~ s/[^\w]//g;
 
-	print OUT1 "</ol>\n<h3>$book</h3>\n<ol>\n"
+	print OUT1 "</ol>\n<h3 id=\"$book\">$book</h3>\n<ol>\n"
 	    if ($prev_book ne $book);
 	$prev_book = $book;
 
@@ -426,7 +426,7 @@ EOHTML
 	print OUT1 qq{\n};
     }
 
-    print OUT1 "</ol>\n<h3>Doubled Parshiyot</h3>\n<ol>\n";
+    print OUT1 "</ol>\n<h3 id=\"DoubledParshiyot\">Doubled Parshiyot</h3>\n<ol>\n";
 
     foreach my $h (@combined)
     {
