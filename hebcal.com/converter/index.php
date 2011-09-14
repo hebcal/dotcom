@@ -298,7 +298,7 @@ function my_header($hebdate) {
       "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"/etc/hdate-en.xml\">\n";
     echo html_header_new("Hebrew Date Converter - $hebdate", $xtra_head);
 ?>
-<div id="container" class="single-attachment">
+<div id="container">
 <div id="content" role="main">
 <div class="page type-page hentry">
 <h1 class="entry-title">Date Converter</h1>
@@ -348,45 +348,40 @@ echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
 }
 
 function my_footer() {
-    $html = <<<EOD
+?>
 <p>See also the Hebcal <a href="/yahrzeit/">Yahrzeit, Birthday and
 Anniversary Calendar</a> which will calculate dates ten years into the
 future and optionally export to Microsoft Outlook, Apple iCal, iPhone,
 iPad, Android (via Google Calendar), and other desktop, mobile and web
 calendars.</p>
-EOD
-	;
-
-if (!isset($_COOKIE["C"])) {
-    $html .= <<<EOD
-<div class="converter-ad">
-<script type="text/javascript"><!--
-google_ad_client = "pub-7687563417622459";
-google_alternate_color = "ffffff";
-google_ad_width = 728;
-google_ad_height = 90;
-google_ad_format = "728x90_as";
-google_ad_type = "text";
-//2006-10-05: converter
-google_ad_channel ="0073211120";
-//--></script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-</div><!-- #converter-ad -->
-EOD
-	;
-}
-
-    $html .= <<<EOD
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
 </div><!-- #container -->
-EOD;
+<div id="primary" class="widget-area" role="complementary">
+<ul class="xoxo">
+<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
+<div><label class="screen-reader-text" for="s">Search for:</label>
+<input type="text" value="" name="s" id="s" />
+<input type="submit" id="searchsubmit" value="Search" />
+</div>
+</form></li>
+<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--
+google_ad_client = "ca-pub-7687563417622459";
+/* 200x200 text only */
+google_ad_slot = "5114852649";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></li>
+</ul>
+</div><!-- #primary .widget-area -->
+<?php
 
-    $html .= html_footer_new();
-    echo $html;
+    echo html_footer_new();
     exit();
 }
 
