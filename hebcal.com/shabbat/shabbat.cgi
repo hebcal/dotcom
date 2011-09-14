@@ -627,7 +627,7 @@ sub more_from_hebcal {
     $url .= ';tag=1c';
 
     my $month_name = join(" ", $Hebcal::MoY_long{$this_mon}, $this_year);
-    Hebcal::out_html($cfg, qq{<h3 class="widget-title">More from hebcal.com</h3>\n},
+    Hebcal::out_html($cfg, qq{<h3 class="widget-title">More candle lighting</h3>\n},
 		     "<ul>\n",
 		     "<li><a\nhref=\"$url\">$month_name</a> calendar\n");
 
@@ -639,9 +639,9 @@ sub more_from_hebcal {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
     $url .= ";year=" . $hyear;
-    Hebcal::out_html($cfg,"<li><a\n",
-		     "href=\"$url\">Print times for Hebrew year $hyear</a>\n",
-		     "and post it on your refrigerator\n");
+    Hebcal::out_html($cfg,"<li><a title=\"Print and post on your refrigerator\"\n",
+		     "href=\"$url\">Printable page for $hyear</a>\n",
+		     "<br>year at a glance\n");
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
@@ -657,8 +657,24 @@ sub more_from_hebcal {
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     Hebcal::out_html($cfg,"<li>",
-		      "<a\nhref=\"$url\">Subscribe to weekly email</a>\n",
-		      "candle lighting times\n");
+		     "<a\nhref=\"$url\">Subscribe to weekly email</a>\n");
+
+    # Mac OS X
+    $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
+    Hebcal::out_html($cfg,"<li>",
+		     "<a title=\"by Mark Saper\"\nhref=\"$url\">Mac OS X Dashboard Widget</a>\n");
+
+    my $rss_href = self_url() . ";cfg=r";
+    my $rss_html = <<EOHTML;
+<li><a href="$rss_href">RSS feed</a>
+<a title="RSS feed of candle lighting times"
+href="$rss_href"><img
+src="/i/xml.gif" style="border:none" width="36" height="14"
+alt="RSS feed of candle lighting times"></a>
+EOHTML
+;
+
+    Hebcal::out_html($cfg, $rss_html);
 
     # Synagogues link
     $url = join('', "http://", $q->virtual_host(), "/link/?");
@@ -672,28 +688,10 @@ sub more_from_hebcal {
     $url .= "&amp;type=shabbat";
 
     Hebcal::out_html($cfg,"<li>",
-		     "Synagogues: <a\nhref=\"$url\">add\n",
-		     "Shabbat Times to your web site</a>\n");
+		     "<a title=\"Candle lighting and Torah portion ",
+		     "for your synagogue site\"\nhref=\"$url\">Add\n",
+		     "Shabbat Times to your Website</a>\n");
  
-    # Mac OS X
-    $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
-    Hebcal::out_html($cfg,"<li>",
-		     "<a\nhref=\"$url\">Mac OS X Dashboard Widget</a>\n",
-		     "by Mark Saper\n");
-
-    my $rss_href = self_url() . ";cfg=r";
-    my $rss_html = <<EOHTML;
-<li><a href="$rss_href">RSS feed</a>
-of candle lighting times
-<a title="RSS feed of candle lighting times"
-href="$rss_href"><img
-src="/i/xml.gif" style="border:none" width="36" height="14"
-alt="RSS feed of candle lighting times"></a>
-EOHTML
-;
-
-    Hebcal::out_html($cfg, $rss_html);
-
     Hebcal::out_html($cfg,"</ul>\n");
 }
 
@@ -835,21 +833,28 @@ sub form($$$$)
     Hebcal::out_html($cfg, qq{</fieldset></form>\n});
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
 
-    my $footer_divs=<<EOHTML;
+    my $footer_divs1=<<EOHTML;
 </div><!-- .entry-content -->
 </div><!-- #post-## -->
 </div><!-- #content -->
 </div><!-- #container -->
+<div id="primary" class="widget-area" role="complementary">
+<ul class="xoxo">
+<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
+<div><label class="screen-reader-text" for="s">Search for:</label>
+<input type="text" value="" name="s" id="s" />
+<input type="submit" id="searchsubmit" value="Search" />
+</div>
+</form></li>
+<li id="more-from-hebcal" class="widget-container">
 EOHTML
 ;
-    Hebcal::out_html(undef, $footer_divs);
+    Hebcal::out_html(undef, $footer_divs1);
 
-    Hebcal::out_html(undef, qq{<div id="primary" class="widget-area" role="complementary">\n});
-    Hebcal::out_html(undef, qq{<ul class="xoxo">\n<li id="more-from-hebcal" class="widget-container">\n});
     more_from_hebcal();
-    Hebcal::out_html(undef, qq{</li><!-- #more-from-hebcal -->\n});
 
-    my $advertisement=<<EOHTML;
+    my $footer_divs2=<<EOHTML;
+</li><!-- #more-from-hebcal -->
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
@@ -862,11 +867,11 @@ google_ad_height = 200;
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script></li>
+</ul><!-- .xoxo -->
+</div><!-- #primary .widget-area -->
 EOHTML
 ;
-    Hebcal::out_html(undef, $advertisement);
-
-    Hebcal::out_html(undef, qq{</ul><!-- .xoxo -->\n</div><!-- #primary .widget-area -->\n});
+    Hebcal::out_html(undef, $footer_divs2);
 
     Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev));
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
