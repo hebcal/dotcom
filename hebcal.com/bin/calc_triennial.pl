@@ -595,9 +595,9 @@ EOHTML
     my $description = "Parashat $h ($torah). ";
 
     if (defined $read_on->{$h} && defined $read_on->{$h}->[1]) {
-      $description .= "Read in the Diaspora on " . $read_on->{$h}->[1];
+      $description .= "Read on " . $read_on->{$h}->[1] . " in the Diaspora";
     } else {
-      $description .= "List of dates when read the Diaspora";
+      $description .= "List of dates when read in the Diaspora";
     }
     $description .= ". Torah reading, Haftarah, links to audio and commentary.";
 
