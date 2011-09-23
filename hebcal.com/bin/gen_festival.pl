@@ -567,7 +567,7 @@ EOHTML
 				       "/holidays/$slug",
 				       "single single-post",
 				       $meta . $xtra_head,
-				       1);
+				       0);
 
 	print OUT4 get_index_body_preamble($page_title, 0);
 
