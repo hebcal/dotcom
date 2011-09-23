@@ -592,11 +592,20 @@ EOHTML
     my $keyword = $h;
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
+    my $description = "Parashat $h ($torah). ";
+
+    if (defined $read_on->{$h} && defined $read_on->{$h}->[1]) {
+      $description .= "Read in the Diaspora on " . $read_on->{$h}->[1];
+    } else {
+      $description .= "List of dates when read the Diaspora";
+    }
+    $description .= ". Torah reading, Haftarah, links to audio and commentary.";
+
     print OUT2 Hebcal::html_header("$h - Torah Portion - $hebrew",
 				   "/sedrot/$anchor",
 				   "single single-post",
-				   "",
-				   1);
+				   qq{<meta name="description" content="$description">\n},
+				   0);
 
     my @tri_date;
     my @tri_date2;
