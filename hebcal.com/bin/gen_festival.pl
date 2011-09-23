@@ -567,7 +567,7 @@ EOHTML
 				       "/holidays/$slug",
 				       "single single-post",
 				       $meta . $xtra_head,
-				       0);
+				       1);
 
 	print OUT4 get_index_body_preamble($page_title, 0);
 
@@ -745,7 +745,7 @@ EOHTML
 				   "/holidays/$slug",
 				   "single single-post",
 				   $meta,
-				   1);
+				   0);
 
     my $prev = $PREV{$f};
     my($prev_link) = '';
