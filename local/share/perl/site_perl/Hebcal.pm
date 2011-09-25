@@ -1328,7 +1328,7 @@ sub html_header
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $str = <<EOHTML;
 <!DOCTYPE html>
-<html><head>
+<html lang="en-US"><head>
 <meta charset="UTF-8">
 <title>$title2</title>
 <base href="http://www.hebcal.com$base_href" target="_top">
