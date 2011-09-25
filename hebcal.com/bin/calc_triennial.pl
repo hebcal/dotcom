@@ -377,7 +377,7 @@ EOHTML
 				   "single single-post",
 				   $xtra_head);
     print OUT1 <<EOHTML;
-<div id="container" class="single-attachment">
+<div id="container">
 <div id="content" role="main">
 <div class="page type-page hentry">
 <h1 class="entry-title"><a href="index.xml"><img
@@ -448,6 +448,28 @@ EOHTML
 </div><!-- #post-## -->
 </div><!-- #content -->
 </div><!-- #container -->
+<div id="primary" class="widget-area" role="complementary">
+<ul class="xoxo">
+<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
+<div><label class="screen-reader-text" for="s">Search for:</label>
+<input type="text" value="" name="s" id="s" />
+<input type="submit" id="searchsubmit" value="Search" />
+</div>
+</form></li>
+<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-7687563417622459";
+/* 200x200 text only */
+google_ad_slot = "5114852649";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></li>
+</ul><!-- .xoxo -->
+</div><!-- #primary .widget-area -->
 EOHTML
 ;
     print OUT1 $html_footer;
