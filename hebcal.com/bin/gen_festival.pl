@@ -480,7 +480,7 @@ sub write_index_page
     open(OUT3, ">$fn.$$") || die "$fn.$$: $!\n";
 
     my $meta = <<EOHTML;
-<meta name="description" content="Dates of major and minor Jewish holidays for years $meta_greg_yr1-$meta_greg_yr2. Links to pages describing observance and customs, holiday Torah readings, recommended books.">
+<meta name="description" content="Dates of major and minor Jewish holidays for years $meta_greg_yr1-$meta_greg_yr2. Links to pages describing observance and customs, holiday Torah readings.">
 EOHTML
 ;
 
@@ -559,7 +559,7 @@ EOHTML
 	$page_title = "Jewish Holiday Calendar $slug";
 
 	$meta = <<EOHTML;
-<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_year), observances and customs, holiday Torah readings, recommended books.">
+<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_year), observances and customs, holiday Torah readings.">
 EOHTML
 ;
 
@@ -737,7 +737,7 @@ sub write_festival_page
     }
 
     my $meta = <<EOHTML;
-<meta name="description" content="Jewish holiday of $f$meta_hebrew. $descr. Dates of observance for years $meta_greg_yr1-$meta_greg_yr2, recommended books, holiday Torah Readings.">
+<meta name="description" content="Jewish holiday of $f$meta_hebrew. $descr. Dates of observance for years $meta_greg_yr1-$meta_greg_yr2, holiday Torah Readings.">
 EOHTML
 ;
 
@@ -872,7 +872,7 @@ EOHTML
     ;
     }
 
-    if (1)
+    if (0)
     {
 	my $subf = $SUBFESTIVALS{$f}->[0];
 	my $books = $festivals->{"festival"}->{$subf}->{"books"}->{"book"};
