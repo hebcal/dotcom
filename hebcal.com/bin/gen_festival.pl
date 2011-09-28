@@ -100,7 +100,6 @@ my $mtime_script = (stat($0))[9];
 my $NOW = time();
 my $MTIME = $mtime_script > $mtime_festival ? $mtime_script : $mtime_festival;
 my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
-my $html_footer = html_footer();
 
 my @FESTIVALS;
 my %SUBFESTIVALS;
@@ -794,9 +793,6 @@ $next_link
 <div class="page type-page hentry">
 <h1 class="entry-title">$f / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-<div class="entry-meta">
-<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
-</div><!-- .entry-meta -->
 <div class="entry-content">
 <p>$long_descr.
 EOHTML
@@ -1067,7 +1063,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </div><!-- #primary .widget-area -->
 EOHTML
 ;
-    print OUT2 $html_footer;
+    print OUT2 Hebcal::html_footer_new(undef, $REVISION);
 
     close(OUT2);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -1148,22 +1144,6 @@ sub print_aliyah
     }
 
     print OUT2 qq{<br>\n};
-}
-
-sub html_footer
-{
-    my $str = Hebcal::html_footer_new(undef, $REVISION, 1);
-
-# remove the AMZN link enhancer for now if we're not going to get associate fees
-# <script type="text/javascript" src="http://www.assoc-amazon.com/s/link-enhancer?tag=hebcal-20&o=1"></script>
-
-    $str .= <<EOHTML;
-</body>
-</html>
-EOHTML
-;
-
-    return $str;
 }
 
 sub holidays_observed
