@@ -1057,10 +1057,10 @@ EOHTML
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
-/* 200x200 text only */
-google_ad_slot = "5114852649";
-google_ad_width = 200;
-google_ad_height = 200;
+/* skyscraper text only */
+google_ad_slot = "7666032223";
+google_ad_width = 160;
+google_ad_height = 600;
 //-->
 </script>
 <script type="text/javascript"
