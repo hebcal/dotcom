@@ -449,6 +449,18 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidaye.htm">
  Fast of the First Born
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_the_Firstborn">
+ Fast of the Firstborn (Hebrew: תענית בכורות, Ta'anit B'khorot or
+ תענית בכורים, Ta'anit B'khorim); is a unique fast day in Judaism
+ which usually falls on the day before Passover (i.e. the fourteenth
+ day of Nisan, a month in the Jewish calendar. Passover always begins
+ on the fifteenth of the Hebrew month). Usually, the fast is broken at
+ a siyum celebration (typically made at the conclusion of the morning
+ services), which, according to prevailing custom, creates an
+ atmosphere of rejoicing that overrides the requirement to continue
+ the fast (see Breaking the fast below). Unlike most Jewish fast days,
+ only firstborns are required to fast on the Fast of the Firstborn.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
   <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" numverses="4"/>
@@ -460,6 +472,18 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidaye.htm">
  Fast of Esther
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Esther">
+ The Fast of Esther (Ta'anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish
+ fast from dawn until dusk on Purim eve, commemorating the three-day
+ fast observed by the Jewish people in the story of Purim. It is a
+ common misconception that this fast was accepted by the Jews for all
+ future generations during the time of Esther, as it is stated in the
+ Book of Esther: They had established for themselves and their
+ descendants the matters of the fasts and their cry (Esther
+ 9:31). This verse actually refers to the four fasts which relate to
+ mourning for the Temple. Rather, the first mention of this fast is a
+ Minhag that is referenced in the Gaonic period.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
   <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" numverses="4"/>
@@ -1060,6 +1084,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
  calendar. It commemorates a time when the Jewish people living in
  Persia were saved from extermination
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Purim">
+ Purim (Hebrew: פּוּרִים, Pûrîm "lots", from the word pur, related to
+ Akkadian pūru) is a Jewish holiday that commemorates the deliverance
+ of the Jewish people in the ancient Persian Empire from destruction
+ in the wake of a plot by Haman, a story recorded in the Biblical Book
+ of Esther (Megillat Esther).
+ </wikipedia>
  <books>
   <book ASIN="0827600453" author="H. L. Ginsberg">
   Five Megilloth and Jonah 
@@ -1372,6 +1403,16 @@ with the verse
  <about href="http://en.wikipedia.org/wiki/Lag_Ba%27omer">
  33rd day of counting the Omer
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Lag_BaOmer">
+ Lag BaOmer (Hebrew: ל״ג בעומר), also known as Lag LaOmer amongst
+ Sephardi Jews, is a Jewish holiday celebrated on the thirty-third day
+ of the Counting of the Omer, which occurs on the 18th day of
+ Iyar. One reason given for the holiday is as the day of passing of
+ Rabbi Shimon bar Yochai. Modern Jewish tradition links the holiday to
+ the Bar Kokhba Revolt against the Roman Empire (132-135 CE). In
+ Israel, it is celebrated as a symbol for the fighting Jewish
+ spirit.
+ </wikipedia>
 </festival>
 <festival id="Tu B'Shvat" hebrew="טוּ בִּשְׁבָט" yomtov="0">
  <about href="http://www.jewfaq.org/holiday8.htm">
@@ -1410,6 +1451,21 @@ with the verse
  <about href="http://en.wikipedia.org/wiki/Yom_HaShoah">
  Holocaust Memorial Day
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Yom_HaShoah">
+ Yom HaZikaron laShoah ve-laG'vurah (יום הזיכרון לשואה ולגבורה;
+ "Holocaust and Heroism Remembrance Day"), known colloquially in
+ Israel and abroad as Yom HaShoah (יום השואה) and in English as
+ Holocaust Remembrance Day, or Holocaust Day, is observed as Israel's
+ day of commemoration for the approximately six million Jews and five
+ million others who perished in the Holocaust as a result of the
+ actions carried out by Nazi Germany and its accessories, and for the
+ Jewish resistance in that period. In Israel, it is a national
+ memorial day and public holiday. It was inaugurated on 1953, anchored
+ by a law signed by the Prime Minister of Israel David Ben-Gurion and
+ the President of Israel Yitzhak Ben-Zvi. It is held on the 27th of
+ Nisan (April/May), unless the 27th would be adjacent to Shabbat, in
+ which case the date is shifted by a day.
+ </wikipedia>
 </festival>
 <festival id="Yom HaZikaron" hebrew="יוֹם הַזִּכָּרוֹן" yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Yom_Hazikaron">
@@ -1424,11 +1480,32 @@ with the verse
  <about href="http://en.wikipedia.org/wiki/Jerusalem_Day">
  Jerusalem Day.  Commemorates the re-unification of Jerusalem in 1967
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Jerusalem_Day">
+ Jerusalem Day (Hebrew: יום ירושלים, Yom Yerushalayim) is an Israeli
+ national holiday commemorating the reunification of Jerusalem and the
+ establishment of Israeli control over the Old City in June 1967. The
+ Chief Rabbinate of Israel declared Jerusalem Day a minor religious
+ holiday to thank God for victory in the Six-Day War and for answering
+ the 2,000-year-old prayer of "Next Year in Jerusalem".
+ </wikipedia>
 </festival>
 <festival id="Days of the Omer" hebrew="עוֹמֶר" yomtov="0">
  <about href="http://www.jewfaq.org/holidayb.htm">
  7 weeks from the second night of Pesach to the day before Shavuot
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Counting_of_the_Omer">
+ Counting of the Omer (or Sefirat Ha'omer, Hebrew: ספירת העומר) is a
+ verbal counting of each of the forty-nine days between the Jewish
+ holidays of Passover and Shavuot. This mitzvah derives from the Torah
+ commandment to count forty-nine days beginning from the day on which
+ the Omer, a sacrifice containing an omer-measure of barley, was
+ offered in the Temple in Jerusalem, up until the day before an
+ offering of wheat was brought to the Temple on Shavuot. The Counting
+ of the Omer begins on the second day of Passover (the 16th of Nisan)
+ for Rabbinic Jews, and after the weekly Shabbat during Passover for
+ Karaite Jews, and ends the day before the holiday of Shavuot, the
+ 'fiftieth day.'
+ </wikipedia>
 </festival>
 <festival id="Erev Pesach" hebrew="עֶרֶב פֶּסַח"/>
 <festival id="Erev Shavuot" hebrew="עֶרֶב שָׁבוּעוֹת"/>
