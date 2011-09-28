@@ -673,7 +673,7 @@ dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
-<table border="1" style="padding:5px">
+<table border="1" style="padding:5px;font-size:90%">
 <tr>
 <td style="text-align:center"><b>Full Kriyah</b>
 <br><small>$fk_date</small>
