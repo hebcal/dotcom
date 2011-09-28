@@ -1011,6 +1011,20 @@ href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
 };
     }
 
+    if (defined $wikipedia_descr) {
+	my $wikipedia_href = $wikipedia->{'href'};
+	my $wiki_title = $wikipedia_href;
+	$wiki_title =~ s/\#.+$//;
+	$wiki_title =~ s/^.+\///;
+	$wiki_title =~ s/_/ /g;
+
+	print OUT2 qq{<dt><a class="outbound"
+href="$wikipedia_href">"$wiki_title"
+in <em>Wikipedia: The Free Encyclopedia</em></a>
+<dd>Wikimedia Foundation Inc.
+};
+    }
+
     print OUT2 "</dl>\n";
 
     if ($prev_link || $next_link)
