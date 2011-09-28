@@ -219,7 +219,9 @@ my %seph2ashk = reverse %Hebcal::ashk2seph;
 
 my $REVISION = '$Revision$'; #'
 my $html_footer = Hebcal::html_footer_new(undef, $REVISION, 0);
-my $MTIME = (stat($aliyah_in))[9];
+my $mtime_aliyah = (stat($aliyah_in))[9];
+my $mtime_script = (stat($0))[9];
+my $MTIME = $mtime_script > $mtime_aliyah ? $mtime_script : $mtime_aliyah;
 my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 foreach my $h (keys %readings1, "Vezot Haberakhah")
@@ -667,9 +669,6 @@ $next_link
 <div class="page type-page hentry">
 <h1 class="entry-title">Parashat $h / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-<div class="entry-meta">
-<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
-</div><!-- .entry-meta -->
 <div class="entry-content">
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
