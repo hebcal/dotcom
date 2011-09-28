@@ -216,6 +216,7 @@ sub trim
 	$value =~ s/\s+$//;
 	$value =~ s/\n/ /g;
 	$value =~ s/\s+/ /g;
+	$value =~ s/\.$//; 	# remove trailing period
     }
 
     $value;
@@ -223,13 +224,13 @@ sub trim
 
 sub get_var
 {
-    my($festivals,$f,$name) = @_;
+    my($festivals,$f,$name,$nowarn) = @_;
 
     my $subf = $SUBFESTIVALS{$f}->[0];
     my $value = $festivals->{'festival'}->{$subf}->{$name};
 
     if (! defined $value) {
-	warn "ERROR: no $name for $f";
+	warn "ERROR: no $name for $f" unless $nowarn;
     }
 
     if (ref($value) eq 'SCALAR') {
@@ -652,13 +653,13 @@ sub write_festival_part
     if ($torah) {
 	my $torah_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'torah'}->{'href'};
 
-	print OUT2 qq{\n<h3 id="$slug-torah">Torah Portion: };
+	print OUT2 qq{\n<h4 id="$slug-torah">Torah Portion: };
 	print OUT2 qq{<a class="outbound" href="$torah_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($torah_href);
 	print OUT2 $torah;
 	print OUT2 qq{</a>}
 	    if ($torah_href);
-	print OUT2 qq{</h3>\n};
+	print OUT2 qq{</h4>\n};
 
 	if (! $torah_href) {
 	    warn "$f: missing Torah href\n";
@@ -683,13 +684,13 @@ sub write_festival_part
     if ($haft) {
 	my $haft_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'href'};
 
-	print OUT2 qq{\n<h3 id="$slug-haft">Haftarah: };
+	print OUT2 qq{\n<h4 id="$slug-haft">Haftarah: };
 	print OUT2 qq{<a class="outbound" href="$haft_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($haft_href);
 	print OUT2 $haft;
 	print OUT2 qq{</a>}
 	    if ($haft_href);
-	print OUT2 qq{</h3>\n};
+	print OUT2 qq{</h4>\n};
 
 	if (! $haft_href) {
 	    warn "$f: missing Haft href\n";
@@ -776,6 +777,13 @@ EOHTML
     my($strassfeld_link) =
 	"http://www.amazon.com/o/ASIN/0062720082/hebcal-20";
 
+    my $wikipedia_descr;
+    my $wikipedia = get_var($festivals, $f, 'wikipedia', 1);
+    if ($wikipedia) {
+	$wikipedia_descr = trim($wikipedia->{'content'});
+    }
+    my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
+
     print OUT2 <<EOHTML;
 <div id="container">
 <div id="content" role="main">
@@ -790,36 +798,11 @@ dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 <span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
 </div><!-- .entry-meta -->
 <div class="entry-content">
-<p>$descr.
+<p>$long_descr.
 EOHTML
 ;
 
-    if ($about) {
-	my $about_href = $about->{'href'};
-	if ($about_href) {
-	    my $more = '';
-	    if ($about_href =~ /^http:\/\/([^\/]+)/i) {
-		$more = $1;
-		$more =~ s/^www\.//i;
-		if ($more eq 'hebcal.com') {
-		    $more = '';
-		} elsif ($more eq 'jewfaq.org') {
-		    $more = " from Judaism 101";
-		} elsif ($more eq "en.wikipedia.org") {
-		    $more = " from Wikipedia";
-		} else {
-		    $more = " from $more";
-		}
-	    }
-	    print OUT2 <<EOHTML;
-[<a class="outbound" title="Detailed information about holiday"
-href="$about_href">more${more}...</a>]</p>
-EOHTML
-;
-	} else {
-#    	    warn "$f: missing About href\n";
-	}
-    }
+    print OUT2 read_more_from($f,$about,$wikipedia);
 
     if (defined $OBSERVED{$f})
     {
@@ -985,14 +968,14 @@ EOHTML
 	    my $slug = Hebcal::make_anchor($part2);
 	    $slug =~ s/\.html$//;
 
-	    print OUT2 qq{\n<h2 id="$slug">$part};
+	    print OUT2 qq{\n<h3 id="$slug">$part};
 	    my $part_hebrew = $festivals->{'festival'}->{$part}->{'hebrew'};
 	    if ($part_hebrew)
 	    {
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
 		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
 	    }
-	    print OUT2 qq{</h2>\n};
+	    print OUT2 qq{</h3>\n};
 
 	    my $part_about = $festivals->{'festival'}->{$part}->{'about'};
 	    if ($part_about) {
@@ -1074,6 +1057,52 @@ EOHTML
 
     close(OUT2);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
+}
+
+sub read_more_hyperlink {
+  my($f,$href,$title) = @_;
+  return qq{<a class="outbound" title="More about $f from $title" href="$href">$title <span class="meta-nav">&rarr;</span></a>};
+}
+
+sub read_more_from {
+  my($f,$about,$wikipedia) = @_;
+  my $html = "";
+  my $about_href;
+  my $wikipedia_href;
+  my $primary_source = "";
+  if ($about) {
+    $about_href = $about->{'href'};
+    if ($about_href && $about_href =~ /^http:\/\/([^\/]+)/i) {
+      my $more = $1;
+      $more =~ s/^www\.//i;
+      if ($more eq 'hebcal.com') {
+	$primary_source = 'Hebcal';
+      } elsif ($more eq 'jewfaq.org') {
+	$primary_source = "Judaism 101";
+      } elsif ($more eq "en.wikipedia.org") {
+	$primary_source = "Wikipedia";
+      } else {
+	$primary_source = $more;
+      }
+    } else {
+      $about_href = undef;
+    }
+  }
+  if ($wikipedia) {
+    $wikipedia_href = $wikipedia->{'href'};
+  }
+  if ($about_href || $wikipedia_href) {
+    $html = qq{\n<br><em>Read more from };
+    if ($about_href) {
+      $html .= read_more_hyperlink($f,$about_href, $primary_source);
+      $html .= " or " if ($wikipedia_href && $primary_source ne "Wikipedia");
+    }
+    if ($wikipedia_href && $primary_source ne "Wikipedia") {
+	$html .= read_more_hyperlink($f,$wikipedia_href, "Wikipedia");
+    }
+    $html .= qq{</em></p>\n};
+  }
+  return $html;
 }
 
 sub print_aliyah

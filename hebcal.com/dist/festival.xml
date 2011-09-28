@@ -131,6 +131,15 @@ every other day (e.g. fast days): 3
  (the Festival of Matzah), it commemorates the Exodus and freedom of
  the Israelites from ancient Egypt
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Passover">
+ Passover (Hebrew, Yiddish: פֶּסַח Pesach, Modern Hebrew: /ˈpesaχ/ Pesah,
+ Pesakh, Yiddish: Peysekh, Paysakh, Paysokh) is a Jewish holiday and
+ festival. It commemorates the story of the Exodus, in which the
+ ancient Israelites were freed from slavery in Egypt. Passover begins
+ on the 15th day of the month of Nisan in the Jewish calendar, which is
+ in spring in the Northern Hemisphere, and is celebrated for seven or
+ eight days. It is one of the most widely observed Jewish holidays.
+ </wikipedia>
  <books>
   <book ASIN="0899061788" author="Scherkan Zlotowitz">
   Family Haggadah (Artscroll Mesorah Series)
@@ -339,6 +348,19 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidayc.htm">
  Festival of Weeks, commemorates the giving of the Torah at Mount Sinai
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Shavuot">
+ The festival of Shavuot (or Shavuos, in Ashkenazi usage; Shabhuʿoth
+ in Classical and Mizrahi Hebrew Hebrew: שבועות, lit. "Weeks") is a
+ Jewish holiday that occurs on the sixth day of the Hebrew month of
+ Sivan (late May or early June).
+
+ Shavuot commemorates the anniversary of the day God gave the Torah to
+ the entire Israelite nation assembled at Mount Sinai, although the
+ association between the giving of the Torah (Matan Torah) and Shavuot
+ is not explicit in the Biblical text. The holiday is one of the
+ Shalosh Regalim, the three Biblical pilgrimage festivals. It marks
+ the conclusion of the Counting of the Omer.
+ </wikipedia>
  <books>
   <book ASIN="076576041X" author="Ronald H. Isaacs">
     Every Person's Guide to Shavuot
@@ -407,6 +429,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.ou.org/chagim/roshchodesh/tevet/fast.htm">
  Fast commemorating the siege of Jerusalem
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Tenth_of_Tevet">
+ Tenth of Tevet (Hebrew: עשרה בטבת, Asarah BeTevet), the tenth day of
+ the Hebrew month of Tevet, is a minor fast day in Judaism. It is a
+ "low fast" observed from sunrise to sunset. The day has no
+ relationship to Hanukkah, but it happens to follow that festival by a
+ week. Whether the 10th of Tevet falls 7 or 8 days after Hanukkah
+ depends on whether the preceding month of Kislev has 29 or 30 days in
+ the relevant year.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
   <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" numverses="4"/>
@@ -437,9 +468,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 <festival id="Tzom Gedaliah" hebrew="צוֹם גְּדַלְיָה" yomtov="0">
- <about href="http://aish.com/holidays/The_High_Holidays/articles/The_Fast_of_Gedalia.asp">
+ <about href="http://www.aish.com/h/hh/rh/guide/Fast_of_Gedalia.html">
  Fast of the Seventh Month
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Gedalia">
+ The Fast of Gedalia (Hebrew: צוֹם גְּדַלְיָּה), also spelled Gedaliah, is a
+ Jewish fast day from dawn until dusk to lament the assassination of
+ the righteous governor of Judah of that name, which ended Jewish rule
+ following the destruction of the First Temple.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
   <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" numverses="4"/>
@@ -490,6 +527,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Rosh_Hashanah">
+ Rosh Hashanah (Hebrew: ראש השנה), (literally "head of the year"), is
+ the Jewish New Year. It is the first of the High Holidays or Yamim
+ Noraim ("Days of Awe"), celebrated ten days before Yom Kippur. Rosh
+ Hashanah is observed on the first two days of Tishrei, the seventh
+ month of the Hebrew calendar. It is described in the Torah as יום
+ תרועה (Yom Teru'ah, a day of sounding [the Shofar]).
+ </wikipedia>
  <books>
   <book ASIN="0805210482" author="Shmuel Yosef Agnon">
   Days of Awe: A Treasury of Jewish Wisdom for Reflection, Repentance, and
@@ -559,6 +604,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday4.htm">
  Day of Atonement
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Yom_Kippur">
+ Yom Kippur (Hebrew: יוֹם כִּפּוּר or יום הכיפורים), Also known as Day of
+ Atonement, is the holiest day of the year for the Jews. Its central
+ themes are atonement and repentance. Jews traditionally observe this
+ holy day with a 25-hour period of fasting and intensive prayer, often
+ spending most of the day in synagogue services. Yom Kippur completes
+ the annual period known in Judaism as the High Holy Days (or
+ sometimes "the Days of Awe").
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/yomkippur.shtml"/>
   <haft reading="Isaiah 57:14 - 58:14" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/yomkippur_haft.shtml"/>
@@ -620,6 +674,14 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Sukkot">
+ Sukkot (Hebrew: סוכות or סֻכּוֹת, sukkōt, or sukkos, Feast of Booths,
+ Feast of Tabernacles) is a Biblical holiday celebrated on the 15th
+ day of the month of Tishrei (late September to late October). It is
+ one of the three biblically mandated festivals Shalosh regalim on
+ which Jews were commanded to make a pilgrimage to the Temple in
+ Jerusalem.
+ </wikipedia>
  <books>
   <book ASIN="0827603029" author="Philip Goodman">
   The Sukkot/Simhat Torah Anthology
@@ -771,6 +833,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday6.htm">
  Eighth Day of Assembly
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Shemini_Atzeret">
+ Shemini Atzeret (שמיני עצרת - "the Eighth [day] of Assembly";
+ Ashkenazic pron. shmini-atseres) is a Jewish holiday. It is
+ celebrated on the 22nd day of the Hebrew month of Tishrei (first
+ month of calendar). In the Diaspora, an additional day is celebrated,
+ the second day being separately referred to as Simchat Torah. In
+ Israel and Reform Judaism, the holidays of Shemini Atzeret and
+ Simchat Torah are combined into a single day and the names are used
+ interchangeably.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/sheminiatzeret.shtml"/>
   <haft reading="I Kings 8:54 - 8:66" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/sheminiatzeret_haft.shtml"/>
@@ -805,6 +877,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday6.htm">
  Day of Celebrating the Torah
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Simchat_Torah">
+ Simchat Torah or Simḥath Torah (also Simkhes Toreh, Hebrew: שִׂמְחַת
+ תורָה, lit., "Rejoicing with/of the Torah,") is a celebration marking
+ the conclusion of the annual cycle of public Torah readings, and the
+ beginning of a new cycle. Simchat Torah is a component of the
+ Biblical Jewish holiday of Shemini Atzeret ("Eighth Day of
+ Assembly"), which follows immediately after the festival of Sukkot in
+ the month of Tishrei (mid-September to early October on the Gregorian
+ calendar).
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/simhattorah.shtml"/>
   <aliyah parsha="54" num="1" book="Deuteronomy" begin="33:1" end="33:7"/>
@@ -852,6 +934,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
  The Jewish festival of rededication, also known as the Festival of
  Lights. Sometimes spelled Hanukkah, Chanukkah, Hanukah, or Hannukah
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Hanukkah">
+ Hanukkah (Hebrew: חֲנֻכָּה, usually spelled חנוכה pronounced [χanuˈka] in
+ Modern Hebrew, also romanized as Chanukah or Chanuka), also known as
+ the Festival of Lights, is an eight-day Jewish holiday commemorating
+ the rededication of the Holy Temple (the Second Temple) in Jerusalem
+ at the time of the Maccabean Revolt of the 2nd century BCE. Hanukkah
+ is observed for eight nights and days, starting on the 25th day of
+ Kislev according to the Hebrew calendar, which may occur at any time
+ from late November to late December in the Gregorian calendar.
+ </wikipedia>
  <books>
   <book ASIN="0899061869"/>
   <book ASIN="1930143311"/>
@@ -1012,6 +1104,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm">
  Shabbat before Rosh Chodesh Nissan
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaChodesh">
+ Shabbat HaChodesh ("Sabbath [of the] month" שבת החודש) precedes the
+ first of the Hebrew month of Nisan during which Passover is
+ celebrated. Exodus 12:1-20 and the laws of Passover. On the first day
+ of Nisan, God presented the first commandment of how to "sanctify the
+ new moon" (kiddush hachodesh) for the onset of Rosh Chodesh and thus
+ Nisan becomes the first month of the Jewish year (counting by
+ months.)
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/4maf.shtml#hahodesh_maf"/>
   <haft reading="Ezekiel 45:16 - 46:18" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hahodesh_haft.shtml"/>
@@ -1035,6 +1136,12 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
  Shabbat before Pesach
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
+ Shabbat HaGadol ("Great Shabbat" שבת הגדול) is the Shabbat
+ immediately before Passover. There is a special Haftarah reading on
+ this Shabbat of the book of Malachi. Traditionally a lengthy and
+ expansive sermon is given to the general community in the afternoon.
+ </wikipedia>
  <kriyah>
   <haft reading="Malachi 3:4 - 3:24" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hagadol_haft.shtml"/>
  </kriyah>
@@ -1044,6 +1151,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.ou.org/yerushalayim/tishabav/chazon.html">
  Shabbat before Tish'a B'Av (Shabbat of Prophecy/Shabbat of Vision)
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Chazon">
+ Shabbat Chazon ("Sabbath [of] vision" שבת חזון) takes its name from
+ the Haftarah that is read on the Shabbat immediately prior to the
+ mournful fast of Tisha B'Av, from the words of rebuke and doom coming
+ from Isaiah in the Book of Isaiah 1:1-27. It is also referred to as
+ the Black Sabbath due to its status as the saddest Shabbat of the
+ year (as opposed to the White Sabbath, Shabbat Shuvah, immediately
+ precededing Yom Kippur).
+ </wikipedia>
 </festival>
 
 <festival id="Shabbat Nachamu" hebrew="שַׁבָּת נַחֲמוּ" yomtov="0">
@@ -1055,6 +1171,13 @@ with the verse
 נַחֲמוּ נַחֲמוּ, עַמִּי
 ("Comfort, oh comfort my people")
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Nachamu">
+ Shabbat Nachamu ("Sabbath of comfort/ing) takes its name from the
+ haftarah from Isaiah in the Book of Isaiah 40:1-26 that speaks of
+ "comforting" the Jewish people for their suffering. It the first of
+ seven haftarahs of consolation leading up to the holiday of Rosh
+ Hashanah, the Jewish New Year.
+ </wikipedia>
  <kriyah>
   <haft reading="Isaiah 40:1 - 40:26" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vaethannan_haft.shtml"/>
  </kriyah>
@@ -1064,6 +1187,14 @@ with the verse
  <about href="http://www.ou.org/chagim/fourshabbatot/parah.htm">
  Shabbat after Purim
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Parah">
+ Shabbat Parah ("Sabbath [of the] red heifer" שבת פרה) takes place on
+ the Shabbat following Purim, in preparation for Passover. Numbers
+ 19:1-22 describes the parah adumah ("red heifer") in the Jewish
+ temple as part of the manner in which the kohanim and the Jewish
+ people purified themselves so that they would be ready ("pure") to
+ sacrifice the korban Pesach.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/4maf.shtml#parah_maf"/>
   <haft reading="Ezekiel 36:16 - 36:38" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/parah_haft.shtml"/>
@@ -1075,6 +1206,17 @@ with the verse
  <about href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm">
  Shabbat before Rosh Chodesh Adar
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shekalim">
+ Shabbat Shekalim ("Sabbath [of] shekels" שבת שקלים) read in
+ preparation for Purim, requests each adult male Jew contribute half
+ of a Biblical shekel for the upkeep of the Tent of Meeting. The Torah
+ portion Exodus 30:11-16 is read. This Shabbat takes place on the
+ Shabbat before the 1st of the Hebrew calendar month of Adar, or on
+ the 1st of Adar itself if it falls on Shabbat. In leap years on the
+ Hebrew calendar, when there are two months of Adar, Shabbat Shekalim
+ is on the Shabbat before the 1st of Adar II (or on the 1st of Adar II
+ itself if it is Shabbat).
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/4maf.shtml#shekalim_maf"/>
   <haft reading="II Kings 12:1 - 12:17" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shekalim_haft.shtml"/>
@@ -1098,6 +1240,14 @@ with the verse
  <about href="http://www.ou.org/chagim/roshchodesh/tishrei/aseretyemai.htm#shabbat">
  Shabbat that falls between Rosh Hashanah and Yom Kippur (Shabbat of Returning)
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah">
+ Shabbat Shuvah ("Sabbath [of] Return" שבת שובה) refers to the Shabbat
+ that occurs during the Ten Days of Repentance between Rosh Hashanah
+ and Yom Kippur. Only one Shabbat can occur between these dates. This
+ Shabbat is named after the first word of the Haftarah (Hosea 14:2-10)
+ and literally means "Return!" It is perhaps a play on, but not to be
+ confused with, the word Teshuvah (the word for repentance).
+ </wikipedia>
  <kriyah>
   <haft reading="Hosea 14:2-10; Micah 7:18-20; Joel 2:15-27" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shuvah_haft.shtml"/>
  </kriyah>
@@ -1107,6 +1257,15 @@ with the verse
  <about href="http://www.ou.org/chagim/fourshabbatot/zachor.htm">
  Shabbat before Purim
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Zachor">
+ Shabbat Zachor ("Sabbath [of] remembrance שבת זכור) is the Shabbat
+ immediately preceding Purim. Deuteronomy 25:17-19, describing the
+ attack by Amalek, is recounted. There is a tradition from the Talmud
+ that Haman, the antagonist of the Purim story, was descended from
+ Amalek. The portion that is read includes a commandment to remember
+ the attack by Amalek, and therefore at this public reading both men
+ and women make a special effort to hear the reading.
+ </wikipedia>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/4maf.shtml#zakhor_maf"/>
   <haft reading="I Samuel 15:2 - 15:34" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/zakhor_haft.shtml"/>
@@ -1218,6 +1377,14 @@ with the verse
  <about href="http://www.jewfaq.org/holiday8.htm">
  New Year for Trees
  </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Tu_Bishvat">
+ Tu Bishvat or Tu B'Shevat (Hebrew: ט״ו בשבט‎) is a minor Jewish
+ holiday, occurring on the 15th day of the Hebrew month of Shevat (in
+ 2011 this occurred from sunset on January 19 through sunset on
+ January 20). It is also called "The New Year of the Trees" or
+ (Hebrew: ראש השנה לאילנות, Rosh HaShanah La'Ilanot‎). Tu Bishvat is
+ one of four "New Years" mentioned in the Mishnah.
+ </wikipedia>
  <books>
   <book ASIN="0827607172"/>
   <book ASIN="0807405361"/>
