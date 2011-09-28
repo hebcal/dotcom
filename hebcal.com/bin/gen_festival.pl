@@ -652,7 +652,7 @@ sub write_festival_part
     if ($torah) {
 	my $torah_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'torah'}->{'href'};
 
-	print OUT2 qq{\n<h4 id="$slug-torah">Torah Portion: };
+	print OUT2 qq{\n<h4 id="$slug-torah" style="margin-bottom:8px">Torah Portion: };
 	print OUT2 qq{<a class="outbound" href="$torah_href"\ntitle="Translation from JPS Tanakh">}
 	    if ($torah_href);
 	print OUT2 $torah;
