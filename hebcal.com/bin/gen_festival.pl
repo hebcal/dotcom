@@ -697,6 +697,24 @@ sub write_festival_part
     }
 }
 
+sub day_event_observed {
+    my($f,$evt) = @_;
+    my($gy,$gm,$gd);
+    if (begins_at_dawn($f)) {
+	($gy,$gm,$gd) =
+	  ($evt->[$Hebcal::EVT_IDX_YEAR],
+	   $evt->[$Hebcal::EVT_IDX_MON] + 1,
+	   $evt->[$Hebcal::EVT_IDX_MDAY]);
+    } else {
+	($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
+	  ($evt->[$Hebcal::EVT_IDX_YEAR],
+	   $evt->[$Hebcal::EVT_IDX_MON] + 1,
+	   $evt->[$Hebcal::EVT_IDX_MDAY],
+	   -1);
+    }
+    return ($gy,$gm,$gd);
+}
+
 sub begins_at_dawn {
     my($f) = @_;
     return ($f =~ /^(Tzom|Asara|Ta\'anit) /) ? 1 : 0;
@@ -736,8 +754,24 @@ sub write_festival_page
 	$meta_hebrew = $hebrew = "";
     }
 
+    my $next_observed = "";
+    if (defined $OBSERVED{$f}) {
+	my $rise_or_set = begins_at_dawn($f) ? "dawn" : "sundown";
+	foreach my $evt (@{$OBSERVED{$f}}) {
+	    next unless defined $evt;
+	    my($gy,$gm,$gd) = day_event_observed($f,$evt);
+	    my $time = Hebcal::event_to_time($evt);
+	    if ($time >= $NOW) {
+	        my $dow = Hebcal::get_dow($gy,$gm,$gd);
+		$next_observed = sprintf " Begins at %s on %s, %02d %s %04d. ",
+		  $rise_or_set, $Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
+		last;
+	    }
+	}
+    }
+
     my $meta = <<EOHTML;
-<meta name="description" content="Jewish holiday of $f$meta_hebrew. $descr. Dates of observance for years $meta_greg_yr1-$meta_greg_yr2, holiday Torah Readings.">
+<meta name="description" content="Jewish holiday of $f$meta_hebrew. $descr.${next_observed}Holiday Torah readings, dates observed.">
 EOHTML
 ;
 
@@ -817,19 +851,7 @@ EOHTML
 				  $evt->[$Hebcal::EVT_IDX_YEAR],
 				  $evt->[$Hebcal::EVT_IDX_MON] + 1,
 				  $evt->[$Hebcal::EVT_IDX_MDAY]);
-	    my($gy,$gm,$gd);
-	    if ($f =~ /^(Tzom|Asara|Ta\'anit) /) {
-		($gy,$gm,$gd) =
-		    ($evt->[$Hebcal::EVT_IDX_YEAR],
-		     $evt->[$Hebcal::EVT_IDX_MON] + 1,
-		     $evt->[$Hebcal::EVT_IDX_MDAY]);
-	    } else {
-		($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
-		    ($evt->[$Hebcal::EVT_IDX_YEAR],
-		     $evt->[$Hebcal::EVT_IDX_MON] + 1,
-		     $evt->[$Hebcal::EVT_IDX_MDAY],
-		     -1);
-	    }
+	    my($gy,$gm,$gd) = day_event_observed($f,$evt);
 	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
 	    my $style = "";
 	    if (!$displayed_upcoming) {
