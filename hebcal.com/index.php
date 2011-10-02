@@ -136,10 +136,10 @@ if (isset($events)) {
     }
 }
 if ($rosh_chodesh) { ?>
-<br><span class="fpgreeting">Chodesh Tov! Hebcal.com wishes you
+<br><span class="fpgreeting">Chodesh Tov! We wish you
 a good new month.</span>
 <?php } elseif ($chanukah) { ?>
-<br><span class="fpgreeting">Chag Urim Sameach! Hebcal.com wishes you
+<br><span class="fpgreeting">Chag Urim Sameach! We wish you
 a happy Chanukah.</span>
 <?php } elseif (isset($chanukah_upcoming)) { ?>
 <br><span class="fpgreeting">Light the first <a
@@ -147,10 +147,10 @@ title="Chanukah, the Festival of Lights"
 href="/holidays/chanukah?tag=fp">Hanukkah</a> candle
 <?php echo $chanukah_upcoming ?>.</span>
 <?php } elseif (isset($shalosh_regalim)) { ?>
-<br><span class="fpgreeting">Moadim L&#39;Simcha! Hebcal.com wishes you
+<br><span class="fpgreeting">Moadim L&#39;Simcha! We wish you
 a happy <?php echo $shalosh_regalim ?>.</span>
 <?php } elseif ($shana_tova) { ?>
-<br><span class="fpgreeting">Shanah Tovah! Hebcal.com wishes you a happy
+<br><span class="fpgreeting">Shanah Tovah! We wish you a happy
 and healthy New Year.</span>
 <?php     if (isset($erev_rh)) { ?>
 <br><span class="fpgreeting"><a href="/holidays/rosh-hashana?tag=fp">Rosh
@@ -158,7 +158,7 @@ Hashana <?php echo $hy + 1 ?></a> begins at sundown
 on <?php echo $erev_rh ?>.</span>
 <?php     } ?>
 <?php } elseif ($gmar_tov) { ?>
-<br><span class="fpgreeting">G&#39;mar Chatimah Tovah! Hebcal.com wishes
+<br><span class="fpgreeting">G&#39;mar Chatimah Tovah! We wish
 you a good inscription in the Book of Life.</span>
 <?php     if (isset($erev_yk)) { ?>
 <br><span class="fpgreeting"><a href="/holidays/yom-kippur?tag=fp">Yom
@@ -166,13 +166,13 @@ Kippur</a> begins at sundown
 on <?php echo $erev_yk ?>.</span>
 <?php     } ?>
 <?php } elseif ($chag_kasher) { ?>
-<br><span class="fpgreeting">Chag Kasher v&#39;Sameach! Hebcal.com
-wishes you a happy <a href="/holidays/pesach?tag=fp">Passover</a>.</span>
+<br><span class="fpgreeting">Chag Kasher v&#39;Sameach! We wish
+you a happy <a href="/holidays/pesach?tag=fp">Passover</a>.</span>
 <?php } elseif (isset($chag_sameach)) { ?>
-<br><span class="fpgreeting">Chag Sameach! Hebcal.com wishes you
+<br><span class="fpgreeting">Chag Sameach! We wish you
 a happy <?php echo $chag_sameach ?>.</span>
 <?php } elseif ($minor_fast) { ?>
-<br><span class="fpgreeting">Tzom Kal. Hebcal.com wishes you an easy
+<br><span class="fpgreeting">Tzom Kal. We wish you an easy
 fast.</span>
 <?php } ?>
 </p><!-- .fpsubhead -->
