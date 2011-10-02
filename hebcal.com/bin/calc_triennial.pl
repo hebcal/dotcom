@@ -177,6 +177,10 @@ foreach my $yr (($start_year - 3) .. ($start_year + 10))
     my(@ev) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
     special_readings(\@ev, \%special_maftir, \%special_maftir_anode,
 		     \%special_haftara);
+
+    # hack for Pinchas
+    my @ev2 = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
+    special_pinchas(\@ev2, \%special_haftara);
 }
 
 if ($opts{'t'})
@@ -799,6 +803,9 @@ EOHTML
 		    my $sp_verse = $1;
 		    my $sp_festival = $2;
 		    my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
+		    if ($h eq "Pinchas" && ! defined $sp_href) {
+		        $sp_href = "http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot_haft.shtml";
+		    }
 		    $stime2 =~ s/-/ /g;
 		    print OUT2 <<EOHTML;
 <li>$stime2 (<b>$sp_festival</b> / <a class="outbound"
@@ -1202,6 +1209,24 @@ sub get_special_maftir
     }
 
     return undef;
+}
+
+sub special_pinchas {
+    my($events,$haftara) = @_;
+    foreach my $evt (@{$events}) {
+	next unless "Parashat Pinchas" eq $evt->[$Hebcal::EVT_IDX_SUBJ];
+	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+	my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+	my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
+	my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
+	# check to see if it's after the 17th of Tammuz
+	if ($hebdate->{"mm"} > 4
+	    || ($hebdate->{"mm"} == 4 && $hebdate->{"dd"} > 17)) {
+	    my $stime2 = sprintf("%02d-%s-%04d",
+				 $day, $Hebcal::MoY_short[$month - 1], $year);
+	    $haftara->{$stime2} = "Jeremiah 1:1 - 2:3 (Pinchas occurring after 17 Tammuz)";
+	}
+    }
 }
 
 sub special_readings
