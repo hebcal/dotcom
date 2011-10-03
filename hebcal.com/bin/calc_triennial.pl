@@ -658,8 +658,6 @@ EOHTML
 	$fk_date = '&nbsp;';
     }
 
-    my $amazon_link1 =
-	"http://www.amazon.com/o/ASIN/0827607121/hebcal-20";
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
@@ -895,10 +893,6 @@ Chumash: The Stone Edition (Artscroll Series)</a></em>
 href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
-<dt><em><a class="amzn" id="etz-hayim-2"
-href="$amazon_link1">Etz
-Hayim: Torah and Commentary</a></em>
-<dd>David L. Lieber et. al., Jewish Publication Society, 2001
 <dt><em><a class="outbound"
 href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
 <dd>Mechon Mamre
