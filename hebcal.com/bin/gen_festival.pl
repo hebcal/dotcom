@@ -745,13 +745,11 @@ sub write_festival_page
     $keyword .= ",$seph2ashk{$f}" if defined $seph2ashk{$f};
 
     my $hebrew = get_var($festivals, $f, 'hebrew');
-    my $meta_hebrew;
     if ($hebrew) {
 	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
-	$meta_hebrew = " (Hebrew: $hebrew)";
 	$page_title .= " - $hebrew";
     } else {
-	$meta_hebrew = $hebrew = "";
+	$hebrew = "";
     }
 
     my $next_observed = "";
@@ -771,7 +769,7 @@ sub write_festival_page
     }
 
     my $meta = <<EOHTML;
-<meta name="description" content="Jewish holiday of $f$meta_hebrew. $descr.${next_observed}Holiday Torah readings, dates observed.">
+<meta name="description" content="Jewish holiday of $f. $descr.${next_observed}Holiday Torah readings, dates observed.">
 EOHTML
 ;
 
