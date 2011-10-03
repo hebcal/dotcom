@@ -155,8 +155,6 @@ every other day (e.g. fast days): 3
   Creating Lively Passover Seders: An Interactive Sourcebook of Tales,
   Texts &amp; Activities
   </book>
-  <book ASIN="0688155901">
-  </book>
  </books>
 </festival>
 <festival id="Pesach I" hebrew="פֶּסַח יוֹם א׳" yomtov="1">
@@ -707,17 +705,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Jerusalem.
  </wikipedia>
  <books>
-  <book ASIN="0827603029" author="Philip Goodman">
-  The Sukkot/Simhat Torah Anthology
+  <book ASIN="1580130186" author="Judyth Saypol Groner">
+  All About Sukkot
   </book>
   <book ASIN="0827607423" author="Michael V. Fox">
   Ecclesiastes: The Traditional Hebrew Text with the New JPS Translation
-  </book>
-  <book ASIN="0929371755" author="Judith Z. Abrams">
-  Sukkot: A Family Seder
-  </book>
-  <book ASIN="1580130186" author="Judyth Saypol Groner">
-  All About Sukkot
   </book>
  </books>
 </festival>
@@ -917,12 +909,6 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="54" num="2" book="Deuteronomy" begin="33:8" end="33:12"/>
   <aliyah parsha="54" num="3" book="Deuteronomy" begin="33:13" end="33:17"/>
  </kriyah>
- <books>
-  <book ASIN="0827603029" author="Philip Goodman">
-  The Sukkot/Simhat Torah Anthology
-  </book>
-  <book ASIN="0929371879"/>
- </books>
 </festival>
 
 <festival id="Simchat Torah" hebrew="שִׂמְחַת תּוֹרָה" yomtov="1">
@@ -969,11 +955,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
  from late November to late December in the Gregorian calendar.
  </wikipedia>
  <books>
-  <book ASIN="0899061869"/>
-  <book ASIN="1930143311"/>
+  <book ASIN="0899061850"/>
   <book ASIN="156512538X"/>
   <book ASIN="0807409103"/>
-  <book ASIN="0807578630"/>
  </books>
 </festival>
 <festival id="Chanukah: 1 Candle" hebrew="חֲנוּכָּה: א׳ נֵר" yomtov="0">
@@ -1368,14 +1352,6 @@ with the verse
  <about href="http://www.ou.org/chagim/roshchodesh/shevat/default.htm">
  The new Hebrew month of Sh'vat
  </about>
- <books>
-  <book ASIN="0827607172"/>
-  <book ASIN="0807405361"/>
-  <book ASIN="0881230081"/>
-  <book ASIN="0930494393"/>
-  <book ASIN="1580130658"/>
-  <book ASIN="1580131220"/>
- </books>
 </festival>
 <festival id="Rosh Chodesh Sivan" hebrew="רֹאשׁ חודש סִיוָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm">
@@ -1428,11 +1404,9 @@ with the verse
  </wikipedia>
  <books>
   <book ASIN="0827607172"/>
-  <book ASIN="0807405361"/>
   <book ASIN="0881230081"/>
   <book ASIN="0930494393"/>
   <book ASIN="1580130658"/>
-  <book ASIN="1580131220"/>
  </books>
 </festival>
 

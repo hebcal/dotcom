@@ -94,6 +94,7 @@ if ($opts{'f'}) {
     print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
 }
 
+my $DO_AMAZON = 1;
 my $REVISION = '$Revision$'; #'
 my $mtime_festival = (stat($festival_in))[9];
 my $mtime_script = (stat($0))[9];
@@ -871,7 +872,7 @@ EOHTML
     ;
     }
 
-    if (0)
+    if ($DO_AMAZON)
     {
 	my $subf = $SUBFESTIVALS{$f}->[0];
 	my $books = $festivals->{"festival"}->{$subf}->{"books"}->{"book"};
