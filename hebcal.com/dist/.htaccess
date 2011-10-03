@@ -13,6 +13,7 @@ AddDescription "Palm Date Book Archive export" Palm-DBA.pm
 AddDescription "GPL-licensed source code" HebcalGPL.pm
 AddDescription "Release notes" ChangeLog.txt
 AddDescription "SQLite dump of zip code DB" zips99.sqldump.gz
+AddDescription "WordPress Shabbat Times widget" hebcal-shabbat-widget.zip
 
 Redirect gone /dist/zips99.dbdump.txt
 Redirect gone /dist/gen_holidays.pl
