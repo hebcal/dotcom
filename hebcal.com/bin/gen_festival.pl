@@ -769,7 +769,7 @@ sub write_festival_page
     }
 
     my $meta = <<EOHTML;
-<meta name="description" content="Jewish holiday of $f. $descr.${next_observed}Holiday Torah readings, dates observed.">
+<meta name="description" content="Jewish holiday of $f.$next_observed$descr. Holiday Torah readings, dates observed.">
 EOHTML
 ;
 
