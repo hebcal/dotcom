@@ -955,7 +955,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
  from late November to late December in the Gregorian calendar.
  </wikipedia>
  <books>
-  <book ASIN="0899061850"/>
+  <book ASIN="0899061850" author="Rabbi Hersh Goldwurm">
+    Chanukah - Its History, Observance &amp; Significance
+  </book>
   <book ASIN="156512538X"/>
   <book ASIN="0807409103"/>
  </books>
