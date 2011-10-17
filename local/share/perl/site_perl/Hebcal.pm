@@ -2220,13 +2220,7 @@ sub vcalendar_write_contents
 
 	out_html(undef, qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl});
 
-	if ($is_icalendar && $href) {
-	    if ($href =~ m,/(sedrot|holidays)/.+,) {
-		$href .= "?tag=ical";
-	    }
-	    out_html(undef, qq{URL;VALUE=URI:$href$endl});
-	}
-
+	my $memo = "";
 	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
 	    && defined $cconfig
 	    && defined $cconfig->{"city"})
@@ -2235,8 +2229,7 @@ sub vcalendar_write_contents
 	}
 	elsif ($evt->[$Hebcal::EVT_IDX_MEMO])
  	{
-	    out_html(undef, qq{DESCRIPTION:},
-		     $evt->[$Hebcal::EVT_IDX_MEMO], $endl);
+	    $memo = $evt->[$Hebcal::EVT_IDX_MEMO];
 	}
 	elsif (defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/)
 	{
@@ -2255,15 +2248,25 @@ sub vcalendar_write_contents
 	      }
 	    }
 	    $sth->finish;
-	    my $memo = "";
 	    if ($torah_reading) {
-	      $memo = $torah_reading;
+	      $memo = "Torah: $torah_reading";
 	      if ($haftarah_reading) {
-		$memo .= "\\n\\nHaftarah: ";
+		$memo .= "\\nHaftarah: ";
 		$memo .= $haftarah_reading;
 	      }
 	    }
-	    out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
+	}
+
+	if ($href) {
+	  if ($href =~ m,/(sedrot|holidays)/.+,) {
+	    $href .= "?tag=ical";
+	  }
+	  $memo .= "\\n\\n" if $memo;
+	  $memo .= $href;
+	}
+
+	if ($memo) {
+	  out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
 	}
 
 	my($date) = sprintf("%04d%02d%02d",
