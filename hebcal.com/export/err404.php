@@ -8,23 +8,20 @@ $args = strstr($_SERVER["REQUEST_URI"], "?");
 if ($args !== false) {
     $arg2 = str_replace(";", "&", substr($args, 1));
     parse_str($arg2, $param);
-    if (isset($param["v"]) && $param["v"] == "1") {
+    if (isset($param["v"]) && ($param["v"] == "1" || $param["v"] == "yahrzeit")) {
 	header("HTTP/1.1 200 OK");
 	header("Status: 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
-	$url = "http://www.hebcal.com/hebcal/index.cgi/export.ics" . $args;
+	if ($param["v"] == "1") {
+	    $url = "http://www.hebcal.com/hebcal/index.cgi/export.ics" . $args;
+	} elseif ($param["v"] == "yahrzeit") {
+	    $url = "http://www.hebcal.com/yahrzeit/yahrzeit.cgi/export.ics" . $args;
+	}
 	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_USERAGENT, "hebcal-export/$VERSION");
-	curl_exec($ch);
-	curl_close($ch);
-	exit();
-    } elseif (isset($param["v"]) && $param["v"] == "yahrzeit") {
-	header("HTTP/1.1 200 OK");
-	header("Status: 200 OK");
-	header("Content-Type: text/calendar; charset=UTF-8");
-	$url = "http://www.hebcal.com/yahrzeit/yahrzeit.cgi/export.ics" . $args;
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_USERAGENT, "hebcal-export/$VERSION");
+	$user_agent = "hebcal-export/$VERSION";
+	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+	$ref_url = "http://www.hebcal.com" . $_SERVER["REQUEST_URI"];
+	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
 	curl_exec($ch);
 	curl_close($ch);
 	exit();
