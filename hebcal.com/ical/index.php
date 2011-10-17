@@ -39,7 +39,6 @@ apps</a> for step-by-step instructions.</p>
 function cal_row($path,$title,$subtitle) {
     $url_noproto = $_SERVER["HTTP_HOST"] . "/ical/" . $path . ".ics";
     $webcal = "webcal://" . $url_noproto;
-    $webcal_esc = urlencode($webcal);
     $http_esc = urlencode("http://" . $url_noproto);
 ?>
 <tr>
@@ -51,26 +50,19 @@ href="<?php echo $webcal ?>"><img
 src="/i/ical-64x64.png" width="64" height="64"
 alt="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 border="0"></a></td>
-<td><a class="download" id="quick-csv-<?php echo $path ?>"
-title="Download <?php echo $title ?> to Microsoft Outlook"
-href="<?php echo $path ?>.csv"><img
-src="/i/outlook-149x53.png" width="149" height="53"
-alt="Download <?php echo $title ?> to Microsoft Outlook"
-border="0"></a></td>
 <td><a class="download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
 href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
 src="http://www.google.com/calendar/images/ext/gc_button6.gif"
 width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
-<br>
-<a class="download" id="quick-wlive-<?php echo $path ?>"
-title="Add <?php echo $title ?> to Windows Live Calendar"
-href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=<?php echo $webcal_esc ?>&name=<?php echo urlencode($title) ?>"><img
-src="/i/wlive-150x20.png"
-width="150" height="20" border="0"
-alt="Add <?php echo $title ?> to Windows Live Calendar"></a>
 </td>
+<td><a class="download" id="quick-csv-<?php echo $path ?>"
+title="Download <?php echo $title ?> to Microsoft Outlook"
+href="<?php echo $path ?>.csv"><img
+src="/i/outlook-149x53.png" width="149" height="53"
+alt="Download <?php echo $title ?> to Microsoft Outlook"
+border="0"></a></td>
 </tr>
 <?php
 }
