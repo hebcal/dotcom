@@ -1014,17 +1014,17 @@ EOHTML
 href="$strassfeld_link">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dd>Rabbi Michael Strassfeld
-<dt><em><a class="amzn" id="jps-tanakh-1"
-title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
-href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
-The Holy Scriptures</a></em>
-<dd>Jewish Publication Society
 };
 
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
 	print OUT2 qq{<dt><em><a class="outbound"
 href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
 <dd>Mechon Mamre
+<dt><em><a class="amzn" id="jps-tanakh-1"
+title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
+href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
+The Holy Scriptures</a></em>
+<dd>Jewish Publication Society
 };
     }
 
