@@ -1,4 +1,9 @@
 <?php
+$VERSION = '$Revision: 3343 $';
+$matches = array();
+if (preg_match('/(\d+)/', $VERSION, $matches)) {
+    $VERSION = $matches[1];
+}
 $args = strstr($_SERVER["REQUEST_URI"], "?");
 if ($args !== false) {
     $arg2 = str_replace(";", "&", substr($args, 1));
@@ -9,6 +14,7 @@ if ($args !== false) {
 	header("Content-Type: text/calendar; charset=UTF-8");
 	$url = "http://www.hebcal.com/hebcal/index.cgi/export.ics" . $args;
 	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_USERAGENT, "hebcal-export/$VERSION");
 	curl_exec($ch);
 	curl_close($ch);
 	exit();
@@ -18,6 +24,7 @@ if ($args !== false) {
 	header("Content-Type: text/calendar; charset=UTF-8");
 	$url = "http://www.hebcal.com/yahrzeit/yahrzeit.cgi/export.ics" . $args;
 	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_USERAGENT, "hebcal-export/$VERSION");
 	curl_exec($ch);
 	curl_close($ch);
 	exit();
