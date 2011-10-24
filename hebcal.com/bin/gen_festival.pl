@@ -753,7 +753,7 @@ sub write_festival_page
 	$hebrew = "";
     }
 
-    my $next_observed = "";
+    my $next_observed = ". ";
     if (defined $OBSERVED{$f}) {
 	my $rise_or_set = begins_at_dawn($f) ? "dawn" : "sundown";
 	foreach my $evt (@{$OBSERVED{$f}}) {
@@ -762,7 +762,7 @@ sub write_festival_page
 	    my $time = Hebcal::event_to_time($evt);
 	    if ($time >= $NOW) {
 	        my $dow = Hebcal::get_dow($gy,$gm,$gd);
-		$next_observed = sprintf " Begins at %s on %s, %02d %s %04d. ",
+		$next_observed = sprintf ", begins at %s on %s, %02d %s %04d. ",
 		  $rise_or_set, $Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
 		last;
 	    }
@@ -770,7 +770,7 @@ sub write_festival_page
     }
 
     my $meta = <<EOHTML;
-<meta name="description" content="Jewish holiday of $f.$next_observed$descr. Holiday Torah readings, dates observed.">
+<meta name="description" content="Jewish holiday of $f$next_observed$descr. Holiday Torah readings, dates observed.">
 EOHTML
 ;
 
