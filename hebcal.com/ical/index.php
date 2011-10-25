@@ -58,7 +58,7 @@ width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
 </td>
 <?php if ($suppress_outlook) { ?>
-<td><small>(not available)</small></td>
+<td><small>(Outlook download not available)</small></td>
 <?php } else { ?>
 <td><a class="download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
