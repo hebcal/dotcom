@@ -36,7 +36,7 @@ page. See also <a href="/home/category/import">help importing into
 apps</a> for step-by-step instructions.</p>
 
 <?php
-function cal_row($path,$title,$subtitle) {
+function cal_row($path,$title,$subtitle,$suppress_outlook=false) {
     $url_noproto = $_SERVER["HTTP_HOST"] . "/ical/" . $path . ".ics";
     $webcal = "webcal://" . $url_noproto;
     $http_esc = urlencode("http://" . $url_noproto);
@@ -57,15 +57,21 @@ src="http://www.google.com/calendar/images/ext/gc_button6.gif"
 width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
 </td>
+<?php if ($suppress_outlook) { ?>
+<td><small>(not available)</small></td>
+<?php } else { ?>
 <td><a class="download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
 href="<?php echo $path ?>.csv"><img
 src="/i/outlook-149x53.png" width="149" height="53"
 alt="Download <?php echo $title ?> to Microsoft Outlook"
 border="0"></a></td>
+<?php
+    } // suppress_outlook
+?>
 </tr>
 <?php
-}
+} // function cal_row()
 ?>
 <table id="hebcal-ical" cellpadding="5">
 <?php
@@ -76,7 +82,8 @@ cal_row("jewish-holidays-all", "Jewish Holidays (all)",
 cal_row("hdate-en", "Hebrew calendar dates (English transliteration)",
 	"Displays the Hebrew date (such as <b>18th of Tevet, 5770</b>) every day of the week");
 cal_row("hdate-he", "Hebrew calendar dates (Hebrew)",
-	"Displays the Hebrew date (such as <b>י״ח בטבת תש״ע</b>) every day of the week");
+	"Displays the Hebrew date (such as <b>י״ח בטבת תש״ע</b>) every day of the week",
+	true);
 cal_row("omer", "Days of the Omer",
 	"7 weeks from the second night of Pesach to the day before Shavuot");
 ?>
