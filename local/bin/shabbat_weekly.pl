@@ -153,6 +153,7 @@ foreach my $smtp (@SMTP) {
 
 Hebcal::zipcode_close_db($ZIPS_DBH);
 
+msg("Success!", $opt_verbose);
 exit(0);
 
 sub mail_all
