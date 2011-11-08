@@ -485,22 +485,56 @@ sub write_index_page
 EOHTML
 ;
 
-    my $xtra_head = <<EOHTML;
-<style type="text/css">
-#hebcal-major-holidays tr td, #hebcal-major-holidays tr th,
-#hebcal-minor-holidays tr td, #hebcal-minor-holidays tr th,
-#hebcal-rosh-chodesh tr td, #hebcal-rosh-chodesh tr th {
-  padding: 4px;
-}
-#hebcal-major-holidays td.date-obs,
-#hebcal-minor-holidays td.date-obs,
-#hebcal-rosh-chodesh td.date-obs {
-  font-size: 12px;
-  line-height:16px;
-}
-</style>
-EOHTML
-;
+    my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
+    my @major = split(/,/, $major);
+
+    my $modern = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim";
+    my @modern = split(/,/, $modern);
+
+    my $public_fasts = "Tzom Gedaliah,Asara B'Tevet,Ta'anit Esther,Ta'anit Bechorot,Tzom Tammuz";
+    my @public_fasts = split(/,/, $public_fasts);
+
+    my %everything_else = map { $_ => 1 } @major, @modern, @public_fasts;
+
+    my @minor;
+    my @special_shabbat;
+    my @rosh_chodesh;
+    foreach my $f (@FESTIVALS) {
+	if ($f =~ /^Rosh Chodesh/) {
+	    push(@rosh_chodesh, $f);
+	} elsif ($f =~ /^Shabbat /) {
+	    push(@special_shabbat, $f);
+	} elsif (! defined $everything_else{$f}) {
+	    push(@minor, $f);
+	}
+    }
+
+    my @sections = (
+       [ \@major,		"Major holidays" ],
+       [ \@minor,		"Minor holidays" ],
+       [ \@public_fasts,	"Public fasts" ],
+       [ \@modern,		"Modern holidays" ],
+       [ \@special_shabbat,	"Special Shabbatot" ],
+       [ \@rosh_chodesh,	"Rosh Chodesh" ],
+    );
+
+
+    my @table_ids;
+    foreach my $section (@sections) {
+      my $table_id = lc($section->[1]);
+      $table_id =~ s/\s+/-/g;
+      push(@table_ids, "hebcal-$table_id");
+    }
+
+    my $td_sep = " tr td,\n#";
+    my $xtra_head = qq{<style type="text/css">\n};
+    $xtra_head .= "#" . join($td_sep, @table_ids) . $td_sep;
+    $xtra_head .= join(" tr th,\n#", @table_ids);
+    $xtra_head .= " tr th {\n  padding: 4px;\n}\n";
+
+    $xtra_head .= "#" . join(" td.date-obs,\n#", @table_ids);
+    $xtra_head .= " td.date-obs {\n  font-size: 12px;\n  line-height:16px;\n}\n";
+    $xtra_head .= "</style>\n";
 
     my $page_title = "Jewish Holidays";
     print OUT3 Hebcal::html_header($page_title,
@@ -510,28 +544,13 @@ EOHTML
 
     print OUT3 get_index_body_preamble($page_title, 1);
 
-    my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
-    my @major = split(/,/, $major);
-    print OUT3 "<h3>Major holidays</h3>\n";
-    table_index($festivals, "hebcal-major-holidays", @major);
-
-    my %major = map { $_ => 1 } @major;
-    my @minor;
-    my @rosh_chodesh;
-    foreach my $f (@FESTIVALS) {
-	if ($f =~ /^Rosh Chodesh/) {
-	    push(@rosh_chodesh, $f);
-	} elsif (! defined $major{$f}) {
-	    push(@minor, $f);
-	}
+    foreach my $section (@sections) {
+      my $heading = $section->[1];
+      print OUT3 "<h3>", $heading, "</h3>\n";
+      my $table_id = lc($heading);
+      $table_id =~ s/\s+/-/g;
+      table_index($festivals, "hebcal-$table_id", @{$section->[0]});
     }
-
-    print OUT3 "<h3>Minor holidays, special Shabbatot, public fasts</h3>\n";
-    table_index($festivals, "hebcal-minor-holidays", @minor);
-
-    print OUT3 "<h3>Rosh Chodesh</h3>\n";
-    table_index($festivals, "hebcal-rosh-chodesh", @rosh_chodesh);
-
 
     my $body_divs_end = <<EOHTML;
 </div><!-- .entry-content -->
@@ -586,14 +605,13 @@ EOHTML
 	}
 	print OUT4 "</p>\n";
 
-	print OUT4 "<h3>Major holidays</h3>\n";
-	table_one_year_only($festivals, "hebcal-major-holidays", $i, @major);
-
-	print OUT4 "<h3>Minor holidays, special Shabbatot, public fasts</h3>\n";
-	table_one_year_only($festivals, "hebcal-minor-holidays", $i, @minor);
-
-	print OUT4 "<h3>Rosh Chodesh</h3>\n";
-	table_one_year_only($festivals, "hebcal-rosh-chodesh", $i, @rosh_chodesh);
+	foreach my $section (@sections) {
+	  my $heading = $section->[1];
+	  print OUT4 "<h3>", $heading, "</h3>\n";
+	  my $table_id = lc($heading);
+	  $table_id =~ s/\s+/-/g;
+	  table_one_year_only($festivals, "hebcal-$table_id", $i, @{$section->[0]});
+	}
 
 	print OUT4 $body_divs_end;
 	print OUT4 Hebcal::html_footer_new(undef, $REVISION);
@@ -915,6 +933,7 @@ EOHTML
 				  "ResponseGroup" => "ItemAttributes",
 				  "Version" => "2009-01-06",
 				  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
+				  "AssociateTag" => "hebcal-20",
 				  );
 		    my $signedRequest = $helper->sign(\%params);
 		    my $queryString = $helper->canonicalize($signedRequest);
@@ -941,6 +960,10 @@ EOHTML
 			} elsif (defined $attrs->{"Author"}) {
 			    $author = $attrs->{"Author"};
 			}
+		    }
+		    else
+		    {
+		      print STDERR "*** can't get Items/Item/ASIN from XML from ", $response->content, "\n";
 		    }
 		}
 		else
