@@ -32,12 +32,20 @@ print O "use utf8;\n\n";
 
 print O "\%HebcalConst::CITIES_NEW = (\n";
 my %city_tzName;
+my %city_latLong;
 while(<CITIES>) {
     chomp;
     my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
     $city =~ s/\'/\\\'/g;
     print O "'$woeid' => ['$country','$city',$latitude,$longitude,'$tzName'],\n";
     $city_tzName{$city} = $tzName;
+    $city_latLong{$city} = [$latitude,$longitude];
+    if ($country eq "US") {
+      $city =~ s/Washington, DC/Washington DC/;
+      $city =~ s/,\s.+//;
+      $city_tzName{$city} = $tzName;
+      $city_latLong{$city} = [$latitude,$longitude];
+    }
 }
 close(CITIES);
 print O ");\n\n";
@@ -45,6 +53,12 @@ print O ");\n\n";
 print O "\%HebcalConst::CITY_TZID = (\n";
 while(my($city,$tzName) = each(%city_tzName)) {
     print O "'$city' => '$tzName',\n";
+}
+print O ");\n\n";
+
+print O "\%HebcalConst::CITY_LATLONG = (\n";
+while(my($city,$latlong) = each(%city_latLong)) {
+    print O "'$city' => [", $latlong->[0], ",", $latlong->[1], "],\n";
 }
 print O ");\n\n";
 
