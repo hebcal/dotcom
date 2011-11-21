@@ -154,6 +154,20 @@ while (my($key,$val) = each %HebcalConst::CITIES)
     $Hebcal::city_dst{$key} = $val->[1];
 }
 
+# based on cities.txt and loaded into HebcalConst.pm
+%Hebcal::CITY_TZID = ();
+%Hebcal::CITY_LATLONG = ();
+while(my($woe,$info) = each(%HebcalConst::CITIES_NEW)) {
+    my($country,$city,$latitude,$longitude,$tzName) = @{$info};
+    $Hebcal::CITY_TZID{$city} = $tzName;
+    $Hebcal::CITY_LATLONG{$city} = [$latitude,$longitude];
+    if ($country eq "US") {
+	$city =~ s/Washington, DC/Washington DC/;
+	$city =~ s/,\s.+//;
+	$Hebcal::CITY_TZID{$city} = $tzName;
+	$Hebcal::CITY_LATLONG{$city} = [$latitude,$longitude];
+    }
+}
 
 # translate from Askenazic transiliterations to Separdic
 %Hebcal::ashk2seph =
@@ -2105,8 +2119,8 @@ sub vcalendar_write_contents
     if ($is_icalendar) {
 	if (defined $q->param("geo") && $q->param("geo") eq "city"
 		 && $q->param("city")
-		 && defined $HebcalConst::CITY_TZID{$q->param("city")}) {
-	    $tzid = $HebcalConst::CITY_TZID{$q->param("city")};
+		 && defined $Hebcal::CITY_TZID{$q->param("city")}) {
+	    $tzid = $Hebcal::CITY_TZID{$q->param("city")};
 	} elsif (defined $state && $state eq 'AK' && $tz == -10) {
 	    $tzid = 'US/Aleutian';
 	} elsif (defined $state && $state eq 'AZ' && $tz == -7) {

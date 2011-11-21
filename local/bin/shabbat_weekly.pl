@@ -213,7 +213,7 @@ sub get_latlong {
 	}
 	return ($lat, $long, $tz, $city);
     } else {
-	my $latlong = $HebcalConst::CITY_LATLONG{$args->{"city"}};
+	my $latlong = $Hebcal::CITY_LATLONG{$args->{"city"}};
 	my($lat,$long) = (0.0,0.0);
 	if (defined $latlong) {
 	  ($lat,$long) = ($latlong->[0], -1.0 * $latlong->[1]);
