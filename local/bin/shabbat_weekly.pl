@@ -67,7 +67,7 @@ if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "all" => \$opt_all,
      "log!" => \$opt_log,
-     "verbose|v" => \$opt_verbose)) {
+     "verbose|v+" => \$opt_verbose)) {
     usage();
 }
 
@@ -90,7 +90,8 @@ $year += 1900;
 my $midnight = Time::Local::timelocal(0,0,0,
 				      $mday,$mon,$year,$wday,$yday,$isdst);
 my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
-my $endofweek = $midnight + (5 * 60 * 60 * 24);
+my $five_days_ahead = $midnight + (5 * 60 * 60 * 24);
+my $endofweek = $five_days_ahead > $saturday ? $five_days_ahead : $saturday;
 my $sat_year = (localtime($saturday))[5] + 1900;
 
 my $HOME = "/home/hebcal";
@@ -205,11 +206,22 @@ sub get_latlong {
     if (defined $args->{"zip"}) {
     	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    get_zipinfo($args->{"zip"});
-	return (($lat_deg + ($lat_min / 60.0)),
-		($long_deg + ($long_min / 60.0)),
-		$tz, $city);
+	my $lat = $lat_deg + ($lat_min / 60.0);
+	my $long = $long_deg + ($long_min / 60.0);
+	if ($opt_verbose > 2) {
+	  msg("zip=" . $args->{"zip"} . ",lat=$lat,long=$long", $opt_verbose);
+	}
+	return ($lat, $long, $tz, $city);
     } else {
-	return (0.0, 0.0,
+	my $latlong = $HebcalConst::CITY_LATLONG{$args->{"city"}};
+	my($lat,$long) = (0.0,0.0);
+	if (defined $latlong) {
+	  ($lat,$long) = ($latlong->[0], -1.0 * $latlong->[1]);
+	}
+	if ($opt_verbose > 2) {
+	  msg("city=" . $args->{"city"} . ",lat=$lat,long=$long", $opt_verbose);
+	}
+	return ($lat, $long,
 		$Hebcal::city_tz{$args->{"city"}},
 		$args->{"city"});
     }
@@ -240,6 +252,10 @@ sub mail_user
 
     my($cmd,$loc,$args) = @{$CONFIG{$to}};
     return 1 unless $cmd;
+
+    if ($opt_verbose > 1) {
+      msg("to=$to   cmd=$cmd", $opt_verbose);
+    }
 
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
     if ($sat_year != $year) {
