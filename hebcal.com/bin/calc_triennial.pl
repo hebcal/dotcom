@@ -386,10 +386,7 @@ EOHTML
 <div id="container">
 <div id="content" role="main">
 <div class="page type-page hentry">
-<h1 class="entry-title"><a href="index.xml"><img
-src="/i/xml.gif" style="border:none;float:right" alt="View the raw XML source"
-width="36" height="14"></a>
-Torah Readings</h1>
+<h1 class="entry-title">Torah Readings</h1>
 <div class="entry-meta">
 <span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
 </div><!-- .entry-meta -->
@@ -462,6 +459,12 @@ EOHTML
 <input type="submit" id="searchsubmit" value="Search" />
 </div>
 </form></li>
+<li id="more-from-hebcal" class="widget-container">
+<h3 class="widget-title">Torah Reading RSS feeds</h3>
+<p><a href="index.xml">Parashat ha-Shavua RSS
+<img src="/i/feed-icon-14x14.png" style="border:none"
+alt="View the raw XML source" width="14" height="14"></a></p>
+</li><!-- #more-from-hebcal -->
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";

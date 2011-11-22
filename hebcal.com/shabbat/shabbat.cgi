@@ -669,7 +669,7 @@ sub more_from_hebcal {
 <li><a href="$rss_href">RSS feed</a>
 <a title="RSS feed of candle lighting times"
 href="$rss_href"><img
-src="/i/xml.gif" style="border:none" width="36" height="14"
+src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="RSS feed of candle lighting times"></a>
 EOHTML
 ;

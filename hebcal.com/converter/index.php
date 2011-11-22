@@ -208,16 +208,8 @@ of the Gregorian Calendar</a>.</p>
 ?>
 <div id="converter-results">
 <p style="font-size: large">
-<a href="/etc/hdate-en.xml"
-title="Today's Hebrew Date in English Transliteration RSS"><img
-src="/i/xml.gif" style="border:none;float:right" width="36" height="14"
-alt="Today's Hebrew Date in English Transliteration RSS"></a>
 <?php echo "$first = <b>$second</b>"; ?></p>
 <p dir="rtl" lang="he" class="hebrew-big">
-<a href="/etc/hdate-he.xml"
-title="Today's Hebrew Date in Hebrew RSS"><img
-src="/i/xml.gif" style="border:none;float:right" width="36" height="14"
-alt="Today's Hebrew Date in Hebrew RSS"></a>
 <?php
 if ($hm == "Adar1" && !is_leap_year($hy)) {
     $month_name = "Adar";
@@ -370,6 +362,20 @@ calendars.</p>
 <input type="submit" id="searchsubmit" value="Search" />
 </div>
 </form></li>
+<li id="more-from-hebcal" class="widget-container">
+<h3 class="widget-title">Hebrew Date RSS Feeds</h3>
+<ul>
+<li><a href="/etc/hdate-en.xml"
+title="Today's Hebrew Date in English Transliteration RSS">in
+English transliteration <img
+src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
+alt="Today's Hebrew Date in English Transliteration RSS"></a></li>
+<li><a href="/etc/hdate-he.xml"
+title="Today's Hebrew Date in Hebrew RSS">in Hebrew <img
+src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
+alt="Today's Hebrew Date in Hebrew RSS"></a></li>
+</ul>
+</li><!-- #more-from-hebcal -->
 <li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* 200x200 text only */
