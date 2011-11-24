@@ -989,7 +989,7 @@ div.cal { margin-bottom: 18px }
  text-decoration:underline;
  cursor:pointer;
 }
-@media print { div.pbba { page-break-before: always } }
+\@media print { div.pbba { page-break-before: always } }
 </style>
 EOHTML
 ;
