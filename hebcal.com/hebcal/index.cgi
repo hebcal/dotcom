@@ -989,6 +989,7 @@ div.cal { margin-bottom: 18px }
  text-decoration:underline;
  cursor:pointer;
 }
+@media print { div.pbba { page-break-before: always } }
 </style>
 EOHTML
 ;
@@ -1364,14 +1365,16 @@ sub write_html_cal
     my $cal = $cals->[$i];
     my $id = $cal_ids->[$i];
     my $style = "";
+    my $class = "cal";
     if ($i != 0) {
+	$class .= " pbba";
 	$style = qq{ style="page-break-before:always"};
     }
     if ($id eq sprintf("%04d-%02d", $this_year, $this_mon)) {
 	Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
     }
     Hebcal::out_html(undef,
-		     qq{<div id="cal-$id" align="center" class="cal"$style$dir>\n},
+		     qq{<div id="cal-$id" align="center" class="$class"$style$dir>\n},
 		     $cal->as_HTML(), 
 		     qq{</div><!-- #cal-$id -->\n});
 }
