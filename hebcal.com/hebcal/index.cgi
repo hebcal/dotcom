@@ -973,6 +973,7 @@ sub results_page
     my $xtra_head = <<EOHTML;
 <style type="text/css">
 div.cal { margin-bottom: 18px }
+div.pbba { page-break-before: always }
 #hebcal-results table.month h2 { 
  color: #000;
  font-family: "Helvetica Neue",Arial,Helvetica,"Nimbus Sans L",sans-serif;
