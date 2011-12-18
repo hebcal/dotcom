@@ -101,8 +101,8 @@ if ($hmnum == 13 && $hd >= 1) {
 } elseif ($hmnum == 8 && $hd >= 2 && $hd <= 15) {
     // for two weeks before Pesach, show greeting
     $chag_kasher = true;	// month 8 == Nisan
-} elseif ($hmnum == 3 && $hd >= 10 && $hd <= 24) {
-    // for two weeks before Chanukah, show greeting
+} elseif ($hmnum == 3 && $hd >= 3 && $hd <= 24) {
+    // for three weeks before Chanukah, show greeting
     $chanukah_jd = jewishtojd(3, 24, $hy); // month 3 == Kislev
     $chanukah_cal = cal_from_jd($chanukah_jd, CAL_GREGORIAN);
     $chanukah_upcoming = sprintf("%s sundown on %s, %s %s %s",
