@@ -800,7 +800,7 @@ EOHTML
 ;
 		    $did_special = 1;
 		}
-		if ($special_haftara{$stime2} =~ /^(.+) \((.+)\)$/) {
+		if ($special_haftara{$stime2} =~ /^(.+)\s+\|\s+(.+)$/) {
 		    my $sp_verse = $1;
 		    my $sp_festival = $2;
 		    my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
@@ -809,9 +809,9 @@ EOHTML
 		    }
 		    $stime2 =~ s/-/ /g;
 		    print OUT2 <<EOHTML;
-<li>$stime2 (<b>$sp_festival</b> / <a class="outbound"
+<li>$stime2 - <b>$sp_festival</b> / <a class="outbound"
 title="Special Haftara for $sp_festival"
-href="$sp_href">$sp_verse</a>)
+href="$sp_href">$sp_verse</a>
 EOHTML
 ;
 		}
@@ -1255,6 +1255,13 @@ sub special_readings
 	    && $day == $events->[$i+1]->[$Hebcal::EVT_IDX_MDAY]) {
 	    $chanukah_day = $1 - 1;
 	    $h = "Shabbat Rosh Chodesh Chanukah";
+	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/
+	    && defined $events->[$i+1]
+	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Shabbat HaChodesh/
+	    && $year == $events->[$i+1]->[$Hebcal::EVT_IDX_YEAR]
+	    && $month == $events->[$i+1]->[$Hebcal::EVT_IDX_MON] + 1
+	    && $day == $events->[$i+1]->[$Hebcal::EVT_IDX_MDAY]) {
+	    $h = "Shabbat HaChodesh (on Rosh Chodesh)";
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
 	} elsif ($dow == 7 && $h =~ /^Rosh Chodesh/) {
@@ -1283,7 +1290,7 @@ sub special_readings
 	    my $haft =
 		$fxml->{'festival'}->{$h}->{'kriyah'}->{'haft'}->{'reading'};
 	    if (defined $haft) {
-		$haftara->{$stime2} = "$haft ($h)";
+		$haftara->{$stime2} = "$haft | $h";
 	    }
 
 	    my $a;
@@ -1303,7 +1310,7 @@ sub special_readings
 		if ($chanukah_day) {
 		    $h .= " - Day $chanukah_day";
 		}
-		$maftir->{$stime2} = sprintf("%s %s - %s (%s)",
+		$maftir->{$stime2} = sprintf("%s %s - %s | %s",
 					     $a->{'book'},
 					     $a->{'begin'},
 					     $a->{'end'},
