@@ -169,18 +169,15 @@ calc_variation_options($axml, \%cycle_option2, $pattern2);
 my %readings1 = cycle_readings($bereshit_idx1,$events1,\%cycle_option1);
 my %readings2 = cycle_readings($bereshit_idx2,$events2,\%cycle_option2);
 
-my %special_maftir;
-my %special_maftir_anode;
-my %special_haftara;
+my %special;
 foreach my $yr (($start_year - 3) .. ($start_year + 10))
 {
     my(@ev) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
-    special_readings(\@ev, \%special_maftir, \%special_maftir_anode,
-		     \%special_haftara);
+    special_readings(\@ev);
 
     # hack for Pinchas
     my @ev2 = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
-    special_pinchas(\@ev2, \%special_haftara);
+    special_pinchas(\@ev2);
 }
 
 if ($opts{'t'})
@@ -197,6 +194,8 @@ if ($opts{'t'})
 }
 
 my $dbh;
+my $SQL_INSERT_INTO_LEYNING =
+  "INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)";
 if ($opts{'d'}) {
   my $dbfile = $opts{'d'};
   $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
@@ -213,7 +212,7 @@ if ($opts{'d'}) {
 }
 
 my(%parashah_dates);
-my(%parashah_stime2);
+my %parashah_date_sql;
 my(%parashah_time);
 my($saturday) = get_saturday();
 readings_for_current_year($axml, \%parashah_dates, \%parashah_time);
@@ -747,12 +746,12 @@ EOHTML
 
     print OUT2 "</tr>\n";
 
-    if (defined $parashah_stime2{$h}) {
+    if (defined $parashah_date_sql{$h}) {
 	my %sp_dates;
-	foreach my $stime2 (@{$parashah_stime2{$h}}) {
-	    if (defined $stime2 && defined $special_maftir_anode{$stime2}) {
-		my $fest = $special_maftir_anode{$stime2}->[1];
-		push(@{$sp_dates{$fest}}, $stime2);
+	foreach my $dt (@{$parashah_date_sql{$h}}) {
+	    if (defined $dt && defined $special{$dt}->{"Ma"}) {
+		my $fest = $special{$dt}->{"reason"};
+		push(@{$sp_dates{$fest}}, $dt);
 	    }
 	}
 
@@ -760,7 +759,7 @@ EOHTML
 	    my $count = 0;
 	    print OUT2 qq{<tr><td style="vertical-align:top" colspan="4">\n};
 	    foreach my $fest (sort keys %sp_dates) {
-		my $aliyah = $special_maftir_anode{$sp_dates{$fest}->[0]}->[0];
+		my $aliyah = $special{$sp_dates{$fest}->[0]}->{"Ma"};
 		my $info = format_aliyah($aliyah,
 					 $all_inorder[$aliyah->{'parsha'}-1],
 					 undef,1);
@@ -770,7 +769,11 @@ On <b>$fest</b><br>
 $info<ul class="gtl">
 EOHTML
 ;
-		foreach my $stime2 (@{$sp_dates{$fest}}) {
+		foreach my $dt (@{$sp_dates{$fest}}) {
+		    my($year,$month,$day) = split(/-/, $dt);
+		    $month =~ s/^0//;
+		    $day =~ s/^0//;
+		    my $stime2 = date_format_csv($year, $month, $day);
 		    $stime2 =~ s/-/ /g;
 		    print OUT2 "<li>$stime2\n";
 		}
@@ -812,10 +815,10 @@ title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
 
-    if (defined $parashah_stime2{$h}) {
+    if (defined $parashah_date_sql{$h}) {
 	my $did_special;
-	foreach my $stime2 (@{$parashah_stime2{$h}}) {
-	    if (defined $stime2 && defined $special_haftara{$stime2}) {
+	foreach my $dt (@{$parashah_date_sql{$h}}) {
+	    if (defined $dt && defined $special{$dt}->{"H"}) {
 		if (!$did_special) {
 		    print OUT2 <<EOHTML;
 When Parashat $h coincides with a special Shabbat, we read a
@@ -825,21 +828,24 @@ EOHTML
 ;
 		    $did_special = 1;
 		}
-		if ($special_haftara{$stime2} =~ /^(.+)\s+\|\s+(.+)$/) {
-		    my $sp_verse = $1;
-		    my $sp_festival = $2;
-		    my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
-		    if ($h eq "Pinchas" && ! defined $sp_href) {
-		        $sp_href = "http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot_haft.shtml";
-		    }
-		    $stime2 =~ s/-/ /g;
-		    print OUT2 <<EOHTML;
+		my $sp_verse = $special{$dt}->{"H"};
+		my $sp_festival = $special{$dt}->{"reason"};
+		$sp_festival =~ s/ - Day \d//; # Chanukah
+		my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
+		if ($h eq "Pinchas" && ! defined $sp_href) {
+		  $sp_href = "http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot_haft.shtml";
+		}
+		my($year,$month,$day) = split(/-/, $dt);
+		$month =~ s/^0//;
+		$day =~ s/^0//;
+		my $stime2 = date_format_csv($year, $month, $day);
+		$stime2 =~ s/-/ /g;
+		print OUT2 <<EOHTML;
 <li>$stime2 - <b>$sp_festival</b> / <a class="outbound"
 title="Special Haftara for $sp_festival"
 href="$sp_href">$sp_verse</a>
 EOHTML
 ;
-		}
 	    }
 	}
 	if ($did_special) {
@@ -1234,7 +1240,7 @@ sub get_special_maftir
 }
 
 sub special_pinchas {
-    my($events,$haftara) = @_;
+    my($events) = @_;
     foreach my $evt (@{$events}) {
 	next unless "Parashat Pinchas" eq $evt->[$Hebcal::EVT_IDX_SUBJ];
 	my($year,$month,$day) = event_ymd($evt);
@@ -1242,23 +1248,22 @@ sub special_pinchas {
 	# check to see if it's after the 17th of Tammuz
 	if ($hebdate->{"mm"} > 4
 	    || ($hebdate->{"mm"} == 4 && $hebdate->{"dd"} > 17)) {
-	    my $stime2 = date_format_csv($year, $month, $day);
-	    $haftara->{$stime2} = "Jeremiah 1:1 - 2:3 (Pinchas occurring after 17 Tammuz)";
+	    my $dt = date_format_sql($year, $month, $day);
+	    $special{$dt}->{"H"} = "Jeremiah 1:1 - 2:3";
+	    $special{$dt}->{"reason"} = "Pinchas occurring after 17 Tammuz";
 	}
     }
 }
 
 sub special_readings
 {
-    my($events,$maftir,$maftir_anode,$haftara) = @_;
+    my($events) = @_;
 
     for (my $i = 0; $i < @{$events}; $i++) {
 	my($year,$month,$day) = event_ymd($events->[$i]);
-	my $stime2 = date_format_csv($year, $month, $day);
-
-	next if defined $haftara->{$stime2};
-	next if defined $maftir->{$stime2};
-
+	my $dt = date_format_sql($year, $month, $day);
+	next if defined $special{$dt};
+	
 	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
 
 	my $h = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1281,11 +1286,10 @@ sub special_readings
 	} elsif ($dow == 7 && $h =~ /^Rosh Chodesh/) {
 	    # even worse hack!
 	    $h = 'Shabbat Machar Chodesh';
-	    ($year,$month,$day) =
+	    my($year0,$month0,$day0) =
 		Date::Calc::Add_Delta_Days($year, $month, $day, -1);
-	    $stime2 = date_format_csv($year, $month, $day);
-	    next if defined $haftara->{$stime2};
-	    next if defined $maftir->{$stime2};
+	    $dt = date_format_sql($year0, $month0, $day0);
+	    next if defined $special{$dt};
 	} elsif ($dow != 6) {
 	    next;
 	}
@@ -1303,7 +1307,8 @@ sub special_readings
 	    my $haft =
 		$fxml->{'festival'}->{$h}->{'kriyah'}->{'haft'}->{'reading'};
 	    if (defined $haft) {
-		$haftara->{$stime2} = "$haft | $h";
+		$special{$dt}->{"H"} = $haft;
+		$special{$dt}->{"reason"} = $h;
 	    }
 
 	    my $a;
@@ -1322,13 +1327,14 @@ sub special_readings
 	    if ($a) {
 		if ($chanukah_day) {
 		    $h .= " - Day $chanukah_day";
+		    $special{$dt}->{"reason"} = $h;
 		}
-		$maftir->{$stime2} = sprintf("%s %s - %s | %s",
+		my $maftir_reading = sprintf("%s %s - %s",
 					     $a->{'book'},
 					     $a->{'begin'},
-					     $a->{'end'},
-					     $h);
-		$maftir_anode->{$stime2} = [$a,$h];
+					     $a->{'end'});
+		$special{$dt}->{"M"} = $maftir_reading;
+		$special{$dt}->{"Ma"} = $a;
 	    }
 	}
     }
@@ -1342,12 +1348,13 @@ sub csv_parasha_event
 
     my($year,$month,$day) = event_ymd($evt);
     my $stime2 = date_format_csv($year, $month, $day);
-    my $date_sql = date_format_sql($year, $month, $day);
+    my $dt = date_format_sql($year, $month, $day);
+    my $special_maftir = $special{$dt}->{"M"};
 
     my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
     if (defined $dbh) {
-      my $sth = $dbh->prepare("INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)");
-      my $rv = $sth->execute($date_sql, $h, "T", $verses)
+      my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
+      my $rv = $sth->execute($dt, $h, "T", $verses)
 	or croak "can't execute the query: " . $sth->errstr;
     }
 
@@ -1357,7 +1364,7 @@ sub csv_parasha_event
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
     my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } @{$aliyot};
     foreach my $aliyah (@sorted_aliyot) {
-	next if $aliyah->{'num'} eq 'M' && defined $special_maftir{$stime2};
+	next if $aliyah->{'num'} eq 'M' && defined $special_maftir;
 	printf CSV
 		qq{%s,"%s",%s,"$book %s - %s",%s\015\012},
 		$stime2,
@@ -1367,29 +1374,30 @@ sub csv_parasha_event
 		$aliyah->{'end'},
 		$aliyah->{'numverses'};
 	if (defined $dbh) {
-	  my $sth = $dbh->prepare("INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)");
+	  my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
 	  my $aliyah_text = sprintf("%s %s - %s", $book, $aliyah->{'begin'}, $aliyah->{'end'});
-	  my $rv = $sth->execute($date_sql, $h, $aliyah->{'num'}, $aliyah_text)
+	  my $rv = $sth->execute($dt, $h, $aliyah->{'num'}, $aliyah_text)
 	    or croak "can't execute the query: " . $sth->errstr;
 	}
     }
 
-    if (defined $special_maftir{$stime2}) {
+    if (defined $special_maftir) {
+      my $maftir_aliyah = $special_maftir . " | " . $special{$dt}->{"reason"};
       printf CSV
 	qq{%s,"%s","%s","%s",\015\012},
 	$stime2,
 	$h,
 	'maf',
-	$special_maftir{$stime2};
+	$maftir_aliyah;
       if (defined $dbh) {
-	my $sth = $dbh->prepare("INSERT INTO leyning VALUES (?, ?, ?, ?)");
-	my $rv = $sth->execute($date_sql, $h, "M", $special_maftir{$stime2})
+	my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
+	my $rv = $sth->execute($dt, $h, "M", $maftir_aliyah)
 	  or croak "can't execute the query: " . $sth->errstr;
       }
     }
 
-    my $haft = (defined $special_haftara{$stime2}) ?
-      $special_haftara{$stime2} : $parshiot->{'parsha'}->{$h}->{'haftara'};
+    my $haft = $special{$dt}->{"H"}
+      || $parshiot->{'parsha'}->{$h}->{'haftara'};
 
     if (! defined $haft && $h =~ /^([^-]+)-(.+)$/ &&
 	defined $combined{$1} && defined $combined{$2}) {
@@ -1398,16 +1406,20 @@ sub csv_parasha_event
       $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
     }
 
+    my $haftarah_reading = $haft;
+    if (defined $special{$dt}->{"reason"}) {
+      $haftarah_reading .= " | " . $special{$dt}->{"reason"};
+    }
     printf CSV
       qq{%s,"%s","%s","%s",\015\012},
       $stime2,
       $h,
       'Haftara',
-      $haft;
+      $haftarah_reading;
 
     if (defined $dbh) {
-      my $sth = $dbh->prepare("INSERT INTO leyning VALUES (?, ?, ?, ?)");
-      my $rv = $sth->execute($date_sql, $h, "H", $haft)
+      my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
+      my $rv = $sth->execute($dt, $h, "H", $haft)
 	or croak "can't execute the query: " . $sth->errstr;
     }
 
@@ -1440,6 +1452,7 @@ sub readings_for_current_year
 	    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
 	    my $h = $1;
 	    my($year,$month,$day) = event_ymd($events[$i]);
+	    $parashah_date_sql{$h}->[$yr] = date_format_sql($year, $month, $day);
 	    my $stime = sprintf("%02d %s %04d",
 				$day,
 				$Hebcal::MoY_long{$month},
@@ -1456,8 +1469,6 @@ sub readings_for_current_year
 		if $yr == 1;	# second year in array
 
 	    if ($opts{'f'}) {
-		my $stime2 = date_format_csv($year, $month, $day);
-		$parashah_stime2{$h}->[$yr] = $stime2;
 		csv_parasha_event($events[$i], $h, $parshiot);
 	    }
 	}
@@ -1488,6 +1499,8 @@ sub triennial_csv
 
 	my($year,$month,$day) = event_ymd($events->[$i]);
 	my $stime2 = date_format_csv($year, $month, $day);
+	my $dt = date_format_sql($year, $month, $day);
+	my $special_maftir = $special{$dt}->{"M"};
 
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$book =~ s/\s+.+$//;
@@ -1495,7 +1508,7 @@ sub triennial_csv
 	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			    @{$readings->{$h}->[$yr]->[0]})
 	{
-	    next if $aliyah->{'num'} eq 'M' && defined $special_maftir{$stime2};
+	    next if $aliyah->{'num'} eq 'M' && defined $special_maftir;
 	    printf CSV
 		qq{%s,"%s",%s,"$book %s - %s"\015\012},
 		$stime2,
@@ -1505,17 +1518,18 @@ sub triennial_csv
 		$aliyah->{'end'};
 	}
 
-	if (defined $special_maftir{$stime2}) {
+	if (defined $special_maftir) {
+	  my $maftir_aliyah = $special_maftir . " | " . $special{$dt}->{"reason"};
 	    printf CSV
 		qq{%s,"%s","%s","%s",\015\012},
 		$stime2,
 		$h,
 		'maf',
-		$special_maftir{$stime2};
+		$maftir_aliyah;
 	}
 
-	my $haft = (defined $special_haftara{$stime2}) ?
-	    $special_haftara{$stime2} : $parshiot->{'parsha'}->{$h}->{'haftara'};
+	my $haft = $special{$dt}->{"H"}
+	  || $parshiot->{'parsha'}->{$h}->{'haftara'};
 
 	if (! defined $haft && $h =~ /^([^-]+)-(.+)$/ &&
 	    defined $combined{$1} && defined $combined{$2})
@@ -1525,12 +1539,16 @@ sub triennial_csv
 	    $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
 	}
 
+	my $haftarah_reading = $haft;
+	if (defined $special{$dt}->{"reason"}) {
+	  $haftarah_reading .= " | " . $special{$dt}->{"reason"};
+	}
 	printf CSV
 	    qq{%s,"%s","%s","%s",\015\012},
 	    $stime2,
 	    $h,
 	    'Haftara',
-	    $haft;
+	    $haftarah_reading;
 
 	print CSV "\015\012";
     }
