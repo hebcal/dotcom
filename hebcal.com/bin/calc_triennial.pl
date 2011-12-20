@@ -245,6 +245,21 @@ if ($opts{'d'}) {
 
 exit(0);
 
+sub event_ymd {
+  my($evt) = @_;
+  my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+  my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+  my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
+  ($year,$month,$day);
+}
+
+sub event_dates_equal {
+  my($evt1,$evt2) = @_;
+  my($year1,$month1,$day1) = event_ymd($evt1);
+  my($year2,$month2,$day2) = event_ymd($evt2);
+  $year1 == $year2 && $month1 == $month2 && $day1 == $day2;
+}
+
 sub get_tri_events
 {
     my($start) = @_;
@@ -296,63 +311,63 @@ sub cycle_readings
     my($bereshit_idx,$events,$option) = @_;
 
     my %readings;
-    my $year = 1;
+    my $yr = 1;
     for (my $i = $bereshit_idx; $i < @{$events}; $i++)
     {
 	if ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
 	    $i != $bereshit_idx)
 	{
-	    $year++;
-	    last if ($year == 4);
+	    $yr++;
+	    last if ($yr == 4);
 	}
 
 	next unless $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/;
 	my $h = $1;
 
-	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my($year,$month,$day) = event_ymd($events->[$i]);
 	my $stime = sprintf("%02d %s %04d",
-			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			    $day,
 			    $Hebcal::MoY_long{$month},
-			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+			    $year);
 
 	if (defined $combined{$h})
 	{
-	    my $variation = $option->{$h} . "." . $year;
+	    my $variation = $option->{$h} . "." . $yr;
 	    my $a = $triennial_aliyot{$h}->{$variation};
 	    croak unless defined $a;
-	    $readings{$h}->[$year] = [$a, $stime, $h];
+	    $readings{$h}->[$yr] = [$a, $stime, $h];
 	}
-	elsif (defined $triennial_aliyot{$h}->{$year})
+	elsif (defined $triennial_aliyot{$h}->{$yr})
 	{
-	    my $a = $triennial_aliyot{$h}->{$year};
+	    my $a = $triennial_aliyot{$h}->{$yr};
 	    croak unless defined $a;
 
-	    $readings{$h}->[$year] = [$a, $stime, $h];
+	    $readings{$h}->[$yr] = [$a, $stime, $h];
 
 	    if ($h =~ /^([^-]+)-(.+)$/ &&
 		defined $combined{$1} && defined $combined{$2})
 	    {
-		$readings{$1}->[$year] = [$a, $stime, $h];
-		$readings{$2}->[$year] = [$a, $stime, $h];
+		$readings{$1}->[$yr] = [$a, $stime, $h];
+		$readings{$2}->[$yr] = [$a, $stime, $h];
 	    }
 	}
-	elsif (defined $triennial_aliyot{$h}->{"Y.$year"})
+	elsif (defined $triennial_aliyot{$h}->{"Y.$yr"})
 	{
-	    my $a = $triennial_aliyot{$h}->{"Y.$year"};
+	    my $a = $triennial_aliyot{$h}->{"Y.$yr"};
 	    croak unless defined $a;
 
-	    $readings{$h}->[$year] = [$a, $stime, $h];
+	    $readings{$h}->[$yr] = [$a, $stime, $h];
 
 	    if ($h =~ /^([^-]+)-(.+)$/ &&
 		defined $combined{$1} && defined $combined{$2})
 	    {
-		$readings{$1}->[$year] = [$a, $stime, $h];
-		$readings{$2}->[$year] = [$a, $stime, $h];
+		$readings{$1}->[$yr] = [$a, $stime, $h];
+		$readings{$2}->[$yr] = [$a, $stime, $h];
 	    }
 	}
 	else
 	{
-	    croak "can't find aliyot for $h, year $year";
+	    croak "can't find aliyot for $h, year $yr";
 	}
     }
 
@@ -1212,9 +1227,7 @@ sub special_pinchas {
     my($events,$haftara) = @_;
     foreach my $evt (@{$events}) {
 	next unless "Parashat Pinchas" eq $evt->[$Hebcal::EVT_IDX_SUBJ];
-	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-	my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-	my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
+	my($year,$month,$day) = event_ymd($evt);
 	my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
 	# check to see if it's after the 17th of Tammuz
 	if ($hebdate->{"mm"} > 4
@@ -1231,9 +1244,7 @@ sub special_readings
     my($events,$maftir,$maftir_anode,$haftara) = @_;
 
     for (my $i = 0; $i < @{$events}; $i++) {
-	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my $day = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+	my($year,$month,$day) = event_ymd($events->[$i]);
 
 	my $stime2 = sprintf("%02d-%s-%04d",
 			     $day, $Hebcal::MoY_short[$month - 1], $year);
@@ -1247,20 +1258,16 @@ sub special_readings
 	my $chanukah_day = 0;
 	# hack! for Shabbat Rosh Chodesh
 	if ($dow == 6 && $h =~ /^Rosh Chodesh/
-	    && defined $events->[$i+1]
 	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d) Candles/
 	    && $1 > 1
-	    && $year == $events->[$i+1]->[$Hebcal::EVT_IDX_YEAR]
-	    && $month == $events->[$i+1]->[$Hebcal::EVT_IDX_MON] + 1
-	    && $day == $events->[$i+1]->[$Hebcal::EVT_IDX_MDAY]) {
+	    && defined $events->[$i+1]
+	    && event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $chanukah_day = $1 - 1;
 	    $h = "Shabbat Rosh Chodesh Chanukah";
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/
-	    && defined $events->[$i+1]
 	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Shabbat HaChodesh/
-	    && $year == $events->[$i+1]->[$Hebcal::EVT_IDX_YEAR]
-	    && $month == $events->[$i+1]->[$Hebcal::EVT_IDX_MON] + 1
-	    && $day == $events->[$i+1]->[$Hebcal::EVT_IDX_MDAY]) {
+	    && defined $events->[$i+1]
+	    && event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $h = "Shabbat HaChodesh (on Rosh Chodesh)";
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
@@ -1327,15 +1334,12 @@ sub csv_parasha_event
 {
     my($evt,$h,$parshiot) = @_;
 
-    my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+    my($year,$month,$day) = event_ymd($evt);
     my $stime2 = sprintf("%02d-%s-%04d",
-			 $evt->[$Hebcal::EVT_IDX_MDAY],
+			 $day, 
 			 $Hebcal::MoY_short[$month - 1],
-			 $evt->[$Hebcal::EVT_IDX_YEAR]);
-    my $date_sql = sprintf("%04d-%02d-%02d",
-			   $evt->[$Hebcal::EVT_IDX_YEAR],
-			   $month,
-			   $evt->[$Hebcal::EVT_IDX_MDAY]);
+			 $year);
+    my $date_sql = sprintf("%04d-%02d-%02d", $year, $month, $day);
 
     my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
     if (defined $dbh) {
@@ -1432,27 +1436,27 @@ sub readings_for_current_year
 	for (my $i = 0; $i < @events; $i++) {
 	    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
 	    my $h = $1;
-	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	    my($year,$month,$day) = event_ymd($events[$i]);
 	    my $stime = sprintf("%02d %s %04d",
-				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				$day,
 				$Hebcal::MoY_long{$month},
-				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+				$year);
 
 	    $current->{$h}->[$yr] = $stime;
 
 	    $parashah_time->{$h} = Time::Local::timelocal
 	      (1,0,0,
-	       $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-	       $events[$i]->[$Hebcal::EVT_IDX_MON],
-	       $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
+	       $day,
+	       $month - 1,
+	       $year - 1900,
 	       '','','')
 		if $yr == 1;	# second year in array
 
 	    if ($opts{'f'}) {
 		my $stime2 = sprintf("%02d-%s-%04d",
-				     $events[$i]->[$Hebcal::EVT_IDX_MDAY],
+				     $day,
 				     $Hebcal::MoY_short[$month - 1],
-				     $events[$i]->[$Hebcal::EVT_IDX_YEAR]);
+				     $year);
 		$parashah_stime2{$h}->[$yr] = $stime2;
 		csv_parasha_event($events[$i], $h, $parshiot);
 	    }
@@ -1469,30 +1473,30 @@ sub triennial_csv
 {
     my($parshiot,$events,$bereshit_idx,$readings) = @_;
 
-    my $year = 1;
+    my $yr = 1;
     for (my $i = $bereshit_idx; $i < @{$events}; $i++)
     {
 	if ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
 	    $i != $bereshit_idx)
 	{
-	    $year++;
-	    last if ($year == 4);
+	    $yr++;
+	    last if ($yr == 4);
 	}
 
 	next unless ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
 	my $h = $1;
 
-	my $month = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+	my($year,$month,$day) = event_ymd($events->[$i]);
 	my $stime2 = sprintf("%02d-%s-%04d",
-			     $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
+			     $day,
 			     $Hebcal::MoY_short[$month - 1],
-			     $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+			     $year);
 
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$book =~ s/\s+.+$//;
 
 	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			    @{$readings->{$h}->[$year]->[0]})
+			    @{$readings->{$h}->[$yr]->[0]})
 	{
 	    next if $aliyah->{'num'} eq 'M' && defined $special_maftir{$stime2};
 	    printf CSV
