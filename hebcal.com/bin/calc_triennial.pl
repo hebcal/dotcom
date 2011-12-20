@@ -260,6 +260,16 @@ sub event_dates_equal {
   $year1 == $year2 && $month1 == $month2 && $day1 == $day2;
 }
 
+sub date_format_sql {
+  my($year,$month,$day) = @_;
+  sprintf("%04d-%02d-%02d", $year, $month, $day);
+}
+
+sub date_format_csv {
+  my($year,$month,$day) = @_;
+  sprintf("%02d-%s-%04d", $day, $Hebcal::MoY_short[$month - 1], $year);
+}
+
 sub get_tri_events
 {
     my($start) = @_;
@@ -1232,8 +1242,7 @@ sub special_pinchas {
 	# check to see if it's after the 17th of Tammuz
 	if ($hebdate->{"mm"} > 4
 	    || ($hebdate->{"mm"} == 4 && $hebdate->{"dd"} > 17)) {
-	    my $stime2 = sprintf("%02d-%s-%04d",
-				 $day, $Hebcal::MoY_short[$month - 1], $year);
+	    my $stime2 = date_format_csv($year, $month, $day);
 	    $haftara->{$stime2} = "Jeremiah 1:1 - 2:3 (Pinchas occurring after 17 Tammuz)";
 	}
     }
@@ -1245,9 +1254,7 @@ sub special_readings
 
     for (my $i = 0; $i < @{$events}; $i++) {
 	my($year,$month,$day) = event_ymd($events->[$i]);
-
-	my $stime2 = sprintf("%02d-%s-%04d",
-			     $day, $Hebcal::MoY_short[$month - 1], $year);
+	my $stime2 = date_format_csv($year, $month, $day);
 
 	next if defined $haftara->{$stime2};
 	next if defined $maftir->{$stime2};
@@ -1276,8 +1283,7 @@ sub special_readings
 	    $h = 'Shabbat Machar Chodesh';
 	    ($year,$month,$day) =
 		Date::Calc::Add_Delta_Days($year, $month, $day, -1);
-	    $stime2 = sprintf("%02d-%s-%04d",
-			      $day, $Hebcal::MoY_short[$month - 1], $year);
+	    $stime2 = date_format_csv($year, $month, $day);
 	    next if defined $haftara->{$stime2};
 	    next if defined $maftir->{$stime2};
 	} elsif ($dow != 6) {
@@ -1335,11 +1341,8 @@ sub csv_parasha_event
     my($evt,$h,$parshiot) = @_;
 
     my($year,$month,$day) = event_ymd($evt);
-    my $stime2 = sprintf("%02d-%s-%04d",
-			 $day, 
-			 $Hebcal::MoY_short[$month - 1],
-			 $year);
-    my $date_sql = sprintf("%04d-%02d-%02d", $year, $month, $day);
+    my $stime2 = date_format_csv($year, $month, $day);
+    my $date_sql = date_format_sql($year, $month, $day);
 
     my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
     if (defined $dbh) {
@@ -1453,10 +1456,7 @@ sub readings_for_current_year
 		if $yr == 1;	# second year in array
 
 	    if ($opts{'f'}) {
-		my $stime2 = sprintf("%02d-%s-%04d",
-				     $day,
-				     $Hebcal::MoY_short[$month - 1],
-				     $year);
+		my $stime2 = date_format_csv($year, $month, $day);
 		$parashah_stime2{$h}->[$yr] = $stime2;
 		csv_parasha_event($events[$i], $h, $parshiot);
 	    }
@@ -1487,10 +1487,7 @@ sub triennial_csv
 	my $h = $1;
 
 	my($year,$month,$day) = event_ymd($events->[$i]);
-	my $stime2 = sprintf("%02d-%s-%04d",
-			     $day,
-			     $Hebcal::MoY_short[$month - 1],
-			     $year);
+	my $stime2 = date_format_csv($year, $month, $day);
 
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$book =~ s/\s+.+$//;
