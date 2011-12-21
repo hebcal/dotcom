@@ -749,27 +749,32 @@ EOHTML
     if (defined $parashah_date_sql{$h}) {
 	my %sp_dates;
 	foreach my $dt (@{$parashah_date_sql{$h}}) {
-	    if (defined $dt && defined $special{$dt}->{"Ma"}) {
-		my $fest = $special{$dt}->{"reason"};
-		push(@{$sp_dates{$fest}}, $dt);
+	    if (defined $dt && (defined $special{$dt}->{"Ma"} || defined $special{$dt}->{"8"})) {
+		my $reason = $special{$dt}->{"reason"};
+		push(@{$sp_dates{$reason}}, $dt);
 	    }
 	}
 
 	if (keys %sp_dates) {
 	    my $count = 0;
 	    print OUT2 qq{<tr><td style="vertical-align:top" colspan="4">\n};
-	    foreach my $fest (sort keys %sp_dates) {
-		my $aliyah = $special{$sp_dates{$fest}->[0]}->{"Ma"};
-		my $info = format_aliyah($aliyah,
-					 $all_inorder[$aliyah->{'parsha'}-1],
-					 undef,1);
+	    foreach my $reason (sort keys %sp_dates) {
+		my $info = "";
+		foreach my $aliyah ("8", "Ma") {
+		  my $aa = $special{$sp_dates{$reason}->[0]}->{$aliyah};
+		  if ($aa) {
+		    my $aa_parashah = $all_inorder[$aa->{'parsha'} - 1];
+		    $info .= "<br>\n" if $count++;
+		    $info .= format_aliyah($aa, $aa_parashah, undef, 1);
+		  }
+		}
 #		print OUT2 "<br>\n" if $count++;
 		print OUT2 <<EOHTML;
-On <b>$fest</b><br>
+On <b>$reason</b><br>
 $info<ul class="gtl">
 EOHTML
 ;
-		foreach my $dt (@{$sp_dates{$fest}}) {
+		foreach my $dt (@{$sp_dates{$reason}}) {
 		    my($year,$month,$day) = split(/-/, $dt);
 		    $month =~ s/^0//;
 		    $day =~ s/^0//;
@@ -1215,20 +1220,20 @@ sub get_parashah_info
      $drash_ajr);
 }
 
-sub get_special_maftir
+sub get_special_aliyah
 {
-    my($h) = @_;
+    my($h,$aliyah_num) = @_;
 
     if (defined $fxml->{'festival'}->{$h}) {
 	if (defined $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'}) {
 	    my $a = $fxml->{'festival'}->{$h}->{'kriyah'}->{'aliyah'};
 	    if (ref($a) eq 'HASH') {
-		if ($a->{'num'} eq 'M') {
+		if ($a->{'num'} eq $aliyah_num) {
 		    return $a;
 		}
 	    } else {
 		foreach my $aliyah (@{$a}) {
-		    if ($aliyah->{'num'} eq 'M') {
+		    if ($aliyah->{'num'} eq $aliyah_num) {
 			return $aliyah;
 		    }
 		}
@@ -1322,7 +1327,7 @@ sub special_readings
 		    "num" => "M",
 		};
 	    } else {
-		$a = get_special_maftir($h);
+		$a = get_special_aliyah($h, "M");
 	    }
 	    if ($a) {
 		if ($chanukah_day) {
@@ -1336,6 +1341,8 @@ sub special_readings
 		$special{$dt}->{"M"} = $maftir_reading;
 		$special{$dt}->{"Ma"} = $a;
 	    }
+	    my $a8 = get_special_aliyah($h, "8");
+	    $special{$dt}->{"8"} = $a8 if $a8;
 	}
     }
 
