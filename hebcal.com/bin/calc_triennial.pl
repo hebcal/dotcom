@@ -193,12 +193,12 @@ if ($opts{'t'})
     rename("$fn.$$", $fn) || croak "$fn: $!\n";
 }
 
-my $dbh;
+my $DBH;
 my $SQL_INSERT_INTO_LEYNING =
   "INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)";
 if ($opts{'d'}) {
   my $dbfile = $opts{'d'};
-  $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
+  $DBH = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
 		     { RaiseError => 1, AutoCommit => 0 })
     or croak $DBI::errstr;
   my @sql = ("DROP TABLE IF EXISTS leyning",
@@ -206,7 +206,7 @@ if ($opts{'d'}) {
 	     "CREATE INDEX leyning_dt ON leyning (dt)",
 	     );
   foreach my $sql (@sql) {
-    $dbh->do($sql)
+    $DBH->do($sql)
       or croak $DBI::errstr;
   }
 }
@@ -236,9 +236,9 @@ foreach my $h (keys %readings1, "Vezot Haberakhah")
 write_index_page($axml,\%parashah_dates);
 
 if ($opts{'d'}) {
-  $dbh->commit;
-  $dbh->disconnect;
-  $dbh = undef;
+  $DBH->commit;
+  $DBH->disconnect;
+  $DBH = undef;
 }
 
 
@@ -1342,11 +1342,22 @@ sub special_readings
     1;
 }
 
+# write full kryiyah to CSV & leyning DB
 sub csv_parasha_event
 {
     my($evt,$h,$parshiot) = @_;
 
     my($year,$month,$day) = event_ymd($evt);
+    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
+    csv_parasha_event_inner($h,$year,$month,$day,$parshiot,$aliyot,$DBH);
+}
+
+# write all of the aliyot for Shabbat to CSV file.
+# if $dbh is defined (for fullkriyah), also write to the leyning DB.
+sub csv_parasha_event_inner
+{
+    my($h,$year,$month,$day,$parshiot,$aliyot,$dbh) = @_;
+
     my $stime2 = date_format_csv($year, $month, $day);
     my $dt = date_format_sql($year, $month, $day);
     my $special_maftir = $special{$dt}->{"M"};
@@ -1361,18 +1372,19 @@ sub csv_parasha_event
     my $book = $verses;
     $book =~ s/\s+.+$//;
 
-    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
     my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } @{$aliyot};
     foreach my $aliyah (@sorted_aliyot) {
 	next if $aliyah->{'num'} eq 'M' && defined $special_maftir;
 	printf CSV
-		qq{%s,"%s",%s,"$book %s - %s",%s\015\012},
+		qq{%s,"%s",%s,"$book %s - %s"},
 		$stime2,
 		$h,
 		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
 		$aliyah->{'begin'},
-		$aliyah->{'end'},
-		$aliyah->{'numverses'};
+		$aliyah->{'end'};
+	print CSV ",", $aliyah->{'numverses'}
+	  if $aliyah->{'numverses'};
+	print CSV "\015\012";
 	if (defined $dbh) {
 	  my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
 	  my $aliyah_text = sprintf("%s %s - %s", $book, $aliyah->{'begin'}, $aliyah->{'end'});
@@ -1498,59 +1510,8 @@ sub triennial_csv
 	my $h = $1;
 
 	my($year,$month,$day) = event_ymd($events->[$i]);
-	my $stime2 = date_format_csv($year, $month, $day);
-	my $dt = date_format_sql($year, $month, $day);
-	my $special_maftir = $special{$dt}->{"M"};
-
-	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
-	$book =~ s/\s+.+$//;
-
-	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			    @{$readings->{$h}->[$yr]->[0]})
-	{
-	    next if $aliyah->{'num'} eq 'M' && defined $special_maftir;
-	    printf CSV
-		qq{%s,"%s",%s,"$book %s - %s"\015\012},
-		$stime2,
-		$h,
-		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
-		$aliyah->{'begin'},
-		$aliyah->{'end'};
-	}
-
-	if (defined $special_maftir) {
-	  my $maftir_aliyah = $special_maftir . " | " . $special{$dt}->{"reason"};
-	    printf CSV
-		qq{%s,"%s","%s","%s",\015\012},
-		$stime2,
-		$h,
-		'maf',
-		$maftir_aliyah;
-	}
-
-	my $haft = $special{$dt}->{"H"}
-	  || $parshiot->{'parsha'}->{$h}->{'haftara'};
-
-	if (! defined $haft && $h =~ /^([^-]+)-(.+)$/ &&
-	    defined $combined{$1} && defined $combined{$2})
-	{
-	    my($p1,$p2) = ($1,$2);
-	    my $ph = ($p1 eq 'Nitzavim') ? $p1 : $p2;
-	    $haft = $parshiot->{'parsha'}->{$ph}->{'haftara'};
-	}
-
-	my $haftarah_reading = $haft;
-	if (defined $special{$dt}->{"reason"}) {
-	  $haftarah_reading .= " | " . $special{$dt}->{"reason"};
-	}
-	printf CSV
-	    qq{%s,"%s","%s","%s",\015\012},
-	    $stime2,
-	    $h,
-	    'Haftara',
-	    $haftarah_reading;
-
-	print CSV "\015\012";
+	my $aliyot = $readings->{$h}->[$yr]->[0];
+	csv_parasha_event_inner($h,$year,$month,$day,$parshiot,$aliyot,undef);
     }
 }
 
