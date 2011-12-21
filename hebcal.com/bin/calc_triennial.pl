@@ -756,10 +756,10 @@ EOHTML
 	}
 
 	if (keys %sp_dates) {
-	    my $count = 0;
 	    print OUT2 qq{<tr><td style="vertical-align:top" colspan="4">\n};
 	    foreach my $reason (sort keys %sp_dates) {
 		my $info = "";
+		my $count = 0;
 		foreach my $aliyah ("8", "Ma") {
 		  my $aa = $special{$sp_dates{$reason}->[0]}->{$aliyah};
 		  if ($aa) {
