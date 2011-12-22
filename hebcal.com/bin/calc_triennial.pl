@@ -776,11 +776,7 @@ EOHTML
 ;
 		foreach my $dt (@{$sp_dates{$reason}}) {
 		    my($year,$month,$day) = split(/-/, $dt);
-		    $month =~ s/^0//;
-		    $day =~ s/^0//;
-		    my $stime2 = date_format_csv($year, $month, $day);
-		    $stime2 =~ s/-/ /g;
-		    print OUT2 "<li>$stime2\n";
+		    print OUT2 "<li>", format_html_date($year,$month,$day), "\n";
 		}
 
 		print OUT2 "</ul>\n";
@@ -841,12 +837,10 @@ EOHTML
 		  $sp_href = "http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot_haft.shtml";
 		}
 		my($year,$month,$day) = split(/-/, $dt);
-		$month =~ s/^0//;
-		$day =~ s/^0//;
-		my $stime2 = date_format_csv($year, $month, $day);
-		$stime2 =~ s/-/ /g;
+		my $stime2 = format_html_date($year,$month,$day);
 		print OUT2 <<EOHTML;
-<li>$stime2 - <b>$sp_festival</b> / <a class="outbound"
+<li>$stime2 -
+<b>$sp_festival</b> / <a class="outbound"
 title="Special Haftara for $sp_festival"
 href="$sp_href">$sp_verse</a>
 EOHTML
@@ -906,17 +900,17 @@ EOHTML
 	print OUT2 qq{</ul>\n};
     }
 
-    if (defined $read_on->{$h})
-    {
+    if (defined $parashah_date_sql{$h}) {
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>
 Parashat $h is read in the Diaspora on:
 <ul class="gtl">
 EOHTML
 	;
-	foreach my $stime (@{$read_on->{$h}}) {
-	    next unless defined $stime;
-	    print OUT2 "<li>$stime\n";
+	foreach my $dt (@{$parashah_date_sql{$h}}) {
+	    next unless $dt;
+	    my($year,$month,$day) = split(/-/, $dt);
+	    print OUT2 "<li>", format_html_date($year,$month,$day), "\n";
 	}
 	print OUT2 "</ul>\n";
     }
@@ -963,6 +957,14 @@ EOHTML
     rename("$fn.$$", $fn) || croak "$fn: $!\n";
 }
 
+sub format_html_date {
+  my($gy,$gm,$gd) = @_;
+  $gm =~ s/^0//;
+  $gd =~ s/^0//;
+  sprintf "<a href=\"/hebcal/?v=1;year=%d;month=%d" .
+    ";s=on;nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\">%02d %s %04d</a>",
+      $gy, $gm, $gd, $Hebcal::MoY_long{$gm}, $gy;
+}
 
 sub print_tri_cell
 {
