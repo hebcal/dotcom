@@ -962,7 +962,7 @@ sub format_html_date {
   $gm =~ s/^0//;
   $gd =~ s/^0//;
   sprintf "<a href=\"/hebcal/?v=1;year=%d;month=%d" .
-    ";s=on;nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\">%02d %s %04d</a>",
+    ";s=on;nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=sedrot\">%02d %s %04d</a>",
       $gy, $gm, $gd, $Hebcal::MoY_long{$gm}, $gy;
 }
 
