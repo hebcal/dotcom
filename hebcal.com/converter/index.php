@@ -181,17 +181,41 @@ else
     $dow = "";
 }
 
+if ($hm == "Adar1" && !is_leap_year($hy)) {
+    $month_name = "Adar";
+} else {
+    $month_name = $hmstr_to_hebcal[$hm];
+}
+$hebrew = build_hebrew_date($month_name, $hd, $hy);
+
 if ($type == "g2h")
 {
     $first = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
     $second = format_hebrew_date($hd, $hm, $hy);
-    my_header($second, "$first = $second");
+    $header_hebdate = $second;
 }
 else
 {
     $first = format_hebrew_date($hd, $hm, $hy);
     $second = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
-    my_header($first, "$first = $second");
+    $header_hebdate = $first;
+}
+
+if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
+    header("Content-Type: text/json; charset=UTF-8");
+    echo "{\"gy\":$gy,\"gm\":$gm,\"gd\":$gd,\n\"hy\":$hy,\"hm\":\"$month_name\",\"hd\":$hd,\n\"hebrew\":\"$hebrew\"\n}\n";
+    exit();
+} elseif (isset($_GET["cfg"]) && $_GET["cfg"] == "xml") {
+    header("Content-Type: text/xml; charset=UTF-8");
+    echo "<?xml version=\"1.0\" ?>\n"; ?>
+<hebcal>
+<gregorian year="<?php echo $gy ?>" month="<?php echo $gm ?>" day="<?php echo $gd ?>" />
+<hebrew year="<?php echo $hy ?>" month="<?php echo $month_name ?>" day="<?php echo $hd ?>" str="<?php echo $hebrew ?>" />
+</hebcal>
+<?php
+    exit();
+} else {
+    my_header($header_hebdate, "$first = $second");
 }
 
 if ($gy < 1752) {
@@ -211,12 +235,6 @@ of the Gregorian Calendar</a>.</p>
 <?php echo "$first = <b>$second</b>"; ?></p>
 <p dir="rtl" lang="he" class="hebrew-big">
 <?php
-if ($hm == "Adar1" && !is_leap_year($hy)) {
-    $month_name = "Adar";
-} else {
-    $month_name = $hmstr_to_hebcal[$hm];
-}
-$hebrew = build_hebrew_date($month_name, $hd, $hy);
 echo $hebrew, "\n";
 ?>
 </p>
