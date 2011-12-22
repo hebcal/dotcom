@@ -749,7 +749,7 @@ EOHTML
     if (defined $parashah_date_sql{$h}) {
 	my %sp_dates;
 	foreach my $dt (@{$parashah_date_sql{$h}}) {
-	    if (defined $dt && (defined $special{$dt}->{"Ma"} || defined $special{$dt}->{"8"})) {
+	    if (defined $dt && (defined $special{$dt}->{"M"} || defined $special{$dt}->{"8"})) {
 		my $reason = $special{$dt}->{"reason"};
 		push(@{$sp_dates{$reason}}, $dt);
 	    }
@@ -1338,8 +1338,7 @@ sub special_readings
 					     $a->{'book'},
 					     $a->{'begin'},
 					     $a->{'end'});
-		$special{$dt}->{"M"} = $maftir_reading;
-		$special{$dt}->{"Ma"} = $a;
+		$special{$dt}->{"M"} = $a;
 	    }
 	    my $a8 = get_special_aliyah($h, "8");
 	    $special{$dt}->{"8"} = $a8 if $a8;
@@ -1367,7 +1366,6 @@ sub csv_parasha_event_inner
 
     my $stime2 = date_format_csv($year, $month, $day);
     my $dt = date_format_sql($year, $month, $day);
-    my $special_maftir = $special{$dt}->{"M"};
 
     my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
     if (defined $dbh) {
@@ -1379,40 +1377,32 @@ sub csv_parasha_event_inner
     my $book = $verses;
     $book =~ s/\s+.+$//;
 
-    my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } @{$aliyot};
+    my %aliyot = map { $_->{"num"} => $_ } @{$aliyot};
+    $aliyot{"M"} = $special{$dt}->{"M"} if defined $special{$dt}->{"M"};
+    $aliyot{"8"} = $special{$dt}->{"8"} if defined $special{$dt}->{"8"};
+
+    my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } values %aliyot;
     foreach my $aliyah (@sorted_aliyot) {
-	next if $aliyah->{'num'} eq 'M' && defined $special_maftir;
+	my $aliyah_text = sprintf("%s %s - %s",
+				  $book, $aliyah->{'begin'}, $aliyah->{'end'});
+	if (defined $special{$dt}->{"reason"}
+	    && ($aliyah->{"num"} eq "M" || $aliyah->{"num"} eq "8")) {
+	    $aliyah_text .= " | " . $special{$dt}->{"reason"};
+	}
 	printf CSV
-		qq{%s,"%s",%s,"$book %s - %s"},
+		qq{%s,"%s",%s,"%s",},
 		$stime2,
 		$h,
 		($aliyah->{'num'} eq 'M' ? '"maf"' : $aliyah->{'num'}),
-		$aliyah->{'begin'},
-		$aliyah->{'end'};
-	print CSV ",", $aliyah->{'numverses'}
+		$aliyah_text;
+	print CSV $aliyah->{'numverses'}
 	  if $aliyah->{'numverses'};
 	print CSV "\015\012";
 	if (defined $dbh) {
 	  my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
-	  my $aliyah_text = sprintf("%s %s - %s", $book, $aliyah->{'begin'}, $aliyah->{'end'});
 	  my $rv = $sth->execute($dt, $h, $aliyah->{'num'}, $aliyah_text)
 	    or croak "can't execute the query: " . $sth->errstr;
 	}
-    }
-
-    if (defined $special_maftir) {
-      my $maftir_aliyah = $special_maftir . " | " . $special{$dt}->{"reason"};
-      printf CSV
-	qq{%s,"%s","%s","%s",\015\012},
-	$stime2,
-	$h,
-	'maf',
-	$maftir_aliyah;
-      if (defined $dbh) {
-	my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
-	my $rv = $sth->execute($dt, $h, "M", $maftir_aliyah)
-	  or croak "can't execute the query: " . $sth->errstr;
-      }
     }
 
     my $haft = $special{$dt}->{"H"}
