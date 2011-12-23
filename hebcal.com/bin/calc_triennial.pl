@@ -760,7 +760,7 @@ EOHTML
 	    foreach my $reason (sort keys %sp_dates) {
 		my $info = "";
 		my $count = 0;
-		foreach my $aliyah ("8", "Ma") {
+		foreach my $aliyah ("8", "M") {
 		  my $aa = $special{$sp_dates{$reason}->[0]}->{$aliyah};
 		  if ($aa) {
 		    my $aa_parashah = $all_inorder[$aa->{'parsha'} - 1];
