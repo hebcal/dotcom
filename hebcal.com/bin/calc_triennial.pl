@@ -1283,8 +1283,7 @@ sub special_readings
 	    && $1 > 1
 	    && defined $events->[$i+1]
 	    && event_dates_equal($events->[$i], $events->[$i+1])) {
-	    $chanukah_day = $1 - 1;
-	    $h = "Shabbat Rosh Chodesh Chanukah";
+	    $h = "Shabbat Rosh Chodesh Chanukah"; # don't set $chanukah_day = 6
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/
 	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Shabbat HaChodesh/
 	    && defined $events->[$i+1]
