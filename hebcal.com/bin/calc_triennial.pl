@@ -1389,9 +1389,10 @@ sub csv_parasha_event_inner
     foreach my $aliyah (@sorted_aliyot) {
 	my $aliyah_text = sprintf("%s %s - %s",
 				  $book, $aliyah->{'begin'}, $aliyah->{'end'});
-	if (defined $special{$dt}->{"reason"}
-	    && ($aliyah->{"num"} eq "M" || $aliyah->{"num"} eq "8")) {
-	    $aliyah_text .= " | " . $special{$dt}->{"reason"};
+	if (defined $special{$dt}->{$aliyah->{"num"}}) {
+	    $aliyah_text = sprintf("%s %s - %s | %s",
+				   $aliyah->{"book"}, $aliyah->{"begin"}, $aliyah->{"end"},
+				   $special{$dt}->{"reason"});
 	}
 	printf CSV
 		qq{%s,"%s",%s,"%s",},
@@ -1420,7 +1421,7 @@ sub csv_parasha_event_inner
     }
 
     my $haftarah_reading = $haft;
-    if (defined $special{$dt}->{"reason"}) {
+    if (defined $special{$dt}->{"H"}) {
       $haftarah_reading .= " | " . $special{$dt}->{"reason"};
     }
     printf CSV
