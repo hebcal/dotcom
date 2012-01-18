@@ -1205,6 +1205,7 @@ accurate.</p>
 
     my $header_ad = <<EOHTML;
 <div id="hebcal-results-header-ad">
+<h3 class="widget-title" style="font-size:14px;margin-bottom:4px">Advertisement</h3>
 <script type="text/javascript"><!--
 google_ad_client = "pub-7687563417622459";
 /* 300x250, created 10/14/10 */
