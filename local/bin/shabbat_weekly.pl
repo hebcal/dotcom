@@ -399,7 +399,7 @@ sub gen_body
 	}
 	else
 	{
-	    $body .= "Holiday: $subj on $strtime\n";
+	    $body .= "$subj occurs on $strtime\n";
 	    my $hanchor = Hebcal::get_holiday_anchor($subj,undef,undef);
 	    if ($hanchor && !$holiday_seen{$hanchor}) {
 		$body .= "  http://www.hebcal.com" . $hanchor . "\n";
