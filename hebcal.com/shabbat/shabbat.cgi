@@ -478,9 +478,9 @@ sub display_html_common
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
-	    Hebcal::out_html($cfg,qq{Holiday: <a$anchor
-target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> on
-$items->[$i]->{'date'}});
+	    Hebcal::out_html($cfg,qq{<a$anchor
+target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>
+occurs on $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
