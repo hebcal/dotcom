@@ -3,7 +3,7 @@
 ########################################################################
 # Convert decimal dates to Hebrew
 #
-# Copyright (c) 2005  Michael J. Radwin.
+# Copyright (c) 2012  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -145,7 +145,12 @@ function build_hebrew_date($hm, $hd, $hy)
 {
     global $hebnum_months;
 
-    return hebnum_to_string($hd) . " \327\221\326\274\326\260" .
+    $vowel = "\326\260"; # Sheva U+05B0
+    $month_prefix = " \327\221\326\274";
+    if ($hm == "Sh'vat") {
+	$vowel = "\326\264"; # Hiriq U+05B4
+    }
+    return hebnum_to_string($hd) . $month_prefix . $vowel .
         $hebnum_months[$hm] . " " . hebnum_to_string($hy);
 }
 
