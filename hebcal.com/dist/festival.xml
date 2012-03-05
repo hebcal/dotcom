@@ -51,7 +51,7 @@
  <group>Rosh Chodesh Tevet</group>
  <group>Asara B'Tevet</group>
  <group>Rosh Chodesh Sh'vat</group>
- <group>Tu B'Shvat</group>
+ <group>Tu BiShvat</group>
  <group>Shabbat Shekalim
   <li>Shabbat Shekalim</li>
   <li>Shabbat Shekalim (on Rosh Chodesh)</li>
@@ -1395,7 +1395,7 @@ with the verse
  spirit.
  </wikipedia>
 </festival>
-<festival id="Tu B'Shvat" hebrew="טוּ בִּשְׁבָט" yomtov="0">
+<festival id="Tu BiShvat" hebrew="טוּ בִּשְׁבָט" yomtov="0">
  <about href="http://www.jewfaq.org/holiday8.htm">
  New Year for Trees
  </about>
