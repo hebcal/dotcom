@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2012  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -857,7 +857,7 @@ EOHTML
 
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>
-$f begins at $rise_or_set in the Diaspora on:
+$f begins in the Diaspora on:
 <ul>
 EOHTML
 	;
@@ -879,7 +879,8 @@ EOHTML
 	      }
 	    }
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
-		";nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\"$style>%s, %02d %s %04d</a> (%s)\n",
+		";nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\"$style>%s,\n" .
+		"%02d %s %04d</a> at $rise_or_set (%s)\n",
 		$gy, $gm,
 		$Hebcal::DoW[$dow],
 		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
