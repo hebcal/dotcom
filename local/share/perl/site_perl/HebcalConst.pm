@@ -515,7 +515,7 @@ use utf8;
 'Shabbat HaGadol' => 'Shabbat before Pesach',
 'Shabbat Machar Chodesh' => 'When Shabbat falls the day before Rosh Chodesh',
 'Shabbat Nachamu' => 'Shabbat after Tish\'a B\'Av (Shabbat of Consolation)',
-'Shabbat Parah' => 'Shabbat after Purim',
+'Shabbat Parah' => 'Shabbat of the Red Heifer',
 'Shabbat Rosh Chodesh' => 'When Shabbat falls on Rosh Chodesh',
 'Shabbat Shekalim' => 'Shabbat before Rosh Chodesh Adar',
 'Shabbat Shekalim (on Rosh Chodesh)' => 'Shabbat before Rosh Chodesh Adar',
