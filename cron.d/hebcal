@@ -45,8 +45,5 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # SVN backup
 13 0 * * * $HEBCAL_BIN/s3backup.sh
 
-# clean cmd cache monthly
-0 0 1 * * mv /tmp/hebcron-cache /tmp/hebcron-cache.$$ && rm -rf /tmp/hebcron-cache.$$
-
 # don't run fetchmail as a daemon, run it from cron
 */6 * * * * /home/hebcal/local/bin/fetchmail
