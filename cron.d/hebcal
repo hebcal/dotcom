@@ -46,4 +46,4 @@ HEBCAL_BIN=/home/hebcal/local/bin
 13 0 * * * $HEBCAL_BIN/s3backup.sh
 
 # don't run fetchmail as a daemon, run it from cron
-*/6 * * * * /home/hebcal/local/bin/fetchmail
+*/6 * * * * /home/hebcal/local/bin/fetchmail -s 2> /dev/null
