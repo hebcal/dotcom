@@ -1,9 +1,10 @@
 #!/bin/sh
 
 PATH=/bin:/usr/bin
-S3SYNCDIR=/home/mradwin/local/s3sync
+HCHOME=/home/hebcal
+S3SYNCDIR=$HCHOME/local/s3sync
 LOCKFILE=/tmp/mradwin.s3backup.lock
-BACKUPDIR=/home/hebcal/local/lib/svn
+BACKUPDIR=$HCHOME/local/lib/svn
 
 dotlockfile -r 0 -p $LOCKFILE
 if [ $? != 0 ]; then
@@ -21,4 +22,3 @@ cd $S3SYNCDIR
 ruby s3sync.rb -v -r ${BACKUPDIR} hebcal:
 
 dotlockfile -u $LOCKFILE
-
