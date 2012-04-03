@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2012  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -124,11 +124,6 @@ unless ($wrote_parasha) {
 
 my $hdate = `$HEBCAL -T -x -h | grep -v Omer`;
 chomp($hdate);
-
-$outfile = "$WEBDIR/today.inc";
-open(OUT,">$outfile") || die;
-print OUT "$hdate\n";
-close(OUT);
 
 if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 {
