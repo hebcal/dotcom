@@ -126,7 +126,8 @@ echo html_header_new("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.
 <div class="entry-content">
 <p class="fpsubhead">
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
-include("./today.inc");
+$hm = $hnum_to_str[$hmnum];
+echo format_hebrew_date($hd, $hm, $hy);
 if (isset($events)) {
     foreach ($events as $h) {
 	if (strncmp($h, "Parashat ", 9) != 0) {

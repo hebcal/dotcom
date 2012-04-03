@@ -5,7 +5,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2012  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -124,6 +124,74 @@ $hebcal_tz_names = array(
      "tz_-3"   => "GMT -03:00",
      "tz_-4"   => "GMT -04:00",
      );
+
+$hmstr_to_num = array(
+    "Nisan" => 8,
+    "Iyyar" => 9,
+    "Sivan" => 10,
+    "Tamuz" => 11,
+    "Av" => 12,
+    "Elul" => 13,
+    "Tishrei" => 1,
+    "Cheshvan" => 2,
+    "Kislev" => 3,
+    "Tevet" => 4,
+    "Shvat" => 5,
+    "Adar1" => 6,
+    "Adar2" => 7,
+    );
+
+$hnum_to_str = array_flip($hmstr_to_num);
+
+$hmstr_to_hebcal = array(
+    "Nisan" => "Nisan",
+    "Iyyar" => "Iyyar",
+    "Sivan" => "Sivan",
+    "Tamuz" => "Tamuz",
+    "Av" => "Av",
+    "Elul" => "Elul",
+    "Tishrei" => "Tishrei",
+    "Cheshvan" => "Cheshvan",
+    "Kislev" => "Kislev",
+    "Tevet" => "Tevet",
+    "Shvat" => "Sh'vat",
+    "Adar1" => "Adar I",
+    "Adar2" => "Adar II",
+    );
+
+$hebrew_months = array_keys($hmstr_to_hebcal);
+
+function numsuffix($n) {
+    if ($n >= 10 && $n <= 19) {
+	return $n . "th";
+    }
+
+    $d = $n % 10;
+    if ($d == 1) {
+	return $n . "st";
+    } elseif ($d == 2) {
+	return $n . "nd";
+    } elseif ($d == 3) {
+	return $n . "rd";
+    } else {
+	return $n . "th";
+    }
+}
+
+function is_leap_year($hyear) {
+    return (1 + ($hyear * 7)) % 19 < 7 ? true : false;
+}
+
+function format_hebrew_date($hd, $hm, $hy) {
+    global $hmstr_to_hebcal;
+    if ($hm == "Adar1" && !is_leap_year($hy)) {
+	$month_name = "Adar";
+    } else {
+	$month_name = $hmstr_to_hebcal[$hm];
+    }
+
+    return numsuffix($hd) . " of " . $month_name . ", $hy";
+}
 
 function hebcal_get_zipcode_fields($zip, $password)
 {
