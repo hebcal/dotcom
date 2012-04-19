@@ -2255,9 +2255,12 @@ sub vcalendar_write_contents
 	    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
 	    my $torah_reading;
 	    my $haftarah_reading;
+	    my $maftir_reading;
 	    while(my($aliyah_num,$aliyah_reading) = $sth->fetchrow_array) {
 	      if ($aliyah_num eq "T") {
 		$torah_reading = $aliyah_reading;
+	      } elsif ($aliyah_num eq "M") {
+		$maftir_reading = $aliyah_reading;
 	      } elsif ($aliyah_num eq "H") {
 		$haftarah_reading = $aliyah_reading;
 	      }
@@ -2265,6 +2268,10 @@ sub vcalendar_write_contents
 	    $sth->finish;
 	    if ($torah_reading) {
 	      $memo = "Torah: $torah_reading";
+	      if ($maftir_reading) {
+		$memo .= "\\nMaftir: ";
+		$memo .= $maftir_reading;
+	      }
 	      if ($haftarah_reading) {
 		$memo .= "\\nHaftarah: ";
 		$memo .= $haftarah_reading;
