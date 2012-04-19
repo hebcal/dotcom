@@ -1432,7 +1432,7 @@ sub csv_parasha_event_inner
 
     if (defined $dbh) {
       my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
-      my $rv = $sth->execute($dt, $h, "H", $haft)
+      my $rv = $sth->execute($dt, $h, "H", $haftarah_reading)
 	or croak "can't execute the query: " . $sth->errstr;
     }
 
