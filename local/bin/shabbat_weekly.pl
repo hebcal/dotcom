@@ -140,6 +140,8 @@ for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
 }
 # dh limit 100 emails an hour per authenticated user
 my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
+msg("$SMTP_NUM_CONNECTIONS open; will sleep for $SMTP_SLEEP_TIME between messages",
+    $opt_verbose);
 
 my %CONFIG;
 my %ZIP_CACHE;
