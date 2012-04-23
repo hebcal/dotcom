@@ -292,6 +292,7 @@ $unsub_url
 	(
 	 "From" => "Hebcal <shabbat-owner\@hebcal.com>",
 	 "To" => $to,
+	 "Reply-To" => "no-reply\@hebcal.com",
 	 "MIME-Version" => "1.0",
 	 "Content-Type" => "text/plain",
 	 "Subject" => "[shabbat] Candles $lighting",
