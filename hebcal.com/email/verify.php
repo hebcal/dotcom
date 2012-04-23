@@ -116,6 +116,7 @@ EOD;
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-owner@hebcal.com";
+    $reply_to = "no-reply@hebcal.com";
     $return_path = "shabbat-return-" . strtr($info["em"], "@", "=") .
 	"@hebcal.com";
     $subject = "Your subscription to hebcal is complete";
@@ -127,7 +128,7 @@ EOD;
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $info["em"],
-		     "Reply-To" => $from_addr,
+		     "Reply-To" => $reply_to,
 		     "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",

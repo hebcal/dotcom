@@ -490,6 +490,7 @@ function subscribe($param) {
 
 	$from_name = "Hebcal Subscription Notification";
     	$from_addr = "shabbat-owner@hebcal.com";
+	$reply_to = "no-reply@hebcal.com";
 	$return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
 	    "@hebcal.com";
 	$subject = "Your subscription is updated";
@@ -498,7 +499,7 @@ function subscribe($param) {
 
 	$headers = array("From" => "\"$from_name\" <$from_addr>",
 			 "To" => $param["em"],
-			 "Reply-To" => $from_addr,
+			 "Reply-To" => $reply_to,
 			 "List-Unsubscribe" =>
 			 "<mailto:shabbat-unsubscribe@hebcal.com>",
 			 "MIME-Version" => "1.0",
@@ -686,7 +687,7 @@ EOD
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $param["em"],
-		     "Reply-To" => $from_addr,
+		     "Reply-To" => $reply_to,
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
 		     "X-Sender" => $sender,
