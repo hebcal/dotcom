@@ -55,6 +55,8 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	    $pos = strpos($subj, " ");
 	    if ($pos === false) { $pos = strlen($subj); }
 	    $shalosh_regalim = substr($subj, 0, $pos);
+	} elseif ($subj == "Pesach Sheni") {
+	    // Pesach Sheni is not a Chag Sameach
 	} elseif (strncmp($subj, "Sukkot", 6) == 0
 	    || strncmp($subj, "Pesach", 6) == 0
 	    || strncmp($subj, "Shavuot", 7) == 0) {
