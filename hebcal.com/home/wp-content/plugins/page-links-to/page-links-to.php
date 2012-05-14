@@ -3,7 +3,7 @@
 Plugin Name: Page Links To
 Plugin URI: http://txfx.net/wordpress-plugins/page-links-to/
 Description: Allows you to point WordPress pages or posts to a URL of your choosing.  Good for setting up navigational links to non-WP sections of your site or to off-site resources.
-Version: 2.6
+Version: 2.7.1
 Author: Mark Jaquith
 Author URI: http://coveredwebservices.com/
 */
@@ -29,6 +29,7 @@ class CWS_PageLinksTo {
 	static $instance;
 	var $targets;
 	var $links;
+	var $targets_on_this_page;
 
 	function __construct() {
 		self::$instance = $this;
@@ -40,6 +41,9 @@ class CWS_PageLinksTo {
 	 */
 	function init() {
 		$this->maybe_upgrade();
+
+		load_plugin_textdomain( 'page-links-to', false, basename( dirname( __FILE__ ) ) . '/languages' );
+
 		add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages'       )        );
 		add_action( 'template_redirect',   array( $this, 'template_redirect'   )        );
 		add_filter( 'page_link',           array( $this, 'link'                ), 20, 2 );
@@ -49,6 +53,7 @@ class CWS_PageLinksTo {
 		add_action( 'save_post',           array( $this, 'save_post'           )        );
 		add_filter( 'wp_nav_menu_objects', array( $this, 'wp_nav_menu_objects' ), 10, 2 );
 		add_action( 'load-post.php',       array( $this, 'load_post'           )        );
+		add_filter( 'the_posts',           array( $this, 'the_posts'           )        );
 	}
 
  /**
@@ -140,11 +145,21 @@ class CWS_PageLinksTo {
 		wp_nonce_field( 'txfx_plt', '_txfx_pl2_nonce', false, true );
 		echo '</p>';
 		$url = get_post_meta( $post->ID, '_links_to', true);
-		if ( !$url )
+		if ( !$url ) {
+			$linked = false;
 			$url = 'http://';
+		} else {
+			$linked = true;
+		}
 	?>
-		<p>Point to this URL: <input name="txfx_links_to" type="text" style="width:75%" id="txfx_links_to" value="<?php echo esc_attr( $url ); ?>" /></p>
-		<p><label for="txfx_links_to_new_window"><input type="checkbox" name="txfx_links_to_new_window" id="txfx_links_to_new_window" value="_blank" <?php checked( '_blank', get_post_meta( $post->ID, '_links_to_target', true ) ); ?>> Open this link in a new window</label></p>
+		<p><?php _e( 'Point this content to:', 'page-links-to' ); ?></p>
+		<p><label><input type="radio" id="txfx-links-to-choose-wp" name="txfx_links_to_choice" value="wp" <?php checked( !$linked ); ?> /> <?php _e( 'Its normal WordPress URL', 'page-links-to' ); ?></label></p>
+		<p><label><input type="radio" id="txfx-links-to-choose-alternate" name="txfx_links_to_choice" value="alternate" <?php checked( $linked ); ?> /> <?php _e( 'An alternate URL', 'page-links-to' ); ?></label></p>
+		<div style="margin-left: 30px;" id="txfx-links-to-alternate-section" class="<?php echo !$linked ? 'hide-if-js' : ''; ?>">
+			<p><input name="txfx_links_to" type="text" style="width:75%" id="txfx-links-to" value="<?php echo esc_attr( $url ); ?>" /></p>
+			<p><label for="txfx-links-to-new-window"><input type="checkbox" name="txfx_links_to_new_window" id="txfx-links-to-new-window" value="_blank" <?php checked( '_blank', get_post_meta( $post->ID, '_links_to_target', true ) ); ?>> <?php _e( 'Open this link in a new window', 'page-links-to' ); ?></label></p>
+		</div>
+		<script src="<?php echo trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/page-links-to.dev.js'; ?>"></script>
 	<?php
 	}
 
@@ -155,7 +170,7 @@ class CWS_PageLinksTo {
 	 */
 	function save_post( $post_ID ) {
 		if ( isset( $_REQUEST['_txfx_pl2_nonce'] ) && wp_verify_nonce( $_REQUEST['_txfx_pl2_nonce'], 'txfx_plt' ) ) {
-			if ( isset( $_POST['txfx_links_to'] ) && strlen( $_POST['txfx_links_to'] ) > 0 && $_POST['txfx_links_to'] !== 'http://' ) {
+			if ( ( !isset( $_POST['txfx_links_to_choice'] ) || 'alternate' == $_POST['txfx_links_to_choice'] ) && isset( $_POST['txfx_links_to'] ) && strlen( $_POST['txfx_links_to'] ) > 0 && $_POST['txfx_links_to'] !== 'http://' ) {
 				$link = stripslashes( $_POST['txfx_links_to'] );
 				if ( 0 === strpos( $link, 'www.' ) )
 					$link = 'http://' . $link; // Starts with www., so add http://
@@ -229,7 +244,7 @@ class CWS_PageLinksTo {
 			if ( isset( $page_links_to_target_cache[$id] ) )
 				$targets[$page] = $page_links_to_target_cache[$id];
 
-			if ( str_replace( 'http://www.', 'http://', $this_url ) == str_replace( 'http://www.', 'http://', $page ) || ( is_home() && str_replace( 'http://www.', 'http://', trailingslashit( get_bloginfo( 'home' ) ) ) == str_replace( 'http://www.', 'http://', trailingslashit( $page ) ) ) ) {
+			if ( str_replace( 'http://www.', 'http://', $this_url ) == str_replace( 'http://www.', 'http://', $page ) || ( is_home() && str_replace( 'http://www.', 'http://', trailingslashit( get_bloginfo( 'url' ) ) ) == str_replace( 'http://www.', 'http://', trailingslashit( $page ) ) ) ) {
 				$highlight = true;
 				$current_page = esc_url( $page );
 			}
@@ -263,7 +278,7 @@ class CWS_PageLinksTo {
 
 	function load_post() {
 		if ( isset( $_GET['post'] ) ) {
-			if ( $url = get_post_meta( absint( $_GET['post'] ), '_links_to', true ) ) {
+			if ( get_post_meta( absint( $_GET['post'] ), '_links_to', true ) ) {
 				add_action( 'admin_notices', array( $this, 'notify_of_external_link' ) );
 			}
 		}
@@ -271,6 +286,32 @@ class CWS_PageLinksTo {
 
 	function notify_of_external_link() {
 		?><div class="updated"><p><?php _e( '<strong>Note</strong>: This content is pointing to an alternate URL. Use the &#8220;Page Links To&#8221; box to change this behavior.', 'page-links-to' ); ?></p></div><?php
+	}
+
+	function id_to_url_callback( &$val, $key ) {
+		$val = get_permalink( $val );
+	}
+
+	function the_posts( $posts ) {
+		$page_links_to_target_cache = $this->get_targets();
+		if ( is_array( $page_links_to_target_cache) && count( $page_links_to_target_cache ) ) {
+			$pids = array();
+			foreach ( (array) $posts as $p )
+				$pids[$p->ID] = $p->ID;
+			$targets = array_keys( array_intersect_key( $page_links_to_target_cache, $pids ) );
+			if ( count( $targets ) ) {
+				array_walk( $targets, array( $this, 'id_to_url_callback' ) );
+				$targets = array_unique( $targets );
+				$this->targets_on_this_page = $targets;
+				wp_enqueue_script( 'jquery' );
+				add_action( 'wp_head', array( $this, 'targets_in_new_window_via_js' ) );
+			}
+		}
+		return $posts;
+	}
+
+	function targets_in_new_window_via_js() {
+		?><script>(function($){var t=<?php echo json_encode( $this->targets_on_this_page ); ?>;$(document).ready(function(){var a=$('a');$.each(t,function(i,v){a.filter('[href="'+v+'"]').attr('target','_blank');});});})(jQuery);</script><?php
 	}
 
 }
