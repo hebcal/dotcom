@@ -23,7 +23,8 @@ Redirect permanent /holidays/rosh-hashana.html http://www.hebcal.com/holidays/ro
 Redirect permanent /holidays/shabbat-chazon.html http://www.hebcal.com/holidays/shabbat-chazon
 Redirect permanent /holidays/shabbat-hachodesh.html http://www.hebcal.com/holidays/shabbat-hachodesh
 Redirect permanent /holidays/shabbat-hagadol.html http://www.hebcal.com/holidays/shabbat-hagadol
-Redirect permanent /holidays/shabbat-hazon.html http://www.hebcal.com/holidays/shabbat-hazon
+Redirect permanent /holidays/shabbat-hazon.html http://www.hebcal.com/holidays/shabbat-chazon
+Redirect permanent /holidays/shabbat-hazon http://www.hebcal.com/holidays/shabbat-chazon
 Redirect permanent /holidays/shabbat-machar-chodesh.html http://www.hebcal.com/holidays/shabbat-machar-chodesh
 Redirect permanent /holidays/shabbat-nachamu.html http://www.hebcal.com/holidays/shabbat-nachamu
 Redirect permanent /holidays/shabbat-parah.html http://www.hebcal.com/holidays/shabbat-parah
