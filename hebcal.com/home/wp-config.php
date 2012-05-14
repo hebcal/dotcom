@@ -16,7 +16,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('WP_CACHE', true); //Added by WP-Cache Manager
+//define('WP_CACHE', true); //Added by WP-Cache Manager
 define('DB_NAME', 'hebcal_com');
 
 /** MySQL database username */
