@@ -37,6 +37,7 @@ Redirect permanent /holidays/shmini-atzeret.html http://www.hebcal.com/holidays/
 Redirect permanent /holidays/shushan-purim.html http://www.hebcal.com/holidays/shushan-purim
 Redirect permanent /holidays/simchat-torah.html http://www.hebcal.com/holidays/simchat-torah
 Redirect permanent /holidays/sukkot.html http://www.hebcal.com/holidays/sukkot
+Redirect permanent /holidays/sukkos http://www.hebcal.com/holidays/sukkot
 Redirect permanent /holidays/taanit-bechorot.html http://www.hebcal.com/holidays/taanit-bechorot
 Redirect permanent /holidays/taanit-esther.html http://www.hebcal.com/holidays/taanit-esther
 Redirect permanent /holidays/tisha-bav.html http://www.hebcal.com/holidays/tisha-bav
