@@ -80,9 +80,14 @@ Redirect permanent /help/tech.html http://www.hebcal.com/home/category/developer
 
 Redirect permanent /help/sedrot.html http://www.hebcal.com/sedrot/
 Redirect permanent /help/holidays.html http://www.hebcal.com/holidays/
+Redirect permanent /help/purim-katan.html http://www.hebcal.com/home/121/purim-katan
 
 Redirect permanent /news/index.rdf http://www.hebcal.com/home/feed
 Redirect permanent /news/index.xml http://www.hebcal.com/home/feed
+Redirect permanent /news/2004/09/shana_tovah.html http://www.hebcal.com/home/144/shana_tovah
+Redirect permanent /news/2005/02/printable_calendars.html http://www.hebcal.com/home/38/printing-a-jewish-calendar
+Redirect permanent /news/2010/03/yahoo_calendar_and_windows_live_.html http://www.hebcal.com/home/154/yahoo-calendar-and-windows-live-calendar-support
+
 RedirectMatch permanent ^/news(/)?$ http://www.hebcal.com/home/category/news
 
 Redirect gone /shabbat/cities.html
