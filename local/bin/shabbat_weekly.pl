@@ -125,13 +125,12 @@ chomp($HOSTNAME);
 
 my @AUTH =
     (
-     ['lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
-     ['hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
-     ['shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
-     ['kyg0f4neienvfpgx@hebcal.com', 'xxxxxxxx'],
+     ['mail.hebcal.com', 'lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
+     ['mail.hebcal.com', 'hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
+     ['mail.hebcal.com', 'shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
+     ['mail.hebcal.com', 'kyg0f4neienvfpgx@hebcal.com', 'xxxxxxxx'],
      );
 my @SMTP;
-my $SMTP_HOST = "mail.hebcal.com";
 my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
 msg("Opening $SMTP_NUM_CONNECTIONS SMTP connections", $opt_verbose);
 for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
@@ -539,10 +538,11 @@ sub smtp_reconnect
 	$SMTP[$server_num]->quit();
 	$SMTP[$server_num] = undef;
     }
-    my $user = $AUTH[$server_num]->[0];
-    my $password = $AUTH[$server_num]->[1];
-    my $smtp = smtp_connect($SMTP_HOST, $user, $password, $debug)
-	or croak "Can't connect to $SMTP_HOST as $user";
+    my $host = $AUTH[$server_num]->[0];
+    my $user = $AUTH[$server_num]->[1];
+    my $password = $AUTH[$server_num]->[2];
+    my $smtp = smtp_connect($host, $user, $password, $debug)
+	or croak "Can't connect to $host as $user";
     $SMTP[$server_num] = $smtp;
     return $smtp;
 }
