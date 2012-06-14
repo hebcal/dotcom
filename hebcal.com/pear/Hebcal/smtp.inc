@@ -25,7 +25,10 @@ function email_address_valid($str)
 	return false;
     }
 
-    return $addr[0]->mailbox . '@' . $addr[0]->host;
+    $mailbox = str_replace(" ", "", $addr[0]->mailbox);
+    $host = str_replace(" ", "", $addr[0]->host);
+
+    return $mailbox . '@' . $host;
 }
 
 
