@@ -127,10 +127,10 @@ my @AUTH =
     (
      ['email-smtp.us-east-1.amazonaws.com',
       'AKIAI6V6VWD6W4UGYGTQ', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'],
-     ['mail.hebcal.com', 'lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
-     ['mail.hebcal.com', 'hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
-     ['mail.hebcal.com', 'shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
-     ['mail.hebcal.com', 'kyg0f4neienvfpgx@hebcal.com', 'xxxxxxxx'],
+#     ['mail.hebcal.com', 'lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
+#     ['mail.hebcal.com', 'hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
+#     ['mail.hebcal.com', 'shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
+#     ['mail.hebcal.com', 'kyg0f4neienvfpgx@hebcal.com', 'xxxxxxxx'],
      );
 my @SMTP;
 my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
@@ -140,7 +140,8 @@ for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
     smtp_reconnect($i, 1);
 }
 # dh limit 100 emails an hour per authenticated user
-my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
+#my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
+my $SMTP_SLEEP_TIME = 1;
 msg("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME sec between messages",
     $opt_verbose);
 
