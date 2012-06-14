@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2012  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -125,6 +125,8 @@ chomp($HOSTNAME);
 
 my @AUTH =
     (
+     ['email-smtp.us-east-1.amazonaws.com',
+      'AKIAI6V6VWD6W4UGYGTQ', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'],
      ['mail.hebcal.com', 'lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
      ['mail.hebcal.com', 'hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
      ['mail.hebcal.com', 'shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
