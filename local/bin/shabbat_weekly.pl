@@ -172,7 +172,7 @@ sub mail_all
     my $MAX_FAILURES = 100;
     my $RECONNECT_INTERVAL = 20;
     my $failures = 0;
-    for (;;) {
+    for (my $attempts = 0; $attempts < 3; $attempts++) {
 	my @addrs = keys %SUBS;
 	my $count =  scalar(@addrs);
 	last if $count == 0;
