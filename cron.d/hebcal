@@ -37,7 +37,7 @@ HEBCAL_BIN=/home/hebcal/local/bin
 #30 1 7 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
 # clear bounces at 8:03am on friday
-3 8 * * 5 nice $HEBCAL_BIN/shabbat_deactivate.pl -count 5
+3 8 * * 5 nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
 
 # MySQL backups
 30 0 * * * nice $HEBCAL_BIN/email_list_snapshot.sh
