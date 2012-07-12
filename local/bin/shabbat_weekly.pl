@@ -97,6 +97,10 @@ my $sat_year = (localtime($saturday))[5] + 1900;
 my $HOME = "/home/hebcal";
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
 
+my $STATUS_OK = 1;
+my $STATUS_TRY_LATER = 2;
+my $STATUS_FAIL_AND_CONTINUE = 3;
+
 if ($opt_log) {
     my $logfile = sprintf("%s/local/var/log/shabbat-%04d%02d%02d",
 			  $HOME, $year, $mon+1, $mday);
@@ -183,8 +187,8 @@ sub mail_all
 	for (my $i = 0; $i < $count; $i++) {
 	    my $to = $addrs[$i];
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
-	    my $success = mail_user($to, $SMTP[$server_num]);
-	    if ($success) {
+	    my $status = mail_user($to, $SMTP[$server_num]);
+	    if ($status == $STATUS_OK || $status == $STATUS_FAIL_AND_CONTINUE) {
 		delete $SUBS{$to};
 		# reconnect every so often
 		if (($i % $RECONNECT_INTERVAL) == ($RECONNECT_INTERVAL - 1)) {
@@ -307,7 +311,8 @@ $unsub_url
 
     my $status = my_sendmail($smtp,$return_path,\%headers,$body);
     if ($opt_log) {
-	print LOG join(":", $msgid, $status, $to,
+	my $log_status = ($status == $STATUS_OK) ? 1 : 0;
+	print LOG join(":", $msgid, $log_status, $to,
 		       defined $args->{"zip"} 
 		       ? $args->{"zip"} : $args->{"city"}), "\n";
     }
@@ -594,24 +599,29 @@ sub my_sendmail
     my $rv = $smtp->mail($return_path);
     unless ($rv) {
 	carp "smtp mail() failure for $to\n" . $smtp->debug_txt();
-	return 0;
+	return $STATUS_TRY_LATER;
     }
 
     $rv = $smtp->to($to);
     unless ($rv) {
 	carp "smtp to() failure for $to\n" . $smtp->debug_txt();
-	return 0;
+	return $STATUS_TRY_LATER;
     }
 
     $rv = $smtp->data();
     $rv = $smtp->datasend($message);
     $rv = $smtp->dataend();
     unless ($rv) {
-	carp "smtp dataend() failure for $to\n" . $smtp->debug_txt();
-	return 0;
+	my $debug_txt = $smtp->debug_txt();
+	if ($debug_txt =~ /<<< 554 Message rejected: Address blacklisted/) {
+	    carp "$to 554 Message rejected: Address blacklisted\n";
+	    return $STATUS_FAIL_AND_CONTINUE;
+	}
+	carp "smtp dataend() failure for $to\n" . $debug_txt;
+	return $STATUS_TRY_LATER;
     }
 
-    1;
+    $STATUS_OK;
 }
 
 sub usage {
