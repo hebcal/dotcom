@@ -188,7 +188,11 @@ sub mail_all
 	    my $to = $addrs[$i];
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
 	    my $status = mail_user($to, $SMTP[$server_num]);
-	    if ($status == $STATUS_OK || $status == $STATUS_FAIL_AND_CONTINUE) {
+	    if ($status == $STATUS_FAIL_AND_CONTINUE) {
+		# count this as a real failure but don't try the address again
+		delete $SUBS{$to};
+		++$failures;
+	    } elsif ($status == $STATUS_OK) {
 		delete $SUBS{$to};
 		# reconnect every so often
 		if (($i % $RECONNECT_INTERVAL) == ($RECONNECT_INTERVAL - 1)) {
