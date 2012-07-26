@@ -2288,6 +2288,8 @@ sub vcalendar_write_contents
 	}
 
 	if ($memo) {
+	  $memo =~ s/,/\\,/g;
+	  $memo =~ s/;/\\;/g;
 	  out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
 	}
 
