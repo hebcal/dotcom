@@ -217,6 +217,20 @@ my(%parashah_time);
 my($saturday) = get_saturday();
 readings_for_current_year($axml, \%parashah_dates, \%parashah_time);
 
+my %next_reading;
+my $NOW = time();
+foreach my $h (keys %readings1, "Vezot Haberakhah") {
+    foreach my $dt (@{$parashah_date_sql{$h}}) {
+	next unless $dt;
+	my($year,$month,$day) = split(/-/, $dt);
+	my $time = Date::Calc::Date_to_Time($year,$month,$day,12,59,59);
+	if ($time >= $NOW) {
+	    $next_reading{$h} = $dt;
+	    last;
+	}
+    }
+}
+
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
@@ -446,9 +460,12 @@ EOHTML
 
 	print OUT1 qq{<li><a id="$anchor" },
 	qq{href="$anchor">Parashat $h</a>};
-	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
-	{
-	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>};
+	if ($next_reading{$h}) {
+	    my($year,$month,$day) = split(/-/, $next_reading{$h});
+	    $day =~ s/^0//;
+	    $month =~ s/^0//;
+	    printf OUT1 qq{ - <small>%02d %s %04d</small>},
+		$day, $Hebcal::MoY_long{$month}, $year;
 	}
 	print OUT1 qq{\n};
     }
@@ -462,9 +479,12 @@ EOHTML
 
 	print OUT1 qq{<li><a id="$anchor" },
 	qq{href="$anchor">Parashat $h</a>};
-	if (defined $read_on->{$h} && defined $read_on->{$h}->[1])
-	{
-	    print OUT1 qq{ - <small>$read_on->{$h}->[1]</small>};
+	if ($next_reading{$h}) {
+	    my($year,$month,$day) = split(/-/, $next_reading{$h});
+	    $day =~ s/^0//;
+	    $month =~ s/^0//;
+	    printf OUT1 qq{ - <small>%02d %s %04d</small>},
+		$day, $Hebcal::MoY_long{$month}, $year;
 	}
 	print OUT1 qq{\n};
     }
@@ -649,11 +669,16 @@ EOHTML
 
     my $description = "Parashat $h ($torah). ";
 
-    if (defined $read_on->{$h} && defined $read_on->{$h}->[1]) {
-      $description .= "Read on " . $read_on->{$h}->[1] . " in the Diaspora";
-    } else {
-      $description .= "List of dates when read in the Diaspora";
+    my $next_observed = "List of dates when read in the Diaspora";
+    if ($next_reading{$h}) {
+	my($year,$month,$day) = split(/-/, $next_reading{$h});
+	$day =~ s/^0//;
+	$month =~ s/^0//;
+	$next_observed = sprintf "Read on %02d %s %04d in the Diaspora",
+	    $day, $Hebcal::MoY_long{$month}, $year;
     }
+
+    $description .= $next_observed;
     $description .= ". Torah reading, Haftarah, links to audio and commentary.";
 
     print OUT2 Hebcal::html_header("$h - Torah Portion - $hebrew",
