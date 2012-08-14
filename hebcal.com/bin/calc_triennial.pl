@@ -211,11 +211,10 @@ if ($opts{'d'}) {
   }
 }
 
-my(%parashah_dates);
 my %parashah_date_sql;
 my(%parashah_time);
 my($saturday) = get_saturday();
-readings_for_current_year($axml, \%parashah_dates, \%parashah_time);
+readings_for_current_year($axml);
 
 my %next_reading;
 my $NOW = time();
@@ -243,11 +242,11 @@ my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 foreach my $h (keys %readings1, "Vezot Haberakhah")
 {
-    write_sedra_page($axml,\%parashah_dates,$h,$prev{$h},$next{$h},
+    write_sedra_page($axml,$h,$prev{$h},$next{$h},
 		     $readings1{$h},$readings2{$h});
 }
 
-write_index_page($axml,\%parashah_dates);
+write_index_page($axml);
 
 if ($opts{'d'}) {
   $DBH->commit;
@@ -399,7 +398,7 @@ sub cycle_readings
 
 sub write_index_page
 {
-    my($parshiot,$read_on) = @_;
+    my($parshiot) = @_;
 
     my $fn = "$outdir/index.html";
     open(OUT1, ">$fn.$$") || croak "$fn.$$: $!\n";
@@ -610,7 +609,7 @@ sub read_aliyot_metadata
 
 sub write_sedra_page
 {
-    my($parshiot,$read_on,$h,$prev,$next,$tri1,$tri2) = @_;
+    my($parshiot,$h,$prev,$next,$tri1,$tri2) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
@@ -1466,7 +1465,7 @@ sub csv_parasha_event_inner
 
 sub readings_for_current_year
 {
-    my($parshiot,$current,$parashah_time) = @_;
+    my($parshiot) = @_;
 
     my $heb_yr = $hebrew_year - 1;
 
@@ -1491,14 +1490,7 @@ sub readings_for_current_year
 	    my $h = $1;
 	    my($year,$month,$day) = event_ymd($events[$i]);
 	    $parashah_date_sql{$h}->[$yr] = date_format_sql($year, $month, $day);
-	    my $stime = sprintf("%02d %s %04d",
-				$day,
-				$Hebcal::MoY_long{$month},
-				$year);
-
-	    $current->{$h}->[$yr] = $stime;
-
-	    $parashah_time->{$h} = Time::Local::timelocal
+	    $parashah_time{$h} = Time::Local::timelocal
 	      (1,0,0,
 	       $day,
 	       $month - 1,
