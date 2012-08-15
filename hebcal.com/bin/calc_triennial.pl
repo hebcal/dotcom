@@ -460,11 +460,8 @@ EOHTML
 	print OUT1 qq{<li><a id="$anchor" },
 	qq{href="$anchor">Parashat $h</a>};
 	if ($next_reading{$h}) {
-	    my($year,$month,$day) = split(/-/, $next_reading{$h});
-	    $day =~ s/^0//;
-	    $month =~ s/^0//;
-	    printf OUT1 qq{ - <small>%02d %s %04d</small>},
-		$day, $Hebcal::MoY_long{$month}, $year;
+	    print OUT1 " - <small>", date_sql_to_dd_MMM_yyyy($next_reading{$h}),
+		"</small>";
 	}
 	print OUT1 qq{\n};
     }
@@ -479,11 +476,8 @@ EOHTML
 	print OUT1 qq{<li><a id="$anchor" },
 	qq{href="$anchor">Parashat $h</a>};
 	if ($next_reading{$h}) {
-	    my($year,$month,$day) = split(/-/, $next_reading{$h});
-	    $day =~ s/^0//;
-	    $month =~ s/^0//;
-	    printf OUT1 qq{ - <small>%02d %s %04d</small>},
-		$day, $Hebcal::MoY_long{$month}, $year;
+	    print OUT1 " - <small>", date_sql_to_dd_MMM_yyyy($next_reading{$h}),
+		"</small>";
 	}
 	print OUT1 qq{\n};
     }
@@ -530,6 +524,14 @@ EOHTML
     rename("$fn.$$", $fn) || croak "$fn: $!\n";
 
     1;
+}
+
+sub date_sql_to_dd_MMM_yyyy {
+    my($date_sql) = @_;
+    my($year,$month,$day) = split(/-/, $date_sql);
+    $day =~ s/^0//;
+    $month =~ s/^0//;
+    sprintf "%02d %s %04d", $day, $Hebcal::MoY_long{$month}, $year;
 }
 
 sub calc_variation_options
@@ -667,18 +669,16 @@ EOHTML
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
     my $description = "Parashat $h ($torah). ";
-
-    my $next_observed = "List of dates when read in the Diaspora";
+    my $next_observed = "";
     if ($next_reading{$h}) {
-	my($year,$month,$day) = split(/-/, $next_reading{$h});
-	$day =~ s/^0//;
-	$month =~ s/^0//;
-	$next_observed = sprintf "Read on %02d %s %04d in the Diaspora",
-	    $day, $Hebcal::MoY_long{$month}, $year;
+	my $dt = date_sql_to_dd_MMM_yyyy($next_reading{$h});
+	$next_observed = "Read on $dt in the Diaspora.";
+	$description .= $next_observed;
+    } else {
+	$description .= "List of dates when read in the Diaspora.";
     }
 
-    $description .= $next_observed;
-    $description .= ". Torah reading, Haftarah, links to audio and commentary.";
+    $description .= " Torah reading, Haftarah, links to audio and commentary.";
 
     print OUT2 Hebcal::html_header("$h - Torah Portion - $hebrew",
 				   "/sedrot/$anchor",
@@ -723,6 +723,7 @@ $next_link
 <h1 class="entry-title">Parashat $h / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 <div class="entry-content">
+$next_observed
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
