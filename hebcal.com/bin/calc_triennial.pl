@@ -671,9 +671,10 @@ EOHTML
     my $description = "Parashat $h ($torah). ";
     my $next_observed = "";
     if ($next_reading{$h}) {
-	my $dt = date_sql_to_dd_MMM_yyyy($next_reading{$h});
-	$next_observed = "Read on $dt in the Diaspora.";
-	$description .= $next_observed;
+	my $read_on = "Read on " . date_sql_to_dd_MMM_yyyy($next_reading{$h})
+	    . " in the Diaspora.";
+	$next_observed = "<p>" . $read_on . "</p>";
+	$description .= $read_on;
     } else {
 	$description .= "List of dates when read in the Diaspora.";
     }
