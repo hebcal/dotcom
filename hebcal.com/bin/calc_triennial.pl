@@ -669,14 +669,24 @@ EOHTML
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
     my $description = "Parashat $h ($torah). ";
-    my $next_observed = "";
+    my $intro_summary = "<p>";
     if ($next_reading{$h}) {
-	my $read_on = "Read on " . date_sql_to_dd_MMM_yyyy($next_reading{$h})
-	    . " in the Diaspora.";
-	$next_observed = "<p>" . $read_on . "</p>";
-	$description .= $read_on;
+	my $dt = date_sql_to_dd_MMM_yyyy($next_reading{$h});
+	$intro_summary .= "Next read in the Diaspora on $dt.";
+	$description .= "Read on $dt in the Diaspora.";
     } else {
 	$description .= "List of dates when read in the Diaspora.";
+    }
+
+    if (defined $parashah2id{$h}) {
+	$intro_summary .= "\nParashat $h is the " . ordinate($parashah2id{$h})
+	    . " weekly Torah portion in the annual Jewish cycle of Torah reading."
+    }
+
+    if ($intro_summary eq "<p>") {
+	$intro_summary = "";
+    } else {
+	$intro_summary .= "</p>";
     }
 
     $description .= " Torah reading, Haftarah, links to audio and commentary.";
@@ -724,7 +734,7 @@ $next_link
 <h1 class="entry-title">Parashat $h / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
 <div class="entry-content">
-$next_observed
+$intro_summary
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
@@ -1551,4 +1561,27 @@ sub get_saturday
     }
 
     $sat;
+}
+
+########################################################################
+# from Lingua::EN::Numbers::Ordinate
+########################################################################
+
+sub ordsuf ($) {
+  return 'th' if not(defined($_[0])) or not( 0 + $_[0] );
+   # 'th' for undef, 0, or anything non-number.
+  my $n = abs($_[0]);  # Throw away the sign.
+  return 'th' unless $n == int($n); # Best possible, I guess.
+  $n %= 100;
+  return 'th' if $n == 11 or $n == 12 or $n == 13;
+  $n %= 10;
+  return 'st' if $n == 1; 
+  return 'nd' if $n == 2;
+  return 'rd' if $n == 3;
+  return 'th';
+}
+
+sub ordinate ($) {
+  my $i = $_[0] || 0;
+  return $i . ordsuf($i);
 }
