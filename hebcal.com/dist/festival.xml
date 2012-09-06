@@ -59,8 +59,8 @@
  <group>Rosh Chodesh Adar
   <li>Rosh Chodesh Adar</li>
   <li>Rosh Chodesh Adar I</li>
-  <li>Rosh Chodesh Adar II</li>
  </group>
+ <group>Rosh Chodesh Adar II</group>
  <group>Ta'anit Esther</group>
  <group>Shabbat Zachor</group>
  <group>Purim Katan</group>
@@ -568,6 +568,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <book ASIN="0316739081" author="Rabbi Alan Lew">
   This Is Real and You Are Completely Unprepared: The Days of Awe as a
   Journey of Transformation
+  </book>
+  <book ASIN="0789325411" author="">
+  The Jewish Calendar 2013
   </book>
  </books>
 </festival>
