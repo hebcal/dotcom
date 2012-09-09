@@ -428,12 +428,18 @@ EOHTML
 <span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
 </div><!-- .entry-meta -->
 <div class="entry-content">
-<p>Readings for:
-<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;set=off">$hy0</a> -
-$hebrew_year -
-<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;set=off">$hy1</a> -
-<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;set=off">$hy2</a> -
-<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;set=off">$hy3</a></p>
+<p>Readings for Diaspora:
+<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=off;set=off">$hy0</a> -
+<a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=off;set=off">$hebrew_year</a> -
+<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=off;set=off">$hy1</a> -
+<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=off;set=off">$hy2</a> -
+<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=off;set=off">$hy3</a>
+<br>Readings for Israel:
+<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=on;set=off">$hy0</a> -
+<a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=on;set=off">$hebrew_year</a> -
+<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=on;set=off">$hy1</a> -
+<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=on;set=off">$hy2</a> -
+<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=on;set=off">$hy3</a></p>
 <p>Leyning coordinators:
 <a title="Can I download the aliyah-by-aliyah breakdown of Torah readings for Shabbat?"
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
