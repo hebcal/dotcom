@@ -4,7 +4,13 @@ $matches = array();
 if (preg_match('/(\d+)/', $VERSION, $matches)) {
     $VERSION = $matches[1];
 }
-$args = strstr($_SERVER["REQUEST_URI"], "?");
+$request_uri = $_SERVER["REQUEST_URI"];
+$ics_question = strpos($request_uri, ".ics%3F");
+if ($ics_question !== false) {
+    $request_uri = substr($request_uri, 0, $ics_question)
+	. urldecode(substr($request_uri, $ics_question));
+}
+$args = strstr($request_uri, "?");
 if ($args !== false) {
     if (strncmp($args, "?subscribe=1%3B", 15) == 0) {
 	$args = str_replace("%3B", ";", $args); // reverse iOS ; => %3B conversion
@@ -23,7 +29,7 @@ if ($args !== false) {
 	$ch = curl_init($url);
 	$user_agent = "hebcal-export/$VERSION";
 	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
-	$ref_url = "http://www.hebcal.com" . $_SERVER["REQUEST_URI"];
+	$ref_url = "http://www.hebcal.com" . $request_uri;
 	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
 	curl_exec($ch);
 	curl_close($ch);
