@@ -7,6 +7,8 @@ if (preg_match('/(\d+)/', $VERSION, $matches)) {
 $args = strstr($_SERVER["REQUEST_URI"], "?");
 if ($args !== false) {
     $arg2 = str_replace(";", "&", substr($args, 1));
+    $arg2 = str_replace("%3B", "&", $arg2);
+//    $arg2 = str_replace("%26", "&", $arg2);
     parse_str($arg2, $param);
     if (isset($param["v"]) && ($param["v"] == "1" || $param["v"] == "yahrzeit")) {
 	header("HTTP/1.1 200 OK");
