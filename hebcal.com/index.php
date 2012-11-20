@@ -112,7 +112,7 @@ if ($hmnum == 13 && $hd >= 1) {
     if ($chanukah_dayname == "Fri") {
 	$chanukah_when = "before sundown";
     } elseif ($chanukah_dayname == "Sat") {
-	$chanukah_when = "after Havdalah";
+	$chanukah_when = "at nightfall";
     }
     $chanukah_upcoming = sprintf("%s on %s, %s %s %s",
 		$chanukah_when,
