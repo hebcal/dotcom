@@ -107,12 +107,19 @@ if ($hmnum == 13 && $hd >= 1) {
     // for three weeks before Chanukah, show greeting
     $chanukah_jd = jewishtojd(3, 24, $hy); // month 3 == Kislev
     $chanukah_cal = cal_from_jd($chanukah_jd, CAL_GREGORIAN);
-    $chanukah_upcoming = sprintf("%s sundown on %s, %s %s %s",
-	       $chanukah_cal["abbrevdayname"] == "Fri" ? "before" : "at",
-		       $chanukah_cal["abbrevdayname"],
-		       $chanukah_cal["day"],
-		       $chanukah_cal["monthname"],
-		       $chanukah_cal["year"]);
+    $chanukah_when = "at sundown";
+    $chanukah_dayname = $chanukah_cal["abbrevdayname"];
+    if ($chanukah_dayname == "Fri") {
+	$chanukah_when = "before sundown";
+    } elseif ($chanukah_dayname == "Sat") {
+	$chanukah_when = "after Havdalah";
+    }
+    $chanukah_upcoming = sprintf("%s on %s, %s %s %s",
+		$chanukah_when,
+		$chanukah_dayname,
+		$chanukah_cal["day"],
+		$chanukah_cal["monthname"],
+		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
