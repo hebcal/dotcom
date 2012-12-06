@@ -428,6 +428,9 @@ sub gen_body
 sub load_subs
 {
     my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
+    if ($opt_verbose > 2) {
+	msg("Connecting to $dsn", $opt_verbose);
+    }
     my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
 
     my $all_sql = "";
