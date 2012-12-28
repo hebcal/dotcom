@@ -514,13 +514,15 @@ EOD;
 	$err = smtp_send($return_path, $param["em"], $headers, $body);
 
 	$html = <<<EOD
-<h2>Subscription Updated</h2>
-<p>Your subsciption information has been updated successfully.</p>
+<div class="alert alert-success alert-block">
+<h4>Unsubscribed</h4>
+Your subsciption information has been updated successfully.
 <p><small>
 $city_descr
 <br>&nbsp;&nbsp;$tz_descr
 <br>&nbsp;&nbsp;$dst_descr
 </small></p>
+</div>
 EOD
 	     ;
 
@@ -586,11 +588,12 @@ EOD;
     if ($err === true)
     {
 	$html = <<<EOD
-<p>Thank you for your interest in weekly
-candle lighting times and parsha information.</p>
-<p>A confirmation message has been sent
+<div class="alert alert-success">
+<strong>Thank you!</strong>
+A confirmation message has been sent
 to <strong>$html_email</strong>.<br>
-Click the link within that message to confirm your subscription.</p>
+Click the link within that message to confirm your subscription.
+</div>
 <p>If you do not receive this acknowledgment message within an hour
 or two, then the most likely problem is that you made a typo
 in your email address.  If you do not get the confirmation message,
@@ -607,9 +610,12 @@ EOD
     else
     {
 	$html = <<<EOD
-<h2>Sorry!</h2>
-<p>Unfortunately, we are temporarily unable to send email
-to <strong>$html_email</strong>.</p>
+<div class="alert alert-error alert-block">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<h4>Server Error</h4>
+Sorry, we are temporarily unable to send email
+to <strong>$html_email</strong>.
+</div>
 <p>Please try again in a few minutes.</p>
 <p>If the problem persists, please send email to
 <a href="mailto:webmaster&#64;hebcal.com">webmaster&#64;hebcal.com</a>.</p>
@@ -639,9 +645,11 @@ function unsubscribe($param) {
 
     if (isset($info["status"]) && $info["status"] == "unsubscribed") {
 	$html = <<<EOD
-<h2>Already Unsubscribed</h2>
-<p><strong>$html_email</strong>
-is already removed from the email subscription list.</p>
+<div class="alert">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>$html_email</strong>
+is already removed from the email subscription list.
+</div>
 EOD
 	     ;
 
@@ -656,8 +664,11 @@ EOD
 
     if (sql_unsub($param["em"]) === false) {
         $html = <<<EOD
-<h2>Database error</h2>
-<p>Sorry, an error occurred.  Please try again later.</p>
+<div class="alert alert-error alert-block">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<h4>Database Error</h4>
+Sorry, a database error occurred on our servers. Please try again later.
+</div>
 EOD
 	     ;
         echo $html;
@@ -697,9 +708,11 @@ EOD;
     $err = smtp_send($return_path, $param["em"], $headers, $body);
 
     $html = <<<EOD
-<h2>Unsubscribed</h2>
-<p>You have been removed from the email subscription list.<br>
-A confirmation message has been sent to <strong>$html_email</strong>.</p>
+<div class="alert alert-success alert-block">
+<h4>Unsubscribed</h4>
+You have been removed from the email subscription list.<br>
+A confirmation message has been sent to <strong>$html_email</strong>.
+</div>
 EOD
 	     ;
     echo $html;
