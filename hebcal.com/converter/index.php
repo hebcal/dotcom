@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2011  Michael J. Radwin.
+ * Copyright (c) 2012  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -194,14 +194,9 @@ of the Gregorian Calendar</a>.</p>
 <?php
 }
 ?>
-<div id="converter-results">
-<p style="font-size: large">
-<?php echo "$first = <b>$second</b>"; ?></p>
-<p dir="rtl" lang="he" class="hebrew-big">
-<?php
-echo $hebrew, "\n";
-?>
-</p>
+<div id="converter-results" class="well">
+<p class="lead"><?php echo "$first = <strong>$second</strong>"; ?></p>
+<p dir="rtl" lang="he" class="lead hebrew-big"><?php echo $hebrew ?></p>
 <?php
 if ($gy >= 1900 && $gy <= 2099) {
     $century = substr($gy, 0, 2);
@@ -209,7 +204,7 @@ if ($gy >= 1900 && $gy <= 2099) {
     @include($f);
     $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
     if (isset($sedra) && isset($sedra[$iso])) {
-	echo "<div id=\"converter-events\"><ul>\n";
+	echo "<div id=\"converter-events\"><ul class=\"unstyled\">\n";
 	if (is_array($sedra[$iso])) {
 	    foreach ($sedra[$iso] as $sed) {
 		display_hebrew_event($sed);
@@ -240,15 +235,17 @@ function my_header($hebdate, $result = false) {
 $xtra_head = <<<EOD
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates.$description">
+<style type="text/css">
+#converter-results { text-align: center; }
+</style>
 EOD;
 
-    echo html_header_new("Hebrew Date Converter - $hebdate", $xtra_head);
+    echo html_header_bootstrap("Hebrew Date Converter - $hebdate", $xtra_head);
 ?>
-<div id="container">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Date Converter</h1>
-<div class="entry-content">
+<div class="span9">
+<div class="page-header">
+<h1>Date Converter <small>Hebrew &harr; Gregorian</small></h1>
+</div>
 <?php
 }
 
@@ -267,24 +264,29 @@ function form($head, $message, $help = "") {
     $action = $_SERVER["SCRIPT_URL"];
 ?>
 <div id="converter-form">
-<form name="f1" id="f1" action="<?php echo $action ?>">
-<input type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
+<form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
+<fieldset>
+<input class="input-mini" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
 <?php
 global $MoY_long;
 echo HTML_Form::returnSelect("gm", $MoY_long, $gm);
 ?>
-<input type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
-<label for="gs"><input type="checkbox" name="gs" value="on" id="gs">
+<input class="input-mini" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
+<label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
 After sunset</label>
-<input name="g2h" type="submit" value="Convert Gregorian to Hebrew date">
+<button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Gregorian to Hebrew</button>
+</fieldset>
 </form>
-<form name="f2" id="f2" action="<?php echo $action ?>">
-<input type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
+
+<form class="form-inline" name="f2" id="f2" action="<?php echo $action ?>">
+<fieldset>
+<input class="input-mini" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
 <?php
 echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
 ?>
-<input type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
-<input name="h2g" type="submit" value="Convert Hebrew to Gregorian date">
+<input class="input-mini" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
+<button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
+</fieldset>
 </form>
 </div><!-- #converter-form -->
 <?php
@@ -300,20 +302,10 @@ Anniversary Calendar</a> which will calculate dates ten years into the
 future and optionally export to Microsoft Outlook, Apple iCal, iPhone,
 iPad, Android (via Google Calendar), and other desktop, mobile and web
 calendars.</p>
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-<div id="primary" class="widget-area" role="complementary">
-<ul class="xoxo">
-<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
-<div><label class="screen-reader-text" for="s">Search for:</label>
-<input type="text" value="" name="s" id="s" />
-<input type="submit" id="searchsubmit" value="Search" />
-</div>
-</form></li>
-<li id="more-from-hebcal" class="widget-container">
-<h3 class="widget-title">Hebrew Date RSS Feeds</h3>
+</div><!-- .span9 -->
+<div class="span3" role="complementary">
+<div class="row-fluid">
+<h4>Hebrew Date RSS Feeds</h4>
 <ul>
 <li><a href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS">in
@@ -325,8 +317,10 @@ title="Today's Hebrew Date in Hebrew RSS">in Hebrew <img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS"></a></li>
 </ul>
-</li><!-- #more-from-hebcal -->
-<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--
+</div><!-- .row-fluid -->
+
+<div class="row-fluid">
+<h4>Advertisement</h4><script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* 200x200 text only */
 google_ad_slot = "5114852649";
@@ -336,12 +330,12 @@ google_ad_height = 200;
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></li>
-</ul>
-</div><!-- #primary .widget-area -->
+</script>
+</div><!-- .row-fluid -->
+</div><!-- .span3 -->
 <?php
 
-    echo html_footer_new();
+    echo html_footer_bootstrap();
     exit();
 }
 

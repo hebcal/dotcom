@@ -364,6 +364,25 @@ $HTML_MENU_ITEMS =
      array( "Help", "/home/help" ),
     );
 
+$HTML_MENU_ITEMS_V2 =
+    array(
+     array( "Tools", "#",
+       array( "Jewish Holidays", "/holidays/" ),
+       array( "Custom Calendar", "/hebcal/" ),
+       array( "Download Calendar", "/ical/" ),
+       array( "Torah Readings", "/sedrot/" ),
+       array( "Hebrew Date Converter", "/converter/" ),
+       array( "Yahrzeit + Anniversary Calendar", "/yahrzeit/" ),
+       array( "Shabbat Times", "/shabbat/" ) ),
+     array( "About", "/home/about",
+       array( "About Hebcal", "/home/about" ),
+       array( "Contact Us", "/home/about/contact" ),
+       array( "Donate", "/home/about/donate" ),
+       array( "News", "/home/category/news" ),
+       array( "Privacy Policy", "/home/about/privacy-policy") ),
+     array( "Help", "/home/help" ),
+    );
+
 
 function html_menu_item($title, $path, $selected) {
     $classes = array();
@@ -401,6 +420,45 @@ function html_menu($selected) {
     $str .= "</ul>";
     return $str;
 }
+
+function html_menu_item_bootstrap($title, $path, $selected) {
+    $class = false;
+    if ($path != "/" && $path == $selected) {
+	$class = "active";
+    }
+    $str = "<li";
+    if ($class !== false) {
+	$str .= " class=\"$class\"";
+    }
+    $str .= "><a href=\"$path\" title=\"$title\">$title</a>";
+    return $str;
+}
+
+
+function html_menu_bootstrap($selected) {
+    global $HTML_MENU_ITEMS_V2;
+    $str = "<ul class=\"nav\">";
+    foreach ($HTML_MENU_ITEMS_V2 as $item) {
+	$title = $item[0];
+	$path = $item[1];
+	if (isset($item[2])) {
+	    $str .= "<li class=\"dropdown\">";
+	    $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <b class=\"caret\"></b></a>";
+	    $str .= "<ul class=\"dropdown-menu\">";
+	    for ($i = 2; isset($item[$i]); $i++) {
+		$str .= html_menu_item_bootstrap($item[$i][0], $item[$i][1], $selected);
+		$str .= "</li>";
+	    }
+	    $str .= "</ul>";
+	} else {
+	    $str .= html_menu_item_bootstrap($title, $path, $selected);
+	}
+	$str .= "</li>";
+    }
+    $str .= "</ul>";
+    return $str;
+}
+
 
 function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
     if ($title_append_suffix) {
@@ -445,6 +503,129 @@ $xtra_head</head>
 <div id="main">
 EOD;
     return $html;
+}
+
+function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true) {
+    if ($title_append_suffix) {
+	$title .= " | Hebcal Jewish Calendar";
+    }
+    $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $base_href = preg_replace('/&/', '&amp;', $base_href);
+    $menu = html_menu_bootstrap($_SERVER["SCRIPT_URL"]);
+    $html = <<<EOD
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title</title>
+<base href="$base_href" target="_top">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/bootstrap/css/bootstrap-responsive.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="wp-bootstrap-css" href="/bootstrap/css/wordpress-bootstrap.min.css" media="all">
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-967247-1']);
+_gaq.push(['_trackPageview']);
+_gaq.push(['_trackPageLoadTime']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css">
+.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
+.hebrew-big {font-family:'SBL Hebrew',Arial;font-size:xx-large;direction:rtl}
+</style>
+$xtra_head</head>
+<body class="single single-post">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+         <div class="nav-collapse collapse">
+         $menu
+         <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
+           <input class="input-small" type="text" name="s" id="s">
+           <button type="submit" class="btn btn-primary">Search</button>
+         </form>
+         </div><!-- .nav-collapse -->
+        </div><!-- .container -->
+       </div><!-- .navbar-inner -->
+      </div><!-- .navbar -->
+
+<div class="container-fluid">
+<div id="content" class="clearfix row-fluid">
+<div id="main" class="clearfix" role="main">
+EOD;
+    return $html;
+}
+
+function html_footer_bootstrap($last_updated = true) {
+    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
+    $year = strftime("%Y", time());
+    $date = strftime("%d %B %Y", $stat[9]);
+    global $VER;
+
+    $site_generator_div = "";
+    if ($last_updated) {
+	$site_generator_div = <<<EOD
+<p class="pull-right">$date (Revision: $VER)</p>
+EOD;
+    }
+
+    $html = <<<EOD
+</div><!-- #main -->
+</div><!-- #content -->
+
+<footer role="contentinfo">
+<div id="inner-footer" class="clearfix">
+<hr>
+<div id="widget-footer" class="clearfix row-fluid">
+</div>
+<nav class="clearfix">
+</nav>
+$site_generator_div
+<p class="pull-left"><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></p>
+</div><!-- #inner-footer -->
+
+<div class="clearfix">
+<iframe src="http://www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
+</div><!-- .clearfix -->
+
+</footer>
+
+</div> <!-- .container-fluid -->
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+function tvis(b){var a=document.getElementById(b);if(a.style.display=="block"){a.style.display="none"}else{a.style.display="block"}return false}(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}if(b[a]&&b[a].className=="download"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}if(b[a]&&b[a].className=="dlhead"){if(b[a].id){b[a].onclick=function(){return tvis(this.id+"-body")}}}}}}})();
+</script>
+</body></html>
+EOD;
+
+    return $html;
+}
+
+function get_saturday($gy, $gm, $gd) {
+    $timestamp = mktime(12, 34, 56, $gm, $gd, $gy);
+    $wday = date("w", $timestamp);
+    if ($wday == 6) {
+	return array($gy, $gm, $gd);
+    } else {
+	$sat_timestamp = $timestamp + ((6 - $wday) * 60 * 60 * 24);
+	return array(date("Y", $sat_timestamp),
+		     date("n", $sat_timestamp),
+		     date("j", $sat_timestamp));
+    }
 }
 
 ?>

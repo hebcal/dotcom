@@ -125,18 +125,21 @@ $xtra_head = <<<EOD
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 EOD;
-echo html_header_new("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
+echo html_header_bootstrap("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
 		     false);
 ?>
-<div id="container">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<div class="entry-content">
+<div class="span12">
+
+<div class="clearfix">
+<h1>Hebcal Jewish Calendar</h1>
+
 <p class="fpsubhead">
 <?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
 $hm = $hnum_to_str[$hmnum];
-echo format_hebrew_date($hd, $hm, $hy);
+echo format_hebrew_date($hd, $hm, $hy), "\n";
+
+// holidays today
 if (isset($events)) {
     foreach ($events as $h) {
 	if (strncmp($h, "Parashat ", 9) != 0) {
@@ -145,6 +148,24 @@ if (isset($events)) {
 	}
     }
 }
+
+// parashah hashavuah
+list($saturday_gy,$saturday_gm,$saturday_gd) = get_saturday($gy, $gm, $gd);
+$saturday_iso = sprintf("%04d%02d%02d", $saturday_gy, $saturday_gm, $saturday_gd);
+if (isset($sedra) && isset($sedra[$saturday_iso])) {
+    if (is_array($sedra[$saturday_iso])) {
+	$sat_events = $sedra[$saturday_iso];
+    } else {
+	$sat_events = array($sedra[$saturday_iso]);
+    }
+    foreach ($sat_events as $h) {
+	if (strncmp($h, "Parashat ", 9) == 0) {
+	    $anchor = hebcal_make_anchor($h);
+	    echo "&nbsp; - &nbsp; <a href=\"", $anchor, "\">", $h, "</a>\n";
+	}
+    }
+}
+
 if ($rosh_chodesh) { ?>
 <br><span class="fpgreeting">Chodesh Tov! We wish you
 a good new month.</span>
@@ -186,101 +207,62 @@ a happy <?php echo $chag_sameach ?>.</span>
 fast.</span>
 <?php } ?>
 </p><!-- .fpsubhead -->
+<p class="lead">Free Jewish holiday calendars and Hebrew date converters since 1999.</p>
+</div><!-- .clearfix -->
 
-<p>Make a free <a title="Hebcal Custom Calendar"
-href="/hebcal/">custom Jewish calendar</a> for any year 0001-9999 at
-Hebcal.com. Included are <a title="Jewish Holidays"
-href="/holidays/">Jewish holidays</a> (major and minor), candle
-lighting times, and Torah readings.</p>
-
-<p><a href="/ical/">Download</a>
-your holiday calendar to Microsoft Outlook, Apple iCal, iPhone, iPad,
-BlackBerry, Palm, or Android (via Google Calendar).</p>
-
-<p>Use our <a href="/converter/">Date Converter</a> to convert between
-Hebrew and Gregorian dates and see today's date in a Hebrew font. Our
-<a href="/yahrzeit/">Yahrzeit, Birthday, and Anniversary Calendar</a>
-lets you generate a list of Yahrzeit (memorial) and Yizkor dates, or
-Hebrew Birthdays and Anniversaries.</p>
-
-<p>Join our <a href="/email/">Shabbat candle lighting times email
-list</a> to receive a weekly reminder of the Parashat ha-Shavua and
-when to light candles for your city.</p>
-
-<p>This is a free service. Please <a title="Send money to Hebcal.com"
-href="/home/about/donate">donate</a> to show your appreciation.</p>
-
-<p>Developers: we offer <a
-title="Including hebcal.com content on other sites, advanced linking"
-href="http://www.hebcal.com/home/category/developers">APIs, RSS Feeds,
-Source Code and widgets</a> for inclusion on your synagogue or other
-website.</p>
-
-<iframe src="http://www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
-
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-<div id="primary" class="widget-area" role="complementary">
-<ul class="xoxo">
-<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
-	<div><label class="screen-reader-text" for="s">Search for:</label>
-	<input type="text" value="" name="s" id="s" />
-	<input type="submit" id="searchsubmit" value="Search" />
-	</div>
-	</form></li>
-<li id="categories-3" class="widget-container widget_categories"><h3 class="widget-title">Quick links</h3>
-<ul>
-<li><a
-href="/hebcal/?v=1;year=<?php echo $gy ?>;month=<?php echo $gm ?>;nx=on;nh=on;mf=on;ss=on;vis=on;set=off;tag=fp.ql"><?php
-  echo date("F Y");
-?> Calendar</a>
+<div class="row-fluid">
+<div class="span4">
+<h3>Jewish Holidays</h3>
+<p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
+Download to Outlook, iPhone, Google Calendar, and more.</p>
+<p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
 <?php
   $hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
   $greg_yr1 = $hebyear - 3761;
   $greg_yr2 = $greg_yr1 + 1;
   $greg_range = $greg_yr1 . "-" . $greg_yr2;
 ?>
-<li><a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?> Holidays</a>
+<p><a class="btn" href="/holidays/<?php echo $greg_range ?>"><i class="icon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
+</div><!-- .span4 -->
+
+<div class="span4">
+<h3>Convert Dates</h3>
+<p>Convert between Hebrew and Gregorian dates and see today's date in a Hebrew font.</p>
+<p><a class="btn" href="/converter/"><i class="icon-refresh"></i> Date Converter &raquo;</a></p>
+
+<p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
+Hebrew Birthdays and Anniversaries.</p>
+<p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+</div><!-- .span4 -->
+
+<div class="span4">
+<h3>Shabbat Times</h3>
+<p>Candle-lighting and Havdalah times, plus this week's Torah portion.</p>
+<p><a class="btn" href="/shabbat/"><i class="icon-time"></i> Shabbat Times &raquo;</a></p>
+<p>Receive a weekly reminder of the Parashat ha-Shavua and
+when to light candles for your city.</p>
+<p><a class="btn" href="/email/"><i class="icon-envelope"></i> Subscribe by email &raquo;</a></p>
+</div><!-- .span4 -->
+</div><!-- .row-fluid -->
+
+<div class="row-fluid">
+<div class="span4">
+<h3>Torah Readings</h3>
+<p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
+<p><a class="btn" href="/sedrot/"><i class="icon-book"></i> Torah Readings &raquo;</a></p>
+</div><!-- .span4 -->
+
+<div class="span4">
+<h3>Developers</h3>
+<p>APIs, RSS Feeds, Source Code and widgets for inclusion on
+your synagogue or other website.</p>
+<p><a class="btn" href="/home/category/developers"><i class="icon-wrench"></i> API Documentation &raquo;</a></p>
+</div><!-- .span4 -->
+</div><!-- .row-fluid -->
+
+</div><!-- .span12 -->
+
 <?php
-  include("./holiday.inc");
-  include("./current.inc"); ?>
-</ul>
-</li>
-<li id="candles-3" class="widget-container widget_categories"><h3 class="widget-title">Candle lighting</h3>
-<form action="/shabbat/" method="get">
-<input type="hidden" name="geo" value="zip">
-<label for="zip">Zip code:</label>
-<input type="text" name="zip" size="5" maxlength="5"
-<?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
-id="zip">&nbsp;<input type="submit" value="Go">
-<input type="hidden" name="m" value="<?php
-  if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
-<input type="hidden" name="tag" value="fp.ql">
-</form>
-<?php
-  if ($param["zip"]) {
-     echo "<ul><li><a title=\"Shabbat times for $hebyear\"\n", 
-        "href=\"/shabbat/fridge.cgi?zip=$param[zip];year=$hebyear\">Printable\n",
-        "page for $hebyear</a><br>year at a glance</li></ul>";
-  }
-?>
-</li>
-<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3><script type="text/javascript"><!--
-google_ad_client = "ca-pub-7687563417622459";
-/* 200x200 text hompeage */
-google_ad_slot = "2418261047";
-google_ad_width = 200;
-google_ad_height = 200;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></li>
-</ul>
-</div><!-- #primary .widget-area -->
-<?php
-echo html_footer_new();
+echo html_footer_bootstrap();
 ?>
 
