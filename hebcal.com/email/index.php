@@ -32,9 +32,8 @@ EOD;
 echo html_header_bootstrap("Shabbat Candle Lighting Times by Email",
 		     $xtra_head);
 ?>
-<div class="page-header">
-<h1 class="entry-title">Shabbat Times by Email</h1>
-</div>
+<p class="lead">Subscribe to weekly Shabbat candle
+lighting times and Torah portion by email.</p>
 <?php
 
 $param = array();
@@ -290,10 +289,6 @@ function form($param, $message = "", $help = "") {
     }
 
 ?>
-<p class="lead">Subscribe to weekly Shabbat candle
-lighting times and Torah portion.
-<br><small>Email is sent out every week on Thursday morning.</small></p>
-
 <div id="email-form" class="well">
 <form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
 <fieldset>
@@ -349,6 +344,8 @@ or
 </fieldset>
 </form>
 </div><!-- #email-form -->
+
+<p>You'll receive a maximum of one message per week, typically on Thursday morning.</p>
 
 <div id="privacy-policy">
 <h3>Email Privacy Policy</h3>
