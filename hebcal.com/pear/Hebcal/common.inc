@@ -552,8 +552,10 @@ $xtra_head</head>
          <div class="nav-collapse collapse">
          $menu
          <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
-           <input class="input-small" type="text" name="s" id="s">
-           <button type="submit" class="btn btn-primary">Search</button>
+      <fieldset>
+      <div class="input-append input-prepend">
+      <span class="add-on"><i class="icon-search"></i></span><input class="input-mini" type="text" name="s" id="s"><button type="submit" class="btn btn-primary">Search</button></div>
+      </fieldset>
          </form>
          </div><!-- .nav-collapse -->
         </div><!-- .container -->
