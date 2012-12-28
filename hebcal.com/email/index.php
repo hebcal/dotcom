@@ -29,14 +29,12 @@ margin:0 0 12px 12px;
 }
 </style>
 EOD;
-echo html_header_new("Shabbat Candle Lighting Times by Email",
+echo html_header_bootstrap("Shabbat Candle Lighting Times by Email",
 		     $xtra_head);
 ?>
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Shabbat Candle Lighting Times by Email</h1>
-<div class="entry-content">
+<div class="page-header">
+<h1 class="entry-title">Shabbat Times by Email</h1>
+</div>
 <?php
 
 $param = array();
@@ -62,7 +60,7 @@ if ($param["v"])
     $to_addr = email_address_valid($email);
     if ($to_addr == false) {
 	form($param,
-	     "Sorry, <b>" . htmlspecialchars($email) . "</b> does\n" .
+	     "Sorry, <strong>" . htmlspecialchars($email) . "</strong> does\n" .
 	     "not appear to be a valid email address.");
     }
 
@@ -273,12 +271,13 @@ EOD;
 
 function form($param, $message = "", $help = "") {
     if ($message != "") {
-	$message = '<hr noshade size="1"><p><font' . "\n" .
-	    'color="#ff0000">' .  $message . "</font></p>" . $help . 
-	    '<hr noshade size="1">';
+?>
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <?php echo $message; echo $help; ?>
+</div><!-- .alert -->
+<?php
     }
-
-    echo $message;
 
     if (!$param["dst"]) {
 	$param["dst"] = "usa";
@@ -291,16 +290,15 @@ function form($param, $message = "", $help = "") {
     }
 
 ?>
-<p>Fill out the form to subscribe to weekly Shabbat candle
+<p class="lead">Subscribe to weekly Shabbat candle
 lighting times and Torah portion.
-<br>Email is sent out every week on Thursday morning.</p>
+<br><small>Email is sent out every week on Thursday morning.</small></p>
 
-<div id="email-form">
+<div id="email-form" class="well">
 <form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
-<fieldset><legend>Email list subscription</legend>
-<ol>
+<fieldset>
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
-<li><label for="city">Closest City:</label>
+<label for="city">Closest City:</label>
 <?php
 global $hebcal_city_tz;
 $entries = array();
@@ -318,22 +316,22 @@ echo HTML_Form::returnSelect("city", $entries,
 href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=zip">zip code</a>)</small>
 <input type="hidden" name="geo" value="city">
 <?php } else { ?>
-<li><label for="zip">Zip code:
-<input type="text" name="zip" size="5" maxlength="5" id="zip"
+<label for="zip">Zip code:
+<input type="text" name="zip" class="input-mini" maxlength="5" id="zip"
 value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
 href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
 <input type="hidden" name="geo" value="zip">
 <?php } ?>
-<li><label for="m1">Havdalah minutes past sundown:
+<label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
-  echo htmlspecialchars($param["m"]) ?>" size="3" maxlength="3" id="m1">
+  echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3" id="m1">
 </label>
-<li><label for="em">E-mail address:
-<input type="text" name="em" size="30"
+<label for="em">E-mail address:
+<input type="email" name="em"
 value="<?php echo htmlspecialchars($param["em"]) ?>" id="em">
 </label>
-<li><label for="upd">
+<label for="upd" class="checkbox">
 <input type="checkbox" name="upd" value="on" <?php
   if ($param["upd"] == "on") { echo "checked"; } ?> id="upd">
 Contact me occasionally about changes to the hebcal.com website.
@@ -344,11 +342,10 @@ Contact me occasionally about changes to the hebcal.com website.
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?> 
-<li><input type="submit" name="modify" value="<?php
-  echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?>">
+<button type="submit" class="btn btn-primary" name="modify" value="1">
+<?php echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?></button>
 or
-<input type="submit" name="unsubscribe" value="Unsubscribe">
-</ol>
+<button type="submit" class="btn" name="unsubscribe" value="1">Unsubscribe</button>
 </fieldset>
 </form>
 </div><!-- #email-form -->
@@ -367,14 +364,7 @@ href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.
 }
 
 function my_footer() {
-    $html = <<<EOD
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-EOD;
-    echo $html;
-    echo html_footer_new();
+    echo html_footer_bootstrap();
 }
 
 function subscribe($param) {
@@ -382,7 +372,7 @@ function subscribe($param) {
     if (preg_match('/\@hebcal.com$/', $param["em"]))
     {
 	form($param,
-	     "Sorry, can't use a <b>hebcal.com</b> email address.");
+	     "Sorry, can't use a <strong>hebcal.com</strong> email address.");
     }
 
     if ($param["geo"] == "zip")
@@ -403,7 +393,7 @@ function subscribe($param) {
 	if (!preg_match('/^\d{5}$/', $param["zip"]))
 	{
 	    form($param,
-	    "Sorry, <b>" . $param["zip"] . "</b> does\n" .
+	    "Sorry, <strong>" . $param["zip"] . "</strong> does\n" .
 	    "not appear to be a 5-digit zip code.");
 	}
 
@@ -414,8 +404,8 @@ function subscribe($param) {
 	if (!$state)
 	{
 	    form($param,
-	    "Sorry, can't find\n".  "<b>" . $param["zip"] .
-	    "</b> in the zip code database.\n",
+	    "Sorry, can't find\n".  "<strong>" . $param["zip"] .
+	    "</strong> in the zip code database.\n",
 	    "<ul><li>Please try a nearby zip code</li></ul>");
 	}
 
@@ -426,7 +416,7 @@ function subscribe($param) {
 	{
 	    form($param,
 	    "Sorry, can't auto-detect\n" .
-	    "timezone for <b>" . $city_descr . "</b>\n",
+	    "timezone for <strong>" . $city_descr . "</strong>\n",
 	    "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
@@ -456,7 +446,7 @@ function subscribe($param) {
 	if (!isset($hebcal_city_tz[$param["city"]]))
 	{
 	    form($param,
-	    "Sorry, <b>" . htmlspecialchars($param["city"]) . "</b> is\n" .
+	    "Sorry, <strong>" . htmlspecialchars($param["city"]) . "</strong> is\n" .
 	    "not a recoginized city.");
 	}
 
@@ -602,7 +592,7 @@ EOD;
 <p>Thank you for your interest in weekly
 candle lighting times and parsha information.</p>
 <p>A confirmation message has been sent
-to <b>$html_email</b>.<br>
+to <strong>$html_email</strong>.<br>
 Click the link within that message to confirm your subscription.</p>
 <p>If you do not receive this acknowledgment message within an hour
 or two, then the most likely problem is that you made a typo
@@ -622,7 +612,7 @@ EOD
 	$html = <<<EOD
 <h2>Sorry!</h2>
 <p>Unfortunately, we are temporarily unable to send email
-to <b>$html_email</b>.</p>
+to <strong>$html_email</strong>.</p>
 <p>Please try again in a few minutes.</p>
 <p>If the problem persists, please send email to
 <a href="mailto:webmaster&#64;hebcal.com">webmaster&#64;hebcal.com</a>.</p>
@@ -653,7 +643,7 @@ function unsubscribe($param) {
     if (isset($info["status"]) && $info["status"] == "unsubscribed") {
 	$html = <<<EOD
 <h2>Already Unsubscribed</h2>
-<p><b>$html_email</b>
+<p><strong>$html_email</strong>
 is already removed from the email subscription list.</p>
 EOD
 	     ;
@@ -664,7 +654,7 @@ EOD
 
     if (!$info) {
 	form($param,
-	     "Sorry, <b>$html_email</b> is\nnot currently subscribed.");
+	     "Sorry, <strong>$html_email</strong> is\nnot currently subscribed.");
     }
 
     if (sql_unsub($param["em"]) === false) {
@@ -712,7 +702,7 @@ EOD;
     $html = <<<EOD
 <h2>Unsubscribed</h2>
 <p>You have been removed from the email subscription list.<br>
-A confirmation message has been sent to <b>$html_email</b>.</p>
+A confirmation message has been sent to <strong>$html_email</strong>.</p>
 EOD
 	     ;
     echo $html;
