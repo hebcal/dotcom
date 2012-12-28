@@ -35,6 +35,7 @@ subscribe in your device or web/desktop application.</p>
 readings, visit our <a href="/hebcal/">custom Jewish calendar</a>
 page. See also <a href="/home/category/import">help importing into
 apps</a> for step-by-step instructions.</p>
+</div><!-- .span12 -->
 
 <?php
 function cal_row($path,$title,$subtitle,$suppress_outlook=false) {
@@ -42,39 +43,43 @@ function cal_row($path,$title,$subtitle,$suppress_outlook=false) {
     $webcal = "webcal://" . $url_noproto;
     $http_esc = urlencode("http://" . $url_noproto);
 ?>
-<tr>
-<td><h4><?php echo $title ?></h4>
-<?php echo $subtitle ?></td>
-<td><a class="download" id="quick-ical-<?php echo $path ?>"
+<div class="row-fluid">
+<div class="span7">
+<h4><?php echo $title ?></h4>
+<?php echo $subtitle ?></div>
+<div class="span1"><a class="download" id="quick-ical-<?php echo $path ?>"
 title="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 href="<?php echo $webcal ?>"><img
 src="/i/ical-64x64.png" width="64" height="64"
 alt="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
-border="0"></a></td>
-<td><a class="download" id="quick-gcal-<?php echo $path ?>"
+border="0"></a></div>
+<div class="span2"><a class="download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
 href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
 src="http://www.google.com/calendar/images/ext/gc_button6.gif"
 width="114" height="36" border="0"
 alt="Add <?php echo $title ?> to Google Calendar"></a>
-</td>
+</div>
+<div class="span2">
 <?php if ($suppress_outlook) { ?>
-<td><small>(Outlook download not available)</small></td>
+<em>(Outlook download not available)</em>
 <?php } else { ?>
-<td><a class="download" id="quick-csv-<?php echo $path ?>"
+<a class="download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
 href="<?php echo $path ?>.csv"><img
 src="/i/outlook-149x53.png" width="149" height="53"
 alt="Download <?php echo $title ?> to Microsoft Outlook"
-border="0"></a></td>
+border="0"></a>
 <?php
     } // suppress_outlook
 ?>
-</tr>
+</div>
+</div><!-- .row-fluid -->
+<hr>
 <?php
 } // function cal_row()
 ?>
-<table id="hebcal-ical" cellpadding="5" class="table">
+<div class="clearfix">
 <?php
 cal_row("jewish-holidays", "Jewish Holidays",
 	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah");
@@ -88,9 +93,10 @@ cal_row("hdate-he", "Hebrew calendar dates (Hebrew)",
 cal_row("omer", "Days of the Omer",
 	"7 weeks from the second night of Pesach to the day before Shavuot");
 ?>
-</table>
+</div><!-- .clearfix -->
 
-<p>To get a customized feed with candle lighting times for Shabbat
+<div class="clearfix">
+<p class="lead">To get a customized feed with candle lighting times for Shabbat
 and holidays, Torah readings, etc, follow these instructions:</p>
 
 <ol>
@@ -101,6 +107,6 @@ and holidays, Torah readings, etc, follow these instructions:</p>
 <li>Under the "Export to desktop, mobile or web-based calendar" section,
   follow the instructions for your favorite application or mobile device
 </ol>
+</div><!-- .clearfix -->
 
-</div><!-- .span12 -->
 <?php echo html_footer_bootstrap(); ?>
