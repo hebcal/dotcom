@@ -13,24 +13,7 @@ $matches = array();
 if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
-$xtra_head = <<<EOD
-<style type="text/css">
-.entry-content fieldset {
-border:1px solid #E7E7E7;
-margin:0 0 12px;
-padding:6px;
-}
-.entry-content input, .entry-content select {
-margin:4px;
-}
-form ol {
-list-style:none inside none;
-margin:0 0 12px 12px;
-}
-</style>
-EOD;
-echo html_header_bootstrap("Shabbat Candle Lighting Times by Email",
-		     $xtra_head);
+echo html_header_bootstrap("Shabbat Candle Lighting Times by Email");
 ?>
 <p class="lead">Subscribe to weekly Shabbat candle
 lighting times and Torah portion by email.</p>
