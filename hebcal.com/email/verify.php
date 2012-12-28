@@ -153,23 +153,16 @@ $unsub_url
 EOD;
 
     $err = smtp_send($return_path, $info["em"], $headers, $body);
-    echo html_header_new("Email Subscription Confirmed");
+    echo html_header_bootstrap("Email Subscription Confirmed");
 ?>
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Email Subscription Confirmed</h1>
-<div class="entry-content">
-<p>Thank you for your interest in weekly
-candle lighting times and parsha information.</p>
-<p>A confirmation message has been sent
-to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
+<p class="lead">Confirm your subscription to weekly Shabbat
+candle lighting times and Torah portion by email.</p>
+<div class="alert alert-success">
+<strong>Thank you!</strong> Your subscription is now active.
+<br>A confirmation message has been sent
+to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 <?php
-    echo html_footer_new();
+    echo html_footer_bootstrap();
     exit();
 } else {
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
@@ -190,39 +183,30 @@ to <b><?php echo htmlentities($info["em"]) ?></b>.</p>
 	$dst_descr = "";
 	unset($info["zip"]);
     }
-    echo html_header_new("Confirm Email Subscription");
+    echo html_header_bootstrap("Confirm Email Subscription");
 ?>
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Confirm Email Subscription</h1>
-<div class="entry-content">
-<p>Please confirm your subscription to hebcal.com weekly Shabbat Candle
-Lighting Times.</p>
-<p>Email: <b><?php echo $info["em"] ?></b>
+<p class="lead">Confirm your subscription to weekly Shabbat
+candle lighting times and Torah portion by email.</p>
+<div id="email-form" class="well">
+<p>Email: <strong><?php echo $info["em"] ?></strong>
 <br>Location: <?php echo $city_descr ?>
 <br><small>&nbsp;&nbsp;<?php echo $tz_descr ?>
 <br>&nbsp;&nbsp;<?php echo $dst_descr ?>
 </small></p>
-<p>
 <form method="post" name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>">
 <input type="hidden" name="k" value="<?php echo $info["id"] ?>">
 <input type="hidden" name="commit" value="1">
-<input type="submit" name="sub1" id="sub1" value="Confirm Subscription">
+<button type="submit" name="sub1" id="sub1" value="1" class="btn btn-success">Confirm Subscription</button>
 </form>
-</p>
+</div><!-- #email-form -->
 <h3>Email Privacy Policy</h3>
 <p>We will never sell or give your email address to anyone.
 <br>We will never use your email address to send you unsolicited
 offers.</p>
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
 <?php
- echo html_footer_new();
+ echo html_footer_bootstrap();
  exit();
 }
 ?>
