@@ -184,17 +184,19 @@ if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
 
 if ($gy < 1752) {
 ?>
-<p><span style="color:red;font-size:large">WARNING:
-Results for year 1752 C.E. and before may not be accurate.</span>
-Hebcal does not take into account a correction of ten days that
+<div class="alert alert-block">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Warning!</strong>
+Results for year 1752 C.E. and earlier may be inaccurate.
+<p>Hebcal does not take into account a correction of ten days that
 was introduced by Pope Gregory XIII known as the Gregorian
-Reformation. For more information, read about the <a
-href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">adoption
-of the Gregorian Calendar</a>.</p>
+Reformation.<sup><a
+href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a></sup></p>
+</div><!-- .alert -->
 <?php
 }
 ?>
-<div id="converter-results" class="well">
+<div id="converter-results">
 <p class="lead"><?php echo "$first = <strong>$second</strong>"; ?></p>
 <p dir="rtl" lang="he" class="lead hebrew-big"><?php echo $hebrew ?></p>
 <?php
@@ -257,13 +259,17 @@ function form($head, $message, $help = "") {
     }
 
     if ($message) {
-	echo "<hr noshade size=\"1\"><p\nstyle=\"color: red\">",
-	    $message, "</p>", $help, "<hr noshade size=\"1\">";
+?>
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <?php echo $message; echo $help; ?>
+</div><!-- .alert -->
+<?php
     }
 
     $action = $_SERVER["SCRIPT_URL"];
 ?>
-<div id="converter-form">
+<div id="converter-form" class="well">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
 <fieldset>
 <input class="input-mini" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
