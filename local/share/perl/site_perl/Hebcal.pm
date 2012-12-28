@@ -1225,6 +1225,49 @@ EOHTML
     }
 }
 
+sub html_footer_bootstrap
+{
+    my($q,$rcsrev,$noclosebody) = @_;
+
+    my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    $rcsrev =~ s/\s*\$//g;
+
+    my $hhmts = strftime("%d %B %Y", localtime($mtime));
+
+    my $str = <<EOHTML;
+</div><!-- #main -->
+</div><!-- #content -->
+
+<footer role="contentinfo">
+<div id="inner-footer" class="clearfix">
+<hr>
+<p class="pull-right">$rcsrev ($hhmts)</p>
+<p class="pull-left"><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></p>
+</div><!-- #inner-footer -->
+
+<div class="clearfix">
+<iframe src="http://www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
+</div><!-- .clearfix -->
+
+</footer>
+</div> <!-- .container-fluid -->
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+EOHTML
+;
+
+    $str .= $URCHIN;
+
+    if ($noclosebody) {
+	return $str;
+    } else {
+	return $str . "</body></html>\n";
+    }
+}
+
 sub woe_city
 {
     my($woe) = @_;
@@ -1300,6 +1343,24 @@ my $HTML_MENU_ITEMS =
      [ "Help", "/home/help" ],
     ];
 
+my $HTML_MENU_ITEMS_V2 =
+    [
+     [ "Products", "#",
+       [ "Jewish Holidays", "/holidays/" ],
+       [ "Custom Calendar", "/hebcal/" ],
+       [ "Hebrew Date Converter", "/converter/" ],
+       [ "Yahrzeit + Anniversary Calendar", "/yahrzeit/" ],
+       [ "Shabbat Times", "/shabbat/" ],
+	    [ "Torah Readings", "/sedrot/" ]],
+     [ "About", "/home/about",
+       [ "About Hebcal", "/home/about" ],
+       [ "Contact Us", "/home/about/contact" ],
+       [ "Donate", "/home/about/donate" ],
+       [ "News", "/home/category/news" ],
+       [ "Privacy Policy", "/home/about/privacy-policy"] ],
+     [ "Help", "/home/help" ],
+    ];
+
 sub html_menu_item {
     my($title,$path,$selected) = @_;
     my @classes = ();
@@ -1334,6 +1395,45 @@ sub html_menu {
     $str .= qq{</ul>};
     return $str;
 }
+
+sub html_menu_item_bootstrap {
+    my($title,$path,$selected) = @_;
+    my $class = undef;
+    if ($path ne "/" && $path eq $selected) {
+	$class = "active";
+    }
+    my $str = qq{<li};
+    if ($class) {
+	$str .= qq{ class="$class"};
+    }
+    $str .= qq{><a href="$path" title="$title">$title</a>};
+    return $str;
+}
+
+sub html_menu_bootstrap {
+    my($selected) = @_;
+    my $str = qq{<ul class="nav">};
+    foreach my $item (@{$HTML_MENU_ITEMS_V2}) {
+	my $title = $item->[0];
+	my $path = $item->[1];
+	if (defined $item->[2]) {
+	    $str .= "<li class=\"dropdown\">";
+	    $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <b class=\"caret\"></b></a>";
+	    $str .= "<ul class=\"dropdown-menu\">";
+	    for (my $i = 2; defined $item->[$i]; $i++) {
+		$str .= html_menu_item_bootstrap($item->[$i]->[0], $item->[$i]->[1], $selected);
+		$str .= qq{</li>};
+	    }
+	    $str .= qq{</ul>};
+	} else {
+	    $str .= html_menu_item_bootstrap($title, $path, $selected);
+	}
+	$str .= qq{</li>};
+    }
+    $str .= qq{</ul>};
+    return $str;
+}
+
 
 sub html_header
 {
@@ -1375,6 +1475,69 @@ $xtra_head</head>
 </div><!-- #masthead -->
 </div><!-- #header -->
 <div id="main">
+EOHTML
+;
+    return $str;
+}
+
+sub html_header_bootstrap {
+    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title) = @_;
+    $xtra_head = "" unless $xtra_head;
+    my $menu = html_menu_bootstrap($base_href);
+    my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
+    my $str = <<EOHTML;
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta charset="UTF-8">
+<title>$title2</title>
+<base href="http://www.hebcal.com$base_href" target="_top">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/bootstrap/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/bootstrap/css/bootstrap-responsive.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="wp-bootstrap-css" href="/bootstrap/css/wordpress-bootstrap.min.css" media="all">
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-967247-1']);
+_gaq.push(['_trackPageview']);
+_gaq.push(['_trackPageLoadTime']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css">
+.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
+.hebrew-big {font-family:'SBL Hebrew',Arial;font-size:xx-large;direction:rtl}
+</style>
+$xtra_head</head>
+<body class="$body_class">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+         <div class="nav-collapse collapse">
+         $menu
+         <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
+      <fieldset>
+      <div class="input-append input-prepend">
+      <span class="add-on"><i class="icon-search"></i></span><input class="input-mini" type="text" name="s" id="s"><button type="submit" class="btn btn-primary">Search</button></div>
+      </fieldset>
+         </form>
+         </div><!-- .nav-collapse -->
+        </div><!-- .container -->
+       </div><!-- .navbar-inner -->
+      </div><!-- .navbar -->
+
+<div class="container-fluid">
+<div id="content" class="clearfix row-fluid">
+<div id="main" class="clearfix" role="main">
 EOHTML
 ;
     return $str;
