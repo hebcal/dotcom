@@ -628,8 +628,8 @@ sub more_from_hebcal {
 
     my $month_name = join(" ", $Hebcal::MoY_long{$this_mon}, $this_year);
     Hebcal::out_html($cfg, qq{<h4>More candle lighting</h4>\n},
-		     "<ul class=\"unstyled\">\n",
-		     "<li><a class=\"btn\"\nhref=\"$url\"><i class=\"icon-calendar\"></i> $month_name</a>\n");
+		     "<ul class=\"nav nav-list\">\n",
+		     "<li><a\nhref=\"$url\"><i class=\"icon-calendar\"></i> $month_name</a>\n");
 
     # Fridge calendar
     $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
@@ -639,7 +639,7 @@ sub more_from_hebcal {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
     $url .= ";year=" . $hyear;
-    Hebcal::out_html($cfg,"<li><a class=\"btn\" title=\"Print and post on your refrigerator\"\n",
+    Hebcal::out_html($cfg,"<li><a title=\"Print and post on your refrigerator\"\n",
 		     "href=\"$url\"><i class=\"icon-print\"></i> Printable page for $hyear</a>\n");
 
     # Email
@@ -656,11 +656,11 @@ sub more_from_hebcal {
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     Hebcal::out_html($cfg,"<li>",
-		     "<a class=\"btn\"\nhref=\"$url\"><i class=\"icon-envelope\"></i> Subscribe to weekly email</a>\n");
+		     "<a\nhref=\"$url\"><i class=\"icon-envelope\"></i> Subscribe to weekly email</a>\n");
 
     my $rss_href = self_url() . ";cfg=r";
     my $rss_html = <<EOHTML;
-<li><a class="btn" title="RSS feed of candle lighting times"
+<li><a title="RSS feed of candle lighting times"
 href="$rss_href"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="RSS feed of candle lighting times"> RSS feed</a>
@@ -681,7 +681,7 @@ EOHTML
     $url .= "&amp;type=shabbat";
 
     Hebcal::out_html($cfg,"<li>",
-		     "<a class=\"btn\" title=\"Candle lighting and Torah portion ",
+		     "<a title=\"Candle lighting and Torah portion ",
 		     "for your synagogue site\"\nhref=\"$url\"><i class=\"icon-wrench\"></i> Add\n",
 		     "Shabbat Times to your Website</a>\n");
  
