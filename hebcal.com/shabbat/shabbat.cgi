@@ -207,7 +207,7 @@ sub process_args
 	if ($q->param('zip') !~ /^\d{5}$/)
 	{
 	    form($cfg,1,
-		  "Sorry, <b>" . $q->param('zip') . "</b> does\n" .
+		  "Sorry, <strong>" . $q->param('zip') . "</strong> does\n" .
 		  "not appear to be a 5-digit zip code.");
 	}
 
@@ -220,8 +220,8 @@ sub process_args
 	undef($DB);
 
 	form($cfg,1,
-	      "Sorry, can't find\n".  "<b>" . $q->param('zip') .
-	      "</b> in the zip code database.\n",
+	      "Sorry, can't find\n".  "<strong>" . $q->param('zip') .
+	      "</strong> in the zip code database.\n",
 	      "<ul><li>Please try a nearby zip code</li></ul>")
 	    unless defined $state;
 
@@ -237,7 +237,7 @@ sub process_args
 
 	    form($cfg,1,
 		  "Sorry, can't auto-detect\n" .
-		  "timezone for <b>" . $city_descr . "</b>\n" .
+		  "timezone for <strong>" . $city_descr . "</strong>\n" .
 		  "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
@@ -349,7 +349,7 @@ qq{<?xml version="1.0"?>
 <wml>
 <card id="shabbat2" title="$title">
 <!-- $cmd_pretty -->
-<p><b>$city_descr</b></p>
+<p><strong>$city_descr</strong></p>
 });
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
@@ -474,7 +474,7 @@ sub display_html_common
 	    Hebcal::out_html($cfg,qq{<a$anchor></a>})
 		unless $cfg;
 	    Hebcal::out_html($cfg,qq{$items->[$i]->{'subj'}:
-<b>$items->[$i]->{'time'}</b> on $items->[$i]->{'date'}});
+<strong>$items->[$i]->{'time'}</strong> on $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
@@ -627,9 +627,9 @@ sub more_from_hebcal {
     $url .= ';tag=1c';
 
     my $month_name = join(" ", $Hebcal::MoY_long{$this_mon}, $this_year);
-    Hebcal::out_html($cfg, qq{<h3 class="widget-title">More candle lighting</h3>\n},
-		     "<ul>\n",
-		     "<li><a\nhref=\"$url\">$month_name</a> calendar\n");
+    Hebcal::out_html($cfg, qq{<h4>More candle lighting</h4>\n},
+		     "<ul class=\"unstyled\">\n",
+		     "<li><a class=\"btn\"\nhref=\"$url\"><i class=\"icon-calendar\"></i> $month_name</a>\n");
 
     # Fridge calendar
     $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
@@ -639,9 +639,8 @@ sub more_from_hebcal {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
     $url .= ";year=" . $hyear;
-    Hebcal::out_html($cfg,"<li><a title=\"Print and post on your refrigerator\"\n",
-		     "href=\"$url\">Printable page for $hyear</a>\n",
-		     "<br>year at a glance\n");
+    Hebcal::out_html($cfg,"<li><a class=\"btn\" title=\"Print and post on your refrigerator\"\n",
+		     "href=\"$url\"><i class=\"icon-print\"></i> Printable page for $hyear</a>\n");
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
@@ -657,20 +656,14 @@ sub more_from_hebcal {
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     Hebcal::out_html($cfg,"<li>",
-		     "<a\nhref=\"$url\">Subscribe to weekly email</a>\n");
-
-    # Mac OS X
-    $url = "http://www.apple.com/downloads/dashboard/reference/hebcal.html";
-    Hebcal::out_html($cfg,"<li>",
-		     "<a title=\"by Mark Saper\"\nhref=\"$url\">Mac OS X Dashboard Widget</a>\n");
+		     "<a class=\"btn\"\nhref=\"$url\"><i class=\"icon-envelope\"></i> Subscribe to weekly email</a>\n");
 
     my $rss_href = self_url() . ";cfg=r";
     my $rss_html = <<EOHTML;
-<li><a href="$rss_href">RSS feed</a>
-<a title="RSS feed of candle lighting times"
+<li><a class="btn" title="RSS feed of candle lighting times"
 href="$rss_href"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="RSS feed of candle lighting times"></a>
+alt="RSS feed of candle lighting times"> RSS feed</a>
 EOHTML
 ;
 
@@ -688,8 +681,8 @@ EOHTML
     $url .= "&amp;type=shabbat";
 
     Hebcal::out_html($cfg,"<li>",
-		     "<a title=\"Candle lighting and Torah portion ",
-		     "for your synagogue site\"\nhref=\"$url\">Add\n",
+		     "<a class=\"btn\" title=\"Candle lighting and Torah portion ",
+		     "for your synagogue site\"\nhref=\"$url\"><i class=\"icon-wrench\"></i> Add\n",
 		     "Shabbat Times to your Website</a>\n");
  
     Hebcal::out_html($cfg,"</ul>\n");
@@ -701,19 +694,13 @@ sub my_head {
     my $xtra_head = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
 <style type="text/css">
-.entry-content fieldset {
-border:1px solid #E7E7E7;
-margin:0 0 12px;
-padding:6px;
+ul#hebcal-results { list-style-type:none }
+ul#hebcal-results li {
+  margin-bottom: 11px;
+  font-size: 21px;
+  font-weight: 200;
+  line-height: normal;
 }
-.entry-content input, .entry-content select {
-margin:0;
-}
-form ol {
-list-style:none inside none;
-margin:0 0 12px 12px;
-}
-ul#hebcal-results { list-style-type: none }
 #city-list  li { font-size:12px }
 #city-list ul li { display: inline }
 #city-list ul li:after { content:" | "}
@@ -722,15 +709,15 @@ ul#hebcal-results { list-style-type: none }
 EOHTML
 ;
 	my $head_divs = <<EOHTML;
-<div id="container">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">$title</h1>
-<div class="entry-content">
+<div class="span9">
+<div class="page-header">
+<h1>Shabbat Times <small>$city_descr</small></h1>
+</div>
+
 EOHTML
 ;
 	Hebcal::out_html($cfg,
-			 Hebcal::html_header($title,
+			 Hebcal::html_header_bootstrap($title,
 					     $script_name,
 					     "single single-post",
 					     $xtra_head),
@@ -759,22 +746,23 @@ sub form($$$$)
     if ($message ne '')
     {
 	$help = '' unless defined $help;
-	$message = "<blockquote><p\nstyle=\"color: red\">" .
-	    $message . "</p>" . $help . "</blockquote>";
+	$message = qq{<div class="alert alert-error alert-block">\n} .
+	    qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n} .
+	    $message . $help . "</div>";
     }
 
     Hebcal::out_html($cfg,
 	qq{$message\n},
-	qq{<div id="hebcal-form-zipcode">\n},
+	qq{<div id="hebcal-form-zipcode" class="well">\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
 	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
-	qq{<ol>\n},
-	qq{<li><label for="zip">Zip code:\n},
+	qq{<label for="zip">ZIP code:\n},
 	$q->textfield(-name => 'zip',
 		      -id => 'zip',
+		      -class => 'input-mini',
 		      -size => 5,
 		      -maxlength => 5),
 	qq{</label>});
@@ -782,13 +770,13 @@ sub form($$$$)
     if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
     {
 	Hebcal::out_html($cfg,
-	qq{<li><label\nfor="tz">Time zone:\n},
+	qq{<label\nfor="tz">Time zone:\n},
 	$q->popup_menu(-name => 'tz',
 		       -id => 'tz',
 		       -values => ['auto',-5,-6,-7,-8,-9,-10],
 		       -default => 'auto',
 		       -labels => \%Hebcal::tz_names),
-	qq{</label>\n<li>Daylight Saving Time:\n},
+	qq{</label>\nDaylight Saving Time:\n},
 	$q->radio_group(-name => 'dst',
 			-values => ['usa','none'],
 			-default => 'usa',
@@ -798,16 +786,16 @@ sub form($$$$)
     }
     
     Hebcal::out_html($cfg,
-	"<li><label\nfor=\"m1\">Havdalah minutes past sundown:\n",
+	qq{<label\nfor="m1" title="enter '0' to suppress Havdalah times">Havdalah minutes past sundown:\n},
 	$q->textfield(-name => 'm',
 		      -id => 'm1',
+		      -class => 'input-mini',
 		      -size => 3,
 		      -maxlength => 3,
 		      -default => $Hebcal::havdalah_min),
 	"</label>",
-	"<ol><li><small>(enter\n\"0\" to turn off\nHavdalah times)</small></ol>",
-	qq{<li><input\ntype="submit" value="Get Shabbat Times">\n},
-	qq{</ol></fieldset></form>});
+	qq{<input\ntype="submit" value="Get Shabbat Times" class="btn btn-primary">\n},
+	qq{</fieldset></form>});
 
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-zipcode -->\n});
 
@@ -818,8 +806,7 @@ sub form($$$$)
 
     Hebcal::out_html(undef, qq{<div id="hebcal-form-city">\n});
     Hebcal::out_html($cfg,
-		     qq{<form>\n},
-		     qq{<fieldset><legend>Get Shabbat times by Major City</legend>\n},
+		     qq{<h4>Get Shabbat times by Major City</h4>\n},
 		     qq{<div id="city-list">\n},
 		     qq{<ul>\n});
     foreach my $city_name (sort keys %Hebcal::city_tz) {
@@ -830,23 +817,12 @@ sub form($$$$)
 	Hebcal::out_html($cfg, qq{<li><a href="$url">$city_name</a></li>\n});
     }
     Hebcal::out_html($cfg, qq{</ul>\n</div><!-- .city-list -->\n});
-    Hebcal::out_html($cfg, qq{</fieldset></form>\n});
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
 
     my $footer_divs1=<<EOHTML;
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-<div id="primary" class="widget-area" role="complementary">
-<ul class="xoxo">
-<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
-<div><label class="screen-reader-text" for="s">Search for:</label>
-<input type="text" value="" name="s" id="s" />
-<input type="submit" id="searchsubmit" value="Search" />
-</div>
-</form></li>
-<li id="more-from-hebcal" class="widget-container">
+</div><!-- .span9 -->
+<div class="span3" role="complementary">
+<div id="more-from-hebcal">
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs1);
@@ -854,8 +830,9 @@ EOHTML
     more_from_hebcal();
 
     my $footer_divs2=<<EOHTML;
-</li><!-- #more-from-hebcal -->
-<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
+</div><!-- #more-from-hebcal -->
+<div id="shabbat-ad">
+<h4 class="widget-title">Advertisement</h4>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* 200x200 text only */
@@ -866,14 +843,14 @@ google_ad_height = 200;
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></li>
-</ul><!-- .xoxo -->
-</div><!-- #primary .widget-area -->
+</script>
+</div><!-- #shabbat-ad -->
+</div><!-- .span3 -->
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs2);
 
-    Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev));
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
     Hebcal::cache_end() if $cache;
     exit(0);
