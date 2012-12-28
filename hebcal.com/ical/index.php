@@ -15,18 +15,19 @@ $xtra_head = <<<EOD
 }
 </style>
 EOD;
-echo html_header_new($page_title, $xtra_head);
+echo html_header_bootstrap($page_title, $xtra_head);
 ?>
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title"><?php echo $page_title ?></h1>
-<div class="entry-content">
+<div class="span12">
+<div class="page-header">
+<h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
+</div>
 
-<p>Jewish holidays for the next 10 years are available for Microsoft
+<p class="lead">Jewish holidays for the next 10 years are available for Microsoft
 Outlook, Apple iCal, iPhone, iPad, Android (via Google Calendar),
 or to any desktop program that supports
-iCalendar (.ics) files. These holidays are for Jews living in the
+iCalendar (.ics) files.</p>
+
+<p>These holidays are for Jews living in the
 Diaspora (anywhere outside of modern Israel). Click the icons below to
 subscribe in your device or web/desktop application.</p>
 
@@ -42,8 +43,8 @@ function cal_row($path,$title,$subtitle,$suppress_outlook=false) {
     $http_esc = urlencode("http://" . $url_noproto);
 ?>
 <tr>
-<td><b><big><?php echo $title ?></big></b>
-<br><?php echo $subtitle ?></td>
+<td><h4><?php echo $title ?></h4>
+<?php echo $subtitle ?></td>
 <td><a class="download" id="quick-ical-<?php echo $path ?>"
 title="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
 href="<?php echo $webcal ?>"><img
@@ -73,16 +74,16 @@ border="0"></a></td>
 <?php
 } // function cal_row()
 ?>
-<table id="hebcal-ical" cellpadding="5">
+<table id="hebcal-ical" cellpadding="5" class="table">
 <?php
 cal_row("jewish-holidays", "Jewish Holidays",
 	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah");
 cal_row("jewish-holidays-all", "Jewish Holidays (all)",
 	"Also includes Rosh Chodesh, minor fasts, and special Shabbatot");
 cal_row("hdate-en", "Hebrew calendar dates (English transliteration)",
-	"Displays the Hebrew date (such as <b>18th of Tevet, 5770</b>) every day of the week");
+	"Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week");
 cal_row("hdate-he", "Hebrew calendar dates (Hebrew)",
-	"Displays the Hebrew date (such as <b>י״ח בטבת תש״ע</b>) every day of the week",
+	"Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week",
 	true);
 cal_row("omer", "Days of the Omer",
 	"7 weeks from the second night of Pesach to the day before Shavuot");
@@ -101,8 +102,5 @@ and holidays, Torah readings, etc, follow these instructions:</p>
   follow the instructions for your favorite application or mobile device
 </ol>
 
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-<?php echo html_footer_new(); ?>
+</div><!-- .span12 -->
+<?php echo html_footer_bootstrap(); ?>
