@@ -312,16 +312,17 @@ calendars.</p>
 <div class="span3" role="complementary">
 <div class="row-fluid">
 <h4>Hebrew Date RSS Feeds</h4>
-<ul>
+<ul class="nav nav-list">
 <li><a href="/etc/hdate-en.xml"
-title="Today's Hebrew Date in English Transliteration RSS">in
-English transliteration <img
+title="Today's Hebrew Date in English Transliteration RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="Today's Hebrew Date in English Transliteration RSS"></a></li>
+alt="Today's Hebrew Date in English Transliteration RSS">
+in English transliteration</a></li>
 <li><a href="/etc/hdate-he.xml"
-title="Today's Hebrew Date in Hebrew RSS">in Hebrew <img
+title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="Today's Hebrew Date in Hebrew RSS"></a></li>
+alt="Today's Hebrew Date in Hebrew RSS">
+in Hebrew</a></li>
 </ul>
 </div><!-- .row-fluid -->
 
