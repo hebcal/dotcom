@@ -215,7 +215,6 @@ fast.</span>
 <h3>Jewish Holidays</h3>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
-<p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
 <?php
   $hebyear = ($hmnum == 13) ? $hy + 1 : $hy;
   $greg_yr1 = $hebyear - 3761;
@@ -223,6 +222,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
   $greg_range = $greg_yr1 . "-" . $greg_yr2;
 ?>
 <p><a class="btn" href="/holidays/<?php echo $greg_range ?>"><i class="icon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
+<p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
 </div><!-- .span4 -->
 
 <div class="span4">
@@ -238,7 +238,16 @@ Hebrew Birthdays and Anniversaries.</p>
 <div class="span4">
 <h3>Shabbat Times</h3>
 <p>Candle-lighting and Havdalah times, plus this week's Torah portion.</p>
-<p><a class="btn" href="/shabbat/"><i class="icon-time"></i> Shabbat Times &raquo;</a></p>
+<form action="/shabbat/" method="get" class="form">
+<input type="hidden" name="geo" value="zip">
+<label>ZIP code:
+<input type="text" name="zip" size="5" maxlength="5" class="input-mini"
+<?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
+id="zip"></label>
+<input type="hidden" name="m" value="<?php
+  if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
+<button type="submit" class="btn"><i class="icon-time"></i> Shabbat Times &raquo;</button>
+</form>
 <p>Receive a weekly reminder of the Parashat ha-Shavua and
 when to light candles for your city.</p>
 <p><a class="btn" href="/email/"><i class="icon-envelope"></i> Subscribe by email &raquo;</a></p>
