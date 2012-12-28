@@ -248,6 +248,10 @@ id="zip"></label>
   if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <button type="submit" class="btn"><i class="icon-time"></i> Shabbat Times &raquo;</button>
 </form>
+<?php if ($param["zip"]) { ?>
+<p><a class="btn" href="/shabbat/fridge.cgi?zip=<?php echo $param["zip"] ?>;year=<?php
+  echo $hebyear ?>"><i class="icon-print"></i> Print Hebrew Year <?php echo $hebyear ?> &raquo;</a></p>
+<?php } ?>
 <p>Receive a weekly reminder of the Parashat ha-Shavua and
 when to light candles for your city.</p>
 <p><a class="btn" href="/email/"><i class="icon-envelope"></i> Subscribe by email &raquo;</a></p>
@@ -263,9 +267,9 @@ when to light candles for your city.</p>
 
 <div class="span4">
 <h3>Developers</h3>
-<p>APIs, RSS Feeds, Source Code and widgets for inclusion on
+<p>APIs, RSS Feeds, JavaScript, Source Code and widgets for
 your synagogue or other website.</p>
-<p><a class="btn" href="/home/category/developers"><i class="icon-wrench"></i> API Documentation &raquo;</a></p>
+<p><a class="btn" href="/home/category/developers"><i class="icon-wrench"></i> Developer Docs &raquo;</a></p>
 </div><!-- .span4 -->
 </div><!-- .row-fluid -->
 
