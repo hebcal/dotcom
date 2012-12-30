@@ -753,7 +753,7 @@ sub form($$$$)
 
     Hebcal::out_html($cfg,
 	qq{$message\n},
-	qq{<div id="hebcal-form-zipcode" class="well">\n},
+	qq{<div id="hebcal-form-zipcode" class="well well-small">\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
 	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
 	$q->hidden(-name => 'geo',
