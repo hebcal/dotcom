@@ -1,6 +1,10 @@
 <?php
 // $Id$
 // $URL$
+
+// don't visit DreamHost php4 /usr/local/lib/php
+set_include_path(".:/usr/local/php5/lib/pear");
+
 header("Cache-Control: private");
 $sender = "webmaster@hebcal.com";
 
