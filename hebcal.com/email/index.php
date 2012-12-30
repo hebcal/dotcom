@@ -276,7 +276,7 @@ function form($param, $message = "", $help = "") {
     }
 
 ?>
-<div id="email-form" class="well">
+<div id="email-form" class="well well-small">
 <form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
 <fieldset>
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
