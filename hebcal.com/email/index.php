@@ -502,11 +502,10 @@ EOD;
 
 	$html = <<<EOD
 <div class="alert alert-success alert-block">
-<h4>Unsubscribed</h4>
-Your subsciption information has been updated successfully.
-<p><small>
-$city_descr
-<br>&nbsp;&nbsp;$tz_descr
+<strong>Success!</strong> Your subsciption information has been updated.
+<p>Email: <strong>$html_email</strong>
+<br>Location: $city_descr
+<br><small>&nbsp;&nbsp;$tz_descr
 <br>&nbsp;&nbsp;$dst_descr
 </small></p>
 </div>
