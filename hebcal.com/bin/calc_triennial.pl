@@ -697,6 +697,7 @@ title="Translation from JPS Tanakh">$torah</a></h3>
 <div class="row-fluid">
 <div class="span3">
 <h4>Full Kriyah</h4>
+<ol class="unstyled">
 EOHTML
 ;
 
@@ -704,10 +705,10 @@ EOHTML
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$aliyot})
     {
-	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
+	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah), "\n";
     }
 
-    print OUT2 "</div><!-- .span3 fk -->\n";
+    print OUT2 "</ol>\n</div><!-- .span3 fk -->\n";
 
     foreach my $yr (1 .. 3)
     {
@@ -971,11 +972,13 @@ sub print_tri_cell
     croak "no aliyot array for $h (year $yr)"
 	unless defined $triennial->[$yr]->[0];
 
+    print OUT2 qq{<ul class="unstyled">\n};
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$triennial->[$yr]->[0]})
     {
-	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
+	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah), "\n";
     }
+    print OUT2 "</ul>\n";
 }
 
 sub format_aliyah
