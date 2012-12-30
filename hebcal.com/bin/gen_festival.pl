@@ -96,11 +96,7 @@ if ($opts{'f'}) {
 
 my $DO_AMAZON = 1;
 my $REVISION = '$Revision$'; #'
-my $mtime_festival = (stat($festival_in))[9];
-my $mtime_script = (stat($0))[9];
 my $NOW = time();
-my $MTIME = $mtime_script > $mtime_festival ? $mtime_script : $mtime_festival;
-my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 my @FESTIVALS;
 my %SUBFESTIVALS;
@@ -439,7 +435,6 @@ sub get_index_body_preamble {
 <div class="page-header">
 <h1>$page_title</h1>
 </div>
-<p class="meta">Last updated on <time>$MTIME_FORMATTED</time></p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <strong>Sep 19-20</strong>, then the holiday begins at
