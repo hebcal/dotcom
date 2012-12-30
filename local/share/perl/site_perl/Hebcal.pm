@@ -1487,10 +1487,9 @@ sub html_header_bootstrap {
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $str = <<EOHTML;
 <!DOCTYPE html>
-<html lang="en-US"><head>
+<html><head>
 <meta charset="UTF-8">
 <title>$title2</title>
-<base href="http://www.hebcal.com$base_href" target="_top">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/bootstrap/css/bootstrap.min.css" media="all">
 <link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/bootstrap/css/bootstrap-responsive.min.css" media="all">
