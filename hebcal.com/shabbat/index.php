@@ -52,7 +52,7 @@ if (!$qs && isset($_COOKIE["C"])) {
     }
 }
 
-$url = "http://www.hebcal.com/shabbat/shabbat.cgi";
+$url = "http://" . $_SERVER["HTTP_HOST"] . "/shabbat/shabbat.cgi";
 if ($qs) {
     $now = time();
     $lt = localtime($now);
