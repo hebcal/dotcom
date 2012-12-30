@@ -75,9 +75,9 @@ header("Status: 404 Not Found");
       </div><!-- .navbar -->
 
 
-<div class="hero-unit">
+<div class="page-header">
 <h1>Not Found</h1>
-</div><!-- .hero-unit -->
+</div><!-- .page-header -->
 
 <p class="lead">The requested URL
 <?php echo htmlspecialchars($_SERVER["REQUEST_URI"]) ?>
