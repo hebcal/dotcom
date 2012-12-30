@@ -126,7 +126,8 @@ EOD;
 
     $ip = $_SERVER["REMOTE_ADDR"];
 
-    $unsub_url = "http://www.hebcal.com/email/?e=" .
+    $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
+    $unsub_url = $url_prefix . "/email/?e=" .
 	urlencode(base64_encode($info["em"]));
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",

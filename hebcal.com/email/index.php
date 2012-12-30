@@ -548,6 +548,7 @@ EOD
 		     "X-Originating-IP" => "[$ip]",
 		     "Subject" => $subject);
 
+    $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
     $body = <<<EOD
 Hello,
 
@@ -557,7 +558,7 @@ $city_descr.
 
 Please confirm your request by clicking on this link:
 
-http://www.hebcal.com/email/verify.php?$encoded
+$url_prefix/email/verify.php?$encoded
 
 If you did not request (or do not want) weekly Shabbat
 candle lighting time information, please accept our
