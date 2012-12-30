@@ -1237,7 +1237,6 @@ sub html_footer_bootstrap
     my $hhmts = strftime("%d %B %Y", localtime($mtime));
 
     my $str = <<EOHTML;
-</div><!-- #main -->
 </div><!-- #content -->
 
 <footer role="contentinfo">
@@ -1534,9 +1533,8 @@ $xtra_head</head>
        </div><!-- .navbar-inner -->
       </div><!-- .navbar -->
 
-<div class="container-fluid">
+<div class="container">
 <div id="content" class="clearfix row-fluid">
-<div id="main" class="clearfix" role="main">
 EOHTML
 ;
     return $str;
