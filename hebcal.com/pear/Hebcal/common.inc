@@ -588,10 +588,6 @@ EOD;
 <footer role="contentinfo">
 <div id="inner-footer" class="clearfix">
 <hr>
-<div id="widget-footer" class="clearfix row-fluid">
-</div>
-<nav class="clearfix">
-</nav>
 $site_generator_div
 <p class="pull-left"><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></p>
 </div><!-- #inner-footer -->
@@ -601,7 +597,6 @@ $site_generator_div
 </div><!-- .clearfix -->
 
 </footer>
-
 </div> <!-- .container-fluid -->
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
