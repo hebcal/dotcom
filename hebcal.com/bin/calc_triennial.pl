@@ -12,7 +12,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2012  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -68,7 +68,6 @@ $0 =~ s,.*/,,;  # basename
 
 my($usage) = "usage: $0 [-h] [-H <year>] [-t t.csv] [-f f.csv] [-d d.sqlite3] aliyah.xml festival.xml output-dir
     -h        Display usage information.
-    -2        Display two years of triennial on HTML pages
     -H <year> Start with hebrew year <year> (default this year)
     -t t.csv  Dump triennial readings to comma separated values
     -f f.csv  Dump full kriyah readings to comma separated values
@@ -76,7 +75,7 @@ my($usage) = "usage: $0 [-h] [-H <year>] [-t t.csv] [-f f.csv] [-d d.sqlite3] al
 ";
 
 my(%opts);
-Getopt::Std::getopts('hH:c:t:f:2d:', \%opts) || croak "$usage\n";
+Getopt::Std::getopts('hH:c:t:f:d:', \%opts) || croak "$usage\n";
 $opts{'h'} && croak "$usage\n";
 (@ARGV == 3) || croak "$usage";
 
@@ -234,7 +233,7 @@ foreach my $h (keys %readings1, "Vezot Haberakhah") {
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
 my $REVISION = '$Revision$'; #'
-my $html_footer = Hebcal::html_footer_new(undef, $REVISION, 0);
+my $html_footer = Hebcal::html_footer_bootstrap(undef, $REVISION, 0);
 my $mtime_aliyah = (stat($aliyah_in))[9];
 my $mtime_script = (stat($0))[9];
 my $MTIME = $mtime_script > $mtime_aliyah ? $mtime_script : $mtime_aliyah;
@@ -415,31 +414,31 @@ sub write_index_page
 </style>
 EOHTML
 ;
-    print OUT1 Hebcal::html_header("Torah Readings",
+    print OUT1 Hebcal::html_header_bootstrap("Torah Readings",
 				   "/sedrot/",
 				   "single single-post",
 				   $xtra_head);
     print OUT1 <<EOHTML;
-<div id="container">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Torah Readings</h1>
-<div class="entry-meta">
-<span class="meta-prep meta-prep-author">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
-</div><!-- .entry-meta -->
-<div class="entry-content">
-<p>Readings for Diaspora:
-<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=off;set=off">$hy0</a> -
-<a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=off;set=off">$hebrew_year</a> -
-<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=off;set=off">$hy1</a> -
-<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=off;set=off">$hy2</a> -
-<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=off;set=off">$hy3</a>
-<br>Readings for Israel:
-<a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=on;set=off">$hy0</a> -
-<a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=on;set=off">$hebrew_year</a> -
-<a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=on;set=off">$hy1</a> -
-<a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=on;set=off">$hy2</a> -
-<a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=on;set=off">$hy3</a></p>
+<div class="span9">
+<div class="page-header">
+<h1>Torah Readings</h1>
+</div>
+<div class="pagination"><ul>
+<li class="disabled"><a href="#">Diaspora</a></li>
+<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=off;set=off">$hy0</a></li>
+<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=off;set=off">$hebrew_year</a></li>
+<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=off;set=off">$hy1</a></li>
+<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=off;set=off">$hy2</a></li>
+<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=off;set=off">$hy3</a></li>
+</ul></div>
+<div class="pagination"><ul>
+<li class="disabled"><a href="#">Israel</a></li>
+<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=on;set=off">$hy0</a></li>
+<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=on;set=off">$hebrew_year</a></li>
+<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=on;set=off">$hy1</a></li>
+<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=on;set=off">$hy2</a></li>
+<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=on;set=off">$hy3</a></li>
+</ul></div>
 <p>Leyning coordinators:
 <a title="Can I download the aliyah-by-aliyah breakdown of Torah readings for Shabbat?"
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
@@ -490,25 +489,14 @@ EOHTML
 
     print OUT1 "</ol>\n</div><!-- #hebcal-sedrot -->\n";
     print OUT1 <<EOHTML;
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-<div id="primary" class="widget-area" role="complementary">
-<ul class="xoxo">
-<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
-<div><label class="screen-reader-text" for="s">Search for:</label>
-<input type="text" value="" name="s" id="s" />
-<input type="submit" id="searchsubmit" value="Search" />
-</div>
-</form></li>
-<li id="more-from-hebcal" class="widget-container">
-<h3 class="widget-title">Torah Reading RSS feeds</h3>
-<p><a href="index.xml">Parashat ha-Shavua RSS
-<img src="/i/feed-icon-14x14.png" style="border:none"
-alt="View the raw XML source" width="14" height="14"></a></p>
-</li><!-- #more-from-hebcal -->
-<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
+</div><!-- .span9 -->
+<div class="span3">
+<h4>Torah Reading RSS feeds</h4>
+<ul class="nav nav-list">
+<li><a href="index.xml"><img src="/i/feed-icon-14x14.png" style="border:none"
+alt="View the raw XML source" width="14" height="14"> Parashat ha-Shavua RSS</a>
+</ul>
+<h4>Advertisement</h4>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* skyscraper text only */
@@ -519,9 +507,8 @@ google_ad_height = 600;
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></li>
-</ul><!-- .xoxo -->
-</div><!-- #primary .widget-area -->
+</script>
+</div><!-- .span3 -->
 EOHTML
 ;
     print OUT1 $html_footer;
@@ -637,37 +624,8 @@ sub write_sedra_page
 	$ashk = " for Ashkenazim";
     }
 
-    my($anchor) = lc($h);
+    my $anchor = lc($h);
     $anchor =~ s/[^\w]//g;
-
-    my($prev_link) = '';
-    my($prev_anchor);
-    if ($prev)
-    {
-	$prev_anchor = lc($prev);
-	$prev_anchor =~ s/[^\w]//g;
-
-	my $title = "Previous Parashah";
-	$prev_link = <<EOHTML
-<div class="nav-previous"><a title="$title" href="$prev_anchor" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
-EOHTML
-;
-    }
-
-    my($next_link) = '';
-    my($next_anchor);
-    if ($next)
-    {
-	$next_anchor = lc($next);
-	$next_anchor =~ s/[^\w]//g;
-
-	my $title = "Next Parashah";
-	$next_link = <<EOHTML
-<div class="nav-next"><a title="$title" href="$next_anchor" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
-EOHTML
-;
-    }
-
     my $fn = "$outdir/$anchor";
     open(OUT2, ">$fn.$$") || croak "$fn.$$: $!\n";
 
@@ -675,7 +633,8 @@ EOHTML
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
     my $description = "Parashat $h ($torah). ";
-    my $intro_summary = "<p>";
+    my $default_intro_summary = qq{<p class="lead">};
+    my $intro_summary = $default_intro_summary;
     if ($next_reading{$h}) {
 	my $dt = date_sql_to_dd_MMM_yyyy($next_reading{$h});
 	$intro_summary .= "Next read in the Diaspora on $dt.";
@@ -689,7 +648,7 @@ EOHTML
 	    . " weekly Torah portion in the annual Jewish cycle of Torah reading."
     }
 
-    if ($intro_summary eq "<p>") {
+    if ($intro_summary eq $default_intro_summary) {
 	$intro_summary = "";
     } else {
 	$intro_summary .= "</p>";
@@ -697,7 +656,7 @@ EOHTML
 
     $description .= " Torah reading, Haftarah, links to audio and commentary.";
 
-    print OUT2 Hebcal::html_header("$h - Torah Portion - $hebrew",
+    print OUT2 Hebcal::html_header_bootstrap("$h - Torah Portion - $hebrew",
 				   "/sedrot/$anchor",
 				   "single single-post",
 				   qq{<meta name="description" content="$description">\n},
@@ -705,11 +664,9 @@ EOHTML
 
     my @tri_date;
     my @tri_date2;
-    my $fk_date;
     if ($h eq 'Vezot Haberakhah')
     {
 	$tri_date[1] = $tri_date[2] = $tri_date[3] =
-	$fk_date =
 	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
 	@tri_date2 = @tri_date;
     }
@@ -722,55 +679,26 @@ EOHTML
 	    $tri_date2[$_] = (defined $tri2->[$_]) ?
 		$tri2->[$_]->[1] : '(read separately)';
 	}
-
-	$fk_date = '&nbsp;';
     }
 
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
     print OUT2 <<EOHTML;
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div id="nav-above" class="navigation">
-$prev_link
-$next_link
-</div><!-- #nav-above -->
-<div class="page type-page hentry">
+<div class="span10">
+<div class="page-header">
 <h1 class="entry-title">Parashat $h / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-<div class="entry-content">
+</div>
 $intro_summary
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
 title="Translation from JPS Tanakh">$torah</a></h3>
-<table border="1" style="padding:5px;font-size:90%">
-<tr>
-<td style="text-align:center"><b>Full Kriyah</b>
-<br><small>$fk_date</small>
-</td>
-<td style="text-align:center"><b>Triennial Year I</b>
-<br><small>$tri_date[1]</small>
-</td>
-<td style="text-align:center"><b>Triennial Year II</b>
-<br><small>$tri_date[2]</small>
-</td>
-<td style="text-align:center"><b>Triennial Year III</b>
-<br><small>$tri_date[3]</small>
-</td>
-</tr>
-<tr>
+<div class="row-fluid">
+<div class="span3">
+<h4>Full Kriyah</h4>
 EOHTML
 ;
-
-    if ($opts{'2'})
-    {
-	print OUT2 qq{<td style="vertical-align:top" rowspan="3">\n};
-    }
-    else
-    {
-	print OUT2 qq{<td style="vertical-align:top">\n};
-    }
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
@@ -779,14 +707,21 @@ EOHTML
 	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
     }
 
-    print OUT2 "</td>\n";
+    print OUT2 "</div><!-- .span3 fk -->\n";
 
     foreach my $yr (1 .. 3)
     {
+	print OUT2 <<EOHTML;
+<div class="span3">
+<h4>Triennial Year $yr</h4>
+<span class="muted">$tri_date[$yr]</span>
+EOHTML
+;
 	print_tri_cell($tri1,$h,$yr,$torah);
+	print OUT2 qq{</div><!-- .span3 tri$yr -->\n};
     }
 
-    print OUT2 "</tr>\n";
+    print OUT2 qq{</div><!-- .row-fluid -->\n};
 
     if (defined $parashah_date_sql{$h}) {
 	my %sp_dates;
@@ -798,7 +733,7 @@ EOHTML
 	}
 
 	if (keys %sp_dates) {
-	    print OUT2 qq{<tr><td style="vertical-align:top" colspan="4">\n};
+	    print OUT2 qq{<h4>Special Maftir</h4>\n};
 	    foreach my $reason (sort keys %sp_dates) {
 		my $info = "";
 		my $count = 0;
@@ -823,35 +758,10 @@ EOHTML
 
 		print OUT2 "</ul>\n";
 	    }
-	    print OUT2 "</td></tr>\n";
-	}
-    }
-
-    if ($opts{'2'})
-    {
-	print OUT2 <<EOHTML;
-<tr>
-<td style="text-align:center"><b>Triennial Year I</b>
-<br><small>$tri_date2[1]</small>
-</td>
-<td style="text-align:center"><b>Triennial Year II</b>
-<br><small>$tri_date2[2]</small>
-</td>
-<td style="text-align:center"><b>Triennial Year III</b>
-<br><small>$tri_date2[3]</small>
-</td>
-</tr>
-EOHTML
-;
-
-	foreach my $yr (1 .. 3)
-	{
-	    print_tri_cell($tri2,$h,$yr,$torah);
 	}
     }
 
     print OUT2 <<EOHTML;
-</table>
 <h3 id="haftarah">Haftarah$ashk: <a class="outbound"
 href="$haftarah_href"
 title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
@@ -975,22 +885,30 @@ href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
 EOHTML
 ;
 
-    if ($prev_link || $next_link)
-    {
-	print OUT2 <<EOHTML;
-<div id="nav-below" class="navigation">
-$prev_link
-$next_link
-</div><!-- #nav-below -->
-EOHTML
-;
+    my $prev_nav = "";
+    if ($prev) {
+	my $prev_anchor = lc($prev);
+	$prev_anchor =~ s/[^\w]//g;
+	$prev_nav = qq{<li><a title="Previous Parashah" href="$prev_anchor" rel="prev"><i class="icon-arrow-left"></i> $prev</a></li>};
+    }
+
+    my $next_nav = "";
+    if ($next) {
+	my $next_anchor = lc($next);
+	$next_anchor =~ s/[^\w]//g;
+	$next_nav = qq{<li><a title="Next Parashah" href="$next_anchor" rel="prev"><i class="icon-arrow-right"></i> $next</a></li>};
     }
 
     print OUT2 <<EOHTML;
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
+</div><!-- .span10 -->
+<div class="span2">
+<h4>Torah Readings</h4>
+<ul class="nav nav-list">
+<li><a href="."><i class="icon-book"></i> Torah Readings</a>
+$prev_nav
+$next_nav
+</ul>
+</div><!-- .span2 -->
 EOHTML
 ;
     print OUT2 $html_footer;
@@ -1014,12 +932,9 @@ sub print_tri_cell
 {
     my($triennial,$h,$yr,$torah) = @_;
 
-    print OUT2 qq{<td style="vertical-align:top">\n};
-    print OUT2 "<!-- tri $yr -->\n";
-
     if ($h eq 'Vezot Haberakhah')
     {
-	print OUT2 "&nbsp;</td>\n";
+	print OUT2 "&nbsp;\n";
 	return;
     }
     elsif (! defined $triennial->[$yr])
@@ -1036,8 +951,6 @@ sub print_tri_cell
 	$anchor =~ s/[^\w]//g;
 	print OUT2 "<li><a href=\"$anchor\">$p2</a>\n";
 	print OUT2 "</ul>\n";
-
-	print OUT2 "</td>\n";
 	return;
     }
     elsif ($triennial->[$yr]->[2] ne $h)
@@ -1052,8 +965,6 @@ sub print_tri_cell
 	my($anchor) = lc($h_combined);
 	$anchor =~ s/[^\w]//g;
 	print OUT2 "See <a href=\"$anchor\">$h_combined</a>\n";
-
-	print OUT2 "</td>\n";
 	return;
     }
 
@@ -1065,7 +976,6 @@ sub print_tri_cell
     {
 	print OUT2 format_aliyah($aliyah,$h,$torah), "<br>\n";
     }
-    print OUT2 "</td>\n";
 }
 
 sub format_aliyah
