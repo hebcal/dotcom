@@ -314,26 +314,26 @@ sub table_cell_observed {
     } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
 	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
     } else {
-	$s .= "<b>"; # begin yomtov
+	$s .= "<strong>"; # begin yomtov
 	if ($f eq "Rosh Hashana" || $f eq "Shavuot") {
 	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
 	} elsif ($f eq "Yom Kippur" || $f eq "Shmini Atzeret" || $f eq "Simchat Torah") {
 	    $s .= format_single_day_html($gy, $gm, $gd, $show_year);
 	} elsif ($f eq "Sukkot") {
 	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
-	    $s .= "</b><br>";
+	    $s .= "</strong><br>";
 	    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
 	    $s .= format_date_plus_delta($gy2, $gm2, $gd2, 4, $show_year);
 	} elsif ($f eq "Pesach") {
 	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
-	    $s .= "</b><br>";
+	    $s .= "</strong><br>";
 	    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
 	    $s .= format_date_plus_delta($gy2, $gm2, $gd2, 3, $show_year);
-	    $s .= "<br><b>";
+	    $s .= "<br><strong>";
 	    my($gy3,$gm3,$gd3) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 6);
 	    $s .= format_date_plus_delta($gy3, $gm3, $gd3, 1, $show_year);
 	}
-	$s .= "</b>" unless $f eq "Sukkot";
+	$s .= "</strong>" unless $f eq "Sukkot";
     }
     return $s;
 }
@@ -341,7 +341,7 @@ sub table_cell_observed {
 sub table_index {
     my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
-<table id="$table_id">
+<table class="table" id="$table_id">
 <col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 <tbody>
 EOHTML
@@ -390,7 +390,7 @@ EOHTML
 sub table_one_year_only {
     my($festivals,$table_id,$i,@holidays) = @_;
     print OUT4 <<EOHTML;
-<table id="$table_id">
+<table class="table" id="$table_id">
 <col style="width:180px"><col style="width:180px"><col>
 <tbody>
 EOHTML
@@ -435,19 +435,16 @@ sub get_index_body_preamble {
     my($page_title,$do_multi_year) = @_;
 
     my $str = <<EOHTML;
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">$page_title</h1>
-<div class="entry-meta">
-<span class="meta-prep">Last updated on</span> <span class="entry-date">$MTIME_FORMATTED</span>
-</div><!-- .entry-meta -->
-<div class="entry-content">
+<div class="span12">
+<div class="page-header">
+<h1>$page_title</h1>
+</div>
+<p class="meta">Last updated on <time>$MTIME_FORMATTED</time></p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
-Hashana were listed as <b>Sep 19-20</b>, then the holiday begins at
-sundown on <b>Sep 18</b> and ends at sundown on <b>Sep 20</b>.
-Dates in <b>bold</b> are <em>yom tov</em>, so they have similar
+Hashana were listed as <strong>Sep 19-20</strong>, then the holiday begins at
+sundown on <strong>Sep 18</strong> and ends at sundown on <strong>Sep 20</strong>.
+Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
 <p>
@@ -537,7 +534,7 @@ EOHTML
     $xtra_head .= "</style>\n";
 
     my $page_title = "Jewish Holidays";
-    print OUT3 Hebcal::html_header($page_title,
+    print OUT3 Hebcal::html_header_bootstrap($page_title,
 				   "/holidays/",
 				   "single single-post",
 				   $meta . $xtra_head);
@@ -553,15 +550,12 @@ EOHTML
     }
 
     my $body_divs_end = <<EOHTML;
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
+</div><!-- .span12 -->
 EOHTML
 ;
 
     print OUT3 $body_divs_end;
-    print OUT3 Hebcal::html_footer_new(undef, $REVISION);
+    print OUT3 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
     close(OUT3);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -583,7 +577,7 @@ EOHTML
 EOHTML
 ;
 
-	print OUT4 Hebcal::html_header($page_title,
+	print OUT4 Hebcal::html_header_bootstrap($page_title,
 				       "/holidays/$slug",
 				       "single single-post",
 				       $meta . $xtra_head,
@@ -591,19 +585,21 @@ EOHTML
 
 	print OUT4 get_index_body_preamble($page_title, 0);
 
-	print OUT4 "<p>";
+	print OUT4 qq{<div class="pagination"><ul>\n};
 	foreach my $j (0 .. $NUM_YEARS) {
 	    my $other_yr = $HEB_YR + $j - 1;
 	    my $other_greg_yr1 = $other_yr - 3761;
 	    my $other_greg_yr2 = $other_greg_yr1 + 1;
 	    my $other_slug = "$other_greg_yr1-$other_greg_yr2";
 
-	    print OUT4 qq{<a title="Hebrew Year $other_yr" href="$other_slug">} unless $i == $j;
-	    print OUT4 $other_slug;
-	    print OUT4 "</a>" unless $i == $j;
-	    print OUT4 " |\n" unless $j == $NUM_YEARS;
+	    if ($i == $j) {
+		print OUT4 qq{<li class="active">};
+	    } else {
+		print OUT4 qq{<li>};
+	    }
+	    print OUT4 qq{<a title="Hebrew Year $other_yr" href="$other_slug">$other_slug</a></li>\n};
 	}
-	print OUT4 "</p>\n";
+	print OUT4 qq{</ul></div>\n};
 
 	foreach my $section (@sections) {
 	  my $heading = $section->[1];
@@ -614,7 +610,7 @@ EOHTML
 	}
 
 	print OUT4 $body_divs_end;
-	print OUT4 Hebcal::html_footer_new(undef, $REVISION);
+	print OUT4 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
 	close(OUT4);
 	rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -792,40 +788,11 @@ sub write_festival_page
 EOHTML
 ;
 
-    print OUT2 Hebcal::html_header($page_title,
+    print OUT2 Hebcal::html_header_bootstrap($page_title,
 				   "/holidays/$slug",
 				   "single single-post",
 				   $meta,
 				   0);
-
-    my $prev = $PREV{$f};
-    my($prev_link) = '';
-    my($prev_slug);
-    if ($prev)
-    {
-	$prev_slug = Hebcal::make_anchor($prev);
-	my $title = "Previous Holiday";
-	$prev_link = <<EOHTML
-<div class="nav-previous"><a href="$prev_slug" rel="prev"><span class="meta-nav">&larr;</span> $prev</a></div>
-EOHTML
-;
-    }
-
-    my $next = $NEXT{$f};
-    my($next_link) = '';
-    my($next_slug);
-    if ($next)
-    {
-	$next_slug = Hebcal::make_anchor($next);
-	my $title = "Next Holiday";
-	$next_link = <<EOHTML
-<div class="nav-next"><a href="$next_slug" rel="next">$next <span class="meta-nav">&rarr;</span></a></div>
-EOHTML
-;
-    }
-
-    my($strassfeld_link) =
-	"http://www.amazon.com/o/ASIN/0062720082/hebcal-20";
 
     my $wikipedia_descr;
     my $wikipedia = get_var($festivals, $f, 'wikipedia', 1);
@@ -835,17 +802,12 @@ EOHTML
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
 
     print OUT2 <<EOHTML;
-<div id="container">
-<div id="content" role="main">
-<div id="nav-above" class="navigation">
-$prev_link
-$next_link
-</div><!-- #nav-above -->
-<div class="page type-page hentry">
-<h1 class="entry-title">$f / <span
+<div class="span9">
+<div class="page-header">
+<h1>$f / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
-<div class="entry-content">
-<p>$long_descr.
+</div>
+<p class="lead">$long_descr.</p>
 EOHTML
 ;
 
@@ -1035,7 +997,7 @@ EOHTML
 <h3 id="ref">References</h3>
 <dl>
 <dt><em><a class="amzn" id="strassfeld-2"
-href="$strassfeld_link">The
+href="http://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dd>Rabbi Michael Strassfeld
 };
@@ -1068,31 +1030,30 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
 
     print OUT2 "</dl>\n";
 
-    if ($prev_link || $next_link)
-    {
-	print OUT2 <<EOHTML;
-<div id="nav-below" class="navigation">
-$prev_link
-$next_link
-</div><!-- #nav-below -->
-EOHTML
-;
+    my $prev = $PREV{$f};
+    my $prev_nav = "";
+    if ($prev) {
+	my $prev_slug = Hebcal::make_anchor($prev);
+	$prev_nav = qq{<li><a title="Previous Holiday" href="$prev_slug" rel="prev"><i class="icon-arrow-left"></i> $prev</a></li>};
+    }
+
+    my $next = $NEXT{$f};
+    my $next_nav = "";
+    if ($next) {
+	my $next_slug = Hebcal::make_anchor($next);
+	$next_nav = qq{<li><a title="Next Holiday" href="$next_slug" rel="prev"><i class="icon-arrow-right"></i> $next</a></li>};
     }
 
     print OUT2 <<EOHTML;
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-<div id="primary" class="widget-area" role="complementary">
-<ul class="xoxo">
-<li id="search-3" class="widget-container widget_search"><form role="search" method="get" id="searchform" action="http://www.hebcal.com/home/" >
-<div><label class="screen-reader-text" for="s">Search for:</label>
-<input type="text" value="" name="s" id="s" />
-<input type="submit" id="searchsubmit" value="Search" />
-</div>
-</form></li>
-<li id="advman-3" class="widget-container Advman_Widget"><h3 class="widget-title">Advertisement</h3>
+</div><!-- .span9 -->
+<div class="span3">
+<h4>Jewish Holidays</h4>
+<ul class="nav nav-list">
+<li><a href="."><i class="icon-calendar"></i> Holiday Calendar</a>
+$prev_nav
+$next_nav
+</ul>
+<h4>Advertisement</h4>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* skyscraper text only */
@@ -1103,12 +1064,11 @@ google_ad_height = 600;
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script></li>
-</ul><!-- .xoxo -->
-</div><!-- #primary .widget-area -->
+</script>
+</div><!-- .span3 -->
 EOHTML
 ;
-    print OUT2 Hebcal::html_footer_new(undef, $REVISION);
+    print OUT2 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
     close(OUT2);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -1116,7 +1076,7 @@ EOHTML
 
 sub read_more_hyperlink {
   my($f,$href,$title) = @_;
-  return qq{<a class="outbound" title="More about $f from $title" href="$href">$title <span class="meta-nav">&rarr;</span></a>};
+  return qq{<a class="outbound" title="More about $f from $title" href="$href">$title &rarr;</a>};
 }
 
 sub read_more_from {
@@ -1147,7 +1107,7 @@ sub read_more_from {
     $wikipedia_href = $wikipedia->{'href'};
   }
   if ($about_href || $wikipedia_href) {
-    $html = qq{\n<br><em>Read more from };
+    $html = qq{\n<p><em>Read more from };
     if ($about_href) {
       $html .= read_more_hyperlink($f,$about_href, $primary_source);
       $html .= " or " if ($wikipedia_href && $primary_source ne "Wikipedia");
