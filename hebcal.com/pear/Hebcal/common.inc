@@ -561,9 +561,8 @@ $xtra_head</head>
        </div><!-- .navbar-inner -->
       </div><!-- .navbar -->
 
-<div class="container-fluid">
+<div class="container">
 <div id="content" class="clearfix row-fluid">
-<div id="main" class="clearfix" role="main">
 EOD;
     return $html;
 }
@@ -582,7 +581,6 @@ EOD;
     }
 
     $html = <<<EOD
-</div><!-- #main -->
 </div><!-- #content -->
 
 <footer role="contentinfo">
