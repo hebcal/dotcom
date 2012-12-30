@@ -500,6 +500,7 @@ EOD;
 
 	$err = smtp_send($return_path, $param["em"], $headers, $body);
 
+	$html_email = htmlentities($param["em"]);
 	$html = <<<EOD
 <div class="alert alert-success alert-block">
 <strong>Success!</strong> Your subsciption information has been updated.
