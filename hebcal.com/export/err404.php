@@ -4,6 +4,7 @@ $matches = array();
 if (preg_match('/(\d+)/', $VERSION, $matches)) {
     $VERSION = $matches[1];
 }
+$url_prefix = "http://" . $_SERVER["HTTP_HOST"];
 $request_uri = $_SERVER["REQUEST_URI"];
 $ics_question = strpos($request_uri, ".ics%3F");
 if ($ics_question !== false) {
@@ -22,14 +23,14 @@ if ($args !== false) {
 	header("Status: 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
 	if ($param["v"] == "1") {
-	    $url = "http://www.hebcal.com/hebcal/index.cgi/export.ics" . $args;
+	    $url = $url_prefix . "/hebcal/index.cgi/export.ics" . $args;
 	} elseif ($param["v"] == "yahrzeit") {
-	    $url = "http://www.hebcal.com/yahrzeit/yahrzeit.cgi/export.ics" . $args;
+	    $url = $url_prefix . "/yahrzeit/yahrzeit.cgi/export.ics" . $args;
 	}
 	$ch = curl_init($url);
 	$user_agent = "hebcal-export/$VERSION";
 	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
-	$ref_url = "http://www.hebcal.com" . $request_uri;
+	$ref_url = $url_prefix . $request_uri;
 	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
 	curl_exec($ch);
 	curl_close($ch);
@@ -40,46 +41,32 @@ if ($args !== false) {
 header("HTTP/1.1 404 Not Found");
 header("Status: 404 Not Found");
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head>
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
 <title><?php echo $_SERVER["REDIRECT_STATUS"] ?> Not Found</title>
-<link rel="stylesheet" href="/style.css" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="container">
 
-<table width="100%" class="navbar">
-<tr><td>
-<strong><a href="/">hebcal.com</a></strong> <tt>-&gt;</tt>
-Not Found
-</td>
-<td align="right">
-<a href="/help/">Help</a> -
-<a href="/search/">Search</a>
-</td></tr></table>
-
+<div class="hero-unit">
 <h1>Not Found</h1>
 <p>The requested URL
 <?php echo htmlspecialchars($_SERVER["REQUEST_URI"]) ?>
  was not found on this server.</p>
+</div><!-- .hero-unit -->
 
-<p>Please check your request for typing errors and retry.</p>
+<p class="lead">Please check your request for typing errors and retry.</p>
 
-<form action="/cgi-bin/htsearch" method="get">
-<input type="text" name="words" size="30">
-<input type="hidden" name="config" value="hebcal">
-<input type="submit" value="Search"></td></tr></table>
-</form>
+<hr>
 
-<p>
-<hr noshade size="1">
-<span class="tiny">Copyright
-&copy; <?php echo date("Y") ?> Michael J. Radwin. All rights reserved.
-<a href="/privacy/">Privacy Policy</a> -
-<a href="/help/">Help</a> -
-<a href="/contact/">Contact</a> -
-<a href="/news/">News</a> -
-<a href="/donations/">Donate</a>
-</span>
-</body></html>
+<footer>
+Copyright &copy; <?php echo date("Y") ?> Michael J. Radwin. All rights reserved.
+</footer>
+
+</div> <!-- .container -->
+</body>
+</html>
