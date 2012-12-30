@@ -48,18 +48,42 @@ header("Status: 404 Not Found");
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" id="wp-bootstrap-css" href="/bootstrap/css/wordpress-bootstrap.min.css" media="all">
 </head>
 <body>
 <div class="container">
 
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+         <div class="nav-collapse collapse">
+         <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
+      <fieldset>
+      <div class="input-append input-prepend">
+      <span class="add-on"><i class="icon-search"></i></span><input class="input-mini" type="text" name="s" id="s"><button type="submit" class="btn btn-primary">Search</button></div>
+      </fieldset>
+         </form>
+         </div><!-- .nav-collapse -->
+        </div><!-- .container -->
+       </div><!-- .navbar-inner -->
+      </div><!-- .navbar -->
+
+
 <div class="hero-unit">
 <h1>Not Found</h1>
-<p>The requested URL
-<?php echo htmlspecialchars($_SERVER["REQUEST_URI"]) ?>
- was not found on this server.</p>
 </div><!-- .hero-unit -->
 
-<p class="lead">Please check your request for typing errors and retry.</p>
+<p class="lead">The requested URL
+<?php echo htmlspecialchars($_SERVER["REQUEST_URI"]) ?>
+ was not found on this server.</p>
+
+<p>Please check your request for typing errors and retry.</p>
 
 <hr>
 
