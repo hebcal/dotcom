@@ -269,7 +269,7 @@ function form($head, $message, $help = "") {
 
     $action = $_SERVER["SCRIPT_URL"];
 ?>
-<div id="converter-form" class="well">
+<div id="converter-form" class="well well-small">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
 <fieldset>
 <input class="input-mini" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
