@@ -292,9 +292,7 @@ echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
 ?>
 <input class="input-mini" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
 <button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
-</fieldset>
-</form>
-</div><!-- #converter-form -->
+</fieldset></form></div><!-- #converter-form -->
 <?php
 
     my_footer();
