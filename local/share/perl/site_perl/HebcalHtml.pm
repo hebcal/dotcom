@@ -41,6 +41,36 @@ use strict;
 
 use CGI qw(-no_xhtml);
 
+$HebcalHtml::gregorian_warning = qq{<div class="alert alert-block">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Warning!</strong>
+Results for year 1752 C.E. and earlier may be inaccurate.
+<p>Hebcal does not take into account a correction of ten days that
+was introduced by Pope Gregory XIII known as the Gregorian
+Reformation.<sup><a
+href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a></sup></p>
+</div><!-- .alert -->
+};
+
+$HebcalHtml::indiana_warning = qq{<div class="alert alert-block">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Warning!</strong>
+Indiana has confusing time zone &amp; Daylight Saving Time
+rules.</span><br>Please check <a
+href="http://www.mccsc.edu/time.html#WHAT">What time is it in
+Indiana?</a> to make sure the above settings are correct.
+</div><!-- .alert -->
+};
+
+$HebcalHtml::usno_warning =  qq{<div class="alert alert-block">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Warning!</strong>
+Candle-lighting times are guaranteed to be wrong at extreme
+northern or southern latitudes.</span><br>Please consult your
+local halachic authority for correct candle-lighting times.
+</div><!-- .alert -->
+};
+
 sub accordion_bootstrap {
     my($title,$anchor,$inner) = @_;
     my $s = <<EOHTML;
