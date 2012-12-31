@@ -1025,30 +1025,10 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
 
     print OUT2 "</dl>\n";
 
-    my $prev = $PREV{$f};
-    my $prev_nav = "";
-    if ($prev) {
-	my $prev_slug = Hebcal::make_anchor($prev);
-	$prev_nav = qq{<li><a title="Previous Holiday" href="$prev_slug" rel="prev"><i class="icon-arrow-left"></i> $prev</a></li>};
-    }
-
-    my $next = $NEXT{$f};
-    my $next_nav = "";
-    if ($next) {
-	my $next_slug = Hebcal::make_anchor($next);
-	$next_nav = qq{<li><a title="Next Holiday" href="$next_slug" rel="prev"><i class="icon-arrow-right"></i> $next</a></li>};
-    }
-
     print OUT2 <<EOHTML;
 </div><!-- .span9 -->
 <div class="span3">
-<h4>Jewish Holidays</h4>
-<ul class="nav nav-list">
-<li><a href="."><i class="icon-calendar"></i> Holiday Calendar</a>
-$prev_nav
-$next_nav
-</ul>
-<h4>Advertisement</h4>
+<h5>Advertisement</h5>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* skyscraper text only */
