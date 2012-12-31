@@ -272,12 +272,12 @@ function form($head, $message, $help = "") {
 <div id="converter-form" class="well well-small">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
 <fieldset>
-<input style="width:100%" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
+<input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
 <?php
 global $MoY_long;
 echo HTML_Form::returnSelect("gm", $MoY_long, $gm);
 ?>
-<input style="width:100%" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
+<input style="width:auto" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
 <label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
 After sunset</label>
 <button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Gregorian to Hebrew</button>
@@ -286,11 +286,11 @@ After sunset</label>
 
 <form class="form-inline" name="f2" id="f2" action="<?php echo $action ?>">
 <fieldset>
-<input style="width:100%" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
+<input style="width:auto" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
 <?php
 echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
 ?>
-<input style="width:100%" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
+<input style="width:auto" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
 <button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
 </fieldset></form></div><!-- #converter-form -->
 <?php
