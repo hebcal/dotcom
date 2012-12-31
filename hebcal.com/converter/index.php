@@ -275,7 +275,7 @@ function form($head, $message, $help = "") {
 <input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
 <?php
 global $MoY_long;
-echo HTML_Form::returnSelect("gm", $MoY_long, $gm, 1, "", false, 'class="input-small"');
+echo HTML_Form::returnSelect("gm", $MoY_long, $gm, 1, "", false, 'class="input-medium"');
 ?>
 <input style="width:auto" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
 <label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
@@ -288,7 +288,7 @@ After sunset</label>
 <fieldset>
 <input style="width:auto" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
 <?php
-echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-small"');
+echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-medium"');
 ?>
 <input style="width:auto" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
 <button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
