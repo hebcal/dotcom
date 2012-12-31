@@ -197,8 +197,9 @@ href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a
 }
 ?>
 <div id="converter-results">
-<p class="lead"><?php echo "$first = <strong>$second</strong>"; ?></p>
-<p dir="rtl" lang="he" class="lead hebrew-big"><?php echo $hebrew ?></p>
+<ul class="unstyled">
+<li class="big-list"><?php echo "$first = <strong>$second</strong>"; ?></li>
+<li dir="rtl" lang="he" class="hebrew big-list jumbo"><?php echo $hebrew ?></li>
 <?php
 if ($gy >= 1900 && $gy <= 2099) {
     $century = substr($gy, 0, 2);
@@ -206,7 +207,6 @@ if ($gy >= 1900 && $gy <= 2099) {
     @include($f);
     $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
     if (isset($sedra) && isset($sedra[$iso])) {
-	echo "<div id=\"converter-events\"><ul class=\"unstyled\">\n";
 	if (is_array($sedra[$iso])) {
 	    foreach ($sedra[$iso] as $sed) {
 		display_hebrew_event($sed);
@@ -214,10 +214,9 @@ if ($gy >= 1900 && $gy <= 2099) {
 	} else {
 	    display_hebrew_event($sedra[$iso]);
 	}
-	echo "</ul></div><!-- #converter-events -->\n";
     }
 }
-echo "</div><!-- #converter-results -->\n";
+echo "</ul>\n</div><!-- #converter-results -->\n";
 
 form(false, "", "");
 /*NOTREACHED*/
@@ -239,6 +238,15 @@ $xtra_head = <<<EOD
 <meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates.$description">
 <style type="text/css">
 #converter-results { text-align: center; }
+#converter-results .big-list {
+  margin-bottom: 6px;
+  font-size: 27px;
+  font-weight: 200;
+  line-height: normal;
+}
+#converter-results .jumbo {
+  font-size: 36px;
+}
 </style>
 EOD;
 
@@ -272,26 +280,40 @@ function form($head, $message, $help = "") {
 <div id="converter-form" class="well well-small">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
 <fieldset>
+<div class="span5">
+<div class="controls controls-row">
 <input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
 <?php
 global $MoY_long;
 echo HTML_Form::returnSelect("gm", $MoY_long, $gm, 1, "", false, 'class="input-medium"');
 ?>
 <input style="width:auto" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
+</div><!-- .controls-row -->
+<div class="controls controls-row">
 <label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
 After sunset</label>
+</div><!-- .controls-row -->
+</div><!-- .span5 -->
+<div class="span4">
 <button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Gregorian to Hebrew</button>
+</div>
 </fieldset>
 </form>
 
 <form class="form-inline" name="f2" id="f2" action="<?php echo $action ?>">
 <fieldset>
+<div class="span5">
+<div class="controls controls-row">
 <input style="width:auto" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
 <?php
 echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-medium"');
 ?>
 <input style="width:auto" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
+</div><!-- .controls-row -->
+</div><!-- .span5 -->
+<div class="span4">
 <button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
+</div>
 </fieldset></form></div><!-- #converter-form -->
 <?php
 
@@ -309,19 +331,18 @@ future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
 <p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .span6 -->
 <div class="span6">
-<h4>Hebrew Date RSS Feeds</h4>
-<ul class="nav nav-list">
-<li><a href="/etc/hdate-en.xml"
+<h4>Hebrew Date Feeds</h4>
+<p>Today's Hebrew date for your RSS reader.</p>
+<p><a class="btn" href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in English Transliteration RSS">
-in English transliteration</a></li>
-<li><a href="/etc/hdate-he.xml"
+English transliteration feed &raquo;</a></p>
+<p><a class="btn" href="/etc/hdate-he.xml"
 title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS">
-in Hebrew</a></li>
-</ul>
+Hebrew feed &raquo;</a></p>
 </div><!-- .span6 -->
 </div><!-- .row-fluid -->
 </div><!-- .span9 -->
