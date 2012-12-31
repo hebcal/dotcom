@@ -207,7 +207,7 @@ a happy <?php echo $chag_sameach ?>.</span>
 fast.</span>
 <?php } ?>
 </p><!-- .fpsubhead -->
-<p class="lead">Free Jewish holiday calendars and Hebrew date converters since 1999.</p>
+<p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
 </div><!-- .clearfix -->
 
 <div class="row-fluid">
@@ -237,7 +237,7 @@ Hebrew Birthdays and Anniversaries.</p>
 
 <div class="span4">
 <h3>Shabbat Times</h3>
-<p>Candle-lighting and Havdalah times, plus this week's Torah portion.</p>
+<p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
 <form action="/shabbat/" method="get" class="form">
 <input type="hidden" name="geo" value="zip">
 <label>ZIP code:
@@ -250,11 +250,10 @@ id="zip"></label>
 </form>
 <?php if ($param["zip"]) { ?>
 <p><a class="btn" href="/shabbat/fridge.cgi?zip=<?php echo $param["zip"] ?>;year=<?php
-  echo $hebyear ?>"><i class="icon-print"></i> Print Hebrew Year <?php echo $hebyear ?> &raquo;</a></p>
+  echo $hebyear ?>"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
+<?php } else { ?>
+<p><a class="btn" href="/home/shabbat/fridge"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
 <?php } ?>
-<p>Receive a weekly reminder of the Parashat ha-Shavua and
-when to light candles for your city.</p>
-<p><a class="btn" href="/email/"><i class="icon-envelope"></i> Subscribe by email &raquo;</a></p>
 </div><!-- .span4 -->
 </div><!-- .row-fluid -->
 
@@ -266,11 +265,22 @@ when to light candles for your city.</p>
 </div><!-- .span4 -->
 
 <div class="span4">
+<h3>About</h3>
+<p>Our mission: to increase awareness of Jewish holidays and to help
+Jews to be observant of the mitzvot.</p>
+<p><a class="btn" href="/home/about/donate"><i class="icon-gift"></i> Donate &raquo;</a></p>
+<p><small><a href="/home/category/news">What's new</a>
+| <a href="/home/about/privacy-policy">Privacy</a>
+| <a href="/home/about/contact">Contact</a></small></p>
+</div><!-- .span4 -->
+
+<div class="span4">
 <h3>Developers</h3>
 <p>APIs, RSS Feeds, JavaScript, Source Code and widgets for
 your synagogue or other website.</p>
 <p><a class="btn" href="/home/category/developers"><i class="icon-wrench"></i> Developer Docs &raquo;</a></p>
 </div><!-- .span4 -->
+
 </div><!-- .row-fluid -->
 
 </div><!-- .span12 -->
