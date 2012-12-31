@@ -301,14 +301,14 @@ echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm);
 
 function my_footer() {
 ?>
-<p>See also the Hebcal <a href="/yahrzeit/">Yahrzeit, Birthday and
-Anniversary Calendar</a> which will calculate dates ten years into the
-future and optionally export to Microsoft Outlook, Apple iCal, iPhone,
-iPad, Android (via Google Calendar), and other desktop, mobile and web
-calendars.</p>
-</div><!-- .span9 -->
-<div class="span3" role="complementary">
 <div class="row-fluid">
+<div class="span6">
+<h4>Yahrzeit + Anniversary Calendar</h4>
+<p>Calculate anniversaries on the Hebrew calendar ten years into the
+future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
+<p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+</div><!-- .span6 -->
+<div class="span6">
 <h4>Hebrew Date RSS Feeds</h4>
 <ul class="nav nav-list">
 <li><a href="/etc/hdate-en.xml"
@@ -322,10 +322,12 @@ src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS">
 in Hebrew</a></li>
 </ul>
+</div><!-- .span6 -->
 </div><!-- .row-fluid -->
-
-<div class="row-fluid">
-<h4>Advertisement</h4><script type="text/javascript"><!--
+</div><!-- .span9 -->
+<div class="span3" role="complementary">
+<h5>Advertisement</h5>
+<script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
 /* 200x200 text only */
 google_ad_slot = "5114852649";
@@ -336,7 +338,6 @@ google_ad_height = 200;
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-</div><!-- .row-fluid -->
 </div><!-- .span3 -->
 <?php
 
