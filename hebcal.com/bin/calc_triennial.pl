@@ -576,7 +576,7 @@ sub write_sedra_sidebar {
     my($parshiot,$current) = @_;
 
     print OUT2 <<EOHTML;
-<div class="span2">
+<div class="span2 hidden-phone">
 <div class="sidebar-nav">
 <ul class="nav nav-list">
 EOHTML
