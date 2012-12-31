@@ -409,9 +409,6 @@ sub write_index_page
 
     my $xtra_head = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
-<style type="text/css">
-#hebcal-sedrot ol { list-style: none }
-</style>
 EOHTML
 ;
     print OUT1 Hebcal::html_header_bootstrap("Torah Readings",
@@ -419,96 +416,69 @@ EOHTML
 				   "single single-post",
 				   $xtra_head);
     print OUT1 <<EOHTML;
-<div class="span9">
 <div class="page-header">
 <h1>Torah Readings</h1>
 </div>
-<div class="pagination"><ul>
-<li class="disabled"><a href="#">Diaspora</a></li>
-<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=off;set=off">$hy0</a></li>
-<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=off;set=off">$hebrew_year</a></li>
-<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=off;set=off">$hy1</a></li>
-<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=off;set=off">$hy2</a></li>
-<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=off;set=off">$hy3</a></li>
-</ul></div>
-<div class="pagination"><ul>
-<li class="disabled"><a href="#">Israel</a></li>
-<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=on;set=off">$hy0</a></li>
-<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=on;set=off">$hebrew_year</a></li>
-<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=on;set=off">$hy1</a></li>
-<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=on;set=off">$hy2</a></li>
-<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=on;set=off">$hy3</a></li>
-</ul></div>
-<p>Leyning coordinators:
-<a title="Can I download the aliyah-by-aliyah breakdown of Torah readings for Shabbat?"
-href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat">download
-Parashat ha-Shavua spreadheet</a> with aliyah-by-aliyah breakdowns.</p>
-<div id="hebcal-sedrot">
+
+<p class="lead">Weekly Torah readings (Parashat ha-Shavua) including
+verses for each aliyah and accompanying Haftarah. Includes
+both traditional (full kriyah) and triennial reading schemes.</p>
+
+<p><a class="btn"
+href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat"><i
+class="icon-download-alt"></i> Leyning spreadsheet &raquo;</a>
+
+&nbsp;&nbsp;
+<a class="btn" href="index.xml"><img src="/i/feed-icon-14x14.png"
+style="border:none" alt="View the raw XML source" width="14"
+height="14"> Parashat ha-Shavua RSS &raquo;</a>
+
+<div class="row-fluid">
+<div class="span4">
 <h3 id="Genesis">Genesis</h3>
-<ol>
+<ol class="unstyled">
 EOHTML
     ;
 
-    my($prev_book) = 'Genesis';
-    foreach my $h (@all_inorder)
-    {
+    my $book_count = 1;
+    my $prev_book = "Genesis";
+    foreach my $h (@all_inorder) {
 	my($book) = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$book =~ s/\s+.+$//;
 
-	my($anchor) = lc($h);
-	$anchor =~ s/[^\w]//g;
-
-	print OUT1 "</ol>\n<h3 id=\"$book\">$book</h3>\n<ol>\n"
-	    if ($prev_book ne $book);
+	if ($prev_book ne $book) {
+	    print OUT1 "</ol>\n</div><!-- .span4 -->\n";
+	    if ($book_count++ % 3 == 0) {
+		print OUT1 qq{</div><!-- .row-fluid -->\n<div class="row-fluid">\n};
+	    }
+	    print OUT1 qq{<div class="span4">\n<h3 id="$book">$book</h3>\n<ol class="unstyled">\n};
+	}
 	$prev_book = $book;
 
-	print OUT1 qq{<li><a id="$anchor" },
-	qq{href="$anchor">Parashat $h</a>};
-	if ($next_reading{$h}) {
-	    print OUT1 " - <small>", date_sql_to_dd_MMM_yyyy($next_reading{$h}),
-		"</small>";
-	}
-	print OUT1 qq{\n};
-    }
-
-    print OUT1 "</ol>\n<h3 id=\"DoubledParshiyot\">Doubled Parshiyot</h3>\n<ol>\n";
-
-    foreach my $h (@combined)
-    {
-	my($anchor) = lc($h);
+	my $anchor = lc($h);
 	$anchor =~ s/[^\w]//g;
-
-	print OUT1 qq{<li><a id="$anchor" },
-	qq{href="$anchor">Parashat $h</a>};
-	if ($next_reading{$h}) {
-	    print OUT1 " - <small>", date_sql_to_dd_MMM_yyyy($next_reading{$h}),
-		"</small>";
-	}
-	print OUT1 qq{\n};
+	print OUT1 qq{<li><a href="$anchor">Parashat $h</a>\n};
     }
 
-    print OUT1 "</ol>\n</div><!-- #hebcal-sedrot -->\n";
     print OUT1 <<EOHTML;
-</div><!-- .span9 -->
-<div class="span3">
-<h4>Torah Reading RSS feeds</h4>
-<ul class="nav nav-list">
-<li><a href="index.xml"><img src="/i/feed-icon-14x14.png" style="border:none"
-alt="View the raw XML source" width="14" height="14"> Parashat ha-Shavua RSS</a>
-</ul>
-<h4>Advertisement</h4>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-7687563417622459";
-/* skyscraper text only */
-google_ad_slot = "7666032223";
-google_ad_width = 160;
-google_ad_height = 600;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-</div><!-- .span3 -->
+</ol>
+</div><!-- .span4 -->
+<div class="span4">
+<h3 id="DoubledParshiyot">Doubled Parshiyot</h3>
+<ol class="unstyled">
+EOHTML
+;
+
+    foreach my $h (@combined) {
+	my $anchor = lc($h);
+	$anchor =~ s/[^\w]//g;
+	print OUT1 qq{<li><a href="$anchor">Parashat $h</a>\n};
+    }
+
+    print OUT1 <<EOHTML;
+</ol>
+</div><!-- .span4 -->
+</div><!-- .row-fluid -->
 EOHTML
 ;
     print OUT1 $html_footer;
@@ -602,6 +572,55 @@ sub read_aliyot_metadata
     1;
 }
 
+sub write_sedra_sidebar {
+    my($parshiot,$current) = @_;
+
+    print OUT2 <<EOHTML;
+<div class="span2">
+<div class="sidebar-nav">
+<ul class="nav nav-list">
+EOHTML
+;
+    my $prev_book = "";
+    foreach my $h (@all_inorder) {
+	my $book = $parshiot->{'parsha'}->{$h}->{'verse'};
+	$book =~ s/\s+.+$//;
+
+	print OUT2 qq{<li class="nav-header">$book</li>\n} if $prev_book ne $book;
+	$prev_book = $book;
+
+	if ($h eq $current) {
+	    print OUT2 qq{<li class="active">};
+	} else {
+	    print OUT2 qq{<li>};
+	}
+
+	my $anchor = lc($h);
+	$anchor =~ s/[^\w]//g;
+	print OUT2 qq{<a href="$anchor">$h</a></li>\n};
+    }
+
+    print OUT2 qq{<li class="nav-header">Doubled Parshiyot</li>\n};
+    foreach my $h (@combined) {
+	if ($h eq $current) {
+	    print OUT2 qq{<li class="active">};
+	} else {
+	    print OUT2 qq{<li>};
+	}
+
+	my $anchor = lc($h);
+	$anchor =~ s/[^\w]//g;
+	print OUT2 qq{<a href="$anchor">$h</a></li>\n};
+    }
+
+    print OUT2 <<EOHTML;
+</ul>
+</div>
+</div><!-- .span2 -->
+EOHTML
+;
+}
+
 sub write_sedra_page
 {
     my($parshiot,$h,$prev,$next,$tri1,$tri2) = @_;
@@ -674,15 +693,15 @@ sub write_sedra_page
     {
 	foreach (1 .. 3)
 	{
-	    $tri_date[$_] = (defined $tri1->[$_]) ?
-		$tri1->[$_]->[1] : '(read separately)';
-	    $tri_date2[$_] = (defined $tri2->[$_]) ?
-		$tri2->[$_]->[1] : '(read separately)';
+	    $tri_date[$_] = (defined $tri1->[$_]) ? $tri1->[$_]->[1] : "";
+	    $tri_date2[$_] = (defined $tri2->[$_]) ? $tri2->[$_]->[1] : "";
 	}
     }
 
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
+
+    write_sedra_sidebar($parshiot,$h);
 
     print OUT2 <<EOHTML;
 <div class="span10">
@@ -705,7 +724,7 @@ EOHTML
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$aliyot})
     {
-	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah), "\n";
+	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah);
     }
 
     print OUT2 "</ol>\n</div><!-- .span3 fk -->\n";
@@ -857,7 +876,7 @@ EOHTML
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>
 Parashat $h is read in the Diaspora on:
-<ul class="gtl">
+<ul class="unstyled">
 EOHTML
 	;
 	foreach my $dt (@{$parashah_date_sql{$h}}) {
@@ -886,30 +905,8 @@ href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
 EOHTML
 ;
 
-    my $prev_nav = "";
-    if ($prev) {
-	my $prev_anchor = lc($prev);
-	$prev_anchor =~ s/[^\w]//g;
-	$prev_nav = qq{<li><a title="Previous Parashah" href="$prev_anchor" rel="prev"><i class="icon-arrow-left"></i> $prev</a></li>};
-    }
-
-    my $next_nav = "";
-    if ($next) {
-	my $next_anchor = lc($next);
-	$next_anchor =~ s/[^\w]//g;
-	$next_nav = qq{<li><a title="Next Parashah" href="$next_anchor" rel="prev"><i class="icon-arrow-right"></i> $next</a></li>};
-    }
-
     print OUT2 <<EOHTML;
 </div><!-- .span10 -->
-<div class="span2">
-<h4>Torah Readings</h4>
-<ul class="nav nav-list">
-<li><a href="."><i class="icon-book"></i> Torah Readings</a>
-$prev_nav
-$next_nav
-</ul>
-</div><!-- .span2 -->
 EOHTML
 ;
     print OUT2 $html_footer;
@@ -942,7 +939,7 @@ sub print_tri_cell
     {
 	my($p1,$p2) = split(/-/, $h);
 
-	print OUT2 "Read separately.  See:\n<ul>\n";
+	print OUT2 "<p>Read separately. See:</p>\n<ul>\n";
 
 	my($anchor) = lc($p1);
 	$anchor =~ s/[^\w]//g;
@@ -961,11 +958,11 @@ sub print_tri_cell
 
 	my($other) = ($p1 eq $h) ? $p2 : $p1;
 
-	print OUT2 "Read together with<br>\nParashat $other.<br>\n";
+	print OUT2 "<p>Read together with<br>Parashat $other.<br>\n";
 
 	my($anchor) = lc($h_combined);
 	$anchor =~ s/[^\w]//g;
-	print OUT2 "See <a href=\"$anchor\">$h_combined</a>\n";
+	print OUT2 "See <a href=\"$anchor\">$h_combined</a></p>\n";
 	return;
     }
 
@@ -976,7 +973,7 @@ sub print_tri_cell
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$triennial->[$yr]->[0]})
     {
-	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah), "\n";
+	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah);
     }
     print OUT2 "</ul>\n";
 }
@@ -1014,7 +1011,7 @@ sub format_aliyah
     $info = "$label: $info\n";
 
     if ($aliyah->{'numverses'}) {
-	$info .= "<small>(" . $aliyah->{'numverses'} .
+	$info .= qq{<small class="muted">(} . $aliyah->{'numverses'} .
 	    "&nbsp;p'sukim)</small>\n";
     }
 
