@@ -265,7 +265,7 @@ id="zip"></label>
 </div><!-- .span4 -->
 
 <div class="span4">
-<h3>About</h3>
+<h3>About Us</h3>
 <p>Our mission: to increase awareness of Jewish holidays and to help
 Jews to be observant of the mitzvot.</p>
 <p><a class="btn" href="/home/about/donate"><i class="icon-gift"></i> Donate &raquo;</a></p>
