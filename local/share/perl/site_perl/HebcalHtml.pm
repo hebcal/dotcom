@@ -283,3 +283,5 @@ EOHTML
 
     return $s;
 }
+
+1;
