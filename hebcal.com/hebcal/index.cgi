@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -52,6 +52,7 @@ use Time::Local ();
 use Date::Calc ();
 use Hebcal ();
 use HebcalGPL ();
+use HebcalHtml ();
 use HTML::CalendarMonthSimple ();
 use Palm::DBA ();
 
@@ -552,7 +553,7 @@ EOHTML
 ;
 
     Hebcal::out_html(undef,
-		     Hebcal::html_header("Custom Calendar",
+		     Hebcal::html_header_bootstrap("Custom Calendar",
 					 $script_name,
 					 "single single-post",
 					 $xtra_head)
@@ -573,6 +574,25 @@ EOHTML
 	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
 	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
     }
+
+my $form_head = <<EOHTML
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Basics</a></li>
+    <li><a href="#tab2" data-toggle="tab">Options</a></li>
+    <li><a href="#tab3" data-toggle="tab">Candle lighting</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+      <p>I'm in Section 1.</p>
+    </div>
+    <div class="tab-pane" id="tab2">
+      <p>Howdy, I'm in Section 2.</p>
+    </div>
+  </div>
+</div>
+EOHTML
+;
 
     Hebcal::out_html(undef,
     $message, "\n",
@@ -864,7 +884,7 @@ JSCRIPT_END
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs);
-    Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
@@ -995,7 +1015,7 @@ div.pbba { page-break-before: always }
 EOHTML
 ;
     Hebcal::out_html(undef,
-		     Hebcal::html_header($results_title,
+		     Hebcal::html_header_bootstrap($results_title,
 					 $script_name,
 					 "single single-post",
 					 $xtra_head)
@@ -1010,7 +1030,7 @@ EOHTML
     my @entry_meta;
     my $h1_extra = "";
     if (param_true("c")) {
-	$h1_extra = " &mdash; " . $cconfig->{"title"};
+	$h1_extra = " <small>" . $cconfig->{"title"} . "</small>";
 	push(@entry_meta, $cconfig->{"lat_descr"})
 	    if $cconfig->{"lat_descr"};
 	push(@entry_meta, $cconfig->{"long_descr"})
@@ -1019,21 +1039,10 @@ EOHTML
 	    if $cconfig->{"dst_tz_descr"};
     }
 
-    my $entry_meta = "";
-    if (@entry_meta) {
-	$entry_meta = qq{<div class="entry-meta">\n<div>}
-		. join("</div>\n<div>", @entry_meta)
-		. qq{</div>\n</div><!-- .entry-meta -->\n};
-    }
-
     my $head_divs = <<EOHTML;
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Jewish Calendar $date$h1_extra</h1>
-<div class="entry-content">
-<div id="hebcal-results-header">
-$entry_meta
+<div class="page-header">
+<h1>Jewish Calendar $date$h1_extra</h1>
+</div>
 EOHTML
 ;
     Hebcal::out_html(undef, $head_divs);
@@ -1053,7 +1062,7 @@ EOHTML
 	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
 	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
 
-	Hebcal::out_html(undef, $Hebcal::gregorian_warning)
+	Hebcal::out_html(undef, $HebcalHtml::gregorian_warning)
 	    if ($greg_year1 <= 1752);
 
 	if ($greg_year1 >= 3762
@@ -1062,22 +1071,25 @@ EOHTML
 	    my $future_years = $greg_year1 - $this_year;
 	    my $new_url = Hebcal::self_url($q, 
 					   {"yt" => "H", "month" => "x"});
-	    Hebcal::out_html(undef, "<p><span style=\"color: red\">NOTE:
+	    Hebcal::out_html(undef, qq{<div class="alert alert-block">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Note!</strong>
 You are viewing a calendar for <b>Gregorian</b> year $greg_year1, which
 is $future_years years <em>in the future</em>.</span><br>
 Did you really mean to do this? Perhaps you intended to get the calendar
-for <a href=\"$new_url\">Hebrew year $greg_year1</a>?<br>
+for <a href="$new_url">Hebrew year $greg_year1</a>?<br>
 If you really intended to use Gregorian year $greg_year1, please
 continue. Hebcal.com results this far in the future should be
-accurate.</p>
-");
+accurate.
+</div><!-- .alert -->
+});
 	}
     }
 
-    Hebcal::out_html(undef, $Hebcal::indiana_warning)
+    Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
 	if (defined $cconfig->{"state"} && $cconfig->{"state"} eq "IN");
 
-    Hebcal::out_html(undef, $Hebcal::usno_warning)
+    Hebcal::out_html(undef, $HebcalHtml::usno_warning)
 	if (defined $cconfig->{"lat_deg"} &&
 	    ($cconfig->{"lat_deg"} >= 60.0 || $cconfig->{"lat_deg"} <= -60.0));
 
@@ -1121,9 +1133,27 @@ accurate.</p>
 
     Hebcal::out_html(undef, "<div class=\"goto\" id=\"change-view\">", $goto, "</div>\n");
 
+    my $entry_meta = "";
+    if (@entry_meta) {
+	$entry_meta = qq{<div class="entry-meta">\n<div>}
+		. join("</div>\n<div>", @entry_meta)
+		. qq{</div>\n</div><!-- .entry-meta -->\n};
+    }
+
+    my $results_html = <<EOHTML;
+<div id="hebcal-results-header">
+<div class="row">
+<div class="span4">
+$entry_meta
+</div><!-- .span4 -->
+EOHTML
+;
+    Hebcal::out_html(undef, $results_html);
+
+
     if ($numEntries > 0)
     {
-	Hebcal::out_html(undef, qq{<div class="goto" id="results-links"><ul>});
+	Hebcal::out_html(undef, qq{<div class="span4"><ul>});
 
 	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
 	{
@@ -1190,9 +1220,11 @@ accurate.</p>
 	    my $plus4 = $1 + $EXTRA_YEARS;
 	    $download_title .= "-" . $plus4;
 	}
-	Hebcal::out_html(undef, qq{<li>Export to desktop, mobile or web-based calendar\n});
-	Hebcal::out_html(undef, Hebcal::download_html($q, $filename, \@events, $download_title));
 	Hebcal::out_html(undef, "\n</ul></div>\n");
+
+	Hebcal::out_html(undef, qq{<div class="span4">\n<h4>Download</h4>\n});
+	Hebcal::out_html(undef, HebcalHtml::download_html_bootstrap($q, $filename, \@events, $download_title));
+	Hebcal::out_html(undef, "\n</div>\n");
     }
     else
     {    
@@ -1201,6 +1233,7 @@ accurate.</p>
 	qq{for $date</h3>});
     }
 
+    Hebcal::out_html(undef, "</div><!-- .row -->\n");
     Hebcal::out_html(undef, "</div><!-- #hebcal-results-header -->\n");
 
     my $header_ad = <<EOHTML;
@@ -1342,14 +1375,10 @@ EOHTML
     my $footer_divs=<<EOHTML;
 <div class="navigation">
 $nav_inner</div><!-- .navigation -->
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs);
-    Hebcal::out_html(undef, Hebcal::html_footer_new($q,$rcsrev,1));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
