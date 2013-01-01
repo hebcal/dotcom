@@ -366,7 +366,7 @@ $HTML_MENU_ITEMS =
 
 $HTML_MENU_ITEMS_V2 =
     array(
-     array( "Products", "#",
+     array( "Services", "#",
        array( "Jewish Holidays", "/holidays/" ),
        array( "Custom Calendar", "/hebcal/" ),
        array( "Hebrew Date Converter", "/converter/" ),
