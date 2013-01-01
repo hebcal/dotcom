@@ -4,7 +4,7 @@
 # Hebcal Interactive Jewish Calendar is a web site that lets you
 # generate a list of Jewish holidays for any year. Candle lighting
 # times are calculated from your latitude and longitude (which can
-# be determined by your zip code or closest city).
+# be determined by your ZIP code or closest city).
 #
 # Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
@@ -124,13 +124,13 @@ if (defined $q->param("year") && $q->param("year") eq "now" &&
 form("Please specify a year.")
     if !defined $q->param("year") || $q->param("year") eq "";
 
-form("Sorry, invalid year\n<b>" . $q->param("year") . "</b>.")
+form("Sorry, invalid year\n<strong>" . $q->param("year") . "</strong>.")
     if $q->param("year") !~ /^\d+$/ || $q->param("year") == 0;
 
 form("Sorry, Hebrew year must be 3762 or later.")
     if $q->param("yt") && $q->param("yt") eq "H" && $q->param("year") < 3762;
 
-form("Sorry, invalid Havdalah minutes\n<b>" . $q->param("m") . "</b>.")
+form("Sorry, invalid Havdalah minutes\n<strong>" . $q->param("m") . "</strong>.")
     if defined $q->param("m") &&
     $q->param("m") ne "" && $q->param("m") !~ /^\d+$/;
 
@@ -365,7 +365,7 @@ EOJS
 
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    $subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj);
+	    $subj = sprintf("<strong>%d:%02dp</strong> %s", $hour, $min, $subj);
 	}
 
 	if ($v2) {
@@ -571,8 +571,9 @@ EOHTML
     if ($message ne "")
     {
 	$help = "" unless defined $help;
-	$message = "<hr noshade size=\"1\"><p\nstyle=\"color: red\">" .
-	    $message . "</p>" . $help . "<hr noshade size=\"1\">";
+	$message = qq{<div class="alert alert-error alert-block">\n} .
+	    qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n} .
+	    $message . $help . "</div>";
     }
 
 my $form_head = <<EOHTML
@@ -596,8 +597,8 @@ EOHTML
 
     Hebcal::out_html(undef,
     $message, "\n",
-    qq{<p>Select your calendar options and click the <b>Preview
-Calendar</b> button at the bottom of the form. Once you have created
+    qq{<p>Select your calendar options and click the <strong>Preview
+Calendar</strong> button at the bottom of the form. Once you have created
 your custom calendar, you can export to Outlook, iCal, Google Calendar,
 and other applications.</p>},
     "<div id=\"form\">",
@@ -797,7 +798,7 @@ and other applications.</p>},
     {
 	# default is Zip Code
 	Hebcal::out_html(undef,
-	"<li><label\nfor=\"zip\">Zip code:</label>\n",
+	"<li><label\nfor=\"zip\">ZIP code:</label>\n",
 	$q->textfield(-name => "zip",
 		      -id => "zip",
 		      -size => 5,
@@ -1021,12 +1022,6 @@ EOHTML
 					 $xtra_head)
 	);
 
-    my $nav_inner = <<EOHTML;
-<div class="nav-previous"><a href="$prev_url" rel="prev"><span class="meta-nav">&larr;</span> Jewish Calendar $prev_title</a></div>
-<div class="nav-next"><a href="$next_url" rel="next">Jewish Calendar $next_title <span class="meta-nav">&rarr;</span></a></div>
-EOHTML
-    ;
-
     my $h1_extra = "";
     if (param_true("c")) {
 	$h1_extra = " <small>" . $cconfig->{"title"} . "</small>";
@@ -1067,7 +1062,7 @@ EOHTML
 	    Hebcal::out_html(undef, qq{<div class="alert alert-block">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>Note!</strong>
-You are viewing a calendar for <b>Gregorian</b> year $greg_year1, which
+You are viewing a calendar for <strong>Gregorian</strong> year $greg_year1, which
 is $future_years years <em>in the future</em>.</span><br>
 Did you really mean to do this? Perhaps you intended to get the calendar
 for <a href="$new_url">Hebrew year $greg_year1</a>?<br>
@@ -1182,7 +1177,6 @@ EOHTML
 	    Hebcal::out_html(undef,
 	    "\n<li>",
 	    "<a href=\"$url\">Printable\npage of candle-lighting times for $hyear</a>");
-#	    Hebcal::out_html(undef, "\n<span class=\"hl\"><b>NEW!</b></span>");
 	}
 
 	my $download_title = $date;
@@ -1199,8 +1193,7 @@ EOHTML
     else
     {    
 	Hebcal::out_html(undef,
-	qq{<h3 style="color: red">No Hebrew Calendar events\n},
-	qq{for $date</h3>});
+	qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
     }
 
     Hebcal::out_html(undef, "</div><!-- .row -->\n");
@@ -1230,7 +1223,6 @@ EOHTML
     Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
-    Hebcal::out_html(undef, qq{<div class="navigation">\n}, $nav_inner, qq{</div><!-- .navigation -->\n});
 
     my @html_cals;
     my %html_cals;
@@ -1265,6 +1257,31 @@ EOHTML
 	}
     }
 
+    my $nav_pagination = <<EOHTML;
+<div class="pagination">
+<ul>
+<li><a href="$prev_url" rel="prev">&laquo; $prev_title</a></li>
+EOHTML
+    ;
+    foreach my $cal_id (@html_cal_ids) {
+	if ($cal_id =~ /^(\d{4})-(\d{2})$/) {
+	    my $year = $1;
+	    my $mon = $2;
+	    $mon =~ s/^0//;
+	    my $mon_long = $Hebcal::MoY_long{$mon};
+	    my $mon_short = $Hebcal::MoY_short[$mon-1];
+	    $nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
+	}
+    }
+    $nav_pagination .= <<EOHTML;
+<li><a href="$next_url" rel="next">$next_title &raquo;</a></li>
+</ul>
+</div><!-- .pagination -->
+EOHTML
+    ;
+
+    Hebcal::out_html(undef, $nav_pagination);
+
     for (my $i = 0; $i < $numEntries; $i++)
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1289,7 +1306,7 @@ EOHTML
 	if ($q->param("vis"))
 	{
 	    my $cal_subj = $subj;
-	    $cal_subj = sprintf("<b>%d:%02dp</b> %s", $hour, $min, $subj)
+	    $cal_subj = sprintf("<strong>%d:%02dp</strong> %s", $hour, $min, $subj)
 		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
 
 	    $cal_subj =~
@@ -1342,12 +1359,7 @@ EOHTML
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
-    my $footer_divs=<<EOHTML;
-<div class="navigation">
-$nav_inner</div><!-- .navigation -->
-EOHTML
-;
-    Hebcal::out_html(undef, $footer_divs);
+    Hebcal::out_html(undef, $nav_pagination);
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
@@ -1409,7 +1421,7 @@ sub get_candle_config
 
     if (param_true("c") && defined $q->param("city"))
     {
-	form("Sorry, invalid city\n<b>" . $q->param("city") . "</b>.")
+	form("Sorry, invalid city\n<strong>" . $q->param("city") . "</strong>.")
 	    unless defined($Hebcal::city_tz{$q->param("city")});
 
 	$q->param("geo","city");
@@ -1470,19 +1482,19 @@ sub get_candle_config
 	$q->param("ladir","n") unless ($q->param("ladir") eq "s");
 
 	form("Sorry, longitude degrees\n" .
-	     "<b>" . $q->param("lodeg") . "</b> out of valid range 0-180.")
+	     "<strong>" . $q->param("lodeg") . "</strong> out of valid range 0-180.")
 	    if ($q->param("lodeg") > 180);
 
 	form("Sorry, latitude degrees\n" .
-	     "<b>" . $q->param("ladeg") . "</b> out of valid range 0-90.")
+	     "<strong>" . $q->param("ladeg") . "</strong> out of valid range 0-90.")
 	    if ($q->param("ladeg") > 90);
 
 	form("Sorry, longitude minutes\n" .
-	     "<b>" . $q->param("lomin") . "</b> out of valid range 0-60.")
+	     "<strong>" . $q->param("lomin") . "</strong> out of valid range 0-60.")
 	    if ($q->param("lomin") > 60);
 
 	form("Sorry, latitude minutes\n" .
-	     "<b>" . $q->param("lamin") . "</b> out of valid range 0-60.")
+	     "<strong>" . $q->param("lamin") . "</strong> out of valid range 0-60.")
 	    if ($q->param("lamin") > 60);
 
 	my($long_deg,$long_min,$lat_deg,$lat_min) =
@@ -1523,8 +1535,8 @@ sub get_candle_config
     {
 	$q->param("geo","zip");
 
-	form("Sorry, <b>" . $q->param("zip") . "</b> does\n" .
-	     "not appear to be a 5-digit zip code.")
+	form("Sorry, <strong>" . $q->param("zip") . "</strong> does\n" .
+	     "not appear to be a 5-digit ZIP code.")
 	    unless $q->param("zip") =~ /^\d\d\d\d\d$/;
 
 	my $DB = Hebcal::zipcode_open_db();
@@ -1533,12 +1545,12 @@ sub get_candle_config
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
 
-	form("Sorry, can't find\n".  "<b>" . $q->param("zip") .
-	     "</b> in the zip code database.\n",
-	     "<ul><li>Please try a nearby zip code or select candle\n" .
+	form("Sorry, can't find\n".  "<strong>" . $q->param("zip") .
+	     "</strong> in the ZIP code database.\n",
+	     "<ul><li>Please try a nearby ZIP code or select candle\n" .
 	     "lighting times by\n" .
 	     "<a href=\"" . $script_name .
-	     "?c=on;geo=city\">city</a> or\n" .
+	     "?c=on;geo=city\">large city</a> or\n" .
 	     "<a href=\"" . $script_name .
 	     "?c=on;geo=pos\">latitude/longitude</a></li></ul>")
 	    unless defined $state;
@@ -1557,7 +1569,7 @@ sub get_candle_config
 	    $q->param("tz_override", "1");
 
 	    form("Sorry, can't auto-detect\n" .
-		 "timezone for <b>" . $config{"title"} . "</b>\n",
+		 "timezone for <strong>" . $config{"title"} . "</strong>\n",
 		 "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
