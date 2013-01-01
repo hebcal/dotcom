@@ -1344,7 +1344,7 @@ my $HTML_MENU_ITEMS =
 
 my $HTML_MENU_ITEMS_V2 =
     [
-     [ "Products", "#",
+     [ "Services", "#",
        [ "Jewish Holidays", "/holidays/" ],
        [ "Custom Calendar", "/hebcal/" ],
        [ "Hebrew Date Converter", "/converter/" ],
