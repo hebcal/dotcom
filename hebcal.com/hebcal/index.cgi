@@ -1027,16 +1027,9 @@ EOHTML
 EOHTML
     ;
 
-    my @entry_meta;
     my $h1_extra = "";
     if (param_true("c")) {
 	$h1_extra = " <small>" . $cconfig->{"title"} . "</small>";
-	push(@entry_meta, $cconfig->{"lat_descr"})
-	    if $cconfig->{"lat_descr"};
-	push(@entry_meta, $cconfig->{"long_descr"})
-	    if $cconfig->{"long_descr"};
-	push(@entry_meta, split(/\n<br>/, $cconfig->{"dst_tz_descr"}))
-	    if $cconfig->{"dst_tz_descr"};
     }
 
     my $head_divs = <<EOHTML;
@@ -1095,57 +1088,34 @@ accurate.
 
     # toggle month/full year and event list/calendar grid
 
-    my $goto = "change view: [ ";
+    my $changeview = qq{<div class="pagination"><ul>\n};
+    $changeview .= "<li";
+    $changeview .= qq{ class="active"} unless $q->param("vis");
+    $changeview .= qq{><a href="} . Hebcal::self_url($q, {"vis" => "0"}) . qq{">event list</a></li>\n};
 
-    if ($q->param("vis"))
-    {
-	$goto .= "<a\nhref=\"" . Hebcal::self_url($q, {"vis" => "0"}) .
-	    "\">event\nlist</a> | <b>calendar grid</b> ]";
+    $changeview .= "<li";
+    $changeview .= qq{ class="active"} if $q->param("vis");
+    $changeview .= qq{><a href="} . Hebcal::self_url($q, {"vis" => "on"}) . qq{">calendar grid</a></li>\n};
+
+    $changeview .= qq{</ul></div>\n};
+
+    if (!$q->param("yt") || $q->param("yt") eq "G") {
+	$changeview .= qq{<div class="pagination"><ul>\n};
+	$changeview .= "<li";
+	$changeview .= qq{ class="active"} unless $date =~ /^\d+$/;
+	$changeview .= qq{><a href="} . Hebcal::self_url($q, {"month" => "1"}) . qq{">month</a></li>\n};
+
+	$changeview .= "<li";
+	$changeview .= qq{ class="active"} if $date =~ /^\d+$/;
+	$changeview .= qq{><a href="} . Hebcal::self_url($q, {"month" => "x"}) . qq{">entire year</a></li>\n};
+
+	$changeview .= qq{</ul></div>\n};
     }
-    else
-    {
-	$goto .= "<b>event list</b> | <a\nhref=\"" .
-	    Hebcal::self_url($q, {"vis" => "on"}) . "\">calendar\ngrid</a> ]";
-    }
-
-    if ($q->param("yt") && $q->param("yt") eq "H")
-    {
-	$goto .= "\n";
-    }
-    else
-    {
-	$goto .= "\n&nbsp;&nbsp;&nbsp; [ ";
-
-	if ($date !~ /^\d+$/)
-	{
-	    $goto .= "<b>month</b> | " .
-		"<a\nhref=\"" . Hebcal::self_url($q, {"month" => "x"}) .
-		"\">entire\nyear</a> ]";
-	}
-	else
-	{
-	    $goto .= "<a\nhref=\"" . Hebcal::self_url($q, {"month" => "1"}) .
-		"\">month</a> |\n<b>entire year</b> ]";
-	}
-    }
-
-    $goto .= "\n";
-
-    Hebcal::out_html(undef, "<div class=\"goto\" id=\"change-view\">", $goto, "</div>\n");
-
-    my $entry_meta = "";
-    if (@entry_meta) {
-	$entry_meta = qq{<div class="entry-meta">\n<div>}
-		. join("</div>\n<div>", @entry_meta)
-		. qq{</div>\n</div><!-- .entry-meta -->\n};
-    }
+    Hebcal::out_html(undef, $changeview);
 
     my $results_html = <<EOHTML;
 <div id="hebcal-results-header">
 <div class="row">
-<div class="span4">
-$entry_meta
-</div><!-- .span4 -->
 EOHTML
 ;
     Hebcal::out_html(undef, $results_html);
@@ -1525,11 +1495,12 @@ sub get_candle_config
 	    unless $q->param("tz");
 	$q->param("geo","pos");
 
-	$config{"title"} = "Geographic Position";
+	# Geographic Position
 	$config{"lat_descr"} = "${lat_deg}d${lat_min}' " .
-	    uc($q->param("ladir")) . " latitude";
+	    uc($q->param("ladir")) . " lat";
 	$config{"long_descr"} = "${long_deg}d${long_min}' " .
-	    uc($q->param("lodir")) . " longitude";
+	    uc($q->param("lodir")) . " long";
+	$config{"title"} = $config{"lat_descr"} . ", " . $config{"long_descr"};
 	my $dst_text = ($q->param("dst") eq "none") ? "none" :
 	    "automatic for " . $Hebcal::dst_names{$q->param("dst")};
 	$config{"dst_tz_descr"} =
