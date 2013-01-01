@@ -1024,10 +1024,11 @@ EOHTML
 
     my $h1_extra = "";
     if (param_true("c")) {
-	$h1_extra = " <small>" . $cconfig->{"title"} . "</small>";
+	$h1_extra = "<br><small>" . $cconfig->{"title"} . "</small>";
     }
 
     my $head_divs = <<EOHTML;
+<div class="span8">
 <div class="page-header">
 <h1>Jewish Calendar $date$h1_extra</h1>
 </div>
@@ -1081,6 +1082,81 @@ accurate.
 	if (defined $cconfig->{"lat_deg"} &&
 	    ($cconfig->{"lat_deg"} >= 60.0 || $cconfig->{"lat_deg"} <= -60.0));
 
+    if ($numEntries > 0) {
+	my $download_title = $date;
+	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/) {
+	    my $plus4 = $1 + $EXTRA_YEARS;
+	    $download_title .= "-" . $plus4;
+	}
+	Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
+    }
+
+    Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
+    Hebcal::out_html(undef, qq{<a class="btn" href="},
+		     Hebcal::self_url($q, {"v" => "0"}),
+		     qq{"><i class="icon-cog"></i> Change options &raquo;</a>\n});
+
+    if ($numEntries > 0) {
+	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
+
+	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
+	    # Fridge
+	    my $url = join("", "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
+	    if ($q->param("zip")) {
+		$url .= "zip=" . $q->param("zip");
+	    } else {
+		$url .= "city=" . Hebcal::url_escape($q->param("city"));
+	    }
+
+	    my $hyear;
+	    if ($q->param("yt") && $q->param("yt") eq "H") {
+		$hyear = $q->param("year");
+		$url .= ";year=" . $q->param("year");
+	    } else {
+		my $i = ($q->param("month") eq "x") ? 0 : $numEntries - 1;
+		my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
+		my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
+		my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+		my $hebdate = HebcalGPL::greg2hebrew($year,$mon,$mday);
+		$hyear = $hebdate->{"yy"};
+		$url .= ";year=" . $hyear;
+	    }
+	    
+	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
+	}
+    }
+    Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
+
+    if ($numEntries > 0 && param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
+	# Email
+	my $email_form = <<EOHTML;
+<form class="form-inline" action="/email/">
+<fieldset>
+<input type="hidden" name="v" value="1">
+EOHTML
+;
+	if ($q->param("zip")) {
+	    $email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
+	    $email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
+	} else {
+	    $email_form .= qq{<input type="hidden" name="geo" value="city">\n};
+	    $email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
+	}
+
+	if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
+	    $email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
+	}
+
+	$email_form .= <<EOHTML;
+<input type="email" name="em" placeholder="Email...">
+<button type="submit" class="btn" name="modify" value="1"><i class="icon-envelope"></i> Subscribe to weekly email</button>
+</fieldset>
+</form>
+EOHTML
+;
+	Hebcal::out_html(undef, $email_form);
+    }
+
     # toggle month/full year and event list/calendar grid
 
     my $changeview = qq{<div class="pagination"><ul>\n};
@@ -1108,100 +1184,16 @@ accurate.
     }
     Hebcal::out_html(undef, $changeview);
 
-    my $results_html = <<EOHTML;
-<div id="hebcal-results-header">
-<div class="row">
-EOHTML
-;
-    Hebcal::out_html(undef, $results_html);
-
-
-    if ($numEntries > 0)
-    {
-	Hebcal::out_html(undef, qq{<div class="span4"><ul>});
-
-	if (defined $q->param("tag") && $q->param("tag") eq "fp.ql")
-	{
-	    Hebcal::out_html(undef,
-	    "\n<li>",
-	    "<a href=\"", Hebcal::self_url($q, {"v" => 0, "tag" => "cal.cust"}),
-	    "\">Customize\ncalendar options</a>");
-	}
-
-	if (param_true("c") &&
-	    $q->param("geo") && $q->param("geo") =~ /^city|zip$/)
-	{
-	    # Email
-	    my $url = join("", "http://", $q->virtual_host(), "/email/",
-			   "?geo=", $q->param("geo"), "&amp;");
-
-	    if ($q->param("zip")) {
-		$url .= "zip=" . $q->param("zip");
-	    } else {
-		$url .= "city=" . Hebcal::url_escape($q->param("city"));
-	    }
-
-	    $url .= "&amp;m=" . $q->param("m")
-		if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
-	    $url .= "&amp;tag=interactive";
-
-	    Hebcal::out_html(undef,
-	    "\n<li>",
-	    "<a href=\"$url\">Subscribe\nto weekly candle lighting times via email</a>");
-
-	    # Fridge
-	    $url =
-		join("", "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
-	    if ($q->param("zip")) {
-		$url .= "zip=" . $q->param("zip");
-	    } else {
-		$url .= "city=" . Hebcal::url_escape($q->param("city"));
-	    }
-
-	    my $hyear;
-	    if ($q->param("yt") && $q->param("yt") eq "H") {
-		$hyear = $q->param("year");
-		$url .= ";year=" . $q->param("year");
-	    } else {
-		my $i = ($q->param("month") eq "x") ? 0 : $numEntries - 1;
-		my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-		my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-		my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
-		my $hebdate = HebcalGPL::greg2hebrew($year,$mon,$mday);
-		$hyear = $hebdate->{"yy"};
-		$url .= ";year=" . $hyear;
-	    }
-
-	    $url .= ";tag=interactive";
-
-	    Hebcal::out_html(undef,
-	    "\n<li>",
-	    "<a href=\"$url\">Printable\npage of candle-lighting times for $hyear</a>");
-	}
-
-	my $download_title = $date;
-	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/) {
-	    my $plus4 = $1 + $EXTRA_YEARS;
-	    $download_title .= "-" . $plus4;
-	}
-	Hebcal::out_html(undef, "\n</ul></div>\n");
-
-	Hebcal::out_html(undef, qq{<div class="span4">\n<h4>Download</h4>\n});
-	Hebcal::out_html(undef, HebcalHtml::download_html_bootstrap($q, $filename, \@events, $download_title));
-	Hebcal::out_html(undef, "\n</div>\n");
-    }
-    else
-    {    
+    if ($numEntries == 0) {    
 	Hebcal::out_html(undef,
 	qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
     }
 
-    Hebcal::out_html(undef, "</div><!-- .row -->\n");
-    Hebcal::out_html(undef, "</div><!-- #hebcal-results-header -->\n");
+    Hebcal::out_html(undef, "</div><!-- .span8 -->\n");
 
     my $header_ad = <<EOHTML;
-<div id="hebcal-results-header-ad">
-<h3 class="widget-title" style="font-size:14px;margin-bottom:4px">Advertisement</h3>
+<div class="span4">
+<h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
 <script type="text/javascript"><!--
 google_ad_client = "pub-7687563417622459";
 /* 300x250, created 10/14/10 */
@@ -1213,7 +1205,7 @@ google_ad_height = 250;
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-</div><!-- #hebcal-results-header-ad -->
+</div><!-- .span4 -->
 EOHTML
 ;
     # slow down Mediapartners-Google/2.1 so it doesn't crawl us so fast
@@ -1222,7 +1214,7 @@ EOHTML
     }
     Hebcal::out_html(undef, $header_ad);
 
-    Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
+    Hebcal::out_html(undef, "<div class=\"span12\" id=\"hebcal-results\">\n");
 
     my @html_cals;
     my %html_cals;
@@ -1258,7 +1250,7 @@ EOHTML
     }
 
     my $nav_pagination = <<EOHTML;
-<div class="pagination">
+<div class="pagination pagination-centered">
 <ul>
 <li><a href="$prev_url" rel="prev">&laquo; $prev_title</a></li>
 EOHTML
@@ -1357,9 +1349,9 @@ EOHTML
     }
 
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
+    Hebcal::out_html(undef, $nav_pagination);
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
-    Hebcal::out_html(undef, $nav_pagination);
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
