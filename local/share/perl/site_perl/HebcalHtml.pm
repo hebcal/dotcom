@@ -82,7 +82,7 @@ sub accordion_bootstrap {
   <div class="accordion-inner">
    $inner
   </div>
- </div>
+ </div><!-- #${anchor}-body -->
 </div>
 EOHTML
 ;
@@ -125,7 +125,7 @@ sub download_html_bootstrap {
     my $palm_title = "Palm Desktop (Windows-only)";
 
     my $ol_ics = <<EOHTML;
-<ol class="dlinstr" id="ol-ics-body">
+<ol>
 <li>Internet Calendar Subscription: <a class="download"
 href="webcal://$vhost$subical_href"
 id="dl-ol-ics">$ics_title</a>
@@ -135,7 +135,7 @@ href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to imp
 EOHTML
 ;
     my $ol_csv = <<EOHTML;
-<ol class="dlinstr" id="ol-csv-body">
+<ol>
 <li>Export Outlook CSV file. Select one of:
 <ul>
 <li>USA date format (month/day/year): <a class="download"
@@ -165,7 +165,7 @@ and then import manually into Apple iCal.
 EOHTML
 ;
     my $ol_mac = <<EOHTML;
-<ol class="dlinstr" id="ol-mac-body">
+<ol>
 <li>Download <a class="download"
 href="${ical_href}"
 id="dl-ol-mac">$ics_title</a>
@@ -175,7 +175,7 @@ href="/home/186/outlook-2011-mac-import">How to import .ics file into Outlook 20
 EOHTML
 ;
     my $ios = <<EOHTML;
-<ol class="dlinstr" id="ios-body">
+<ol>
 <li>Subscribe to: <a class="download"
 href="webcal://$vhost$subical_href"
 id="dl-ios-sub">$ics_title</a>
@@ -193,7 +193,6 @@ EOHTML
     my $full_http_href = "http://" . $vhost . $gcal_subical_href;
     my $gcal_href = Hebcal::url_escape($full_http_href);
     my $gcal = <<EOHTML;
-<div class="dlinstr" id="gcal-body">
 <p><a title="Add to Google Calendar"
 class="download" id="dl-gcal-sub"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
@@ -204,7 +203,6 @@ href="${ical_href}">download</a> and then <a
 title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
 href="/home/59/google-calendar-alternative-instructions">follow
 our Google Calendar import instructions</a>.</p>
-</div><!-- #gcal-body -->
 EOHTML
 ;
 
@@ -212,14 +210,12 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive = <<EOHTML;
-<div class="dlinstr" id="wlive-body">
-Add to&nbsp;&nbsp;
+<p>Add to&nbsp;&nbsp;
 <a title="Windows Live Calendar" class="dl-wlive"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"><img
 src="/i/wlive-150x20.png"
 width="150" height="20" style="border:none"
-alt="Windows Live Calendar"></a>
-</div><!-- #wlive-body -->
+alt="Windows Live Calendar"></a></p>
 EOHTML
 ;
 
@@ -230,7 +226,6 @@ EOHTML
     $ampersand_subical_href =~ s/;/&amp;/g;
     my $ampersand_http_href = "http://" . $vhost . $ampersand_subical_href;
     my $ycal = <<EOHTML;
-<div class="dlinstr" id="ycal-body">
 <form id="GrabLinkForm" action="#">
 <ol>
 <li>Copy the entire iCal URL here:
@@ -247,7 +242,6 @@ and click the "<b>+</b>" button next to "Calendars" on the left side of the page
 <li>Click <b>Save</b> at the top of the page
 </ol>
 </form>
-</div><!-- #ycal-body -->
 EOHTML
 ;
 
@@ -283,7 +277,7 @@ EOHTML
     }
 
     my $palm = <<EOHTML;
-<ul class="dlinstr" id="palm-body">
+<ul>
 <li>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)
 <ol>
 <li>Export <a class="download" id="dl-vcs" href="$href_vcs">${filename}.vcs</a>
@@ -291,7 +285,7 @@ EOHTML
 href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a>
 </ol>
 $palm_dba
-</ul><!-- #palm-body -->
+</ul>
 EOHTML
 ;
 
@@ -306,6 +300,7 @@ EOHTML
     $s .= accordion_bootstrap($wlive_title, "wlive", $wlive);
     $s .= accordion_bootstrap($ycal_title, "ycal", $ycal);
     $s .= accordion_bootstrap($palm_title, "palm", $palm);
+    $s .= qq{</div><!-- #accordion2 -->\n};
 
     return $s;
 }
@@ -315,18 +310,18 @@ sub download_html_modal {
 
     my $html = download_html_bootstrap($q,$filename,$events,$title);
     my $s = <<EOHTML;
-<a href="#hebcal-download-modal" role="button" class="btn" data-toggle="modal"><i class="icon-download-alt"></i> Download</a>
+<a href="#hcdl-modal" role="button" class="btn" data-toggle="modal"><i class="icon-download-alt"></i> Download</a>
 
-<div id="hebcal-download-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hebcal-download-modalLabel" aria-hidden="true">
+<div id="hcdl-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-  <h3 id="hebcal-download-modalLabel">Modal header</h3>
+  <h3 id="hcdl-modalLabel">Download calendar</h3>
  </div>
  <div class="modal-body">
 $html
  </div>
  <div class="modal-footer">
-   <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+   <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
  </div>
 </div>
 EOHTML
