@@ -310,8 +310,6 @@ sub download_html_modal {
 
     my $html = download_html_bootstrap($q,$filename,$events,$title);
     my $s = <<EOHTML;
-<a href="#hcdl-modal" role="button" class="btn" data-toggle="modal"><i class="icon-download-alt"></i> Download ...</a>
-
 <div id="hcdl-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -327,6 +325,10 @@ $html
 EOHTML
 ;
     return $s;
+}
+
+sub download_html_modal_button {
+    return qq{<a href="#hcdl-modal" role="button" class="btn" data-toggle="modal"><i class="icon-download-alt"></i> Download ...</a>};
 }
 
 1;
