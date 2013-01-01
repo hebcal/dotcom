@@ -310,4 +310,28 @@ EOHTML
     return $s;
 }
 
+sub download_html_modal {
+    my($q,$filename,$events,$title) = @_;
+
+    my $html = download_html_bootstrap($q,$filename,$events,$title);
+    my $s = <<EOHTML;
+<a href="#hebcal-download-modal" role="button" class="btn" data-toggle="modal"><i class="icon-download-alt"></i> Download</a>
+
+<div id="hebcal-download-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hebcal-download-modalLabel" aria-hidden="true">
+ <div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h3 id="hebcal-download-modalLabel">Modal header</h3>
+ </div>
+ <div class="modal-body">
+$html
+ </div>
+ <div class="modal-footer">
+   <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+ </div>
+</div>
+EOHTML
+;
+    return $s;
+}
+
 1;
