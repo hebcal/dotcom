@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -64,7 +64,7 @@ if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} eq 'optout')
 
     $title = "Opt-Out Complete";
     $entry_content=<<EOHTML;
-<p>Opt-out completed successfully.</p>
+<p class="lead">Opt-out completed successfully.</p>
 <p>Your <b>hebcal.com</b> cookie id is now set to opt_out.</p>
 EOHTML
 ;
@@ -77,28 +77,22 @@ else
 
     $title = "Cookie Deleted";
     $entry_content=<<EOHTML;
-<p>We deleted your cookie for the Hebcal Jewish Calendar and
+<p class="lead">We deleted your cookie for the Hebcal Jewish Calendar and
 Shabbat Candle Lighting Times.</p>
 EOHTML
 ;
 }
 
 my $body=<<EOHTML;
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">$title</h1>
-<div class="entry-content">
+<div class="page-title">
+<h1>$title</h1>
+</div>
 $entry_content
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
 EOHTML
 ;
 print $q->header(),
-    Hebcal::html_header($title, Hebcal::script_name($q), "single single-post"),
+    Hebcal::html_header_bootstrap($title, Hebcal::script_name($q), "single single-post"),
     $body,
-    Hebcal::html_footer_new($q,$rcsrev);
+    Hebcal::html_footer_bootstrap($q,$rcsrev);
 exit(0);
 
