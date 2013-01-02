@@ -165,6 +165,7 @@ candle lighting times and Torah portion by email.</p>
 <strong>Thank you!</strong> Your subscription is now active.
 <br>A confirmation message has been sent
 to <strong><?php echo htmlentities($info["em"]) ?></strong>.
+</div>
 <?php
     echo html_footer_bootstrap();
     exit();
@@ -191,7 +192,7 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 ?>
 <p class="lead">Confirm your subscription to weekly Shabbat
 candle lighting times and Torah portion by email.</p>
-<div id="email-form" class="well">
+<div class="well">
 <p>Email: <strong><?php echo $info["em"] ?></strong>
 <br>Location: <?php echo $city_descr ?>
 <br><small>&nbsp;&nbsp;<?php echo $tz_descr ?>
@@ -202,7 +203,7 @@ candle lighting times and Torah portion by email.</p>
 <input type="hidden" name="commit" value="1">
 <button type="submit" name="sub1" id="sub1" value="1" class="btn btn-success">Confirm Subscription</button>
 </form>
-</div><!-- #email-form -->
+</div><!-- .well -->
 <h3>Email Privacy Policy</h3>
 <p>We will never sell or give your email address to anyone.
 <br>We will never use your email address to send you unsolicited
