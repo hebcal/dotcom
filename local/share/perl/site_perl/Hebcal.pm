@@ -1235,7 +1235,7 @@ sub html_footer_bootstrap
     $rcsrev =~ s/\s*\$//g;
 
     my $hhmts = strftime("%d %B %Y", localtime($mtime));
-    my $last_updated_text = qq{<p>$hhmts <small class="muted">Revision: $rcsrev</small></p>};
+    my $last_updated_text = qq{<p>$hhmts <small class="muted">$rcsrev</small></p>};
 
     my $str = <<EOHTML;
 </div><!-- #content -->
