@@ -597,7 +597,7 @@ $site_generator_div
 </footer>
 </div> <!-- .container-fluid -->
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
