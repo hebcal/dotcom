@@ -304,66 +304,6 @@ function hebcal_make_anchor($str)
     }
 }
 
-function html_footer_new($last_updated = true) {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $year = strftime("%Y", time());
-    $date = strftime("%d %B %Y", $stat[9]);
-    global $VER;
-
-    $site_generator_div = "";
-    if ($last_updated) {
-	$site_generator_div = <<<EOD
-<div id="site-generator">
-$date (Revision: $VER)
-</div><!-- #site-generator -->
-EOD;
-    }
-
-    $html = <<<EOD
-</div><!-- #main -->
-<div id="footer" role="contentinfo">
-<div id="colophon">
-<div id="site-info">
-<a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a>
-</div><!-- #site-info -->
-$site_generator_div
-</div><!-- #colophon -->
-</div><!-- #footer -->
-</div><!-- #wrapper -->
-<script type="text/javascript">
-function tvis(b){var a=document.getElementById(b);if(a.style.display=="block"){a.style.display="none"}else{a.style.display="block"}return false}(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}if(b[a]&&b[a].className=="download"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}if(b[a]&&b[a].className=="dlhead"){if(b[a].id){b[a].onclick=function(){return tvis(this.id+"-body")}}}}}}})();
-</script>
-</body></html>
-EOD;
-
-    return $html;
-}
-
-$HTML_MENU_ITEMS =
-    array(
-     array( "Home", "/" ),
-     array( "Calendar", "/hebcal/",
-       array( "Custom Calendar", "/hebcal/" ),
-       array( "Download", "/ical/" ) ),
-     array( "Holidays", "/holidays/" ),
-     array( "Date Converter", "/converter/",
-       array( "Hebrew/Gregorian date converter", "/converter/" ),
-       array( "Yahrzeit, Birthday and Anniversary Calendar", "/yahrzeit/" ) ),
-     array( "Shabbat Times", "/shabbat/", 
-       array( "Candle lighting times", "/shabbat/" ),
-       array( "Email List", "/email/" ),
-       array( "Year at a glance", "/home/shabbat/fridge" ),
-       array( "Widgets", "/home/shabbat/widgets" ) ),
-     array( "Torah Readings", "/sedrot/" ),
-     array( "About Hebcal", "/home/about",
-       array( "About Hebcal", "/home/about" ),
-       array( "Contact Us", "/home/about/contact" ),
-       array( "Donate", "/home/about/donate" ),
-       array( "News", "/home/category/news" ),
-       array( "Privacy Policy", "/home/about/privacy-policy") ),
-     array( "Help", "/home/help" ),
-    );
-
 $HTML_MENU_ITEMS_V2 =
     array(
      array( "Services", "#",
@@ -381,44 +321,6 @@ $HTML_MENU_ITEMS_V2 =
        array( "Privacy Policy", "/home/about/privacy-policy") ),
      array( "Help", "/home/help" ),
     );
-
-
-function html_menu_item($title, $path, $selected) {
-    $classes = array();
-    if ($path != "/") {
-	$classes[] = "page_item";
-    }
-    if ($path == $selected) {
-	$classes[] = "current_page_item";
-    }
-    $str = "<li";
-    if (!empty($classes)) {
-	$str .= " class=\"" . implode(" ", $classes) . "\"";
-    }
-    $str .= "><a href=\"$path\" title=\"$title\">$title</a>";
-    return $str;
-}
-
-function html_menu($selected) {
-    global $HTML_MENU_ITEMS;
-    $str = "<ul>";
-    foreach ($HTML_MENU_ITEMS as $item) {
-	$title = $item[0];
-	$path = $item[1];
-	$str .= html_menu_item($title, $path, $selected);
-	if (isset($item[2])) {
-	    $str .= "<ul class=\"children\">";
-	    for ($i = 2; isset($item[$i]); $i++) {
-		$str .= html_menu_item($item[$i][0], $item[$i][1], $selected);
-		$str .= "</li>";
-	    }
-	    $str .= "</ul>";
-	}
-	$str .= "</li>";
-    }
-    $str .= "</ul>";
-    return $str;
-}
 
 function html_menu_item_bootstrap($title, $path, $selected) {
     $class = false;
@@ -458,52 +360,6 @@ function html_menu_bootstrap($selected) {
     return $str;
 }
 
-
-function html_header_new($title, $xtra_head="", $title_append_suffix=true) {
-    if ($title_append_suffix) {
-	$title .= " | Hebcal Jewish Calendar";
-    }
-    $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-    $base_href = preg_replace('/&/', '&amp;', $base_href);
-    $menu = html_menu($_SERVER["SCRIPT_URL"]);
-    $html = <<<EOD
-<!DOCTYPE html>
-<html><head>
-<meta charset="UTF-8">
-<title>$title</title>
-<base href="$base_href" target="_top">
-<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-967247-1']);
-_gaq.push(['_trackPageview']);
-_gaq.push(['_trackPageLoadTime']);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-</script>
-$xtra_head</head>
-<body class="single single-post">
-<div id="wrapper" class="hfeed">
-<div id="header">
-<div id="masthead">
-<div id="branding" role="banner">
-<div id="site-title"><span><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></span></div>
-<div id="site-description"></div>
-</div><!-- #branding -->
-<div id="access" role="navigation">
-<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
-<div class="menu">$menu</div>
-</div><!-- #access -->
-</div><!-- #masthead -->
-</div><!-- #header -->
-<div id="main">
-EOD;
-    return $html;
-}
-
 function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true) {
     if ($title_append_suffix) {
 	$title .= " | Hebcal Jewish Calendar";
@@ -536,29 +392,29 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
 </style>
 $xtra_head</head>
-<body class="single single-post">
+<body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
-         <div class="nav-collapse collapse">
-         $menu
-         <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
-      <fieldset>
-      <div class="input-append input-prepend">
-      <span class="add-on"><i class="icon-search"></i></span><input class="input-medium" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
-      </fieldset>
-         </form>
-         </div><!-- .nav-collapse -->
-        </div><!-- .container -->
-       </div><!-- .navbar-inner -->
-      </div><!-- .navbar -->
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+     </a>
+     <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+     <div class="nav-collapse collapse">
+     $menu
+     <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
+   <fieldset>
+   <div class="input-append input-prepend">
+   <span class="add-on"><i class="icon-search"></i></span><input class="input-medium" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
+   </fieldset>
+     </form>
+     </div><!-- .nav-collapse -->
+    </div><!-- .container -->
+   </div><!-- .navbar-inner -->
+</div><!-- .navbar -->
 
 <div class="container">
 <div id="content" class="clearfix row-fluid">
