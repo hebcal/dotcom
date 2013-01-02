@@ -534,7 +534,6 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 </script>
 <style type="text/css">
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
-.hebrew-big {font-family:'SBL Hebrew',Arial;font-size:xx-large;direction:rtl}
 </style>
 $xtra_head</head>
 <body class="single single-post">
