@@ -606,10 +606,16 @@ sub display_html
 
     display_html_common($items);
 
+    Hebcal::out_html(undef, "<hr>\n");
+    
+    more_from_hebcal();
+
     form($cfg,0,'','');
 }
 
 sub more_from_hebcal {
+    Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
+
     # link to hebcal full calendar
     my($url) = join('', "http://", $q->virtual_host(), "/hebcal/",
 			 "?v=1;geo=", $q->param('geo'), ";");
@@ -627,9 +633,7 @@ sub more_from_hebcal {
     $url .= ';tag=1c';
 
     my $month_name = join(" ", $Hebcal::MoY_long{$this_mon}, $this_year);
-    Hebcal::out_html($cfg, qq{<h4>More candle lighting</h4>\n},
-		     "<ul class=\"nav nav-list\">\n",
-		     "<li><a\nhref=\"$url\"><i class=\"icon-calendar\"></i> $month_name</a>\n");
+    Hebcal::out_html($cfg, qq{<a class="btn" href="$url"><i class="icon-calendar"></i> $month_name calendar &raquo;</a>\n});
 
     # Fridge calendar
     $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
@@ -639,53 +643,55 @@ sub more_from_hebcal {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
     $url .= ";year=" . $hyear;
-    Hebcal::out_html($cfg,"<li><a title=\"Print and post on your refrigerator\"\n",
-		     "href=\"$url\"><i class=\"icon-print\"></i> Printable page for $hyear</a>\n");
+    Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
+		     qq{href="$url"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
 
     # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
 			 "?geo=", $q->param('geo'), "&amp;");
 
-    if ($q->param('zip')) {
-	$url .= "zip=" . $q->param('zip');
-    } else {
-	$url .= "city=" . Hebcal::url_escape($q->param('city'));
-    }
-
-    $url .= "&amp;m=" . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
-    Hebcal::out_html($cfg,"<li>",
-		     "<a\nhref=\"$url\"><i class=\"icon-envelope\"></i> Subscribe to weekly email</a>\n");
-
     my $rss_href = self_url() . ";cfg=r";
     my $rss_html = <<EOHTML;
-<li><a title="RSS feed of candle lighting times"
+<a class="btn" title="RSS feed of candle lighting times"
 href="$rss_href"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="RSS feed of candle lighting times"> RSS feed</a>
+alt="RSS feed of candle lighting times"> RSS feed &raquo;</a>
 EOHTML
 ;
 
     Hebcal::out_html($cfg, $rss_html);
 
-    # Synagogues link
-    $url = join('', "http://", $q->virtual_host(), "/link/?");
-    if ($q->param('zip')) {
-	$url .= "zip=" . $q->param('zip');
-    } else {
-	$url .= "city=" . Hebcal::url_escape($q->param('city'));
-    }
-    $url .= "&amp;m=" . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-    $url .= "&amp;type=shabbat";
+    Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
 
-    Hebcal::out_html($cfg,"<li>",
-		     "<a title=\"Candle lighting and Torah portion ",
-		     "for your synagogue site\"\nhref=\"$url\"><i class=\"icon-wrench\"></i> Add\n",
-		     "Shabbat Times to your Website</a>\n");
- 
-    Hebcal::out_html($cfg,"</ul>\n");
+    my $email_form = <<EOHTML;
+<form class="form-inline" action="/email/">
+<fieldset>
+<input type="hidden" name="v" value="1">
+EOHTML
+;
+    if ($q->param("zip")) {
+	$email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
+	$email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
+    } else {
+	$email_form .= qq{<input type="hidden" name="geo" value="city">\n};
+	$email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
+    }
+
+    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
+	$email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
+    }
+
+    $email_form .= <<EOHTML;
+<p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
+<div class="input-append input-prepend">
+<span class="add-on"><i class="icon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
+<button type="submit" class="btn" name="modify" value="1"> Sign up</button>
+</div>
+</fieldset>
+</form>
+EOHTML
+;
+    Hebcal::out_html($cfg, $email_form);
 }
 
 sub my_head {
@@ -709,7 +715,7 @@ ul#hebcal-results li {
 EOHTML
 ;
 	my $head_divs = <<EOHTML;
-<div class="span9">
+<div class="span10">
 <div class="page-header">
 <h1>Shabbat Times <small>$city_descr</small></h1>
 </div>
@@ -755,7 +761,7 @@ sub form($$$$)
 	qq{$message\n},
 	qq{<div id="hebcal-form-zipcode" class="well well-small">\n},
 	qq{<form name="f1" id="f1"\naction="$script_name">},
-	qq{<fieldset><legend>Get Shabbat times by Zip Code</legend>\n},
+	qq{<fieldset>\n},
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
 		   -override => 1),
@@ -799,11 +805,6 @@ sub form($$$$)
 
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-zipcode -->\n});
 
-
-#    Hebcal::out_html(undef, qq{<div id="hebcal-form-right">\n});
-#    more_from_hebcal();
-#    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-right -->\n});
-
     Hebcal::out_html(undef, qq{<div id="hebcal-form-city">\n});
     Hebcal::out_html($cfg,
 		     qq{<h4>Get Shabbat times by Major City</h4>\n},
@@ -819,33 +820,22 @@ sub form($$$$)
     Hebcal::out_html($cfg, qq{</ul>\n</div><!-- .city-list -->\n});
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
 
-    my $footer_divs1=<<EOHTML;
-</div><!-- .span9 -->
-<div class="span3" role="complementary">
-<div id="more-from-hebcal">
-EOHTML
-;
-    Hebcal::out_html(undef, $footer_divs1);
-
-    more_from_hebcal();
-
     my $footer_divs2=<<EOHTML;
-</div><!-- #more-from-hebcal -->
-<div id="shabbat-ad">
-<h4 class="widget-title">Advertisement</h4>
+</div><!-- .span10 -->
+<div class="span2" role="complementary">
+<h5>Advertisement</h5>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
-/* 200x200 text only */
-google_ad_slot = "5114852649";
-google_ad_width = 200;
-google_ad_height = 200;
+/* skyscraper text only */
+google_ad_slot = "7666032223";
+google_ad_width = 160;
+google_ad_height = 600;
 //-->
 </script>
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-</div><!-- #shabbat-ad -->
-</div><!-- .span3 -->
+</div><!-- .span2 -->
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs2);
