@@ -532,6 +532,13 @@ sub form
     my $xtra_head = <<EOHTML;
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">
 <meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
+<style type="text/css">
+legend {
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 30px;
+}
+</style>
 EOHTML
 ;
 
@@ -542,8 +549,8 @@ EOHTML
 					 $xtra_head)
 	);
     my $head_divs = <<EOHTML;
-<p class="lead">Customize your calendar with Jewish holidays, candle
-lighting times, Torah readings, and Hebrew dates.</p>
+<p class="lead">Customize your calendar of Jewish holidays, candle
+lighting times, and Torah readings.</p>
 EOHTML
 ;
     Hebcal::out_html(undef, $head_divs);
@@ -803,7 +810,7 @@ EOHTML
     "\n",
     $q->submit(-name => ".s",
 	       -class => "btn btn-primary",
-	       -value => "Preview Calendar"),
+	       -value => "Create Calendar"),
     qq{</div><!-- .clearfix -->\n},
     qq{</form>\n});
 
@@ -943,22 +950,8 @@ sub results_page
 <style type="text/css">
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
-#hebcal-results table.month h2 { 
- color: #000;
- font-family: "Helvetica Neue",Arial,Helvetica,"Nimbus Sans L",sans-serif;
- font-size: 21px;
- font-weight: bold;
- line-height: 1.3em;
- margin: 0.2em;
- text-align: center;
-}
-#change-view { font-size: small; margin-bottom: 0.4em }
-#results-links { font-size: small }
-.dlhead {
- color: #0066cc;
- text-decoration:underline;
- cursor:pointer;
-}
+.evt {font-size:85%;}
+.hl {background:#ff9;}
 \@media print { div.pbba { page-break-before: always } }
 </style>
 EOHTML
@@ -1108,33 +1101,6 @@ EOHTML
 	Hebcal::out_html(undef, $email_form);
     }
 
-    # toggle month/full year and event list/calendar grid
-
-    my $changeview = qq{<div class="pagination"><ul>\n};
-    $changeview .= "<li";
-    $changeview .= qq{ class="active"} unless $q->param("vis");
-    $changeview .= qq{><a href="} . Hebcal::self_url($q, {"vis" => "0"}) . qq{">event list</a></li>\n};
-
-    $changeview .= "<li";
-    $changeview .= qq{ class="active"} if $q->param("vis");
-    $changeview .= qq{><a href="} . Hebcal::self_url($q, {"vis" => "on"}) . qq{">calendar grid</a></li>\n};
-
-    $changeview .= qq{</ul></div>\n};
-
-    if (!$q->param("yt") || $q->param("yt") eq "G") {
-	$changeview .= qq{<div class="pagination"><ul>\n};
-	$changeview .= "<li";
-	$changeview .= qq{ class="active"} unless $date =~ /^\d+$/;
-	$changeview .= qq{><a href="} . Hebcal::self_url($q, {"month" => "1"}) . qq{">month</a></li>\n};
-
-	$changeview .= "<li";
-	$changeview .= qq{ class="active"} if $date =~ /^\d+$/;
-	$changeview .= qq{><a href="} . Hebcal::self_url($q, {"month" => "x"}) . qq{">entire year</a></li>\n};
-
-	$changeview .= qq{</ul></div>\n};
-    }
-    Hebcal::out_html(undef, $changeview);
-
     if ($numEntries == 0) {    
 	Hebcal::out_html(undef,
 	qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
@@ -1274,7 +1240,7 @@ EOHTML
 		   ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
 		    /^\d+\w+ day of the Omer$/))
 	    {
-		$class .= " dim";
+		$class .= " muted";
 	    }
 
 	    $cal->addcontent($mday, qq{<span class="$class">$cal_subj</span>});
@@ -1330,7 +1296,7 @@ sub write_html_cal
 	Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
     }
     Hebcal::out_html(undef,
-		     qq{<div id="cal-$id" align="center" class="$class"$style$dir>\n},
+		     qq{<div id="cal-$id" class="$class"$style$dir>\n},
 		     $cal->as_HTML(), 
 		     qq{</div><!-- #cal-$id -->\n});
 }
@@ -1341,8 +1307,8 @@ sub new_html_cal
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
 					    "month" => $month);
-    $cal->border(1);
-    $cal->tableclass("month");
+    $cal->border(0);
+    $cal->tableclass("table table-bordered");
     $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
 
     my $end_day = Date::Calc::Days_in_Month($year, $month);
