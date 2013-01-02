@@ -633,7 +633,7 @@ sub more_from_hebcal {
     $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on;mf=on;ss=on';
     $url .= ';tag=1c';
 
-    my $month_name = join(" ", $Hebcal::MoY_long{$this_mon}, $this_year);
+    my $month_name = join(" ", $Hebcal::MoY_short[$this_mon-1], $this_year);
     Hebcal::out_html($cfg, qq{<a class="btn" href="$url"><i class="icon-calendar"></i> $month_name calendar &raquo;</a>\n});
 
     # Fridge calendar
@@ -647,10 +647,10 @@ sub more_from_hebcal {
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
 		     qq{href="$url"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
 
-    # Email
     $url = join('', "http://", $q->virtual_host(), "/email/",
 			 "?geo=", $q->param('geo'), "&amp;");
 
+    # RSS
     my $rss_href = self_url() . ";cfg=r";
     my $rss_html = <<EOHTML;
 <a class="btn" title="RSS feed of candle lighting times"
@@ -662,8 +662,23 @@ EOHTML
 
     Hebcal::out_html($cfg, $rss_html);
 
+    # Synagogues link
+    $url = join('', "http://", $q->virtual_host(), "/link/?");
+    if ($q->param('zip')) {
+	$url .= "zip=" . $q->param('zip');
+    } else {
+	$url .= "city=" . Hebcal::url_escape($q->param('city'));
+    }
+    $url .= "&amp;m=" . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+    $url .= "&amp;type=shabbat";
+
+    Hebcal::out_html($cfg, qq{<a class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
+		     qq{href="$url"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});
+
     Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
 
+    # Email
     my $email_form = <<EOHTML;
 <form class="form-inline" action="/email/">
 <fieldset>
