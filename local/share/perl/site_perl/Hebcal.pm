@@ -1525,7 +1525,7 @@ $xtra_head</head>
          <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
       <fieldset>
       <div class="input-append input-prepend">
-      <span class="add-on"><i class="icon-search"></i></span><input class="input-mini" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
+      <span class="add-on"><i class="icon-search"></i></span><input class="input-medium" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
       </fieldset>
          </form>
          </div><!-- .nav-collapse -->
