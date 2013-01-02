@@ -86,17 +86,15 @@ ul#hebcal-results { list-style-type: none }
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 EOD;
 
-echo html_header_new("Add weekly Shabbat candle-lighting times to your synagogue website",
+echo html_header_bootstrap("Add weekly Shabbat candle-lighting times to your synagogue website",
 		     $xtra_head);
 ?>
-<div id="container" class="single-attachment">
-<div id="content" role="main">
-<div class="page type-page hentry">
-<h1 class="entry-title">Add Shabbat Times to your Website</h1>
-<div class="entry-content">
-<p>You can use these HTML tags to add weekly Shabbat candle-lighting
-times and Torah portion directly on your synagogue's website. Browse
-the <a href="/home/category/developers">Hebcal web developer
+<div class="page-header">
+<h1>Add Shabbat Times to your Website</h1>
+</div>
+<p class="lead">Use these HTML tags to add weekly Shabbat candle-lighting
+times and Torah portion directly on your synagogue's website.</p>
+<p>Browse the <a href="/home/category/developers">Hebcal web developer
 APIs</a> to display other information on your site (e.g. today's
 Hebrew date, a full Jewish Calendar, RSS feeds).</p>
 <p>The following tags are for
@@ -129,58 +127,54 @@ Candle Lighting times for <?php echo $descr ?></a>
 courtesy of hebcal.com.
 </noscript>
 </div><!-- .box -->
-<div>&nbsp</div>
 
 <h2 id="change">Change City</h2>
 
 <p>Enter a new city to get revised HTML tags for your
 synagogue's web page.</p>
 
-<div id="hebcal-form-left">
-<fieldset><legend>Get Shabbat times by Zip Code</legend>
-<form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
+<div class="row-fluid">
+<div class="span6">
+<form action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
+<fieldset><legend>Shabbat times by Zip Code</legend>
 <input type="hidden" name="geo" value="zip">
 <input type="hidden" name="type" value="shabbat">
-<ol>
-<li><label for="zip">Zip code:
-<input type="text" name="zip" value="<?php echo $zip ?>" size="5" maxlength="5" id="zip"></label>
-<li><label for="m1">Havdalah minutes past sundown:
-<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m1">
-</label>
-<ol><li><small>(enter "0" to turn off Havdalah times)</small></ol>
-<li><label for="a1"><input type="checkbox" name="a" id="a1"<?php echo $ashk ?>>
+<label>ZIP code:
+<input type="text" name="zip" value="<?php echo $zip ?>" size="5" maxlength="5" style="width:auto"></label>
+<label>Havdalah minutes past sundown:
+<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" style="width:auto"></label>
+<small class="help-block">(enter "0" to turn off Havdalah times)</small>
+<label class="checkbox"><input type="checkbox" name="a"<?php echo $ashk ?>>
 Use Ashkenazis Hebrew transliterations</label>
-<li><input type="submit" value="Get new HTML tags">
-</ol></fieldset></form>
-</div><!-- #hebcal-form-left -->
+<input type="submit" class="btn btn-primary" value="Get new HTML tags">
+</fieldset></form>
+</div><!-- .span6 -->
 
-<div id="hebcal-form-right">
-<form name="f2" id="f2" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
-<fieldset><legend>Get Shabbat times by Major City</legend>
+<div class="span6">
+<form action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
+<fieldset><legend>Shabbat times by Major City</legend>
 <input type="hidden" name="geo" value="city">
 <input type="hidden" name="type" value="shabbat">
-<ol>
-<li><?php
+<?php
 global $hebcal_city_tz;
 $entries = array();
 foreach ($hebcal_city_tz as $k => $v) {
     $entries[$k] = $k;
 }
 echo HTML_Form::returnSelect("city", $entries,
-			     $geo_city ? $geo_city : "Jerusalem");
+			     $geo_city ? $geo_city : "Jerusalem",
+			     1, "", false, 'class="input-medium"');
 ?>
-<li><label for="m2">Havdalah minutes past sundown:
-<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" id="m2">
+<label>Havdalah minutes past sundown:
+<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" style="width:auto">
 </label>
-<ol><li><small>(enter "0" to turn off Havdalah times)</small></ol>
-<li><label for="a2"><input type="checkbox" name="a" id="a2"<?php echo $ashk ?>>
+<small class="help-block">(enter "0" to turn off Havdalah times)</small>
+<label class="checkbox"><input type="checkbox" name="a"<?php echo $ashk ?>>
 Use Ashkenazis Hebrew transliterations</label>
-<li><input type="submit" value="Get new HTML tags">
-</ol>
+<input type="submit" class="btn btn-primary" value="Get new HTML tags">
 </fieldset></form>
-</div><!-- #hebcal-form-right -->
-
-<div id="hebcal-form-bottom"></div>
+</div><!-- .span6 -->
+</div><!-- .row-fluid -->
 
 <h2 id="fonts">Customize Fonts</h2>
 
@@ -210,13 +204,6 @@ href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 
 <?php
-    $html = <<<EOD
-</div><!-- .entry-content -->
-</div><!-- #post-## -->
-</div><!-- #content -->
-</div><!-- #container -->
-EOD;
-    echo $html;
-    echo html_footer_new();
+    echo html_footer_bootstrap();
     exit();
 ?>
