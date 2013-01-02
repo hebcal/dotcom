@@ -1512,32 +1512,31 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 </script>
 <style type="text/css">
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
-.hebrew-big {font-family:'SBL Hebrew',Arial;font-size:xx-large;direction:rtl}
 </style>
 $xtra_head</head>
 <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
-         <div class="nav-collapse collapse">
-         $menu
-         <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
-      <fieldset>
+<div class="navbar navbar-fixed-top">
+ <div class="navbar-inner">
+   <div class="container">
+   <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+   <span class="icon-bar"></span>
+   <span class="icon-bar"></span>
+   <span class="icon-bar"></span>
+   </a>
+   <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+   <div class="nav-collapse collapse">
+    $menu
+    <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
+     <fieldset>
       <div class="input-append input-prepend">
       <span class="add-on"><i class="icon-search"></i></span><input class="input-medium" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
       </fieldset>
-         </form>
-         </div><!-- .nav-collapse -->
-        </div><!-- .container -->
-       </div><!-- .navbar-inner -->
-      </div><!-- .navbar -->
+    </form>
+   </div><!-- .nav-collapse -->
+   </div><!-- .container -->
+ </div><!-- .navbar-inner -->
+</div><!-- .navbar -->
 
 <div class="container">
 <div id="content" class="clearfix row-fluid">
