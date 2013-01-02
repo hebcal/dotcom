@@ -568,26 +568,34 @@ EOD;
 }
 
 function html_footer_bootstrap($last_updated = true) {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $year = strftime("%Y", time());
-    $date = strftime("%d %B %Y", $stat[9]);
-    global $VER;
-
-    $site_generator_div = "";
+    $last_updated_text = "";
     if ($last_updated) {
-	$site_generator_div = <<<EOD
-<p class="pull-right">$date (Revision: $VER)</p>
-EOD;
+	$stat = stat($_SERVER["SCRIPT_FILENAME"]);
+	$year = strftime("%Y", time());
+	$date = strftime("%d %B %Y", $stat[9]);
+	global $VER;
+	$last_updated_text = "<p>$date <small class=\"muted\">Revision: $VER</small></p>";
     }
 
     $html = <<<EOD
 </div><!-- #content -->
 
 <footer role="contentinfo">
-<div id="inner-footer" class="clearfix">
 <hr>
-$site_generator_div
-<p class="pull-left"><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></p>
+<div id="inner-footer" class="clearfix row">
+<div class="span4">
+<a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a>
+</div>
+<div class="span4 offset4">
+$last_updated_text
+<p><a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img
+alt="Creative Commons License" style="border-width:0" src="/i/cc.by.80x15.png"></a>
+<br><small>Except where otherwise noted, content on
+<span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
+is licensed under a 
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
+Commons Attribution 3.0 License</a>.</small>
+</div>
 </div><!-- #inner-footer -->
 
 <div class="clearfix">
@@ -595,7 +603,7 @@ $site_generator_div
 </div><!-- .clearfix -->
 
 </footer>
-</div> <!-- .container-fluid -->
+</div> <!-- .container -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
