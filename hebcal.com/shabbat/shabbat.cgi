@@ -51,6 +51,7 @@ use Time::Local ();
 use Date::Calc ();
 use Hebcal ();
 use HebcalGPL ();
+use HebcalHtml ();
 use POSIX qw(strftime);
 
 my($rcsrev) = '$Revision$'; #'
@@ -590,10 +591,10 @@ sub display_html
 
     my_head($title);
 
-    Hebcal::out_html($cfg, $Hebcal::indiana_warning)
+    Hebcal::out_html($cfg, $HebcalHtml::indiana_warning)
 	if ($city_descr =~ / IN /);
 
-    Hebcal::out_html(undef, $Hebcal::usno_warning)
+    Hebcal::out_html(undef, $HebcalHtml::usno_warning)
 	if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
