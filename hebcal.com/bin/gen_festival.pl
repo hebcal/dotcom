@@ -797,7 +797,7 @@ EOHTML
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
 
     print OUT2 <<EOHTML;
-<div class="span9">
+<div class="span10">
 <div class="page-header">
 <h1>$f / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
@@ -1026,8 +1026,8 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
     print OUT2 "</dl>\n";
 
     print OUT2 <<EOHTML;
-</div><!-- .span9 -->
-<div class="span3">
+</div><!-- .span10 -->
+<div class="span2">
 <h5>Advertisement</h5>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-7687563417622459";
@@ -1040,7 +1040,7 @@ google_ad_height = 600;
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-</div><!-- .span3 -->
+</div><!-- .span2 -->
 EOHTML
 ;
     print OUT2 Hebcal::html_footer_bootstrap(undef, $REVISION);
