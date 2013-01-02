@@ -583,10 +583,11 @@ function html_footer_bootstrap($last_updated = true) {
 <footer role="contentinfo">
 <hr>
 <div id="inner-footer" class="clearfix row">
-<div class="span4">
-<a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a>
+<div class="span5">
+<p><a href="/">Hebcal Jewish Calendar</a></p>
+<iframe src="//www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=360&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:360px; height:35px;" allowTransparency="true"></iframe>
 </div>
-<div class="span4 offset4">
+<div class="span4 offset3">
 $last_updated_text
 <p><a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img
 alt="Creative Commons License" style="border-width:0" src="/i/cc.by.80x15.png"></a>
@@ -597,11 +598,6 @@ is licensed under a
 Commons Attribution 3.0 License</a>.</small>
 </div>
 </div><!-- #inner-footer -->
-
-<div class="clearfix">
-<iframe src="http://www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:35px;" allowTransparency="true"></iframe>
-</div><!-- .clearfix -->
-
 </footer>
 </div> <!-- .container -->
 
