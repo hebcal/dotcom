@@ -589,13 +589,11 @@ function html_footer_bootstrap($last_updated = true) {
 </div>
 <div class="span4 offset3">
 $last_updated_text
-<p><a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img
-alt="Creative Commons License" style="border-width:0" src="/i/cc.by.80x15.png"></a>
-<br><small>Except where otherwise noted, content on
+<p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
 is licensed under a 
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
-Commons Attribution 3.0 License</a>.</small>
+Commons Attribution 3.0 License</a>.</small></p>
 </div>
 </div><!-- #inner-footer -->
 </footer>
