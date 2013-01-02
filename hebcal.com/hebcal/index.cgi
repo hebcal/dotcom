@@ -1307,7 +1307,7 @@ sub new_html_cal
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
 					    "month" => $month);
-    $cal->border(0);
+    $cal->border(1);
     $cal->tableclass("table table-bordered");
     $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
 
