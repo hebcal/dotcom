@@ -240,12 +240,17 @@ $xtra_head = <<<EOD
 #converter-results { text-align: center; }
 #converter-results .big-list {
   margin-bottom: 6px;
-  font-size: 27px;
+  font-size: 29px;
   font-weight: 200;
   line-height: normal;
 }
 #converter-results .jumbo {
-  font-size: 36px;
+  font-size: 37px;
+}
+legend {
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 30px;
 }
 </style>
 EOD;
@@ -253,9 +258,6 @@ EOD;
     echo html_header_bootstrap("Hebrew Date Converter - $hebdate", $xtra_head);
 ?>
 <div class="span9">
-<div class="page-header">
-<h1>Date Converter <small>Hebrew &harr; Gregorian</small></h1>
-</div>
 <?php
 }
 
@@ -279,6 +281,7 @@ function form($head, $message, $help = "") {
 ?>
 <div id="converter-form" class="well well-small">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
+<legend>Hebrew Date Converter</legend>
 <fieldset>
 <div class="span5">
 <div class="controls controls-row">
@@ -325,13 +328,13 @@ function my_footer() {
 ?>
 <div class="row-fluid">
 <div class="span6">
-<h4>Yahrzeit + Anniversary Calendar</h4>
+<h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
 <p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .span6 -->
 <div class="span6">
-<h4>Hebrew Date Feeds</h4>
+<h5>Hebrew Date Feeds</h5>
 <p>Today's Hebrew date for your RSS reader.</p>
 <p><a class="btn" href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
