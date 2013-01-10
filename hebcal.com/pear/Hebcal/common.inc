@@ -408,7 +408,7 @@ $xtra_head</head>
      <div class="nav-collapse collapse">
      $menu
      <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
-     <input name="s" id="s" type="text" class="search-query" placeholder="Search">
+     <input name="s" type="text" class="search-query" placeholder="Search">
      </form>
      </div><!-- .nav-collapse -->
     </div><!-- .container -->
