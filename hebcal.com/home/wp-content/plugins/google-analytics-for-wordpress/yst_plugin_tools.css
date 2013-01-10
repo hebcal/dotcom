@@ -78,10 +78,6 @@ div.inside .button:hover, div.inside .button-primary:hover {
 	text-decoration: none;
 }
 
-.button, .button-primary {
-	margin-top: 10px;
-}
-
 .postbox#donate {
 	border-color: green;
 	border-width: 2px;
