@@ -398,7 +398,7 @@ $xtra_head</head>
 
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
-    <div class="container">
+    <div class="container-fluid nav-container">
      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
@@ -407,11 +407,8 @@ $xtra_head</head>
      <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
      <div class="nav-collapse collapse">
      $menu
-     <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
-   <fieldset>
-   <div class="input-append input-prepend">
-   <span class="add-on"><i class="icon-search"></i></span><input class="input-medium" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
-   </fieldset>
+     <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
+     <input name="s" id="s" type="text" class="search-query" placeholder="Search">
      </form>
      </div><!-- .nav-collapse -->
     </div><!-- .container -->
