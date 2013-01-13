@@ -316,7 +316,9 @@ my %monthnames =
      );
 
 my $URCHIN = qq{<script type="text/javascript">
-function tvis(b){var a=document.getElementById(b);if(a.style.display=="block"){a.style.display="none"}else{a.style.display="block"}return true}(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}if(b[a]&&b[a].className=="download"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
+(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}
+if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}
+if(b[a]&&b[a].className=="download"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
 </script>
 };
 
@@ -1189,42 +1191,6 @@ sub zipcode_get_zip_fields($$)
      $latitude,$longitude);
 }
 
-sub html_footer_new
-{
-    my($q,$rcsrev,$noclosebody) = @_;
-
-    my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
-	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-
-    $rcsrev =~ s/\s*\$//g;
-
-    my $hhmts = strftime("%d %B %Y", localtime($mtime));
-
-    my $str = <<EOHTML;
-</div><!-- #main -->
-<div id="footer" role="contentinfo">
-<div id="colophon">
-<div id="site-info">
-<a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a>
-</div><!-- #site-info -->
-<div id="site-generator">
-$rcsrev ($hhmts)
-</div><!-- #site-generator -->
-</div><!-- #colophon -->
-</div><!-- #footer -->
-</div><!-- #wrapper -->
-EOHTML
-;
-
-    $str .= $URCHIN;
-
-    if ($noclosebody) {
-	return $str;
-    } else {
-	return $str . "</body></html>\n";
-    }
-}
-
 sub html_footer_bootstrap
 {
     my($q,$rcsrev,$noclosebody) = @_;
@@ -1323,31 +1289,6 @@ sub html_city_select
     $retval;
 }
 
-my $HTML_MENU_ITEMS =
-    [
-     [ "Home", "/" ],
-     [ "Calendar", "/hebcal/",
-       [ "Custom Calendar", "/hebcal/" ],
-       [ "Download", "/ical/" ] ],
-     [ "Holidays", "/holidays/" ],
-     [ "Date Converter", "/converter/",
-       [ "Hebrew/Gregorian date converter", "/converter/" ],
-       [ "Yahrzeit, Birthday and Anniversary Calendar", "/yahrzeit/" ] ],
-     [ "Shabbat Times", "/shabbat/", 
-       [ "Candle lighting times", "/shabbat/" ],
-       [ "Email List", "/email/" ],
-       [ "Year at a glance", "/home/shabbat/fridge" ],
-       [ "Widgets", "/home/shabbat/widgets" ] ],
-     [ "Torah Readings", "/sedrot/" ],
-     [ "About Hebcal", "/home/about",
-       [ "About Hebcal", "/home/about" ],
-       [ "Contact Us", "/home/about/contact" ],
-       [ "Donate", "/home/about/donate" ],
-       [ "News", "/home/category/news" ],
-       [ "Privacy Policy", "/home/about/privacy-policy"] ],
-     [ "Help", "/home/help" ],
-    ];
-
 my $HTML_MENU_ITEMS_V2 =
     [
      [ "Services", "#",
@@ -1365,41 +1306,6 @@ my $HTML_MENU_ITEMS_V2 =
        [ "Privacy Policy", "/home/about/privacy-policy"] ],
      [ "Help", "/home/help" ],
     ];
-
-sub html_menu_item {
-    my($title,$path,$selected) = @_;
-    my @classes = ();
-    push(@classes, "page_item") unless $path eq "/";
-    push(@classes, "current_page_item") if $path eq $selected;
-    my $str = qq{<li};
-    if (@classes) {
-	my $classes = join(" ", @classes);
-	$str .= qq{ class="$classes"};
-    }
-    $str .= qq{><a href="$path" title="$title">$title</a>};
-    return $str;
-}
-
-sub html_menu {
-    my($selected) = @_;
-    my $str = qq{<ul>};
-    foreach my $item (@{$HTML_MENU_ITEMS}) {
-	my $title = $item->[0];
-	my $path = $item->[1];
-	$str .= html_menu_item($title, $path, $selected);
-	if (defined $item->[2]) {
-	    $str .= qq{<ul class="children">};
-	    for (my $i = 2; defined $item->[$i]; $i++) {
-		$str .= html_menu_item($item->[$i]->[0], $item->[$i]->[1], $selected);
-		$str .= qq{</li>};
-	    }
-	    $str .= qq{</ul>};
-	}
-	$str .= qq{</li>};
-    }
-    $str .= qq{</ul>};
-    return $str;
-}
 
 sub html_menu_item_bootstrap {
     my($title,$path,$selected) = @_;
@@ -1436,52 +1342,6 @@ sub html_menu_bootstrap {
 	$str .= qq{</li>};
     }
     $str .= qq{</ul>};
-    return $str;
-}
-
-
-sub html_header
-{
-    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title) = @_;
-    $xtra_head = "" unless $xtra_head;
-    my $menu = html_menu($base_href);
-    my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
-    my $str = <<EOHTML;
-<!DOCTYPE html>
-<html lang="en-US"><head>
-<meta charset="UTF-8">
-<title>$title2</title>
-<base href="http://www.hebcal.com$base_href" target="_top">
-<link rel="stylesheet" type="text/css" media="all" href="/home/wp-content/themes/twentyten/style.css">
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-967247-1']);
-_gaq.push(['_trackPageview']);
-_gaq.push(['_trackPageLoadTime']);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-</script>
-$xtra_head</head>
-<body class="$body_class">
-<div id="wrapper" class="hfeed">
-<div id="header">
-<div id="masthead">
-<div id="branding" role="banner">
-<div id="site-title"><span><a href="/" title="Hebcal Jewish Calendar">Hebcal Jewish Calendar</a></span></div>
-<div id="site-description"></div>
-</div><!-- #branding -->
-<div id="access" role="navigation">
-<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
-<div class="menu">$menu</div>
-</div><!-- #access -->
-</div><!-- #masthead -->
-</div><!-- #header -->
-<div id="main">
-EOHTML
-;
     return $str;
 }
 
@@ -1815,188 +1675,6 @@ sub download_href
     }
 
     $href;
-}
-
-sub download_html
-{
-    my($q, $filename, $events, $title) = @_;
-
-    my($greg_year1,$greg_year2) = (0,0);
-    my($numEntries) = scalar(@{$events});
-    if ($numEntries > 0)
-    {
-	$greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
-	$greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
-    }
-
-    my $s = qq{<ul id="export">\n};
-
-    my $ical1 = download_href($q, $filename, "ics");
-    $ical1 =~ /\?(.+)$/;
-    my $args = $1;
-    my $ical_href = get_vcalendar_cache_fn($args) . "?" . $args;
-    my $subical_href = $ical_href;
-    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
-    my $vhost = $q->virtual_host();
-    my $href_ol_usa = download_href($q, "${filename}_usa", "csv");
-    my $href_ol_eur = download_href($q, "${filename}_eur", "csv") . ";euro=1";
-    my $href_vcs = download_href($q, $filename, "vcs");
-    my $gcal_subical_href = $subical_href;
-    $gcal_subical_href =~ s/;/&/g;
-    my $full_http_href = "http://" . $vhost . $gcal_subical_href;
-    my $gcal_href = Hebcal::url_escape($full_http_href);
-    my $ampersand_subical_href = $subical_href;
-    $ampersand_subical_href =~ s/;/&amp;/g;
-    my $ampersand_http_href = "http://" . $vhost . $ampersand_subical_href;
-    my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
-	: Hebcal::url_escape("Hebcal $filename");
-    my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
- 
-    # only offer DBA export when we know timegm() will work
-    my $palm_dba = "";
-    my $dst;
-    if ($q->param("geo") && $q->param("geo") ne "off"
-	&& $q->param("c") && $q->param("c") ne "off")
-    {
-	if (defined $q->param("dst") && $q->param("dst") ne "")
-	{
-	    $dst = $q->param("dst");
-	}
-	elsif ($q->param("geo") eq "city" && $q->param("city")
-	       && defined $Hebcal::city_dst{$q->param("city")})
-	{
-	    $dst = $Hebcal::city_dst{$q->param("city")};
-	}
-    }
-
-    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-	(!defined($dst) || $dst eq "usa" || $dst eq "none"))
-    {
-	my $dba_href = download_href($q, $filename, 'dba');
-	$palm_dba = <<EOHTML;
-<li>Palm Desktop 4.1.4 - Date Book Archive
-<ol>
-<li>Export <a class="download" id="dl-dba" href="$dba_href">$filename.dba</a>
-<li><a title="Palm Desktop - import Hebcal Jewish calendar"
-href="/home/87/palm-desktop-import-hebcal-jewish-calendar">How to import DBA file into Palm Desktop 4.1.4</a>
-</ol>
-EOHTML
-;
-    }
-
-    $s .= <<EOHTML;
-<li><a class="dlhead" onclick="tvis('ol-ics-body')" id="ol-ics">Outlook 2007, Outlook 2010 (Windows)</a>
-<ol class="dlinstr" id="ol-ics-body">
-<li>Internet Calendar Subscription: <a class="download"
-href="webcal://$vhost$subical_href"
-id="dl-ol-ics">$ics_title</a>
-<li><a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
-href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import ICS file into Outlook</a>
-</ol>
-<li><a class="dlhead" onclick="tvis('ol-csv-body')" id="ol-csv">Outlook 97, 98, 2000, 2002, 2003 (Windows)</a>
-<ol class="dlinstr" id="ol-csv-body">
-<li>Export Outlook CSV file. Select one of:
-<ul>
-<li>USA date format (month/day/year): <a class="download"
-href="$href_ol_usa"
-id="dl-ol-csv-usa">${filename}_usa.csv</a>
-<li>European date format (day/month/year): <a class="download"
-href="$href_ol_eur"
-id="dl-ol-csv-eur">${filename}_eur.csv</a>
-</ul>
-<li><a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
-href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook</a>
-</ol>
-<li><a class="dlhead" onclick="tvis('ical-body')" id="ical">Apple iCal (Mac OS X)</a>
-<div class="dlinstr" id="ical-body">
-<ol>
-<li>Subscribe to: <a class="download"
-href="webcal://$vhost$subical_href"
-id="dl-ical-sub">$ics_title</a>
-<li><a title="Apple iCal - import Hebcal Jewish calendar"
-href="/home/79/apple-ical-import-hebcal-jewish-calendar">How to import ICS file into Apple iCal</a>
-</ol>
-Alternate option: <a class="download"
-href="${ical_href}"
-id="dl-ical-alt">download $ics_title</a>
-and then import manually into Apple iCal.
-</div><!-- #ical-body -->
-<li><a class="dlhead" onclick="tvis('ol-mac-body')" id="ol-mac">Outlook 2011 (Mac OS X)</a>
-<ol class="dlinstr" id="ol-mac-body">
-<li>Download <a class="download"
-href="${ical_href}"
-id="dl-ol-mac">$ics_title</a>
-<li><a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
-href="/home/186/outlook-2011-mac-import">How to import .ics file into Outlook 2011 for Mac OS X</a>
-</ol><!-- #ol-mac-body -->
-<li><a class="dlhead" onclick="tvis('ios-body')" id="ios">iPhone &amp; iPad (iOS 3.0 and higher)</a>
-<ol class="dlinstr" id="ios-body">
-<li>Subscribe to: <a class="download"
-href="webcal://$vhost$subical_href"
-id="dl-ios-sub">$ics_title</a>
-<li><a title="iPhone and iPad - import Hebcal Jewish calendar"
-href="/home/77/iphone-ipad-jewish-calendar">Step-by-step import instructions</a>
-</ol>
-<li><a class="dlhead" onclick="tvis('gcal-body')" id="gcal">Google Calendar</a>
-<div class="dlinstr" id="gcal-body">
-<blockquote>
-<a title="Add to Google Calendar"
-class="download" id="dl-gcal-sub"
-href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
-src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a>
-</blockquote>
-Alternate option:
-<a class="download" id="dl-gcal-alt"
-href="${ical_href}">download</a> and then <a
-title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
-href="/home/59/google-calendar-alternative-instructions">follow
-our Google Calendar import instructions</a>.
-</div><!-- #gcal-body -->
-<li><a class="dlhead" onclick="tvis('wlive-body')" id="wlive">Windows Live Calendar</a>
-<div class="dlinstr" id="wlive-body">
-<blockquote>
-Add to&nbsp;&nbsp;
-<a title="Windows Live Calendar" class="dl-wlive"
-href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"><img
-src="/i/wlive-150x20.png"
-width="150" height="20" style="border:none"
-alt="Windows Live Calendar"></a>
-</blockquote>
-</div><!-- #wlive-body -->
-<li><a class="dlhead" onclick="tvis('ycal-body')" id="ycal">Yahoo! Calendar</a>
-<div class="dlinstr" id="ycal-body">
-<form id="GrabLinkForm" action="#">
-<ol>
-<li>Copy the entire iCal URL here:
-<label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
-onfocus="this.select();" onKeyPress="return false;"
-value="${ampersand_http_href}"></small></label>
-<li>Go to your <a href="http://calendar.yahoo.com/">Yahoo! Calendar</a>,
-and click the "<b>+</b>" button next to "Calendars" on the left side of the page
-<li>Click <b>Subscribe to Calendar</b>
-<li>Paste the web address into the "Email or iCal address" window
-<li>Click <b>Next</b> at the top of the page
-<li>Type a name for the calendar in the window after "Display as."
-<li>Choose a color for the calendar in the "Color:" pull-down menu
-<li>Click <b>Save</b> at the top of the page
-</ol>
-</form>
-</div><!-- #ycal-body -->
-<li><a class="dlhead" onclick="tvis('palm-body')" id="palm">Palm Desktop (Windows-only)</a>
-<ul class="dlinstr" id="palm-body">
-<li>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)
-<ol>
-<li>Export <a class="download" id="dl-vcs" href="$href_vcs">${filename}.vcs</a>
-<li><a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
-href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a>
-</ol>
-$palm_dba
-</ul><!-- #palm-body -->
-</ul><!-- #export -->
-EOHTML
-;
-
-    $s;
 }
 
 sub export_http_header($$)
