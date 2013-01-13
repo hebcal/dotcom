@@ -150,7 +150,8 @@ if ($opts{'H'}) {
 }
 
 my %GREG2HEB;
-my $NUM_YEARS = 5;
+my $NUM_YEARS = 9;
+my $NUM_YEARS_MAIN_INDEX = 5;
 my $meta_greg_yr1 = $HEB_YR - 3761 - 1;
 my $meta_greg_yr2 = $meta_greg_yr1 + $NUM_YEARS + 1;
 print "Gregorian-to-Hebrew date map...\n" if $opts{"v"};
@@ -344,7 +345,7 @@ EOHTML
 ;
 
     print OUT3 "<tr><th>Holiday</th>";
-    foreach my $i (0 .. $NUM_YEARS) {
+    foreach my $i (0 .. $NUM_YEARS_MAIN_INDEX) {
 	my $yr = $HEB_YR + $i - 1;
 	my $greg_yr1 = $yr - 3761;
 	my $greg_yr2 = $greg_yr1 + 1;
@@ -365,7 +366,7 @@ EOHTML
 	my $slug = Hebcal::make_anchor($f);
 
 	print OUT3 qq{<tr><td><a href="$slug" title="$short_descr">$f</a></td>\n};
-	foreach my $i (0 .. $NUM_YEARS) {
+	foreach my $i (0 .. $NUM_YEARS_MAIN_INDEX) {
 	    print OUT3 "<td class=\"date-obs\">";
 	    if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[$i]) {
 		my $evt = $OBSERVED{$f}->[$i];
@@ -580,7 +581,7 @@ EOHTML
 
 	print OUT4 get_index_body_preamble($page_title, 0);
 
-	print OUT4 qq{<div class="pagination"><ul>\n};
+	print OUT4 qq{<div class="pagination pagination-small"><ul>\n};
 	foreach my $j (0 .. $NUM_YEARS) {
 	    my $other_yr = $HEB_YR + $j - 1;
 	    my $other_greg_yr1 = $other_yr - 3761;
