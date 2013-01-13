@@ -19,6 +19,8 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 </script>
 <style type="text/css">
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
+.navbar{position:static}
+body{padding-top:0}
 </style>
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">
 <meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
@@ -34,7 +36,7 @@ legend {
 
 <div class="navbar navbar-fixed-top">
  <div class="navbar-inner">
-   <div class="container">
+   <div class="container-fluid nav-container">
    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
    <span class="icon-bar"></span>
    <span class="icon-bar"></span>
@@ -43,11 +45,8 @@ legend {
    <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
    <div class="nav-collapse collapse">
     <ul class="nav"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Services <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="/holidays/" title="Jewish Holidays">Jewish Holidays</a></li><li class="active"><a href="/hebcal/" title="Custom Calendar">Custom Calendar</a></li><li><a href="/converter/" title="Hebrew Date Converter">Hebrew Date Converter</a></li><li><a href="/yahrzeit/" title="Yahrzeit + Anniversary Calendar">Yahrzeit + Anniversary Calendar</a></li><li><a href="/shabbat/" title="Shabbat Times">Shabbat Times</a></li><li><a href="/sedrot/" title="Torah Readings">Torah Readings</a></li></ul></li><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="/home/about" title="About Hebcal">About Hebcal</a></li><li><a href="/home/about/contact" title="Contact Us">Contact Us</a></li><li><a href="/home/about/donate" title="Donate">Donate</a></li><li><a href="/home/category/news" title="News">News</a></li><li><a href="/home/about/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li><a href="/home/help" title="Help">Help</a></li></ul>
-    <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
-     <fieldset>
-      <div class="input-append input-prepend">
-      <span class="add-on"><i class="icon-search"></i></span><input class="input-medium" type="text" name="s"><button type="submit" class="btn btn-primary">Search</button></div>
-      </fieldset>
+    <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
+    <input name="s" id="s" type="text" class="search-query" placeholder="Search">
     </form>
    </div><!-- .nav-collapse -->
    </div><!-- .container -->
@@ -171,4 +170,4 @@ Commons Attribution 3.0 License</a>.</small></p>
 function tvis(b){var a=document.getElementById(b);if(a.style.display=="block"){a.style.display="none"}else{a.style.display="block"}return true}(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}if(b[a]&&b[a].className=="download"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
 </script>
 </body></html>
-<!-- generated Wed Jan  9 12:53:40 2013 -->
+<!-- generated Sun Jan 13 08:28:23 2013 -->
