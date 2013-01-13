@@ -429,7 +429,7 @@ EOHTML
 }
 
 sub get_index_body_preamble {
-    my($page_title,$do_multi_year) = @_;
+    my($page_title,$do_multi_year,$heb_year) = @_;
 
     my $str = <<EOHTML;
 <div class="span12">
@@ -443,23 +443,25 @@ sundown on <strong>Sep 18</strong> and ends at sundown on <strong>Sep 20</strong
 Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
-<p>
 EOHTML
 ;
 
     if ($do_multi_year) {
       $str .= <<EOHTML;
-The tables of holidays below include the current year and 4 years
-into the future for the Diaspora.
+<p>The tables of holidays below include the current year and 4 years
+into the future for the Diaspora.</p>
 EOHTML
 ;
     }
 
+    my $custom_link =
+	$heb_year ? "/hebcal/?v=0&amp;year=$heb_year&amp;yt=H" : "/hebcal/";
+
     $str .= <<EOHTML;
-<a href="/ical/">Download</a> to your favorite desktop, mobile or
-web-based calendar, or <a href="/hebcal/">make a custom calendar</a>
-to select a different year or for advanced options such as
-candle-lighting times and Torah readings.</p>
+<div class="btn-toolbar">
+<a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download &raquo;</a>
+<a class="btn btn-small" title="Hebcal Custom Calendar" href="$custom_link"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
+</div><!-- .btn-toolbar -->
 EOHTML
 ;
 
@@ -579,7 +581,7 @@ EOHTML
 				       $meta . $xtra_head,
 				       1);
 
-	print OUT4 get_index_body_preamble($page_title, 0);
+	print OUT4 get_index_body_preamble($page_title, 0, $heb_year);
 
 	print OUT4 qq{<div class="pagination pagination-small"><ul>\n};
 	foreach my $j (0 .. $NUM_YEARS) {
