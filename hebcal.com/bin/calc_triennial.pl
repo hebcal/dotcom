@@ -399,7 +399,7 @@ sub write_index_page
 {
     my($parshiot) = @_;
 
-    my $fn = "$outdir/index.html";
+    my $fn = "$outdir/index.php";
     open(OUT1, ">$fn.$$") || croak "$fn.$$: $!\n";
 
     my $hy0 = $hebrew_year - 1;
@@ -423,15 +423,47 @@ EOHTML
 <p class="lead">Weekly Torah readings (Parashat ha-Shavua) including
 verses for each aliyah and accompanying Haftarah. Includes
 both traditional (full kriyah) and triennial reading schemes.</p>
+EOHTML
+    ;
 
-<p><a class="btn"
+print OUT1 q'<?php
+require("../pear/Hebcal/common.inc");
+list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+$gm = $mon + 1;
+$gd = $mday;
+$gy = $year + 1900;
+$century = substr($gy, 0, 2);
+$fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
+@include($fn);
+list($saturday_gy,$saturday_gm,$saturday_gd) = get_saturday($gy, $gm, $gd);
+$saturday_iso = sprintf("%04d%02d%02d", $saturday_gy, $saturday_gm, $saturday_gd);
+if (isset($sedra) && isset($sedra[$saturday_iso])) {
+    if (is_array($sedra[$saturday_iso])) {
+	$sat_events = $sedra[$saturday_iso];
+    } else {
+	$sat_events = array($sedra[$saturday_iso]);
+    }
+    foreach ($sat_events as $h) {
+	if (strncmp($h, "Parashat ", 9) == 0) {
+	    $anchor = hebcal_make_anchor($h);
+	    echo "<p class=\"lead\">This week&apos;s Torah Portion is <a href=\"", $anchor, "\">", $h, "</a>.</p>\n";
+	    break;
+	}
+    }
+}
+?>
+';
+
+
+    print OUT1 <<EOHTML;
+<div class="btn-toolbar">
+<a class="btn btn-small" title="Download aliyah-by-aliyah breakdown"
 href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat"><i
 class="icon-download-alt"></i> Leyning spreadsheet &raquo;</a>
-
-&nbsp;&nbsp;
-<a class="btn" href="index.xml"><img src="/i/feed-icon-14x14.png"
+<a class="btn btn-small" href="index.xml"><img src="/i/feed-icon-14x14.png"
 style="border:none" alt="View the raw XML source" width="14"
 height="14"> Parashat ha-Shavua RSS &raquo;</a>
+</div><!-- .btn-toolbar -->
 
 <div class="row-fluid">
 <div class="span4">
