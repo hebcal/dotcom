@@ -367,6 +367,14 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
     $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
     $base_href = preg_replace('/&/', '&amp;', $base_href);
     $menu = html_menu_bootstrap($_SERVER["SCRIPT_URL"]);
+
+    if ($_SERVER["SCRIPT_URL"] == "/") {
+	$logo = '<span class="brand" id="logo" title="Hebcal Jewish Calendar">Hebcal</span>';
+    } else {
+	$logo = '<a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
+    }
+
+
     $html = <<<EOD
 <!DOCTYPE html>
 <html><head>
@@ -404,7 +412,7 @@ $xtra_head</head>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
      </a>
-     <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+     $logo
      <div class="nav-collapse collapse">
      $menu
      <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
@@ -431,6 +439,11 @@ function html_footer_bootstrap($last_updated = true) {
 	$last_updated_text = "<p>$date <small class=\"muted\">Revision: $VER</small></p>";
     }
 
+    $site_title = "Hebcal Jewish Calendar";
+    if ($_SERVER["SCRIPT_URL"] != "/") {
+	$site_title = "<a href=\"/\">$site_title</a>";
+    }
+
     $html = <<<EOD
 </div><!-- #content -->
 
@@ -438,7 +451,7 @@ function html_footer_bootstrap($last_updated = true) {
 <hr>
 <div id="inner-footer" class="clearfix row">
 <div class="span5">
-<p><a href="/">Hebcal Jewish Calendar</a></p>
+<p>$site_title</p>
 <iframe src="//www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=360&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:360px; height:35px;" allowTransparency="true"></iframe>
 </div>
 <div class="span4 offset3">
