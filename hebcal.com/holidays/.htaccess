@@ -41,7 +41,8 @@ Redirect permanent /holidays/sukkos http://www.hebcal.com/holidays/sukkot
 Redirect permanent /holidays/taanit-bechorot.html http://www.hebcal.com/holidays/taanit-bechorot
 Redirect permanent /holidays/taanit-esther.html http://www.hebcal.com/holidays/taanit-esther
 Redirect permanent /holidays/tisha-bav.html http://www.hebcal.com/holidays/tisha-bav
-Redirect permanent /holidays/tu-bshvat.html http://www.hebcal.com/holidays/tu-bshvat
+Redirect permanent /holidays/tu-bshvat.html http://www.hebcal.com/holidays/tu-bishvat
+Redirect permanent /holidays/tu-bshvat http://www.hebcal.com/holidays/tu-bishvat
 Redirect permanent /holidays/tzom-gedaliah.html http://www.hebcal.com/holidays/tzom-gedaliah
 Redirect permanent /holidays/tzom-tammuz.html http://www.hebcal.com/holidays/tzom-tammuz
 Redirect permanent /holidays/yom-haatzmaut.html http://www.hebcal.com/holidays/yom-haatzmaut
