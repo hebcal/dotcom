@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -82,7 +82,11 @@ print $q->start_html(
     -title => $title,
     -target => "_top",
     -xbase => $base,
-    -style => { -verbatim => '@media print { .goto {display:none} }' }
+    -style => { -verbatim => qq'\@media print { .goto {display:none} }
+table tbody tr td {
+font-family: "Courier New", Courier, monospace;
+}
+' }
     );
 
 my $numEntries = scalar(@{$evts});
@@ -127,11 +131,11 @@ sub format_items
 	    $stime = "<b>$stime</b>";
 	}
 
-	$stime = "<tt>$stime</tt><br>\n";
+	$stime .= "<br>\n";
 	push(@items, $stime);
     }
 
-    Hebcal::out_html($cfg,qq{<p><table border="1" cellpadding="8"><tr>\n});
+    Hebcal::out_html($cfg,qq{<p><table border="1" cellpadding="8"><tbody><tr>\n});
 
     my $third = POSIX::ceil(scalar(@items) / 3.0);
     for (my $i = 0; $i < 3; $i++)
@@ -153,7 +157,7 @@ sub format_items
 	Hebcal::out_html($cfg,"</td>\n");
     }
 
-    Hebcal::out_html($cfg,qq{</tr></table>\n});
+    Hebcal::out_html($cfg,qq{</tr></tbody></table>\n});
 
     Hebcal::out_html($cfg,"<p><a class=\"goto\" title=\"Previous\" href=\"",
 		     Hebcal::self_url($q, {'year' => $hebrew_year - 1}),
