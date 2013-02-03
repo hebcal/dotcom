@@ -241,8 +241,7 @@ my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
 
 foreach my $h (keys %readings1, "Vezot Haberakhah")
 {
-    write_sedra_page($axml,$h,$prev{$h},$next{$h},
-		     $readings1{$h},$readings2{$h});
+    write_sedra_page($axml,$h,$prev{$h},$next{$h},$readings1{$h});
 }
 
 write_index_page($axml);
@@ -655,7 +654,7 @@ EOHTML
 
 sub write_sedra_page
 {
-    my($parshiot,$h,$prev,$next,$tri1,$tri2) = @_;
+    my($parshiot,$h,$prev,$next,$tri1) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,$drash_jts,$drash_ou,
@@ -714,19 +713,16 @@ sub write_sedra_page
 				   0);
 
     my @tri_date;
-    my @tri_date2;
     if ($h eq 'Vezot Haberakhah')
     {
 	$tri_date[1] = $tri_date[2] = $tri_date[3] =
 	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
-	@tri_date2 = @tri_date;
     }
     else
     {
 	foreach (1 .. 3)
 	{
 	    $tri_date[$_] = (defined $tri1->[$_]) ? $tri1->[$_]->[1] : "";
-	    $tri_date2[$_] = (defined $tri2->[$_]) ? $tri2->[$_]->[1] : "";
 	}
     }
 
