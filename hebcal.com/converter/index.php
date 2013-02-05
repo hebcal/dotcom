@@ -247,7 +247,7 @@ $xtra_head = <<<EOD
 #converter-results .jumbo {
   font-size: 37px;
 }
-legend {
+.pseudo-legend {
   font-size: 17px;
   font-weight: bold;
   line-height: 30px;
@@ -281,8 +281,8 @@ function form($head, $message, $help = "") {
 ?>
 <div id="converter-form" class="well well-small">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
+<div class="pseudo-legend">Hebrew Date Converter<br><hr></div>
 <fieldset>
-<legend>Hebrew Date Converter</legend>
 <div class="span5">
 <div class="controls controls-row">
 <input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
