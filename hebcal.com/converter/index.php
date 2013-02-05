@@ -281,8 +281,8 @@ function form($head, $message, $help = "") {
 ?>
 <div id="converter-form" class="well well-small">
 <form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
-<legend>Hebrew Date Converter</legend>
 <fieldset>
+<legend>Hebrew Date Converter</legend>
 <div class="span5">
 <div class="controls controls-row">
 <input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
