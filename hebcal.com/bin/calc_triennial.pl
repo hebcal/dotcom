@@ -865,7 +865,10 @@ EOHTML
 	}
     }
 
+    # these drash links keep getting broken; disable for now
     undef $drash_jts;
+    undef $drash_ajr;
+    undef $drash_uj;
 
     my $has_drash = $drash_jts || $drash_ou ||
 	$drash_torah || $drash_uj || $drash_ajr;
