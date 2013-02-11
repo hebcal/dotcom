@@ -65,11 +65,7 @@ else
 	$info = get_sub_info($param["em"]);
 	if (isset($info["status"]) && $info["status"] == "active") {
 	    foreach ($info as $k => $v) {
-		if ($k == "upd") {
-		    $param[$k] = ($v == "1") ? "on" : "";
-		} else {
-		    $param[$k] = $v;
-		}
+		$param[$k] = $v;
 	    }
 	    if (isset($param["city"])) {
 		$param["geo"] = "city";
@@ -134,15 +130,13 @@ function write_sub_info($param) {
 	$geo_sql = "email_candles_city='$param[city]',email_candles_zipcode=NULL";
     }
 
-    $optin_announce = $param["upd"] ? 1 : 0;
-
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='active',
     $geo_sql,
     email_candles_havdalah='$param[m]',
     email_ip='$_SERVER[REMOTE_ADDR]',
-    email_optin_announce='$optin_announce'
+    email_optin_announce='0'
 WHERE email_address = '$param[em]'
 EOD;
 
@@ -156,7 +150,7 @@ function get_sub_info($email) {
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
-       email_candles_havdalah, email_optin_announce
+       email_candles_havdalah
 FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_address = '$email'
 EOD;
@@ -175,14 +169,13 @@ EOD;
     }
 
     list($id,$address,$status,$created,$zip,$city,
-	 $havdalah,$optin_announce) = mysql_fetch_row($result);
+	 $havdalah) = mysql_fetch_row($result);
 
     $val = array(
 	"id" => $id,
 	"status" => $status,
 	"em" => $address,
 	"m" => $havdalah,
-	"upd" => $optin_announce,
 	"zip" => $zip,
 	"tz" => $timezone,
 	"dst" => $dst,
@@ -233,15 +226,13 @@ function write_staging_info($param, $old_encoded)
 	$location_value = $param["city"];
     }
 
-    $optin_announce = $param["upd"] ? 1 : 0;
-
     $sql = <<<EOD
 REPLACE INTO hebcal_shabbat_email
 (email_id, email_address, email_status, email_created,
  email_candles_havdalah, email_optin_announce,
  $location_name, email_ip)
 VALUES ('$encoded', '$param[em]', 'pending', NOW(),
-	'$param[m]', '$optin_announce',
+	'$param[m]', '0',
 	'$location_value', '$_SERVER[REMOTE_ADDR]')
 EOD;
 
@@ -279,6 +270,10 @@ function form($param, $message = "", $help = "") {
 <div id="email-form" class="well well-small">
 <form name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
 <fieldset>
+<label for="em">E-mail address:
+<input type="email" name="em"
+value="<?php echo htmlspecialchars($param["em"]) ?>" id="em">
+</label>
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
 <label for="city">Closest City:</label>
 <?php
@@ -308,15 +303,6 @@ href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
 <label for="m1">Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php
   echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3" id="m1">
-</label>
-<label for="em">E-mail address:
-<input type="email" name="em"
-value="<?php echo htmlspecialchars($param["em"]) ?>" id="em">
-</label>
-<label for="upd" class="checkbox">
-<input type="checkbox" name="upd" value="on" <?php
-  if ($param["upd"] == "on") { echo "checked"; } ?> id="upd">
-Contact me occasionally about changes to the hebcal.com website.
 </label>
 <input type="hidden" name="v" value="1">
 <?php global $is_update;
