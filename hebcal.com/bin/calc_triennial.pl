@@ -12,7 +12,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2012  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -225,6 +225,19 @@ foreach my $h (keys %readings1, "Vezot Haberakhah") {
 	if ($time >= $NOW) {
 	    $next_reading{$h} = $dt;
 	    last;
+	}
+    }
+    # see if the combined reading is sooner
+    if ($combined{$h}) {
+	my $doubled = $combined{$h};
+	foreach my $dt (@{$parashah_date_sql{$doubled}}) {
+	    next unless $dt;
+	    my($year,$month,$day) = split(/-/, $dt);
+	    my $time = Date::Calc::Date_to_Time($year,$month,$day,12,59,59);
+	    if ($time >= $NOW && $dt lt $next_reading{$h}) {
+		$next_reading{$h} = $dt;
+		last;
+	    }
 	}
     }
 }
