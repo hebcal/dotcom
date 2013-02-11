@@ -400,6 +400,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
 .navbar{position:static}
 body{padding-top:0}
+.label{text-transform:none}
 @media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
