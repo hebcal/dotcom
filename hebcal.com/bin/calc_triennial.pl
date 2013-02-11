@@ -920,10 +920,26 @@ Parashat $h is read in the Diaspora on:
 <ul class="unstyled">
 EOHTML
 	;
+	my @dates;
+	my %doubled;
 	foreach my $dt (@{$parashah_date_sql{$h}}) {
 	    next unless $dt;
+	    push(@dates, $dt);
+	}
+	if ($combined{$h}) {
+	    my $doubled = $combined{$h};
+	    foreach my $dt (@{$parashah_date_sql{$doubled}}) {
+		next unless $dt;
+		push(@dates, $dt);
+		$doubled{$dt} = 1;
+	    }
+	}
+	foreach my $dt (sort @dates) {
 	    my($year,$month,$day) = split(/-/, $dt);
 	    print OUT2 "<li>", format_html_date($year,$month,$day), "\n";
+	    if ($doubled{$dt}) {
+		print OUT2 " - <small>Parashat ", $combined{$h}, "</small>\n";
+	    }
 	}
 	print OUT2 "</ul>\n";
     }
