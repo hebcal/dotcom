@@ -315,4 +315,14 @@ sub download_html_modal_button {
     return qq{<a href="#hcdl-modal" role="button" class="btn" data-toggle="modal"><i class="icon-download-alt"></i> Download ...</a>};
 }
 
+
+# avoid warnings
+if ($^W && 0)
+{
+    my $unused;
+    $unused = $HebcalHtml::usno_warning;
+    $unused = $HebcalHtml::gregorian_warning;
+    $unused = $HebcalHtml::indiana_warning;
+}
+
 1;
