@@ -125,16 +125,16 @@ sub download_html_bootstrap {
     my $palm_title = "Palm Desktop (Windows-only)";
 
     my $ol_ics = <<EOHTML;
-<a class="btn download"
+<p><a class="btn download"
 href="webcal://$vhost$subical_href"
-id="dl-ol-ics"><i class="icon-download-alt"></i> $ics_title</a>
-<br><a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
-href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">How to import
-ICS (Internet Calendar Subscription) file into Outlook</a>
+id="dl-ol-ics"><i class="icon-download-alt"></i> $ics_title</a></p>
+<p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
+href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
+ICS (Internet Calendar Subscription) file into Outlook</a></p>
 EOHTML
 ;
     my $ol_csv = <<EOHTML;
-Download Outlook CSV file. Select one of:
+Select an Outlook CSV file to download
 <ul>
 <li>USA date format (month/day/year): <a class="btn download"
 href="$href_ol_usa"
@@ -143,16 +143,16 @@ id="dl-ol-csv-usa"><i class="icon-download-alt"></i> ${filename}_usa.csv</a>
 href="$href_ol_eur"
 id="dl-ol-csv-eur"><i class="icon-download-alt"></i> ${filename}_eur.csv</a>
 </ul>
-<a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
-href="/home/12/outlook-csv-jewish-calendar">How to import CSV file into Outlook</a>
+Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
+href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 EOHTML
 ;
     my $ical = <<EOHTML;
-<p>Subscribe to: <a class="btn download"
+<p><a class="btn download"
 href="webcal://$vhost$subical_href"
-id="dl-ical-sub"><i class="icon-download-alt"></i> $ics_title</a>
-<br><a title="Apple iCal - import Hebcal Jewish calendar"
-href="/home/79/apple-ical-import-hebcal-jewish-calendar">How to import ICS file into Apple iCal</a></p>
+id="dl-ical-sub"><i class="icon-download-alt"></i> $ics_title</a></p>
+<p>Step-by-step: <a title="Apple iCal - import Hebcal Jewish calendar"
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple iCal</a></p>
 <p>Alternate option: <a class="download"
 href="${ical_href}"
 id="dl-ical-alt">download $ics_title</a>
@@ -160,19 +160,20 @@ and then import manually into Apple iCal.</p>
 EOHTML
 ;
     my $ol_mac = <<EOHTML;
-Download <a class="btn download"
+<p><a class="btn download"
 href="${ical_href}"
-id="dl-ol-mac"><i class="icon-download-alt"></i> $ics_title</a>
-<br><a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
-href="/home/186/outlook-2011-mac-import">How to import .ics file into Outlook 2011 for Mac OS X</a>
+id="dl-ol-mac"><i class="icon-download-alt"></i> $ics_title</a></p>
+<p>Step-by-step: <a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
+href="/home/186/outlook-2011-mac-import">Import .ics file into
+Outlook 2011 for Mac OS X</a></p>
 EOHTML
 ;
     my $ios = <<EOHTML;
-Subscribe to: <a class="btn download"
+<p><a class="btn download"
 href="webcal://$vhost$subical_href"
-id="dl-ios-sub"><i class="icon-download-alt"></i> $ics_title</a>
-<br><a title="iPhone and iPad - import Hebcal Jewish calendar"
-href="/home/77/iphone-ipad-jewish-calendar">Step-by-step import instructions</a>
+id="dl-ios-sub"><i class="icon-download-alt"></i> $ics_title</a></p>
+<p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
+href="/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p>
 EOHTML
 ;
 
@@ -258,18 +259,18 @@ EOHTML
 	my $dba_href = Hebcal::download_href($q, $filename, 'dba');
 	$palm_dba = <<EOHTML;
 <h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
-Download <a class="btn download" id="dl-dba" href="$dba_href"><i class="icon-download-alt"></i> $filename.dba</a>
-<br><a title="Palm Desktop - import Hebcal Jewish calendar"
-href="/home/87/palm-desktop-import-hebcal-jewish-calendar">How to import DBA file into Palm Desktop 4.1.4</a>
+<p><a class="btn download" id="dl-dba" href="$dba_href"><i class="icon-download-alt"></i> $filename.dba</a></p>
+<p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
+href="/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
 EOHTML
 ;
     }
 
     my $palm = <<EOHTML;
 <h5>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)</h5>
-Download <a class="btn download" id="dl-vcs" href="$href_vcs"><i class="icon-download-alt"></i> ${filename}.vcs</a>
-<br><a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
-href="/home/188/palm-desktop-62">How to import VCS file into Palm Desktop 6.2 for Windows</a>
+<p><a class="btn download" id="dl-vcs" href="$href_vcs"><i class="icon-download-alt"></i> ${filename}.vcs</a></p>
+<p>Step-by-step: <a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
+href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
 $palm_dba
 EOHTML
 ;
