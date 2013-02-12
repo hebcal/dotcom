@@ -1,4 +1,7 @@
 <?php
+/** Enable W3 Total Cache */
+define('WP_CACHE', true); // Added by W3 Total Cache
+
 /**
  * The base configurations of the WordPress.
  *
@@ -16,7 +19,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-//define('WP_CACHE', true); //Added by WP-Cache Manager
+ //Added by WP-Cache Manager
 define('DB_NAME', 'hebcal_com');
 
 /** MySQL database username */

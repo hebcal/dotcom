@@ -1,10 +1,10 @@
 === Page Links To ===
-Contributors: markjaquith
-Donate link: http://txfx.net/wordpress-plugins/donate
-Tags: page, redirect, link, external link, repoint
-Requires at least: 3.3
-Tested up to: 3.4
-Stable tag: 2.7.1
+Contributors: markjaquith  
+Donate link: http://txfx.net/wordpress-plugins/donate  
+Tags: page, redirect, link, external link, repoint  
+Requires at least: 3.3  
+Tested up to: 3.5.1  
+Stable tag: 2.7.1  
 
 Lets you make a WordPress page (or other content type) link to an external URL of your choosing, instead of its WordPress URL.
 
@@ -55,6 +55,9 @@ If you want to link to a full URL, you *must* include the `http://` portion.
 Yes. Linking to `/my-photos.php` is a good idea, as it'll still work if you move your site to a different domain.
 
 == Changelog ==
+
+= 2.8 =
+* Added translations for: Swedish, Hebrew.
 
 = 2.7.1 =
 * Fix an array bug
