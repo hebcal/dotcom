@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2012  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -54,31 +54,21 @@ use POSIX qw(strftime);
 
 my $WEBDIR = '/home/hebcal/web/hebcal.com';
 my $HEBCAL = "$WEBDIR/bin/hebcal";
+my $HOSTNAME = "www.hebcal.com";
 
 my($syear,$smonth,$sday) = Hebcal::upcoming_dow(6); # saturday
 
-my $outfile = "$WEBDIR/current.inc";
-my $wrote_parasha = 0;
-
 my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $syear", "", 0, $smonth);
-my $parasha = '';
 for (my $i = 0; $i < @events; $i++)
 {
     if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sday)
     {
-	$parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my $href = Hebcal::get_holiday_anchor($parasha,undef,undef);
 	if ($href)
 	{
 	    my $stime = sprintf("%02d %s %d",
 				$sday, Date::Calc::Month_to_Text($smonth), $syear);
-	    open(OUT,">$outfile") || die;
-	    my $parasha2 = $parasha;
-	    $parasha2 =~ s/ /&nbsp;/g;
-	    print OUT "\n<li><a\n";
-	    print OUT "href=\"$href?tag=fp.ql\">$parasha2</a><br>$stime";
-	    close(OUT);
-	    $wrote_parasha = 1;
 
 	    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
 				   gmtime(time()));
@@ -89,22 +79,24 @@ for (my $i = 0; $i < @events; $i++)
 					 $sday,
 					 $Hebcal::MoY_short[$smonth - 1],
 					 $syear);
-
+	    my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
 	    open(RSS,">$WEBDIR/sedrot/index.xml") || die;
+	    my $link = "http://$HOSTNAME$href?tag=rss";
 	    print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
 <title>Hebcal Parsahat ha-Shavua</title>
-<link>http://www.hebcal.com/sedrot/</link>
+<link>http://$HOSTNAME/sedrot/</link>
 <description>Torah reading of the week from Hebcal.com</description>
 <language>en-us</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$parasha</title>
-<link>http://www.hebcal.com$href?tag=rss</link>
+<link>$link</link>
 <description>$stime</description>
 <pubDate>$parasha_pubDate</pubDate>
+<guid isPermaLink="false">$link&dt=$dt</guid>
 </item>
 </channel>
 </rss>
@@ -116,12 +108,6 @@ for (my $i = 0; $i < @events; $i++)
     }
 }
 
-unless ($wrote_parasha) {
-    # no parasha this week, so create empty include file
-    open(OUT,">$outfile") || die;
-    close(OUT);
-}
-
 my $hdate = `$HEBCAL -T -x -h | grep -v Omer`;
 chomp($hdate);
 
@@ -130,7 +116,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     my($hm,$hd,$hy) = ($2,$1,$3);
     my $hebrew = Hebcal::build_hebrew_date($hm,$hd,$hy);
 
-    $outfile = "$WEBDIR/etc/hdate-en.js";
+    my $outfile = "$WEBDIR/etc/hdate-en.js";
     open(OUT,">$outfile") || die;
     print OUT "document.write(\"$hdate\");\n";
     close(OUT);
@@ -149,14 +135,14 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 <rss version="2.0">
 <channel>
 <title>Hebrew Date</title>
-<link>http://www.hebcal.com/converter/</link>
+<link>http://$HOSTNAME/converter/</link>
 <description>Today\'s Hebrew Date from Hebcal.com</description>
 <language>en-us</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$hdate</title>
-<link>http://www.hebcal.com/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;tag=rss</link>
+<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;tag=rss</link>
 <description>$hdate</description>
 <pubDate>$pubDate</pubDate>
 </item>
@@ -170,14 +156,14 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 <rss version="2.0">
 <channel>
 <title>Hebrew Date</title>
-<link>http://www.hebcal.com/converter/</link>
+<link>http://$HOSTNAME/converter/</link>
 <description>Today\'s Hebrew Date from Hebcal.com</description>
 <language>he</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$hebrew</title>
-<link>http://www.hebcal.com/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss</link>
+<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss</link>
 <description>$hebrew</description>
 <pubDate>$pubDate</pubDate>
 </item>
@@ -186,50 +172,3 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 };
     close(RSS);
 }
-
-$outfile = "$WEBDIR/holiday.inc";
-open(OUT,">$outfile") || die;
-@events = Hebcal::invoke_hebcal($HEBCAL, '', 0);
-
-my($midnight,$nextweek);
-{
-    my $now = time;
-    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-	localtime($now);
-    $year += 1900;
-
-    $midnight = Time::Local::timelocal
-	(0,0,0,$mday,$mon,$year,$wday,$yday,$isdst);
-#    $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
-    $nextweek = $midnight + (5 * 60 * 60 * 24);
-}
-
-my %seen;
-for (my $i = 0; $i < @events; $i++)
-{
-    # holiday is at 12:00:01 am
-    my $time = Time::Local::timelocal
-	(1,0,0,
-	 $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-	 $events[$i]->[$Hebcal::EVT_IDX_MON],
-	 $events[$i]->[$Hebcal::EVT_IDX_YEAR] - 1900,
-	 "","","");
-
-    if ($time >= $midnight && $time <= $nextweek) {
-	my $holiday = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my $href = Hebcal::get_holiday_anchor($holiday,undef,undef);
-	if ($href) {
-	    next if $seen{$href};
-	    my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	    my $stime = sprintf("%02d %s %04d",
-				$events[$i]->[$Hebcal::EVT_IDX_MDAY],
-				$Hebcal::MoY_long{$month},
-				$events[$i]->[$Hebcal::EVT_IDX_YEAR]);
-	    $holiday =~ s/ /&nbsp;/g;
-	    print OUT "\n<li><a\n";
-	    print OUT "href=\"$href?tag=fp.ql\">$holiday</a><br>$stime\n";
-	    $seen{$href} = 1;
-	}
-    }
-}
-close(OUT);
