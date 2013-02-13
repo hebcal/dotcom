@@ -1141,7 +1141,7 @@ sub get_parashah_info
     }
 
     ($hebrew,$torah,$haftarah,$haftarah_seph,
-     $torah_href,$haftarah_href,$drash_torg,$drash_ou);
+     $torah_href,$haftarah_href,$drash_ou,$drash_torg);
 }
 
 sub get_special_aliyah
