@@ -671,9 +671,8 @@ sub write_sedra_page
     my($parshiot,$h,$prev,$next,$tri1) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
-       $torah_href,$haftarah_href,$drash_jts,$drash_ou,
-       $drash_reform,$drash_torah,$drash_uj,
-       $drash_ajr) = get_parashah_info($parshiot,$h);
+       $torah_href,$haftarah_href,
+       $drash_ou,$drash_torg) = get_parashah_info($parshiot,$h);
 
     if ($hebrew) {
 	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
@@ -866,54 +865,20 @@ EOHTML
 	}
     }
 
-    # these drash links keep getting broken; disable for now
-    undef $drash_jts;
-    undef $drash_ajr;
-    undef $drash_uj;
-
-    my $has_drash = $drash_jts || $drash_ou ||
-	$drash_torah || $drash_uj || $drash_ajr;
-
-    if ($has_drash)
-    {
+    my $has_drash = $drash_ou || $drash_torg;
+    if ($has_drash) {
 	print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
     }
 
-    if ($drash_jts)
-    {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from JTS"\nhref="$drash_jts">};
-	if ($drash_jts =~ /jtsa\.edu/)
-	{
-	    print OUT2 qq{Jewish\nTheological Seminary</a>\n};
-	}
-	else
-	{
-	    print OUT2 qq{Commentary</a>\n};
-	}
+    if ($drash_ou) {
+	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU Torah</a>\n};
     }
 
-    if ($drash_ou)
-    {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU\nTorah Insights</a>\n};
+    if ($drash_torg) {
+	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Project Genesis"\nhref="$drash_torg">Torah.org</a>\n};
     }
 
-    if ($drash_torah)
-    {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Project Genesis"\nhref="$drash_torah">Torah.org</a>\n};
-    }
-
-    if ($drash_uj)
-    {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from AJULA"\nhref="$drash_uj">American Jewish University</a>\n};
-    }
-
-    if ($drash_ajr)
-    {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from AJR"\nhref="$drash_ajr">Academy for Jewish Religion</a>\n};
-    }
-
-    if ($has_drash)
-    {
+    if ($has_drash) {
 	print OUT2 qq{</ul>\n};
     }
 
@@ -1087,12 +1052,9 @@ sub get_parashah_info
 
     my($hebrew);
     my($torah,$haftarah,$haftarah_seph);
-    my($torah_href,$haftarah_href,$drash1);
-    my $drash1_auto = 1;
-    my $drash2 = '';
-    my $drash2_auto = 1;
-    my $drash3 = '';
-    my $drash_uj = '';
+    my($torah_href,$haftarah_href);
+    my $drash_ou;
+    my $drash_torg;
     if ($h =~ /^([^-]+)-(.+)$/ &&
 	defined $combined{$1} && defined $combined{$2})
     {
@@ -1143,23 +1105,11 @@ sub get_parashah_info
 	$links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
 	foreach my $l (@{$links})
 	{
-	    if ($l->{'rel'} eq 'drash')
-	    {
-		$drash1 = $l->{'href'};
-		$drash1_auto = $l->{'auto'} if defined $l->{'auto'};
-	    }
-	    elsif ($l->{'rel'} eq 'drash2')
-	    {
-		$drash2 = $l->{'href'};
-		$drash2_auto = $l->{'auto'} if defined $l->{'auto'};
-	    }
-	    elsif ($l->{'rel'} eq 'drash3')
-	    {
-		$drash3 = $l->{'href'};
-	    }
-	    elsif ($l->{'rel'} eq 'drash4')
-	    {
-		$drash_uj = $l->{'href'};
+	    if ($l->{'rel'} eq 'drash:ou.org') {
+		my $cid = $l->{'cid'};
+		$drash_ou = "http://www.ou.org/index.php/torah/browse_parsha/C$cid/";
+	    } elsif ($l->{'rel'} eq 'drash:torah.org') {
+		$drash_torg = $l->{'href'};
 	    }
 	}
 
@@ -1176,26 +1126,12 @@ sub get_parashah_info
 	my $links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
 	foreach my $l (@{$links})
 	{
-	    if ($l->{'rel'} eq 'drash')
-	    {
-		$drash1 = $l->{'href'};
-		$drash1_auto = $l->{'auto'} if defined $l->{'auto'};
-	    }
-	    elsif ($l->{'rel'} eq 'drash2')
-	    {
-		$drash2 = $l->{'href'};
-		$drash2_auto = $l->{'auto'} if defined $l->{'auto'};
-	    }
-	    elsif ($l->{'rel'} eq 'drash3')
-	    {
-		$drash3 = $l->{'href'};
-	    }
-	    elsif ($l->{'rel'} eq 'drash4')
-	    {
-		$drash_uj = $l->{'href'};
-	    }
-	    elsif ($l->{'rel'} eq 'torah')
-	    {
+	    if ($l->{'rel'} eq 'drash:ou.org') {
+		my $cid = $l->{'cid'};
+		$drash_ou = "http://www.ou.org/index.php/torah/browse_parsha/C$cid/";
+	    } elsif ($l->{'rel'} eq 'drash:torah.org') {
+		$drash_torg = $l->{'href'};
+	    } elsif ($l->{'rel'} eq 'torah') {
 		$torah_href = $l->{'href'};
 	    }
 	}
@@ -1204,37 +1140,8 @@ sub get_parashah_info
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
     }
 
-    if ($drash1 =~ m,/\d\d\d\d/, && $drash1_auto) {
-	if (defined $parashah_time{$h} && $parashah_time{$h} < $saturday) {
-	    $drash1 =~ s,/\d\d\d\d/,/$hebrew_year/,;
-	}
-    }
-
-    if ($drash2 =~ m,/\d\d\d\d/, && $drash2_auto &&
-	defined $parashah_time{$h} && $parashah_time{$h} < $saturday)
-    {
-	$drash2 =~ s,/\d\d\d\d/,/$hebrew_year/,;
-	if ($hebrew_year =~ /^\d\d(\d\d)$/) {
-	    my $last2 = $1;
-	    $drash2 =~ s/\d\d\.htm$/$last2.htm/;
-	}
-    }
-
-    # urj site still broken. :-(
-    my $drash4 = '';
-
-    my $anchor = lc($h);
-    $anchor =~ s/[^\w]//g;
-    my $drash_ajr = "http://ajrsem.org/$anchor";
-    if (defined $parashah_time{$h} && $parashah_time{$h} < $saturday) {
-	$drash_ajr .= $hebrew_year;
-    } else {
-	$drash_ajr .= $hebrew_year - 1;
-    }
-
     ($hebrew,$torah,$haftarah,$haftarah_seph,
-     $torah_href,$haftarah_href,$drash1,$drash2,$drash4,$drash3,$drash_uj,
-     $drash_ajr);
+     $torah_href,$haftarah_href,$drash_torg,$drash_ou);
 }
 
 sub get_special_aliyah
