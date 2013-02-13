@@ -1103,6 +1103,7 @@ sub get_parashah_info
 
 	# grab drash for the combined reading
 	$links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
+	$links = [ $links ] unless ref($links) eq "ARRAY";
 	foreach my $l (@{$links})
 	{
 	    if ($l->{'rel'} eq 'drash:ou.org') {
