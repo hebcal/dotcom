@@ -458,7 +458,8 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
     foreach ($sat_events as $h) {
 	if (strncmp($h, "Parashat ", 9) == 0) {
 	    $anchor = hebcal_make_anchor($h);
-	    echo "<p class=\"lead\">This week&apos;s Torah Portion is <a href=\"", $anchor, "\">", $h, "</a>.</p>\n";
+	    $sat_timestamp = mktime(12, 34, 56, $saturday_gm, $saturday_gd, $saturday_gy);
+	    echo "<p class=\"lead\">This week&apos;s Torah Portion is <a href=\"", $anchor, "\">", $h, "</a> (read in the Diaspora on", date("j F Y", $sat_timestamp), ").</p>\n";
 	    break;
 	}
     }
