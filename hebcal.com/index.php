@@ -80,8 +80,9 @@ if (isset($sedra) && isset($sedra[$iso])) {
 
 // Yamim Nora'im
 $jd = gregoriantojd($gm, $gd, $gy);
-$hebdate = jdtojewish($jd); 
+$hebdate = jdtojewish($jd);
 list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
+$purim_month_num = is_leap_year($hy) ? 7 : 6;
 if ($hmnum == 13 && $hd >= 1) {
     $shana_tova = true;		// month 13 == Elul
     $rh_jd = jewishtojd(13, 29, $hy);
@@ -100,6 +101,16 @@ if ($hmnum == 13 && $hd >= 1) {
 		       $rh_cal["day"],
 		       $rh_cal["monthname"],
 		       $rh_cal["year"]);
+} elseif ($hmnum == $purim_month_num && $hd >= 2 && $hd <= 13) {
+    // for two weeks before Purim, show greeting
+    $purim_upcoming = true;
+    $purim_jd = jewishtojd($purim_month_num, 13, $hy);
+    $purim_cal = cal_from_jd($purim_jd, CAL_GREGORIAN);
+    $erev_purim = sprintf("%s, %s %s %s",
+		       $purim_cal["abbrevdayname"],
+		       $purim_cal["day"],
+		       $purim_cal["monthname"],
+		       $purim_cal["year"]);
 } elseif ($hmnum == 8 && $hd >= 2 && $hd <= 15) {
     // for two weeks before Pesach, show greeting
     $chag_kasher = true;	// month 8 == Nisan
@@ -200,6 +211,10 @@ on <?php echo $erev_yk ?>.</span>
 <?php } elseif ($chag_kasher) { ?>
 <br><span class="label label-success">Chag Kasher v&#39;Sameach</span>
 <span class="text-success">We wish you a happy <a href="/holidays/pesach">Passover</a>.</span>
+<?php } elseif (isset($purim_upcoming)) { ?>
+<br><span class="label label-success">Chag Sameach</span>
+<span class="text-success">We wish you a happy <a href="/holidays/purim">Purim</a>
+(begins at sundown on <?php echo $erev_purim ?>).</span>
 <?php } elseif (isset($chag_sameach)) { ?>
 <br><span class="label label-success">Chag Sameach</span>
 <span class="text-success">We wish you a happy <?php echo $chag_sameach ?>.</span>
