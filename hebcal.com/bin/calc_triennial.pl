@@ -414,10 +414,6 @@ sub write_index_page
     my $fn = "$outdir/index.php";
     open(OUT1, ">$fn.$$") || croak "$fn.$$: $!\n";
 
-    my $hy0 = $hebrew_year - 1;
-    my $hy1 = $hebrew_year + 1;
-    my $hy2 = $hebrew_year + 2;
-    my $hy3 = $hebrew_year + 3;
 
     my $xtra_head = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
@@ -526,6 +522,40 @@ EOHTML
 </div><!-- .row-fluid -->
 EOHTML
 ;
+
+    my $hy0 = $hebrew_year - 1;
+    my $hy1 = $hebrew_year + 1;
+    my $hy2 = $hebrew_year + 2;
+    my $hy3 = $hebrew_year + 3;
+
+    print OUT1 <<EOHTML;
+<div class="row-fluid">
+<div class="span12">
+<div class="pagination">
+<ul>
+<li class="disabled"><a href="#">Diaspora</a></li>
+<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=off;set=off">$hy0</a></li>
+<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=off;set=off">$hebrew_year</a></li>
+<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=off;set=off">$hy1</a></li>
+<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=off;set=off">$hy2</a></li>
+<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=off;set=off">$hy3</a></li>
+</ul>
+</div><!-- .pagination -->
+<div class="pagination">
+<ul>
+<li class="disabled"><a href="#">Israel</a></li>
+<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=on;set=off">$hy0</a></li>
+<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=on;set=off">$hebrew_year</a></li>
+<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=on;set=off">$hy1</a></li>
+<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=on;set=off">$hy2</a></li>
+<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=on;set=off">$hy3</a></li>
+</ul>
+</div><!-- .pagination -->
+</div><!-- .span12 -->
+</div><!-- .row-fluid -->
+EOHTML
+;
+
     print OUT1 $html_footer;
 
     close(OUT1);
