@@ -534,21 +534,21 @@ EOHTML
 <div class="pagination">
 <ul>
 <li class="disabled"><a href="#">Diaspora</a></li>
-<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=off;set=off">$hy0</a></li>
-<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=off;set=off">$hebrew_year</a></li>
-<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=off;set=off">$hy1</a></li>
-<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=off;set=off">$hy2</a></li>
-<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=off;set=off">$hy3</a></li>
+<li><a href="/hebcal/?year=$hy0&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy0</a></li>
+<li><a href="/hebcal/?year=$hebrew_year&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hebrew_year</a></li>
+<li><a href="/hebcal/?year=$hy1&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy1</a></li>
+<li><a href="/hebcal/?year=$hy2&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy2</a></li>
+<li><a href="/hebcal/?year=$hy3&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy3</a></li>
 </ul>
 </div><!-- .pagination -->
 <div class="pagination">
 <ul>
 <li class="disabled"><a href="#">Israel</a></li>
-<li><a href="/hebcal/?year=$hy0;v=1;month=x;yt=H;s=on;i=on;set=off">$hy0</a></li>
-<li><a href="/hebcal/?year=$hebrew_year;v=1;month=x;yt=H;s=on;i=on;set=off">$hebrew_year</a></li>
-<li><a href="/hebcal/?year=$hy1;v=1;month=x;yt=H;s=on;i=on;set=off">$hy1</a></li>
-<li><a href="/hebcal/?year=$hy2;v=1;month=x;yt=H;s=on;i=on;set=off">$hy2</a></li>
-<li><a href="/hebcal/?year=$hy3;v=1;month=x;yt=H;s=on;i=on;set=off">$hy3</a></li>
+<li><a href="/hebcal/?year=$hy0&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy0</a></li>
+<li><a href="/hebcal/?year=$hebrew_year&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hebrew_year</a></li>
+<li><a href="/hebcal/?year=$hy1&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy1</a></li>
+<li><a href="/hebcal/?year=$hy2&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy2</a></li>
+<li><a href="/hebcal/?year=$hy3&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy3</a></li>
 </ul>
 </div><!-- .pagination -->
 </div><!-- .span12 -->
