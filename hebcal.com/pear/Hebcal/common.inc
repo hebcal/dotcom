@@ -438,10 +438,11 @@ function html_footer_bootstrap($last_updated = true) {
     $last_updated_text = "";
     if ($last_updated) {
 	$stat = stat($_SERVER["SCRIPT_FILENAME"]);
-	$year = strftime("%Y", time());
-	$date = strftime("%d %B %Y", $stat[9]);
 	global $VER;
-	$last_updated_text = "<p>$date <small class=\"muted\">Revision: $VER</small></p>";
+	$last_updated_text = "<p><time datetime=\""
+	    . date("Y-m-d", $stat[9]) . "\">"
+	    . date("j F Y", $stat[9]). "</time>"
+	    . " <small class=\"muted\">Revision: $VER</small></p>";
     }
 
     $site_title = "Hebcal Jewish Calendar";
