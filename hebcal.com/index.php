@@ -135,27 +135,30 @@ if ($hmnum == 13 && $hd >= 1) {
 $xtra_head = <<<EOD
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
+<style type="text/css">
+ul.inline li:after{content:"\\00a0\\00b7"}
+ul.inline li:last-child:after{content:""}
+</style>
 EOD;
 echo html_header_bootstrap("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
 		     false);
 ?>
 <div class="span12">
-
 <div class="clearfix">
 <h1>Hebcal Jewish Calendar</h1>
-
-<p class="fpsubhead">
-<?php echo date("D, j F Y") ?> &nbsp; - &nbsp; <?php
+<ul class="inline">
+<?php
+echo "<li><time datetime=\"", date("Y-m-d"), "\">", date("D, j F Y"), "</time>\n";
 $hm = $hnum_to_str[$hmnum];
-echo format_hebrew_date($hd, $hm, $hy), "\n";
+echo "<li>", format_hebrew_date($hd, $hm, $hy), "\n";
 
 // holidays today
 if (isset($events)) {
     foreach ($events as $h) {
 	if (strncmp($h, "Parashat ", 9) != 0) {
 	    $anchor = hebcal_make_anchor($h);
-	    echo "&nbsp; - &nbsp; <a href=\"", $anchor, "\">", $h, "</a>\n";
+	    echo "<li><a href=\"", $anchor, "\">", $h, "</a>\n";
 	}
     }
 }
@@ -172,58 +175,61 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
     foreach ($sat_events as $h) {
 	if (strncmp($h, "Parashat ", 9) == 0) {
 	    $anchor = hebcal_make_anchor($h);
-	    echo "&nbsp; - &nbsp; <a href=\"", $anchor, "\">", $h, "</a>\n";
+	    echo "<li><a href=\"", $anchor, "\">", $h, "</a>\n";
 	}
     }
 }
-
+?></ul>
+<p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
+<?php
 if (isset($rosh_chodesh)) { ?>
-<br><span class="label label-success">Chodesh Tov</span>
-<span class="text-success">We wish you a good new month of <?php echo $rosh_chodesh ?>.</span>
+<p><span class="label label-success">Chodesh Tov</span>
+<span class="text-success">We wish you a good new month of <?php echo $rosh_chodesh ?>.</span></p>
 <?php } elseif ($chanukah) { ?>
-<br><span class="label label-success">Chag Urim Sameach</span>
-<span class="text-success">We wish you a happy Chanukah.</span>
+<p><span class="label label-success">Chag Urim Sameach</span>
+<span class="text-success">We wish you a happy Chanukah.</span></p>
 <?php } elseif (isset($chanukah_upcoming)) { ?>
-<br><span class="label label-success">Happy Chanukah</span>
+<p><span class="label label-success">Happy Chanukah</span>
 <span class="text-success">Light the <a
 title="Chanukah, the Festival of Lights"
 href="/holidays/chanukah">first candle</a>
-<?php echo $chanukah_upcoming ?>.</span>
+<?php echo $chanukah_upcoming ?>.</span></p>
 <?php } elseif (isset($shalosh_regalim)) { ?>
-<br><span class="fpgreeting">Moadim L&#39;Simcha! We wish you
-a happy <?php echo $shalosh_regalim ?>.</span>
+<p><span class="fpgreeting">Moadim L&#39;Simcha! We wish you
+a happy <?php echo $shalosh_regalim ?>.</span></p>
 <?php } elseif ($shana_tova) { ?>
-<br><span class="label label-success">Shanah Tovah</span>
+<p><span class="label label-success">Shanah Tovah</span>
 <span class="text-success">We wish you a happy and healthy New Year.</span>
 <?php     if (isset($erev_rh)) { ?>
 <br><span class="text-success"><a href="/holidays/rosh-hashana">Rosh
 Hashana <?php echo $hy + 1 ?></a> begins at sundown
 on <?php echo $erev_rh ?>.</span>
 <?php     } ?>
+</p>
 <?php } elseif ($gmar_tov) { ?>
-<br><span class="label label-success">G&#39;mar Chatimah Tovah</span>
+<p><span class="label label-success">G&#39;mar Chatimah Tovah</span>
 <span class="text-success">We wish you a good inscription in the Book of Life.</span>
 <?php     if (isset($erev_yk)) { ?>
 <br><span class="text-success"><a href="/holidays/yom-kippur">Yom
 Kippur</a> begins at sundown
 on <?php echo $erev_yk ?>.</span>
 <?php     } ?>
+</p>
 <?php } elseif ($chag_kasher) { ?>
-<br><span class="label label-success">Chag Kasher v&#39;Sameach</span>
-<span class="text-success">We wish you a happy <a href="/holidays/pesach">Passover</a>.</span>
+<p><span class="label label-success">Chag Kasher v&#39;Sameach</span>
+<span class="text-success">We wish you a happy <a
+href="/holidays/pesach">Passover</a>.</span></p>
 <?php } elseif (isset($purim_upcoming)) { ?>
-<br><span class="label label-success">Chag Sameach</span>
+<p><span class="label label-success">Chag Sameach</span>
 <span class="text-success">We wish you a happy <a href="/holidays/purim">Purim</a>
-(begins at sundown on <?php echo $erev_purim ?>).</span>
+(begins at sundown on <?php echo $erev_purim ?>).</span></p>
 <?php } elseif (isset($chag_sameach)) { ?>
-<br><span class="label label-success">Chag Sameach</span>
-<span class="text-success">We wish you a happy <?php echo $chag_sameach ?>.</span>
+<p><span class="label label-success">Chag Sameach</span>
+<span class="text-success">We wish you a happy <?php echo $chag_sameach ?>.</span></p>
 <?php } elseif ($minor_fast) { ?>
-<br><span class="label label-success">Tzom Kal</span>
-<span class="text-success">We wish you an easy fast.</span>
+<p><span class="label label-success">Tzom Kal</span>
+<span class="text-success">We wish you an easy fast.</span></p>
 <?php } ?>
-</p><!-- .fpsubhead -->
-<p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
 </div><!-- .clearfix -->
 
 <div class="row-fluid">
