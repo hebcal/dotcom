@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2010  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -52,9 +52,16 @@ use Hebcal ();
 use Mail::Internet ();
 use Email::Valid ();
 use MIME::Base64 ();
+use Config::Tiny;
+
+my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+my $DBHOST = $Config->{_}->{"hebcal.mysql.host"};
+my $DBUSER = $Config->{_}->{"hebcal.mysql.user"};
+my $DBPASS = $Config->{_}->{"hebcal.mysql.password"};
+my $DBNAME = $Config->{_}->{"hebcal.mysql.dbname"};
 
 my $site = "hebcal.com";
-my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
+my $DSN = "DBI:mysql:database=$dbname;host=$dbhost";
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
@@ -129,7 +136,7 @@ sub unsubscribe
 {
     my $email = $from;
 
-    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
+    my $dbh = DBI->connect($DSN, $DBUSER, $DBPASS);
 
     my $sql = <<EOD
 SELECT email_status,email_id
@@ -256,4 +263,3 @@ sub shabbat_log
 	close(LOG);
     }
 }
-
