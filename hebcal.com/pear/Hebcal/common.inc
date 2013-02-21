@@ -5,7 +5,7 @@
  *
  * $Id$
  *
- * Copyright (c) 2012  Michael J. Radwin.
+ * Copyright (c) 2013  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -222,6 +222,7 @@ function hebcal_open_mysql_db() {
 }
 
 function hebcal_get_zipcode_fields($zip) {
+    global $hebcal_db;
     hebcal_open_mysql_db();
     $sql = <<<EOD
 SELECT zips_latitude, zips_longitude,
