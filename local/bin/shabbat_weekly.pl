@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2012  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -52,6 +52,7 @@ use DBI ();
 use Hebcal::SMTP;
 use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
+use Config::Tiny;
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)/) {
@@ -73,6 +74,8 @@ if (!Getopt::Long::GetOptions
 
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
+
+my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
 
 my %SUBS;
 load_subs();
@@ -127,15 +130,16 @@ if ($opt_log) {
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
-my @AUTH =
-    (
-     ['email-smtp.us-east-1.amazonaws.com',
-      'AKIAI6V6VWD6W4UGYGTQ', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'],
-#     ['mail.hebcal.com', 'lw7d08fj2u7guglw@hebcal.com', 'xxxxxxxxxxxxxxxx'],
-#     ['mail.hebcal.com', 'hebcal-shabbat-weekly@hebcal.com', 'xxxxxxxxxxxxxxxx'],
-#     ['mail.hebcal.com', 'shabbat-cron@hebcal.com', 'xxxxxxxxxxxxxxxxx'],
-#     ['mail.hebcal.com', 'kyg0f4neienvfpgx@hebcal.com', 'xxxxxxxx'],
-     );
+my @AUTH = (
+	    [$Config->{_}->{"hebcal.email.shabbat.host"},
+	     $Config->{_}->{"hebcal.email.shabbat.user"},
+	     $Config->{_}->{"hebcal.email.shabbat.password"}],
+	   );
+#for (my $i = 1; $i <= 4; $i++) {
+#    push(@AUTH, [$Config->{_}->{"hebcal.email.shabbat.alt.host"},
+#		 $Config->{_}->{"hebcal.email.shabbat.alt.u$i"},
+#		 $Config->{_}->{"hebcal.email.shabbat.alt.p$i"}]);
+#}
 my @SMTP;
 my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
 msg("Opening $SMTP_NUM_CONNECTIONS SMTP connections", $opt_verbose);
@@ -427,11 +431,15 @@ sub gen_body
 
 sub load_subs
 {
-    my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
+    my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
+    my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
+    my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
+    my $dbname = $Config->{_}->{"hebcal.mysql.dbname"};
+    my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
     if ($opt_verbose > 1) {
 	msg("Connecting to $dsn", $opt_verbose);
     }
-    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
+    my $dbh = DBI->connect($dsn, $dbuser, $dbpass);
 
     my $all_sql = "";
     if (!$opt_all) {
@@ -634,4 +642,3 @@ sub my_sendmail
 sub usage {
     die "usage: $0 {-all | address ...}\n";
 }
-
