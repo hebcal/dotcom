@@ -91,35 +91,9 @@ else {
 my_footer();
 exit();
 
-function get_password() {
-    $passfile = file("../hebcal-db-pass.cgi");
-    $password = trim($passfile[0]);
-    return $password;
-}
-
-function my_open_db() {
-    global $db;
-    global $db_open;
-    if (!isset($db_open)) {
-	$dbpass = get_password();
-	$db = mysql_pconnect("mysql5.hebcal.com", "mradwin_hebcal", $dbpass);
-	if (!$db) {
-	    error_log("Could not connect: " . mysql_error());
-	    die();
-	}
-	$dbname = "hebcal5";
-	if (!mysql_select_db($dbname, $db)) {
-	    error_log("Could not USE $dbname: " . mysql_error());
-	    die();
-	}
-	$db_open = true;
-    }
-    return true;
-}
-
 function write_sub_info($param) {
-    global $db;
-    my_open_db();
+    global $hebcal_db;
+    hebcal_open_mysql_db();
 
     if ($param["geo"] == "zip")
     {
@@ -140,13 +114,13 @@ SET email_status='active',
 WHERE email_address = '$param[em]'
 EOD;
 
-    return mysql_query($sql, $db);
+    return mysql_query($sql, $hebcal_db);
 }
 
 function get_sub_info($email) {
-    global $db;
     error_log("get_sub_info($email);");
-    my_open_db();
+    global $hebcal_db;
+    hebcal_open_mysql_db();
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
@@ -156,7 +130,7 @@ WHERE hebcal_shabbat_email.email_address = '$email'
 EOD;
 
     error_log($sql);
-    $result = mysql_query($sql, $db);
+    $result = mysql_query($sql, $hebcal_db);
     if (!$result) {
 	error_log("Invalid query 1: " . mysql_error());
 	return array();
@@ -190,7 +164,6 @@ EOD;
 
 function write_staging_info($param, $old_encoded)
 {
-    global $db;
     if ($old_encoded)
     {
 	$encoded = $old_encoded;
@@ -213,7 +186,8 @@ function write_staging_info($param, $old_encoded)
 	$encoded = bin2hex($rand);
     }
 
-    my_open_db();
+    global $hebcal_db;
+    hebcal_open_mysql_db();
 
     if ($param["geo"] == "zip")
     {
@@ -236,10 +210,10 @@ VALUES ('$encoded', '$param[em]', 'pending', NOW(),
 	'$location_value', '$_SERVER[REMOTE_ADDR]')
 EOD;
 
-    $result = mysql_query($sql, $db)
+    $result = mysql_query($sql, $hebcal_db)
 	or die("Invalid query 2: " . mysql_error());
 
-    if (mysql_affected_rows($db) < 1) {
+    if (mysql_affected_rows($hebcal_db) < 1) {
 	die("Strange numrows from MySQL:" . mysql_error());
     }
 
@@ -318,7 +292,7 @@ or
 </form>
 </div><!-- #email-form -->
 
-<p>You'll receive a maximum of one message per week, typically on Thursday morning.</p>
+<p>You&apos;ll receive a maximum of one message per week, typically on Thursday morning.</p>
 
 <div id="privacy-policy">
 <h3>Email Privacy Policy</h3>
@@ -367,9 +341,8 @@ function subscribe($param) {
 	    "not appear to be a 5-digit zip code.");
 	}
 
-	$password = get_password();
 	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    hebcal_get_zipcode_fields($param["zip"], $password);
+	    hebcal_get_zipcode_fields($param["zip"]);
 
 	if (!$state)
 	{
@@ -601,15 +574,15 @@ EOD
 }
 
 function sql_unsub($em) {
-    global $db;
-    my_open_db();
+    global $hebcal_db;
+    hebcal_open_mysql_db();
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='unsubscribed',email_ip='$_SERVER[REMOTE_ADDR]'
 WHERE email_address = '$em'
 EOD;
 
-   return mysql_query($sql, $db);
+   return mysql_query($sql, $hebcal_db);
 }
 
 function unsubscribe($param) {

@@ -193,11 +193,36 @@ function format_hebrew_date($hd, $hm, $hy) {
     return numsuffix($hd) . " of " . $month_name . ", $hy";
 }
 
-function hebcal_get_zipcode_fields($zip, $password)
-{
-    $db = mysql_pconnect("mysql5.hebcal.com", "mradwin_hebcal", $password)
-	or die("Could not connect: " . mysql_error());
+function hebcal_get_ini() {
+    return parse_ini_file("/home/hebcal/local/etc/hebcal-dot-com.ini");
+}
 
+function hebcal_open_mysql_db() {
+    global $hebcal_db;
+    global $hebcal_db_open;
+    global $hebcal_ini;
+    if (!isset($hebcal_db_open)) {
+	$hebcal_ini = hebcal_get_ini();
+	$dbpass = $hebcal_ini["hebcal.mysql.password"];
+	$dbhost = $hebcal_ini["hebcal.mysql.host"];
+	$dbuser = $hebcal_ini["hebcal.mysql.user"];
+	$dbname = $hebcal_ini["hebcal.mysql.dbname"];
+	$hebcal_db = mysql_pconnect($dbhost, $dbuser, $dbpass);
+	if (!$hebcal_db) {
+	    error_log("Could not connect: " . mysql_error());
+	    die();
+	}
+	if (!mysql_select_db($dbname, $hebcal_db)) {
+	    error_log("Could not USE $dbname: " . mysql_error());
+	    die();
+	}
+	$hebcal_db_open = true;
+    }
+    return true;
+}
+
+function hebcal_get_zipcode_fields($zip) {
+    hebcal_open_mysql_db();
     $sql = <<<EOD
 SELECT zips_latitude, zips_longitude,
        zips_timezone, zips_dst, zips_city, zips_state
@@ -205,7 +230,7 @@ FROM hebcal5.hebcal_zips
 WHERE zips_zipcode = '$zip'
 EOD;
 
-    $result = mysql_query($sql, $db)
+    $result = mysql_query($sql, $hebcal_db)
 	or die("Invalid query: " . mysql_error());
 
     list($latitude,$longitude,$tz,$dst,$city,$state) =

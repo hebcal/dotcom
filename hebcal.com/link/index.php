@@ -36,10 +36,8 @@ if ($param["city"]) {
     $geo_city = htmlspecialchars($geo_city);
     $descr = $geo_city;
 } else {
-    $passfile = file("../hebcal-db-pass.cgi");
-    $password = trim($passfile[0]);
     list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	hebcal_get_zipcode_fields($zip, $password);
+	hebcal_get_zipcode_fields($zip);
 
     if (!$state) {
 	$city = "Unknown";

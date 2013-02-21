@@ -14,29 +14,9 @@ function bad_request($err) {
     exit(0);
 }
 
-function get_password() {
-    $passfile = file("../hebcal-db-pass.cgi");
-    $password = trim($passfile[0]);
-    return $password;
-}
-
-function my_open_db() {
-    $dbpass = get_password();
-    $db = mysql_pconnect("mysql5.hebcal.com", "mradwin_hebcal", $dbpass);
-    if (!$db) {
-	error_log("Could not connect: " . mysql_error());
-	die();
-    }
-    $dbname = "hebcal5";
-    if (!mysql_select_db($dbname, $db)) {
-	error_log("Could not USE $dbname: " . mysql_error());
-	die();
-    }
-    return $db;
-}
-
 function get_sub_info($id) {
-    $db = my_open_db();
+    global $hebcal_db;
+    hebcal_open_mysql_db();
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
@@ -45,7 +25,7 @@ FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_id = '$id'
 EOD;
 
-    $result = mysql_query($sql, $db)
+    $result = mysql_query($sql, $hebcal_db)
 	or die("Invalid query 1: " . mysql_error());
 
     if (mysql_num_rows($result) != 1) {
@@ -106,7 +86,8 @@ if (!isset($info["em"])) {
 }
 
 if (isset($param["commit"]) && $param["commit"] == "1") {
-    $db = my_open_db();
+    global $hebcal_db;
+    hebcal_open_mysql_db();
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='active',
@@ -114,7 +95,7 @@ SET email_status='active',
 WHERE email_id = '$info[id]'
 EOD;
 
-    mysql_query($sql, $db)
+    mysql_query($sql, $hebcal_db)
 	or die("Invalid query 2: " . mysql_error());
 
     $from_name = "Hebcal Subscription Notification";
@@ -171,9 +152,8 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
     exit();
 } else {
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
-	$password = get_password();
 	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    hebcal_get_zipcode_fields($info["zip"], $password);
+	    hebcal_get_zipcode_fields($info["zip"]);
 	$city_descr = "$city, $state " . $info["zip"];
 	global $hebcal_tz_names;
 	$info["tz"] = $tz;
