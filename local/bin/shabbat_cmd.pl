@@ -47,7 +47,6 @@ use strict;
 use DBI ();
 use Hebcal ();
 use Config::Tiny;
-use strict;
 
 my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
 my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
