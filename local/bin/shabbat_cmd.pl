@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -46,9 +46,17 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use strict;
 use DBI ();
 use Hebcal ();
+use Config::Tiny;
+use strict;
+
+my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
+my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
+my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
+my $dbname = $Config->{_}->{"hebcal.mysql.dbname"};
 
 my $site = "hebcal.com";
-my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
+my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
 my $usage = "usage: $0 unsub|bounce email-addr";
 
 sub main() {
@@ -70,7 +78,7 @@ sub unsubscribe($$$)
 {
     my($email,$op,$new_status) = @_;
 
-    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
+    my $dbh = DBI->connect($dsn, $dbuser, $dbpass);
 
     my $sql = <<EOD
 SELECT email_status,email_id
@@ -148,4 +156,3 @@ sub shabbat_log
 die "$usage\n" unless @ARGV == 2;
 main();
 exit(0);
-
