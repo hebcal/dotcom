@@ -6,7 +6,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2012  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -59,11 +59,8 @@ use Hebcal ();
 use Date::Calc;
 use HebcalGPL ();
 use RequestSignatureHelper;
+use Config::Tiny;
 use strict;
-
-use constant myAWSId    => '15X7F0YJNN5FCYC7CGR2';
-use constant myAWSSecret    => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-use constant myEndPoint    => 'ecs.amazonaws.com';
 
 $0 =~ s,.*/,,;  # basename
 my($usage) = "usage: $0 [-hy] [-H <year>] [f f.csv] festival.xml output-dir
@@ -178,12 +175,13 @@ holidays_observed(\%OBSERVED);
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
 # Set up the helper
+my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+my $AWS_HOST = $Config->{_}->{"hebcal.aws.product-api.host"};
 my $helper = new RequestSignatureHelper (
-    +RequestSignatureHelper::kAWSAccessKeyId => myAWSId,
-    +RequestSignatureHelper::kAWSSecretKey => myAWSSecret,
-    +RequestSignatureHelper::kEndPoint => myEndPoint,
-					 );
-
+    +RequestSignatureHelper::kAWSAccessKeyId => $Config->{_}->{"hebcal.aws.product-api.id"},
+    +RequestSignatureHelper::kAWSSecretKey => $Config->{_}->{"hebcal.aws.product-api.secret"},
+    +RequestSignatureHelper::kEndPoint => $AWS_HOST,
+					);
 
 my $ua;
 foreach my $f (@FESTIVALS)
@@ -898,7 +896,7 @@ EOHTML
 				  );
 		    my $signedRequest = $helper->sign(\%params);
 		    my $queryString = $helper->canonicalize($signedRequest);
-		    my $url = "http://" . myEndPoint . "/onca/xml?" . $queryString;
+		    my $url = "http://" . $AWS_HOST . "/onca/xml?" . $queryString;
 		    my $request = HTTP::Request->new("GET", $url);
 		    my $response = $ua->request($request);
 		    my $rxml = XML::Simple::XMLin($response->content);
