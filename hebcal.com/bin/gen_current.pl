@@ -52,13 +52,15 @@ use Date::Calc ();
 use Time::Local ();
 use POSIX qw(strftime);
 
-my $WEBDIR = '/home/hebcal/web/hebcal.com';
-my $HEBCAL = "$WEBDIR/bin/hebcal";
 my $HOSTNAME = "www.hebcal.com";
+
+my $dbh = DBI->connect("dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE", "", "")
+    or die $DBI::errstr;
+my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
 
 my($syear,$smonth,$sday) = Hebcal::upcoming_dow(6); # saturday
 
-my @events = Hebcal::invoke_hebcal("$HEBCAL -s -h -x $syear", "", 0, $smonth);
+my @events = Hebcal::invoke_hebcal("$Hebcal::HEBCAL_BIN -s -h -x $syear", "", 0, $smonth);
 for (my $i = 0; $i < @events; $i++)
 {
     if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sday)
@@ -80,8 +82,12 @@ for (my $i = 0; $i < @events; $i++)
 					 $Hebcal::MoY_short[$smonth - 1],
 					 $syear);
 	    my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
-	    open(RSS,">$WEBDIR/sedrot/index.xml") || die;
+	    open(RSS,">$Hebcal::WEBDIR/sedrot/index.xml") || die;
 	    my $link = "http://$HOSTNAME$href?tag=rss";
+	    my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
+	    $memo =~ s/\\n/<\/p>\n<p>/g;
+	    $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
+	    undef $sth;
 	    print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
@@ -92,9 +98,9 @@ for (my $i = 0; $i < @events; $i++)
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
-<title>$parasha</title>
+<title>$parasha - $stime</title>
 <link>$link</link>
-<description>$stime</description>
+<description>$memo</description>
 <pubDate>$parasha_pubDate</pubDate>
 <guid isPermaLink="false">$link&dt=$dt</guid>
 </item>
@@ -108,7 +114,9 @@ for (my $i = 0; $i < @events; $i++)
     }
 }
 
-my $hdate = `$HEBCAL -T -x -h | grep -v Omer`;
+$dbh->disconnect();
+
+my $hdate = `$Hebcal::HEBCAL_BIN -T -x -h | grep -v Omer`;
 chomp($hdate);
 
 if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
@@ -116,12 +124,12 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     my($hm,$hd,$hy) = ($2,$1,$3);
     my $hebrew = Hebcal::build_hebrew_date($hm,$hd,$hy);
 
-    my $outfile = "$WEBDIR/etc/hdate-en.js";
+    my $outfile = "$Hebcal::WEBDIR/etc/hdate-en.js";
     open(OUT,">$outfile") || die;
     print OUT "document.write(\"$hdate\");\n";
     close(OUT);
 
-    $outfile = "$WEBDIR/etc/hdate-he.js";
+    $outfile = "$Hebcal::WEBDIR/etc/hdate-he.js";
     open(OUT,">$outfile") || die;
     print OUT "document.write(\"$hebrew\");\n";
     close(OUT);
@@ -130,7 +138,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $hm =~ s/[^A-Za-z]+//g;
 
-    open(RSS,">$WEBDIR/etc/hdate-en.xml") || die;
+    open(RSS,">$Hebcal::WEBDIR/etc/hdate-en.xml") || die;
     print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
@@ -151,7 +159,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 };
     close(RSS);
 
-    open(RSS,">$WEBDIR/etc/hdate-he.xml") || die;
+    open(RSS,">$Hebcal::WEBDIR/etc/hdate-he.xml") || die;
     print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
