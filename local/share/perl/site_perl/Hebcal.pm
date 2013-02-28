@@ -61,10 +61,12 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
-my $WEBDIR = "/home/hebcal/web/hebcal.com";
-my $EMAIL_PASSFILE = "$WEBDIR/email/hebcal-email-pass.cgi";
-my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
-my $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
+$Hebcal::WEBDIR = "/home/hebcal/web/hebcal.com";
+$Hebcal::HEBCAL_BIN = "$Hebcal::WEBDIR/bin/hebcal";
+$Hebcal::LUACH_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/luach.sqlite3";
+
+my $EMAIL_PASSFILE = "$Hebcal::WEBDIR/email/hebcal-email-pass.cgi";
+my $ZIP_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/zips.sqlite3";
 
 my($this_year) = (localtime)[5];
 $this_year += 1900;
@@ -77,25 +79,6 @@ if ($VERSION =~ /(\d+)/) {
 my $HOSTNAME;
 my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
 $CACHE_DIR .= "/cache/";
-
-$Hebcal::gregorian_warning = "<p><span style=\"color:red;font-size:large\">WARNING:
-Results for year 1752 C.E. and before may not be accurate.</span>
-Hebcal does not take into account a correction of ten days that
-was introduced by Pope Gregory XIII known as the Gregorian
-Reformation. For more information, read about the <a
-href=\"http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe\">adoption
-of the Gregorian Calendar</a>.</p>";
-
-$Hebcal::indiana_warning = "<p><span style=\"color: red\">WARNING:
-Indiana has confusing time zone &amp; Daylight Saving Time
-rules.</span><br>Please check <a
-href=\"http://www.mccsc.edu/time.html#WHAT\">What time is it in
-Indiana?</a> to make sure the above settings are correct.</p>";
-
-$Hebcal::usno_warning = "<p><span style=\"color: red\">WARNING:
-Candle-lighting times are guaranteed to be wrong at extreme
-northern or southern latitudes.</span><br>Please consult your
-local halachic authority for correct candle-lighting times.</p>";
 
 # boolean options
 @Hebcal::opts = ('c','o','s','i','a','d','D');
@@ -1933,6 +1916,39 @@ sub get_vcalendar_cache_fn
     return "/export/$dir/$fn";
 }
 
+
+sub torah_calendar_memo {
+    my($dbh,$sth,$gy,$gm,$gd) = @_;
+    my $date_sql = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
+    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
+    my $torah_reading;
+    my $haftarah_reading;
+    my $special_maftir;
+    while(my($aliyah_num,$aliyah_reading) = $sth->fetchrow_array) {
+	if ($aliyah_num eq "T") {
+	    $torah_reading = $aliyah_reading;
+	} elsif ($aliyah_num eq "M" && $aliyah_reading =~ / \| /) {
+	    $special_maftir = $aliyah_reading;
+	} elsif ($aliyah_num eq "H") {
+	    $haftarah_reading = $aliyah_reading;
+	}
+    }
+    $sth->finish;
+    my $memo;
+    if ($torah_reading) {
+	$memo = "Torah: $torah_reading";
+	if ($special_maftir) {
+	    $memo .= "\\nMaftir: ";
+	    $memo .= $special_maftir;
+	}
+	if ($haftarah_reading) {
+	    $memo .= "\\nHaftarah: ";
+	    $memo .= $haftarah_reading;
+	}
+    }
+    return $memo;
+}
+
 sub vcalendar_write_contents
 {
     my($q,$events,$tz,$state,$title,$cconfig) = @_;
@@ -2044,7 +2060,7 @@ sub vcalendar_write_contents
     }
 
     # don't raise error if we can't open DB
-    my $dbh = DBI->connect("dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "");
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE", "", "");
     my $sth;
     if (defined $dbh) {
       $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
@@ -2094,35 +2110,10 @@ sub vcalendar_write_contents
 	}
 	elsif (defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/)
 	{
-	    my $date_sql = sprintf("%04d-%02d-%02d",
-				   $evt->[$Hebcal::EVT_IDX_YEAR],
-				   $evt->[$Hebcal::EVT_IDX_MON] + 1,
-				   $evt->[$Hebcal::EVT_IDX_MDAY]);
-	    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
-	    my $torah_reading;
-	    my $haftarah_reading;
-	    my $special_maftir;
-	    while(my($aliyah_num,$aliyah_reading) = $sth->fetchrow_array) {
-	      if ($aliyah_num eq "T") {
-		$torah_reading = $aliyah_reading;
-	      } elsif ($aliyah_num eq "M" && $aliyah_reading =~ / \| /) {
-		$special_maftir = $aliyah_reading;
-	      } elsif ($aliyah_num eq "H") {
-		$haftarah_reading = $aliyah_reading;
-	      }
-	    }
-	    $sth->finish;
-	    if ($torah_reading) {
-	      $memo = "Torah: $torah_reading";
-	      if ($special_maftir) {
-		$memo .= "\\nMaftir: ";
-		$memo .= $special_maftir;
-	      }
-	      if ($haftarah_reading) {
-		$memo .= "\\nHaftarah: ";
-		$memo .= $haftarah_reading;
-	      }
-	    }
+	    $memo = torah_calendar_memo($dbh, $sth,
+					$evt->[$Hebcal::EVT_IDX_YEAR],
+					$evt->[$Hebcal::EVT_IDX_MON] + 1,
+					$evt->[$Hebcal::EVT_IDX_MDAY]);
 	}
 
 	if ($href) {
@@ -2545,11 +2536,9 @@ if ($^W && 0)
     $unused = $Hebcal::city_dst{'foo'};
     $unused = $Hebcal::MoY_long{'foo'};
     $unused = $Hebcal::ashk2seph{'foo'};
-    $unused = $Hebcal::usno_warning;
-    $unused = $Hebcal::gregorian_warning;
-    $unused = $Hebcal::indiana_warning;
     $unused = $Hebcal::lang_names{'foo'};
     $unused = $Hebcal::havdalah_min;
+    $unused = $Hebcal::HEBCAL_BIN;
     $unused = $Hebcal::dst_names{'foo'};
 }
 
