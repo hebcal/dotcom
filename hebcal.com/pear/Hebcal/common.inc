@@ -408,9 +408,8 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
 <title>$title</title>
 <base href="$base_href" target="_top">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/bootstrap/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/bootstrap/css/bootstrap-responsive.min.css" media="all">
-<link rel="stylesheet" type="text/css" id="wp-bootstrap-css" href="/bootstrap/css/wordpress-bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
 <script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-967247-1']);
@@ -498,8 +497,8 @@ Commons Attribution 3.0 License</a>.</small></p>
 </footer>
 </div> <!-- .container -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 (function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}
