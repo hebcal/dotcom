@@ -1191,6 +1191,10 @@ EOHTML
 
     Hebcal::out_html(undef, $nav_pagination);
 
+    if (!$q->param("vis")) {
+	Hebcal::out_html(undef, qq{<table class="table table-striped"><tbody>\n});
+    }
+
     for (my $i = 0; $i < $numEntries; $i++)
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
@@ -1247,16 +1251,20 @@ EOHTML
 	}
 	else
 	{
-	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
-	    my $line = sprintf("<tt>%s%02d-%s-%04d</tt> &nbsp;%s",
-			       $dow, $mday, $Hebcal::MoY_short[$mon-1],
-			       $year, $subj);
-	    $line .= sprintf(": %d:%02dpm", $hour, $min)
+	    my $subj_copy = $subj;
+	    $subj_copy .= sprintf(": %d:%02dpm", $hour, $min)
 		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
-	    $line .= "<br>\n";
-
-	    Hebcal::out_html(undef, $line);
+	    Hebcal::out_html(undef,
+			     qq{<tr>},
+			     qq{<td>}, $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)], qq{</td>},
+			     qq{<td>}, sprintf("%02d-%s-%04d", $mday, $Hebcal::MoY_short[$mon-1], $year), qq{</td>},
+			     qq{<td>}, $subj_copy, qq{</td>},
+			     qq{</tr>\n});
 	}
+    }
+
+    if (!$q->param("vis")) {
+	Hebcal::out_html(undef, qq{</tbody></table>\n});
     }
 
     if (@html_cals) {
