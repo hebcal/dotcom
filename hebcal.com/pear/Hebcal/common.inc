@@ -424,7 +424,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 <style type="text/css">
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
 .navbar{position:static}
-.navbar .brand{font-weight: bold !important}
+.navbar .brand{color: #000 !important; font-weight: bold !important}
 body{padding-top:0}
 .label{text-transform:none}
 @media print{
