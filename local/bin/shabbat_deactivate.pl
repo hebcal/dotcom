@@ -4,7 +4,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -101,8 +101,15 @@ EOF
 sub get_candidates
 {
     my $site = "hebcal.com";
-    my $dsn = "DBI:mysql:database=hebcal5;host=mysql5.hebcal.com";
-    my $dbh = DBI->connect($dsn, "mradwin_hebcal", "xxxxxxxx");
+
+    my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+    my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
+    my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
+    my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
+    my $dbname = $Config->{_}->{"hebcal.mysql.dbname"};
+
+    my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
+    my $dbh = DBI->connect($dsn, $dbuser, $dbpass);
 
     my $sql = qq{
 	SELECT DISTINCT a.bounce_address,r.bounce_id,count(r.bounce_id)
@@ -177,4 +184,3 @@ sub shabbat_log
 	close(LOG);
     }
 }
-

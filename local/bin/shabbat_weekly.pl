@@ -75,7 +75,7 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
 
-my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
 
 my %SUBS;
 load_subs();
