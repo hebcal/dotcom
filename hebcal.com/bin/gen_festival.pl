@@ -797,7 +797,7 @@ EOHTML
     }
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
 
-    my $pager = qq{<ul class="pager">\n};
+    my $pager = qq{<ul class="pager hidden-phone">\n};
     my $prev = $PREV{$f};
     if ($prev) {
 	my $prev_slug = Hebcal::make_anchor($prev);
