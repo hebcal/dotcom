@@ -237,7 +237,11 @@ $xtra_head = <<<EOD
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates.$description">
 <style type="text/css">
-#converter-results { text-align: center; }
+#converter-results {
+ margin-top: 12px;
+ margin-bottom: 12px;
+ text-align: center;
+}
 #converter-results .big-list {
   margin-bottom: 6px;
   font-size: 29px;
@@ -280,10 +284,9 @@ function form($head, $message, $help = "") {
     $action = $_SERVER["SCRIPT_URL"];
 ?>
 <div id="converter-form" class="well well-small">
-<form class="form-inline" name="f1" id="f1" action="<?php echo $action ?>">
+<form class="form-inline" action="<?php echo $action ?>">
 <div class="pseudo-legend">Hebrew Date Converter</div>
 <fieldset>
-<div class="span5">
 <div class="controls controls-row">
 <input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd">
 <?php
@@ -292,20 +295,18 @@ echo HTML_Form::returnSelect("gm", $MoY_long, $gm, 1, "", false, 'class="input-m
 ?>
 <input style="width:auto" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy">
 </div><!-- .controls-row -->
-<div class="controls controls-row">
+<div class="controls">
 <label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
 After sunset</label>
-</div><!-- .controls-row -->
-</div><!-- .span5 -->
-<div class="span4">
+</div><!-- .controls -->
+<div class="controls">
 <button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Gregorian to Hebrew</button>
-</div>
+</div><!-- .controls -->
 </fieldset>
 </form>
 
-<form class="form-inline" name="f2" id="f2" action="<?php echo $action ?>">
+<form class="form-inline" action="<?php echo $action ?>">
 <fieldset>
-<div class="span5">
 <div class="controls controls-row">
 <input style="width:auto" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd">
 <?php
@@ -313,10 +314,9 @@ echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="
 ?>
 <input style="width:auto" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy">
 </div><!-- .controls-row -->
-</div><!-- .span5 -->
-<div class="span4">
+<div class="controls">
 <button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
-</div>
+</div><!-- .controls -->
 </fieldset></form></div><!-- #converter-form -->
 <?php
 
