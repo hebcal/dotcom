@@ -2,6 +2,10 @@ AddDefaultCharset UTF-8
 FileETag MTime Size
 DirectoryIndex index.php index.html
 
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css text/javascript
+</IfModule>
+
 ErrorDocument 404 /missing.html
 
 RedirectMatch ^/_vti http://www.hebcal.com/
