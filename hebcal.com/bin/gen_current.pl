@@ -136,7 +136,16 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
-    $hm =~ s/[^A-Za-z]+//g;
+    my $hmonth = $hm;
+    if ($hmonth eq "Adar I") {
+	$hmonth = "Adar1";
+    } elsif ($hmonth eq "Adar II") {
+	$hmonth = "Adar2";
+    } elsif ($hmonth eq "Adar") {
+	$hmonth = "Adar1";
+    }
+
+    $hmonth =~ s/[^A-Za-z0-9]+//g;
 
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-en.xml") || die;
     print RSS qq{<?xml version="1.0" ?>
@@ -150,7 +159,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$hdate</title>
-<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;tag=rss</link>
+<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;tag=rss</link>
 <description>$hdate</description>
 <pubDate>$pubDate</pubDate>
 </item>
@@ -171,7 +180,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
 <title>$hebrew</title>
-<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hm&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss</link>
+<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss</link>
 <description>$hebrew</description>
 <pubDate>$pubDate</pubDate>
 </item>
