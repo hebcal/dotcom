@@ -520,35 +520,33 @@ EOHTML
 </ol>
 </div><!-- .span4 -->
 </div><!-- .row-fluid -->
-EOHTML
-;
-
-    my $hy0 = $hebrew_year - 1;
-    my $hy1 = $hebrew_year + 1;
-    my $hy2 = $hebrew_year + 2;
-    my $hy3 = $hebrew_year + 3;
-
-    print OUT1 <<EOHTML;
 <div class="row-fluid">
 <div class="span12">
+<h4>Parsahat ha-Shavua by Hebrew year</h4>
 <div class="pagination">
 <ul>
 <li class="disabled"><a href="#">Diaspora</a></li>
-<li><a href="/hebcal/?year=$hy0&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy0</a></li>
-<li><a href="/hebcal/?year=$hebrew_year&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hebrew_year</a></li>
-<li><a href="/hebcal/?year=$hy1&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy1</a></li>
-<li><a href="/hebcal/?year=$hy2&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy2</a></li>
-<li><a href="/hebcal/?year=$hy3&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$hy3</a></li>
+EOHTML
+;
+
+    for (my $i = $hebrew_year-1; $i < $hebrew_year+5; $i++) {
+	print OUT1 qq{<li><a href="/hebcal/?year=$i&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$i</a></li>\n};
+    }
+
+    print OUT1 <<EOHTML;
 </ul>
 </div><!-- .pagination -->
 <div class="pagination">
 <ul>
 <li class="disabled"><a href="#">Israel</a></li>
-<li><a href="/hebcal/?year=$hy0&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy0</a></li>
-<li><a href="/hebcal/?year=$hebrew_year&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hebrew_year</a></li>
-<li><a href="/hebcal/?year=$hy1&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy1</a></li>
-<li><a href="/hebcal/?year=$hy2&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy2</a></li>
-<li><a href="/hebcal/?year=$hy3&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$hy3</a></li>
+EOHTML
+;
+
+    for (my $i = $hebrew_year-1; $i < $hebrew_year+5; $i++) {
+	print OUT1 qq{<li><a href="/hebcal/?year=$i&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$i</a></li>\n};
+    }
+
+    print OUT1 <<EOHTML;
 </ul>
 </div><!-- .pagination -->
 </div><!-- .span12 -->
