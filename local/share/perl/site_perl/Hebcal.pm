@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2012 Michael J. Radwin.
+# Copyright (c) 2013 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -52,6 +52,7 @@ use DBI;
 use HebcalConst;
 use Digest::MD5 ();
 use Locale::Country ();
+use Config::Tiny;
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -65,17 +66,14 @@ $Hebcal::WEBDIR = "/home/hebcal/web/hebcal.com";
 $Hebcal::HEBCAL_BIN = "$Hebcal::WEBDIR/bin/hebcal";
 $Hebcal::LUACH_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/luach.sqlite3";
 
-my $EMAIL_PASSFILE = "$Hebcal::WEBDIR/email/hebcal-email-pass.cgi";
 my $ZIP_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/zips.sqlite3";
-
-my($this_year) = (localtime)[5];
-$this_year += 1900;
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)/) {
     $VERSION = $1;
 }
 
+my $CONFIG_INI;
 my $HOSTNAME;
 my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
 $CACHE_DIR .= "/cache/";
@@ -2392,8 +2390,6 @@ sub csv_write_contents($$$)
 # for managing email shabbat list
 ########################################################################
 
-my $SENDMAIL_PASS;
-
 sub sendmail_v2
 {
     my($return_path,$headers,$body,$verbose) = @_;
@@ -2437,23 +2433,20 @@ sub sendmail_v2
 	return 0;
     }
 
-    my($smtp) = Net::SMTP->new('mail.hebcal.com', Timeout => 20);
+    unless ($CONFIG_INI) {
+	$CONFIG_INI = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+    }
+
+    my $sendmail_host = $CONFIG_INI->{_}->{"hebcal.email.adhoc.host"};
+    my $sendmail_user = $CONFIG_INI->{_}->{"hebcal.email.adhoc.user"};
+    my $sendmail_pass = $CONFIG_INI->{_}->{"hebcal.email.adhoc.password"};
+
+    my $smtp = Net::SMTP->new($sendmail_host, Timeout => 20);
     unless ($smtp) {
         return 0;
     }
 
-    unless ($SENDMAIL_PASS) {
-	if (open(PASSFILE, $EMAIL_PASSFILE)) {
-	    $SENDMAIL_PASS = <PASSFILE>;
-	    chop $SENDMAIL_PASS;
-	    close(PASSFILE);
-	}
-    }
-
-    my $username = "e73z5ikvo4cpsh2q";
-    my $dom = "hebcal.com";
-    my $sendmail_user = $username . '@' . $dom;
-    $smtp->auth($sendmail_user, $SENDMAIL_PASS);
+    $smtp->auth($sendmail_user, $sendmail_pass);
 
     my $message = '';
     while (my($key,$val) = each %{$headers})
