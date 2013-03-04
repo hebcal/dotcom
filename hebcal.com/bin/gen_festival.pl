@@ -797,8 +797,22 @@ EOHTML
     }
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
 
+    my $pager = qq{<ul class="pager">\n};
+    my $prev = $PREV{$f};
+    if ($prev) {
+	my $prev_slug = Hebcal::make_anchor($prev);
+	$pager .= qq{<li class="previous"><a title="Previous Holiday" href="$prev_slug" rel="prev">&larr; $prev</a></li>\n};
+    }
+    my $next = $NEXT{$f};
+    if ($next) {
+	my $next_slug = Hebcal::make_anchor($next);
+	$pager .= qq{<li class="next"><a title="Next Holiday" href="$next_slug" rel="next">$next &rarr;</a></li>\n};
+    }
+    $pager .= qq{</ul>\n};
+
     print OUT2 <<EOHTML;
 <div class="span10">
+$pager
 <div class="page-header">
 <h1>$f / <span
 dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
@@ -1027,6 +1041,7 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
     print OUT2 "</dl>\n";
 
     print OUT2 <<EOHTML;
+$pager
 </div><!-- .span10 -->
 <div class="span2">
 <h5>Advertisement</h5>
