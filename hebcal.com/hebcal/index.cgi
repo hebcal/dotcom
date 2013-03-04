@@ -1192,7 +1192,7 @@ EOHTML
     Hebcal::out_html(undef, $nav_pagination);
 
     if (!$q->param("vis")) {
-	Hebcal::out_html(undef, qq{<table class="table table-striped"><tbody>\n});
+	Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
     }
 
     for (my $i = 0; $i < $numEntries; $i++)
