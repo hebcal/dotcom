@@ -1,4 +1,7 @@
 DefaultType text/html
+<IfModule mod_deflate.c>
+SetOutputFilter DEFLATE
+</IfModule>
 
 Redirect permanent /holidays/asara-btevet.html http://www.hebcal.com/holidays/asara-btevet
 Redirect permanent /holidays/chanukah.html http://www.hebcal.com/holidays/chanukah
