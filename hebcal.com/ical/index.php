@@ -102,10 +102,10 @@ and holidays, Torah readings, etc, follow these instructions:</p>
 <ol>
 <li>Go to <a
     href="http://www.hebcal.com/hebcal/">http://www.hebcal.com/hebcal/</a>
-<li>Fill out the form with your preferences and click the "Preview
-    Calendar" button
-<li>Under the "Export to desktop, mobile or web-based calendar" section,
-  follow the instructions for your favorite application or mobile device
+<li>Fill out the form with your preferences and click the <strong>Create
+    Calendar</strong> button
+<li>Click the <strong>Download...</strong> button
+<li>Follow the instructions for your favorite application or mobile device
 </ol>
 </div><!-- .clearfix -->
 
