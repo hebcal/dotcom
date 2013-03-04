@@ -65,6 +65,7 @@ if ($^V && $^V ge v5.8.1) {
 $Hebcal::WEBDIR = "/home/hebcal/web/hebcal.com";
 $Hebcal::HEBCAL_BIN = "$Hebcal::WEBDIR/bin/hebcal";
 $Hebcal::LUACH_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/luach.sqlite3";
+$Hebcal::CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 
 my $ZIP_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/zips.sqlite3";
 
@@ -2434,7 +2435,7 @@ sub sendmail_v2
     }
 
     unless ($CONFIG_INI) {
-	$CONFIG_INI = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+	$CONFIG_INI = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
     }
 
     my $sendmail_host = $CONFIG_INI->{_}->{"hebcal.email.adhoc.host"};
