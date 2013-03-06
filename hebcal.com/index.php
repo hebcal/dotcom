@@ -78,6 +78,16 @@ if (isset($sedra) && isset($sedra[$iso])) {
     }
 }
 
+function format_greg_date_for_erev($hmonth, $hday, $hyear) {
+    $jd = jewishtojd($hmonth, $hday, $hyear);
+    $greg_cal = cal_from_jd($jd, CAL_GREGORIAN);
+    return sprintf("%s, %s %s %s",
+		   $greg_cal["abbrevdayname"],
+		   $greg_cal["day"],
+		   $greg_cal["monthname"],
+		   $greg_cal["year"]);
+}
+
 // Yamim Nora'im
 $jd = gregoriantojd($gm, $gd, $gy);
 $hebdate = jdtojewish($jd);
@@ -85,35 +95,16 @@ list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
 $purim_month_num = is_leap_year($hy) ? 7 : 6;
 if ($hmnum == 13 && $hd >= 1) {
     $shana_tova = true;		// month 13 == Elul
-    $rh_jd = jewishtojd(13, 29, $hy);
-    $rh_cal = cal_from_jd($rh_jd, CAL_GREGORIAN);
-    $erev_rh = sprintf("%s, %s %s %s",
-		       $rh_cal["abbrevdayname"],
-		       $rh_cal["day"],
-		       $rh_cal["monthname"],
-		       $rh_cal["year"]);
+    $erev_rh = format_greg_date_for_erev(13, 29, $hy);
 } elseif ($hmnum == 1 && $hd <= 10) {
     $gmar_tov = true;		// month 1 == Tishrei
-    $rh_jd = jewishtojd(1, 9, $hy);
-    $rh_cal = cal_from_jd($rh_jd, CAL_GREGORIAN);
-    $erev_yk = sprintf("%s, %s %s %s",
-		       $rh_cal["abbrevdayname"],
-		       $rh_cal["day"],
-		       $rh_cal["monthname"],
-		       $rh_cal["year"]);
+    $erev_yk = format_greg_date_for_erev(1, 9, $hy);
 } elseif ($hmnum == $purim_month_num && $hd >= 2 && $hd <= 13) {
     // for two weeks before Purim, show greeting
-    $purim_upcoming = true;
-    $purim_jd = jewishtojd($purim_month_num, 13, $hy);
-    $purim_cal = cal_from_jd($purim_jd, CAL_GREGORIAN);
-    $erev_purim = sprintf("%s, %s %s %s",
-		       $purim_cal["abbrevdayname"],
-		       $purim_cal["day"],
-		       $purim_cal["monthname"],
-		       $purim_cal["year"]);
-} elseif ($hmnum == 8 && $hd >= 2 && $hd <= 15) {
-    // for two weeks before Pesach, show greeting
-    $chag_kasher = true;	// month 8 == Nisan
+    $erev_purim = format_greg_date_for_erev($purim_month_num, 13, $hy);
+} elseif (($hmnum == $purim_month_num && $hd >= 24) || ($hmnum == 8 && $hd <= 14)) {
+    // for three weeks before Pesach, show greeting
+    $erev_pesach = format_greg_date_for_erev(8, 14, $hy);
 } elseif ($hmnum == 3 && $hd >= 3 && $hd <= 24) {
     // for three weeks before Chanukah, show greeting
     $chanukah_jd = jewishtojd(3, 24, $hy); // month 3 == Kislev
@@ -179,25 +170,26 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 	}
     }
 }
+
+function holiday_greeting($blurb, $long_text) { ?>
+<p><span class="label label-success"><?php echo $blurb ?></span>
+<span class="text-success"><?php echo $long_text ?>.</span></p>
+<?php
+}
+
 ?></ul>
 <p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
 <?php
-if (isset($rosh_chodesh)) { ?>
-<p><span class="label label-success">Chodesh Tov</span>
-<span class="text-success">We wish you a good new month of <?php echo $rosh_chodesh ?>.</span></p>
-<?php } elseif ($chanukah) { ?>
-<p><span class="label label-success">Chag Urim Sameach</span>
-<span class="text-success">We wish you a happy Chanukah.</span></p>
-<?php } elseif (isset($chanukah_upcoming)) { ?>
-<p><span class="label label-success">Happy Chanukah</span>
-<span class="text-success">Light the <a
-title="Chanukah, the Festival of Lights"
-href="/holidays/chanukah">first candle</a>
-<?php echo $chanukah_upcoming ?>.</span></p>
-<?php } elseif (isset($shalosh_regalim)) { ?>
-<p><span class="fpgreeting">Moadim L&#39;Simcha! We wish you
-a happy <?php echo $shalosh_regalim ?>.</span></p>
-<?php } elseif ($shana_tova) { ?>
+if (isset($rosh_chodesh)) {
+    holiday_greeting("Chodesh Tov", "We wish you a good new month of $rosh_chodesh");
+} elseif ($chanukah) {
+    holiday_greeting("Chag Urim Sameach", "We wish you a happy Chanukah");
+} elseif (isset($chanukah_upcoming)) {
+    holiday_greeting("Happy Chanukah",
+		     "Light the <a title=\"Chanukah, the Festival of Lights\" href=\"/holidays/chanukah\">first candle</a> $chanukah_upcoming");
+} elseif (isset($shalosh_regalim)) {
+    holiday_greeting("Moadim L&#39;Simcha", "We wish you a happy $shalosh_regalim");
+} elseif ($shana_tova) { ?>
 <p><span class="label label-success">Shanah Tovah</span>
 <span class="text-success">We wish you a happy and healthy New Year.</span>
 <?php     if (isset($erev_rh)) { ?>
@@ -206,30 +198,19 @@ Hashana <?php echo $hy + 1 ?></a> begins at sundown
 on <?php echo $erev_rh ?>.</span>
 <?php     } ?>
 </p>
-<?php } elseif ($gmar_tov) { ?>
-<p><span class="label label-success">G&#39;mar Chatimah Tovah</span>
-<span class="text-success">We wish you a good inscription in the Book of Life.</span>
-<?php     if (isset($erev_yk)) { ?>
-<br><span class="text-success"><a href="/holidays/yom-kippur">Yom
-Kippur</a> begins at sundown
-on <?php echo $erev_yk ?>.</span>
-<?php     } ?>
-</p>
-<?php } elseif ($chag_kasher) { ?>
-<p><span class="label label-success">Chag Kasher v&#39;Sameach</span>
-<span class="text-success">We wish you a happy <a
-href="/holidays/pesach">Passover</a>.</span></p>
-<?php } elseif (isset($purim_upcoming)) { ?>
-<p><span class="label label-success">Chag Sameach</span>
-<span class="text-success">We wish you a happy <a href="/holidays/purim">Purim</a>
-(begins at sundown on <?php echo $erev_purim ?>).</span></p>
-<?php } elseif (isset($chag_sameach)) { ?>
-<p><span class="label label-success">Chag Sameach</span>
-<span class="text-success">We wish you a happy <?php echo $chag_sameach ?>.</span></p>
-<?php } elseif ($minor_fast) { ?>
-<p><span class="label label-success">Tzom Kal</span>
-<span class="text-success">We wish you an easy fast.</span></p>
-<?php } ?>
+<?php
+} elseif ($gmar_tov) {
+    holiday_greeting("G&#39;mar Chatimah Tovah",
+		     "We wish you a good inscription in the Book of Life. <a href=\"/holidays/yom-kippur\">Yom Kippur</a> begins at sundown on $erev_yk");
+} elseif (isset($erev_pesach)) {
+     holiday_greeting("Chag Kasher v&#39;Sameach", "We wish you a happy <a href=\"/holidays/pesach\">Passover</a>! Pesach begins at sundown on $erev_pesach");
+} elseif (isset($erev_purim)) {
+     holiday_greeting("Chag Sameach", "We wish you a happy <a href=\"/holidays/purim\">Purim</a> (begins at sundown on $erev_purim)");
+} elseif (isset($chag_sameach)) {
+     holiday_greeting("Chag Sameach", "We wish you a happy $chag_sameach");
+} elseif ($minor_fast) {
+     holiday_greeting("Tzom Kal", "We wish you an easy fast");
+} ?>
 </div><!-- .clearfix -->
 
 <div class="row-fluid">
