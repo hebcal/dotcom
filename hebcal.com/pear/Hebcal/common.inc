@@ -431,8 +431,10 @@ body{padding-top:0}
  .sidebar-nav{display:none}
 }
 </style>
+<meta property="fb:app_id" content="205907769446397">
 $xtra_head</head>
 <body>
+<div id="fb-root"></div>
 
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
@@ -483,8 +485,8 @@ function html_footer_bootstrap($last_updated = true) {
 <div id="inner-footer" class="clearfix row">
 <div class="span5">
 <p>$site_title</p>
-<iframe src="//www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=360&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:360px; height:35px;" allowTransparency="true"></iframe>
-</div>
+<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
+</div><!-- .span5 -->
 <div class="span4 offset3">
 $last_updated_text
 <p><small>Except where otherwise noted, content on
@@ -504,6 +506,13 @@ Commons Attribution 3.0 License</a>.</small></p>
 (function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}
 if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}
 if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 </script>
 </body></html>
 EOD;
