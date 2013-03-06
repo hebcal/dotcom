@@ -172,8 +172,11 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 }
 
 function holiday_greeting($blurb, $long_text) { ?>
-<p><span class="label label-success"><?php echo $blurb ?></span>
-<span class="text-success"><?php echo $long_text ?>.</span></p>
+<div class="alert alert-success">
+ <button type="button" class="close" data-dismiss="alert">&times;</button>
+ <strong><?php echo $blurb ?>!</strong>
+ <?php echo $long_text ?>.
+</div><!-- .alert -->
 <?php
 }
 
@@ -189,28 +192,28 @@ if (isset($rosh_chodesh)) {
 		     "Light the <a title=\"Chanukah, the Festival of Lights\" href=\"/holidays/chanukah\">first candle</a> $chanukah_upcoming");
 } elseif (isset($shalosh_regalim)) {
     holiday_greeting("Moadim L&#39;Simcha", "We wish you a happy $shalosh_regalim");
-} elseif ($shana_tova) { ?>
-<p><span class="label label-success">Shanah Tovah</span>
-<span class="text-success">We wish you a happy and healthy New Year.</span>
-<?php     if (isset($erev_rh)) { ?>
-<br><span class="text-success"><a href="/holidays/rosh-hashana">Rosh
-Hashana <?php echo $hy + 1 ?></a> begins at sundown
-on <?php echo $erev_rh ?>.</span>
-<?php     } ?>
-</p>
-<?php
+} elseif ($shana_tova) {
+    $rh_greeting = "We wish you a happy and healthy New Year";
+    if (isset($erev_rh)) {
+	$next_hy = $hy + 1;
+	$rh_greeting .= ".<br><a href=\"/holidays/rosh-hashana\">Rosh Hashana $next_hy</a> begins at sundown on $erev_rh";
+    }
+    holiday_greeting("Shanah Tovah", $rh_greeting);
 } elseif ($gmar_tov) {
     holiday_greeting("G&#39;mar Chatimah Tovah",
-		     "We wish you a good inscription in the Book of Life. <a href=\"/holidays/yom-kippur\">Yom Kippur</a> begins at sundown on $erev_yk");
+		     "We wish you a good inscription in the Book of Life.<br><a href=\"/holidays/yom-kippur\">Yom Kippur</a> begins at sundown on $erev_yk");
 } elseif (isset($erev_pesach)) {
-     holiday_greeting("Chag Kasher v&#39;Sameach", "We wish you a happy <a href=\"/holidays/pesach\">Passover</a>! Pesach begins at sundown on $erev_pesach");
+     holiday_greeting("Chag Kasher v&#39;Sameach",
+		      "We wish you a happy <a href=\"/holidays/pesach\">Passover</a>.<br>Pesach begins at sundown on $erev_pesach");
 } elseif (isset($erev_purim)) {
-     holiday_greeting("Chag Sameach", "We wish you a happy <a href=\"/holidays/purim\">Purim</a> (begins at sundown on $erev_purim)");
+     holiday_greeting("Chag Sameach",
+		      "We wish you a happy <a href=\"/holidays/purim\">Purim</a> (begins at sundown on $erev_purim)");
 } elseif (isset($chag_sameach)) {
      holiday_greeting("Chag Sameach", "We wish you a happy $chag_sameach");
 } elseif ($minor_fast) {
      holiday_greeting("Tzom Kal", "We wish you an easy fast");
-} ?>
+}
+?>
 </div><!-- .clearfix -->
 
 <div class="row-fluid">
