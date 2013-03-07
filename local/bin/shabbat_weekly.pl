@@ -53,6 +53,7 @@ use Hebcal::SMTP;
 use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
 use Config::Tiny;
+use MIME::Lite;
 
 my $VERSION = '$Revision$$';
 if ($VERSION =~ /(\d+)/) {
@@ -307,8 +308,6 @@ $unsub_url
 	 "From" => "Hebcal <shabbat-owner\@hebcal.com>",
 	 "To" => $to,
 	 "Reply-To" => "no-reply\@hebcal.com",
-	 "MIME-Version" => "1.0",
-	 "Content-Type" => "text/plain",
 	 "Subject" => "[shabbat] Candles $lighting",
 	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
 	 "List-Id" => "<shabbat.hebcal.com>",
@@ -598,17 +597,20 @@ sub smtp_connect
 sub my_sendmail
 {
     my($smtp,$return_path,$headers,$body) = @_;
-    
-    $headers->{"X-Sender"} = "$LOGIN\@$HOSTNAME";
-    $headers->{"X-Mailer"} = "hebcal mail v$VERSION";
 
-    my $message = "";
-    while (my($key,$val) = each %{$headers})
-    {
+    my $msg = MIME::Lite->new(Type => 'multipart/alternative');
+    while (my($key,$val) = each %{$headers}) {
 	while (chomp($val)) {}
-	$message .= "$key: $val\n";
+	$msg->add($key => $val);
     }
-    $message .= "\n" . $body;
+    $msg->add("X-Sender" => "$LOGIN\@$HOSTNAME");
+    $msg->replace("X-Mailer" => "hebcal mail v$VERSION");
+
+    $msg->attach(Type => "text/plain",
+		 Data => $body);
+	
+    $msg->attach(Type => "text/html",
+		 Data => "<!DOCTYPE html><html><head><title>Hebcal Shabbat Times</title></head><body>\n<pre>$body</pre></body></html>\n");
 
     my $to = $headers->{"To"};
     my $rv = $smtp->mail($return_path);
@@ -624,7 +626,7 @@ sub my_sendmail
     }
 
     $rv = $smtp->data();
-    $rv = $smtp->datasend($message);
+    $rv = $smtp->datasend($msg->as_string);
     $rv = $smtp->dataend();
     unless ($rv) {
 	my $debug_txt = $smtp->debug_txt();
