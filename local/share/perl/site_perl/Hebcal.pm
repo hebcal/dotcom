@@ -502,18 +502,17 @@ sub events_to_dict
 		      "dst" => undef,
 		      });
     my @items;
-    for (my $i = 0; $i < scalar(@{$events}); $i++)
-    {
-	my $time = event_to_time($events->[$i]);
+    foreach my $evt (@{$events}) {
+	my $time = event_to_time($evt);
 	next if ($friday && $time < $friday) || ($saturday && $time > $saturday);
 
-	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+	my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
 
-	my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
 
 	my %item;
@@ -527,7 +526,7 @@ sub events_to_dict
 	    $tz++ if $isdst;
 	}
 
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
 	    $item{"dc:date"} =
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
@@ -2076,12 +2075,7 @@ sub vcalendar_write_contents
       }
     }
 
-    my($i);
-    my($numEntries) = scalar(@{$events});
-    for ($i = 0; $i < $numEntries; $i++)
-    {
-	my $evt = $events->[$i];
-
+    foreach my $evt (@{$events}) {
 	out_html(undef, qq{BEGIN:VEVENT$endl});
 	out_html(undef, qq{DTSTAMP:$dtstamp$endl});
 
@@ -2137,12 +2131,12 @@ sub vcalendar_write_contents
 	  out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
 	}
 
-	my($date) = sprintf("%04d%02d%02d",
-			    $evt->[$Hebcal::EVT_IDX_YEAR],
-			    $evt->[$Hebcal::EVT_IDX_MON] + 1,
-			    $evt->[$Hebcal::EVT_IDX_MDAY],
-			    );
-	my($end_date) = $date;
+	my $date = sprintf("%04d%02d%02d",
+			   $evt->[$Hebcal::EVT_IDX_YEAR],
+			   $evt->[$Hebcal::EVT_IDX_MON] + 1,
+			   $evt->[$Hebcal::EVT_IDX_MDAY],
+			  );
+	my $end_date = $date;
 
 	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
@@ -2305,7 +2299,6 @@ sub translate_subject
 sub csv_write_contents($$$)
 {
     my($q,$events,$euro) = @_;
-    my($numEntries) = scalar(@{$events});
 
     export_http_header($q, 'text/x-csv');
     my $endl = get_browser_endl($q->user_agent());
@@ -2315,23 +2308,21 @@ sub csv_write_contents($$$)
 	qq{"End Time","All day event","Description","Show time as",},
 	qq{"Location"$endl};
 
-    my($i);
-    for ($i = 0; $i < $numEntries; $i++)
-    {
-	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my($memo) = $events->[$i]->[$Hebcal::EVT_IDX_MEMO];
+    foreach my $evt (@{$events}) {
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	my $memo = $evt->[$Hebcal::EVT_IDX_MEMO];
 
 	my $date;
 	if ($euro) {
 	    $date = sprintf("\"%d/%d/%04d\"",
-			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
-			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+			    $evt->[$Hebcal::EVT_IDX_MDAY],
+			    $evt->[$Hebcal::EVT_IDX_MON] + 1,
+			    $evt->[$Hebcal::EVT_IDX_YEAR]);
 	} else {
 	    $date = sprintf("\"%d/%d/%04d\"",
-			    $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1,
-			    $events->[$i]->[$Hebcal::EVT_IDX_MDAY],
-			    $events->[$i]->[$Hebcal::EVT_IDX_YEAR]);
+			    $evt->[$Hebcal::EVT_IDX_MON] + 1,
+			    $evt->[$Hebcal::EVT_IDX_MDAY],
+			    $evt->[$Hebcal::EVT_IDX_YEAR]);
 	}
 
 	my($start_time) = '';
@@ -2339,16 +2330,16 @@ sub csv_write_contents($$$)
 	my($end_date) = '';
 	my($all_day) = '"true"';
 
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
-	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
+	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
 
 	    $hour -= 12 if $hour > 12;
 	    $start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
 
 	    $hour += 12 if $hour < 12;
-	    $min += $events->[$i]->[$Hebcal::EVT_IDX_DUR];
+	    $min += $evt->[$Hebcal::EVT_IDX_DUR];
 
 	    if ($min >= 60)
 	    {
@@ -2379,8 +2370,8 @@ sub csv_write_contents($$$)
 	    qq{"$subj",$date,$start_time,$end_date,$end_time,},
 	    qq{$all_day,"$memo",};
 
-	if ($events->[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
-	    $events->[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1)
+	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
+	    $evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
 	{
 	    print STDOUT qq{"4"};
 	}
