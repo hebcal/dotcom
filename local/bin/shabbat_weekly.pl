@@ -388,19 +388,15 @@ sub gen_body
 	my $time = Hebcal::event_to_time($events->[$i]);
 	next if $time < $midnight || $time > $endofweek;
 
-	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my($year) = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my($mon) = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my($mday) = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
-
-	my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
-	$hour -= 12 if $hour > 12;
-
+	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	my $strtime = strftime("%A, %B %d", localtime($time));
 
 	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
+	    my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    $hour -= 12 if $hour > 12;
+
 	    $body .= sprintf("%s is at %d:%02dpm on %s\n",
 			     $subj, $hour, $min, $strtime);
 	}
