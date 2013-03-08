@@ -286,7 +286,9 @@ sub mail_user
     my $unsub_url = "http://www.hebcal.com/email/?" .
 	"e=" . my_url_escape($encoded);
 
-    my($body) = gen_body(\@events) . qq{
+    my($body,$html_body) = gen_body(\@events);
+
+    $body .= qq{
 $loc
 
 Shabbat Shalom,
@@ -340,24 +342,22 @@ sub my_url_escape
 sub get_friday_candles
 {
     my($events) = @_;
-    my($numEntries) = scalar(@{$events});
-    my($i);
     my $retval = "";
-    for ($i = 0; $i < $numEntries; $i++)
+    foreach my $evt (@{$events})
     {
-	my $time = Hebcal::event_to_time($events->[$i]);
+	my $time = Hebcal::event_to_time($evt);
 	next if $time < $midnight || $time > $endofweek;
 
-	my $year = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
-	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+	my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 	my $dow = Hebcal::get_dow($year, $mon, $mday);
 
 	if ($dow == 5 && $subj eq "Candle lighting")
 	{
-	    my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	    my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
 	    $hour -= 12 if $hour > 12;
 
 	    $retval .= sprintf("%d:%02dpm", $hour, $min);
@@ -378,23 +378,21 @@ sub gen_body
     my($events) = @_;
 
     my $body = "";
+    my $html_body = "";
 
     my %holiday_seen;
-    my($numEntries) = scalar(@{$events});
-    my($i);
-    for ($i = 0; $i < $numEntries; $i++)
-    {
+    foreach my $evt (@{$events}) {
 	# holiday is at 12:00:01 am
-	my $time = Hebcal::event_to_time($events->[$i]);
+	my $time = Hebcal::event_to_time($evt);
 	next if $time < $midnight || $time > $endofweek;
 
-	my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 	my $strtime = strftime("%A, %B %d", localtime($time));
 
 	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
-	    my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	    my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
 	    $hour -= 12 if $hour > 12;
 
 	    $body .= sprintf("%s is at %d:%02dpm on %s\n",
@@ -421,7 +419,7 @@ sub gen_body
 	}
     }
 
-    $body;
+    return ($body,$html_body);
 }
 
 sub load_subs
