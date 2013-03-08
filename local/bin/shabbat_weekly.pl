@@ -298,6 +298,18 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
+    my $html_loc = $loc;
+    $html_loc =~ s/\n/<br>\n/g;
+    $html_body .= qq{<div style="font-size:16px">
+<p>$html_loc</p>
+<p>Shabbat Shalom!</p>
+</div>
+<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<p>This email was sent to $to by Hebcal.com</p>
+<p><a href="$unsub_url">Unsubscribe/Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></p>
+</div>
+};
+
     my $email_mangle = $to;
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
@@ -311,14 +323,14 @@ $unsub_url
 	 "To" => $to,
 	 "Reply-To" => "no-reply\@hebcal.com",
 	 "Subject" => "[shabbat] Candles $lighting",
-	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
+	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1>",
 	 "List-Id" => "<shabbat.hebcal.com>",
 	 "Errors-To" => $return_path,
 	 "Precedence" => "bulk",
 	 "Message-ID" => "<$msgid\@hebcal.com>",
 	 );
 
-    my $status = my_sendmail($smtp,$return_path,\%headers,$body);
+    my $status = my_sendmail($smtp,$return_path,\%headers,$body,$html_body);
     if ($opt_log) {
 	my $log_status = ($status == $STATUS_OK) ? 1 : 0;
 	print LOG join(":", $msgid, $log_status, $to,
@@ -397,25 +409,33 @@ sub gen_body
 
 	    $body .= sprintf("%s is at %d:%02dpm on %s\n",
 			     $subj, $hour, $min, $strtime);
+	    $html_body .= sprintf("<p>%s is at <strong>%d:%02dpm</strong> on %s.</p>\n",
+				  $subj, $hour, $min, $strtime);
 	}
 	elsif ($subj eq "No sunset today.")
 	{
-	    $body .= "No sunset on $strtime\n";
+	    my $str = "No sunset on $strtime";
+	    $body      .= qq{$str\n};
+	    $html_body .= qq{<p>$str.</p>\n};
 	}
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
+	    my $url = "http://www.hebcal.com"
+		. Hebcal::get_holiday_anchor($subj,undef,undef);
 	    $body .= "This week's Torah portion is $subj\n";
-	    $body .= "  http://www.hebcal.com" .
-	      Hebcal::get_holiday_anchor($subj,undef,undef) . "\n";
+	    $body .= "  $url\n";
+	    $html_body .= qq{<p>This week's Torah portion is <a href="$url">$subj</a>.</p>\n};
 	}
 	else
 	{
 	    $body .= "$subj occurs on $strtime\n";
 	    my $hanchor = Hebcal::get_holiday_anchor($subj,undef,undef);
+	    my $url = "http://www.hebcal.com" . $hanchor;
 	    if ($hanchor && !$holiday_seen{$hanchor}) {
-		$body .= "  http://www.hebcal.com" . $hanchor . "\n";
+		$body .= "  $url\n";
 		$holiday_seen{$hanchor} = 1;
 	    }
+	    $html_body .= qq{<p><a href="$url">$subj</a> occurs on $strtime.</p>\n};
 	}
     }
 
@@ -590,7 +610,7 @@ sub smtp_connect
 
 sub my_sendmail
 {
-    my($smtp,$return_path,$headers,$body) = @_;
+    my($smtp,$return_path,$headers,$body,$html_body) = @_;
 
     my $msg = MIME::Lite->new(Type => 'multipart/alternative');
     while (my($key,$val) = each %{$headers}) {
@@ -604,7 +624,8 @@ sub my_sendmail
 		 Data => $body);
 	
     $msg->attach(Type => "text/html",
-		 Data => "<!DOCTYPE html><html><head><title>Hebcal Shabbat Times</title></head><body>\n<pre>$body</pre></body></html>\n");
+		 Data => "<!DOCTYPE html><html><head><title>Hebcal Shabbat Times</title></head>\n" .
+		 	 qq{<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">$html_body</div></body></html>\n});
 
     my $to = $headers->{"To"};
     my $rv = $smtp->mail($return_path);
