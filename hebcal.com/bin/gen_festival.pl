@@ -545,7 +545,7 @@ EOHTML
       table_index($festivals, "hebcal-$table_id", @{$section->[0]});
     }
 
-    print OUT4 qq{</div><!-- span12 -->\n};
+    print OUT3 qq{</div><!-- .span12 -->\n};
     print OUT3 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
     close(OUT3);
@@ -621,7 +621,7 @@ EOHTML
 	}
 
 
-	print OUT4 qq{</div><!-- span12 -->\n};
+	print OUT4 qq{</div><!-- .span12 -->\n};
 	print OUT4 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
 	close(OUT4);
