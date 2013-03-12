@@ -427,10 +427,10 @@ EOHTML
 }
 
 sub get_index_body_preamble {
-    my($page_title,$do_multi_year,$heb_year) = @_;
+    my($page_title,$do_multi_year,$heb_year,$div_class) = @_;
 
     my $str = <<EOHTML;
-<div class="span12">
+<div class="$div_class">
 <div class="page-header">
 <h1>$page_title</h1>
 </div>
@@ -535,7 +535,7 @@ EOHTML
 				   "single single-post",
 				   $meta . $xtra_head);
 
-    print OUT3 get_index_body_preamble($page_title, 1);
+    print OUT3 get_index_body_preamble($page_title, 1, undef, "span12");
 
     foreach my $section (@sections) {
       my $heading = $section->[1];
@@ -545,12 +545,7 @@ EOHTML
       table_index($festivals, "hebcal-$table_id", @{$section->[0]});
     }
 
-    my $body_divs_end = <<EOHTML;
-</div><!-- .span12 -->
-EOHTML
-;
-
-    print OUT3 $body_divs_end;
+    print OUT4 qq{</div><!-- span12 -->\n};
     print OUT3 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
     close(OUT3);
@@ -566,7 +561,7 @@ EOHTML
 	$fn = "$outdir/$slug";
 	open(OUT4, ">$fn.$$") || die "$fn.$$: $!\n";
 
-	$page_title = "Jewish Holiday Calendar $slug";
+	$page_title = "Jewish Holidays $slug";
 
 	$meta = <<EOHTML;
 <meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_year), observances and customs, holiday Torah readings.">
@@ -577,10 +572,30 @@ EOHTML
 				       "/holidays/$slug",
 				       "single single-post",
 				       $meta . $xtra_head,
-				       1);
+				       0);
 
-	print OUT4 get_index_body_preamble($page_title, 0, $heb_year);
-
+	print OUT4 qq{<div class="row-fluid">\n};
+	print OUT4 get_index_body_preamble($page_title, 0, $heb_year, "span8");
+	print OUT4 <<EOHTML;
+</div><!-- .span8 -->
+<div class="span4">
+<h5>Advertisement</h5>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+/* 300x250, created 10/14/10 */
+google_ad_slot = "1140358973";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div><!-- .span4 -->
+</div><!-- .row-fluid -->
+EOHTML
+;
+	print OUT4 qq{<div class="span12">\n};
 	print OUT4 qq{<div class="pagination pagination-small"><ul>\n};
 	foreach my $j (0 .. $NUM_YEARS) {
 	    my $other_yr = $HEB_YR + $j - 1;
@@ -605,7 +620,8 @@ EOHTML
 	  table_one_year_only($festivals, "hebcal-$table_id", $i, @{$section->[0]});
 	}
 
-	print OUT4 $body_divs_end;
+
+	print OUT4 qq{</div><!-- span12 -->\n};
 	print OUT4 Hebcal::html_footer_bootstrap(undef, $REVISION);
 
 	close(OUT4);
