@@ -973,8 +973,8 @@ sub format_html_date {
   my($gy,$gm,$gd) = @_;
   $gm =~ s/^0//;
   $gd =~ s/^0//;
-  sprintf "<a title=\"%s %d holiday calendar\" href=\"/hebcal/?v=1;year=%d;month=%d" .
-    ";s=on;nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=sedrot#hebcal-results\">%02d %s %d</a>",
+  sprintf "<a title=\"%s %d holiday calendar\" href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
+    "&amp;s=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off&amp;tag=sedrot#hebcal-results\">%02d %s %d</a>",
     $Hebcal::MoY_long{$gm}, $gy,
     $gy, $gm,
     $gd, $Hebcal::MoY_long{$gm}, $gy;
