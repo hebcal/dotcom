@@ -9,8 +9,9 @@ CSVDIR = $(DISTDIR)
 SEDROT = ../sedrot
 DBDIR = ../hebcal
 HOLIDAYS = ../holidays
+CONVERTER_SEDRA = ../converter/sedra/20/2099.inc
 
-all: xml2perl sedrot holidays json
+all: xml2perl sedrot holidays json converter
 
 holidays: $(HOLIDAYS)/purim
 
@@ -18,10 +19,12 @@ sedrot: $(SEDROT)/bereshit
 
 xml2perl: $(SITE_PERL)/HebcalConst.pm
 
+converter: $(CONVERTER_SEDRA)
+
 $(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
 
-../converter/sedra/20/2099.inc: gen_daily_sedra.pl hebcal
+$(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
 	./gen_daily_sedra.pl 1900 2099
 
 json: $(CITIES_JSON)
