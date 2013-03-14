@@ -21,6 +21,9 @@ xml2perl: $(SITE_PERL)/HebcalConst.pm
 $(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
 
+../converter/sedra/20/2099.inc: gen_daily_sedra.pl hebcal
+	./gen_daily_sedra.pl 1900 2099
+
 json: $(CITIES_JSON)
 
 $(CITIES_JSON): $(CITIES_TXT) gen_cities_json.pl
