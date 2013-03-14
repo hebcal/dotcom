@@ -17,8 +17,8 @@ fetch_urls () {
 FILE="jewish-holidays"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;nh=on;i=off;lg=s;vis=on;c=off;geo=zip;ny=10;nx=off;mf=off;ss=off"
 perl -pi -e "s/tag=ical/tag=dl-major/g" "${FILE}.ics"
-perl -pi -e 's/^X-WR-CALNAME:.*/X-WR-CALNAME:Jewish Holidays/' "${FILE}.ics"
-perl -pi -e 's/^X-WR-CALDESC:.*/X-WR-CALDESC:http://www.hebcal.com/' "${FILE}.ics"
+perl -pi -e 's/^X-WR-CALNAME:.*/X-WR-CALNAME:Jewish Holidays\r/' "${FILE}.ics"
+perl -pi -e 's/^X-WR-CALDESC:.*/X-WR-CALDESC:http:\/\/www.hebcal.com\/\r/' "${FILE}.ics"
 
 FILE="jewish-holidays-all"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;nh=on;i=off;lg=s;vis=on;c=off;geo=zip;ny=10;nx=on;mf=on;ss=on"
