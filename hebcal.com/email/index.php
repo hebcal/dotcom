@@ -285,7 +285,7 @@ href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?> 
 <button type="submit" class="btn btn-primary" name="modify" value="1">
-<?php echo ($is_update) ? "Modify Subscription" : "Subscribe"; ?></button>
+<?php echo ($is_update) ? "Update Subscription" : "Subscribe"; ?></button>
 or
 <button type="submit" class="btn" name="unsubscribe" value="1">Unsubscribe</button>
 </fieldset>
