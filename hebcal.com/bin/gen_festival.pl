@@ -866,8 +866,8 @@ EOHTML
 		$displayed_upcoming = 1;
 	      }
 	    }
-	    printf OUT2 "<li><a href=\"/hebcal/?v=1;year=%d;month=%d" .
-		";nx=on;mf=on;ss=on;nh=on;vis=on;set=off;tag=hol.obs\"$style>%s,\n" .
+	    printf OUT2 "<li><a href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
+		"&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off&amp;tag=hol.obs\"$style>%s,\n" .
 		"%02d %s %04d</a> at $rise_or_set (%s)\n",
 		$gy, $gm,
 		$Hebcal::DoW[$dow],
