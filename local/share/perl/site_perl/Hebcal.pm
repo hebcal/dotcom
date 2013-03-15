@@ -1189,20 +1189,44 @@ sub html_footer_bootstrap
 
 <footer role="contentinfo">
 <hr>
-<div id="inner-footer" class="clearfix row">
-<div class="span5">
-<p><a href="/">Hebcal Jewish Calendar</a></p>
-<div id="fb-root"></div>
-<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
-</div>
-<div class="span4 offset3">
+<div id="inner-footer" class="clearfix">
+<div class="row-fluid">
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Products</li>
+<li><a href="/holidays/">Jewish Holidays</a></li>
+<li><a href="/converter/">Hebrew Date Converter</a></li>
+<li><a href="/shabbat/">Shabbat Times</a></li>
+<li><a href="/sedrot/">Torah Readings</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">About Us</li>
+<li><a href="/home/about">About Hebcal</a></li>
+<li><a href="/home/category/news">News</a></li>
+<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Connect</li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact Us</a></li>
+<li><a href="/home/about/donate">Donate</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
 $last_updated_text
+<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
 <p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
 is licensed under a 
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
-</div>
+</div><!-- .span3 -->
+</div><!-- .row-fluid -->
 </div><!-- #inner-footer -->
 </footer>
 </div> <!-- .container -->
@@ -1273,24 +1297,16 @@ sub html_city_select
 
 my $HTML_MENU_ITEMS_V2 =
     [
-     [ "Services", "#",
-       [ "Jewish Holidays", "/holidays/" ],
-       [ "Custom Calendar", "/hebcal/" ],
-       [ "Hebrew Date Converter", "/converter/" ],
-       [ "Yahrzeit + Anniversary Calendar", "/yahrzeit/" ],
-       [ "Shabbat Times", "/shabbat/" ],
-	    [ "Torah Readings", "/sedrot/" ]],
-     [ "About", "/home/about",
-       [ "About Hebcal", "/home/about" ],
-       [ "Contact Us", "/home/about/contact" ],
-       [ "Donate", "/home/about/donate" ],
-       [ "News", "/home/category/news" ],
-       [ "Privacy Policy", "/home/about/privacy-policy"] ],
-     [ "Help", "/home/help" ],
+     [ "/holidays/",	"Holidays",	"Jewish Holidays" ],
+     [ "/converter/",	"Date Converter", "Hebrew Date Converter" ],
+     [ "/shabbat/",	"Shabbat",	"Shabbat Times" ],
+     [ "/sedrot/",	"Torah",	"Torah Readings" ],
+     [ "/home/about",	"About",	"About" ],
+     [ "/home/help",	"Help",		"Help" ],
     ];
 
 sub html_menu_item_bootstrap {
-    my($title,$path,$selected) = @_;
+    my($path,$title,$tooltip,$selected) = @_;
     my $class = undef;
     if ($path ne "/" && $path eq $selected) {
 	$class = "active";
@@ -1299,7 +1315,7 @@ sub html_menu_item_bootstrap {
     if ($class) {
 	$str .= qq{ class="$class"};
     }
-    $str .= qq{><a href="$path" title="$title">$title</a>};
+    $str .= qq{><a href="$path" title="$tooltip">$title</a>};
     return $str;
 }
 
@@ -1307,19 +1323,20 @@ sub html_menu_bootstrap {
     my($selected) = @_;
     my $str = qq{<ul class="nav">};
     foreach my $item (@{$HTML_MENU_ITEMS_V2}) {
-	my $title = $item->[0];
-	my $path = $item->[1];
-	if (defined $item->[2]) {
+	my $path = $item->[0];
+	my $title = $item->[1];
+	my $tooltip = $item->[2];
+	if (defined $item->[3]) {
 	    $str .= "<li class=\"dropdown\">";
 	    $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <b class=\"caret\"></b></a>";
 	    $str .= "<ul class=\"dropdown-menu\">";
-	    for (my $i = 2; defined $item->[$i]; $i++) {
-		$str .= html_menu_item_bootstrap($item->[$i]->[0], $item->[$i]->[1], $selected);
+	    for (my $i = 3; defined $item->[$i]; $i++) {
+		$str .= html_menu_item_bootstrap($item->[$i]->[0], $item->[$i]->[1], $item->[$i]->[2], $selected);
 		$str .= qq{</li>};
 	    }
 	    $str .= qq{</ul>};
 	} else {
-	    $str .= html_menu_item_bootstrap($title, $path, $selected);
+	    $str .= html_menu_item_bootstrap($path, $title, $tooltip, $selected);
 	}
 	$str .= qq{</li>};
     }
