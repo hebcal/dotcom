@@ -520,8 +520,6 @@ is licensed under a
 Commons Attribution 3.0 License</a>.</small></p>
 </div><!-- .span3 -->
 </div><!-- .row-fluid -->
-<div class="clearfix row-fluid">
-</div><!-- .row-fluid -->
 </div><!-- #inner-footer -->
 </footer>
 </div> <!-- .container -->
