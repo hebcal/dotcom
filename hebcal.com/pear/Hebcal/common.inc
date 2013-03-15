@@ -332,23 +332,15 @@ function hebcal_make_anchor($str)
 
 $HTML_MENU_ITEMS_V2 =
     array(
-     array( "Services", "#",
-       array( "Jewish Holidays", "/holidays/" ),
-       array( "Custom Calendar", "/hebcal/" ),
-       array( "Hebrew Date Converter", "/converter/" ),
-       array( "Yahrzeit + Anniversary Calendar", "/yahrzeit/" ),
-       array( "Shabbat Times", "/shabbat/" ),
-	    array( "Torah Readings", "/sedrot/" )),
-     array( "About", "/home/about",
-       array( "About Hebcal", "/home/about" ),
-       array( "Contact Us", "/home/about/contact" ),
-       array( "Donate", "/home/about/donate" ),
-       array( "News", "/home/category/news" ),
-       array( "Privacy Policy", "/home/about/privacy-policy") ),
-     array( "Help", "/home/help" ),
+	array( "/holidays/",	"Holidays",	"Jewish Holidays" ),
+	array( "/converter/",	"Date Converter", "Hebrew Date Converter" ),
+	array( "/shabbat/",	"Shabbat",	"Shabbat Times" ),
+	array( "/sedrot/",	"Torah",	"Torah Readings" ),
+	array( "/home/about",	"About",	"About" ),
+	array( "/home/help",	"Help",		"Help" ),
     );
 
-function html_menu_item_bootstrap($title, $path, $selected) {
+function html_menu_item_bootstrap($path, $title, $tooltip, $selected) {
     $class = false;
     if ($path != "/" && $path == $selected) {
 	$class = "active";
@@ -357,7 +349,7 @@ function html_menu_item_bootstrap($title, $path, $selected) {
     if ($class !== false) {
 	$str .= " class=\"$class\"";
     }
-    $str .= "><a href=\"$path\" title=\"$title\">$title</a>";
+    $str .= "><a href=\"$path\" title=\"$tooltip\">$title</a>";
     return $str;
 }
 
@@ -366,19 +358,20 @@ function html_menu_bootstrap($selected) {
     global $HTML_MENU_ITEMS_V2;
     $str = "<ul class=\"nav\">";
     foreach ($HTML_MENU_ITEMS_V2 as $item) {
-	$title = $item[0];
-	$path = $item[1];
-	if (isset($item[2])) {
+	$path = $item[0];
+	$title = $item[1];
+	$tooltip = $item[2];
+	if (isset($item[3])) {
 	    $str .= "<li class=\"dropdown\">";
 	    $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <b class=\"caret\"></b></a>";
 	    $str .= "<ul class=\"dropdown-menu\">";
-	    for ($i = 2; isset($item[$i]); $i++) {
-		$str .= html_menu_item_bootstrap($item[$i][0], $item[$i][1], $selected);
+	    for ($i = 3; isset($item[$i]); $i++) {
+		$str .= html_menu_item_bootstrap($item[$i][0], $item[$i][1], $item[$i][2], $selected);
 		$str .= "</li>";
 	    }
 	    $str .= "</ul>";
 	} else {
-	    $str .= html_menu_item_bootstrap($title, $path, $selected);
+	    $str .= html_menu_item_bootstrap($path, $title, $tooltip, $selected);
 	}
 	$str .= "</li>";
     }
@@ -489,19 +482,46 @@ function html_footer_bootstrap($last_updated = true) {
 
 <footer role="contentinfo">
 <hr>
-<div id="inner-footer" class="clearfix row">
-<div class="span5">
-<p>$site_title</p>
-<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
-</div><!-- .span5 -->
-<div class="span4 offset3">
+<div id="inner-footer" class="clearfix">
+<div class="row-fluid">
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Products</li>
+<li><a href="/holidays/">Jewish Holidays</a></li>
+<li><a href="/converter/">Hebrew Date Converter</a></li>
+<li><a href="/shabbat/">Shabbat Times</a></li>
+<li><a href="/sedrot/">Torah Readings</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">About Us</li>
+<li><a href="/home/about">About Hebcal</a></li>
+<li><a href="/home/category/news">News</a></li>
+<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Connect</li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact Us</a></li>
+<li><a href="/home/about/donate">Donate</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
 $last_updated_text
+<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
 <p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
 is licensed under a 
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
-</div>
+</div><!-- .span3 -->
+</div><!-- .row-fluid -->
+<div class="clearfix row-fluid">
+</div><!-- .row-fluid -->
 </div><!-- #inner-footer -->
 </footer>
 </div> <!-- .container -->
