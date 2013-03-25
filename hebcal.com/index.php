@@ -29,9 +29,13 @@ $fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
 $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 if (isset($sedra) && isset($sedra[$iso])) {
     $other_holidays = array(
-	"Tu B'Shvat" => true, "Purim" => true, "Shushan Purim" => true,
-	"Yom HaAtzma'ut" => true, "Lag B'Omer" => true,
-	"Shmini Atzeret" => true, "Simchat Torah" => true,
+	"Tu BiShvat" => true,
+	"Purim" => true,
+	"Shushan Purim" => true,
+	"Yom HaAtzma'ut" => true,
+	"Lag B'Omer" => true,
+	"Shmini Atzeret" => true,
+	"Simchat Torah" => true,
 	);
 
     if (is_array($sedra[$iso])) {
@@ -69,8 +73,9 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	}
 	if (strncmp($subj, "Tzom", 4) == 0
 	    || strncmp($subj, "Asara", 5) == 0
-	    || strncmp($subj, "Ta'anit", 7) == 0) {
-	    $minor_fast = true;
+	    || strncmp($subj, "Ta'anit", 7) == 0
+	    || $subj == "Tish'a B'Av") {
+	    $fast_day = true;
 	}
 	if (isset($other_holidays[$subj])) {
 	    $chag_sameach = $subj;
@@ -172,11 +177,14 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 }
 
 function holiday_greeting($blurb, $long_text) { ?>
+<div class="row-fluid">
+<div class="span8">
 <div class="alert alert-success">
- <button type="button" class="close" data-dismiss="alert">&times;</button>
  <strong><?php echo $blurb ?>!</strong>
  <?php echo $long_text ?>.
 </div><!-- .alert -->
+</div><!-- .span8 -->
+</div><!-- .row-fluid -->
 <?php
 }
 
@@ -184,14 +192,17 @@ function holiday_greeting($blurb, $long_text) { ?>
 <p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
 <?php
 if (isset($rosh_chodesh)) {
-    holiday_greeting("Chodesh Tov", "We wish you a good new month of $rosh_chodesh");
+    $anchor = hebcal_make_anchor("Rosh Chodesh $rosh_chodesh");
+    holiday_greeting("Chodesh Tov", "We wish you a good new month of <a href=\"$anchor\">$rosh_chodesh</a>");
 } elseif ($chanukah) {
-    holiday_greeting("Chag Urim Sameach", "We wish you a happy Chanukah");
+    holiday_greeting("Chag Urim Sameach",
+		     "We wish you a happy <a href=\"/holidays/chanukah\">Chanukah</a>");
 } elseif (isset($chanukah_upcoming)) {
     holiday_greeting("Happy Chanukah",
 		     "Light the <a title=\"Chanukah, the Festival of Lights\" href=\"/holidays/chanukah\">first candle</a> $chanukah_upcoming");
 } elseif (isset($shalosh_regalim)) {
-    holiday_greeting("Moadim L&#39;Simcha", "We wish you a happy $shalosh_regalim");
+    $anchor = hebcal_make_anchor($shalosh_regalim);
+    holiday_greeting("Moadim L&#39;Simcha", "We wish you a happy <a href=\"$anchor\">$shalosh_regalim</a>");
 } elseif ($shana_tova) {
     $rh_greeting = "We wish you a happy and healthy New Year";
     if (isset($erev_rh)) {
@@ -209,8 +220,9 @@ if (isset($rosh_chodesh)) {
      holiday_greeting("Chag Sameach",
 		      "We wish you a happy <a href=\"/holidays/purim\">Purim</a> (begins at sundown on $erev_purim)");
 } elseif (isset($chag_sameach)) {
-     holiday_greeting("Chag Sameach", "We wish you a happy $chag_sameach");
-} elseif ($minor_fast) {
+    $anchor = hebcal_make_anchor($chag_sameach);
+    holiday_greeting("Chag Sameach", "We wish you a happy <a href=\"$anchor\">$chag_sameach</a>");
+} elseif ($fast_day) {
      holiday_greeting("Tzom Kal", "We wish you an easy fast");
 }
 ?>
