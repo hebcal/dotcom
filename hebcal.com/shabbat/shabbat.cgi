@@ -402,10 +402,11 @@ sub display_rss
 
     Hebcal::out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title>$title</title>
 <link>$url</link>
+<atom:link href="$url;cfg=r" rel="self" type="application/rss+xml" />
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
 <language>en-us</language>
 <copyright>Copyright (c) $this_year Michael J. Radwin. All rights reserved.</copyright>
@@ -421,15 +422,15 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 	}
 
 	my $link = $items->[$i]->{'link'};
-	if ($link =~ /\.html$/)
-	{
-	    $link .= "?tag=rss";
-	}
+	my $guid = $link;
+	$guid .= ($guid =~ /\?/) ? "&amp;" : "?";
+	$guid .= "dt=" . $items->[$i]->{"dc:date"};
 
 	Hebcal::out_html($cfg, 
 qq{<item>
 <title>$subj</title>
 <link>$link</link>
+<guid isPermaLink="false">$guid</guid>
 <description>$items->[$i]->{'date'}</description>
 <category>$items->[$i]->{'class'}</category>
 <pubDate>$items->[$i]->{'pubDate'}</pubDate> 
