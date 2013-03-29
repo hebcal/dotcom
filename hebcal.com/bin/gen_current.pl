@@ -102,7 +102,7 @@ for (my $i = 0; $i < @events; $i++)
 <link>$link</link>
 <description>$memo</description>
 <pubDate>$parasha_pubDate</pubDate>
-<guid isPermaLink="false">$link&dt=$dt</guid>
+<guid isPermaLink="false">$link&amp;dt=$dt</guid>
 </item>
 </channel>
 </rss>
