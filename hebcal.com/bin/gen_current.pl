@@ -87,7 +87,6 @@ for (my $i = 0; $i < @events; $i++)
 	    my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
 	    $memo =~ s/\\n/<\/p>\n<p>/g;
 	    $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
-	    undef $sth;
 	    print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
@@ -114,7 +113,8 @@ for (my $i = 0; $i < @events; $i++)
     }
 }
 
-$dbh->disconnect();
+undef $sth;
+undef $dbh;
 
 my $hdate = `$Hebcal::HEBCAL_BIN -T -x -h | grep -v Omer`;
 chomp($hdate);
