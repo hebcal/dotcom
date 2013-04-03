@@ -277,12 +277,12 @@ EOHTML
 
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
+    $s .= accordion_bootstrap($ios_title, "ios", $ios);
     $s .= accordion_bootstrap($ol_ics_title, "ol-ics", $ol_ics);
     $s .= accordion_bootstrap($ol_csv_title, "ol-csv", $ol_csv);
     $s .= accordion_bootstrap($ical_title, "ical", $ical);
-    $s .= accordion_bootstrap($ol_mac_title, "ol-mac", $ol_mac);
-    $s .= accordion_bootstrap($ios_title, "ios", $ios);
     $s .= accordion_bootstrap($gcal_title, "gcal", $gcal);
+    $s .= accordion_bootstrap($ol_mac_title, "ol-mac", $ol_mac);
     $s .= accordion_bootstrap($wlive_title, "wlive", $wlive);
     $s .= accordion_bootstrap($ycal_title, "ycal", $ycal);
     $s .= accordion_bootstrap($palm_title, "palm", $palm);
