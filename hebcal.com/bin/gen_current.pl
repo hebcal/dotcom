@@ -84,14 +84,16 @@ for (my $i = 0; $i < @events; $i++)
 	    my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
 	    open(RSS,">$Hebcal::WEBDIR/sedrot/index.xml") || die;
 	    my $link = "http://$HOSTNAME$href?tag=rss";
+	    my $channel_link = "http://$HOSTNAME/sedrot/";
 	    my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
 	    $memo =~ s/\\n/<\/p>\n<p>/g;
 	    $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
 	    print RSS qq{<?xml version="1.0" ?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title>Hebcal Parsahat ha-Shavua</title>
-<link>http://$HOSTNAME/sedrot/</link>
+<link>$channel_link</link>
+<atom:link href="${channel_link}index.xml" rel="self" type="application/rss+xml" />
 <description>Torah reading of the week from Hebcal.com</description>
 <language>en-us</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
