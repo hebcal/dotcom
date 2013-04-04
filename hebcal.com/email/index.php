@@ -74,6 +74,11 @@ else
 	}
     }
 
+    if ($param["unsubscribe"]) {
+	$default_unsubscribe = true;
+    }
+
+
     form($param);
 }
 
@@ -279,15 +284,16 @@ href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
   echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3" id="m1">
 </label>
 <input type="hidden" name="v" value="1">
-<?php global $is_update;
+<?php global $is_update, $default_unsubscribe;
+    $modify_class = $default_unsubscribe ? "btn" : "btn btn-primary";
+    $unsub_class = $default_unsubscribe ? "btn btn-primary" : "btn";
     if ($is_update) { ?>
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?> 
-<button type="submit" class="btn btn-primary" name="modify" value="1">
+<button type="submit" class="<?php echo $modify_class ?>" name="modify" value="1">
 <?php echo ($is_update) ? "Update Subscription" : "Subscribe"; ?></button>
-or
-<button type="submit" class="btn" name="unsubscribe" value="1">Unsubscribe</button>
+<button type="submit" class="<?php echo $unsub_class ?>" name="unsubscribe" value="1">Unsubscribe</button>
 </fieldset>
 </form>
 </div><!-- #email-form -->
