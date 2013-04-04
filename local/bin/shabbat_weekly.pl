@@ -306,7 +306,9 @@ $unsub_url
 </div>
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
 <p>This email was sent to $to by Hebcal.com</p>
-<p><a href="$unsub_url">Unsubscribe/Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></p>
+<p><a href="$unsub_url&amp;unsubscribe=1">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></p>
+
+<a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></p>
 </div>
 };
 
