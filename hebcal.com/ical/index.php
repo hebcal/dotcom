@@ -22,7 +22,7 @@ echo html_header_bootstrap($page_title, $xtra_head);
 <h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
 </div>
 
-<p class="lead">Jewish holidays for the next 10 years are available for Microsoft
+<p class="lead">Jewish holiday files for Microsoft
 Outlook, Apple iCal, iPhone, iPad, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files.</p>
