@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -x
-umask 022
 
 TMPFILE=`mktemp`
 YEAR=`date +'%Y'`
@@ -21,6 +20,7 @@ update_ics_name() {
     desc=$3
     perl -pi -e "s/^X-WR-CALNAME:.*/X-WR-CALNAME:${name}\r/" "${file}.ics"
     perl -pi -e "s/^X-WR-CALDESC:.*/X-WR-CALDESC:${desc}\r/" "${file}.ics"
+    chmod 0644 "${file}.ics"
 }
 
 
