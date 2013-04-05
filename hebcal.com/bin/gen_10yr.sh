@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -x
+umask 022
 
 TMPFILE=`mktemp`
 YEAR=`date +'%Y'`
@@ -10,8 +11,8 @@ CSV_URL="http://www.hebcal.com/hebcal/index.cgi/hebcal_usa.csv"
 fetch_urls () {
     file=$1
     args=$2
-    curl -o $TMPFILE "${ICS_URL}?${args}" && cp $TMPFILE "${file}.ics"
-    curl -o $TMPFILE "${CSV_URL}?${args}" && cp $TMPFILE "${file}.csv"
+    rm -f "${file}.ics" && curl -o $TMPFILE "${ICS_URL}?${args}" && cp $TMPFILE "${file}.ics"
+    rm -f "${file}.csv" && curl -o $TMPFILE "${CSV_URL}?${args}" && cp $TMPFILE "${file}.csv"
 }
 
 update_ics_name() {
