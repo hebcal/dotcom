@@ -10,8 +10,10 @@ CSV_URL="http://www.hebcal.com/hebcal/index.cgi/hebcal_usa.csv"
 fetch_urls () {
     file=$1
     args=$2
-    rm -f "${file}.ics" && curl -o $TMPFILE "${ICS_URL}?${args}" && cp $TMPFILE "${file}.ics"
-    rm -f "${file}.csv" && curl -o $TMPFILE "${CSV_URL}?${args}" && cp $TMPFILE "${file}.csv"
+    rm -f "${file}.ics" "${file}.csv"
+    curl -o $TMPFILE "${ICS_URL}?${args}" && cp $TMPFILE "${file}.ics"
+    curl -o $TMPFILE "${CSV_URL}?${args}" && cp $TMPFILE "${file}.csv"
+    chmod 0644 "${file}.ics" "${file}.csv"
 }
 
 update_ics_name() {
@@ -20,7 +22,6 @@ update_ics_name() {
     desc=$3
     perl -pi -e "s/^X-WR-CALNAME:.*/X-WR-CALNAME:${name}\r/" "${file}.ics"
     perl -pi -e "s/^X-WR-CALDESC:.*/X-WR-CALDESC:${desc}\r/" "${file}.ics"
-    chmod 0644 "${file}.ics"
 }
 
 
