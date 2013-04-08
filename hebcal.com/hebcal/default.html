@@ -15,6 +15,14 @@ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async
 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=205907769446397";
+  js.async = true;
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
 </script>
 <style type="text/css">
 .hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
@@ -47,7 +55,7 @@ legend {
    </a>
    <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
    <div class="nav-collapse collapse">
-    <ul class="nav"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Services <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="/holidays/" title="Jewish Holidays">Jewish Holidays</a></li><li class="active"><a href="/hebcal/" title="Custom Calendar">Custom Calendar</a></li><li><a href="/converter/" title="Hebrew Date Converter">Hebrew Date Converter</a></li><li><a href="/yahrzeit/" title="Yahrzeit + Anniversary Calendar">Yahrzeit + Anniversary Calendar</a></li><li><a href="/shabbat/" title="Shabbat Times">Shabbat Times</a></li><li><a href="/sedrot/" title="Torah Readings">Torah Readings</a></li></ul></li><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="/home/about" title="About Hebcal">About Hebcal</a></li><li><a href="/home/about/contact" title="Contact Us">Contact Us</a></li><li><a href="/home/about/donate" title="Donate">Donate</a></li><li><a href="/home/category/news" title="News">News</a></li><li><a href="/home/about/privacy-policy" title="Privacy Policy">Privacy Policy</a></li></ul></li><li><a href="/home/help" title="Help">Help</a></li></ul>
+    <ul class="nav"><li><a href="/holidays/" title="Jewish Holidays">Holidays</a></li><li><a href="/converter/" title="Hebrew Date Converter">Date Converter</a></li><li><a href="/shabbat/" title="Shabbat Times">Shabbat</a></li><li><a href="/sedrot/" title="Torah Readings">Torah</a></li><li><a href="/home/about" title="About">About</a></li><li><a href="/home/help" title="Help">Help</a></li></ul>
     <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
     <input name="s" id="s" type="text" class="search-query" placeholder="Search">
     </form>
@@ -138,7 +146,7 @@ var d=document;
 function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
 d.f1.submit();return false;}
 function s6(val){
-if(val=='G'){d.f1.year.value=2013;d.f1.month.value=3;}
+if(val=='G'){d.f1.year.value=2013;d.f1.month.value=4;}
 if(val=='H'){d.f1.year.value=5773;d.f1.month.value='x';}
 return false;}
 d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
@@ -150,19 +158,44 @@ d.getElementById("ss").onclick=function(){if(this.checked==true){d.f1.nh.checked
 
 <footer role="contentinfo">
 <hr>
-<div id="inner-footer" class="clearfix row">
-<div class="span5">
-<p><a href="/">Hebcal Jewish Calendar</a></p>
-<iframe src="//www.facebook.com/plugins/like.php?app_id=205907769446397&amp;href=http%3A%2F%2Fwww.facebook.com%2Fhebcal&amp;send=false&amp;layout=standard&amp;width=360&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:360px; height:35px;" allowTransparency="true"></iframe>
-</div>
-<div class="span4 offset3">
-<p>09 January 2013 <small class="muted">Revision: 3535</small></p>
+<div id="inner-footer" class="clearfix">
+<div class="row-fluid">
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Products</li>
+<li><a href="/holidays/">Jewish Holidays</a></li>
+<li><a href="/converter/">Hebrew Date Converter</a></li>
+<li><a href="/shabbat/">Shabbat Times</a></li>
+<li><a href="/sedrot/">Torah Readings</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">About Us</li>
+<li><a href="/home/about">About Hebcal</a></li>
+<li><a href="/home/category/news">News</a></li>
+<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Connect</li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact Us</a></li>
+<li><a href="/home/about/donate">Donate</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<p>04 March 2013 <small class="muted">Revision: 3645</small></p>
+<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
 <p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
 is licensed under a 
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
-</div>
+</div><!-- .span3 -->
+</div><!-- .row-fluid -->
 </div><!-- #inner-footer -->
 </footer>
 </div> <!-- .container -->
@@ -175,4 +208,4 @@ if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(
 if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
 </script>
 </body></html>
-<!-- generated Mon Mar  4 11:36:53 2013 -->
+<!-- generated Mon Apr  1 00:00:07 2013 -->
