@@ -57,7 +57,7 @@ update_ics_name $FILE \
     "Days of the Omer" \
     "7 weeks from the second night of Pesach to the day before Shavuot"
 
-FILE="sedrot"
+FILE="torah-readings-diaspora"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;s=on;i=off;lg=s;c=off;geo=none;ny=3"
 update_ics_name $FILE \
     "Torah Readings (Diaspora)" \
