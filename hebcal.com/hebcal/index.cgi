@@ -455,6 +455,7 @@ sub vcalendar_display
 				       $g_nmf, $g_nss);
 
     my $title = $g_date;
+    $title =~ s/^Hebrew Year //;
     plus4_events($cmd, \$title, \@events);
 
     my $tz = $q->param("tz");
