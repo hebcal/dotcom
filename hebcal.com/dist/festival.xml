@@ -1465,6 +1465,9 @@ with the verse
  earlier or postponed if observance of the holiday (or Yom
  HaZikaron, which always preceeds it) would conflict with Shabbat
  </about>
+ <books>
+  <book ASIN="0822576686"/>
+ </books>
 </festival>
 <festival id="Yom HaShoah" hebrew="יוֹם הַשּׁוֹאָה" yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Yom_HaShoah">
@@ -1485,6 +1488,9 @@ with the verse
  Nisan (April/May), unless the 27th would be adjacent to Shabbat, in
  which case the date is shifted by a day.
  </wikipedia>
+ <books>
+  <book ASIN="1550652893"/>
+ </books>
 </festival>
 <festival id="Yom HaZikaron" hebrew="יוֹם הַזִּכָּרוֹן" yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Yom_Hazikaron">
