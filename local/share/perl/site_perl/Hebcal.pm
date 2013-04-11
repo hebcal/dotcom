@@ -2032,7 +2032,7 @@ sub vcalendar_write_contents
 
     if ($is_icalendar) {
 	if (defined $cconfig && defined $cconfig->{"city"}) {
-	    $title .= " " . $cconfig->{"city"};
+	    $title = $cconfig->{"city"} . " " . $title;
 	}
 	out_html(undef, 
 	qq{VERSION:2.0$endl},
