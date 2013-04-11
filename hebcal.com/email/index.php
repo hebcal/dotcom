@@ -18,10 +18,6 @@ if (preg_match('/(\d+)/', $VER, $matches)) {
     $VER = $matches[1];
 }
 echo html_header_bootstrap("Shabbat Candle Lighting Times by Email");
-?>
-<p class="lead">Subscribe to weekly Shabbat candle
-lighting times and Torah portion by email.</p>
-<?php
 
 $param = array();
 if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"])
@@ -90,11 +86,24 @@ elseif ($param["unsubscribe"]) {
 }
 else {
     form($param);
+    // form always writes footer and exits
 }
-?>
-<?php
-my_footer();
+
+echo_lead_text();
+echo html_footer_bootstrap();
 exit();
+
+
+function echo_lead_text() {
+    global $echoed_lead_text;
+    if (!$echoed_lead_text) {
+?>
+<p class="lead">Subscribe to weekly Shabbat candle
+lighting times and Torah portion by email.</p>
+<?php
+	$echoed_lead_text = true;
+    }
+}
 
 function write_sub_info($param) {
     global $hebcal_db;
@@ -226,6 +235,8 @@ EOD;
 }
 
 function form($param, $message = "", $help = "") {
+    echo_lead_text();
+
     if ($message != "") {
 ?>
 <div class="alert alert-error">
@@ -309,12 +320,8 @@ offers.</p>
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 </div><!-- #privacy-policy -->
 <?php
-    my_footer();
-    exit();
-}
-
-function my_footer() {
     echo html_footer_bootstrap();
+    exit();
 }
 
 function subscribe($param) {
