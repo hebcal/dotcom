@@ -604,6 +604,7 @@ function unsubscribe($param) {
     $info = get_sub_info($param["em"]);
 
     if (isset($info["status"]) && $info["status"] == "unsubscribed") {
+	echo_lead_text();
 	$html = <<<EOD
 <div class="alert">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
