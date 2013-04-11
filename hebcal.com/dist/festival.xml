@@ -1525,6 +1525,11 @@ with the verse
  Karaite Jews, and ends the day before the holiday of Shavuot, the
  'fiftieth day.'
  </wikipedia>
+ <books>
+  <book ASIN="1935604007"/>
+  <book ASIN="1468127934"/>
+  <book ASIN="1470157985"/>
+ </books>
 </festival>
 <festival id="Erev Pesach" hebrew="עֶרֶב פֶּסַח"/>
 <festival id="Erev Shavuot" hebrew="עֶרֶב שָׁבוּעוֹת"/>
