@@ -218,10 +218,7 @@ if (defined $q->param("month") && defined $q->param("year") &&
 }
 else
 {
-    $g_date = sprintf("%s%04d",
-		    ($q->param("yt") && $q->param("yt") eq "H") ?
-		    "Hebrew Year " : "",
-		    $q->param("year"));
+    $g_date = sprintf("%04d", $q->param("year"));
     my $plus4 = $q->param("year") + $EXTRA_YEARS;
     $g_filename .= "_" . $plus4;
 }
@@ -455,7 +452,6 @@ sub vcalendar_display
 				       $g_nmf, $g_nss);
 
     my $title = $g_date;
-    $title =~ s/^Hebrew Year //;
     plus4_events($cmd, \$title, \@events);
 
     my $tz = $q->param("tz");
