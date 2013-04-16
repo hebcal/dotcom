@@ -320,16 +320,22 @@ sub process_args
     (\@events,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty);
 }
 
+sub url_html {
+    my($url) = @_;
+    $url =~ s/&/&amp;/g;
+    return $url;
+}
+
 sub self_url
 {
     my($url) = join('', "http://", $q->virtual_host(), $script_name,
 			 "?geo=", $q->param('geo'));
 
-    $url .= ";zip=" . $q->param('zip')
+    $url .= "&zip=" . $q->param('zip')
 	if $q->param('zip');
-    $url .= ";city=" . Hebcal::url_escape($q->param('city'))
+    $url .= "&city=" . Hebcal::url_escape($q->param('city'))
 	if $q->param('city');
-    $url .= ";m=" . $q->param('m')
+    $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
     $url;
@@ -395,7 +401,8 @@ sub display_rss
 
     print "Content-Type: text/xml\015\012\015\012";
 
-    my($url) = self_url();
+    my $url = url_html(self_url());
+
     my $title = 'Shabbat Times for ' . $city_descr;
 
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
@@ -406,7 +413,7 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 <channel>
 <title>$title</title>
 <link>$url</link>
-<atom:link href="$url;cfg=r" rel="self" type="application/rss+xml" />
+<atom:link href="$url&amp;cfg=r" rel="self" type="application/rss+xml" />
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
 <language>en-us</language>
 <copyright>Copyright (c) $this_year Michael J. Radwin. All rights reserved.</copyright>
@@ -503,7 +510,7 @@ sub display_javascript
     my($title) = "Shabbat Times for $city_descr";
 
     if ($cfg eq "i" || $cfg eq "widget") {
-	print $q->header();
+	print $q->header(-charset => "UTF-8");
 	my $base = "http://" . $q->virtual_host() . $script_name;
 	print $q->start_html(
 	    -title => $title,
@@ -514,21 +521,6 @@ sub display_javascript
     } else {
 	print "Content-Type: application/x-javascript\015\012\015\012";
     }
-
-    my($url) = self_url();
-
-    my $tag;
-    if ($cfg eq "i") {
-	$tag = "iframe.1c";
-    } elsif ($cfg eq "widget") {
-	$tag = "widget";
-    } elsif ($q->param('.from')) {
-	$tag = Hebcal::url_escape($q->param('.from'));
-    } else {
-	$tag = "js.1c";
-    }
-
-    $url .= ";tag=$tag";
 
     my $loc_class = '';
     if (defined $q->param('zip') && $q->param('zip') ne '') {
@@ -544,11 +536,6 @@ sub display_javascript
 
     for (my $i = 0; $i < scalar(@{$items}); $i++)
     {
-	if ($items->[$i]->{'link'} && $items->[$i]->{'link'} =~ /\.html$/)
-	{
-	    $items->[$i]->{'link'} .= "?tag=$tag";
-	}
-
 	if ($cfg eq "widget" && $items->[$i]->{'link'})
 	{
 	    $items->[$i]->{'link'} = "javascript:widget.openURL('" .
@@ -561,6 +548,7 @@ sub display_javascript
     if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
+    my $url = url_html(self_url());
     if ($cfg eq "widget")
     {
 	$url = "javascript:widget.openURL('" . $url . "');";
@@ -588,7 +576,7 @@ sub display_html
 
     my $title = "Shabbat Candle Lighting Times for $city_descr";
 
-    print $q->header();
+    print $q->header(-charset => "UTF-8");
 
     my_head($title);
 
@@ -597,14 +585,6 @@ sub display_html
 
     Hebcal::out_html(undef, $HebcalHtml::usno_warning)
 	if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
-
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	if ($items->[$i]->{'link'} && $items->[$i]->{'link'} =~ /\.html$/)
-	{
-	    $items->[$i]->{'link'} .= "?tag=1c";
-	}
-    }
 
     display_html_common($items);
 
@@ -619,8 +599,8 @@ sub more_from_hebcal {
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
 
     # link to hebcal full calendar
-    my($url) = join('', "http://", $q->virtual_host(), "/hebcal/",
-			 "?v=1;geo=", $q->param('geo'), ";");
+    my $url = join('', "http://", $q->virtual_host(), "/hebcal/",
+		   "?v=1&geo=", $q->param('geo'), "&");
 
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
@@ -628,14 +608,15 @@ sub more_from_hebcal {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
 
-    $url .= ";m=" . $q->param('m')
+    $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    $url .= ';vis=on;month=now;year=now;nh=on;nx=on;s=on;c=on;mf=on;ss=on';
-    $url .= ';tag=1c';
+    $url .= '&vis=on&month=now&year=now&nh=on&nx=on&s=on&c=on&mf=on&ss=on';
 
     my $month_name = join(" ", $Hebcal::MoY_short[$this_mon-1], $this_year);
-    Hebcal::out_html($cfg, qq{<a class="btn" href="$url"><i class="icon-calendar"></i> $month_name calendar &raquo;</a>\n});
+    Hebcal::out_html($cfg, qq{<a class="btn" href="},
+		     url_html($url),
+		     qq{"><i class="icon-calendar"></i> $month_name calendar &raquo;</a>\n});
 
     # Fridge calendar
     $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
@@ -644,15 +625,13 @@ sub more_from_hebcal {
     } else {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
-    $url .= ";year=" . $hyear;
+    $url .= "&year=" . $hyear;
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
-		     qq{href="$url"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
-
-    $url = join('', "http://", $q->virtual_host(), "/email/",
-			 "?geo=", $q->param('geo'), "&amp;");
+		     qq{href="}, url_html($url),
+		     qq{"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
 
     # RSS
-    my $rss_href = self_url() . ";cfg=r";
+    my $rss_href = url_html(self_url() . "&cfg=r");
     my $rss_html = <<EOHTML;
 <a class="btn" title="RSS feed of candle lighting times"
 href="$rss_href"><img
@@ -670,12 +649,12 @@ EOHTML
     } else {
 	$url .= "city=" . Hebcal::url_escape($q->param('city'));
     }
-    $url .= "&amp;m=" . $q->param('m')
+    $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-    $url .= "&amp;type=shabbat";
+    $url .= "&type=shabbat";
 
     Hebcal::out_html($cfg, qq{<a class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
-		     qq{href="$url"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});
+		     qq{href="}, url_html($url), qq{"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});
 
     Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
 
@@ -713,7 +692,7 @@ EOHTML
 
 sub my_head {
     my($title) = @_;
-    my $rss_href = self_url() . ";cfg=r";
+    my $rss_href = url_html(self_url() . "&cfg=r");
     my $xtra_head = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
 <style type="text/css">
@@ -753,7 +732,7 @@ sub form($$$$)
     my($cfg,$head,$message,$help) = @_;
 
     if ($head) {
-	print $q->header();
+	print $q->header(-charset => "UTF-8");
 	my_head("Shabbat Candle Lighting Times");
     }
 
@@ -829,10 +808,10 @@ sub form($$$$)
 		     qq{<ul>\n});
     foreach my $city_name (sort keys %Hebcal::city_tz) {
 	my $url = join('', $script_name, "?city=", Hebcal::url_escape($city_name));
-	$url .= ";m=" . $q->param('m')
+	$url .= "&m=" . $q->param('m')
 	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 	$city_name =~ s/ /&nbsp;/g;
-	Hebcal::out_html($cfg, qq{<li><a href="$url">$city_name</a></li>\n});
+	Hebcal::out_html($cfg, qq{<li><a href="}, url_html($url), qq{">$city_name</a></li>\n});
     }
     Hebcal::out_html($cfg, qq{</ul>\n</div><!-- .city-list -->\n});
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
