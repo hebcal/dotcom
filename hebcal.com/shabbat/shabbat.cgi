@@ -482,19 +482,15 @@ sub display_html_common
 	{
 	    Hebcal::out_html($cfg,qq{<a$anchor></a>})
 		unless $cfg;
-	    Hebcal::out_html($cfg,qq{$items->[$i]->{'subj'}:
-<strong>$items->[$i]->{'time'}</strong> on $items->[$i]->{'date'}});
+	    Hebcal::out_html($cfg,qq{$items->[$i]->{'subj'}: <strong>$items->[$i]->{'time'}</strong> on $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'holiday')
 	{
-	    Hebcal::out_html($cfg,qq{<a$anchor
-target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>
-occurs on $items->[$i]->{'date'}});
+	    Hebcal::out_html($cfg,qq{<a$anchor target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> occurs on $items->[$i]->{'date'}});
 	}
 	elsif ($items->[$i]->{'class'} eq 'parashat')
 	{
-	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor
-target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
+	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
 	}
     
 	Hebcal::out_html($cfg,qq{</li>\n});
@@ -555,8 +551,7 @@ sub display_javascript
     }
 
     Hebcal::out_html($cfg, qq{<div class="copyright">
-<small>Powered by <a target="$tgt"
-href="$url">Hebcal Shabbat Times</a></small>
+<small>Powered by <a target="$tgt" href="$url">Hebcal Shabbat Times</a></small>
 </div><!-- .copyright -->
 </div><!-- #hebcal-$loc_class -->
 </div><!-- #hebcal -->
