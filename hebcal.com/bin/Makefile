@@ -60,6 +60,7 @@ RELEASEFILES = 	web/hebcal.com/dist/ChangeLog.txt \
 		web/hebcal.com/bin/*.pl \
 		local/share/perl/site_perl/Hebcal.pm \
 		local/share/perl/site_perl/HebcalConst.pm \
+		local/share/perl/site_perl/HebcalHtml.pm \
 		local/share/perl/site_perl/Palm/DBA.pm \
 		web/hebcal.com/pear/Hebcal/*.inc \
 		web/hebcal.com/wap-shabbat.php \
