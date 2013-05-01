@@ -22,6 +22,7 @@ update_ics_name() {
     desc=$3
     perl -pi -e "s/^X-WR-CALNAME:.*/X-WR-CALNAME:${name}\r/" "${file}.ics"
     perl -pi -e "s/^X-WR-CALDESC:.*/X-WR-CALDESC:${desc}\r/" "${file}.ics"
+    perl -pi -e "s/^X-PUBLISHED-TTL:PT7D/X-PUBLISHED-TTL:PT30D/" "${file}.ics"
 }
 
 
@@ -40,19 +41,19 @@ update_ics_name $FILE \
     "http:\\/\\/www.hebcal.com\\/"
 
 FILE="hdate-en"
-fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;i=off;lg=s;d=on;c=off;geo=none;ny=3"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;i=off;lg=s;d=on;c=off;geo=none;ny=2"
 update_ics_name $FILE \
     "Hebrew calendar dates (en)" \
     "Displays the Hebrew date every day of the week in English transliteration"
 
 FILE="hdate-he"
-fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;i=off;lg=h;d=on;c=off;geo=none;ny=3"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;i=off;lg=h;d=on;c=off;geo=none;ny=2"
 update_ics_name $FILE \
     "Hebrew calendar dates (he)" \
     "Displays the Hebrew date every day of the week in Hebrew"
 
 FILE="omer"
-fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;o=on;i=off;lg=s;c=off;geo=none;ny=3"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;o=on;i=off;lg=s;c=off;geo=none;ny=2"
 update_ics_name $FILE \
     "Days of the Omer" \
     "7 weeks from the second night of Pesach to the day before Shavuot"
