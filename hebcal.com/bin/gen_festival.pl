@@ -1185,7 +1185,9 @@ sub holidays_observed
 	    $subj_copy =~ s/ \d{4}$//;
 	    $subj_copy =~ s/ \(CH\'\'M\)$//;
 	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
-	    $subj_copy =~ s/ [IV]+$//;
+	    if ($subj ne "Rosh Chodesh Adar II") {
+		$subj_copy =~ s/ [IV]+$//;
+	    }
 	    $subj_copy =~ s/: \d Candles?$//;
 	    $subj_copy =~ s/: 8th Day$//;
 
