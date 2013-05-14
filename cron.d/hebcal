@@ -26,9 +26,9 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # shabbat: regular emails at 2:45am pacific on Thursdays
 45 2 * * 4 nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
-# shabbat: post to Facebook wall on Wednesday between 4:17-4:37pm Pacific
+# shabbat: post to Facebook wall on Thursday between 5:17-5:37am Pacific
 # Sleep a random amount, not greater than 30 minutes
-17 16 * * 3 nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
+17 5 * * 4 nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
 
 # post to Facebook wall Sunday-Friday between 6:03-6:33am Pacific
 3 6 * * 0-5 nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
