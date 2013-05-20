@@ -100,6 +100,7 @@ if ($cfg eq "i" || $cfg eq "j") {
 my $num_years = 20;
 if (defined $q->param("years") && $q->param("years") =~ /^\d+$/) {
     $num_years = $q->param("years");
+    $num_years = 99 if $num_years > 99;
 }
 
 my %yahrzeits = ();
@@ -423,11 +424,15 @@ and then come back to this page.</p>
     $q->checkbox(-name => "yizkor",
 		 -label => "Include Yizkor dates"),
     "</label>",
-    $q->hidden(-name => "years", -default => $num_years), "\n",
+    "\n<label>Number of years: ",
+    $q->textfield(-name => "years",
+		  -default => $num_years,
+		  -style => "width:auto",
+		  -maxlength => 2,
+		  -size => 2),
+    "</label>",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
-#    $q->hidden(-name => "cfg"),
-#    $q->hidden(-name => "rand",-value => time(),-override => 1),
     $q->hidden(-name => ".cgifields",
 	       -values => ["hebdate", "yizkor"],
 	       -override => 1), "\n",
@@ -458,9 +463,13 @@ instructions</a>.</p>
 sub show_row {
     my($q,$cfg,$i,$months) = @_;
 
+    my $style = "";
+    if ($i % 2 == 0) {
+	$style = qq{ style="background-color:#f9f9f9"};
+    }
     Hebcal::out_html
 	($cfg,
-	 qq{<div class="form-inline">\n},
+	 qq{<div class="form-inline"$style>\n},
 	 $q->popup_menu(-name => "t$i",
 			-class => "input-small",
 			-values => ["Yahrzeit","Birthday","Anniversary"]),
