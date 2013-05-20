@@ -463,7 +463,7 @@ instructions</a>.</p>
 sub show_row {
     my($q,$cfg,$i,$months) = @_;
 
-    my $style = "border-top:2px solid #dddddd";
+    my $style = "border-bottom:2px solid #dddddd";
     if (($i - 1) % 2 == 0) {
 	$style .= ";background-color:#f9f9f9";
     }
