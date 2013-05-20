@@ -463,13 +463,13 @@ instructions</a>.</p>
 sub show_row {
     my($q,$cfg,$i,$months) = @_;
 
-    my $style = "";
-    if ($i % 2 == 0) {
-	$style = qq{ style="background-color:#f9f9f9"};
+    my $style = "border-top:2px solid #dddddd";
+    if (($i - 1) % 2 == 0) {
+	$style .= ";background-color:#f9f9f9";
     }
     Hebcal::out_html
 	($cfg,
-	 qq{<div class="form-inline"$style>\n},
+	 qq{<div class="form-inline" style="$style">\n},
 	 $q->popup_menu(-name => "t$i",
 			-class => "input-small",
 			-values => ["Yahrzeit","Birthday","Anniversary"]),
