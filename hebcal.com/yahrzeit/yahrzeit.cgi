@@ -97,7 +97,7 @@ if ($cfg eq "i" || $cfg eq "j") {
     $count += 5;
 }
 
-my $num_years = 10;
+my $num_years = 20;
 if (defined $q->param("years") && $q->param("years") =~ /^\d+$/) {
     $num_years = $q->param("years");
 }
@@ -400,7 +400,7 @@ sub form
 
     Hebcal::out_html($cfg,
 qq{<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
-or Hebrew Anniversaries for the next 10 years.</p>
+or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>October 20, 1994 (after
 sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</b>'s
 yahrzeit.</strong>
