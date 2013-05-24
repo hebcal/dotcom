@@ -167,7 +167,15 @@ else
 
 if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
     header("Content-Type: text/json; charset=UTF-8");
+    $callback = false;
+    if (isset($_GET["callback"]) && preg_match('/^[\w\.]+$/', $_GET["callback"])) {
+	echo $_GET["callback"], "(";
+	$callback = true;
+    }
     echo "{\"gy\":$gy,\"gm\":$gm,\"gd\":$gd,\n\"hy\":$hy,\"hm\":\"$month_name\",\"hd\":$hd,\n\"hebrew\":\"$hebrew\"\n}\n";
+    if ($callback) {
+	echo ")\n";
+    }
     exit();
 } elseif (isset($_GET["cfg"]) && $_GET["cfg"] == "xml") {
     header("Content-Type: text/xml; charset=UTF-8");
