@@ -13,12 +13,12 @@ if [ $? != 0 ]; then
 fi
 
 AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxx
-AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
 
 cd $S3SYNCDIR
-ruby s3sync.rb -v -r ${BACKUPDIR} hebcal:
+ruby s3sync.rb -v -r ${BACKUPDIR} hebcal2:
 
 dotlockfile -u $LOCKFILE
