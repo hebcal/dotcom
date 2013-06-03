@@ -14,9 +14,11 @@ fi
 
 AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxxxxxx
 AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+AWS_CALLING_FORMAT=SUBDOMAIN
 
 export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
+export AWS_CALLING_FORMAT
 
 cd $S3SYNCDIR
 ruby s3sync.rb -v -r ${BACKUPDIR} hebcal2:
