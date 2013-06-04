@@ -2137,6 +2137,7 @@ sub vcalendar_write_contents
 	  if ($href =~ m,/(sedrot|holidays)/.+,) {
 	    $href .= "?tag=ical";
 	  }
+	  out_html(undef, qq{URL:}, $href, $endl) if $is_icalendar;
 	  $memo .= "\\n\\n" if $memo;
 	  $memo .= $href;
 	}
