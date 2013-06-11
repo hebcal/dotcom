@@ -46,6 +46,7 @@ use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
+use HebcalGPL ();
 use HebcalHtml ();
 use Palm::DBA ();
 use POSIX ();
@@ -55,6 +56,33 @@ my $this_year = (localtime)[5];
 $this_year += 1900;
 
 my $rcsrev = '$Revision$'; #'
+
+my $NISAN = 1;
+my $IYYAR = 2;
+my $SIVAN = 3;
+my $TAMUZ = 4;
+my $AV = 5;
+my $ELUL = 6;
+my $TISHREI = 7;
+my $CHESHVAN = 8;
+my $KISLEV = 9;
+my $TEVET = 10;
+my $SHVAT = 11;
+my $ADAR_I = 12;
+my $ADAR_II = 13;
+
+my @HEB_MONTH_NAME =
+(
+  [
+    "VOID", "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+    "Cheshvan", "Kislev", "Tevet", "Sh'vat", "Adar", "Nisan"
+  ],
+  [
+    "VOID", "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+    "Cheshvan", "Kislev", "Tevet", "Sh'vat", "Adar I", "Adar II",
+    "Nisan"
+  ]
+);
 
 # process form params
 my $q = new CGI;
@@ -103,8 +131,7 @@ if (defined $q->param("years") && $q->param("years") =~ /^\d+$/) {
     $num_years = 99 if $num_years > 99;
 }
 
-my %yahrzeits = ();
-my %ytype = ();
+my @inputs = ();
 foreach my $key (1 .. $count)
 {
     if (defined $q->param("m$key") &&
@@ -128,15 +155,7 @@ foreach my $key (1 .. $count)
 	    ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,1);
 	}
 
-	$yahrzeits{$q->param("n$key")} =
-	    sprintf("%02d %02d %4d %s",
-		    $gm,
-		    $gd,
-		    $gy,
-		    $q->param("n$key"));
-	$ytype{$q->param("n$key")} = 
-	    ($q->param("t$key") eq "Yahrzeit") ?
-		$q->param("t$key") : "Hebrew " . $q->param("t$key");
+	push(@inputs, [$key, $gy, $gm, $gd, $q->param("n$key"), $q->param("t$key")]);
     }
 }
 
@@ -167,7 +186,7 @@ exit(0);
 
 sub vcalendar_display
 {
-    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+    my @events = my_invoke_hebcal($this_year);
 
     Hebcal::vcalendar_write_contents($q, \@events, undef, undef,
 				     "Yahrzeit");
@@ -175,7 +194,7 @@ sub vcalendar_display
 
 sub dba_display
 {
-    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+    my @events = my_invoke_hebcal($this_year);
 
     Hebcal::export_http_header($q, "application/x-palm-dba");
 
@@ -188,21 +207,72 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
+    my @events = my_invoke_hebcal($this_year);
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
+
+sub get_birthday_or_anniversary {
+    my($gy,$gm,$gd,$hyear) = @_;
+
+    my $orig = HebcalGPL::greg2hebrew($gy,$gm,$gd);
+    my $res = {"dd" => $orig->{"dd"}, "mm" => $orig->{"mm"}, "yy" => $hyear};
+
+    # The birthday of someone born in Adar of an ordinary year or
+    # Adar II of a leap year is also always in the last month of the
+    # year, be that Adar or Adar II.
+    if (($orig->{"mm"} == $ADAR_I && !HebcalGPL::LEAP_YR_HEB($orig->{"yy"}))
+	|| ($orig->{"mm"} == $ADAR_II && HebcalGPL::LEAP_YR_HEB($orig->{"yy"})))
+    {
+	$res->{"mm"} = HebcalGPL::MONTHS_IN_HEB($hyear);
+    }
+    # The birthday in an ordinary year of someone born during the
+    # first 29 days of Adar I in a leap year is on the corresponding
+    # day of Adar; in a leap year, the birthday occurs in Adar I, as
+    # expected.
+    #
+    # Someone born on the thirtieth day of Marcheshvan, Kislev, or
+    # Adar I has his birthday postponed until the first of the
+    # following month in years where that day does not
+    # occur. [Calendrical Calculations p. 111]
+    elsif ($orig->{"mm"} == $CHESHVAN && $orig->{"dd"} == 30
+	   && !HebcalGPL::long_cheshvan($hyear))
+    {
+	$res->{"mm"} = $KISLEV;
+	$res->{"dd"} = 1;
+    }
+    elsif ($orig->{"mm"} == $KISLEV && $orig->{"dd"} == 30
+	   && HebcalGPL::short_kislev($hyear))
+    {
+	$res->{"mm"} = $TEVET;
+	$res->{"dd"} = 1;
+    }
+    elsif ($orig->{"mm"} == $ADAR_I && $orig->{"dd"} == 30
+	   && HebcalGPL::LEAP_YR_HEB($orig->{"yy"})
+	   && !HebcalGPL::LEAP_YR_HEB($hyear))
+    {
+	$res->{"mm"} = $NISAN;
+	$res->{"dd"} = 1;
+    }
+
+    $res;
+}
+
 sub my_invoke_hebcal {
-    my($this_year,$y,$t) = @_;
+    my($this_year) = @_;
     my @events2 = ();
 
+    my %yahrzeits;
     my $tmpfile = POSIX::tmpnam();
     open(T, ">$tmpfile") || die "$tmpfile: $!\n";
-    foreach my $key (keys %{$y})
-    {
-	print T $y->{$key}, "\n";
+    foreach my $input (@inputs) {
+	my($key,$gy,$gm,$gd,$name,$type) = @{$input};
+	if ($type eq "Yahrzeit") {
+	    printf T "%02d %02d %4d %s\n", $gm, $gd, $gy, $name;
+	    $yahrzeits{$name} = 1;
+	}
     }
     close(T);
 
@@ -212,14 +282,36 @@ sub my_invoke_hebcal {
 
     foreach my $year ($this_year .. ($this_year + $num_years))
     {
+	my $hyear = $year + 3760;
+	# first process birthday and anniversaries
+	foreach my $input (@inputs) {
+	    my($key,$gy,$gm,$gd,$name,$type) = @{$input};
+	    next if $type eq "Yahrzeit";
+	    my $hdate = get_birthday_or_anniversary($gy,$gm,$gd,$hyear);
+	    my $gregdate = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs($hdate));
+	    push(@events2, [
+		     sprintf("%s's Hebrew %s (%d%s of %s)",
+			     $name, $type,
+			     $hdate->{"dd"}, HebcalGPL::numSuffix($hdate->{"dd"}),
+			     $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}]),
+		     1, # EVT_IDX_UNTIMED
+		     0, # EVT_IDX_MIN
+		     0, # EVT_IDX_HOUR
+		     $gregdate->{"dd"},
+		     $gregdate->{"mm"} - 1,
+		     $gregdate->{"yy"},
+		     0, # EVT_IDX_DUR
+		     "", # EVT_IDX_MEMO
+		     0, # EVT_IDX_YOMTOV,
+		 ]);
+	}
+
 	my @events = Hebcal::invoke_hebcal("$cmd $year", "", undef);
-	my $numEntries = scalar(@events);
-	for (my $i = 0; $i < $numEntries; $i++)
-	{
-	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	    my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-	    my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	    my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+	foreach my $evt (@events) {
+	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	    my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+	    my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+	    my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
 	
 	    if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
 	    {
@@ -227,9 +319,9 @@ sub my_invoke_hebcal {
 		next;
 	    }
 
-	    if (defined $y->{$subj})
+	    if (defined $yahrzeits{$subj})
 	    {
-		my $subj2 = "${subj}'s " . $t->{$subj};
+		my $subj2 = "${subj}'s Yahrzeit";
 		my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
 
 		$subj2 .= " ($greg2heb{$isodate})"
@@ -237,15 +329,15 @@ sub my_invoke_hebcal {
 
 		push(@events2,
 		     [$subj2,
-		      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
-		      $events[$i]->[$Hebcal::EVT_IDX_MIN],
-		      $events[$i]->[$Hebcal::EVT_IDX_HOUR],
-		      $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-		      $events[$i]->[$Hebcal::EVT_IDX_MON],
-		      $events[$i]->[$Hebcal::EVT_IDX_YEAR],
-		      $events[$i]->[$Hebcal::EVT_IDX_DUR],
-		      $events[$i]->[$Hebcal::EVT_IDX_MEMO],
-		      $events[$i]->[$Hebcal::EVT_IDX_YOMTOV],
+		      1, # EVT_IDX_UNTIMED
+		      0, # EVT_IDX_MIN
+		      0, # EVT_IDX_HOUR
+		      $evt->[$Hebcal::EVT_IDX_MDAY],
+		      $evt->[$Hebcal::EVT_IDX_MON],
+		      $evt->[$Hebcal::EVT_IDX_YEAR],
+		      0, # EVT_IDX_DUR
+		      "", # EVT_IDX_MEMO
+		      0, # EVT_IDX_YOMTOV,
 		      ]);
 	    }
 	    elsif ($subj eq "Pesach VIII" || $subj eq "Shavuot II" ||
@@ -255,26 +347,15 @@ sub my_invoke_hebcal {
 		    ($q->param("yizkor") eq "on" ||
 		     $q->param("yizkor") eq "1");
 
-		my $subj2 = "Yizkor ($subj)";
-
-		push(@events2,
-		     [$subj2,
-		      $events[$i]->[$Hebcal::EVT_IDX_UNTIMED],
-		      $events[$i]->[$Hebcal::EVT_IDX_MIN],
-		      $events[$i]->[$Hebcal::EVT_IDX_HOUR],
-		      $events[$i]->[$Hebcal::EVT_IDX_MDAY],
-		      $events[$i]->[$Hebcal::EVT_IDX_MON],
-		      $events[$i]->[$Hebcal::EVT_IDX_YEAR],
-		      $events[$i]->[$Hebcal::EVT_IDX_DUR],
-		      $events[$i]->[$Hebcal::EVT_IDX_MEMO],
-		      $events[$i]->[$Hebcal::EVT_IDX_YOMTOV],
-		      ]);
+		my @evt_copy = @{$evt};
+		$evt_copy[$Hebcal::EVT_IDX_SUBJ] = "Yizkor ($subj)";
+		push(@events2, \@evt_copy);
 	    }
 	}
     }
 
     unlink($tmpfile);
-    @events2;
+    sort { Hebcal::event_to_time($a) <=> Hebcal::event_to_time($b) } @events2;
 }
 
 sub results_page {
@@ -329,12 +410,11 @@ EOHTML
 			  "</a></big></center>\n");
     }
 
-form(1) unless keys %yahrzeits;
+form(1) unless scalar(@inputs) >= 1;
 
-my @events = my_invoke_hebcal($this_year, \%yahrzeits, \%ytype);
-my $numEntries = scalar(@events);
+my @events = my_invoke_hebcal($this_year);
 
-if ($numEntries > 0) {
+if (scalar(@events) > 0) {
     $q->param("v", "yahrzeit");
     Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, "yahrzeit", \@events));
 
@@ -349,9 +429,11 @@ the evening before the date specified. This is because the Jewish
 day actually begins at sundown on the previous night.</p>\n});
 }
 
-for (my $i = 0; $i < $numEntries; $i++)
-{
-    if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ / of Adar/) {
+foreach my $evt (@events) {
+    my $hdate = HebcalGPL::greg2hebrew($evt->[$Hebcal::EVT_IDX_YEAR],
+				       $evt->[$Hebcal::EVT_IDX_MON] + 1,
+				       $evt->[$Hebcal::EVT_IDX_MDAY]);
+    if ($hdate->{"mm"} >= $ADAR_I) {
 	Hebcal::out_html($cfg, qq{<div class="alert alert-info">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>Note:</strong> the results below contain one or more anniversary in Adar.
@@ -365,17 +447,17 @@ does Hebcal determine an anniversary occurring in Adar?</a>
 
 Hebcal::out_html($cfg, qq{<table class="table table-condensed table-striped">}) unless ($q->param("yizkor"));
 
-for (my $i = 0; $i < $numEntries; $i++)
+my $prev_year = 0;
+foreach my $evt (@events)
 {
-    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-    my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-    my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-    my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+    my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+    my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
 
-    if ($year != $events[$i - 1]->[$Hebcal::EVT_IDX_YEAR] &&
-	$q->param("yizkor"))
+    if ($year != $prev_year && $q->param("yizkor"))
     {
-	Hebcal::out_html($cfg, "</table>") unless $i == 0;
+	Hebcal::out_html($cfg, "</table>") unless $prev_year == 0;
 	Hebcal::out_html($cfg, qq{<h4>$year</h4>\n<table class="table table-condensed table-striped">});
     }
 
@@ -386,6 +468,7 @@ for (my $i = 0; $i < $numEntries; $i++)
 	 sprintf(qq{<tr><td style="width:130px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
 		 $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
 		 Hebcal::html_entify($subj)));
+    $prev_year = $year;
 }
 
 Hebcal::out_html($cfg, "</table>\n");
