@@ -132,6 +132,8 @@ if (defined $q->param("years") && $q->param("years") =~ /^\d+$/) {
 }
 
 my @inputs = ();
+my %input_types;
+my %input_names;
 foreach my $key (1 .. $count)
 {
     if (defined $q->param("m$key") &&
@@ -155,7 +157,11 @@ foreach my $key (1 .. $count)
 	    ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,1);
 	}
 
-	push(@inputs, [$key, $gy, $gm, $gd, $q->param("n$key"), $q->param("t$key")]);
+	my $type = $q->param("t$key");
+	my $name = $q->param("n$key");
+	push(@inputs, [$key, $gy, $gm, $gd, $name, $type]);
+	$input_types{$type} = 1;
+	$input_names{$name} = 1;
     }
 }
 
@@ -188,8 +194,22 @@ sub vcalendar_display
 {
     my @events = my_invoke_hebcal($this_year);
 
-    Hebcal::vcalendar_write_contents($q, \@events, undef, undef,
-				     "Yahrzeit");
+    my $title;
+    my @types = keys %input_types;
+    if (scalar(@types) == 1) {
+	$title = $types[0];
+    } else {
+	$title = "Anniversary";
+    }
+
+    my @names = sort keys %input_names;
+    if (scalar(@names) > 3) {
+	@names = @names[0 .. 2];
+	push(@names, "...");
+    }
+    $title .= " for " . join('\, ', @names);
+
+    Hebcal::vcalendar_write_contents($q, \@events, undef, undef, $title);
 }
 
 sub dba_display
@@ -416,11 +436,28 @@ my @events = my_invoke_hebcal($this_year);
 
 if (scalar(@events) > 0) {
     $q->param("v", "yahrzeit");
-    Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, "yahrzeit", \@events));
+
+    my $filename;
+    my @types = keys %input_types;
+    if (scalar(@types) == 1) {
+	$filename = lc($types[0]);
+    } else {
+	$filename = "anniversary";
+    }
+
+    my @names = sort keys %input_names;
+    if (scalar(@names) > 3) {
+	@names = @names[0 .. 2];
+    }
+    @names = map { Hebcal::make_anchor($_) } @names;
+    $filename .= "_" . join("_", @names);
+
+    $q->param("filename", $filename);
+    Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events));
 
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
-    Hebcal::out_html($cfg, qq{<a class="btn" href="#form"><i class="icon-cog"></i> Enter more dates and names</a>\n});
     Hebcal::out_html($cfg, HebcalHtml::download_html_modal_button());
+    Hebcal::out_html($cfg, qq{<a class="btn" href="#form"><i class="icon-cog"></i> Enter more dates and names</a>\n});
     Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
 
     Hebcal::out_html($cfg,
@@ -510,6 +547,9 @@ and then come back to this page.</p>
     "\n<label>Number of years: ",
     $q->textfield(-name => "years",
 		  -default => $num_years,
+		  -pattern => '\d*',
+		  -min => "1",
+		  -max => "99",
 		  -style => "width:auto",
 		  -maxlength => 2,
 		  -size => 2),
@@ -559,6 +599,9 @@ sub show_row {
 	 "\n",
 	 $q->textfield(-name => "d$i",
 		       -placeholder => "Day",
+		       -pattern => '\d*',
+		       -min => "1",
+		       -max => "31",
 		       -style => "width:auto",
 		       -maxlength => 2,
 		       -size => 2),
@@ -570,6 +613,7 @@ sub show_row {
 	 "\n",
 	 $q->textfield(-name => "y$i",
 		       -placeholder => "Year",
+		       -pattern => '\d*',
 		       -style => "width:auto",
 		       -maxlength => 4,
 		       -size => 4),
