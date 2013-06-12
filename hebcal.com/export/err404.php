@@ -46,38 +46,67 @@ header("Status: 404 Not Found");
 <meta charset="UTF-8">
 <title><?php echo $_SERVER["REDIRECT_STATUS"] ?> Not Found</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" id="wp-bootstrap-css" href="/bootstrap/css/wordpress-bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-967247-1']);
+_gaq.push(['_trackPageview']);
+_gaq.push(['_trackPageLoadTime']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
 </head>
-<body>
-<div class="container">
+<body class="error404">
+<header role="banner">
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
-         <div class="nav-collapse collapse">
-         <form class="navbar-form pull-right" role="search" method="get" id="searchform" action="/home/">
-      <fieldset>
-      <div class="input-append input-prepend">
-      <span class="add-on"><i class="icon-search"></i></span><input class="input-mini" type="text" name="s" id="s"><button type="submit" class="btn btn-primary">Search</button></div>
-      </fieldset>
-         </form>
-         </div><!-- .nav-collapse -->
-        </div><!-- .container -->
-       </div><!-- .navbar-inner -->
-      </div><!-- .navbar -->
+<div id="inner-header" class="clearfix">
+  
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner">
+<div class="container-fluid nav-container">
+  <nav role="navigation">
+  <a class="brand" id="logo" title="Jewish Calendar" href="/">Hebcal</a>
+								
+  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  </a>
+								
+<div class="nav-collapse">
+  <ul id="menu-default" class="nav"><li id="menu-item-441" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Jewish Holidays" href="http://www.hebcal.com/holidays/" >Holidays</a></li>
+<li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Hebrew Date Converter" href="http://www.hebcal.com/converter/" >Date Converter</a></li>
+<li id="menu-item-440" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Shabbat Times" href="http://www.hebcal.com/shabbat/" >Shabbat</a></li>
+<li id="menu-item-445" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Torah Readings" href="http://www.hebcal.com/sedrot/" >Torah</a></li>
+<li id="menu-item-324" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="http://www.hebcal.com/home/about" >About</a></li>
+<li id="menu-item-328" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent"><a href="http://www.hebcal.com/home/help" >Help</a></li>
+</ul>								</div>
 
+</nav>
+							
+<form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+<input name="s" id="s" type="text" class="search-query" placeholder="Search">
+</form>
 
-<div class="page-header">
-<h1>Not Found</h1>
-</div><!-- .page-header -->
+</div>
+</div>
+</div>
+
+</div> <!-- end #inner-header -->
+
+</header> <!-- end header -->
+
+<div class="container-fluid">
+  
+<div id="content" class="clearfix row-fluid">
+
+<div id="main" class="span12 clearfix" role="main">
+
+<div class="page-header"><h1>Not Found</h1></div>
 
 <p class="lead">The requested URL
 <?php echo htmlspecialchars($_SERVER["REQUEST_URI"]) ?>
@@ -85,12 +114,53 @@ header("Status: 404 Not Found");
 
 <p>Please check your request for typing errors and retry.</p>
 
+</div> <!-- end #main -->
+    
+</div> <!-- end #content -->
+
+<footer role="contentinfo">
 <hr>
-
-<footer>
-Copyright &copy; <?php echo date("Y") ?> Michael J. Radwin. All rights reserved.
+<div id="inner-footer" class="clearfix">
+<div class="row-fluid">
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Products</li>
+<li><a href="/holidays/">Jewish Holidays</a></li>
+<li><a href="/converter/">Hebrew Date Converter</a></li>
+<li><a href="/shabbat/">Shabbat Times</a></li>
+<li><a href="/sedrot/">Torah Readings</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">About Us</li>
+<li><a href="/home/about">About Hebcal</a></li>
+<li><a href="/home/category/news">News</a></li>
+<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<ul class="nav nav-list">
+<li class="nav-header">Connect</li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact Us</a></li>
+<li><a href="/home/about/donate">Donate</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .span3 -->
+<div class="span3">
+<p>10 June 2013 <small class="muted">Revision: 3737</small></p>
+<p><small>Except where otherwise noted, content on
+<span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
+is licensed under a 
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
+Commons Attribution 3.0 License</a>.</small></p>
+</div><!-- .span3 -->
+</div><!-- .row-fluid -->
+</div><!-- #inner-footer -->
 </footer>
-
 </div> <!-- .container -->
-</body>
-</html>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+</body></html>
