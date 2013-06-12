@@ -129,6 +129,7 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
+<link href="/i/glyphicons_pro_1.7/glyphicons/web/html_css/css/glyphicons.css" rel="stylesheet">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style type="text/css">
@@ -229,8 +230,11 @@ if (isset($rosh_chodesh)) {
 </div><!-- .clearfix -->
 
 <div class="row-fluid">
-<div class="span4">
-<h3>Jewish Holidays</h3>
+<div class="span6">
+<div class="media">
+<img class="media-object pull-left" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_045_calendar.png" width="23" height="24">
+<div class="media-body">
+<h2 class="media-heading">Holiday Calendar</h2>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 <?php
@@ -241,27 +245,35 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 ?>
 <p><a class="btn" href="/holidays/<?php echo $greg_range ?>"><i class="icon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
 <p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
-</div><!-- .span4 -->
+</div><!-- .media-body -->
+</div><!-- .media -->
+</div><!-- .span6 -->
 
-<div class="span4">
-<h3>Convert Dates</h3>
+<div class="span6">
+<div class="media">
+<img class="media-object pull-left" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_081_refresh@2x.png" width="46" height="48">
+<div class="media-body">
+<h2 class="media-heading">Convert Dates</h2>
 <p>Convert between Hebrew and Gregorian dates and see today's date in a Hebrew font.</p>
 <p><a class="btn" href="/converter/"><i class="icon-refresh"></i> Date Converter &raquo;</a></p>
-
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries.</p>
-<p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
-</div><!-- .span4 -->
+<p><a class="btn" href="/yahrzeit/"><i class="icon-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+</div><!-- .media-body -->
+</div><!-- .media -->
+</div><!-- .span6 -->
+</div><!-- .row-fluid -->
 
-<div class="span4">
-<h3>Shabbat Times</h3>
+<div class="row-fluid">
+<div class="span6">
+<h2><i class="glyphicons-icon candle"></i>Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
-<form action="/shabbat/" method="get" class="form">
+<form action="/shabbat/" method="get" class="form form-inline">
 <input type="hidden" name="geo" value="zip">
 <label>ZIP code:
 <input type="text" name="zip" size="5" maxlength="5" class="input-mini"
 <?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
-id="zip"></label>
+pattern="\d*" id="zip"></label>
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <button type="submit" class="btn"><i class="icon-time"></i> Shabbat Times &raquo;</button>
@@ -272,33 +284,13 @@ id="zip"></label>
 <?php } else { ?>
 <p><a class="btn" href="/home/shabbat/fridge"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
 <?php } ?>
-</div><!-- .span4 -->
-</div><!-- .row-fluid -->
+</div><!-- .span6 -->
 
-<div class="row-fluid">
-<div class="span4">
-<h3>Torah Readings</h3>
+<div class="span6">
+<h2><i class="glyphicons-icon book_open"></i>Torah Readings</h2>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
 <p><a class="btn" href="/sedrot/"><i class="icon-book"></i> Torah Readings &raquo;</a></p>
-</div><!-- .span4 -->
-
-<div class="span4">
-<h3>About Us</h3>
-<p>Our mission: to increase awareness of Jewish holidays and to help
-Jews to be observant of the mitzvot.</p>
-<p><a class="btn" href="/home/about/donate"><i class="icon-gift"></i> Donate &raquo;</a></p>
-<p><small><a href="/home/category/news">What's new</a>
-| <a href="/home/about/privacy-policy">Privacy</a>
-| <a href="/home/about/contact">Contact</a></small></p>
-</div><!-- .span4 -->
-
-<div class="span4">
-<h3>Developers</h3>
-<p>APIs, RSS Feeds, JavaScript, Source Code and widgets for
-your synagogue or other website.</p>
-<p><a class="btn" href="/home/category/developers"><i class="icon-wrench"></i> Developer Docs &raquo;</a></p>
-</div><!-- .span4 -->
-
+</div><!-- .span6 -->
 </div><!-- .row-fluid -->
 
 </div><!-- .span12 -->
