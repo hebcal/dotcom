@@ -129,7 +129,6 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
-<link href="/i/glyphicons_pro_1.7/glyphicons/web/html_css/css/glyphicons.css" rel="stylesheet">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style type="text/css">
@@ -231,10 +230,8 @@ if (isset($rosh_chodesh)) {
 
 <div class="row-fluid">
 <div class="span6">
-<div class="media">
-<img class="media-object pull-left" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_045_calendar.png" width="23" height="24">
-<div class="media-body">
-<h2 class="media-heading">Holiday Calendar</h2>
+<h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_045_calendar.png" width="23" height="24" alt="">
+Holiday Calendar</h2>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 <?php
@@ -245,28 +242,23 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 ?>
 <p><a class="btn" href="/holidays/<?php echo $greg_range ?>"><i class="icon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
 <p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
-</div><!-- .media-body -->
-</div><!-- .media -->
 </div><!-- .span6 -->
 
 <div class="span6">
-<div class="media">
-<img class="media-object pull-left" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_081_refresh@2x.png" width="46" height="48">
-<div class="media-body">
-<h2 class="media-heading">Convert Dates</h2>
-<p>Convert between Hebrew and Gregorian dates and see today's date in a Hebrew font.</p>
+<h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_081_refresh.png" width="25" height="26" alt="">
+Convert Dates</h2>
+<p>Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 <p><a class="btn" href="/converter/"><i class="icon-refresh"></i> Date Converter &raquo;</a></p>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries.</p>
-<p><a class="btn" href="/yahrzeit/"><i class="icon-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
-</div><!-- .media-body -->
-</div><!-- .media -->
+<p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .span6 -->
 </div><!-- .row-fluid -->
 
 <div class="row-fluid">
 <div class="span6">
-<h2><i class="glyphicons-icon candle"></i>Shabbat Times</h2>
+<h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_334_candle.png" width="20" height="25" alt="">
+Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
 <form action="/shabbat/" method="get" class="form form-inline">
 <input type="hidden" name="geo" value="zip">
@@ -287,7 +279,8 @@ pattern="\d*" id="zip"></label>
 </div><!-- .span6 -->
 
 <div class="span6">
-<h2><i class="glyphicons-icon book_open"></i>Torah Readings</h2>
+<h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_351_book_open.png" width="24" height="22" alt="">
+Torah Readings</h2>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
 <p><a class="btn" href="/sedrot/"><i class="icon-book"></i> Torah Readings &raquo;</a></p>
 </div><!-- .span6 -->
