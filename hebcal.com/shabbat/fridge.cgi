@@ -92,6 +92,7 @@ my $head = <<EOHTML;
 body {
   font-size: 80%;
   font-family: 'PT Sans', sans-serif;
+  line-height: 1.25;
 }
 \@media print{
  a[href]:after{content:""}
@@ -100,6 +101,9 @@ body {
 }
 #fridge-table td {
   padding: 0px 4px;
+}
+#fridge-table td.leftpad {
+  padding: 0 0 0 6px;
 }
 .yomtov { font-weight:700 }
 .narrow { font-family: 'PT Sans Narrow', sans-serif }
@@ -114,7 +118,8 @@ Hebcal::out_html($cfg, $head);
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
-		 qq{<div align="center">\n<p>&nbsp;</p><h4>Candle Lighting Times for $city_descr<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h4>\n});
+		 qq{<div align="center">\n<h4 style="margin:24px 0 0">Candle Lighting Times for $city_descr<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h4>\n});
+Hebcal::out_html($cfg, qq{<p style="margin:0 0 4px">www.hebcal.com</p>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
@@ -156,21 +161,19 @@ sub format_items
 
 	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON];
 	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
-	my $item_date = sprintf("%s %2d", $Hebcal::MoY_short[$mon], $mday);
-	$item_date =~ s/  / &nbsp;/;
 
 	my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
 	my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
 	my $item_time = sprintf("%d:%02d", $hour, $min);
 
-	push(@items, [$item_date, $item_time, $reason, $yom_tov]);
+	push(@items, [$Hebcal::MoY_short[$mon], $mday, $item_time, $reason, $yom_tov]);
     }
 
     my $table_head = <<EOHTML;
 <table style="width:auto" id="fridge-table">
-<col><col><col>
-<col style="border-left:solid;border-width:1px;border-color:#999999"><col><col>
+<col><col><col><col>
+<col style="border-left:solid;border-width:1px;border-color:#999999"><col><col><col>
 <tbody>
 EOHTML
     ;
@@ -202,22 +205,25 @@ EOHTML
 
 sub format_row {
     my($item) = @_;
+
     unless (defined $item) {
-	Hebcal::out_html($cfg, "<td><td><td>");
+	Hebcal::out_html($cfg, "<td><td><td><td>");
 	return;
     }
+    my($month,$day,$time,$subject,$yom_tov) = @{$item};
     my @class = ();
-    if ($item->[3]) {
+    if ($yom_tov) {
 	push(@class, "yomtov");
     }
     my @narrow = ();
-    if (length($item->[2]) > 14) {
+    if (length($subject) > 14) {
 	push(@narrow, "narrow");
     }
     Hebcal::out_html($cfg,
-		     qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $item->[0], "</td>",
-		     qq{<td class="}, join(" ", @class, @narrow), qq{">}, $item->[2], "</td>",
-		     qq{<td class="}, join(" ", @class), qq{">}, $item->[1], "</td>");
+		     qq{<td class="}, join(" ", @class, "leftpad"), qq{">}, $month, "</td>",
+		     qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $day, "</td>",
+		     qq{<td class="}, join(" ", @class, @narrow), qq{">}, $subject, "</td>",
+		     qq{<td class="}, join(" ", @class), qq{">}, $time, "</td>");
 }
 
 sub process_args
