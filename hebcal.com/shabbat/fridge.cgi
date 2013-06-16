@@ -75,7 +75,8 @@ for (my $i = 0; $i < $numEntries2; $i++)
 my $title = "Refrigerator Shabbos Times for $hebrew_year";
 
 print "Cache-Control: private\015\012";
-print $q->header();
+print $q->header(-type => "text/html",
+		 -charset => "UTF-8");
 my $base = "http://" . $q->virtual_host() . $script_name;
 
 my $head = <<EOHTML;
@@ -84,17 +85,24 @@ my $head = <<EOHTML;
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
 <link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
 <style>
+body {
+  font-size: 80%;
+  font-family: 'PT Sans', sans-serif;
+}
 \@media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
  .goto {display:none}
 }
 #fridge-table td {
-  padding: 1px 6px;
+  padding: 0px 4px;
 }
+.yomtov { font-weight:700 }
+.narrow { font-family: 'PT Sans Narrow', sans-serif }
 </style>
 <body>
 <div class="container">
@@ -106,13 +114,13 @@ Hebcal::out_html($cfg, $head);
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
-		 qq{<center><h3>Candle Lighting Times for $city_descr<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h3>\n});
+		 qq{<div align="center">\n<p>&nbsp;</p><h4>Candle Lighting Times for $city_descr<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h4>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
 format_items($q,$evts);
 
-Hebcal::out_html($cfg, qq{</div><!-- #content -->\n</div><!-- .container -->\n</body>\n</html>\n});
+Hebcal::out_html($cfg, qq{</div><!-- .center -->\n</div><!-- #content -->\n</div><!-- .container -->\n</body>\n</html>\n});
 
 exit(0);
 
@@ -131,6 +139,9 @@ sub format_items
 	if (defined $events->[$i+1]
 	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)$/) {
 	    $reason = $1;
+	} elsif ($i == $numEntries - 1) {
+	    $yom_tov = 1;
+	    $reason = "Rosh Hashana";
 	} else {
 	    $yom_tov = $events->[$i+1]->[$Hebcal::EVT_IDX_YOMTOV];
 	    $reason = $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ];
@@ -159,29 +170,18 @@ sub format_items
     my $table_head = <<EOHTML;
 <table style="width:auto" id="fridge-table">
 <col><col><col>
-<col style="border-left:solid;border-width:2px;border-color:#dddddd"><col><col>
+<col style="border-left:solid;border-width:1px;border-color:#999999"><col><col>
 <tbody>
 EOHTML
     ;
     Hebcal::out_html($cfg, $table_head);
 
-    my $half = int(scalar(@items) / 2);
+    my $half = POSIX::ceil(scalar(@items) / 2.0);
     for (my $i = 0; $i < $half; $i++) {
 	Hebcal::out_html($cfg, "<tr>");
-	my $left = $items[$i];
-
-	my $left_reason = $left->[2];
-	$left_reason = "<strong>" . $left_reason . "</strong>" if $left->[3];
-	Hebcal::out_html($cfg, qq{<td style="text-align:right">}, $left->[0], "</td>",
-			 qq{<td>}, $left_reason, "</td>",
-			 "<td>", $left->[1], "</td>", "\n");
-
-	my $right = $items[$i+$half];
-	my $right_reason = $right->[2];
-	$right_reason = "<strong>" . $right_reason . "</strong>" if $right->[3];
-	Hebcal::out_html($cfg, qq{<td style="text-align:right">}, $right->[0], "</td>",
-			 "<td>", $right_reason, "</td>",
-			 "<td>", $right->[1], "</td>");
+	format_row($items[$i]);
+	Hebcal::out_html($cfg, "\n");
+	format_row($items[$i+$half]);
 	Hebcal::out_html($cfg, "</tr>\n");
     }
 
@@ -192,12 +192,32 @@ EOHTML
 					   "tz" => undef, "dst" => undef}),
 		     "\">&larr;&nbsp;", $hebrew_year - 1,
 		     "</a>&nbsp;&nbsp;&nbsp;",
-		     "Times in <b>bold</b> indicate holidays.",
+		     "Times in <strong>bold</strong> indicate holidays.",
 		     "&nbsp;&nbsp;&nbsp;<a class=\"goto\" title=\"Next\" href=\"",
 		     Hebcal::self_url($q, {'year' => $hebrew_year + 1,
 					   "tz" => undef, "dst" => undef}),
 		     "\">", $hebrew_year + 1, "&nbsp;&rarr;</a>",
 		     "</p>\n");
+}
+
+sub format_row {
+    my($item) = @_;
+    unless (defined $item) {
+	Hebcal::out_html($cfg, "<td><td><td>");
+	return;
+    }
+    my @class = ();
+    if ($item->[3]) {
+	push(@class, "yomtov");
+    }
+    my @narrow = ();
+    if (length($item->[2]) > 14) {
+	push(@narrow, "narrow");
+    }
+    Hebcal::out_html($cfg,
+		     qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $item->[0], "</td>",
+		     qq{<td class="}, join(" ", @class, @narrow), qq{">}, $item->[2], "</td>",
+		     qq{<td class="}, join(" ", @class), qq{">}, $item->[1], "</td>");
 }
 
 sub process_args
