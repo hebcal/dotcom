@@ -45,7 +45,6 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
-use Time::Local ();
 use Hebcal ();
 use Date::Calc;
 use HebcalGPL ();
@@ -78,16 +77,32 @@ my $title = "Refrigerator Shabbos Times for $hebrew_year";
 print "Cache-Control: private\015\012";
 print $q->header();
 my $base = "http://" . $q->virtual_host() . $script_name;
-print $q->start_html(
-    -title => $title,
-    -target => "_top",
-    -xbase => $base,
-    -style => { -verbatim => qq'\@media print { .goto {display:none} }
-table tbody tr td {
-font-family: "Courier New", Courier, monospace;
+
+my $head = <<EOHTML;
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
+<style>
+\@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+ .goto {display:none}
 }
-' }
-    );
+#fridge-table td {
+  padding: 1px 6px;
+}
+</style>
+<body>
+<div class="container">
+<div id="content" class="clearfix row-fluid">
+EOHTML
+;
+
+Hebcal::out_html($cfg, $head);
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
@@ -96,7 +111,8 @@ Hebcal::out_html($cfg,
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
 format_items($q,$evts);
-Hebcal::out_html($cfg,"</center>\n</body>\n</html>\n");
+
+Hebcal::out_html($cfg, qq{</div><!-- #content -->\n</div><!-- .container -->\n</body>\n</html>\n});
 
 exit(0);
 
@@ -108,64 +124,78 @@ sub format_items
     my @items;
     for (my $i = 0; $i < $numEntries; $i++)
     {
-	my($subj) = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	
-	next unless $subj eq 'Candle lighting';
-	
-	my($year) = $events->[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my($mon) = $events->[$i]->[$Hebcal::EVT_IDX_MON];
-	my($mday) = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+	next unless $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Candle lighting';
 
-	my($min) = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	my($hour) = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
+	my $reason = "";
+	my $yom_tov = 0;
+	if (defined $events->[$i+1]
+	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)$/) {
+	    $reason = $1;
+	} else {
+	    $yom_tov = $events->[$i+1]->[$Hebcal::EVT_IDX_YOMTOV];
+	    $reason = $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ];
+	    $reason =~ s/ \(CH\'\'M\)$//;
+	    $reason =~ s/ \(Hoshana Raba\)$//;
+	    $reason =~ s/ [IV]+$//;
+	    $reason =~ s/: \d Candles?$//;
+	    $reason =~ s/: 8th Day$//;
+	    $reason =~ s/^Erev //;
+	    $reason =~ s/ \d{4}$//;
+	}
+
+	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON];
+	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+	my $item_date = sprintf("%s %2d", $Hebcal::MoY_short[$mon], $mday);
+	$item_date =~ s/  / &nbsp;/;
+
+	my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
+	my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
+	my $item_time = sprintf("%d:%02d", $hour, $min);
 
-	my $stime = sprintf("%2d %s &nbsp;%d:%02d",
-			    $mday, $Hebcal::MoY_short[$mon], $hour, $min);
-	$stime =~ s/^ /&nbsp;/;
-
-	my $time = Time::Local::timelocal(1,0,0,$mday,$mon,$year - 1900,'','','');
-	my $wday = (localtime($time))[6];
-	if ($wday != 5)
-	{
-	    $stime = "<b>$stime</b>";
-	}
-
-	$stime .= "<br>\n";
-	push(@items, $stime);
+	push(@items, [$item_date, $item_time, $reason, $yom_tov]);
     }
 
-    Hebcal::out_html($cfg,qq{<p><table border="1" cellpadding="8"><tbody><tr>\n});
+    my $table_head = <<EOHTML;
+<table style="width:auto" id="fridge-table">
+<col><col><col>
+<col style="border-left:solid;border-width:2px;border-color:#dddddd"><col><col>
+<tbody>
+EOHTML
+    ;
+    Hebcal::out_html($cfg, $table_head);
 
-    my $third = POSIX::ceil(scalar(@items) / 3.0);
-    for (my $i = 0; $i < 3; $i++)
-    {
-	Hebcal::out_html($cfg,"<td valign=\"top\">\n");
-	for (my $j = 0; $j < $third; $j++)
-	{
-	    my $k = $j + ($third * $i);
-	    Hebcal::out_html($cfg, $items[$k]) if $items[$k];
-	}
+    my $half = int(scalar(@items) / 2);
+    for (my $i = 0; $i < $half; $i++) {
+	Hebcal::out_html($cfg, "<tr>");
+	my $left = $items[$i];
 
-	if ($i == 2)
-	{
-	    for (my $k = ($third * 3); $k < scalar(@items); $k++)
-	    {
-		Hebcal::out_html($cfg, $items[$k]) if $items[$k];
-	    }
-	}
-	Hebcal::out_html($cfg,"</td>\n");
+	my $left_reason = $left->[2];
+	$left_reason = "<strong>" . $left_reason . "</strong>" if $left->[3];
+	Hebcal::out_html($cfg, qq{<td style="text-align:right">}, $left->[0], "</td>",
+			 qq{<td>}, $left_reason, "</td>",
+			 "<td>", $left->[1], "</td>", "\n");
+
+	my $right = $items[$i+$half];
+	my $right_reason = $right->[2];
+	$right_reason = "<strong>" . $right_reason . "</strong>" if $right->[3];
+	Hebcal::out_html($cfg, qq{<td style="text-align:right">}, $right->[0], "</td>",
+			 "<td>", $right_reason, "</td>",
+			 "<td>", $right->[1], "</td>");
+	Hebcal::out_html($cfg, "</tr>\n");
     }
 
-    Hebcal::out_html($cfg,qq{</tr></tbody></table>\n});
+    Hebcal::out_html($cfg,qq{</tbody></table>\n});
 
     Hebcal::out_html($cfg,"<p><a class=\"goto\" title=\"Previous\" href=\"",
-		     Hebcal::self_url($q, {'year' => $hebrew_year - 1}),
+		     Hebcal::self_url($q, {'year' => $hebrew_year - 1,
+					   "tz" => undef, "dst" => undef}),
 		     "\">&larr;&nbsp;", $hebrew_year - 1,
 		     "</a>&nbsp;&nbsp;&nbsp;",
 		     "Times in <b>bold</b> indicate holidays.",
 		     "&nbsp;&nbsp;&nbsp;<a class=\"goto\" title=\"Next\" href=\"",
-		     Hebcal::self_url($q, {'year' => $hebrew_year + 1}),
+		     Hebcal::self_url($q, {'year' => $hebrew_year + 1,
+					   "tz" => undef, "dst" => undef}),
 		     "\">", $hebrew_year + 1, "&nbsp;&rarr;</a>",
 		     "</p>\n");
 }
