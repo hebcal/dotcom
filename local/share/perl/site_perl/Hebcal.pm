@@ -1372,6 +1372,7 @@ body{padding-top:0}
 :lang(he) {
   font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
   font-size:125%;
+  font-weight:normal;
   direction:rtl;
 }
 \@media print{
