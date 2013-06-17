@@ -1367,9 +1367,13 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 })();
 </script>
 <style type="text/css">
-.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
 .navbar{position:static}
 body{padding-top:0}
+:lang(he) {
+  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  font-size:125%;
+  direction:rtl;
+}
 \@media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
