@@ -421,7 +421,7 @@ sub translate_subject
 sub hebrew_span
 {
     my($hebrew) = @_;
-    return qq{<span dir="rtl" lang="he" class="hebrew">$hebrew</span>};
+    return qq{<span lang="he" dir="rtl">$hebrew</span>};
 }
 
 sub plus4_events {
