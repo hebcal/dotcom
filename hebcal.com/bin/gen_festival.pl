@@ -830,8 +830,7 @@ EOHTML
 <div class="span10">
 $pager
 <div class="page-header">
-<h1>$f / <span
-dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
+<h1>$f / <span lang="he" dir="rtl">$hebrew</span></h1>
 </div>
 <p class="lead">$long_descr.</p>
 EOHTML
@@ -1002,7 +1001,7 @@ EOHTML
 	    if ($part_hebrew)
 	    {
 		$part_hebrew = Hebcal::hebrew_strip_nikkud($part_hebrew);
-		print OUT2 qq{\n- <span dir="rtl" class="hebrew"\nlang="he">$part_hebrew</span>};
+		print OUT2 qq{\n- <span lang="he" dir="rtl">$part_hebrew</span>};
 	    }
 	    print OUT2 qq{</h3>\n};
 
