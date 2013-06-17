@@ -775,8 +775,7 @@ sub write_sedra_page
     print OUT2 <<EOHTML;
 <div class="span10">
 <div class="page-header">
-<h1 class="entry-title">Parashat $h / <span
-dir="rtl" class="hebrew" lang="he">$hebrew</span></h1>
+<h1 class="entry-title">Parashat $h / <span lang="he" dir="rtl">$hebrew</span></h1>
 </div>
 $intro_summary
 <h3 id="torah">Torah Portion: <a class="outbound"
