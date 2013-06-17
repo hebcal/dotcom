@@ -88,7 +88,7 @@ my $head = <<EOHTML;
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
 <style>
 body {
-  font-size: 80%;
+  font-size: 85%;
   font-family: 'PT Sans', sans-serif;
   line-height: 1.25;
 }
