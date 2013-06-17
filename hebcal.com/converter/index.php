@@ -165,6 +165,23 @@ else
     $header_hebdate = $first;
 }
 
+$events = array();
+if ($gy >= 1900 && $gy <= 2099) {
+    $century = substr($gy, 0, 2);
+    $f = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
+    @include($f);
+    $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
+    if (isset($sedra) && isset($sedra[$iso])) {
+	if (is_array($sedra[$iso])) {
+	    foreach ($sedra[$iso] as $evt) {
+		$events[] = $evt;
+	    }
+	} else {
+	    $events[] = $sedra[$iso];
+	}
+    }
+}
+
 if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
     header("Content-Type: text/json; charset=UTF-8");
     $callback = false;
@@ -172,7 +189,17 @@ if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
 	echo $_GET["callback"], "(";
 	$callback = true;
     }
-    echo "{\"gy\":$gy,\"gm\":$gm,\"gd\":$gd,\n\"hy\":$hy,\"hm\":\"$month_name\",\"hd\":$hd,\n\"hebrew\":\"$hebrew\"\n}\n";
+    $arr = array("gy"=>$gy,
+		 "gm"=>$gm,
+		 "gd"=>$gd,
+		 "hy"=>$hy,
+		 "hm"=>$month_name,
+		 "hd"=>$hd,
+		 "hebrew"=>$hebrew);
+    if (!empty($events)) {
+	$arr["events"] = $events;
+    }
+    echo json_encode($arr, JSON_NUMERIC_CHECK);
     if ($callback) {
 	echo ")\n";
     }
@@ -209,20 +236,8 @@ href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a
 <li class="big-list"><?php echo "$first = <strong>$second</strong>"; ?></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><?php echo $hebrew ?></li>
 <?php
-if ($gy >= 1900 && $gy <= 2099) {
-    $century = substr($gy, 0, 2);
-    $f = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
-    @include($f);
-    $iso = sprintf("%04d%02d%02d", $gy, $gm, $gd);
-    if (isset($sedra) && isset($sedra[$iso])) {
-	if (is_array($sedra[$iso])) {
-	    foreach ($sedra[$iso] as $sed) {
-		display_hebrew_event($sed);
-	    }
-	} else {
-	    display_hebrew_event($sedra[$iso]);
-	}
-    }
+foreach ($events as $evt) {
+    display_hebrew_event($evt);
 }
 echo "</ul>\n</div><!-- #converter-results -->\n";
 
