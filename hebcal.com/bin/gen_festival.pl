@@ -505,7 +505,7 @@ EOHTML
     my @sections = (
        [ \@major,		"Major holidays" ],
        [ \@minor,		"Minor holidays" ],
-       [ \@public_fasts,	"Public fasts" ],
+       [ \@public_fasts,	"Minor fasts" ],
        [ \@modern,		"Modern holidays" ],
        [ \@special_shabbat,	"Special Shabbatot" ],
        [ \@rosh_chodesh,	"Rosh Chodesh" ],
