@@ -498,14 +498,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Esther">
  The Fast of Esther (Ta'anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish
  fast from dawn until dusk on Purim eve, commemorating the three-day
- fast observed by the Jewish people in the story of Purim. It is a
- common misconception that this fast was accepted by the Jews for all
- future generations during the time of Esther, as it is stated in the
- Book of Esther: They had established for themselves and their
- descendants the matters of the fasts and their cry (Esther
- 9:31). This verse actually refers to the four fasts which relate to
- mourning for the Temple. Rather, the first mention of this fast is a
- Minhag that is referenced in the Gaonic period.
+ fast observed by the Jewish people in the story of Purim. 
+ If the date of the Fast of Esther falls on Shabbat (Saturday), the fast
+ is instead observed on the preceding Thursday.
+ Like other minor fasts, Ta'anit Esther begins at dawn (first light) and
+ ends at nightfall (full dark).
  </wikipedia>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
@@ -516,13 +513,16 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Tzom Gedaliah" hebrew="צוֹם גְּדַלְיָה" yomtov="0">
  <about href="http://www.aish.com/h/hh/rh/guide/Fast_of_Gedalia.html">
- Fast of the Seventh Month
+ Fast of the Seventh Month, commemorates the assassination of the Jewish
+ governor of Judah
  </about>
  <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Gedalia">
  The Fast of Gedalia (Hebrew: צוֹם גְּדַלְיָּה), also spelled Gedaliah, is a
  Jewish fast day from dawn until dusk to lament the assassination of
  the righteous governor of Judah of that name, which ended Jewish rule
  following the destruction of the First Temple.
+ Like other minor fasts, Tzom Gedaliah begins at dawn (first light) and
+ ends at nightfall (full dark).
  </wikipedia>
  <kriyah>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
@@ -536,6 +536,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Fast commemorating breaching of the walls of Jerusalem by Nebuchadnezzar
  </about>
  <kriyah>
+ <wikipedia href="https://en.wikipedia.org/wiki/Seventeenth_of_Tammuz">
+ The Seventeenth of Tammuz (Hebrew: שבעה עשר בתמוז‎, Shiv'ah Asar
+ b'Tammuz) is a Jewish fast day commemorating the breach of the walls of
+ Jerusalem before the destruction of the Second Temple. It falls on
+ the 17th day of the Hebrew month of Tammuz and marks the beginning of
+ the three-week mourning period leading up to Tisha B'Av.
+ Like other minor fasts, Tzom Tammuz begins at dawn (first light) and
+ ends at nightfall (full dark).
+ </wikipedia>
   <torah href="http://www.mechon-mamre.org/e/et/et0232.htm#11"/>
   <aliyah parsha="21" num="1" book="Exodus" begin="32:11" end="32:14" numverses="4"/>
   <aliyah parsha="21" num="2" book="Exodus" begin="34:1" end="34:3" numverses="3"/>
