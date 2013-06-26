@@ -865,7 +865,7 @@ EOHTML
 		$displayed_upcoming = 1;
 	      }
 	    }
-	    my $html5time = sprintf("%04d%-02d-%02d", $gy, $gm, $gd);
+	    my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
 		"&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off&amp;tag=hol.obs\"$style>" .
 		"<time datetime=\"%s\">%s, %02d %s %04d</time></a> at $rise_or_set (%s)\n",
