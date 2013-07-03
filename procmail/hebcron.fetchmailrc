@@ -8,7 +8,7 @@ poll mail.hebcal.com
 proto pop3
 
 user rwodz1mzr1wnbtrq@hebcal.com
-pass 2aM7K2wzB35oSFcb
+pass xxxxxxxxxxxxxxxx
 options ssl
 mda /usr/bin/procmail
 fetchall
