@@ -1179,10 +1179,9 @@ sub html_footer_bootstrap
     my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    $rcsrev =~ s/\s*\$//g;
-
     my $hhmts = strftime("%d %B %Y", localtime($mtime));
-    my $last_updated_text = qq{<p>$hhmts <small class="muted">$rcsrev</small></p>};
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
+    my $last_updated_text = qq{<p><time datetime="$dc_date">$hhmts</time></p>};
 
     my $str = <<EOHTML;
 </div><!-- #content -->
