@@ -22,11 +22,6 @@
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution. 
 #
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
-#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -228,41 +223,24 @@ my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
 my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
 my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
 
-if (! defined $pi)
-{
-#    my $cache = Hebcal::cache_begin($q);
+if (! defined $pi) {
     results_page($g_date, $g_filename);
-#    Hebcal::cache_end() if $cache;
-}
-elsif ($pi =~ /[^\/]+\.csv$/)
-{
+} elsif ($pi =~ /[^\/]+\.csv$/) {
     csv_display();
-}
-elsif ($pi =~ /[^\/]+\.dba$/)
-{
+} elsif ($pi =~ /[^\/]+\.dba$/) {
     dba_display();
-}
-elsif ($pi =~ /[^\/]+\.[vi]cs$/)
-{
+} elsif ($pi =~ /[^\/]+\.pdf$/) {
+    pdf_display();
+} elsif ($pi =~ /[^\/]+\.[vi]cs$/) {
     vcalendar_display();
-}
-elsif (defined $q->param("cfg") && $q->param("cfg") eq "e")
-{
+} elsif (defined $q->param("cfg") && $q->param("cfg") eq "e") {
     javascript_events(0);
-}
-elsif (defined $q->param("cfg") && $q->param("cfg") eq "e2")
-{
+} elsif (defined $q->param("cfg") && $q->param("cfg") eq "e2") {
     javascript_events(1);
-}
-elsif (defined $q->param("cfg") && $q->param("cfg") eq "json")
-{
+} elsif (defined $q->param("cfg") && $q->param("cfg") eq "json") {
     json_events();
-}
-else
-{
-#    my $cache = Hebcal::cache_begin($q);
+} else {
     results_page($g_date, $g_filename);
-#    Hebcal::cache_end() if $cache;
 }
 
 close(STDOUT);
@@ -466,6 +444,196 @@ sub vcalendar_display
 
     Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $title, $cconfig);
 }
+
+use constant PDF_WIDTH => 792;
+use constant PDF_HEIGHT => 612;
+use constant PDF_TMARGIN => 72;
+use constant PDF_BMARGIN => 36;
+use constant PDF_LMARGIN => 36;
+use constant PDF_RMARGIN => 36;
+use constant PDF_COLUMNS => 7;
+
+sub pdf_display {
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+				       $g_nmf, $g_nss);
+
+    my $title = $g_date;
+    eval("use PDF::API2");
+
+    my $pdf = PDF::API2->new();
+    $pdf->info("Author" => "Hebcal Jewish Calendar",
+	       "Title" => $title);
+
+    my %font;
+    $font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
+    $font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
+    $font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
+    $font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
+
+    my %cells;
+    foreach my $evt (@events) {
+	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+	my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+	my $cal_id = sprintf("%04d-%02d", $year, $mon);
+	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
+	push(@{$cells{$cal_id}{$mday}}, $evt);
+    }
+
+    my $lg = $q->param("lg");
+    my @DAYS = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
+    foreach my $year_month (sort keys %cells) {
+	my($year,$month) = split(/-/, $year_month);
+	$month =~ s/^0//;
+
+	my $month_name = Date::Calc::Month_to_Text($month);
+	my $daysinmonth = Date::Calc::Days_in_Month($year,$month);
+	my $day = 1;
+
+	# returns "1" for Monday, "2" for Tuesday .. until "7" for Sunday
+	my $dow = Date::Calc::Day_of_Week($year,$month,$day);
+	$dow = 0 if $dow == 7; # treat Sunday as day 0 (not day 7 as Date::Calc does)
+
+	my($hspace, $vspace) = (0, 0); # Space between columns and rows
+	my $rows = 5;
+	if (($daysinmonth == 31 && $dow >= 5) || ($daysinmonth == 30 && $dow == 6)) {
+	    $rows = 6;
+	}
+
+	my $colwidth = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN - (PDF_COLUMNS - 1) * $hspace) / PDF_COLUMNS;
+	my $rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN - ($rows - 1) * $vspace) / $rows;
+
+	my $page = $pdf->page;
+	$page->mediabox(PDF_WIDTH, PDF_HEIGHT);
+
+	my $text = $page->text(); # Add the Text object
+	$text->translate(PDF_WIDTH / 2, PDF_HEIGHT - PDF_TMARGIN + 24); # Position the Text object
+	$text->font($font{'bold'}, 24); # Assign a font to the Text object
+	$text->text_center("$month_name $year"); # Draw the string
+
+	my $g = $page->gfx();
+	$g->strokecolor("#aaaaaa");
+	$g->linewidth(1);
+	$g->rect(PDF_LMARGIN, PDF_BMARGIN,
+		 PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN,
+		 PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN);
+	$g->stroke();
+	$g->endpath(); 
+
+	$text->font($font{'plain'},10);
+	for (my $i = 0; $i < scalar(@DAYS); $i++) {
+	    my $x = PDF_LMARGIN + $i * ($colwidth + $hspace) + ($colwidth / 2);
+	    $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
+	    $text->text_center($DAYS[$i]);
+	}
+
+	# Loop through the columns
+	foreach my $c (0 .. PDF_COLUMNS - 1) {
+	    my $x = PDF_LMARGIN + $c * ($colwidth + $hspace);
+	    if ($c > 0) {
+		# Print a vertical grid line
+		$g->move($x, PDF_BMARGIN);
+		$g->line($x, PDF_HEIGHT - PDF_TMARGIN);
+		$g->stroke;
+		$g->endpath();
+	    }
+    
+	    # Loop through the rows
+	    foreach my $r (0 .. $rows - 1) {
+		my $y = PDF_HEIGHT - PDF_TMARGIN - $r * ($rowheight + $vspace);
+		if ($r > 0) {
+		    # Print a horizontal grid line
+		    $g->move(PDF_LMARGIN, $y);
+		    $g->line(PDF_WIDTH - PDF_RMARGIN, $y);
+		    $g->stroke;
+		    $g->endpath();
+		}
+	    }
+	}
+
+	my $xpos = PDF_LMARGIN + $colwidth - 4;
+	$xpos += ($dow * $colwidth);
+	my $ypos = PDF_HEIGHT - PDF_TMARGIN - 12;
+	for (my $mday = 1; $mday <= $daysinmonth; $mday++) {
+	    # render day number
+	    $text->font($font{'plain'}, 11);
+	    $text->fillcolor("#000000");
+	    $text->translate($xpos, $ypos);
+	    $text->text_right($mday);
+
+	    # events within day $mday
+	    if (defined $cells{$year_month}{$mday}) {
+		$text->translate($xpos - $colwidth + 8, $ypos - 18);
+		foreach my $evt (@{$cells{$year_month}{$mday}}) {
+		    pdf_render_event($text, $evt, $lg);
+		}
+	    }
+
+	    $xpos += $colwidth;	# move to the right by one cell
+	    if (++$dow == 7) {
+		$dow = 0;
+		$xpos = PDF_LMARGIN + $colwidth - 4;
+		$ypos -= $rowheight; # move down the page
+	    }
+	}
+
+	$text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
+	$text->font($font{'condensed'}, 8);
+	$text->fillcolor("#000000");
+	$text->text_right("This Jewish holiday calendar from www.hebcal.com is licensed under Creative Commons Attribution 3.0");
+    }
+
+    print $pdf->stringify();
+    $pdf->end();
+}
+
+sub pdf_render_event {
+    my($text,$evt,$lg) = @_;
+
+    my $color = "#000000";
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    if (($subj =~ /^\d+\w+.+, \d{4,}$/) || ($subj =~ /^\d+\w+ day of the Omer$/)) {
+	$color = "#666666";
+    }
+    $text->fillcolor($color);
+
+    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0) {
+	my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
+	$hour -= 12 if $hour > 12;
+	my $time_formatted = sprintf("%d:%02dp ", $hour, $min);
+	$text->font($font{'bold'}, 8);
+	$text->text($time_formatted);
+    }
+
+    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+    if ($lg eq "h" && $hebrew) {
+	my $str = scalar reverse($hebrew);
+	$str =~ s/(\d+)/scalar reverse($1)/ge;
+	$str =~ s/\(/\cA/g;
+	$str =~ s/\)/\(/g;
+	$str =~ s/\cA/\)/g;
+	$text->font($font{'hebrew'}, 10);
+	$text->text($str);
+    } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+	$text->font($font{'bold'}, 8);
+	$text->text($subj);
+    } elsif (length($subj) >= 25) {
+	$text->font($font{'condensed'}, 9);
+	$text->fillcolor("#000000");
+	$text->text($subj);
+    } elsif ($subj =~ /^Havdalah \((\d+) min\)$/) {
+	my $minutes = $1;
+	$text->font($font{'plain'}, 8);
+	$text->text("Havdalah");
+	$text->font($font{'plain'}, 6);
+	$text->text(" ($minutes min)");
+    } else {
+	$text->font($font{'plain'}, 8);
+	$text->text($subj);
+    }
+    $text->cr(-12);
+}
+
 
 sub dba_display
 {
@@ -1550,5 +1718,5 @@ sub get_candle_config
 }
 
 # local variables:
-# mode: perl
+# mode: c-perl
 # end:
