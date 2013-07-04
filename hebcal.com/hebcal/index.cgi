@@ -1214,10 +1214,13 @@ accurate.
     Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
     Hebcal::out_html(undef, qq{<a class="btn" href="},
 		     Hebcal::self_url($q, {"v" => "0"}),
-		     qq{"><i class="icon-cog"></i> Change options &raquo;</a>\n});
+		     qq{"><i class="icon-cog"></i> Change options</a>\n});
 
     if ($numEntries > 0) {
 	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
+
+	my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
+	Hebcal::out_html(undef, qq{<a class="btn" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
 
 	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
 	    # Fridge
@@ -1242,7 +1245,7 @@ accurate.
 		$url .= ";year=" . $hyear;
 	    }
 	    
-	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
+	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
 	}
     }
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
