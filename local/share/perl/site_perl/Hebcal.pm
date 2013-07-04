@@ -69,10 +69,7 @@ $Hebcal::CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 
 my $ZIP_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/zips.sqlite3";
 
-my $VERSION = '$Revision$$';
-if ($VERSION =~ /(\d+)/) {
-    $VERSION = $1;
-}
+my $VERSION = "4000";		# fake it for now, git doesn't support keyword expansion
 
 my $CONFIG_INI;
 my $HOSTNAME;
