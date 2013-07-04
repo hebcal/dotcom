@@ -582,7 +582,8 @@ sub pdf_display {
 	$text->text_right("This Jewish holiday calendar from www.hebcal.com is licensed under Creative Commons Attribution 3.0");
     }
 
-    print $pdf->stringify();
+    print STDOUT $q->header(-type => "application/pdf");
+    print STDOUT $pdf->stringify();
     $pdf->end();
 }
 
