@@ -458,11 +458,14 @@ sub pdf_display {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
 
-    my $title = $g_date;
-    eval("use PDF::API2");
+    my $title = "Jewish Calendar $g_date";
+    if (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") {
+	$title .= " "  . $cconfig->{"city"};
+    }
 
+    eval("use PDF::API2");
     my $pdf = PDF::API2->new();
-    $pdf->info("Author" => "Hebcal Jewish Calendar",
+    $pdf->info("Author" => "Hebcal Jewish Calendar (www.hebcal.com)",
 	       "Title" => $title);
 
     $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
@@ -585,6 +588,7 @@ sub pdf_display {
     }
 
     print STDOUT $q->header(-type => "application/pdf");
+    binmode(STDOUT, ":raw");
     print STDOUT $pdf->stringify();
     $pdf->end();
 }
