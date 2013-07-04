@@ -1,15 +1,7 @@
 <?php
-// $Id$
-// $URL$
 
 require "../pear/Hebcal/common.inc";
 require "../pear/HTML/Form.php";
-
-$VER = '$Revision$';
-$matches = array();
-if (preg_match('/(\d+)/', $VER, $matches)) {
-    $VER = $matches[1];
-}
 
 if (isset($_COOKIE["C"])) {
     parse_str($_COOKIE["C"], $param);

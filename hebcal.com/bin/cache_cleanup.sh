@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# $Id$
-# $URL$
-
 HEBCAL_WEB=/home/hebcal/web/hebcal.com
 
 PATH=/bin:/sbin:/usr/bin:/usr/sbin

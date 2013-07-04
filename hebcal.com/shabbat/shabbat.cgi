@@ -4,7 +4,7 @@
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times
 # and Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -19,11 +19,6 @@
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution.
-#
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -53,8 +48,6 @@ use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
 use POSIX qw(strftime);
-
-my($rcsrev) = '$Revision$'; #'
 
 # process form params
 my($q) = new CGI;
@@ -833,7 +826,7 @@ EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs2);
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef));
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
     Hebcal::cache_end() if $cache;
     exit(0);

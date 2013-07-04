@@ -61,8 +61,6 @@ my $content_type = "text/html; charset=UTF-8";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
-my $rcsrev = '$Revision$'; #'
-
 my $latlong_url = "http://www.getty.edu/research/tools/vocabulary/tgn/";
 my %long_candles_text =
     ("pos" => "latitude/longitude",
@@ -844,7 +842,7 @@ JSCRIPT_END
 	;
     Hebcal::out_html(undef, $js);
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev,1));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
@@ -1281,7 +1279,7 @@ EOHTML
     Hebcal::out_html(undef, $nav_pagination);
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,$rcsrev,1));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 

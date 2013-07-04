@@ -1,7 +1,4 @@
 <?php
-// $Id$
-// $URL$
-
 // don't visit DreamHost php4 /usr/local/lib/php
 set_include_path(".:/usr/local/php5/lib/pear");
 
@@ -12,11 +9,6 @@ require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 require "../pear/HTML/Form.php";
 
-$VER = '$Revision$';
-$matches = array();
-if (preg_match('/(\d+)/', $VER, $matches)) {
-    $VER = $matches[1];
-}
 echo html_header_bootstrap("Shabbat Candle Lighting Times by Email");
 
 $param = array();
@@ -324,7 +316,7 @@ href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.
 }
 
 function subscribe($param) {
-    global $sender, $VER;
+    global $sender;
     if (preg_match('/\@hebcal.com$/', $param["em"]))
     {
 	form($param,
@@ -450,9 +442,9 @@ function subscribe($param) {
 			 "MIME-Version" => "1.0",
 			 "Content-Type" => "text/plain",
 			 "X-Sender" => $sender,
-			 "X-Mailer" => "hebcal web v$VER",
+			 "X-Mailer" => "hebcal web",
 			 "Message-ID" =>
-			 "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
+			 "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",
 			 "X-Originating-IP" => "[$ip]",
 			 "Subject" => $subject);
 
@@ -513,9 +505,9 @@ EOD
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
 		     "X-Sender" => $sender,
-		     "X-Mailer" => "hebcal web v$VER",
+		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
-		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
+		     "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",
 		     "X-Originating-IP" => "[$ip]",
 		     "Subject" => $subject);
 
@@ -597,7 +589,7 @@ EOD;
 }
 
 function unsubscribe($param) {
-    global $sender, $VER;
+    global $sender;
     $html_email = htmlentities($param["em"]);
     $info = get_sub_info($param["em"]);
 
@@ -645,9 +637,9 @@ EOD
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
 		     "X-Sender" => $sender,
-		     "X-Mailer" => "hebcal web v$VER",
+		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
-		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
+		     "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",
 		     "X-Originating-IP" => "[$ip]",
 		     "Subject" => $subject);
 

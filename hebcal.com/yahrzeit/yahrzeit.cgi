@@ -55,8 +55,6 @@ use Date::Calc ();
 my $this_year = (localtime)[5];
 $this_year += 1900;
 
-my $rcsrev = '$Revision$'; #'
-
 my $NISAN = 1;
 my $IYYAR = 2;
 my $SIVAN = 3;
@@ -577,7 +575,7 @@ and then come back to this page.</p>
 instructions</a>.</p>
 });
 
-	Hebcal::out_html($cfg, Hebcal::html_footer_bootstrap($q,$rcsrev,0));
+	Hebcal::out_html($cfg, Hebcal::html_footer_bootstrap($q,undef,0));
     }
 
     exit(0);

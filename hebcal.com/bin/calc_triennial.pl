@@ -10,8 +10,6 @@
 #   A Complete Triennial System for Reading the Torah
 #   http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
-# $Id$
-#
 # Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
@@ -27,11 +25,6 @@
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution.
-#
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -245,12 +238,7 @@ foreach my $h (keys %readings1, "Vezot Haberakhah") {
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
-my $REVISION = '$Revision$'; #'
-my $html_footer = Hebcal::html_footer_bootstrap(undef, $REVISION, 0);
-my $mtime_aliyah = (stat($aliyah_in))[9];
-my $mtime_script = (stat($0))[9];
-my $MTIME = $mtime_script > $mtime_aliyah ? $mtime_script : $mtime_aliyah;
-my $MTIME_FORMATTED = strftime("%d %B %Y", localtime($MTIME));
+my $html_footer = Hebcal::html_footer_bootstrap(undef, undef, 0);
 
 foreach my $h (keys %readings1, "Vezot Haberakhah")
 {

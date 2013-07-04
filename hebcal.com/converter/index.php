@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2012  Michael J. Radwin.
+ * Copyright (c) 2013  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -18,11 +18,6 @@
  *    copyright notice, this list of conditions and the following
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
- *
- *  * Neither the name of Hebcal.com nor the names of its
- *    contributors may be used to endorse or promote products
- *    derived from this software without specific prior written
- *    permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -42,12 +37,6 @@
 require("./HTML/Form.php");
 require("../pear/Hebcal/hebnum.inc");
 require("../pear/Hebcal/common.inc");
-
-$VER = '$Revision$';
-$matches = array();
-if (preg_match('/(\d+)/', $VER, $matches)) {
-    $VER = $matches[1];
-}
 
 $calinf = cal_info(CAL_GREGORIAN);
 $MoY_long = $calinf["months"];

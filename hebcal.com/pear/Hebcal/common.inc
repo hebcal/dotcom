@@ -1,9 +1,7 @@
 <?php
 
-/*
+/***********************************************************************
  * Hebcal PHP helper functions
- *
- * $Id$
  *
  * Copyright (c) 2013  Michael J. Radwin.
  * All rights reserved.
@@ -20,11 +18,6 @@
  *    copyright notice, this list of conditions and the following
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
- *
- *  - Neither the name of Hebcal.com nor the names of its
- *    contributors may be used to endorse or promote products
- *    derived from this software without specific prior written
- *    permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -468,11 +461,10 @@ function html_footer_bootstrap($last_updated = true) {
     $last_updated_text = "";
     if ($last_updated) {
 	$stat = stat($_SERVER["SCRIPT_FILENAME"]);
-	global $VER;
 	$last_updated_text = "<p><time datetime=\""
-	    . date("Y-m-d", $stat[9]) . "\">"
+	    . date("c", $stat[9]) . "\">"
 	    . date("j F Y", $stat[9]). "</time>"
-	    . " <small class=\"muted\">Revision: $VER</small></p>";
+	    . "</p>";
     }
 
     $site_title = "Hebcal Jewish Calendar";

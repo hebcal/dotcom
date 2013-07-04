@@ -1,7 +1,4 @@
 <?php
-// $Id$
-// $URL$
-
 // don't visit DreamHost php4 /usr/local/lib/php
 set_include_path(".:/usr/local/php5/lib/pear");
 
@@ -51,12 +48,6 @@ EOD;
     mysql_free_result($result);
 
     return $val;
-}
-
-$VER = '$Revision$';
-$matches = array();
-if (preg_match('/(\d+)/', $VER, $matches)) {
-    $VER = $matches[1];
 }
 
 header("Cache-Control: private");
@@ -119,9 +110,9 @@ EOD;
 		     "Content-Type" => "text/plain",
 		     "X-Sender" => $sender,
 		     "Precedence" => "bulk",
-		     "X-Mailer" => "hebcal web v$VER",
+		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
-		     "<Hebcal.Web.$VER.".time().".".posix_getpid()."@hebcal.com>",
+		     "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",
 		     "X-Originating-IP" => "[$ip]",
 		     "Subject" => $subject);
 

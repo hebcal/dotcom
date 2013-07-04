@@ -4,8 +4,6 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# $Id$
-#
 # Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
@@ -21,11 +19,6 @@
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution.
-#
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -92,7 +85,6 @@ if ($opts{'f'}) {
 }
 
 my $DO_AMAZON = 1;
-my $REVISION = '$Revision$'; #'
 my $NOW = time();
 
 my @FESTIVALS;
@@ -546,7 +538,7 @@ EOHTML
     }
 
     print OUT3 qq{</div><!-- .span12 -->\n};
-    print OUT3 Hebcal::html_footer_bootstrap(undef, $REVISION);
+    print OUT3 Hebcal::html_footer_bootstrap(undef, undef);
 
     close(OUT3);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -622,7 +614,7 @@ EOHTML
 
 
 	print OUT4 qq{</div><!-- .span12 -->\n};
-	print OUT4 Hebcal::html_footer_bootstrap(undef, $REVISION);
+	print OUT4 Hebcal::html_footer_bootstrap(undef, undef);
 
 	close(OUT4);
 	rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -1075,7 +1067,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </div><!-- .span2 -->
 EOHTML
 ;
-    print OUT2 Hebcal::html_footer_bootstrap(undef, $REVISION);
+    print OUT2 Hebcal::html_footer_bootstrap(undef, undef);
 
     close(OUT2);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
