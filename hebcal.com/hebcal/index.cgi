@@ -54,7 +54,6 @@ use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
 use HTML::CalendarMonthSimple ();
-use Palm::DBA ();
 
 my $http_expires = "Tue, 02 Jun 2037 20:00:00 GMT";
 my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
@@ -489,6 +488,7 @@ sub dba_display
 
     my $basename = $q->path_info();
     $basename =~ s,^.*/,,;
+    eval("use Palm::DBA");
     Palm::DBA::write_header($basename);
     Palm::DBA::write_contents(\@events, $tz, $dst);
 }
