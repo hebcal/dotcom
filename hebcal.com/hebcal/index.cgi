@@ -468,7 +468,10 @@ sub pdf_display {
     $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
     $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
     $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
-    $pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
+    my $lg = $q->param("lg");
+    if ($lg eq "h") {
+	$pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
+    }
 
     my %cells;
     foreach my $evt (@events) {
@@ -479,7 +482,6 @@ sub pdf_display {
 	push(@{$cells{$cal_id}{$mday}}, $evt);
     }
 
-    my $lg = $q->param("lg");
     my @DAYS = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
     foreach my $year_month (sort keys %cells) {
 	my($year,$month) = split(/-/, $year_month);
