@@ -63,15 +63,10 @@ $pdf->info(
 );
 
 my %font;
-#$font{'plain'} = $pdf->corefont('Helvetica', -encoding => 'latin1');
-#$font{'bold'} = $pdf->corefont('Helvetica-Bold', -encoding => 'latin1');
-#$font{'plain'} = $pdf->ttfont('/Users/mradwin/Desktop/SourceSansPro_FontsOnly-1.050/TTF/SourceSansPro-Regular.ttf');
-#$font{'bold'} = $pdf->ttfont('/Users/mradwin/Desktop/SourceSansPro_FontsOnly-1.050/TTF/SourceSansPro-Bold.ttf');
-$font{'plain'} = $pdf->ttfont('/Users/mradwin/dotcom/hebcal.com/hebcal/fonts/Open_Sans/OpenSans-Regular.ttf');
-$font{'condensed'} = $pdf->ttfont('/Users/mradwin/dotcom/hebcal.com/hebcal/fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
-$font{'bold'} = $pdf->ttfont('/Users/mradwin/dotcom/hebcal.com/hebcal/fonts/Open_Sans/OpenSans-Bold.ttf');
-
-$font{'hebrew'} = $pdf->ttfont('/Users/mradwin/Downloads/SBL_Hbrw.ttf');
+$font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
+$font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
+$font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
+$font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
 
 my @events = get_sample_events();
 my %cells;
@@ -110,7 +105,7 @@ foreach my $year_month (sort keys %cells) {
 
     my $text = $page->text();	# Add the Text object
     $text->translate(WIDTH / 2, HEIGHT - TMARGIN + 24); # Position the Text object
-    $text->font($font{'bold'}, 32); # Assign a font to the Text object
+    $text->font($font{'bold'}, 24); # Assign a font to the Text object
     $text->text_center("$month_name $year"); # Draw the string
 
     my $g = $page->gfx();
@@ -153,66 +148,90 @@ foreach my $year_month (sort keys %cells) {
 	}
     }
 
-    # render month numbers
     my $xpos = LMARGIN + $colwidth - 4;
     $xpos += ($dow * $colwidth);
-    my $ypos = HEIGHT - TMARGIN - 12; # start at row 0, then subtract $rowheight from $ypos
-    for (my $i = 1; $i <= $daysinmonth; $i++) {
-	$text->font($font{'plain'}, 12);
+    my $ypos = HEIGHT - TMARGIN - 12;
+    for (my $mday = 1; $mday <= $daysinmonth; $mday++) {
+	# render day number
+	$text->font($font{'plain'}, 11);
 	$text->fillcolor("#000000");
 	$text->translate($xpos, $ypos);
-	$text->text_right($i);
+	$text->text_right($mday);
 
-	if (defined $cells{$year_month}{$i}) {
+	# events within day $mday
+	if (defined $cells{$year_month}{$mday}) {
 	    $text->translate($xpos - $colwidth + 8, $ypos - 18);
-	    foreach my $evt (@{$cells{$year_month}{$i}}) {
-		my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-#		my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-		my $str = $subj;
-		if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0) {
-		    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-		    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-		    $hour -= 12 if $hour > 12;
-		    $str = sprintf("%d:%02dp %s", $hour, $min, $subj);
-		}
-
-		if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
-		    $text->font($font{'bold'}, 8);
-		    $text->fillcolor("#000000");
-		} elsif (($str =~ /^\d+\w+.+, \d{4,}$/)
-			 || ($str =~ /^\d+\w+ day of the Omer$/)) {
-		    $text->font($font{'plain'}, 8);
-		    $text->fillcolor("#999999");
-		} elsif (length($str) >= 25) {
-		    $text->font($font{'condensed'}, 9);
-		    $text->fillcolor("#000000");
-		} else {
-		    $text->font($font{'plain'}, 8);
-		    $text->fillcolor("#000000");
-		}
-		$text->text($str);
-		$text->cr(-12);
+	    foreach my $evt (@{$cells{$year_month}{$mday}}) {
+		render_event($text, $evt, "s");
 	    }
 	}
 
-	$xpos += $colwidth;
+	$xpos += $colwidth;	# move to the right by one cell
 	if (++$dow == 7) {
 	    $dow = 0;
 	    $xpos = LMARGIN + $colwidth - 4;
-	    $ypos -= $rowheight;
+	    $ypos -= $rowheight; # move down the page
 	}
     }
 
     $text->translate(WIDTH - RMARGIN, BMARGIN - 12);
-    $text->font($font{'hebrew'}, 8);
-    $text->fillcolor("#999999");
-    $text->text_right("Copyright (c) ט״ז בְּתָּמוּז תשע״ג Hebcal.com - Licensed under a Creative Commons Attribution 3.0 License");
+    $text->font($font{'condensed'}, 8);
+    $text->fillcolor("#000000");
+    $text->text_right("This Jewish holiday calendar from www.hebcal.com is licensed under Creative Commons Attribution 3.0");
 }
 
 $pdf->save;
 $pdf->end();
 
 exit(0);
+
+sub render_event {
+    my($text,$evt,$lg) = @_;
+
+    my $color = "#000000";
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    if (($subj =~ /^\d+\w+.+, \d{4,}$/) || ($subj =~ /^\d+\w+ day of the Omer$/)) {
+	$color = "#666666";
+    }
+    $text->fillcolor($color);
+
+    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0) {
+	my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
+	$hour -= 12 if $hour > 12;
+	my $time_formatted = sprintf("%d:%02dp ", $hour, $min);
+	$text->font($font{'bold'}, 8);
+	$text->text($time_formatted);
+    }
+
+    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+    if ($lg eq "h" && $hebrew) {
+	my $str = scalar reverse($hebrew);
+	$str =~ s/(\d+)/scalar reverse($1)/ge;
+	$str =~ s/\(/\cA/g;
+	$str =~ s/\)/\(/g;
+	$str =~ s/\cA/\)/g;
+	$text->font($font{'hebrew'}, 10);
+	$text->text($str);
+    } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+	$text->font($font{'bold'}, 8);
+	$text->text($subj);
+    } elsif (length($subj) >= 25) {
+	$text->font($font{'condensed'}, 9);
+	$text->fillcolor("#000000");
+	$text->text($subj);
+    } elsif ($subj =~ /^Havdalah \((\d+) min\)$/) {
+	my $minutes = $1;
+	$text->font($font{'plain'}, 8);
+	$text->text("Havdalah");
+	$text->font($font{'plain'}, 6);
+	$text->text(" ($minutes min)");
+    } else {
+	$text->font($font{'plain'}, 8);
+	$text->text($subj);
+    }
+    $text->cr(-12);
+}
 
 sub get_sample_events {
     my @aa = (['22nd of Tevet, 5773',1,-1,-1,'4',0,'2013',0,'',0],
