@@ -448,9 +448,9 @@ sub vcalendar_display
 use constant PDF_WIDTH => 792;
 use constant PDF_HEIGHT => 612;
 use constant PDF_TMARGIN => 72;
-use constant PDF_BMARGIN => 36;
-use constant PDF_LMARGIN => 36;
-use constant PDF_RMARGIN => 36;
+use constant PDF_BMARGIN => 32;
+use constant PDF_LMARGIN => 24;
+use constant PDF_RMARGIN => 24;
 use constant PDF_COLUMNS => 7;
 my %pdf_font;
 
@@ -509,6 +509,8 @@ sub pdf_display {
 
 	my $page = $pdf->page;
 	$page->mediabox(PDF_WIDTH, PDF_HEIGHT);
+	$page->cropbox(PDF_WIDTH, PDF_HEIGHT);
+	$page->trimbox(PDF_WIDTH, PDF_HEIGHT);
 
 	my $text = $page->text(); # Add the Text object
 	$text->translate(PDF_WIDTH / 2, PDF_HEIGHT - PDF_TMARGIN + 24); # Position the Text object
