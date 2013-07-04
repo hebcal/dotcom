@@ -452,6 +452,7 @@ use constant PDF_BMARGIN => 36;
 use constant PDF_LMARGIN => 36;
 use constant PDF_RMARGIN => 36;
 use constant PDF_COLUMNS => 7;
+my %pdf_font;
 
 sub pdf_display {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
@@ -464,11 +465,10 @@ sub pdf_display {
     $pdf->info("Author" => "Hebcal Jewish Calendar",
 	       "Title" => $title);
 
-    my %font;
-    $font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
-    $font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
-    $font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
-    $font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
+    $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
+    $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
+    $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
+    $pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
 
     my %cells;
     foreach my $evt (@events) {
@@ -507,7 +507,7 @@ sub pdf_display {
 
 	my $text = $page->text(); # Add the Text object
 	$text->translate(PDF_WIDTH / 2, PDF_HEIGHT - PDF_TMARGIN + 24); # Position the Text object
-	$text->font($font{'bold'}, 24); # Assign a font to the Text object
+	$text->font($pdf_font{'bold'}, 24); # Assign a font to the Text object
 	$text->text_center("$month_name $year"); # Draw the string
 
 	my $g = $page->gfx();
@@ -519,7 +519,7 @@ sub pdf_display {
 	$g->stroke();
 	$g->endpath(); 
 
-	$text->font($font{'plain'},10);
+	$text->font($pdf_font{'plain'},10);
 	for (my $i = 0; $i < scalar(@DAYS); $i++) {
 	    my $x = PDF_LMARGIN + $i * ($colwidth + $hspace) + ($colwidth / 2);
 	    $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
@@ -555,7 +555,7 @@ sub pdf_display {
 	my $ypos = PDF_HEIGHT - PDF_TMARGIN - 12;
 	for (my $mday = 1; $mday <= $daysinmonth; $mday++) {
 	    # render day number
-	    $text->font($font{'plain'}, 11);
+	    $text->font($pdf_font{'plain'}, 11);
 	    $text->fillcolor("#000000");
 	    $text->translate($xpos, $ypos);
 	    $text->text_right($mday);
@@ -577,7 +577,7 @@ sub pdf_display {
 	}
 
 	$text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
-	$text->font($font{'condensed'}, 8);
+	$text->font($pdf_font{'condensed'}, 8);
 	$text->fillcolor("#000000");
 	$text->text_right("This Jewish holiday calendar from www.hebcal.com is licensed under Creative Commons Attribution 3.0");
     }
@@ -601,7 +601,7 @@ sub pdf_render_event {
 	my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
 	$hour -= 12 if $hour > 12;
 	my $time_formatted = sprintf("%d:%02dp ", $hour, $min);
-	$text->font($font{'bold'}, 8);
+	$text->font($pdf_font{'bold'}, 8);
 	$text->text($time_formatted);
     }
 
@@ -612,23 +612,23 @@ sub pdf_render_event {
 	$str =~ s/\(/\cA/g;
 	$str =~ s/\)/\(/g;
 	$str =~ s/\cA/\)/g;
-	$text->font($font{'hebrew'}, 10);
+	$text->font($pdf_font{'hebrew'}, 10);
 	$text->text($str);
     } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
-	$text->font($font{'bold'}, 8);
+	$text->font($pdf_font{'bold'}, 8);
 	$text->text($subj);
     } elsif (length($subj) >= 25) {
-	$text->font($font{'condensed'}, 9);
+	$text->font($pdf_font{'condensed'}, 9);
 	$text->fillcolor("#000000");
 	$text->text($subj);
     } elsif ($subj =~ /^Havdalah \((\d+) min\)$/) {
 	my $minutes = $1;
-	$text->font($font{'plain'}, 8);
+	$text->font($pdf_font{'plain'}, 8);
 	$text->text("Havdalah");
-	$text->font($font{'plain'}, 6);
+	$text->font($pdf_font{'plain'}, 6);
 	$text->text(" ($minutes min)");
     } else {
-	$text->font($font{'plain'}, 8);
+	$text->font($pdf_font{'plain'}, 8);
 	$text->text($subj);
     }
     $text->cr(-12);
