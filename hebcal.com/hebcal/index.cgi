@@ -469,7 +469,6 @@ sub pdf_display {
 	       "Title" => $title);
 
     $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
-    $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
     $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
     my $lg = $q->param("lg");
     if ($lg eq "h") {
@@ -583,10 +582,15 @@ sub pdf_display {
 	    }
 	}
 
-	$text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
-	$text->font($pdf_font{'condensed'}, 8);
 	$text->fillcolor("#000000");
-	$text->text_right("This Jewish holiday calendar from www.hebcal.com is licensed under Creative Commons Attribution 3.0");
+	$text->font($font{'plain'}, 8);
+	if (param_true("c")) {
+	    $text->translate(PDF_LMARGIN, PDF_BMARGIN - 12);
+	    $text->text("Candle lighting times for " . $cconfig->{"title"});
+	}
+
+	$text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
+	$text->text_right("Provided by www.hebcal.com with a Creative Commons Attribution 3.0 license");
     }
 
     print STDOUT $q->header(-type => "application/pdf");
@@ -627,6 +631,10 @@ sub pdf_render_event {
 	$text->font($pdf_font{'bold'}, 8);
 	$text->text($subj);
     } elsif (length($subj) >= 25) {
+	# lazy eval on font that might not be used
+	if (! defined $pdf_font{'condensed'}) {
+	    $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
+	}
 	$text->font($pdf_font{'condensed'}, 9);
 	$text->fillcolor("#000000");
 	$text->text($subj);
