@@ -446,11 +446,13 @@ EOHTML
 
     my $custom_link =
 	$heb_year ? "/hebcal/?v=0&amp;year=$heb_year&amp;yt=H" : "/hebcal/";
+    my $pdf_heb_year = $heb_year || $HEB_YR;
 
     $str .= <<EOHTML;
 <div class="btn-toolbar">
-<a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download &raquo;</a>
-<a class="btn btn-small" title="Hebcal Custom Calendar" href="$custom_link"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
+<a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download</a>
+<a class="btn btn-small download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="icon-print"></i> Print PDF</a>
+<a class="btn btn-small" title="Hebcal Custom Calendar" href="$custom_link"><i class="icon-pencil"></i> Customize your calendar</a>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
