@@ -570,7 +570,7 @@ sub pdf_display {
 	    if (defined $cells{$year_month}{$mday}) {
 		$text->translate($xpos - $colwidth + 8, $ypos - 18);
 		foreach my $evt (@{$cells{$year_month}{$mday}}) {
-		    pdf_render_event($text, $evt, $lg);
+		    pdf_render_event($pdf, $text, $evt, $lg);
 		}
 	    }
 
@@ -583,7 +583,7 @@ sub pdf_display {
 	}
 
 	$text->fillcolor("#000000");
-	$text->font($font{'plain'}, 8);
+	$text->font($pdf_font{'plain'}, 8);
 	if (param_true("c")) {
 	    $text->translate(PDF_LMARGIN, PDF_BMARGIN - 12);
 	    $text->text("Candle lighting times for " . $cconfig->{"title"});
@@ -600,7 +600,7 @@ sub pdf_display {
 }
 
 sub pdf_render_event {
-    my($text,$evt,$lg) = @_;
+    my($pdf,$text,$evt,$lg) = @_;
 
     my $color = "#000000";
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
