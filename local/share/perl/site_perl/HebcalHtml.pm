@@ -274,7 +274,7 @@ $palm_dba
 EOHTML
 ;
 
-    my $pdf_title = "Print PDF (8.5x11 pages)";
+    my $pdf_title = "Print PDF (formatted for 8.5\"x11\" paper)";
     my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
     my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf"><i class="icon-print"></i> ${filename}.pdf</a></p>\n};
 
