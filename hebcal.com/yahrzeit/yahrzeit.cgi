@@ -155,7 +155,7 @@ foreach my $key (1 .. $count)
 	    ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,1);
 	}
 
-	my $type = $q->param("t$key");
+	my $type = $q->param("t$key") || "Yahrzeit";
 	my $name = $q->param("n$key");
 	push(@inputs, [$key, $gy, $gm, $gd, $name, $type]);
 	$input_types{$type} = 1;
