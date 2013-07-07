@@ -276,7 +276,7 @@ EOHTML
 
     my $pdf_title = "Print PDF (8.5x11 pages)";
     my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
-    my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf"><i class="icon-print"></i> $pdf_title</a></p>\n};
+    my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf"><i class="icon-print"></i> ${filename}.pdf</a></p>\n};
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
     $s .= accordion_bootstrap($pdf_title, "pdf", $pdf);
