@@ -113,7 +113,6 @@ sub download_html_bootstrap {
 	: Hebcal::url_escape("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
  
-
     my $ol_ics_title = "Outlook 2007, Outlook 2010 (Windows)";
     my $ol_csv_title = "Outlook 97, 98, 2000, 2002, 2003 (Windows)";
     my $ical_title = "Apple iCal (Mac OS X)";
@@ -275,8 +274,12 @@ $palm_dba
 EOHTML
 ;
 
+    my $pdf_title = "Print PDF (8.5x11 pages)";
+    my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
+    my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf"><i class="icon-print"></i> $pdf_title</a></p>\n};
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
+    $s .= accordion_bootstrap($pdf_title, "pdf", $pdf);
     $s .= accordion_bootstrap($ios_title, "ios", $ios);
     $s .= accordion_bootstrap($ol_ics_title, "ol-ics", $ol_ics);
     $s .= accordion_bootstrap($ol_csv_title, "ol-csv", $ol_csv);
