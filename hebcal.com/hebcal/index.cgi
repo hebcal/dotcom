@@ -211,8 +211,6 @@ if (defined $q->param("month") && defined $q->param("year") &&
 else
 {
     $g_date = sprintf("%04d", $q->param("year"));
-    my $plus4 = $q->param("year") + $EXTRA_YEARS;
-    $g_filename .= "_" . $plus4;
 }
 
 my $pi = $q->path_info();
@@ -1228,7 +1226,7 @@ accurate.
 	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
 
 	my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-	Hebcal::out_html(undef, qq{<a class="btn download" id="dl-pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
+	Hebcal::out_html(undef, qq{<a class="btn download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
 
 	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
 	    # Fridge
