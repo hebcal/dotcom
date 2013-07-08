@@ -9,25 +9,21 @@
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-967247-1']);
 _gaq.push(['_trackPageview']);
-_gaq.push(['_trackPageLoadTime']);
 (function() {
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=205907769446397";
-  js.async = true;
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
 </script>
 <style type="text/css">
-.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
 .navbar{position:static}
 body{padding-top:0}
+:lang(he) {
+  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  font-size:125%;
+  font-weight:normal;
+  direction:rtl;
+}
 @media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
@@ -73,7 +69,7 @@ lighting times, and Torah readings.</p>
 <div class="span6">
 <fieldset><legend>Jewish Holidays for</legend>
 <div class="form-inline">
-<label>Year: <input type="text" name="year" value="2013" size="4" maxlength="4" style="width:auto" id="year"></label>
+<label>Year: <input type="text" name="year" value="2013" size="4" maxlength="4" pattern="\d*" style="width:auto" id="year"></label>
 <label>Month: <select name="month"  class="input-medium" id="month">
 <option selected value="x">- Entire year -</option>
 <option value="1">January</option>
@@ -125,8 +121,8 @@ is the difference?</a>)</small></fieldset>
 | <a onclick="return s1('city', 'on')" href="/hebcal/?c=on;geo=city">large cities</a>
 | <a onclick="return s1('pos', 'on')" href="/hebcal/?c=on;geo=pos">latitude/longitude</a>
 ]</small>
-<label>ZIP code: <input type="text" name="zip"  size="5" maxlength="5" style="width:auto"></label>
-<label>Havdalah minutes past sundown: <input type="text" name="m" value="72" size="3" maxlength="3" style="width:auto"></label>
+<label>ZIP code: <input type="text" name="zip"  size="5" maxlength="5" pattern="\d*" style="width:auto"></label>
+<label>Havdalah minutes past sundown: <input type="text" name="m" value="72" size="3" maxlength="3" pattern="\d*" style="width:auto"></label>
 <small class="help-block">(enter "0" to turn off Havdalah times)</small>
 </fieldset>
 </div><!-- .span6 -->
@@ -146,7 +142,7 @@ var d=document;
 function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
 d.f1.submit();return false;}
 function s6(val){
-if(val=='G'){d.f1.year.value=2013;d.f1.month.value=4;}
+if(val=='G'){d.f1.year.value=2013;d.f1.month.value=7;}
 if(val=='H'){d.f1.year.value=5773;d.f1.month.value='x';}
 return false;}
 d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
@@ -187,8 +183,7 @@ d.getElementById("ss").onclick=function(){if(this.checked==true){d.f1.nh.checked
 </ul>
 </div><!-- .span3 -->
 <div class="span3">
-<p>04 March 2013 <small class="muted">Revision: 3645</small></p>
-<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
+<p>17 June 2013 <small class="muted">Revision: 3778</small></p>
 <p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
 is licensed under a 
@@ -208,4 +203,4 @@ if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(
 if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
 </script>
 </body></html>
-<!-- generated Mon Apr  1 00:00:07 2013 -->
+<!-- generated Mon Jul  1 00:00:06 2013 -->
