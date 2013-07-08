@@ -1,8 +1,6 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 ########################################################################
-#
-# $Id$
 #
 # Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
@@ -19,11 +17,6 @@
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution.
-#
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -54,11 +47,6 @@ use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
 use Config::Tiny;
 use MIME::Lite;
-
-my $VERSION = '$Revision$$';
-if ($VERSION =~ /(\d+)/) {
-    $VERSION = $1;
-}
 
 my $opt_all = 0;
 my $opt_help;
@@ -618,7 +606,7 @@ sub my_sendmail
 	$msg->add($key => $val);
     }
     $msg->add("X-Sender" => "$LOGIN\@$HOSTNAME");
-    $msg->replace("X-Mailer" => "hebcal mail v$VERSION");
+    $msg->replace("X-Mailer" => "hebcal mail");
 
     $msg->attach(Type => "text/plain",
 		 Data => $body);
