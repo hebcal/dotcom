@@ -158,7 +158,6 @@ body{padding-top:0}
 </ul>
 </div><!-- .span3 -->
 <div class="span3">
-<p>10 June 2013 <small class="muted">Revision: 3737</small></p>
 <p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
 is licensed under a 
