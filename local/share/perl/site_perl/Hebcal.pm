@@ -57,7 +57,7 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
-$Hebcal::WEBDIR = "/home/hebcal/web/hebcal.com";
+$Hebcal::WEBDIR = $ENV{"DOCUMENT_ROOT"} || "/home/hebcal/web/hebcal.com";
 $Hebcal::HEBCAL_BIN = "$Hebcal::WEBDIR/bin/hebcal";
 $Hebcal::LUACH_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/luach.sqlite3";
 $Hebcal::CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";

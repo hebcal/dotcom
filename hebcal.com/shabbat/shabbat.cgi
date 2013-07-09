@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 ########################################################################
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times

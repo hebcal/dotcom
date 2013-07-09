@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
