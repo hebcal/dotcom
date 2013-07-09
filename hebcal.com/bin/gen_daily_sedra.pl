@@ -41,9 +41,6 @@ use Hebcal ();
 use Date::Calc ();
 use Getopt::Std ();
 
-my $WEBDIR = "/home/hebcal/web/hebcal.com";
-my $HEBCAL = "$WEBDIR/bin/hebcal";
-
 $0 =~ s,.*/,,;  # basename
 
 my($usage) = "usage: $0 [-h] start-year end-year
@@ -63,11 +60,11 @@ my $end_year = shift;
 
 for (my $syear = $start_year; $syear <= $end_year; $syear++) {
     my $century = substr($syear, 0, 2);
-    my $dir = "$WEBDIR/converter/sedra/$century";
+    my $dir = "../converter/sedra/$century";
     unless (-d $dir) {
 	system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed";
     }
-    my @events = Hebcal::invoke_hebcal("$HEBCAL -o -S $syear", "", 0);
+    my @events = Hebcal::invoke_hebcal("./hebcal -o -S $syear", "", 0);
 
     my $outfile = "$dir/$syear.inc";
     open(OUT,">$outfile") || die;
