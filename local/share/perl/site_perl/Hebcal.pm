@@ -1958,6 +1958,114 @@ END:VTIMEZONE
 ",
  );
 
+sub process_args_common {
+    my($q,$handle_cookie) = @_;
+
+    if ($handle_cookie) {
+	# default setttings needed for cookie
+	$q->param('c','on');
+	$q->param('nh','on');
+	$q->param('nx','on');
+
+	my $cookies = Hebcal::get_cookies($q);
+	if (defined $cookies->{'C'}) {
+	    Hebcal::process_cookie($q,$cookies->{'C'});
+	}
+    }
+
+    # remove leading and trailing whitespace
+    foreach my $key ($q->param()) {
+	my $val = $q->param($key);
+	$val = '' unless defined $val;
+	$val =~ s/^\s+//g;
+	$val =~ s/\s+$//g;
+	$q->param($key,$val);
+    }
+
+    my $cmd  = './hebcal';
+
+    my($latitude,$longitude,$city_descr);
+    if (defined $q->param('zip') && $q->param('zip') ne '') {
+	if ($q->param('zip') !~ /^\d{5}$/) {
+	    my $message = "Sorry, <strong>" . $q->param('zip')
+		. "</strong> does not appear to be a 5-digit zip code.";
+	    return (0,$message,undef);
+	}
+
+	my $DB = Hebcal::zipcode_open_db();
+	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
+	# set global $latitude and $longitude
+	($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,$latitude,$longitude) =
+	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
+	Hebcal::zipcode_close_db($DB);
+	undef($DB);
+
+	unless (defined $state) {
+	    my $message = "Sorry, can't find\n".  "<strong>" . $q->param('zip') .
+		"</strong> in the zip code database.";
+	    my $help = "<ul><li>Please try a nearby zip code</li></ul>";
+	    return (0,$message,$help);
+	}
+
+	my $tzid = Hebcal::get_usa_tzid($state,$tz);
+
+	unless (defined $tzid) {
+	    my $message = "Sorry, can't auto-detect timezone for <strong>" . $city_descr . "</strong>";
+	    return (0,$message,undef);
+	}
+
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+	$city_descr = "$city, $state " . $q->param('zip');
+
+	$q->param('geo','zip');
+	$q->delete('city');
+	$q->delete('i');
+    } else {
+	my $city = validate_city($q->param("city"));
+	$q->param("city", $city);
+
+	($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+	my($lat_deg,$lat_min,$long_deg,$long_min) =
+	    Hebcal::latlong_to_hebcal($latitude, $longitude);
+	my $tzid = $Hebcal::CITY_TZID{$city};
+
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+	$city_descr = Hebcal::woe_city($city) . ", " . Hebcal::woe_country($city);
+
+	if ($Hebcal::CITY_COUNTRY{$city} eq 'IL') {
+	    $q->param('i','on');
+	} else {
+	    $q->delete('i');
+	}
+    }
+
+    $cmd .= " -m " . $q->param('m')
+	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+
+    foreach (qw(a i)) {
+	$cmd .= ' -' . $_
+	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
+    }
+
+    return (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
+
+sub validate_city {
+    my($city) = @_;
+    unless (defined $city) {
+	return "US-New York-NY";
+    }
+    if (defined($Hebcal::CITIES_OLD{$city})) {
+	return $Hebcal::CITIES_OLD{$city};
+    }
+    if (defined($Hebcal::CITY_TZID{$city})) {
+	return $city;
+    }
+    return "US-New York-NY";
+}
+
+
 sub get_usa_tzid {
     my($state,$tz) = @_;
     my $tzid;

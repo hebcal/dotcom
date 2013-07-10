@@ -51,8 +51,7 @@ my($script_name) = $q->script_name();
 $script_name =~ s,/index.cgi$,/,;
 
 my $cfg;
-my($evts,undef,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
-    process_args($q);
+my($evts,undef,$city_descr,$cmd_pretty) = process_args($q);
 
 my $hebrew_year = 0;
 my $numEntries2 = scalar(@{$evts});
@@ -231,160 +230,31 @@ sub process_args
 {
     my($q) = @_;
 
-    # default setttings needed for cookie
-    $q->param('c','on');
-
-    # sanitize input to prevent people from trying to hack the site.
-    # remove anthing other than word chars, white space, or hyphens.
-    my($key);
-    foreach $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	$val = '' unless defined $val;
-	$val =~ s/[^\w\s\.-]//g;
-	$val =~ s/^\s*//g;		# nuke leading
-	$val =~ s/\s*$//g;		# and trailing whitespace
-	$q->param($key,$val);
+    my @status = Hebcal::process_args_common($q, 0);
+    unless ($status[0]) {
+	print "Status: 400 Bad Request\r\n", "Content-Type: text/html\r\n\r\n",
+	    $status[1], "\n";
+	exit(0);
     }
 
-    my($cmd)  = './hebcal -s -x -c -H';
-
-    my($city_descr,$dst_descr,$tz_descr);
-    if (defined $q->param('city'))
-    {
-	unless (defined($Hebcal::city_tz{$q->param('city')}))
-	{
-	    $q->param('city','New York');
-	}
-
-	$q->param('geo','city');
-	$q->delete('tz');
-	$q->delete('dst');
-	$q->delete('zip');
-
-	$cmd .= " -C '" . $q->param('city') . "'";
-
-	$city_descr = $q->param('city');
-
-	if ($Hebcal::city_dst{$q->param('city')} eq 'israel')
-	{
-	    $q->param('i','on');
-	}
-	else
-	{
-	    $q->delete('i');
-	}
-    }
-    elsif (defined $q->param('zip') && $q->param('zip') ne '')
-    {
-	$q->param('geo','zip');
-	$q->delete('city');
-	$q->delete('i');
-
-	if ($q->param('zip') !~ /^\d{5}$/)
-	{
-	    $q->param('zip', 90210);
-	}
-
-	my $DB = Hebcal::zipcode_open_db();
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
-	Hebcal::zipcode_close_db($DB);
-	undef($DB);
-
-	unless (defined $state) {
-	    print "Status: 400 Bad Request\r\n",
-	    "Content-Type: text/plain\r\n\r\n",
-	    "Can't find zip code ", $q->param('zip'), " in the DB.\n";
-	    exit(0);
-	}
-
-	# allow CGI args to override
-	if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/)
-	{
-	    $tz = $q->param('tz');
-	}
-	else
-	{
-	    $q->param('tz', $tz);
-	}
-
-	if ($tz eq '?') {
-	    print "Status: 500 Internal Server Error\r\n",
-	    "Content-Type: text/plain\r\n\r\n",
-	    "No timezone for zip code ", $q->param('zip'), "\n";
-	    exit(0);
-	}
-
-	$city_descr = "$city, $state";
-
-	# allow CGI args to override
-	if (defined $q->param('dst'))
-	{
-	    $dst = 0 if $q->param('dst') eq 'none';
-	    $dst = 1 if $q->param('dst') eq 'usa';
-	}
-
-	if ($dst eq '1')
-	{
-	    $q->param('dst','usa');
-	}
-	else
-	{
-	    $q->param('dst','none');
-	}
-
-	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
-	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
-	$dst_descr = "Daylight Saving Time: $dst_text";
-	$tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-    }
-    else
-    {
-	$q->param('city','New York');
-	$q->param('geo','city');
-	$q->delete('tz');
-	$q->delete('dst');
-	$q->delete('zip');
-	$q->delete('i');
-
-	$cmd .= " -C '" . $q->param('city') . "'";
-
-	$city_descr = $q->param('city');
-    }
-
-    $cmd .= " -z " . $q->param('tz')
-	if (defined $q->param('tz') && $q->param('tz') ne '');
-
-    $cmd .= " -Z " . $q->param('dst')
-	if (defined $q->param('dst') && $q->param('dst') ne '');
-
-    foreach ('a', 'i')
-    {
-	$cmd .= ' -' . $_
-	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
-    }
+    my($ok,$cmd,$latitude,$longitude,$city_descr) = @status;
+    $cmd .= " -c -s -x";
 
     if (defined $q->param('year') && $q->param('year') =~ /^\d+$/) {
-	$cmd .= " " . $q->param('year');
+	$cmd .= " -H " . $q->param('year');
     } else {
 	my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 	my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
 	my $HEB_YR = $hebdate->{"yy"};
 	$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
-	$cmd .= " " . $HEB_YR;
+	$cmd .= " -H " . $HEB_YR;
     }
 
     my(@events) = Hebcal::invoke_hebcal($cmd, '', 0);
     
-    my($cmd_pretty) = $cmd;
-    $cmd_pretty =~ s,.*/,,; # basename
-
-    (\@events,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty);
+    (\@events,$cfg,$city_descr,$cmd);
 }
 
 # local variables:
-# mode: perl
+# mode: cperl
 # end:

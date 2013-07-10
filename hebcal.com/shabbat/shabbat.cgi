@@ -92,109 +92,25 @@ sub process_args
 	if (defined $ENV{'HTTP_ACCEPT'} &&
 	    $ENV{'HTTP_ACCEPT'} =~ /text\/vnd\.wap\.wml/);
 
-    my($cfg) = $q->param('cfg');
+    my $cfg = $q->param('cfg');
 
-    # default setttings needed for cookie
-    $q->param('c','on');
-    $q->param('nh','on');
-    $q->param('nx','on');
-
-    my($cookies) = Hebcal::get_cookies($q);
-    if (defined $cookies->{'C'})
-    {
-	Hebcal::process_cookie($q,$cookies->{'C'});
+    my @status = Hebcal::process_args_common($q, 1);
+    unless ($status[0]) {
+	form($cfg, 1, $status[1], $status[2]);
     }
 
-    # sanitize input to prevent people from trying to hack the site.
-    # remove anthing other than word chars, white space, or hyphens.
-    my($key);
-    foreach $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	$val = '' unless defined $val;
-	$val =~ s/^\s+//g;		# nuke leading
-	$val =~ s/\s+$//g;		# and trailing whitespace
-	$q->param($key,$val);
-    }
-
-    my $cmd  = './hebcal';
-
+    my $cmd;
     my $city_descr;
-    if (defined $q->param('zip') && $q->param('zip') ne '')
-    {
-	if ($q->param('zip') !~ /^\d{5}$/)
-	{
-	    form($cfg,1,
-		  "Sorry, <strong>" . $q->param('zip') . "</strong> does\n" .
-		  "not appear to be a 5-digit zip code.");
-	}
-
-	my $DB = Hebcal::zipcode_open_db();
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
-	# set global $latitude and $longitude
-	($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,$latitude,$longitude) =
-	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
-	Hebcal::zipcode_close_db($DB);
-	undef($DB);
-
-	form($cfg,1,
-	      "Sorry, can't find\n".  "<strong>" . $q->param('zip') .
-	      "</strong> in the zip code database.\n",
-	      "<ul><li>Please try a nearby zip code</li></ul>")
-	    unless defined $state;
-
-	my $tzid = Hebcal::get_usa_tzid($state,$tz);
-	unless (defined $tzid) {
-	    form($cfg,1,
-		  "Sorry, can't auto-detect\n" .
-		  "timezone for <strong>" . $city_descr . "</strong>\n");
-	}
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-	$city_descr = "$city, $state " . $q->param('zip');
-
-	$q->param('geo','zip');
-	$q->delete('city');
-	$q->delete('i');
-    }
-    else
-    {
-	my $city = validate_city($q->param("city"));
-	$q->param("city", $city);
-
-	my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
-	my($lat_deg,$lat_min,$long_deg,$long_min) =
-	    Hebcal::latlong_to_hebcal($latitude, $longitude);
-	my $tzid = $Hebcal::CITY_TZID{$city};
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-	$city_descr = Hebcal::woe_city($city) . ", " . Hebcal::woe_country($city);
-
-	if ($Hebcal::CITY_COUNTRY{$city} eq 'IL') {
-	    $q->param('i','on');
-	} else {
-	    $q->delete('i');
-	}
-    }
+    (undef,$cmd,$latitude,$longitude,$city_descr) = @status;
 
     $cmd .= ' -c -s';
 
-    foreach ('a', 'i')
-    {
-	$cmd .= ' -' . $_
-	    if defined $q->param($_) && $q->param($_) =~ /^on|1$/;
-    }
-
     # don't do holidays or rosh chodesh for WML
-    if (defined $cfg && $cfg eq 'w')
-    {
+    if (defined $cfg && $cfg eq 'w') {
 	$cmd .= ' -h -x';
     }
 
-    $cmd .= " -m " . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
-    my($loc) = (defined $city_descr && $city_descr ne '') ?
+    my $loc = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
 
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year", $loc, 0);
@@ -204,10 +120,7 @@ sub process_args
 	@events = (@ev2, @events);
     }
     
-    my($cmd_pretty) = $cmd;
-    $cmd_pretty =~ s/^.+\/hebcal/hebcal/; # basename
-
-    (\@events,$cfg,$city_descr,$cmd_pretty);
+    (\@events,$cfg,$city_descr,$cmd);
 }
 
 sub validate_city {
