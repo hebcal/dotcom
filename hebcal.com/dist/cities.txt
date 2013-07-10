@@ -96,7 +96,7 @@ woe56126011	IL	Jerusalem	31.7800	35.2300	Asia/Jerusalem	2	1
 woe1968212	IL	Tel Aviv	32.0667	34.7667	Asia/Jerusalem	2	1
 woe1968033	IL	Tiberias	32.7956	35.5286	Asia/Jerusalem	2	1
 woe538629	IM	Douglas	54.1500	-4.4833	Europe/Isle_of_Man	0	1
-woe2295420	IN	Bangalore	12.9833	77.5833	Asia/Calcutta	5
+woe2295420	IN	Bangalore	12.9833	77.5833	Asia/Calcutta	5	0
 woe2295411	IN	Bombay	18.9750	72.8258	Asia/Calcutta	5	0
 woe2295386	IN	Calcutta	22.5697	88.3697	Asia/Calcutta	5	0
 woe2295423	IN	Cochin	9.9667	76.2333	Asia/Calcutta	5	0
@@ -264,5 +264,7 @@ woe676757	DE	Munich	48.136410	11.577530	Europe/Berlin	1	1
 woe2348079	NZ	Auckland	-36.884109	174.770416	Pacific/Auckland	12	1
 woe2344116	TR	Istanbul	41.040852	28.986179	Asia/Istanbul	2	1
 woe23396899	CA	Vaughan	43.856419	-79.508102	America/Toronto	-6	1
-woe8775	CA	Calgary	51.045219	-114.063011	America/Edmonton	-7 1
+woe8775	CA	Calgary	51.045219	-114.063011	America/Edmonton	-7	1
 woe784794	CH	Zurich	47.377060	8.539550	Europe/Zurich	1	1
+woe99999998	IL	Petach Tikvah	32.08333333	34.88333333	Asia/Jerusalem	2	1
+woe99999997	US	Honolulu, HI	21.3	-157.8166666667	US/Hawaii	-10	0

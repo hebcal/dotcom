@@ -13,6 +13,7 @@ die "usage: $0 outfile.pm\n" unless $outfile;
 my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
 my $CITIES_TXT = "../dist/cities.txt";
+my $COUNTRIES_TXT = "../dist/countries.txt";
 
 my $axml = XMLin($SEDROT_XML);
 $axml || die $SEDROT_XML;
@@ -23,6 +24,9 @@ $fxml || die $HOLIDAYS_XML;
 open(CITIES, $CITIES_TXT) || die $CITIES_TXT;
 binmode(CITIES, ":utf8");
 
+open(COUNTRIES, $COUNTRIES_TXT) || die $COUNTRIES_TXT;
+binmode(COUNTRIES, ":utf8");
+
 open(O,">$outfile.$$") || die "$outfile.$$: $!\n";
 binmode(O, ":utf8");
 
@@ -30,12 +34,30 @@ print O "package HebcalConst;\n\n";
 
 print O "use utf8;\n\n";
 
+print O "\%HebcalConst::COUNTRIES = (\n";
+while(<COUNTRIES>) {
+    chomp;
+    my($code,$name,$full_name,$iso3,$number,$continent_code) = split(/\|/);
+    $name =~ s/\'/\\\'/g;
+    print O "'$code' => ['$name','$continent_code'],\n";
+}
+close(COUNTRIES);
+print O ");\n\n";
+
 print O "\%HebcalConst::CITIES_NEW = (\n";
 while(<CITIES>) {
     chomp;
     my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
     $city =~ s/\'/\\\'/g;
-    print O "'$woeid' => ['$country','$city',$latitude,$longitude,'$tzName'],\n";
+    my $id = $country . "-";
+    if ($country eq "US") {
+	my $id_city = $city;
+	$id_city =~ s/, /-/;
+	$id .= $id_city;
+    } else {
+	$id .= $city;
+    }
+    print O "'$id' => ['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,'$woeid'],\n";
 }
 close(CITIES);
 print O ");\n\n";
@@ -99,22 +121,6 @@ foreach my $f (sort keys %{$fxml->{"festival"}})
 	}
     }
 }
-print O ");\n\n";
-
-print O "%HebcalConst::CITIES = (\n";
-open(HEBCAL,"$dir/hebcal cities |") || die;
-while(<HEBCAL>)
-{
-    chop;
-    if (/^(.+) \(\d+d\d+\' . lat, \d+d\d+\' . long, GMT (.)(\d+):00, (.+)\)/)
-    {
-	my($city,$sign,$tz,$dst) = ($1,$2,$3,$4);
-	$sign = "" if $sign eq "+";
-	print O "'$city' => [$sign$tz,'$dst'],\n";
-    }
-}
-close(HEBCAL);
-
 print O ");\n\n";
 
 print O "1;\n";

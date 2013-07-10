@@ -38,6 +38,7 @@
 package Hebcal;
 
 use strict;
+use utf8;
 use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/home/hebcal/local/share/perl";
@@ -46,7 +47,6 @@ use Date::Calc ();
 use DBI;
 use HebcalConst;
 use Digest::MD5 ();
-use Locale::Country ();
 use Config::Tiny;
 
 if ($^V && $^V ge v5.8.1) {
@@ -114,6 +114,17 @@ $Hebcal::havdalah_min = 72;
      'aunz'    => 'Australia and NZ',
      );
 
+%Hebcal::CONTINENTS =
+    (
+     'AF' => 'Africa',
+     'AS' => 'Asia',
+     'EU' => 'Europe',
+     'NA' => 'North America',
+     'SA' => 'South America',
+     'OC' => 'Oceania',
+     'AN' => 'Antarctica',
+    );
+
 %Hebcal::city_tz =
     (
      );
@@ -128,20 +139,84 @@ while (my($key,$val) = each %HebcalConst::CITIES)
     $Hebcal::city_dst{$key} = $val->[1];
 }
 
+
+%Hebcal::CITIES_OLD = (
+'Ashdod' => 'IL-Ashdod',
+'Atlanta' => 'US-Atlanta-GA',
+'Austin' => 'US-Austin-TX',
+'Baghdad' => 'IQ-Baghdad',
+'Beer Sheva' => 'IL-Beer Sheva',
+'Berlin' => 'DE-Berlin',
+'Baltimore' => 'US-Baltimore-MD',
+'Bogota' => 'CO-Bogotá',
+'Boston' => 'US-Boston-MA',
+'Buenos Aires' => 'AR-Buenos Aires',
+'Buffalo' => 'US-Buffalo-NY',
+'Chicago' => 'US-Chicago-IL',
+'Cincinnati' => 'US-Cincinnati-OH',
+'Cleveland' => 'US-Cleveland-OH',
+'Dallas' => 'US-Dallas-TX',
+'Denver' => 'US-Denver-CO',
+'Detroit' => 'US-Detroit-MI',
+'Eilat' => 'IL-Eilat',
+'Gibraltar' => 'GI-Gibraltar',
+'Haifa' => 'IL-Haifa',
+'Hawaii' => 'US-Honolulu-HI',
+'Houston' => 'US-Houston-TX',
+'Jerusalem' => 'IL-Jerusalem',
+'Johannesburg' => 'ZA-Johannesburg',
+'Kiev' => 'UA-Kiev',
+'La Paz' => 'BO-La Paz',
+'Livingston' => 'US-Livingston-NY',
+'London' => 'GB-London',
+'Los Angeles' => 'US-Los Angeles-CA',
+'Miami' => 'US-Miami-FL',
+'Melbourne' => 'AU-Melbourne',
+'Mexico City' => 'MX-Mexico City',
+'Montreal' => 'CA-Montreal',
+'Moscow' => 'RU-Moscow',
+'New York' => 'US-New York-NY',
+'Omaha' => 'US-Omaha-NE',
+'Ottawa' => 'CA-Ottawa',
+'Panama City' => 'PA-Panama City',
+'Paris' => 'FR-Paris',
+'Petach Tikvah' => 'IL-Petach Tikvah',
+'Philadelphia' => 'US-Philadelphia-PA',
+'Phoenix' => 'US-Phoenix-AZ',
+'Pittsburgh' => 'US-Pittsburgh-PA',
+'Saint Louis' => 'US-Saint Louis-MO',
+'Saint Petersburg' => 'RU-Saint Petersburg',
+'San Francisco' => 'US-San Francisco-CA',
+'Seattle' => 'US-Seattle-WA',
+'Sydney' => 'AU-Sydney',
+'Tel Aviv' => 'IL-Tel Aviv',
+'Tiberias' => 'IL-Tiberias',
+'Toronto' => 'CA-Toronto',
+'Vancouver' => 'CA-Vancouver',
+'White Plains' => 'US-White Plains-NY',
+'Washington DC' => 'US-Washington-DC',
+);
+
 # based on cities.txt and loaded into HebcalConst.pm
 %Hebcal::CITY_TZID = ();
+%Hebcal::CITY_COUNTRY = ();
 %Hebcal::CITY_LATLONG = ();
-while(my($woe,$info) = each(%HebcalConst::CITIES_NEW)) {
-    my($country,$city,$latitude,$longitude,$tzName) = @{$info};
-    $Hebcal::CITY_TZID{$city} = $tzName;
-    $Hebcal::CITY_LATLONG{$city} = [$latitude,$longitude];
-    if ($country eq "US") {
-	$city =~ s/Washington, DC/Washington DC/;
-	$city =~ s/,\s.+//;
-	$Hebcal::CITY_TZID{$city} = $tzName;
-	$Hebcal::CITY_LATLONG{$city} = [$latitude,$longitude];
-    }
+while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
+    my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+    $Hebcal::CITY_TZID{$id} = $tzName;
+    $Hebcal::CITY_COUNTRY{$id} = $country;
+    $Hebcal::CITY_LATLONG{$id} = [$latitude,$longitude];
 }
+
+# backwards compatibility with Hebcal for Unix city names
+#while(my($old,$new) = each(%Hebcal::CITIES_OLD)) {
+#    my $info = $HebcalConst::CITIES_NEW{$new};
+#    next unless defined $info;
+#    my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+#    $Hebcal::CITY_TZID{$old} = $tzName;
+#    $Hebcal::CITY_COUNTRY{$old} = $country;
+#    $Hebcal::CITY_LATLONG{$old} = [$latitude,$longitude];
+#}
 
 # translate from Askenazic transiliterations to Separdic
 %Hebcal::ashk2seph =
@@ -1092,6 +1167,27 @@ WHERE zips_zipcode = '$zipcode'
     ($latitude,$longitude,$tz,$dst,$city,$state);
 }
 
+sub latlong_to_hebcal {
+    my($latitude,$longitude) = @_;
+
+    # remove any prefixed + signs from the strings
+    $latitude =~ s/^\+//;
+    $longitude =~ s/^\+//;
+
+    # remove any leading zeros
+    $latitude =~ s/^(-?)0+/$1/;
+    $longitude =~ s/^(-?)0+/$1/;
+
+    my $lat_deg = int($latitude);
+    my $long_deg = int($longitude) * -1;
+
+    my $lat_min = abs(sprintf("%.0f", ($latitude - int($latitude)) * 60));
+    my $long_min = abs(sprintf("%.0f", ($longitude - int($longitude)) * 60));
+
+    ($lat_deg,$lat_min,$long_deg,$long_min);
+}
+
+
 sub zipcode_get_zip_fields($$)
 {
     my($dbh,$zipcode) = @_;
@@ -1104,46 +1200,6 @@ sub zipcode_get_zip_fields($$)
 	warn "zipcode_get_zip_fields: $zipcode Not Found";
 	return undef;
     }
-
-    # remove any prefixed + signs from the strings
-    $latitude =~ s/^\+//;
-    $longitude =~ s/^\+//;
-
-    # remove any leading zeros
-    $latitude =~ s/^(-?)0+/$1/;
-    $longitude =~ s/^(-?)0+/$1/;
-
-    # in hebcal, negative longitudes are EAST (this is backwards)
-    my $long_hebcal = $longitude * -1.0;
-
-    my($long_deg,$long_min) = split(/\./, $long_hebcal, 2);
-    my($lat_deg,$lat_min) = split(/\./, $latitude, 2);
-
-    if (defined $long_min && $long_min ne '')
-    {
-	$long_min = '.' . $long_min;
-    }
-    else
-    {
-	$long_min = 0;
-    }
-
-    if (defined $lat_min && $lat_min ne '')
-    {
-	$lat_min = '.' . $lat_min;
-    }
-    else
-    {
-	$lat_min = 0;
-    }
-
-    $long_min = $long_min * 60;
-#    $long_min *= -1 if $long_deg < 0;
-    $long_min = sprintf("%.0f", $long_min);
-
-    $lat_min = $lat_min * 60;
-    $lat_min *= -1 if $lat_deg < 0;
-    $lat_min = sprintf("%.0f", $lat_min);
 
     my(@city) = split(/([- ])/, $city);
     $city = '';
@@ -1160,6 +1216,8 @@ sub zipcode_get_zip_fields($$)
 	$dst = 0;
     }
 
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+	latlong_to_hebcal($latitude, $longitude);
     ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
      $latitude,$longitude);
 }
@@ -1237,14 +1295,20 @@ EOHTML
 
 sub woe_city
 {
-    my($woe) = @_;
-    return $HebcalConst::CITIES_NEW{$woe}->[1];
+    my($id) = @_;
+    return $HebcalConst::CITIES_NEW{$id}->[1];
+}
+
+sub woe_country_code
+{
+    my($id) = @_;
+    return $HebcalConst::CITIES_NEW{$id}->[0];
 }
 
 sub woe_country
 {
-    my($woe) = @_;
-    my $country_name = Locale::Country::code2country($HebcalConst::CITIES_NEW{$woe}->[0]);
+    my($id) = @_;
+    my $country_name = $HebcalConst::COUNTRIES{woe_country_code($id)}->[0];
     $country_name =~ s/,\s+.+$//;
     $country_name;
 }
@@ -1257,30 +1321,36 @@ sub sort_city_info
 
 sub html_city_select
 {
-    my $retval = "<select>\n";
+    my($selected_city) = @_;
+    my $retval = "<select name=\"city\" class=\"input-xxlarge\">\n";
     my %groups;
-    my @other;
-    while(my($woe,$info) = each(%HebcalConst::CITIES_NEW)) {
-	my($country,$city,$latitude,$longitude,$tzName) = @{$info};
-	if ($country eq "US" || $country eq "CA" || $country eq "IL") {
-	    $groups{$country} = [] unless defined $groups{$country};
-	    push(@{$groups{$country}}, $woe);
-	} else {
-	    push(@other, $woe);
-	}
+    while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
+	my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+	my $grp = ($country =~ /^US|CA|IL$/)
+	    ? $country
+	    : $HebcalConst::COUNTRIES{$country}->[1];
+	$groups{$grp} = [] unless defined $groups{$grp};
+	push(@{$groups{$grp}}, $id);
     }
-    foreach my $country (qw(US CA IL)) {
-	$retval .= "<optgroup label=\"" . Locale::Country::code2country($country) . "\">\n";
-	foreach my $woe (sort sort_city_info @{$groups{$country}}) {
-	    $retval .= sprintf "<option value=\"%s\">%s</option>\n", $woe, woe_city($woe);
+    foreach my $grp (qw(US CA IL EU NA SA AS OC AF AN)) {
+	next unless defined $groups{$grp};
+	my $label = ($grp =~ /^US|CA|IL$/)
+	    ? $HebcalConst::COUNTRIES{$grp}->[0]
+	    : $Hebcal::CONTINENTS{$grp};
+	$retval .= "<optgroup label=\"$label\">\n";
+	foreach my $id (sort sort_city_info @{$groups{$grp}}) {
+	    my $opt_city = woe_city($id);
+	    $opt_city =~ s/, /-/;
+	    my $id = woe_country_code($id) . "-" . $opt_city;
+	    my $opt_country = woe_country($id);
+	    $opt_country = "USA" if $opt_country eq "United States of America";
+	    $retval .= sprintf "<option%s value=\"%s\">%s, %s</option>\n",
+		defined $selected_city && $id eq $selected_city ? " selected" : "",
+		$id,
+		woe_city($id), $opt_country;
 	}
 	$retval .= "</optgroup>\n";
     }
-    $retval .= "<optgroup label=\"World Cities\">\n";
-    foreach my $woe (sort sort_city_info @other) {
-	$retval .= sprintf "<option value=\"%s\">%s, %s</option>\n", $woe, woe_city($woe), woe_country($woe);
-    }
-    $retval .= "</optgroup>\n";
     $retval .= "</select>\n";
     $retval;
 }
@@ -1888,6 +1958,30 @@ END:VTIMEZONE
 ",
  );
 
+sub get_usa_tzid {
+    my($state,$tz) = @_;
+    my $tzid;
+    if (defined $state && $state eq 'AK' && $tz == -10) {
+	$tzid = 'US/Aleutian';
+    } elsif (defined $state && $state eq 'AZ' && $tz == -7) {
+	$tzid = 'America/Phoenix';
+    } elsif ($tz == -5) {
+	$tzid = 'US/Eastern';
+    } elsif ($tz == -6) {
+	$tzid = 'US/Central';
+    } elsif ($tz == -7) {
+	$tzid = 'US/Mountain';
+    } elsif ($tz == -8) {
+	$tzid = 'US/Pacific';
+    } elsif ($tz == -9) {
+	$tzid = 'US/Alaska';
+    } elsif ($tz == -10) {
+	$tzid = 'US/Hawaii';
+    }
+    return $tzid;		# possibly undef
+}
+
+
 sub get_munged_qs
 {
     my($args) = @_;
@@ -1993,22 +2087,8 @@ sub vcalendar_write_contents
 		 && $q->param("city")
 		 && defined $Hebcal::CITY_TZID{$q->param("city")}) {
 	    $tzid = $Hebcal::CITY_TZID{$q->param("city")};
-	} elsif (defined $state && $state eq 'AK' && $tz == -10) {
-	    $tzid = 'US/Aleutian';
-	} elsif (defined $state && $state eq 'AZ' && $tz == -7) {
-	    $tzid = 'America/Phoenix';
-	} elsif ($tz == -5) {
-	    $tzid = 'US/Eastern';
-	} elsif ($tz == -6) {
-	    $tzid = 'US/Central';
-	} elsif ($tz == -7) {
-	    $tzid = 'US/Mountain';
-	} elsif ($tz == -8) {
-	    $tzid = 'US/Pacific';
-	} elsif ($tz == -9) {
-	    $tzid = 'US/Alaska';
-	} elsif ($tz == -10) {
-	    $tzid = 'US/Hawaii';
+	} else {
+	    $tzid = get_usa_tzid($state,$tz);
 	}
     }
 

@@ -39,14 +39,14 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
-use CGI qw(-no_xhtml);
+use CGI qw(-no_xhtml -utf8);
 use CGI::Carp qw(fatalsToBrowser);
-use DB_File;
 use Time::Local ();
 use Date::Calc ();
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
+use URI::Escape;
 use POSIX qw(strftime);
 
 # process form params
@@ -62,8 +62,7 @@ $hyear++ if $hebdate->{"mm"} == 6; # Elul
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
 my($latitude,$longitude);
-my($evts,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty) =
-    process_args($q);
+my($evts,$cfg,$city_descr,$cmd_pretty) = process_args($q);
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday);
 
 my $cache = Hebcal::cache_begin($q);
@@ -95,51 +94,6 @@ sub process_args
 
     my($cfg) = $q->param('cfg');
 
-    if (defined $cfg && $cfg eq 'w')
-    {
-	my $dbmfile = 'wap.db';
-	my %DB;
-	my($user) = $ENV{'HTTP_X_UP_SUBNO'};
-
-	$q->param('noset', 1);
-
-	if (defined $user &&
-	    defined $q->param('zip') && $q->param('zip') =~ /^\d{5}$/)
-	{
-	    tie(%DB, 'DB_File', $dbmfile, O_RDWR|O_CREAT, 0644, $DB_File::DB_HASH)
-		|| die "Can't tie $dbmfile: $!\n";
-	    my($val) = $DB{$user};
-	    if (defined $val)
-	    {
-		my($c) = new CGI($val);
-		$c->param('zip', $q->param('zip'));
-		$DB{$user} = $c->query_string();
-	    }
-	    else
-	    {
-		$DB{$user} = 'zip=' . $q->param('zip');
-	    }
-	    untie(%DB);
-	}
-	elsif (defined $user && !defined $q->param('zip'))
-	{
-	    tie(%DB, 'DB_File', $dbmfile, O_RDONLY, 0444, $DB_File::DB_HASH)
-		|| die "Can't tie $dbmfile: $!\n";
-	    my($val) = $DB{$user};
-	    untie(%DB);
-
-	    if (defined $val)
-	    {
-		my($c) = new CGI($val);
-		if (defined $c->param('zip'))
-		{
-		    $q->param('zip', $c->param('zip'));
-		    $q->param('geo', 'zip');
-		}
-	    }
-	}
-    }
-
     # default setttings needed for cookie
     $q->param('c','on');
     $q->param('nh','on');
@@ -158,46 +112,16 @@ sub process_args
     {
 	my($val) = $q->param($key);
 	$val = '' unless defined $val;
-	$val =~ s/[^\w\s\.-]//g;
-	$val =~ s/^\s*//g;		# nuke leading
-	$val =~ s/\s*$//g;		# and trailing whitespace
+	$val =~ s/^\s+//g;		# nuke leading
+	$val =~ s/\s+$//g;		# and trailing whitespace
 	$q->param($key,$val);
     }
 
-    my($cmd)  = './hebcal';
+    my $cmd  = './hebcal';
 
-    my($city_descr,$dst_descr,$tz_descr);
-    if (defined $q->param('city'))
+    my $city_descr;
+    if (defined $q->param('zip') && $q->param('zip') ne '')
     {
-	unless (defined($Hebcal::city_tz{$q->param('city')}))
-	{
-	    $q->param('city','New York');
-	}
-
-	$q->param('geo','city');
-	$q->delete('tz');
-	$q->delete('dst');
-	$q->delete('zip');
-
-	$cmd .= " -C '" . $q->param('city') . "'";
-
-	$city_descr = $q->param('city');
-
-	if ($Hebcal::city_dst{$q->param('city')} eq 'israel')
-	{
-	    $q->param('i','on');
-	}
-	else
-	{
-	    $q->delete('i');
-	}
-    }
-    elsif (defined $q->param('zip') && $q->param('zip') ne '')
-    {
-	$q->param('geo','zip');
-	$q->delete('city');
-	$q->delete('i');
-
 	if ($q->param('zip') !~ /^\d{5}$/)
 	{
 	    form($cfg,1,
@@ -219,59 +143,38 @@ sub process_args
 	      "<ul><li>Please try a nearby zip code</li></ul>")
 	    unless defined $state;
 
-	# allow CGI args to override
-	$tz = $q->param('tz')
-	    if (defined $q->param('tz') && $q->param('tz') =~ /^-?\d+$/);
-
-	$city_descr = "$city, $state " . $q->param('zip');
-
-	if ($tz eq '?')
-	{
-	    $q->param('tz_override', '1');
-
+	my $tzid = Hebcal::get_usa_tzid($state,$tz);
+	unless (defined $tzid) {
 	    form($cfg,1,
 		  "Sorry, can't auto-detect\n" .
-		  "timezone for <strong>" . $city_descr . "</strong>\n" .
-		  "<ul><li>Please select your time zone below.</li></ul>");
+		  "timezone for <strong>" . $city_descr . "</strong>\n");
 	}
 
-	$q->param('tz', $tz);
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+	$city_descr = "$city, $state " . $q->param('zip');
 
-	# allow CGI args to override
-	if (defined $q->param('dst'))
-	{
-	    $dst = 0 if $q->param('dst') eq 'none';
-	    $dst = 1 if $q->param('dst') eq 'usa';
-	}
-
-	if ($dst eq '1')
-	{
-	    $q->param('dst','usa');
-	}
-	else
-	{
-	    $q->param('dst','none');
-	}
-
-	my $dst_text = ($q->param('dst') eq 'none') ? 'none' :
-	    'automatic for ' . $Hebcal::dst_names{$q->param('dst')};
-	$dst_descr = "Daylight Saving Time: $dst_text";
-	$tz_descr = "Time zone: " . $Hebcal::tz_names{$q->param('tz')};
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+	$q->param('geo','zip');
+	$q->delete('city');
+	$q->delete('i');
     }
     else
     {
-	$q->param('city','New York');
-	$q->param('geo','city');
-	$q->delete('tz');
-	$q->delete('dst');
-	$q->delete('zip');
-	$q->delete('i');
+	my $city = validate_city($q->param("city"));
+	$q->param("city", $city);
 
-	$cmd .= " -C '" . $q->param('city') . "'";
+	my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+	my($lat_deg,$lat_min,$long_deg,$long_min) =
+	    Hebcal::latlong_to_hebcal($latitude, $longitude);
+	my $tzid = $Hebcal::CITY_TZID{$city};
 
-	$city_descr = $q->param('city');
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+	$city_descr = Hebcal::woe_city($city) . ", " . Hebcal::woe_country($city);
+
+	if ($Hebcal::CITY_COUNTRY{$city} eq 'IL') {
+	    $q->param('i','on');
+	} else {
+	    $q->delete('i');
+	}
     }
 
     $cmd .= ' -c -s';
@@ -291,12 +194,6 @@ sub process_args
     $cmd .= " -m " . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 
-    $cmd .= " -z " . $q->param('tz')
-	if (defined $q->param('tz') && $q->param('tz') ne '');
-
-    $cmd .= " -Z " . $q->param('dst')
-	if (defined $q->param('dst') && $q->param('dst') ne '');
-
     my($loc) = (defined $city_descr && $city_descr ne '') ?
 	"in $city_descr" : '';
 
@@ -308,9 +205,23 @@ sub process_args
     }
     
     my($cmd_pretty) = $cmd;
-    $cmd_pretty =~ s,.*/,,; # basename
+    $cmd_pretty =~ s/^.+\/hebcal/hebcal/; # basename
 
-    (\@events,$cfg,$city_descr,$dst_descr,$tz_descr,$cmd_pretty);
+    (\@events,$cfg,$city_descr,$cmd_pretty);
+}
+
+sub validate_city {
+    my($city) = @_;
+    unless (defined $city) {
+	return "US-New York-NY";
+    }
+    if (defined($Hebcal::CITIES_OLD{$city})) {
+	return $Hebcal::CITIES_OLD{$city};
+    }
+    if (defined($Hebcal::CITY_TZID{$city})) {
+	return $city;
+    }
+    return "US-New York-NY";
 }
 
 sub url_html {
@@ -326,7 +237,7 @@ sub self_url
 
     $url .= "&zip=" . $q->param('zip')
 	if $q->param('zip');
-    $url .= "&city=" . Hebcal::url_escape($q->param('city'))
+    $url .= "&city=" . uri_escape_utf8($q->param('city'))
 	if $q->param('city');
     $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
@@ -593,7 +504,7 @@ sub more_from_hebcal {
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
-	$url .= "city=" . Hebcal::url_escape($q->param('city'));
+	$url .= "city=" . uri_escape_utf8($q->param('city'));
     }
 
     $url .= "&m=" . $q->param('m')
@@ -611,7 +522,7 @@ sub more_from_hebcal {
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
-	$url .= "city=" . Hebcal::url_escape($q->param('city'));
+	$url .= "city=" . uri_escape_utf8($q->param('city'));
     }
     $url .= "&year=" . $hyear;
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
@@ -635,7 +546,7 @@ EOHTML
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
-	$url .= "city=" . Hebcal::url_escape($q->param('city'));
+	$url .= "city=" . uri_escape_utf8($q->param('city'));
     }
     $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
@@ -691,10 +602,11 @@ ul#hebcal-results li {
   font-weight: 200;
   line-height: normal;
 }
-#city-list  li { font-size:12px }
-#city-list ul li { display: inline }
-#city-list ul li:after { content:" | "}
-#city-list ul li.last:after { content:"" }
+.pseudo-legend {
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 30px;
+}
 </style>
 EOHTML
 ;
@@ -744,7 +656,7 @@ sub form($$$$)
     Hebcal::out_html($cfg,
 	qq{$message\n},
 	qq{<div id="hebcal-form-zipcode" class="well well-small">\n},
-	qq{<form name="f1" id="f1"\naction="$script_name">},
+	qq{<form action="$script_name">},
 	qq{<fieldset>\n},
 	$q->hidden(-name => 'geo',
 		   -value => 'zip',
@@ -758,24 +670,6 @@ sub form($$$$)
 		      -maxlength => 5),
 	qq{</label>});
 
-    if ($q->param('geo') eq 'pos' || $q->param('tz_override'))
-    {
-	Hebcal::out_html($cfg,
-	qq{<label\nfor="tz">Time zone:\n},
-	$q->popup_menu(-name => 'tz',
-		       -id => 'tz',
-		       -values => ['auto',-5,-6,-7,-8,-9,-10],
-		       -default => 'auto',
-		       -labels => \%Hebcal::tz_names),
-	qq{</label>\nDaylight Saving Time:\n},
-	$q->radio_group(-name => 'dst',
-			-values => ['usa','none'],
-			-default => 'usa',
-			-labels =>
-			{'usa' => "\nUSA (except AZ, HI, and IN) ",
-			 'none' => "\nnone ", }));
-    }
-    
     Hebcal::out_html($cfg,
 	qq{<label\nfor="m1" title="enter '0' to suppress Havdalah times">Havdalah minutes past sundown:\n},
 	$q->textfield(-name => 'm',
@@ -791,19 +685,29 @@ sub form($$$$)
 
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-zipcode -->\n});
 
-    Hebcal::out_html(undef, qq{<div id="hebcal-form-city">\n});
     Hebcal::out_html($cfg,
-		     qq{<h4>Get Shabbat times by Major City</h4>\n},
-		     qq{<div id="city-list">\n},
-		     qq{<ul>\n});
-    foreach my $city_name (sort keys %Hebcal::city_tz) {
-	my $url = join('', $script_name, "?city=", Hebcal::url_escape($city_name));
-	$url .= "&m=" . $q->param('m')
-	    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-	$city_name =~ s/ /&nbsp;/g;
-	Hebcal::out_html($cfg, qq{<li><a href="}, url_html($url), qq{">$city_name</a></li>\n});
-    }
-    Hebcal::out_html($cfg, qq{</ul>\n</div><!-- .city-list -->\n});
+		     qq{<div id="hebcal-form-city" class="well well-small">\n},
+		     qq{<form action="$script_name">},
+		     qq{<div class="pseudo-legend">Get Shabbat times by Major City</div>\n},
+		     qq{<fieldset>\n},
+		     $q->hidden(-name => 'geo',
+				-value => 'city',
+				-override => 1),
+		     Hebcal::html_city_select($q->param("city")));
+
+    Hebcal::out_html($cfg,
+	qq{<label\nfor="m2" title="enter '0' to suppress Havdalah times">Havdalah minutes past sundown:\n},
+	$q->textfield(-name => 'm',
+		      -id => 'm2',
+		      -pattern => '\d*',
+		      -class => 'input-mini',
+		      -size => 3,
+		      -maxlength => 3,
+		      -default => $Hebcal::havdalah_min),
+	"</label>",
+	qq{<input\ntype="submit" value="Get Shabbat Times" class="btn btn-primary">\n},
+	qq{</fieldset></form>});
+
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
 
     my $footer_divs2=<<EOHTML;
@@ -858,5 +762,5 @@ sub get_saturday
 }
 
 # local variables:
-# mode: perl
+# mode: cperl
 # end:
