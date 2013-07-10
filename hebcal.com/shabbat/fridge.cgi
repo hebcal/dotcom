@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
