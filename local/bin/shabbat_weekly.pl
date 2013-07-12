@@ -314,7 +314,7 @@ $unsub_url
 	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1>",
 	 "List-Id" => "<shabbat.hebcal.com>",
 	 "Errors-To" => $return_path,
-	 "Precedence" => "bulk",
+#	 "Precedence" => "bulk",
 	 "Message-ID" => "<$msgid\@hebcal.com>",
 	 );
 
