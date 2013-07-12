@@ -94,7 +94,7 @@ sub process_args
 
     my $cfg = $q->param('cfg');
 
-    my @status = Hebcal::process_args_common($q, 1);
+    my @status = Hebcal::process_args_common($q, 1, 1);
     unless ($status[0]) {
 	form($cfg, 1, $status[1], $status[2]);
     }
@@ -121,20 +121,6 @@ sub process_args
     }
     
     (\@events,$cfg,$city_descr,$cmd);
-}
-
-sub validate_city {
-    my($city) = @_;
-    unless (defined $city) {
-	return "US-New York-NY";
-    }
-    if (defined($Hebcal::CITIES_OLD{$city})) {
-	return $Hebcal::CITIES_OLD{$city};
-    }
-    if (defined($Hebcal::CITY_TZID{$city})) {
-	return $city;
-    }
-    return "US-New York-NY";
 }
 
 sub url_html {
@@ -411,8 +397,7 @@ sub more_from_hebcal {
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
 
     # link to hebcal full calendar
-    my $url = join('', "http://", $q->virtual_host(), "/hebcal/",
-		   "?v=1&geo=", $q->param('geo'), "&");
+    my $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
 
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
@@ -431,7 +416,7 @@ sub more_from_hebcal {
 		     qq{"><i class="icon-calendar"></i> $month_name calendar &raquo;</a>\n});
 
     # Fridge calendar
-    $url = join('', "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
+    $url = "/shabbat/fridge.cgi?";
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
@@ -455,7 +440,7 @@ EOHTML
     Hebcal::out_html($cfg, $rss_html);
 
     # Synagogues link
-    $url = join('', "http://", $q->virtual_host(), "/link/?");
+    $url = "/link/?";
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {

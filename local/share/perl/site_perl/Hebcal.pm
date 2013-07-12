@@ -39,15 +39,16 @@ package Hebcal;
 
 use strict;
 use utf8;
-use CGI qw(-no_xhtml);
 use POSIX qw(strftime);
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
-use DBI;
+use URI::Escape;
 use HebcalConst;
 use Digest::MD5 ();
 use Config::Tiny;
+
+my $eval_use_DBI;
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -104,16 +105,6 @@ $Hebcal::havdalah_min = 72;
      "h"  => "Hebrew only",
      );
 
-%Hebcal::dst_names =
-    (
-     'none'    => 'none',
-     'usa'     => 'USA and Canada',
-     'mx'     =>  'Mexico',
-     'israel'  => 'Israel',
-     'eu'      => 'European Union',
-     'aunz'    => 'Australia and NZ',
-     );
-
 %Hebcal::CONTINENTS =
     (
      'AF' => 'Africa',
@@ -124,21 +115,6 @@ $Hebcal::havdalah_min = 72;
      'OC' => 'Oceania',
      'AN' => 'Antarctica',
     );
-
-%Hebcal::city_tz =
-    (
-     );
-
-%Hebcal::city_dst =
-    (
-     );
-
-while (my($key,$val) = each %HebcalConst::CITIES)
-{
-    $Hebcal::city_tz{$key} = $val->[0];
-    $Hebcal::city_dst{$key} = $val->[1];
-}
-
 
 %Hebcal::CITIES_OLD = (
 'Ashdod' => 'IL-Ashdod',
@@ -201,11 +177,15 @@ while (my($key,$val) = each %HebcalConst::CITIES)
 %Hebcal::CITY_TZID = ();
 %Hebcal::CITY_COUNTRY = ();
 %Hebcal::CITY_LATLONG = ();
+%Hebcal::CITY_TZ_OFFSET = ();
+%Hebcal::CITY_TZ_DST = ();
 while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
     my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
     $Hebcal::CITY_TZID{$id} = $tzName;
     $Hebcal::CITY_COUNTRY{$id} = $country;
     $Hebcal::CITY_LATLONG{$id} = [$latitude,$longitude];
+    $Hebcal::CITY_TZ_OFFSET{$id} = $tzOffset;
+    $Hebcal::CITY_TZ_DST{$id} = $dst;
 }
 
 # backwards compatibility with Hebcal for Unix city names
@@ -277,34 +257,6 @@ while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
   "Shabbos Nachamu"		=>	"Shabbat Nachamu",
   );
 
-%Hebcal::tz_names = (
-     'auto' => '- Attempt to auto-detect -',
-     '-5'   => 'GMT -05:00 (U.S. Eastern)',
-     '-6'   => 'GMT -06:00 (U.S. Central)',
-     '-7'   => 'GMT -07:00 (U.S. Mountain)',
-     '-8'   => 'GMT -08:00 (U.S. Pacific)',
-     '-9'   => 'GMT -09:00 (U.S. Alaskan)',
-     '-10'  => 'GMT -10:00 (U.S. Hawaii)',
-     '-11'  => 'GMT -11:00',
-     '-12'  => 'GMT -12:00',
-     '12'   => 'GMT +12:00',
-     '11'   => 'GMT +11:00',
-     '10'   => 'GMT +10:00',
-     '9'    => 'GMT +09:00',
-     '8'    => 'GMT +08:00',
-     '7'    => 'GMT +07:00',
-     '6'    => 'GMT +06:00',
-     '5'    => 'GMT +05:00',
-     '4'    => 'GMT +04:00',
-     '3'    => 'GMT +03:00',
-     '2'    => 'GMT +02:00',
-     '1'    => 'GMT +01:00',
-     '0'    => 'Greenwich Mean Time',
-     '-1'   => 'GMT -01:00',
-     '-2'   => 'GMT -02:00',
-     '-3'   => 'GMT -03:00',
-     '-4'   => 'GMT -04:00',
-     );
 
 # @events is an array of arrays.  these are the indices into each
 # event structure:
@@ -553,10 +505,10 @@ sub events_to_dict
 	$tz = 0 if $tz eq "auto";
     }
     elsif ($q->param("city") && 
-	   defined($Hebcal::city_tz{$q->param("city")}))
+	   defined($Hebcal::CITY_TZID{$q->param("city")}))
     {
-	$tz = $Hebcal::city_tz{$q->param("city")};
-	$dst = $Hebcal::city_dst{$q->param("city")};
+	$tz = $Hebcal::CITY_TZ_OFFSET{$q->param("city")};
+	$dst = $Hebcal::CITY_TZ_DST{$q->param("city")};
     }
     my $tz_save = $tz;
 
@@ -1137,6 +1089,10 @@ sub out_html
 
 sub zipcode_open_db
 {
+    unless ($eval_use_DBI) {
+	eval("use DBI");
+	$eval_use_DBI = 1;
+    }
     my($file) = $_[0] ? $_[0] : $ZIP_SQLITE_FILE;
     my $dbh = DBI->connect("dbi:SQLite:dbname=$file", "", "")
 	or die $DBI::errstr;
@@ -1322,7 +1278,7 @@ sub sort_city_info
 sub html_city_select
 {
     my($selected_city) = @_;
-    my $retval = "<select name=\"city\" class=\"input-xxlarge\">\n";
+    my $retval = "<select name=\"city\" class=\"input-xlarge\">\n";
     my %groups;
     while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
 	my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
@@ -1485,26 +1441,7 @@ sub html_entify($)
 
 sub url_escape($)
 {
-    local($_) = @_;
-    my($res) = '';
-
-    foreach (split(//))
-    {
-	if (/ /)
-	{
-	    $res .= '+';
-	}
-	elsif (/[^a-zA-Z0-9_.*-]/)
-	{
-	    $res .= sprintf("%%%02X", ord($_));
-	}
-	else
-	{
-	    $res .= $_;
-	}
-    }
-
-    $res;
+    return uri_escape_utf8($_[0]);
 }
 
 sub http_date($)
@@ -1530,7 +1467,7 @@ sub gen_cookie($)
 	    $retval .= '&tz=' . $q->param('tz')
 	        if defined $q->param('tz') && $q->param('tz') ne '';
 	} elsif ($q->param('geo') eq 'city') {
-	    $retval .= '&city=' . &url_escape($q->param('city'));
+	    $retval .= '&city=' . uri_escape_utf8($q->param('city'));
 	} elsif ($q->param('geo') eq 'pos') {
 	    $retval .= '&lodeg=' . $q->param('lodeg');
 	    $retval .= '&lomin=' . $q->param('lomin');
@@ -1701,7 +1638,7 @@ sub self_url($$)
 	next if exists $override->{$key} && !defined $override->{$key};
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
-	$url .= "$sep$key=" . Hebcal::url_escape($val);
+	$url .= "$sep$key=" . uri_escape_utf8($val);
 	$sep = ";";
     }
 
@@ -1711,7 +1648,7 @@ sub self_url($$)
 	next unless defined $override->{$key};
 	unless (defined $q->param($key))
 	{
-	    $url .= "$sep$key=" . Hebcal::url_escape($override->{$key});
+	    $url .= "$sep$key=" . uri_escape_utf8($override->{$key});
 	    $sep = ";";
 	}
     }
@@ -1737,7 +1674,7 @@ sub download_href
     foreach my $key ($q->param())
     {
 	my($val) = $q->param($key);
-	$href .= ";$key=" . Hebcal::url_escape($val);
+	$href .= ";$key=" . uri_escape_utf8($val);
     }
 
     $href;
@@ -1959,13 +1896,13 @@ END:VTIMEZONE
  );
 
 sub process_args_common {
-    my($q,$handle_cookie) = @_;
+    my($q,$handle_cookie,$default_to_nyc,$cconfig) = @_;
 
     if ($handle_cookie) {
 	# default setttings needed for cookie
-	$q->param('c','on');
-	$q->param('nh','on');
-	$q->param('nx','on');
+	foreach (qw(c nh nx)) {
+	    $q->param($_, "on");
+	}
 
 	my $cookies = Hebcal::get_cookies($q);
 	if (defined $cookies->{'C'}) {
@@ -1985,7 +1922,29 @@ sub process_args_common {
     my $cmd  = './hebcal';
 
     my($latitude,$longitude,$city_descr);
-    if (defined $q->param('zip') && $q->param('zip') ne '') {
+
+    if (defined $q->param("city") &&
+	($q->param("city") eq "Jerusalem" || $q->param("city") eq "IL-Jerusalem")) {
+	# special case for candles 40 minutes before sunset...
+	my $city = "IL-Jerusalem";
+	$q->param("city", $city);
+	$q->param("geo","city");
+
+	($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+	$cmd .= " -C 'Jerusalem'";
+	$city_descr = "Jerusalem, Israel";
+	$q->param("i", "on");
+	foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	    $q->delete($_);
+	}
+	if (defined $cconfig) {
+	    $cconfig->{"latitude"} = $latitude;
+	    $cconfig->{"longitude"} = $longitude;
+	    $cconfig->{"title"} = $city_descr;
+	    $cconfig->{"city"} = "Jerusalem";
+	    $cconfig->{"geo"} = "city";
+	}
+    } elsif (defined $q->param('zip') && $q->param('zip') ne '') {
 	if ($q->param('zip') !~ /^\d{5}$/) {
 	    my $message = "Sorry, <strong>" . $q->param('zip')
 		. "</strong> does not appear to be a 5-digit zip code.";
@@ -2017,12 +1976,87 @@ sub process_args_common {
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 	$city_descr = "$city, $state " . $q->param('zip');
 
-	$q->param('geo','zip');
-	$q->delete('city');
-	$q->delete('i');
-    } else {
+	$q->param("geo", "zip");
+	foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid i)) {
+	    $q->delete($_);
+	}
+	if (defined $cconfig) {
+	    $cconfig->{"latitude"} = $latitude;
+	    $cconfig->{"longitude"} = $longitude;
+	    $cconfig->{"title"} = $city_descr;
+	    $cconfig->{"city"} = $city;
+	    $cconfig->{"state"} = $state;
+	    $cconfig->{"zip"} = $q->param("zip");
+	    $cconfig->{"geo"} = "zip";
+	}
+    } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
+	     defined $q->param("ladeg") && defined $q->param("lamin") &&
+	     defined $q->param("lodir") && defined $q->param("ladir") &&
+	     $q->param("lodeg") ne '' && $q->param("lomin") ne '' &&
+	     $q->param("ladeg") ne '' && $q->param("lamin") ne '') {
+
+	my %maxval = ("ladeg" =>  90, "lamin" => 60,
+		      "lodeg" => 180, "lomin" => 60);
+	foreach my $key (qw(lodeg lomin ladeg lamin)) {
+	    my $value = $q->param($key);
+	    my $message;
+	    if ($value !~ /^\d+$/) {
+		$message = "Sorry, all latitude/longitude\narguments must be numeric.";
+	    }
+	    if ($value > $maxval{$key}) {
+		my $keyname = (substr($key, 1, 1) eq "a") ? "latitude" : "longitude";
+		$keyname .= (substr($key, 2, 1) eq "d") ? " degrees" : " minutes";
+		$message = "Sorry, $keyname <strong>$value</strong> out of valid range 0-$maxval{$key}";
+	    }
+	    return (0, $message, undef) if $message;
+	}
+
+	my($long_deg,$long_min,$lat_deg,$lat_min) =
+	    ($q->param("lodeg"),$q->param("lomin"),
+	     $q->param("ladeg"),$q->param("lamin"));
+
+	$q->param("lodir","w") unless ($q->param("lodir") eq "e");
+	$q->param("ladir","n") unless ($q->param("ladir") eq "s");
+
+	$q->param("geo","pos");
+	foreach (qw(city zip tz dst)) {
+	    $q->delete($_);
+	}
+
+	# Geographic Position
+	$city_descr = sprintf("%dd%d' %s lat, %dd%d' %s long",
+			      $lat_deg, $lat_min, uc($q->param("ladir")),
+			      $long_deg, $long_min, uc($q->param("lodir")));
+
+	$latitude = $lat_deg + ($lat_min / 60.0);
+	$longitude = $long_deg + ($long_min / 60.0);
+	$latitude *= -1 if $q->param("ladir") eq "s";
+	$longitude *= -1 if $q->param("lodir") eq "w";
+
+	# don't multiply minutes by -1 since hebcal does it internally
+	$long_deg *= -1  if ($q->param("lodir") eq "e");
+	$lat_deg  *= -1  if ($q->param("ladir") eq "s");
+
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+	if ($q->param("tzid")) {
+	    my $tzid = $q->param("tzid");
+	    $cmd .= " -z '$tzid'";
+	}
+	if (defined $cconfig) {
+	    $cconfig->{"latitude"} = $latitude;
+	    $cconfig->{"longitude"} = $longitude;
+	    $cconfig->{"lat_deg"} = $lat_deg;
+	    $cconfig->{"lat_min"} = $lat_min;
+	    $cconfig->{"long_deg"} = $long_deg;
+	    $cconfig->{"long_min"} = $long_min;
+	    $cconfig->{"title"} = $city_descr;
+	    $cconfig->{"geo"} = "pos";
+	}
+    } elsif ($default_to_nyc ||
+	     (defined $q->param("city") && $q->param("city") ne "")) {
 	my $city = validate_city($q->param("city"));
 	$q->param("city", $city);
+	$q->param("geo","city");
 
 	($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
 	my($lat_deg,$lat_min,$long_deg,$long_min) =
@@ -2030,12 +2064,34 @@ sub process_args_common {
 	my $tzid = $Hebcal::CITY_TZID{$city};
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-	$city_descr = Hebcal::woe_city($city) . ", " . Hebcal::woe_country($city);
+
+	my $country = woe_country($city);
+	$country = "USA" if $country eq "United States of America";
+	$city_descr = Hebcal::woe_city($city) . ", $country";
 
 	if ($Hebcal::CITY_COUNTRY{$city} eq 'IL') {
 	    $q->param('i','on');
 	} else {
 	    $q->delete('i');
+	}
+	foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	    $q->delete($_);
+	}
+	if (defined $cconfig) {
+	    $cconfig->{"latitude"} = $latitude;
+	    $cconfig->{"longitude"} = $longitude;
+	    $cconfig->{"title"} = $city_descr;
+	    $cconfig->{"city"} = woe_city($city);
+	    $cconfig->{"geo"} = "city";
+	}
+    } else {
+	$q->param("geo","none");
+	$q->param("c","off");
+	foreach (qw(m zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	    $q->delete($_);
+	}
+	if (defined $cconfig) {
+	    $cconfig->{"geo"} = "none";
 	}
     }
 
@@ -2227,7 +2283,7 @@ sub vcalendar_write_contents
 	    {
 		next if $key =~ /^(subscribe|download|tag)$/o;
 		my $val = $q->param($key);
-		$desc_url .= "$sep$key=" . Hebcal::url_escape($val);
+		$desc_url .= "$sep$key=" . uri_escape_utf8($val);
 		$sep = ";" if $sep eq "?";
 	    }
 	    out_html(undef, qq{X-WR-CALDESC:$desc_url$endl});
@@ -2254,6 +2310,11 @@ sub vcalendar_write_contents
 	    }
 	    close(VTZ);
 	}
+    }
+
+    unless ($eval_use_DBI) {
+	eval("use DBI");
+	$eval_use_DBI = 1;
     }
 
     # don't raise error if we can't open DB
@@ -2716,15 +2777,11 @@ sub sendmail_v2
 if ($^W && 0)
 {
     my $unused;
-    $unused = $Hebcal::tz_names{'foo'};
-    $unused = $Hebcal::city_tz{'foo'};
-    $unused = $Hebcal::city_dst{'foo'};
     $unused = $Hebcal::MoY_long{'foo'};
     $unused = $Hebcal::ashk2seph{'foo'};
     $unused = $Hebcal::lang_names{'foo'};
     $unused = $Hebcal::havdalah_min;
     $unused = $Hebcal::HEBCAL_BIN;
-    $unused = $Hebcal::dst_names{'foo'};
 }
 
 1;

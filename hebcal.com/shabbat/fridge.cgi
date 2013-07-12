@@ -38,10 +38,11 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
-use CGI qw(-no_xhtml);
+use CGI qw(-no_xhtml -utf8);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
 use Date::Calc;
+use URI::Escape;
 use HebcalGPL ();
 use POSIX ();
 
@@ -69,7 +70,6 @@ my $title = "Refrigerator Shabbos Times for $hebrew_year";
 print "Cache-Control: private\015\012";
 print $q->header(-type => "text/html",
 		 -charset => "UTF-8");
-my $base = "http://" . $q->virtual_host() . $script_name;
 
 my $head = <<EOHTML;
 <!DOCTYPE html>
@@ -190,15 +190,21 @@ EOHTML
 
     Hebcal::out_html($cfg,qq{</tbody></table>\n});
 
+    my $url_base = $script_name . "?";
+    if ($q->param("zip")) {
+	$url_base .= "zip=" . $q->param("zip");
+    } else {
+	$url_base .= "city=" . uri_escape_utf8($q->param("city"));
+    }
+    $url_base .= "&amp;year=";
+
     Hebcal::out_html($cfg,"<p><a class=\"goto\" title=\"Previous\" href=\"",
-		     Hebcal::self_url($q, {'year' => $hebrew_year - 1,
-					   "tz" => undef, "dst" => undef}),
+		     $url_base . ($hebrew_year - 1) .
 		     "\">&larr;&nbsp;", $hebrew_year - 1,
 		     "</a>&nbsp;&nbsp;&nbsp;",
 		     "Times in <strong>bold</strong> indicate holidays.",
 		     "&nbsp;&nbsp;&nbsp;<a class=\"goto\" title=\"Next\" href=\"",
-		     Hebcal::self_url($q, {'year' => $hebrew_year + 1,
-					   "tz" => undef, "dst" => undef}),
+		     $url_base . ($hebrew_year + 1) .
 		     "\">", $hebrew_year + 1, "&nbsp;&rarr;</a>",
 		     "</p>\n");
 }
@@ -230,7 +236,7 @@ sub process_args
 {
     my($q) = @_;
 
-    my @status = Hebcal::process_args_common($q, 0);
+    my @status = Hebcal::process_args_common($q, 0, 1);
     unless ($status[0]) {
 	print "Status: 400 Bad Request\r\n", "Content-Type: text/html\r\n\r\n",
 	    $status[1], "\n";

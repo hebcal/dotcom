@@ -4,7 +4,7 @@ woe1922738	AF	Kabul	34.5167	69.1833	Asia/Kabul	4	0
 woe56273	AI	The Valley	18.2167	-63.0500	America/Anguilla	-4	0
 woe472135	AL	Tirana	41.3275	19.8189	Europe/Tirane	1	1
 woe2214662	AM	Yerevan	40.1811	44.5136	Asia/Yerevan	4	1
-woe152045	AN	Willemstad	12.1000	-68.9167	America/Curacao	-4	0
+woe152045	CW	Willemstad	12.1000	-68.9167	America/Curacao	-4	0
 woe1261906	AO	Luanda	-8.8383	13.2344	Africa/Luanda	1	0
 woe468739	AR	Buenos Aires	-34.5875	-58.6725	America/Argentina/Buenos_Aires	-3	0
 woe1062841	AS	Pago Pago	-14.2393	-170.7221	US/Samoa	-11	0

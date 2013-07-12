@@ -41,10 +41,11 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
-use CGI qw(-no_xhtml);
+use CGI qw(-no_xhtml -utf8);
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Date::Calc ();
+use URI::Escape;
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
@@ -63,8 +64,6 @@ my %long_candles_text =
      "zip" => "zip code",
      "none" => "none");
 
-my $cmd  = "./hebcal";
-
 # process form params
 my $q = new CGI;
 
@@ -80,13 +79,10 @@ if (! $q->param("v") && $C_cookie)
     Hebcal::process_cookie($q,$C_cookie);
 }
 
-# sanitize input to prevent people from trying to hack the site.
-# remove anthing other than word chars, white space, or hyphens.
 foreach my $key ($q->param())
 {
     my $val = $q->param($key);
     $val = "" unless defined $val;
-    $val =~ s/[^\w\.\s-]//g;
     $val =~ s/^\s+//g;		# nuke leading
     $val =~ s/\s+$//g;		# and trailing whitespace
     $q->param($key,$val);
@@ -137,10 +133,22 @@ form("Please select at least one event option.")
 	(!defined $q->param("d") || $q->param("d") eq "off") &&
 	(!defined $q->param("s") || $q->param("s") eq "off"));
 
-my($cmd_extra,$cconfig) =
-    get_candle_config($q);
 
-$cmd .= $cmd_extra if $cmd_extra;
+my %cconfig;
+my $cmd = "./hebcal";
+
+if (param_true("c")) {
+    my @status = Hebcal::process_args_common($q, 0, 0, \%cconfig);
+    unless ($status[0]) {
+	form($status[1], $status[2]);
+    }
+    $cmd = $status[1];
+} else {
+    $q->param("c","off");
+    foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir m tz dst tzid)) {
+	$q->delete($_);
+    }
+}
 
 foreach (@Hebcal::opts)
 {
@@ -152,18 +160,6 @@ $cmd .= " -a"
     if defined $q->param("lg") && $q->param("lg") =~ /^a/;
 $cmd .= " -h" if !defined $q->param("nh") || $q->param("nh") eq "off";
 $cmd .= " -x" if !defined $q->param("nx") || $q->param("nx") eq "off";
-
-if (param_true("c"))
-{
-    $cmd .= " -m " . $q->param("m")
-	if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
-
-    $cmd .= " -z " . $q->param("tz")
-	if (defined $q->param("tz") && $q->param("tz") ne "");
-
-    $cmd .= " -Z " . $q->param("dst")
-	if (defined $q->param("dst") && $q->param("dst") ne "");
-}
 
 if ($q->param("yt") && $q->param("yt") eq "H")
 {
@@ -215,8 +211,8 @@ else
 
 my $pi = $q->path_info();
 
-my $g_loc = (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") ?
-    "in " . $cconfig->{"city"} : "";
+my $g_loc = (defined $cconfig{"city"} && $cconfig{"city"} ne "") ?
+    "in " . $cconfig{"city"} : "";
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
 my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
 my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
@@ -262,11 +258,11 @@ sub json_events
 			    );
 
     my $title = "Hebcal $g_date";
-    if (defined $cconfig->{"title"} && $cconfig->{"title"} ne "") {
-	$title .= " "  . $cconfig->{"title"};
+    if (defined $cconfig{"title"} && $cconfig{"title"} ne "") {
+	$title .= " "  . $cconfig{"title"};
     }
     Hebcal::items_to_json($items,$q,$title,
-			  $cconfig->{"latitude"},$cconfig->{"longitude"});
+			  $cconfig{"latitude"},$cconfig{"longitude"});
 }
 
 sub javascript_events
@@ -435,12 +431,12 @@ sub vcalendar_display
     {
 	$tz = $Hebcal::city_tz{$q->param("city")};
     }
-    elsif (defined $cconfig->{"state"})
+    elsif (defined $cconfig{"state"})
     {
-	$state = $cconfig->{"state"};
+	$state = $cconfig{"state"};
     }
 
-    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $title, $cconfig);
+    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $title, \%cconfig);
 }
 
 use constant PDF_WIDTH => 792;
@@ -457,8 +453,8 @@ sub pdf_display {
 				       $g_nmf, $g_nss);
 
     my $title = "Jewish Calendar $g_date";
-    if (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") {
-	$title .= " "  . $cconfig->{"city"};
+    if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
+	$title .= " "  . $cconfig{"city"};
     }
 
     eval("use PDF::API2");
@@ -584,7 +580,7 @@ sub pdf_display {
 	$text->font($pdf_font{'plain'}, 8);
 	if (param_true("c")) {
 	    $text->translate(PDF_LMARGIN, PDF_BMARGIN - 12);
-	    $text->text("Candle lighting times for " . $cconfig->{"title"});
+	    $text->text("Candle lighting times for " . $cconfig{"title"});
 	}
 
 	$text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
@@ -875,12 +871,9 @@ EOHTML
     if ($q->param("geo") eq "city")
     {
 	Hebcal::out_html(undef,
-	"<label>Large City: ",
-	$q->popup_menu(-name => "city",
-		       -class => "input-medium",
-		       -values => [sort keys %Hebcal::city_tz],
-		       -default => "New York"),
-	"</label>\n");
+			 "<label>Large City: ",
+			 Hebcal::html_city_select($q->param("city")),
+			 "</label>\n");
     }
     elsif ($q->param("geo") eq "pos")
     {
@@ -946,27 +939,12 @@ EOHTML
 	"</label>\n");
     }
 
-    if ($q->param("geo") eq "pos" || $q->param("tz_override"))
-    {
+    if ($q->param("geo") eq "pos") {
 	Hebcal::out_html(undef,
 	"<label>Time zone: ",
-	$q->popup_menu(-name => "tz",
-		       -values =>
-		       (defined $q->param("geo") && $q->param("geo") eq "pos")
-		       ? [-5,-6,-7,-8,-9,-10,-11,-12,
-			  12,11,10,9,8,7,6,5,4,3,2,1,0,
-			  -1,-2,-3,-4]
-		       : ["auto",-5,-6,-7,-8,-9,-10],
-		       -default =>
-		       (defined $q->param("geo") && $q->param("geo") eq "pos")
-		       ? 0 : "auto",
-		       -labels => \%Hebcal::tz_names),
-	"</label>\n",
-	"<label>Daylight Saving Time: ",
-	$q->popup_menu(-name => "dst",
-		       -values => ["usa","mx","eu","israel","aunz","none"],
-		       -default => "none",
-		       -labels => \%Hebcal::dst_names),
+	$q->popup_menu(-name => "tzid",
+		       -values => \@HebcalConst::TIMEZONES,
+		       -default => "UTC"),
 	"</label>\n");
     }
 
@@ -1124,8 +1102,8 @@ sub results_page
     }
 
     my $results_title = "Jewish Calendar $date";
-    if (defined $cconfig->{"city"} && $cconfig->{"city"} ne "") {
-	$results_title .= " "  . $cconfig->{"city"};
+    if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
+	$results_title .= " "  . $cconfig{"city"};
     }
 
     print STDOUT $q->header(-expires => $http_expires,
@@ -1150,7 +1128,7 @@ EOHTML
 
     my $h1_extra = "";
     if (param_true("c")) {
-	$h1_extra = "<br><small>" . $cconfig->{"title"} . "</small>";
+	$h1_extra = "<br><small>" . $cconfig{"title"} . "</small>";
     }
 
     my $head_divs = <<EOHTML;
@@ -1202,11 +1180,11 @@ accurate.
     }
 
     Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
-	if (defined $cconfig->{"state"} && $cconfig->{"state"} eq "IN");
+	if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
 
     Hebcal::out_html(undef, $HebcalHtml::usno_warning)
-	if (defined $cconfig->{"lat_deg"} &&
-	    ($cconfig->{"lat_deg"} >= 60.0 || $cconfig->{"lat_deg"} <= -60.0));
+	if (defined $cconfig{"lat_deg"} &&
+	    ($cconfig{"lat_deg"} >= 60.0 || $cconfig{"lat_deg"} <= -60.0));
 
     if ($numEntries > 0) {
 	my $download_title = $date;
@@ -1218,9 +1196,6 @@ accurate.
     }
 
     Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
-    Hebcal::out_html(undef, qq{<a class="btn" href="},
-		     Hebcal::self_url($q, {"v" => "0"}),
-		     qq{"><i class="icon-cog"></i> Change options</a>\n});
 
     if ($numEntries > 0) {
 	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
@@ -1234,7 +1209,7 @@ accurate.
 	    if ($q->param("zip")) {
 		$url .= "zip=" . $q->param("zip");
 	    } else {
-		$url .= "city=" . Hebcal::url_escape($q->param("city"));
+		$url .= "city=" . uri_escape_utf8($q->param("city"));
 	    }
 
 	    my $hyear;
@@ -1254,6 +1229,11 @@ accurate.
 	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
 	}
     }
+
+    Hebcal::out_html(undef, qq{<a class="btn" href="},
+		     Hebcal::self_url($q, {"v" => "0"}),
+		     qq{"><i class="icon-cog"></i> Change options</a>\n});
+
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
 
     if ($numEntries > 0 && param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
@@ -1517,224 +1497,6 @@ sub new_html_cal
 }
 
 
-sub get_candle_config
-{
-    my($q) = @_;
-
-    my $cmd_extra;
-    my %config;
-
-    if (param_true("c") && defined $q->param("city"))
-    {
-	form("Sorry, invalid city\n<strong>" . $q->param("city") . "</strong>.")
-	    unless defined($Hebcal::city_tz{$q->param("city")});
-
-	$q->param("geo","city");
-#	$q->param("tz",$Hebcal::city_tz{$q->param("city")});
-	$q->delete("tz");
-	$q->delete("dst");
-	$q->delete("zip");
-	$q->delete("lodeg");
-	$q->delete("lomin");
-	$q->delete("ladeg");
-	$q->delete("lamin");
-	$q->delete("lodir");
-	$q->delete("ladir");
-
-	my $city = $q->param("city");
-	$config{"title"} = $city;
-	$config{"city"} = $city;
-	$cmd_extra = " -C '$city'";
-
-	if ($Hebcal::city_dst{$city} eq "israel")
-	{
-	    $q->param("i","on");
-	}
-    }
-    elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
-	   defined $q->param("ladeg") && defined $q->param("lamin") &&
-	   defined $q->param("lodir") && defined $q->param("ladir"))
-    {
-	if (($q->param("lodeg") eq "") &&
-	    ($q->param("lomin") eq "") &&
-	    ($q->param("ladeg") eq "") &&
-	    ($q->param("lamin") eq ""))
-	{
-	    $q->param("c","off");
-	    $q->delete("zip");
-	    $q->delete("city");
-	    $q->param("geo","pos");
-	    $q->delete("lodeg");
-	    $q->delete("lomin");
-	    $q->delete("ladeg");
-	    $q->delete("lamin");
-	    $q->delete("lodir");
-	    $q->delete("ladir");
-	    $q->delete("dst");
-	    $q->delete("tz");
-	    $q->delete("m");
-
-	    return (undef,\%config);
-	}
-
-	form("Sorry, all latitude/longitude\narguments must be numeric.")
-	    if (($q->param("lodeg") !~ /^\d+$/) ||
-		($q->param("lomin") !~ /^\d+$/) ||
-		($q->param("ladeg") !~ /^\d+$/) ||
-		($q->param("lamin") !~ /^\d+$/));
-
-	$q->param("lodir","w") unless ($q->param("lodir") eq "e");
-	$q->param("ladir","n") unless ($q->param("ladir") eq "s");
-
-	form("Sorry, longitude degrees\n" .
-	     "<strong>" . $q->param("lodeg") . "</strong> out of valid range 0-180.")
-	    if ($q->param("lodeg") > 180);
-
-	form("Sorry, latitude degrees\n" .
-	     "<strong>" . $q->param("ladeg") . "</strong> out of valid range 0-90.")
-	    if ($q->param("ladeg") > 90);
-
-	form("Sorry, longitude minutes\n" .
-	     "<strong>" . $q->param("lomin") . "</strong> out of valid range 0-60.")
-	    if ($q->param("lomin") > 60);
-
-	form("Sorry, latitude minutes\n" .
-	     "<strong>" . $q->param("lamin") . "</strong> out of valid range 0-60.")
-	    if ($q->param("lamin") > 60);
-
-	my($long_deg,$long_min,$lat_deg,$lat_min) =
-	    ($q->param("lodeg"),$q->param("lomin"),
-	     $q->param("ladeg"),$q->param("lamin"));
-
-	$q->param("dst","none")
-	    unless $q->param("dst");
-	$q->param("tz","0")
-	    unless $q->param("tz");
-	$q->param("geo","pos");
-
-	# Geographic Position
-	$config{"lat_descr"} = "${lat_deg}d${lat_min}' " .
-	    uc($q->param("ladir")) . " lat";
-	$config{"long_descr"} = "${long_deg}d${long_min}' " .
-	    uc($q->param("lodir")) . " long";
-	$config{"title"} = $config{"lat_descr"} . ", " . $config{"long_descr"};
-	my $dst_text = ($q->param("dst") eq "none") ? "none" :
-	    "automatic for " . $Hebcal::dst_names{$q->param("dst")};
-	$config{"dst_tz_descr"} =
-	    "Time zone: " . $Hebcal::tz_names{$q->param("tz")} .
-	    "\n<br>Daylight Saving Time: $dst_text";
-
-	# don't multiply minutes by -1 since hebcal does it internally
-	$long_deg *= -1  if ($q->param("lodir") eq "e");
-	$lat_deg  *= -1  if ($q->param("ladir") eq "s");
-
-	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-
-	$config{"long_deg"} = $long_deg;
-	$config{"long_min"} = $long_min;
-	$config{"lat_deg"} = $lat_deg;
-	$config{"lat_min"} = $lat_min;
-    }
-    elsif (param_true("c") &&
-	   defined $q->param("zip") && $q->param("zip") ne "")
-    {
-	$q->param("geo","zip");
-
-	form("Sorry, <strong>" . $q->param("zip") . "</strong> does\n" .
-	     "not appear to be a 5-digit ZIP code.")
-	    unless $q->param("zip") =~ /^\d\d\d\d\d$/;
-
-	my $DB = Hebcal::zipcode_open_db();
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,$latitude,$longitude) =
-	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
-	Hebcal::zipcode_close_db($DB);
-	undef($DB);
-
-	form("Sorry, can't find\n".  "<strong>" . $q->param("zip") .
-	     "</strong> in the ZIP code database.\n",
-	     "<ul><li>Please try a nearby ZIP code or select candle\n" .
-	     "lighting times by\n" .
-	     "<a href=\"" . $script_name .
-	     "?c=on;geo=city\">large city</a> or\n" .
-	     "<a href=\"" . $script_name .
-	     "?c=on;geo=pos\">latitude/longitude</a></li></ul>")
-	    unless defined $state;
-
-	# allow CGI args to override
-	$tz = $q->param("tz")
-	    if (defined $q->param("tz") && $q->param("tz") =~ /^-?\d+$/);
-
-	$config{"title"} = "$city, $state " . $q->param("zip");
-	$config{"city"} = $city;
-	$config{"state"} = $state;
-	$config{"zip"} = $q->param("zip");
-
-	if ($tz eq "?")
-	{
-	    $q->param("tz_override", "1");
-
-	    form("Sorry, can't auto-detect\n" .
-		 "timezone for <strong>" . $config{"title"} . "</strong>\n",
-		 "<ul><li>Please select your time zone below.</li></ul>");
-	}
-
-	$q->param("tz", $tz);
-
-	# allow CGI args to override
-	if (defined $q->param("dst"))
-	{
-	    $dst = 0 if $q->param("dst") eq "none";
-	    $dst = 1 if $q->param("dst") eq "usa";
-	}
-
-	if ($dst eq "1")
-	{
-	    $q->param("dst","usa");
-	}
-	else
-	{
-	    $q->param("dst","none");
-	}
-
-#	$config{"lat_descr"} = "${lat_deg}d${lat_min}' N latitude";
-#	$config{"long_descr"} = "${long_deg}d${long_min}' W longitude";
-	my $dst_text = ($q->param("dst") eq "none") ? "none" :
-	    "automatic for " . $Hebcal::dst_names{$q->param("dst")};
-	$config{"dst_tz_descr"} =
-	    "Time zone: " . $Hebcal::tz_names{$q->param("tz")} .
-	    "\n<br>Daylight Saving Time: $dst_text";
-
-	$cmd_extra = " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-
-	$config{"long_deg"} = $long_deg;
-	$config{"long_min"} = $long_min;
-	$config{"lat_deg"} = $lat_deg;
-	$config{"lat_min"} = $lat_min;
-	$config{"latitude"} = $latitude;
-	$config{"longitude"} = $longitude;
-    }
-    else
-    {
-	$q->param("c","off");
-	$q->delete("zip");
-	$q->delete("city");
-#	$q->param("geo", "none");
-	$q->delete("lodeg");
-	$q->delete("lomin");
-	$q->delete("ladeg");
-	$q->delete("lamin");
-	$q->delete("lodir");
-	$q->delete("ladir");
-	$q->delete("dst");
-	$q->delete("tz");
-	$q->delete("m");
-
-	$cmd_extra = undef;
-    }
-
-    return ($cmd_extra,\%config);
-}
-
 # local variables:
-# mode: c-perl
+# mode: cperl
 # end:
