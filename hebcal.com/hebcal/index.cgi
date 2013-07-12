@@ -1140,9 +1140,7 @@ EOHTML
 ;
     Hebcal::out_html(undef, $head_divs);
 
-    my $cmd_pretty = $cmd;
-    $cmd_pretty =~ s,.*/,,; # basename
-    Hebcal::out_html(undef, "<!-- $cmd_pretty -->\n");
+    Hebcal::out_html(undef, "<!-- $cmd -->\n");
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
