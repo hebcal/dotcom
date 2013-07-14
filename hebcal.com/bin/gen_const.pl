@@ -14,7 +14,6 @@ my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
 my $CITIES_TXT = "../dist/cities.txt";
 my $COUNTRIES_TXT = "../dist/countries.txt";
-my $ZONE_TAB = "/usr/share/zoneinfo/zone.tab";
 
 my $axml = XMLin($SEDROT_XML);
 $axml || die $SEDROT_XML;
@@ -28,28 +27,12 @@ binmode(CITIES, ":utf8");
 open(COUNTRIES, $COUNTRIES_TXT) || die "$COUNTRIES_TXT: $!";
 binmode(COUNTRIES, ":utf8");
 
-open(ZONE_TAB, $ZONE_TAB) || die "$ZONE_TAB: $!";
-
 open(O,">$outfile.$$") || die "$outfile.$$: $!\n";
 binmode(O, ":utf8");
 
 print O "package HebcalConst;\n\n";
 
 print O "use utf8;\n\n";
-
-my %zones;
-while(<ZONE_TAB>) {
-    chomp;
-    next if /^\#/;
-    my($country,$latlong,$tz,$comments) = split(/\s+/, $_, 4);
-    $zones{$tz} = 1;
-}
-close(ZONE_TAB);
-print O "\@HebcalConst::TIMEZONES = ('UTC',\n";
-foreach (sort keys %zones) {
-    print O "'$_',\n";
-}
-print O ");\n\n";
 
 print O "\%HebcalConst::COUNTRIES = (\n";
 while(<COUNTRIES>) {

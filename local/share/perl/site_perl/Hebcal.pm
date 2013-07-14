@@ -188,16 +188,6 @@ while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
     $Hebcal::CITY_TZ_DST{$id} = $dst;
 }
 
-# backwards compatibility with Hebcal for Unix city names
-#while(my($old,$new) = each(%Hebcal::CITIES_OLD)) {
-#    my $info = $HebcalConst::CITIES_NEW{$new};
-#    next unless defined $info;
-#    my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
-#    $Hebcal::CITY_TZID{$old} = $tzName;
-#    $Hebcal::CITY_COUNTRY{$old} = $country;
-#    $Hebcal::CITY_LATLONG{$old} = [$latitude,$longitude];
-#}
-
 # translate from Askenazic transiliterations to Separdic
 %Hebcal::ashk2seph =
  (
@@ -322,6 +312,26 @@ if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(
 if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
 </script>
 };
+
+my $ZONE_TAB = "/usr/share/zoneinfo/zone.tab";
+my @TIMEZONES;
+my $TIMEZONE_LIST_INIT;
+
+sub get_timezones {
+    open(ZONE_TAB, $ZONE_TAB) || die "$ZONE_TAB: $!";
+    my @zones;
+    while(<ZONE_TAB>) {
+	chomp;
+	next if /^\#/;
+	my($country,$latlong,$tz,$comments) = split(/\s+/, $_, 4);
+	push(@zones, $tz);
+    }
+    close(ZONE_TAB);
+    @TIMEZONES = sort @zones;
+    unshift(@TIMEZONES, "UTC");
+    $TIMEZONE_LIST_INIT = 1;
+    \@TIMEZONES;
+}
 
 ########################################################################
 # invoke hebcal unix app and create perl array of output
@@ -1910,10 +1920,13 @@ sub process_args_common {
 	}
     }
 
-    # remove leading and trailing whitespace
     foreach my $key ($q->param()) {
 	my $val = $q->param($key);
 	$val = '' unless defined $val;
+	# sanitize input to prevent people from trying to hack the site.
+	$val =~ s/[^\w\.\s-]//g unless $key eq "city";
+	# remove anthing other than word chars, white space, or hyphens.
+	# remove leading and trailing whitespace
 	$val =~ s/^\s+//g;
 	$val =~ s/\s+$//g;
 	$q->param($key,$val);
@@ -1942,6 +1955,7 @@ sub process_args_common {
 	    $cconfig->{"longitude"} = $longitude;
 	    $cconfig->{"title"} = $city_descr;
 	    $cconfig->{"city"} = "Jerusalem";
+	    $cconfig->{"tzid"} = "Asia/Jerusalem";
 	    $cconfig->{"geo"} = "city";
 	}
     } elsif (defined $q->param('zip') && $q->param('zip') ne '') {
@@ -1987,6 +2001,9 @@ sub process_args_common {
 	    $cconfig->{"city"} = $city;
 	    $cconfig->{"state"} = $state;
 	    $cconfig->{"zip"} = $q->param("zip");
+	    $cconfig->{"tzid"} = $tzid;
+	    $cconfig->{"tz_offset"} = $tz;
+	    $cconfig->{"tz_dst"} = $dst;
 	    $cconfig->{"geo"} = "zip";
 	}
     } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
@@ -2038,8 +2055,9 @@ sub process_args_common {
 	$lat_deg  *= -1  if ($q->param("ladir") eq "s");
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+	my $tzid;
 	if ($q->param("tzid")) {
-	    my $tzid = $q->param("tzid");
+	    $tzid = $q->param("tzid");
 	    $cmd .= " -z '$tzid'";
 	}
 	if (defined $cconfig) {
@@ -2050,6 +2068,7 @@ sub process_args_common {
 	    $cconfig->{"long_deg"} = $long_deg;
 	    $cconfig->{"long_min"} = $long_min;
 	    $cconfig->{"title"} = $city_descr;
+	    $cconfig->{"tzid"} = $tzid if $tzid;
 	    $cconfig->{"geo"} = "pos";
 	}
     } elsif ($default_to_nyc ||
@@ -2082,6 +2101,7 @@ sub process_args_common {
 	    $cconfig->{"longitude"} = $longitude;
 	    $cconfig->{"title"} = $city_descr;
 	    $cconfig->{"city"} = woe_city($city);
+	    $cconfig->{"tzid"} = $tzid;
 	    $cconfig->{"geo"} = "city";
 	}
     } else {
@@ -2218,7 +2238,7 @@ sub torah_calendar_memo {
 
 sub vcalendar_write_contents
 {
-    my($q,$events,$tz,$state,$title,$cconfig) = @_;
+    my($q,$events,$title,$cconfig) = @_;
 
     my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
 
@@ -2244,16 +2264,8 @@ sub vcalendar_write_contents
     my $endl = get_browser_endl($q->user_agent());
 
     my $tzid;
-    $tz = 0 unless defined $tz;
-
-    if ($is_icalendar) {
-	if (defined $q->param("geo") && $q->param("geo") eq "city"
-		 && $q->param("city")
-		 && defined $Hebcal::CITY_TZID{$q->param("city")}) {
-	    $tzid = $Hebcal::CITY_TZID{$q->param("city")};
-	} else {
-	    $tzid = get_usa_tzid($state,$tz);
-	}
+    if ($is_icalendar && defined $cconfig && defined $cconfig->{"tzid"}) {
+	$tzid = $cconfig->{"tzid"};
     }
 
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", gmtime(time()));
@@ -2303,9 +2315,8 @@ sub vcalendar_write_contents
 	} elsif (open(VTZ,$vtimezone_ics)) {
 	    my $in_vtz = 0;
 	    while(<VTZ>) {
-		chomp;
 		$in_vtz = 1 if /^BEGIN:VTIMEZONE/;
-		out_html(undef, $_, $endl) if $in_vtz;
+		out_html(undef, $_) if $in_vtz;
 		$in_vtz = 0 if /^END:VTIMEZONE/;
 	    }
 	    close(VTZ);

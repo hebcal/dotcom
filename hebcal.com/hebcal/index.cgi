@@ -79,10 +79,13 @@ if (! $q->param("v") && $C_cookie)
     Hebcal::process_cookie($q,$C_cookie);
 }
 
+# sanitize input to prevent people from trying to hack the site.
+# remove anthing other than word chars, white space, or hyphens.
 foreach my $key ($q->param())
 {
     my $val = $q->param($key);
     $val = "" unless defined $val;
+    $val =~ s/[^\w\.\s-]//g unless $key eq "city";
     $val =~ s/^\s+//g;		# nuke leading
     $val =~ s/\s+$//g;		# and trailing whitespace
     $q->param($key,$val);
@@ -422,21 +425,7 @@ sub vcalendar_display
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
-
-    my $tz = $q->param("tz");
-    my $state;
-
-    if (defined $q->param("geo") && $q->param("geo") eq "city" &&
-	defined $q->param("city") && $q->param("city") ne "")
-    {
-	$tz = $Hebcal::city_tz{$q->param("city")};
-    }
-    elsif (defined $cconfig{"state"})
-    {
-	$state = $cconfig{"state"};
-    }
-
-    Hebcal::vcalendar_write_contents($q, \@events, $tz, $state, $title, \%cconfig);
+    Hebcal::vcalendar_write_contents($q, \@events, $title, \%cconfig);
 }
 
 use constant PDF_WIDTH => 792;
@@ -943,7 +932,7 @@ EOHTML
 	Hebcal::out_html(undef,
 	"<label>Time zone: ",
 	$q->popup_menu(-name => "tzid",
-		       -values => \@HebcalConst::TIMEZONES,
+		       -values => Hebcal::get_timezones(),
 		       -default => "UTC"),
 	"</label>\n");
     }

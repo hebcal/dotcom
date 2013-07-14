@@ -207,7 +207,7 @@ sub vcalendar_display
     }
     $title .= " for " . join('\, ', @names);
 
-    Hebcal::vcalendar_write_contents($q, \@events, undef, undef, $title);
+    Hebcal::vcalendar_write_contents($q, \@events, $title, undef);
 }
 
 sub dba_display
