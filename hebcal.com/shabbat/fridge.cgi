@@ -257,7 +257,10 @@ sub process_args
     }
 
     my(@events) = Hebcal::invoke_hebcal($cmd, '', 0);
-    
+
+    # shorten the headline for USA
+    $city_descr =~ s/, USA$//;	# no United States of America
+    $city_descr =~ s/ \d{5}$//;	# no zipcode
     (\@events,$cfg,$city_descr,$cmd);
 }
 
