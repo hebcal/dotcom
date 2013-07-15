@@ -453,7 +453,7 @@ sub pdf_display {
 
     $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
     $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
-    my $lg = $q->param("lg");
+    my $lg = $q->param("lg") || "s";
     if ($lg eq "h") {
 	$pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
     }
