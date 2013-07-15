@@ -1451,7 +1451,7 @@ sub html_entify($)
 
 sub url_escape($)
 {
-    return uri_escape_utf8($_[0]);
+    return URI::Escape::uri_escape_utf8($_[0]);
 }
 
 sub http_date($)
@@ -1477,7 +1477,7 @@ sub gen_cookie($)
 	    $retval .= '&tz=' . $q->param('tz')
 	        if defined $q->param('tz') && $q->param('tz') ne '';
 	} elsif ($q->param('geo') eq 'city') {
-	    $retval .= '&city=' . uri_escape_utf8($q->param('city'));
+	    $retval .= '&city=' . URI::Escape::uri_escape_utf8($q->param('city'));
 	} elsif ($q->param('geo') eq 'pos') {
 	    $retval .= '&lodeg=' . $q->param('lodeg');
 	    $retval .= '&lomin=' . $q->param('lomin');
@@ -1648,7 +1648,7 @@ sub self_url($$)
 	next if exists $override->{$key} && !defined $override->{$key};
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
-	$url .= "$sep$key=" . uri_escape_utf8($val);
+	$url .= "$sep$key=" . URI::Escape::uri_escape_utf8($val);
 	$sep = ";";
     }
 
@@ -1658,7 +1658,7 @@ sub self_url($$)
 	next unless defined $override->{$key};
 	unless (defined $q->param($key))
 	{
-	    $url .= "$sep$key=" . uri_escape_utf8($override->{$key});
+	    $url .= "$sep$key=" . URI::Escape::uri_escape_utf8($override->{$key});
 	    $sep = ";";
 	}
     }
@@ -1684,7 +1684,7 @@ sub download_href
     foreach my $key ($q->param())
     {
 	my($val) = $q->param($key);
-	$href .= ";$key=" . uri_escape_utf8($val);
+	$href .= ";$key=" . URI::Escape::uri_escape_utf8($val);
     }
 
     $href;
@@ -2295,7 +2295,7 @@ sub vcalendar_write_contents
 	    {
 		next if $key =~ /^(subscribe|download|tag)$/o;
 		my $val = $q->param($key);
-		$desc_url .= "$sep$key=" . uri_escape_utf8($val);
+		$desc_url .= "$sep$key=" . URI::Escape::uri_escape_utf8($val);
 		$sep = ";" if $sep eq "?";
 	    }
 	    out_html(undef, qq{X-WR-CALDESC:$desc_url$endl});
