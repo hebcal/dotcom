@@ -149,14 +149,16 @@ EOD;
     list($id,$address,$status,$created,$zip,$city,
 	 $havdalah) = mysql_fetch_row($result);
 
+    global $hebcal_cities_old;
+    if (isset($hebcal_cities_old[$city])) {
+	$city = $hebcal_cities_old[$city];
+    }
     $val = array(
 	"id" => $id,
 	"status" => $status,
 	"em" => $address,
 	"m" => $havdalah,
 	"zip" => $zip,
-	"tz" => $timezone,
-	"dst" => $dst,
 	"city" => $city,
 	"t" => $created,
 	);
@@ -318,13 +320,6 @@ function subscribe($param) {
 	{
 	    form($param,
 	    "Please enter your zip code for candle lighting times.");
-	}
-
-	if (!$param["dst"]) {
-	    $param["dst"] = "usa";
-	}
-	if (!$param["tz"]) {
-	    $param["tz"] = "auto";
 	}
 
 	if (!preg_match('/^\d{5}$/', $param["zip"]))
