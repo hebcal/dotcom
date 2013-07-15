@@ -293,7 +293,11 @@ function form($head, $message, $help = "") {
 <?php
     }
 
-    $action = $_SERVER["REQUEST_URI"];
+    $action = $_SERVER["PHP_SELF"];
+    $pos = strpos($action, "index.php");
+    if ($pos !== false) {
+	$action = substr($action, 0, $pos);
+    }
 ?>
 <div id="converter-form" class="well well-small">
 <form class="form-inline" action="<?php echo $action ?>">

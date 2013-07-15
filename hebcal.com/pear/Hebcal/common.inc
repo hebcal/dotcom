@@ -34,89 +34,106 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **********************************************************************/
 
-$hebcal_city_tz = array(
-     "Ashdod"		=>	2,
-     "Atlanta"		=>	-5,
-     "Austin"		=>	-6,
-     "Baghdad"		=>	3,
-     "Berlin"		=>	1,
-     "Beer Sheva"	=>	2,
-     "Baltimore"	=>	-5,
-     "Bogota"		=>	-5,
-     "Boston"		=>	-5,
-     "Buenos Aires"	=>	-3,
-     "Buffalo"		=>	-5,
-     "Chicago"		=>	-6,
-     "Cincinnati"	=>	-5,
-     "Cleveland"	=>	-5,
-     "Dallas"		=>	-6,
-     "Denver"		=>	-7,
-     "Detroit"		=>	-5,
-     "Eilat"		=>	2,
-     "Gibraltar"	=>	-10,
-     "Haifa"		=>	2,
-     "Hawaii"		=>	-10,
-     "Houston"		=>	-6,
-     "Jerusalem"	=>	2,
-     "Johannesburg"	=>	2,
-     "Kiev"		=>	2,
-     "La Paz"		=>	-4,
-     "London"		=>	0,
-     "Los Angeles"	=>	-8,
-     "Miami"		=>	-5,
-     "Mexico City"	=>	-6,
-     "Montreal"		=>	-5,
-     "Moscow"		=>	3,
-     "New York"		=>	-5,
-     "Omaha"		=>	-6,
-     "Paris"		=>	1,
-     "Petach Tikvah"	=>	2,
-     "Philadelphia"	=>	-5,
-     "Phoenix"		=>	-7,
-     "Pittsburgh"	=>	-5,
-     "Saint Louis"	=>	-6,
-     "Saint Petersburg"	=>	3,
-     "San Francisco"	=>	-8,
-     "Seattle"		=>	-8,
-     "Tel Aviv"		=>	2,
-     "Tiberias"		=>	2,
-     "Toronto"		=>	-5,
-     "Vancouver"	=>	-8,
-     "Washington DC"	=>	-5,
-     "Melbourne"	=>	10,
-     "Sydney"		=>	10,
-     "Ottawa"		=>	-5,
-     );
-ksort($hebcal_city_tz);
+require "const.inc";
 
-$hebcal_tz_names = array(
-     "tz_auto" => "- Attempt to auto-detect -",
-     "tz_-5"   => "GMT -05:00 (U.S. Eastern)",
-     "tz_-6"   => "GMT -06:00 (U.S. Central)",
-     "tz_-7"   => "GMT -07:00 (U.S. Mountain)",
-     "tz_-8"   => "GMT -08:00 (U.S. Pacific)",
-     "tz_-9"   => "GMT -09:00 (U.S. Alaskan)",
-     "tz_-10"  => "GMT -10:00 (U.S. Hawaii)",
-     "tz_-11"  => "GMT -11:00",
-     "tz_-12"  => "GMT -12:00",
-     "tz_12"   => "GMT +12:00",
-     "tz_11"   => "GMT +11:00",
-     "tz_10"   => "GMT +10:00",
-     "tz_9"    => "GMT +09:00",
-     "tz_8"    => "GMT +08:00",
-     "tz_7"    => "GMT +07:00",
-     "tz_6"    => "GMT +06:00",
-     "tz_5"    => "GMT +05:00",
-     "tz_4"    => "GMT +04:00",
-     "tz_3"    => "GMT +03:00",
-     "tz_2"    => "GMT +02:00",
-     "tz_1"    => "GMT +01:00",
-     "tz_0"    => "Greenwich Mean Time",
-     "tz_-1"   => "GMT -01:00",
-     "tz_-2"   => "GMT -02:00",
-     "tz_-3"   => "GMT -03:00",
-     "tz_-4"   => "GMT -04:00",
-     );
+$hebcal_cities_old = array(
+'Ashdod' => 'IL-Ashdod',
+'Atlanta' => 'US-Atlanta-GA',
+'Austin' => 'US-Austin-TX',
+'Baghdad' => 'IQ-Baghdad',
+'Beer Sheva' => 'IL-Beer Sheva',
+'Berlin' => 'DE-Berlin',
+'Baltimore' => 'US-Baltimore-MD',
+'Bogota' => 'CO-Bogotá',
+'Boston' => 'US-Boston-MA',
+'Buenos Aires' => 'AR-Buenos Aires',
+'Buffalo' => 'US-Buffalo-NY',
+'Chicago' => 'US-Chicago-IL',
+'Cincinnati' => 'US-Cincinnati-OH',
+'Cleveland' => 'US-Cleveland-OH',
+'Dallas' => 'US-Dallas-TX',
+'Denver' => 'US-Denver-CO',
+'Detroit' => 'US-Detroit-MI',
+'Eilat' => 'IL-Eilat',
+'Gibraltar' => 'GI-Gibraltar',
+'Haifa' => 'IL-Haifa',
+'Hawaii' => 'US-Honolulu-HI',
+'Houston' => 'US-Houston-TX',
+'Jerusalem' => 'IL-Jerusalem',
+'Johannesburg' => 'ZA-Johannesburg',
+'Kiev' => 'UA-Kiev',
+'La Paz' => 'BO-La Paz',
+'Livingston' => 'US-Livingston-NY',
+'London' => 'GB-London',
+'Los Angeles' => 'US-Los Angeles-CA',
+'Miami' => 'US-Miami-FL',
+'Melbourne' => 'AU-Melbourne',
+'Mexico City' => 'MX-Mexico City',
+'Montreal' => 'CA-Montreal',
+'Moscow' => 'RU-Moscow',
+'New York' => 'US-New York-NY',
+'Omaha' => 'US-Omaha-NE',
+'Ottawa' => 'CA-Ottawa',
+'Panama City' => 'PA-Panama City',
+'Paris' => 'FR-Paris',
+'Petach Tikvah' => 'IL-Petach Tikvah',
+'Philadelphia' => 'US-Philadelphia-PA',
+'Phoenix' => 'US-Phoenix-AZ',
+'Pittsburgh' => 'US-Pittsburgh-PA',
+'Saint Louis' => 'US-Saint Louis-MO',
+'Saint Petersburg' => 'RU-Saint Petersburg',
+'San Francisco' => 'US-San Francisco-CA',
+'Seattle' => 'US-Seattle-WA',
+'Sydney' => 'AU-Sydney',
+'Tel Aviv' => 'IL-Tel Aviv',
+'Tiberias' => 'IL-Tiberias',
+'Toronto' => 'CA-Toronto',
+'Vancouver' => 'CA-Vancouver',
+'White Plains' => 'US-White Plains-NY',
+'Washington DC' => 'US-Washington-DC',
+);
+
+function hebcal_tz_names() {
+    global $TIMEZONE_LIST_INIT, $TIMEZONE_ARRAY;
+    if (!isset($TIMEZONE_LIST_INIT)) {
+	$TIMEZONE_LIST_INIT = true;
+	$TIMEZONE_ARRAY = array();
+	$zone_tab = "/usr/share/zoneinfo/zone.tab";
+	if (($fh = fopen($zone_tab, "r")) !== FALSE) {
+	    while (($line = fgets($fh)) !== FALSE) {
+		if (substr($line, 0, 1) != "#") {
+		    $fields = preg_split("/\s+/", $line);
+		    $TIMEZONE_ARRAY[] = $fields[2];
+		}
+	    }
+	    fclose($fh);
+	    sort($TIMEZONE_ARRAY);
+	}
+	array_unshift($TIMEZONE_ARRAY, "UTC");
+    }
+    return $TIMEZONE_ARRAY;
+}
+
+function get_usa_tzid($tz,$state) {
+    if (isset($state) && $state == 'AK' && $tz == -10) {
+	return 'US/Aleutian';
+    } elseif (isset($state) && $state == 'AZ' && $tz == -7) {
+	return 'America/Phoenix';
+    } elseif ($tz == -5) {
+	return 'US/Eastern';
+    } elseif ($tz == -6) {
+	return 'US/Central';
+    } elseif ($tz == -7) {
+	return 'US/Mountain';
+    } elseif ($tz == -8) {
+	return 'US/Pacific';
+    } elseif ($tz == -9) {
+	return 'US/Alaska';
+    } elseif ($tz == -10) {
+	return 'US/Hawaii';
+    }
+    return null;
+}
 
 $hmstr_to_num = array(
     "Nisan" => 8,
@@ -376,11 +393,16 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
     if ($title_append_suffix) {
 	$title .= " | Hebcal Jewish Calendar";
     }
-    $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $self = $_SERVER["PHP_SELF"];
+    $pos = strpos($self, "index.php");
+    if ($pos !== false) {
+	$self = substr($self, 0, $pos);
+    }
+    $base_href = "http://" . $_SERVER["HTTP_HOST"] . $self;
     $base_href = preg_replace('/&/', '&amp;', $base_href);
-    $menu = html_menu_bootstrap($_SERVER["REQUEST_URI"]);
+    $menu = html_menu_bootstrap($_SERVER["PHP_SELF"]);
 
-    if ($_SERVER["REQUEST_URI"] == "/") {
+    if ($self == "/") {
 	$logo = '<span class="brand" id="logo" title="Hebcal Jewish Calendar">Hebcal</span>';
     } else {
 	$logo = '<a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
@@ -465,11 +487,6 @@ function html_footer_bootstrap($last_updated = true) {
 	    . date("c", $stat[9]) . "\">"
 	    . date("j F Y", $stat[9]). "</time>"
 	    . "</p>";
-    }
-
-    $site_title = "Hebcal Jewish Calendar";
-    if ($_SERVER["REQUEST_URI"] != "/") {
-	$site_title = "<a href=\"/\">$site_title</a>";
     }
 
     $html = <<<EOD

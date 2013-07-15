@@ -125,7 +125,7 @@ synagogue's web page.</p>
 
 <div class="row-fluid">
 <div class="span6">
-<form action="<?php echo $_SERVER["REQUEST_URI"] ?>" method="get">
+<form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
 <fieldset><legend>Shabbat times by Zip Code</legend>
 <input type="hidden" name="geo" value="zip">
 <input type="hidden" name="type" value="shabbat">
@@ -141,18 +141,18 @@ Use Ashkenazis Hebrew transliterations</label>
 </div><!-- .span6 -->
 
 <div class="span6">
-<form action="<?php echo $_SERVER["REQUEST_URI"] ?>" method="get">
+<form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
 <fieldset><legend>Shabbat times by Major City</legend>
 <input type="hidden" name="geo" value="city">
 <input type="hidden" name="type" value="shabbat">
 <?php
-global $hebcal_city_tz;
+global $hebcal_cities;
 $entries = array();
-foreach ($hebcal_city_tz as $k => $v) {
-    $entries[$k] = $k;
+foreach ($hebcal_cities as $k => $v) {
+    $entries[$k] = "$v[1], $v[0]";
 }
 echo HTML_Form::returnSelect("city", $entries,
-			     $geo_city ? $geo_city : "Jerusalem",
+			     $geo_city ? $geo_city : "IL-Jerusalem",
 			     1, "", false, 'class="input-medium"');
 ?>
 <label>Havdalah minutes past sundown:

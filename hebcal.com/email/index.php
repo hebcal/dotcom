@@ -2,13 +2,13 @@
 // don't visit DreamHost php4 /usr/local/lib/php
 set_include_path(".:/usr/local/php5/lib/pear");
 
-header("Cache-Control: private");
-$sender = "webmaster@hebcal.com";
-
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 require "../pear/HTML/Form.php";
 
+$sender = "webmaster@hebcal.com";
+
+header("Cache-Control: private");
 echo html_header_bootstrap("Shabbat Candle Lighting Times by Email");
 
 $param = array();
@@ -22,7 +22,7 @@ foreach($_REQUEST as $key => $value) {
     $param[$key] = trim($value);
 }
 
-if ($param["v"])
+if (isset($param["v"]) && $param["v"])
 {
     $email = $param["em"];
     if (!$email)
@@ -62,7 +62,7 @@ else
 	}
     }
 
-    if ($param["unsubscribe"]) {
+    if (isset($param["unsubscribe"]) && $param["unsubscribe"]) {
 	$default_unsubscribe = true;
     }
 
@@ -237,19 +237,18 @@ function form($param, $message = "", $help = "") {
 <?php
     }
 
-    if (!$param["dst"]) {
-	$param["dst"] = "usa";
-    }
-    if (!$param["tz"]) {
-	$param["tz"] = "auto";
-    }
     if (!isset($param["m"])) {
 	$param["m"] = 72;
     }
 
+    $action = $_SERVER["PHP_SELF"];
+    $pos = strpos($action, "index.php");
+    if ($pos !== false) {
+	$action = substr($action, 0, $pos);
+    }
 ?>
 <div id="email-form" class="well well-small">
-<form action="<?php echo $_SERVER["REQUEST_URI"] ?>" method="post">
+<form action="<?php echo $action ?>" method="post">
 <fieldset>
 <label for="em">E-mail address:
 <input type="email" name="em"
@@ -258,27 +257,27 @@ value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
 <label for="city">Closest City:</label>
 <?php
-global $hebcal_city_tz;
+global $hebcal_cities;
 $entries = array();
-foreach ($hebcal_city_tz as $k => $v) {
-    $entries[$k] = $k;
+foreach ($hebcal_cities as $k => $v) {
+    $entries[$k] = "$v[1], $v[0]";
 }
 if ($param["city"]) {
     $geo_city = htmlspecialchars($param["city"]);
 }
 echo HTML_Form::returnSelect("city", $entries,
-			     $geo_city ? $geo_city : "Jerusalem", 1,
+			     isset($geo_city) ? $geo_city : "IL-Jerusalem", 1,
 			     "", false);
 ?>
 &nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $_SERVER["REQUEST_URI"] ?>?geo=zip">zip code</a>)</small>
+href="<?php echo $action ?>?geo=zip">zip code</a>)</small>
 <input type="hidden" name="geo" value="city">
 <?php } else { ?>
 <label for="zip">Zip code:
 <input type="text" name="zip" class="input-mini" maxlength="5"
 pattern="\d*" value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $_SERVER["REQUEST_URI"] ?>?geo=city">closest city</a>)</small>
+href="<?php echo $action ?>?geo=city">closest city</a>)</small>
 <input type="hidden" name="geo" value="zip">
 <?php } ?>
 <label for="m1">Havdalah minutes past sundown:
@@ -367,17 +366,9 @@ function subscribe($param) {
 	    "<ul><li>Please select your time zone below.</li></ul>");
 	}
 
-	global $hebcal_tz_names;
 	$param["tz"] = $tz;
-	$tz_descr = "Time zone: " . $hebcal_tz_names["tz_" . $tz];
-
-	if ($dst) {
-	    $param["dst"] = "usa";
-	} else {
-	    $param["dst"] = "none";
-	}
-
-	$dst_descr = "Daylight Saving Time: " . $param["dst"];
+	$tzid = get_usa_tzid($tz, $state);
+	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["city"]);
     }
@@ -389,8 +380,8 @@ function subscribe($param) {
 	    "Please select a city for candle lighting times.");
 	}
 
-	global $hebcal_city_tz;
-	if (!isset($hebcal_city_tz[$param["city"]]))
+	global $hebcal_cities;
+	if (!isset($hebcal_cities[$param["city"]]))
 	{
 	    form($param,
 	    "Sorry, <strong>" . htmlspecialchars($param["city"]) . "</strong> is\n" .
@@ -398,10 +389,8 @@ function subscribe($param) {
 	}
 
 	$city_descr = $param["city"];
-	global $hebcal_tz_names;
-	$tz_descr = "Time zone: " .
-	     $hebcal_tz_names["tz_" . $hebcal_city_tz[$param["city"]]];
-	$dst_descr = "";
+	$tzid = $hebcal_cities[$param["city"]][4];
+	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["zip"]);
     }
@@ -470,7 +459,6 @@ EOD;
 <p>Email: <strong>$html_email</strong>
 <br>Location: $city_descr
 <br><small>&nbsp;&nbsp;$tz_descr
-<br>&nbsp;&nbsp;$dst_descr
 </small></p>
 </div>
 EOD
@@ -553,7 +541,6 @@ to avoid typos.</p>
 <p><small>
 $city_descr
 <br>&nbsp;&nbsp;$tz_descr
-<br>&nbsp;&nbsp;$dst_descr
 </small></p>
 EOD
 		     ;

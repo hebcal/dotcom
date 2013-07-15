@@ -1,10 +1,7 @@
 <?php
 
-// $Id$
-// $URL$
-
 $incpath = get_include_path();
-set_include_path("$incpath:/home/hebcal/web/hebcal.com/pear");
+set_include_path("$incpath:" . $_SERVER["DOCUMENT_ROOT"] . "/pear");
 
 require "Mail.php";
 require "Mail/RFC822.php";

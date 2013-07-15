@@ -7,8 +7,9 @@ use utf8;
 my $dir = $0;
 $dir =~ s,/[^/]+$,,;
 
-my $outfile = shift;
-die "usage: $0 outfile.pm\n" unless $outfile;
+my $outfile_pm = shift;
+my $outfile_php = shift;
+die "usage: $0 outfile.pm outfile.php\n" unless $outfile_pm && $outfile_php;
 
 my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
@@ -27,8 +28,12 @@ binmode(CITIES, ":utf8");
 open(COUNTRIES, $COUNTRIES_TXT) || die "$COUNTRIES_TXT: $!";
 binmode(COUNTRIES, ":utf8");
 
-open(O,">$outfile.$$") || die "$outfile.$$: $!\n";
+open(O,">$outfile_pm.$$") || die "$outfile_pm.$$: $!\n";
 binmode(O, ":utf8");
+open(OPHP,">$outfile_php.$$") || die "$outfile_php.$$: $!\n";
+binmode(OPHP, ":utf8");
+
+print OPHP "<?php\n";
 
 print O "package HebcalConst;\n\n";
 
@@ -45,6 +50,7 @@ close(COUNTRIES);
 print O ");\n\n";
 
 print O "\%HebcalConst::CITIES_NEW = (\n";
+print OPHP "\$hebcal_cities = array(\n";
 while(<CITIES>) {
     chomp;
     my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
@@ -58,9 +64,11 @@ while(<CITIES>) {
 	$id .= $city;
     }
     print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,'$woeid'],\n";
+    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,'$woeid'),\n";
 }
 close(CITIES);
 print O ");\n\n";
+print OPHP ");\n\n";
 
 print O "%HebcalConst::SEDROT = (\n";
 foreach my $h (sort keys %{$axml->{"parsha"}})
@@ -126,7 +134,11 @@ print O ");\n\n";
 print O "1;\n";
 
 close(O);
-rename("$outfile.$$", $outfile) || die "$outfile: $!\n";
+rename("$outfile_pm.$$", $outfile_pm) || die "$outfile_pm: $!\n";
+
+close(OPHP);
+rename("$outfile_php.$$", $outfile_php) || die "$outfile_php: $!\n";
+
 
 exit(0);
 

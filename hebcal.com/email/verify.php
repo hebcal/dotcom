@@ -39,8 +39,6 @@ EOD;
 	"m" => $havdalah,
 	"upd" => $optin_announce,
 	"zip" => $zip,
-	"tz" => $timezone,
-	"dst" => $dst,
 	"city" => $city,
 	"t" => $created,
 	);
@@ -146,17 +144,15 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	    hebcal_get_zipcode_fields($info["zip"]);
 	$city_descr = "$city, $state " . $info["zip"];
-	global $hebcal_tz_names;
 	$info["tz"] = $tz;
-	$tz_descr = "Time zone: " . $hebcal_tz_names["tz_" . $tz];
-	$dst_descr = "Daylight Saving Time: " . ($dst ? "usa" : "none");
+	$tzid = get_usa_tzid($tz, $state);
+	$tz_descr = "Time zone: " . $tzid;
 	unset($info["city"]);
     } else {
 	$city_descr = $info["city"];
-	global $hebcal_tz_names;
-	$tz_descr = "Time zone: " .
-	     $hebcal_tz_names["tz_" . $hebcal_city_tz[$info["city"]]];
-	$dst_descr = "";
+	global $hebcal_cities;
+	$tzid = $hebcal_cities[$info["city"]][4];
+	$tz_descr = "Time zone: " . $tzid;
 	unset($info["zip"]);
     }
     echo html_header_bootstrap("Confirm Email Subscription");
@@ -167,9 +163,8 @@ candle lighting times and Torah portion by email.</p>
 <p>Email: <strong><?php echo $info["em"] ?></strong>
 <br>Location: <?php echo $city_descr ?>
 <br><small>&nbsp;&nbsp;<?php echo $tz_descr ?>
-<br>&nbsp;&nbsp;<?php echo $dst_descr ?>
 </small></p>
-<form method="post" action="<?php echo $_SERVER["REQUEST_URI"] ?>">
+<form method="post" action="<?php echo $_SERVER["PHP_SELF"] ?>">
 <input type="hidden" name="k" value="<?php echo $info["id"] ?>">
 <input type="hidden" name="commit" value="1">
 <button type="submit" name="sub1" id="sub1" value="1" class="btn btn-success">Confirm Subscription</button>

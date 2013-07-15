@@ -22,7 +22,7 @@ xml2perl: $(SITE_PERL)/HebcalConst.pm
 converter: $(CONVERTER_SEDRA)
 
 $(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
-	./gen_const.pl $(SITE_PERL)/HebcalConst.pm
+	./gen_const.pl $(SITE_PERL)/HebcalConst.pm ../pear/Hebcal/const.inc
 
 $(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
 	./gen_daily_sedra.pl 1900 2099
