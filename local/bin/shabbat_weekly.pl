@@ -471,6 +471,9 @@ EOD
 	if ($zip) {
 	    $cfg .= ";zip=$zip";
 	} elsif ($city) {
+	    if (defined($Hebcal::CITIES_OLD{$city})) {
+		$city = $Hebcal::CITIES_OLD{$city};
+	    }
 	    $cfg .= ";city=$city";
 	}
 	$SUBS{$email} = $cfg;
