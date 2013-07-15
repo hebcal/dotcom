@@ -44,6 +44,7 @@ use Hebcal ();
 use Date::Calc ();
 use Time::Local ();
 use POSIX qw(strftime);
+use DBI;
 
 my $HOSTNAME = "www.hebcal.com";
 
@@ -143,44 +144,40 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     $hmonth =~ s/[^A-Za-z0-9]+//g;
 
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-en.xml") || die;
-    print RSS qq{<?xml version="1.0" ?>
-<rss version="2.0">
-<channel>
-<title>Hebrew Date</title>
-<link>http://$HOSTNAME/converter/</link>
-<description>Today\'s Hebrew Date from Hebcal.com</description>
-<language>en-us</language>
-<copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
-<lastBuildDate>$pubDate</lastBuildDate>
-<item>
-<title>$hdate</title>
-<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;tag=rss</link>
-<description>$hdate</description>
-<pubDate>$pubDate</pubDate>
-</item>
-</channel>
-</rss>
-};
+    print RSS rss_hebdate("en-us",
+	 $hdate,
+	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;tag=rss";
+	 $hdate);
     close(RSS);
 
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-he.xml") || die;
-    print RSS qq{<?xml version="1.0" ?>
+    print RSS rss_hebdate("he",
+	 $hebrew,
+	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss",
+	 $hebrew);
+    close(RSS);
+}
+exit(0);
+
+sub rss_hebdate {
+    my($language,$title,$link,$description) = @_;
+
+    return qq{<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
 <title>Hebrew Date</title>
 <link>http://$HOSTNAME/converter/</link>
 <description>Today\'s Hebrew Date from Hebcal.com</description>
-<language>he</language>
+<language>$language</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
-<title>$hebrew</title>
-<link>http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss</link>
-<description>$hebrew</description>
+<title>$title</title>
+<link>$link</link>
+<description>$description</description>
 <pubDate>$pubDate</pubDate>
 </item>
 </channel>
 </rss>
 };
-    close(RSS);
 }
