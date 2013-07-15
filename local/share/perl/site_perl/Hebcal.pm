@@ -404,6 +404,7 @@ sub invoke_hebcal
     $cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
     $cmd_smashed =~ s/\s+//g;
     $cmd_smashed =~ s/\'//g;
+    $cmd_smashed =~ s/\//_/g;
 
     my $hccache;
     my $login = getlogin() || getpwuid($<) || "UNKNOWN";
@@ -1296,7 +1297,7 @@ sub html_city_select
 	    ? $country
 	    : $HebcalConst::COUNTRIES{$country}->[1];
 	$groups{$grp} = [] unless defined $groups{$grp};
-	push(@{$groups{$grp}}, $id);
+	push(@{$groups{$grp}}, [$id, $country, Hebcal::woe_country($id), $city]);
     }
     foreach my $grp (qw(US CA IL EU NA SA AS OC AF AN)) {
 	next unless defined $groups{$grp};
@@ -1304,16 +1305,17 @@ sub html_city_select
 	    ? $HebcalConst::COUNTRIES{$grp}->[0]
 	    : $Hebcal::CONTINENTS{$grp};
 	$retval .= "<optgroup label=\"$label\">\n";
-	foreach my $id (sort sort_city_info @{$groups{$grp}}) {
-	    my $opt_city = woe_city($id);
-	    $opt_city =~ s/, /-/;
-	    my $id = woe_country_code($id) . "-" . $opt_city;
-	    my $opt_country = woe_country($id);
-	    $opt_country = "USA" if $opt_country eq "United States of America";
-	    $retval .= sprintf "<option%s value=\"%s\">%s, %s</option>\n",
+	foreach my $info (sort {$a->[3] cmp $b->[3]} @{$groups{$grp}}) {
+	    my($id,$cc,$country,$city) = @{$info};
+	    my $city_country = $city;
+	    if ($cc eq "US") {
+		$city_country .= ", USA";
+	    } else {
+		$city_country .= ", $country";
+	    }
+	    $retval .= sprintf "<option%s value=\"%s\">%s</option>\n",
 		defined $selected_city && $id eq $selected_city ? " selected" : "",
-		$id,
-		woe_city($id), $opt_country;
+		$id, $city_country;
 	}
 	$retval .= "</optgroup>\n";
     }
