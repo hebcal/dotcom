@@ -640,15 +640,15 @@ sub dba_display
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
 
-    my $dst = (defined($q->param("dst")) && $q->param("dst") eq "usa") ? 1 : 0;
-    my $tz = $q->param("tz");
-
-    if (defined $q->param("geo") && $q->param("geo") eq "city" &&
-	defined $q->param("city") && $q->param("city") ne "")
-    {
-	$dst = $Hebcal::city_dst{$q->param("city")} eq "usa" ? 1 : 0;
-	$tz = $Hebcal::city_tz{$q->param("city")};
-    }
+    my $dst;
+    my $tz;
+    if ($cconfig{"geo"} eq "zip") {
+	$tz = $cconfig{"tz_offset"};
+	$dst = $cconfig{"tz_dst"};
+    } elsif ($cconfig{"geo"} eq "city") {
+	$tz = $Hebcal::CITY_TZ_OFFSET{$q->param("city")};
+	$dst = $Hebcal::CITY_TZ_DST{$q->param("city")};
+    } 
 
     Hebcal::export_http_header($q, "application/x-palm-dba");
 
