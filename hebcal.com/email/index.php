@@ -249,28 +249,28 @@ function form($param, $message = "", $help = "") {
 <div id="email-form" class="well well-small">
 <form action="<?php echo $action ?>" method="post">
 <fieldset>
-<label for="em">E-mail address:
+<label>E-mail address:
 <input type="email" name="em"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 </label>
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
-<label for="city">Closest City:
+<label>Closest City:
 <?php
-echo html_city_select(isset($geo_city) ? $geo_city : "IL-Jerusalem");
+echo html_city_select(isset($param["city"]) ? $param["city"] : "IL-Jerusalem");
 ?>
 </label>
 &nbsp;&nbsp;<small>(or select by <a
 href="<?php echo $action ?>?geo=zip">zip code</a>)</small>
 <input type="hidden" name="geo" value="city">
 <?php } else { ?>
-<label for="zip">Zip code:
+<label>ZIP code:
 <input type="text" name="zip" class="input-mini" maxlength="5"
 pattern="\d*" value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
 href="<?php echo $action ?>?geo=city">closest city</a>)</small>
 <input type="hidden" name="geo" value="zip">
 <?php } ?>
-<label for="m1">Havdalah minutes past sundown:
+<label>Havdalah minutes past sundown:
 <input type="text" name="m" pattern="\d*" value="<?php
   echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3">
 </label>
