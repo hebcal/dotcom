@@ -292,14 +292,15 @@ Shabbat Times</h2>
 <input type="hidden" name="geo" value="zip">
 <label>ZIP code:
 <input type="text" name="zip" size="5" maxlength="5" class="input-mini"
-<?php if ($param["zip"]) { echo "value=\"$param[zip]\" "; } ?>
+<?php if (isset($param["zip"])) { echo "value=\"$param[zip]\" "; } ?>
 pattern="\d*" id="zip"></label>
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
 <button type="submit" class="btn"><i class="icon-time"></i> Shabbat Times &raquo;</button>
 </form>
-<?php if ($param["zip"]) { ?>
-<p><a class="btn" href="/shabbat/fridge.cgi?zip=<?php echo $param["zip"] ?>;year=<?php
+<?php if (isset($param["zip"]) || isset($param["city"])) { ?>
+<p><a class="btn" href="/shabbat/fridge.cgi?<?php
+  echo isset($param["zip"]) ? "zip=$param[zip]" : "city=$param[city]" ?>;year=<?php
   echo $hebyear ?>"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
 <?php } else { ?>
 <p><a class="btn" href="/home/shabbat/fridge"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>

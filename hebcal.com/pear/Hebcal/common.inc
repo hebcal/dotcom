@@ -36,6 +36,16 @@
 
 require "const.inc";
 
+$hebcal_continents = array(
+    'AF' => 'Africa',
+    'AS' => 'Asia',
+    'EU' => 'Europe',
+    'NA' => 'North America',
+    'SA' => 'South America',
+    'OC' => 'Oceania',
+    'AN' => 'Antarctica',
+    );
+
 $hebcal_cities_old = array(
 'Ashdod' => 'IL-Ashdod',
 'Atlanta' => 'US-Atlanta-GA',
@@ -92,6 +102,55 @@ $hebcal_cities_old = array(
 'White Plains' => 'US-White Plains-NY',
 'Washington DC' => 'US-Washington-DC',
 );
+
+function city_cmp($a, $b) {
+    return strcmp($a[3], $b[3]);
+}
+
+function html_city_select($selected_city = false) {
+    global $hebcal_cities, $hebcal_countries, $hebcal_continents;
+    $retval = "<select name=\"city\" class=\"input-xlarge\">\n";
+    $groups = array();
+    $special_countries = array("US"=>1,"CA"=>1,"IL"=>1);
+    foreach ($hebcal_cities as $id => $info) {
+	$country = $info[0];
+	$city = $info[1];
+	$grp = isset($special_countries[$country])
+	    ? $country
+	    : $hebcal_countries[$country][1];
+	if (!isset($groups[$grp])) {
+	    $groups[$grp] = array();
+	}
+	$groups[$grp][] = array($id, $country, $hebcal_countries[$country][0], $city);
+    }
+    foreach (explode(" ", "US CA IL EU NA SA AS OC AF") as $grp) {
+	$label = isset($special_countries[$grp])
+	    ? $hebcal_countries[$grp][0]
+	    : $hebcal_continents[$grp];
+	$retval .= "<optgroup label=\"$label\">\n";
+	usort($groups[$grp], "city_cmp");
+	foreach ($groups[$grp] as $info) {
+	    $id = $info[0];
+	    $cc = $info[1];
+	    $country = $info[2];
+	    $city = $info[3];
+	    $city_country = $city;
+	    if ($cc == "US") {
+		$city_country .= ", USA";
+	    } else {
+		$city_country .= ", $country";
+	    }
+	    $retval .= "<option";
+	    if ($selected_city && $id == $selected_city) {
+		$retval .= " selected";
+	    }
+	    $retval .= " value=\"$id\">$city_country</option>\n";
+	}
+	$retval .= "</optgroup>\n";
+    }
+    $retval .= "</select>\n";
+    return $retval;
+}
 
 function hebcal_tz_names() {
     global $TIMEZONE_LIST_INIT, $TIMEZONE_ARRAY;

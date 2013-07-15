@@ -2,9 +2,6 @@
 
 require "../pear/Hebcal/common.inc";
 
-if (isset($_COOKIE["C"])) {
-    parse_str($_COOKIE["C"], $param);
-}
 foreach($_REQUEST as $key => $value) {
     $param[$key] = $value;
 }
@@ -14,7 +11,7 @@ if (isset($param["m"]) && is_numeric($param["m"])) {
 } else {
     $m = 72;
 }
-if ($param["zip"] && preg_match('/^\d{5}$/', $param["zip"])) {
+if (isset($param["zip"]) && preg_match('/^\d{5}$/', $param["zip"])) {
     $zip = $param["zip"];
 } else {
     $zip = 90210;
@@ -24,8 +21,9 @@ if (isset($param["city"])) {
     $geo_city = $param["city"];
     $geo_link = "geo=city;city=" . urlencode($geo_city);
 
-    $geo_city = htmlspecialchars($geo_city);
-    $descr = $geo_city;
+    global $hebcal_cities;
+    $info = $hebcal_cities[$geo_city];
+    $descr = $info[1] . ", " . $hebcal_countries[$info[0]][0];
 } else {
     list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
 	hebcal_get_zipcode_fields($zip);
@@ -145,14 +143,7 @@ Use Ashkenazis Hebrew transliterations</label>
 <input type="hidden" name="geo" value="city">
 <input type="hidden" name="type" value="shabbat">
 <?php
-global $hebcal_cities;
-$entries = array();
-foreach ($hebcal_cities as $k => $v) {
-    $entries[$k] = "$v[1], $v[0]";
-}
-echo html_form_select("city", $entries,
-			     isset($geo_city) ? $geo_city : "IL-Jerusalem",
-			     1, "", false, 'class="input-medium"');
+echo html_city_select(isset($geo_city) ? $geo_city : "IL-Jerusalem");
 ?>
 <label>Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" style="width:auto">

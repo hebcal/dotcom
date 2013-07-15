@@ -39,6 +39,7 @@ print O "package HebcalConst;\n\n";
 print O "use utf8;\n\n";
 
 print O "\%HebcalConst::COUNTRIES = (\n";
+print OPHP "\$hebcal_countries = array(\n";
 print OJS "HEBCAL.countries={";
 my $first = 1;
 while(<COUNTRIES>) {
@@ -51,9 +52,11 @@ while(<COUNTRIES>) {
 
     $name =~ s/\'/\\\'/g;
     print O "'$code'=>['$name','$continent_code'],\n";
+    print OPHP "'$code'=>array('$name','$continent_code'),\n";
 }
 close(COUNTRIES);
 print O ");\n\n";
+print OPHP ");\n\n";
 print OJS "};\n";
 
 

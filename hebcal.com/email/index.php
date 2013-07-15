@@ -254,20 +254,11 @@ function form($param, $message = "", $help = "") {
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 </label>
 <?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
-<label for="city">Closest City:</label>
+<label for="city">Closest City:
 <?php
-global $hebcal_cities;
-$entries = array();
-foreach ($hebcal_cities as $k => $v) {
-    $entries[$k] = "$v[1], $v[0]";
-}
-if ($param["city"]) {
-    $geo_city = htmlspecialchars($param["city"]);
-}
-echo html_form_select("city", $entries,
-			     isset($geo_city) ? $geo_city : "IL-Jerusalem", 1,
-			     "", false);
+echo html_city_select(isset($geo_city) ? $geo_city : "IL-Jerusalem");
 ?>
+</label>
 &nbsp;&nbsp;<small>(or select by <a
 href="<?php echo $action ?>?geo=zip">zip code</a>)</small>
 <input type="hidden" name="geo" value="city">
