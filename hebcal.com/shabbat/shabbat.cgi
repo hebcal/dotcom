@@ -136,7 +136,7 @@ sub self_url
 
     $url .= "&zip=" . $q->param('zip')
 	if $q->param('zip');
-    $url .= "&city=" . uri_escape_utf8($q->param('city'))
+    $url .= "&city=" . URI::Escape::uri_escape_utf8($q->param('city'))
 	if $q->param('city');
     $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
@@ -402,7 +402,7 @@ sub more_from_hebcal {
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
-	$url .= "city=" . uri_escape_utf8($q->param('city'));
+	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param('city'));
     }
 
     $url .= "&m=" . $q->param('m')
@@ -420,7 +420,7 @@ sub more_from_hebcal {
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
-	$url .= "city=" . uri_escape_utf8($q->param('city'));
+	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param('city'));
     }
     $url .= "&year=" . $hyear;
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
@@ -444,7 +444,7 @@ EOHTML
     if ($q->param('zip')) {
 	$url .= "zip=" . $q->param('zip');
     } else {
-	$url .= "city=" . uri_escape_utf8($q->param('city'));
+	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param('city'));
     }
     $url .= "&m=" . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);

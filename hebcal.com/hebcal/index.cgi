@@ -1196,7 +1196,7 @@ accurate.
 	    if ($q->param("zip")) {
 		$url .= "zip=" . $q->param("zip");
 	    } else {
-		$url .= "city=" . uri_escape_utf8($q->param("city"));
+		$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
 	    }
 
 	    my $hyear;

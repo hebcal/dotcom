@@ -45,7 +45,6 @@ use XML::Simple ();
 use LWP::UserAgent;
 use HTTP::Request;
 use Image::Magick;
-use URI::Escape qw(uri_escape_utf8);
 use POSIX qw(strftime);
 use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();

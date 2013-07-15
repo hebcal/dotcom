@@ -194,7 +194,7 @@ EOHTML
     if ($q->param("zip")) {
 	$url_base .= "zip=" . $q->param("zip");
     } else {
-	$url_base .= "city=" . uri_escape_utf8($q->param("city"));
+	$url_base .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
     }
     $url_base .= "&amp;year=";
 
