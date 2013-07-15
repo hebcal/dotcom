@@ -88,7 +88,9 @@ sub get_candidates
 {
     my $site = "hebcal.com";
 
-    my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+    my $ini_path = "/home/hebcal/local/etc/hebcal-dot-com.ini";
+    my $Config = Config::Tiny->read($ini_path)
+	or die "$ini_path: $!\n";
     my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
     my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
     my $dbpass = $Config->{_}->{"hebcal.mysql.password"};

@@ -41,7 +41,8 @@ use Hebcal ();
 use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
 
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 
 my $EMAIL_FROM = $Config->{_}->{"hebcal.email.facebook.from"};
 my $EMAIL_TO = $Config->{_}->{"hebcal.email.facebook.to"};

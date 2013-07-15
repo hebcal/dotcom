@@ -2700,7 +2700,8 @@ sub sendmail_v2
     }
 
     unless ($CONFIG_INI) {
-	$CONFIG_INI = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
+	$CONFIG_INI = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+	    or die "$Hebcal::CONFIG_INI_PATH: $!";
     }
 
     my $sendmail_host = $CONFIG_INI->{_}->{"hebcal.email.adhoc.host"};

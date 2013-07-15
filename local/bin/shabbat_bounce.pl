@@ -47,7 +47,9 @@ use Email::Valid ();
 use Mail::DeliveryStatus::BounceParser ();
 use Config::Tiny;
 
-my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+my $ini_path = "/home/hebcal/local/etc/hebcal-dot-com.ini";
+my $Config = Config::Tiny->read($ini_path)
+    or die "$ini_path: $!\n";
 my $DBHOST = $Config->{_}->{"hebcal.mysql.host"};
 my $DBUSER = $Config->{_}->{"hebcal.mysql.user"};
 my $DBPASS = $Config->{_}->{"hebcal.mysql.password"};

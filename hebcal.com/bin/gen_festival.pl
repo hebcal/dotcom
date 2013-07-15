@@ -167,7 +167,8 @@ holidays_observed(\%OBSERVED);
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
 # Set up the helper
-my $Config = Config::Tiny->read("/home/hebcal/local/etc/hebcal-dot-com.ini");
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 my $AWS_HOST = $Config->{_}->{"hebcal.aws.product-api.host"};
 my $helper = new RequestSignatureHelper (
     +RequestSignatureHelper::kAWSAccessKeyId => $Config->{_}->{"hebcal.aws.product-api.id"},

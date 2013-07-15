@@ -47,7 +47,8 @@ use Email::Valid ();
 use MIME::Base64 ();
 use Config::Tiny;
 
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 my $DBHOST = $Config->{_}->{"hebcal.mysql.host"};
 my $DBUSER = $Config->{_}->{"hebcal.mysql.user"};
 my $DBPASS = $Config->{_}->{"hebcal.mysql.password"};

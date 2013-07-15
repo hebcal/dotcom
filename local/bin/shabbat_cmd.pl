@@ -41,7 +41,8 @@ use DBI ();
 use Hebcal ();
 use Config::Tiny;
 
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
 my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
 my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
