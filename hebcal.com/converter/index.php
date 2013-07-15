@@ -41,7 +41,8 @@ require("../pear/Hebcal/common.inc");
 $calinf = cal_info(CAL_GREGORIAN);
 $MoY_long = $calinf["months"];
 
-if ($_GET["h2g"] && $_GET["hm"] && $_GET["hd"] && $_GET["hy"])
+if (isset($_GET["h2g"]) && $_GET["h2g"] &&
+    isset($_GET["hm"]) && isset($_GET["hd"]) && isset($_GET["hy"]))
 {
     $type = "h2g";
     $hd = $_GET["hd"];
@@ -67,7 +68,7 @@ if ($_GET["h2g"] && $_GET["hm"] && $_GET["hd"] && $_GET["hy"])
 else
 {
     $type = "g2h";
-    if ($_GET["gm"] && $_GET["gd"] && $_GET["gy"])
+    if (isset($_GET["gm"]) && isset($_GET["gd"]) && isset($_GET["gy"]))
     {
 	$gm = $_GET["gm"];
 	$gd = $_GET["gd"];
@@ -87,8 +88,8 @@ else
 	    form(true, "Gregorian year out of valid range 0001-9999", "");
 	}
 
-	# after sunset?
-	if ($_GET["gs"])
+	// after sunset?
+	if (isset($_GET["gs"]) && $_GET["gs"])
 	{
 	    $jd = gregoriantojd($gm, $gd, $gy);
 	    $greg = jdtogregorian($jd + 1);
@@ -97,7 +98,7 @@ else
     }
     else
     {
-	$now = ($_GET["t"] && is_numeric($_GET["t"])) ? $_GET["t"] : time();
+	$now = (isset($_GET["t"]) && is_numeric($_GET["t"])) ? $_GET["t"] : time();
 
 	list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
 	    localtime($now);
@@ -114,7 +115,7 @@ if ($type == "g2h")
     $hebdate = jdtojewish($jd); 
     list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
     $hm = $hnum_to_str[$hmnum];
-#    $hmstr = jdmonthname($jd,4);
+//    $hmstr = jdmonthname($jd,4);
 }
 else
 {
