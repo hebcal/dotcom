@@ -251,7 +251,7 @@ woe329616	VG	Road Town	18.4167	-64.6167	America/Tortola	-4	0
 woe1236594	VN	Hanoi	21.0333	105.85	Asia/Phnom_Penh	7	0
 woe980858	WS	Apia	-13.8333	-171.7333	Pacific/Samoa	-11	0
 woe1365571	YT	Mamoudzou	-12.7794	45.2272	Indian/Mayotte	3	0
-woe1582504	ZA	Johannesburg	-26.2000	28.0833	Africa/Johannesburg	2	0 
+woe1582504	ZA	Johannesburg	-26.2000	28.0833	Africa/Johannesburg	2	0
 woe1586638	ZA	Pretoria	-25.7069	28.2294	Africa/Johannesburg	2	0
 woe1569006	ZM	Lusaka	-15.4167	28.2833	Africa/Lusaka	2	0
 woe1467052	ZW	Harare	-17.8178	31.0447	Africa/Harare	2	0
@@ -268,5 +268,5 @@ woe784794	CH	Zurich	47.377060	8.539550	Europe/Zurich	1	1
 woe99999998	IL	Petach Tikvah	32.08333333	34.88333333	Asia/Jerusalem	2	1
 woe99999997	US	Honolulu, HI	21.3	-157.8166666667	US/Hawaii	-10	0
 woe99999996	IL	Be'er Sheva	31.243166667	34.793	Asia/Jerusalem	2	1
-woe99999995	IL	Rishon LeZion	31.95		34.800	Asia/Jerusalem	2	1 
-woe99999994	IL	Ashkelon	31.6666667		34.56666667	Asia/Jerusalem	2	1 
+woe99999995	IL	Rishon LeZion	31.95	34.800	Asia/Jerusalem	2	1
+woe99999994	IL	Ashkelon	31.6666667	34.56666667	Asia/Jerusalem	2	1
