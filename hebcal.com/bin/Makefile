@@ -11,7 +11,7 @@ DBDIR = ../hebcal
 HOLIDAYS = ../holidays
 CONVERTER_SEDRA = ../converter/sedra/20/2099.inc
 
-all: xml2perl sedrot holidays json converter
+all: xml2perl sedrot holidays converter
 
 holidays: $(HOLIDAYS)/purim
 
@@ -21,16 +21,11 @@ xml2perl: $(SITE_PERL)/HebcalConst.pm
 
 converter: $(CONVERTER_SEDRA)
 
-$(SITE_PERL)/HebcalConst.pm: $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
-	./gen_const.pl $(SITE_PERL)/HebcalConst.pm ../pear/Hebcal/const.inc
+$(SITE_PERL)/HebcalConst.pm $(CITIES_JSON): $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
+	./gen_const.pl $(SITE_PERL)/HebcalConst.pm ../pear/Hebcal/const.inc $(CITIES_JSON)
 
 $(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
 	./gen_daily_sedra.pl 1900 2099
-
-json: $(CITIES_JSON)
-
-$(CITIES_JSON): $(CITIES_TXT) gen_cities_json.pl
-	./gen_cities_json.pl $(CITIES_TXT) opencountrycodes.xml $(CITIES_JSON)
 
 $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)

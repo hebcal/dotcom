@@ -2,14 +2,12 @@
 
 use strict;
 use XML::Simple;
-use utf8;
 
-my $dir = $0;
-$dir =~ s,/[^/]+$,,;
+die "usage: $0 outfile.pm outfile.php outfile.js\n" unless @ARGV == 3;
 
 my $outfile_pm = shift;
 my $outfile_php = shift;
-die "usage: $0 outfile.pm outfile.php\n" unless $outfile_pm && $outfile_php;
+my $outfile_js = shift;
 
 my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
@@ -32,43 +30,63 @@ open(O,">$outfile_pm.$$") || die "$outfile_pm.$$: $!\n";
 binmode(O, ":utf8");
 open(OPHP,">$outfile_php.$$") || die "$outfile_php.$$: $!\n";
 binmode(OPHP, ":utf8");
+open(OJS,">$outfile_js.$$") || die "$outfile_js.$$: $!\n";
+binmode(OJS, ":utf8");
 
 print OPHP "<?php\n";
-
+print OJS "if(typeof HEBCAL==\"undefined\"||!HEBCAL){var HEBCAL={};}\n";
 print O "package HebcalConst;\n\n";
-
 print O "use utf8;\n\n";
 
 print O "\%HebcalConst::COUNTRIES = (\n";
+print OJS "HEBCAL.countries={";
+my $first = 1;
 while(<COUNTRIES>) {
     chomp;
     my($code,$name,$full_name,$iso3,$number,$continent_code) = split(/\|/);
+
+    print OJS "," unless $first;
+    $first = 0;
+    print OJS qq{"$code":["$name","$continent_code"]};
+
     $name =~ s/\'/\\\'/g;
     print O "'$code'=>['$name','$continent_code'],\n";
 }
 close(COUNTRIES);
 print O ");\n\n";
+print OJS "};\n";
+
 
 print O "\%HebcalConst::CITIES_NEW = (\n";
 print OPHP "\$hebcal_cities = array(\n";
+print OJS "HEBCAL.cities={";
+$first = 1;
 while(<CITIES>) {
     chomp;
     my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
-    $city =~ s/\'/\\\'/g;
+    die "$CITIES_TXT:$. something looks fishy"
+	if $latitude eq "" || $longitude eq "" || $tzName !~ m,/, || int($tzOffset) ne $tzOffset || $dst !~ /^(0|1)$/;
+    my $id_city = $city;
+    $id_city =~ s/\'//g;
     my $id = $country . "-";
     if ($country eq "US") {
-	my $id_city = $city;
 	$id_city =~ s/, /-/;
-	$id .= $id_city;
-    } else {
-	$id .= $city;
     }
-    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,'$woeid'],\n";
-    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,'$woeid'),\n";
+    $id .= $id_city;
+    $woeid =~ s/^woe//;
+
+    print OJS "," unless $first;
+    $first = 0;
+    print OJS qq{"$id":["$country","$city",$latitude,$longitude,"$tzName",$tzOffset,$dst,$woeid]};
+
+    $city =~ s/\'/\\\'/g;
+    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,$woeid],\n";
+    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,$woeid),\n";
 }
 close(CITIES);
 print O ");\n\n";
 print OPHP ");\n\n";
+print OJS "};\n";
 
 print O "%HebcalConst::SEDROT = (\n";
 foreach my $h (sort keys %{$axml->{"parsha"}})
@@ -139,6 +157,8 @@ rename("$outfile_pm.$$", $outfile_pm) || die "$outfile_pm: $!\n";
 close(OPHP);
 rename("$outfile_php.$$", $outfile_php) || die "$outfile_php: $!\n";
 
+close(OJS);
+rename("$outfile_js.$$", $outfile_js) || die "$outfile_js: $!\n";
 
 exit(0);
 
