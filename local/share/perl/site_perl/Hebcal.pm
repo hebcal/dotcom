@@ -2533,6 +2533,7 @@ sub vcalendar_write_contents
     out_html(undef, qq{END:VCALENDAR$endl});
 
     if (defined $dbh) {
+      undef $sth;
       $dbh->disconnect();
     }
 
