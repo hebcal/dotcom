@@ -232,32 +232,45 @@ function hebcal_open_mysql_db() {
 }
 
 function hebcal_get_zipcode_fields($zip) {
-    global $hebcal_db;
-    hebcal_open_mysql_db();
+    global $hebcal_zip_db;
+
+    $file = $_SERVER["DOCUMENT_ROOT"] . "/hebcal/zips.sqlite3";
+    $db = new SQLite3($file);
+    if (!$db) {
+	error_log("Could not open SQLite3 $file");
+	die();
+    }
+
     $sql = <<<EOD
 SELECT zips_latitude, zips_longitude,
        zips_timezone, zips_dst, zips_city, zips_state
-FROM hebcal5.hebcal_zips
+FROM hebcal_zips
 WHERE zips_zipcode = '$zip'
 EOD;
 
-    $result = mysql_query($sql, $hebcal_db)
-	or die("Invalid query: " . mysql_error());
+    $query = $db->query($sql); 
+    if (!$query) {
+	error_log("Loading zip $zip from $file: " . $db->lastErrorMsg());
+	die();
+    }
 
     list($latitude,$longitude,$tz,$dst,$city,$state) =
-	mysql_fetch_row($result);
+	$query->fetchArray(SQLITE3_NUM);
 
-    mysql_free_result($result);
+    // clean up
+    unset($query);
+    $db->close();
+    unset($db);
 
     if (!$state)  {
 	return null;
     }
 
-    # remove any prefixed + signs from the strings
+    // remove any prefixed + signs from the strings
     $latitude = preg_replace('/^\+/', "", $latitude);
     $longitude = preg_replace('/^\+/', "", $longitude);
 
-    # in hebcal, negative longitudes are EAST (this is backwards)
+    // in hebcal, negative longitudes are EAST (this is backwards)
     $longitude *= -1.0;
 
     list($long_deg,$long_min) = explode(".", $longitude, 2);
@@ -398,9 +411,7 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
     if ($pos !== false) {
 	$self = substr($self, 0, $pos);
     }
-    $base_href = "http://" . $_SERVER["HTTP_HOST"] . $self;
-    $base_href = preg_replace('/&/', '&amp;', $base_href);
-    $menu = html_menu_bootstrap($_SERVER["PHP_SELF"]);
+    $menu = html_menu_bootstrap($self);
 
     if ($self == "/") {
 	$logo = '<span class="brand" id="logo" title="Hebcal Jewish Calendar">Hebcal</span>';
@@ -414,7 +425,6 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
-<base href="$base_href" target="_top">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
 <link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
