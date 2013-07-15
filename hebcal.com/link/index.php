@@ -1,7 +1,6 @@
 <?php
 
 require "../pear/Hebcal/common.inc";
-require "../pear/HTML/Form.php";
 
 if (isset($_COOKIE["C"])) {
     parse_str($_COOKIE["C"], $param);
@@ -21,7 +20,7 @@ if ($param["zip"] && preg_match('/^\d{5}$/', $param["zip"])) {
     $zip = 90210;
 }
 
-if ($param["city"]) {
+if (isset($param["city"])) {
     $geo_city = $param["city"];
     $geo_link = "geo=city;city=" . urlencode($geo_city);
 
@@ -151,8 +150,8 @@ $entries = array();
 foreach ($hebcal_cities as $k => $v) {
     $entries[$k] = "$v[1], $v[0]";
 }
-echo HTML_Form::returnSelect("city", $entries,
-			     $geo_city ? $geo_city : "IL-Jerusalem",
+echo html_form_select("city", $entries,
+			     isset($geo_city) ? $geo_city : "IL-Jerusalem",
 			     1, "", false, 'class="input-medium"');
 ?>
 <label>Havdalah minutes past sundown:

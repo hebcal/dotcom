@@ -34,7 +34,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **********************************************************************/
 
-require("./HTML/Form.php");
 require("../pear/Hebcal/hebnum.inc");
 require("../pear/Hebcal/common.inc");
 
@@ -308,7 +307,7 @@ function form($head, $message, $help = "") {
 <input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
 <?php
 global $MoY_long;
-echo HTML_Form::returnSelect("gm", $MoY_long, $gm, 1, "", false, 'class="input-medium"');
+echo html_form_select("gm", $MoY_long, $gm, 1, "", false, 'class="input-medium"');
 ?>
 <input style="width:auto" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
 </div><!-- .controls-row -->
@@ -327,7 +326,7 @@ After sunset</label>
 <div class="controls controls-row">
 <input style="width:auto" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
 <?php
-echo HTML_Form::returnSelect("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-medium"');
+echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-medium"');
 ?>
 <input style="width:auto" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .controls-row -->

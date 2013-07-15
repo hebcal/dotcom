@@ -569,4 +569,50 @@ function get_saturday($gy, $gm, $gd) {
     }
 }
 
+// borrowed from HTML/Form.php from PHP 4
+// under version 2.0 of the PHP license
+//
+// $Id: Form.php,v 1.2 2003/02/14 11:12:08 mj Exp $
+//
+// HTML form utility functions.
+
+function html_form_select($name, $entries, $default = '', $size = 1,
+			  $blank = '', $multiple = false, $attrib = '')
+{
+    if ($multiple && substr($name, -2) != "[]") {
+	$name .= "[]";
+    }
+    $str = "   <select name=\"$name\"";
+    if ($size) {
+	$str .= " size=\"$size\"";
+    }
+    if ($multiple) {
+	$str .= " multiple=\"multiple\"";
+    }
+    if ($attrib) {
+	$str .= " $attrib";
+    }
+    $str .= ">\n";
+    if ($blank) {
+	$str .= "    <option value=\"\">$blank</option>\n";
+    }
+    while (list($val, $text) = each($entries)) {
+	$str .= '    <option ';
+	if ($default) {
+	    if ($multiple && is_array($default)) {
+		if ((is_string(key($default)) && $default[$val]) ||
+		    (is_int(key($default)) && in_array($val, $default))) {
+		    $str .= 'selected="selected" ';
+		}
+	    } elseif ($default == $val) {
+		$str .= 'selected="selected" ';
+	    }
+	}
+	$str .= "value=\"$val\">$text</option>\n";
+    }
+    $str .= "   </select>\n";
+
+    return $str;
+}
+
 ?>

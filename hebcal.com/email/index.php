@@ -4,7 +4,6 @@ set_include_path(".:/usr/local/php5/lib/pear");
 
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
-require "../pear/HTML/Form.php";
 
 $sender = "webmaster@hebcal.com";
 
@@ -265,7 +264,7 @@ foreach ($hebcal_cities as $k => $v) {
 if ($param["city"]) {
     $geo_city = htmlspecialchars($param["city"]);
 }
-echo HTML_Form::returnSelect("city", $entries,
+echo html_form_select("city", $entries,
 			     isset($geo_city) ? $geo_city : "IL-Jerusalem", 1,
 			     "", false);
 ?>
