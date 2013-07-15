@@ -267,3 +267,6 @@ woe8775	CA	Calgary	51.045219	-114.063011	America/Edmonton	-7	1
 woe784794	CH	Zurich	47.377060	8.539550	Europe/Zurich	1	1
 woe99999998	IL	Petach Tikvah	32.08333333	34.88333333	Asia/Jerusalem	2	1
 woe99999997	US	Honolulu, HI	21.3	-157.8166666667	US/Hawaii	-10	0
+woe99999996	IL	Be'er Sheva	31.243166667	34.793	Asia/Jerusalem	2	1
+woe99999995	IL	Rishon LeZion	31.95		34.800	Asia/Jerusalem	2	1 
+woe99999994	IL	Ashkelon	31.6666667		34.56666667	Asia/Jerusalem	2	1 
