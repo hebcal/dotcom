@@ -232,8 +232,6 @@ function hebcal_open_mysql_db() {
 }
 
 function hebcal_get_zipcode_fields($zip) {
-    global $hebcal_zip_db;
-
     $file = $_SERVER["DOCUMENT_ROOT"] . "/hebcal/zips.sqlite3";
     $db = new SQLite3($file);
     if (!$db) {
