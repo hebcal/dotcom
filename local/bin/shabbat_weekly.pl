@@ -64,7 +64,8 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
 
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 
 my %SUBS;
 load_subs();
@@ -227,7 +228,7 @@ sub get_latlong {
 	  msg("city=" . $args->{"city"} . ",lat=$lat,long=$long", $opt_verbose);
 	}
 	return ($lat, $long,
-		$Hebcal::city_tz{$args->{"city"}},
+		$Hebcal::CITY_TZ_OFFSET{$args->{"city"}},
 		$args->{"city"});
     }
 }
@@ -516,28 +517,29 @@ sub parse_config
 	    return undef;
 	}
 
-	$city_descr = "These times are for:";
-	$city_descr .= "\n  $city, $state " . $args{"zip"};
-	$city_descr .= "\n  " . $Hebcal::tz_names{$tz};
+	my $tzid = Hebcal::get_usa_tzid($state,$tz);
+	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 
-	if (defined $tz && $tz ne "?") {
-	    $cmd .= " -z $tz";
-	}
-
-	if ($dst == 1) {
-	    $cmd .= " -Z usa";
-	} elsif ($dst == 0) {
-	    $cmd .= " -Z none";
-	}
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
+	$city_descr = "These times are for $city, $state " . $args{"zip"} . ".";
     } elsif (defined $args{"city"}) {
-	$city_descr = $args{"city"};
-	$city_descr =~ s/\+/ /g;
-	$cmd .= " -C '" . $city_descr . "'";
-	$cmd .= " -i"
-	    if ($Hebcal::city_dst{$city_descr} eq "israel");
-	$city_descr = "These times are for $city_descr.";
+	my $city = $args{"city"};
+	$city =~ s/\+/ /g;
+	if ($city eq "Jerusalem" || $city eq "IL-Jerusalem") {
+	    $cmd .= " -C 'Jerusalem'";
+	} else {
+	    my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+	    my($lat_deg,$lat_min,$long_deg,$long_min) =
+		Hebcal::latlong_to_hebcal($latitude, $longitude);
+
+	    my $tzid = $Hebcal::CITY_TZID{$city};
+	    $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+	}
+
+	$cmd .= " -i" if $Hebcal::CITY_COUNTRY{$city} eq "IL";
+
+	my $country = Hebcal::woe_country($city);
+	$country = "USA" if $country eq "United States of America";
+	$city_descr = "These times are for " . Hebcal::woe_city($city) . ", $country" . ".";
     } else {
 	carp "no geographic key in [$config]";
 	return undef;
