@@ -92,7 +92,7 @@ if ($qs) {
 	$now + ((6 - $wday) * 60 * 60 * 24);
     header("Expires: ". gmdate("D, d M Y H:i:s", $saturday). " GMT");
 
-    if ($private) {
+    if (isset($private)) {
 	header("Cache-Control: private");
     }
 

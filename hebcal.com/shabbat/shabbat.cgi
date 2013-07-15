@@ -554,6 +554,50 @@ sub form($$$$)
     Hebcal::out_html($cfg,
 	qq{$message\n},
 	qq{<div id="hebcal-form-zipcode" class="well well-small">\n},
+	qq{<div class="pseudo-legend">World cities</div>\n});
+
+    Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
+    my %groups;
+    while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
+	my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+	my $grp = ($country =~ /^US|CA|IL$/)
+	    ? $country
+	    : $HebcalConst::COUNTRIES{$country}->[1];
+	$groups{$grp} = [] unless defined $groups{$grp};
+	push(@{$groups{$grp}}, [$id, $country, Hebcal::woe_country($id), $city]);
+    }
+    foreach my $grp (qw(US CA IL EU NA SA AS OC AF AN)) {
+	next unless defined $groups{$grp};
+	my $label;
+	if ($grp eq "US") {
+	    $label = "USA";
+	} elsif ($grp eq "CA" || $grp eq "IL") {
+	    $label = $HebcalConst::COUNTRIES{$grp}->[0];
+	} else {
+	    $label = $Hebcal::CONTINENTS{$grp};
+	}
+	my $btn_html=<<EOHTML;
+<div class="btn-group">
+<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">$label <span class="caret"></span></button>
+<ul class="dropdown-menu">
+EOHTML
+;
+	foreach my $info (sort {$a->[3] cmp $b->[3]} @{$groups{$grp}}) {
+	    my($id,$cc,$country,$city) = @{$info};
+	    my $city_country = $city;
+	    $city_country .= ", $country" unless $grp=~ /^US|CA|IL$/;
+	    $btn_html .= qq{<li><a href="?city=$id">$city_country</a></li>\n};
+	}
+	$btn_html .= qq{</ul></div><!-- /btn-group -->\n};
+	Hebcal::out_html(undef, $btn_html);
+    }
+
+    Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
+
+    Hebcal::out_html($cfg,
+	qq{<div class="pseudo-legend">United States of America</div>\n});
+
+    Hebcal::out_html($cfg,
 	qq{<form action="$script_name">},
 	qq{<fieldset>\n},
 	$q->hidden(-name => 'geo',
@@ -582,31 +626,6 @@ sub form($$$$)
 	qq{</fieldset></form>});
 
     Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-zipcode -->\n});
-
-    Hebcal::out_html($cfg,
-		     qq{<div id="hebcal-form-city" class="well well-small">\n},
-		     qq{<form action="$script_name">},
-		     qq{<div class="pseudo-legend">Get Shabbat times by Major City</div>\n},
-		     qq{<fieldset>\n},
-		     $q->hidden(-name => 'geo',
-				-value => 'city',
-				-override => 1),
-		     Hebcal::html_city_select($q->param("city")));
-
-    Hebcal::out_html($cfg,
-	qq{<label\nfor="m2" title="enter '0' to suppress Havdalah times">Havdalah minutes past sundown:\n},
-	$q->textfield(-name => 'm',
-		      -id => 'm2',
-		      -pattern => '\d*',
-		      -class => 'input-mini',
-		      -size => 3,
-		      -maxlength => 3,
-		      -default => $Hebcal::havdalah_min),
-	"</label>",
-	qq{<input\ntype="submit" value="Get Shabbat Times" class="btn btn-primary">\n},
-	qq{</fieldset></form>});
-
-    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-city -->\n});
 
     my $footer_divs2=<<EOHTML;
 </div><!-- .span10 -->
