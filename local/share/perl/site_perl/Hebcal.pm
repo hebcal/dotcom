@@ -65,8 +65,6 @@ $Hebcal::CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 
 my $ZIP_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/zips.sqlite3";
 
-my $VERSION = "4000";		# fake it for now, git doesn't support keyword expansion
-
 my $CONFIG_INI;
 my $HOSTNAME;
 my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
@@ -2280,7 +2278,7 @@ sub vcalendar_write_contents
 	}
 	out_html(undef, 
 	qq{VERSION:2.0$endl},
-	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v$VERSION//EN$endl},
+	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v4.13//EN$endl},
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{METHOD:PUBLISH$endl},
 	qq{X-LOTUS-CHARSET:UTF-8$endl},
@@ -2736,13 +2734,12 @@ sub sendmail_v2
 
     if (! defined $headers->{'X-Mailer'})
     {
-	$message .= "X-Mailer: hebcal mail v$VERSION\n";
+	$message .= "X-Mailer: hebcal mail v4.13\n";
     }
 
     if (! defined $headers->{'Message-ID'})
     {
-	$message .= "Message-ID: <HEBCAL.$VERSION." . time() .
-	    ".$$\@$HOSTNAME>\n";
+	$message .= "Message-ID: <HEBCAL." . time() . ".$$\@$HOSTNAME>\n";
     }
 
     $message .= "\n" . $body;
