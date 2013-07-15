@@ -130,7 +130,7 @@ if ($hmnum == 13 && $hd >= 1) {
     $shana_tova = true;		// month 13 == Elul
     $erev_rh = format_greg_date_for_erev(13, 29, $hy);
 } elseif ($hmnum == 1 && $hd <= 10) {
-    $gmar_tov = true;		// month 1 == Tishrei
+    // month 1 == Tishrei. Gmar Tov!
     $erev_yk = format_greg_date_for_erev(1, 9, $hy);
 } elseif ($hmnum == $purim_month_num && $hd >= 2 && $hd <= 13) {
     // for two weeks before Purim, show greeting
@@ -222,7 +222,7 @@ function holiday_greeting($blurb, $long_text) { ?>
 if (isset($rosh_chodesh)) {
     $anchor = hebcal_make_anchor("Rosh Chodesh $rosh_chodesh");
     holiday_greeting("Chodesh Tov", "We wish you a good new month of <a href=\"$anchor\">$rosh_chodesh</a>");
-} elseif ($chanukah) {
+} elseif (isset($chanukah)) {
     holiday_greeting("Chag Urim Sameach",
 		     "We wish you a happy <a href=\"/holidays/chanukah\">Chanukah</a>");
 } elseif (isset($chanukah_upcoming)) {
@@ -231,14 +231,14 @@ if (isset($rosh_chodesh)) {
 } elseif (isset($shalosh_regalim)) {
     $anchor = hebcal_make_anchor($shalosh_regalim);
     holiday_greeting("Moadim L&#39;Simcha", "We wish you a happy <a href=\"$anchor\">$shalosh_regalim</a>");
-} elseif ($shana_tova) {
+} elseif (isset($shana_tova)) {
     $rh_greeting = "We wish you a happy and healthy New Year";
     if (isset($erev_rh)) {
 	$next_hy = $hy + 1;
 	$rh_greeting .= ".<br><a href=\"/holidays/rosh-hashana\">Rosh Hashana $next_hy</a> begins at sundown on $erev_rh";
     }
     holiday_greeting("Shanah Tovah", $rh_greeting);
-} elseif ($gmar_tov) {
+} elseif (isset($erev_yk)) {
     holiday_greeting("G&#39;mar Chatimah Tovah",
 		     "We wish you a good inscription in the Book of Life.<br><a href=\"/holidays/yom-kippur\">Yom Kippur</a> begins at sundown on $erev_yk");
 } elseif (isset($erev_pesach)) {

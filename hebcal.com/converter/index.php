@@ -293,7 +293,7 @@ function form($head, $message, $help = "") {
 <?php
     }
 
-    $action = $_SERVER["SCRIPT_URL"];
+    $action = $_SERVER["REQUEST_URI"];
 ?>
 <div id="converter-form" class="well well-small">
 <form class="form-inline" action="<?php echo $action ?>">

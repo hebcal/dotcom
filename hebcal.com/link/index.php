@@ -125,7 +125,7 @@ synagogue's web page.</p>
 
 <div class="row-fluid">
 <div class="span6">
-<form action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
+<form action="<?php echo $_SERVER["REQUEST_URI"] ?>" method="get">
 <fieldset><legend>Shabbat times by Zip Code</legend>
 <input type="hidden" name="geo" value="zip">
 <input type="hidden" name="type" value="shabbat">
@@ -141,7 +141,7 @@ Use Ashkenazis Hebrew transliterations</label>
 </div><!-- .span6 -->
 
 <div class="span6">
-<form action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="get">
+<form action="<?php echo $_SERVER["REQUEST_URI"] ?>" method="get">
 <fieldset><legend>Shabbat times by Major City</legend>
 <input type="hidden" name="geo" value="city">
 <input type="hidden" name="type" value="shabbat">

@@ -249,7 +249,7 @@ function form($param, $message = "", $help = "") {
 
 ?>
 <div id="email-form" class="well well-small">
-<form action="<?php echo $_SERVER["SCRIPT_URL"] ?>" method="post">
+<form action="<?php echo $_SERVER["REQUEST_URI"] ?>" method="post">
 <fieldset>
 <label for="em">E-mail address:
 <input type="email" name="em"
@@ -271,14 +271,14 @@ echo HTML_Form::returnSelect("city", $entries,
 			     "", false);
 ?>
 &nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=zip">zip code</a>)</small>
+href="<?php echo $_SERVER["REQUEST_URI"] ?>?geo=zip">zip code</a>)</small>
 <input type="hidden" name="geo" value="city">
 <?php } else { ?>
 <label for="zip">Zip code:
 <input type="text" name="zip" class="input-mini" maxlength="5"
 pattern="\d*" value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $_SERVER["SCRIPT_URL"] ?>?geo=city">closest city</a>)</small>
+href="<?php echo $_SERVER["REQUEST_URI"] ?>?geo=city">closest city</a>)</small>
 <input type="hidden" name="geo" value="zip">
 <?php } ?>
 <label for="m1">Havdalah minutes past sundown:

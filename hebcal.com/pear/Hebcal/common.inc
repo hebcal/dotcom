@@ -378,9 +378,9 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
     }
     $base_href = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
     $base_href = preg_replace('/&/', '&amp;', $base_href);
-    $menu = html_menu_bootstrap($_SERVER["SCRIPT_URL"]);
+    $menu = html_menu_bootstrap($_SERVER["REQUEST_URI"]);
 
-    if ($_SERVER["SCRIPT_URL"] == "/") {
+    if ($_SERVER["REQUEST_URI"] == "/") {
 	$logo = '<span class="brand" id="logo" title="Hebcal Jewish Calendar">Hebcal</span>';
     } else {
 	$logo = '<a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
@@ -468,7 +468,7 @@ function html_footer_bootstrap($last_updated = true) {
     }
 
     $site_title = "Hebcal Jewish Calendar";
-    if ($_SERVER["SCRIPT_URL"] != "/") {
+    if ($_SERVER["REQUEST_URI"] != "/") {
 	$site_title = "<a href=\"/\">$site_title</a>";
     }
 

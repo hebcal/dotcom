@@ -169,7 +169,7 @@ candle lighting times and Torah portion by email.</p>
 <br><small>&nbsp;&nbsp;<?php echo $tz_descr ?>
 <br>&nbsp;&nbsp;<?php echo $dst_descr ?>
 </small></p>
-<form method="post" name="f1" id="f1" action="<?php echo $_SERVER["SCRIPT_URL"] ?>">
+<form method="post" action="<?php echo $_SERVER["REQUEST_URI"] ?>">
 <input type="hidden" name="k" value="<?php echo $info["id"] ?>">
 <input type="hidden" name="commit" value="1">
 <button type="submit" name="sub1" id="sub1" value="1" class="btn btn-success">Confirm Subscription</button>
