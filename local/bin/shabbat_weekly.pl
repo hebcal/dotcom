@@ -613,12 +613,20 @@ sub my_sendmail
     $msg->add("X-Sender" => "$LOGIN\@$HOSTNAME");
     $msg->replace("X-Mailer" => "hebcal mail");
 
-    $msg->attach(Type => "text/plain",
-		 Data => $body);
-	
-    $msg->attach(Type => "text/html",
-		 Data => "<!DOCTYPE html><html><head><title>Hebcal Shabbat Times</title></head>\n" .
-		 	 qq{<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">$html_body</div></body></html>\n});
+    my $part = MIME::Lite->new(Top  => 0,
+			       Type => "text/plain",
+			       Data => $body);
+    $part->attr("content-type.charset" => "UTF-8");
+    $msg->attach($part);
+
+    my $part2 = MIME::Lite->new(Top  => 0,
+				Type => "text/html",
+				Data => "<!DOCTYPE html><html><head><title>Hebcal Shabbat Times</title></head>\n" .
+				qq{<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">$html_body</div></body></html>\n}
+			       );
+    $part2->attr("content-type.charset" => "UTF-8");
+    $msg->attach($part2);
+
 
     my $to = $headers->{"To"};
     my $rv = $smtp->mail($return_path);
