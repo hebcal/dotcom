@@ -94,12 +94,17 @@ foreach my $key ($q->param())
 {
     next if $key =~ /^ref_(url|text)$/;
     my $val = $q->param($key);
-    $val = "" unless defined $val;
-    $val =~ s/[^\w\s\.-]//g
-	unless $key =~ /^n\d+$/;
-    $val =~ s/^\s*//g;		# nuke leading
-    $val =~ s/\s*$//g;		# and trailing whitespace
-    $q->param($key,$val);
+    if (defined $val) {
+	my $orig = $val;
+	if ($key !~ /^n\d+$/) {
+	    # sanitize input to prevent people from trying to hack the site.
+	    # remove anthing other than word chars, white space, or hyphens.
+	    $val =~ s/[^\w\.\s-]//g;
+	}
+	$val =~ s/^\s+//g;		# nuke leading
+	$val =~ s/\s+$//g;		# and trailing whitespace
+	$q->param($key, $val) if $val ne $orig;
+    }
 }
 
 my $cfg = $q->param("cfg");

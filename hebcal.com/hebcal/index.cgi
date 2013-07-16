@@ -41,7 +41,8 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
-use CGI qw(-no_xhtml -utf8);
+use CGI qw(-no_xhtml);
+use Encode qw(decode_utf8);
 use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Date::Calc ();
@@ -79,16 +80,21 @@ if (! $q->param("v") && $C_cookie)
     Hebcal::process_cookie($q,$C_cookie);
 }
 
-# sanitize input to prevent people from trying to hack the site.
-# remove anthing other than word chars, white space, or hyphens.
-foreach my $key ($q->param())
-{
+foreach my $key ($q->param()) {
     my $val = $q->param($key);
-    $val = "" unless defined $val;
-    $val =~ s/[^\w\.\s-]//g unless $key eq "city";
-    $val =~ s/^\s+//g;		# nuke leading
-    $val =~ s/\s+$//g;		# and trailing whitespace
-    $q->param($key,$val);
+    if (defined $val) {
+	my $orig = $val;
+	if ($key eq "city") {
+	    $val = decode_utf8($val);
+	} else {
+	    # sanitize input to prevent people from trying to hack the site.
+	    # remove anthing other than word chars, white space, or hyphens.
+	    $val =~ s/[^\w\.\s-]//g;
+	}
+	$val =~ s/^\s+//g;		# nuke leading
+	$val =~ s/\s+$//g;		# and trailing whitespace
+	$q->param($key, $val) if $val ne $orig;
+    }
 }
 
 # decide whether this is a results page or a blank form

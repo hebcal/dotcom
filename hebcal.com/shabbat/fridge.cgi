@@ -38,7 +38,8 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
-use CGI qw(-no_xhtml -utf8);
+use CGI qw(-no_xhtml);
+use Encode qw(decode_utf8);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
 use Date::Calc;
@@ -50,6 +51,23 @@ use POSIX ();
 my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/index.cgi$,/,;
+
+foreach my $key ($q->param()) {
+    my $val = $q->param($key);
+    if (defined $val) {
+	my $orig = $val;
+	if ($key eq "city") {
+	    $val = decode_utf8($val);
+	} else {
+	    # sanitize input to prevent people from trying to hack the site.
+	    # remove anthing other than word chars, white space, or hyphens.
+	    $val =~ s/[^\w\.\s-]//g;
+	}
+	$val =~ s/^\s+//g;		# nuke leading
+	$val =~ s/\s+$//g;		# and trailing whitespace
+	$q->param($key, $val) if $val ne $orig;
+    }
+}
 
 my $cfg;
 my($evts,undef,$city_descr,$cmd_pretty) = process_args($q);
