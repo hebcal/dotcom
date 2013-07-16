@@ -441,7 +441,9 @@ sub load_subs
     if ($opt_verbose > 1) {
 	msg("Connecting to $dsn", $opt_verbose);
     }
-    my $dbh = DBI->connect($dsn, $dbuser, $dbpass);
+    my $dbh = DBI->connect($dsn, $dbuser, $dbpass)
+	or die "DB Connection not made: $DBI::errstr";
+    $dbh->{'mysql_enable_utf8'} = 1;
 
     my $all_sql = "";
     if (!$opt_all) {
