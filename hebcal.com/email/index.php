@@ -365,7 +365,7 @@ function subscribe($param) {
 	    "Please select a city for candle lighting times.");
 	}
 
-	global $hebcal_cities;
+	global $hebcal_cities, $hebcal_countries;
 	if (!isset($hebcal_cities[$param["city"]]))
 	{
 	    form($param,
@@ -373,7 +373,9 @@ function subscribe($param) {
 	    "not a recoginized city.");
 	}
 
-	$city_descr = $param["city"];
+	$city_info = $hebcal_cities[$param["city"]];
+	$city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
+
 	$tzid = $hebcal_cities[$param["city"]][4];
 	$tz_descr = "Time zone: " . $tzid;
 
@@ -414,7 +416,7 @@ function subscribe($param) {
 			 "List-Unsubscribe" =>
 			 "<mailto:shabbat-unsubscribe@hebcal.com>",
 			 "MIME-Version" => "1.0",
-			 "Content-Type" => "text/plain",
+			 "Content-Type" => "text/html; charset=UTF-8",
 			 "X-Sender" => $sender,
 			 "X-Mailer" => "hebcal web",
 			 "Message-ID" =>
@@ -423,16 +425,19 @@ function subscribe($param) {
 			 "Subject" => $subject);
 
 	$body = <<<EOD
-Hello,
+<!DOCTYPE html><html><head><title>Your subscription is updated</title></head>
+<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<p>Hello,</p>
 
-We have updated your weekly Shabbat candle lighting time
-subscription for $city_descr.
+<p>We have updated your weekly Shabbat candle lighting time
+subscription for $city_descr.</p>
 
-Regards,
-hebcal.com
+<p>Regards,
+<br>hebcal.com</p>
 
-To unsubscribe from this list, send an email to:
-shabbat-unsubscribe@hebcal.com
+<p>To unsubscribe from this list, send an email to:
+<br><a href="mailto:shabbat-unsubscribe@hebcal.com">shabbat-unsubscribe@hebcal.com</a></p>
+</div></body></html>
 EOD;
 
 	$err = smtp_send($return_path, $param["em"], $headers, $body);
@@ -476,7 +481,7 @@ EOD
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $param["em"],
 		     "MIME-Version" => "1.0",
-		     "Content-Type" => "text/plain",
+		     "Content-Type" => "text/html; charset=UTF-8",
 		     "X-Sender" => $sender,
 		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
@@ -486,24 +491,27 @@ EOD
 
     $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
     $body = <<<EOD
-Hello,
+<!DOCTYPE html><html><head><title>$subject</title></head>
+<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<p>Hello,</p>
 
-We have received your request to receive weekly Shabbat
+<p>We have received your request to receive weekly Shabbat
 candle lighting time information from hebcal.com for
-$city_descr.
+$city_descr.</p>
 
-Please confirm your request by clicking on this link:
+<p>Please confirm your request by clicking on this link:</p>
 
-$url_prefix/email/verify.php?$encoded
+<p><a href="$url_prefix/email/verify.php?$encoded">$url_prefix/email/verify.php?$encoded</a></p>
 
-If you did not request (or do not want) weekly Shabbat
+<p>If you did not request (or do not want) weekly Shabbat
 candle lighting time information, please accept our
-apologies and ignore this message.
+apologies and ignore this message.</p>
 
-Regards,
-hebcal.com
+<p>Regards,
+<br>hebcal.com</p>
 
-[$_SERVER[REMOTE_ADDR]]
+<p>[$_SERVER[REMOTE_ADDR]]</p>
+</div></body></html>
 EOD;
 
     $err = smtp_send($return_path, $param["em"], $headers, $body);
@@ -523,10 +531,8 @@ or two, then the most likely problem is that you made a typo
 in your email address.  If you do not get the confirmation message,
 please return to the subscription page and try again, taking care
 to avoid typos.</p>
-<p><small>
-$city_descr
-<br>&nbsp;&nbsp;$tz_descr
-</small></p>
+<p>$city_descr
+<br>&nbsp;&nbsp;$tz_descr</p>
 EOD
 		     ;
     }
@@ -607,7 +613,7 @@ EOD
 		     "To" => $param["em"],
 		     "Reply-To" => $reply_to,
 		     "MIME-Version" => "1.0",
-		     "Content-Type" => "text/plain",
+		     "Content-Type" => "text/html; charset=UTF-8",
 		     "X-Sender" => $sender,
 		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
@@ -616,13 +622,16 @@ EOD
 		     "Subject" => $subject);
 
     $body = <<<EOD
-Hello,
+<!DOCTYPE html><html><head><title>$subject</title></head>
+<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<p>Hello,</p>
 
-Per your request, you have been removed from the weekly
-Shabbat candle lighting time list.
+<p>Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.</p>
 
-Regards,
-hebcal.com
+<p>Regards,
+<br>hebcal.com</p>
+</div></body></html>
 EOD;
 
     $err = smtp_send($return_path, $param["em"], $headers, $body);
