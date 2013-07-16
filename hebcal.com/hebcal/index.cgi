@@ -154,6 +154,7 @@ if (param_true("c")) {
     $cmd = $status[1];
 } else {
     $q->param("c","off");
+    $cconfig{"geo"} = "none";
     foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir m tz dst tzid)) {
 	$q->delete($_);
     }
