@@ -1175,9 +1175,9 @@ accurate.
     Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
 	if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
 
+    my $latitude = $cconfig{"latitude"};
     Hebcal::out_html(undef, $HebcalHtml::usno_warning)
-	if (defined $cconfig{"lat_deg"} &&
-	    ($cconfig{"lat_deg"} >= 60.0 || $cconfig{"lat_deg"} <= -60.0));
+	if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 
     if ($numEntries > 0) {
 	my $download_title = $date;
