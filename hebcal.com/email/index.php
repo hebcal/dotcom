@@ -425,19 +425,18 @@ function subscribe($param) {
 			 "Subject" => $subject);
 
 	$body = <<<EOD
-<!DOCTYPE html><html><head><title>Your subscription is updated</title></head>
-<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
-<p>Hello,</p>
-
-<p>We have updated your weekly Shabbat candle lighting time
-subscription for $city_descr.</p>
-
-<p>Regards,
-<br>hebcal.com</p>
-
-<p>To unsubscribe from this list, send an email to:
-<br><a href="mailto:shabbat-unsubscribe@hebcal.com">shabbat-unsubscribe@hebcal.com</a></p>
-</div></body></html>
+<div dir="ltr">
+<div>Hello,</div>
+<div><br></div>
+<div>We have updated your weekly Shabbat candle lighting time
+subscription for $city_descr.</div>
+<div><br></div>
+<div>Regards,
+<br>hebcal.com</div>
+<div><br></div>
+<div>To unsubscribe from this list, send an email to:
+<br><a href="mailto:shabbat-unsubscribe@hebcal.com">shabbat-unsubscribe@hebcal.com</a></div>
+</div>
 EOD;
 
 	$err = smtp_send($return_path, $param["em"], $headers, $body);
@@ -491,27 +490,26 @@ EOD
 
     $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
     $body = <<<EOD
-<!DOCTYPE html><html><head><title>$subject</title></head>
-<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
-<p>Hello,</p>
-
-<p>We have received your request to receive weekly Shabbat
+<div dir="ltr">
+<div>Hello,</div>
+<div><br></div>
+<div>We have received your request to receive weekly Shabbat
 candle lighting time information from hebcal.com for
-$city_descr.</p>
-
-<p>Please confirm your request by clicking on this link:</p>
-
-<p><a href="$url_prefix/email/verify.php?$encoded">$url_prefix/email/verify.php?$encoded</a></p>
-
-<p>If you did not request (or do not want) weekly Shabbat
+$city_descr.</div>
+<div><br></div>
+<div>Please confirm your request by clicking on this link:</div>
+<div><br></div>
+<div><a href="$url_prefix/email/verify.php?$encoded">$url_prefix/email/verify.php?$encoded</a></div>
+<div><br></div>
+<div>If you did not request (or do not want) weekly Shabbat
 candle lighting time information, please accept our
-apologies and ignore this message.</p>
-
-<p>Regards,
-<br>hebcal.com</p>
-
-<p>[$_SERVER[REMOTE_ADDR]]</p>
-</div></body></html>
+apologies and ignore this message.</div>
+<div><br></div>
+<div>Regards,
+<br>hebcal.com</div>
+<div><br></div>
+<div>[$_SERVER[REMOTE_ADDR]]</div>
+</div>
 EOD;
 
     $err = smtp_send($return_path, $param["em"], $headers, $body);
@@ -622,16 +620,15 @@ EOD
 		     "Subject" => $subject);
 
     $body = <<<EOD
-<!DOCTYPE html><html><head><title>$subject</title></head>
-<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
-<p>Hello,</p>
-
-<p>Per your request, you have been removed from the weekly
-Shabbat candle lighting time list.</p>
-
-<p>Regards,
-<br>hebcal.com</p>
-</div></body></html>
+<div dir="ltr">
+<div>Hello,</div>
+<div><br></div>
+<div>Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.</div>
+<div><br></div>
+<div>Regards,
+<br>hebcal.com</div>
+</div>
 EOD;
 
     $err = smtp_send($return_path, $param["em"], $headers, $body);
