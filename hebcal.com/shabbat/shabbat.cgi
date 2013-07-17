@@ -80,8 +80,9 @@ $hyear++ if $hebdate->{"mm"} == 6; # Elul
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
 my($latitude,$longitude);
-my($evts,$cfg,$city_descr,$cmd_pretty) = process_args($q);
-my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday);
+my %cconfig;
+my($evts,$cfg,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
+my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,$cconfig{"tzid"});
 
 my $cache = Hebcal::cache_begin($q);
 
@@ -104,7 +105,7 @@ exit(0);
 
 sub process_args
 {
-    my($q) = @_;
+    my($q,$cconfig) = @_;
 
     $q->param('cfg', 'w')
 	if (defined $ENV{'HTTP_ACCEPT'} &&
@@ -112,7 +113,7 @@ sub process_args
 
     my $cfg = $q->param('cfg');
 
-    my @status = Hebcal::process_args_common($q, 1, 1);
+    my @status = Hebcal::process_args_common($q, 1, 1, $cconfig);
     unless ($status[0]) {
 	form($cfg, 1, $status[1], $status[2]);
     }
@@ -577,7 +578,7 @@ sub form($$$$)
     Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
     my %groups;
     while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
-	my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+	my($country,$city,$latitude,$longitude,$tzName,$woeid) = @{$info};
 	my $grp = ($country =~ /^US|CA|IL$/)
 	    ? $country
 	    : $HebcalConst::COUNTRIES{$country}->[1];

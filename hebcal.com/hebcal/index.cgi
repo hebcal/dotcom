@@ -263,7 +263,7 @@ sub json_events
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
-    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0);
+    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
 
     print STDOUT $q->header(-type => "text/json",
 			    -charset => "UTF-8",
@@ -649,23 +649,13 @@ sub dba_display
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
 
-    my $dst;
-    my $tz;
-    if ($cconfig{"geo"} eq "zip") {
-	$tz = $cconfig{"tz_offset"};
-	$dst = $cconfig{"tz_dst"};
-    } elsif ($cconfig{"geo"} eq "city") {
-	$tz = $Hebcal::CITY_TZ_OFFSET{$q->param("city")};
-	$dst = $Hebcal::CITY_TZ_DST{$q->param("city")};
-    } 
-
     Hebcal::export_http_header($q, "application/x-palm-dba");
 
     my $basename = $q->path_info();
     $basename =~ s,^.*/,,;
     eval("use Palm::DBA");
     Palm::DBA::write_header($basename);
-    Palm::DBA::write_contents(\@events, $tz, $dst);
+    Palm::DBA::write_contents(\@events, $cconfig{"tzid"});
 }
 
 sub csv_display

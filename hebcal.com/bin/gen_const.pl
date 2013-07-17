@@ -66,9 +66,9 @@ print OJS "HEBCAL.cities={";
 $first = 1;
 while(<CITIES>) {
     chomp;
-    my($woeid,$country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst) = split(/\t/);
+    my($woeid,$country,$city,$latitude,$longitude,$tzName) = split(/\t/);
     die "$CITIES_TXT:$. something looks fishy"
-	if $latitude eq "" || $longitude eq "" || $tzName !~ m,/, || int($tzOffset) ne $tzOffset || $dst !~ /^(0|1)$/;
+	if $latitude eq "" || $longitude eq "" || $tzName !~ m,/,;
     my $id_city = $city;
     $id_city =~ s/\'//g;
     my $id = $country . "-";
@@ -80,11 +80,11 @@ while(<CITIES>) {
 
     print OJS "," unless $first;
     $first = 0;
-    print OJS qq{"$id":["$country","$city",$latitude,$longitude,"$tzName",$tzOffset,$dst,$woeid]};
+    print OJS qq{"$id":["$country","$city",$latitude,$longitude,"$tzName",$woeid]};
 
     $city =~ s/\'/\\\'/g;
-    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,$woeid],\n";
-    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$tzOffset,$dst,$woeid),\n";
+    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$woeid],\n";
+    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$woeid),\n";
 }
 close(CITIES);
 print O ");\n\n";

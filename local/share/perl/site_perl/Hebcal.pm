@@ -49,6 +49,7 @@ use Digest::MD5 ();
 use Config::Tiny;
 
 my $eval_use_DBI;
+my $eval_use_DateTime;
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -175,15 +176,11 @@ $Hebcal::havdalah_min = 72;
 %Hebcal::CITY_TZID = ();
 %Hebcal::CITY_COUNTRY = ();
 %Hebcal::CITY_LATLONG = ();
-%Hebcal::CITY_TZ_OFFSET = ();
-%Hebcal::CITY_TZ_DST = ();
 while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
-    my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+    my($country,$city,$latitude,$longitude,$tzName,$woeid) = @{$info};
     $Hebcal::CITY_TZID{$id} = $tzName;
     $Hebcal::CITY_COUNTRY{$id} = $country;
     $Hebcal::CITY_LATLONG{$id} = [$latitude,$longitude];
-    $Hebcal::CITY_TZ_OFFSET{$id} = $tzOffset;
-    $Hebcal::CITY_TZ_DST{$id} = $dst;
 }
 
 # translate from Askenazic transiliterations to Separdic
@@ -397,12 +394,17 @@ sub invoke_hebcal
     local($_);
     local(*HEBCAL);
 
-    my $cmd_smashed = $cmd;
-    $cmd_smashed =~ s/^\S+//;
-    $cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
-    $cmd_smashed =~ s/\s+//g;
-    $cmd_smashed =~ s/\'//g;
-    $cmd_smashed =~ s/\//_/g;
+    my $cmd_smashed;
+    if (index($cmd, " -Y") == -1) {
+	$cmd_smashed = $cmd;
+	$cmd_smashed =~ s/^\S+//;
+	$cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
+	$cmd_smashed =~ s/\s+//g;
+	$cmd_smashed =~ s/\'//g;
+	$cmd_smashed =~ s/\//_/g;
+    } else {
+	$cmd_smashed = "";
+    }
 
     my $hccache;
     my $login = getlogin() || getpwuid($<) || "UNKNOWN";
@@ -504,22 +506,12 @@ sub event_to_time
 
 sub events_to_dict
 {
-    my($events,$cfg,$q,$friday,$saturday) = @_;
+    my($events,$cfg,$q,$friday,$saturday,$tzid) = @_;
 
-    my $tz = 0;
-    my $dst = $q->param("dst");
-    if ($q->param("tz"))
-    {
-	$tz = $q->param("tz");
-	$tz = 0 if $tz eq "auto";
+    unless ($eval_use_DateTime) {
+	eval("use DateTime");
+	$eval_use_DateTime = 1;
     }
-    elsif ($q->param("city") && 
-	   defined($Hebcal::CITY_TZID{$q->param("city")}))
-    {
-	$tz = $Hebcal::CITY_TZ_OFFSET{$q->param("city")};
-	$dst = $Hebcal::CITY_TZ_DST{$q->param("city")};
-    }
-    my $tz_save = $tz;
 
     my $url = "http://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
@@ -540,7 +532,8 @@ sub events_to_dict
 	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
 
 	my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-	my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
+	my $hour24 = $evt->[$Hebcal::EVT_IDX_HOUR];
+	my $hour = $hour24;
 	$hour -= 12 if $hour > 12;
 
 	my %item;
@@ -548,43 +541,46 @@ sub events_to_dict
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
 	$item{"date"} = strftime($format, localtime($time));
 
-	my $tz = $tz_save;
-	if (defined $dst && $dst eq "usa") {
-	    my($isdst) = (localtime($time))[8];
-	    $tz++ if $isdst;
-	}
-
 	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
+	    my $dt = DateTime->new(
+				   year       => $year,
+				   month      => $mon,
+				   day        => $mday,
+				   hour       => $hour24,
+				   minute     => $min,
+				   second     => 0,
+				   time_zone  => $tzid,
+				  );
+
+	    my $tzOffset = $dt->offset();
+	    my $tz = int($tzOffset / 3600);
+	    my $tzMin = abs(int((($tzOffset / 3600) - $tz) * 60));
+
 	    $item{"dc:date"} =
-		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:00",
+		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:%02d",
 			$year,$mon,$mday,
-			$hour + 12,$min,0,
+			$hour24,$min,0,
 			$tz > 0 ? "+" : "-",
-			abs($tz));
+			abs($tz), $tzMin);
 
 	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
-	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d00",
+	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d%02d",
 				       $dow, $mday,
 				       $Hebcal::MoY_short[$mon - 1],
-				       $year, $hour + 12, $min,
+				       $year, $hour24, $min,
 				       $tz > 0 ? "+" : "-",
-				       abs($tz));
+				       abs($tz), $tzMin);
 	}
 	else
 	{
 	    $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-#	    $item{"dc:date"} .= sprintf("T00:00:00%s%02d:00",
-#					$tz > 0 ? "+" : "-",
-#					abs($tz));
 	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
-	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 %s%02d00",
+	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 +0000",
 				       $dow,
 				       $mday,
 				       $Hebcal::MoY_short[$mon - 1],
-				       $year,
-				       $tz > 0 ? "+" : "-",
-				       abs($tz));
+				       $year);
 	}
 
 	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
@@ -1290,7 +1286,7 @@ sub html_city_select
     my $retval = "<select name=\"city\" class=\"input-xlarge\">\n";
     my %groups;
     while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
-	my($country,$city,$latitude,$longitude,$tzName,$tzOffset,$dst,$woeid) = @{$info};
+	my($country,$city,$latitude,$longitude,$tzName,$woeid) = @{$info};
 	my $grp = ($country =~ /^US|CA|IL$/)
 	    ? $country
 	    : $HebcalConst::COUNTRIES{$country}->[1];

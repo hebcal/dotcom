@@ -21,7 +21,7 @@ if (isset($param["city"])) {
     $geo_city = $param["city"];
     $geo_link = "geo=city;city=" . urlencode($geo_city);
 
-    global $hebcal_cities;
+    global $hebcal_cities, $hebcal_countries;
     $info = $hebcal_cities[$geo_city];
     $descr = $info[1] . ", " . $hebcal_countries[$info[0]][0];
 } else {

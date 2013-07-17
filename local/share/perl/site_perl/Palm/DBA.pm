@@ -10,9 +10,9 @@
 #     );
 #
 # Palm::DBA::write_header('calendar_2002.dba');
-# Palm::DBA::write_contents(\@events, '-8', 1);
+# Palm::DBA::write_contents(\@events, 'America/Los_Angeles');
 # 
-# Copyright (c) 2004  Michael J. Radwin.
+# Copyright (c) 2013  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -27,11 +27,6 @@
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution.
-#
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -51,9 +46,7 @@
 package Palm::DBA;
 require 5.000;
 use strict;
-use Time::Local ();
-
-my $VERSION = '$Revision$'; #'
+use DateTime;
 
 my $PALM_DBA_MAGIC      = 1145176320;
 my $PALM_DBA_INTEGER    = 1;
@@ -135,42 +128,20 @@ sub write_header($)
     1;
 }
 
-sub write_contents($$$)
+sub write_contents($$)
 {
-    my($events,$tz,$dst) = @_;
+    my($events,$tzid) = @_;
     my($nevents) = scalar(@{$events});
-    my($startTime,$i,$secsEast,$local2local);
 
     if ($^V && $^V ge v5.8.1) {
 	binmode(STDOUT, ":raw");
     }
 
-    # compute diff seconds between GMT and whatever our local TZ is
-    # pick 1990/01/15 as a date that we're certain is standard time
-    $startTime = Time::Local::timegm(0,34,12,15,0,90,0,0,0);
-    $secsEast = $startTime - Time::Local::timelocal(0,34,12,15,0,90,0,0,0);
-
-    $tz = 0 unless (defined $tz && $tz =~ /^-?\d+$/);
-
-    if ($tz == 0)
-    {
-	# assume GMT
-	$local2local = $secsEast;
-    }
-    else
-    {
-	# add secsEast to go from our localtime to GMT
-	# then sub destination tz secsEast to get into local time
-	$local2local = $secsEast - ($tz * 60 * 60);
-    }
-
-#    warn "DBG: tz=$tz,dst=$dst,local2local=$local2local,secsEast=$secsEast\n";
-
     $nevents = $PALM_DBA_MAXENTRIES
 	if ($nevents > $PALM_DBA_MAXENTRIES);
     write_int($nevents*15);
 
-    for ($i = 0; $i < $nevents; $i++)
+    for (my $i = 0; $i < $nevents; $i++)
     {
 	# skip events that can't be expressed in a 31-bit time_t
         next if $events->[$i]->[$Palm::DBA::EVT_IDX_YEAR] <= 1969 ||
@@ -183,29 +154,18 @@ sub write_contents($$$)
 	    $events->[$i]->[$Palm::DBA::EVT_IDX_MIN] = 0;
 	}
 
-	if (!$dst)
-	{
-	    # no DST, so just use gmtime and then add that city offset
-	    $startTime = Time::Local::timegm(
-		 0,
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_MDAY],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_MON],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_YEAR] - 1900);
-	    $startTime -= ($tz * 60 * 60); # move into local tz
-	}
-	else
-	{
-	    $startTime = Time::Local::timelocal(
-		 0,
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_MDAY],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_MON],
-		 $events->[$i]->[$Palm::DBA::EVT_IDX_YEAR] - 1900);
-	    $startTime += $local2local; # move into their local tz
-	}
+	my $dt = DateTime->new(
+		       year       => $events->[$i]->[$Palm::DBA::EVT_IDX_YEAR],
+		       month      => $events->[$i]->[$Palm::DBA::EVT_IDX_MON] + 1,
+		       day        => $events->[$i]->[$Palm::DBA::EVT_IDX_MDAY],
+		       hour       => $events->[$i]->[$Palm::DBA::EVT_IDX_HOUR],
+		       minute     => $events->[$i]->[$Palm::DBA::EVT_IDX_MIN],
+		       second     => 0,
+		       time_zone  => $tzid,
+		      );
+
+	my $startTime = $dt->epoch();
+#	$startTime += $dt->offset();
 
 	write_int($PALM_DBA_INTEGER);
 	write_int(0);		# recordID
