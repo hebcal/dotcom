@@ -2047,6 +2047,7 @@ sub process_args_common {
 	if ($q->param("tzid")) {
 	    $tzid = $q->param("tzid");
 	    $cmd .= " -z '$tzid'";
+	    $city_descr .= ", $tzid";
 	}
 	if (defined $cconfig) {
 	    $cconfig->{"latitude"} = $latitude;
