@@ -227,18 +227,13 @@ sub get_latlong {
 	if ($opt_verbose > 2) {
 	  msg("city=" . $args->{"city"} . ",lat=$lat,long=$long", $opt_verbose);
 	}
-	return ($lat, $long,
-		$Hebcal::CITY_TZ_OFFSET{$args->{"city"}},
-		$args->{"city"});
+	return ($lat, $long, $args->{"city"});
     }
 }
 
 sub by_timezone {
-    my($lat_a,$long_a,$tz_a,$city_a) = get_latlong($a);
-    my($lat_b,$long_b,$tz_b,$city_b) = get_latlong($b);
-    if ($tz_a != $tz_b) {
-	return $tz_b <=> $tz_a;
-    }
+    my($lat_a,$long_a,$city_a) = get_latlong($a);
+    my($lat_b,$long_b,$city_b) = get_latlong($b);
     if ($long_a == $long_b) {
 	if ($lat_a == $lat_b) {
 	    return $city_a cmp $city_b;
