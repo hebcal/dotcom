@@ -1920,18 +1920,6 @@ sub process_args_common {
 	}
     }
 
-    foreach my $key ($q->param()) {
-	my $val = $q->param($key);
-	$val = '' unless defined $val;
-	# sanitize input to prevent people from trying to hack the site.
-	$val =~ s/[^\w\.\s-]//g unless $key eq "city";
-	# remove anthing other than word chars, white space, or hyphens.
-	# remove leading and trailing whitespace
-	$val =~ s/^\s+//g;
-	$val =~ s/\s+$//g;
-	$q->param($key,$val);
-    }
-
     my $cmd  = './hebcal';
 
     my($latitude,$longitude,$city_descr);
