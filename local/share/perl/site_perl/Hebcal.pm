@@ -2029,7 +2029,7 @@ sub process_args_common {
 	}
 
 	# Geographic Position
-	$city_descr = sprintf("%dd%d' %s lat, %dd%d' %s long",
+	$city_descr = sprintf("%d\x{b0}%d\x{2032}%s, %d\x{b0}%d\x{2032}%s",
 			      $lat_deg, $lat_min, uc($q->param("ladir")),
 			      $long_deg, $long_min, uc($q->param("lodir")));
 
