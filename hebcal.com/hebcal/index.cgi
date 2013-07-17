@@ -86,6 +86,8 @@ foreach my $key ($q->param()) {
 	my $orig = $val;
 	if ($key eq "city") {
 	    $val = decode_utf8($val);
+	} elsif ($key eq "tzid") {
+	    $val =~ s/[^\/\w\.\s-]//g; # allow forward-slash in tzid
 	} else {
 	    # sanitize input to prevent people from trying to hack the site.
 	    # remove anthing other than word chars, white space, or hyphens.
