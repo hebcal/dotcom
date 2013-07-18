@@ -225,7 +225,7 @@ sub dba_display
     $path_info =~ s,^.*/,,;
 
     Palm::DBA::write_header($path_info);
-    Palm::DBA::write_contents(\@events, 0, 0);
+    Palm::DBA::write_contents(\@events, 'America/New_York');
 }
 
 sub csv_display
