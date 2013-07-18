@@ -646,6 +646,8 @@ sub pdf_render_event {
 
 sub dba_display
 {
+    eval("use Palm::DBA");
+
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
 
@@ -653,7 +655,7 @@ sub dba_display
 
     my $basename = $q->path_info();
     $basename =~ s,^.*/,,;
-    eval("use Palm::DBA");
+
     Palm::DBA::write_header($basename);
     Palm::DBA::write_contents(\@events, $cconfig{"tzid"});
 }
