@@ -43,6 +43,7 @@ use POSIX qw(strftime);
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 use Date::Calc ();
+use Time::Local ();		# needed for Hebcal::event_to_time
 use URI::Escape;
 use HebcalConst;
 use Digest::MD5 ();
