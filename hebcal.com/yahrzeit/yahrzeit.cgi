@@ -48,7 +48,6 @@ use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
-use Palm::DBA ();
 use POSIX ();
 use Date::Calc ();
 
@@ -217,6 +216,8 @@ sub vcalendar_display
 
 sub dba_display
 {
+    eval("use Palm::DBA");
+
     my @events = my_invoke_hebcal($this_year);
 
     Hebcal::export_http_header($q, "application/x-palm-dba");
