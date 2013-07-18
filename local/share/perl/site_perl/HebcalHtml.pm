@@ -57,7 +57,7 @@ $HebcalHtml::indiana_warning = qq{<div class="alert alert-block">
 <strong>Warning!</strong>
 Indiana has confusing time zone &amp; Daylight Saving Time
 rules.</span><br>Please check <a
-href="http://www.mccsc.edu/time.html#WHAT">What time is it in
+href="http://en.wikipedia.org/wiki/Time_in_Indiana">What time is it in
 Indiana?</a> to make sure the above settings are correct.
 </div><!-- .alert -->
 };
