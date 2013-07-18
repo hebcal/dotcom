@@ -604,6 +604,7 @@ EOHTML
 	foreach my $info (sort {$a->[3] cmp $b->[3]} @{$groups{$grp}}) {
 	    my($id,$cc,$country,$city) = @{$info};
 	    my $city_country = $city;
+	    $country = "UK" if $country eq "United Kingdom";
 	    $city_country .= ", $country" unless $grp=~ /^US|CA|IL$/;
 	    $btn_html .= qq{<li><a href="?city=$id">$city_country</a></li>\n};
 	}

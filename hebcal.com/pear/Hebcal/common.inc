@@ -137,6 +137,8 @@ function html_city_select($selected_city = false) {
 	    $city_country = $city;
 	    if ($cc == "US") {
 		$city_country .= ", USA";
+	    } elseif ($cc == "GB") {
+		$city_country .= ", UK";
 	    } else {
 		$city_country .= ", $country";
 	    }

@@ -60,31 +60,29 @@ print OPHP ");\n\n";
 print OJS "};\n";
 
 
+my %seen;
 print O "\%HebcalConst::CITIES_NEW = (\n";
 print OPHP "\$hebcal_cities = array(\n";
 print OJS "HEBCAL.cities={";
 $first = 1;
 while(<CITIES>) {
     chomp;
-    my($woeid,$country,$city,$latitude,$longitude,$tzName) = split(/\t/);
+    my($id,$geonameid,$country,$city,$population,$latitude,$longitude,$tzName) = split(/\|/);
     die "$CITIES_TXT:$. something looks fishy"
 	if $latitude eq "" || $longitude eq "" || $tzName !~ m,/,;
-    my $id_city = $city;
-    $id_city =~ s/\'//g;
-    my $id = $country . "-";
-    if ($country eq "US") {
-	$id_city =~ s/, /-/;
+    if (defined $seen{$id} || defined $seen{$geonameid}) {
+	die "$CITIES_TXT:$. duplicate $id $geonameid";
     }
-    $id .= $id_city;
-    $woeid =~ s/^woe//;
-
+    $seen{$id} = 1;
+    $seen{$geonameid} = 1;
     print OJS "," unless $first;
     $first = 0;
-    print OJS qq{"$id":["$country","$city",$latitude,$longitude,"$tzName",$woeid]};
+    print OJS qq{"$id":["$country","$city",$latitude,$longitude,"$tzName",$geonameid]};
 
+    $id =~ s/\'//g;
     $city =~ s/\'/\\\'/g;
-    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$woeid],\n";
-    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$woeid),\n";
+    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$geonameid],\n";
+    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$geonameid),\n";
 }
 close(CITIES);
 print O ");\n\n";
