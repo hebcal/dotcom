@@ -49,6 +49,7 @@ use Config::Tiny;
 use MIME::Lite;
 
 my $opt_all = 0;
+my $opt_dryrun = 0;
 my $opt_help;
 my $opt_verbose = 0;
 my $opt_log = 1;
@@ -56,6 +57,7 @@ my $opt_log = 1;
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "all" => \$opt_all,
+     "dryrun|n" => \$opt_dryrun,
      "log!" => \$opt_log,
      "verbose|v+" => \$opt_verbose)) {
     usage();
@@ -63,6 +65,7 @@ if (!Getopt::Long::GetOptions
 
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
+$opt_log = 0 if $opt_dryrun;
 
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
     or die "$Hebcal::CONFIG_INI_PATH: $!\n";
@@ -140,6 +143,7 @@ for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
 # dh limit 100 emails an hour per authenticated user
 #my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
 my $SMTP_SLEEP_TIME = 1;
+$SMTP_SLEEP_TIME = 0 if $opt_dryrun;
 msg("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME sec between messages",
     $opt_verbose);
 
@@ -210,24 +214,19 @@ sub get_latlong {
     my($id) = @_;
     my $args = $CONFIG{$id}->[2];
     if (defined $args->{"zip"}) {
-    	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	my($city,$state,$tzid,$latitude,$longitude,
+	   $lat_deg,$lat_min,$long_deg,$long_min) =
 	    get_zipinfo($args->{"zip"});
-	my $lat = $lat_deg + ($lat_min / 60.0);
-	my $long = $long_deg + ($long_min / 60.0);
 	if ($opt_verbose > 2) {
-	  msg("zip=" . $args->{"zip"} . ",lat=$lat,long=$long", $opt_verbose);
+	  msg("zip=" . $args->{"zip"} . ",lat=$latitude,long=$longitude", $opt_verbose);
 	}
-	return ($lat, $long, $tz, $city);
+	return ($latitude, $longitude, $city);
     } else {
-	my $latlong = $Hebcal::CITY_LATLONG{$args->{"city"}};
-	my($lat,$long) = (0.0,0.0);
-	if (defined $latlong) {
-	  ($lat,$long) = ($latlong->[0], -1.0 * $latlong->[1]);
-	}
+	my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$args->{"city"}}};
 	if ($opt_verbose > 2) {
-	  msg("city=" . $args->{"city"} . ",lat=$lat,long=$long", $opt_verbose);
+	  msg("city=" . $args->{"city"} . ",lat=$latitude,long=$longitude", $opt_verbose);
 	}
-	return ($lat, $long, $args->{"city"});
+	return ($latitude, $longitude, $args->{"city"});
     }
 }
 
@@ -241,7 +240,7 @@ sub by_timezone {
 	    return $lat_a <=> $lat_b;
 	}
     } else {
-	return $long_a <=> $long_b;
+	return $long_b <=> $long_a;
     }
 }
 
@@ -313,6 +312,8 @@ $unsub_url
 #	 "Precedence" => "bulk",
 	 "Message-ID" => "<$msgid\@hebcal.com>",
 	 );
+
+    return $STATUS_OK if $opt_dryrun;
 
     my $status = my_sendmail($smtp,$return_path,\%headers,$body,$html_body);
     if ($opt_log) {
@@ -470,6 +471,8 @@ EOD
 	} elsif ($city) {
 	    if (defined($Hebcal::CITIES_OLD{$city})) {
 		$city = $Hebcal::CITIES_OLD{$city};
+	    } elsif (! defined $Hebcal::CITY_LATLONG{$city}) {
+		croak "unknown city $city for id=$id;email=$email";
 	    }
 	    $cfg .= ";city=$city";
 	}
@@ -502,6 +505,10 @@ sub parse_config
 
     my $cmd = "$HOME/web/hebcal.com/bin/hebcal";
 
+    if ($opt_verbose > 3) {
+	msg("cfg=$config", $opt_verbose);
+    }
+
     my %args;
     foreach my $kv (split(/;/, $config)) {
 	my($key,$val) = split(/=/, $kv, 2);
@@ -525,6 +532,10 @@ sub parse_config
 	if ($city eq "Jerusalem" || $city eq "IL-Jerusalem") {
 	    $cmd .= " -C 'Jerusalem'";
 	} else {
+	    if (! defined $Hebcal::CITY_LATLONG{$city}) {
+		carp "unknown city [$config]";
+		return undef;
+	    }
 	    my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
 	    my($lat_deg,$lat_min,$long_deg,$long_min) =
 		Hebcal::latlong_to_hebcal($latitude, $longitude);
