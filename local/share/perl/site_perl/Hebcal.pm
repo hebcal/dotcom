@@ -1454,10 +1454,6 @@ sub gen_cookie($)
     {
 	if ($q->param('geo') eq 'zip') {
 	    $retval .= '&zip=' . $q->param('zip');
-	    $retval .= '&dst=' . $q->param('dst')
-	        if defined $q->param('dst') && $q->param('dst') ne '';
-	    $retval .= '&tz=' . $q->param('tz')
-	        if defined $q->param('tz') && $q->param('tz') ne '';
 	} elsif ($q->param('geo') eq 'city') {
 	    $retval .= '&city=' . URI::Escape::uri_escape_utf8($q->param('city'));
 	} elsif ($q->param('geo') eq 'pos') {
@@ -1467,10 +1463,8 @@ sub gen_cookie($)
 	    $retval .= '&ladeg=' . $q->param('ladeg');
 	    $retval .= '&lamin=' . $q->param('lamin');
 	    $retval .= '&ladir=' . $q->param('ladir');
-	    $retval .= '&dst=' . $q->param('dst')
-	        if defined $q->param('dst') && $q->param('dst') ne '';
-	    $retval .= '&tz=' . $q->param('tz')
-	        if defined $q->param('tz') && $q->param('tz') ne '';
+	    $retval .= '&tzid=' . $q->param('tzid')
+	        if defined $q->param('tzid') && $q->param('tzid') ne '';
 	}
 	$retval .= '&m=' . $q->param('m')
 	    if defined $q->param('m') && $q->param('m') ne '';
@@ -1546,10 +1540,6 @@ sub process_cookie($$)
 	    if (! defined $q->param('zip') || $q->param('zip') =~ /^\s*$/)
 	    {
 		$q->param('zip',$c->param('zip'));
-		$q->param('dst',$c->param('dst'))
-		    if defined $c->param('dst');
-		$q->param('tz',$c->param('tz'))
-		    if defined $c->param('tz');
 	    }
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
@@ -1557,10 +1547,8 @@ sub process_cookie($$)
 		unless $q->param('city');
 	    $q->param('geo','city');
 	    $q->param('c','on');
-	    $q->delete('tz');
-	    $q->delete('dst');
-	    if (defined $Hebcal::city_dst{$q->param('city')} &&
-		$Hebcal::city_dst{$q->param('city')} eq 'israel')
+	    if (defined $Hebcal::CITY_COUNTRY{$q->param('city')} &&
+		$Hebcal::CITY_COUNTRY{$q->param('city')} eq 'IL')
 	    {
 		$q->param('i','on');
 		$c->param('i','on');
@@ -1572,24 +1560,14 @@ sub process_cookie($$)
 		 defined $c->param('lamin') &&
 		 defined $c->param('ladir') &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'pos')) {
-	    $q->param('lodeg',$c->param('lodeg'))
-		unless $q->param('lodeg');
-	    $q->param('lomin',$c->param('lomin'))
-		unless $q->param('lomin');
-	    $q->param('lodir',$c->param('lodir'))
-		unless $q->param('lodir');
-	    $q->param('ladeg',$c->param('ladeg'))
-		unless $q->param('ladeg');
-	    $q->param('lamin',$c->param('lamin'))
-		unless $q->param('lamin');
-	    $q->param('ladir',$c->param('ladir'))
-		unless $q->param('ladir');
+	    foreach (qw(lodeg lomin ladeg lamin lodir ladir)) {
+		$q->param($_, $c->param($_))
+		    unless $q->param($_);
+	    }
 	    $q->param('geo','pos');
 	    $q->param('c','on');
-	    $q->param('dst',$c->param('dst'))
-		if (defined $c->param('dst') && ! defined $q->param('dst'));
-	    $q->param('tz',$c->param('tz'))
-		if (defined $c->param('tz') && ! defined $q->param('tz'));
+	    $q->param('tzid',$c->param('tzid'))
+		if (defined $c->param('tzid') && ! defined $q->param('tzid'));
 	}
     }
 
