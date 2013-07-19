@@ -136,7 +136,7 @@ Hebcal::out_html($cfg, $head);
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
-		 qq{<div align="center">\n<h4 style="margin:24px 0 0">Candle Lighting Times for $city_descr<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h4>\n});
+		 qq{<div align="center">\n<h4 style="margin:24px 0 0">Candle Lighting Times<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])\n<br>$city_descr</h4>\n});
 Hebcal::out_html($cfg, qq{<p style="margin:0 0 4px">www.hebcal.com</p>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
