@@ -1111,22 +1111,22 @@ sub zipcode_close_db($)
     $dbh->disconnect();
 }
 
-sub zipcode_get_zip($$)
+sub zipcode_get_v2_zip($$)
 {
     my($dbh,$zipcode) = @_;
 
     my $sql = qq{
-SELECT zips_latitude, zips_longitude, zips_timezone, zips_dst, zips_city, zips_state
-FROM hebcal_zips
-WHERE zips_zipcode = '$zipcode'
+SELECT CityMixedCase,State,Latitude,Longitude,TimeZone,DayLightSaving
+FROM ZIPCodes_Primary
+WHERE ZipCode = ?
 };
 
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
-    $sth->execute() or die $dbh->errstr;
+    $sth->execute($zipcode) or die $dbh->errstr;
 
-    my($latitude,$longitude,$tz,$dst,$city,$state) = $sth->fetchrow_array;
+    my($CityMixedCase,$State,$Latitude,$Longitude,$TimeZone,$DayLightSaving) = $sth->fetchrow_array;
     $sth->finish;
-    ($latitude,$longitude,$tz,$dst,$city,$state);
+    ($CityMixedCase,$State,$Latitude,$Longitude,$TimeZone,$DayLightSaving);
 }
 
 sub latlong_to_hebcal {
@@ -1154,34 +1154,19 @@ sub zipcode_get_zip_fields($$)
 {
     my($dbh,$zipcode) = @_;
 
-    my($latitude,$longitude,$tz,$dst,$city,$state) =
-	zipcode_get_zip($dbh,$zipcode);
+    my($CityMixedCase,$State,$Latitude,$Longitude,$TimeZone,$DayLightSaving) =
+	zipcode_get_v2_zip($dbh,$zipcode);
 
-    if (! defined $state)
-    {
+    if (! defined $State) {
 	warn "zipcode_get_zip_fields: $zipcode Not Found";
 	return undef;
     }
 
-    my(@city) = split(/([- ])/, $city);
-    $city = '';
-    foreach (@city)
-    {
-	$_ = lc($_);
-	$_ = "\u$_";		# inital cap
-	$city .= $_;
-    }
-
-    if (($state eq 'HI' || $state eq 'AZ') && $dst == 1)
-    {
-	warn "[$city, $state, $zipcode] had DST=1 but should be 0";
-	$dst = 0;
-    }
-
+    my $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
     my($lat_deg,$lat_min,$long_deg,$long_min) =
-	latlong_to_hebcal($latitude, $longitude);
-    ($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,
-     $latitude,$longitude);
+	latlong_to_hebcal($Latitude, $Longitude);
+    ($CityMixedCase,$State,$tzid,
+     $Latitude,$Longitude,$lat_deg,$lat_min,$long_deg,$long_min);
 }
 
 sub html_footer_bootstrap
@@ -1951,9 +1936,10 @@ sub process_args_common {
 	}
 
 	my $DB = Hebcal::zipcode_open_db();
-	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
+	my($city,$state,$tzid,$lat_deg,$lat_min,$long_deg,$long_min);
 	# set global $latitude and $longitude
-	($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state,$latitude,$longitude) =
+	($city,$state,$tzid,$latitude,$longitude,
+	 $lat_deg,$lat_min,$long_deg,$long_min) =
 	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
 	Hebcal::zipcode_close_db($DB);
 	undef($DB);
@@ -1963,13 +1949,6 @@ sub process_args_common {
 		"</strong> in the zip code database.";
 	    my $help = "<ul><li>Please try a nearby zip code</li></ul>";
 	    return (0,$message,$help);
-	}
-
-	my $tzid = Hebcal::get_usa_tzid($state,$tz);
-
-	unless (defined $tzid) {
-	    my $message = "Sorry, can't auto-detect timezone for <strong>" . $city_descr . "</strong>";
-	    return (0,$message,undef);
 	}
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
@@ -1987,8 +1966,6 @@ sub process_args_common {
 	    $cconfig->{"state"} = $state;
 	    $cconfig->{"zip"} = $q->param("zip");
 	    $cconfig->{"tzid"} = $tzid;
-	    $cconfig->{"tz_offset"} = $tz;
-	    $cconfig->{"tz_dst"} = $dst;
 	    $cconfig->{"geo"} = "zip";
 	}
     } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
@@ -2072,6 +2049,7 @@ sub process_args_common {
 
 	my $country = woe_country($city);
 	$country = "USA" if $country eq "United States of America";
+	$country = "UK" if $country eq "United Kingdom";
 	$city_descr = Hebcal::woe_city($city) . ", $country";
 
 	if ($Hebcal::CITY_COUNTRY{$city} eq 'IL') {
@@ -2128,27 +2106,48 @@ sub validate_city {
 }
 
 
+# Zip-Codes.com TimeZone IDs
+#
+# Code 	Description 
+#  4	Atlantic (GMT -04:00) 
+#  5	Eastern (GMT -05:00) 
+#  6	Central (GMT -06:00) 
+#  7	Mountain (GMT -07:00) 
+#  8	Pacific (GMT -08:00) 
+#  9	Alaska (GMT -09:00) 
+# 10	Hawaii-Aleutian Islands (GMT -10:00) 
+# 11	American Samoa (GMT -11:00) 
+# 13	Marshall Islands (GMT +12:00) 
+# 14	Guam (GMT +10:00) 
+# 15	Palau (GMT +9:00)
+my %ZIPCODES_TZ_MAP = (
+'0' => 'UTC',
+'4' => 'America/Puerto_Rico',
+'5' => 'America/New_York',
+'6' => 'America/Chicago',
+'7' => 'America/Denver',
+'8' => 'America/Los_Angeles',
+'9' => 'America/Anchorage',
+'10' => 'Pacific/Honolulu',
+'11' => 'Pacific/Pago_Pago',
+'13' => 'Pacific/Funafuti',
+'14' => 'Pacific/Guam',
+'15' => 'Pacific/Palau',
+);
+
 sub get_usa_tzid {
-    my($state,$tz) = @_;
-    my $tzid;
-    if (defined $state && $state eq 'AK' && $tz == -10) {
-	$tzid = 'US/Aleutian';
-    } elsif (defined $state && $state eq 'AZ' && $tz == -7) {
-	$tzid = 'America/Phoenix';
-    } elsif ($tz == -5) {
-	$tzid = 'US/Eastern';
-    } elsif ($tz == -6) {
-	$tzid = 'US/Central';
-    } elsif ($tz == -7) {
-	$tzid = 'US/Mountain';
-    } elsif ($tz == -8) {
-	$tzid = 'US/Pacific';
-    } elsif ($tz == -9) {
-	$tzid = 'US/Alaska';
-    } elsif ($tz == -10) {
-	$tzid = 'US/Hawaii';
+    my($state,$tz,$dst) = @_;
+    if (defined $state && $state eq 'AK' && $tz == 10) {
+	return 'America/Adak';
+    } elsif (defined $state && $state eq 'AZ' && $tz == 7) {
+	if ($dst eq 'Y') {
+	    return 'America/Denver';
+	} else {
+	    return 'America/Phoenix';
+	}
+    } else {
+	return $ZIPCODES_TZ_MAP{$tz};
     }
-    return $tzid;		# possibly undef
 }
 
 

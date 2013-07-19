@@ -175,25 +175,34 @@ function hebcal_tz_names() {
     return $TIMEZONE_ARRAY;
 }
 
-function get_usa_tzid($tz,$state) {
-    if (isset($state) && $state == 'AK' && $tz == -10) {
-	return 'US/Aleutian';
-    } elseif (isset($state) && $state == 'AZ' && $tz == -7) {
-	return 'America/Phoenix';
-    } elseif ($tz == -5) {
-	return 'US/Eastern';
-    } elseif ($tz == -6) {
-	return 'US/Central';
-    } elseif ($tz == -7) {
-	return 'US/Mountain';
-    } elseif ($tz == -8) {
-	return 'US/Pacific';
-    } elseif ($tz == -9) {
-	return 'US/Alaska';
-    } elseif ($tz == -10) {
-	return 'US/Hawaii';
+$ZIPCODES_TZ_MAP = array(
+'0' => 'UTC',
+'4' => 'America/Puerto_Rico',
+'5' => 'America/New_York',
+'6' => 'America/Chicago',
+'7' => 'America/Denver',
+'8' => 'America/Los_Angeles',
+'9' => 'America/Anchorage',
+'10' => 'Pacific/Honolulu',
+'11' => 'Pacific/Pago_Pago',
+'13' => 'Pacific/Funafuti',
+'14' => 'Pacific/Guam',
+'15' => 'Pacific/Palau',
+);
+
+function get_usa_tzid($tz,$state,$dst) {
+    if (isset($state) && $state == 'AK' && $tz == 10) {
+	return 'America/Adak';
+    } elseif (isset($state) && $state == 'AZ' && $tz == 7) {
+	if ($dst == 'Y') {
+	    return 'America/Denver';
+	} else {
+	    return 'America/Phoenix';
+	}
+    } else {
+	global $ZIPCODES_TZ_MAP;
+	return $ZIPCODES_TZ_MAP[$tz];
     }
-    return null;
 }
 
 $hmstr_to_num = array(
@@ -301,10 +310,9 @@ function hebcal_get_zipcode_fields($zip) {
     }
 
     $sql = <<<EOD
-SELECT zips_latitude, zips_longitude,
-       zips_timezone, zips_dst, zips_city, zips_state
-FROM hebcal_zips
-WHERE zips_zipcode = '$zip'
+SELECT CityMixedCase,State,Latitude,Longitude,TimeZone,DayLightSaving
+FROM ZIPCodes_Primary
+WHERE ZipCode = '$zip'
 EOD;
 
     $query = $db->query($sql); 
@@ -313,7 +321,7 @@ EOD;
 	die();
     }
 
-    list($latitude,$longitude,$tz,$dst,$city,$state) =
+    list($city,$state,$latitude,$longitude,$TimeZone,$DayLightSaving) =
 	$query->fetchArray(SQLITE3_NUM);
 
     // clean up
@@ -324,6 +332,8 @@ EOD;
     if (!$state)  {
 	return null;
     }
+
+    $tzid = get_usa_tzid($TimeZone,$state,$DayLightSaving);
 
     // remove any prefixed + signs from the strings
     $latitude = preg_replace('/^\+/', "", $latitude);
@@ -365,9 +375,8 @@ EOD;
     }
     $lat_min = sprintf("%.0f", $lat_min);
 
-    $city = ucwords(strtolower($city));
-
-    return array($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state);
+    return array($city,$state,$tzid,$latitude,$longitude,
+		 $lat_deg,$lat_min,$long_deg,$long_min);
 }
 
 function hebcal_make_holiday_anchor($str)

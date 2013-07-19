@@ -250,7 +250,7 @@ if (isset($rosh_chodesh)) {
 } elseif (isset($chag_sameach)) {
     $anchor = hebcal_make_anchor($chag_sameach);
     holiday_greeting("Chag Sameach", "We wish you a happy <a href=\"$anchor\">$chag_sameach</a>");
-} elseif ($fast_day) {
+} elseif (isset($fast_day)) {
      holiday_greeting("Tzom Kal", "We wish you an easy fast");
 }
 ?>

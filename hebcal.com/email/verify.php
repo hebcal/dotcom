@@ -133,7 +133,7 @@ EOD;
 candle lighting times and Torah portion by email.</p>
 <div class="alert alert-success">
 <strong>Thank you!</strong> Your subscription is now active.
-<br>A confirmation message has been sent
+A confirmation message has been sent
 to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 </div>
 <?php
@@ -141,29 +141,27 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
     exit();
 } else {
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
-	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    hebcal_get_zipcode_fields($info["zip"]);
+	list($city,$state,$tzid,$latitude,$longitude,
+	     $lat_deg,$lat_min,$long_deg,$long_min) =
+	    hebcal_get_zipcode_fields($param["zip"]);
 	$city_descr = "$city, $state " . $info["zip"];
-	$info["tz"] = $tz;
-	$tzid = get_usa_tzid($tz, $state);
-	$tz_descr = "Time zone: " . $tzid;
 	unset($info["city"]);
     } else {
-	$city_descr = $info["city"];
-	global $hebcal_cities;
+	global $hebcal_cities, $hebcal_countries;
+	$city_info = $hebcal_cities[$info["city"]];
+	$city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
 	$tzid = $hebcal_cities[$info["city"]][4];
-	$tz_descr = "Time zone: " . $tzid;
 	unset($info["zip"]);
     }
+    $tz_descr = "Time zone: " . $tzid;
     echo html_header_bootstrap("Confirm Email Subscription");
 ?>
 <p class="lead">Confirm your subscription to weekly Shabbat
 candle lighting times and Torah portion by email.</p>
 <div class="well">
 <p>Email: <strong><?php echo $info["em"] ?></strong>
-<br>Location: <?php echo $city_descr ?>
-<br><small>&nbsp;&nbsp;<?php echo $tz_descr ?>
-</small></p>
+<br>Location: <?php echo $city_descr ?> &nbsp;&nbsp;(<?php echo $tz_descr ?>)
+</p>
 <form method="post" action="<?php echo $_SERVER["PHP_SELF"] ?>">
 <input type="hidden" name="k" value="<?php echo $info["id"] ?>">
 <input type="hidden" name="commit" value="1">

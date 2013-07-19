@@ -329,7 +329,8 @@ function subscribe($param) {
 	    "not appear to be a 5-digit zip code.");
 	}
 
-	list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+	list($city,$state,$tzid,$latitude,$longitude,
+	     $lat_deg,$lat_min,$long_deg,$long_min) =
 	    hebcal_get_zipcode_fields($param["zip"]);
 
 	if (!$state)
@@ -341,18 +342,6 @@ function subscribe($param) {
 	}
 
 	$city_descr = "$city, $state " . $param["zip"];
-
-	// handle timezone == "auto"
-	if ($tz == "?" || $tz == "0")
-	{
-	    form($param,
-	    "Sorry, can't auto-detect\n" .
-	    "timezone for <strong>" . $city_descr . "</strong>\n",
-	    "<ul><li>Please select your time zone below.</li></ul>");
-	}
-
-	$param["tz"] = $tz;
-	$tzid = get_usa_tzid($tz, $state);
 	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["city"]);
@@ -446,9 +435,7 @@ EOD;
 <div class="alert alert-success alert-block">
 <strong>Success!</strong> Your subsciption information has been updated.
 <p>Email: <strong>$html_email</strong>
-<br>Location: $city_descr
-<br><small>&nbsp;&nbsp;$tz_descr
-</small></p>
+<br>Location: $city_descr &nbsp;&nbsp;($tz_descr)</p>
 </div>
 EOD
 	     ;
@@ -521,7 +508,7 @@ EOD;
 <div class="alert alert-success">
 <strong>Thank you!</strong>
 A confirmation message has been sent
-to <strong>$html_email</strong>.<br>
+to <strong>$html_email</strong> for $city_descr.<br>
 Click the link within that message to confirm your subscription.
 </div>
 <p>If you do not receive this acknowledgment message within an hour
@@ -529,8 +516,6 @@ or two, then the most likely problem is that you made a typo
 in your email address.  If you do not get the confirmation message,
 please return to the subscription page and try again, taking care
 to avoid typos.</p>
-<p>$city_descr
-<br>&nbsp;&nbsp;$tz_descr</p>
 EOD
 		     ;
     }
@@ -636,7 +621,7 @@ EOD;
     $html = <<<EOD
 <div class="alert alert-success alert-block">
 <h4>Unsubscribed</h4>
-You have been removed from the email subscription list.<br>
+You have been removed from the email subscription list.
 A confirmation message has been sent to <strong>$html_email</strong>.
 </div>
 EOD

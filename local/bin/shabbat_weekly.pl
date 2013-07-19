@@ -510,14 +510,12 @@ sub parse_config
 
     my $city_descr;
     if (defined $args{"zip"}) {
-    	my($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
-	    get_zipinfo($args{"zip"});
+	my($city,$state,$tzid,$latitude,$longitude,
+	   $lat_deg,$lat_min,$long_deg,$long_min) = get_zipinfo($args{"zip"});
 	unless (defined $state) {
 	    carp "unknown zipcode [$config]";
 	    return undef;
 	}
-
-	my $tzid = Hebcal::get_usa_tzid($state,$tz);
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 
 	$city_descr = "These times are for $city, $state " . $args{"zip"} . ".";

@@ -25,7 +25,8 @@ if (isset($param["city"])) {
     $info = $hebcal_cities[$geo_city];
     $descr = $info[1] . ", " . $hebcal_countries[$info[0]][0];
 } else {
-    list($long_deg,$long_min,$lat_deg,$lat_min,$tz,$dst,$city,$state) =
+    list($city,$state,$tzid,$latitude,$longitude,
+	 $lat_deg,$lat_min,$long_deg,$long_min) =
 	hebcal_get_zipcode_fields($zip);
 
     if (!$state) {
