@@ -90,7 +90,7 @@ EOHTML
 }
 
 sub download_html_bootstrap {
-    my($q,$filename,$events,$title) = @_;
+    my($q,$filename,$events,$title,$suppress_pdf) = @_;
 
     my($greg_year1,$greg_year2) = (0,0);
     my($numEntries) = scalar(@{$events});
@@ -279,7 +279,7 @@ EOHTML
     my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf"><i class="icon-print"></i> ${filename}.pdf</a></p>\n};
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
-    $s .= accordion_bootstrap($pdf_title, "pdf", $pdf);
+    $s .= accordion_bootstrap($pdf_title, "pdf", $pdf) unless $suppress_pdf;
     $s .= accordion_bootstrap($ios_title, "ios", $ios);
     $s .= accordion_bootstrap($ol_ics_title, "ol-ics", $ol_ics);
     $s .= accordion_bootstrap($ol_csv_title, "ol-csv", $ol_csv);
@@ -295,9 +295,9 @@ EOHTML
 }
 
 sub download_html_modal {
-    my($q,$filename,$events,$title) = @_;
+    my($q,$filename,$events,$title,$suppress_pdf) = @_;
 
-    my $html = download_html_bootstrap($q,$filename,$events,$title);
+    my $html = download_html_bootstrap($q,$filename,$events,$title,$suppress_pdf);
     my $s = <<EOHTML;
 <div id="hcdl-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-header">

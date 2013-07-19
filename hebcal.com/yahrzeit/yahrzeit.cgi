@@ -457,7 +457,7 @@ if (scalar(@events) > 0) {
     $filename .= "_" . join("_", @names);
 
     $q->param("filename", $filename);
-    Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events));
+    Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events, undef, 1));
 
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
     Hebcal::out_html($cfg, HebcalHtml::download_html_modal_button());
@@ -634,5 +634,5 @@ sub show_row {
 }
 
 # local variables:
-# mode: perl
+# mode: cperl
 # end:
