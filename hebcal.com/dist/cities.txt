@@ -46,8 +46,11 @@ BW-Gaborone|9991265547|BW|Gaborone|0|-24.6464|25.9119|Africa/Gaborone
 BY-Minsk|625144|BY|Minsk|1742124|53.9|27.56667|Europe/Minsk
 BZ-Belmopan|99957172|BZ|Belmopan|0|17.2500|-88.7667|America/Belize
 CA-Calgary|9998775|CA|Calgary|0|51.045219|-114.063011|America/Edmonton
+CA-Edmonton|5946768|CA|Edmonton|712391|53.55014|-113.46871|America/Edmonton
+CA-Mississauga|6075357|CA|Mississauga|668549|43.5789|-79.6583|America/Toronto
 CA-Montreal|6077243|CA|Montréal|3268513|45.50884|-73.58781|America/Montreal
 CA-Ottawa|9993369|CA|Ottawa|0|45.4167|-75.7000|America/Toronto
+CA-Quebec City|6325494|CA|Québec City|528595|46.81228|-71.21454|America/Montreal
 CA-Toronto|6167865|CA|Toronto|4612191|43.70011|-79.4163|America/Toronto
 CA-Vancouver|6173331|CA|Vancouver|1837969|49.24966|-123.11934|America/Vancouver
 CA-Winnipeg|9992972|CA|Winnipeg|0|49.899441|-97.140793|America/Winnipeg
