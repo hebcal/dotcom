@@ -1463,7 +1463,7 @@ sub gen_cookie($)
 	    $retval .= '&ladeg=' . $q->param('ladeg');
 	    $retval .= '&lamin=' . $q->param('lamin');
 	    $retval .= '&ladir=' . $q->param('ladir');
-	    $retval .= '&tzid=' . $q->param('tzid')
+	    $retval .= '&tzid=' . URI::Escape::uri_escape_utf8($q->param('tzid'))
 	        if defined $q->param('tzid') && $q->param('tzid') ne '';
 	}
 	$retval .= '&m=' . $q->param('m')
