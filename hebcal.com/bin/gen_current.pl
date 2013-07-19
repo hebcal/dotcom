@@ -146,21 +146,23 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-en.xml") || die;
     print RSS rss_hebdate("en-us",
 	 $hdate,
-	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;tag=rss";
-	 $hdate);
+	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;tag=rss",
+	 $hdate,
+	 $pubDate);
     close(RSS);
 
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-he.xml") || die;
     print RSS rss_hebdate("he",
 	 $hebrew,
 	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss",
-	 $hebrew);
+	 $hebrew,
+	 $pubDate);
     close(RSS);
 }
 exit(0);
 
 sub rss_hebdate {
-    my($language,$title,$link,$description) = @_;
+    my($language,$title,$link,$description,$pubDate) = @_;
 
     return qq{<?xml version="1.0" ?>
 <rss version="2.0">
