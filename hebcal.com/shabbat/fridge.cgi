@@ -70,7 +70,7 @@ foreach my $key ($q->param()) {
 }
 
 my $cfg;
-my($evts,undef,$city_descr,$cmd_pretty) = process_args($q);
+my($evts,undef,$city_descr,$short_city,$cmd_pretty) = process_args($q);
 
 my $hebrew_year = 0;
 my $numEntries2 = scalar(@{$evts});
@@ -83,7 +83,7 @@ for (my $i = 0; $i < $numEntries2; $i++)
     }
 }
 
-my $title = "Refrigerator Shabbos Times for $hebrew_year";
+my $title = "Refrigerator Shabbos Times for $city_descr - $hebrew_year | Hebcal";
 
 print "Cache-Control: private\015\012";
 print $q->header(-type => "text/html",
@@ -136,7 +136,7 @@ Hebcal::out_html($cfg, $head);
 
 my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
-		 qq{<div align="center">\n<h4 style="margin:24px 0 0">Candle Lighting Times<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])\n<br>$city_descr</h4>\n});
+		 qq{<div align="center">\n<h4 style="margin:24px 0 0">Candle Lighting Times for $short_city<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h4>\n});
 Hebcal::out_html($cfg, qq{<p style="margin:0 0 4px">www.hebcal.com</p>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
@@ -254,7 +254,8 @@ sub process_args
 {
     my($q) = @_;
 
-    my @status = Hebcal::process_args_common($q, 0, 1);
+    my %cconfig;
+    my @status = Hebcal::process_args_common($q, 0, 1, \%cconfig);
     unless ($status[0]) {
 	print "Status: 400 Bad Request\r\n", "Content-Type: text/html\r\n\r\n",
 	    $status[1], "\n";
@@ -262,6 +263,16 @@ sub process_args
     }
 
     my($ok,$cmd,$latitude,$longitude,$city_descr) = @status;
+
+    my $short_city = $city_descr;
+    if ($cconfig{"geo"} eq "zip") {
+	# shorten the headline for USA
+	$short_city =~ s/, USA$//;	# no United States of America
+	$short_city =~ s/ \d{5}$//;	# no zipcode
+    } elsif ($cconfig{"geo"} eq "city") {
+	$short_city = $cconfig{"city"};
+    }
+
     $cmd .= " -c -s -x";
 
     if (defined $q->param('year') && $q->param('year') =~ /^\d+$/) {
@@ -276,10 +287,7 @@ sub process_args
 
     my(@events) = Hebcal::invoke_hebcal($cmd, '', 0);
 
-    # shorten the headline for USA
-    $city_descr =~ s/, USA$//;	# no United States of America
-    $city_descr =~ s/ \d{5}$//;	# no zipcode
-    (\@events,$cfg,$city_descr,$cmd);
+    (\@events,$cfg,$city_descr,$short_city,$cmd);
 }
 
 # local variables:
