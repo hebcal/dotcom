@@ -1,9 +1,4 @@
 <?php
-$VERSION = '$Revision: 3343 $';
-$matches = array();
-if (preg_match('/(\d+)/', $VERSION, $matches)) {
-    $VERSION = $matches[1];
-}
 $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
 $request_uri = $_SERVER["REQUEST_URI"];
 $ics_question = strpos($request_uri, ".ics%3F");
@@ -28,7 +23,7 @@ if ($args !== false) {
 	    $url = $url_prefix . "/yahrzeit/yahrzeit.cgi/export.ics" . $args;
 	}
 	$ch = curl_init($url);
-	$user_agent = "hebcal-export/$VERSION";
+	$user_agent = "hebcal-export/20130721";
 	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
 	$ref_url = $url_prefix . $request_uri;
 	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
