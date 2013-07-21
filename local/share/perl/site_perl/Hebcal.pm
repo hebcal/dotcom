@@ -2239,6 +2239,9 @@ sub vcalendar_write_contents
 	if (defined $cconfig && defined $cconfig->{"city"}) {
 	    $title = $cconfig->{"city"} . " " . $title;
 	}
+
+	$title =~ s/,/\\,/g;
+
 	out_html(undef, 
 	qq{VERSION:2.0$endl},
 	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v4.13//EN$endl},
