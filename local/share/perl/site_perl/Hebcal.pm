@@ -1865,6 +1865,35 @@ END:VTIMEZONE
 ",
  );
 
+# Zip-Codes.com TimeZone IDs
+#
+# Code 	Description 
+#  4	Atlantic (GMT -04:00) 
+#  5	Eastern (GMT -05:00) 
+#  6	Central (GMT -06:00) 
+#  7	Mountain (GMT -07:00) 
+#  8	Pacific (GMT -08:00) 
+#  9	Alaska (GMT -09:00) 
+# 10	Hawaii-Aleutian Islands (GMT -10:00) 
+# 11	American Samoa (GMT -11:00) 
+# 13	Marshall Islands (GMT +12:00) 
+# 14	Guam (GMT +10:00) 
+# 15	Palau (GMT +9:00)
+my %ZIPCODES_TZ_MAP = (
+'0' => 'UTC',
+'4' => 'America/Puerto_Rico',
+'5' => 'America/New_York',
+'6' => 'America/Chicago',
+'7' => 'America/Denver',
+'8' => 'America/Los_Angeles',
+'9' => 'America/Anchorage',
+'10' => 'Pacific/Honolulu',
+'11' => 'Pacific/Pago_Pago',
+'13' => 'Pacific/Funafuti',
+'14' => 'Pacific/Guam',
+'15' => 'Pacific/Palau',
+);
+
 sub process_args_common {
     my($q,$handle_cookie,$default_to_nyc,$cconfig) = @_;
 
@@ -1976,9 +2005,6 @@ sub process_args_common {
 	$q->param("ladir","n") unless ($q->param("ladir") eq "s");
 
 	$q->param("geo","pos");
-	foreach (qw(city zip tz dst)) {
-	    $q->delete($_);
-	}
 
 	# Geographic Position
 	$city_descr = sprintf("%d\x{b0}%d\x{2032}%s, %d\x{b0}%d\x{2032}%s",
@@ -1995,11 +2021,38 @@ sub process_args_common {
 	$lat_deg  *= -1  if ($q->param("ladir") eq "s");
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-	my $tzid;
-	if ($q->param("tzid")) {
-	    $tzid = $q->param("tzid");
-	    $cmd .= " -z '$tzid'";
-	    $city_descr .= ", $tzid";
+
+	# special-case common old-style URLs
+	if (! defined $q->param("tzid")
+	    && defined $q->param("tz")
+	    && defined $q->param("dst")) {
+	    my $tz = $q->param("tz");
+	    my $dst = $q->param("dst");
+	    if ($tz eq "0" && $dst eq "none") { 
+		$q->param("tzid", "UTC");
+	    } elsif ($tz eq "2" && $dst eq "israel") { 
+		$q->param("tzid", "Asia/Jerusalem");
+	    } elsif ($tz eq "0" && $dst eq "eu") { 
+		$q->param("tzid", "Europe/London");
+	    } elsif ($tz eq "1" && $dst eq "eu") { 
+		$q->param("tzid", "Europe/Paris");
+	    } elsif ($tz eq "2" && $dst eq "eu") { 
+		$q->param("tzid", "Europe/Athens");
+	    } elsif ($dst eq "usa" && defined $ZIPCODES_TZ_MAP{int($tz * -1)}) {
+		$q->param("tzid", $ZIPCODES_TZ_MAP{int($tz * -1)});
+	    }
+	}
+
+	if (! defined $q->param("tzid")) {
+	    return (0, "Please select a Time zone", undef);
+	}
+
+	my $tzid = $q->param("tzid");
+	$cmd .= " -z '$tzid'";
+	$city_descr .= ", $tzid";
+
+	foreach (qw(city zip tz dst)) {
+	    $q->delete($_);
 	}
 	if (defined $cconfig) {
 	    $cconfig->{"latitude"} = $latitude;
@@ -2083,35 +2136,6 @@ sub validate_city {
     return "US-New York-NY";
 }
 
-
-# Zip-Codes.com TimeZone IDs
-#
-# Code 	Description 
-#  4	Atlantic (GMT -04:00) 
-#  5	Eastern (GMT -05:00) 
-#  6	Central (GMT -06:00) 
-#  7	Mountain (GMT -07:00) 
-#  8	Pacific (GMT -08:00) 
-#  9	Alaska (GMT -09:00) 
-# 10	Hawaii-Aleutian Islands (GMT -10:00) 
-# 11	American Samoa (GMT -11:00) 
-# 13	Marshall Islands (GMT +12:00) 
-# 14	Guam (GMT +10:00) 
-# 15	Palau (GMT +9:00)
-my %ZIPCODES_TZ_MAP = (
-'0' => 'UTC',
-'4' => 'America/Puerto_Rico',
-'5' => 'America/New_York',
-'6' => 'America/Chicago',
-'7' => 'America/Denver',
-'8' => 'America/Los_Angeles',
-'9' => 'America/Anchorage',
-'10' => 'Pacific/Honolulu',
-'11' => 'Pacific/Pago_Pago',
-'13' => 'Pacific/Funafuti',
-'14' => 'Pacific/Guam',
-'15' => 'Pacific/Palau',
-);
 
 sub get_usa_tzid {
     my($state,$tz,$dst) = @_;
