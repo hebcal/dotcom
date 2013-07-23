@@ -944,11 +944,15 @@ EOHTML
 	$q->textfield(-name => "m",
 		      -pattern => '\d*',
 		      -style => "width:auto",
-		      -size => 3,
-		      -maxlength => 3,
+		      -size => 2,
+		      -maxlength => 2,
 		      -default => $Hebcal::havdalah_min),
+	qq{&nbsp;<a href="/home/96/what-is-havdalah-or-when-does-shabbat-end" id="havdalahInfo" data-toggle="tooltip" data-placement="bottom" },
+	qq{title="Use 42 min for three medium-sized stars, },
+	qq{50 min for three small stars, },
+	qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
 	"</label>\n",
-	qq{<small class="help-block">(enter "0" to turn off Havdalah times)</small>\n});
+	);
 
     }
 
@@ -994,6 +998,7 @@ JSCRIPT_END
     Hebcal::out_html(undef, $js);
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
+    Hebcal::out_html(undef, "<script>\$('#havdalahInfo').tooltip()</script>\n");
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
