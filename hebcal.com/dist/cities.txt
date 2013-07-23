@@ -14,6 +14,8 @@ AT-Vienna|2761369|AT|Vienna|1691468|48.20849|16.37208|Europe/Vienna
 AU-Adelaide|2078025|AU|Adelaide|1225235|-34.92866|138.59863|Australia/Adelaide
 AU-Brisbane|2174003|AU|Brisbane|2189878|-27.46794|153.02809|Australia/Brisbane
 AU-Canberra|9991100968|AU|Canberra|0|-35.2833|149.2167|Australia/Canberra
+AU-Gold Coast|2165087|AU|Gold Coast|591473|-28.00029|153.43088|Australia/Brisbane
+AU-Hobart|2163355|AU|Hobart|216656|-42.87936|147.32941|Australia/Hobart
 AU-Melbourne|2158177|AU|Melbourne|4246375|-37.814|144.96332|Australia/Melbourne
 AU-Perth|2063523|AU|Perth|1896548|-31.95224|115.8614|Australia/Perth
 AU-Sydney|2147714|AU|Sydney|4627345|-33.86785|151.20732|Australia/Sydney
@@ -47,6 +49,7 @@ BY-Minsk|625144|BY|Minsk|1742124|53.9|27.56667|Europe/Minsk
 BZ-Belmopan|99957172|BZ|Belmopan|0|17.2500|-88.7667|America/Belize
 CA-Calgary|9998775|CA|Calgary|0|51.045219|-114.063011|America/Edmonton
 CA-Edmonton|5946768|CA|Edmonton|712391|53.55014|-113.46871|America/Edmonton
+CA-Halifax|6324729|CA|Halifax|359111|44.64533|-63.57239|America/Halifax
 CA-Mississauga|6075357|CA|Mississauga|668549|43.5789|-79.6583|America/Toronto
 CA-Montreal|6077243|CA|Montréal|3268513|45.50884|-73.58781|America/Montreal
 CA-Ottawa|9993369|CA|Ottawa|0|45.4167|-75.7000|America/Toronto
@@ -264,6 +267,7 @@ NP-Kathmandu|1283240|NP|Kathmandu|1442271|27.70169|85.3206|Asia/Kathmandu
 NU-Alofi|9991064260|NU|Alofi|0|-19.0167|-169.9167|Pacific/Niue
 NZ-Auckland|9992348079|NZ|Auckland|0|-36.884109|174.770416|Pacific/Auckland
 NZ-Wellington|9992351310|NZ|Wellington|0|-41.3000|174.7833|Pacific/Auckland
+NZ-Christchurch|2192362|NZ|Christchurch|363926|-43.53333|172.63333|Pacific/Auckland
 OM-Muscat|9992268284|OM|Muscat|0|23.6133|58.5933|Asia/Muscat
 PA-Panama City|999159386|PA|Panama City|0|8.9667|-79.5333|America/Panama
 PE-Lima|3936456|PE|Lima|7737002|-12.04318|-77.02824|America/Lima
