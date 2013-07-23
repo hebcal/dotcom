@@ -171,6 +171,7 @@ $Hebcal::havdalah_min = 72;
 'Vancouver' => 'CA-Vancouver',
 'White Plains' => 'US-White Plains-NY',
 'Washington DC' => 'US-Washington-DC',
+'IL-Bene Beraq' => 'IL-Bnei Brak',
 );
 
 # based on cities.txt and loaded into HebcalConst.pm
