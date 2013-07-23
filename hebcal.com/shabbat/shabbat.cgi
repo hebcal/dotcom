@@ -606,7 +606,11 @@ EOHTML
 	    my $city_country = $city;
 	    $country = "UK" if $country eq "United Kingdom";
 	    $city_country .= ", $country" unless $grp=~ /^US|CA|IL$/;
-	    $btn_html .= qq{<li><a href="?city=$id">$city_country</a></li>\n};
+
+	    my $url = "?gep=city&amp;city=$id";
+	    $url .= "&amp;m=" . $q->param('m')
+		if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+	    $btn_html .= qq{<li><a href="$url">$city_country</a></li>\n};
 	}
 	$btn_html .= qq{</ul></div><!-- /btn-group -->\n};
 	Hebcal::out_html(undef, $btn_html);
@@ -633,14 +637,19 @@ EOHTML
 	qq{</label>});
 
     Hebcal::out_html($cfg,
-	qq{<label\nfor="m1" title="enter '0' to suppress Havdalah times">Havdalah minutes past sundown:\n},
+	qq{<label>Havdalah minutes past sundown:\n},
 	$q->textfield(-name => 'm',
 		      -id => 'm1',
 		      -pattern => '\d*',
 		      -class => 'input-mini',
-		      -size => 3,
-		      -maxlength => 3,
+		      -style => "width:auto",
+		      -size => 2,
+		      -maxlength => 2,
 		      -default => $Hebcal::havdalah_min),
+	qq{&nbsp;<a href="/home/96/what-is-havdalah-or-when-does-shabbat-end" id="havdalahInfo" data-toggle="tooltip" data-placement="right" },
+	qq{title="Use 42 min for three medium-sized stars, },
+	qq{50 min for three small stars, },
+	qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
 	"</label>",
 	qq{<input\ntype="submit" value="Get Shabbat Times" class="btn btn-primary">\n},
 	qq{</fieldset></form>});
@@ -667,7 +676,9 @@ EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs2);
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
+    Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').tooltip()</script>\n");
+    Hebcal::out_html($cfg, "</body></html>\n");
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
     Hebcal::cache_end() if $cache;
     exit(0);
