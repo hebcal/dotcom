@@ -169,14 +169,23 @@ IL-Ashdod|295629|IL|Ashdod|224656|31.79213|34.64966|Asia/Jerusalem
 IL-Ashkelon|295620|IL|Ashkelon|105995|31.66926|34.57149|Asia/Jerusalem
 IL-Bat Yam|295548|IL|Bat Yam|128979|32.02362|34.75199|Asia/Jerusalem
 IL-Be'er Sheva|295530|IL|Be'er Sheva|186600|31.25181|34.7913|Asia/Jerusalem
-IL-Bene Beraq|295514|IL|Bené Beraq|154400|32.08523|34.83315|Asia/Jerusalem
+IL-Beit Shemesh|295432|IL|Beit Shemesh|67100|31.74959|34.98877|Asia/Jerusalem
+IL-Bnei Brak|295514|IL|Bnei Brak|154400|32.08523|34.83315|Asia/Jerusalem
 IL-Eilat|295277|IL|Eilat|45588|29.55805|34.94821|Asia/Jerusalem
+IL-Hadera|294946|IL|H̱adera|75854|32.43645|34.91956|Asia/Jerusalem
 IL-Haifa|294801|IL|Haifa|267300|32.81841|34.9885|Asia/Jerusalem
+IL-Herzliya|294778|IL|Herzliya|83600|32.16627|34.82536|Asia/Jerusalem
 IL-Holon|294751|IL|H̱olon|165787|32.01034|34.77918|Asia/Jerusalem
 IL-Jerusalem|281184|IL|Jerusalem|801000|31.76904|35.21633|Asia/Jerusalem
+IL-Kfar Saba|294514|IL|Kfar Saba|80773|32.175|34.90694|Asia/Jerusalem
+IL-Lod|294421|IL|Lod|66589|31.9467|34.8903|Asia/Jerusalem
+IL-Modiin|6693679|IL|Modi'in|76466|31.89825|35.01051|Asia/Jerusalem
+IL-Nazareth|294098|IL|Nazareth|64800|32.69925|35.30483|Asia/Jerusalem
 IL-Netanya|294071|IL|Netanya|171676|32.33292|34.85992|Asia/Jerusalem
 IL-Petach Tikvah|6693674|IL|Petach Tikvah|188900|32.09174|34.88503|Asia/Jerusalem
+IL-Ra'anana|293807|IL|Ra'anana|80000|32.1836|34.87386|Asia/Jerusalem
 IL-Ramat Gan|293788|IL|Ramat Gan|128095|32.0812|34.81934|Asia/Jerusalem
+IL-Ramla|293768|IL|Ramla|63860|31.92923|34.86563|Asia/Jerusalem
 IL-Rishon LeZion|293703|IL|Rishon LeZion|220492|31.97102|34.78939|Asia/Jerusalem
 IL-Tel Aviv|293397|IL|Tel Aviv|250000|32.08088|34.78057|Asia/Jerusalem
 IL-Tiberias|293322|IL|Tiberias|39790|32.7922|35.53124|Asia/Jerusalem
