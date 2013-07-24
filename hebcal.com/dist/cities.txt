@@ -61,8 +61,9 @@ CD-Kinshasa|2314302|CD|Kinshasa|7785965|-4.32142|15.30807|Africa/Kinshasa
 CD-Lubumbashi|922704|CD|Lubumbashi|1373770|-11.66089|27.47938|Africa/Lubumbashi
 CF-Bangui|9991306666|CF|Bangui|0|4.3667|18.5833|Africa/Bangui
 CG-Brazzaville|2260535|CG|Brazzaville|1284609|-4.26613|15.28318|Africa/Brazzaville
-CH-Bern|999781788|CH|Bern|0|46.9167|7.4667|Europe/Zurich
-CH-Zurich|999784794|CH|Zurich|0|47.377060|8.539550|Europe/Zurich
+CH-Bern|2661552|CH|Bern|121631|46.94809|7.44744|Europe/Zurich
+CH-Geneva|2660646|CH|Geneva|183981|46.20222|6.14569|Europe/Zurich
+CH-Zurich|2657896|CH|Zurich|341730|47.36667|8.55|Europe/Zurich
 CI-Abidjan|2293538|CI|Abidjan|3677115|5.30966|-4.01266|Africa/Abidjan
 CI-Yamoussoukro|9991347063|CI|Yamoussoukro|0|6.8167|-5.2833|Africa/Abidjan
 CK-Avarua|9991064303|CK|Avarua|0|-21.2078|-159.7750|Pacific/Rarotonga
