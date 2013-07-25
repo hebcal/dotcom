@@ -134,7 +134,11 @@ if ($opts{'H'}) {
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     $HEB_YR = $hebdate->{"yy"};
-    $HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+    if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15)
+	|| $hebdate->{"mm"} == 6) {
+	# it's past the 15th of Av (5th month) or Elul (6th month)
+	$HEB_YR++;
+    }
 }
 
 my %GREG2HEB;
