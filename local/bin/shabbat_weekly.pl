@@ -49,6 +49,7 @@ use Config::Tiny;
 use MIME::Lite;
 use Date::Calc;
 use HebcalGPL ();
+use URI::Escape;
 
 my $opt_all = 0;
 my $opt_dryrun = 0;
@@ -91,6 +92,8 @@ my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 my $five_days_ahead = $midnight + (5 * 60 * 60 * 24);
 my $endofweek = $five_days_ahead > $saturday ? $five_days_ahead : $saturday;
 my $sat_year = (localtime($saturday))[5] + 1900;
+my $UTM_PARAM = sprintf("utm_source=newsletter&amp;utm_campaign=%04d-%02d-%02d",
+			$year, $mon+1, $mday);
 
 my $HOME = "/home/hebcal";
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
@@ -269,7 +272,7 @@ sub mail_user
     my $encoded = MIME::Base64::encode_base64($to);
     chomp($encoded);
     my $unsub_url = "http://www.hebcal.com/email/?" .
-	"e=" . my_url_escape($encoded);
+	"e=" . URI::Escape::uri_escape_utf8($encoded);
 
     my $html_body = "";
 
@@ -281,12 +284,12 @@ sub mail_user
 	my $next_year = $hebdate->{"yy"} + 1;
 	my $fridge_loc = defined $args->{"zip"} 
 	    ? "zip=" . $args->{"zip"}
-	    : "city=" . $args->{"city"};
+	    : "city=" . URI::Escape::uri_escape_utf8($args->{"city"});
 	my $loc_copy = $loc;
 	$loc_copy =~ s/,.+$//;
 	$html_body .= qq{<div style="font-size:14px;color:#999;font-family:arial,helvetica,sans-serif">\n};
 	$html_body .= qq{<div>Rosh Hashana $next_year is coming! Print your }
-	    . qq{<a href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year">}
+	    . qq{<a href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year&amp;$UTM_PARAM">}
 	    . qq{$loc_copy virtual refrigerator magnet</a> for candle lighting times and }
 	    . qq{Parashat haShavuah on a compact 5x7 page.</div>\n}
 	    . qq{<div>&nbsp;</div>\n};
@@ -320,7 +323,7 @@ $unsub_url
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
 <div>This email was sent to $to by Hebcal.com</div>
 <div>&nbsp;</div>
-<div><a href="$unsub_url&amp;unsubscribe=1">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></div>
+<div><a href="$unsub_url&amp;unsubscribe=1&amp;$UTM_PARAM">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1&amp;$UTM_PARAM">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy?$UTM_PARAM">Privacy Policy</a></div>
 </div>
 };
 
@@ -355,16 +358,6 @@ $unsub_url
     }
 
     $status;
-}
-
-sub my_url_escape
-{
-    my($str) = @_;
-
-    $str =~ s/([^\w\$. -])/sprintf("%%%02X", ord($1))/eg;
-    $str =~ s/ /+/g;
-
-    $str;
 }
 
 sub get_friday_candles
@@ -440,7 +433,7 @@ sub gen_body
 		. Hebcal::get_holiday_anchor($subj,undef,undef);
 	    $body .= "This week's Torah portion is $subj\n";
 	    $body .= "  $url\n";
-	    $html_body .= qq{<div>This week's Torah portion is <a href="$url">$subj</a>.</div>\n<div>&nbsp;</div>\n};
+	    $html_body .= qq{<div>This week's Torah portion is <a href="$url?$UTM_PARAM">$subj</a>.</div>\n<div>&nbsp;</div>\n};
 	}
 	else
 	{
@@ -451,7 +444,7 @@ sub gen_body
 		$body .= "  $url\n";
 		$holiday_seen{$hanchor} = 1;
 	    }
-	    $html_body .= qq{<div><a href="$url">$subj</a> occurs on $strtime.</div>\n<div>&nbsp;</div>\n};
+	    $html_body .= qq{<div><a href="$url?$UTM_PARAM">$subj</a> occurs on $strtime.</div>\n<div>&nbsp;</div>\n};
 	}
     }
 
