@@ -47,6 +47,8 @@ use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
 use Config::Tiny;
 use MIME::Lite;
+use Date::Calc;
+use HebcalGPL ();
 
 my $opt_all = 0;
 my $opt_dryrun = 0;
@@ -269,10 +271,37 @@ sub mail_user
     my $unsub_url = "http://www.hebcal.com/email/?" .
 	"e=" . my_url_escape($encoded);
 
-    my($body,$html_body) = gen_body(\@events);
+    my $html_body = "";
+
+    # for the last two weeks of Av and the last week or two of Elul
+    my @today = Date::Calc::Today();
+    my $hebdate = HebcalGPL::greg2hebrew($today[0], $today[1], $today[2]);
+    if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15)
+	|| ($hebdate->{"mm"} == 6 && $hebdate->{"dd"} >= 20)) {
+	my $next_year = $hebdate->{"yy"} + 1;
+	my $fridge_loc = defined $args->{"zip"} 
+	    ? "zip=" . $args->{"zip"}
+	    : "city=" . $args->{"city"};
+	my $loc_copy = $loc;
+	$loc_copy =~ s/,.+$//;
+	$html_body .= qq{<div style="font-size:14px;color:#999;font-family:arial,helvetica,sans-serif">\n};
+	$html_body .= qq{<div>Rosh Hashana $next_year is coming! Print your }
+	    . qq{<a href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year">}
+	    . qq{$loc_copy virtual refrigerator magnet</a> for candle lighting times and }
+	    . qq{Parashat haShavuah on a compact 5x7 page.</div>\n}
+	    . qq{<div>&nbsp;</div>\n};
+	$html_body .= "</div>\n";
+    }
+
+    # begin the HTML for the events - main body
+    $html_body .= qq{<div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">\n};
+
+    my($body,$html_body_events) = gen_body(\@events);
+
+    $html_body .= $html_body_events;
 
     $body .= qq{
-$loc
+These times are for $loc.
 
 Shabbat Shalom,
 hebcal.com
@@ -281,15 +310,17 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 };
 
-    my $html_loc = $loc;
-    $html_loc =~ s/\n/<br>\n/g;
     $html_body .= qq{<div style="font-size:16px">
-<p>$html_loc</p>
-<p>Shabbat Shalom!</p>
+<div>These times are for $loc.</div>
+<div>&nbsp;</div>
+<div>Shabbat Shalom!</div>
+<div>&nbsp;</div>
+</div>
 </div>
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<p>This email was sent to $to by Hebcal.com</p>
-<p><a href="$unsub_url&amp;unsubscribe=1">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></p>
+<div>This email was sent to $to by Hebcal.com</div>
+<div>&nbsp;</div>
+<div><a href="$unsub_url&amp;unsubscribe=1">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></div>
 </div>
 };
 
@@ -394,14 +425,14 @@ sub gen_body
 
 	    $body .= sprintf("%s is at %d:%02dpm on %s\n",
 			     $subj, $hour, $min, $strtime);
-	    $html_body .= sprintf("<p>%s is at <strong>%d:%02dpm</strong> on %s.</p>\n",
+	    $html_body .= sprintf("<div>%s is at <strong>%d:%02dpm</strong> on %s.</div>\n<div>&nbsp;</div>\n",
 				  $subj, $hour, $min, $strtime);
 	}
 	elsif ($subj eq "No sunset today.")
 	{
 	    my $str = "No sunset on $strtime";
 	    $body      .= qq{$str\n};
-	    $html_body .= qq{<p>$str.</p>\n};
+	    $html_body .= qq{<div>$str.</div>\n<div>&nbsp;</div>\n};
 	}
 	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
 	{
@@ -409,7 +440,7 @@ sub gen_body
 		. Hebcal::get_holiday_anchor($subj,undef,undef);
 	    $body .= "This week's Torah portion is $subj\n";
 	    $body .= "  $url\n";
-	    $html_body .= qq{<p>This week's Torah portion is <a href="$url">$subj</a>.</p>\n};
+	    $html_body .= qq{<div>This week's Torah portion is <a href="$url">$subj</a>.</div>\n<div>&nbsp;</div>\n};
 	}
 	else
 	{
@@ -420,7 +451,7 @@ sub gen_body
 		$body .= "  $url\n";
 		$holiday_seen{$hanchor} = 1;
 	    }
-	    $html_body .= qq{<p><a href="$url">$subj</a> occurs on $strtime.</p>\n};
+	    $html_body .= qq{<div><a href="$url">$subj</a> occurs on $strtime.</div>\n<div>&nbsp;</div>\n};
 	}
     }
 
@@ -525,7 +556,7 @@ sub parse_config
 	}
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 
-	$city_descr = "These times are for $city, $state " . $args{"zip"} . ".";
+	$city_descr = "$city, $state " . $args{"zip"};
     } elsif (defined $args{"city"}) {
 	my $city = $args{"city"};
 	$city =~ s/\+/ /g;
@@ -548,7 +579,7 @@ sub parse_config
 
 	my $country = Hebcal::woe_country($city);
 	$country = "USA" if $country eq "United States of America";
-	$city_descr = "These times are for " . Hebcal::woe_city($city) . ", $country" . ".";
+	$city_descr = Hebcal::woe_city($city) . ", $country";
     } else {
 	carp "no geographic key in [$config]";
 	return undef;
@@ -628,7 +659,7 @@ sub my_sendmail
     my $part2 = MIME::Lite->new(Top  => 0,
 				Type => "text/html",
 				Data => "<!DOCTYPE html><html><head><title>Hebcal Shabbat Times</title></head>\n" .
-				qq{<body><div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">$html_body</div></body></html>\n}
+				qq{<body>$html_body</body></html>\n}
 			       );
     $part2->attr("content-type.charset" => "UTF-8");
     $msg->attach($part2);
