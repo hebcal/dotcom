@@ -495,6 +495,32 @@ sub invoke_hebcal
     @events;
 }
 
+
+sub event_ymd($) {
+  my($evt) = @_;
+  my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+  my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+  my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
+  ($year,$month,$day);
+}
+
+sub event_dates_equal($$) {
+  my($evt1,$evt2) = @_;
+  my($year1,$month1,$day1) = event_ymd($evt1);
+  my($year2,$month2,$day2) = event_ymd($evt2);
+  $year1 == $year2 && $month1 == $month2 && $day1 == $day2;
+}
+
+sub date_format_sql($$$) {
+  my($year,$month,$day) = @_;
+  sprintf("%04d-%02d-%02d", $year, $month, $day);
+}
+
+sub date_format_csv($$$) {
+  my($year,$month,$day) = @_;
+  sprintf("%02d-%s-%04d", $day, $Hebcal::MoY_short[$month - 1], $year);
+}
+
 sub event_to_time
 {
     my($evt) = @_;

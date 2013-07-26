@@ -256,31 +256,6 @@ if ($opts{'d'}) {
 
 exit(0);
 
-sub event_ymd {
-  my($evt) = @_;
-  my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-  my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-  my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
-  ($year,$month,$day);
-}
-
-sub event_dates_equal {
-  my($evt1,$evt2) = @_;
-  my($year1,$month1,$day1) = event_ymd($evt1);
-  my($year2,$month2,$day2) = event_ymd($evt2);
-  $year1 == $year2 && $month1 == $month2 && $day1 == $day2;
-}
-
-sub date_format_sql {
-  my($year,$month,$day) = @_;
-  sprintf("%04d-%02d-%02d", $year, $month, $day);
-}
-
-sub date_format_csv {
-  my($year,$month,$day) = @_;
-  sprintf("%02d-%s-%04d", $day, $Hebcal::MoY_short[$month - 1], $year);
-}
-
 sub get_tri_events
 {
     my($start) = @_;
@@ -345,7 +320,7 @@ sub cycle_readings
 	next unless $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/;
 	my $h = $1;
 
-	my($year,$month,$day) = event_ymd($events->[$i]);
+	my($year,$month,$day) = Hebcal::event_ymd($events->[$i]);
 	my $stime = sprintf("%02d %s %04d",
 			    $day,
 			    $Hebcal::MoY_long{$month},
@@ -1188,12 +1163,12 @@ sub special_pinchas {
     my($events) = @_;
     foreach my $evt (@{$events}) {
 	next unless "Parashat Pinchas" eq $evt->[$Hebcal::EVT_IDX_SUBJ];
-	my($year,$month,$day) = event_ymd($evt);
+	my($year,$month,$day) = Hebcal::event_ymd($evt);
 	my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
 	# check to see if it's after the 17th of Tammuz
 	if ($hebdate->{"mm"} > 4
 	    || ($hebdate->{"mm"} == 4 && $hebdate->{"dd"} > 17)) {
-	    my $dt = date_format_sql($year, $month, $day);
+	    my $dt = Hebcal::date_format_sql($year, $month, $day);
 	    $special{$dt}->{"H"} = "Jeremiah 1:1 - 2:3";
 	    $special{$dt}->{"reason"} = "Pinchas occurring after 17 Tammuz";
 	}
@@ -1205,8 +1180,8 @@ sub special_readings
     my($events) = @_;
 
     for (my $i = 0; $i < @{$events}; $i++) {
-	my($year,$month,$day) = event_ymd($events->[$i]);
-	my $dt = date_format_sql($year, $month, $day);
+	my($year,$month,$day) = Hebcal::event_ymd($events->[$i]);
+	my $dt = Hebcal::date_format_sql($year, $month, $day);
 	next if defined $special{$dt};
 	
 	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
@@ -1218,12 +1193,12 @@ sub special_readings
 	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d) Candles/
 	    && $1 > 1
 	    && defined $events->[$i+1]
-	    && event_dates_equal($events->[$i], $events->[$i+1])) {
+	    && Hebcal::event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $h = "Shabbat Rosh Chodesh Chanukah"; # don't set $chanukah_day = 6
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/
 	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Shabbat HaChodesh/
 	    && defined $events->[$i+1]
-	    && event_dates_equal($events->[$i], $events->[$i+1])) {
+	    && Hebcal::event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $h = "Shabbat HaChodesh (on Rosh Chodesh)";
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
@@ -1232,7 +1207,7 @@ sub special_readings
 	    $h = 'Shabbat Machar Chodesh';
 	    my($year0,$month0,$day0) =
 		Date::Calc::Add_Delta_Days($year, $month, $day, -1);
-	    $dt = date_format_sql($year0, $month0, $day0);
+	    $dt = Hebcal::date_format_sql($year0, $month0, $day0);
 	    next if defined $special{$dt};
 	} elsif ($dow != 6) {
 	    next;
@@ -1292,7 +1267,7 @@ sub csv_parasha_event
 {
     my($evt,$h,$parshiot) = @_;
 
-    my($year,$month,$day) = event_ymd($evt);
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
     csv_parasha_event_inner($h,$year,$month,$day,$parshiot,$aliyot,$DBH);
 }
@@ -1303,8 +1278,8 @@ sub csv_parasha_event_inner
 {
     my($h,$year,$month,$day,$parshiot,$aliyot,$dbh) = @_;
 
-    my $stime2 = date_format_csv($year, $month, $day);
-    my $dt = date_format_sql($year, $month, $day);
+    my $stime2 = Hebcal::date_format_csv($year, $month, $day);
+    my $dt = Hebcal::date_format_sql($year, $month, $day);
 
     my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
     if (defined $dbh) {
@@ -1400,8 +1375,8 @@ sub readings_for_current_year
 	for (my $i = 0; $i < @events; $i++) {
 	    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
 	    my $h = $1;
-	    my($year,$month,$day) = event_ymd($events[$i]);
-	    $parashah_date_sql{$h}->[$yr] = date_format_sql($year, $month, $day);
+	    my($year,$month,$day) = Hebcal::event_ymd($events[$i]);
+	    $parashah_date_sql{$h}->[$yr] = Hebcal::date_format_sql($year, $month, $day);
 	    $parashah_time{$h} = Time::Local::timelocal
 	      (1,0,0,
 	       $day,
@@ -1439,7 +1414,7 @@ sub triennial_csv
 	next unless ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
 	my $h = $1;
 
-	my($year,$month,$day) = event_ymd($events->[$i]);
+	my($year,$month,$day) = Hebcal::event_ymd($events->[$i]);
 	my $aliyot = $readings->{$h}->[$yr]->[0];
 	csv_parasha_event_inner($h,$year,$month,$day,$parshiot,$aliyot,undef);
     }
