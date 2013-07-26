@@ -141,15 +141,15 @@ Hebcal::out_html($cfg, qq{<p style="margin:0 0 4px">www.hebcal.com</p>\n});
     
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
-format_items($q,$evts);
+my $items = filter_events($evts);
+format_items($q,$items);
 
 Hebcal::out_html($cfg, qq{</div><!-- .center -->\n</div><!-- #content -->\n</div><!-- .container -->\n</body>\n</html>\n});
 
 exit(0);
 
-sub format_items
-{
-    my($q,$events) = @_;
+sub filter_events {
+    my($events) = @_;
 
     my $numEntries = scalar(@{$events});
     my @items;
@@ -187,6 +187,12 @@ sub format_items
 
 	push(@items, [$Hebcal::MoY_short[$mon], $mday, $item_time, $reason, $yom_tov]);
     }
+    \@items;
+}
+
+sub format_items
+{
+    my($q,$items) = @_;
 
     my $table_head = <<EOHTML;
 <table style="width:auto" id="fridge-table">
@@ -197,12 +203,12 @@ EOHTML
     ;
     Hebcal::out_html($cfg, $table_head);
 
-    my $half = POSIX::ceil(scalar(@items) / 2.0);
+    my $half = POSIX::ceil(scalar(@{$items}) / 2.0);
     for (my $i = 0; $i < $half; $i++) {
 	Hebcal::out_html($cfg, "<tr>");
-	format_row($items[$i]);
+	format_row($items->[$i]);
 	Hebcal::out_html($cfg, "\n");
-	format_row($items[$i+$half]);
+	format_row($items->[$i+$half]);
 	Hebcal::out_html($cfg, "</tr>\n");
     }
 
