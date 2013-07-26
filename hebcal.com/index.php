@@ -305,7 +305,7 @@ pattern="\d*" id="zip"></label>
 </form>
 <?php if (isset($param["zip"]) || isset($param["city"])) { ?>
 <p><a class="btn" href="/shabbat/fridge.cgi?<?php
-  echo isset($param["zip"]) ? "zip=$param[zip]" : "city=$param[city]" ?>;year=<?php
+  echo isset($param["zip"]) ? "zip=$param[zip]" : "city=$param[city]" ?>&amp;year=<?php
   echo $hebyear ?>"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
 <?php } else { ?>
 <p><a class="btn" href="/home/shabbat/fridge"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
