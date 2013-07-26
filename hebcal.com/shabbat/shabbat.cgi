@@ -181,22 +181,21 @@ qq{<?xml version="1.0"?>
 <p><strong>$city_descr</strong></p>
 });
 
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	my $subj = $items->[$i]->{'subj'};
+    foreach my $item (@{$items}) {
+	my $subj = $item->{'subj'};
 	$subj =~ s/^Candle lighting/Candles/;
 
 	Hebcal::out_html($cfg, "<p>$subj");
 
-	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
+	if ($item->{'class'} =~ /^(candles|havdalah)$/)
 	{
-	    my $pm = $items->[$i]->{'time'};
+	    my $pm = $item->{'time'};
 	    $pm =~ s/pm$/p/;
 	    Hebcal::out_html($cfg, ": $pm");
 	}
-	elsif ($items->[$i]->{'class'} eq 'holiday')
+	elsif ($item->{'class'} eq 'holiday')
 	{
-	    Hebcal::out_html($cfg, "<br/>\n", $items->[$i]->{'date'});
+	    Hebcal::out_html($cfg, "<br/>\n", $item->{'date'});
 	}
 
 	Hebcal::out_html($cfg, "</p>\n");
@@ -234,7 +233,7 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title>$title</title>
-<link>$url</link>
+<link>$url&amp;utm_source=rss</link>
 <atom:link href="$url&amp;cfg=r" rel="self" type="application/rss+xml" />
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
 <language>en-us</language>
@@ -243,29 +242,28 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 <!-- $cmd_pretty -->
 });
 
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	my $subj = $items->[$i]->{'subj'};
-	if (defined $items->[$i]->{'time'}) { 
-	    $subj .= ": " . $items->[$i]->{'time'};
+    foreach my $item (@{$items}) {
+	my $subj = $item->{'subj'};
+	if (defined $item->{'time'}) { 
+	    $subj .= ": " . $item->{'time'};
 	}
 
-	my $link = $items->[$i]->{'link'};
+	my $link = $item->{'link'};
 	my $guid = $link;
 	$guid .= ($guid =~ /\?/) ? "&amp;" : "?";
-	$guid .= "dt=" . $items->[$i]->{"dc:date"};
+	$guid .= "dt=" . $item->{"dc:date"};
 
 	Hebcal::out_html($cfg, 
 qq{<item>
 <title>$subj</title>
 <link>$link</link>
 <guid isPermaLink="false">$guid</guid>
-<description>$items->[$i]->{'date'}</description>
-<category>$items->[$i]->{'class'}</category>
-<pubDate>$items->[$i]->{'pubDate'}</pubDate> 
+<description>$item->{'date'}</description>
+<category>$item->{'class'}</category>
+<pubDate>$item->{'pubDate'}</pubDate> 
 });
 
-	if ($items->[$i]->{'class'} eq "candles" && defined $latitude) {
+	if ($item->{'class'} eq "candles" && defined $latitude) {
 	    Hebcal::out_html($cfg,
 qq{<geo:lat>$latitude</geo:lat>
 <geo:long>$longitude</geo:long>
@@ -288,31 +286,30 @@ sub display_html_common
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	Hebcal::out_html($cfg,qq{<li class="$items->[$i]->{'class'}">});
+    foreach my $item (@{$items}) {
+	Hebcal::out_html($cfg,qq{<li class="$item->{'class'}">});
 
 	my $anchor = '';
 	if (!$cfg)
 	{
-	    $anchor = $items->[$i]->{'about'};
+	    $anchor = $item->{'about'};
 	    $anchor =~ s/^.*#//;
 	    $anchor = qq{ id="$anchor"};
 	}
 
-	if ($items->[$i]->{'class'} =~ /^(candles|havdalah)$/)
+	if ($item->{'class'} =~ /^(candles|havdalah)$/)
 	{
 	    Hebcal::out_html($cfg,qq{<a$anchor></a>})
 		unless $cfg;
-	    Hebcal::out_html($cfg,qq{$items->[$i]->{'subj'}: <strong>$items->[$i]->{'time'}</strong> on $items->[$i]->{'date'}});
+	    Hebcal::out_html($cfg,qq{$item->{'subj'}: <strong>$item->{'time'}</strong> on $item->{'date'}});
 	}
-	elsif ($items->[$i]->{'class'} eq 'holiday')
+	elsif ($item->{'class'} eq 'holiday')
 	{
-	    Hebcal::out_html($cfg,qq{<a$anchor target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a> occurs on $items->[$i]->{'date'}});
+	    Hebcal::out_html($cfg,qq{<a$anchor target="$tgt" href="$item->{'link'}">$item->{'subj'}</a> occurs on $item->{'date'}});
 	}
-	elsif ($items->[$i]->{'class'} eq 'parashat')
+	elsif ($item->{'class'} eq 'parashat')
 	{
-	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$items->[$i]->{'link'}">$items->[$i]->{'subj'}</a>});
+	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$item->{'link'}">$item->{'subj'}</a>});
 	}
     
 	Hebcal::out_html($cfg,qq{</li>\n});
@@ -352,12 +349,10 @@ sub display_javascript
 		     qq{<div id="hebcal-$loc_class">\n},
 		     qq{<h3>Shabbat times for $city_descr</h3>\n});
 
-    for (my $i = 0; $i < scalar(@{$items}); $i++)
-    {
-	if ($cfg eq "widget" && $items->[$i]->{'link'})
-	{
-	    $items->[$i]->{'link'} = "javascript:widget.openURL('" .
-		$items->[$i]->{'link'} . "');";
+    foreach my $item (@{$items}) {
+	if ($cfg eq "widget" && $item->{'link'}) {
+	    $item->{'link'} = "javascript:widget.openURL('" .
+		$item->{'link'} . "');";
 	}
     }
 
@@ -366,7 +361,7 @@ sub display_javascript
     if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
-    my $url = url_html(self_url());
+    my $url = url_html(self_url() . "&utm_source=shabbat1c");
     if ($cfg eq "widget")
     {
 	$url = "javascript:widget.openURL('" . $url . "');";
@@ -641,7 +636,6 @@ EOHTML
 	$q->textfield(-name => 'm',
 		      -id => 'm1',
 		      -pattern => '\d*',
-		      -class => 'input-mini',
 		      -style => "width:auto",
 		      -size => 2,
 		      -maxlength => 2,
