@@ -44,7 +44,6 @@ use Getopt::Std ();
 use XML::Simple ();
 use LWP::UserAgent;
 use HTTP::Request;
-use Image::Magick;
 use POSIX qw(strftime);
 use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
@@ -53,6 +52,8 @@ use HebcalGPL ();
 use RequestSignatureHelper;
 use Config::Tiny;
 use strict;
+
+my $eval_use_Image_Magick = 0;
 
 $0 =~ s,.*/,,;  # basename
 my($usage) = "usage: $0 [-hy] [-H <year>] [f f.csv] festival.xml output-dir
@@ -83,7 +84,6 @@ if ($opts{'f'}) {
     print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
 }
 
-my $DO_AMAZON = 1;
 my $NOW = time();
 
 my @FESTIVALS;
@@ -169,17 +169,23 @@ holidays_observed(\%OBSERVED);
 
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
-# Set up the helper
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
-    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
-my $AWS_HOST = $Config->{_}->{"hebcal.aws.product-api.host"};
-my $helper = new RequestSignatureHelper (
+# Set up the amazon request signing helper
+my $helper;
+my $AWS_HOST;
+my $ua;
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
+my $DO_AMAZON = 1;
+if ($Config) {
+    $AWS_HOST = $Config->{_}->{"hebcal.aws.product-api.host"};
+    $helper = new RequestSignatureHelper (
     +RequestSignatureHelper::kAWSAccessKeyId => $Config->{_}->{"hebcal.aws.product-api.id"},
     +RequestSignatureHelper::kAWSSecretKey => $Config->{_}->{"hebcal.aws.product-api.secret"},
     +RequestSignatureHelper::kEndPoint => $AWS_HOST,
-					);
+					 );
+} else {
+    $DO_AMAZON = 0;
+}
 
-my $ua;
 foreach my $f (@FESTIVALS)
 {
     print "   $f...\n" if $opts{"v"};
@@ -925,6 +931,11 @@ EOHTML
 			$ua->mirror("http://images.amazon.com/images/P/$img",
 				    $filename);
 		    }
+		}
+
+		unless ($eval_use_Image_Magick) {
+		    eval("use Image::Magick");
+		    $eval_use_Image_Magick = 1;
 		}
 
 		my $image = new Image::Magick;
