@@ -92,7 +92,7 @@ my $saturday = $now + ((6 - $wday) * 60 * 60 * 24);
 my $five_days_ahead = $midnight + (5 * 60 * 60 * 24);
 my $endofweek = $five_days_ahead > $saturday ? $five_days_ahead : $saturday;
 my $sat_year = (localtime($saturday))[5] + 1900;
-my $UTM_PARAM = sprintf("utm_source=newsletter&amp;utm_campaign=%04d-%02d-%02d",
+my $UTM_PARAM = sprintf("utm_source=newsletter&amp;utm_campaign=shabbat-%04d-%02d-%02d",
 			$year, $mon+1, $mday);
 
 my $HOME = "/home/hebcal";
