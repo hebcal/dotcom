@@ -38,7 +38,7 @@
 package HebcalHtml;
 
 use strict;
-
+use URI::Escape;
 use CGI qw(-no_xhtml);
 
 $HebcalHtml::gregorian_warning = qq{<div class="alert alert-block">
@@ -109,8 +109,8 @@ sub download_html_bootstrap {
     my $href_ol_usa = Hebcal::download_href($q, "${filename}_usa", "csv");
     my $href_ol_eur = Hebcal::download_href($q, "${filename}_eur", "csv") . ";euro=1";
     my $href_vcs = Hebcal::download_href($q, $filename, "vcs");
-    my $title_esc = $title ? Hebcal::url_escape("Hebcal $title")
-	: Hebcal::url_escape("Hebcal $filename");
+    my $title_esc = $title ? URI::Escape::uri_escape_utf8("Hebcal $title")
+	: URI::Escape::uri_escape_utf8("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
  
     my $ol_ics_title = "Outlook 2007, Outlook 2010 (Windows)";
@@ -182,7 +182,7 @@ EOHTML
     my $gcal_subical_href = $subical_href;
     $gcal_subical_href =~ s/;/&/g;
     my $full_http_href = "http://" . $vhost . $gcal_subical_href;
-    my $gcal_href = Hebcal::url_escape($full_http_href);
+    my $gcal_href = URI::Escape::uri_escape_utf8($full_http_href);
     my $gcal = <<EOHTML;
 <p><a title="Add to Google Calendar"
 class="download" id="dl-gcal-sub"
