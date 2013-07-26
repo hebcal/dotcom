@@ -1200,8 +1200,7 @@ sub html_footer_bootstrap
 <div class="span3">
 $last_updated_text
 <p><small>Except where otherwise noted, content on
-<span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
-is licensed under a 
+this site is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
 </div><!-- .span3 -->
