@@ -19,7 +19,7 @@ if (isset($param["zip"]) && preg_match('/^\d{5}$/', $param["zip"])) {
 
 if (isset($param["city"])) {
     $geo_city = $param["city"];
-    $geo_link = "geo=city;city=" . urlencode($geo_city);
+    $geo_link = "geo=city&amp;city=" . urlencode($geo_city);
 
     global $hebcal_cities, $hebcal_countries;
     $info = $hebcal_cities[$geo_city];
@@ -34,19 +34,20 @@ if (isset($param["city"])) {
 	$state = "ZZ";
     }
 
-    $geo_link = "geo=zip;zip=" . urlencode($zip);
+    $geo_link = "geo=zip&amp;zip=" . urlencode($zip);
     $descr = htmlspecialchars("$city, $state $zip");
     $zip = htmlspecialchars($zip);
 }
 
 if (isset($param["a"]) && ($param["a"] == "1" || $param["a"] == "on")) {
-    $geo_link .= ";a=on";
+    $geo_link .= "&amp;a=on";
     $ashk = " checked";
 } else {
     $ashk = "";
 }
 
-$url_base = "http://www.hebcal.com/shabbat/?${geo_link};m=${m}";
+$url_base = "http://www.hebcal.com/shabbat/?${geo_link}&amp;m=${m}";
+$url_base_double = htmlentities($url_base);
 
 $xtra_head = <<<EOD
 <style type="text/css">
@@ -90,30 +91,18 @@ Hebrew date, a full Jewish Calendar, RSS feeds).</p>
 (<a href="#change">change city</a>).</p>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML:</p>
-<pre class="brush:html">
+<pre class="brush:html;auto-links:false"">
 &lt;script type="text/javascript"
-src="<?php echo $url_base ?>;cfg=j;tgt=_top"&gt;
+src="<?php echo $url_base_double ?>&amp;amp;cfg=j&amp;amp;tgt=_top"&gt;
 &lt;/script&gt;
-&lt;noscript&gt;
-&lt;!-- this link seen by people who have JavaScript turned off --&gt;
-&lt;a target="_top" href="<?php echo $url_base ?>"&gt;Shabbat
-Candle Lighting times for <?php echo $descr ?>&lt;/a&gt;
-courtesy of hebcal.com.
-&lt;/noscript&gt;
 </pre>
 
 <p>The result will look like this (<a href="#fonts">customize fonts</a>):</p>
 
 <div class="box">
 <script type="text/javascript"
-src="<?php echo $url_base ?>;cfg=j;tgt=_top">
+src="<?php echo $url_base ?>&amp;cfg=j&amp;tgt=_top">
 </script>
-<noscript>
-<!-- this link seen by people who have JavaScript turned off -->
-<a target="_top" href="<?php echo $url_base ?>">Shabbat
-Candle Lighting times for <?php echo $descr ?></a>
-courtesy of hebcal.com.
-</noscript>
 </div><!-- .box -->
 
 <h2 id="change">Change City</h2>
