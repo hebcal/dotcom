@@ -1023,7 +1023,7 @@ sub cache_begin($)
 #	$qs = $s;
 #    }
 
-    $qs =~ s/[&;]?(tag|set)=[^&;]+//g;
+    $qs =~ s/[&;]?(tag|set|utm_source|utm_campaign)=[^&;]+//g;
     $qs =~ s/[&;]?\.(from|cgifields|s)=[^&;]+//g;
     $qs =~ s/[&;]/,/g;
     $qs =~ s/\./_/g;
@@ -2373,7 +2373,7 @@ sub vcalendar_write_contents
 
 	if ($href) {
 	  if ($href =~ m,/(sedrot|holidays)/.+,) {
-	    $href .= "?tag=ical";
+	    $href .= "?utm_source=ical";
 	  }
 	  out_html(undef, qq{URL:}, $href, $endl) if $is_icalendar;
 	  $memo .= "\\n\\n" if $memo;
