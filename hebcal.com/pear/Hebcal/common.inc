@@ -603,8 +603,7 @@ function html_footer_bootstrap($last_updated = true) {
 <div class="span3">
 $last_updated_text
 <div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
-<p><small>Except where otherwise noted, content on <span
-xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span> is licensed under a <a
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
 rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
 </div><!-- .span3 -->
 </div><!-- .row-fluid -->
