@@ -36,7 +36,9 @@ $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 
 $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
-	./gen_festival.pl -v $(XML_FESTIVAL) $(HOLIDAYS)
+	./gen_festival.pl -v \
+		-d $(DBDIR)/luach.sqlite3 \
+		$(XML_FESTIVAL) $(HOLIDAYS)
 
 converter: ../converter/sedra/19/1900.inc
 

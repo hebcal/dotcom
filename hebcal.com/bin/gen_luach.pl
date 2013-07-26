@@ -84,7 +84,7 @@ if ($opts{'y'}) {
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     $HEB_YR = $hebdate->{"yy"};
-    $HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+    $HEB_YR++ if $hebdate->{"mm"} == 5; # Av
 }
 
 my @events = Hebcal::invoke_hebcal("./hebcal -s -H $HEB_YR", '', 0);
@@ -157,7 +157,7 @@ for (my @dt = ($start_year, $start_month, 1);
     $html_cals{$cal_id} = $cal;
 }
 
-my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
 
 foreach my $evt (@events) {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
@@ -167,9 +167,10 @@ foreach my $evt (@events) {
     my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
 
     my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-    if ($subj =~ /^(Parshas|Parashat)\s+/) {
-	$memo = torah_memo($year, $month, $day);
-    }
+
+    my $torah_memo = torah_memo($subj, $year, $month, $day);
+    $memo .= "<br>" . $torah_memo if $torah_memo;
+
     add_event($year, $month, $day, $subj, $hebrew, $memo);
 }
 
@@ -215,7 +216,13 @@ Commons Attribution 3.0 License</a>.</small></p>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
-<script>\$('.popover-test').popover({html:true})</script>
+<script>
+\$("a[data-toggle=popover]")
+      .popover({html:true})
+      .click(function(e) {
+        e.preventDefault()
+      })
+</script>
 </body></html>
 EOHTML
 ;
@@ -235,7 +242,7 @@ sub add_event {
     my $cal = $html_cals{$cal_id};
 
     my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-    my $placement = ($dow == 6) ? "left" : "bottom";
+    my $placement = ($dow == 6) ? "left" : "right";
 
     my $title = $hebrew ? "$subj / $hebrew" : $subj;
     my $html = qq{<a href="#" class="popover-test" data-toggle="popover" data-placement="$placement" title="$title" data-content="$memo">$subj</a>};
@@ -243,9 +250,10 @@ sub add_event {
 }
 
 sub torah_memo {
-    my($year,$month,$day) = @_;
-    my $date_sql = sprintf("%04d-%02d-%02d", $year, $month, $day);
-    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
+    my($reason,$year,$month,$day) = @_;
+    my $date_sql = Hebcal::date_format_sql($year, $month, $day);
+    $reason =~ s/^Parashat\s+//;
+    my $rv = $sth->execute($date_sql,$reason) or die $dbh->errstr;
     my $torah_reading;
     my $haftarah_reading;
     my $special_maftir;

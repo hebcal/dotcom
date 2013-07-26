@@ -51,20 +51,23 @@ use Date::Calc;
 use HebcalGPL ();
 use RequestSignatureHelper;
 use Config::Tiny;
+use DBI;
+use Carp;
 use strict;
 
 my $eval_use_Image_Magick = 0;
 
 $0 =~ s,.*/,,;  # basename
-my($usage) = "usage: $0 [-hy] [-H <year>] [f f.csv] festival.xml output-dir
-    -h        Display usage information.
-    -v        Verbose mode
-    -H <year> Start with hebrew year <year> (default this year)
-    -f f.csv  Dump full kriyah readings to comma separated values
+my($usage) = "usage: $0 [-hy] [-H <year>] [-f f.csv] [-d luach.sqlite3] festival.xml output-dir
+  -h                Display usage information
+  -v                Verbose mode
+  -H <year>         Start with hebrew year <year> (default this year)
+  -f f.csv          Dump full kriyah readings to comma separated values
+  -d luach.sqlite3  Write leyning info to the luach database
 ";
 
 my(%opts);
-Getopt::Std::getopts('hf:vH:', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hf:vH:d:', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
@@ -77,6 +80,16 @@ if (! -d $outdir) {
 
 print "Reading $festival_in...\n" if $opts{"v"};
 my $fxml = XML::Simple::XMLin($festival_in);
+
+my $DBH;
+my $SQL_INSERT_INTO_LEYNING =
+    "INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)";
+if ($opts{'d'}) {
+    my $dbfile = $opts{'d'};
+    $DBH = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
+			{ RaiseError => 1, AutoCommit => 0 })
+	or croak $DBI::errstr;
+}
 
 if ($opts{'f'}) {
     my $fn = $opts{"f"};
@@ -201,6 +214,12 @@ if ($opts{'f'}) {
 print "Index page...\n" if $opts{"v"};
 write_index_page($fxml);
 
+if ($opts{'d'}) {
+  $DBH->commit;
+  $DBH->disconnect;
+  $DBH = undef;
+}
+
 exit(0);
 
 sub trim
@@ -298,9 +317,7 @@ sub format_date_plus_delta {
 
 sub table_cell_observed {
     my($f,$evt,$show_year) = @_;
-    my($gy,$gm,$gd) = ($evt->[$Hebcal::EVT_IDX_YEAR],
-		       $evt->[$Hebcal::EVT_IDX_MON] + 1,
-		       $evt->[$Hebcal::EVT_IDX_MDAY]);
+    my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
     my $s = "";
     if ($f eq "Chanukah") {
 	$s .= format_date_plus_delta($gy, $gm, $gd, 7, $show_year);
@@ -658,48 +675,53 @@ EOHTML
     }
 }
 
+sub get_torah_and_maftir {
+    my($aliyot) = @_;
+    if (ref($aliyot) eq 'HASH') {
+	$aliyot = [ $aliyot ];
+    }
+
+    my($torah,$maftir,$book,$begin,$end);
+    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			    @{$aliyot}) {
+	if ($aliyah->{'num'} eq 'M') {
+	    $maftir = sprintf("%s %s - %s",
+			      $aliyah->{'book'},
+			      $aliyah->{'begin'},
+			      $aliyah->{'end'});
+	}
+
+	if ($aliyah->{'num'} =~ /^\d+$/) {
+	    if (($book && $aliyah->{'book'} eq $book) ||
+		($aliyah->{'num'} eq '8')) {
+		$end = $aliyah->{'end'};
+	    }
+	    $book = $aliyah->{'book'} unless $book;
+	    $begin = $aliyah->{'begin'} unless $begin;
+	}
+    }
+
+    if ($book) {
+	$torah = "$book $begin - $end";
+    }
+
+    ($torah,$maftir);
+}
+
+
 sub write_festival_part
 {
     my($festivals,$f) = @_;
 
     my $slug = Hebcal::make_anchor($f);
-    $slug =~ s/\.html$//;
 
     my $torah;
     my $maftir;
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
 	my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
-	if (ref($aliyot) eq 'HASH') {
-	    $aliyot = [ $aliyot ];
-	}
-
-	my $book;
-	my $begin;
-	my $end;
-	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			    @{$aliyot}) {
-	    if ($aliyah->{'num'} eq 'M') {
-		$maftir = sprintf("%s %s - %s",
-				  $aliyah->{'book'},
-				  $aliyah->{'begin'},
-				  $aliyah->{'end'});
-	    }
-
-	    if ($aliyah->{'num'} =~ /^\d+$/) {
-		if (($book && $aliyah->{'book'} eq $book) ||
-		    ($aliyah->{'num'} eq '8')) {
-		    $end = $aliyah->{'end'};
-		}
-		$book = $aliyah->{'book'} unless $book;
-		$begin = $aliyah->{'begin'} unless $begin;
-	    }
-	}
-
-	if ($book) {
-	    $torah = "$book $begin - $end";
-	    if ($maftir) {
-		$torah .= " &amp; $maftir";
-	    }
+	($torah,$maftir) = get_torah_and_maftir($aliyot);
+	if ($torah && $maftir) {
+	    $torah .= " &amp; $maftir";
 	} elsif ($maftir) {
 	    $torah = "$maftir (special maftir)";
 	}
@@ -755,18 +777,9 @@ sub write_festival_part
 
 sub day_event_observed {
     my($f,$evt) = @_;
-    my($gy,$gm,$gd);
-    if (begins_at_dawn($f)) {
-	($gy,$gm,$gd) =
-	  ($evt->[$Hebcal::EVT_IDX_YEAR],
-	   $evt->[$Hebcal::EVT_IDX_MON] + 1,
-	   $evt->[$Hebcal::EVT_IDX_MDAY]);
-    } else {
-	($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
-	  ($evt->[$Hebcal::EVT_IDX_YEAR],
-	   $evt->[$Hebcal::EVT_IDX_MON] + 1,
-	   $evt->[$Hebcal::EVT_IDX_MDAY],
-	   -1);
+    my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
+    if (!begins_at_dawn($f)) {
+	($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
     }
     return ($gy,$gm,$gd);
 }
@@ -1161,25 +1174,33 @@ sub read_more_from {
   return $html;
 }
 
-sub print_aliyah
-{
+sub format_aliyah_info {
     my($aliyah) = @_;
 
     my($c1,$v1) = ($aliyah->{'begin'} =~ /^([^:]+):([^:]+)$/);
     my($c2,$v2) = ($aliyah->{'end'}   =~ /^([^:]+):([^:]+)$/);
-    my($info) = $aliyah->{'book'} . " ";
+    my $info = $aliyah->{'book'} . " ";
     if ($c1 eq $c2) {
 	$info .= "$c1:$v1-$v2";
     } else {
 	$info .= "$c1:$v1-$c2:$v2";
     }
+    $info;
+}
 
+sub print_aliyah
+{
+    my($aliyah) = @_;
+
+    my($c1,$v1) = ($aliyah->{'begin'} =~ /^([^:]+):([^:]+)$/);
 #    my $url = Hebcal::get_mechon_mamre_url($aliyah->{'book'}, $c1, $v1);
 #    my $title = "Hebrew-English bible text";
     my $url = Hebcal::get_bible_ort_org_url($aliyah->{'book'}, $c1, $v1, $aliyah->{'parsha'});
     $url =~ s/&/&amp;/g;
     my $title = "Hebrew-English bible text from ORT";
-    $info = qq{<a class="outbound" title="$title"\nhref="$url">$info</a>};
+    my $info = qq{<a class="outbound" title="$title"\nhref="$url">}
+	. format_aliyah_info($aliyah)
+	. qq{</a>};
 
     my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
     print OUT2 qq{$label: $info};
@@ -1196,20 +1217,45 @@ sub holidays_observed
 {
     my($current) = @_;
 
-    my @years;
     foreach my $i (0 .. $NUM_YEARS)
     {
 	my $yr = $HEB_YR + $i - 1;
-	my @ev = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
-	$years[$i] = \@ev;
-    }
+	my @events = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
+	foreach my $evt (@events) {
+	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	    my($year,$month,$day) = Hebcal::event_ymd($evt);
+	    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+	    my $h = $subj;
+	    my $fest;
+	    if ($dow == 6) {
+		$fest = $fxml->{'festival'}->{"$h (on Shabbat)"};
+	    }
+	    # try without "on Shabbat" if we didn't find it
+	    $fest = $fxml->{'festival'}->{$h} unless defined $fest;
+	    if (defined $fest) {
+		my $a = $fest->{"kriyah"}->{"aliyah"};
+		if (defined $a) {
+		    if (ref($a) eq 'HASH') {
+			$a = [ $a ];
+		    }
+		    my($torah,$maftir) = get_torah_and_maftir($a);
+		    my $dt = Hebcal::date_format_sql($year, $month, $day);
+		    my $sth = $DBH->prepare($SQL_INSERT_INTO_LEYNING);
+		    if ($torah) {
+			$sth->execute($dt, $h, "T", $torah)
+			    or croak "can't execute the query: " . $sth->errstr;
+		    }
+		    foreach my $aliyah (@{$a}) {
+			my $info = sprintf("%s %s - %s",
+					   $aliyah->{'book'},
+					   $aliyah->{'begin'},
+					   $aliyah->{'end'});
+			my $rv = $sth->execute($dt, $h, $aliyah->{'num'}, $info)
+			    or croak "can't execute the query: " . $sth->errstr;
+		    }
+		}
+	    }
 
-    for (my $yr = 0; $yr <= $NUM_YEARS; $yr++)
-    {
-	my @events = @{$years[$yr]};
-	for (my $i = 0; $i < @events; $i++)
-	{
-	    my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 	    next if $subj =~ /^Erev /;
 
 	    # Since Chanukah doesn't have an Erev, skip a day
@@ -1225,9 +1271,9 @@ sub holidays_observed
 	    $subj_copy =~ s/: \d Candles?$//;
 	    $subj_copy =~ s/: 8th Day$//;
 
-	    $current->{$subj_copy}->[$yr] = $events[$i]
+	    $current->{$subj_copy}->[$i] = $evt
 		unless (defined $current->{$subj_copy} &&
-			defined $current->{$subj_copy}->[$yr]);
+			defined $current->{$subj_copy}->[$i]);
 	}
     }
 }
