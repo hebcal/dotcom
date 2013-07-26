@@ -92,10 +92,13 @@ my $numEntries = scalar(@events);
 
 my $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
 my $start_year = $events[0]->[$Hebcal::EVT_IDX_YEAR];
+
 my $end_month = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
 my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
 my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
 
+my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 7, "dd" => 1 });
+my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 6, "dd" => 29 });
 
 my $outfile = "$outdir/index.html";
 open(OUT,">$outfile") || die "$outfile: $!";
@@ -107,7 +110,26 @@ print OUT <<EOHTML;
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" id="bootstrap-css" href="css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+<style type="text/css">
+.navbar{position:static}
+body{
+ font-family: 'Source Sans Pro', sans-serif;
+ padding-top:0
+}
+.label{text-transform:none}
+:lang(he) {
+  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  font-size:125%;
+  direction:rtl;
+}
+\@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+}
+</style>
 </head>
 <body>
 
@@ -120,23 +142,54 @@ print OUT <<EOHTML;
 EOHTML
 ;
 
-#my @html_cals;
-#my %html_cals;
-#my @html_cal_ids;
+my @html_cals;
+my %html_cals;
+my @html_cal_ids;
 
-
+# build the calendar objects
 for (my @dt = ($start_year, $start_month, 1);
      Date::Calc::Date_to_Days(@dt) <= $end_days;
      @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1))	{
     my $cal = new_html_cal($dt[0], $dt[1]);
     my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
-#    push(@html_cals, $cal);
-#    push(@html_cal_ids, $cal_id);
-#    $html_cals{$cal_id} = $cal;
-    print OUT qq{<div id="cal-$cal_id">\n}, $cal->as_HTML(), 
-	qq{</div><!-- #cal-$cal_id -->\n};
+    push(@html_cals, $cal);
+    push(@html_cal_ids, $cal_id);
+    $html_cals{$cal_id} = $cal;
 }
 
+my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+
+foreach my $evt (@events) {
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+
+    my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
+    my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+    my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
+
+    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+    if ($subj =~ /^(Parshas|Parashat)\s+/) {
+	$memo = torah_memo($year, $month, $day);
+    }
+    add_event($year, $month, $day, $subj, $hebrew, $memo);
+}
+
+# figure out which Shabbatot are M'varchim haChodesh
+for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
+    my $greg = HebcalGPL::abs2greg($abs);
+    my $dow = Date::Calc::Day_of_Week($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"});
+    if ($dow == 6) {
+	my $hebdate = HebcalGPL::abs2hebrew($abs);
+	if ($hebdate->{"dd"} >= 23 && $hebdate->{"dd"} <= 29 && $hebdate->{"mm"} != 6) {
+	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Shabbat Mevarchim", undef, "");
+	}
+    }
+}
+
+foreach my $cal (@html_cals) {
+#    print OUT qq{<div id="cal-$cal_id">\n};
+    print OUT $cal->as_HTML();
+#    print OUT qq{</div><!-- #cal-$cal_id -->\n};
+}
 
 my $mtime = (defined $ENV{'SCRIPT_FILENAME'}) ?
     (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -152,7 +205,7 @@ print OUT <<EOHTML;
 <div id="inner-footer" class="clearfix">
 $last_updated_text
 <p><small>Except where otherwise noted, content on
-<span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
+this site
 is licensed under a 
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
@@ -160,23 +213,68 @@ Commons Attribution 3.0 License</a>.</small></p>
 </footer>
 </div> <!-- .container -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+<script>\$('.popover-test').popover({html:true})</script>
 </body></html>
 EOHTML
 ;
 
 close(OUT);
 
-$dbh->commit;
+#$dbh->commit;
 $dbh->disconnect;
 $dbh = undef;
 
 exit(0);
 
 
-sub new_html_cal
-{
+sub add_event {
+    my($year,$month,$day,$subj,$hebrew,$memo) = @_;
+    my $cal_id = sprintf("%04d-%02d", $year, $month);
+    my $cal = $html_cals{$cal_id};
+
+    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+    my $placement = ($dow == 6) ? "left" : "bottom";
+
+    my $title = $hebrew ? "$subj / $hebrew" : $subj;
+    my $html = qq{<a href="#" class="popover-test" data-toggle="popover" data-placement="$placement" title="$title" data-content="$memo">$subj</a>};
+    $cal->addcontent($day, qq{<li>$html</li>});
+}
+
+sub torah_memo {
+    my($year,$month,$day) = @_;
+    my $date_sql = sprintf("%04d-%02d-%02d", $year, $month, $day);
+    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
+    my $torah_reading;
+    my $haftarah_reading;
+    my $special_maftir;
+    while(my($aliyah_num,$aliyah_reading) = $sth->fetchrow_array) {
+	if ($aliyah_num eq "T") {
+	    $torah_reading = $aliyah_reading;
+	} elsif ($aliyah_num eq "M" && $aliyah_reading =~ / \| /) {
+	    $special_maftir = $aliyah_reading;
+	} elsif ($aliyah_num eq "H") {
+	    $haftarah_reading = $aliyah_reading;
+	}
+    }
+    $sth->finish;
+    my $memo;
+    if ($torah_reading) {
+	$memo = "Torah: $torah_reading";
+	if ($special_maftir) {
+	    $memo .= "<br>Maftir: ";
+	    $memo .= $special_maftir;
+	}
+	if ($haftarah_reading) {
+	    $memo .= "<br>Haftarah: ";
+	    $memo .= $haftarah_reading;
+	}
+    }
+    $memo;
+}
+
+sub new_html_cal {
     my($year,$month) = @_;
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
