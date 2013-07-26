@@ -409,15 +409,6 @@ EOHTML
     if ($cfg eq "i" || $cfg eq "j")
     {
 	my $self_url = join("", "http://", $q->virtual_host(), $script_name);
-	if (defined $ENV{"HTTP_REFERER"} && $ENV{"HTTP_REFERER"} !~ /^\s*$/)
-	{
-	    $self_url .= "?.from=" . Hebcal::url_escape($ENV{"HTTP_REFERER"});
-	}
-	elsif ($q->param(".from"))
-	{
-	    $self_url .= "?.from=" . Hebcal::url_escape($q->param(".from"));
-	}
-
 	Hebcal::out_html
 	    ($cfg,
 	     "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
