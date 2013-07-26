@@ -322,17 +322,22 @@ sub display_javascript
 {
     my($items) = @_;
 
-    my($title) = "Shabbat Times for $city_descr";
+    my $shabbat = defined $q->param("a") && $q->param("a") =~ /^(on|1)$/
+	? "Shabbos" : "Shabbat";
+    my $title = "$shabbat Times for $city_descr";
 
     if ($cfg eq "i" || $cfg eq "widget") {
 	print $q->header(-charset => "UTF-8");
-	my $base = "http://" . $q->virtual_host() . $script_name;
-	print $q->start_html(
-	    -title => $title,
-	    -target => "_top",
-	    -xbase => $base,
-	    -style => { -verbatim => "ul#hebcal-results { list-style-type: none }" }
-	    );
+	Hebcal::out_html($cfg, qq{<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title</title>
+<style type="text/css">
+ul#hebcal-results{list-style-type:none}
+</style>
+</head>
+<body>
+});
     } else {
 	print "Content-Type: application/x-javascript\015\012\015\012";
     }
@@ -347,7 +352,7 @@ sub display_javascript
 
     Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
 		     qq{<div id="hebcal-$loc_class">\n},
-		     qq{<h3>Shabbat times for $city_descr</h3>\n});
+		     qq{<h3>$shabbat times for $city_descr</h3>\n});
 
     foreach my $item (@{$items}) {
 	if ($cfg eq "widget" && $item->{'link'}) {
@@ -368,7 +373,7 @@ sub display_javascript
     }
 
     Hebcal::out_html($cfg, qq{<div class="copyright">
-<small>Powered by <a target="$tgt" href="$url">Hebcal Shabbat Times</a></small>
+<small>Powered by <a target="$tgt" href="$url">Hebcal $shabbat Times</a></small>
 </div><!-- .copyright -->
 </div><!-- #hebcal-$loc_class -->
 </div><!-- #hebcal -->
