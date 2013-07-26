@@ -607,7 +607,7 @@ EOHTML
 	    $country = "UK" if $country eq "United Kingdom";
 	    $city_country .= ", $country" unless $grp=~ /^US|CA|IL$/;
 
-	    my $url = "?gep=city&amp;city=$id";
+	    my $url = "?geo=city&amp;city=" . URI::Escape::uri_escape_utf8($id);
 	    $url .= "&amp;m=" . $q->param('m')
 		if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
 	    $btn_html .= qq{<li><a href="$url">$city_country</a></li>\n};
