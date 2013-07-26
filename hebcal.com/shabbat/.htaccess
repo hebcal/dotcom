@@ -1,5 +1,3 @@
-Header set P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\", CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
-
 #DirectoryIndex shabbat.cgi
 DirectoryIndex index.php
 
@@ -10,3 +8,7 @@ Redirect /shabbat/shabbat.pl http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.html http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.pl http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.cgi http://www.hebcal.com/shabbat/
+
+RewriteEngine On
+RewriteBase /shabbat/
+RewriteRule ^city/(.*)$ "/shabbat/index.php?geo=city&city=$1&m=50" [B,QSA,L]
