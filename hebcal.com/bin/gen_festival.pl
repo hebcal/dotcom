@@ -533,7 +533,29 @@ EOHTML
 				   "single single-post",
 				   $meta . $xtra_head);
 
-    print OUT3 get_index_body_preamble($page_title, 1, undef, "span12");
+    print OUT3 qq{<div class="row-fluid">\n};
+    print OUT3 get_index_body_preamble($page_title, 1, undef, "span8");
+    print OUT3 <<EOHTML;
+</div><!-- .span8 -->
+<div class="span4">
+<h5>Advertisement</h5>
+<script type="text/javascript"><!--
+google_ad_client = "pub-7687563417622459";
+/* 300x250, created 10/14/10 */
+google_ad_slot = "1140358973";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div><!-- .span4 -->
+</div><!-- .row-fluid -->
+EOHTML
+;
+    print OUT3 qq{<div class="row-fluid">\n};
+    print OUT3 qq{<div class="span12">\n};
 
     foreach my $section (@sections) {
       my $heading = $section->[1];
@@ -544,6 +566,7 @@ EOHTML
     }
 
     print OUT3 qq{</div><!-- .span12 -->\n};
+    print OUT3 qq{</div><!-- .row-fluid -->\n};
     print OUT3 Hebcal::html_footer_bootstrap(undef, undef);
 
     close(OUT3);
@@ -593,6 +616,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </div><!-- .row-fluid -->
 EOHTML
 ;
+	print OUT4 qq{<div class="row-fluid">\n};
 	print OUT4 qq{<div class="span12">\n};
 	print OUT4 qq{<div class="pagination pagination-small"><ul>\n};
 	foreach my $j (0 .. $NUM_YEARS) {
@@ -620,6 +644,7 @@ EOHTML
 
 
 	print OUT4 qq{</div><!-- .span12 -->\n};
+	print OUT4 qq{</div><!-- .row-fluid -->\n};
 	print OUT4 Hebcal::html_footer_bootstrap(undef, undef);
 
 	close(OUT4);
