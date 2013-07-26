@@ -1081,18 +1081,18 @@ sub results_page
 	    $ny = $py = $q->param("year");
 	}
 
-	$prev_url = Hebcal::self_url($q, {"year" => $py, "month" => $pm});
+	$prev_url = Hebcal::self_url($q, {"year" => $py, "month" => $pm}, "&amp;");
 	$prev_title = sprintf("%s %04d", $Hebcal::MoY_long{$pm}, $py);
 
-	$next_url = Hebcal::self_url($q, {"year" => $ny, "month" => $nm});
+	$next_url = Hebcal::self_url($q, {"year" => $ny, "month" => $nm}, "&amp;");
 	$next_title = sprintf("%s %04d", $Hebcal::MoY_long{$nm}, $ny);
     }
     else
     {
-	$prev_url = Hebcal::self_url($q, {"year" => ($q->param("year") - 1)});
+	$prev_url = Hebcal::self_url($q, {"year" => ($q->param("year") - 1)}, "&amp;");
 	$prev_title = sprintf("%04d", ($q->param("year") - 1));
 
-	$next_url = Hebcal::self_url($q, {"year" => ($q->param("year") + 1)});
+	$next_url = Hebcal::self_url($q, {"year" => ($q->param("year") + 1)}, "&amp;");
 	$next_title = sprintf("%04d", ($q->param("year") + 1));
     }
 
@@ -1156,7 +1156,8 @@ EOHTML
 	{
 	    my $future_years = $greg_year1 - $this_year;
 	    my $new_url = Hebcal::self_url($q, 
-					   {"yt" => "H", "month" => "x"});
+					   {"yt" => "H", "month" => "x"},
+					   "&amp;");
 	    Hebcal::out_html(undef, qq{<div class="alert alert-block">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>Note!</strong>
@@ -1198,7 +1199,7 @@ accurate.
 
 	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
 	    # Fridge
-	    my $url = join("", "http://", $q->virtual_host(), "/shabbat/fridge.cgi?");
+	    my $url = "/shabbat/fridge.cgi?";
 	    if ($q->param("zip")) {
 		$url .= "zip=" . $q->param("zip");
 	    } else {
@@ -1208,7 +1209,7 @@ accurate.
 	    my $hyear;
 	    if ($q->param("yt") && $q->param("yt") eq "H") {
 		$hyear = $q->param("year");
-		$url .= ";year=" . $q->param("year");
+		$url .= "&amp;year=" . $q->param("year");
 	    } else {
 		my $i = ($q->param("month") eq "x") ? 0 : $numEntries - 1;
 		my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
@@ -1216,7 +1217,7 @@ accurate.
 		my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
 		my $hebdate = HebcalGPL::greg2hebrew($year,$mon,$mday);
 		$hyear = $hebdate->{"yy"};
-		$url .= ";year=" . $hyear;
+		$url .= "&amp;year=" . $hyear;
 	    }
 	    
 	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
@@ -1224,7 +1225,7 @@ accurate.
     }
 
     Hebcal::out_html(undef, qq{<a class="btn" href="},
-		     Hebcal::self_url($q, {"v" => "0"}),
+		     Hebcal::self_url($q, {"v" => "0"}, "&amp;"),
 		     qq{"><i class="icon-cog"></i> Change options</a>\n});
 
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});

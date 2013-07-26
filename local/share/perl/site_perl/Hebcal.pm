@@ -1007,35 +1007,18 @@ sub cache_begin($)
 {
     my($q) = @_;
 
-    return undef unless $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
+    my $orig_qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
+    return undef unless $orig_qs;
 
     my $script_name = $q->script_name();
     $script_name =~ s/\./_/g;
-
-    my $qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
-#    if ($qs =~ /v=1/) {
-#	my $s = "v=1";
-#	foreach my $key (sort $q->param()) {
-#	    next if $key eq "v";
-#	    my $val = $q->param($key) || "";
-#	    $s .= ";" . url_escape($key) . "=" . url_escape($val);
-#	}
-#	$qs = $s;
-#    }
-
-    $qs =~ s/[&;]?(tag|set|utm_source|utm_campaign)=[^&;]+//g;
-    $qs =~ s/[&;]?\.(from|cgifields|s)=[^&;]+//g;
-    $qs =~ s/[&;]/,/g;
-    $qs =~ s/\./_/g;
-    $qs =~ s/\//-/g;
-    $qs =~ s/\%20/+/g;
-    $qs =~ s/[\<\>\s\"\'\`\?\*\$\|\[\]\{\}\\\~]//g; # unsafe chars
 
     my $dir = $CACHE_DIR . $script_name;
     unless (-d $dir) {
 	system("/bin/mkdir", "-p", $dir) == 0 or return undef;
     }
 
+    my $qs = get_munged_qs($orig_qs);
     $cache = "$dir/$qs.$$";
     if (!open(CACHE, ">$cache")) {
 	$cache = undef;
@@ -1594,23 +1577,24 @@ sub process_cookie($$)
 # EXPORT
 ########################################################################
 
-sub self_url($$)
+sub self_url
 {
-    my($q,$override) = @_;
+    my($q,$override,$next_sep) = @_;
 
     my $url = Hebcal::script_name($q);
     my $sep = "?";
+    $next_sep ||= ";";
 
     foreach my $key ($q->param())
     {
-	# delete "tag" params unless explicitly specified
-	next if $key eq "tag" && !exists $override->{"tag"};
+	# delete "utm_source" params unless explicitly specified
+	next if $key eq "utm_source" && !exists $override->{"utm_source"};
 	# ignore undef entries in the override hash
 	next if exists $override->{$key} && !defined $override->{$key};
 	my($val) = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
 	$url .= "$sep$key=" . URI::Escape::uri_escape_utf8($val);
-	$sep = ";";
+	$sep = $next_sep;
     }
 
     foreach my $key (keys %{$override})
@@ -1620,7 +1604,7 @@ sub self_url($$)
 	unless (defined $q->param($key))
 	{
 	    $url .= "$sep$key=" . URI::Escape::uri_escape_utf8($override->{$key});
-	    $sep = ";";
+	    $sep = $next_sep;
 	}
     }
 
@@ -1642,10 +1626,8 @@ sub download_href
     my $href = $script_name;
     $href .= $cgi if $cgi;
     $href .= "/$filename.$ext?dl=1";
-    foreach my $key ($q->param())
-    {
-	my($val) = $q->param($key);
-	$href .= ";$key=" . URI::Escape::uri_escape_utf8($val);
+    foreach my $key ($q->param()) {
+	$href .= ";$key=" . URI::Escape::uri_escape_utf8($q->param($key));
     }
 
     $href;
@@ -2167,9 +2149,14 @@ sub get_munged_qs
 	$qs = "bogus";
     }
 
-    $qs =~ s/[&;]?(tag|set|vis|subscribe|dl)=[^&;]+//g;
-    $qs =~ s/[&;]?\.(from|cgifields|s)=[^&;]+//g;
-    $qs =~ s/[&;]/,/g;
+    # first translate all ampersands and semicolons into commas
+    $qs =~ s/&amp;/,/g;
+    $qs =~ s/&/,/g;
+    $qs =~ s/;/,/g;
+
+    # now delete selected parameters
+    $qs =~ s/,?(tag|utm_source|utm_campaign|set|vis|subscribe|dl)=[^,]+//g;
+    $qs =~ s/,?\.(from|cgifields|s)=[^,]+//g;
     $qs =~ s/^,+//g;
     $qs =~ s/\./_/g;
     $qs =~ s/\//-/g;
@@ -2279,17 +2266,13 @@ sub vcalendar_write_contents
 	# include an iCal description
 	if (defined $q->param("v"))
 	{
-	    my $desc_url = "http://" . $q->virtual_host() .
-		(($q->param("v") eq "yahrzeit") ? "/yahrzeit/" : "/hebcal/");
-	    my $sep = "?";
-	    foreach my $key ($q->param())
-	    {
-		next if $key =~ /^(subscribe|download|tag)$/o;
-		my $val = $q->param($key);
-		$desc_url .= "$sep$key=" . URI::Escape::uri_escape_utf8($val);
-		$sep = ";" if $sep eq "?";
+	    my $desc;
+	    if ($q->param("v") eq "yahrzeit") {
+		$desc = "Yahrzeits + Anniversaries from www.hebcal.com";
+	    } else {
+		$desc = "Jewish Holidays from www.hebcal.com";
 	    }
-	    out_html(undef, qq{X-WR-CALDESC:$desc_url$endl});
+	    out_html(undef, qq{X-WR-CALDESC:$desc$endl});
 	}
     } else {
 	out_html(undef, qq{VERSION:1.0$endl},
