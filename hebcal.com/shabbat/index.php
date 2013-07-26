@@ -97,7 +97,7 @@ if ($qs) {
     }
 
     $url .= "?$qs";
-    $qs = preg_replace('/[&;]?(tag|set)=[^&;]+/', "", $qs);
+    $qs = preg_replace('/[&;]?(tag|utm_source|set|tgt)=[^&;]+/', "", $qs);
     $qs = preg_replace('/[&;]?\.(from|cgifields|s)=[^&;]+/', "", $qs);
     $qs = strtr($qs, "&;./", ",,_-");
     $qs = str_replace("%20", "+", $qs);
