@@ -10,6 +10,9 @@ SEDROT = ../sedrot
 DBDIR = ../hebcal
 HOLIDAYS = ../holidays
 CONVERTER_SEDRA = ../converter/sedra/20/2099.inc
+REFORM_LUACH_DB = $(DBDIR)/reform-luach.sqlite3
+REFORM_LUACH_TMPDIR = /tmp/hebcal-reform-luach
+REFORM_LUACH_OUTDIR = ../reform-luach
 
 all: xml2perl sedrot holidays converter
 
@@ -20,6 +23,8 @@ sedrot: $(SEDROT)/bereshit
 xml2perl: $(SITE_PERL)/HebcalConst.pm
 
 converter: $(CONVERTER_SEDRA)
+
+reform-luach: $(REFORM_LUACH_OUTDIR)/index.html
 
 $(SITE_PERL)/HebcalConst.pm $(CITIES_JSON): $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm ../pear/Hebcal/const.inc $(CITIES_JSON)
@@ -39,6 +44,25 @@ $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	./gen_festival.pl -v \
 		-d $(DBDIR)/luach.sqlite3 \
 		$(XML_FESTIVAL) $(HOLIDAYS)
+
+$(REFORM_LUACH_OUTDIR)/index.html: gen_luach.pl $(REFORM_LUACH_DB)
+	./gen_luach.pl \
+		$(XML_FESTIVAL) \
+		$(REFORM_LUACH_DB) \
+		$(REFORM_LUACH_OUTDIR)
+
+$(REFORM_LUACH_DB): gen_festival.pl calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
+	mkdir -p $(REFORM_LUACH_TMPDIR)
+	./calc_triennial.pl \
+		-i \
+		-f $(REFORM_LUACH_TMPDIR)/fullkriyah.csv \
+		-d $(REFORM_LUACH_DB) \
+		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(REFORM_LUACH_TMPDIR)
+	./gen_festival.pl \
+		-i -v \
+		-d $(REFORM_LUACH_DB) \
+		$(XML_FESTIVAL) $(REFORM_LUACH_TMPDIR)
+	rm -rf $(REFORM_LUACH_TMPDIR)
 
 converter: ../converter/sedra/19/1900.inc
 

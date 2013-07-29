@@ -59,22 +59,26 @@ use DBI;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-h] [-H <year>] [-t t.csv] [-f f.csv] [-d d.sqlite3] aliyah.xml festival.xml output-dir
+my($usage) = "usage: $0 [-hi] [-H <year>] [-t t.csv] [-f f.csv] [-d d.sqlite3] aliyah.xml festival.xml output-dir
     -h        Display usage information.
+    -i        Use Israeli sedra scheme (disables triennial functionality!).
     -H <year> Start with hebrew year <year> (default this year)
     -t t.csv  Dump triennial readings to comma separated values
     -f f.csv  Dump full kriyah readings to comma separated values
     -d DBFILE Write state to SQLite3 file 
 ";
 
-my(%opts);
-Getopt::Std::getopts('hH:c:t:f:d:', \%opts) || croak "$usage\n";
+my %opts;
+Getopt::Std::getopts('hH:c:t:f:d:i', \%opts) || croak "$usage\n";
 $opts{'h'} && croak "$usage\n";
 (@ARGV == 3) || croak "$usage";
 
-my($aliyah_in) = shift;
-my($festival_in) = shift;
-my($outdir) = shift;
+my $HEBCAL_CMD = "./hebcal";
+$HEBCAL_CMD .= " -i" if $opts{"i"};
+
+my $aliyah_in = shift;
+my $festival_in = shift;
+my $outdir = shift;
 
 if (! -d $outdir) {
     croak "$outdir: $!\n";
@@ -88,7 +92,8 @@ my $axml = XML::Simple::XMLin($aliyah_in);
 my $fxml = XML::Simple::XMLin($festival_in);
 
 my %triennial_aliyot;
-read_aliyot_metadata($axml, \%triennial_aliyot);
+read_aliyot_metadata($axml, \%triennial_aliyot)
+    unless $opts{"i"};
 
 my(@all_inorder,@combined,%combined,%parashah2id);
 foreach my $h (keys %{$axml->{'parsha'}})
@@ -150,25 +155,30 @@ print "Current Hebrew year $hebrew_year is year $year_num.  3-cycle started at y
 
 my($bereshit_idx1,$pattern1,$events1) = get_tri_events($start_year);
 my %cycle_option1;
-calc_variation_options($axml, \%cycle_option1, $pattern1);
+calc_variation_options($axml, \%cycle_option1, $pattern1)
+    unless $opts{"i"};
 
 $start_year += 3;
 print "\n3-cycle started at year $start_year.\n";
 my($bereshit_idx2,$pattern2,$events2) = get_tri_events($start_year);
 my %cycle_option2;
-calc_variation_options($axml, \%cycle_option2, $pattern2);
+calc_variation_options($axml, \%cycle_option2, $pattern2)
+    unless $opts{"i"};
 
-my %readings1 = cycle_readings($bereshit_idx1,$events1,\%cycle_option1);
-my %readings2 = cycle_readings($bereshit_idx2,$events2,\%cycle_option2);
+my(%readings1,%readings2);
+%readings1 = cycle_readings($bereshit_idx1,$events1,\%cycle_option1)
+    unless $opts{"i"};
+%readings2 = cycle_readings($bereshit_idx2,$events2,\%cycle_option2)
+    unless $opts{"i"};
 
 my %special;
 foreach my $yr (($start_year - 3) .. ($start_year + 10))
 {
-    my(@ev) = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
+    my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -H $yr", "", 0);
     special_readings(\@ev);
 
     # hack for Pinchas
-    my @ev2 = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
+    my @ev2 = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -h -x -H $yr", "", 0);
     special_pinchas(\@ev2);
 }
 
@@ -264,7 +274,7 @@ sub get_tri_events
     foreach my $cycle (0 .. 3)
     {
 	my($yr) = $start + $cycle;
-	my @ev = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
+	my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -h -x -H $yr", "", 0);
 	push(@events, @ev);
     }
 
@@ -1361,7 +1371,7 @@ sub readings_for_current_year
     foreach my $i (0 .. $extra_years)
     {
 	my($yr) = $heb_yr + $i;
-	my(@ev) = Hebcal::invoke_hebcal("./hebcal -s -h -x -H $yr", '', 0);
+	my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -h -x -H $yr", "", 0);
 	$years[$i] = \@ev;
     }
 

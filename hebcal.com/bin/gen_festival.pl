@@ -58,16 +58,17 @@ use strict;
 my $eval_use_Image_Magick = 0;
 
 $0 =~ s,.*/,,;  # basename
-my($usage) = "usage: $0 [-hy] [-H <year>] [-f f.csv] [-d luach.sqlite3] festival.xml output-dir
+my($usage) = "usage: $0 [-hvi] [-H <year>] [-f f.csv] [-d luach.sqlite3] festival.xml output-dir
   -h                Display usage information
   -v                Verbose mode
+  -i                Use Israeli sedra scheme
   -H <year>         Start with hebrew year <year> (default this year)
   -f f.csv          Dump full kriyah readings to comma separated values
   -d luach.sqlite3  Write leyning info to the luach database
 ";
 
 my(%opts);
-Getopt::Std::getopts('hf:vH:d:', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hf:vH:d:i', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
@@ -1220,7 +1221,10 @@ sub holidays_observed
     foreach my $i (0 .. $NUM_YEARS)
     {
 	my $yr = $HEB_YR + $i - 1;
-	my @events = Hebcal::invoke_hebcal("./hebcal -H $yr", '', 0);
+	my $cmd = "./hebcal";
+	$cmd .= " -i" if $opts{"i"};
+	$cmd .= " -H $yr";
+	my @events = Hebcal::invoke_hebcal($cmd, "", 0);
 	foreach my $evt (@events) {
 	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 	    my($year,$month,$day) = Hebcal::event_ymd($evt);

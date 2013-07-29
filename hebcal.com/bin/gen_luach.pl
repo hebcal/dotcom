@@ -40,7 +40,7 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 
 use utf8;
 use open ":utf8";
-use Getopt::Std ();
+use Getopt::Long ();
 use XML::Simple ();
 use DBI;
 use Hebcal ();
@@ -50,17 +50,18 @@ use POSIX qw(strftime);
 use HTML::CalendarMonthSimple ();
 use strict;
 
-$0 =~ s,.*/,,;  # basename
-my $usage = "usage: $0 [-h] [-y <year>] festival.xml luach.sqlite3 output-dir
-    -h        Display usage information.
-    -v        Verbose mode
-    -y <year> Start with hebrew year <year> (default this year)
-";
+my $opt_help;
+my $opt_verbose = 0;
+my $opt_year;
 
-my %opts;
-Getopt::Std::getopts('hy:', \%opts) || die "$usage\n";
-$opts{'h'} && die "$usage\n";
-(@ARGV == 3) || die "$usage";
+if (!Getopt::Long::GetOptions("help|h" => \$opt_help,
+			      "year|y=i" => \$opt_year,
+			      "verbose|v+" => \$opt_verbose)) {
+    usage();
+}
+
+$opt_help && usage();
+(@ARGV == 3) || usage();
 
 my $festival_in = shift;
 my $dbfile = shift;
@@ -74,12 +75,12 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
 		    { RaiseError => 1, AutoCommit => 0 })
     or croak $DBI::errstr;
 
-print "Reading $festival_in...\n" if $opts{"v"};
+print "Reading $festival_in...\n" if $opt_verbose;
 my $fxml = XML::Simple::XMLin($festival_in);
 
 my $HEB_YR;
-if ($opts{'y'}) {
-    $HEB_YR = $opts{'y'};
+if ($opt_year) {
+    $HEB_YR = $opt_year;
 } else {
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
@@ -87,7 +88,8 @@ if ($opts{'y'}) {
     $HEB_YR++ if $hebdate->{"mm"} == 5; # Av
 }
 
-my @events = Hebcal::invoke_hebcal("./hebcal -s -H $HEB_YR", '', 0);
+my $cmd = "./hebcal -s -i -H $HEB_YR";
+my @events = Hebcal::invoke_hebcal($cmd, "", 0);
 my $numEntries = scalar(@events);
 
 my $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
@@ -300,6 +302,16 @@ sub new_html_cal {
     $cal;
 }
 
+
+sub usage {
+    $0 =~ s,.*/,,;  # basename
+    my $usage = "usage: $0 [-h] [-y <year>] festival.xml luach.sqlite3 output-dir
+    -h        Display usage information.
+    -v        Verbose mode
+    -y <year> Start with hebrew year <year> (default this year)
+";
+    die $usage;
+}
 
 # local variables:
 # mode: cperl
