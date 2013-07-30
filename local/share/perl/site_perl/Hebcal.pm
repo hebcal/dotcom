@@ -749,9 +749,10 @@ sub get_dow($$$)
 {
     my($year,$mon,$mday) = @_;
 
-    my($dow) = &Date::Calc::Day_of_Week($year,$mon,$mday);
+    my $dow = Date::Calc::Day_of_Week($year,$mon,$mday);
     $dow == 7 ? 0 : $dow;
 }
+
 sub hebnum_to_array {
     my($num) = @_;
     my(@result) = ();
