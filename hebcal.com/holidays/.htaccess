@@ -1,4 +1,4 @@
-DefaultType text/html
+ForceType text/html
 <IfModule mod_deflate.c>
 SetOutputFilter DEFLATE
 </IfModule>

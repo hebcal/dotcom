@@ -13,6 +13,7 @@ CONVERTER_SEDRA = ../converter/sedra/20/2099.inc
 REFORM_LUACH_DB = $(DBDIR)/reform-luach.sqlite3
 REFORM_LUACH_TMPDIR = /tmp/hebcal-reform-luach
 REFORM_LUACH_OUTDIR = ../reform-luach
+XML_REFORM_LUACH = $(XMLDIR)/reform-luach.xml
 
 all: xml2perl sedrot holidays converter
 
@@ -45,9 +46,10 @@ $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 		-d $(DBDIR)/luach.sqlite3 \
 		$(XML_FESTIVAL) $(HOLIDAYS)
 
-$(REFORM_LUACH_OUTDIR)/index.html: gen_luach.pl $(REFORM_LUACH_DB)
+$(REFORM_LUACH_OUTDIR)/index.html: gen_luach.pl $(REFORM_LUACH_DB) $(XML_REFORM_LUACH)
 	./gen_luach.pl \
 		$(XML_FESTIVAL) \
+		$(XML_REFORM_LUACH) \
 		$(REFORM_LUACH_DB) \
 		$(REFORM_LUACH_OUTDIR)
 

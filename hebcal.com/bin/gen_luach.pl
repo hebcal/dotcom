@@ -41,7 +41,7 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use utf8;
 use open ":utf8";
 use Getopt::Long ();
-use XML::Simple ();
+use XML::Simple qw(:strict);
 use DBI;
 use Hebcal ();
 use Date::Calc;
@@ -61,9 +61,10 @@ if (!Getopt::Long::GetOptions("help|h" => \$opt_help,
 }
 
 $opt_help && usage();
-(@ARGV == 3) || usage();
+(@ARGV == 4) || usage();
 
 my $festival_in = shift;
+my $luach_in = shift;
 my $dbfile = shift;
 my $outdir = shift;
 
@@ -76,7 +77,15 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
     or croak $DBI::errstr;
 
 print "Reading $festival_in...\n" if $opt_verbose;
-my $fxml = XML::Simple::XMLin($festival_in);
+my $fxml = XMLin($festival_in, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+
+print "Reading $luach_in...\n" if $opt_verbose;
+my $luach_xml = XMLin($luach_in,
+		      KeyAttr => ['name', 'key', 'id'],
+		      ForceArray => ["section"]);
+
+use Data::Dumper;
+print Dumper($luach_xml), "\n";
 
 my $HEB_YR;
 if ($opt_year) {
@@ -112,16 +121,13 @@ print OUT <<EOHTML;
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
 <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
 <style type="text/css">
-.navbar{position:static}
 body{
+ padding-top: 70px;
  font-family: 'Source Sans Pro', sans-serif;
- padding-top:0
 }
-.label{text-transform:none}
 :lang(he) {
   font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
   font-size:125%;
@@ -135,12 +141,15 @@ body{
 </head>
 <body>
 
-<div class="masthead">
- <h3 class="muted">Reform Luach</h3>
-</div><!-- .masthead -->
+<div class="navbar navbar-fixed-top">
+<span class="navbar-brand">Reform Luach</span>
+<ul class="nav navbar-nav">
+<li class="active"><a href="#">Home</a></li>
+<li><a href="#">About</a></li>
+</ul>
+</div><!-- .navbar -->
 
 <div class="container">
-<div id="content" class="clearfix row-fluid">
 EOHTML
 ;
 
@@ -188,10 +197,26 @@ for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
     }
 }
 
-foreach my $cal (@html_cals) {
-#    print OUT qq{<div id="cal-$cal_id">\n};
+
+my $nav_pagination = qq{<ul class="pagination pagination-centered">\n};
+foreach my $cal_id (@html_cal_ids) {
+    if ($cal_id =~ /^(\d{4})-(\d{2})$/) {
+	my $year = $1;
+	my $mon = $2;
+	$mon =~ s/^0//;
+	my $mon_long = $Hebcal::MoY_long{$mon};
+	my $mon_short = $Hebcal::MoY_short[$mon-1];
+	$nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
+    }
+}
+$nav_pagination .= qq{</ul><!-- .pagination -->\n};
+print OUT $nav_pagination;
+
+foreach my $cal_id (@html_cal_ids) {
+    my $cal = $html_cals{$cal_id};
+    print OUT qq{<div id="cal-$cal_id" style="padding-top:60px">\n};
     print OUT $cal->as_HTML();
-#    print OUT qq{</div><!-- #cal-$cal_id -->\n};
+    print OUT qq{</div><!-- #cal-$cal_id -->\n};
 }
 
 my $mtime = (defined $ENV{'SCRIPT_FILENAME'}) ?
@@ -201,9 +226,8 @@ my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
 my $last_updated_text = qq{<p><time datetime="$dc_date">$hhmts</time></p>};
 
 print OUT <<EOHTML;
-</div><!-- #content -->
 
-<footer role="contentinfo">
+<footer>
 <hr>
 <div id="inner-footer" class="clearfix">
 $last_updated_text
@@ -214,10 +238,10 @@ is licensed under a
 Commons Attribution 3.0 License</a>.</small></p>
 </div><!-- #inner-footer -->
 </footer>
-</div> <!-- .container -->
+</div><!-- .container -->
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 <script>
 \$("a[data-toggle=popover]")
       .popover({html:true})
@@ -244,11 +268,13 @@ sub add_event {
     my $cal = $html_cals{$cal_id};
 
     my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-    my $placement = ($dow == 6) ? "left" : "right";
+    my $placement = ($dow >= 5) ? "left" : "right";
 
     my $title = $hebrew ? "$subj / $hebrew" : $subj;
     my $html = qq{<a href="#" class="popover-test" data-toggle="popover" data-placement="$placement" title="$title" data-content="$memo">$subj</a>};
-    $cal->addcontent($day, qq{<li>$html</li>});
+    $cal->addcontent($day, "<br>\n")
+	if $cal->getcontent($day) ne "";
+    $cal->addcontent($day, $html);
 }
 
 sub torah_memo {
@@ -305,7 +331,7 @@ sub new_html_cal {
 
 sub usage {
     $0 =~ s,.*/,,;  # basename
-    my $usage = "usage: $0 [-h] [-y <year>] festival.xml luach.sqlite3 output-dir
+    my $usage = "usage: $0 [-h] [-y <year>] festival.xml reform-luach.xml luach.sqlite3 output-dir
     -h        Display usage information.
     -v        Verbose mode
     -y <year> Start with hebrew year <year> (default this year)
