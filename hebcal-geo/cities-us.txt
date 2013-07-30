@@ -1,0 +1,49 @@
+US-New York City-NY|5128581|US|New York City, NY|8175133|40.71427|-74.00597|America/New_York
+US-Los Angeles-CA|5368361|US|Los Angeles, CA|3792621|34.05223|-118.24368|America/Los_Angeles
+US-Chicago-IL|4887398|US|Chicago, IL|2695598|41.85003|-87.65005|America/Chicago
+US-Brooklyn-NY|5110302|US|Brooklyn, NY|2300664|40.6501|-73.94958|America/New_York
+US-Houston-TX|4699066|US|Houston, TX|2099451|29.76328|-95.36327|America/Chicago
+US-Philadelphia-PA|4560349|US|Philadelphia, PA|1526006|39.95234|-75.16379|America/New_York
+US-Manhattan-NY|5125771|US|Manhattan, NY|1487536|40.78343|-73.96625|America/New_York
+US-Phoenix-AZ|5308655|US|Phoenix, AZ|1445632|33.44838|-112.07404|America/Phoenix
+US-Borough of Bronx-NY|5110266|US|Borough of Bronx, NY|1385108|40.84985|-73.86641|America/New_York
+US-San Antonio-TX|4726206|US|San Antonio, TX|1327407|29.42412|-98.49363|America/Chicago
+US-San Diego-CA|5391811|US|San Diego, CA|1307402|32.71533|-117.15726|America/Los_Angeles
+US-Dallas-TX|4684888|US|Dallas, TX|1197816|32.78306|-96.80667|America/Chicago
+US-San Jose-CA|5392171|US|San Jose, CA|945942|37.33939|-121.89496|America/Los_Angeles
+US-Indianapolis-IN|4259418|US|Indianapolis, IN|829718|39.76838|-86.15804|America/Indiana/Indianapolis
+US-Jacksonville-FL|4160021|US|Jacksonville, FL|821784|30.33218|-81.65565|America/New_York
+US-San Francisco-CA|5391959|US|San Francisco, CA|805235|37.77493|-122.41942|America/Los_Angeles
+US-Austin-TX|4671654|US|Austin, TX|790390|30.26715|-97.74306|America/Chicago
+US-Columbus-OH|4509177|US|Columbus, OH|787033|39.96118|-82.99879|America/New_York
+US-Fort Worth-TX|4691930|US|Fort Worth, TX|741206|32.72541|-97.32085|America/Chicago
+US-Charlotte-NC|4460243|US|Charlotte, NC|731424|35.22709|-80.84313|America/New_York
+US-Detroit-MI|4990729|US|Detroit, MI|713777|42.33143|-83.04575|America/Detroit
+US-El Paso-TX|5520993|US|El Paso, TX|649121|31.75872|-106.48693|America/Denver
+US-Memphis-TN|4641239|US|Memphis, TN|646889|35.14953|-90.04898|America/Chicago
+US-New South Memphis-TN|4645421|US|New South Memphis, TN|641608|35.08676|-90.05676|America/Chicago
+US-Baltimore-MD|4347778|US|Baltimore, MD|620961|39.29038|-76.61219|America/New_York
+US-Boston-MA|4930956|US|Boston, MA|617594|42.35843|-71.05977|America/New_York
+US-Seattle-WA|5809844|US|Seattle, WA|608660|47.60621|-122.33207|America/Los_Angeles
+US-Washington, D. C.-DC|4140963|US|Washington, D. C., DC|601723|38.89511|-77.03637|America/New_York
+US-Metropolitan Government of Nashville-Davidson (balance)-TN|7170468|US|Metropolitan Government of Nashville-Davidson (balance), TN|601222|36.17137|-86.78429|America/Chicago
+US-Denver-CO|5419384|US|Denver, CO|600158|39.73915|-104.9847|America/Denver
+US-Milwaukee-WI|5263045|US|Milwaukee, WI|594833|43.0389|-87.90647|America/Chicago
+US-Portland-OR|5746545|US|Portland, OR|583776|45.52345|-122.67621|America/Los_Angeles
+US-Las Vegas-NV|5506956|US|Las Vegas, NV|583756|36.17497|-115.13722|America/Los_Angeles
+US-Oklahoma City-OK|4544349|US|Oklahoma City, OK|579999|35.46756|-97.51643|America/Chicago
+US-South Boston-MA|4951305|US|South Boston, MA|571281|42.33343|-71.04949|America/New_York
+US-Albuquerque-NM|5454711|US|Albuquerque, NM|545852|35.08449|-106.65114|America/Denver
+US-Nashville-TN|4644585|US|Nashville, TN|530852|36.16589|-86.78444|America/Chicago
+US-Tucson-AZ|5318313|US|Tucson, AZ|520116|32.22174|-110.92648|America/Phoenix
+US-Fresno-CA|5350937|US|Fresno, CA|494665|36.74773|-119.77237|America/Los_Angeles
+US-Staten Island-NY|5139568|US|Staten Island, NY|468730|40.56233|-74.13986|America/New_York
+US-Sacramento-CA|5389489|US|Sacramento, CA|466488|38.58157|-121.4944|America/Los_Angeles
+US-Long Beach-CA|5367929|US|Long Beach, CA|462257|33.76696|-118.18923|America/Los_Angeles
+US-Kansas City-MO|4393217|US|Kansas City, MO|459787|39.09973|-94.57857|America/Chicago
+US-Mesa-AZ|5304391|US|Mesa, AZ|439041|33.42227|-111.82264|America/Phoenix
+US-Virginia Beach-VA|4791259|US|Virginia Beach, VA|437994|36.85293|-75.97798|America/New_York
+US-Atlanta-GA|4180439|US|Atlanta, GA|420003|33.749|-84.38798|America/New_York
+US-Colorado Springs-CO|5417598|US|Colorado Springs, CO|416427|38.83388|-104.82136|America/Denver
+US-Omaha-NE|5074472|US|Omaha, NE|408958|41.25861|-95.93779|America/Chicago
+US-Raleigh-NC|4487042|US|Raleigh, NC|403892|35.7721|-78.63861|America/New_York

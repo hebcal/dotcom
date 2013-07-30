@@ -300,7 +300,7 @@ Shabbat Times</h2>
 <?php if (isset($param["zip"])) { echo "value=\"$param[zip]\" "; } ?>
 pattern="\d*" id="zip"></label>
 <input type="hidden" name="m" value="<?php
-  if (isset($param["m"])) { echo $param["m"]; } else { echo "72"; } ?>">
+  if (isset($param["m"])) { echo $param["m"]; } else { echo "50"; } ?>">
 <button type="submit" class="btn"><i class="icon-time"></i> Shabbat Times &raquo;</button>
 </form>
 <?php if (isset($param["zip"]) || isset($param["city"])) { ?>

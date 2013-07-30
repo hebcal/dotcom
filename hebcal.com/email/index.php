@@ -239,7 +239,7 @@ function form($param, $message = "", $help = "") {
     }
 
     if (!isset($param["m"])) {
-	$param["m"] = 72;
+	$param["m"] = 50;
     }
 
     $action = $_SERVER["PHP_SELF"];

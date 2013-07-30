@@ -9,7 +9,7 @@ foreach($_REQUEST as $key => $value) {
 if (isset($param["m"]) && is_numeric($param["m"])) {
     $m = $param["m"];
 } else {
-    $m = 72;
+    $m = 50;
 }
 if (isset($param["zip"]) && preg_match('/^\d{5}$/', $param["zip"])) {
     $zip = $param["zip"];

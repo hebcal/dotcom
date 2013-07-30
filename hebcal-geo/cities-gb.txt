@@ -1,0 +1,11 @@
+GB-London|2643743|GB|London, England|7556900|51.50853|-0.12574|Europe/London
+GB-Birmingham|2655603|GB|Birmingham, England|984333|52.48142|-1.89983|Europe/London
+GB-Glasgow|2648579|GB|Glasgow, Scotland|610268|55.86515|-4.25763|Europe/London
+GB-Liverpool|2644210|GB|Liverpool, England|468945|53.41058|-2.97794|Europe/London
+GB-Leeds|2644688|GB|Leeds, England|455123|53.79648|-1.54785|Europe/London
+GB-Sheffield|2638077|GB|Sheffield, England|447047|53.38297|-1.4659|Europe/London
+GB-Edinburgh|2650225|GB|Edinburgh, Scotland|435791|55.95206|-3.19648|Europe/London
+GB-Bristol|2654675|GB|Bristol, England|430713|51.45523|-2.59665|Europe/London
+GB-Manchester|2643123|GB|Manchester, England|395515|53.48095|-2.23743|Europe/London
+GB-Cardiff|2653822|GB|Cardiff, Wales|302139|51.48|-3.18|Europe/London
+GB-Belfast|2655984|GB|Belfast, Northern Ireland|274770|54.58333|-5.93333|Europe/London

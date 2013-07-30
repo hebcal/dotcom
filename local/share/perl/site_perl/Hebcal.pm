@@ -75,7 +75,7 @@ $CACHE_DIR .= "/cache/";
 # boolean options
 @Hebcal::opts = ('c','o','s','i','a','d','D');
 
-$Hebcal::havdalah_min = 72;
+$Hebcal::havdalah_min = 50;
 @Hebcal::DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 @Hebcal::MoY_short =
     ('Jan','Feb','Mar','Apr','May','Jun',
