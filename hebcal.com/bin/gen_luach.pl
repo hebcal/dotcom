@@ -81,8 +81,8 @@ my $fxml = XMLin($festival_in, KeyAttr => ['name', 'key', 'id'], ForceArray => 0
 
 print "Reading $luach_in...\n" if $opt_verbose;
 my $luach_xml = XMLin($luach_in,
-		      KeyAttr => ['name', 'key', 'id'],
-		      ForceArray => ["section"]);
+		      KeyAttr => ['id'],
+		      ForceArray => ["li", "section"]);
 
 use Data::Dumper;
 print Dumper($luach_xml), "\n";
@@ -128,6 +128,23 @@ body{
  padding-top: 70px;
  font-family: 'Source Sans Pro', sans-serif;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+ font-family: 'Source Sans Pro', sans-serif;
+}
+.popover {
+ max-width: 476px;
+}
 :lang(he) {
   font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
   font-size:125%;
@@ -170,20 +187,51 @@ for (my @dt = ($start_year, $start_month, 1);
 
 my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
 
+my %rosh_chodesh;
 foreach my $evt (@events) {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
-    my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-    my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-    my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
-
     my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+    $subj =~ s/ \d{4}$//;
+
+    if ($memo ne "") {
+	$memo = "<div>$memo</div>";
+    }
+
+    my $xml_item;
+
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
+    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+    if ($dow == 6) {
+	$xml_item = find_item("$subj (on Shabbat");
+    }
+    # try without "on Shabbat" if we didn't find it
+    $xml_item = find_item($subj) unless defined $xml_item;
+
+    if ($xml_item) {
+	foreach my $section (@{$xml_item->{"section"}}) {
+	    $memo .= "<strong>" . $section->{"name"}. qq{</strong><ul style="padding-left:11px">};
+	    foreach my $li (@{$section->{"li"}}) {
+		$memo .= "<li>$li</li>\n";
+	    }
+	    $memo .= "</ul>";
+	}
+    }
 
     my $torah_memo = torah_memo($subj, $year, $month, $day);
     $memo .= "<br>" . $torah_memo if $torah_memo;
 
     add_event($year, $month, $day, $subj, $hebrew, $memo);
+    if ($subj =~ /^Rosh Chodesh (.+)$/) {
+	my $rch_month = $1;
+	$rosh_chodesh{$rch_month} = [] unless defined $rosh_chodesh{$rch_month};
+	push(@{$rosh_chodesh{$rch_month}}, $evt);
+    }
 }
+
+my @DAYS = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
+my @heb_months = qw(VOID Nisan Iyyar Sivan Tamuz Av Elul Tishei Cheshvan Kislev Tevet Sh'vat);
+push(@heb_months, "Adar I", "Adar II");
 
 # figure out which Shabbatot are M'varchim haChodesh
 for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
@@ -192,11 +240,36 @@ for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
     if ($dow == 6) {
 	my $hebdate = HebcalGPL::abs2hebrew($abs);
 	if ($hebdate->{"dd"} >= 23 && $hebdate->{"dd"} <= 29 && $hebdate->{"mm"} != 6) {
-	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Shabbat Mevarchim", undef, "");
+	    my $hmonth = $hebdate->{"mm"} + 1;
+	    if ($hmonth > HebcalGPL::MONTHS_IN_HEB($hebdate->{"yy"})) {
+		$hmonth = 1;
+	    }
+	    my $hebmonth = $heb_months[$hmonth];
+	    my($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[0]);
+	    my $dow = Hebcal::get_dow($year, $month, $day);
+	    my $memo = "Rosh Chodesh <strong>$hebmonth</strong> will be on <strong>" . $DAYS[$dow] . "</strong>";
+	    if (defined $rosh_chodesh{$hebmonth}->[1]) {
+		($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[1]);
+		$dow = Hebcal::get_dow($year, $month, $day);
+		$memo .= " and <strong>" . $DAYS[$dow] . "</strong>";
+	    }
+	    $memo .= ".";
+	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Shabbat Mevarchim", undef, $memo);
 	}
     }
 }
 
+# Aseret Y'mei T'shuvah
+my $rh10days = find_item("Aseret Y'mei T'shuvah");
+my $rh10days_memo = qq{<ul style="padding-left:11px">};
+foreach my $li (@{$rh10days->{"section"}->[0]->{"li"}}) {
+    $rh10days_memo .= "<li>$li</li>\n";
+}
+$rh10days_memo .= "</ul>";
+for (my $abs = $start_abs; $abs < $start_abs+10; $abs++) {
+    my $greg = HebcalGPL::abs2greg($abs);
+    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Aseret Y'mei T'shuvah", undef, $rh10days_memo);
+}
 
 my $nav_pagination = qq{<ul class="pagination pagination-centered">\n};
 foreach my $cal_id (@html_cal_ids) {
@@ -261,6 +334,13 @@ $dbh = undef;
 
 exit(0);
 
+sub find_item {
+    my($title) = @_;
+    foreach my $item (@{$luach_xml->{"item"}}) {
+	return $item if defined $item->{"title"} && $item->{"title"} eq $title;
+    }
+    undef;
+}
 
 sub add_event {
     my($year,$month,$day,$subj,$hebrew,$memo) = @_;
@@ -268,10 +348,11 @@ sub add_event {
     my $cal = $html_cals{$cal_id};
 
     my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-    my $placement = ($dow >= 5) ? "left" : "right";
+    my $placement = ($dow == 5 || $dow == 6) ? "left" : "right";
 
     my $title = $hebrew ? "$subj / $hebrew" : $subj;
-    my $html = qq{<a href="#" class="popover-test" data-toggle="popover" data-placement="$placement" title="$title" data-content="$memo">$subj</a>};
+    my $memo_html = Hebcal::html_entify($memo);
+    my $html = qq{<a href="#" class="popover-test" data-toggle="popover" data-placement="$placement" title="$title" data-content="$memo_html">$subj</a>};
     $cal->addcontent($day, "<br>\n")
 	if $cal->getcontent($day) ne "";
     $cal->addcontent($day, $html);
@@ -297,13 +378,13 @@ sub torah_memo {
     $sth->finish;
     my $memo;
     if ($torah_reading) {
-	$memo = "Torah: $torah_reading";
+	$memo = "<strong>Torah Reading:</strong> $torah_reading";
 	if ($special_maftir) {
-	    $memo .= "<br>Maftir: ";
+	    $memo .= "<br><strong>Maftir:</strong> ";
 	    $memo .= $special_maftir;
 	}
 	if ($haftarah_reading) {
-	    $memo .= "<br>Haftarah: ";
+	    $memo .= "<br><strong>Haftarah:</strong> ";
 	    $memo .= $haftarah_reading;
 	}
     }
