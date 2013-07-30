@@ -287,13 +287,13 @@ sub mail_user
 	    : "city=" . URI::Escape::uri_escape_utf8($args->{"city"});
 	my $loc_copy = $loc;
 	$loc_copy =~ s/,.+$//;
-	$html_body .= qq{<div style="font-size:14px;color:#999;font-family:arial,helvetica,sans-serif">\n};
-	$html_body .= qq{<div>Rosh Hashana $next_year is coming! Print your }
-	    . qq{<a href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year&amp;$UTM_PARAM">}
+
+	$html_body .= qq{<div style="font-size:14px;font-family:arial,helvetica,sans-serif;padding:8px;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;border-radius:4px">\n};
+	$html_body .= qq{Rosh Hashana $next_year is coming! Print your }
+	    . qq{<a style="color:#356635" href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year&amp;$UTM_PARAM">}
 	    . qq{$loc_copy virtual refrigerator magnet</a> for candle lighting times and }
-	    . qq{Parashat haShavuah on a compact 5x7 page.</div>\n}
+	    . qq{Parashat haShavuah on a compact 5x7 page.\n</div>\n}
 	    . qq{<div>&nbsp;</div>\n};
-	$html_body .= "</div>\n";
     }
 
     # begin the HTML for the events - main body
