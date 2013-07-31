@@ -47,16 +47,20 @@ BT-Thimphu|9991887896|BT|Thimphu|0|27.4833|89.6000|Asia/Thimphu
 BW-Gaborone|9991265547|BW|Gaborone|0|-24.6464|25.9119|Africa/Gaborone
 BY-Minsk|625144|BY|Minsk|1742124|53.9|27.56667|Europe/Minsk
 BZ-Belmopan|99957172|BZ|Belmopan|0|17.2500|-88.7667|America/Belize
-CA-Calgary|9998775|CA|Calgary|0|51.045219|-114.063011|America/Edmonton
-CA-Edmonton|5946768|CA|Edmonton|712391|53.55014|-113.46871|America/Edmonton
-CA-Halifax|6324729|CA|Halifax|359111|44.64533|-63.57239|America/Halifax
-CA-Mississauga|6075357|CA|Mississauga|668549|43.5789|-79.6583|America/Toronto
-CA-Montreal|6077243|CA|Montréal|3268513|45.50884|-73.58781|America/Montreal
-CA-Ottawa|9993369|CA|Ottawa|0|45.4167|-75.7000|America/Toronto
-CA-Quebec City|6325494|CA|Québec City|528595|46.81228|-71.21454|America/Montreal
-CA-Toronto|6167865|CA|Toronto|4612191|43.70011|-79.4163|America/Toronto
-CA-Vancouver|6173331|CA|Vancouver|1837969|49.24966|-123.11934|America/Vancouver
-CA-Winnipeg|9992972|CA|Winnipeg|0|49.899441|-97.140793|America/Winnipeg
+CA-Calgary|9998775|CA|Calgary, Alberta|0|51.045219|-114.063011|America/Edmonton
+CA-Edmonton|5946768|CA|Edmonton, Aberta|712391|53.55014|-113.46871|America/Edmonton
+CA-Halifax|6324729|CA|Halifax, Nova Scotia|359111|44.64533|-63.57239|America/Halifax
+CA-Mississauga|6075357|CA|Mississauga, Ontario|668549|43.5789|-79.6583|America/Toronto
+CA-Montreal|6077243|CA|Montréal, Quebec|3268513|45.50884|-73.58781|America/Montreal
+CA-Ottawa|9993369|CA|Ottawa, Ontario|0|45.4167|-75.7000|America/Toronto
+CA-Quebec City|6325494|CA|Québec City, Quebec|528595|46.81228|-71.21454|America/Montreal
+CA-Regina|6119109|CA|Regina, Saskatchewan|176183|50.45008|-104.6178|America/Regina
+CA-Saskatoon|6141256|CA|Saskatoon, Saskatchewan|198958|52.11679|-106.63452|America/Regina
+CA-St. John's-05|6324733|CA|St. John's, Newfoundland|99182|47.56494|-52.70931|America/St_Johns
+CA-Toronto|6167865|CA|Toronto, Ontario|4612191|43.70011|-79.4163|America/Toronto
+CA-Vancouver|6173331|CA|Vancouver, British Columbia|1837969|49.24966|-123.11934|America/Vancouver
+CA-Victoria|6174041|CA|Victoria, British Columbia|289625|48.43294|-123.3693|America/Vancouver
+CA-Winnipeg|9992972|CA|Winnipeg, Manitoba|0|49.899441|-97.140793|America/Winnipeg
 CD-Kinshasa|2314302|CD|Kinshasa|7785965|-4.32142|15.30807|Africa/Kinshasa
 CD-Lubumbashi|922704|CD|Lubumbashi|1373770|-11.66089|27.47938|Africa/Lubumbashi
 CF-Bangui|9991306666|CF|Bangui|0|4.3667|18.5833|Africa/Bangui
