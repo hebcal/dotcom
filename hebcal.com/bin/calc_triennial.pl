@@ -1364,39 +1364,31 @@ sub readings_for_current_year
 {
     my($parshiot) = @_;
 
-    my $heb_yr = $hebrew_year - 1;
-
-    my $extra_years = 10;
-    my @years;
-    foreach my $i (0 .. $extra_years)
-    {
-	my($yr) = $heb_yr + $i;
-	my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -h -x -H $yr", "", 0);
-	$years[$i] = \@ev;
-    }
-
     if ($opts{'f'}) {
 	open(CSV, ">$opts{'f'}.$$") || croak "$opts{'f'}.$$: $!\n";
 	print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
     }
 
-    for (my $yr = 0; $yr < $extra_years; $yr++) {
-	my @events = @{$years[$yr]};
-	for (my $i = 0; $i < @events; $i++) {
-	    next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
-	    my $h = $1;
-	    my($year,$month,$day) = Hebcal::event_ymd($events[$i]);
-	    $parashah_date_sql{$h}->[$yr] = Hebcal::date_format_sql($year, $month, $day);
-	    $parashah_time{$h} = Time::Local::timelocal
-	      (1,0,0,
-	       $day,
-	       $month - 1,
-	       $year - 1900,
-	       '','','')
-		if $yr == 1;	# second year in array
+    my $extra_years = 10;
+    foreach my $i (0 .. $extra_years) {
+	my $yr = $hebrew_year - 1 + $i;
+	my @events = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -H $yr", "", 0);
+	foreach my $evt (@events) {
+	    my($year,$month,$day) = Hebcal::event_ymd($evt);
+	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/) {
+		my $h = $1;
+		$parashah_date_sql{$h}->[$i] = Hebcal::date_format_sql($year, $month, $day);
+		$parashah_time{$h} = Time::Local::timelocal
+		    (1,0,0,
+		     $day,
+		     $month - 1,
+		     $year - 1900,
+		     '','','')
+			if $i == 1;	# second year in array
 
-	    if ($opts{'f'}) {
-		csv_parasha_event($events[$i], $h, $parshiot);
+		if ($opts{'f'}) {
+		    csv_parasha_event($evt, $h, $parshiot);
+		}
 	    }
 	}
     }
