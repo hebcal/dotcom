@@ -689,7 +689,7 @@ sub form
 
     my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
     my $hyear = $hebdate->{"yy"};
-    $hyear++ if $hebdate->{"mm"} == 6; # Elul
+    $hyear++ if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15) || $hebdate->{"mm"} == 6);
 
     print STDOUT $q->header(-type => $content_type);
 
@@ -1206,19 +1206,11 @@ accurate.
 		$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
 	    }
 
-	    my $hyear;
-	    if ($q->param("yt") && $q->param("yt") eq "H") {
-		$hyear = $q->param("year");
-		$url .= "&amp;year=" . $q->param("year");
-	    } else {
-		my $i = ($q->param("month") eq "x") ? 0 : $numEntries - 1;
-		my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-		my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-		my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
-		my $hebdate = HebcalGPL::greg2hebrew($year,$mon,$mday);
-		$hyear = $hebdate->{"yy"};
-		$url .= "&amp;year=" . $hyear;
-	    }
+	    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+	    my $hyear = $hebdate->{"yy"};
+	    $hyear++ if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15) || $hebdate->{"mm"} == 6);
+
+	    $url .= "&amp;year=$hyear";
 	    
 	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
 	}
