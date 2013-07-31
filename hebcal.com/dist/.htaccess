@@ -4,15 +4,10 @@ HeaderName HEADER.html
 ReadmeName README.html
 IndexIgnore RCS
 
-AddDescription "Perl and PHP source code (BSD License)" hebcal-dot-com.tar.gz
 AddDescription "Aliyah-by-aliyah breakdown of parshiyot" aliyah.xml
 AddDescription "Torah readings for festivals" festival.xml
 AddDescription "Triennial Torah Readings" triennial.csv
 AddDescription "Full Kriyah Torah Readings" fullkriyah.csv
-AddDescription "Palm Date Book Archive export" Palm-DBA.pm
-AddDescription "GPL-licensed source code" HebcalGPL.pm
-AddDescription "Release notes" ChangeLog.txt
-AddDescription "SQLite dump of zip code DB" zips99.sqldump.gz
 AddDescription "WordPress Shabbat Times widget" hebcal-shabbat-widget.zip
 
 Redirect gone /dist/zips99.dbdump.txt
@@ -23,3 +18,8 @@ Redirect gone /dist/yahrzeit.pl
 Redirect gone /dist/hebcal.pl
 Redirect gone /dist/zips2db.pl
 Redirect gone /dist/del_cookie.pl
+Redirect gone /dist/hebcal-dot-com.tar.gz
+Redirect gone /dist/Palm-DBA.pm
+Redirect gone /dist/HebcalGPL.pm
+Redirect gone /dist/ChangeLog.txt
+Redirect gone /dist/zips99.sqldump.gz
