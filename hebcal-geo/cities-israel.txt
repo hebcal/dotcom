@@ -1,2 +1,0 @@
-IL-Eilat|295277|IL|Eilat|45588|29.55805|34.94821|Asia/Jerusalem
-IL-Tiberias|293322|IL|Tiberias|39790|32.7922|35.53124|Asia/Jerusalem
