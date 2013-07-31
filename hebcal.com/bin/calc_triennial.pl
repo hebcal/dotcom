@@ -1298,7 +1298,8 @@ sub csv_parasha_event_inner
     my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } values %aliyot;
     foreach my $aliyah (@sorted_aliyot) {
 	my $aliyah_text = sprintf("%s %s - %s",
-				  $book, $aliyah->{'begin'}, $aliyah->{'end'});
+				  $aliyah->{"book"} || $book,
+				  $aliyah->{'begin'}, $aliyah->{'end'});
 	if (defined $special{$dt}->{$aliyah->{"num"}}) {
 	    $aliyah_text = sprintf("%s %s - %s | %s",
 				   $aliyah->{"book"}, $aliyah->{"begin"}, $aliyah->{"end"},
@@ -1323,11 +1324,10 @@ sub csv_parasha_event_inner
 
 # write all of the aliyot for Shabbat to CSV file.
 # if $dbh is defined (for fullkriyah), also write to the leyning DB.
-sub csv_haftarah_event_inner {
+sub csv_haftarah_event {
     my($evt,$h,$parshiot,$dbh) = @_;
 
     my($year,$month,$day) = Hebcal::event_ymd($evt);
-    my $stime2 = Hebcal::date_format_csv($year, $month, $day);
     my $dt = Hebcal::date_format_sql($year, $month, $day);
 
     my $haft = $special{$dt}->{"H"}
@@ -1344,6 +1344,17 @@ sub csv_haftarah_event_inner {
     if (defined $special{$dt}->{"H"}) {
       $haftarah_reading .= " | " . $special{$dt}->{"reason"};
     }
+
+    csv_haftarah_event_inner($evt,$h,$haftarah_reading,$dbh);
+}
+
+sub csv_haftarah_event_inner {
+    my($evt,$h,$haftarah_reading,$dbh) = @_;
+
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
+    my $dt = Hebcal::date_format_sql($year, $month, $day);
+    my $stime2 = Hebcal::date_format_csv($year, $month, $day);
+
     printf CSV
       qq{%s,"%s","%s","%s",\015\012},
       $stime2,
@@ -1356,9 +1367,35 @@ sub csv_haftarah_event_inner {
       my $rv = $sth->execute($dt, $h, "H", $haftarah_reading)
 	or croak "can't execute the query: " . $sth->errstr;
     }
+}
 
+sub csv_extra_newline {
     print CSV "\015\012";
 }
+
+sub get_festival_torah_verses {
+    my($aliyot) = @_;
+
+    my($torah,$book,$begin,$end);
+    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
+			    @{$aliyot}) {
+	if ($aliyah->{'num'} =~ /^\d+$/) {
+	    if (($book && $aliyah->{'book'} eq $book) ||
+		($aliyah->{'num'} eq '8')) {
+		$end = $aliyah->{'end'};
+	    }
+	    $book = $aliyah->{'book'} unless $book;
+	    $begin = $aliyah->{'begin'} unless $begin;
+	}
+    }
+
+    if ($book) {
+	$torah = "$book $begin - $end";
+    }
+
+    $torah;
+}
+
 
 sub readings_for_current_year
 {
@@ -1390,7 +1427,35 @@ sub readings_for_current_year
 		    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
 		    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
 		    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
-		    csv_haftarah_event_inner($evt,$h,$parshiot,$DBH);
+		    csv_haftarah_event($evt,$h,$parshiot,$DBH);
+		    csv_extra_newline();
+		}
+	    } elsif ($opts{'f'}) {
+		# write out non-sedra (holiday) event to DB and CSV
+		my $h = $evt->[$Hebcal::EVT_IDX_SUBJ];
+		$h =~ s/ \d{4}$/ I/; # Rosh Hashana hack
+		my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+		my $fest;
+		if ($dow == 6) {
+		    $fest = $fxml->{'festival'}->{"$h (on Shabbat)"};
+		}
+		# try without "on Shabbat" if we didn't find it
+		$fest = $fxml->{'festival'}->{$h} unless defined $fest;
+		if (defined $fest) {
+		    my $aliyot = $fest->{"kriyah"}->{"aliyah"};
+		    if (defined $aliyot) {
+			if (ref($aliyot) eq 'HASH') {
+			    $aliyot = [ $aliyot ];
+			}
+			my $verses = get_festival_torah_verses($aliyot);
+			if ($verses) {
+			    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
+			    my $haftarah_reading = $fest->{"kriyah"}->{"haft"}->{"reading"};
+			    csv_haftarah_event_inner($evt,$h,$haftarah_reading,$DBH)
+				if defined $haftarah_reading;
+			    csv_extra_newline();
+			}
+		    }
 		}
 	    }
 	}
@@ -1421,7 +1486,8 @@ sub triennial_csv
 	    my $aliyot = $readings->{$h}->[$yr]->[0];
 	    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
 	    csv_parasha_event_inner($evt,$h,$verses,$aliyot,undef);
-	    csv_haftarah_event_inner($evt,$h,$parshiot,undef);
+	    csv_haftarah_event($evt,$h,$parshiot,undef);
+	    csv_extra_newline();
 	}
     }
 }

@@ -43,7 +43,6 @@ $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
 	./gen_festival.pl -v \
-		-d $(DBDIR)/luach.sqlite3 \
 		$(XML_FESTIVAL) $(HOLIDAYS)
 
 $(REFORM_LUACH_OUTDIR)/index.html: gen_luach.pl $(REFORM_LUACH_DB) $(XML_REFORM_LUACH)
@@ -53,17 +52,13 @@ $(REFORM_LUACH_OUTDIR)/index.html: gen_luach.pl $(REFORM_LUACH_DB) $(XML_REFORM_
 		$(REFORM_LUACH_DB) \
 		$(REFORM_LUACH_OUTDIR)
 
-$(REFORM_LUACH_DB): gen_festival.pl calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
+$(REFORM_LUACH_DB): calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(REFORM_LUACH_TMPDIR)
 	./calc_triennial.pl \
 		-i \
 		-f $(REFORM_LUACH_TMPDIR)/fullkriyah.csv \
 		-d $(REFORM_LUACH_DB) \
 		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(REFORM_LUACH_TMPDIR)
-	./gen_festival.pl \
-		-i -v \
-		-d $(REFORM_LUACH_DB) \
-		$(XML_FESTIVAL) $(REFORM_LUACH_TMPDIR)
 	rm -rf $(REFORM_LUACH_TMPDIR)
 
 converter: ../converter/sedra/19/1900.inc

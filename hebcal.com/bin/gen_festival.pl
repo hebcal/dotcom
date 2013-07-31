@@ -58,17 +58,15 @@ use strict;
 my $eval_use_Image_Magick = 0;
 
 $0 =~ s,.*/,,;  # basename
-my($usage) = "usage: $0 [-hvi] [-H <year>] [-f f.csv] [-d luach.sqlite3] festival.xml output-dir
+my($usage) = "usage: $0 [-hvi] [-H <year>] festival.xml output-dir
   -h                Display usage information
   -v                Verbose mode
   -i                Use Israeli sedra scheme
   -H <year>         Start with hebrew year <year> (default this year)
-  -f f.csv          Dump full kriyah readings to comma separated values
-  -d luach.sqlite3  Write leyning info to the luach database
 ";
 
 my(%opts);
-Getopt::Std::getopts('hf:vH:d:i', \%opts) || die "$usage\n";
+Getopt::Std::getopts('hvH:i', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
@@ -81,22 +79,6 @@ if (! -d $outdir) {
 
 print "Reading $festival_in...\n" if $opts{"v"};
 my $fxml = XML::Simple::XMLin($festival_in);
-
-my $DBH;
-my $SQL_INSERT_INTO_LEYNING =
-    "INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)";
-if ($opts{'d'}) {
-    my $dbfile = $opts{'d'};
-    $DBH = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
-			{ RaiseError => 1, AutoCommit => 0 })
-	or croak $DBI::errstr;
-}
-
-if ($opts{'f'}) {
-    my $fn = $opts{"f"};
-    open(CSV, ">$fn.$$") || die "$fn.$$: $!\n";
-    print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
-}
 
 my $NOW = time();
 
@@ -204,22 +186,10 @@ foreach my $f (@FESTIVALS)
 {
     print "   $f...\n" if $opts{"v"};
     write_festival_page($fxml,$f);
-    write_csv($fxml,$f) if $opts{'f'};
-}
-
-if ($opts{'f'}) {
-    close(CSV);
-    rename("$opts{'f'}.$$", $opts{'f'}) || die "$opts{'f'}: $!\n";
 }
 
 print "Index page...\n" if $opts{"v"};
 write_index_page($fxml);
-
-if ($opts{'d'}) {
-  $DBH->commit;
-  $DBH->disconnect;
-  $DBH = undef;
-}
 
 exit(0);
 
@@ -255,35 +225,6 @@ sub get_var
     }
 
     $value;
-}
-
-sub write_csv
-{
-    my($festivals,$f) = @_;
-
-    print CSV "$f\n";
-
-    if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
-	my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
-	if (ref($aliyot) eq 'HASH') {
-	    $aliyot = [ $aliyot ];
-	}
-
-	foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}} @{$aliyot}) {
-	    printf CSV "Torah Service - Aliyah %s,%s %s - %s\n",
-	    $aliyah->{'num'},
-	    $aliyah->{'book'},
-	    $aliyah->{'begin'},
-	    $aliyah->{'end'};
-	}
-    }
-
-    my $haft = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'reading'};
-    if (defined $haft) {
-	print CSV "Torah Service - Haftarah,$haft\n",
-    }
-
-    print CSV "\n";
 }
 
 sub format_single_day {
@@ -1227,39 +1168,6 @@ sub holidays_observed
 	my @events = Hebcal::invoke_hebcal($cmd, "", 0);
 	foreach my $evt (@events) {
 	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	    my($year,$month,$day) = Hebcal::event_ymd($evt);
-	    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-	    my $h = $subj;
-	    my $fest;
-	    if ($dow == 6) {
-		$fest = $fxml->{'festival'}->{"$h (on Shabbat)"};
-	    }
-	    # try without "on Shabbat" if we didn't find it
-	    $fest = $fxml->{'festival'}->{$h} unless defined $fest;
-	    if (defined $fest) {
-		my $a = $fest->{"kriyah"}->{"aliyah"};
-		if (defined $a) {
-		    if (ref($a) eq 'HASH') {
-			$a = [ $a ];
-		    }
-		    my($torah,$maftir) = get_torah_and_maftir($a);
-		    my $dt = Hebcal::date_format_sql($year, $month, $day);
-		    my $sth = $DBH->prepare($SQL_INSERT_INTO_LEYNING);
-		    if ($torah) {
-			$sth->execute($dt, $h, "T", $torah)
-			    or croak "can't execute the query: " . $sth->errstr;
-		    }
-		    foreach my $aliyah (@{$a}) {
-			my $info = sprintf("%s %s - %s",
-					   $aliyah->{'book'},
-					   $aliyah->{'begin'},
-					   $aliyah->{'end'});
-			my $rv = $sth->execute($dt, $h, $aliyah->{'num'}, $info)
-			    or croak "can't execute the query: " . $sth->errstr;
-		    }
-		}
-	    }
-
 	    next if $subj =~ /^Erev /;
 
 	    # Since Chanukah doesn't have an Erev, skip a day
