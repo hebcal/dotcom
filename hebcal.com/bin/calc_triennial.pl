@@ -183,7 +183,7 @@ my(%readings1,%readings2);
     unless $opts{"i"};
 
 my %special;
-foreach my $yr (($start_year - 3) .. ($start_year + 10))
+foreach my $yr (($start_year - 4) .. ($start_year + 10))
 {
     my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -H $yr", "", 0);
     special_readings(\@ev);
