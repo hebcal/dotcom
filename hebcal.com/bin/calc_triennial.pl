@@ -73,6 +73,17 @@ Getopt::Std::getopts('hH:c:t:f:d:i', \%opts) || croak "$usage\n";
 $opts{'h'} && croak "$usage\n";
 (@ARGV == 3) || croak "$usage";
 
+my %hebcal_to_strassfeld = 
+    (
+     "Pesach III (CH''M)" => "Pesach Chol ha-Moed Day 1",
+     "Pesach IV (CH''M)" => "Pesach Chol ha-Moed Day 2",
+     "Sukkot III (CH''M)" => "Sukkot Chol ha-Moed Day 1",
+     "Sukkot IV (CH''M)" => "Sukkot Chol ha-Moed Day 2",
+     "Sukkot V (CH''M)" => "Sukkot Chol ha-Moed Day 3",
+     "Sukkot VI (CH''M)" => "Sukkot Chol ha-Moed Day 4",
+     "Sukkot VII (Hoshana Raba)" => "Sukkot Chol ha-Moed Day 5 (Hoshana Raba)",
+);
+
 my $HEBCAL_CMD = "./hebcal";
 $HEBCAL_CMD .= " -i" if $opts{"i"};
 
@@ -1396,6 +1407,55 @@ sub get_festival_torah_verses {
     $torah;
 }
 
+sub get_festival_xml_for_event {
+    my($evt) = @_;
+
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
+    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+
+    my $h = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    if ($h =~ /^Rosh Hashana \d{4}/) {
+	$h =~ s/ \d{4}$/ I/;
+    } elsif ($dow == 6 && $h =~ /^(Pesach|Sukkot).+\(CH''M\)$/) {
+	$h = "$1 Shabbat Chol ha-Moed";
+    } elsif (defined $hebcal_to_strassfeld{$h}) {
+	$h = $hebcal_to_strassfeld{$h};
+	# TODO: if Shabbat falls on the third day of Chol ha-Moed
+	# Pesach, the readings for the third, fourth, and fifth days are
+	# moved ahead
+    } elsif ($h =~ /^Chanukah: (\d) Candles$/) {
+	my $chanukah_day = $1 - 1;
+	my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
+	if ($chanukah_day == 7 && $hebdate->{"dd"} == 1) {
+	    $h = "Chanukah (Day 7 on Rosh Chodesh)";
+	} else {
+	    $h = "Chanukah (Day $chanukah_day)";
+	}
+    } elsif ($h eq "Chanukah: 8th Day") {
+	$h = "Chanukah (Day 8)";
+    }
+
+    my $fest;
+    if ($dow == 6) {
+	$fest = $fxml->{'festival'}->{"$h (on Shabbat)"};
+    }
+    # try without "on Shabbat" if we didn't find it
+    $fest = $fxml->{'festival'}->{$h} unless defined $fest;
+
+    if ($dow == 6 && $h =~ /^Chanukah/) {
+	my $chanukah_haft_id = "Shabbat Chanukah";
+	if ($evt->[$Hebcal::EVT_IDX_SUBJ] eq "Chanukah: 8th Day") {
+	    $chanukah_haft_id = "Shabbat Chanukah II";
+	}
+	my $new_fest = { "kriyah" => { "aliyah" => $fest->{"kriyah"}->{"aliyah"},
+				       "haft" => $fxml->{"festival"}->{$chanukah_haft_id}->{"kriyah"}->{"haft"},
+				     } };
+	$fest = $new_fest;
+    }
+
+    ($h,$fest);
+}
+
 
 sub readings_for_current_year
 {
@@ -1407,14 +1467,16 @@ sub readings_for_current_year
     }
 
     my $extra_years = 10;
+    my %wrote_csv;
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my @events = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -H $yr", "", 0);
 	foreach my $evt (@events) {
 	    my($year,$month,$day) = Hebcal::event_ymd($evt);
+	    my $dt = Hebcal::date_format_sql($year, $month, $day);
 	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/) {
 		my $h = $1;
-		$parashah_date_sql{$h}->[$i] = Hebcal::date_format_sql($year, $month, $day);
+		$parashah_date_sql{$h}->[$i] = $dt;
 		$parashah_time{$h} = Time::Local::timelocal
 		    (1,0,0,
 		     $day,
@@ -1429,18 +1491,11 @@ sub readings_for_current_year
 		    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
 		    csv_haftarah_event($evt,$h,$parshiot,$DBH);
 		    csv_extra_newline();
+		    $wrote_csv{$dt} = 1;
 		}
-	    } elsif ($opts{'f'}) {
+	    } elsif ($opts{'f'} && ! defined $wrote_csv{$dt}) {
 		# write out non-sedra (holiday) event to DB and CSV
-		my $h = $evt->[$Hebcal::EVT_IDX_SUBJ];
-		$h =~ s/ \d{4}$/ I/; # Rosh Hashana hack
-		my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-		my $fest;
-		if ($dow == 6) {
-		    $fest = $fxml->{'festival'}->{"$h (on Shabbat)"};
-		}
-		# try without "on Shabbat" if we didn't find it
-		$fest = $fxml->{'festival'}->{$h} unless defined $fest;
+		my($h,$fest) = get_festival_xml_for_event($evt);
 		if (defined $fest) {
 		    my $aliyot = $fest->{"kriyah"}->{"aliyah"};
 		    if (defined $aliyot) {

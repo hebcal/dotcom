@@ -872,7 +872,11 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="21" num="6" book="Exodus" begin="34:11" end="34:17"/>
   <aliyah parsha="21" num="7" book="Exodus" begin="34:18" end="34:26"/>
   <!-- The maftir changes depending on what day of Chol ha-Moed Shabbat falls. -->
-  <aliyah parsha="41" num="M" book="Numbers" begin="29:x" end="29:x" numverses="x"/>
+  <aliyah parsha="41" num="M" book="Numbers" begin="29:x" end="29:x" numverses="6"/>
+  <aliyah-day1 parsha="41" num="M" book="Numbers" begin="29:17" end="29:22" numverses="6"/>
+  <aliyah-day2 parsha="41" num="M" book="Numbers" begin="29:20" end="29:25" numverses="6"/>
+  <aliyah-day3 parsha="41" num="M" book="Numbers" begin="29:23" end="29:28" numverses="6"/>
+  <aliyah-day4 parsha="41" num="M" book="Numbers" begin="29:26" end="29:31" numverses="6"/>
  </kriyah>
 </festival>
 <festival id="Sukkot VII (Hoshana Raba)" hebrew="סוּכּוֹת יוֹם ז׳ (הוֹשַׁנָא רַבָּה)" yomtov="0"/>
@@ -951,6 +955,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="54" num="1" book="Deuteronomy" begin="33:1" end="33:7"/>
   <aliyah parsha="54" num="2" book="Deuteronomy" begin="33:8" end="33:12"/>
   <aliyah parsha="54" num="3" book="Deuteronomy" begin="33:13" end="33:17"/>
+  <aliyah parsha="54" num="4" book="Deuteronomy" begin="33:18" end="33:21"/>
+  <aliyah parsha="54" num="5" book="Deuteronomy" begin="33:22" end="33:26"/>
  </kriyah>
 </festival>
 
@@ -1051,6 +1057,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="1" book="Numbers" begin="7:1" end="7:11"/>
   <aliyah parsha="35" num="2" book="Numbers" begin="7:12" end="7:14"/>
   <aliyah parsha="35" num="3" book="Numbers" begin="7:15" end="7:17"/>
+  <aliyah-alt parsha="35" num="1" book="Numbers" begin="7:1" end="7:3"/>
+  <aliyah-alt parsha="35" num="2" book="Numbers" begin="7:4" end="7:11"/>
+  <aliyah-alt parsha="35" num="3" book="Numbers" begin="7:12" end="7:17"/>
  </kriyah>
 </festival>
 <festival id="Chanukah (Day 2)">
@@ -1059,6 +1068,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="1" book="Numbers" begin="7:18" end="7:20"/>
   <aliyah parsha="35" num="2" book="Numbers" begin="7:21" end="7:23"/>
   <aliyah parsha="35" num="3" book="Numbers" begin="7:24" end="7:29"/>
+  <aliyah-alt parsha="35" num="1" book="Numbers" begin="7:18" end="7:20"/>
+  <aliyah-alt parsha="35" num="2" book="Numbers" begin="7:21" end="7:23"/>
+  <aliyah-alt parsha="35" num="3" book="Numbers" begin="7:18" end="7:23"/>
  </kriyah>
 </festival>
 <festival id="Chanukah (Day 3)">
@@ -1067,6 +1079,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="1" book="Numbers" begin="7:24" end="7:26"/>
   <aliyah parsha="35" num="2" book="Numbers" begin="7:27" end="7:29"/>
   <aliyah parsha="35" num="3" book="Numbers" begin="7:30" end="7:35"/>
+  <aliyah-alt parsha="35" num="1" book="Numbers" begin="7:24" end="7:26"/>
+  <aliyah-alt parsha="35" num="2" book="Numbers" begin="7:27" end="7:29"/>
+  <aliyah-alt parsha="35" num="3" book="Numbers" begin="7:24" end="7:29"/>
  </kriyah>
 </festival>
 <festival id="Chanukah (Day 4)">
@@ -1075,6 +1090,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="1" book="Numbers" begin="7:30" end="7:32"/>
   <aliyah parsha="35" num="2" book="Numbers" begin="7:33" end="7:35"/>
   <aliyah parsha="35" num="3" book="Numbers" begin="7:36" end="7:41"/>
+  <aliyah-alt parsha="35" num="1" book="Numbers" begin="7:30" end="7:32"/>
+  <aliyah-alt parsha="35" num="2" book="Numbers" begin="7:33" end="7:35"/>
+  <aliyah-alt parsha="35" num="3" book="Numbers" begin="7:30" end="7:35"/>
  </kriyah>
 </festival>
 <festival id="Chanukah (Day 5)">
@@ -1083,6 +1101,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="1" book="Numbers" begin="7:36" end="7:38"/>
   <aliyah parsha="35" num="2" book="Numbers" begin="7:39" end="7:41"/>
   <aliyah parsha="35" num="3" book="Numbers" begin="7:42" end="7:47"/>
+  <aliyah-alt parsha="35" num="1" book="Numbers" begin="7:36" end="7:38"/>
+  <aliyah-alt parsha="35" num="2" book="Numbers" begin="7:39" end="7:41"/>
+  <aliyah-alt parsha="35" num="3" book="Numbers" begin="7:36" end="7:41"/>
  </kriyah>
 </festival>
 <festival id="Chanukah (Day 6)">
@@ -1100,6 +1121,18 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="35" num="1" book="Numbers" begin="7:48" end="7:50"/>
   <aliyah parsha="35" num="2" book="Numbers" begin="7:51" end="7:53"/>
   <aliyah parsha="35" num="3" book="Numbers" begin="7:54" end="7:59"/>
+  <aliyah-alt parsha="35" num="1" book="Numbers" begin="7:48" end="7:50"/>
+  <aliyah-alt parsha="35" num="2" book="Numbers" begin="7:51" end="7:53"/>
+  <aliyah-alt parsha="35" num="3" book="Numbers" begin="7:48" end="7:53"/>
+ </kriyah>
+</festival>
+<festival id="Chanukah (Day 7 on Rosh Chodesh)">
+ <kriyah>
+  <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hanukkah.shtml"/>
+  <aliyah parsha="41" num="1" book="Numbers" begin="28:1" end="28:5"/>
+  <aliyah parsha="41" num="2" book="Numbers" begin="28:6" end="28:10"/>
+  <aliyah parsha="41" num="3" book="Numbers" begin="28:11" end="28:15"/>
+  <aliyah parsha="35" num="M" book="Numbers" begin="7:48" end="7:53"/>
  </kriyah>
 </festival>
 <festival id="Chanukah (Day 8)">
