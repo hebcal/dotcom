@@ -1272,26 +1272,16 @@ sub special_readings
     1;
 }
 
-# write full kryiyah to CSV & leyning DB
-sub csv_parasha_event
-{
-    my($evt,$h,$parshiot) = @_;
-
-    my($year,$month,$day) = Hebcal::event_ymd($evt);
-    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
-    csv_parasha_event_inner($h,$year,$month,$day,$parshiot,$aliyot,$DBH);
-}
-
 # write all of the aliyot for Shabbat to CSV file.
 # if $dbh is defined (for fullkriyah), also write to the leyning DB.
 sub csv_parasha_event_inner
 {
-    my($h,$year,$month,$day,$parshiot,$aliyot,$dbh) = @_;
+    my($evt,$h,$verses,$aliyot,$dbh) = @_;
 
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
     my $stime2 = Hebcal::date_format_csv($year, $month, $day);
     my $dt = Hebcal::date_format_sql($year, $month, $day);
 
-    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
     if (defined $dbh) {
       my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
       my $rv = $sth->execute($dt, $h, "T", $verses)
@@ -1329,6 +1319,16 @@ sub csv_parasha_event_inner
 	    or croak "can't execute the query: " . $sth->errstr;
 	}
     }
+}
+
+# write all of the aliyot for Shabbat to CSV file.
+# if $dbh is defined (for fullkriyah), also write to the leyning DB.
+sub csv_haftarah_event_inner {
+    my($evt,$h,$parshiot,$dbh) = @_;
+
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
+    my $stime2 = Hebcal::date_format_csv($year, $month, $day);
+    my $dt = Hebcal::date_format_sql($year, $month, $day);
 
     my $haft = $special{$dt}->{"H"}
       || $parshiot->{'parsha'}->{$h}->{'haftara'};
@@ -1387,7 +1387,10 @@ sub readings_for_current_year
 			if $i == 1;	# second year in array
 
 		if ($opts{'f'}) {
-		    csv_parasha_event($evt, $h, $parshiot);
+		    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
+		    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
+		    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
+		    csv_haftarah_event_inner($evt,$h,$parshiot,$DBH);
 		}
 	    }
 	}
@@ -1406,19 +1409,20 @@ sub triennial_csv
     my $yr = 1;
     for (my $i = $bereshit_idx; $i < @{$events}; $i++)
     {
-	if ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit' &&
-	    $i != $bereshit_idx)
-	{
+	my $evt = $events->[$i];
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	if ($subj eq "Parashat Bereshit" && $i != $bereshit_idx) {
 	    $yr++;
 	    last if ($yr == 4);
 	}
 
-	next unless ($events->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
-	my $h = $1;
-
-	my($year,$month,$day) = Hebcal::event_ymd($events->[$i]);
-	my $aliyot = $readings->{$h}->[$yr]->[0];
-	csv_parasha_event_inner($h,$year,$month,$day,$parshiot,$aliyot,undef);
+	if ($subj =~ /^Parashat (.+)/) {
+	    my $h = $1;
+	    my $aliyot = $readings->{$h}->[$yr]->[0];
+	    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
+	    csv_parasha_event_inner($evt,$h,$verses,$aliyot,undef);
+	    csv_haftarah_event_inner($evt,$h,$parshiot,undef);
+	}
     }
 }
 
