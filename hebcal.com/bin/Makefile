@@ -35,7 +35,8 @@ $(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
 
 $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
-	./calc_triennial.pl -f $(CSVDIR)/fullkriyah.csv \
+	./calc_triennial.pl \
+		-f $(CSVDIR)/fullkriyah.csv \
 		-t $(CSVDIR)/triennial.csv \
 		-d $(DBDIR)/luach.sqlite3 \
 		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)

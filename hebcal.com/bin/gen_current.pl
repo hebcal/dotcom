@@ -42,7 +42,6 @@ use strict;
 use open ":utf8";
 use Hebcal ();
 use Date::Calc ();
-use Time::Local ();
 use POSIX qw(strftime);
 use DBI;
 

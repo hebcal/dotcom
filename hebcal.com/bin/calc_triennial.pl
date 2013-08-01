@@ -52,7 +52,6 @@ use HebcalGPL ();
 use Date::Calc ();
 use Getopt::Std ();
 use XML::Simple ();
-use Time::Local ();
 use POSIX qw(strftime);
 use Carp;
 use DBI;
@@ -1456,6 +1455,28 @@ sub get_festival_xml_for_event {
     ($h,$fest);
 }
 
+sub write_holiday_event_to_csv_and_db {
+    my($evt) = @_;
+    my($h,$fest) = get_festival_xml_for_event($evt);
+    if (defined $fest) {
+	my $aliyot = $fest->{"kriyah"}->{"aliyah"};
+	if (defined $aliyot) {
+	    if (ref($aliyot) eq 'HASH') {
+		$aliyot = [ $aliyot ];
+	    }
+	    my $verses = get_festival_torah_verses($aliyot);
+	    if ($verses) {
+		csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
+		my $haftarah_reading = $fest->{"kriyah"}->{"haft"}->{"reading"};
+		csv_haftarah_event_inner($evt,$h,$haftarah_reading,$DBH)
+		    if defined $haftarah_reading;
+		csv_extra_newline();
+		return 1;
+	    }
+	}
+    }
+    return undef;
+}
 
 sub readings_for_current_year
 {
@@ -1477,13 +1498,8 @@ sub readings_for_current_year
 	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/) {
 		my $h = $1;
 		$parashah_date_sql{$h}->[$i] = $dt;
-		$parashah_time{$h} = Time::Local::timelocal
-		    (1,0,0,
-		     $day,
-		     $month - 1,
-		     $year - 1900,
-		     '','','')
-			if $i == 1;	# second year in array
+		$parashah_time{$h} = Hebcal::event_to_time($evt)
+		    if $i == 1;	# second year in array
 
 		if ($opts{'f'}) {
 		    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
@@ -1495,23 +1511,7 @@ sub readings_for_current_year
 		}
 	    } elsif ($opts{'f'} && ! defined $wrote_csv{$dt}) {
 		# write out non-sedra (holiday) event to DB and CSV
-		my($h,$fest) = get_festival_xml_for_event($evt);
-		if (defined $fest) {
-		    my $aliyot = $fest->{"kriyah"}->{"aliyah"};
-		    if (defined $aliyot) {
-			if (ref($aliyot) eq 'HASH') {
-			    $aliyot = [ $aliyot ];
-			}
-			my $verses = get_festival_torah_verses($aliyot);
-			if ($verses) {
-			    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
-			    my $haftarah_reading = $fest->{"kriyah"}->{"haft"}->{"reading"};
-			    csv_haftarah_event_inner($evt,$h,$haftarah_reading,$DBH)
-				if defined $haftarah_reading;
-			    csv_extra_newline();
-			}
-		    }
-		}
+		write_holiday_event_to_csv_and_db($evt);
 	    }
 	}
     }
