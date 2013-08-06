@@ -3,6 +3,10 @@ ForceType text/html
 SetOutputFilter DEFLATE
 </IfModule>
 
+<Files "*.pdf">
+ ForceType application/pdf
+</Files>
+
 Redirect permanent /holidays/asara-btevet.html http://www.hebcal.com/holidays/asara-btevet
 Redirect permanent /holidays/chanukah.html http://www.hebcal.com/holidays/chanukah
 Redirect permanent /holidays/days-of-the-omer.html http://www.hebcal.com/holidays/days-of-the-omer
