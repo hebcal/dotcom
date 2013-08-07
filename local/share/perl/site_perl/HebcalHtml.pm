@@ -130,6 +130,7 @@ id="dl-ol-ics"><i class="icon-download-alt"></i> $ics_title</a></p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
+<p>Alternate option: <a class="download" href="${ical_href}" id="dl-ol-ics-alt">download $ics_title</a> and then import manually into Microsoft Outlook.</p>
 EOHTML
 ;
     my $ol_csv = <<EOHTML;
