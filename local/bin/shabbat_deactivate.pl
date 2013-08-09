@@ -38,6 +38,7 @@ eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
 
 use strict;
 use DBI ();
+use Config::Tiny;
 use Getopt::Long ();
 
 my $COUNT_DEFAULT = 7;
