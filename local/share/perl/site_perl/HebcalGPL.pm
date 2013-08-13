@@ -27,19 +27,19 @@ package HebcalGPL;
 use strict;
 use Date::Calc ();
 
-my $NISAN = 1;
-my $IYYAR = 2;
-my $SIVAN = 3;
-my $TAMUZ = 4;
-my $AV = 5;
-my $ELUL = 6;
-my $TISHREI = 7;
-my $CHESHVAN = 8;
-my $KISLEV = 9;
-my $TEVET = 10;
-my $SHVAT = 11;
-my $ADAR_I = 12;
-my $ADAR_II = 13;
+our $NISAN = 1;
+our $IYYAR = 2;
+our $SIVAN = 3;
+our $TAMUZ = 4;
+our $AV = 5;
+our $ELUL = 6;
+our $TISHREI = 7;
+our $CHESHVAN = 8;
+our $KISLEV = 9;
+our $TEVET = 10;
+our $SHVAT = 11;
+our $ADAR_I = 12;
+our $ADAR_II = 13;
 
 sub MONTHS_IN_HEB ($) {
     LEAP_YR_HEB($_[0]) ? 13 :12;

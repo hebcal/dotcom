@@ -45,7 +45,6 @@ use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Date::Calc ();
 use Hebcal ();
-use HebcalGPL ();
 use HebcalHtml ();
 use URI::Escape;
 use POSIX qw(strftime);
@@ -73,9 +72,7 @@ foreach my $key ($q->param()) {
 }
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-my $hyear = $hebdate->{"yy"};
-$hyear++ if $hebdate->{"mm"} == 6; # Elul
+my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 

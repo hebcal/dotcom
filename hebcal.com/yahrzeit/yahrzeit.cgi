@@ -54,20 +54,6 @@ use Date::Calc ();
 my $this_year = (localtime)[5];
 $this_year += 1900;
 
-my $NISAN = 1;
-my $IYYAR = 2;
-my $SIVAN = 3;
-my $TAMUZ = 4;
-my $AV = 5;
-my $ELUL = 6;
-my $TISHREI = 7;
-my $CHESHVAN = 8;
-my $KISLEV = 9;
-my $TEVET = 10;
-my $SHVAT = 11;
-my $ADAR_I = 12;
-my $ADAR_II = 13;
-
 my @HEB_MONTH_NAME =
 (
   [
@@ -247,8 +233,8 @@ sub get_birthday_or_anniversary {
     # The birthday of someone born in Adar of an ordinary year or
     # Adar II of a leap year is also always in the last month of the
     # year, be that Adar or Adar II.
-    if (($orig->{"mm"} == $ADAR_I && !HebcalGPL::LEAP_YR_HEB($orig->{"yy"}))
-	|| ($orig->{"mm"} == $ADAR_II && HebcalGPL::LEAP_YR_HEB($orig->{"yy"})))
+    if (($orig->{"mm"} == $HebcalGPL::ADAR_I && !HebcalGPL::LEAP_YR_HEB($orig->{"yy"}))
+	|| ($orig->{"mm"} == $HebcalGPL::ADAR_II && HebcalGPL::LEAP_YR_HEB($orig->{"yy"})))
     {
 	$res->{"mm"} = HebcalGPL::MONTHS_IN_HEB($hyear);
     }
@@ -261,23 +247,23 @@ sub get_birthday_or_anniversary {
     # Adar I has his birthday postponed until the first of the
     # following month in years where that day does not
     # occur. [Calendrical Calculations p. 111]
-    elsif ($orig->{"mm"} == $CHESHVAN && $orig->{"dd"} == 30
+    elsif ($orig->{"mm"} == $HebcalGPL::CHESHVAN && $orig->{"dd"} == 30
 	   && !HebcalGPL::long_cheshvan($hyear))
     {
-	$res->{"mm"} = $KISLEV;
+	$res->{"mm"} = $HebcalGPL::KISLEV;
 	$res->{"dd"} = 1;
     }
-    elsif ($orig->{"mm"} == $KISLEV && $orig->{"dd"} == 30
+    elsif ($orig->{"mm"} == $HebcalGPL::KISLEV && $orig->{"dd"} == 30
 	   && HebcalGPL::short_kislev($hyear))
     {
-	$res->{"mm"} = $TEVET;
+	$res->{"mm"} = $HebcalGPL::TEVET;
 	$res->{"dd"} = 1;
     }
-    elsif ($orig->{"mm"} == $ADAR_I && $orig->{"dd"} == 30
+    elsif ($orig->{"mm"} == $HebcalGPL::ADAR_I && $orig->{"dd"} == 30
 	   && HebcalGPL::LEAP_YR_HEB($orig->{"yy"})
 	   && !HebcalGPL::LEAP_YR_HEB($hyear))
     {
-	$res->{"mm"} = $NISAN;
+	$res->{"mm"} = $HebcalGPL::NISAN;
 	$res->{"dd"} = 1;
     }
 
@@ -333,9 +319,7 @@ sub my_invoke_hebcal {
 	my @events = Hebcal::invoke_hebcal("$cmd $year", "", undef);
 	foreach my $evt (@events) {
 	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	    my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-	    my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-	    my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
+	    my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 	
 	    if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
 	    {
@@ -465,7 +449,7 @@ foreach my $evt (@events) {
     my $hdate = HebcalGPL::greg2hebrew($evt->[$Hebcal::EVT_IDX_YEAR],
 				       $evt->[$Hebcal::EVT_IDX_MON] + 1,
 				       $evt->[$Hebcal::EVT_IDX_MDAY]);
-    if ($hdate->{"mm"} >= $ADAR_I) {
+    if ($hdate->{"mm"} >= $HebcalGPL::ADAR_I) {
 	Hebcal::out_html($cfg, qq{<div class="alert alert-info">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>Note:</strong> the results below contain one or more anniversary in Adar.
@@ -483,9 +467,7 @@ my $prev_year = 0;
 foreach my $evt (@events)
 {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-    my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-    my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-    my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
+    my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
     if ($year != $prev_year && $q->param("yizkor"))
     {
@@ -581,7 +563,7 @@ instructions</a>.</p>
 sub show_row {
     my($q,$cfg,$i,$months) = @_;
 
-    my $style = "border-top:1px solid #dddddd;padding:4px";
+    my $style = "border-bottom:1px solid #dddddd;padding:4px";
     if (($i - 1) % 2 == 0) {
 	$style .= ";background-color:#f9f9f9";
     }

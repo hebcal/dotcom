@@ -91,10 +91,8 @@ my $HEB_YR;
 if ($opt_year) {
     $HEB_YR = $opt_year;
 } else {
-    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-    $HEB_YR = $hebdate->{"yy"};
-    $HEB_YR++ if $hebdate->{"mm"} == 5; # Av
+    my($yy,$mm,$dd) = Date::Calc::Today();
+    $HEB_YR = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
 }
 
 my $cmd = "./hebcal -s -i -H $HEB_YR";
@@ -185,7 +183,8 @@ for (my @dt = ($start_year, $start_month, 1);
     $html_cals{$cal_id} = $cal;
 }
 
-my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
+#my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
+my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
 
 my %rosh_chodesh;
 foreach my $evt (@events) {
@@ -348,7 +347,8 @@ sub add_event {
     my $cal = $html_cals{$cal_id};
 
     my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-    my $placement = ($dow == 5 || $dow == 6) ? "left" : "right";
+#    my $placement = ($dow == 5 || $dow == 6) ? "left" : "right";
+    my $placement = "auto";
 
     my $title = $hebrew ? "$subj / $hebrew" : $subj;
     my $memo_html = Hebcal::html_entify($memo);
@@ -362,7 +362,8 @@ sub torah_memo {
     my($reason,$year,$month,$day) = @_;
     my $date_sql = Hebcal::date_format_sql($year, $month, $day);
     $reason =~ s/^Parashat\s+//;
-    my $rv = $sth->execute($date_sql,$reason) or die $dbh->errstr;
+#    my $rv = $sth->execute($date_sql,$reason) or die $dbh->errstr;
+    my $rv = $sth->execute($date_sql) or die $dbh->errstr;
     my $torah_reading;
     my $haftarah_reading;
     my $special_maftir;

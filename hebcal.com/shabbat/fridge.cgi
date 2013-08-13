@@ -44,7 +44,6 @@ use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
 use Date::Calc;
 use URI::Escape;
-use HebcalGPL ();
 use POSIX ();
 
 # process form params
@@ -284,10 +283,8 @@ sub process_args
     if (defined $q->param('year') && $q->param('year') =~ /^\d+$/) {
 	$cmd .= " -H " . $q->param('year');
     } else {
-	my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-	my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-	my $HEB_YR = $hebdate->{"yy"};
-	$HEB_YR++ if $hebdate->{"mm"} == 6; # Elul
+	my($yy,$mm,$dd) = Date::Calc::Today();
+	my $HEB_YR = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
 	$cmd .= " -H " . $HEB_YR;
     }
 

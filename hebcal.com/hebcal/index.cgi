@@ -48,7 +48,6 @@ use Time::Local ();
 use Date::Calc ();
 use URI::Escape;
 use Hebcal ();
-use HebcalGPL ();
 use HebcalHtml ();
 use HTML::CalendarMonthSimple ();
 
@@ -687,9 +686,7 @@ sub form
 {
     my($message,$help) = @_;
 
-    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-    my $hyear = $hebdate->{"yy"};
-    $hyear++ if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15) || $hebdate->{"mm"} == 6);
+    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 
     print STDOUT $q->header(-type => $content_type);
 
@@ -1206,10 +1203,7 @@ accurate.
 		$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
 	    }
 
-	    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-	    my $hyear = $hebdate->{"yy"};
-	    $hyear++ if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15) || $hebdate->{"mm"} == 6);
-
+	    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 	    $url .= "&amp;year=$hyear";
 	    
 	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});

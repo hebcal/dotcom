@@ -48,6 +48,7 @@ use URI::Escape;
 use HebcalConst;
 use Digest::MD5 ();
 use Config::Tiny;
+use HebcalGPL;
 
 my $eval_use_DBI;
 my $eval_use_DateTime;
@@ -751,6 +752,15 @@ sub get_dow($$$)
 
     my $dow = Date::Calc::Day_of_Week($year,$mon,$mday);
     $dow == 7 ? 0 : $dow;
+}
+
+sub get_default_hebrew_year {
+    my($year,$month,$day) = @_;
+    my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
+    my $hyear = $hebdate->{"yy"};
+    $hyear++ if ($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} >= 15)
+	|| $hebdate->{"mm"} == $HebcalGPL::ELUL;
+    $hyear;
 }
 
 sub hebnum_to_array {
@@ -2796,6 +2806,7 @@ if ($^W && 0)
     $unused = $Hebcal::lang_names{'foo'};
     $unused = $Hebcal::havdalah_min;
     $unused = $Hebcal::HEBCAL_BIN;
+    $unused = $DBI::errstr;
 }
 
 1;

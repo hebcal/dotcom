@@ -48,7 +48,6 @@ use POSIX qw(strftime);
 use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
 use Date::Calc;
-use HebcalGPL ();
 use RequestSignatureHelper;
 use Config::Tiny;
 use DBI;
@@ -127,14 +126,8 @@ my $HEB_YR;
 if ($opts{'H'}) {
     $HEB_YR = $opts{'H'};
 } else {
-    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
-    $HEB_YR = $hebdate->{"yy"};
-    if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15)
-	|| $hebdate->{"mm"} == 6) {
-	# it's past the 15th of Av (5th month) or Elul (6th month)
-	$HEB_YR++;
-    }
+    my($yy,$mm,$dd) = Date::Calc::Today();
+    $HEB_YR = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
 }
 
 my %GREG2HEB;
