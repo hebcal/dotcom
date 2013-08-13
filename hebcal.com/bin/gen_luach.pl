@@ -43,6 +43,7 @@ use open ":utf8";
 use Getopt::Long ();
 use XML::Simple qw(:strict);
 use DBI;
+use HTML::Entities ();
 use Hebcal ();
 use Date::Calc;
 use HebcalGPL ();
@@ -77,9 +78,18 @@ $opt_help && usage();
 (@ARGV == 4) || usage();
 
 my $festival_in = shift;
-my $luach_in = shift;
 my $dbfile = shift;
+my $xml_datadir = shift;
 my $outdir = shift;
+
+if (! -d $xml_datadir) {
+    die "$xml_datadir: $!\n";
+}
+
+my $xml_pages_file = "$xml_datadir/other/pages.xml";
+if (! -f $xml_pages_file) {
+    die "$xml_pages_file: $!\n";
+}
 
 if (! -d $outdir) {
     die "$outdir: $!\n";
@@ -91,14 +101,6 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
 
 print "Reading $festival_in...\n" if $opt_verbose;
 my $fxml = XMLin($festival_in, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
-
-print "Reading $luach_in...\n" if $opt_verbose;
-my $luach_xml = XMLin($luach_in,
-		      KeyAttr => ['id'],
-		      ForceArray => ["li", "section"]);
-
-use Data::Dumper;
-print Dumper($luach_xml), "\n";
 
 my $HEB_YR;
 if ($opt_year) {
@@ -126,7 +128,7 @@ my $outfile = "$outdir/index.html";
 open(OUT,">$outfile") || die "$outfile: $!";
 
 my $title = "Luach $HEB_YR";
-print OUT html_header($title);
+print OUT html_header("/", $title);
 
 my @html_cals;
 my %html_cals;
@@ -151,37 +153,21 @@ my %rosh_chodesh;
 foreach my $evt (@events) {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
-    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-    $subj =~ s/ \d{4}$//;
+    my($href,$hebrew,$hebcal_memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+    $subj =~ s/ \d{4}$//;	# Rosh Hashana hack
 
-    if ($memo ne "") {
-	$memo = "<div>$memo</div>";
+    my $luach_subj = translate_subject($subj);
+    my $xml_item = find_item($luach_subj);
+    my $memo = "";
+    if ($xml_item) {
+	$memo .= HTML::Entities::decode($xml_item->{"content"});
     }
-
-    my $xml_item;
 
     my($year,$month,$day) = Hebcal::event_ymd($evt);
-    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-    if ($dow == 6) {
-	$xml_item = find_item("$subj (on Shabbat");
-    }
-    # try without "on Shabbat" if we didn't find it
-    $xml_item = find_item($subj) unless defined $xml_item;
-
-    if ($xml_item) {
-	foreach my $section (@{$xml_item->{"section"}}) {
-	    $memo .= "<strong>" . $section->{"name"}. qq{</strong><ul style="padding-left:11px">};
-	    foreach my $li (@{$section->{"li"}}) {
-		$memo .= "<li>$li</li>\n";
-	    }
-	    $memo .= "</ul>";
-	}
-    }
-
     my $torah_memo = torah_memo($subj, $year, $month, $day);
     $memo .= "<br>" . $torah_memo if $torah_memo;
 
-    add_event($year, $month, $day, $subj, $hebrew, $memo);
+    add_event($year, $month, $day, $subj, $hebrew, $memo, $hebcal_memo);
     if ($subj =~ /^Rosh Chodesh (.+)$/) {
 	my $rch_month = $1;
 	$rosh_chodesh{$rch_month} = [] unless defined $rosh_chodesh{$rch_month};
@@ -193,6 +179,10 @@ my @heb_months = qw(VOID Nisan Iyyar Sivan Tamuz Av Elul Tishei Cheshvan Kislev 
 push(@heb_months, "Adar I", "Adar II");
 
 # figure out which Shabbatot are M'varchim haChodesh
+my $shabbat_mevarchim_title = "Shabbat M'varchim";
+my $shabbat_mevarchim_item = find_item($shabbat_mevarchim_title);
+my $shabbat_mevarchim_memo = HTML::Entities::decode($shabbat_mevarchim_item->{"content"});
+
 for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
     my $greg = HebcalGPL::abs2greg($abs);
     my $dow = Date::Calc::Day_of_Week($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"});
@@ -206,28 +196,28 @@ for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
 	    my $hebmonth = $heb_months[$hmonth];
 	    my($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[0]);
 	    my $dow = Hebcal::get_dow($year, $month, $day);
-	    my $memo = "Rosh Chodesh <strong>$hebmonth</strong> will be on <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
+	    my $when = "on <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
 	    if (defined $rosh_chodesh{$hebmonth}->[1]) {
 		($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[1]);
 		$dow = Hebcal::get_dow($year, $month, $day);
-		$memo .= " and <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
+		$when .= " and <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
 	    }
-	    $memo .= ".";
-	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Shabbat Mevarchim", undef, $memo);
+	    my $memo = $shabbat_mevarchim_memo;
+	    $memo =~ s/new month of X\./new month of <strong>$hebmonth<\/strong>. Rosh Chodesh $hebmonth occurs on $when in the coming week./;
+	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Shabbat Mevarchim", undef, $memo,
+		      "Shabbat which precedes Rosh Chodesh");
 	}
     }
 }
 
 # Aseret Y'mei T'shuvah
-my $rh10days = find_item("Aseret Y'mei T'shuvah");
-my $rh10days_memo = qq{<ul style="padding-left:11px">};
-foreach my $li (@{$rh10days->{"section"}->[0]->{"li"}}) {
-    $rh10days_memo .= "<li>$li</li>\n";
-}
-$rh10days_memo .= "</ul>";
+my $rh10days_title = "Aseret Y'mei T'shuva";
+my $rh10days = find_item($rh10days_title);
+my $rh10days_memo = HTML::Entities::decode($rh10days->{"content"});
 for (my $abs = $start_abs; $abs < $start_abs+10; $abs++) {
     my $greg = HebcalGPL::abs2greg($abs);
-    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Aseret Y'mei T'shuvah", undef, $rh10days_memo);
+    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, $rh10days_title, undef, $rh10days_memo,
+	      "Ten Days of Repentance beginning with Rosh Hashana and ending with Yom Kippur");
 }
 
 my $nav_pagination = qq{<ul class="pagination pagination-centered">\n};
@@ -302,9 +292,13 @@ while (my($day_id,$content) = each(%day_content)) {
 			   $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}],
 			   $hdate->{"yy"});
 
-    print OUT html_header("$when - $heb_when");
-    print OUT qq{<div class="page-header"><h1>$when <small>$heb_when</small></h1></div>\n};
+    print OUT html_header("/$day_id", "$when - $heb_when | Reform Luach");
+    print OUT qq{<div class="page-header"><h1>$when<br><small>$heb_when</small></h1></div>\n};
     foreach my $memo (@{$content}) {
+	$memo =~ s/<h5>/<h4>/g;
+	$memo =~ s/<\/h5>/<\/h4>/g;
+	$memo =~ s/<h2>/<h3>/g;
+	$memo =~ s/<\/h2>/<\/h3>/g;
 	print OUT "<div>\n", $memo, "</div>\n";
     }
     print OUT $html_footer;
@@ -313,8 +307,14 @@ while (my($day_id,$content) = each(%day_content)) {
 
 exit(0);
 
+sub translate_subject {
+    my($subj) = @_;
+    $subj =~ s/^Parashat /Shabbat /;
+    $subj;
+}
+
 sub html_header {
-    my($title) = @_;
+    my($path,$title) = @_;
     my $s =<<EOHTML;
 <!DOCTYPE html>
 <html><head>
@@ -322,25 +322,20 @@ sub html_header {
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
-<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
 <style type="text/css">
 body{
- padding-top: 70px;
  font-family: 'Source Sans Pro', sans-serif;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
  font-family: 'Source Sans Pro', sans-serif;
+ font-weight: 600;
+}
+.btn,.navbar-brand {
+ font-weight: 600;
+}
+.lead,.jumbotron {
+ font-weight: 300;
 }
 :lang(he) {
   font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
@@ -355,12 +350,29 @@ h6,
 </head>
 <body>
 
-<div class="navbar navbar-fixed-top">
-<span class="navbar-brand">Reform Luach</span>
+<div class="navbar">
+ <div class="container">
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+   <span class="icon-bar"></span>
+   <span class="icon-bar"></span>
+   <span class="icon-bar"></span>
+  </button>
+EOHTML
+;
+    if ($path eq "/") {
+	$s .= qq{<span class="navbar-brand">Reform Luach</span>\n};
+    } else {
+	$s .= qq{<a class="navbar-brand" href="/">Reform Luach</a>\n};
+    }
+
+$s .=<<EOHTML;
+<div class="nav-collapse collapse navbar-responsive-collapse">
 <ul class="nav navbar-nav">
-<li class="active"><a href="#">Home</a></li>
-<li><a href="#">About</a></li>
+<li class="active"><a href="/">Home</a></li>
+<li><a href="/about">About</a></li>
 </ul>
+</div><!-- .nav-collapse -->
+</div><!-- .container -->
 </div><!-- .navbar -->
 
 <div class="container">
@@ -369,25 +381,50 @@ EOHTML
     return $s;
 }
 
+sub get_slug {
+    my($title) = @_;
+    my $slug = lc($title);
+    $slug =~ s/\'/-/g;
+    $slug =~ s/\//-/g;
+    $slug =~ s/\cM/ - /g;
+    $slug =~ s/\(//g;
+    $slug =~ s/\)//g;
+    $slug =~ s/[^\w]/-/g;
+    $slug =~ s/\s+/ /g;
+    $slug =~ s/\s/-/g;
+    $slug =~ s/-{2,}/-/g;
+    $slug;
+}
+
 sub find_item {
     my($title) = @_;
-    foreach my $item (@{$luach_xml->{"item"}}) {
-	return $item if defined $item->{"title"} && $item->{"title"} eq $title;
+
+    my $slug = get_slug($title);
+    my $result;
+    my $file = "$xml_datadir/pages/$slug.xml";
+    if (-s $file) {
+	my $xml = XMLin($file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+#	use Data::Dumper;
+#	print Dumper($xml);
+	$result = $xml;
+    } else {
+	warn "unkown item $slug\n";
     }
-    undef;
+
+    $result;
 }
 
 sub add_event {
-    my($year,$month,$day,$subj,$hebrew,$memo) = @_;
+    my($year,$month,$day,$subj,$hebrew,$memo,$tooltip) = @_;
     my $cal_id = sprintf("%04d-%02d", $year, $month);
     my $cal = $html_cals{$cal_id};
 
     my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $day);
-    my $title = $hebrew ? "$subj / $hebrew" : $subj;
-    my $html = qq{<a href="$day_id" title="$title">$subj</a>};
+    my $title = $tooltip ? qq{ title="$tooltip"} : "";
+    my $html = qq{<a href="$day_id"$title>$subj</a>};
 
     $day_content{$day_id} = [] unless defined $day_content{$day_id};
-    push(@{$day_content{$day_id}}, qq{<h3>$title</h3>\n$memo});
+    push(@{$day_content{$day_id}}, $memo);
 
     $cal->addcontent($day, "<br>\n")
 	if $cal->getcontent($day) ne "";
@@ -443,7 +480,7 @@ sub new_html_cal {
 
 sub usage {
     $0 =~ s,.*/,,;  # basename
-    my $usage = "usage: $0 [-h] [-y <year>] festival.xml reform-luach.xml luach.sqlite3 output-dir
+    my $usage = "usage: $0 [-hv] [-y <year>] festival.xml reform-luach.sqlite3 reform-luach-data-dir output-dir
     -h        Display usage information.
     -v        Verbose mode
     -y <year> Start with hebrew year <year> (default this year)
