@@ -1211,7 +1211,7 @@ accurate.
 
     Hebcal::out_html(undef, qq{<a class="btn" href="},
 		     Hebcal::self_url($q, {"v" => "0"}, "&amp;"),
-		     qq{"><i class="icon-cog"></i> Settings</a>\n});
+		     qq{" title="Change calendar options"><i class="icon-cog"></i> Settings</a>\n});
 
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
 
