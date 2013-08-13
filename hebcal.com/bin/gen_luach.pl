@@ -199,12 +199,6 @@ my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
 my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 7, "dd" => 1 });
 my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 6, "dd" => 29 });
 
-my $outfile = "$outdir/index.html";
-open(OUT,">$outfile") || die "$outfile: $!";
-
-my $title = "Luach $HEB_YR";
-print OUT html_header("/", $title);
-
 my @html_cals;
 my %html_cals;
 my %day_content;
@@ -297,24 +291,16 @@ for (my $abs = $start_abs; $abs < $start_abs+10; $abs++) {
 	      "Ten Days of Repentance beginning with Rosh Hashana and ending with Yom Kippur");
 }
 
-my $nav_pagination = qq{<ul class="pagination pagination-centered">\n};
-foreach my $cal_id (@html_cal_ids) {
-    if ($cal_id =~ /^(\d{4})-(\d{2})$/) {
-	my $year = $1;
-	my $mon = $2;
-	$mon =~ s/^0//;
-	my $mon_long = $Hebcal::MoY_long{$mon};
-	my $mon_short = $Hebcal::MoY_short[$mon-1];
-	$nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
-    }
-}
-$nav_pagination .= qq{</ul><!-- .pagination -->\n};
-print OUT $nav_pagination;
+my $outfile = "$outdir/index.html";
+open(OUT,">$outfile") || die "$outfile: $!";
+
+my $title = "Luach $HEB_YR";
+print OUT html_header("/", $title);
 
 foreach my $cal_id (@html_cal_ids) {
     add_daily_buttons($cal_id);
     my $cal = $html_cals{$cal_id};
-    print OUT qq{<div id="cal-$cal_id" style="padding-top:60px">\n};
+    print OUT qq{<div id="cal-$cal_id" style="padding-top:12px">\n};
     print OUT $cal->as_HTML();
     print OUT qq{</div><!-- #cal-$cal_id -->\n};
 }
@@ -376,6 +362,17 @@ while (my($day_id,$content) = each(%day_content)) {
     print OUT $html_footer;
     close(OUT);
 }
+
+my $about_title = "About";
+my $about_item = find_item($about_title);
+my $about_content = HTML::Entities::decode($about_item->{"content"});
+$outfile = "$outdir/about";
+open(OUT,">$outfile") || die "$outfile: $!";
+print OUT html_header("about", "About the Reform Luach");
+print OUT qq{<div class="page-header"><h1>About the Reform Luach</h1></div>\n};
+print OUT "<div>\n", $about_content, "</div>\n";
+print OUT $html_footer;
+close(OUT);
 
 exit(0);
 
@@ -453,12 +450,31 @@ EOHTML
 	$s .= qq{<a class="navbar-brand" href="/">Reform Luach</a>\n};
     }
 
-$s .=<<EOHTML;
+    my @month_menu_item = ( "#", "Calendar", "Calendar" );
+    my $first = 1;
+    foreach my $cal_id (@html_cal_ids) {
+	if ($cal_id =~ /^(\d{4})-(\d{2})$/) {
+	    my $year = $1;
+	    my $mon = $2;
+	    $mon =~ s/^0//;
+	    my $mon_long = $Hebcal::MoY_long{$mon};
+	    my $mon_short = $Hebcal::MoY_short[$mon-1];
+	    my $title = $mon == 1 || $first ? "$mon_long $year" : $mon_long;
+	    push(@month_menu_item, [ "./#cal-$cal_id", $title, "$mon_long $year" ]);
+	    $first = 0;
+	}
+    }
+    
+    my @menu_items = ( [ "/", "Home", "Home" ],
+		       [ "about", "About", "About" ],
+		       \@month_menu_item,
+		     );
+
+    my $menu = Hebcal::html_menu_bootstrap($path,\@menu_items);
+
+    $s .=<<EOHTML;
 <div class="nav-collapse collapse navbar-responsive-collapse">
-<ul class="nav navbar-nav">
-<li class="active"><a href="/">Home</a></li>
-<li><a href="/about">About</a></li>
-</ul>
+$menu
 </div><!-- .nav-collapse -->
 </div><!-- .container -->
 </div><!-- .navbar -->
@@ -491,10 +507,7 @@ sub find_item {
     my $result;
     my $file = "$xml_datadir/pages/$slug.xml";
     if (-s $file) {
-	my $xml = XMLin($file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
-#	use Data::Dumper;
-#	print Dumper($xml);
-	$result = $xml;
+	$result = XMLin($file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
     } else {
 	warn "unkown item $slug\n";
     }
