@@ -61,12 +61,12 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
-$Hebcal::WEBDIR = $ENV{"DOCUMENT_ROOT"} || "/home/hebcal/web/hebcal.com";
-$Hebcal::HEBCAL_BIN = "$Hebcal::WEBDIR/bin/hebcal";
-$Hebcal::LUACH_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/luach.sqlite3";
-$Hebcal::CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
+our $WEBDIR = $ENV{"DOCUMENT_ROOT"} || "/home/hebcal/web/hebcal.com";
+our $HEBCAL_BIN = "$WEBDIR/bin/hebcal";
+our $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
+our $CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 
-my $ZIP_SQLITE_FILE = "$Hebcal::WEBDIR/hebcal/zips.sqlite3";
+my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
 
 my $CONFIG_INI;
 my $HOSTNAME;
@@ -74,14 +74,13 @@ my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
 $CACHE_DIR .= "/cache/";
 
 # boolean options
-@Hebcal::opts = ('c','o','s','i','a','d','D');
+our @opts = qw(c o s i a d D);
+our $havdalah_min = 50;
 
-$Hebcal::havdalah_min = 50;
-@Hebcal::DoW = ('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
-@Hebcal::MoY_short =
-    ('Jan','Feb','Mar','Apr','May','Jun',
-     'Jul','Aug','Sep','Oct','Nov','Dec');
-%Hebcal::MoY_long = (
+our @DoW = qw(Sun Mon Tue Wed Thu Fri Sat);
+our @DoW_long = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
+our @MoY_short = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+our %MoY_long = (
 	     'x' => '- Entire year -',
 	     1   => 'January',
 	     2   => 'February',
@@ -97,7 +96,7 @@ $Hebcal::havdalah_min = 50;
 	     12  => 'December',
 	     );
 
-%Hebcal::lang_names =
+our %lang_names =
     (
      "s"  => "Sephardic transliterations",
      "sh" => "Sephardic translit. + Hebrew",
@@ -106,7 +105,7 @@ $Hebcal::havdalah_min = 50;
      "h"  => "Hebrew only",
      );
 
-%Hebcal::CONTINENTS =
+our %CONTINENTS =
     (
      'AF' => 'Africa',
      'AS' => 'Asia',
@@ -117,7 +116,7 @@ $Hebcal::havdalah_min = 50;
      'AN' => 'Antarctica',
     );
 
-%Hebcal::CITIES_OLD = (
+our %CITIES_OLD = (
 'Ashdod' => 'IL-Ashdod',
 'Atlanta' => 'US-Atlanta-GA',
 'Austin' => 'US-Austin-TX',
@@ -176,18 +175,18 @@ $Hebcal::havdalah_min = 50;
 );
 
 # based on cities.txt and loaded into HebcalConst.pm
-%Hebcal::CITY_TZID = ();
-%Hebcal::CITY_COUNTRY = ();
-%Hebcal::CITY_LATLONG = ();
+our %CITY_TZID = ();
+our %CITY_COUNTRY = ();
+our %CITY_LATLONG = ();
 while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
     my($country,$city,$latitude,$longitude,$tzName,$woeid) = @{$info};
-    $Hebcal::CITY_TZID{$id} = $tzName;
-    $Hebcal::CITY_COUNTRY{$id} = $country;
-    $Hebcal::CITY_LATLONG{$id} = [$latitude,$longitude];
+    $CITY_TZID{$id} = $tzName;
+    $CITY_COUNTRY{$id} = $country;
+    $CITY_LATLONG{$id} = [$latitude,$longitude];
 }
 
 # translate from Askenazic transiliterations to Separdic
-%Hebcal::ashk2seph =
+our %ashk2seph =
  (
   # parshiot translations
   "Bereshis"			=>	"Bereshit",
@@ -249,16 +248,16 @@ while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
 # @events is an array of arrays.  these are the indices into each
 # event structure:
 
-$Hebcal::EVT_IDX_SUBJ = 0;		# title of event
-$Hebcal::EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
-$Hebcal::EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
-$Hebcal::EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
-$Hebcal::EVT_IDX_MDAY = 4;		# day of month, [1 .. 31]
-$Hebcal::EVT_IDX_MON = 5;		# month of year, [0 .. 11]
-$Hebcal::EVT_IDX_YEAR = 6;		# year [1 .. 9999]
-$Hebcal::EVT_IDX_DUR = 7;		# duration in minutes
-$Hebcal::EVT_IDX_MEMO = 8;		# memo text
-$Hebcal::EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
+our $EVT_IDX_SUBJ = 0;		# title of event
+our $EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
+our $EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
+our $EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
+our $EVT_IDX_MDAY = 4;		# day of month, [1 .. 31]
+our $EVT_IDX_MON = 5;		# month of year, [0 .. 11]
+our $EVT_IDX_YEAR = 6;		# year [1 .. 9999]
+our $EVT_IDX_DUR = 7;		# duration in minutes
+our $EVT_IDX_MEMO = 8;		# memo text
+our $EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
 
 my %num2heb =
 (
@@ -371,8 +370,8 @@ sub parse_date_descr($$)
     my($yomtov) = 0;
     my($subj_copy) = $subj;
 
-    $subj_copy = $Hebcal::ashk2seph{$subj_copy}
-	if defined $Hebcal::ashk2seph{$subj_copy};
+    $subj_copy = $ashk2seph{$subj_copy}
+	if defined $ashk2seph{$subj_copy};
     $subj_copy =~ s/ \d{4}$//; # fix Rosh Hashana
 
     $yomtov = 1 if $HebcalConst::YOMTOV{$subj_copy};
@@ -452,8 +451,8 @@ sub invoke_hebcal
 	# not typically used
 	if ($no_special_shabbat || $no_minor_fasts) {
 	    my $subj_copy = $subj;
-	    $subj_copy = $Hebcal::ashk2seph{$subj_copy}
-		if defined $Hebcal::ashk2seph{$subj_copy};
+	    $subj_copy = $ashk2seph{$subj_copy}
+		if defined $ashk2seph{$subj_copy};
 	    if ($no_special_shabbat) {
 		next if $subj_copy =~ /^Shabbat /;
 	    }
@@ -468,8 +467,8 @@ sub invoke_hebcal
 	# a bug in hebcal for unix involving shabbos and chag overlap.
 	# suppress inconsistent times until we can get hebcal fixed.
 	if ($subj =~ /^Havdalah/ && $#events >= 0 &&
-	    $events[$#events]->[$Hebcal::EVT_IDX_MDAY] == $mday &&
-	    $events[$#events]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Candle lighting/)
+	    $events[$#events]->[$EVT_IDX_MDAY] == $mday &&
+	    $events[$#events]->[$EVT_IDX_SUBJ] =~ /^Candle lighting/)
 	{
 	    pop(@events);
 	    next;
@@ -479,8 +478,7 @@ sub invoke_hebcal
 
 	my $memo2;
 	if ($untimed) {
-	    $memo2 = (Hebcal::get_holiday_anchor($subj,$want_sephardic,
-						 undef))[2];
+	    $memo2 = (get_holiday_anchor($subj,$want_sephardic,undef))[2];
 	}
 
 	push(@events,
@@ -499,9 +497,9 @@ sub invoke_hebcal
 
 sub event_ymd($) {
   my($evt) = @_;
-  my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-  my $month = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-  my $day = $evt->[$Hebcal::EVT_IDX_MDAY];
+  my $year = $evt->[$EVT_IDX_YEAR];
+  my $month = $evt->[$EVT_IDX_MON] + 1;
+  my $day = $evt->[$EVT_IDX_MDAY];
   ($year,$month,$day);
 }
 
@@ -519,7 +517,7 @@ sub date_format_sql($$$) {
 
 sub date_format_csv($$$) {
   my($year,$month,$day) = @_;
-  sprintf("%02d-%s-%04d", $day, $Hebcal::MoY_short[$month - 1], $year);
+  sprintf("%02d-%s-%04d", $day, $MoY_short[$month - 1], $year);
 }
 
 sub event_to_time
@@ -527,9 +525,9 @@ sub event_to_time
     my($evt) = @_;
     # holiday is at 12:00:01 am
     return Time::Local::timelocal(1,0,0,
-				  $evt->[$Hebcal::EVT_IDX_MDAY],
-				  $evt->[$Hebcal::EVT_IDX_MON],
-				  $evt->[$Hebcal::EVT_IDX_YEAR] - 1900,
+				  $evt->[$EVT_IDX_MDAY],
+				  $evt->[$EVT_IDX_MON],
+				  $evt->[$EVT_IDX_YEAR] - 1900,
 				  "","","");
 }
 
@@ -555,13 +553,11 @@ sub events_to_dict
 	my $time = event_to_time($evt);
 	next if ($friday && $time < $friday) || ($saturday && $time > $saturday);
 
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
+	my $subj = $evt->[$EVT_IDX_SUBJ];
+	my($year,$mon,$mday) = event_ymd($evt);
 
-	my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-	my $hour24 = $evt->[$Hebcal::EVT_IDX_HOUR];
+	my $min = $evt->[$EVT_IDX_MIN];
+	my $hour24 = $evt->[$EVT_IDX_HOUR];
 	my $hour = $hour24;
 	$hour -= 12 if $hour > 12;
 
@@ -570,7 +566,7 @@ sub events_to_dict
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
 	$item{"date"} = strftime($format, localtime($time));
 
-	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$EVT_IDX_UNTIMED] == 0)
 	{
 	    my $dt = DateTime->new(
 				   year       => $year,
@@ -593,10 +589,10 @@ sub events_to_dict
 			$tz > 0 ? "+" : "-",
 			abs($tz), $tzMin);
 
-	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
+	    my $dow = $DoW[get_dow($year, $mon, $mday)];
 	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d%02d",
 				       $dow, $mday,
-				       $Hebcal::MoY_short[$mon - 1],
+				       $MoY_short[$mon - 1],
 				       $year, $hour24, $min,
 				       $tz > 0 ? "+" : "-",
 				       abs($tz), $tzMin);
@@ -604,11 +600,11 @@ sub events_to_dict
 	else
 	{
 	    $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-	    my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)];
+	    my $dow = $DoW[get_dow($year, $mon, $mday)];
 	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 +0000",
 				       $dow,
 				       $mday,
-				       $Hebcal::MoY_short[$mon - 1],
+				       $MoY_short[$mon - 1],
 				       $year);
 	}
 
@@ -877,7 +873,7 @@ sub get_holiday_anchor($$$)
 	# Unicode for "parashat"
 	$hebrew = "\x{5E4}\x{5E8}\x{5E9}\x{5EA} ";
 
-	$sedra = $Hebcal::ashk2seph{$sedra} if (defined $Hebcal::ashk2seph{$sedra});
+	$sedra = $ashk2seph{$sedra} if (defined $ashk2seph{$sedra});
 
 	if (defined $HebcalConst::SEDROT{$sedra})
 	{
@@ -893,12 +889,12 @@ sub get_holiday_anchor($$$)
 	}
 	elsif (($sedra =~ /^([^-]+)-(.+)$/) &&
 	       (defined $HebcalConst::SEDROT{$1}
-		|| defined $HebcalConst::SEDROT{$Hebcal::ashk2seph{$1}}))
+		|| defined $HebcalConst::SEDROT{$ashk2seph{$1}}))
 	{
 	    my($p1,$p2) = ($1,$2);
 
-	    $p1 = $Hebcal::ashk2seph{$p1} if (defined $Hebcal::ashk2seph{$p1});
-	    $p2 = $Hebcal::ashk2seph{$p2} if (defined $Hebcal::ashk2seph{$p2});
+	    $p1 = $ashk2seph{$p1} if (defined $ashk2seph{$p1});
+	    $p2 = $ashk2seph{$p2} if (defined $ashk2seph{$p2});
 
 	    die "aliyah.xml missing $p2!" unless defined $HebcalConst::SEDROT{$p2};
 
@@ -937,8 +933,8 @@ sub get_holiday_anchor($$$)
     {
 	my($subj_copy) = $subj;
 
-	$subj_copy = $Hebcal::ashk2seph{$subj_copy}
-	    if defined $Hebcal::ashk2seph{$subj_copy};
+	$subj_copy = $ashk2seph{$subj_copy}
+	    if defined $ashk2seph{$subj_copy};
 
 	# fix Rosh Hashana and Havdalah
 	my $subj_suffix;
@@ -1183,7 +1179,7 @@ sub zipcode_get_zip_fields($$)
 	return undef;
     }
 
-    my $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
+    my $tzid = get_usa_tzid($State,$TimeZone,$DayLightSaving);
     my($lat_deg,$lat_min,$long_deg,$long_min) =
 	latlong_to_hebcal($Latitude, $Longitude);
     ($CityMixedCase,$State,$tzid,
@@ -1297,13 +1293,13 @@ sub html_city_select
 	    ? $country
 	    : $HebcalConst::COUNTRIES{$country}->[1];
 	$groups{$grp} = [] unless defined $groups{$grp};
-	push(@{$groups{$grp}}, [$id, $country, Hebcal::woe_country($id), $city]);
+	push(@{$groups{$grp}}, [$id, $country, woe_country($id), $city]);
     }
     foreach my $grp (qw(US CA IL EU NA SA AS OC AF AN)) {
 	next unless defined $groups{$grp};
 	my $label = ($grp =~ /^US|CA|IL$/)
 	    ? $HebcalConst::COUNTRIES{$grp}->[0]
-	    : $Hebcal::CONTINENTS{$grp};
+	    : $CONTINENTS{$grp};
 	$retval .= "<optgroup label=\"$label\">\n";
 	foreach my $info (sort {$a->[3] cmp $b->[3]} @{$groups{$grp}}) {
 	    my($id,$cc,$country,$city) = @{$info};
@@ -1490,7 +1486,7 @@ sub gen_cookie($)
 	    if defined $q->param('m') && $q->param('m') ne '';
     }
 
-    foreach (@Hebcal::opts)
+    foreach (@opts)
     {
 	next if $_ eq 'c' || $_ eq 'H';
 	$retval .= "&$_=" . $q->param($_)
@@ -1567,8 +1563,8 @@ sub process_cookie($$)
 		unless $q->param('city');
 	    $q->param('geo','city');
 	    $q->param('c','on');
-	    if (defined $Hebcal::CITY_COUNTRY{$q->param('city')} &&
-		$Hebcal::CITY_COUNTRY{$q->param('city')} eq 'IL')
+	    if (defined $CITY_COUNTRY{$q->param('city')} &&
+		$CITY_COUNTRY{$q->param('city')} eq 'IL')
 	    {
 		$q->param('i','on');
 		$c->param('i','on');
@@ -1594,7 +1590,7 @@ sub process_cookie($$)
     $q->param('m',$c->param('m'))
 	if (defined $c->param('m') && ! defined $q->param('m'));
 
-    foreach (@Hebcal::opts)
+    foreach (@opts)
     {
 	next if $_ eq 'c';
 	$q->param($_,$c->param($_))
@@ -1617,7 +1613,7 @@ sub self_url
 {
     my($q,$override,$next_sep) = @_;
 
-    my $url = Hebcal::script_name($q);
+    my $url = script_name($q);
     my $sep = "?";
     $next_sep ||= ";";
 
@@ -1922,9 +1918,9 @@ sub process_args_common {
 	    $q->param($_, "on");
 	}
 
-	my $cookies = Hebcal::get_cookies($q);
+	my $cookies = get_cookies($q);
 	if (defined $cookies->{'C'}) {
-	    Hebcal::process_cookie($q,$cookies->{'C'});
+	    process_cookie($q,$cookies->{'C'});
 	}
     }
 
@@ -1939,7 +1935,7 @@ sub process_args_common {
 	$q->param("city", $city);
 	$q->param("geo","city");
 
-	($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+	($latitude,$longitude) = @{$CITY_LATLONG{$city}};
 	$cmd .= " -C 'Jerusalem'";
 	$city_descr = "Jerusalem, Israel";
 	$q->param("i", "on");
@@ -1961,13 +1957,13 @@ sub process_args_common {
 	    return (0,$message,undef);
 	}
 
-	my $DB = Hebcal::zipcode_open_db();
+	my $DB = zipcode_open_db();
 	my($city,$state,$tzid,$lat_deg,$lat_min,$long_deg,$long_min);
 	# set global $latitude and $longitude
 	($city,$state,$tzid,$latitude,$longitude,
 	 $lat_deg,$lat_min,$long_deg,$long_min) =
-	    Hebcal::zipcode_get_zip_fields($DB, $q->param("zip"));
-	Hebcal::zipcode_close_db($DB);
+	    zipcode_get_zip_fields($DB, $q->param("zip"));
+	zipcode_close_db($DB);
 	undef($DB);
 
 	unless (defined $state) {
@@ -2090,19 +2086,19 @@ sub process_args_common {
 	$q->param("city", $city);
 	$q->param("geo","city");
 
-	($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+	($latitude,$longitude) = @{$CITY_LATLONG{$city}};
 	my($lat_deg,$lat_min,$long_deg,$long_min) =
-	    Hebcal::latlong_to_hebcal($latitude, $longitude);
-	my $tzid = $Hebcal::CITY_TZID{$city};
+	    latlong_to_hebcal($latitude, $longitude);
+	my $tzid = $CITY_TZID{$city};
 
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 
 	my $country = woe_country($city);
 	$country = "USA" if $country eq "United States of America";
 	$country = "UK" if $country eq "United Kingdom";
-	$city_descr = Hebcal::woe_city($city) . ", $country";
+	$city_descr = woe_city($city) . ", $country";
 
-	if ($Hebcal::CITY_COUNTRY{$city} eq 'IL') {
+	if ($CITY_COUNTRY{$city} eq 'IL') {
 	    $q->param('i','on');
 	} else {
 	    $q->delete('i');
@@ -2146,10 +2142,10 @@ sub validate_city {
     unless (defined $city) {
 	return "US-New York-NY";
     }
-    if (defined($Hebcal::CITIES_OLD{$city})) {
-	return $Hebcal::CITIES_OLD{$city};
+    if (defined($CITIES_OLD{$city})) {
+	return $CITIES_OLD{$city};
     }
-    if (defined($Hebcal::CITY_TZID{$city})) {
+    if (defined($CITY_TZID{$city})) {
 	return $city;
     }
     return "US-New York-NY";
@@ -2341,7 +2337,7 @@ sub vcalendar_write_contents
     }
 
     # don't raise error if we can't open DB
-    my $dbh = DBI->connect("dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE", "", "");
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "");
     my $sth;
     if (defined $dbh) {
       $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
@@ -2361,9 +2357,9 @@ sub vcalendar_write_contents
 	    out_html(undef, qq{CATEGORIES:HOLIDAY$endl});
 	}
 
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	my $subj = $evt->[$EVT_IDX_SUBJ];
 
-	my($href,$hebrew,$dummy_memo) = Hebcal::get_holiday_anchor($subj,0,$q);
+	my($href,$hebrew,$dummy_memo) = get_holiday_anchor($subj,0,$q);
 
 	$subj =~ s/,/\\,/g;
 
@@ -2374,22 +2370,21 @@ sub vcalendar_write_contents
 	out_html(undef, qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl});
 
 	my $memo = "";
-	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
+	if ($evt->[$EVT_IDX_UNTIMED] == 0
 	    && defined $cconfig
 	    && defined $cconfig->{"city"})
 	{
 	    out_html(undef, qq{LOCATION:}, $cconfig->{"city"}, $endl);
 	}
-	elsif ($evt->[$Hebcal::EVT_IDX_MEMO])
+	elsif ($evt->[$EVT_IDX_MEMO])
  	{
-	    $memo = $evt->[$Hebcal::EVT_IDX_MEMO];
+	    $memo = $evt->[$EVT_IDX_MEMO];
 	}
 	elsif (defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/)
 	{
+	    my($year,$mon,$mday) = event_ymd($evt);
 	    $memo = torah_calendar_memo($dbh, $sth,
-					$evt->[$Hebcal::EVT_IDX_YEAR],
-					$evt->[$Hebcal::EVT_IDX_MON] + 1,
-					$evt->[$Hebcal::EVT_IDX_MDAY]);
+					$year, $mon, $mday);
 	}
 
 	if ($href) {
@@ -2407,22 +2402,20 @@ sub vcalendar_write_contents
 	  out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
 	}
 
+	my($year,$mon,$mday) = event_ymd($evt);
 	my $date = sprintf("%04d%02d%02d",
-			   $evt->[$Hebcal::EVT_IDX_YEAR],
-			   $evt->[$Hebcal::EVT_IDX_MON] + 1,
-			   $evt->[$Hebcal::EVT_IDX_MDAY],
-			  );
+			   $year, $mon, $mday);
 	my $end_date = $date;
 
-	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$EVT_IDX_UNTIMED] == 0)
 	{
-	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $evt->[$EVT_IDX_HOUR];
+	    my $min = $evt->[$EVT_IDX_MIN];
 
 	    $hour += 12 if $hour < 12;
 	    $date .= sprintf("T%02d%02d00", $hour, $min);
 
-	    $min += $evt->[$Hebcal::EVT_IDX_DUR];
+	    $min += $evt->[$EVT_IDX_DUR];
 	    if ($min >= 60)
 	    {
 		$hour++;
@@ -2433,11 +2426,8 @@ sub vcalendar_write_contents
 	}
 	else
 	{
-	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days
-		($evt->[$Hebcal::EVT_IDX_YEAR],
-		 $evt->[$Hebcal::EVT_IDX_MON] + 1,
-		 $evt->[$Hebcal::EVT_IDX_MDAY],
-		 1);
+	    my($year,$mon,$mday) = event_ymd($evt);
+	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($year, $mon, $mday, 1);
 	    $end_date = sprintf("%04d%02d%02d", $gy, $gm, $gd);
 
 	    # for vCalendar Palm Desktop and Outlook 2000 seem to
@@ -2452,7 +2442,7 @@ sub vcalendar_write_contents
 
 	out_html(undef, qq{DTSTART});
 	if ($is_icalendar) {
-	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
+	    if ($evt->[$EVT_IDX_UNTIMED]) {
 		out_html(undef, ";VALUE=DATE");
 	    } elsif ($tzid) {
 		out_html(undef, ";TZID=$tzid");
@@ -2460,7 +2450,7 @@ sub vcalendar_write_contents
 	}
 	out_html(undef, qq{:$date$endl});
 
-	if ($is_icalendar && $evt->[$Hebcal::EVT_IDX_UNTIMED])
+	if ($is_icalendar && $evt->[$EVT_IDX_UNTIMED])
 	{
 	    # avoid using DTEND since Apple iCal and Lotus Notes
 	    # seem to interpret all-day events differently
@@ -2474,8 +2464,8 @@ sub vcalendar_write_contents
         }
 	
 	if ($is_icalendar) {
-	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
-		$evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+	    if ($evt->[$EVT_IDX_UNTIMED] == 0 ||
+		$evt->[$EVT_IDX_YOMTOV] == 1) {
 		out_html(undef, "TRANSP:OPAQUE$endl"); # show as busy
 		out_html(undef, "X-MICROSOFT-CDO-BUSYSTATUS:OOF$endl");
 	    } else {
@@ -2486,10 +2476,10 @@ sub vcalendar_write_contents
 	    my $date_copy = $date;
 	    $date_copy =~ s/T\d+$//;
 
-	    my $digest = Digest::MD5::md5_hex($evt->[$Hebcal::EVT_IDX_SUBJ]);
+	    my $digest = Digest::MD5::md5_hex($evt->[$EVT_IDX_SUBJ]);
 	    my $uid = "hebcal-$date_copy-$digest";
 
-	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
+	    if ($evt->[$EVT_IDX_UNTIMED] == 0
 		&& defined $cconfig) {
 		my $loc;
 		if (defined $cconfig->{"zip"}) {
@@ -2518,15 +2508,15 @@ sub vcalendar_write_contents
 	    out_html(undef, qq{UID:$uid$endl});
 
 	    my $alarm;
-	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
+	    if ($evt->[$EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
 		$alarm = "3H";	# 9pm Omer alarm evening before
 	    }
-	    elsif ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Yizkor \(.+\)$/ ||
-		   $evt->[$Hebcal::EVT_IDX_SUBJ] =~
+	    elsif ($evt->[$EVT_IDX_SUBJ] =~ /^Yizkor \(.+\)$/ ||
+		   $evt->[$EVT_IDX_SUBJ] =~
 		   /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/) {
 		$alarm = "12H";	# noon the day before
 	    }
-	    elsif ($evt->[$Hebcal::EVT_IDX_SUBJ] eq 'Candle lighting') {
+	    elsif ($evt->[$EVT_IDX_SUBJ] eq 'Candle lighting') {
 		$alarm = "10M";	# ten minutes
 	    }
 
@@ -2586,20 +2576,17 @@ sub csv_write_contents($$$)
 	qq{"Location"$endl};
 
     foreach my $evt (@{$events}) {
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	my $memo = $evt->[$Hebcal::EVT_IDX_MEMO];
+	my $subj = $evt->[$EVT_IDX_SUBJ];
+	my $memo = $evt->[$EVT_IDX_MEMO];
 
 	my $date;
+	my($year,$mon,$mday) = event_ymd($evt);
 	if ($euro) {
 	    $date = sprintf("\"%d/%d/%04d\"",
-			    $evt->[$Hebcal::EVT_IDX_MDAY],
-			    $evt->[$Hebcal::EVT_IDX_MON] + 1,
-			    $evt->[$Hebcal::EVT_IDX_YEAR]);
+			    $mday, $mon, $year);
 	} else {
 	    $date = sprintf("\"%d/%d/%04d\"",
-			    $evt->[$Hebcal::EVT_IDX_MON] + 1,
-			    $evt->[$Hebcal::EVT_IDX_MDAY],
-			    $evt->[$Hebcal::EVT_IDX_YEAR]);
+			    $mon, $mday, $year);
 	}
 
 	my($start_time) = '';
@@ -2607,16 +2594,16 @@ sub csv_write_contents($$$)
 	my($end_date) = '';
 	my($all_day) = '"true"';
 
-	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$EVT_IDX_UNTIMED] == 0)
 	{
-	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+	    my $hour = $evt->[$EVT_IDX_HOUR];
+	    my $min = $evt->[$EVT_IDX_MIN];
 
 	    $hour -= 12 if $hour > 12;
 	    $start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
 
 	    $hour += 12 if $hour < 12;
-	    $min += $evt->[$Hebcal::EVT_IDX_DUR];
+	    $min += $evt->[$EVT_IDX_DUR];
 
 	    if ($min >= 60)
 	    {
@@ -2647,8 +2634,8 @@ sub csv_write_contents($$$)
 	    qq{"$subj",$date,$start_time,$end_date,$end_time,},
 	    qq{$all_day,"$memo",};
 
-	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
-	    $evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
+	if ($evt->[$EVT_IDX_UNTIMED] == 0 ||
+	    $evt->[$EVT_IDX_YOMTOV] == 1)
 	{
 	    print STDOUT qq{"4"};
 	}
@@ -2711,8 +2698,8 @@ sub sendmail_v2
     }
 
     unless ($CONFIG_INI) {
-	$CONFIG_INI = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
-	    or die "$Hebcal::CONFIG_INI_PATH: $!";
+	$CONFIG_INI = Config::Tiny->read($CONFIG_INI_PATH)
+	    or die "$CONFIG_INI_PATH: $!";
     }
 
     my $sendmail_host = $CONFIG_INI->{_}->{"hebcal.email.adhoc.host"};
@@ -2801,11 +2788,6 @@ sub sendmail_v2
 if ($^W && 0)
 {
     my $unused;
-    $unused = $Hebcal::MoY_long{'foo'};
-    $unused = $Hebcal::ashk2seph{'foo'};
-    $unused = $Hebcal::lang_names{'foo'};
-    $unused = $Hebcal::havdalah_min;
-    $unused = $Hebcal::HEBCAL_BIN;
     $unused = $DBI::errstr;
 }
 
