@@ -1344,9 +1344,9 @@ sub html_menu_item_bootstrap {
 }
 
 sub html_menu_bootstrap {
-    my($selected) = @_;
-    my $str = qq{<ul class="nav">};
-    foreach my $item (@{$HTML_MENU_ITEMS_V2}) {
+    my($selected,$menu_items) = @_;
+    my $str = qq{<ul class="nav navbar-nav">};
+    foreach my $item (@{$menu_items}) {
 	my $path = $item->[0];
 	my $title = $item->[1];
 	my $tooltip = $item->[2];
@@ -1371,7 +1371,7 @@ sub html_menu_bootstrap {
 sub html_header_bootstrap {
     my($title,$base_href,$body_class,$xtra_head,$suppress_site_title) = @_;
     $xtra_head = "" unless $xtra_head;
-    my $menu = html_menu_bootstrap($base_href);
+    my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $str = <<EOHTML;
 <!DOCTYPE html>
