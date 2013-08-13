@@ -475,7 +475,6 @@ sub pdf_display {
 	push(@{$cells{$cal_id}{$mday}}, $evt);
     }
 
-    my @DAYS = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
     foreach my $year_month (sort keys %cells) {
 	my($year,$month) = split(/-/, $year_month);
 	$month =~ s/^0//;
@@ -517,10 +516,10 @@ sub pdf_display {
 	$g->endpath(); 
 
 	$text->font($pdf_font{'plain'},10);
-	for (my $i = 0; $i < scalar(@DAYS); $i++) {
+	for (my $i = 0; $i < scalar(@Hebcal::DoW_long); $i++) {
 	    my $x = PDF_LMARGIN + $i * ($colwidth + $hspace) + ($colwidth / 2);
 	    $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
-	    $text->text_center($DAYS[$i]);
+	    $text->text_center($Hebcal::DoW_long[$i]);
 	}
 
 	# Loop through the columns

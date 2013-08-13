@@ -228,7 +228,6 @@ foreach my $evt (@events) {
     }
 }
 
-my @DAYS = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
 my @heb_months = qw(VOID Nisan Iyyar Sivan Tamuz Av Elul Tishei Cheshvan Kislev Tevet Sh'vat);
 push(@heb_months, "Adar I", "Adar II");
 
@@ -246,11 +245,11 @@ for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
 	    my $hebmonth = $heb_months[$hmonth];
 	    my($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[0]);
 	    my $dow = Hebcal::get_dow($year, $month, $day);
-	    my $memo = "Rosh Chodesh <strong>$hebmonth</strong> will be on <strong>" . $DAYS[$dow] . "</strong>";
+	    my $memo = "Rosh Chodesh <strong>$hebmonth</strong> will be on <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
 	    if (defined $rosh_chodesh{$hebmonth}->[1]) {
 		($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[1]);
 		$dow = Hebcal::get_dow($year, $month, $day);
-		$memo .= " and <strong>" . $DAYS[$dow] . "</strong>";
+		$memo .= " and <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
 	    }
 	    $memo .= ".";
 	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, "Shabbat Mevarchim", undef, $memo);

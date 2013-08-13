@@ -279,8 +279,8 @@ sub mail_user
     # for the last two weeks of Av and the last week or two of Elul
     my @today = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($today[0], $today[1], $today[2]);
-    if (($hebdate->{"mm"} == 5 && $hebdate->{"dd"} >= 15)
-	|| ($hebdate->{"mm"} == 6 && $hebdate->{"dd"} >= 20)) {
+    if (($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} >= 15)
+	|| ($hebdate->{"mm"} == $HebcalGPL::ELUL && $hebdate->{"dd"} >= 20)) {
 	my $next_year = $hebdate->{"yy"} + 1;
 	my $fridge_loc = defined $args->{"zip"} 
 	    ? "zip=" . $args->{"zip"}
@@ -288,8 +288,17 @@ sub mail_user
 	my $loc_copy = $loc;
 	$loc_copy =~ s/,.+$//;
 
+	my $erev_rh = day_before_rosh_hashana($hebdate->{"yy"} + 1);
+	my $dow = $Hebcal::DoW_long[Hebcal::get_dow($erev_rh->{"yy"},
+						    $erev_rh->{"mm"},
+						    $erev_rh->{"dd"})];
+	my $when = sprintf("%s, %s %d",
+			   $dow,
+			   $Hebcal::MoY_long{$erev_rh->{"mm"}},
+			   $erev_rh->{"dd"});
+
 	$html_body .= qq{<div style="font-size:14px;font-family:arial,helvetica,sans-serif;padding:8px;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;border-radius:4px">\n};
-	$html_body .= qq{Rosh Hashana $next_year is coming! Print your }
+	$html_body .= qq{Rosh Hashana $next_year begins at sundown on $when. Print your }
 	    . qq{<a style="color:#356635" href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year&amp;$UTM_PARAM">}
 	    . qq{$loc_copy virtual refrigerator magnet</a> for candle lighting times and }
 	    . qq{Parashat haShavuah on a compact 5x7 page.\n</div>\n}
@@ -359,6 +368,16 @@ $unsub_url
 
     $status;
 }
+
+sub day_before_rosh_hashana {
+    my($hyear) = @_;
+
+    my $abs = HebcalGPL::hebrew2abs({ yy => $hyear,
+				      mm => $HebcalGPL::TISHREI,
+				      dd => 1 });
+    HebcalGPL::abs2greg($abs - 1);
+}
+
 
 sub get_friday_candles
 {
