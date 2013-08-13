@@ -50,6 +50,19 @@ use POSIX qw(strftime);
 use HTML::CalendarMonthSimple ();
 use strict;
 
+my @HEB_MONTH_NAME =
+(
+  [
+    "VOID", "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+    "Cheshvan", "Kislev", "Tevet", "Sh'vat", "Adar", "Nisan"
+  ],
+  [
+    "VOID", "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+    "Cheshvan", "Kislev", "Tevet", "Sh'vat", "Adar I", "Adar II",
+    "Nisan"
+  ]
+);
+
 my $opt_help;
 my $opt_verbose = 0;
 my $opt_year;
@@ -113,63 +126,11 @@ my $outfile = "$outdir/index.html";
 open(OUT,">$outfile") || die "$outfile: $!";
 
 my $title = "Luach $HEB_YR";
-print OUT <<EOHTML;
-<!DOCTYPE html>
-<html><head>
-<meta charset="UTF-8">
-<title>$title</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
-<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
-<style type="text/css">
-body{
- padding-top: 70px;
- font-family: 'Source Sans Pro', sans-serif;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
- font-family: 'Source Sans Pro', sans-serif;
-}
-.popover {
- max-width: 476px;
-}
-:lang(he) {
-  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
-  font-size:125%;
-  direction:rtl;
-}
-\@media print{
- a[href]:after{content:""}
- .sidebar-nav{display:none}
-}
-</style>
-</head>
-<body>
-
-<div class="navbar navbar-fixed-top">
-<span class="navbar-brand">Reform Luach</span>
-<ul class="nav navbar-nav">
-<li class="active"><a href="#">Home</a></li>
-<li><a href="#">About</a></li>
-</ul>
-</div><!-- .navbar -->
-
-<div class="container">
-EOHTML
-;
+print OUT html_header($title);
 
 my @html_cals;
 my %html_cals;
+my %day_content;
 my @html_cal_ids;
 
 # build the calendar objects
@@ -296,7 +257,7 @@ my $hhmts = strftime("%d %B %Y", localtime($mtime));
 my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
 my $last_updated_text = qq{<p><time datetime="$dc_date">$hhmts</time></p>};
 
-print OUT <<EOHTML;
+my $html_footer =<<EOHTML;
 
 <footer>
 <hr>
@@ -313,24 +274,100 @@ Commons Attribution 3.0 License</a>.</small></p>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
-<script>
-\$("a[data-toggle=popover]")
-      .popover({html:true})
-      .click(function(e) {
-        e.preventDefault()
-      })
-</script>
 </body></html>
 EOHTML
 ;
 
+print OUT $html_footer;
 close(OUT);
 
 #$dbh->commit;
 $dbh->disconnect;
 $dbh = undef;
 
+while (my($day_id,$content) = each(%day_content)) {
+    $outfile = "$outdir/$day_id";
+    open(OUT,">$outfile") || die "$outfile: $!";
+    my($yy,$mm,$dd) = split(/-/, $day_id);
+    $mm =~ s/^0//;
+    $dd =~ s/^0//;
+    my $dow = $Hebcal::DoW_long[Hebcal::get_dow($yy, $mm, $dd)];
+    my $when = sprintf("%s, %s %d, %d",
+		       $dow, $Hebcal::MoY_long{$mm}, $dd, $yy);
+    my $hdate = HebcalGPL::greg2hebrew($yy, $mm, $dd);
+
+    my $heb_when = sprintf("%d%s of %s, %d",
+			   $hdate->{"dd"},
+			   HebcalGPL::numSuffix($hdate->{"dd"}),
+			   $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}],
+			   $hdate->{"yy"});
+
+    print OUT html_header("$when - $heb_when");
+    print OUT qq{<div class="page-header"><h1>$when <small>$heb_when</small></h1></div>\n};
+    foreach my $memo (@{$content}) {
+	print OUT "<div>\n", $memo, "</div>\n";
+    }
+    print OUT $html_footer;
+    close(OUT);
+}
+
 exit(0);
+
+sub html_header {
+    my($title) = @_;
+    my $s =<<EOHTML;
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
+<style type="text/css">
+body{
+ padding-top: 70px;
+ font-family: 'Source Sans Pro', sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+ font-family: 'Source Sans Pro', sans-serif;
+}
+:lang(he) {
+  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  font-size:125%;
+  direction:rtl;
+}
+\@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+<span class="navbar-brand">Reform Luach</span>
+<ul class="nav navbar-nav">
+<li class="active"><a href="#">Home</a></li>
+<li><a href="#">About</a></li>
+</ul>
+</div><!-- .navbar -->
+
+<div class="container">
+EOHTML
+;
+    return $s;
+}
 
 sub find_item {
     my($title) = @_;
@@ -345,13 +382,13 @@ sub add_event {
     my $cal_id = sprintf("%04d-%02d", $year, $month);
     my $cal = $html_cals{$cal_id};
 
-    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
-#    my $placement = ($dow == 5 || $dow == 6) ? "left" : "right";
-    my $placement = "auto";
-
+    my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $day);
     my $title = $hebrew ? "$subj / $hebrew" : $subj;
-    my $memo_html = Hebcal::html_entify($memo);
-    my $html = qq{<a href="#" class="popover-test" data-toggle="popover" data-placement="$placement" title="$title" data-content="$memo_html">$subj</a>};
+    my $html = qq{<a href="$day_id" title="$title">$subj</a>};
+
+    $day_content{$day_id} = [] unless defined $day_content{$day_id};
+    push(@{$day_content{$day_id}}, qq{<h3>$title</h3>\n$memo});
+
     $cal->addcontent($day, "<br>\n")
 	if $cal->getcontent($day) ne "";
     $cal->addcontent($day, $html);
@@ -399,12 +436,6 @@ sub new_html_cal {
     $cal->border(1);
     $cal->tableclass("table table-bordered");
     $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
-
-    my $end_day = Date::Calc::Days_in_Month($year, $month);
-    for (my $mday = 1; $mday <= $end_day ; $mday++)
-    {
-	$cal->setcontent($mday, "&nbsp;");
-    }
 
     $cal;
 }
