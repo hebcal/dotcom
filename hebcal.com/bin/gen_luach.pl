@@ -64,6 +64,81 @@ my @HEB_MONTH_NAME =
   ]
 );
 
+my %PARASHAH_MAP = (
+"Bereshit" => "B'reishit",
+"Noach" => undef,
+"Lech-Lecha" => "Lech L'cha",
+"Vayera" => "Vayeira",
+"Chayei Sara" => undef,
+"Toldot" => undef,
+"Vayetzei" => "Vayeitzei",
+"Vayishlach" => undef,
+"Vayeshev" => "Vayeishev",
+"Miketz" => "Shabbat Chanukah",	# TODO: check this
+"Vayigash" => undef,
+"Vayechi" => "Vay'chi",
+"Shemot" => "Sh'mot",
+"Vaera" => "Va'eira",
+"Bo" => undef,
+"Beshalach" => "Shabbat Parashat B'shalach, Shabbat Shirah",
+"Yitro" => undef,
+"Mishpatim" => undef,
+"Terumah" => "T'rumah",
+"Tetzaveh" => "T'tzaveh",
+"Ki Tisa" => undef,
+"Vayakhel" => "Vayakheil",
+"Pekudei" => "P'kudei",
+"Vayikra" => undef,
+"Tzav" => undef,
+"Shmini" => "Sh'mini",
+"Tazria" => undef,
+"Metzora" => "M'tzora",
+"Achrei Mot" => "Acharei Mot",
+"Kedoshim" => "K'doshim",
+"Emor" => undef,
+"Behar" => "B'har",
+"Bechukotai" => "B'chukotai",
+"Bamidbar" => undef,
+"Nasso" => "Naso",
+"Beha'alotcha" => "B'ha'alot'cha",
+"Sh'lach" => "Sh'lach L'cha",
+"Korach" => undef,
+"Chukat" => undef,
+"Balak" => undef,
+"Pinchas" => undef,
+"Matot" => undef,
+"Masei" => "Mas'ei",
+"Devarim" => "Shabbat D'varim, Shabbat Chazon",
+"Vaetchanan" => "Shabbat V'etchanan/Nachamu",
+"Eikev" => undef,
+"Re'eh" => undef,
+"Shoftim" => undef,
+"Ki Teitzei" => "Ki Teitze",
+"Ki Tavo" => undef,
+"Nitzavim" => undef,
+"Vayeilech" => undef,
+"Ha'Azinu" => undef,
+"Vezot Haberakhah" => undef,
+"Vayakhel-Pekudei" => undef,
+"Tazria-Metzora" => undef,
+"Achrei Mot-Kedoshim" => undef,
+"Behar-Bechukotai" => undef,
+"Chukat-Balak" => undef,
+"Matot-Masei" => undef,
+"Nitzavim-Vayeilech" => "N'tzavim Vayeilech",
+);
+
+my %OTHER_TRANSLATIONS = (
+"Shabbat Shekalim" => "Shabbat Sh'kalim",
+"Tu BiShvat" => "Tu B'Sh'vat",
+"Tzom Tammuz" => "Shiva Asar b'Tammuz",
+"Tish'a B'Av" => "Tisha B'Av",
+"Erev Tish'a B'Av" => "Erev Tisha b'Av",
+"Erev Rosh Hashana" => "Leil S'lichot Erev Rosh Hashanah",
+"Rosh Hashana" => "Rosh Hashanah 1",
+"Rosh Hashana II" => "Rosh Hashanah 2",
+);
+
 my $opt_help;
 my $opt_verbose = 0;
 my $opt_year;
@@ -156,16 +231,18 @@ foreach my $evt (@events) {
     my($href,$hebrew,$hebcal_memo) = Hebcal::get_holiday_anchor($subj,0,undef);
     $subj =~ s/ \d{4}$//;	# Rosh Hashana hack
 
-    my $luach_subj = translate_subject($subj);
+    my($year,$month,$day) = Hebcal::event_ymd($evt);
+    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+
+    my $luach_subj = translate_subject($subj,$dow);
     my $xml_item = find_item($luach_subj);
     my $memo = "";
     if ($xml_item) {
 	$memo .= HTML::Entities::decode($xml_item->{"content"});
     }
 
-    my($year,$month,$day) = Hebcal::event_ymd($evt);
     my $torah_memo = torah_memo($subj, $year, $month, $day);
-    $memo .= "<br>" . $torah_memo if $torah_memo;
+    $memo .= qq{\n<h3>($subj - Hebcal internal data)</h3><div class="well">$torah_memo</div>\n} if $torah_memo;
 
     add_event($year, $month, $day, $subj, $hebrew, $memo, $hebcal_memo);
     if ($subj =~ /^Rosh Chodesh (.+)$/) {
@@ -235,6 +312,7 @@ $nav_pagination .= qq{</ul><!-- .pagination -->\n};
 print OUT $nav_pagination;
 
 foreach my $cal_id (@html_cal_ids) {
+    add_daily_buttons($cal_id);
     my $cal = $html_cals{$cal_id};
     print OUT qq{<div id="cal-$cal_id" style="padding-top:60px">\n};
     print OUT $cal->as_HTML();
@@ -245,19 +323,17 @@ my $mtime = (defined $ENV{'SCRIPT_FILENAME'}) ?
     (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 my $hhmts = strftime("%d %B %Y", localtime($mtime));
 my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
-my $last_updated_text = qq{<p><time datetime="$dc_date">$hhmts</time></p>};
 
 my $html_footer =<<EOHTML;
 
 <footer>
 <hr>
 <div id="inner-footer" class="clearfix">
-$last_updated_text
-<p><small>Except where otherwise noted, content on
-this site
-is licensed under a 
-<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
-Commons Attribution 3.0 License</a>.</small></p>
+<div class="pull-right"><time datetime="$dc_date">$hhmts</time></div>
+<div class="pull-left"><p>Powered by <a href="http://www.hebcal.com/">Hebcal Jewish Calendar</a></p>
+<p><small>Except where otherwise noted, content on this site is licensed under a <a rel="license"
+href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+</div><!-- .pull-left -->
 </div><!-- #inner-footer -->
 </footer>
 </div><!-- .container -->
@@ -295,10 +371,6 @@ while (my($day_id,$content) = each(%day_content)) {
     print OUT html_header("/$day_id", "$when - $heb_when | Reform Luach");
     print OUT qq{<div class="page-header"><h1>$when<br><small>$heb_when</small></h1></div>\n};
     foreach my $memo (@{$content}) {
-	$memo =~ s/<h5>/<h4>/g;
-	$memo =~ s/<\/h5>/<\/h4>/g;
-	$memo =~ s/<h2>/<h3>/g;
-	$memo =~ s/<\/h2>/<\/h3>/g;
 	print OUT "<div>\n", $memo, "</div>\n";
     }
     print OUT $html_footer;
@@ -308,8 +380,24 @@ while (my($day_id,$content) = each(%day_content)) {
 exit(0);
 
 sub translate_subject {
-    my($subj) = @_;
-    $subj =~ s/^Parashat /Shabbat /;
+    my($subj,$dow) = @_;
+
+    if ($subj eq "Erev Rosh Hashana" && $dow == 5) {
+	return "Erev Rosh Hashanah Friday";
+    }
+
+    if ($subj =~ /^Parashat (.+)$/) {
+	my $parashah = $PARASHAH_MAP{$1} || $1;
+	if ($parashah =~ /^Shabbat/) {
+	    return $parashah;
+	}
+	return "Shabbat $parashah";
+    }
+
+    if (defined $OTHER_TRANSLATIONS{$subj}) {
+	return $OTHER_TRANSLATIONS{$subj};
+    }
+
     $subj;
 }
 
@@ -421,13 +509,13 @@ sub add_event {
 
     my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $day);
     my $title = $tooltip ? qq{ title="$tooltip"} : "";
-    my $html = qq{<a href="$day_id"$title>$subj</a>};
+    my $html = qq{<div$title>$subj</div>};
 
     $day_content{$day_id} = [] unless defined $day_content{$day_id};
     push(@{$day_content{$day_id}}, $memo);
 
-    $cal->addcontent($day, "<br>\n")
-	if $cal->getcontent($day) ne "";
+#    $cal->addcontent($day, "<br>\n")
+#	if $cal->getcontent($day) ne "";
     $cal->addcontent($day, $html);
 }
 
@@ -463,6 +551,25 @@ sub torah_memo {
 	}
     }
     $memo;
+}
+
+sub add_daily_buttons {
+    my($cal_id) = @_;
+
+    $cal_id =~ /^(\d{4})-(\d{2})$/;
+    my $year = $1;
+    my $month = $2;
+    $month =~ s/^0//;
+
+    my $cal = $html_cals{$cal_id};
+    my $end_day = Date::Calc::Days_in_Month($year, $month);
+    for (my $mday = 1; $mday <= $end_day ; $mday++) {
+	my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $mday);
+	if (defined $day_content{$day_id}) {
+	    my $s = $cal->getcontent($mday);
+	    $cal->setcontent($mday, qq{<a href="$day_id">$s</a>});
+	}
+    }
 }
 
 sub new_html_cal {
