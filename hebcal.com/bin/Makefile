@@ -12,7 +12,7 @@ HOLIDAYS = ../holidays
 CONVERTER_SEDRA = ../converter/sedra/20/2099.inc
 REFORM_LUACH_DB = $(DBDIR)/reform-luach.sqlite3
 REFORM_LUACH_TMPDIR = /tmp/hebcal-reform-luach
-REFORM_LUACH_OUTDIR = ../reform-luach
+REFORM_LUACH_OUTDIR = ../../reformluach.com
 REFORM_LUACH_XML_DATADIR = ../../reformluach.com/cms/data
 XML_REFORM_LUACH = $(REFORM_LUACH_XML_DATADIR)/other/pages.xml
 
