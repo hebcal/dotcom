@@ -289,16 +289,16 @@ sub mail_user
 	$loc_copy =~ s/,.+$//;
 
 	my $erev_rh = day_before_rosh_hashana($hebdate->{"yy"} + 1);
-	my $dow = $Hebcal::DoW_long[Hebcal::get_dow($erev_rh->{"yy"},
-						    $erev_rh->{"mm"},
-						    $erev_rh->{"dd"})];
+	my $dow = $Hebcal::DoW[Hebcal::get_dow($erev_rh->{"yy"},
+					       $erev_rh->{"mm"},
+					       $erev_rh->{"dd"})];
 	my $when = sprintf("%s, %s %d",
 			   $dow,
 			   $Hebcal::MoY_long{$erev_rh->{"mm"}},
 			   $erev_rh->{"dd"});
 
 	$html_body .= qq{<div style="font-size:14px;font-family:arial,helvetica,sans-serif;padding:8px;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;border-radius:4px">\n};
-	$html_body .= qq{Rosh Hashana $next_year begins at sundown on $when. Print your }
+	$html_body .= qq{Rosh Hashana begins at sundown on $when. Print your }
 	    . qq{<a style="color:#356635" href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year&amp;$UTM_PARAM">}
 	    . qq{$loc_copy virtual refrigerator magnet</a> for candle lighting times and }
 	    . qq{Parashat haShavuah on a compact 5x7 page.\n</div>\n}
@@ -330,7 +330,7 @@ $unsub_url
 </div>
 </div>
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to $to by Hebcal.com</div>
+<div>This email was sent to $to by <a href="http://www.hebcal.com/?$UTM_PARAM">Hebcal.com</a></div>
 <div>&nbsp;</div>
 <div><a href="$unsub_url&amp;unsubscribe=1&amp;$UTM_PARAM">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1&amp;$UTM_PARAM">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy?$UTM_PARAM">Privacy Policy</a></div>
 </div>
