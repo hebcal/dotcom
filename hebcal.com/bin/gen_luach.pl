@@ -39,6 +39,7 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use utf8;
+use strict;
 use open ":utf8";
 use Getopt::Long ();
 use XML::Simple qw(:strict);
@@ -49,7 +50,7 @@ use Date::Calc;
 use HebcalGPL ();
 use POSIX qw(strftime);
 use HTML::CalendarMonthSimple ();
-use strict;
+use Date::Parse ();
 
 my @HEB_MONTH_NAME =
 (
@@ -189,6 +190,26 @@ if (! -d $outdir) {
 print "Reading $festival_in...\n" if $opt_verbose;
 my $fxml = XMLin($festival_in, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
 
+print "Reading $xml_pages_file:...\n" if $opt_verbose;
+my $xml = XMLin($xml_pages_file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+
+my @cms_pages = sort {
+    Date::Parse::str2time($b->{"pubDate"}) <=> Date::Parse::str2time($a->{"pubDate"})
+    }
+    @{$xml->{"item"}};
+my %cms_pages_used;
+
+if ($opt_verbose) {
+    print "Most recently edited items:\n";
+    foreach my $item (@cms_pages[0 .. 5]) {
+	printf("  %s (%s)\n    %s - %s\n\n",
+	       HTML::Entities::decode($item->{"title"}),
+	       $item->{"slug"}, 
+	       $item->{"author"},
+	       $item->{"pubDate"});
+    }
+}
+
 my $HEB_YR;
 if ($opt_year) {
     $HEB_YR = $opt_year;
@@ -215,6 +236,26 @@ $dbh = undef;
 
 generate_index();
 generate_daily_pages();
+
+if ($opt_verbose) {
+    my $count = 0;
+    foreach my $item (@cms_pages) {
+	$count++ unless defined $cms_pages_used{$item->{"slug"}};
+    }
+
+    my $i = 10;
+    print "$count CMS pages not used yet. First $i:\n";
+    foreach my $item (@cms_pages) {
+	next if defined $cms_pages_used{$item->{"slug"}};
+	printf("  %s (%s)\n    %s - %s\n\n",
+	       HTML::Entities::decode($item->{"title"}),
+	       $item->{"slug"}, 
+	       $item->{"author"},
+	       $item->{"pubDate"});
+	last unless --$i;
+    }
+}
+
 exit(0);
 
 sub generate_events {
@@ -600,6 +641,7 @@ sub find_item {
     my($title) = @_;
 
     my $slug = get_slug($title);
+    $cms_pages_used{$slug} = 1;
     my $result;
     my $file = "$xml_datadir/pages/$slug.xml";
     if (-s $file) {
