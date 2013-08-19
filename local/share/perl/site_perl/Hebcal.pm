@@ -1332,7 +1332,7 @@ my $HTML_MENU_ITEMS_V2 =
 sub html_menu_item_bootstrap {
     my($path,$title,$tooltip,$selected) = @_;
     my $class = undef;
-    if ($path ne "/" && $path eq $selected) {
+    if ($path eq $selected) {
 	$class = "active";
     }
     my $str = qq{<li};
