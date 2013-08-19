@@ -394,7 +394,7 @@ href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons At
 </div><!-- .container -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/js/bootstrap.min.js"></script>
 </body></html>
 EOHTML
 ;
@@ -474,13 +474,21 @@ sub translate_subject {
 
 sub html_header {
     my($path,$title) = @_;
+
+    my $brand;
+    if ($path eq "/") {
+	$brand = qq{<span class="navbar-brand">Reform Luach</span>};
+    } else {
+	$brand = qq{<a class="navbar-brand" href="/">Reform Luach</a>};
+    }
+
     my $s =<<EOHTML;
 <!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/css/bootstrap.min.css">
 <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet' type='text/css'>
 <style type="text/css">
 body{
@@ -493,8 +501,8 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 .btn,.navbar-brand {
  font-weight: 600;
 }
-.lead,.jumbotron {
- font-weight: 300;
+.page-header {
+  margin: 20px 0 20px;
 }
 :lang(he) {
   font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
@@ -509,21 +517,18 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 </head>
 <body>
 
-<div class="navbar">
- <div class="container">
-  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-   <span class="icon-bar"></span>
-   <span class="icon-bar"></span>
-   <span class="icon-bar"></span>
-  </button>
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      $brand
+    </div>
 EOHTML
 ;
-    if ($path eq "/") {
-	$s .= qq{<span class="navbar-brand">Reform Luach</span>\n};
-    } else {
-	$s .= qq{<a class="navbar-brand" href="/">Reform Luach</a>\n};
-    }
-
     my @month_menu_item = ( "#", "Calendar", "Calendar" );
     my $first = 1;
     foreach my $cal_id (@html_cal_ids) {
@@ -547,10 +552,10 @@ EOHTML
     my $menu = Hebcal::html_menu_bootstrap($path,\@menu_items);
 
     $s .=<<EOHTML;
-<div class="nav-collapse collapse navbar-responsive-collapse">
-$menu
-</div><!-- .nav-collapse -->
-</div><!-- .container -->
+    <div class="navbar-collapse collapse">
+      $menu
+    </div><!-- .nav-collapse -->
+  </div><!-- .container -->
 </div><!-- .navbar -->
 
 <div class="container">
