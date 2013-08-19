@@ -311,7 +311,8 @@ sub generate_events {
     my $rch_shabbat2 = find_item_content("Shabbat Rosh Chodesh II or One Day Rosh Chodesh");
     my $rch_weekday1 = find_item_content("Rosh Chodesh I Weekday");
     my $rch_weekday2 = find_item_content("Rosh Chodesh II or One Day Rosh Chodesh Weekday");
-    my $chanukah_candle = find_item_content("Chanukah Candlelighting");
+    my $chanukah_candle_title = "Chanukah Candlelighting";
+    my $chanukah_candle_content = find_item_content($chanukah_candle_title);
 
     foreach my $evt (@events) {
 	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
@@ -351,10 +352,10 @@ sub generate_events {
 	}
 
 	$subj = $OTHER_TRANSLATIONS{$subj} if $subj eq "Shmini Atzeret";
-	add_event($year, $month, $day, $subj, $hebrew, $memo, $hebcal_memo, 1);
+	add_event($year, $month, $day, $subj, $memo, $hebcal_memo, 1);
 
 	if ($subj =~ /Chanukah: \d Candles?$/) {
-	    add_event($year, $month, $day, undef, undef, $chanukah_candle, undef, 0);
+	    add_event($year, $month, $day, $chanukah_candle_title, $chanukah_candle_content, undef, 0);
 	}
     }
 
@@ -369,8 +370,8 @@ sub generate_events {
     my $erev_rch_weekday_memo = find_item_content("Erev Rosh Chodesh Weekday");
     my $erev_rch_friday_memo = find_item_content("Erev Rosh Chodesh Friday");
 
-    my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 7, "dd" => 1 });
-    my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 6, "dd" => 29 });
+    my $start_abs = HebcalGPL::hebrew2abs(hyear_first_day($hyear));
+    my $end_abs = HebcalGPL::hebrew2abs(hyear_last_day($hyear));
 
     for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
 	my $greg = HebcalGPL::abs2greg($abs);
@@ -380,13 +381,13 @@ sub generate_events {
 	if ($hebdate->{"dd"} >= 29 && $dow == 6) {
 	    my $next_month = next_hebmonth_name($hebdate);
 	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
-		      "$shabbat_machar_chodesh_title $next_month", undef,
+		      "$shabbat_machar_chodesh_title $next_month",
 		      $shabbat_machar_chodesh_memo,
 		      undef, 0);
 	}
 	# M'varchim HaChodesh
 	if ($dow == 6) {
-	    if ($hebdate->{"dd"} >= 23 && $hebdate->{"dd"} <= 29 && $hebdate->{"mm"} != 6) {
+	    if ($hebdate->{"dd"} >= 23 && $hebdate->{"dd"} <= 29 && $hebdate->{"mm"} != $HebcalGPL::ELUL) {
 		my $hebmonth = next_hebmonth_name($hebdate);
 		my($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[0]);
 		my $dow = Hebcal::get_dow($year, $month, $day);
@@ -399,7 +400,7 @@ sub generate_events {
 		my $memo = $shabbat_mevarchim_memo;
 		$memo =~ s/new month of X\./new month of <strong>$hebmonth<\/strong>. Rosh Chodesh $hebmonth occurs $when in the coming week./;
 		add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
-			  "Shabbat Mevarchim", undef, $memo,
+			  "Shabbat Mevarchim", $memo,
 			  "Shabbat which precedes Rosh Chodesh", 0);
 	    }
 	}
@@ -407,9 +408,15 @@ sub generate_events {
 	if ($hebdate->{"dd"} >= 29) {
 	    my $next_month = next_hebmonth_name($hebdate);
 	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
-		      "Erev Rosh Chodesh $next_month", undef,
+		      "Erev Rosh Chodesh $next_month",
 		      $dow == 5 ? $erev_rch_friday_memo : $erev_rch_weekday_memo,
 		      undef, 0);
+	}
+	if ($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} == 15) {
+	    my $title = "Tu B'Av";
+	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
+		      $title, find_item_content($title),
+		      "Modern-day Israeli Love Holiday", 1);
 	}
     }
 
@@ -418,7 +425,8 @@ sub generate_events {
     my $rh10days_memo = find_item_content($rh10days_title);
     for (my $abs = $start_abs; $abs < $start_abs+10; $abs++) {
 	my $greg = HebcalGPL::abs2greg($abs);
-	add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, $rh10days_title, undef, $rh10days_memo,
+	add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
+		  $rh10days_title, $rh10days_memo,
 		  "Ten Days of Repentance beginning with Rosh Hashana and ending with Yom Kippur", 1);
     }
 }
@@ -576,10 +584,25 @@ sub translate_subject {
     $subj;
 }
 
+sub hyear_first_day {
+    my($hyear) = @_;
+    return { "yy" => $hyear, "mm" => $HebcalGPL::TISHREI, "dd" => 1 };
+}
+
+sub hyear_last_day {
+    my($hyear) = @_;
+    { "yy" => $hyear, "mm" => $HebcalGPL::ELUL, "dd" => 29 };
+}
+
+sub hebrew2greg {
+    my($d) = @_;
+    return HebcalGPL::abs2greg(HebcalGPL::hebrew2abs($d));
+}
+
 sub bootstrap_year_dropdown {
     my($hyear,$basename) = @_;
-    my $start = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 7, "dd" => 1 }));
-    my $end = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 6, "dd" => 29 }));
+    my $start = hebrew2greg(hyear_first_day($hyear));
+    my $end = hebrew2greg(hyear_last_day($hyear));
     my $end_days = Date::Calc::Date_to_Days($end->{"yy"}, $end->{"mm"}, 1);
     my $first = 1;
     my @month_menu_item = ( "#", $hyear, "$hyear Calendar" );
@@ -734,7 +757,7 @@ sub find_item {
 }
 
 sub add_event ($$$$$$$) {
-    my($year,$month,$day,$subj,$hebrew,$memo,$tooltip,$show_in_grid) = @_;
+    my($year,$month,$day,$subj,$memo,$tooltip,$show_in_grid) = @_;
 
     my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $day);
     $day_content{$day_id} = [] unless defined $day_content{$day_id};
