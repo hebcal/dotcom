@@ -186,10 +186,6 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
-my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
-		    { RaiseError => 1, AutoCommit => 0 })
-    or croak $DBI::errstr;
-
 print "Reading $festival_in...\n" if $opt_verbose;
 my $fxml = XMLin($festival_in, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
 
@@ -201,167 +197,189 @@ if ($opt_year) {
     $HEB_YR = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
 }
 
-my $cmd = "./hebcal -s -i -H $HEB_YR";
-my @events = Hebcal::invoke_hebcal($cmd, "", 0);
-my $numEntries = scalar(@events);
-
-my $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
-my $start_year = $events[0]->[$Hebcal::EVT_IDX_YEAR];
-
-my $end_month = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
-my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
-my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
-
-my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 7, "dd" => 1 });
-my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 6, "dd" => 29 });
+my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
+		    { RaiseError => 1, AutoCommit => 0 })
+    or croak $DBI::errstr;
+#my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
+my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
 
 my @html_cals;
 my %html_cals;
 my %day_content;
 my @html_cal_ids;
 
-# build the calendar objects
-for (my @dt = ($start_year, $start_month, 1);
-     Date::Calc::Date_to_Days(@dt) <= $end_days;
-     @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1))	{
-    my $cal = new_html_cal($dt[0], $dt[1]);
-    my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
-    push(@html_cals, $cal);
-    push(@html_cal_ids, $cal_id);
-    $html_cals{$cal_id} = $cal;
-}
+generate_events();
 
-#my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
-my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+$dbh->disconnect;
+$dbh = undef;
 
-my %rosh_chodesh;
-my $rch_shabbat1 = get_item_content("Shabbat Rosh Chodesh I");
-my $rch_shabbat2 = get_item_content("Shabbat Rosh Chodesh II or One Day Rosh Chodesh");
-my $rch_weekday1 = get_item_content("Rosh Chodesh I Weekday");
-my $rch_weekday2 = get_item_content("Rosh Chodesh II or One Day Rosh Chodesh Weekday");
+generate_index();
+generate_daily_pages();
+exit(0);
 
-foreach my $evt (@events) {
-    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+sub generate_events {
+    my $cmd = "./hebcal -s -i -H $HEB_YR";
+    my @events = Hebcal::invoke_hebcal($cmd, "", 0);
+    my $numEntries = scalar(@events);
 
-    my($href,$hebrew,$hebcal_memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-    $subj =~ s/ \d{4}$//;	# Rosh Hashana hack
-    $subj =~ s/Shavuot I/Shavuot/;
+    my $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
+    my $start_year = $events[0]->[$Hebcal::EVT_IDX_YEAR];
 
-    my($year,$month,$day) = Hebcal::event_ymd($evt);
-    my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+    my $end_month = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
+    my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+    my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
 
-    my $luach_subj = translate_subject($subj,$dow);
+    my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 7, "dd" => 1 });
+    my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 6, "dd" => 29 });
 
-    # TODO: add Hoshana Raba as a "Erev Sh'mini Atzeret/Simchat Torah"
-    # also "Erev Shmini Atzeret" => "Erev Sh'mini Atzeret/Erev Simchat Torah Friday",
-
-    my $xml_item = find_item($luach_subj);
-    my $memo = "";
-    if ($xml_item) {
-	$memo .= HTML::Entities::decode($xml_item->{"content"});
+    # build the calendar objects
+    for (my @dt = ($start_year, $start_month, 1);
+	 Date::Calc::Date_to_Days(@dt) <= $end_days;
+	 @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1)) {
+	my $cal = new_html_cal($dt[0], $dt[1]);
+	my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
+	push(@html_cals, $cal);
+	push(@html_cal_ids, $cal_id);
+	$html_cals{$cal_id} = $cal;
     }
 
-    my $torah_memo = torah_memo($subj, $year, $month, $day);
-    $memo .= qq{\n<h3>($subj - Hebcal internal data)</h3><div class="well">$torah_memo</div>\n} if $torah_memo;
+    my %rosh_chodesh;
+    my $rch_shabbat1 = find_item_content("Shabbat Rosh Chodesh I");
+    my $rch_shabbat2 = find_item_content("Shabbat Rosh Chodesh II or One Day Rosh Chodesh");
+    my $rch_weekday1 = find_item_content("Rosh Chodesh I Weekday");
+    my $rch_weekday2 = find_item_content("Rosh Chodesh II or One Day Rosh Chodesh Weekday");
 
-    if ($subj =~ /^Rosh Chodesh (.+)$/) {
-	my $rch_month = $1;
-	$rosh_chodesh{$rch_month} = [] unless defined $rosh_chodesh{$rch_month};
-	push(@{$rosh_chodesh{$rch_month}}, $evt);
+    foreach my $evt (@events) {
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
-	## TODO: this is not quite right - we need to pick the one or two-day version
-	if ($dow == 6) {
-	    $memo .= $rch_shabbat2;
-	} else {
-	    $memo .= $rch_weekday2;
+	my($href,$hebrew,$hebcal_memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+	$subj =~ s/ \d{4}$//;	# Rosh Hashana hack
+	$subj =~ s/Shavuot I/Shavuot/;
+
+	my($year,$month,$day) = Hebcal::event_ymd($evt);
+	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
+
+	my $luach_subj = translate_subject($subj,$dow);
+
+	# TODO: add Hoshana Raba as a "Erev Sh'mini Atzeret/Simchat Torah"
+	# also "Erev Shmini Atzeret" => "Erev Sh'mini Atzeret/Erev Simchat Torah Friday",
+
+	my $xml_item = find_item($luach_subj);
+	my $memo = "";
+	if ($xml_item) {
+	    $memo .= item_content($luach_subj, $xml_item);
 	}
-    }
 
+	my $torah_memo = torah_memo($subj, $year, $month, $day);
+	$memo .= qq{\n<h3>($subj - Hebcal internal data)</h3><div class="well">$torah_memo</div>\n} if $torah_memo;
 
-    add_event($year, $month, $day, $subj, $hebrew, $memo, $hebcal_memo);
-}
+	if ($subj =~ /^Rosh Chodesh (.+)$/) {
+	    my $rch_month = $1;
+	    $rosh_chodesh{$rch_month} = [] unless defined $rosh_chodesh{$rch_month};
+	    push(@{$rosh_chodesh{$rch_month}}, $evt);
 
-my $shabbat_machar_chodesh_title = "Machar Chodesh";
-my $shabbat_machar_chodesh_memo = get_item_content($shabbat_machar_chodesh_title);
-
-# figure out which Shabbatot are M'varchim haChodesh
-my $shabbat_mevarchim_title = "Shabbat M'varchim";
-my $shabbat_mevarchim_memo = get_item_content($shabbat_mevarchim_title);
-
-# Erev Rosh Chodesh
-my $erev_rch_weekday_memo = get_item_content("Erev Rosh Chodesh Weekday");
-my $erev_rch_friday_memo = get_item_content("Erev Rosh Chodesh Friday");
-
-for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
-    my $greg = HebcalGPL::abs2greg($abs);
-    my $dow = Date::Calc::Day_of_Week($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"});
-    my $hebdate = HebcalGPL::abs2hebrew($abs);
-    # Machar Chodesh
-    if ($hebdate->{"dd"} >= 29 && $dow == 6) {
-	my $next_month = next_hebmonth_name($hebdate);
-	add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
-		  "$shabbat_machar_chodesh_title $next_month", undef,
-		  $shabbat_machar_chodesh_memo,
-		  undef);
-    }
-    # M'varchim HaChodesh
-    if ($dow == 6) {
-	if ($hebdate->{"dd"} >= 23 && $hebdate->{"dd"} <= 29 && $hebdate->{"mm"} != 6) {
-	    my $hebmonth = next_hebmonth_name($hebdate);
-	    my($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[0]);
-	    my $dow = Hebcal::get_dow($year, $month, $day);
-	    my $when = "on <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
-	    if (defined $rosh_chodesh{$hebmonth}->[1]) {
-		($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[1]);
-		$dow = Hebcal::get_dow($year, $month, $day);
-		$when .= " and <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
+	    ## TODO: this is not quite right - we need to pick the one or two-day version
+	    if ($dow == 6) {
+		$memo .= $rch_shabbat2;
+	    } else {
+		$memo .= $rch_weekday2;
 	    }
-	    my $memo = $shabbat_mevarchim_memo;
-	    $memo =~ s/new month of X\./new month of <strong>$hebmonth<\/strong>. Rosh Chodesh $hebmonth occurs $when in the coming week./;
+	}
+
+	add_event($year, $month, $day, $subj, $hebrew, $memo, $hebcal_memo, 1);
+    }
+
+    my $shabbat_machar_chodesh_title = "Machar Chodesh";
+    my $shabbat_machar_chodesh_memo = find_item_content($shabbat_machar_chodesh_title);
+
+    # figure out which Shabbatot are M'varchim haChodesh
+    my $shabbat_mevarchim_title = "Shabbat M'varchim";
+    my $shabbat_mevarchim_memo = find_item_content($shabbat_mevarchim_title);
+
+    # Erev Rosh Chodesh
+    my $erev_rch_weekday_memo = find_item_content("Erev Rosh Chodesh Weekday");
+    my $erev_rch_friday_memo = find_item_content("Erev Rosh Chodesh Friday");
+
+    for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
+	my $greg = HebcalGPL::abs2greg($abs);
+	my $dow = Date::Calc::Day_of_Week($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"});
+	my $hebdate = HebcalGPL::abs2hebrew($abs);
+	# Machar Chodesh
+	if ($hebdate->{"dd"} >= 29 && $dow == 6) {
+	    my $next_month = next_hebmonth_name($hebdate);
 	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
-		      "Shabbat Mevarchim", undef, $memo,
-		      "Shabbat which precedes Rosh Chodesh");
+		      "$shabbat_machar_chodesh_title $next_month", undef,
+		      $shabbat_machar_chodesh_memo,
+		      undef, 0);
+	}
+	# M'varchim HaChodesh
+	if ($dow == 6) {
+	    if ($hebdate->{"dd"} >= 23 && $hebdate->{"dd"} <= 29 && $hebdate->{"mm"} != 6) {
+		my $hebmonth = next_hebmonth_name($hebdate);
+		my($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[0]);
+		my $dow = Hebcal::get_dow($year, $month, $day);
+		my $when = "on <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
+		if (defined $rosh_chodesh{$hebmonth}->[1]) {
+		    ($year,$month,$day) = Hebcal::event_ymd($rosh_chodesh{$hebmonth}->[1]);
+		    $dow = Hebcal::get_dow($year, $month, $day);
+		    $when .= " and <strong>" . $Hebcal::DoW_long[$dow] . "</strong>";
+		}
+		my $memo = $shabbat_mevarchim_memo;
+		$memo =~ s/new month of X\./new month of <strong>$hebmonth<\/strong>. Rosh Chodesh $hebmonth occurs $when in the coming week./;
+		add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
+			  "Shabbat Mevarchim", undef, $memo,
+			  "Shabbat which precedes Rosh Chodesh", 0);
+	    }
+	}
+	# Erev Rosh Chodesh
+	if ($hebdate->{"dd"} >= 29) {
+	    my $next_month = next_hebmonth_name($hebdate);
+	    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
+		      "Erev Rosh Chodesh $next_month", undef,
+		      $dow == 5 ? $erev_rch_friday_memo : $erev_rch_weekday_memo,
+		      undef, 0);
 	}
     }
-    # Erev Rosh Chodesh
-    if ($hebdate->{"dd"} >= 29) {
-	my $next_month = next_hebmonth_name($hebdate);
-	add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
-		  "Erev Rosh Chodesh $next_month", undef,
-		  $dow == 5 ? $erev_rch_friday_memo : $erev_rch_weekday_memo,
-		  undef);
+
+    # Aseret Y'mei T'shuvah
+    my $rh10days_title = "Aseret Y'mei T'shuva";
+    my $rh10days_memo = find_item_content($rh10days_title);
+    for (my $abs = $start_abs; $abs < $start_abs+10; $abs++) {
+	my $greg = HebcalGPL::abs2greg($abs);
+	add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, $rh10days_title, undef, $rh10days_memo,
+		  "Ten Days of Repentance beginning with Rosh Hashana and ending with Yom Kippur", 1);
     }
 }
 
-# Aseret Y'mei T'shuvah
-my $rh10days_title = "Aseret Y'mei T'shuva";
-my $rh10days_memo = get_item_content($rh10days_title);
-for (my $abs = $start_abs; $abs < $start_abs+10; $abs++) {
-    my $greg = HebcalGPL::abs2greg($abs);
-    add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"}, $rh10days_title, undef, $rh10days_memo,
-	      "Ten Days of Repentance beginning with Rosh Hashana and ending with Yom Kippur");
+sub generate_index {
+    my $outfile = "$outdir/index.html";
+    open(OUT,">$outfile") || die "$outfile: $!";
+
+    my $title = "Reform Luach $HEB_YR";
+    print OUT html_header("/", $title);
+
+    my $intro_content = find_item_content("Introduction");
+    print OUT qq{<div class="lead">$intro_content</div>\n};
+
+    foreach my $cal_id (@html_cal_ids) {
+	add_daily_buttons($cal_id);
+	my $cal = $html_cals{$cal_id};
+	print OUT qq{<div id="cal-$cal_id" style="padding-top:12px">\n};
+	print OUT $cal->as_HTML();
+	print OUT qq{</div><!-- #cal-$cal_id -->\n};
+    }
+
+    print OUT html_footer();
+    close(OUT);
 }
 
-my $outfile = "$outdir/index.html";
-open(OUT,">$outfile") || die "$outfile: $!";
+sub html_footer {
+    my $mtime = (defined $ENV{'SCRIPT_FILENAME'}) ?
+	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+    my $hhmts = strftime("%d %B %Y", localtime($mtime));
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
 
-my $title = "Luach $HEB_YR";
-print OUT html_header("/", $title);
-
-foreach my $cal_id (@html_cal_ids) {
-    add_daily_buttons($cal_id);
-    my $cal = $html_cals{$cal_id};
-    print OUT qq{<div id="cal-$cal_id" style="padding-top:12px">\n};
-    print OUT $cal->as_HTML();
-    print OUT qq{</div><!-- #cal-$cal_id -->\n};
-}
-
-my $mtime = (defined $ENV{'SCRIPT_FILENAME'}) ?
-    (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
-my $hhmts = strftime("%d %B %Y", localtime($mtime));
-my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
-
-my $html_footer =<<EOHTML;
+    my $html_footer =<<EOHTML;
 
 <footer>
 <hr>
@@ -381,49 +399,47 @@ href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons At
 EOHTML
 ;
 
-print OUT $html_footer;
-close(OUT);
+    $html_footer;
+}
 
-#$dbh->commit;
-$dbh->disconnect;
-$dbh = undef;
+sub generate_daily_pages {
+    my $html_footer = html_footer();
+    while (my($day_id,$content) = each(%day_content)) {
+	my $outfile = "$outdir/$day_id";
+	open(OUT,">$outfile") || die "$outfile: $!";
+	my($yy,$mm,$dd) = split(/-/, $day_id);
+	$mm =~ s/^0//;
+	$dd =~ s/^0//;
+	my $dow = $Hebcal::DoW_long[Hebcal::get_dow($yy, $mm, $dd)];
+	my $when = sprintf("%s, %s %d, %d",
+			   $dow, $Hebcal::MoY_long{$mm}, $dd, $yy);
+	my $hdate = HebcalGPL::greg2hebrew($yy, $mm, $dd);
 
-while (my($day_id,$content) = each(%day_content)) {
-    $outfile = "$outdir/$day_id";
-    open(OUT,">$outfile") || die "$outfile: $!";
-    my($yy,$mm,$dd) = split(/-/, $day_id);
-    $mm =~ s/^0//;
-    $dd =~ s/^0//;
-    my $dow = $Hebcal::DoW_long[Hebcal::get_dow($yy, $mm, $dd)];
-    my $when = sprintf("%s, %s %d, %d",
-		       $dow, $Hebcal::MoY_long{$mm}, $dd, $yy);
-    my $hdate = HebcalGPL::greg2hebrew($yy, $mm, $dd);
+	my $heb_when = sprintf("%d%s of %s, %d",
+			       $hdate->{"dd"},
+			       HebcalGPL::numSuffix($hdate->{"dd"}),
+			       $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}],
+			       $hdate->{"yy"});
 
-    my $heb_when = sprintf("%d%s of %s, %d",
-			   $hdate->{"dd"},
-			   HebcalGPL::numSuffix($hdate->{"dd"}),
-			   $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}],
-			   $hdate->{"yy"});
-
-    print OUT html_header("/$day_id", "$when - $heb_when | Reform Luach");
-    print OUT qq{<div class="page-header"><h1>$when<br><small>$heb_when</small></h1></div>\n};
-    foreach my $memo (@{$content}) {
-	print OUT "<div>\n", $memo, "</div>\n";
+	print OUT html_header("/$day_id", "$when - $heb_when | Reform Luach");
+	print OUT qq{<div class="page-header"><h1>$when<br><small>$heb_when</small></h1></div>\n};
+	foreach my $memo (@{$content}) {
+	    print OUT "<div>\n", $memo, "</div>\n";
+	}
+	print OUT $html_footer;
+	close(OUT);
     }
+
+    my $about_content = find_item_content("About");
+    my $outfile = "$outdir/about";
+    open(OUT,">$outfile") || die "$outfile: $!";
+    print OUT html_header("about", "About the Reform Luach");
+    print OUT qq{<div class="page-header"><h1>About the Reform Luach</h1></div>\n};
+    print OUT "<div>\n", $about_content, "</div>\n";
     print OUT $html_footer;
     close(OUT);
 }
 
-my $about_content = get_item_content("About");
-$outfile = "$outdir/about";
-open(OUT,">$outfile") || die "$outfile: $!";
-print OUT html_header("about", "About the Reform Luach");
-print OUT qq{<div class="page-header"><h1>About the Reform Luach</h1></div>\n};
-print OUT "<div>\n", $about_content, "</div>\n";
-print OUT $html_footer;
-close(OUT);
-
-exit(0);
 
 sub next_hebmonth_name {
     my($hebdate) = @_;
@@ -558,11 +574,19 @@ sub get_slug {
     $slug;
 }
 
-sub get_item_content {
+sub item_content {
+    my($title,$item) = @_;
+    my $slug = get_slug($title);
+    return qq{<!-- CMS:$slug -->\n}
+	. HTML::Entities::decode($item->{"content"})
+	. qq{<!-- /CMS:$slug -->\n};
+}
+
+sub find_item_content {
     my($title) = @_;
     my $item = find_item($title);
     if ($item) {
-	return HTML::Entities::decode($item->{"content"});
+	return item_content($title,$item);
     }
     undef;
 }
@@ -582,8 +606,8 @@ sub find_item {
     $result;
 }
 
-sub add_event {
-    my($year,$month,$day,$subj,$hebrew,$memo,$tooltip) = @_;
+sub add_event ($$$$$$$) {
+    my($year,$month,$day,$subj,$hebrew,$memo,$tooltip,$show_in_grid) = @_;
     my $cal_id = sprintf("%04d-%02d", $year, $month);
     my $cal = $html_cals{$cal_id};
 
@@ -594,9 +618,9 @@ sub add_event {
     $day_content{$day_id} = [] unless defined $day_content{$day_id};
     push(@{$day_content{$day_id}}, $memo);
 
-#    $cal->addcontent($day, "<br>\n")
-#	if $cal->getcontent($day) ne "";
-    $cal->addcontent($day, $html);
+    if ($show_in_grid) {
+	$cal->addcontent($day, $html);
+    }
 }
 
 sub torah_memo {
