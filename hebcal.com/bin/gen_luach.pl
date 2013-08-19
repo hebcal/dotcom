@@ -198,6 +198,7 @@ my @cms_pages = sort {
     }
     @{$xml->{"item"}};
 my %cms_pages_used;
+my %ITEM_CACHE;
 
 if ($opt_verbose) {
     print "Most recently edited items:\n";
@@ -224,18 +225,28 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
 #my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ? AND parashah = ?");
 my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
 
+generate_about_page();
+
 my @html_cals;
 my %html_cals;
 my %day_content;
 my @html_cal_ids;
 
-generate_events();
+for (my $i = 0; $i < 3; $i++) {
+    @html_cals = ();
+    @html_cal_ids = ();
+    %html_cals = ();
+    %day_content = ();
+    my $hyear = $HEB_YR + $i;
+    print "Calculating $hyear calendar...\n" if $opt_verbose;
+    generate_events($hyear);
+    print "Generating $hyear pages...\n" if $opt_verbose;
+    generate_index($hyear);
+    generate_daily_pages();
+}
 
 $dbh->disconnect;
 $dbh = undef;
-
-generate_index();
-generate_daily_pages();
 
 if ($opt_verbose) {
     my $count = 0;
@@ -259,7 +270,8 @@ if ($opt_verbose) {
 exit(0);
 
 sub generate_events {
-    my $cmd = "./hebcal -s -i -H $HEB_YR";
+    my($hyear) = @_;
+    my $cmd = "./hebcal -s -i -H $hyear";
     my @events = Hebcal::invoke_hebcal($cmd, "", 0);
     my $numEntries = scalar(@events);
 
@@ -270,8 +282,8 @@ sub generate_events {
     my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
     my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
 
-    my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 7, "dd" => 1 });
-    my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $HEB_YR, "mm" => 6, "dd" => 29 });
+    my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 7, "dd" => 1 });
+    my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 6, "dd" => 29 });
 
     # build the calendar objects
     for (my @dt = ($start_year, $start_month, 1);
@@ -393,11 +405,15 @@ sub generate_events {
 }
 
 sub generate_index {
-    my $outfile = "$outdir/index.html";
+    my($hyear) = @_;
+
+    my $basename = $hyear == $HEB_YR ? "index.html" : $hyear;
+    my $outfile = "$outdir/$basename";
     open(OUT,">$outfile") || die "$outfile: $!";
 
-    my $title = "Reform Luach $HEB_YR";
-    print OUT html_header("/", $title);
+    my $path = $hyear == $HEB_YR ? "/" : $hyear;
+    my $title = "Reform Luach $hyear";
+    print OUT html_header($path, $title);
 
     my $intro_content = find_item_content("Introduction");
     print OUT qq{<div class="lead">$intro_content</div>\n};
@@ -470,17 +486,18 @@ sub generate_daily_pages {
 	print OUT $html_footer;
 	close(OUT);
     }
+}
 
+sub generate_about_page {
     my $about_content = find_item_content("About");
     my $outfile = "$outdir/about";
     open(OUT,">$outfile") || die "$outfile: $!";
     print OUT html_header("about", "About the Reform Luach");
     print OUT qq{<div class="page-header"><h1>About the Reform Luach</h1></div>\n};
     print OUT "<div>\n", $about_content, "</div>\n";
-    print OUT $html_footer;
+    print OUT html_footer();
     close(OUT);
 }
-
 
 sub next_hebmonth_name {
     my($hebdate) = @_;
@@ -511,6 +528,39 @@ sub translate_subject {
     }
 
     $subj;
+}
+
+sub bootstrap_year_dropdown {
+    my($hyear,$basename) = @_;
+    my $start = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 7, "dd" => 1 }));
+    my $end = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 6, "dd" => 29 }));
+    my $end_days = Date::Calc::Date_to_Days($end->{"yy"}, $end->{"mm"}, 1);
+    my $first = 1;
+    my @month_menu_item = ( "#", $hyear, "$hyear Calendar" );
+    for (my @dt = ($start->{"yy"}, $start->{"mm"}, 1);
+	 Date::Calc::Date_to_Days(@dt) <= $end_days;
+	 @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1)) {
+	my($year,$mon,$mday) = @dt;
+	my $mon_long = $Hebcal::MoY_long{$mon};
+	my $mon_short = $Hebcal::MoY_short[$mon-1];
+	my $title = $mon == 1 || $first ? "$mon_long $year" : $mon_long;
+	my $cal_id = sprintf("%04d-%02d", $year, $mon);
+	push(@month_menu_item, [ "$basename#cal-$cal_id", $title, "$mon_long $year" ]);
+	$first = 0;
+    }
+    return \@month_menu_item;
+}
+
+sub bootstrap_navbar_menu {
+    my($path) = @_;
+    my @menu_items = ( [ "/", "Home", "Home" ],
+		       [ "about", "About", "About" ],
+		       bootstrap_year_dropdown($HEB_YR, "./"),
+		       bootstrap_year_dropdown($HEB_YR+1, $HEB_YR+1),
+		       bootstrap_year_dropdown($HEB_YR+2, $HEB_YR+2),
+		     );
+
+    return Hebcal::html_menu_bootstrap($path,\@menu_items);
 }
 
 sub html_header {
@@ -570,27 +620,8 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     </div>
 EOHTML
 ;
-    my @month_menu_item = ( "#", "Calendar", "Calendar" );
-    my $first = 1;
-    foreach my $cal_id (@html_cal_ids) {
-	if ($cal_id =~ /^(\d{4})-(\d{2})$/) {
-	    my $year = $1;
-	    my $mon = $2;
-	    $mon =~ s/^0//;
-	    my $mon_long = $Hebcal::MoY_long{$mon};
-	    my $mon_short = $Hebcal::MoY_short[$mon-1];
-	    my $title = $mon == 1 || $first ? "$mon_long $year" : $mon_long;
-	    push(@month_menu_item, [ "./#cal-$cal_id", $title, "$mon_long $year" ]);
-	    $first = 0;
-	}
-    }
 
-    my @menu_items = ( [ "/", "Home", "Home" ],
-		       [ "about", "About", "About" ],
-		       \@month_menu_item,
-		     );
-
-    my $menu = Hebcal::html_menu_bootstrap($path,\@menu_items);
+    my $menu = bootstrap_navbar_menu($path);
 
     $s .=<<EOHTML;
     <div class="navbar-collapse collapse">
@@ -641,6 +672,8 @@ sub find_item {
     my($title) = @_;
 
     my $slug = get_slug($title);
+    return $ITEM_CACHE{$slug} if defined $ITEM_CACHE{$slug};
+
     $cms_pages_used{$slug} = 1;
     my $result;
     my $file = "$xml_datadir/pages/$slug.xml";
@@ -650,6 +683,7 @@ sub find_item {
 	warn "unkown item $slug\n";
     }
 
+    $ITEM_CACHE{$slug} = $result;
     $result;
 }
 
