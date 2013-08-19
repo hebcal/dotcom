@@ -410,9 +410,8 @@ sub generate_daily_pages {
 	my($yy,$mm,$dd) = split(/-/, $day_id);
 	$mm =~ s/^0//;
 	$dd =~ s/^0//;
-	my $dow = $Hebcal::DoW_long[Hebcal::get_dow($yy, $mm, $dd)];
-	my $when = sprintf("%s, %s %d, %d",
-			   $dow, $Hebcal::MoY_long{$mm}, $dd, $yy);
+	my $when = sprintf("%s %d, %d",
+			   $Hebcal::MoY_long{$mm}, $dd, $yy);
 	my $hdate = HebcalGPL::greg2hebrew($yy, $mm, $dd);
 
 	my $heb_when = sprintf("%d%s of %s, %d",
@@ -422,7 +421,8 @@ sub generate_daily_pages {
 			       $hdate->{"yy"});
 
 	print OUT html_header("/$day_id", "$when - $heb_when | Reform Luach");
-	print OUT qq{<div class="page-header"><h1>$when<br><small>$heb_when</small></h1></div>\n};
+	my $dow = $Hebcal::DoW_long[Hebcal::get_dow($yy, $mm, $dd)];
+	print OUT qq{<div class="page-header"><h1>$dow, $when<br><small>$heb_when</small></h1></div>\n};
 	foreach my $memo (@{$content}) {
 	    print OUT "<div>\n", $memo, "</div>\n";
 	}
