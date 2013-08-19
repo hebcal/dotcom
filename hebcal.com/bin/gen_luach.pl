@@ -135,6 +135,7 @@ my %FRIDAY_TRANSLATIONS = (
 "Erev Pesach" => "Erev Pesach/Ta'anit Bechorot Friday",
 "Erev Shavuot" => "Erev Shavuot Friday",
 "Erev Yom Kippur" => "Erev Yom Kippur Friday",
+"Pesach VI (CH''M)" => "Pesach Chol HaMoed Day 5 Friday",
 );
 
 my %OTHER_TRANSLATIONS = (
@@ -151,9 +152,15 @@ my %OTHER_TRANSLATIONS = (
 "Lag B'Omer" => "Lag Ba'Omer",
 "Erev Pesach" => "Erev Pesach/Ta’anit Bechorot",
 "Shmini Atzeret" => "Sh'mini Atzeret/Simchat Torah",
-"Sukkot I" => "Sukkot 1",
 "Sukkot VII (Hoshana Raba)" => "Hoshana Raba",
 "Pesach Sheni" => "Pesach Sheini",
+"Pesach II (CH''M)" => "Pesach Chol Hamoed Day 1",
+"Pesach III (CH''M)" => "Pesach Chol Hamoed Day 2",
+"Pesach IV (CH''M)" => "Pesach Chol Hamoed Day 3",
+"Pesach V (CH''M)" => "Pesach Chol Hamoed Day 4",
+"Pesach VI (CH''M)" => "Pesach Chol HaMoed Day 5 Weekday",
+"Chanukah: 1 Candle" => "Erev Chanukah",
+"Chanukah: 8th Day" => "Chanukah 8 Weekday",
 );
 
 my $opt_help;
@@ -269,21 +276,16 @@ if ($opt_verbose) {
 
 exit(0);
 
-sub generate_events {
-    my($hyear) = @_;
-    my $cmd = "./hebcal -s -i -H $hyear";
-    my @events = Hebcal::invoke_hebcal($cmd, "", 0);
-    my $numEntries = scalar(@events);
+sub build_calendar_objs {
+    my($events) = @_;
+    my $numEntries = scalar(@{$events});
 
-    my $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
-    my $start_year = $events[0]->[$Hebcal::EVT_IDX_YEAR];
+    my $start_month = $events->[0]->[$Hebcal::EVT_IDX_MON] + 1;
+    my $start_year = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
 
-    my $end_month = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
-    my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+    my $end_month = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
+    my $end_year = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
     my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
-
-    my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 7, "dd" => 1 });
-    my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 6, "dd" => 29 });
 
     # build the calendar objects
     for (my @dt = ($start_year, $start_month, 1);
@@ -295,12 +297,21 @@ sub generate_events {
 	push(@html_cal_ids, $cal_id);
 	$html_cals{$cal_id} = $cal;
     }
+}
+
+sub generate_events {
+    my($hyear) = @_;
+    my $cmd = "./hebcal -s -i -o -H $hyear";
+    my @events = Hebcal::invoke_hebcal($cmd, "", 0);
+
+    build_calendar_objs(\@events);
 
     my %rosh_chodesh;
     my $rch_shabbat1 = find_item_content("Shabbat Rosh Chodesh I");
     my $rch_shabbat2 = find_item_content("Shabbat Rosh Chodesh II or One Day Rosh Chodesh");
     my $rch_weekday1 = find_item_content("Rosh Chodesh I Weekday");
     my $rch_weekday2 = find_item_content("Rosh Chodesh II or One Day Rosh Chodesh Weekday");
+    my $chanukah_candle = find_item_content("Chanukah Candlelighting");
 
     foreach my $evt (@events) {
 	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
@@ -339,7 +350,12 @@ sub generate_events {
 	    }
 	}
 
+	$subj = $OTHER_TRANSLATIONS{$subj} if $subj eq "Shmini Atzeret";
 	add_event($year, $month, $day, $subj, $hebrew, $memo, $hebcal_memo, 1);
+
+	if ($subj =~ /Chanukah: \d Candles?$/) {
+	    add_event($year, $month, $day, undef, undef, $chanukah_candle, undef, 0);
+	}
     }
 
     my $shabbat_machar_chodesh_title = "Machar Chodesh";
@@ -352,6 +368,9 @@ sub generate_events {
     # Erev Rosh Chodesh
     my $erev_rch_weekday_memo = find_item_content("Erev Rosh Chodesh Weekday");
     my $erev_rch_friday_memo = find_item_content("Erev Rosh Chodesh Friday");
+
+    my $start_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 7, "dd" => 1 });
+    my $end_abs = HebcalGPL::hebrew2abs({ "yy" => $hyear, "mm" => 6, "dd" => 29 });
 
     for (my $abs = $start_abs; $abs <= $end_abs; $abs++) {
 	my $greg = HebcalGPL::abs2greg($abs);
@@ -511,6 +530,10 @@ sub next_hebmonth_name {
 sub translate_subject {
     my($subj,$dow) = @_;
 
+    if ($dow == 6 && ($subj eq "Shavuot" || $subj eq "Yom Kippur")) {
+	return $subj . " Shabbat";
+    }
+
     if ($dow == 5 && defined $FRIDAY_TRANSLATIONS{$subj}) {
 	return $FRIDAY_TRANSLATIONS{$subj};
     }
@@ -521,6 +544,29 @@ sub translate_subject {
 	    return $parashah;
 	}
 	return "Shabbat $parashah";
+    }
+
+    if ($subj =~ /^(\d+)\w+ day of the Omer$/) {
+	return "Counting the Omer";
+    }
+
+    if ($subj eq "Pesach I") {
+	return $dow == 6 ? "Pesach Day 1 Shabbat" : "Pesach Day 1 Weekday";
+    }
+    if ($subj eq "Pesach VII") {
+	return $dow == 6 ? "Pesach Day 7 Shabbat" : "Pesach Day 7";
+    }
+    if ($subj eq "Sukkot I") {
+	return $dow == 6 ? "Sukkot 1 Shabbat" : "Sukkot 1 Weekday";
+    }
+    if ($subj =~ /Sukkot.*CH\'\'M/ && $dow == 6) {
+	return "Shabbat Chol Hamoed Sukkot Saturday";
+    }
+
+    # note plural Candle_S_ - this will NOT match "1 Candle"
+    if ($subj =~ /^Chanukah: (\d) Candles$/) {
+	my $chanukah_day = $1 - 1;
+	return "Chanukah $chanukah_day Weekday";
     }
 
     if (defined $OTHER_TRANSLATIONS{$subj}) {
@@ -689,17 +735,16 @@ sub find_item {
 
 sub add_event ($$$$$$$) {
     my($year,$month,$day,$subj,$hebrew,$memo,$tooltip,$show_in_grid) = @_;
-    my $cal_id = sprintf("%04d-%02d", $year, $month);
-    my $cal = $html_cals{$cal_id};
 
     my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $day);
-    my $title = $tooltip ? qq{ title="$tooltip"} : "";
-    my $html = qq{<div$title>$subj</div>};
-
     $day_content{$day_id} = [] unless defined $day_content{$day_id};
     push(@{$day_content{$day_id}}, $memo);
 
     if ($show_in_grid) {
+	my $title = $tooltip ? qq{ title="$tooltip"} : "";
+	my $html = qq{<div$title>$subj</div>};
+	my $cal_id = sprintf("%04d-%02d", $year, $month);
+	my $cal = $html_cals{$cal_id};
 	$cal->addcontent($day, $html);
     }
 }
