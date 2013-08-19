@@ -1,1 +1,7 @@
-DefaultType text/html
+<FilesMatch "\d{4}-\d{2}-\d{2}">
+  ForceType text/html
+</FilesMatch>
+
+<Files "about">
+  ForceType text/html
+</Files>
