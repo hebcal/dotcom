@@ -120,12 +120,12 @@ my %PARASHAH_MAP = (
 "Vayeilech" => undef,
 "Ha'Azinu" => undef,
 "Vezot Haberakhah" => undef,
-"Vayakhel-Pekudei" => undef,
-"Tazria-Metzora" => undef,
-"Achrei Mot-Kedoshim" => undef,
-"Behar-Bechukotai" => undef,
-"Chukat-Balak" => undef,
-"Matot-Masei" => undef,
+"Vayakhel-Pekudei" => "Vayakheil/P'kudei",
+"Tazria-Metzora" => "Tazria/M'tzora",
+"Achrei Mot-Kedoshim" => "Acharei Mot/K'doshim",
+"Behar-Bechukotai" => "B'har/B'chukotai",
+"Chukat-Balak" => "Chukat/Balak",
+"Matot-Masei" => "Matot/Mas'ei",
 "Nitzavim-Vayeilech" => "N'tzavim Vayeilech",
 );
 
