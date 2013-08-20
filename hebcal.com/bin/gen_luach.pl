@@ -443,7 +443,7 @@ sub generate_index {
     print OUT html_header($path, $title);
 
     my $intro_content = find_item_content("Introduction");
-    print OUT qq{<div class="lead">$intro_content</div>\n};
+    print OUT qq{<div>$intro_content</div>\n};
 
     foreach my $cal_id (@html_cal_ids) {
 	add_daily_buttons($cal_id);
