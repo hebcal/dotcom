@@ -299,11 +299,16 @@ sub my_invoke_hebcal {
 	    next if $type eq "Yahrzeit";
 	    my $hdate = get_birthday_or_anniversary($gy,$gm,$gd,$hyear);
 	    my $gregdate = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs($hdate));
+
+	    my $subj = "${name}'s Hebrew ${type}";
+	    if ($q->param("hebdate")) {
+		$subj .= sprintf(" (%d%s of %s)",
+				 $hdate->{"dd"}, HebcalGPL::numSuffix($hdate->{"dd"}),
+				 $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}]);
+	    }
+
 	    push(@events2, [
-		     sprintf("%s's Hebrew %s (%d%s of %s)",
-			     $name, $type,
-			     $hdate->{"dd"}, HebcalGPL::numSuffix($hdate->{"dd"}),
-			     $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}]),
+		     $subj,
 		     1, # EVT_IDX_UNTIMED
 		     0, # EVT_IDX_MIN
 		     0, # EVT_IDX_HOUR
