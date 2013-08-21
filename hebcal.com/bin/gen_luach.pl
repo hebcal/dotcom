@@ -116,9 +116,9 @@ my %PARASHAH_MAP = (
 "Shoftim" => undef,
 "Ki Teitzei" => "Ki Teitze",
 "Ki Tavo" => undef,
-"Nitzavim" => undef,
+"Nitzavim" => "N'tzavim",
 "Vayeilech" => undef,
-"Ha'Azinu" => undef,
+"Ha'Azinu" => "Ha'azinu",
 "Vezot Haberakhah" => undef,
 "Vayakhel-Pekudei" => "Vayakheil/P'kudei",
 "Tazria-Metzora" => "Tazria/M'tzora",
@@ -144,14 +144,19 @@ my %OTHER_TRANSLATIONS = (
 "Tzom Tammuz" => "Shiva Asar b'Tammuz",
 "Tish'a B'Av" => "Tisha B'Av",
 "Erev Tish'a B'Av" => "Erev Tisha b'Av",
-"Erev Rosh Hashana" => "Leil S'lichot Erev Rosh Hashanah",
+"Erev Rosh Hashana" => "Erev Rosh Hashanah Weekday",
 "Rosh Hashana" => "Rosh Hashanah 1",
 "Rosh Hashana II" => "Rosh Hashanah 2",
 "Yom HaShoah" => "Yom HaShoah V'hag'vurah",
-"Yom HaAtzma'ut" => "Yom Ha'atzm'ut",
+"Yom HaAtzma'ut" => "Yom Ha'atzma'ut",
 "Lag B'Omer" => "Lag Ba'Omer",
 "Erev Pesach" => "Erev Pesach/Ta’anit Bechorot",
 "Shmini Atzeret" => "Sh'mini Atzeret/Simchat Torah",
+"Sukkot II (CH''M)" => "Sukkot 2 Weekday",
+"Sukkot III (CH''M)" => "Sukkot 3 Weekday",
+"Sukkot IV (CH''M)" => "Sukkot 4 Weekday",
+"Sukkot V (CH''M)" => "Sukkot 5 Weekday",
+"Sukkot VI (CH''M)" => "Sukkot 6 Weekday",
 "Sukkot VII (Hoshana Raba)" => "Hoshana Raba",
 "Pesach Sheni" => "Pesach Sheini",
 "Pesach II (CH''M)" => "Pesach Chol Hamoed Day 1",
@@ -198,21 +203,30 @@ print "Reading $festival_in...\n" if $opt_verbose;
 my $fxml = XMLin($festival_in, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
 
 print "Reading $xml_pages_file:...\n" if $opt_verbose;
-my $xml = XMLin($xml_pages_file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+my $xml_pages = XMLin($xml_pages_file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+
+my %cms_filename;
+foreach my $item (@{$xml_pages->{"item"}}) {
+    my $key = HTML::Entities::decode($item->{"title"});
+    $key =~ s/^\s+//;
+    $key =~ s/\s+$//;
+    my $val = $item->{"filename"};
+    $cms_filename{$key} = $val;
+}
 
 my @cms_pages = sort {
     Date::Parse::str2time($b->{"pubDate"}) <=> Date::Parse::str2time($a->{"pubDate"})
     }
-    @{$xml->{"item"}};
+    @{$xml_pages->{"item"}};
+undef $xml_pages;
 my %cms_pages_used;
 my %ITEM_CACHE;
 
 if ($opt_verbose) {
     print "Most recently edited items:\n";
     foreach my $item (@cms_pages[0 .. 5]) {
-	printf("  %s (%s)\n    %s - %s\n\n",
+	printf("  %s\n    %s - %s\n\n",
 	       HTML::Entities::decode($item->{"title"}),
-	       $item->{"slug"}, 
 	       $item->{"author"},
 	       $item->{"pubDate"});
     }
@@ -257,17 +271,17 @@ $dbh = undef;
 
 if ($opt_verbose) {
     my $count = 0;
-    foreach my $item (@cms_pages) {
-	$count++ unless defined $cms_pages_used{$item->{"slug"}};
+    foreach my $title (keys %cms_filename) {
+	$count++ unless defined $cms_pages_used{$title};
     }
 
-    my $i = 10;
+    my $i = 30;
     print "$count CMS pages not used yet. First $i:\n";
     foreach my $item (@cms_pages) {
-	next if defined $cms_pages_used{$item->{"slug"}};
-	printf("  %s (%s)\n    %s - %s\n\n",
-	       HTML::Entities::decode($item->{"title"}),
-	       $item->{"slug"}, 
+	my $title = HTML::Entities::decode($item->{"title"});
+	next if defined $cms_pages_used{$title};
+	printf("  %s\n    %s - %s\n\n",
+	       $title,
 	       $item->{"author"},
 	       $item->{"pubDate"});
 	last unless --$i;
@@ -314,7 +328,8 @@ sub generate_events {
     my $chanukah_candle_title = "Chanukah Candlelighting";
     my $chanukah_candle_content = find_item_content($chanukah_candle_title);
 
-    foreach my $evt (@events) {
+    for (my $i = 0; $i < @events; $i++) {
+	my $evt = $events[$i];
 	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
 	my($href,$hebrew,$hebcal_memo) = Hebcal::get_holiday_anchor($subj,0,undef);
@@ -326,13 +341,33 @@ sub generate_events {
 
 	my $luach_subj = translate_subject($subj,$dow);
 
-	# TODO: add Hoshana Raba as a "Erev Sh'mini Atzeret/Simchat Torah"
-	# also "Erev Shmini Atzeret" => "Erev Sh'mini Atzeret/Erev Simchat Torah Friday",
+	if (defined $events[$i+1]
+	    && Hebcal::event_dates_equal($evt, $events[$i+1])
+	    && $events[$i+1]->[$Hebcal::EVT_IDX_SUBJ] eq "Shabbat Shuva") {
+	    $luach_subj = "Shabbat Vayeilech/Shabbat Shuva" if $subj eq "Parashat Vayeilech";
+	    $luach_subj = "Shabbat Ha'azinu/Shabbat Shuva" if $subj eq "Parashat Ha'Azinu";
+	}
+
+	if ($dow == 6 && $subj =~ /^Rosh Chodesh/
+	    && defined $events[$i+1]
+	    && Hebcal::event_dates_equal($evt, $events[$i+1])
+	    && $events[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d) Candles/
+	    && $1 > 1) {
+	    $luach_subj = "Shabbat Chanukah Rosh Chodesh";
+	}
 
 	my $xml_item = find_item($luach_subj);
 	my $memo = "";
 	if ($xml_item) {
 	    $memo .= item_content($luach_subj, $xml_item);
+	}
+
+	if ($luach_subj eq "Hoshana Raba") {
+	    if ($dow == 5) {
+		$memo .= find_item_content("Erev Sh'mini Atzeret/Erev Simchat Torah Friday");
+	    } else {
+		$memo .= find_item_content("Erev Sh'mini Atzeret/Simchat Torah");
+	    }
 	}
 
 	my $torah_memo = torah_memo($subj, $year, $month, $day);
@@ -556,6 +591,10 @@ sub translate_subject {
 	return $FRIDAY_TRANSLATIONS{$subj};
     }
 
+    if ($dow == 4 && $subj eq "Ta'anit Bechorot") {
+	return "Ta'anit Bechorot/B'dikat Chametz Thursday";
+    }
+
     if ($subj =~ /^Parashat (.+)$/) {
 	my $parashah = $PARASHAH_MAP{$1} || $1;
 	if ($parashah =~ /^Shabbat/) {
@@ -573,6 +612,9 @@ sub translate_subject {
     }
     if ($subj eq "Pesach VII") {
 	return $dow == 6 ? "Pesach Day 7 Shabbat" : "Pesach Day 7";
+    }
+    if ($subj =~ /Pesach.*CH\'\'M/ && $dow == 6) {
+	return "Shabbat Chol HaMoed Pesach";
     }
     if ($subj eq "Sukkot I") {
 	return $dow == 6 ? "Sukkot 1 Shabbat" : "Sukkot 1 Weekday";
@@ -715,27 +757,11 @@ EOHTML
     return $s;
 }
 
-sub get_slug {
-    my($title) = @_;
-    my $slug = lc($title);
-    $slug =~ s/\'/-/g;
-    $slug =~ s/\//-/g;
-    $slug =~ s/\cM/ - /g;
-    $slug =~ s/\(//g;
-    $slug =~ s/\)//g;
-    $slug =~ s/[^\w]/-/g;
-    $slug =~ s/\s+/ /g;
-    $slug =~ s/\s/-/g;
-    $slug =~ s/-{2,}/-/g;
-    $slug;
-}
-
 sub item_content {
     my($title,$item) = @_;
-    my $slug = get_slug($title);
-    return qq{<!-- CMS:$slug -->\n}
+    return qq{<!-- CMS:$title -->\n}
 	. HTML::Entities::decode($item->{"content"})
-	. qq{<!-- /CMS:$slug -->\n};
+	. qq{<!-- /CMS:$title -->\n};
 }
 
 sub find_item_content {
@@ -750,19 +776,23 @@ sub find_item_content {
 sub find_item {
     my($title) = @_;
 
-    my $slug = get_slug($title);
-    return $ITEM_CACHE{$slug} if defined $ITEM_CACHE{$slug};
+    return $ITEM_CACHE{$title} if defined $ITEM_CACHE{$title};
 
-    $cms_pages_used{$slug} = 1;
     my $result;
-    my $file = "$xml_datadir/pages/$slug.xml";
-    if (-s $file) {
-	$result = XMLin($file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+    my $filebase = $cms_filename{$title};
+    if (defined $filebase) {
+	my $file = "$xml_datadir/pages/$filebase";
+	if (-s $file) {
+	    $result = XMLin($file, KeyAttr => ['name', 'key', 'id'], ForceArray => 0);
+	} else {
+	    warn "$file: $!\n";
+	}
     } else {
-	warn "unkown item $slug\n";
+	warn "unkown item $title\n";
     }
 
-    $ITEM_CACHE{$slug} = $result;
+    $cms_pages_used{$title} = 1;
+    $ITEM_CACHE{$title} = $result;
     $result;
 }
 
