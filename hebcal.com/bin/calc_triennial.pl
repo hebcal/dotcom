@@ -1485,7 +1485,7 @@ sub readings_for_current_year
 	print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
     }
 
-    my $extra_years = 10;
+    my $extra_years = 5;
     my %wrote_csv;
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
