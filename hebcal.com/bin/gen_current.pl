@@ -76,7 +76,7 @@ for (my $i = 0; $i < @events; $i++)
 					 $syear);
 	    my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
 	    open(RSS,">$Hebcal::WEBDIR/sedrot/index.xml") || die;
-	    my $link = "http://$HOSTNAME$href?tag=rss";
+	    my $link = "http://$HOSTNAME$href?utm_source=rss&amp;utm_medium=rss";
 	    my $channel_link = "http://$HOSTNAME/sedrot/";
 	    my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
 	    $memo =~ s/\\n/<\/p>\n<p>/g;
@@ -145,7 +145,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-en.xml") || die;
     print RSS rss_hebdate("en-us",
 	 $hdate,
-	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;tag=rss",
+	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_source=rss&amp;utm_medium=rss",
 	 $hdate,
 	 $pubDate);
     close(RSS);
@@ -153,7 +153,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     open(RSS,">$Hebcal::WEBDIR/etc/hdate-he.xml") || die;
     print RSS rss_hebdate("he",
 	 $hebrew,
-	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;tag=rss",
+	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;utm_source=rss&amp;utm_medium=rss",
 	 $hebrew,
 	 $pubDate);
     close(RSS);
