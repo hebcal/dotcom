@@ -143,6 +143,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <group>Rosh Chodesh Elul</group>
  <group>Shabbat Rosh Chodesh</group>
  <group>Shabbat Machar Chodesh</group>
+ <group>Leil Selichot</group>
 </groups>
 
 <!--
@@ -1587,4 +1588,19 @@ with the verse
 <!-- for Israel -->
 <festival id="Pesach II (CH''M)" hebrew="פֶּסַח יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0"/>
 <festival id="Sukkot II (CH''M)" hebrew="סוּכּוֹת יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0"/>
+
+<festival id="Leil Selichot" hebrew="סליחות" yomtov="0">
+ <about href="http://www.jewfaq.org/elul.htm#Selichot">
+ Prayers for forgivenes in preparation for the High Holidays
+ </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Selichot#Selichot_of_the_High_Holidays">
+   Selichot or slichot (Hebrew: סליחות) are Jewish penitential poems and
+   prayers, especially those said in the period leading up to the High
+   Holidays, and on Fast Days. 
+   In the Ashkenazic tradition, it begins on the Saturday night before Rosh
+   Hashanah. If, however, the first day of Rosh Hashanah falls on Monday or
+   Tuesday, Selichot are said beginning the Saturday night prior to ensure
+   that Selichot are recited at least four times.
+ </wikipedia>
+</festival>
 </festivals>
