@@ -313,11 +313,31 @@ sub build_calendar_objs {
     }
 }
 
+sub get_elul_events {
+    my($hyear_next) = @_;
+
+    my $hyear = $hyear_next - 1;
+    my $cmd = "./hebcal -s -i -H $hyear";
+    my @events = Hebcal::invoke_hebcal($cmd, "", 0);
+    my @result;
+    my $in_elul = 0;
+    foreach my $evt (@events) {
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	$in_elul = 1 if $subj eq "Rosh Chodesh Elul";
+	$in_elul = 0 if $subj eq "Erev Rosh Hashana";
+	push(@result, $evt) if $in_elul;
+    }
+    @result;
+}
+
 sub generate_events {
     my($hyear) = @_;
-    my $cmd = "./hebcal -s -i -o -H $hyear";
-    my @events = Hebcal::invoke_hebcal($cmd, "", 0);
 
+    my @ev1 = get_elul_events($hyear);
+    my $cmd = "./hebcal -s -i -o -H $hyear";
+    my @ev2 = Hebcal::invoke_hebcal($cmd, "", 0);
+
+    my @events = (@ev1, @ev2);
     build_calendar_objs(\@events);
 
     my %rosh_chodesh;
@@ -653,7 +673,7 @@ sub hebrew2greg {
 
 sub bootstrap_year_dropdown {
     my($hyear,$basename) = @_;
-    my $start = hebrew2greg(hyear_first_day($hyear));
+    my $start = hebrew2greg({ "yy" => $hyear-1, "mm" => $HebcalGPL::ELUL, "dd" => 1 });
     my $end = hebrew2greg(hyear_last_day($hyear));
     my $end_days = Date::Calc::Date_to_Days($end->{"yy"}, $end->{"mm"}, 1);
     my $first = 1;
