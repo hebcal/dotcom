@@ -258,7 +258,7 @@ sub table_cell_observed {
 	$s .= format_date_plus_delta($gy, $gm, $gd, 7, $show_year);
     } elsif ($f eq "Purim" || $f eq "Tish'a B'Av") {
 	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
-    } elsif (begins_at_dawn($f)) {
+    } elsif (begins_at_dawn($f) || $f eq "Leil Selichot") {
 	$s .= format_single_day($gy, $gm, $gd, $show_year);
     } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
 	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
@@ -713,10 +713,21 @@ sub write_festival_part
 sub day_event_observed {
     my($f,$evt) = @_;
     my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
-    if (!begins_at_dawn($f)) {
+    if (!begins_at_dawn($f) && $f ne "Leil Selichot") {
 	($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
     }
     return ($gy,$gm,$gd);
+}
+
+sub begins_when {
+    my($f) = @_;
+    if ($f eq "Leil Selichot") {
+	return "after nightfall";
+    } elsif (begins_at_dawn($f)) {
+	return "at dawn";
+    } else {
+	return "at sundown";
+    }
 }
 
 sub begins_at_dawn {
@@ -758,14 +769,14 @@ sub write_festival_page
 
     my $next_observed = ". ";
     if (defined $OBSERVED{$f}) {
-	my $rise_or_set = begins_at_dawn($f) ? "dawn" : "sundown";
+	my $rise_or_set = begins_when($f);
 	foreach my $evt (@{$OBSERVED{$f}}) {
 	    next unless defined $evt;
 	    my($gy,$gm,$gd) = day_event_observed($f,$evt);
 	    my $time = Hebcal::event_to_time($evt);
 	    if ($time >= $NOW) {
 	        my $dow = Hebcal::get_dow($gy,$gm,$gd);
-		$next_observed = sprintf ", begins at %s on %s, %02d %s %04d. ",
+		$next_observed = sprintf ", begins %s on %s, %02d %s %04d. ",
 		  $rise_or_set, $Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
 		last;
 	    }
@@ -817,7 +828,7 @@ EOHTML
 
     if (defined $OBSERVED{$f})
     {
-	my $rise_or_set = begins_at_dawn($f) ? "dawn" : "sundown";
+	my $rise_or_set = begins_when($f);
 
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>
@@ -845,7 +856,7 @@ EOHTML
 	    my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
 	    printf OUT2 "<li><a href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
 		"&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off&amp;tag=hol.obs\"$style>" .
-		"<time datetime=\"%s\">%s, %02d %s %04d</time></a> at $rise_or_set (%s)\n",
+		"<time datetime=\"%s\">%s, %02d %s %04d</time></a> $rise_or_set (%s)\n",
 		$gy, $gm,
 		$html5time, $Hebcal::DoW[$dow],
 		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
