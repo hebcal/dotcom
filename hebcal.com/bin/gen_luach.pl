@@ -390,8 +390,11 @@ sub generate_events {
 	    }
 	}
 
-	my $torah_memo = torah_memo($subj, $year, $month, $day);
-	$memo .= qq{\n<h3>($subj - Hebcal internal data)</h3><div class="well">$torah_memo</div>\n} if $torah_memo;
+	# disabled for now
+	if (0) {
+	    my $torah_memo = torah_memo($subj, $year, $month, $day);
+	    $memo .= qq{\n<h3>($subj - Hebcal internal data)</h3><div class="well">$torah_memo</div>\n} if $torah_memo;
+	}
 
 	if ($subj =~ /^Rosh Chodesh (.+)$/) {
 	    my $rch_month = $1;
