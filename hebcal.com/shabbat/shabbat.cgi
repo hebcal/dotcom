@@ -524,6 +524,7 @@ ul#hebcal-results li {
 </style>
 EOHTML
 ;
+    $city_descr ||= "UNKNOWN";
 	my $head_divs = <<EOHTML;
 <div class="span10">
 <div class="page-header">
