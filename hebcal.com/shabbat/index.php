@@ -113,6 +113,12 @@ if ($qs) {
 }
 if (!$status) {
     $ch = curl_init($url);
+    $user_agent = "hebcal-shabbat-cache/20130826";
+    curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+    $ref_url = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    curl_setopt($ch, CURLOPT_REFERER, $ref_url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,
+		array("X-Forwarded-For: " . $_SERVER["REMOTE_ADDR"]));
     curl_exec($ch);
     curl_close($ch);
     cache_comment($cfg, "miss");

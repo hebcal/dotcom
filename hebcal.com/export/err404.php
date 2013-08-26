@@ -27,6 +27,8 @@ if ($args !== false) {
 	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
 	$ref_url = $url_prefix . $request_uri;
 	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER,
+		    array("X-Forwarded-For: " . $_SERVER["REMOTE_ADDR"]));
 	curl_exec($ch);
 	curl_close($ch);
 	exit();
