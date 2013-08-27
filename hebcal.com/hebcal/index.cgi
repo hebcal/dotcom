@@ -53,7 +53,6 @@ use HTML::CalendarMonthSimple ();
 
 my $http_expires = "Tue, 02 Jun 2037 20:00:00 GMT";
 my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
-my $content_type = "text/html; charset=UTF-8";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
@@ -96,6 +95,31 @@ foreach my $key ($q->param()) {
 	$val =~ s/\s+$//g;		# and trailing whitespace
 	$q->param($key, $val) if $val ne $orig;
     }
+}
+
+my $content_type = "text/html";
+my $cfg;
+my $pi = $q->path_info();
+if (! defined $pi) {
+    $cfg = "html";
+} elsif ($pi =~ /[^\/]+\.csv$/) {
+    $cfg = "csv";
+    $content_type = "text/x-csv";
+} elsif ($pi =~ /[^\/]+\.dba$/) {
+    $cfg = "dba";
+    $content_type = "application/x-palm-dba";
+} elsif ($pi =~ /[^\/]+\.pdf$/) {
+    $cfg = "pdf";
+    $content_type = "application/pdf";
+} elsif ($pi =~ /[^\/]+\.[vi]cs$/) {
+    $cfg = "ics";
+    $content_type = "text/calendar";
+} elsif (defined $q->param("cfg") && $q->param("cfg") =~ /^(e|e2|json)$/) {
+    $cfg = $q->param("cfg");
+    $content_type = $q->param("cfg") eq "json"
+	? "text/json" : "text/javascript";
+} else {
+    $cfg = "html";
 }
 
 # decide whether this is a results page or a blank form
@@ -220,32 +244,30 @@ else
     $g_date = sprintf("%04d", $q->param("year"));
 }
 
-my $pi = $q->path_info();
-
 my $g_loc = (defined $cconfig{"city"} && $cconfig{"city"} ne "") ?
     "in " . $cconfig{"city"} : "";
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
 my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
 my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
 
-if (! defined $pi) {
+if ($cfg eq "html") {
     results_page($g_date, $g_filename);
-} elsif ($pi =~ /[^\/]+\.csv$/) {
+} elsif ($cfg eq "csv") {
     csv_display();
-} elsif ($pi =~ /[^\/]+\.dba$/) {
+} elsif ($cfg eq "dba") {
     dba_display();
-} elsif ($pi =~ /[^\/]+\.pdf$/) {
+} elsif ($cfg eq "pdf") {
     pdf_display();
-} elsif ($pi =~ /[^\/]+\.[vi]cs$/) {
+} elsif ($cfg eq "ics") {
     vcalendar_display();
-} elsif (defined $q->param("cfg") && $q->param("cfg") eq "e") {
+} elsif ($cfg eq "e") {
     javascript_events(0);
-} elsif (defined $q->param("cfg") && $q->param("cfg") eq "e2") {
+} elsif ($cfg eq "e2") {
     javascript_events(1);
-} elsif (defined $q->param("cfg") && $q->param("cfg") eq "json") {
+} elsif ($cfg eq "json") {
     json_events();
 } else {
-    results_page($g_date, $g_filename);
+    die "unknown cfg \"$cfg\"";
 }
 
 close(STDOUT);
@@ -264,7 +286,7 @@ sub json_events
 				       $g_nmf, $g_nss);
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
 
-    print STDOUT $q->header(-type => "text/json",
+    print STDOUT $q->header(-type => $content_type,
 			    -charset => "UTF-8",
 			    );
 
@@ -290,7 +312,7 @@ sub javascript_events
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
 	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
 
-    print STDOUT $q->header(-type => "text/javascript",
+    print STDOUT $q->header(-type => $content_type,
 			    -charset => "UTF-8",
 			    -last_modified => Hebcal::http_date($time),
 			    -expires => $http_expires,
@@ -583,7 +605,7 @@ sub pdf_display {
 	$text->text_right("Provided by www.hebcal.com with a Creative Commons Attribution 3.0 license");
     }
 
-    print STDOUT $q->header(-type => "application/pdf");
+    print STDOUT $q->header(-type => $content_type);
     binmode(STDOUT, ":raw");
     print STDOUT $pdf->stringify();
     $pdf->end();
@@ -649,7 +671,7 @@ sub dba_display
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss);
 
-    Hebcal::export_http_header($q, "application/x-palm-dba");
+    Hebcal::export_http_header($q, $content_type);
 
     my $basename = $q->path_info();
     $basename =~ s,^.*/,,;
@@ -685,9 +707,21 @@ sub form
 {
     my($message,$help) = @_;
 
-    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
+    print STDOUT $q->header(-type => $content_type,
+			    -charset => "UTF-8");
 
-    print STDOUT $q->header(-type => $content_type);
+    if ($message ne "" && $cfg ne "html") {
+	if ($cfg =~ /^(e|e2)$/) {
+	    $message =~ s/\"/\\"/g;
+	    print STDOUT qq{alert("Error: $message");\n};
+	} elsif ($cfg eq "json") {
+	    $message =~ s/\"/\\"/g;
+	    print STDOUT "{\"error\":\"$message\"}\n";
+	} else {
+	    print STDOUT $message, "\n";
+	}
+	exit(0);
+    }
 
     my $xtra_head = <<EOHTML;
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">
@@ -975,6 +1009,7 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
 &raquo;</a></p>
 });
 
+    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
     my $js=<<JSCRIPT_END;
 <script type="text/javascript">
 var d=document;
@@ -1098,7 +1133,8 @@ sub results_page
     }
 
     print STDOUT $q->header(-expires => $http_expires,
-			    -type => $content_type);
+			    -type => $content_type,
+			    -charset => "UTF-8");
 
     my $xtra_head = <<EOHTML;
 <style type="text/css">

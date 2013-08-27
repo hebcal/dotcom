@@ -2084,7 +2084,7 @@ sub process_args_common {
 	     (defined $q->param("city") && $q->param("city") ne "")) {
 	my $city = validate_city($q->param("city"));
 	if (! defined $city) {
-	    if (defined $q->param("cfg") && $q->param("cfg") =~ /^(json|xml|r)$/) {
+	    if (defined $q->param("cfg") && $q->param("cfg") =~ /^(json|xml|r|e|e2)$/) {
 		my $city2 = $q->param("city") || "";
 		return (0, "Unknown city '$city2'", undef);
 	    } else {
