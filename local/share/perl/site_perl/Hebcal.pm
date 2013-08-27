@@ -2083,6 +2083,15 @@ sub process_args_common {
     } elsif ($default_to_nyc ||
 	     (defined $q->param("city") && $q->param("city") ne "")) {
 	my $city = validate_city($q->param("city"));
+	if (! defined $city) {
+	    if (defined $q->param("cfg") && $q->param("cfg") =~ /^(json|xml|r)$/) {
+		my $city2 = $q->param("city") || "";
+		return (0, "Unknown city '$city2'", undef);
+	    } else {
+		$city = "US-New York-NY";
+	    }
+	}
+
 	$q->param("city", $city);
 	$q->param("geo","city");
 
@@ -2140,7 +2149,7 @@ sub process_args_common {
 sub validate_city {
     my($city) = @_;
     unless (defined $city) {
-	return "US-New York-NY";
+	return undef;
     }
     if (defined($CITIES_OLD{$city})) {
 	return $CITIES_OLD{$city};
@@ -2148,7 +2157,7 @@ sub validate_city {
     if (defined($CITY_TZID{$city})) {
 	return $city;
     }
-    return "US-New York-NY";
+    return undef;
 }
 
 
