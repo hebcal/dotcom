@@ -197,7 +197,7 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive = <<EOHTML;
-<p><a class="btn download" title="Outlook.com Calendar"
+<p><a class="btn download" title="Add to Outlook.com Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"
 id="dl-wlive"><i class="icon-download-alt"></i> $ics_title</a></p>
 <p>Step-by-step: <a
