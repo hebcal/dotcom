@@ -114,7 +114,7 @@ sub download_html_bootstrap {
     my $ol_mac_title = "Outlook 2011 (Mac OS X)";
     my $ios_title = "iPhone &amp; iPad (iOS 3.0 and higher)";
     my $gcal_title = "Google Calendar";
-    my $wlive_title = "Outlook.com (Windows Live Calendar)";
+    my $wlive_title = "Outlook.com Calendar";
     my $ycal_title = "Yahoo! Calendar";
     my $palm_title = "Palm Desktop (Windows-only)";
 
@@ -197,11 +197,11 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive = <<EOHTML;
-<a class="btn download" title="Outlook.com Calendar"
+<p><a class="btn download" title="Outlook.com Calendar"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"
 id="dl-wlive"><i class="icon-download-alt"></i> $ics_title</a></p>
 <p>Step-by-step: <a
-href="http://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe>Import
+href="http://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe">Import
 or subscribe to a calendar in Outlook.com</a></p>
 EOHTML
 ;
