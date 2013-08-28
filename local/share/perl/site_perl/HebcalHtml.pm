@@ -15,11 +15,6 @@
 #    disclaimer in the documentation and/or other materials
 #    provided with the distribution.
 #
-#  * Neither the name of Hebcal.com nor the names of its
-#    contributors may be used to endorse or promote products
-#    derived from this software without specific prior written
-#    permission.
-#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -119,7 +114,7 @@ sub download_html_bootstrap {
     my $ol_mac_title = "Outlook 2011 (Mac OS X)";
     my $ios_title = "iPhone &amp; iPad (iOS 3.0 and higher)";
     my $gcal_title = "Google Calendar";
-    my $wlive_title = "Windows Live Calendar";
+    my $wlive_title = "Outlook.com (Windows Live Calendar)";
     my $ycal_title = "Yahoo! Calendar";
     my $palm_title = "Palm Desktop (Windows-only)";
 
@@ -202,12 +197,12 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive = <<EOHTML;
-<p>Add to&nbsp;&nbsp;
-<a title="Windows Live Calendar" class="dl-wlive"
-href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"><img
-src="/i/wlive-150x20.png"
-width="150" height="20" style="border:none"
-alt="Windows Live Calendar"></a></p>
+<a class="btn download" title="Outlook.com Calendar"
+href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"
+id="dl-wlive"><i class="icon-download-alt"></i> $ics_title</a></p>
+<p>Step-by-step: <a
+href="http://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe>Import
+or subscribe to a calendar in Outlook.com</a></p>
 EOHTML
 ;
 
@@ -285,9 +280,9 @@ EOHTML
     $s .= accordion_bootstrap($ol_ics_title, "ol-ics", $ol_ics);
     $s .= accordion_bootstrap($ol_csv_title, "ol-csv", $ol_csv);
     $s .= accordion_bootstrap($gcal_title, "gcal", $gcal);
+    $s .= accordion_bootstrap($wlive_title, "wlive", $wlive);
     $s .= accordion_bootstrap($ical_title, "ical", $ical);
     $s .= accordion_bootstrap($ol_mac_title, "ol-mac", $ol_mac);
-    $s .= accordion_bootstrap($wlive_title, "wlive", $wlive);
     $s .= accordion_bootstrap($ycal_title, "ycal", $ycal);
     $s .= accordion_bootstrap($palm_title, "palm", $palm);
     $s .= qq{</div><!-- #accordion2 -->\n};
