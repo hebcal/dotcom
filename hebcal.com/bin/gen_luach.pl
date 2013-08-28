@@ -410,6 +410,7 @@ sub generate_events {
 	}
 
 	$subj = $OTHER_TRANSLATIONS{$subj} if $subj eq "Shmini Atzeret";
+	$subj = qq{<div class="yomtov">$subj</div>} if $evt->[$Hebcal::EVT_IDX_YOMTOV];
 	add_event($year, $month, $day, $subj, $memo, $hebcal_memo, 1);
 
 	if ($subj =~ /Chanukah: \d Candles?$/) {
@@ -459,7 +460,7 @@ sub generate_events {
 		$memo =~ s/new month of X\./new month of <strong>$hebmonth<\/strong>. Rosh Chodesh $hebmonth occurs $when in the coming week./;
 		add_event($greg->{"yy"}, $greg->{"mm"}, $greg->{"dd"},
 			  "Shabbat Mevarchim", $memo,
-			  "Shabbat which precedes Rosh Chodesh", 0);
+			  "Shabbat which precedes Rosh Chodesh", 1);
 	    }
 	}
 	# Erev Rosh Chodesh
@@ -739,10 +740,8 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 .page-header {
   margin: 20px 0 20px;
 }
-:lang(he) {
-  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
-  font-size:125%;
-  direction:rtl;
+.yomtov {
+  background-color: #fcf8e3;
 }
 \@media print{
  a[href]:after{content:""}
