@@ -820,8 +820,12 @@ sub build_hebrew_date($$$)
 {
     my($hm,$hd,$hy) = @_;
 
-    hebnum_to_string($hd) . " \x{5D1}\x{5BC}\x{5B0}" .
-	$monthnames{$hm} . " " . hebnum_to_string($hy);
+    my $s = hebnum_to_string($hd) . " \x{5D1}\x{5BC}\x{5B0}" .
+	$monthnames{$hm};
+    if (defined $hy) {
+	$s .= " " . hebnum_to_string($hy);
+    }
+    $s;
 }
 
 sub hebrew_strip_nikkud($) {

@@ -567,15 +567,17 @@ sub generate_daily_pages {
 			   $Hebcal::MoY_long{$mm}, $dd, $yy);
 	my $hdate = HebcalGPL::greg2hebrew($yy, $mm, $dd);
 
+	my $hm = $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}];
 	my $heb_when = sprintf("%d%s of %s, %d",
 			       $hdate->{"dd"},
 			       HebcalGPL::numSuffix($hdate->{"dd"}),
-			       $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}],
+			       $hm,
 			       $hdate->{"yy"});
 
 	print OUT html_header("/$day_id", "$when - $heb_when | Reform Luach");
 	my $dow = $Hebcal::DoW_long[Hebcal::get_dow($yy, $mm, $dd)];
-	print OUT qq{<div class="page-header"><h1>$dow, $when<br><small>$heb_when</small></h1></div>\n};
+	my $hebrew = hebrew_span(Hebcal::build_hebrew_date($hm, $hdate->{"dd"}, $hdate->{"yy"}));
+	print OUT qq{<div class="page-header"><h1>$dow, $when<br><small>$heb_when / $hebrew</small></h1></div>\n};
 	foreach my $memo (@{$content}) {
 	    print OUT "<div>\n", $memo, "</div>\n";
 	}
@@ -720,7 +722,7 @@ sub html_header {
 
     my $s =<<EOHTML;
 <!DOCTYPE html>
-<html><head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -742,6 +744,10 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 .yomtov {
   background-color: #fcf8e3;
+}
+:lang(he) {
+  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  direction:rtl;
 }
 \@media print{
  a[href]:after{content:""}
@@ -880,10 +886,16 @@ sub add_daily_buttons {
     my $end_day = Date::Calc::Days_in_Month($year, $month);
     for (my $mday = 1; $mday <= $end_day ; $mday++) {
 	my $day_id = sprintf("%04d-%02d-%02d", $year, $month, $mday);
+	my $s = $cal->getcontent($mday);
+	my $today_content = "";
 	if (defined $day_content{$day_id}) {
-	    my $s = $cal->getcontent($mday);
-	    $cal->setcontent($mday, qq{<a href="$day_id">$s</a>});
+	    $today_content = qq{\n<a href="$day_id">$s</a>};
 	}
+	my $hdate = HebcalGPL::greg2hebrew($year, $month, $mday);
+	my $hm = $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}];
+	my $hebrew = Hebcal::hebrew_strip_nikkud(Hebcal::build_hebrew_date($hm, $hdate->{"dd"}, undef));
+	my $hebdate_formatted = qq{<div lang="he" dir="rtl" class="text-muted text-right">$hebrew</div>};
+	$cal->setcontent($mday, $hebdate_formatted . $today_content);
     }
 }
 
@@ -897,6 +909,13 @@ sub new_html_cal {
     $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
 
     $cal;
+}
+
+sub hebrew_span {
+    my($hebrew) = @_;
+    return qq{<span lang="he" dir="rtl">}
+	. Hebcal::hebrew_strip_nikkud($hebrew)
+	. qq{</span>};
 }
 
 
