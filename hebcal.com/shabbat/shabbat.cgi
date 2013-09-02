@@ -214,6 +214,45 @@ sub display_json
 }
 
 
+sub get_link_and_guid {
+    my($item_link, $dc_date) = @_;
+
+    my $u = URI->new($item_link);
+    my $scheme = $u->scheme;
+    my $host   = $u->authority;
+    my $path   = $u->path;
+    my $query  = $u->query;
+    my $frag   = $u->fragment;
+
+    my $utm_param;
+    if (defined $cfg) {
+	if ($cfg eq "r") {
+	    $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
+	} else {
+	    $utm_param = "utm_source=shabbat1c";
+	}
+    }
+
+    my $link = sprintf("%s://%s%s", $scheme, $host, $path);
+    if ($query) {
+	$query =~ s/;/&amp;/g;
+	$link .= "?$query";
+	$link .= "&amp;$utm_param" if defined $cfg;
+    } elsif (defined $cfg) {
+	$link .= "?$utm_param";
+    }
+
+    my $guid = $link;
+    $guid .= "&amp;dt=" . URI::Escape::uri_escape_utf8($dc_date);
+
+    if ($frag) {
+	$link .= "#$frag";
+	$guid .= "#$frag";
+    }
+
+    return ($link, $guid);
+}
+
 sub display_rss
 {
     my($items) = @_;
@@ -247,28 +286,7 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 	    $subj .= ": " . $item->{'time'};
 	}
 
-	my $u = URI->new($item->{"link"});
-	my $scheme = $u->scheme;
-	my $host   = $u->authority;
-	my $path   = $u->path;
-	my $query  = $u->query;
-	my $frag   = $u->fragment;
-
-	my $link = sprintf("%s://%s%s", $scheme, $host, $path);
-	if ($query) {
-	    $query =~ s/;/&amp;/g;
-	    $link .= "?$query&amp;$utm_param";
-	} else {
-	    $link .= "?$utm_param";
-	}
-
-	my $guid = $link;
-	$guid .= "&amp;dt=" . URI::Escape::uri_escape_utf8($item->{"dc:date"});
-
-	if ($frag) {
-	    $link .= "#$frag";
-	    $guid .= "#$frag";
-	}
+	my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
 
 	Hebcal::out_html($cfg, 
 qq{<item>
@@ -314,6 +332,11 @@ sub display_html_common
 	    $anchor = qq{ id="$anchor"};
 	}
 
+	my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
+	if (defined $cfg && $cfg eq "widget") {
+	    $link = "javascript:widget.openURL('" . $link . "');";
+	}
+
 	if ($item->{'class'} =~ /^(candles|havdalah)$/)
 	{
 	    Hebcal::out_html($cfg,qq{<a$anchor></a>})
@@ -322,11 +345,11 @@ sub display_html_common
 	}
 	elsif ($item->{'class'} eq 'holiday')
 	{
-	    Hebcal::out_html($cfg,qq{<a$anchor target="$tgt" href="$item->{'link'}">$item->{'subj'}</a> occurs on $item->{'date'}});
+	    Hebcal::out_html($cfg,qq{<a$anchor target="$tgt" href="$link">$item->{'subj'}</a> occurs on $item->{'date'}});
 	}
 	elsif ($item->{'class'} eq 'parashat')
 	{
-	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$item->{'link'}">$item->{'subj'}</a>});
+	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$link">$item->{'subj'}</a>});
 	}
     
 	Hebcal::out_html($cfg,qq{</li>\n});
@@ -371,12 +394,6 @@ ul#hebcal-results{list-style-type:none}
 		     qq{<div id="hebcal-$loc_class">\n},
 		     qq{<h3>$shabbat times for $city_descr</h3>\n});
 
-    foreach my $item (@{$items}) {
-	if ($cfg eq "widget" && $item->{'link'}) {
-	    $item->{'link'} = "javascript:widget.openURL('" .
-		$item->{'link'} . "');";
-	}
-    }
 
     display_html_common($items);
 
