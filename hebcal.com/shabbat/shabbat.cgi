@@ -47,6 +47,7 @@ use Date::Calc ();
 use Hebcal ();
 use HebcalHtml ();
 use URI::Escape;
+use URI;
 use POSIX qw(strftime);
 
 # process form params
@@ -225,12 +226,13 @@ sub display_rss
 
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
+    my $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
     Hebcal::out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title>$title</title>
-<link>$url&amp;utm_source=rss</link>
+<link>$url&amp;$utm_param</link>
 <atom:link href="$url&amp;cfg=r" rel="self" type="application/rss+xml" />
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
 <language>en-us</language>
@@ -245,10 +247,28 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 	    $subj .= ": " . $item->{'time'};
 	}
 
-	my $link = $item->{'link'};
+	my $u = URI->new($item->{"link"});
+	my $scheme = $u->scheme;
+	my $host   = $u->authority;
+	my $path   = $u->path;
+	my $query  = $u->query;
+	my $frag   = $u->fragment;
+
+	my $link = sprintf("%s://%s%s", $scheme, $host, $path);
+	if ($query) {
+	    $query =~ s/;/&amp;/g;
+	    $link .= "?$query&amp;$utm_param";
+	} else {
+	    $link .= "?$utm_param";
+	}
+
 	my $guid = $link;
-	$guid .= ($guid =~ /\?/) ? "&amp;" : "?";
-	$guid .= "dt=" . $item->{"dc:date"};
+	$guid .= "&amp;dt=" . URI::Escape::uri_escape_utf8($item->{"dc:date"});
+
+	if ($frag) {
+	    $link .= "#$frag";
+	    $guid .= "#$frag";
+	}
 
 	Hebcal::out_html($cfg, 
 qq{<item>
