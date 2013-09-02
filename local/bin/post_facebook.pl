@@ -47,18 +47,19 @@ my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
 my $EMAIL_FROM = $Config->{_}->{"hebcal.email.facebook.from"};
 my $EMAIL_TO = $Config->{_}->{"hebcal.email.facebook.to"};
 my $EMAIL_CC = "michael\@radwin.org";
-my $WEBDIR = "/home/hebcal/web/hebcal.com";
-my $HEBCAL = "$WEBDIR/bin/hebcal";
+my $HEBCAL = $Hebcal::HEBCAL_BIN;
 
 my $opt_help;
 my $opt_verbose = 0;
 my $opt_shabbat;
 my $opt_daily;
+my $opt_dryrun = 0;
 my $opt_randsleep;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "verbose|v" => \$opt_verbose,
+     "dryrun|n" => \$opt_dryrun,
      "daily" => \$opt_daily,
      "shabbat" => \$opt_shabbat,
      "randsleep=i" => \$opt_randsleep)) {
@@ -67,6 +68,16 @@ if (!Getopt::Long::GetOptions
 
 $opt_help && usage();
 
+# don't post anything on yontiff
+my @events = Hebcal::invoke_hebcal($HEBCAL, "", 0);
+my @today = Date::Calc::Today();
+for my $evt (@events) {
+    if (event_date_matches($evt, @today) && $evt->[$Hebcal::EVT_IDX_YOMTOV]) {
+	msg("Today is yomtov: " . $evt->[$Hebcal::EVT_IDX_SUBJ], $opt_verbose);
+	exit(0);
+    }
+}
+
 my $email_subj;			# will be populated if there's an email to send
 
 if ($opt_shabbat) {
@@ -74,10 +85,10 @@ if ($opt_shabbat) {
   my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
   msg("Shabbat is $sat_year,$sat_month,$sat_day", $opt_verbose);
 
-  my @events = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
+  my @ev2 = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
   my $parasha;
   my $special_shabbat;
-  for my $evt (@events) {
+  for my $evt (@ev2) {
     next unless $evt->[$Hebcal::EVT_IDX_MDAY] == $sat_day;
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
     msg("Found $subj", $opt_verbose);
@@ -98,8 +109,6 @@ if ($opt_shabbat) {
 }
 
 if ($opt_daily) {
-  my @events = Hebcal::invoke_hebcal("$HEBCAL", "", 0);
-  my @today = Date::Calc::Today();
   my @tomorrow = Date::Calc::Add_Delta_Days(@today, 1);
   my $today_subj = "";
   for my $evt (@events) {
@@ -141,7 +150,7 @@ if ($email_subj) {
     if ($opt_randsleep) {
       my $sleep = int(rand($opt_randsleep));
       msg("Sleeping for $sleep seconds before posting", $opt_verbose);
-      sleep($sleep);
+      sleep($sleep) unless $opt_dryrun;
     }
 
     my %headers = (
@@ -154,8 +163,10 @@ if ($email_subj) {
 	 );
 
     msg("Sending mail from $EMAIL_FROM to $EMAIL_TO...", $opt_verbose);
-    Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
-	or croak "Can't send mail!";
+    if (! $opt_dryrun) {
+	Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
+		or croak "Can't send mail!";
+    }
 }
 
 msg("Done", $opt_verbose);
