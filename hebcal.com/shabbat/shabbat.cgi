@@ -641,7 +641,7 @@ EOHTML
 		      -size => 2,
 		      -maxlength => 2,
 		      -default => $Hebcal::havdalah_min),
-	qq{&nbsp;<a href="/home/96/what-is-havdalah-or-when-does-shabbat-end" id="havdalahInfo" data-toggle="tooltip" data-placement="right" },
+	qq{&nbsp;<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" },
 	qq{title="Use 42 min for three medium-sized stars, },
 	qq{50 min for three small stars, },
 	qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
