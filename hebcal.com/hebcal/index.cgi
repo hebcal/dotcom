@@ -1226,8 +1226,15 @@ accurate.
     if ($numEntries > 0) {
 	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
 
+	# don't offer "Print PDF" button on Hebrew-only language setting
+	my $print_pdf_btn_class = "btn download";
+	my $lang = $q->param("lg");
+	if ($lang && $lang eq "h") {
+	    $print_pdf_btn_class .= " disabled";
+	}
+
 	my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-	Hebcal::out_html(undef, qq{<a class="btn download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
+	Hebcal::out_html(undef, qq{<a class="$print_pdf_btn_class" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
 
 	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
 	    # Fridge
