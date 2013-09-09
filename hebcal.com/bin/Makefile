@@ -5,7 +5,6 @@ XML_FESTIVAL = $(XMLDIR)/festival.xml
 CITIES_TXT = $(XMLDIR)/cities.txt
 CITIES_JSON = ../etc/cities.js
 SITE_PERL = ../../../local/share/perl/site_perl
-CSVDIR = $(DISTDIR)
 SEDROT = ../sedrot
 DBDIR = ../hebcal
 HOLIDAYS = ../holidays
@@ -37,10 +36,10 @@ $(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
 $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
 	./calc_triennial.pl \
-		-f $(CSVDIR)/fullkriyah.csv \
-		-t $(CSVDIR)/triennial.csv \
+		-f \
+		-t \
 		-d $(DBDIR)/luach.sqlite3 \
-		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(SEDROT)
+		 $(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)
 
 $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
@@ -58,9 +57,9 @@ $(REFORM_LUACH_DB): calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(REFORM_LUACH_TMPDIR)
 	./calc_triennial.pl \
 		-i \
-		-f $(REFORM_LUACH_TMPDIR)/fullkriyah.csv \
+		-f \
 		-d $(REFORM_LUACH_DB) \
-		 $(CSVDIR)/aliyah.xml $(CSVDIR)/festival.xml $(REFORM_LUACH_TMPDIR)
+		 $(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(REFORM_LUACH_TMPDIR)
 	rm -rf $(REFORM_LUACH_TMPDIR)
 
 converter: ../converter/sedra/19/1900.inc

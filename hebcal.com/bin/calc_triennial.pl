@@ -58,17 +58,17 @@ use DBI;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-hi] [-H <year>] [-t t.csv] [-f f.csv] [-d d.sqlite3] aliyah.xml festival.xml output-dir
+my($usage) = "usage: $0 [-hitf] [-H <year>] [-d d.sqlite3] aliyah.xml festival.xml output-dir
     -h        Display usage information.
     -i        Use Israeli sedra scheme (disables triennial functionality!).
+    -t        Dump triennial readings to comma separated values
+    -f        Dump full kriyah readings to comma separated values
     -H <year> Start with hebrew year <year> (default this year)
-    -t t.csv  Dump triennial readings to comma separated values
-    -f f.csv  Dump full kriyah readings to comma separated values
     -d DBFILE Write state to SQLite3 file 
 ";
 
 my %opts;
-Getopt::Std::getopts('hH:c:t:f:d:i', \%opts) || croak "$usage\n";
+Getopt::Std::getopts('hH:tfd:i', \%opts) || croak "$usage\n";
 $opts{'h'} && croak "$usage\n";
 (@ARGV == 3) || croak "$usage";
 
@@ -158,17 +158,18 @@ if ($opts{'H'}) {
 
 # year I in triennial cycle was 5756
 my $year_num = (($hebrew_year - 5756) % 3) + 1;
-my $start_year = $hebrew_year - ($year_num - 1);
-print "Current Hebrew year $hebrew_year is year $year_num.  3-cycle started at year $start_year.\n";
+my $cycle1_start_year = $hebrew_year - ($year_num - 1);
+print "Current Hebrew year $hebrew_year is year $year_num.\n";
+print "==> 3-cycle started at year $cycle1_start_year.\n";
 
-my($bereshit_idx1,$pattern1,$events1) = get_tri_events($start_year);
+my($bereshit_idx1,$pattern1,$events1) = get_tri_events($cycle1_start_year);
 my %cycle_option1;
 calc_variation_options($axml, \%cycle_option1, $pattern1)
     unless $opts{"i"};
 
-$start_year += 3;
-print "\n3-cycle started at year $start_year.\n";
-my($bereshit_idx2,$pattern2,$events2) = get_tri_events($start_year);
+my $cycle2_start_year = $cycle1_start_year + 3;
+print "\n==> Second 3-cycle started at year $cycle2_start_year.\n";
+my($bereshit_idx2,$pattern2,$events2) = get_tri_events($cycle2_start_year);
 my %cycle_option2;
 calc_variation_options($axml, \%cycle_option2, $pattern2)
     unless $opts{"i"};
@@ -180,8 +181,7 @@ my(%readings1,%readings2);
     unless $opts{"i"};
 
 my %special;
-foreach my $yr (($start_year - 4) .. ($start_year + 10))
-{
+foreach my $yr (($cycle1_start_year - 1) .. ($cycle2_start_year + 10)) {
     my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -H $yr", "", 0);
     special_readings(\@ev);
 
@@ -192,15 +192,8 @@ foreach my $yr (($start_year - 4) .. ($start_year + 10))
 
 if ($opts{'t'})
 {
-    my $fn = $opts{'t'};
-    open(CSV, ">$fn.$$") || croak "$fn.$$: $!\n";
-    print CSV qq{"Date","Parashah","Aliyah","Triennial Reading"\015\012};
-
-    triennial_csv($axml,$events1,$bereshit_idx1,\%readings1);
-    triennial_csv($axml,$events2,$bereshit_idx2,\%readings2);
-
-    close(CSV);
-    rename("$fn.$$", $fn) || croak "$fn: $!\n";
+    triennial_csv($axml,$events1,$bereshit_idx1,\%readings1,$cycle1_start_year);
+    triennial_csv($axml,$events2,$bereshit_idx2,\%readings2,$cycle2_start_year);
 }
 
 my $DBH;
@@ -447,12 +440,12 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 
     print OUT1 <<EOHTML;
 <div class="btn-toolbar">
-<a class="btn btn-small" title="Download aliyah-by-aliyah breakdown"
-href="/home/48/can-i-download-the-aliyah-by-aliyah-breakdown-of-torah-readings-for-shabbat"><i
-class="icon-download-alt"></i> Leyning spreadsheet &raquo;</a>
-<a class="btn btn-small" href="index.xml"><img src="/i/feed-icon-14x14.png"
+<a class="btn" title="Download aliyah-by-aliyah breakdown"
+href="#download"><i
+class="icon-download-alt"></i> Leyning spreadsheet</a>
+<a class="btn" href="index.xml"><img src="/i/feed-icon-14x14.png"
 style="border:none" alt="View the raw XML source" width="14"
-height="14"> Parashat ha-Shavua RSS &raquo;</a>
+height="14"> Parashat ha-Shavua RSS feed</a>
 </div><!-- .btn-toolbar -->
 
 <div class="row-fluid">
@@ -503,15 +496,16 @@ EOHTML
 </div><!-- .row-fluid -->
 <div class="row-fluid">
 <div class="span12">
-<h4>Parsahat ha-Shavua by Hebrew year</h4>
+<h3>Parashat ha-Shavua by Hebrew year</h3>
 <div class="pagination">
 <ul>
 <li class="disabled"><a href="#">Diaspora</a></li>
 EOHTML
 ;
-
-    for (my $i = $hebrew_year-1; $i < $hebrew_year+5; $i++) {
-	print OUT1 qq{<li><a href="/hebcal/?year=$i&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$i</a></li>\n};
+    my $extra_years = 8;
+    foreach my $i (0 .. $extra_years) {
+	my $yr = $hebrew_year - 1 + $i;
+	print OUT1 qq{<li><a href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -523,13 +517,82 @@ EOHTML
 EOHTML
 ;
 
-    for (my $i = $hebrew_year-1; $i < $hebrew_year+5; $i++) {
-	print OUT1 qq{<li><a href="/hebcal/?year=$i&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$i</a></li>\n};
+    foreach my $i (0 .. $extra_years) {
+	my $yr = $hebrew_year - 1 + $i;
+	print OUT1 qq{<li><a href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
 </ul>
 </div><!-- .pagination -->
+</div><!-- .span12 -->
+</div><!-- .row-fluid -->
+EOHTML
+;
+
+    my $full_kriyah_download_html = "";
+    foreach my $i (0 .. $extra_years) {
+	my $yr = $hebrew_year - 1 + $i;
+	my $basename = "fullkriyah-$yr.csv";
+	$full_kriyah_download_html .= qq{<a class="btn download" id="leyning-fullkriyah-$yr" href="$basename"
+title="Download $basename"><i class="icon-download-alt"></i> $yr</a>
+};
+    }
+
+    my $triennial_range1 = triennial_csv_range($cycle1_start_year);
+    my $triennial_basename1 = triennial_csv_basename($cycle1_start_year);
+    my $triennial_range2 = triennial_csv_range($cycle2_start_year);
+    my $triennial_basename2 = triennial_csv_basename($cycle2_start_year);
+    my $triennial_download_html = qq{
+<a class="btn download" id="leyning-triennial-$cycle1_start_year" href="$triennial_basename1"
+title="Download $triennial_basename1"><i class="icon-download-alt"></i> $triennial_range1</a>
+<a class="btn download" id="leyning-triennial-$cycle2_start_year" href="$triennial_basename2"
+title="Download $triennial_basename2"><i class="icon-download-alt"></i> $triennial_range2</a>
+};
+
+    print OUT1 <<EOHTML;
+<div class="row-fluid">
+<div class="span12">
+<h3 id="download">Download aliyah-by-aliyah breakdown of Torah readings</h3>
+<p class="lead">Leyning coordinators can download these Comma Separated
+Value (CSV) files and import into Microsoft Excel or some other
+spreadsheet program.</p>
+<p>Note that they follow the Diaspora <a
+href="/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes">sedra
+scheme</a>.</p>
+<h4>Full Kriyah</h4>
+<div class="btn-toolbar">
+$full_kriyah_download_html
+</div><!-- .btn-toolbar -->
+<h4>Triennial</h4>
+<div class="btn-toolbar">
+$triennial_download_html
+</div><!-- .btn-toolbar -->
+<h4>Leyning spreadsheet file format</h4>
+<p>The format of the CSV files looks something like this:</p>
+<table class="table table-striped table-condensed">
+<tbody>
+<tr><th>Date</th><th>Parashah</th><th>Aliyah</th><th>Reading</th><th>Verses</th></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>1</td><td>Genesis 1:1 &#8211; 2:3</td><td>34</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>2</td><td>Genesis 2:4 &#8211; 2:19</td><td>16</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>3</td><td>Genesis 2:20 &#8211; 3:21</td><td>27</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>4</td><td>Genesis 3:22 &#8211; 4:18</td><td>21</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>5</td><td>Genesis 4:19 &#8211; 4:22</td><td>4</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>6</td><td>Genesis 4:23 &#8211; 5:24</td><td>28</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>7</td><td>Genesis 5:25 &#8211; 6:8</td><td>16</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>maf</td><td>Genesis 6:5 &#8211; 6:8</td><td>4</td></tr>
+<tr><td>25-Oct-2003</td><td>Bereshit</td><td>Haftara</td><td>Isaiah 42:5 &#8211; 43:11</td><td></td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>1</td><td>Genesis 6:9 &#8211; 6:22</td><td>14</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>2</td><td>Genesis 7:1 &#8211; 7:16</td><td>16</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>3</td><td>Genesis 7:17 &#8211; 8:14</td><td>22</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>4</td><td>Genesis 8:15 &#8211; 9:7</td><td>15</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>5</td><td>Genesis 9:8 &#8211; 9:17</td><td>10</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>6</td><td>Genesis 9:18 &#8211; 10:32</td><td>44</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>7</td><td>Genesis 11:1 &#8211; 11:32</td><td>32</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>maf</td><td>Genesis 11:29 &#8211; 11:32</td><td>4</td></tr>
+<tr><td>1-Nov-2003</td><td>Noach</td><td>Haftara</td><td>Isaiah 54:1 &#8211; 55:5</td><td></td></tr>
+</tbody>
+</table>
 </div><!-- .span12 -->
 </div><!-- .row-fluid -->
 EOHTML
@@ -1480,15 +1543,17 @@ sub readings_for_current_year
 {
     my($parshiot) = @_;
 
-    if ($opts{'f'}) {
-	open(CSV, ">$opts{'f'}.$$") || croak "$opts{'f'}.$$: $!\n";
-	print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
-    }
-
-    my $extra_years = 5;
+    my $extra_years = 8;
     my %wrote_csv;
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
+	my $basename = "fullkriyah-$yr.csv";
+	my $filename = "$outdir/$basename";
+	my $tmpfile = "$outdir/.$basename.$$";
+	if ($opts{"f"}) {
+	    open(CSV, ">$tmpfile") || croak "$tmpfile: $!\n";
+	    print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
+	}
 	my @events = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -H $yr", "", 0);
 	foreach my $evt (@events) {
 	    my($year,$month,$day) = Hebcal::event_ymd($evt);
@@ -1512,17 +1577,32 @@ sub readings_for_current_year
 		write_holiday_event_to_csv_and_db($evt);
 	    }
 	}
+	if ($opts{"f"}) {
+	    close(CSV);
+	    rename($tmpfile, $filename) || croak "rename $tmpfile => $filename: $!\n";
+	}
     }
+}
 
-    if ($opts{'f'}) {
-	close(CSV);
-	rename("$opts{'f'}.$$", $opts{'f'}) || croak "$opts{'f'}: $!\n";
-    }
+sub triennial_csv_range {
+    my($start_year) = @_;
+    sprintf("%d-%d", $start_year, $start_year + 3);
+}
+
+sub triennial_csv_basename {
+    my($start_year) = @_;
+    "triennial-" . triennial_csv_range($start_year) . ".csv";
 }
 
 sub triennial_csv
 {
-    my($parshiot,$events,$bereshit_idx,$readings) = @_;
+    my($parshiot,$events,$bereshit_idx,$readings,$start_year) = @_;
+
+    my $basename = triennial_csv_basename($start_year);
+    my $filename = "$outdir/$basename";
+    my $tmpfile = "$outdir/.$basename.$$";
+    open(CSV, ">$tmpfile") || croak "$tmpfile: $!\n";
+    print CSV qq{"Date","Parashah","Aliyah","Triennial Reading"\015\012};
 
     my $yr = 1;
     for (my $i = $bereshit_idx; $i < @{$events}; $i++)
@@ -1543,6 +1623,9 @@ sub triennial_csv
 	    csv_extra_newline();
 	}
     }
+
+    close(CSV);
+    rename($tmpfile, $filename) || croak "rename $tmpfile => $filename: $!\n";
 }
 
 sub get_saturday
