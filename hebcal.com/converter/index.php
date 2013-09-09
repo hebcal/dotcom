@@ -367,16 +367,14 @@ Hebrew feed &raquo;</a></p>
 </div><!-- .span9 -->
 <div class="span3" role="complementary">
 <h5>Advertisement</h5>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-7687563417622459";
-/* 200x200 text only */
-google_ad_slot = "5114852649";
-google_ad_width = 200;
-google_ad_height = 200;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 200x200 text only -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:200px;height:200px"
+     data-ad-client="ca-pub-7687563417622459"
+     data-ad-slot="5114852649"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span3 -->
 <?php

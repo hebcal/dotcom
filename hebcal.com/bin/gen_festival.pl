@@ -485,6 +485,20 @@ EOHTML
     $xtra_head .= " td.date-obs {\n  font-size: 12px;\n  line-height:16px;\n}\n";
     $xtra_head .= "</style>\n";
 
+
+    my $pagead_300x250=<<EOHTML;
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 300x250, created 10/14/10 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:300px;height:250px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1140358973"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+EOHTML
+;
+
     my $page_title = "Jewish Holidays";
     print OUT3 Hebcal::html_header_bootstrap($page_title,
 				   "/holidays/",
@@ -497,17 +511,7 @@ EOHTML
 </div><!-- .span8 -->
 <div class="span4">
 <h5>Advertisement</h5>
-<script type="text/javascript"><!--
-google_ad_client = "pub-7687563417622459";
-/* 300x250, created 10/14/10 */
-google_ad_slot = "1140358973";
-google_ad_width = 300;
-google_ad_height = 250;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+$pagead_300x250
 </div><!-- .span4 -->
 </div><!-- .row-fluid -->
 EOHTML
@@ -559,17 +563,7 @@ EOHTML
 </div><!-- .span8 -->
 <div class="span4">
 <h5>Advertisement</h5>
-<script type="text/javascript"><!--
-google_ad_client = "pub-7687563417622459";
-/* 300x250, created 10/14/10 */
-google_ad_slot = "1140358973";
-google_ad_width = 300;
-google_ad_height = 250;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+$pagead_300x250
 </div><!-- .span4 -->
 </div><!-- .row-fluid -->
 EOHTML
@@ -1054,16 +1048,14 @@ $pager
 </div><!-- .span10 -->
 <div class="span2">
 <h5>Advertisement</h5>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-7687563417622459";
-/* skyscraper text only */
-google_ad_slot = "7666032223";
-google_ad_width = 160;
-google_ad_height = 600;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- skyscraper text only -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-7687563417622459"
+     data-ad-slot="7666032223"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span2 -->
 EOHTML

@@ -1294,16 +1294,14 @@ EOHTML
     my $header_ad = <<EOHTML;
 <div class="span4">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
-<script type="text/javascript"><!--
-google_ad_client = "pub-7687563417622459";
-/* 300x250, created 10/14/10 */
-google_ad_slot = "1140358973";
-google_ad_width = 300;
-google_ad_height = 250;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 300x250, created 10/14/10 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:300px;height:250px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1140358973"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span4 -->
 EOHTML

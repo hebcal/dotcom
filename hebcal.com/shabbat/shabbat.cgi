@@ -692,16 +692,14 @@ EOHTML
 </div><!-- .span10 -->
 <div class="span2" role="complementary">
 <h5>Advertisement</h5>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-7687563417622459";
-/* skyscraper text only */
-google_ad_slot = "7666032223";
-google_ad_width = 160;
-google_ad_height = 600;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- skyscraper text only -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-7687563417622459"
+     data-ad-slot="7666032223"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span2 -->
 EOHTML
