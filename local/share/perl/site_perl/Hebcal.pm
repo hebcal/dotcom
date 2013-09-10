@@ -494,6 +494,16 @@ sub invoke_hebcal
     @events;
 }
 
+sub get_today_yomtov {
+    my @events = invoke_hebcal($HEBCAL_BIN, "", 0);
+    my($year,$month,$day) = Date::Calc::Today();
+    for my $evt (@events) {
+	if (event_date_matches($evt,$year,$month,$day) && $evt->[$EVT_IDX_YOMTOV]) {
+	    return $evt->[$EVT_IDX_SUBJ];
+	}
+    }
+    undef;
+}
 
 sub event_ymd($) {
   my($evt) = @_;
@@ -508,6 +518,13 @@ sub event_dates_equal($$) {
   my($year1,$month1,$day1) = event_ymd($evt1);
   my($year2,$month2,$day2) = event_ymd($evt2);
   $year1 == $year2 && $month1 == $month2 && $day1 == $day2;
+}
+
+sub event_date_matches($$$$) {
+  my($evt,$gy,$gm,$gd) = @_;
+  return ($evt->[$EVT_IDX_YEAR] == $gy
+	  && $evt->[$EVT_IDX_MON] + 1 == $gm
+	  && $evt->[$EVT_IDX_MDAY] == $gd);
 }
 
 sub date_format_sql($$$) {

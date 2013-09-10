@@ -70,6 +70,9 @@ $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
 $opt_log = 0 if $opt_dryrun;
 
+# don't send email on yontiff
+exit_if_yomtov();
+
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
     or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 
@@ -167,6 +170,15 @@ Hebcal::zipcode_close_db($ZIPS_DBH);
 
 msg("Success!", $opt_verbose);
 exit(0);
+
+sub exit_if_yomtov {
+    my $subj = Hebcal::get_today_yomtov();
+    if ($subj) {
+	msg("Today is yomtov: $subj", $opt_verbose);
+	exit(0);
+    }
+    1;
+}
 
 sub mail_all
 {

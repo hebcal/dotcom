@@ -41,14 +41,6 @@ use Hebcal ();
 use Getopt::Long ();
 use Log::Message::Simple qw[:STD :CARP];
 
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
-    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
-
-my $EMAIL_FROM = $Config->{_}->{"hebcal.email.facebook.from"};
-my $EMAIL_TO = $Config->{_}->{"hebcal.email.facebook.to"};
-my $EMAIL_CC = "michael\@radwin.org";
-my $HEBCAL = $Hebcal::HEBCAL_BIN;
-
 my $opt_help;
 my $opt_verbose = 0;
 my $opt_shabbat;
@@ -69,14 +61,15 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 
 # don't post anything on yontiff
-my @events = Hebcal::invoke_hebcal($HEBCAL, "", 0);
-my @today = Date::Calc::Today();
-for my $evt (@events) {
-    if (event_date_matches($evt, @today) && $evt->[$Hebcal::EVT_IDX_YOMTOV]) {
-	msg("Today is yomtov: " . $evt->[$Hebcal::EVT_IDX_SUBJ], $opt_verbose);
-	exit(0);
-    }
-}
+exit_if_yomtov();
+
+my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
+    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
+
+my $EMAIL_FROM = $Config->{_}->{"hebcal.email.facebook.from"};
+my $EMAIL_TO = $Config->{_}->{"hebcal.email.facebook.to"};
+my $EMAIL_CC = "michael\@radwin.org";
+my $HEBCAL = $Hebcal::HEBCAL_BIN;
 
 my $email_subj;			# will be populated if there's an email to send
 
@@ -109,11 +102,13 @@ if ($opt_shabbat) {
 }
 
 if ($opt_daily) {
+  my @events = Hebcal::invoke_hebcal($HEBCAL, "", 0);
+  my @today = Date::Calc::Today();
   my @tomorrow = Date::Calc::Add_Delta_Days(@today, 1);
   my $today_subj = "";
   for my $evt (@events) {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-    if (event_date_matches($evt, @today)) {
+    if (Hebcal::event_date_matches($evt, $today[0], $today[1], $today[2])) {
       msg("Today is $subj", $opt_verbose);
       $today_subj = $subj;
       if ($subj =~ /^Erev (.+)$/) {
@@ -131,7 +126,7 @@ if ($opt_daily) {
       } elsif ($subj eq "Chanukah: 1 Candle") {
 	$email_subj = "Light the first Chanukah candle tonight at sundown. Chag Urim Sameach!";
       }
-    } elsif (event_date_matches($evt, @tomorrow)) {
+    } elsif (Hebcal::event_date_matches($evt, $tomorrow[0], $tomorrow[1], $tomorrow[2])) {
       msg("Tomorrow is $subj", $opt_verbose);
       if ($subj =~ /^Rosh Chodesh/ && $subj ne $today_subj) {
 	$email_subj = "$subj begins tonight at sundown. Chodesh Tov!";
@@ -172,13 +167,15 @@ if ($email_subj) {
 msg("Done", $opt_verbose);
 exit(0);
 
-sub event_date_matches {
-  my($evt,$gy,$gm,$gd) = @_;
-  return ($evt->[$Hebcal::EVT_IDX_YEAR] == $gy
-	  && $evt->[$Hebcal::EVT_IDX_MON] + 1 == $gm
-	  && $evt->[$Hebcal::EVT_IDX_MDAY] == $gd);
+sub exit_if_yomtov {
+    my $subj = Hebcal::get_today_yomtov();
+    if ($subj) {
+	msg("Today is yomtov: $subj", $opt_verbose);
+	exit(0);
+    }
+    1;
 }
 
 sub usage {
-    die "usage: $0 [--help] [--verbose] [--randsleep=MAXSECS]\n";
+    die "usage: $0 [--help] [--verbose] [--randsleep=MAXSECS] [--dryrun]\n";
 }
