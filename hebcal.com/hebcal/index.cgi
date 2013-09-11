@@ -724,7 +724,7 @@ sub form
     }
 
     my $xtra_head = <<EOHTML;
-<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,parsha">
+<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,Torah,parsha">
 <meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
 <style type="text/css">
 legend {
@@ -825,7 +825,7 @@ EOHTML
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "s",
-		 -label => "Weekly sedrot on Saturdays"),
+		 -label => "Weekly Torah portion on Saturdays"),
     "</label>\n",
     $q->radio_group(-name => "i",
 		    -values => ["off", "on"],
