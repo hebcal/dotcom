@@ -288,6 +288,9 @@ sub mail_user
 
     my $html_body = "";
 
+    my $loc_short = $loc;
+    $loc_short =~ s/,.+$//;
+
     # for the last two weeks of Av and the last week or two of Elul
     my @today = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($today[0], $today[1], $today[2]);
@@ -297,8 +300,6 @@ sub mail_user
 	my $fridge_loc = defined $args->{"zip"} 
 	    ? "zip=" . $args->{"zip"}
 	    : "city=" . URI::Escape::uri_escape_utf8($args->{"city"});
-	my $loc_copy = $loc;
-	$loc_copy =~ s/,.+$//;
 
 	my $erev_rh = day_before_rosh_hashana($hebdate->{"yy"} + 1);
 	my $dow = $Hebcal::DoW[Hebcal::get_dow($erev_rh->{"yy"},
@@ -312,7 +313,7 @@ sub mail_user
 	$html_body .= qq{<div style="font-size:14px;font-family:arial,helvetica,sans-serif;padding:8px;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;border-radius:4px">\n};
 	$html_body .= qq{Rosh Hashana begins at sundown on $when. Print your }
 	    . qq{<a style="color:#356635" href="http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year&amp;$UTM_PARAM">}
-	    . qq{$loc_copy virtual refrigerator magnet</a> for candle lighting times and }
+	    . qq{$loc_short virtual refrigerator magnet</a> for candle lighting times and }
 	    . qq{Parashat haShavuah on a compact 5x7 page.\n</div>\n}
 	    . qq{<div>&nbsp;</div>\n};
     }
@@ -320,7 +321,8 @@ sub mail_user
     # begin the HTML for the events - main body
     $html_body .= qq{<div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">\n};
 
-    my($body,$html_body_events) = gen_body(\@events);
+    my($subject,$body,$html_body_events) =
+	gen_subject_and_body(\@events,$loc_short);
 
     $html_body .= $html_body_events;
 
@@ -352,7 +354,6 @@ $unsub_url
     $email_mangle =~ s/\@/=/g;
     my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
 
-    my $lighting = get_friday_candles(\@events);
     my $msgid = $args->{"id"} . "." . time();
 
     my %headers =
@@ -360,7 +361,7 @@ $unsub_url
 	 "From" => "Hebcal <shabbat-owner\@hebcal.com>",
 	 "To" => $to,
 	 "Reply-To" => "no-reply\@hebcal.com",
-	 "Subject" => "[shabbat] Candles $lighting",
+	 "Subject" => $subject,
 	 "List-Unsubscribe" => "<$unsub_url&unsubscribe=1>",
 	 "List-Id" => "<shabbat.hebcal.com>",
 	 "Errors-To" => $return_path,
@@ -390,47 +391,13 @@ sub day_before_rosh_hashana {
     HebcalGPL::abs2greg($abs - 1);
 }
 
-
-sub get_friday_candles
-{
-    my($events) = @_;
-    my $retval = "";
-    foreach my $evt (@{$events})
-    {
-	my $time = Hebcal::event_to_time($evt);
-	next if $time < $midnight || $time > $endofweek;
-
-	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
-	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	my $dow = Hebcal::get_dow($year, $mon, $mday);
-
-	if ($dow == 5 && $subj eq "Candle lighting")
-	{
-	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-	    $hour -= 12 if $hour > 12;
-
-	    $retval .= sprintf("%d:%02dpm", $hour, $min);
-	}
-	elsif ($dow == 6 && $subj =~ /^(Parshas\s+|Parashat\s+)(.+)$/)
-	{
-	    my $parashat = $1;
-	    my $sedra = $2;
-	    $retval .= " - $sedra";
-	}
-    }
-
-    return $retval;
-}
-
-sub gen_body
-{
-    my($events) = @_;
+sub gen_subject_and_body {
+    my($events,$city_descr_short) = @_;
 
     my $body = "";
     my $html_body = "";
+    my $first_candles;
+    my $sedra;
 
     my %holiday_seen;
     foreach my $evt (@{$events}) {
@@ -447,8 +414,13 @@ sub gen_body
 	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
 	    $hour -= 12 if $hour > 12;
 
-	    $body .= sprintf("%s is at %d:%02dpm on %s\n",
-			     $subj, $hour, $min, $strtime);
+	    my $hour_min = sprintf("%d:%02dpm", $hour, $min);
+	    if (! defined $first_candles && $subj eq "Candle lighting") {
+		$first_candles = $hour_min;
+	    }
+
+	    $body .= sprintf("%s is at %s on %s\n",
+			     $subj, $hour_min, $strtime);
 	    $html_body .= sprintf("<div>%s is at <strong>%d:%02dpm</strong> on %s.</div>\n<div>&nbsp;</div>\n",
 				  $subj, $hour, $min, $strtime);
 	}
@@ -458,8 +430,9 @@ sub gen_body
 	    $body      .= qq{$str\n};
 	    $html_body .= qq{<div>$str.</div>\n<div>&nbsp;</div>\n};
 	}
-	elsif ($subj =~ /^(Parshas|Parashat)\s+/)
+	elsif ($subj =~ /^(Parshas|Parashat)\s+(.+)$/)
 	{
+	    $sedra = $2;
 	    my $url = "http://www.hebcal.com"
 		. Hebcal::get_holiday_anchor($subj,undef,undef);
 	    $body .= "This week's Torah portion is $subj\n";
@@ -468,6 +441,20 @@ sub gen_body
 	}
 	else
 	{
+	    my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+	    my $dow = Hebcal::get_dow($year,$mon,$mday);
+	    if ($dow == 6) {
+		my $subj_copy = $subj;
+		$subj_copy =~ s/ \(CH\'\'M\)$//;
+		$subj_copy =~ s/ \(Hoshana Raba\)$//;
+		$subj_copy =~ s/ [IV]+$//;
+		$subj_copy =~ s/ \d{4}$//; # Rosh Hashana
+		if ($HebcalConst::YOMTOV{$subj_copy} && ! defined $sedra) {
+		    # Pesach, Sukkot, Shavuot, Shmini Atz, Simchat Torah, RH, YK
+		    $sedra = $subj_copy;
+		}
+	    }
+
 	    $body .= "$subj occurs on $strtime\n";
 	    my $hanchor = Hebcal::get_holiday_anchor($subj,undef,undef);
 	    my $url = "http://www.hebcal.com" . $hanchor;
@@ -479,7 +466,12 @@ sub gen_body
 	}
     }
 
-    return ($body,$html_body);
+    my $subject = "[shabbat]";
+    $subject .= " $sedra -" if $sedra;
+    $subject .= " $city_descr_short";
+    $subject .= " candles $first_candles" if $first_candles;
+
+    return ($subject,$body,$html_body);
 }
 
 sub load_subs
