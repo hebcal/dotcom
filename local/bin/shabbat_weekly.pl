@@ -50,6 +50,7 @@ use MIME::Lite;
 use Date::Calc;
 use HebcalGPL ();
 use URI::Escape;
+use Time::HiRes qw(usleep);
 
 my $opt_all = 0;
 my $opt_dryrun = 0;
@@ -150,9 +151,9 @@ for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
 }
 # dh limit 100 emails an hour per authenticated user
 #my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
-my $SMTP_SLEEP_TIME = 1;
+my $SMTP_SLEEP_TIME = 300_000; 	# 300 milliseconds
 $SMTP_SLEEP_TIME = 0 if $opt_dryrun;
-msg("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME sec between messages",
+msg("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME microseconds between messages",
     $opt_verbose);
 
 my %CONFIG;
@@ -221,7 +222,7 @@ sub mail_all
 		# reconnect to see if this helps
 		smtp_reconnect($server_num, 1);
 	    }
-	    sleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
+	    usleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
 	}
     }
     msg("Done ($failures failures)", $opt_verbose);
