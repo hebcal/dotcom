@@ -505,14 +505,6 @@ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async
 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=205907769446397";
-  js.async = true;
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
 </script>
 <style type="text/css">
 .navbar{position:static}
@@ -530,7 +522,6 @@ body{padding-top:0}
 </style>
 $xtra_head</head>
 <body>
-<div id="fb-root"></div>
 
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
@@ -602,7 +593,6 @@ function html_footer_bootstrap($last_updated = true) {
 </div><!-- .span3 -->
 <div class="span3">
 $last_updated_text
-<div class="fb-like" data-href="https://www.facebook.com/hebcal" data-send="false" data-layout="button_count" data-width="360" data-show-faces="false"></div>
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
 rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
 </div><!-- .span3 -->
