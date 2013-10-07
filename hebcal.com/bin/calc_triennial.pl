@@ -260,7 +260,7 @@ my $html_footer = Hebcal::html_footer_bootstrap(undef, undef, 0);
 
 foreach my $h (@parashah_list) {
     write_sedra_page($axml,$h,$prev{$h},$next{$h},
-		     $triennial_readings[1]->{$h});
+		     \@triennial_readings);
 }
 
 write_index_page($axml);
@@ -749,7 +749,7 @@ EOHTML
 
 sub write_sedra_page
 {
-    my($parshiot,$h,$prev,$next,$tri1) = @_;
+    my($parshiot,$h,$prev,$next,$triennial_readings) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,
@@ -807,20 +807,6 @@ sub write_sedra_page
 				   qq{<meta name="description" content="$description">\n},
 				   0);
 
-    my @tri_date;
-    if ($h eq 'Vezot Haberakhah')
-    {
-	$tri_date[1] = $tri_date[2] = $tri_date[3] =
-	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
-    }
-    else
-    {
-	foreach (1 .. 3)
-	{
-	    $tri_date[$_] = (defined $tri1->[$_]) ? $tri1->[$_]->[1] : "";
-	}
-    }
-
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
@@ -851,17 +837,7 @@ EOHTML
 
     print OUT2 "</ol>\n</div><!-- .span3 fk -->\n";
 
-    foreach my $yr (1 .. 3)
-    {
-	print OUT2 <<EOHTML;
-<div class="span3">
-<h4>Triennial Year $yr</h4>
-<span class="muted">$tri_date[$yr]</span>
-EOHTML
-;
-	print_tri_cell($tri1,$h,$yr,$torah);
-	print OUT2 qq{</div><!-- .span3 tri$yr -->\n};
-    }
+    write_sedra_tri_cells($triennial_readings->[1]->{$h},$h,$torah);
 
     print OUT2 qq{</div><!-- .row-fluid -->\n};
 
@@ -993,6 +969,17 @@ EOHTML
 	}
 	print OUT2 "</ul>\n";
     }
+
+    # if this is a combined parashah or one half of one that's sometimes combined
+    if ($combined{$h} || index($h, "-") != -1) {
+	print OUT2 qq{<h3>Triennial readings for previous and future cycles</h3>\n};
+	print OUT2 qq{<div class="row-fluid">\n};
+	write_sedra_tri_cells($triennial_readings->[0]->{$h},$h,$torah);
+	print OUT2 qq{</div><!-- .row-fluid -->\n};
+	print OUT2 qq{<div class="row-fluid">\n};
+	write_sedra_tri_cells($triennial_readings->[2]->{$h},$h,$torah);
+	print OUT2 qq{</div><!-- .row-fluid -->\n};
+    }
     
     print OUT2 <<EOHTML;
 <h3 id="ref">References</h3>
@@ -1020,6 +1007,31 @@ EOHTML
 
     close(OUT2);
     rename("$fn.$$", $fn) || croak "$fn: $!\n";
+}
+
+sub write_sedra_tri_cells {
+    my($triennial,$h,$torah) = @_;
+
+    my @tri_date;
+    if ($h eq 'Vezot Haberakhah') {
+	$tri_date[1] = $tri_date[2] = $tri_date[3] =
+	    "To be read on Simchat Torah.<br>\nSee holiday readings.";
+    } else {
+	foreach my $yr (1 .. 3) {
+	    $tri_date[$yr] = (defined $triennial->[$yr]) ? $triennial->[$yr]->[1] : "";
+	}
+    }
+    foreach my $yr (1 .. 3) {
+	print OUT2 <<EOHTML;
+<div class="span3">
+<h4>Triennial Year $yr</h4>
+<span class="muted">$tri_date[$yr]</span>
+EOHTML
+;
+	print_tri_cell($triennial,$h,$yr,$torah);
+	print OUT2 qq{</div><!-- .span3 tri$yr -->\n};
+    }
+    1;
 }
 
 sub format_html_date {
