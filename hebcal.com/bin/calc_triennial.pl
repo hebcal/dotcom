@@ -227,8 +227,7 @@ readings_for_current_year($axml);
 
 my %next_reading;
 my $NOW = time();
-my @parashah_list = keys %{$triennial_readings[1]};
-push(@parashah_list, "Vezot Haberakhah");
+my @parashah_list = (@all_inorder, @combined);
 foreach my $h (@parashah_list) {
     foreach my $dt (@{$parashah_date_sql{$h}}) {
 	next unless $dt;
