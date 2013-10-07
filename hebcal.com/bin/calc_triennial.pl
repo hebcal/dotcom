@@ -837,7 +837,7 @@ EOHTML
 
     print OUT2 "</ol>\n</div><!-- .span3 fk -->\n";
 
-    write_sedra_tri_cells($triennial_readings->[1]->{$h},$h,$torah);
+    write_sedra_tri_cells($h,$torah,$triennial_readings->[1]);
 
     print OUT2 qq{</div><!-- .row-fluid -->\n};
 
@@ -974,10 +974,10 @@ EOHTML
     if ($combined{$h} || index($h, "-") != -1) {
 	print OUT2 qq{<h3>Triennial readings for previous and future cycles</h3>\n};
 	print OUT2 qq{<div class="row-fluid">\n};
-	write_sedra_tri_cells($triennial_readings->[0]->{$h},$h,$torah);
+	write_sedra_tri_cells($h,$torah,$triennial_readings->[0]);
 	print OUT2 qq{</div><!-- .row-fluid -->\n};
 	print OUT2 qq{<div class="row-fluid">\n};
-	write_sedra_tri_cells($triennial_readings->[2]->{$h},$h,$torah);
+	write_sedra_tri_cells($h,$torah,$triennial_readings->[2]);
 	print OUT2 qq{</div><!-- .row-fluid -->\n};
     }
     
@@ -1010,8 +1010,9 @@ EOHTML
 }
 
 sub write_sedra_tri_cells {
-    my($triennial,$h,$torah) = @_;
+    my($h,$torah,$triennial_readings) = @_;
 
+    my $triennial = $triennial_readings->{$h};
     my @tri_date;
     if ($h eq 'Vezot Haberakhah') {
 	$tri_date[1] = $tri_date[2] = $tri_date[3] =
@@ -1025,10 +1026,10 @@ sub write_sedra_tri_cells {
 	print OUT2 <<EOHTML;
 <div class="span3">
 <h4>Triennial Year $yr</h4>
-<span class="muted">$tri_date[$yr]</span>
+<div class="muted">$tri_date[$yr]</div>
 EOHTML
 ;
-	print_tri_cell($triennial,$h,$yr,$torah);
+	print_tri_cell($triennial_readings,$h,$yr,$torah);
 	print OUT2 qq{</div><!-- .span3 tri$yr -->\n};
     }
     1;
@@ -1047,8 +1048,9 @@ sub format_html_date {
 
 sub print_tri_cell
 {
-    my($triennial,$h,$yr,$torah) = @_;
+    my($triennial_readings,$h,$yr,$torah) = @_;
 
+    my $triennial = $triennial_readings->{$h};
     if ($h eq 'Vezot Haberakhah')
     {
 	print OUT2 "&nbsp;\n";
@@ -1063,10 +1065,14 @@ sub print_tri_cell
 	my($anchor) = lc($p1);
 	$anchor =~ s/[^\w]//g;
 	print OUT2 "<li><a href=\"$anchor\">$p1</a>\n";
+	print OUT2 qq{- <span class="muted">},
+	    $triennial_readings->{$p1}->[$yr]->[1], qq{</span>\n};
 
 	$anchor = lc($p2);
 	$anchor =~ s/[^\w]//g;
 	print OUT2 "<li><a href=\"$anchor\">$p2</a>\n";
+	print OUT2 qq{- <span class="muted">},
+	    $triennial_readings->{$p2}->[$yr]->[1], qq{</span>\n};
 	print OUT2 "</ul>\n";
 	return;
     }
