@@ -28,14 +28,14 @@ update_ics_name() {
 
 FILE="jewish-holidays"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;nh=on;i=off;lg=s;c=off;geo=none;ny=10;nx=off;mf=off;ss=off"
-perl -pi -e "s/utm_source=ical/utm_source=dl-major/g" "${FILE}.ics"
+perl -pi -e "s/utm_campaign=ical/utm_campaign=dl-major/g" "${FILE}.ics"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "http:\\/\\/www.hebcal.com\\/"
 
 FILE="jewish-holidays-all"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;nh=on;i=off;lg=s;c=off;geo=none;ny=10;nx=on;mf=on;ss=on"
-perl -pi -e "s/utm_source=ical/utm_source=dl-all/g" "${FILE}.ics"
+perl -pi -e "s/utm_campaign=ical/utm_campaign=dl-all/g" "${FILE}.ics"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "http:\\/\\/www.hebcal.com\\/"
