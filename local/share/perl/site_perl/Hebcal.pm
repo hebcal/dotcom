@@ -402,13 +402,8 @@ sub format_hebcal_event_time {
     my($hour,$min,$suffix) = @_;
     $suffix = "pm" unless $suffix;
     if ($hour == 0) {
-	if (lc($suffix) eq "p") {
-	    $suffix = "a";
-	} elsif (lc($suffix) eq "pm") {
-	    $suffix = "am";
-	} elsif (lc($suffix) eq "p.m.") {
-	    $suffix = "a.m.";
-	}
+	$suffix =~ s/p/a/;
+	$suffix =~ s/P/A/;
     }
     $hour -= 12 if $hour > 12;
     sprintf("%d:%02d%s", $hour, $min, $suffix);
@@ -2652,10 +2647,8 @@ sub csv_write_contents($$$)
 	    my $hour = $evt->[$EVT_IDX_HOUR];
 	    my $min = $evt->[$EVT_IDX_MIN];
 
-	    $hour -= 12 if $hour > 12;
-	    $start_time = sprintf("\"%d:%02d PM\"", $hour, $min);
+	    $start_time = '"' . format_hebcal_event_time($hour, $min, " PM") . '"';
 
-	    $hour += 12 if $hour < 12;
 	    $min += $evt->[$EVT_IDX_DUR];
 
 	    if ($min >= 60)
@@ -2664,8 +2657,7 @@ sub csv_write_contents($$$)
 		$min -= 60;
 	    }
 
-	    $hour -= 12 if $hour > 12;
-	    $end_time = sprintf("\"%d:%02d PM\"", $hour, $min);
+	    $end_time = '"' . format_hebcal_event_time($hour, $min, " PM") . '"';
 	    $end_date = $date;
 	    $all_day = '"false"';
 	}
