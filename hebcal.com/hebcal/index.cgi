@@ -330,10 +330,6 @@ EOJS
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 
-	my $min = $events[$i]->[$Hebcal::EVT_IDX_MIN];
-	my $hour = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
-	$hour -= 12 if $hour > 12;
-
 	my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
 	my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
@@ -364,7 +360,8 @@ EOJS
 
 	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    $subj = sprintf("<strong>%d:%02dp</strong> %s", $hour, $min, $subj);
+	    my $time_formatted = Hebcal::format_evt_time($events[$i], "p");
+	    $subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
 	}
 
 	if ($v2) {
@@ -622,12 +619,9 @@ sub pdf_render_event {
     $text->fillcolor($color);
 
     if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0) {
-	my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-	my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-	$hour -= 12 if $hour > 12;
-	my $time_formatted = sprintf("%d:%02dp ", $hour, $min);
+	my $time_formatted = Hebcal::format_evt_time($evt, "p");
 	$text->font($pdf_font{'bold'}, 8);
-	$text->text($time_formatted);
+	$text->text($time_formatted . " ");
     }
 
     my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
@@ -1387,10 +1381,6 @@ EOHTML
     {
 	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
 
-	my $min = $events[$i]->[$Hebcal::EVT_IDX_MIN];
-	my $hour = $events[$i]->[$Hebcal::EVT_IDX_HOUR];
-	$hour -= 12 if $hour > 12;
-
 	my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
 	my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
 	my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
@@ -1406,9 +1396,13 @@ EOHTML
 
 	if ($q->param("vis"))
 	{
-	    my $cal_subj = $subj;
-	    $cal_subj = sprintf("<strong>%d:%02dp</strong> %s", $hour, $min, $subj)
-		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+	    my $cal_subj;
+	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
+		$cal_subj = $subj;
+	    } else {
+		my $time_formatted = Hebcal::format_evt_time($events[$i], "p");
+		$cal_subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
+	    }
 
 	    $cal_subj =~
 		s/ Havdalah \((\d+) min\)$/ Havdalah <small>($1 min)<\/small>/;
@@ -1439,9 +1433,13 @@ EOHTML
 	}
 	else
 	{
-	    my $subj_copy = $subj;
-	    $subj_copy .= sprintf(": %d:%02dpm", $hour, $min)
-		if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0);
+	    my $subj_copy;
+	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
+		$subj_copy = $subj;
+	    } else {
+		my $time_formatted = Hebcal::format_evt_time($events[$i], "pm");
+		$subj_copy = $subj . ": " . $time_formatted;
+	    }
 	    Hebcal::out_html(undef,
 			     qq{<tr>},
 			     qq{<td>}, $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)], qq{</td>},

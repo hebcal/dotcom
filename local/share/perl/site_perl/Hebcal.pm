@@ -343,7 +343,8 @@ sub parse_date_descr($$)
     if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
     {
 	($subj,$hour,$min) = ($1,$2,$3);
-	$hour += 12;		# timed events are always evening
+	$hour += 12 unless $hour == 0;	# timed events are always evening
+					# except for midnight
 
 	if ($subj eq 'Candle lighting')
 	{
@@ -387,6 +388,30 @@ sub parse_date_descr($$)
 #    }
 
     ($subj,$untimed,$min,$hour,$mday,$mon - 1,$year,$dur,$yomtov);
+}
+
+sub format_evt_time {
+    my($evt,$suffix) = @_;
+    format_hebcal_event_time($evt->[$EVT_IDX_HOUR],
+			     $evt->[$EVT_IDX_MIN],
+			     $suffix);
+}
+
+
+sub format_hebcal_event_time {
+    my($hour,$min,$suffix) = @_;
+    $suffix = "pm" unless $suffix;
+    if ($hour == 0) {
+	if (lc($suffix) eq "p") {
+	    $suffix = "a";
+	} elsif (lc($suffix) eq "pm") {
+	    $suffix = "am";
+	} elsif (lc($suffix) eq "p.m.") {
+	    $suffix = "a.m.";
+	}
+    }
+    $hour -= 12 if $hour > 12;
+    sprintf("%d:%02d%s", $hour, $min, $suffix);
 }
 
 sub invoke_hebcal
@@ -575,8 +600,6 @@ sub events_to_dict
 
 	my $min = $evt->[$EVT_IDX_MIN];
 	my $hour24 = $evt->[$EVT_IDX_HOUR];
-	my $hour = $hour24;
-	$hour -= 12 if $hour > 12;
 
 	my %item;
 	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
@@ -636,7 +659,7 @@ sub events_to_dict
 	{
 	    $item{"class"} = ($subj eq "Candle lighting") ?
 		"candles" : "havdalah";
-	    $item{"time"} = sprintf("%d:%02dpm", $hour, $min);
+	    $item{"time"} = format_evt_time($evt, "pm");
 	    $item{"link"} = $url . "#" . $anchor;
 	}
 	elsif ($subj eq "No sunset today.")
