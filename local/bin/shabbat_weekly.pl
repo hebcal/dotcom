@@ -411,19 +411,15 @@ sub gen_subject_and_body {
 
 	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
-	    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-	    my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-	    $hour -= 12 if $hour > 12;
-
-	    my $hour_min = sprintf("%d:%02dpm", $hour, $min);
+	    my $hour_min = Hebcal::format_evt_time($evt, "pm");
 	    if (! defined $first_candles && $subj eq "Candle lighting") {
 		$first_candles = $hour_min;
 	    }
 
 	    $body .= sprintf("%s is at %s on %s\n",
 			     $subj, $hour_min, $strtime);
-	    $html_body .= sprintf("<div>%s is at <strong>%d:%02dpm</strong> on %s.</div>\n<div>&nbsp;</div>\n",
-				  $subj, $hour, $min, $strtime);
+	    $html_body .= sprintf("<div>%s is at <strong>%s</strong> on %s.</div>\n<div>&nbsp;</div>\n",
+				  $subj, $hour_min, $strtime);
 	}
 	elsif ($subj eq "No sunset today.")
 	{
