@@ -326,13 +326,10 @@ EOJS
 ;
     }
     my $first = 1;
-    for (my $i = 0; $i < @events; $i++)
-    {
-	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+    foreach my $evt (@events) {
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
-	my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+	my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
 	my $img_url = "";
 	my $img_w = 0;
@@ -358,9 +355,9 @@ EOJS
 
 	$subj = translate_subject($q,$subj,$hebrew);
 
-	if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
 	{
-	    my $time_formatted = Hebcal::format_evt_time($events[$i], "p");
+	    my $time_formatted = Hebcal::format_evt_time($evt, "p");
 	    $subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
 	}
 
@@ -487,10 +484,8 @@ sub pdf_display {
 
     my %cells;
     foreach my $evt (@events) {
-	my $year = $evt->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $evt->[$Hebcal::EVT_IDX_MON] + 1;
+	my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 	my $cal_id = sprintf("%04d-%02d", $year, $mon);
-	my $mday = $evt->[$Hebcal::EVT_IDX_MDAY];
 	push(@{$cells{$cal_id}{$mday}}, $evt);
     }
 
@@ -1377,13 +1372,10 @@ EOHTML
 	Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
     }
 
-    for (my $i = 0; $i < $numEntries; $i++)
-    {
-	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
+    foreach my $evt (@events) {
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
-	my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my $mon = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my $mday = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+	my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
 	my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
 
@@ -1397,10 +1389,10 @@ EOHTML
 	if ($q->param("vis"))
 	{
 	    my $cal_subj;
-	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
+	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
 		$cal_subj = $subj;
 	    } else {
-		my $time_formatted = Hebcal::format_evt_time($events[$i], "p");
+		my $time_formatted = Hebcal::format_evt_time($evt, "p");
 		$cal_subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
 	    }
 
@@ -1417,13 +1409,13 @@ EOHTML
 		if $cal->getcontent($mday) ne "";
 
 	    my $class = "evt";
-	    if ($events[$i]->[$Hebcal::EVT_IDX_YOMTOV] == 1)
+	    if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
 	    {
 		$class .= " hl";
 	    }
-	    elsif (($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
+	    elsif (($evt->[$Hebcal::EVT_IDX_SUBJ] =~
 		    /^\d+\w+.+, \d{4,}$/) ||
-		   ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~
+		   ($evt->[$Hebcal::EVT_IDX_SUBJ] =~
 		    /^\d+\w+ day of the Omer$/))
 	    {
 		$class .= " muted";
@@ -1434,10 +1426,10 @@ EOHTML
 	else
 	{
 	    my $subj_copy;
-	    if ($events[$i]->[$Hebcal::EVT_IDX_UNTIMED]) {
+	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
 		$subj_copy = $subj;
 	    } else {
-		my $time_formatted = Hebcal::format_evt_time($events[$i], "pm");
+		my $time_formatted = Hebcal::format_evt_time($evt, "pm");
 		$subj_copy = $subj . ": " . $time_formatted;
 	    }
 	    Hebcal::out_html(undef,
