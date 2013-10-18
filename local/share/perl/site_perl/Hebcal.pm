@@ -47,6 +47,7 @@ use Time::Local ();		# needed for Hebcal::event_to_time
 use URI::Escape;
 use HebcalConst;
 use Digest::MD5 ();
+use Encode qw(encode_utf8);
 use Config::Tiny;
 use HebcalGPL;
 
@@ -2524,7 +2525,8 @@ sub vcalendar_write_contents
 	    my $date_copy = $date;
 	    $date_copy =~ s/T\d+$//;
 
-	    my $digest = Digest::MD5::md5_hex($evt->[$EVT_IDX_SUBJ]);
+	    my $subj_utf8 = encode_utf8($evt->[$EVT_IDX_SUBJ]);
+	    my $digest = Digest::MD5::md5_hex($subj_utf8);
 	    my $uid = "hebcal-$date_copy-$digest";
 
 	    if ($evt->[$EVT_IDX_UNTIMED] == 0
