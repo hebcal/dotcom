@@ -47,7 +47,7 @@ use Time::Local ();		# needed for Hebcal::event_to_time
 use URI::Escape;
 use HebcalConst;
 use Digest::MD5 ();
-use Encode qw(encode_utf8);
+use Encode qw(encode_utf8 decode_utf8);
 use Config::Tiny;
 use HebcalGPL;
 
@@ -1712,7 +1712,7 @@ sub export_http_header($$)
     my($time) = defined $ENV{'SCRIPT_FILENAME'} ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
 
-    my($path_info) = $q->path_info();
+    my $path_info = decode_utf8($q->path_info());
     $path_info =~ s,^.*/,,;
 
     print $q->header(-type => "$mime; filename=\"$path_info\"",
