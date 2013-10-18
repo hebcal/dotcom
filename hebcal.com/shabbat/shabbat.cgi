@@ -229,7 +229,7 @@ sub get_link_and_guid {
 	if ($cfg eq "r") {
 	    $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
 	} else {
-	    $utm_param = "utm_source=shabbat1c";
+	    $utm_param = "utm_source=shabbat1c&amp;utm_campaign=shabbat1c";
 	}
     }
 
@@ -237,8 +237,8 @@ sub get_link_and_guid {
     if ($query) {
 	$query =~ s/;/&amp;/g;
 	$link .= "?$query";
-	$link .= "&amp;$utm_param" if defined $cfg;
-    } elsif (defined $cfg) {
+	$link .= "&amp;$utm_param" if defined $utm_param;
+    } elsif (defined $utm_param) {
 	$link .= "?$utm_param";
     }
 
@@ -400,7 +400,7 @@ ul#hebcal-results{list-style-type:none}
     if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
-    my $url = url_html(self_url() . "&utm_source=shabbat1c");
+    my $url = url_html(self_url() . "&utm_source=shabbat1c&utm_campaign=shabbat1c");
     if ($cfg eq "widget")
     {
 	$url = "javascript:widget.openURL('" . $url . "');";
