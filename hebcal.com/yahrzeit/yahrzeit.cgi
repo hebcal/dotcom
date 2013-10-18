@@ -45,14 +45,12 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
+use Encode qw(decode_utf8);
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
 use POSIX ();
 use Date::Calc ();
-
-my $this_year = (localtime)[5];
-$this_year += 1900;
 
 my @HEB_MONTH_NAME =
 (
@@ -81,7 +79,9 @@ foreach my $key ($q->param())
     my $val = $q->param($key);
     if (defined $val) {
 	my $orig = $val;
-	if ($key !~ /^n\d+$/) {
+	if ($key =~ /^n\d+$/) {
+	    $val = decode_utf8($val);
+	} else {
 	    # sanitize input to prevent people from trying to hack the site.
 	    # remove anthing other than word chars, white space, or hyphens.
 	    $val =~ s/[^\w\.\s-]//g;
@@ -180,7 +180,7 @@ exit(0);
 
 sub vcalendar_display
 {
-    my @events = my_invoke_hebcal($this_year);
+    my @events = my_invoke_hebcal();
 
     my $title;
     my @types = keys %input_types;
@@ -204,7 +204,7 @@ sub dba_display
 {
     eval("use Palm::DBA");
 
-    my @events = my_invoke_hebcal($this_year);
+    my @events = my_invoke_hebcal();
 
     Hebcal::export_http_header($q, "application/x-palm-dba");
 
@@ -217,7 +217,7 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = my_invoke_hebcal($this_year);
+    my @events = my_invoke_hebcal();
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     Hebcal::csv_write_contents($q, \@events, $euro);
@@ -271,17 +271,15 @@ sub get_birthday_or_anniversary {
 }
 
 sub my_invoke_hebcal {
-    my($this_year) = @_;
-    my @events2 = ();
-
     my %yahrzeits;
     my $tmpfile = POSIX::tmpnam();
     open(T, ">$tmpfile") || die "$tmpfile: $!\n";
     foreach my $input (@inputs) {
 	my($key,$gy,$gm,$gd,$name,$type) = @{$input};
 	if ($type eq "Yahrzeit") {
-	    printf T "%02d %02d %4d %s\n", $gm, $gd, $gy, $name;
-	    $yahrzeits{$name} = 1;
+	    my $hebcal_name = "YahrzeitPerson" . $key;
+	    printf T "%02d %02d %4d %s\n", $gm, $gd, $gy, $hebcal_name;
+	    $yahrzeits{$hebcal_name} = $name;
 	}
     }
     close(T);
@@ -289,6 +287,10 @@ sub my_invoke_hebcal {
     my $cmd = "./hebcal -D -x -Y $tmpfile";
 
     my %greg2heb = ();
+    my @events2 = ();
+
+    my $this_year = (localtime)[5];
+    $this_year += 1900;
 
     foreach my $year ($this_year .. ($this_year + $num_years))
     {
@@ -334,7 +336,8 @@ sub my_invoke_hebcal {
 
 	    if (defined $yahrzeits{$subj})
 	    {
-		my $subj2 = "${subj}'s Yahrzeit";
+		my $name = $yahrzeits{$subj};
+		my $subj2 = "${name}'s Yahrzeit";
 		my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
 
 		$subj2 .= " ($greg2heb{$isodate})"
@@ -416,7 +419,7 @@ EOHTML
 
 form(1) unless scalar(@inputs) >= 1;
 
-my @events = my_invoke_hebcal($this_year);
+my @events = my_invoke_hebcal();
 
 if (scalar(@events) > 0) {
     $q->param("v", "yahrzeit");
