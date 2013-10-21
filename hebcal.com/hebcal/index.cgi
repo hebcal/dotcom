@@ -489,6 +489,20 @@ sub pdf_display {
 	push(@{$cells{$cal_id}{$mday}}, $evt);
     }
 
+    # add blank months in the middle, even if there are no events
+    my $numEntries = scalar(@events);
+    my($start_year,$start_month,$start_mday) = Hebcal::event_ymd($events[0]);
+    my($end_year,$end_month,$end_mday) = Hebcal::event_ymd($events[$numEntries - 1]);
+    my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
+    for (my @dt = ($start_year, $start_month, 1);
+	 Date::Calc::Date_to_Days(@dt) <= $end_days;
+	 @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1)) {
+	my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
+	if (! defined $cells{$cal_id}) {
+	    $cells{$cal_id}{"dummy"} = [];
+	}
+    }
+
     foreach my $year_month (sort keys %cells) {
 	my($year,$month) = split(/-/, $year_month);
 	$month =~ s/^0//;
