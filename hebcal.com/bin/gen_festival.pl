@@ -733,7 +733,7 @@ sub write_festival_page
 {
     my($festivals,$f) = @_;
 
-    my($slug) = Hebcal::make_anchor($f);
+    my $slug = Hebcal::make_anchor($f);
 
     my $descr;
     my $about = get_var($festivals, $f, 'about');
@@ -847,110 +847,7 @@ EOHTML
     ;
     }
 
-    if ($DO_AMAZON)
-    {
-	my $subf = $SUBFESTIVALS{$f}->[0];
-	my $books = $festivals->{"festival"}->{$subf}->{"books"}->{"book"};
-	if ($books) {
-	    if (ref($books) eq 'HASH') {
-		$books = [ $books ];
-	    }
-
-	    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<table style="padding:6px"><tr>\n};
-	    foreach my $book (@{$books}) {
-		my $asin = $book->{"ASIN"};
-		my $img;
-		my $filename;
-		foreach my $type (qw(T M)) {
-		    $img = "$asin.01.${type}ZZZZZZZ.jpg";
-		    $filename = $outdir . "/../i/" . $img;
-		    if (! -e $filename) {
-			$ua = LWP::UserAgent->new unless $ua;
-			$ua->timeout(10);
-			$ua->mirror("http://images.amazon.com/images/P/$img",
-				    $filename);
-		    }
-		}
-
-		unless ($eval_use_Image_Magick) {
-		    eval("use Image::Magick");
-		    $eval_use_Image_Magick = 1;
-		}
-
-		my $image = new Image::Magick;
-		$image->Read($filename);
-		my($width,$height) = $image->Get("width", "height");
-
-		my $bktitle = $book->{"content"};
-		my $author = $book->{"author"};
-
-		if (!$bktitle)
-		{
-		    $ua = LWP::UserAgent->new unless $ua;
-		    $ua->timeout(10);
-		    my %params = (
-				  "Service" => "AWSECommerceService",
-				  "Operation" => "ItemLookup",
-				  "ItemId" => $asin,
-				  "ResponseGroup" => "ItemAttributes",
-				  "Version" => "2009-01-06",
-				  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
-				  "AssociateTag" => "hebcal-20",
-				  );
-		    my $signedRequest = $helper->sign(\%params);
-		    my $queryString = $helper->canonicalize($signedRequest);
-		    my $url = "http://" . $AWS_HOST . "/onca/xml?" . $queryString;
-		    my $request = HTTP::Request->new("GET", $url);
-		    my $response = $ua->request($request);
-		    my $rxml = XML::Simple::XMLin($response->content);
-		    if (!$response->is_success()) {
-			my $error = findError($rxml);
-			if (defined $error) {
-			    print STDERR "Error: " . $error->{Code} . ": " . $error->{Message} . "\n";
-			} else {
-			    print STDERR "Unknown Error!\n";
-			}
-		    }
-
-		    if (defined $rxml->{"Items"}->{"Item"}->{"ASIN"}
-			&& $rxml->{"Items"}->{"Item"}->{"ASIN"} eq $asin)
-		    {
-			my $attrs = $rxml->{"Items"}->{"Item"}->{"ItemAttributes"};
-			$bktitle = $attrs->{"Title"};
-			if (ref($attrs->{"Author"}) eq "ARRAY") {
-			    $author = $attrs->{"Author"}->[0];
-			} elsif (defined $attrs->{"Author"}) {
-			    $author = $attrs->{"Author"};
-			}
-		    }
-		    else
-		    {
-		      print STDERR "*** can't get Items/Item/ASIN from XML from ", $response->content, "\n";
-		    }
-		}
-		else
-		{
-		    $author = trim($author) if $author;
-		    $bktitle = trim($bktitle);
-		    $bktitle =~ s/\n/ /g;
-		    $bktitle =~ s/\s+/ /g;
-		}
-
-		my $slug2 = $slug;
-		$slug2 =~ s/\.html$//;
-
-		my $shorttitle = $bktitle;
-		$shorttitle =~ s/\s*:.+//;
-		my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
-		print OUT2 qq{<td style="width:200px; text-align:center; vertical-align:top"><a class="amzn" id="$slug2-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" style="border:none; padding:4px"></a><br><a class="amzn" id="$slug2-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
-		print OUT2 qq{<br>by $author} if $author;
-		print OUT2 qq{</td>\n};
-	    }
-
-	    print OUT2 qq{</tr></table>\n};
-	}
-    }
-
+    amazon_recommended_books($festivals,$f) if $DO_AMAZON;
 
     if (@{$SUBFESTIVALS{$f}} == 1)
     {
@@ -1207,4 +1104,106 @@ sub get_next_observed_str {
     }
 
     $next_observed;
+}
+
+sub amazon_recommended_books {
+    my($festivals,$f) = @_;
+
+    my $subf = $SUBFESTIVALS{$f}->[0];
+    my $books = $festivals->{"festival"}->{$subf}->{"books"}->{"book"};
+    return 0 unless $books;
+
+    if (ref($books) eq 'HASH') {
+	$books = [ $books ];
+    }
+
+    my $slug = Hebcal::make_anchor($f);
+    my $slug2 = $slug;
+    $slug2 =~ s/\.html$//;
+
+    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<table style="padding:6px"><tr>\n};
+    foreach my $book (@{$books}) {
+	my $asin = $book->{"ASIN"};
+	my $img;
+	my $filename;
+	foreach my $type (qw(T M)) {
+	    $img = "$asin.01.${type}ZZZZZZZ.jpg";
+	    $filename = $outdir . "/../i/" . $img;
+	    if (! -e $filename) {
+		$ua = LWP::UserAgent->new unless $ua;
+		$ua->timeout(10);
+		$ua->mirror("http://images.amazon.com/images/P/$img",
+			    $filename);
+	    }
+	}
+
+	unless ($eval_use_Image_Magick) {
+	    eval("use Image::Magick");
+	    $eval_use_Image_Magick = 1;
+	}
+
+	my $image = new Image::Magick;
+	$image->Read($filename);
+	my($width,$height) = $image->Get("width", "height");
+
+	my $bktitle = $book->{"content"};
+	my $author = $book->{"author"};
+
+	if (!$bktitle) {
+	    $ua = LWP::UserAgent->new unless $ua;
+	    $ua->timeout(10);
+	    my %params = (
+			  "Service" => "AWSECommerceService",
+			  "Operation" => "ItemLookup",
+			  "ItemId" => $asin,
+			  "ResponseGroup" => "ItemAttributes",
+			  "Version" => "2009-01-06",
+			  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
+			  "AssociateTag" => "hebcal-20",
+			 );
+	    my $signedRequest = $helper->sign(\%params);
+	    my $queryString = $helper->canonicalize($signedRequest);
+	    my $url = "http://" . $AWS_HOST . "/onca/xml?" . $queryString;
+	    my $request = HTTP::Request->new("GET", $url);
+	    my $response = $ua->request($request);
+	    my $rxml = XML::Simple::XMLin($response->content);
+	    if (!$response->is_success()) {
+		my $error = findError($rxml);
+		if (defined $error) {
+		    print STDERR "Error: " . $error->{Code} . ": " . $error->{Message} . "\n";
+		} else {
+		    print STDERR "Unknown Error!\n";
+		}
+	    }
+
+	    if (defined $rxml->{"Items"}->{"Item"}->{"ASIN"}
+		&& $rxml->{"Items"}->{"Item"}->{"ASIN"} eq $asin) {
+		my $attrs = $rxml->{"Items"}->{"Item"}->{"ItemAttributes"};
+		$bktitle = $attrs->{"Title"};
+		if (ref($attrs->{"Author"}) eq "ARRAY") {
+		    $author = $attrs->{"Author"}->[0];
+		} elsif (defined $attrs->{"Author"}) {
+		    $author = $attrs->{"Author"};
+		}
+	    }
+	    else {
+		print STDERR "*** can't get Items/Item/ASIN from XML from ", $response->content, "\n";
+	    }
+	}
+	else {
+	    $author = trim($author) if $author;
+	    $bktitle = trim($bktitle);
+	    $bktitle =~ s/\n/ /g;
+	    $bktitle =~ s/\s+/ /g;
+	}
+
+	my $shorttitle = $bktitle;
+	$shorttitle =~ s/\s*:.+//;
+	my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
+	print OUT2 qq{<td style="width:200px; text-align:center; vertical-align:top"><a class="amzn" id="$slug2-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"\nalt="$bktitle"\nwidth="$width" height="$height" style="border:none; padding:4px"></a><br><a class="amzn" id="$slug2-$asin-2" title="$bktitle" href="$link">$shorttitle</a>};
+	print OUT2 qq{<br>by $author} if $author;
+	print OUT2 qq{</td>\n};
+    }
+
+    print OUT2 qq{</tr></table>\n};
 }
