@@ -181,6 +181,19 @@ foreach my $f (@FESTIVALS)
     write_festival_page($fxml,$f);
 }
 
+my $pagead_300x250=<<EOHTML;
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 300x250, created 10/14/10 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:300px;height:250px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1140358973"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+EOHTML
+;
+
 print "Index page...\n" if $opts{"v"};
 write_index_page($fxml);
 
@@ -486,19 +499,6 @@ EOHTML
     $xtra_head .= "</style>\n";
 
 
-    my $pagead_300x250=<<EOHTML;
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- 300x250, created 10/14/10 -->
-<ins class="adsbygoogle"
- style="display:inline-block;width:300px;height:250px"
- data-ad-client="ca-pub-7687563417622459"
- data-ad-slot="1140358973"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-EOHTML
-;
-
     my $page_title = "Jewish Holidays";
     print OUT3 Hebcal::html_header_bootstrap($page_title,
 				   "/holidays/",
@@ -536,30 +536,40 @@ EOHTML
 
     # SEO - one page per year
     foreach my $i (0 .. $NUM_YEARS) {
-	my $heb_year = $HEB_YR + $i - 1;
-	my $greg_yr1 = $heb_year - 3761;
-	my $greg_yr2 = $greg_yr1 + 1;
+	write_hebrew_year_index_page($i,
+				     $festivals,
+				     \@sections,
+				     $xtra_head);
+    }
+}
 
-	my $slug = "$greg_yr1-$greg_yr2";
-	$fn = "$outdir/$slug";
-	open(OUT4, ">$fn.$$") || die "$fn.$$: $!\n";
+sub write_hebrew_year_index_page {
+    my($i,$festivals,$sections,$xtra_head) = @_;
 
-	$page_title = "Jewish Holidays $slug";
+    my $heb_year = $HEB_YR + $i - 1;
+    my $greg_yr1 = $heb_year - 3761;
+    my $greg_yr2 = $greg_yr1 + 1;
 
-	$meta = <<EOHTML;
+    my $slug = "$greg_yr1-$greg_yr2";
+    my $fn = "$outdir/$slug";
+    open(OUT4, ">$fn.$$") || die "$fn.$$: $!\n";
+
+    my $page_title = "Jewish Holidays $slug";
+
+    my $meta = <<EOHTML;
 <meta name="description" content="Dates of major and minor Jewish holidays for years $greg_yr1-$greg_yr2 (Hebrew year $heb_year), observances and customs, holiday Torah readings.">
 EOHTML
 ;
 
-	print OUT4 Hebcal::html_header_bootstrap($page_title,
-				       "/holidays/$slug",
-				       "single single-post",
-				       $meta . $xtra_head,
-				       0);
+    print OUT4 Hebcal::html_header_bootstrap($page_title,
+					     "/holidays/$slug",
+					     "single single-post",
+					     $meta . $xtra_head,
+					     0);
 
-	print OUT4 qq{<div class="row-fluid">\n};
-	print OUT4 get_index_body_preamble($page_title, 0, $heb_year, "span8");
-	print OUT4 <<EOHTML;
+    print OUT4 qq{<div class="row-fluid">\n};
+    print OUT4 get_index_body_preamble($page_title, 0, $heb_year, "span8");
+    print OUT4 <<EOHTML;
 </div><!-- .span8 -->
 <div class="span4">
 <h5>Advertisement</h5>
@@ -568,40 +578,38 @@ $pagead_300x250
 </div><!-- .row-fluid -->
 EOHTML
 ;
-	print OUT4 qq{<div class="row-fluid">\n};
-	print OUT4 qq{<div class="span12">\n};
-	print OUT4 qq{<div class="pagination pagination-small"><ul>\n};
-	foreach my $j (0 .. $NUM_YEARS) {
-	    my $other_yr = $HEB_YR + $j - 1;
-	    my $other_greg_yr1 = $other_yr - 3761;
-	    my $other_greg_yr2 = $other_greg_yr1 + 1;
-	    my $other_slug = "$other_greg_yr1-$other_greg_yr2";
+    print OUT4 qq{<div class="row-fluid">\n};
+    print OUT4 qq{<div class="span12">\n};
+    print OUT4 qq{<div class="pagination pagination-small"><ul>\n};
+    foreach my $j (0 .. $NUM_YEARS) {
+	my $other_yr = $HEB_YR + $j - 1;
+	my $other_greg_yr1 = $other_yr - 3761;
+	my $other_greg_yr2 = $other_greg_yr1 + 1;
+	my $other_slug = "$other_greg_yr1-$other_greg_yr2";
 
-	    if ($i == $j) {
-		print OUT4 qq{<li class="active">};
-	    } else {
-		print OUT4 qq{<li>};
-	    }
-	    print OUT4 qq{<a title="Hebrew Year $other_yr" href="$other_slug">$other_slug</a></li>\n};
+	if ($i == $j) {
+	    print OUT4 qq{<li class="active">};
+	} else {
+	    print OUT4 qq{<li>};
 	}
-	print OUT4 qq{</ul></div>\n};
-
-	foreach my $section (@sections) {
-	  my $heading = $section->[1];
-	  print OUT4 "<h3>", $heading, "</h3>\n";
-	  my $table_id = lc($heading);
-	  $table_id =~ s/\s+/-/g;
-	  table_one_year_only($festivals, "hebcal-$table_id", $i, @{$section->[0]});
-	}
-
-
-	print OUT4 qq{</div><!-- .span12 -->\n};
-	print OUT4 qq{</div><!-- .row-fluid -->\n};
-	print OUT4 Hebcal::html_footer_bootstrap(undef, undef);
-
-	close(OUT4);
-	rename("$fn.$$", $fn) || die "$fn: $!\n";
+	print OUT4 qq{<a title="Hebrew Year $other_yr" href="$other_slug">$other_slug</a></li>\n};
     }
+    print OUT4 qq{</ul></div>\n};
+
+    foreach my $section (@{$sections}) {
+	my $heading = $section->[1];
+	print OUT4 "<h3>", $heading, "</h3>\n";
+	my $table_id = lc($heading);
+	$table_id =~ s/\s+/-/g;
+	table_one_year_only($festivals, "hebcal-$table_id", $i, @{$section->[0]});
+    }
+
+    print OUT4 qq{</div><!-- .span12 -->\n};
+    print OUT4 qq{</div><!-- .row-fluid -->\n};
+    print OUT4 Hebcal::html_footer_bootstrap(undef, undef);
+
+    close(OUT4);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
 }
 
 sub get_torah_and_maftir {
