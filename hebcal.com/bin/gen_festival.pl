@@ -761,21 +761,7 @@ sub write_festival_page
 	$hebrew = "";
     }
 
-    my $next_observed = ". ";
-    if (defined $OBSERVED{$f}) {
-	my $rise_or_set = begins_when($f);
-	foreach my $evt (@{$OBSERVED{$f}}) {
-	    next unless defined $evt;
-	    my($gy,$gm,$gd) = day_event_observed($f,$evt);
-	    my $time = Hebcal::event_to_time($evt);
-	    if ($time >= $NOW) {
-	        my $dow = Hebcal::get_dow($gy,$gm,$gd);
-		$next_observed = sprintf ", begins %s on %s, %02d %s %04d. ",
-		  $rise_or_set, $Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
-		last;
-	    }
-	}
-    }
+    my $next_observed = get_next_observed_str($f);
 
     my $meta = <<EOHTML;
 <meta name="description" content="Jewish holiday of $f$next_observed$descr. Holiday Torah readings, dates observed.">
@@ -1199,4 +1185,26 @@ sub findError {
     }
 
     return undef;
+}
+
+sub get_next_observed_str {
+    my($f) = @_;
+
+    my $next_observed = ". ";
+    if (defined $OBSERVED{$f}) {
+	my $rise_or_set = begins_when($f);
+	foreach my $evt (@{$OBSERVED{$f}}) {
+	    next unless defined $evt;
+	    my($gy,$gm,$gd) = day_event_observed($f, $evt);
+	    my $time = Hebcal::event_to_time($evt);
+	    if ($time >= $NOW) {
+		my $dow = Hebcal::get_dow($gy, $gm, $gd);
+		$next_observed = sprintf ", begins %s on %s, %02d %s %04d. ", $rise_or_set,
+		    $Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
+		last;
+	    }
+	}
+    }
+
+    $next_observed;
 }
