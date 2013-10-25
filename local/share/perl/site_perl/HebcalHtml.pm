@@ -108,20 +108,20 @@ sub download_html_bootstrap {
 	: URI::Escape::uri_escape_utf8("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
  
-    my $ol_ics_title = "Outlook 2007, Outlook 2010 (Windows)";
+    my $ol_ics_title = "Outlook 2007, 2010, 2013 (Windows)";
     my $ol_csv_title = "Outlook 97, 98, 2000, 2002, 2003 (Windows)";
-    my $ical_title = "Apple iCal (Mac OS X)";
+    my $ical_title = "Mac OS X Calendar (Desktop)";
     my $ol_mac_title = "Outlook 2011 (Mac OS X)";
-    my $ios_title = "iPhone &amp; iPad (iOS 3.0 and higher)";
+    my $ios_title = "Apple iPhone &amp; iPad";
     my $gcal_title = "Google Calendar";
     my $wlive_title = "Outlook.com Calendar";
     my $ycal_title = "Yahoo! Calendar";
     my $palm_title = "Palm Desktop (Windows-only)";
 
     my $ol_ics = <<EOHTML;
-<p><a class="btn download"
+<p><a class="btn download" title="$ics_title"
 href="webcal://$vhost$subical_href"
-id="dl-ol-ics"><i class="icon-download-alt"></i> $ics_title</a></p>
+id="dl-ol-ics"><i class="icon-download-alt"></i> Download Outlook Internet Calendar Subscription</a></p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
@@ -129,25 +129,25 @@ ICS (Internet Calendar Subscription) file into Outlook</a></p>
 EOHTML
 ;
     my $ol_csv = <<EOHTML;
-Select an Outlook CSV file to download
-<ul>
-<li>USA date format (month/day/year): <a class="btn download"
-href="$href_ol_usa"
-id="dl-ol-csv-usa"><i class="icon-download-alt"></i> ${filename}_usa.csv</a>
-<li>European date format (day/month/year): <a class="btn download"
-href="$href_ol_eur"
-id="dl-ol-csv-eur"><i class="icon-download-alt"></i> ${filename}_eur.csv</a>
+Select one of:
+<ul class="unstyled">
+<li><a class="btn download"
+href="$href_ol_usa" title="${filename}_usa.csv"
+id="dl-ol-csv-usa"><i class="icon-download-alt"></i> Download Outlook CSV - USA date format (month/day/year)</a>
+<li><a class="btn download"
+href="$href_ol_eur" title="${filename}_eur.csv"
+id="dl-ol-csv-eur"><i class="icon-download-alt"></i> Download Outlook CSV - European date format (day/month/year)</a>
 </ul>
 Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 EOHTML
 ;
     my $ical = <<EOHTML;
-<p><a class="btn download"
+<p><a class="btn download" title="$ics_title"
 href="webcal://$vhost$subical_href"
-id="dl-ical-sub"><i class="icon-download-alt"></i> $ics_title</a></p>
+id="dl-ical-sub"><i class="icon-download-alt"></i> Download to Mac Calendar</a></p>
 <p>Step-by-step: <a title="Apple iCal - import Hebcal Jewish calendar"
-href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple iCal</a></p>
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple Mac OS X Desktop Calendar</a></p>
 <p>Alternate option: <a class="download"
 href="${ical_href}"
 id="dl-ical-alt">download $ics_title</a>
@@ -155,18 +155,18 @@ and then import manually into Apple iCal.</p>
 EOHTML
 ;
     my $ol_mac = <<EOHTML;
-<p><a class="btn download"
+<p><a class="btn download" title="$ics_title"
 href="${ical_href}"
-id="dl-ol-mac"><i class="icon-download-alt"></i> $ics_title</a></p>
+id="dl-ol-mac"><i class="icon-download-alt"></i> Download to Outlook for Mac</a></p>
 <p>Step-by-step: <a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
 href="/home/186/outlook-2011-mac-import">Import .ics file into
 Outlook 2011 for Mac OS X</a></p>
 EOHTML
 ;
     my $ios = <<EOHTML;
-<p><a class="btn download"
+<p><a class="btn download" title="$ics_title"
 href="webcal://$vhost$subical_href"
-id="dl-ios-sub"><i class="icon-download-alt"></i> $ics_title</a></p>
+id="dl-ios-sub"><i class="icon-download-alt"></i> Download to iPhone/iPad</a></p>
 <p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
 href="/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p>
 EOHTML
@@ -197,9 +197,9 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive = <<EOHTML;
-<p><a class="btn download" title="Add to Outlook.com Calendar"
+<p><a class="btn download" title="$ics_title"
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"
-id="dl-wlive"><i class="icon-download-alt"></i> $ics_title</a></p>
+id="dl-wlive"><i class="icon-download-alt"></i> Add to Outlook.com Calendar</a></p>
 <p>Step-by-step: <a
 href="http://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe">Import
 or subscribe to a calendar in Outlook.com</a></p>
@@ -254,7 +254,7 @@ EOHTML
 	my $dba_href = Hebcal::download_href($q, $filename, 'dba');
 	$palm_dba = <<EOHTML;
 <h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
-<p><a class="btn download" id="dl-dba" href="$dba_href"><i class="icon-download-alt"></i> $filename.dba</a></p>
+<p><a class="btn download" id="dl-dba" href="$dba_href"><i class="icon-download-alt"></i> Download $filename.dba</a></p>
 <p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
 href="/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
 EOHTML
@@ -263,7 +263,7 @@ EOHTML
 
     my $palm = <<EOHTML;
 <h5>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)</h5>
-<p><a class="btn download" id="dl-vcs" href="$href_vcs"><i class="icon-download-alt"></i> ${filename}.vcs</a></p>
+<p><a class="btn download" id="dl-vcs" href="$href_vcs"><i class="icon-download-alt"></i> Download ${filename}.vcs</a></p>
 <p>Step-by-step: <a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
 href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
 $palm_dba
@@ -272,7 +272,7 @@ EOHTML
 
     my $pdf_title = "Print PDF (formatted for 8.5\"x11\" paper)";
     my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
-    my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf"><i class="icon-print"></i> ${filename}.pdf</a></p>\n};
+    my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf" title="${filename}.pdf"><i class="icon-print"></i> Download PDF Calendar</a></p>\n};
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
     $s .= accordion_bootstrap($pdf_title, "pdf", $pdf) unless $suppress_pdf;
