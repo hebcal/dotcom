@@ -439,7 +439,7 @@ if (scalar(@events) > 0) {
     @names = map { Hebcal::make_anchor($_) } @names;
     $filename .= "_" . join("_", @names);
 
-    $q->param("filename", $filename);
+    remove_empty_parameters($q);
     Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events, undef, 1));
 
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
@@ -498,6 +498,31 @@ Hebcal::out_html($cfg, "</table>\n");
 Hebcal::out_html($cfg, qq{<h3 id="form">Enter more dates and names</h3>\n});
 
 form(0);
+}
+
+# remove empty parameters from long download link
+sub remove_empty_parameters {
+    my($q) = @_;
+
+    my %nonempty;
+    foreach my $input (@inputs) {
+	$nonempty{$input->[0]} = 1;
+    }
+    my @to_delete;
+    foreach my $key ($q->param()) {
+	if ($key =~ /^[tdmyns](\d+)$/) {
+	    unless ($nonempty{$1}) {
+		push(@to_delete, $key);
+	    }
+	}
+    }
+    if (! $q->param("ref_url")) {
+	push(@to_delete, qw(ref_url ref_text));
+    }
+    # don't delete while iterating through the parameters
+    foreach my $key (@to_delete) {
+	$q->delete($key);
+    }
 }
 
 sub form
