@@ -655,12 +655,16 @@ sub write_festival_part
     my $torah;
     my $maftir;
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
-	my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
-	($torah,$maftir) = get_torah_and_maftir($aliyot);
-	if ($torah && $maftir) {
-	    $torah .= " &amp; $maftir";
-	} elsif ($maftir) {
-	    $torah = "$maftir (special maftir)";
+	if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'verse'}) {
+	    $torah = $festivals->{'festival'}->{$f}->{'kriyah'}->{'verse'};
+	} else {
+	    my $aliyot = $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'};
+	    ($torah,$maftir) = get_torah_and_maftir($aliyot);
+	    if ($torah && $maftir) {
+		$torah .= " &amp; $maftir";
+	    } elsif ($maftir) {
+		$torah = "$maftir (special maftir)";
+	    }
 	}
     }
 
