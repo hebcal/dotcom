@@ -124,15 +124,7 @@ else
     list($gm, $gd, $gy) = explode("/", $greg, 3);
 }
 
-if ($gy > 1969 && $gy < 2038)
-{
-    $t = mktime(12, 12, 12, $gm, $gd, $gy);
-    $dow = date("D", $t) . ", ";
-}
-else
-{
-    $dow = "";
-}
+$dow = jddayofweek($jd, 2);
 
 if ($hm == "Adar1" && !is_leap_year($hy)) {
     $month_name = "Adar";
@@ -143,14 +135,14 @@ $hebrew = build_hebrew_date($month_name, $hd, $hy);
 
 if ($type == "g2h")
 {
-    $first = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
+    $first = "$dow, $gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
     $second = format_hebrew_date($hd, $hm, $hy);
     $header_hebdate = $second;
 }
 else
 {
     $first = format_hebrew_date($hd, $hm, $hy);
-    $second = "$dow$gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
+    $second = "$dow, $gd ". $MoY_long[$gm] .  " " . sprintf("%04d", $gy);
     $header_hebdate = $first;
 }
 
