@@ -2017,7 +2017,7 @@ sub process_args_common {
 	$city_descr = "$city, $state " . $q->param('zip');
 
 	$q->param("geo", "zip");
-	foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid i)) {
+	foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
 	    $q->delete($_);
 	}
 	if (defined $cconfig) {
@@ -2149,8 +2149,6 @@ sub process_args_common {
 
 	if ($CITY_COUNTRY{$city} eq 'IL') {
 	    $q->param('i','on');
-	} else {
-	    $q->delete('i');
 	}
 	foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
 	    $q->delete($_);
