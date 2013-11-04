@@ -401,7 +401,7 @@ sub format_evt_time {
 
 sub format_hebcal_event_time {
     my($hour,$min,$suffix) = @_;
-    $suffix = "pm" unless $suffix;
+    $suffix = "pm" unless defined $suffix;
     if ($hour == 0) {
 	$suffix =~ s/p/a/;
 	$suffix =~ s/P/A/;
