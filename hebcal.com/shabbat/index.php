@@ -97,16 +97,24 @@ if ($qs) {
     }
 
     $url .= "?$qs";
-    $qs = preg_replace('/[&;]?(tag|utm_source|set|tgt)=[^&;]+/', "", $qs);
-    $qs = preg_replace('/[&;]?\.(from|cgifields|s)=[^&;]+/', "", $qs);
-    $qs = strtr($qs, "&;./", ",,_-");
-    $qs = str_replace("%20", "+", $qs);
-    $dir = $_SERVER["DOCUMENT_ROOT"] . "/cache/shabbat/shabbat_cgi";
-    $cachefile = "$dir/$qs";
-    if (file_exists($cachefile) && filesize($cachefile) > 0) {
-	$status = @readfile($cachefile);
-    } else {
+    if (isset($_SERVER["HTTP_CACHE_CONTROL"])
+	&& $_SERVER["HTTP_CACHE_CONTROL"] == "max-age=0") {
 	$status = false;
+	$extra = "&rand=" . uniqid();
+	$url .= $extra;
+	$qs .= $extra;
+    } else {
+	$qs = preg_replace('/[&;]?(tag|utm_source|set|tgt)=[^&;]+/', "", $qs);
+	$qs = preg_replace('/[&;]?\.(from|cgifields|s)=[^&;]+/', "", $qs);
+	$qs = strtr($qs, "&;./", ",,_-");
+	$qs = str_replace("%20", "+", $qs);
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/cache/shabbat/shabbat_cgi";
+	$cachefile = "$dir/$qs";
+	if (file_exists($cachefile) && filesize($cachefile) > 0) {
+	    $status = @readfile($cachefile);
+	} else {
+	    $status = false;
+	}
     }
 } else {
     $status = false;
