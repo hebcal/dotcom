@@ -446,21 +446,34 @@ sub display_html
     form($cfg,0,'','');
 }
 
+sub get_link_args {
+    my($q,$do_havdalah_mins) = @_;
+
+    my $url = "";
+    if ($q->param("zip")) {
+	$url .= "zip=" . $q->param("zip");
+    } else {
+	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
+    }
+    foreach my $arg (qw(a i)) {
+	$url .= sprintf("&%s=%s", $arg, $q->param($arg))
+	    if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
+    }
+
+    if ($do_havdalah_mins) {
+	$url .= "&m=" . $q->param("m")
+	    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
+    }
+
+    $url;
+}
+
 sub more_from_hebcal {
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
 
     # link to hebcal full calendar
     my $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
-
-    if ($q->param('zip')) {
-	$url .= "zip=" . $q->param('zip');
-    } else {
-	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param('city'));
-    }
-
-    $url .= "&m=" . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
+    $url .= get_link_args($q, 1);
     $url .= '&vis=on&month=now&year=now&nh=on&nx=on&s=on&c=on&mf=on&ss=on';
 
     my $month_name = join(" ", $Hebcal::MoY_short[$this_mon-1], $this_year);
@@ -470,11 +483,7 @@ sub more_from_hebcal {
 
     # Fridge calendar
     $url = "/shabbat/fridge.cgi?";
-    if ($q->param('zip')) {
-	$url .= "zip=" . $q->param('zip');
-    } else {
-	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param('city'));
-    }
+    $url .= get_link_args($q, 0);
     $url .= "&year=" . $hyear;
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
 		     qq{href="}, url_html($url),
@@ -494,13 +503,7 @@ EOHTML
 
     # Synagogues link
     $url = "/link/?";
-    if ($q->param('zip')) {
-	$url .= "zip=" . $q->param('zip');
-    } else {
-	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param('city'));
-    }
-    $url .= "&m=" . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+    $url .= get_link_args($q, 1);
     $url .= "&type=shabbat";
 
     Hebcal::out_html($cfg, qq{<a class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
