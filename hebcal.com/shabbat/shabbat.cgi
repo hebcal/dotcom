@@ -718,25 +718,33 @@ sub get_saturday
 {
     my($q) = @_;
 
-    my $now;
-    if (defined $q->param('t') && $q->param('t') =~ /^\d+$/) {
-	$now = $q->param('t');
+    my($gy,$gm,$gd,$dow);
+    if (defined $q->param("gy") && $q->param("gy") =~ /^\d+$/
+	&& defined $q->param("gm") && $q->param("gm") =~ /^\d+$/
+	&& defined $q->param("gd") && $q->param("gd") =~ /^\d+$/) {
+	($gy,$gm,$gd) = ($q->param("gy"),$q->param("gm"),$q->param("gd"));
+	$dow = Hebcal::get_dow($gy,$gm,$gd);
     } else {
-	$now = time();
+	my $now;
+	if (defined $q->param('t') && $q->param('t') =~ /^\d+$/) {
+	    $now = $q->param('t');
+	} else {
+	    $now = time();
+	}
+	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	    localtime($now);
+	($gy,$gm,$gd) = ($year+1900,$mon+1,$mday);
+	$dow = $wday;
     }
 
-    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-	localtime($now);
-    $year += 1900;
+    my $friday = Time::Local::timelocal(0,0,0,$gd,$gm-1,$gy);
 
-    my $friday = Time::Local::timelocal(0,0,0,
-					$mday,$mon,$year,
-					$wday,$yday,$isdst);
-    my $saturday = ($wday == 6) ?
-	$now + (60 * 60 * 24) : $now + ((6 - $wday) * 60 * 60 * 24);
+    my $saturday = ($dow == 6)
+	? $friday + (60 * 60 * 24)
+	: $friday + ((6 - $dow) * 60 * 60 * 24) + 3601;
     my $sat_year = (localtime($saturday))[5] + 1900;
 
-    ($friday,$year,$saturday,$sat_year);
+    ($friday,$gy,$saturday,$sat_year);
 }
 
 # local variables:
