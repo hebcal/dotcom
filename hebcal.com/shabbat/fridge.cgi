@@ -159,8 +159,8 @@ sub filter_events {
 	my $reason = "";
 	my $yom_tov = 0;
 	if (defined $events->[$i+1]
-	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)$/) {
-	    $reason = $1;
+	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^(Parashat|Parshas) (.+)$/) {
+	    $reason = $2;
 	} elsif ($i == $numEntries - 1) {
 	    $yom_tov = 1;
 	    $reason = "Rosh Hashana";
@@ -179,10 +179,7 @@ sub filter_events {
 	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON];
 	my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
 
-	my $min = $events->[$i]->[$Hebcal::EVT_IDX_MIN];
-	my $hour = $events->[$i]->[$Hebcal::EVT_IDX_HOUR];
-	$hour -= 12 if $hour > 12;
-	my $item_time = sprintf("%d:%02d", $hour, $min);
+	my $item_time = Hebcal::format_evt_time($events->[$i], "");
 
 	push(@items, [$Hebcal::MoY_short[$mon], $mday, $item_time, $reason, $yom_tov]);
     }
@@ -218,6 +215,10 @@ EOHTML
 	$url_base .= "zip=" . $q->param("zip");
     } else {
 	$url_base .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
+    }
+    foreach my $arg (qw(a i)) {
+	$url_base .= sprintf("&amp;%s=%s", $arg, $q->param($arg))
+	    if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
     }
     $url_base .= "&amp;year=";
 
