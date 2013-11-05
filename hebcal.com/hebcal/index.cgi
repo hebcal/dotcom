@@ -117,7 +117,7 @@ if (! defined $pi) {
 } elsif (defined $q->param("cfg") && $q->param("cfg") =~ /^(e|e2|json)$/) {
     $cfg = $q->param("cfg");
     $content_type = $q->param("cfg") eq "json"
-	? "text/json" : "text/javascript";
+	? "application/json" : "text/javascript";
 } else {
     $cfg = "html";
 }
@@ -287,7 +287,6 @@ sub json_events
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
 
     print STDOUT $q->header(-type => $content_type,
-			    -charset => "UTF-8",
 			    );
 
     my $title = "Hebcal $g_date";

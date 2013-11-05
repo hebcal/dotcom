@@ -164,7 +164,7 @@ if ($gy >= 1900 && $gy <= 2099) {
 }
 
 if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
-    header("Content-Type: text/json; charset=UTF-8");
+    header("Content-Type: application/json");
     $callback = false;
     if (isset($_GET["callback"]) && preg_match('/^[\w\.]+$/', $_GET["callback"])) {
 	echo $_GET["callback"], "(";

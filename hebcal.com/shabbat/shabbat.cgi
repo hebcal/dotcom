@@ -208,7 +208,7 @@ sub display_json
 {
     my($items) = @_;
 
-    print "Content-Type: text/json; charset=UTF-8\015\012\015\012";
+    print "Content-Type: application/json\015\012\015\012";
 
     Hebcal::items_to_json($items,$q,$city_descr,$latitude,$longitude);
 }
