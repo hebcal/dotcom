@@ -211,13 +211,14 @@ sub mail_all {
 	my @addrs = keys %SUBS;
 	my $count =  scalar(@addrs);
 	last if $count == 0;
-	INFO("About to mail $count users ($failures previous failures)");
 	# sort the addresses by timezone so we mail eastern users first
+	INFO("Sorting $count users by lat/long");
 	@addrs = sort by_timezone @addrs;
+	INFO("About to mail $count users ($failures previous failures)");
 	for (my $i = 0; $i < $count; $i++) {
 	    my $to = $addrs[$i];
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
-	    if ($i % 500 == 0) {
+	    if ($i % 200 == 0) {
 		my($cmd,$loc,$args) = @{$CONFIG{$to}};
 		INFO("Sending mail #$i ($loc)");
 	    }
