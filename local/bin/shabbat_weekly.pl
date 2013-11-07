@@ -210,6 +210,7 @@ sub mail_all
 	    my $status = mail_user($to, $SMTP[$server_num]);
 	    if ($status == $STATUS_FAIL_AND_CONTINUE) {
 		# count this as a real failure but don't try the address again
+		msg("Failure on mail #$i ($to), won't try this address again", $opt_verbose);
 		delete $SUBS{$to};
 		++$failures;
 	    } elsif ($status == $STATUS_OK) {
@@ -219,6 +220,7 @@ sub mail_all
 		    smtp_reconnect($server_num, 1);
 		}
 	    } else {
+		msg("Failure on mail #$i ($to), reconnecting...", $opt_verbose);
 		if (++$failures >= $MAX_FAILURES) {
 		    carp "Got $failures failures, giving up";
 		    return;
