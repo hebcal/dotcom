@@ -44,7 +44,8 @@ use Time::Local ();
 use DBI ();
 use Hebcal::SMTP;
 use Getopt::Long ();
-use Log::Message::Simple qw[:STD :CARP];
+use Carp;
+use Log::Log4perl qw(:easy);
 use Config::Tiny;
 use MIME::Lite;
 use Date::Calc;
@@ -70,6 +71,17 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
 $opt_log = 0 if $opt_dryrun;
+
+my $loglevel;
+if ($opt_verbose == 0) {
+    $loglevel = $WARN;
+} elsif ($opt_verbose == 1) {
+    $loglevel = $INFO;
+} else {
+    $loglevel = $DEBUG;
+}
+# Just log to STDERR
+Log::Log4perl->easy_init($loglevel);
 
 # don't send email on yontiff
 exit_if_yomtov();
@@ -111,6 +123,7 @@ if ($opt_log) {
 			  $HOME, $year, $mon+1, $mday);
     if ($opt_all) {
 	if (open(LOG, "<$logfile")) {
+	    INFO("Scanning $logfile");
 	    my $count = 0;
 	    while(<LOG>) {
 		my($msgid,$status,$to,$loc) = split(/:/);
@@ -120,7 +133,7 @@ if ($opt_log) {
 		}
 	    }
 	    close(LOG);
-	    msg("Skipping $count users from $logfile", $opt_verbose);
+	    INFO("Skipping $count users from previous run");
 	}
     }
     open(LOG, ">>$logfile") || croak "$logfile: $!";
@@ -146,7 +159,7 @@ my @AUTH = (
 #}
 my @SMTP;
 my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
-msg("Opening $SMTP_NUM_CONNECTIONS SMTP connections", $opt_verbose);
+INFO("Opening $SMTP_NUM_CONNECTIONS SMTP connections");
 for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
     $SMTP[$i] = undef;
     smtp_reconnect($i, 1);
@@ -155,8 +168,7 @@ for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
 #my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
 my $SMTP_SLEEP_TIME = 300_000; 	# 300 milliseconds
 $SMTP_SLEEP_TIME = 0 if $opt_dryrun;
-msg("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME microseconds between messages",
-    $opt_verbose);
+INFO("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME microseconds between messages");
 
 my %CONFIG;
 my %ZIP_CACHE;
@@ -164,27 +176,27 @@ mail_all();
 
 close(LOG) if $opt_log;
 
-msg("Disconnecting from SMTP", $opt_verbose);
+INFO("Disconnecting from SMTP");
 foreach my $smtp (@SMTP) {
     $smtp->quit();
 }
 
 Hebcal::zipcode_close_db($ZIPS_DBH);
 
-msg("Success!", $opt_verbose);
+INFO("Success!");
 exit(0);
 
 sub exit_if_yomtov {
     my $subj = Hebcal::get_today_yomtov();
     if ($subj) {
-	msg("Today is yomtov: $subj", $opt_verbose);
+	INFO("Today is yomtov: $subj");
 	exit(0);
     }
     1;
 }
 
 sub parse_all_configs {
-    msg("Parsing all configs", $opt_verbose);
+    INFO("Parsing all configs");
     while(my($to,$cfg) = each(%SUBS)) {
 	my($cmd,$loc,$args) = parse_config($cfg);
 	$CONFIG{$to} = [$cmd,$loc,$args];
@@ -199,8 +211,7 @@ sub mail_all {
 	my @addrs = keys %SUBS;
 	my $count =  scalar(@addrs);
 	last if $count == 0;
-	msg("About to mail $count users ($failures previous failures)",
-	    $opt_verbose);
+	INFO("About to mail $count users ($failures previous failures)");
 	# sort the addresses by timezone so we mail eastern users first
 	@addrs = sort by_timezone @addrs;
 	for (my $i = 0; $i < $count; $i++) {
@@ -208,12 +219,12 @@ sub mail_all {
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
 	    if ($i % 500 == 0) {
 		my($cmd,$loc,$args) = @{$CONFIG{$to}};
-		msg("Sending mail #$i ($loc)", $opt_verbose);
+		INFO("Sending mail #$i ($loc)");
 	    }
 	    my $status = mail_user($to, $SMTP[$server_num]);
 	    if ($status == $STATUS_FAIL_AND_CONTINUE) {
 		# count this as a real failure but don't try the address again
-		msg("Failure on mail #$i ($to), won't try this address again", $opt_verbose);
+		WARN("Failure on mail #$i ($to), won't try this address again");
 		delete $SUBS{$to};
 		++$failures;
 	    } elsif ($status == $STATUS_OK) {
@@ -223,9 +234,9 @@ sub mail_all {
 		    smtp_reconnect($server_num, 1);
 		}
 	    } else {
-		msg("Failure on mail #$i ($to), reconnecting...", $opt_verbose);
+		WARN("Failure on mail #$i ($to), reconnecting...");
 		if (++$failures >= $MAX_FAILURES) {
-		    carp "Got $failures failures, giving up";
+		    ERROR("Got $failures failures, giving up");
 		    return;
 		}
 		# reconnect to see if this helps
@@ -234,7 +245,7 @@ sub mail_all {
 	    usleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
 	}
     }
-    msg("Done ($failures failures)", $opt_verbose);
+    INFO("Done ($failures failures)");
 }
 
 sub get_latlong {
@@ -245,13 +256,13 @@ sub get_latlong {
 	   $lat_deg,$lat_min,$long_deg,$long_min) =
 	    get_zipinfo($args->{"zip"});
 	if ($opt_verbose > 2) {
-	  msg("zip=" . $args->{"zip"} . ",lat=$latitude,long=$longitude", $opt_verbose);
+	  DEBUG("zip=" . $args->{"zip"} . ",lat=$latitude,long=$longitude");
 	}
 	return ($latitude, $longitude, $city);
     } else {
 	my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$args->{"city"}}};
 	if ($opt_verbose > 2) {
-	  msg("city=" . $args->{"city"} . ",lat=$latitude,long=$longitude", $opt_verbose);
+	    DEBUG("city=" . $args->{"city"} . ",lat=$latitude,long=$longitude");
 	}
 	return ($latitude, $longitude, $args->{"city"});
     }
@@ -280,9 +291,7 @@ sub mail_user
     my($cmd,$loc,$args) = @{$CONFIG{$to}};
     return 1 unless $cmd;
 
-    if ($opt_verbose > 1) {
-      msg("to=$to   cmd=$cmd", $opt_verbose);
-    }
+    DEBUG("to=$to   cmd=$cmd");
 
     my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
     if ($sat_year != $year) {
@@ -487,9 +496,7 @@ sub load_subs
     my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
     my $dbname = $Config->{_}->{"hebcal.mysql.dbname"};
     my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
-    if ($opt_verbose > 1) {
-	msg("Connecting to $dsn", $opt_verbose);
-    }
+    DEBUG("Connecting to $dsn");
     my $dbh = DBI->connect($dsn, $dbuser, $dbpass)
 	or die "DB Connection not made: $DBI::errstr";
     $dbh->{'mysql_enable_utf8'} = 1;
@@ -512,7 +519,7 @@ $all_sql
 EOD
 ;
 
-    msg($sql, $opt_verbose);
+    INFO($sql);
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or croak "can't execute the query: " . $sth->errstr;
@@ -535,7 +542,7 @@ EOD
 
     $dbh->disconnect;
 
-    msg("Loaded $count users", $opt_verbose);
+    INFO("Loaded $count users");
     $count;
 }
 
@@ -559,7 +566,7 @@ sub parse_config
     my $cmd = "$HOME/web/hebcal.com/bin/hebcal";
 
     if ($opt_verbose > 3) {
-	msg("cfg=$config", $opt_verbose);
+	DEBUG("cfg=$config");
     }
 
     my %args;
@@ -573,7 +580,7 @@ sub parse_config
 	my($city,$state,$tzid,$latitude,$longitude,
 	   $lat_deg,$lat_min,$long_deg,$long_min) = get_zipinfo($args{"zip"});
 	unless (defined $state) {
-	    carp "unknown zipcode [$config]";
+	    WARN("unknown zipcode [$config]");
 	    return undef;
 	}
 	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
@@ -586,7 +593,7 @@ sub parse_config
 	    $cmd .= " -C 'Jerusalem'";
 	} else {
 	    if (! defined $Hebcal::CITY_LATLONG{$city}) {
-		carp "unknown city [$config]";
+		WARN("unknown city [$config]");
 		return undef;
 	    }
 	    my($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
@@ -603,7 +610,7 @@ sub parse_config
 	$country = "USA" if $country eq "United States of America";
 	$city_descr = Hebcal::woe_city($city) . ", $country";
     } else {
-	carp "no geographic key in [$config]";
+	ERROR("no geographic key in [$config]");
 	return undef;
     }
 
@@ -648,11 +655,11 @@ sub smtp_connect
 				       Debug => $debug);
 	if ($smtp) {
 	    $smtp->auth($user, $password)
-		or carp "Can't authenticate as $user\n" . $smtp->debug_txt();
+		or WARN("Can't authenticate as $user\n" . $smtp->debug_txt());
 	    return $smtp;
 	} else {
 	    my $sec = 5;
-	    carp "Could not connect to $s, retry in $sec seconds";
+	    WARN("Could not connect to $s, retry in $sec seconds");
 	    sleep($sec);
 	}
     }
@@ -690,13 +697,13 @@ sub my_sendmail
     my $to = $headers->{"To"};
     my $rv = $smtp->mail($return_path);
     unless ($rv) {
-	carp "smtp mail() failure for $to\n" . $smtp->debug_txt();
+	WARN("smtp mail() failure for $to\n" . $smtp->debug_txt());
 	return $STATUS_TRY_LATER;
     }
 
     $rv = $smtp->to($to);
     unless ($rv) {
-	carp "smtp to() failure for $to\n" . $smtp->debug_txt();
+	WARN("smtp to() failure for $to\n" . $smtp->debug_txt());
 	return $STATUS_TRY_LATER;
     }
 
@@ -706,10 +713,10 @@ sub my_sendmail
     unless ($rv) {
 	my $debug_txt = $smtp->debug_txt();
 	if ($debug_txt =~ /<<< 554 Message rejected: Address blacklisted/) {
-	    carp "$to 554 Message rejected: Address blacklisted\n";
+	    INFO("$to 554 Message rejected: Address blacklisted\n");
 	    return $STATUS_FAIL_AND_CONTINUE;
 	}
-	carp "smtp dataend() failure for $to\n" . $debug_txt;
+	WARN("smtp dataend() failure for $to\n" . $debug_txt);
 	return $STATUS_TRY_LATER;
     }
 
