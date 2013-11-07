@@ -203,6 +203,10 @@ sub mail_all
 	for (my $i = 0; $i < $count; $i++) {
 	    my $to = $addrs[$i];
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
+	    if ($i % 500 == 0) {
+		my($cmd,$loc,$args) = @{$CONFIG{$to}};
+		msg("Sending mail #$i ($loc)", $opt_verbose);
+	    }
 	    my $status = mail_user($to, $SMTP[$server_num]);
 	    if ($status == $STATUS_FAIL_AND_CONTINUE) {
 		# count this as a real failure but don't try the address again
