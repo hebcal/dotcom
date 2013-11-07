@@ -82,7 +82,7 @@ my %cconfig;
 my($evts,$cfg,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,$cconfig{"tzid"});
 
-my $cache = Hebcal::cache_begin($q);
+my $cache = Hebcal::cache_begin($q,0);
 
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
 		     $cfg eq "widget" || $cfg eq "json"))

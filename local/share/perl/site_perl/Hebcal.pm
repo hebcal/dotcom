@@ -1076,9 +1076,8 @@ sub script_name($)
 
 
 my $cache = undef;
-sub cache_begin($)
-{
-    my($q) = @_;
+sub cache_begin {
+    my($q,$munge_qs) = @_;
 
     my $orig_qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
     return undef unless $orig_qs;
@@ -1091,7 +1090,24 @@ sub cache_begin($)
 	system("/bin/mkdir", "-p", $dir) == 0 or return undef;
     }
 
-    my $qs = get_munged_qs($orig_qs);
+    my $qs;
+    if ($munge_qs) {
+	$qs = get_munged_qs($orig_qs);
+    } else {
+	my $ext = "html";
+	if (defined $q->param("cfg")) {
+	    my $cfg = $q->param("cfg");
+	    if ($cfg eq "r") {
+		$ext = "xml";
+	    } elsif ($cfg eq "j") {
+		$ext = "js";
+	    } elsif ($cfg eq "json") {
+		$ext = "json";
+	    }
+	    # otherwise use .html default
+	}
+	$qs = "${orig_qs}.${ext}";
+    }
     $cache = "$dir/$qs.$$";
     if (!open(CACHE, ">$cache")) {
 	$cache = undef;
@@ -1105,8 +1121,7 @@ sub cache_begin($)
     $cache;
 }
 
-sub cache_end()
-{
+sub cache_end {
     if ($cache)
     {
 	close(CACHE);
