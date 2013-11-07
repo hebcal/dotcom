@@ -129,6 +129,8 @@ if ($opt_log) {
     select STDOUT;
 }
 
+parse_all_configs();
+
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
@@ -181,14 +183,15 @@ sub exit_if_yomtov {
     1;
 }
 
-sub mail_all
-{
-    msg("Loading config", $opt_verbose);
+sub parse_all_configs {
+    msg("Parsing all configs", $opt_verbose);
     while(my($to,$cfg) = each(%SUBS)) {
 	my($cmd,$loc,$args) = parse_config($cfg);
 	$CONFIG{$to} = [$cmd,$loc,$args];
     }
+}
 
+sub mail_all {
     my $MAX_FAILURES = 100;
     my $RECONNECT_INTERVAL = 20;
     my $failures = 0;
