@@ -86,10 +86,12 @@ Log::Log4perl->easy_init($loglevel);
 # don't send email on yontiff
 exit_if_yomtov();
 
+INFO("Reading $Hebcal::CONFIG_INI_PATH");
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
     or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 
 my %SUBS;
+INFO("Querying database to get subscriber info");
 load_subs();
 if (! keys(%SUBS) && !$opt_all) {
     croak "$ARGV[0]: not found";
@@ -112,6 +114,7 @@ my $UTM_PARAM = sprintf("utm_source=newsletter&amp;utm_campaign=shabbat-%04d-%02
 			$year, $mon+1, $mday);
 
 my $HOME = "/home/hebcal";
+INFO("Opening ZIP code database");
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
 
 my $STATUS_OK = 1;
