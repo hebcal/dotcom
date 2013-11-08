@@ -441,7 +441,25 @@ sub display_html
 
     print $q->header(-type => $content_type, -charset => "UTF-8");
 
-    my_head($title);
+    my @description_items;
+    foreach my $item (@{$items}) {
+	my $datestr = "";
+	if ($item->{"dc:date"} =~ /^\d{4}-0?(\d+)-0?(\d+)/) {
+	    my $month = $1;
+	    my $mday = $2;
+	    $datestr = $Hebcal::MoY_short[$month - 1] . " " . $mday;
+	}
+	if ($item->{"class"} =~ /^(candles|havdalah)$/) {
+	    push(@description_items, "$item->{subj} at $item->{time} on $datestr");
+	} elsif ($item->{"class"} eq "parashat") {
+	    push(@description_items, $item->{subj});
+	} elsif ($item->{"class"} eq "holiday") {
+	    push(@description_items, "$item->{subj} on $datestr");
+	}
+    }
+    my $xtra_head = qq{<meta name="description" content="}
+	. join(". ", @description_items) . qq{.">\n};
+    my_head($title,$xtra_head);
 
     Hebcal::out_html($cfg, $HebcalHtml::indiana_warning)
 	if ($city_descr =~ / IN /);
@@ -556,9 +574,9 @@ EOHTML
 }
 
 sub my_head {
-    my($title) = @_;
+    my($title,$xtra_head) = @_;
     my $rss_href = url_html(self_url() . "&cfg=r");
-    my $xtra_head = <<EOHTML;
+    my $xtra_head2 = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
 <style type="text/css">
 ul#hebcal-results { list-style-type:none }
@@ -589,7 +607,7 @@ EOHTML
 			 Hebcal::html_header_bootstrap($title,
 					     $script_name,
 					     "single single-post",
-					     $xtra_head),
+					     $xtra_head . $xtra_head2),
 			 $head_divs
 	    );
 }
@@ -615,7 +633,7 @@ sub form($$$$)
 	exit(0);
     }
 
-    my_head("Shabbat Candle Lighting Times") if $head;
+    my_head("Shabbat Candle Lighting Times","") if $head;
 
     if (defined $cfg && $cfg eq 'w')
     {
