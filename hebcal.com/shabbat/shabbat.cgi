@@ -79,7 +79,19 @@ my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
 my($latitude,$longitude);
 my %cconfig;
-my($evts,$cfg,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
+my $content_type = "text/html";
+my $cfg = $q->param("cfg");
+if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
+		     $cfg eq "widget" || $cfg eq "json")) {
+    $content_type = "text/vnd.wap.wml" if $cfg eq "w";
+    $content_type = "text/xml" if $cfg eq "r";
+    $content_type = "text/javascript" if $cfg eq "j";
+    $content_type = "application/json" if $cfg eq "json";
+} else {
+    undef($cfg);
+}
+
+my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,$cconfig{"tzid"});
 
 my $cache = Hebcal::cache_begin($q,0);
@@ -137,7 +149,7 @@ sub process_args
 	@events = (@ev2, @events);
     }
     
-    (\@events,$cfg,$city_descr,$cmd);
+    (\@events,$city_descr,$cmd);
 }
 
 sub url_html {
@@ -167,7 +179,7 @@ sub display_wml
 
     my $title = 'Hebcal Shabbat Times';
 	
-    print "Content-Type: text/vnd.wap.wml\015\012\015\012";
+    print "Content-Type: $content_type\015\012\015\012";
 
     Hebcal::out_html($cfg,
 qq{<?xml version="1.0"?>
@@ -208,7 +220,7 @@ sub display_json
 {
     my($items) = @_;
 
-    print "Content-Type: application/json\015\012\015\012";
+    print "Content-Type: $content_type\015\012\015\012";
 
     Hebcal::items_to_json($items,$q,$city_descr,$latitude,$longitude);
 }
@@ -257,7 +269,7 @@ sub display_rss
 {
     my($items) = @_;
 
-    print "Content-Type: text/xml\015\012\015\012";
+    print "Content-Type: $content_type\015\012\015\012";
 
     my $url = url_html(self_url());
 
@@ -367,7 +379,7 @@ sub display_javascript
     my $title = "$shabbat Times for $city_descr";
 
     if ($cfg eq "i" || $cfg eq "widget") {
-	print $q->header(-charset => "UTF-8");
+	print $q->header(-type => $content_type, -charset => "UTF-8");
 	Hebcal::out_html($cfg, qq{<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
@@ -379,7 +391,7 @@ ul#hebcal-results{list-style-type:none}
 <body>
 });
     } else {
-	print "Content-Type: application/x-javascript\015\012\015\012";
+	print "Content-Type: $content_type\015\012\015\012";
     }
 
     my $loc_class = '';
@@ -427,7 +439,7 @@ sub display_html
 
     my $title = "Shabbat Candle Lighting Times for $city_descr";
 
-    print $q->header(-charset => "UTF-8");
+    print $q->header(-type => $content_type, -charset => "UTF-8");
 
     my_head($title);
 
@@ -586,10 +598,24 @@ sub form($$$$)
 {
     my($cfg,$head,$message,$help) = @_;
 
-    if ($head) {
-	print $q->header(-charset => "UTF-8");
-	my_head("Shabbat Candle Lighting Times");
+    print $q->header(-type => $content_type, -charset => "UTF-8") if $head;
+
+    if ($message ne "" && defined $cfg) {
+	if ($cfg eq "j") {
+	    $message =~ s/\"/\\"/g;
+	    print STDOUT qq{alert("Error: $message");\n};
+	} elsif ($cfg eq "r") {
+	    print STDOUT "<error><![CDATA[$message]]></error>\n";
+	} elsif ($cfg eq "json") {
+	    $message =~ s/\"/\\"/g;
+	    print STDOUT "{\"error\":\"$message\"}\n";
+	} else {
+	    print STDOUT $message, "\n";
+	}
+	exit(0);
     }
+
+    my_head("Shabbat Candle Lighting Times") if $head;
 
     if (defined $cfg && $cfg eq 'w')
     {
