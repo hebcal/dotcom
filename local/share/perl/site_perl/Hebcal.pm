@@ -1106,10 +1106,7 @@ sub cache_begin {
 	    }
 	    # otherwise use .html default
 	}
-	$qs = $orig_qs;
-	$qs =~ s/\+/ /g;
-	$qs = URI::Escape::uri_unescape($qs);
-	$qs .= ".$ext";
+	$qs = "${orig_qs}.${ext}";
     }
     $cache = "$dir/$qs.$$";
     if (!open(CACHE, ">$cache")) {

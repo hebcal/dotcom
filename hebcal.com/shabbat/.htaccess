@@ -11,12 +11,6 @@ Redirect /shabbat/index.cgi http://www.hebcal.com/shabbat/
 RewriteEngine On
 RewriteBase /shabbat/
 
-RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{REQUEST_URI} ^/shabbat/city/
-RewriteCond %{HTTP:Cache-Control} !max-age=0
-RewriteCond %{DOCUMENT_ROOT}/cache/shabbat/shabbat_cgi/geo=city&city=$1&m=50.html -f
-RewriteRule ^city/(.*) "/cache/shabbat/shabbat_cgi/geo=city&city=$1&m=50.html" [B,L]
-
 RewriteRule ^city/(.*)$ "/shabbat/shabbat.cgi?geo=city&city=$1&m=50" [B,QSA,L]
 
 RewriteCond %{REQUEST_METHOD} !POST
