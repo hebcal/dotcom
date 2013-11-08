@@ -287,6 +287,7 @@ sub json_events
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
 
     print STDOUT $q->header(-type => $content_type,
+			    -charset => "UTF-8",
 			    );
 
     my $title = "Hebcal $g_date";
