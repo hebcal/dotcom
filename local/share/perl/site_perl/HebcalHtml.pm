@@ -118,14 +118,17 @@ sub download_html_bootstrap {
     my $ycal_title = "Yahoo! Calendar";
     my $palm_title = "Palm Desktop (Windows-only)";
 
+    my $nofollow_month = defined $q->param("month") && $q->param("month") =~ /^\d+$/
+	? qq{ rel="nofollow"} : "";
+
     my $ol_ics = <<EOHTML;
-<p><a class="btn download" title="$ics_title"
+<p><a class="btn download" title="$ics_title"${nofollow_month}
 href="webcal://$vhost$subical_href"
 id="dl-ol-ics"><i class="icon-download-alt"></i> Download Outlook Internet Calendar Subscription</a></p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
-<p>Alternate option: <a class="download" href="${ical_href}" id="dl-ol-ics-alt">download $ics_title</a> and then import manually into Microsoft Outlook.</p>
+<p>Alternate option: <a class="download"${nofollow_month} href="${ical_href}" id="dl-ol-ics-alt">download $ics_title</a> and then import manually into Microsoft Outlook.</p>
 EOHTML
 ;
     my $ol_csv = <<EOHTML;
@@ -143,19 +146,19 @@ href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 EOHTML
 ;
     my $ical = <<EOHTML;
-<p><a class="btn download" title="$ics_title"
+<p><a class="btn download" title="$ics_title"${nofollow_month}
 href="webcal://$vhost$subical_href"
 id="dl-ical-sub"><i class="icon-download-alt"></i> Download to Mac Calendar</a></p>
 <p>Step-by-step: <a title="Apple iCal - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple Mac OS X Desktop Calendar</a></p>
-<p>Alternate option: <a class="download"
+<p>Alternate option: <a class="download"${nofollow_month}
 href="${ical_href}"
 id="dl-ical-alt">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 EOHTML
 ;
     my $ol_mac = <<EOHTML;
-<p><a class="btn download" title="$ics_title"
+<p><a class="btn download" title="$ics_title"${nofollow_month}
 href="${ical_href}"
 id="dl-ol-mac"><i class="icon-download-alt"></i> Download to Outlook for Mac</a></p>
 <p>Step-by-step: <a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
@@ -164,7 +167,7 @@ Outlook 2011 for Mac OS X</a></p>
 EOHTML
 ;
     my $ios = <<EOHTML;
-<p><a class="btn download" title="$ics_title"
+<p><a class="btn download" title="$ics_title"${nofollow_month}
 href="webcal://$vhost$subical_href"
 id="dl-ios-sub"><i class="icon-download-alt"></i> Download to iPhone/iPad</a></p>
 <p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
@@ -181,11 +184,11 @@ EOHTML
     my $gcal_href = URI::Escape::uri_escape_utf8($full_http_href);
     my $gcal = <<EOHTML;
 <p><a title="Add to Google Calendar"
-class="download" id="dl-gcal-sub"
+class="download" id="dl-gcal-sub"${nofollow_month}
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
 <p>Alternate option:
-<a class="download" id="dl-gcal-alt"
+<a class="download" id="dl-gcal-alt"${nofollow_month}
 href="${ical_href}">download</a> and then <a
 title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
 href="/home/59/google-calendar-alternative-instructions">follow
@@ -197,7 +200,7 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive = <<EOHTML;
-<p><a class="btn download" title="$ics_title"
+<p><a class="btn download" title="$ics_title"${nofollow_month}
 href="http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}"
 id="dl-wlive"><i class="icon-download-alt"></i> Add to Outlook.com Calendar</a></p>
 <p>Step-by-step: <a
@@ -272,7 +275,7 @@ EOHTML
 
     my $pdf_title = "Print PDF (formatted for 8.5\"x11\" paper)";
     my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
-    my $pdf = qq{<p><a class="btn download" href="$href_pdf" id="dl-pdf" title="${filename}.pdf"><i class="icon-print"></i> Download PDF Calendar</a></p>\n};
+    my $pdf = qq{<p><a class="btn download"${nofollow_month} href="$href_pdf" id="dl-pdf" title="${filename}.pdf"><i class="icon-print"></i> Download PDF Calendar</a></p>\n};
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
     $s .= accordion_bootstrap($pdf_title, "pdf", $pdf) unless $suppress_pdf;
