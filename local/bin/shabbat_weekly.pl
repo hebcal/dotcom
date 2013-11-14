@@ -216,7 +216,7 @@ sub parse_all_configs {
 
 sub mail_all {
     my $MAX_FAILURES = 100;
-    my $RECONNECT_INTERVAL = 20;
+    my $RECONNECT_INTERVAL = 50;
     my $failures = 0;
     for (my $attempts = 0; $attempts < 3; $attempts++) {
 	my @addrs = keys %SUBS;
@@ -226,18 +226,18 @@ sub mail_all {
 	INFO("Sorting $count users by lat/long");
 	@addrs = sort by_timezone @addrs;
 	open_smtp_connections();
-	INFO("About to mail $count users ($failures previous failures)");
+	INFO("About to mail $count users");
 	for (my $i = 0; $i < $count; $i++) {
 	    my $to = $addrs[$i];
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
 	    if ($i % 200 == 0) {
 		my($cmd,$loc,$args) = @{$CONFIG{$to}};
-		INFO("Sending mail #$i ($loc)");
+		INFO("Sending mail #$i/$count ($loc)");
 	    }
 	    my $status = mail_user($to, $SMTP[$server_num]);
 	    if ($status == $STATUS_FAIL_AND_CONTINUE) {
 		# count this as a real failure but don't try the address again
-		WARN("Failure on mail #$i ($to), won't try this address again");
+		WARN("Failure on mail #$i/$count ($to), won't try this address again");
 		delete $SUBS{$to};
 		++$failures;
 	    } elsif ($status == $STATUS_OK) {
@@ -247,7 +247,7 @@ sub mail_all {
 		    smtp_reconnect($server_num, 1);
 		}
 	    } else {
-		WARN("Failure on mail #$i ($to), reconnecting...");
+		WARN("Failure on mail #$i/$count ($to), reconnecting...");
 		if (++$failures >= $MAX_FAILURES) {
 		    ERROR("Got $failures failures, giving up");
 		    return;
@@ -257,9 +257,9 @@ sub mail_all {
 	    }
 	    usleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
 	}
+	INFO("Sent $count messages, $failures failures");
 	close_smtp_connections();
     }
-    INFO("Done ($failures failures)");
 }
 
 sub get_latlong {
