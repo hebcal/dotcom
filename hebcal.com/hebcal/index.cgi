@@ -1357,10 +1357,17 @@ EOHTML
 	}
     }
 
+    my $prev_nofollow = ($q->param("month") =~ /^\d+$/
+			 || $greg_year1 < $this_year
+			) ? " nofollow" : "";
+    my $next_nofollow = ($q->param("month") =~ /^\d+$/
+			 || $greg_year2 > $this_year + 2
+			) ? " nofollow" : "";
+
     my $nav_pagination = <<EOHTML;
 <div class="pagination pagination-centered">
 <ul>
-<li><a href="$prev_url" rel="prev">&laquo; $prev_title</a></li>
+<li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
     ;
     foreach my $cal_id (@html_cal_ids) {
@@ -1374,7 +1381,7 @@ EOHTML
 	}
     }
     $nav_pagination .= <<EOHTML;
-<li><a href="$next_url" rel="next">$next_title &raquo;</a></li>
+<li><a href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
 </ul>
 </div><!-- .pagination -->
 EOHTML
