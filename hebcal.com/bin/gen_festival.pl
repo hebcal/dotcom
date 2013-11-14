@@ -69,6 +69,8 @@ Getopt::Std::getopts('hvH:i', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
+my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+
 my($festival_in) = shift;
 my($outdir) = shift;
 
@@ -845,10 +847,12 @@ EOHTML
 		$displayed_upcoming = 1;
 	      }
 	    }
+	    my $nofollow = $gy > $this_year + 2 ? qq{ rel="nofollow"} : "";
 	    my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
-	    printf OUT2 "<li><a href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
-		"&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off&amp;tag=hol.obs\"$style>" .
+	    printf OUT2 "<li><a%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
+		"&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off\"$style>" .
 		"<time datetime=\"%s\">%s, %02d %s %04d</time></a> $rise_or_set (%s)\n",
+		$nofollow,
 		$gy, $gm,
 		$html5time, $Hebcal::DoW[$dow],
 		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
