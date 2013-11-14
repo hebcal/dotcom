@@ -123,6 +123,10 @@ sub process_args
 
     my $cfg = $q->param('cfg');
 
+    if (defined $q->param("city") && $q->param("city") ne "") {
+	$q->param("geo", "city");
+    }
+
     my @status = Hebcal::process_args_common($q, 1, 1, $cconfig);
     unless ($status[0]) {
 	form($cfg, 1, $status[1], $status[2]);
