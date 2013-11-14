@@ -84,6 +84,8 @@ my %hebcal_to_strassfeld =
      "Sukkot VII (Hoshana Raba)" => "Sukkot Chol ha-Moed Day 5 (Hoshana Raba)",
 );
 
+my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+
 my $HEBCAL_CMD = "./hebcal";
 $HEBCAL_CMD .= " -i" if $opts{"i"};
 
@@ -513,7 +515,8 @@ EOHTML
     my $extra_years = 8;
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
-	print OUT1 qq{<li><a href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
+	my $nofollow = $i > 3 ? qq{ rel="nofollow"} : "";
+	print OUT1 qq{<li><a$nofollow href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -527,7 +530,8 @@ EOHTML
 
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
-	print OUT1 qq{<li><a href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
+	my $nofollow = $i > 3 ? qq{ rel="nofollow"} : "";
+	print OUT1 qq{<li><a$nofollow href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -1039,9 +1043,11 @@ sub format_html_date {
   my($gy,$gm,$gd) = @_;
   $gm =~ s/^0//;
   $gd =~ s/^0//;
-  sprintf "<a title=\"%s %d holiday calendar\" href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
-    "&amp;s=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off&amp;tag=sedrot#hebcal-results\">%02d %s %d</a>",
+  my $nofollow = $gy > $this_year + 2 ? qq{ rel="nofollow"} : "";
+  sprintf "<a title=\"%s %d holiday calendar\"%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
+    "&amp;s=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off#hebcal-results\">%02d %s %d</a>",
     $Hebcal::MoY_long{$gm}, $gy,
+    $nofollow,
     $gy, $gm,
     $gd, $Hebcal::MoY_long{$gm}, $gy;
 }
