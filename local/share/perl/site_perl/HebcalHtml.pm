@@ -131,10 +131,10 @@ EOHTML
     my $ol_csv = <<EOHTML;
 Select one of:
 <ul class="unstyled">
-<li><a class="btn download"
+<li><a class="btn download" rel="nofollow"
 href="$href_ol_usa" title="${filename}_usa.csv"
 id="dl-ol-csv-usa"><i class="icon-download-alt"></i> Download Outlook CSV - USA date format (month/day/year)</a>
-<li><a class="btn download"
+<li><a class="btn download" rel="nofollow"
 href="$href_ol_eur" title="${filename}_eur.csv"
 id="dl-ol-csv-eur"><i class="icon-download-alt"></i> Download Outlook CSV - European date format (day/month/year)</a>
 </ul>
@@ -254,7 +254,7 @@ EOHTML
 	my $dba_href = Hebcal::download_href($q, $filename, 'dba');
 	$palm_dba = <<EOHTML;
 <h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
-<p><a class="btn download" id="dl-dba" href="$dba_href"><i class="icon-download-alt"></i> Download $filename.dba</a></p>
+<p><a class="btn download" id="dl-dba" rel="nofollow" href="$dba_href"><i class="icon-download-alt"></i> Download $filename.dba</a></p>
 <p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
 href="/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
 EOHTML
@@ -263,7 +263,7 @@ EOHTML
 
     my $palm = <<EOHTML;
 <h5>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)</h5>
-<p><a class="btn download" id="dl-vcs" href="$href_vcs"><i class="icon-download-alt"></i> Download ${filename}.vcs</a></p>
+<p><a class="btn download" id="dl-vcs" rel="nofollow" href="$href_vcs"><i class="icon-download-alt"></i> Download ${filename}.vcs</a></p>
 <p>Step-by-step: <a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
 href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
 $palm_dba
