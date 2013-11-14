@@ -128,17 +128,18 @@ id="dl-ol-ics"><i class="icon-download-alt"></i> Download Outlook Internet Calen
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
-<p>Alternate option: <a class="download"${nofollow_month} href="${ical_href}" id="dl-ol-ics-alt">download $ics_title</a> and then import manually into Microsoft Outlook.</p>
+<p>Alternate option: <a class="download"${nofollow_month} href="${ical_href}" id="dl-ol-ics-alt"
+download="$ics_title">download $ics_title</a> and then import manually into Microsoft Outlook.</p>
 EOHTML
 ;
     my $ol_csv = <<EOHTML;
 Select one of:
 <ul class="unstyled">
 <li><a class="btn download" rel="nofollow"
-href="$href_ol_usa" title="${filename}_usa.csv"
+href="$href_ol_usa" title="${filename}_usa.csv" download="${filename}_usa.csv"
 id="dl-ol-csv-usa"><i class="icon-download-alt"></i> Download Outlook CSV - USA date format (month/day/year)</a>
 <li><a class="btn download" rel="nofollow"
-href="$href_ol_eur" title="${filename}_eur.csv"
+href="$href_ol_eur" title="${filename}_eur.csv" download="${filename}_eur.csv"
 id="dl-ol-csv-eur"><i class="icon-download-alt"></i> Download Outlook CSV - European date format (day/month/year)</a>
 </ul>
 Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
@@ -152,14 +153,14 @@ id="dl-ical-sub"><i class="icon-download-alt"></i> Download to Mac Calendar</a><
 <p>Step-by-step: <a title="Apple iCal - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple Mac OS X Desktop Calendar</a></p>
 <p>Alternate option: <a class="download"${nofollow_month}
-href="${ical_href}"
+href="${ical_href}" download="$ics_title"
 id="dl-ical-alt">download $ics_title</a>
 and then import manually into Apple iCal.</p>
 EOHTML
 ;
     my $ol_mac = <<EOHTML;
 <p><a class="btn download" title="$ics_title"${nofollow_month}
-href="${ical_href}"
+href="${ical_href}" download="$ics_title"
 id="dl-ol-mac"><i class="icon-download-alt"></i> Download to Outlook for Mac</a></p>
 <p>Step-by-step: <a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
 href="/home/186/outlook-2011-mac-import">Import .ics file into
@@ -189,7 +190,7 @@ href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
 <p>Alternate option:
 <a class="download" id="dl-gcal-alt"${nofollow_month}
-href="${ical_href}">download</a> and then <a
+href="${ical_href}" download="$ics_title">download</a> and then <a
 title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
 href="/home/59/google-calendar-alternative-instructions">follow
 our Google Calendar import instructions</a>.</p>
@@ -257,7 +258,7 @@ EOHTML
 	my $dba_href = Hebcal::download_href($q, $filename, 'dba');
 	$palm_dba = <<EOHTML;
 <h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
-<p><a class="btn download" id="dl-dba" rel="nofollow" href="$dba_href"><i class="icon-download-alt"></i> Download $filename.dba</a></p>
+<p><a class="btn download" id="dl-dba" rel="nofollow" href="$dba_href" download="$filename.dba"><i class="icon-download-alt"></i> Download $filename.dba</a></p>
 <p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
 href="/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
 EOHTML
@@ -266,7 +267,7 @@ EOHTML
 
     my $palm = <<EOHTML;
 <h5>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)</h5>
-<p><a class="btn download" id="dl-vcs" rel="nofollow" href="$href_vcs"><i class="icon-download-alt"></i> Download ${filename}.vcs</a></p>
+<p><a class="btn download" id="dl-vcs" rel="nofollow" href="$href_vcs" download="$filename.vcs"><i class="icon-download-alt"></i> Download ${filename}.vcs</a></p>
 <p>Step-by-step: <a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
 href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
 $palm_dba
@@ -275,7 +276,7 @@ EOHTML
 
     my $pdf_title = "Print PDF (formatted for 8.5\"x11\" paper)";
     my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
-    my $pdf = qq{<p><a class="btn download"${nofollow_month} href="$href_pdf" id="dl-pdf" title="${filename}.pdf"><i class="icon-print"></i> Download PDF Calendar</a></p>\n};
+    my $pdf = qq{<p><a class="btn download"${nofollow_month} href="$href_pdf" id="dl-pdf" title="${filename}.pdf" download="${filename}.pdf"><i class="icon-print"></i> Download PDF Calendar</a></p>\n};
 
     my $s = qq{<div class="accordion" id="accordion2">\n};
     $s .= accordion_bootstrap($pdf_title, "pdf", $pdf) unless $suppress_pdf;
