@@ -57,12 +57,14 @@ my $opt_all = 0;
 my $opt_dryrun = 0;
 my $opt_help;
 my $opt_verbose = 0;
+my $opt_sleeptime = 300_000; 	# 300 milliseconds
 my $opt_log = 1;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "all" => \$opt_all,
      "dryrun|n" => \$opt_dryrun,
+     "sleeptime=i" => \$opt_sleeptime,
      "log!" => \$opt_log,
      "verbose|v+" => \$opt_verbose)) {
     usage();
@@ -71,6 +73,7 @@ if (!Getopt::Long::GetOptions
 $opt_help && usage();
 usage() if !@ARGV && !$opt_all;
 $opt_log = 0 if $opt_dryrun;
+$opt_sleeptime = 0 if $opt_dryrun;
 
 my $loglevel;
 if ($opt_verbose == 0) {
@@ -153,7 +156,6 @@ chomp($HOSTNAME);
 my @SMTP;
 my @SMTP_AUTH;
 my $SMTP_NUM_CONNECTIONS;
-my $SMTP_SLEEP_TIME;
 my %CONFIG;
 my %ZIP_CACHE;
 mail_all();
@@ -186,8 +188,7 @@ sub open_smtp_connections {
 	$SMTP[$i] = undef;
 	smtp_reconnect($i, 1);
     }
-    $SMTP_SLEEP_TIME = $opt_dryrun ? 0 : 300_000; 	# 300 milliseconds
-    INFO("SMTP connections open; will sleep for $SMTP_SLEEP_TIME usec between messages");
+    INFO("SMTP connections open; will sleep for $opt_sleeptime usec between messages");
 }
 
 sub close_smtp_connections {
@@ -255,7 +256,7 @@ sub mail_all {
 		# reconnect to see if this helps
 		smtp_reconnect($server_num, 1);
 	    }
-	    usleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
+	    usleep($opt_sleeptime) unless $opt_sleeptime == 0 || $i == ($count - 1);
 	}
 	INFO("Sent $count messages, $failures failures");
 	close_smtp_connections();
