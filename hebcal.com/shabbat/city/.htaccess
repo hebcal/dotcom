@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteBase /shabbat/city/
+
+RewriteRule ^(.*)$ "/shabbat/shabbat.cgi?geo=city&city=$1&m=50" [B,QSA,L]
+

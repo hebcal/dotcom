@@ -689,7 +689,7 @@ EOHTML
 	    $country = "UK" if $country eq "United Kingdom";
 	    $city_country .= ", $country" unless $grp=~ /^US|CA|IL$/;
 
-	    my $url = "/shabbat/city/" . URI::Escape::uri_escape_utf8($id);
+	    my $url = "/shabbat/?city=" . URI::Escape::uri_escape_utf8($id);
 	    $btn_html .= qq{<li><a href="$url">$city_country</a></li>\n};
 	}
 	$btn_html .= qq{</ul></div><!-- /btn-group -->\n};

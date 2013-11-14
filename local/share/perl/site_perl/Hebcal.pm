@@ -1129,6 +1129,16 @@ sub cache_end {
 	my $newfn = $fn;
 	$newfn =~ s/\.\d+$//;	# no pid
 	rename($fn, $newfn);
+	if ($newfn =~ m,^(.+)/([^/]+)$,) {
+	    my $dir = $1;
+	    my $qs = $2;
+	    my $qs2 = URI::Escape::uri_unescape($qs);
+	    if ($qs2 ne $qs) {
+		# also symlink URL-decoded version for mod_rewrite internal redirect
+		unlink("$dir/$qs2");
+		symlink($qs, "$dir/$qs2");
+	    }
+	}
 	$cache = undef;
     }
 
