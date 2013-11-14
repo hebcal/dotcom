@@ -150,44 +150,52 @@ parse_all_configs();
 my $HOSTNAME = `/bin/hostname -f`;
 chomp($HOSTNAME);
 
-my @AUTH = (
-	    [$Config->{_}->{"hebcal.email.shabbat.host"},
-	     $Config->{_}->{"hebcal.email.shabbat.user"},
-	     $Config->{_}->{"hebcal.email.shabbat.password"}],
-	   );
-#for (my $i = 1; $i <= 4; $i++) {
-#    push(@AUTH, [$Config->{_}->{"hebcal.email.shabbat.alt.host"},
-#		 $Config->{_}->{"hebcal.email.shabbat.alt.u$i"},
-#		 $Config->{_}->{"hebcal.email.shabbat.alt.p$i"}]);
-#}
 my @SMTP;
-my $SMTP_NUM_CONNECTIONS = scalar(@AUTH);
-INFO("Opening $SMTP_NUM_CONNECTIONS SMTP connections");
-for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
-    $SMTP[$i] = undef;
-    smtp_reconnect($i, 1);
-}
-# dh limit 100 emails an hour per authenticated user
-#my $SMTP_SLEEP_TIME = int(40 / $SMTP_NUM_CONNECTIONS);
-my $SMTP_SLEEP_TIME = 300_000; 	# 300 milliseconds
-$SMTP_SLEEP_TIME = 0 if $opt_dryrun;
-INFO("All SMTP connections open; will sleep for $SMTP_SLEEP_TIME microseconds between messages");
-
+my @SMTP_AUTH;
+my $SMTP_NUM_CONNECTIONS;
+my $SMTP_SLEEP_TIME;
 my %CONFIG;
 my %ZIP_CACHE;
 mail_all();
 
 close(LOG) if $opt_log;
 
-INFO("Disconnecting from SMTP");
-foreach my $smtp (@SMTP) {
-    $smtp->quit();
-}
-
 Hebcal::zipcode_close_db($ZIPS_DBH);
 
 INFO("Success!");
 exit(0);
+
+sub open_smtp_connections {
+    if ($Config->{_}->{"hebcal.email.shabbat.alt.enabled"}) {
+	@SMTP_AUTH = ();
+	for (my $i = 1; $i <= 4; $i++) {
+	    push(@SMTP_AUTH, [$Config->{_}->{"hebcal.email.shabbat.alt.host"},
+			      $Config->{_}->{"hebcal.email.shabbat.alt.u$i"},
+			      $Config->{_}->{"hebcal.email.shabbat.alt.p$i"}]);
+	}
+    } else {
+	@SMTP_AUTH = (
+	     [$Config->{_}->{"hebcal.email.shabbat.host"},
+	      $Config->{_}->{"hebcal.email.shabbat.user"},
+	      $Config->{_}->{"hebcal.email.shabbat.password"}],
+	    );
+    }
+    $SMTP_NUM_CONNECTIONS = scalar(@SMTP_AUTH);
+    INFO("Opening $SMTP_NUM_CONNECTIONS SMTP connections");
+    for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
+	$SMTP[$i] = undef;
+	smtp_reconnect($i, 1);
+    }
+    $SMTP_SLEEP_TIME = $opt_dryrun ? 0 : 300_000; 	# 300 milliseconds
+    INFO("SMTP connections open; will sleep for $SMTP_SLEEP_TIME usec between messages");
+}
+
+sub close_smtp_connections {
+    INFO("Closing $SMTP_NUM_CONNECTIONS SMTP connections");
+    foreach my $smtp (@SMTP) {
+	$smtp->quit();
+    }
+}
 
 sub exit_if_yomtov {
     my $subj = Hebcal::get_today_yomtov();
@@ -217,6 +225,7 @@ sub mail_all {
 	# sort the addresses by timezone so we mail eastern users first
 	INFO("Sorting $count users by lat/long");
 	@addrs = sort by_timezone @addrs;
+	open_smtp_connections();
 	INFO("About to mail $count users ($failures previous failures)");
 	for (my $i = 0; $i < $count; $i++) {
 	    my $to = $addrs[$i];
@@ -248,6 +257,7 @@ sub mail_all {
 	    }
 	    usleep($SMTP_SLEEP_TIME) unless $i == ($count - 1);
 	}
+	close_smtp_connections();
     }
     INFO("Done ($failures failures)");
 }
@@ -637,9 +647,9 @@ sub smtp_reconnect
 	$SMTP[$server_num]->quit();
 	$SMTP[$server_num] = undef;
     }
-    my $host = $AUTH[$server_num]->[0];
-    my $user = $AUTH[$server_num]->[1];
-    my $password = $AUTH[$server_num]->[2];
+    my $host = $SMTP_AUTH[$server_num]->[0];
+    my $user = $SMTP_AUTH[$server_num]->[1];
+    my $password = $SMTP_AUTH[$server_num]->[2];
     my $smtp = smtp_connect($host, $user, $password, $debug)
 	or croak "Can't connect to $host as $user";
     $SMTP[$server_num] = $smtp;
