@@ -736,7 +736,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Yom Kippur (Mincha, Alternate)" hebrew="יוֹם כִּפּוּר מנחה" yomtov="1">
  <kriyah>
-  <torah href="http://www.mechon-mamre.org/e/et/et0318.htm"/>
+  <torah href="http://www.mechon-mamre.org/e/et/et0319.htm"/>
   <haft reading="Jonah 1:1-4:11; Micah 7:18-20" href="http://www.mechon-mamre.org/e/et/et1701.htm"/>
   <aliyah parsha="30" num="1" book="Leviticus" begin="19:1" end="19:4"/>
   <aliyah parsha="30" num="2" book="Leviticus" begin="19:5" end="19:10"/>
