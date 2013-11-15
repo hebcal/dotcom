@@ -1149,11 +1149,14 @@ div.pbba { page-break-before: always }
 </style>
 EOHTML
 ;
+
+    my $lang = $q->param("lg");
+    my $lang_hebrew = ($lang && $lang =~ /h/) ? 1 : 0;
+
     Hebcal::out_html(undef,
-		     Hebcal::html_header_bootstrap($results_title,
-					 $script_name,
-					 "single single-post",
-					 $xtra_head)
+		     Hebcal::html_header_bootstrap(
+			$results_title, $script_name, "ignored",
+			$xtra_head, 0, $lang_hebrew)
 	);
 
     my $h1_extra = "";

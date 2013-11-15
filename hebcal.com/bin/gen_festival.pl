@@ -502,10 +502,8 @@ EOHTML
 
 
     my $page_title = "Jewish Holidays";
-    print OUT3 Hebcal::html_header_bootstrap($page_title,
-				   "/holidays/",
-				   "single single-post",
-				   $meta . $xtra_head);
+    print OUT3 Hebcal::html_header_bootstrap(
+	$page_title, "/holidays/", "ignored",  $meta . $xtra_head);
 
     print OUT3 qq{<div class="row-fluid">\n};
     print OUT3 get_index_body_preamble($page_title, 1, undef, "span8");
@@ -782,11 +780,8 @@ sub write_festival_page
 EOHTML
 ;
 
-    print OUT2 Hebcal::html_header_bootstrap($page_title,
-				   "/holidays/$slug",
-				   "single single-post",
-				   $meta,
-				   0);
+    print OUT2 Hebcal::html_header_bootstrap(
+	 $page_title, "/holidays/$slug", "ignored", $meta, 0, 1);
 
     my $wikipedia_descr;
     my $wikipedia = get_var($festivals, $f, 'wikipedia', 1);

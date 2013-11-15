@@ -263,7 +263,7 @@ $xtra_head = <<<EOD
 </style>
 EOD;
 
-    echo html_header_bootstrap("Hebrew Date Converter - $hebdate", $xtra_head);
+echo html_header_bootstrap("Hebrew Date Converter - $hebdate", $xtra_head, true, true);
 ?>
 <div class="span9">
 <?php

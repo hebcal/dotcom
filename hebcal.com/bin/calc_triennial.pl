@@ -805,11 +805,9 @@ sub write_sedra_page
 
     $description .= " Torah reading, Haftarah, links to audio and commentary.";
 
-    print OUT2 Hebcal::html_header_bootstrap("$h - Torah Portion - $hebrew",
-				   "/sedrot/$anchor",
-				   "single single-post",
-				   qq{<meta name="description" content="$description">\n},
-				   0);
+    print OUT2 Hebcal::html_header_bootstrap(
+	"$h - Torah Portion - $hebrew", "/sedrot/$anchor", "ignored",
+	qq{<meta name="description" content="$description">\n}, 0, 1);
 
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";

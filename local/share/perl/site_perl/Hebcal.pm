@@ -1434,10 +1434,13 @@ sub html_menu_bootstrap {
 }
 
 sub html_header_bootstrap {
-    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title) = @_;
+    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title,$hebrew_stylesheet) = @_;
     $xtra_head = "" unless $xtra_head;
     my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
+    my $xtra_stylesheet = $hebrew_stylesheet
+	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
+	: "";
     my $str = <<EOHTML;
 <!DOCTYPE html>
 <html><head>
@@ -1446,7 +1449,7 @@ sub html_header_bootstrap {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
 <link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
-<script type="text/javascript">
+$xtra_stylesheet<script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-967247-1']);
 _gaq.push(['_trackPageview']);
@@ -1460,7 +1463,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 .navbar{position:static}
 body{padding-top:0}
 :lang(he) {
-  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  font-family:'Alef Hebrew','SBL Hebrew',David;
   font-size:125%;
   font-weight:normal;
   direction:rtl;

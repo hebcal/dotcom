@@ -470,7 +470,7 @@ function html_menu_bootstrap($selected) {
     return $str;
 }
 
-function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true) {
+function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true, $hebrew_stylesheet=false) {
     if ($title_append_suffix) {
 	$title .= " | Hebcal Jewish Calendar";
     }
@@ -487,6 +487,9 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
 	$logo = '<a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
     }
 
+    $xtra_stylesheet = $hebrew_stylesheet
+	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
+	: "";
 
     $html = <<<EOD
 <!DOCTYPE html>
@@ -496,7 +499,7 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true)
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
 <link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
-<script type="text/javascript">
+$xtra_stylesheet<script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-967247-1']);
 _gaq.push(['_trackPageview']);
@@ -511,7 +514,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 body{padding-top:0}
 .label{text-transform:none}
 :lang(he) {
-  font-family:'SBL Hebrew',David,Narkisim,'Times New Roman','Ezra SIL SR',FrankRuehl,'Microsoft Sans Serif','Lucida Grande';
+  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
   font-size:125%;
   direction:rtl;
 }
