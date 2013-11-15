@@ -794,6 +794,7 @@ EOHTML
 	$wikipedia_descr = trim($wikipedia->{'content'});
     }
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
+    $long_descr =~ s/(\p{script=Hebrew}[\p{script=Hebrew}\s]+\p{script=Hebrew})/<span lang="he" dir="rtl">$1<\/span>/g;
 
     my $pager = qq{<ul class="pager hidden-phone">\n};
     my $prev = $PREV{$f};
