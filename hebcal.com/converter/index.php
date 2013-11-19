@@ -214,7 +214,7 @@ href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a
 ?>
 <div id="converter-results">
 <ul class="unstyled">
-<li class="big-list"><?php echo "$first = <strong>$second</strong>"; ?></li>
+<li class="big-list"><span class="nobr"><?php echo $first ?></span> = <strong class="nobr"><?php echo $second ?></strong></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><?php echo $hebrew ?></li>
 <?php
 foreach ($events as $evt) {
@@ -242,8 +242,8 @@ $xtra_head = <<<EOD
 <meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates.$description">
 <style type="text/css">
 #converter-results {
- margin-top: 12px;
- margin-bottom: 12px;
+ margin-top: 32px;
+ margin-bottom: 32px;
  text-align: center;
 }
 #converter-results .big-list {
@@ -260,6 +260,7 @@ $xtra_head = <<<EOD
   font-weight: bold;
   line-height: 30px;
 }
+.nobr { white-space: nowrap }
 </style>
 EOD;
 
