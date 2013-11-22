@@ -53,7 +53,8 @@ use Date::Calc ();
 use Getopt::Std ();
 use XML::Simple ();
 use POSIX qw(strftime);
-use Log::Message::Simple qw[:STD :CARP];
+use Carp;
+use Log::Log4perl qw(:easy);
 use DBI;
 
 $0 =~ s,.*/,,;  # basename
@@ -67,11 +68,12 @@ my($usage) = "usage: $0 [-hitf] [-H <year>] [-d d.sqlite3] aliyah.xml festival.x
     -d DBFILE Write state to SQLite3 file 
 ";
 
-my $opt_verbose = 1;
 my %opts;
 Getopt::Std::getopts('hH:tfd:i', \%opts) || croak "$usage\n";
 $opts{'h'} && croak "$usage\n";
 (@ARGV == 3) || croak "$usage";
+
+Log::Log4perl->easy_init($INFO);
 
 my %hebcal_to_strassfeld = 
     (
@@ -100,9 +102,9 @@ if (! -d $outdir) {
 $| = 1;
 
 ## load aliyah.xml data to get parshiot
-msg("Loading $aliyah_in...", $opt_verbose);
+INFO("Loading $aliyah_in...");
 my $axml = XML::Simple::XMLin($aliyah_in);
-msg("Loading $festival_in...", $opt_verbose);
+INFO("Loading $festival_in...");
 my $fxml = XML::Simple::XMLin($festival_in);
 
 my %triennial_aliyot;
@@ -149,7 +151,7 @@ foreach my $parashah (@combined)
     $prev{$parashah} = $prev{$p1};
 }
 
-msg("Finished building internal data structures", $opt_verbose);
+INFO("Finished building internal data structures");
 
 ## load 4 years of hebcal event data
 my($hebrew_year);
@@ -162,7 +164,7 @@ if ($opts{'H'}) {
 
 # year I in triennial cycle was 5756
 my $year_num = (($hebrew_year - 5756) % 3) + 1;
-msg("Current Hebrew year $hebrew_year is year $year_num.", $opt_verbose);
+INFO("Current Hebrew year $hebrew_year is year $year_num.");
 
 my @cycle_start_years;
 my @triennial_readings;
@@ -172,7 +174,7 @@ for (my $i = 0; $i < 3; $i++) {
     my $year_offset = ($i - 1) * 3;
     my $cycle_start_year = $hebrew_year - ($year_num - 1) + $year_offset;
     $cycle_start_years[$i] = $cycle_start_year;
-    msg("3-cycle started at year $cycle_start_year", $opt_verbose);
+    INFO("3-cycle started at year $cycle_start_year");
     my($bereshit_idx,$pattern,$events) = get_tri_events($cycle_start_year);
     $triennial_events[$i] = $events;
     $bereshit_indices[$i] = $bereshit_idx;
@@ -395,7 +397,7 @@ sub write_index_page
     my($parshiot) = @_;
 
     my $fn = "$outdir/index.php";
-    msg("write_index_page: $fn", $opt_verbose);
+    INFO("write_index_page: $fn");
     open(OUT1, ">$fn.$$") || croak "$fn.$$: $!\n";
 
 
@@ -660,7 +662,7 @@ sub calc_variation_options
 		unless defined $option->{$parashah};
 	}
 
-	msg("  $parashah: $pat ($option->{$parashah})", $opt_verbose);
+	INFO("  $parashah: $pat ($option->{$parashah})");
     }
 
     $option;
@@ -775,7 +777,7 @@ sub write_sedra_page
     my $anchor = lc($h);
     $anchor =~ s/[^\w]//g;
     my $fn = "$outdir/$anchor";
-    msg("write_sedra_page: $fn", $opt_verbose);
+    INFO("write_sedra_page: $fn");
     open(OUT2, ">$fn.$$") || croak "$fn.$$: $!\n";
 
     my $keyword = $h;
@@ -1583,7 +1585,7 @@ sub readings_for_current_year
 	my $filename = "$outdir/$basename";
 	my $tmpfile = "$outdir/.$basename.$$";
 	if ($opts{"f"}) {
-	    msg("readings_for_current_year: $filename", $opt_verbose);
+	    INFO("readings_for_current_year: $filename");
 	    open(CSV, ">$tmpfile") || croak "$tmpfile: $!\n";
 	    print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
 	}
@@ -1634,7 +1636,7 @@ sub triennial_csv
     my $basename = triennial_csv_basename($start_year);
     my $filename = "$outdir/$basename";
     my $tmpfile = "$outdir/.$basename.$$";
-    msg("triennial_csv: $filename", $opt_verbose);
+    INFO("triennial_csv: $filename");
     open(CSV, ">$tmpfile") || croak "$tmpfile: $!\n";
     print CSV qq{"Date","Parashah","Aliyah","Triennial Reading"\015\012};
 
