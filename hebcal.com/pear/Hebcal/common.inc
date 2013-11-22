@@ -551,7 +551,7 @@ EOD;
     return $html;
 }
 
-function html_footer_bootstrap($last_updated = true) {
+function html_footer_bootstrap($last_updated = true, $xtra_html = "") {
     $last_updated_text = "";
     if ($last_updated) {
 	$stat = stat($_SERVER["SCRIPT_FILENAME"]);
@@ -598,6 +598,8 @@ function html_footer_bootstrap($last_updated = true) {
 $last_updated_text
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
 rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
+also under a cc-by licence.</small></p>
 </div><!-- .span3 -->
 </div><!-- .row-fluid -->
 </div><!-- #inner-footer -->
@@ -606,13 +608,26 @@ rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creat
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
-
 <script type="text/javascript">
-(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","outbound-amzn",this.id])}}}
-if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){_gaq.push(["_trackEvent","outbound-article",c.substring(7,d)])}}}}
-if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){_gaq.push(["_trackEvent","download",this.id])}}}}}}})();
+$(document).ready(function(){
+  $('a.amzn').click(function(){
+    _gaq.push(['_trackEvent','outbound-amzn',$(this).attr('id')]);
+  });
+  $('a.outbound').click(function(){
+    var c=$(this).attr('href');
+    if(c&&c.indexOf("http://")===0){
+      var d=c.indexOf("/",7);
+      if(d>7) {
+	_gaq.push(['_trackEvent','outbound-article',c.substring(7,d)]);
+      }
+    }
+  });
+  $('a.download').click(function(){
+    _gaq.push(['_trackEvent','download',$(this).attr('id')]);
+  });
+});
 </script>
-</body></html>
+$xtra_html</body></html>
 EOD;
 
     return $html;
