@@ -39,7 +39,8 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 use strict;
 use Hebcal ();
 use Getopt::Long ();
-use Log::Message::Simple qw[:STD :CARP];
+use Carp;
+use Log::Log4perl qw(:easy);
 
 my $opt_help;
 my $opt_verbose = 0;
@@ -60,9 +61,12 @@ if (!Getopt::Long::GetOptions
 
 $opt_help && usage();
 
+Log::Log4perl->easy_init($opt_verbose ? $INFO : $WARN);
+
 # don't post anything on yontiff
 exit_if_yomtov();
 
+INFO("Reading $Hebcal::CONFIG_INI_PATH");
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
     or die "$Hebcal::CONFIG_INI_PATH: $!\n";
 
@@ -76,7 +80,7 @@ my $email_subj;			# will be populated if there's an email to send
 if ($opt_shabbat) {
   # get the date for this upcoming saturday
   my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
-  msg("Shabbat is $sat_year,$sat_month,$sat_day", $opt_verbose);
+  DEBUG("Shabbat is $sat_year,$sat_month,$sat_day");
 
   my @ev2 = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
   my $parasha;
@@ -84,7 +88,7 @@ if ($opt_shabbat) {
   for my $evt (@ev2) {
     next unless $evt->[$Hebcal::EVT_IDX_MDAY] == $sat_day;
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-    msg("Found $subj", $opt_verbose);
+    INFO("Found $subj");
     if ($subj =~ /^Parashat/) {
 	$parasha = $subj;
     } elsif ($subj =~ /^Shabbat/) {
@@ -109,7 +113,7 @@ if ($opt_daily) {
   for my $evt (@events) {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
     if (Hebcal::event_date_matches($evt, $today[0], $today[1], $today[2])) {
-      msg("Today is $subj", $opt_verbose);
+      INFO("Today is $subj");
       $today_subj = $subj;
       if ($subj =~ /^Erev (.+)$/) {
 	my $holiday = $1;
@@ -127,7 +131,7 @@ if ($opt_daily) {
 	$email_subj = "Light the first Chanukah candle tonight at sundown. Chag Urim Sameach!";
       }
     } elsif (Hebcal::event_date_matches($evt, $tomorrow[0], $tomorrow[1], $tomorrow[2])) {
-      msg("Tomorrow is $subj", $opt_verbose);
+      INFO("Tomorrow is $subj");
       if ($subj =~ /^Rosh Chodesh/ && $subj ne $today_subj) {
 	$email_subj = "$subj begins tonight at sundown. Chodesh Tov!";
       } elsif ($subj eq "Shmini Atzeret") {
@@ -140,11 +144,11 @@ if ($opt_daily) {
 }
 
 if ($email_subj) {
-    msg("Email subject is $email_subj", $opt_verbose);
+    INFO("Email subject is $email_subj");
 
     if ($opt_randsleep) {
       my $sleep = int(rand($opt_randsleep));
-      msg("Sleeping for $sleep seconds before posting", $opt_verbose);
+      INFO("Sleeping for $sleep seconds before posting");
       sleep($sleep) unless $opt_dryrun;
     }
 
@@ -157,20 +161,20 @@ if ($email_subj) {
 	   "Subject" => $email_subj,
 	 );
 
-    msg("Sending mail from $EMAIL_FROM to $EMAIL_TO...", $opt_verbose);
+    INFO("Sending mail from $EMAIL_FROM to $EMAIL_TO...");
     if (! $opt_dryrun) {
 	Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
 		or croak "Can't send mail!";
     }
 }
 
-msg("Done", $opt_verbose);
+INFO("Done");
 exit(0);
 
 sub exit_if_yomtov {
     my $subj = Hebcal::get_today_yomtov();
     if ($subj) {
-	msg("Today is yomtov: $subj", $opt_verbose);
+	INFO("Today is yomtov: $subj");
 	exit(0);
     }
     1;
