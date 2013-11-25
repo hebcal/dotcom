@@ -1301,6 +1301,8 @@ $last_updated_text
 this site is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
+also under a cc-by licence.</small></p>
 </div><!-- .span3 -->
 </div><!-- .row-fluid -->
 </div><!-- #inner-footer -->
