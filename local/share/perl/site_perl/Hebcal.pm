@@ -1464,7 +1464,10 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 </script>
 <style type="text/css">
 .navbar{position:static}
-body{padding-top:0}
+body{
+ padding-top:0;
+ color:#222222;
+}
 :lang(he) {
   font-family:'Alef Hebrew','SBL Hebrew',David;
   font-size:125%;

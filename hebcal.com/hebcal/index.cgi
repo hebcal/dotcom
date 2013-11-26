@@ -699,11 +699,13 @@ sub alt_candles_text
 {
     my($q,$geo) = @_;
 
+    my $class = ($geo eq $q->param("geo")) ? qq{ class="active"} : "";
     my $text = $long_candles_text{$geo};
     my $c = ($geo eq "none") ? "off" : "on";
-    $q->a({-href => $script_name . "?c=$c;geo=" . $geo,
-	   -onClick => "return s1('" . $geo . "', '" . $c . "')" },
-	  $text);
+    qq{<li$class>}
+	. $q->a({-href => $script_name . "?c=$c;geo=" . $geo,
+	       -onClick => "return s1('" . $geo . "', '" . $c . "')" }, $text)
+	. qq{</li>\n};
 }
 
 sub form
@@ -738,6 +740,10 @@ legend {
 </style>
 EOHTML
 ;
+
+    if (defined $q->param("geo") && $q->param("geo") eq "pos") {
+	$xtra_head .= qq{<link rel="stylesheet" type="text/css" href="/i/typeahead.css">\n};
+    }
 
     Hebcal::out_html(undef,
 		     Hebcal::html_header_bootstrap("Custom Calendar",
@@ -814,11 +820,13 @@ EOHTML
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "mf",
+		 -id => "mf",
 		 -checked => 1,
 		 -label => "Minor Fasts"),
     qq{\n<small class="muted">(Ta'anit Esther, Tzom Gedaliah, etc.)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "ss",
+		 -id => "ss",
 		 -checked => 1,
 		 -label => "Special Shabbatot"),
     qq{\n<small class="muted">(Shabbat Shekalim, Zachor, etc.)</small></label>\n},
@@ -877,19 +885,12 @@ EOHTML
 	       -default => "zip"),
     "\n");
 
-    Hebcal::out_html(undef, "<small>[\n");
+    Hebcal::out_html(undef, qq{<ul class="nav nav-tabs">});
     foreach my $type ("none", "zip", "city", "pos")
     {
-	if ($type eq $q->param("geo")) {
-	    Hebcal::out_html(undef, $long_candles_text{$type});
-	} else {
-	    Hebcal::out_html(undef, alt_candles_text($q, $type));
-	}
-	if ($type ne "pos") {
-	    Hebcal::out_html(undef, "\n| ");
-	}
+	Hebcal::out_html(undef, alt_candles_text($q, $type));
     }
-    Hebcal::out_html(undef, "\n]</small>\n");
+    Hebcal::out_html(undef, qq{</ul>\n});
 
     if ($q->param("geo") eq "city")
     {
@@ -901,9 +902,15 @@ EOHTML
     elsif ($q->param("geo") eq "pos")
     {
 	Hebcal::out_html(undef,
+	qq{<div class="city-typeahead form-inline">
+   <input id="city-typeahead" class="form-control input-xlarge" type="text" placeholder="Search for city">
+</div>
+});
+	Hebcal::out_html(undef,
 	qq{<div class="form-inline">\n},
 	"<label>",
 	$q->textfield(-name => "ladeg",
+		      -id => "ladeg",
 		      -style => "width:auto",
 		      -pattern => '\d*',
 		      -size => 3,
@@ -911,12 +918,14 @@ EOHTML
 	" deg</label>\n",
 	"<label>",
 	$q->textfield(-name => "lamin",
+		      -id => "lamin",
 		      -style => "width:auto",
 		      -pattern => '\d*',
 		      -size => 2,
 		      -maxlength => 2),
 	" min</label>\n",
 	$q->popup_menu(-name => "ladir",
+		       -id => "ladir",
 		       -class => "input-medium",
 		       -values => ["n","s"],
 		       -default => "n",
@@ -926,6 +935,7 @@ EOHTML
 	qq{<div class="form-inline">\n},
 	"<label>",
 	$q->textfield(-name => "lodeg",
+		      -id => "lodeg",
 		      -style => "width:auto",
 		      -pattern => '\d*',
 		      -size => 3,
@@ -933,12 +943,14 @@ EOHTML
 	" deg</label>\n",
 	"<label>",
 	$q->textfield(-name => "lomin",
+		      -id => "lomin",
 		      -style => "width:auto",
 		      -pattern => '\d*',
 		      -size => 2,
 		      -maxlength => 2),
 	" min</label>\n",
 	$q->popup_menu(-name => "lodir",
+		       -id => "lodir",
 		       -class => "input-medium",
 		       -values => ["w","e"],
 		       -default => "w",
@@ -966,6 +978,7 @@ EOHTML
 	Hebcal::out_html(undef,
 	"<label>Time zone: ",
 	$q->popup_menu(-name => "tzid",
+		       -id => "tzid",
 		       -values => Hebcal::get_timezones(),
 		       -default => "UTC"),
 	"</label>\n");
@@ -1013,7 +1026,7 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
 });
 
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
-    my $js=<<JSCRIPT_END;
+    my $xtra_html=<<JSCRIPT_END;
 <script type="text/javascript">
 var d=document;
 function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
@@ -1022,17 +1035,49 @@ function s6(val){
 if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
 if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
-d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;}}
+d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;d.f1.mf.checked=false;d.f1.ss.checked=false;}}
 d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
 d.getElementById("mf").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
 d.getElementById("ss").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
 </script>
 JSCRIPT_END
 	;
-    Hebcal::out_html(undef, $js);
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
-    Hebcal::out_html(undef, "<script>\$('#havdalahInfo').tooltip()</script>\n");
+    $xtra_html .= "<script>\$('#havdalahInfo').tooltip()</script>\n";
+
+# don't interpolate this next part
+    if ($q->param("geo") eq "pos") {
+	$xtra_html .=<<'JSCRIPT_END';
+<script src="/i/hogan.min.js"></script>
+<script src="/i/typeahead-0.9.3.min.js"></script>
+<script type="text/javascript">
+$("#city-typeahead").typeahead({
+    name: "hebcal-city",
+    remote: "/complete.php?q=%QUERY",
+    template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
+    limit: 7,
+    engine: Hogan
+}).on('typeahead:selected', function (obj, datum, name) {
+  $('#tzid').val(datum.timezone);
+  var ladir = datum.latitude < 0 ? 's' : 'n';
+  var ladeg = Math.floor(Math.abs(datum.latitude));
+  var lamin = Math.floor((Math.abs(datum.latitude) - ladeg) * 60);
+  $('#ladir').val(ladir);
+  $('#ladeg').val(ladeg);
+  $('#lamin').val(lamin);
+  var lodir = datum.longitude < 0 ? 'w' : 'e';
+  var lodeg = Math.floor(Math.abs(datum.longitude));
+  var lomin = Math.floor((Math.abs(datum.longitude) - lodeg) * 60);
+  $('#lodir').val(lodir);
+  $('#lodeg').val(lodeg);
+  $('#lomin').val(lomin);
+});
+</script>
+JSCRIPT_END
+;
+    }
+
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
     Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
 
