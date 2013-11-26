@@ -78,12 +78,16 @@ do_file($dbh,$in_admin1,"admin1",4);
 do_sql($dbh, qq{DROP TABLE IF EXISTS geoname_fulltext});
 
 do_sql($dbh, qq{CREATE VIRTUAL TABLE geoname_fulltext
-USING fts3(geonameid int, name text, population int
+USING fts3(geonameid int, longname text,
+asciiname text, admin1 text, country text,
+population int, latitude real, longitude real, timezone text
 );
 });
 
 do_sql($dbh, qq{INSERT INTO geoname_fulltext
-SELECT g.geonameid, g.asciiname||', '||a.asciiname||', '||c.Country, g.population
+SELECT g.geonameid, g.asciiname||', '||a.asciiname||', '||c.Country,
+g.asciiname, a.asciiname, c.Country,
+g.population, g.latitude, g.longitude, g.timezone
 FROM geoname g, admin1 a, country c
 WHERE g.country = c.ISO
 AND g.country||'.'||g.admin1 = a.key
