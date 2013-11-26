@@ -1253,7 +1253,7 @@ sub zipcode_get_zip_fields($$)
 
 sub html_footer_bootstrap
 {
-    my($q,$rcsrev,$noclosebody) = @_;
+    my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
 
     my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -1315,6 +1315,7 @@ EOHTML
 ;
 
     $str .= $URCHIN;
+    $str .= $xtra_html if $xtra_html;
 
     if ($noclosebody) {
 	return $str;
