@@ -31,7 +31,7 @@ if (!$query) {
 $search_results = array();
 
 while ($res = $query->fetchArray(SQLITE3_ASSOC)) {
-    $tokens = array_merge(explode(" ", $asciiname), explode(" ", $country));
+    $tokens = array_merge(explode(" ", $res["asciiname"]), explode(" ", $res["country"]));
     $search_results[] = array("id" => $res["geonameid"],
 			      "value" => $res["asciiname"],
 			      "admin1" => $res["admin1"],
