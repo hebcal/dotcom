@@ -288,6 +288,7 @@ sub json_events
 
     print STDOUT $q->header(-type => $content_type,
 			    -charset => "UTF-8",
+			    -access_control_allow_origin => '*',
 			    );
 
     my $title = "Hebcal $g_date";
@@ -316,6 +317,7 @@ sub javascript_events
 			    -charset => "UTF-8",
 			    -last_modified => Hebcal::http_date($time),
 			    -expires => $http_expires,
+			    -access_control_allow_origin => '*',
 			    );
 
     if ($v2) {

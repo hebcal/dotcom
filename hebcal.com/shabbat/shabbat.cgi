@@ -224,6 +224,7 @@ sub display_json
 {
     my($items) = @_;
 
+    print "Access-Control-Allow-Origin: *\015\012";
     print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
 
     Hebcal::items_to_json($items,$q,$city_descr,$latitude,$longitude);
@@ -273,6 +274,7 @@ sub display_rss
 {
     my($items) = @_;
 
+    print "Access-Control-Allow-Origin: *\015\012";
     print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
 
     my $url = url_html(self_url());
@@ -395,6 +397,7 @@ ul#hebcal-results{list-style-type:none}
 <body>
 });
     } else {
+	print "Access-Control-Allow-Origin: *\015\012";
 	print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
     }
 

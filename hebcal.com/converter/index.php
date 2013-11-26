@@ -164,6 +164,7 @@ if ($gy >= 1900 && $gy <= 2099) {
 }
 
 if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
+    header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
     $callback = false;
     if (isset($_GET["callback"]) && preg_match('/^[\w\.]+$/', $_GET["callback"])) {
@@ -186,6 +187,7 @@ if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
     }
     exit();
 } elseif (isset($_GET["cfg"]) && $_GET["cfg"] == "xml") {
+    header("Access-Control-Allow-Origin: *");
     header("Content-Type: text/xml; charset=UTF-8");
     echo "<?xml version=\"1.0\" ?>\n"; ?>
 <hebcal>
