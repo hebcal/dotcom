@@ -903,7 +903,7 @@ EOHTML
     {
 	Hebcal::out_html(undef,
 	qq{<div class="city-typeahead form-inline">
-   <input id="city-typeahead" class="form-control input-xlarge" type="text" placeholder="Search for city">
+   <input id="city-typeahead" name="city-typeahead" class="form-control input-xlarge" type="text" placeholder="Search for city">
 </div>
 });
 	Hebcal::out_html(undef,
