@@ -2,6 +2,10 @@ AddDefaultCharset UTF-8
 FileETag MTime Size
 DirectoryIndex index.php index.html
 
+<FilesMatch "\.(js|json|xml)$">
+  Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
 <IfModule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/html text/css text/javascript
 </IfModule>
