@@ -1,6 +1,3 @@
-# $Id$
-# $URL$
-
 SHELL=/bin/sh
 MAILTO="michael@radwin.org"
 HEBCAL_WEB=/home/hebcal/web/hebcal.com
@@ -21,20 +18,21 @@ HEBCAL_BIN=/home/hebcal/local/bin
 0 0 * * * nice $HEBCAL_WEB/bin/gen_current.pl
 
 # update hebcal.com commentary at 11am on wednesday
-11 11 * * 3 touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null
+11 11 * * 3 touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null 2>&1
 
-# shabbat: regular emails at 2:45am pacific on Thursdays
-45 2 * * 4 nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# shabbat: regular emails at 4:45am pacific on Thursdays
+45 4 * * 4 nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
-# shabbat: post to Facebook wall on Thursday between 5:17-5:37am Pacific
+# shabbat: post to Facebook wall on Thursday between 10:17-10:37am Pacific
 # Sleep a random amount, not greater than 30 minutes
-17 5 * * 4 nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
+17 10 * * 4 nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
 
-# post to Facebook wall Sunday-Friday between 6:03-6:33am Pacific
-3 6 * * 0-5 nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
+# post to Facebook wall Sunday-Friday between 8:03-8:33am Pacific
+3 8 * * 0-5 nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
 
-# special Rosh Hashana 5771 - 7 Sep 2010 at 1:30am
-#30 1 7 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# special Sukkot - 17 Sep 2010 at 8:45am (+ 9/24/2013)
+#45 8 17 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+#45 8 24 9 * nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
 # clear bounces at 8:03am on friday
 3 8 * * 5 nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
@@ -43,7 +41,7 @@ HEBCAL_BIN=/home/hebcal/local/bin
 30 0 * * * nice $HEBCAL_BIN/email_list_snapshot.sh
 
 # SVN backup
-13 0 * * * $HEBCAL_BIN/s3backup.sh
+#13 0 * * * $HEBCAL_BIN/s3backup.sh
 
 # don't run fetchmail as a daemon, run it from cron
-*/6 * * * * /home/hebcal/local/bin/fetchmail -s 2> /dev/null
+*/6 * * * * /home/hebcal/local/bin/fetchmail -s > /dev/null 2>&1
