@@ -52,6 +52,7 @@ use Date::Calc;
 use HebcalGPL ();
 use URI::Escape;
 use Time::HiRes qw(usleep);
+use Fcntl qw(:flock);
 
 my $opt_all = 0;
 my $opt_dryrun = 0;
@@ -86,18 +87,26 @@ if ($opt_verbose == 0) {
 # Just log to STDERR
 Log::Log4perl->easy_init($loglevel);
 
+open(my $lockfile, ">", "/tmp/hebcal-shabbat-weekly.lock")
+    or LOGDIE("Can't open lockfile: $!");
+
+if (!flock($lockfile, LOCK_EX)) {
+    WARN("Unable to acquire lock: $!");
+    exit(1);
+}
+
 # don't send email on yontiff
 exit_if_yomtov();
 
 INFO("Reading $Hebcal::CONFIG_INI_PATH");
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
-    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
+    or LOGDIE "$Hebcal::CONFIG_INI_PATH: $!";
 
 my %SUBS;
 INFO("Querying database to get subscriber info");
 load_subs();
 if (! keys(%SUBS) && !$opt_all) {
-    croak "$ARGV[0]: not found";
+    LOGCROAK "$ARGV[0]: not found";
 }
 
 my($LOGIN) = getlogin() || getpwuid($<) || "UNKNOWN";
@@ -117,7 +126,7 @@ my $UTM_PARAM = sprintf("utm_source=newsletter&amp;utm_campaign=shabbat-%04d-%02
 			$year, $mon+1, $mday);
 
 my $HOME = "/home/hebcal";
-INFO("Opening ZIP code database");
+lfINFO("Opening ZIP code database");
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
 
 my $STATUS_OK = 1;
@@ -142,7 +151,7 @@ if ($opt_log) {
 	    INFO("Skipping $count users from previous run");
 	}
     }
-    open(LOG, ">>$logfile") || croak "$logfile: $!";
+    open(LOG, ">>$logfile") || LOGCROAK "$logfile: $!";
     select LOG;
     $| = 1;
     select STDOUT;
@@ -161,6 +170,8 @@ my %ZIP_CACHE;
 mail_all();
 
 close(LOG) if $opt_log;
+
+flock($lockfile, LOCK_UN);		# ignore failures
 
 Hebcal::zipcode_close_db($ZIPS_DBH);
 
@@ -201,7 +212,7 @@ sub close_smtp_connections {
 sub exit_if_yomtov {
     my $subj = Hebcal::get_today_yomtov();
     if ($subj) {
-	INFO("Today is yomtov: $subj");
+	WARN("Today is yomtov: $subj");
 	exit(0);
     }
     1;
@@ -301,7 +312,7 @@ sub mail_user
 {
     my($to,$smtp) = @_;
 
-    my $cfg = $SUBS{$to} or croak "invalid user $to";
+    my $cfg = $SUBS{$to} or LOGCROAK "invalid user $to";
 
     my($cmd,$loc,$args) = @{$CONFIG{$to}};
     return 1 unless $cmd;
@@ -513,7 +524,7 @@ sub load_subs
     my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
     DEBUG("Connecting to $dsn");
     my $dbh = DBI->connect($dsn, $dbuser, $dbpass)
-	or die "DB Connection not made: $DBI::errstr";
+	or LOGDIE("DB Connection not made: $DBI::errstr");
     $dbh->{'mysql_enable_utf8'} = 1;
 
     my $all_sql = "";
@@ -537,7 +548,7 @@ EOD
     INFO($sql);
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
-	or croak "can't execute the query: " . $sth->errstr;
+	or LOGCROAK "can't execute the query: " . $sth->errstr;
     my $count = 0;
     while (my($email,$id,$zip,$city,$havdalah) = $sth->fetchrow_array) {
 	my $cfg = "id=$id;m=$havdalah";
@@ -547,7 +558,7 @@ EOD
 	    if (defined($Hebcal::CITIES_OLD{$city})) {
 		$city = $Hebcal::CITIES_OLD{$city};
 	    } elsif (! defined $Hebcal::CITY_LATLONG{$city}) {
-		croak "unknown city $city for id=$id;email=$email";
+		LOGCROAK "unknown city $city for id=$id;email=$email";
 	    }
 	    $cfg .= ";city=$city";
 	}
@@ -641,7 +652,7 @@ sub smtp_reconnect
 {
     my($server_num,$debug) = @_;
 
-    croak "server number $server_num too large"
+    LOGCROAK "server number $server_num too large"
 	if $server_num >= $SMTP_NUM_CONNECTIONS;
 
     if (defined $SMTP[$server_num]) {
@@ -652,7 +663,7 @@ sub smtp_reconnect
     my $user = $SMTP_AUTH[$server_num]->[1];
     my $password = $SMTP_AUTH[$server_num]->[2];
     my $smtp = smtp_connect($host, $user, $password, $debug)
-	or croak "Can't connect to $host as $user";
+	or LOGCROAK "Can't connect to $host as $user";
     $SMTP[$server_num] = $smtp;
     return $smtp;
 }
