@@ -96,7 +96,7 @@ alt="Add <?php echo $title ?> to Google Calendar"></a>
 <?php } else { ?>
 <a class="download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
-href="<?php echo $path ?>.csv" download="$path.csv"><img
+href="<?php echo $path ?>.csv" download="<?php echo $path ?>.csv"><img
 src="/i/outlook-149x53.png" width="149" height="53"
 alt="Download <?php echo $title ?> to Microsoft Outlook"
 border="0"></a>
