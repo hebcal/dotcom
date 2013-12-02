@@ -1082,6 +1082,9 @@ sub cache_begin {
     my $orig_qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
     return undef unless $orig_qs;
 
+    # don't bother to cache a jQuery JSONP request (param "_" with timestamp value)
+    return undef if $orig_qs =~ /&_=\d/;
+
     my $script_name = $q->script_name();
     $script_name =~ s/\./_/g;
 
