@@ -126,7 +126,7 @@ my $UTM_PARAM = sprintf("utm_source=newsletter&amp;utm_campaign=shabbat-%04d-%02
 			$year, $mon+1, $mday);
 
 my $HOME = "/home/hebcal";
-lfINFO("Opening ZIP code database");
+INFO("Opening ZIP code database");
 my $ZIPS_DBH = Hebcal::zipcode_open_db();
 
 my $STATUS_OK = 1;
