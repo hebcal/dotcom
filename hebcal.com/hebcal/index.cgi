@@ -912,11 +912,12 @@ EOHTML
     elsif ($q->param("geo") eq "pos")
     {
 	Hebcal::out_html(undef,
-	qq{<div class="city-typeahead form-inline" style="margin-bottom:12px">
-   <input id="city-typeahead" name="city-typeahead" class="form-control input-xlarge" type="text" placeholder="Search for city">
-</div>
-});
-	Hebcal::out_html(undef,
+	qq{<div class="city-typeahead form-inline" style="margin-bottom:12px">\n},
+	$q->textfield(-name => "city-typeahead",
+		      -id => "city-typeahead",
+		      -class => "form-control input-xlarge",
+		      -placeholder => "Search for city"),
+	qq{</div>\n},
 	qq{<div class="form-inline">\n},
 	"<label>",
 	$q->textfield(-name => "ladeg",
