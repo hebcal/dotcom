@@ -1115,14 +1115,14 @@ sub results_page
 
     if (param_true("c"))
     {
-	if (defined $q->param("zip"))
+	if ($cconfig{"geo"} eq "zip")
 	{
 	    $filename .= "_" . $q->param("zip");
 	}
-	elsif (defined $q->param("city"))
+	elsif (defined $cconfig{"city"} && $cconfig{"city"} ne "")
 	{
-	    my $tmp = lc($q->param("city"));
-	    $tmp =~ s/[^\w]/_/g;
+	    my $tmp = $cconfig{"city"};
+	    $tmp =~ s/[^A-Za-z0-9]/_/g;
 	    $filename .= "_" . $tmp;
 	}
     }
