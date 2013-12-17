@@ -81,7 +81,7 @@ foreach my $key ($q->param()) {
     my $val = $q->param($key);
     if (defined $val) {
 	my $orig = $val;
-	if ($key eq "city") {
+	if ($key eq "city" || $key eq "city-typeahead") {
 	    $val = decode_utf8($val);
 	} elsif ($key eq "tzid") {
 	    $val =~ s/[^\/\w\.\s-]//g; # allow forward-slash in tzid
@@ -174,6 +174,15 @@ if (param_true("c")) {
     my @status = Hebcal::process_args_common($q, 0, 0, \%cconfig);
     unless ($status[0]) {
 	form($status[1], $status[2]);
+    }
+    if ($cconfig{"geo"} eq "pos" && defined $q->param("city-typeahead") && $q->param("city-typeahead") !~ /^\s*$/) {
+	my $city = $q->param("city-typeahead");
+	$city =~ s/^\s+//;
+	$city =~ s/\s+$//;
+	$cconfig{"title_pos"} = $cconfig{"title"};
+	$cconfig{"title"} = $city;
+	$city =~ s/,.+//;
+	$cconfig{"city"} = $city;
     }
     $cmd = $status[1];
 } else {
@@ -903,7 +912,7 @@ EOHTML
     elsif ($q->param("geo") eq "pos")
     {
 	Hebcal::out_html(undef,
-	qq{<div class="city-typeahead form-inline">
+	qq{<div class="city-typeahead form-inline" style="margin-bottom:12px">
    <input id="city-typeahead" name="city-typeahead" class="form-control input-xlarge" type="text" placeholder="Search for city">
 </div>
 });
@@ -1288,8 +1297,13 @@ accurate.
 	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
 	    # Fridge
 	    my $url = "/shabbat/fridge.cgi?";
-	    if ($q->param("zip")) {
+	    if ($cconfig{"geo"} eq "zip") {
 		$url .= "zip=" . $q->param("zip");
+#	    } elsif ($cconfig{"geo"} eq "pos") {
+#		$url .= "city-typeahead=" . URI::Escape::uri_escape_utf8($q->param("city-typeahead"));
+#		foreach (qw(lodeg lomin ladeg lamin lodir ladir tzid)) {
+#		    $url .= "&amp;$_=" . URI::Escape::uri_escape_utf8($q->param($_));
+#		}
 	    } else {
 		$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
 	    }
