@@ -56,7 +56,6 @@ my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
-my $latlong_url = "http://www.getty.edu/research/tools/vocabulary/tgn/";
 my %long_candles_text =
     ("pos" => "latitude/longitude",
      "city" => "large cities",
@@ -959,9 +958,6 @@ EOHTML
 		       -labels => {"e" => "East Longitude",
 				   "w" => "West Longitude"}),
 	qq{</div>\n});
-	Hebcal::out_html(undef,
-	"<p><small><a href=\"$latlong_url\">Search</a>\n",
-	"for the exact location of your city.</small></p>\n");
     }
     elsif ($q->param("geo") ne "none")
     {
