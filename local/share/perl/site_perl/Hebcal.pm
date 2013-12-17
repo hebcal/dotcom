@@ -1736,7 +1736,7 @@ sub download_href
     $href .= $cgi if $cgi;
     $href .= "/$filename.$ext?dl=1";
     foreach my $key ($q->param()) {
-	my $val = $q->param($key) || "";
+	my $val = defined $q->param($key) ? $q->param($key) : "";
 	$href .= ";$key=" . URI::Escape::uri_escape_utf8($val);
     }
 
