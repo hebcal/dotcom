@@ -457,7 +457,10 @@ href="#download"><i
 class="icon-download-alt"></i> Leyning spreadsheet</a>
 <a class="btn" href="index.xml"><img src="/i/feed-icon-14x14.png"
 style="border:none" alt="View the raw XML source" width="14"
-height="14"> Parashat ha-Shavua RSS feed</a>
+height="14"> Parashat ha-Shavua feed (Diaspora)</a>
+<a class="btn" href="israel.xml"><img src="/i/feed-icon-14x14.png"
+style="border:none" alt="View the raw XML source" width="14"
+height="14"> Parashat ha-Shavua feed (Israel)</a>
 </div><!-- .btn-toolbar -->
 
 <div class="row-fluid">
