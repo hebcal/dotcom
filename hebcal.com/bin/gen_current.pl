@@ -44,75 +44,50 @@ use Hebcal ();
 use Date::Calc ();
 use POSIX qw(strftime);
 use DBI;
+use Getopt::Long ();
+use Log::Log4perl qw(:easy);
 
 my $HOSTNAME = "www.hebcal.com";
+my $opt_help;
+my $opt_verbose = 0;
 
-my $dbh = DBI->connect("dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE", "", "")
-    or die $DBI::errstr;
+if (!Getopt::Long::GetOptions
+    ("help|h" => \$opt_help,
+     "verbose|v+" => \$opt_verbose)) {
+    usage();
+}
+
+$opt_help && usage();
+
+my $loglevel;
+if ($opt_verbose == 0) {
+    $loglevel = $WARN;
+} elsif ($opt_verbose == 1) {
+    $loglevel = $INFO;
+} else {
+    $loglevel = $DEBUG;
+}
+# Just log to STDERR
+Log::Log4perl->easy_init($loglevel);
+
+my $dsn = "dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE";
+DEBUG("Connecting to $dsn");
+my $dbh = DBI->connect($dsn, "", "")
+    or LOGDIE("$dsn: $DBI::errstr");
 my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
 
 my($syear,$smonth,$sday) = Hebcal::upcoming_dow(6); # saturday
+DEBUG("Shabbat is $syear-$smonth-$sday");
 
-my @events = Hebcal::invoke_hebcal("$Hebcal::HEBCAL_BIN -s -h -x $syear", "", 0, $smonth);
-for (my $i = 0; $i < @events; $i++)
-{
-    if ($events[$i]->[$Hebcal::EVT_IDX_MDAY] == $sday)
-    {
-	my $parasha = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	my $href = Hebcal::get_holiday_anchor($parasha,undef,undef);
-	if ($href)
-	{
-	    my $stime = sprintf("%02d %s %d",
-				$sday, Date::Calc::Month_to_Text($smonth), $syear);
-
-	    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
-				   gmtime(time()));
-
-	    my $dow = $Hebcal::DoW[Hebcal::get_dow($syear, $smonth, $sday)];
-	    my $parasha_pubDate = sprintf("%s, %02d %s %d 12:00:00 GMT",
-					 $dow,
-					 $sday,
-					 $Hebcal::MoY_short[$smonth - 1],
-					 $syear);
-	    my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
-	    open(RSS,">$Hebcal::WEBDIR/sedrot/index.xml") || die;
-	    my $link = "http://$HOSTNAME$href?utm_source=rss&amp;utm_campaign=rss-parasha";
-	    my $channel_link = "http://$HOSTNAME/sedrot/";
-	    my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
-	    $memo =~ s/\\n/<\/p>\n<p>/g;
-	    $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
-	    print RSS qq{<?xml version="1.0" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-<title>Hebcal Parsahat ha-Shavua</title>
-<link>$channel_link</link>
-<atom:link href="${channel_link}index.xml" rel="self" type="application/rss+xml" />
-<description>Torah reading of the week from Hebcal.com</description>
-<language>en-us</language>
-<copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
-<lastBuildDate>$pubDate</lastBuildDate>
-<item>
-<title>$parasha - $stime</title>
-<link>$link</link>
-<description>$memo</description>
-<pubDate>$parasha_pubDate</pubDate>
-<guid isPermaLink="false">$link&amp;dt=$dt</guid>
-</item>
-</channel>
-</rss>
-};
-	    close(RSS);
-	}
-
-	last;
-    }
-}
+rss_parasha($syear,$smonth,$sday,"index",1);
+rss_parasha($syear,$smonth,$sday,"israel",0);
 
 undef $sth;
 undef $dbh;
 
 my $hdate = `$Hebcal::HEBCAL_BIN -T -x -h | grep -v Omer`;
 chomp($hdate);
+DEBUG("Today is $hdate");
 
 if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 {
@@ -120,12 +95,14 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     my $hebrew = Hebcal::build_hebrew_date($hm,$hd,$hy);
 
     my $outfile = "$Hebcal::WEBDIR/etc/hdate-en.js";
-    open(OUT,">$outfile") || die;
+    DEBUG("Creating $outfile");
+    open(OUT,">$outfile") || LOGDIE "$outfile: $!";
     print OUT "document.write(\"$hdate\");\n";
     close(OUT);
 
     $outfile = "$Hebcal::WEBDIR/etc/hdate-he.js";
-    open(OUT,">$outfile") || die;
+    DEBUG("Creating $outfile");
+    open(OUT,">$outfile") || LOGDIE "$outfile: $!";
     print OUT "document.write(\"$hebrew\");\n";
     close(OUT);
 
@@ -142,7 +119,9 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $hmonth =~ s/[^A-Za-z0-9]+//g;
 
-    open(RSS,">$Hebcal::WEBDIR/etc/hdate-en.xml") || die;
+    $outfile = "$Hebcal::WEBDIR/etc/hdate-en.xml";
+    DEBUG("Creating $outfile");
+    open(RSS,">$outfile") || LOGDIE "$outfile: $!";
     print RSS rss_hebdate("en-us",
 	 $hdate,
 	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_source=rss&amp;utm_campaign=rss-hdate-en",
@@ -150,7 +129,9 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 	 $pubDate);
     close(RSS);
 
-    open(RSS,">$Hebcal::WEBDIR/etc/hdate-he.xml") || die;
+    $outfile = "$Hebcal::WEBDIR/etc/hdate-he.xml";
+    DEBUG("Creating $outfile");
+    open(RSS,">$outfile") || LOGDIE "$outfile: $!";
     print RSS rss_hebdate("he",
 	 $hebrew,
 	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;utm_source=rss&amp;utm_campaign=rss-hdate-he",
@@ -159,6 +140,93 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     close(RSS);
 }
 exit(0);
+
+sub rss_parasha {
+    my($syear,$smonth,$sday,$basename,$diaspora) = @_;
+
+    my $cmd = "$Hebcal::HEBCAL_BIN -s -h -x";
+    $cmd .= " -i" unless $diaspora;
+    $cmd .= " $syear";
+
+    my $title = "Hebcal Parsahat ha-Shavua";
+    my $description = "Torah reading of the week from Hebcal.com";
+    if ($diaspora) {
+	$title .= " (Diaspora)";
+	$description .= " (Diaspora)";
+    } else {
+	$title .= " (Israel)";
+	$description .= " (Israel)";
+    }
+
+    DEBUG("Invoking $cmd");
+    my @events = Hebcal::invoke_hebcal($cmd, "", 0, $smonth);
+    my $parasha = find_parasha_hashavuah(\@events, $sday);
+    if ($parasha) {
+	DEBUG("This week's Torah Portion is $parasha");
+	my $outfile = "$Hebcal::WEBDIR/sedrot/$basename.xml";
+	rss_parasha_inner($parasha,$syear,$smonth,$sday,
+			  $outfile,$title,$description);
+    }
+}
+
+sub find_parasha_hashavuah {
+    my($events,$sday) = @_;
+    foreach my $evt (@{$events}) {
+	if ($evt->[$Hebcal::EVT_IDX_MDAY] == $sday) {
+	    return $evt->[$Hebcal::EVT_IDX_SUBJ];
+	}
+    }
+    return undef;
+}
+
+sub rss_parasha_inner {
+    my($parasha,$syear,$smonth,$sday,$outfile,$title,$description) = @_;
+    my $href = Hebcal::get_holiday_anchor($parasha,undef,undef);
+    return 0 unless $href;
+
+    my $stime = sprintf("%02d %s %d",
+			$sday, Date::Calc::Month_to_Text($smonth), $syear);
+
+    my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
+			   gmtime(time()));
+
+    my $dow = $Hebcal::DoW[Hebcal::get_dow($syear, $smonth, $sday)];
+    my $parasha_pubDate = sprintf("%s, %02d %s %d 12:00:00 GMT",
+				  $dow,
+				  $sday,
+				  $Hebcal::MoY_short[$smonth - 1],
+				  $syear);
+    my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
+    DEBUG("Creating $outfile");
+    open(RSS,">$outfile") || LOGDIE "$outfile: $!";
+    my $link = "http://$HOSTNAME$href?utm_source=rss&amp;utm_campaign=rss-parasha";
+    my $channel_link = "http://$HOSTNAME/sedrot/";
+    my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
+    $memo =~ s/\\n/<\/p>\n<p>/g;
+    $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
+    print RSS qq{<?xml version="1.0" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>$title</title>
+<link>$channel_link</link>
+<atom:link href="${channel_link}index.xml" rel="self" type="application/rss+xml" />
+<description>$description</description>
+<language>en-us</language>
+<copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
+<lastBuildDate>$pubDate</lastBuildDate>
+<item>
+<title>$parasha - $stime</title>
+<link>$link</link>
+<description>$memo</description>
+<pubDate>$parasha_pubDate</pubDate>
+<guid isPermaLink="false">$link&amp;dt=$dt</guid>
+</item>
+</channel>
+</rss>
+};
+    close(RSS);
+    1;
+}
 
 sub rss_hebdate {
     my($language,$title,$link,$description,$pubDate) = @_;
@@ -181,4 +249,8 @@ sub rss_hebdate {
 </channel>
 </rss>
 };
+}
+
+sub usage {
+    die "usage: $0 [-help] [-verbose]\n";
 }
