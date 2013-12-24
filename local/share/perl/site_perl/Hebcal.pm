@@ -68,6 +68,7 @@ our $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
 our $CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 
 my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
+my $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
 
 my $CONFIG_INI;
 my $HOSTNAME;
@@ -1549,6 +1550,8 @@ sub gen_cookie($)
 	    $retval .= '&zip=' . $q->param('zip');
 	} elsif ($q->param('geo') eq 'city') {
 	    $retval .= '&city=' . URI::Escape::uri_escape_utf8($q->param('city'));
+	} elsif ($q->param('geo') eq 'geonameid') {
+	    $retval .= '&geonameid=' . $q->param('geonameid');
 	} elsif ($q->param('geo') eq 'pos') {
 	    $retval .= '&lodeg=' . $q->param('lodeg');
 	    $retval .= '&lomin=' . $q->param('lomin');
@@ -1634,6 +1637,13 @@ sub process_cookie($$)
 	    {
 		$q->param('zip',$c->param('zip'));
 	    }
+	} elsif (defined $c->param('geonameid') && $c->param('geonameid') =~ /^\d+$/ &&
+	    (! defined $q->param('geo') || $q->param('geo') eq 'geonameid')) {
+	    $q->param('geo','geonameid');
+	    $q->param('c','on');
+	    if (! defined $q->param('geonameid') || $q->param('geonameid') =~ /^\s*$/) {
+		$q->param('geonameid',$c->param('geonameid'));
+	    }
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
 	    $q->param('city',$c->param('city'))
@@ -1718,6 +1728,27 @@ sub self_url
     }
 
     $url;
+}
+
+sub get_geo_args {
+    my($q,$separator) = @_;
+    $separator = '&' unless defined $separator;
+    if (defined $q->param('zip') && $q->param('zip') =~ /^\d+$/) {
+	return 'zip=' . $q->param('zip');
+    } elsif (defined $q->param('city') && $q->param('city') ne '') {
+	return 'city=' . URI::Escape::uri_escape_utf8($q->param('city'));
+    } elsif (defined $q->param('geonameid') && $q->param('geonameid') =~ /^\d+$/) {
+	return 'geonameid=' . $q->param('geonameid');
+    } elsif (defined $q->param('geo') && $q->param('geo') eq 'pos') {
+	my $sep = '';
+	my $retval = '';
+	foreach (qw(city-typeahead lodeg lomin ladeg lamin lodir ladir tzid)) {
+	    $retval .= "$sep$_=" . URI::Escape::uri_escape_utf8($q->param($_));
+	    $sep = $separator;
+	}
+	return $retval;
+    }
+    '';
 }
 
 sub download_href
@@ -1998,7 +2029,7 @@ sub process_args_common_jerusalem {
     my $cmd = "./hebcal -C 'Jerusalem'";
     my $city_descr = "Jerusalem, Israel";
     $q->param("i", "on");
-    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid geonameid city-typeahead)) {
 	$q->delete($_);
     }
     if (defined $cconfig) {
@@ -2038,7 +2069,7 @@ sub process_args_common_zip {
     my $city_descr = "$city, $state " . $q->param('zip');
 
     $q->param("geo", "zip");
-    foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+    foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid geonameid city-typeahead)) {
 	$q->delete($_);
     }
     if (defined $cconfig) {
@@ -2050,6 +2081,45 @@ sub process_args_common_zip {
 	$cconfig->{"zip"} = $q->param("zip");
 	$cconfig->{"tzid"} = $tzid;
 	$cconfig->{"geo"} = "zip";
+    }
+    (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
+sub process_args_common_geoname {
+    my($q,$cconfig) = @_;
+    my $dbh = zipcode_open_db($GEONAME_SQLITE_FILE);
+    $dbh->{sqlite_unicode} = 1;
+    my $sql = qq{
+SELECT g.name, g.asciiname, c.country, a.name, g.latitude, g.longitude, g.timezone
+FROM geoname g
+LEFT JOIN country c on g.country = c.iso
+LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
+WHERE g.geonameid = ?
+};
+    my $sth = $dbh->prepare($sql) or die $dbh->errstr;
+    $sth->execute($q->param('geonameid')) or die $dbh->errstr;
+    my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array;
+    $sth->finish;
+    zipcode_close_db($dbh);
+    undef($dbh);
+
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+	latlong_to_hebcal($latitude, $longitude);
+    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $city_descr = "$name, $admin1, $country";
+    if ($country eq "Israel") {
+	$q->param('i','on');
+    }
+    foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead)) {
+	$q->delete($_);
+    }
+    if (defined $cconfig) {
+	$cconfig->{"latitude"} = $latitude;
+	$cconfig->{"longitude"} = $longitude;
+	$cconfig->{"title"} = $city_descr;
+	$cconfig->{"city"} = $name;
+	$cconfig->{"tzid"} = $tzid;
+	$cconfig->{"geo"} = "geoname";
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
@@ -2127,7 +2197,7 @@ sub process_args_common_geopos {
     $cmd .= " -z '$tzid'";
     $city_descr .= ", $tzid";
 
-    foreach (qw(city zip tz dst)) {
+    foreach (qw(city zip tz dst geonameid)) {
 	$q->delete($_);
     }
     if (defined $cconfig) {
@@ -2183,7 +2253,7 @@ sub process_args_common_city {
     if ($CITY_COUNTRY{$city} eq 'IL') {
 	$q->param('i','on');
     }
-    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead geonameid)) {
 	$q->delete($_);
     }
     if (defined $cconfig) {
@@ -2201,7 +2271,7 @@ sub process_args_common_none {
     my($q,$cconfig) = @_;
     $q->param("geo","none");
     $q->param("c","off");
-    foreach (qw(m zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+    foreach (qw(m zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead geonameid)) {
 	$q->delete($_);
     }
     if (defined $cconfig) {
@@ -2232,6 +2302,12 @@ sub process_args_common {
 	@status = process_args_common_jerusalem($q, $cconfig);
     } elsif (defined $q->param('zip') && $q->param('zip') ne '') {
 	@status = process_args_common_zip($q, $cconfig);
+    } elsif (defined $q->param('geonameid') && $q->param('geonameid') =~ /^\d+$/) {
+	if ($q->param('geonameid') == 281184) {
+	    @status = process_args_common_jerusalem($q, $cconfig);
+	} else {
+	    @status = process_args_common_geoname($q, $cconfig);
+	}
     } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
 	     defined $q->param("ladeg") && defined $q->param("lamin") &&
 	     defined $q->param("lodir") && defined $q->param("ladir") &&

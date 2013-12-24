@@ -1301,20 +1301,10 @@ accurate.
 	my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
 	Hebcal::out_html(undef, qq{<a class="$print_pdf_btn_class" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
 
-	if (param_true("c") && $q->param("geo") && $q->param("geo") =~ /^city|zip$/) {
+	if (param_true("c")) {
 	    # Fridge
 	    my $url = "/shabbat/fridge.cgi?";
-	    if ($cconfig{"geo"} eq "zip") {
-		$url .= "zip=" . $q->param("zip");
-#	    } elsif ($cconfig{"geo"} eq "pos") {
-#		$url .= "city-typeahead=" . URI::Escape::uri_escape_utf8($q->param("city-typeahead"));
-#		foreach (qw(lodeg lomin ladeg lamin lodir ladir tzid)) {
-#		    $url .= "&amp;$_=" . URI::Escape::uri_escape_utf8($q->param($_));
-#		}
-	    } else {
-		$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
-	    }
-
+	    $url .= Hebcal::get_geo_args($q, "&amp;");
 	    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 	    $url .= "&amp;year=$hyear";
 	    

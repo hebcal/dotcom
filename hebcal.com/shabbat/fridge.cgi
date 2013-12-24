@@ -55,8 +55,10 @@ foreach my $key ($q->param()) {
     my $val = $q->param($key);
     if (defined $val) {
 	my $orig = $val;
-	if ($key eq "city") {
+	if ($key eq "city" || $key eq "city-typeahead") {
 	    $val = decode_utf8($val);
+	} elsif ($key eq "tzid") {
+	    $val =~ s/[^\/\w\.\s-]//g; # allow forward-slash in tzid
 	} else {
 	    # sanitize input to prevent people from trying to hack the site.
 	    # remove anthing other than word chars, white space, or hyphens.
@@ -211,11 +213,7 @@ EOHTML
     Hebcal::out_html($cfg,qq{</tbody></table>\n});
 
     my $url_base = $script_name . "?";
-    if ($q->param("zip")) {
-	$url_base .= "zip=" . $q->param("zip");
-    } else {
-	$url_base .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
-    }
+    $url_base .= Hebcal::get_geo_args($q, "&amp;");
     foreach my $arg (qw(a i)) {
 	$url_base .= sprintf("&amp;%s=%s", $arg, $q->param($arg))
 	    if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
@@ -270,13 +268,9 @@ sub process_args
 
     my($ok,$cmd,$latitude,$longitude,$city_descr) = @status;
 
-    my $short_city = $city_descr;
+    my $short_city = $cconfig{"city"} ? $cconfig{"city"} : $city_descr;
     if ($cconfig{"geo"} eq "zip") {
-	# shorten the headline for USA
-	$short_city =~ s/, USA$//;	# no United States of America
-	$short_city =~ s/ \d{5}$//;	# no zipcode
-    } elsif ($cconfig{"geo"} eq "city") {
-	$short_city = $cconfig{"city"};
+	$short_city = $cconfig{"city"} . ", " . $cconfig{"state"};
     }
 
     $cmd .= " -c -s -x";

@@ -59,8 +59,10 @@ foreach my $key ($q->param()) {
     my $val = $q->param($key);
     if (defined $val) {
 	my $orig = $val;
-	if ($key eq "city") {
+	if ($key eq "city" || $key eq "city-typeahead") {
 	    $val = decode_utf8($val);
+	} elsif ($key eq "tzid") {
+	    $val =~ s/[^\/\w\.\s-]//g; # allow forward-slash in tzid
 	} else {
 	    # sanitize input to prevent people from trying to hack the site.
 	    # remove anthing other than word chars, white space, or hyphens.
@@ -164,16 +166,9 @@ sub url_html {
 
 sub self_url
 {
-    my($url) = join('', "http://", $q->virtual_host(), $script_name,
-			 "?geo=", $q->param('geo'));
-
-    $url .= "&zip=" . $q->param('zip')
-	if $q->param('zip');
-    $url .= "&city=" . URI::Escape::uri_escape_utf8($q->param('city'))
-	if $q->param('city');
-    $url .= "&m=" . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
-
+    my $url = join('',
+		   "http://", $q->virtual_host(), $script_name,
+		   "?geo=", $q->param('geo'), "&", get_link_args($q, 1));
     $url;
 }
 
@@ -486,12 +481,8 @@ sub display_html
 sub get_link_args {
     my($q,$do_havdalah_mins) = @_;
 
-    my $url = "";
-    if ($q->param("zip")) {
-	$url .= "zip=" . $q->param("zip");
-    } else {
-	$url .= "city=" . URI::Escape::uri_escape_utf8($q->param("city"));
-    }
+    my $url = Hebcal::get_geo_args($q);
+
     foreach my $arg (qw(a i)) {
 	$url .= sprintf("&%s=%s", $arg, $q->param($arg))
 	    if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
@@ -761,7 +752,7 @@ EOHTML
     Hebcal::out_html(undef, $footer_divs2);
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
-    Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').tooltip()</script>\n");
+    Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').click(function(e){e.preventDefault()}).tooltip()</script>\n");
     Hebcal::out_html($cfg, "</body></html>\n");
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
     Hebcal::cache_end() if $cache;
