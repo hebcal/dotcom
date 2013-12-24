@@ -18,13 +18,19 @@ if (isset($param["zip"]) && preg_match('/^\d{5}$/', $param["zip"])) {
 }
 
 if (isset($param["city"])) {
+    $geo = "city";
     $geo_city = $param["city"];
     $geo_link = "geo=city&amp;city=" . urlencode($geo_city);
 
     global $hebcal_cities, $hebcal_countries;
     $info = $hebcal_cities[$geo_city];
     $descr = $info[1] . ", " . $hebcal_countries[$info[0]][0];
+} elseif (isset($param["geonameid"])) {
+    $geo = "geonameid";
+    $geo_link = "geo=geonameid&amp;geonameid=" . $param["geonameid"];
+    $descr = $param["city-typeahead"];
 } else {
+    $geo = "zip";
     list($city,$state,$tzid,$latitude,$longitude,
 	 $lat_deg,$lat_min,$long_deg,$long_min) =
 	hebcal_get_zipcode_fields($zip);
@@ -51,27 +57,13 @@ $url_base_double = htmlentities($url_base);
 
 $xtra_head = <<<EOD
 <style type="text/css">
-.entry-content fieldset {
-border:1px solid #E7E7E7;
-margin:0 0 12px;
-padding:6px;
-}
-.entry-content input, .entry-content select {
-margin:0;
-}
-form ol {
-list-style:none inside none;
-margin:0 0 12px 12px;
-}
-#hebcal-form-left { float:left; width:48%;}
-#hebcal-form-right { float:right; width:48%;}
-#hebcal-form-bottom { clear:both; }
-ul#hebcal-results { list-style-type: none }
+ul.hebcal-results { list-style-type: none }
 </style>
 <script type="text/javascript" src="/i/sh-3.0.83/scripts/shCore.js"></script>
 <script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushXml.js"></script>
 <script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushCss.js"></script>
 <link type="text/css" rel="stylesheet" href="/i/sh-3.0.83/styles/shCoreDefault.css">
+<link rel="stylesheet" type="text/css" href="/i/typeahead.css">
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 EOD;
 
@@ -111,11 +103,17 @@ src="<?php echo $url_base ?>&amp;cfg=j&amp;tgt=_top">
 synagogue's web page.</p>
 
 <div class="row-fluid">
-<div class="span6">
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li<?php if ($geo == "zip") { echo ' class="active"';} ?>><a href="#tab-zip" data-toggle="tab">ZIP code</a></li>
+    <li<?php if ($geo == "city") { echo ' class="active"';} ?>><a href="#tab-city" data-toggle="tab">Major City</a></li>
+    <li<?php if ($geo == "geonameid") { echo ' class="active"';} ?>><a href="#tab-search" data-toggle="tab">Search</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane<?php if ($geo == "zip") { echo ' active';} ?>" id="tab-zip">
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
-<fieldset><legend>Shabbat times by Zip Code</legend>
+<fieldset>
 <input type="hidden" name="geo" value="zip">
-<input type="hidden" name="type" value="shabbat">
 <label>ZIP code:
 <input type="text" name="zip" value="<?php echo $zip ?>" size="5" maxlength="5" style="width:auto"></label>
 <label>Havdalah minutes past sundown:
@@ -125,13 +123,11 @@ synagogue's web page.</p>
 Use Ashkenazis Hebrew transliterations</label>
 <input type="submit" class="btn btn-primary" value="Get new HTML tags">
 </fieldset></form>
-</div><!-- .span6 -->
-
-<div class="span6">
+    </div><!-- #tab-zip -->
+    <div class="tab-pane<?php if ($geo == "city") { echo ' active';} ?>" id="tab-city">
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
-<fieldset><legend>Shabbat times by Major City</legend>
+<fieldset>
 <input type="hidden" name="geo" value="city">
-<input type="hidden" name="type" value="shabbat">
 <?php
 echo html_city_select(isset($geo_city) ? $geo_city : "IL-Jerusalem");
 ?>
@@ -143,7 +139,27 @@ echo html_city_select(isset($geo_city) ? $geo_city : "IL-Jerusalem");
 Use Ashkenazis Hebrew transliterations</label>
 <input type="submit" class="btn btn-primary" value="Get new HTML tags">
 </fieldset></form>
-</div><!-- .span6 -->
+    </div><!-- #tab-city -->
+    <div class="tab-pane<?php if ($geo == "geonameid") { echo ' active';} ?>" id="tab-search">
+<form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
+<fieldset>
+<input type="hidden" name="geo" value="geoname">
+<input type="hidden" name="geonameid" id="geonameid" value="">
+<div class="city-typeahead form-inline" style="margin-bottom:12px">
+<input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
+</div>
+<label>Havdalah minutes past sundown:
+<input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" style="width:auto">
+</label>
+<small class="help-block">(enter "0" to turn off Havdalah times)</small>
+<label class="checkbox"><input type="checkbox" name="a"<?php echo $ashk ?>>
+Use Ashkenazis Hebrew transliterations</label>
+<input type="submit" class="btn btn-primary" value="Get new HTML tags">
+</fieldset></form>
+    </div><!-- #tab-search -->
+  </div><!-- .tab-content -->
+</div><!-- .tabbable -->
+
 </div><!-- .row-fluid -->
 
 <h2 id="fonts">Customize Fonts</h2>
@@ -155,17 +171,24 @@ page:</p>
 
 <pre class="brush:html">
 &lt;style type="text/css"&gt;
-#hebcal {
+.hebcal {
  font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
  font-size: small;
 }
-#hebcal H3 {
+.hebcal H3 {
  font-family: Georgia,Palatino,"Times New Roman",Times,serif;
 }
-#hebcal .candles { color: red; font-size: large }
-#hebcal .havdalah { color: green } 
-#hebcal .parashat { color: black; background: #ff9 }
-#hebcal .holiday { display: none }
+ul.hebcal-results { list-style-type:none }
+ul.hebcal-results li {
+  margin-bottom: 11px;
+  font-size: 21px;
+  font-weight: 200;
+  line-height: normal;
+}
+.hebcal-results .candles { color: red; font-size: large }
+.hebcal-results .havdalah { color: green } 
+.hebcal-results .parashat { color: black; background: #ff9 }
+.hebcal-results .holiday { display: none }
 &lt;/style&gt;
 </pre>
 
@@ -174,6 +197,22 @@ href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 
 <?php
-    echo html_footer_bootstrap();
+$xtra_html = <<<EOD
+<script src="/i/hogan.min.js"></script>
+<script src="/i/typeahead-0.9.3.min.js"></script>
+<script type="text/javascript">
+$("#city-typeahead").typeahead({
+    name: "hebcal-city",
+    remote: "/complete.php?q=%QUERY",
+    template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
+    limit: 7,
+    engine: Hogan
+}).on('typeahead:selected', function (obj, datum, name) {
+  console.debug(datum);
+  $('#geonameid').val(datum.id);
+});
+</script>
+EOD;
+    echo html_footer_bootstrap(true, $xtra_html);
     exit();
 ?>
