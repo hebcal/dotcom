@@ -330,7 +330,7 @@ sub display_html_common
     my($items) = @_;
 
     Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
-    Hebcal::out_html($cfg,"<ul id=\"hebcal-results\">\n");
+    Hebcal::out_html($cfg,"<ul class=\"hebcal-results\">\n");
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
@@ -386,7 +386,7 @@ sub display_javascript
 <meta charset="UTF-8">
 <title>$title</title>
 <style type="text/css">
-ul#hebcal-results{list-style-type:none}
+ul.hebcal-results{list-style-type:none}
 </style>
 </head>
 <body>
@@ -399,13 +399,15 @@ ul#hebcal-results{list-style-type:none}
     my $loc_class = '';
     if (defined $q->param('zip') && $q->param('zip') ne '') {
 	$loc_class = $q->param('zip');
+    } elsif (defined $q->param('geonameid') && $q->param('geonameid') ne '') {
+	$loc_class = $q->param('geonameid');
     } else {
 	$loc_class = lc($q->param('city'));
 	$loc_class =~ s/\s+/-/g; 
     }
 
-    Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
-		     qq{<div id="hebcal-$loc_class">\n},
+    Hebcal::out_html($cfg, qq{<div class="hebcal">\n},
+		     qq{<div class="hebcal-$loc_class">\n},
 		     qq{<h3>$shabbat times for $city_descr</h3>\n});
 
 
@@ -577,8 +579,8 @@ sub my_head {
     my $xtra_head2 = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
 <style type="text/css">
-ul#hebcal-results { list-style-type:none }
-ul#hebcal-results li {
+ul.hebcal-results { list-style-type:none }
+ul.hebcal-results li {
   margin-bottom: 11px;
   font-size: 21px;
   font-weight: 200;
