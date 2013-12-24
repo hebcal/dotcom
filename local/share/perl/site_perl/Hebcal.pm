@@ -53,6 +53,7 @@ use HebcalGPL;
 
 my $eval_use_DBI;
 my $eval_use_DateTime;
+my $eval_use_JSON;
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -688,14 +689,13 @@ sub events_to_dict
     \@items;
 }
 
-sub items_to_json
-{
+sub items_to_json {
     my($items,$q,$city_descr,$latitude,$longitude) = @_;
 
-    my $url = "http://" . $q->virtual_host() . self_url($q, {"cfg" => undef});
-    $url =~ s,/,\\/,g;
-
-    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00";
+    unless ($eval_use_JSON) {
+	eval("use JSON");
+	$eval_use_JSON = 1;
+    }
 
     my $cb = $q->param("callback");
     if ($cb && $cb =~ /^[A-Za-z_]\w*$/) {
@@ -704,56 +704,40 @@ sub items_to_json
 	$cb = undef;
     }
 
-    out_html(undef, qq'{"title":"$city_descr",
-"link":"$url",
-"date":"$dc_date",
-');
+    my $out = { title => $city_descr,
+		link => "http://" . $q->virtual_host() . self_url($q, {"cfg" => undef}),
+		date => strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00",
+		items => json_transform_items($items),
+	      };
 
     if (defined $latitude) {
-	out_html(undef, qq'"latitude":$latitude,
-"longitude":$longitude,
-');
+	$out->{latitude} = $latitude;
+	$out->{longitude} = $longitude;
     }
 
-    out_html(undef, qq'"items":[\n');
-    items_to_json_inner($items);
-    out_html(undef, "]\n}\n");
-
+    my $json = JSON->new;
+    out_html(undef, $json->encode($out));
     out_html(undef, ")\n") if $cb;
 }
 
-sub items_to_json_inner
-{
+sub json_transform_items {
     my($items) = @_;
-
-    for (my $i = 0; $i < scalar(@{$items}); $i++) {
-	my $subj = $items->[$i]->{"subj"};
-	if (defined $items->[$i]->{"time"}) { 
-	    $subj .= ": " . $items->[$i]->{"time"};
-	}
-
-	my $class = $items->[$i]->{"class"};
-	my $date =  $items->[$i]->{"dc:date"};
-
-	out_html(undef, qq'{"title":"$subj",
-"category":"$class",
-"date":"$date"');
-
-	if ($class =~ /^(parashat|holiday)$/) {
-	    my $link =  $items->[$i]->{"link"};
-	    $link =~ s,/,\\/,g;
-	    out_html(undef, qq',\n"link":"$link"');
-	}
-
-	if (defined $items->[$i]->{"hebrew"}) {
-	    my $hebrew = $items->[$i]->{"hebrew"};
-	    out_html(undef, qq',\n"hebrew":"$hebrew"');
-	}
-
-	out_html(undef, "\n}");
-	out_html(undef, ",") unless $i+1 == scalar(@{$items});
-	out_html(undef, "\n");
+    my @out;
+    foreach my $item (@{$items}) {
+	my $subj = $item->{"subj"};
+	$subj .= ": " . $item->{"time"} if defined $item->{"time"};
+	my $out = {
+		   title => $subj,
+		   category => $item->{"class"},
+		   date => $item->{"dc:date"},
+		  };
+	$out->{link} = $item->{"link"}
+	    if $item->{"class"} =~ /^(parashat|holiday)$/;
+	$out->{hebrew} = $item->{"hebrew"}
+	    if defined $item->{"hebrew"};
+	push(@out, $out);
     }
+    \@out;
 }
 
 sub upcoming_dow
