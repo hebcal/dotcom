@@ -1987,6 +1987,230 @@ my %ZIPCODES_TZ_MAP = (
 '15' => 'Pacific/Palau',
 );
 
+sub process_args_common_jerusalem {
+    my($q,$cconfig) = @_;
+    # special case for candles 40 minutes before sunset...
+    my $city = "IL-Jerusalem";
+    $q->param("city", $city);
+    $q->param("geo","city");
+
+    my($latitude,$longitude) = @{$CITY_LATLONG{$city}};
+    my $cmd = "./hebcal -C 'Jerusalem'";
+    my $city_descr = "Jerusalem, Israel";
+    $q->param("i", "on");
+    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	$q->delete($_);
+    }
+    if (defined $cconfig) {
+	$cconfig->{"latitude"} = $latitude;
+	$cconfig->{"longitude"} = $longitude;
+	$cconfig->{"title"} = $city_descr;
+	$cconfig->{"city"} = "Jerusalem";
+	$cconfig->{"tzid"} = "Asia/Jerusalem";
+	$cconfig->{"geo"} = "city";
+    }
+    (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
+sub process_args_common_zip {
+    my($q,$cconfig) = @_;
+
+    if ($q->param('zip') !~ /^\d{5}$/) {
+	my $message = "Sorry, <strong>" . $q->param('zip')
+	    . "</strong> does not appear to be a 5-digit zip code.";
+	return (0,$message,undef);
+    }
+
+    my $DB = zipcode_open_db();
+    my($city,$state,$tzid,$latitude,$longitude,$lat_deg,$lat_min,$long_deg,$long_min) =
+	zipcode_get_zip_fields($DB, $q->param("zip"));
+    zipcode_close_db($DB);
+    undef($DB);
+
+    unless (defined $state) {
+	my $message = "Sorry, can't find\n".  "<strong>" . $q->param('zip') .
+	    "</strong> in the zip code database.";
+	my $help = "<ul><li>Please try a nearby zip code</li></ul>";
+	return (0,$message,$help);
+    }
+
+    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $city_descr = "$city, $state " . $q->param('zip');
+
+    $q->param("geo", "zip");
+    foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	$q->delete($_);
+    }
+    if (defined $cconfig) {
+	$cconfig->{"latitude"} = $latitude;
+	$cconfig->{"longitude"} = $longitude;
+	$cconfig->{"title"} = $city_descr;
+	$cconfig->{"city"} = $city;
+	$cconfig->{"state"} = $state;
+	$cconfig->{"zip"} = $q->param("zip");
+	$cconfig->{"tzid"} = $tzid;
+	$cconfig->{"geo"} = "zip";
+    }
+    (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
+sub process_args_common_geopos {
+    my($q,$cconfig) = @_;
+
+    my %maxval = ("ladeg" =>  90, "lamin" => 60,
+		  "lodeg" => 180, "lomin" => 60);
+    foreach my $key (qw(lodeg lomin ladeg lamin)) {
+	my $value = $q->param($key);
+	my $message;
+	if ($value !~ /^\d+$/) {
+	    $message = "Sorry, all latitude/longitude\narguments must be numeric.";
+	}
+	if ($value > $maxval{$key}) {
+	    my $keyname = (substr($key, 1, 1) eq "a") ? "latitude" : "longitude";
+	    $keyname .= (substr($key, 2, 1) eq "d") ? " degrees" : " minutes";
+	    $message = "Sorry, $keyname <strong>$value</strong> out of valid range 0-$maxval{$key}";
+	}
+	return (0, $message, undef) if $message;
+    }
+
+    my($long_deg,$long_min,$lat_deg,$lat_min) =
+	($q->param("lodeg"),$q->param("lomin"),
+	 $q->param("ladeg"),$q->param("lamin"));
+    
+    $q->param("lodir","w") unless ($q->param("lodir") eq "e");
+    $q->param("ladir","n") unless ($q->param("ladir") eq "s");
+
+    $q->param("geo","pos");
+
+    # Geographic Position
+    my $city_descr = sprintf("%d\x{b0}%d\x{2032}%s, %d\x{b0}%d\x{2032}%s",
+			     $lat_deg, $lat_min, uc($q->param("ladir")),
+			     $long_deg, $long_min, uc($q->param("lodir")));
+
+    my $latitude = $lat_deg + ($lat_min / 60.0);
+    my $longitude = $long_deg + ($long_min / 60.0);
+    $latitude *= -1 if $q->param("ladir") eq "s";
+    $longitude *= -1 if $q->param("lodir") eq "w";
+
+    # don't multiply minutes by -1 since hebcal does it internally
+    $long_deg *= -1  if ($q->param("lodir") eq "e");
+    $lat_deg  *= -1  if ($q->param("ladir") eq "s");
+
+    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min";
+
+    # special-case common old-style URLs
+    if (! defined $q->param("tzid")
+	&& defined $q->param("tz")
+	&& defined $q->param("dst")) {
+	my $tz = $q->param("tz");
+	my $dst = $q->param("dst");
+	if ($tz eq "0" && $dst eq "none") { 
+	    $q->param("tzid", "UTC");
+	} elsif ($tz eq "2" && $dst eq "israel") { 
+	    $q->param("tzid", "Asia/Jerusalem");
+	} elsif ($tz eq "0" && $dst eq "eu") { 
+	    $q->param("tzid", "Europe/London");
+	} elsif ($tz eq "1" && $dst eq "eu") { 
+	    $q->param("tzid", "Europe/Paris");
+	} elsif ($tz eq "2" && $dst eq "eu") { 
+	    $q->param("tzid", "Europe/Athens");
+	} elsif ($dst eq "usa" && defined $ZIPCODES_TZ_MAP{int($tz * -1)}) {
+	    $q->param("tzid", $ZIPCODES_TZ_MAP{int($tz * -1)});
+	}
+    }
+
+    if (! defined $q->param("tzid")) {
+	return (0, "Please select a Time zone", undef);
+    }
+
+    my $tzid = $q->param("tzid");
+    $cmd .= " -z '$tzid'";
+    $city_descr .= ", $tzid";
+
+    foreach (qw(city zip tz dst)) {
+	$q->delete($_);
+    }
+    if (defined $cconfig) {
+	$cconfig->{"latitude"} = $latitude;
+	$cconfig->{"longitude"} = $longitude;
+	$cconfig->{"lat_deg"} = $lat_deg;
+	$cconfig->{"lat_min"} = $lat_min;
+	$cconfig->{"long_deg"} = $long_deg;
+	$cconfig->{"long_min"} = $long_min;
+	if (defined $q->param("city-typeahead") && $q->param("city-typeahead") !~ /^\s*$/) {
+	    $cconfig->{"title_pos"} = $city_descr;
+	    my $city_typeahead = $q->param("city-typeahead");
+	    $city_typeahead =~ s/^\s+//; # trim leading and trailing whitespace
+	    $city_typeahead =~ s/\s+$//;
+	    $city_descr = $city_typeahead; # save full string for return value
+	    $city_typeahead =~ s/,.+//;
+	    $cconfig->{"city"} = $city_typeahead; # short name for title tag
+	}
+	$cconfig->{"title"} = $city_descr;
+	$cconfig->{"tzid"} = $tzid;
+	$cconfig->{"geo"} = "pos";
+    }
+    (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
+sub process_args_common_city {
+    my($q,$cconfig) = @_;
+    my $city = validate_city($q->param("city"));
+    if (! defined $city) {
+	if (defined $q->param("cfg") && $q->param("cfg") =~ /^(json|xml|r|e|e2)$/) {
+	    my $city2 = $q->param("city") || "";
+	    return (0, "Unknown city '$city2'", undef);
+	} else {
+	    $city = "US-New York-NY";
+	}
+    }
+
+    $q->param("city", $city);
+    $q->param("geo","city");
+
+    my($latitude,$longitude) = @{$CITY_LATLONG{$city}};
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+	latlong_to_hebcal($latitude, $longitude);
+    my $tzid = $CITY_TZID{$city};
+
+    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+
+    my $country = woe_country($city);
+    $country = "USA" if $country eq "United States of America";
+    $country = "UK" if $country eq "United Kingdom";
+    my $city_descr = woe_city($city) . ", $country";
+
+    if ($CITY_COUNTRY{$city} eq 'IL') {
+	$q->param('i','on');
+    }
+    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	$q->delete($_);
+    }
+    if (defined $cconfig) {
+	$cconfig->{"latitude"} = $latitude;
+	$cconfig->{"longitude"} = $longitude;
+	$cconfig->{"title"} = $city_descr;
+	$cconfig->{"city"} = woe_city($city);
+	$cconfig->{"tzid"} = $tzid;
+	$cconfig->{"geo"} = "city";
+    }
+    (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
+sub process_args_common_none {
+    my($q,$cconfig) = @_;
+    $q->param("geo","none");
+    $q->param("c","off");
+    foreach (qw(m zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
+	$q->delete($_);
+    }
+    if (defined $cconfig) {
+	$cconfig->{"geo"} = "none";
+    }
+    my $cmd = "./hebcal";
+    (1,$cmd,undef,undef,undef);
+}
+
 sub process_args_common {
     my($q,$handle_cookie,$default_to_nyc,$cconfig) = @_;
 
@@ -2002,213 +2226,27 @@ sub process_args_common {
 	}
     }
 
-    my $cmd  = './hebcal';
-
-    my($latitude,$longitude,$city_descr);
-
+    my @status;
     if (defined $q->param("city") &&
 	($q->param("city") eq "Jerusalem" || $q->param("city") eq "IL-Jerusalem")) {
-	# special case for candles 40 minutes before sunset...
-	my $city = "IL-Jerusalem";
-	$q->param("city", $city);
-	$q->param("geo","city");
-
-	($latitude,$longitude) = @{$CITY_LATLONG{$city}};
-	$cmd .= " -C 'Jerusalem'";
-	$city_descr = "Jerusalem, Israel";
-	$q->param("i", "on");
-	foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
-	    $q->delete($_);
-	}
-	if (defined $cconfig) {
-	    $cconfig->{"latitude"} = $latitude;
-	    $cconfig->{"longitude"} = $longitude;
-	    $cconfig->{"title"} = $city_descr;
-	    $cconfig->{"city"} = "Jerusalem";
-	    $cconfig->{"tzid"} = "Asia/Jerusalem";
-	    $cconfig->{"geo"} = "city";
-	}
+	@status = process_args_common_jerusalem($q, $cconfig);
     } elsif (defined $q->param('zip') && $q->param('zip') ne '') {
-	if ($q->param('zip') !~ /^\d{5}$/) {
-	    my $message = "Sorry, <strong>" . $q->param('zip')
-		. "</strong> does not appear to be a 5-digit zip code.";
-	    return (0,$message,undef);
-	}
-
-	my $DB = zipcode_open_db();
-	my($city,$state,$tzid,$lat_deg,$lat_min,$long_deg,$long_min);
-	# set global $latitude and $longitude
-	($city,$state,$tzid,$latitude,$longitude,
-	 $lat_deg,$lat_min,$long_deg,$long_min) =
-	    zipcode_get_zip_fields($DB, $q->param("zip"));
-	zipcode_close_db($DB);
-	undef($DB);
-
-	unless (defined $state) {
-	    my $message = "Sorry, can't find\n".  "<strong>" . $q->param('zip') .
-		"</strong> in the zip code database.";
-	    my $help = "<ul><li>Please try a nearby zip code</li></ul>";
-	    return (0,$message,$help);
-	}
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-	$city_descr = "$city, $state " . $q->param('zip');
-
-	$q->param("geo", "zip");
-	foreach (qw(city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
-	    $q->delete($_);
-	}
-	if (defined $cconfig) {
-	    $cconfig->{"latitude"} = $latitude;
-	    $cconfig->{"longitude"} = $longitude;
-	    $cconfig->{"title"} = $city_descr;
-	    $cconfig->{"city"} = $city;
-	    $cconfig->{"state"} = $state;
-	    $cconfig->{"zip"} = $q->param("zip");
-	    $cconfig->{"tzid"} = $tzid;
-	    $cconfig->{"geo"} = "zip";
-	}
+	@status = process_args_common_zip($q, $cconfig);
     } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
 	     defined $q->param("ladeg") && defined $q->param("lamin") &&
 	     defined $q->param("lodir") && defined $q->param("ladir") &&
 	     $q->param("lodeg") ne '' && $q->param("lomin") ne '' &&
 	     $q->param("ladeg") ne '' && $q->param("lamin") ne '') {
-
-	my %maxval = ("ladeg" =>  90, "lamin" => 60,
-		      "lodeg" => 180, "lomin" => 60);
-	foreach my $key (qw(lodeg lomin ladeg lamin)) {
-	    my $value = $q->param($key);
-	    my $message;
-	    if ($value !~ /^\d+$/) {
-		$message = "Sorry, all latitude/longitude\narguments must be numeric.";
-	    }
-	    if ($value > $maxval{$key}) {
-		my $keyname = (substr($key, 1, 1) eq "a") ? "latitude" : "longitude";
-		$keyname .= (substr($key, 2, 1) eq "d") ? " degrees" : " minutes";
-		$message = "Sorry, $keyname <strong>$value</strong> out of valid range 0-$maxval{$key}";
-	    }
-	    return (0, $message, undef) if $message;
-	}
-
-	my($long_deg,$long_min,$lat_deg,$lat_min) =
-	    ($q->param("lodeg"),$q->param("lomin"),
-	     $q->param("ladeg"),$q->param("lamin"));
-
-	$q->param("lodir","w") unless ($q->param("lodir") eq "e");
-	$q->param("ladir","n") unless ($q->param("ladir") eq "s");
-
-	$q->param("geo","pos");
-
-	# Geographic Position
-	$city_descr = sprintf("%d\x{b0}%d\x{2032}%s, %d\x{b0}%d\x{2032}%s",
-			      $lat_deg, $lat_min, uc($q->param("ladir")),
-			      $long_deg, $long_min, uc($q->param("lodir")));
-
-	$latitude = $lat_deg + ($lat_min / 60.0);
-	$longitude = $long_deg + ($long_min / 60.0);
-	$latitude *= -1 if $q->param("ladir") eq "s";
-	$longitude *= -1 if $q->param("lodir") eq "w";
-
-	# don't multiply minutes by -1 since hebcal does it internally
-	$long_deg *= -1  if ($q->param("lodir") eq "e");
-	$lat_deg  *= -1  if ($q->param("ladir") eq "s");
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min";
-
-	# special-case common old-style URLs
-	if (! defined $q->param("tzid")
-	    && defined $q->param("tz")
-	    && defined $q->param("dst")) {
-	    my $tz = $q->param("tz");
-	    my $dst = $q->param("dst");
-	    if ($tz eq "0" && $dst eq "none") { 
-		$q->param("tzid", "UTC");
-	    } elsif ($tz eq "2" && $dst eq "israel") { 
-		$q->param("tzid", "Asia/Jerusalem");
-	    } elsif ($tz eq "0" && $dst eq "eu") { 
-		$q->param("tzid", "Europe/London");
-	    } elsif ($tz eq "1" && $dst eq "eu") { 
-		$q->param("tzid", "Europe/Paris");
-	    } elsif ($tz eq "2" && $dst eq "eu") { 
-		$q->param("tzid", "Europe/Athens");
-	    } elsif ($dst eq "usa" && defined $ZIPCODES_TZ_MAP{int($tz * -1)}) {
-		$q->param("tzid", $ZIPCODES_TZ_MAP{int($tz * -1)});
-	    }
-	}
-
-	if (! defined $q->param("tzid")) {
-	    return (0, "Please select a Time zone", undef);
-	}
-
-	my $tzid = $q->param("tzid");
-	$cmd .= " -z '$tzid'";
-	$city_descr .= ", $tzid";
-
-	foreach (qw(city zip tz dst)) {
-	    $q->delete($_);
-	}
-	if (defined $cconfig) {
-	    $cconfig->{"latitude"} = $latitude;
-	    $cconfig->{"longitude"} = $longitude;
-	    $cconfig->{"lat_deg"} = $lat_deg;
-	    $cconfig->{"lat_min"} = $lat_min;
-	    $cconfig->{"long_deg"} = $long_deg;
-	    $cconfig->{"long_min"} = $long_min;
-	    $cconfig->{"title"} = $city_descr;
-	    $cconfig->{"tzid"} = $tzid if $tzid;
-	    $cconfig->{"geo"} = "pos";
-	}
+	@status = process_args_common_geopos($q, $cconfig);
     } elsif ($default_to_nyc ||
 	     (defined $q->param("city") && $q->param("city") ne "")) {
-	my $city = validate_city($q->param("city"));
-	if (! defined $city) {
-	    if (defined $q->param("cfg") && $q->param("cfg") =~ /^(json|xml|r|e|e2)$/) {
-		my $city2 = $q->param("city") || "";
-		return (0, "Unknown city '$city2'", undef);
-	    } else {
-		$city = "US-New York-NY";
-	    }
-	}
-
-	$q->param("city", $city);
-	$q->param("geo","city");
-
-	($latitude,$longitude) = @{$CITY_LATLONG{$city}};
-	my($lat_deg,$lat_min,$long_deg,$long_min) =
-	    latlong_to_hebcal($latitude, $longitude);
-	my $tzid = $CITY_TZID{$city};
-
-	$cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-
-	my $country = woe_country($city);
-	$country = "USA" if $country eq "United States of America";
-	$country = "UK" if $country eq "United Kingdom";
-	$city_descr = woe_city($city) . ", $country";
-
-	if ($CITY_COUNTRY{$city} eq 'IL') {
-	    $q->param('i','on');
-	}
-	foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
-	    $q->delete($_);
-	}
-	if (defined $cconfig) {
-	    $cconfig->{"latitude"} = $latitude;
-	    $cconfig->{"longitude"} = $longitude;
-	    $cconfig->{"title"} = $city_descr;
-	    $cconfig->{"city"} = woe_city($city);
-	    $cconfig->{"tzid"} = $tzid;
-	    $cconfig->{"geo"} = "city";
-	}
+	@status = process_args_common_city($q, $cconfig);
     } else {
-	$q->param("geo","none");
-	$q->param("c","off");
-	foreach (qw(m zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid)) {
-	    $q->delete($_);
-	}
-	if (defined $cconfig) {
-	    $cconfig->{"geo"} = "none";
-	}
+	@status = process_args_common_none($q, $cconfig);
     }
+
+    return @status unless $status[0];
+    my($cmd,$latitude,$longitude,$city_descr) = @status[1..4];
 
     $cmd .= " -m " . $q->param('m')
 	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
