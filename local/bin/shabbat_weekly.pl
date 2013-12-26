@@ -242,9 +242,9 @@ sub mail_all {
 	for (my $i = 0; $i < $count; $i++) {
 	    my $to = $addrs[$i];
 	    my $server_num = $i % $SMTP_NUM_CONNECTIONS;
-	    if ($i % 200 == 0) {
+	    if (($i % 200 == 0) || ($i + 1 == $count)) {
 		my($cmd,$loc,$args) = @{$CONFIG{$to}};
-		INFO("Sending mail #$i/$count ($loc)");
+		INFO("Sending mail #" . ($i + 1) . "/$count ($loc)");
 	    }
 	    my $status = mail_user($to, $SMTP[$server_num]);
 	    if ($status == $STATUS_FAIL_AND_CONTINUE) {
