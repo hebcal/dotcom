@@ -406,7 +406,7 @@ ul.hebcal-results{list-style-type:none}
 	$loc_class =~ s/\s+/-/g; 
     }
 
-    Hebcal::out_html($cfg, qq{<div class="hebcal">\n},
+    Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
 		     qq{<div class="hebcal-$loc_class">\n},
 		     qq{<h3>$shabbat times for $city_descr</h3>\n});
 
