@@ -634,6 +634,9 @@ sub pdf_render_event {
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
     if (($subj =~ /^\d+\w+.+, \d{4,}$/) || ($subj =~ /^\d+\w+ day of the Omer$/)) {
 	$color = "#666666";
+    } elsif ($subj =~ /^Daf Yomi: (.+)$/) {
+	$subj = $1;
+	$color = "#666666";
     }
     $text->fillcolor($color);
 
@@ -843,6 +846,10 @@ EOHTML
     qq{<label class="checkbox">},
     $q->checkbox(-name => "o",
 		 -label => "Days of the Omer"),
+    "</label>\n",
+    qq{<label class="checkbox">},
+    $q->checkbox(-name => "F",
+		 -label => "Daf Yomi"),
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "s",
@@ -1461,7 +1468,8 @@ EOHTML
 
 	if (defined $href && $href ne "")
 	{
-	    $subj = qq{<a href="$href">$subj</a>};
+	    my $atitle = $memo ? qq{ title="$memo"} : "";
+	    $subj = qq{<a$atitle href="$href">$subj</a>};
 	}
 
 	if ($q->param("vis"))
@@ -1476,6 +1484,7 @@ EOHTML
 
 	    $cal_subj =~
 		s/ Havdalah \((\d+) min\)$/ Havdalah <small>($1 min)<\/small>/;
+	    $cal_subj =~ s/Daf Yomi: //;
 
 	    my $cal_id = sprintf("%04d-%02d", $year, $mon);
 	    my $cal = $html_cals{$cal_id};

@@ -77,7 +77,7 @@ my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
 $CACHE_DIR .= "/cache/";
 
 # boolean options
-our @opts = qw(c o s i a d D);
+our @opts = qw(c o s i a d D F);
 our $havdalah_min = 50;
 
 our @DoW = qw(Sun Mon Tue Wed Thu Fri Sat);
@@ -247,6 +247,49 @@ our %ashk2seph =
   "Shabbos Nachamu"		=>	"Shabbat Nachamu",
   );
 
+
+my %DAFYOMI = (
+   "Berachot" => "Berakhot",
+   "Shabbat" => 0,
+   "Eruvin" => 0,
+   "Pesachim" => 0,
+   "Shekalim" => 0,
+   "Yoma" => 0,
+   "Sukkah" => 0,
+   "Beitzah" => 0,
+   "Rosh Hashana" => "Rosh Hashanah",
+   "Taanit" => 0,
+   "Megillah" => 0,
+   "Moed Katan" => 0,
+   "Chagigah" => 0,
+   "Yevamot" => 0,
+   "Ketubot" => 0,
+   "Nedarim" => 0,
+   "Nazir" => 0,
+   "Sotah" => 0,
+   "Gitin" => "Gittin",
+   "Kiddushin" => 0,
+   "Baba Kamma" => "Bava Kamma",
+   "Baba Metzia" => "Bava Metzia",
+   "Baba Batra" =>  "Bava Batra",
+   "Sanhedrin" => 0,
+   "Makkot" => 0,
+   "Shevuot" => 0,
+   "Avodah Zarah" => 0,
+   "Horayot" => 0,
+   "Zevachim" => 0,
+   "Menachot" => 0,
+   "Chullin" => 0,
+   "Bechorot" => "Bekhorot",
+   "Arachin" => "Arakhin",
+   "Temurah" => 0,
+   "Keritot" => 0,
+   "Meilah" => 0,
+   "Kinnim" => 0,
+   "Tamid" => 0,
+   "Midot" => "Middot",
+   "Niddah" => 0,
+);
 
 # @events is an array of arrays.  these are the indices into each
 # event structure:
@@ -672,6 +715,8 @@ sub events_to_dict
 		$item{"class"} = "parashat";
 	    } elsif ($subj =~ /^(\d+)\w+ day of the Omer$/) {
 		$item{"class"} = "omer";
+	    } elsif ($subj =~ /^Daf Yomi:/) {
+		$item{"class"} = "dafyomi";
 	    } elsif ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/) {
 		$item{"class"} = "hebdate";
 	    } else {
@@ -953,6 +998,13 @@ sub get_holiday_anchor($$$)
 	   $subj =~ /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/)
     {
 	# don't generate holiday anchors for yahrzeit calendar
+    }
+    elsif ($subj =~ /^Daf Yomi:\s+(.+)\s+(\d+)\s*$/)
+    {
+	my $tractate = $DAFYOMI{$1} || $1;
+	my $page = $2;
+	$tractate =~ s/ /_/g;
+	$href = "http://www.sefaria.org/${tractate}.${page}a";
     }
     else
     {
