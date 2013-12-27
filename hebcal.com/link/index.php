@@ -171,11 +171,11 @@ page:</p>
 
 <pre class="brush:html">
 &lt;style type="text/css"&gt;
-.hebcal {
+#hebcal {
  font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
  font-size: small;
 }
-.hebcal H3 {
+#hebcal H3 {
  font-family: Georgia,Palatino,"Times New Roman",Times,serif;
 }
 ul.hebcal-results { list-style-type:none }
