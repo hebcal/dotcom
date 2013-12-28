@@ -2,7 +2,7 @@
 
 set -x
 
-TMPFILE=`mktemp`
+TMPFILE=`mktemp /tmp/hebcal.XXXXXX`
 YEAR=`date +'%Y'`
 ICS_URL="http://www.hebcal.com/hebcal/index.cgi/export.ics"
 CSV_URL="http://www.hebcal.com/hebcal/index.cgi/hebcal_usa.csv"
@@ -63,5 +63,11 @@ fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;s=on;i=off;lg=s;c=off;geo=none;n
 update_ics_name $FILE \
     "Torah Readings (Diaspora)" \
     "Parashat ha-Shavua - Weekly Torah Portion from Hebcal"
+
+FILE="daf-yomi"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;F=on;i=off;lg=s;c=off;geo=none;ny=2"
+update_ics_name $FILE \
+    "Daf Yomi" \
+    "daily regimen of learning the Talmud"
 
 rm -f $TMPFILE
