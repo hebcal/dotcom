@@ -124,6 +124,8 @@ cal_row("torah-readings-diaspora", "Torah Readings",
 	"Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha");
 cal_row("omer", "Days of the Omer",
 	"7 weeks from the second night of Pesach to the day before Shavuot");
+cal_row("daf-yomi", "Daf Yomi",
+	"Daily regimen of learning the Talmud");
 ?>
 </div><!-- .clearfix -->
 

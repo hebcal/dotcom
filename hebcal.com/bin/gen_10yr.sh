@@ -68,6 +68,6 @@ FILE="daf-yomi"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;F=on;i=off;lg=s;c=off;geo=none;ny=2"
 update_ics_name $FILE \
     "Daf Yomi" \
-    "daily regimen of learning the Talmud"
+    "Daily regimen of learning the Talmud"
 
 rm -f $TMPFILE
