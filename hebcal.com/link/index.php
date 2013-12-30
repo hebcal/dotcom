@@ -84,7 +84,7 @@ Hebrew date, a full Jewish Calendar, RSS feeds).</p>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML:</p>
 <pre class="brush:html;auto-links:false"">
-&lt;script type="text/javascript"
+&lt;script type="text/javascript" charset="utf-8"
 src="<?php echo $url_base_double ?>&amp;amp;cfg=j&amp;amp;tgt=_top"&gt;
 &lt;/script&gt;
 </pre>
@@ -92,7 +92,7 @@ src="<?php echo $url_base_double ?>&amp;amp;cfg=j&amp;amp;tgt=_top"&gt;
 <p>The result will look like this (<a href="#fonts">customize fonts</a>):</p>
 
 <div class="box">
-<script type="text/javascript"
+<script type="text/javascript" charset="utf-8"
 src="<?php echo $url_base ?>&amp;cfg=j&amp;tgt=_top">
 </script>
 </div><!-- .box -->
