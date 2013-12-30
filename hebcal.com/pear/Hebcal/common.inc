@@ -301,6 +301,42 @@ function hebcal_open_mysql_db() {
     return true;
 }
 
+function hebcal_get_geoname($geonameid) {
+    $file = $_SERVER["DOCUMENT_ROOT"] . "/hebcal/geonames.sqlite3";
+    $db = new SQLite3($file);
+    if (!$db) {
+	error_log("Could not open SQLite3 $file");
+	die();
+    }
+
+    $sql = <<<EOD
+SELECT g.name, g.asciiname, c.country, a.name, g.latitude, g.longitude, g.timezone
+FROM geoname g
+LEFT JOIN country c on g.country = c.iso
+LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
+WHERE g.geonameid = '$geonameid'
+EOD;
+
+    $query = $db->query($sql); 
+    if (!$query) {
+	error_log("Loading geonameid $geonameid from $file: " . $db->lastErrorMsg());
+	die();
+    }
+
+    $result = $query->fetchArray(SQLITE3_NUM);
+
+    // clean up
+    unset($query);
+    $db->close();
+    unset($db);
+
+    if (!$result[0])  {
+	return null;
+    }
+
+    return $result;
+}
+
 function hebcal_get_zipcode_fields($zip) {
     $file = $_SERVER["DOCUMENT_ROOT"] . "/hebcal/zips.sqlite3";
     $db = new SQLite3($file);

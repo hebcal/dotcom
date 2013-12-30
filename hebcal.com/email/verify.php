@@ -17,6 +17,7 @@ function get_sub_info($id) {
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
+       email_candles_geonameid,
        email_candles_havdalah, email_optin_announce
 FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_id = '$id'
@@ -30,6 +31,7 @@ EOD;
     }
 
     list($id,$address,$status,$created,$zip,$city,
+	 $geonameid,
 	 $havdalah,$optin_announce) = mysql_fetch_row($result);
 
     $val = array(
@@ -40,6 +42,7 @@ EOD;
 	"upd" => $optin_announce,
 	"zip" => $zip,
 	"city" => $city,
+	"geonameid" => $geonameid,
 	"t" => $created,
 	);
 
@@ -146,12 +149,20 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 	    hebcal_get_zipcode_fields($param["zip"]);
 	$city_descr = "$city, $state " . $info["zip"];
 	unset($info["city"]);
+	unset($info["geonameid"]);
+    } elseif (isset($info["geonameid"]) && preg_match('/^\d+$/', $info["geonameid"])) {
+	list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+	    hebcal_get_geoname($info["geonameid"]);
+	$city_descr = "$name, $admin1, $country";
+	unset($info["zip"]);
+	unset($info["city"]);
     } else {
 	global $hebcal_cities, $hebcal_countries;
 	$city_info = $hebcal_cities[$info["city"]];
 	$city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
 	$tzid = $hebcal_cities[$info["city"]][4];
 	unset($info["zip"]);
+	unset($info["geonameid"]);
     }
     $tz_descr = "Time zone: " . $tzid;
     echo html_header_bootstrap("Confirm Email Subscription");
