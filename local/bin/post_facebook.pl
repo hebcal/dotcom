@@ -41,6 +41,7 @@ use Hebcal ();
 use Getopt::Long ();
 use Carp;
 use Log::Log4perl qw(:easy);
+use File::Basename;
 
 my $opt_help;
 my $opt_verbose = 0;
@@ -191,8 +192,9 @@ if ($email_subj) {
 	}
 	INFO("Twitter status: $twitter_subj");
 	if (! $opt_dryrun) {
-	    system("./post_twitter.py", $twitter_subj) == 0
-		or LOGDIE("system failed: $?");
+	    my $cmd = dirname($0) . "/post_twitter.py";
+	    system($cmd, $twitter_subj) == 0
+		or LOGDIE("system $cmd failed: $?");
 	}
     }
 }
