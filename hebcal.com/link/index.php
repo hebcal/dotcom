@@ -26,8 +26,8 @@ if (isset($param["city"])) {
     $info = $hebcal_cities[$geo_city];
     $descr = $info[1] . ", " . $hebcal_countries[$info[0]][0];
 } elseif (isset($param["geonameid"])) {
-    $geo = "geonameid";
-    $geo_link = "geo=geonameid&amp;geonameid=" . $param["geonameid"];
+    $geo = "geoname";
+    $geo_link = "geo=geoname&amp;geonameid=" . $param["geonameid"];
     $descr = $param["city-typeahead"];
 } else {
     $geo = "zip";
@@ -107,7 +107,7 @@ synagogue's web page.</p>
   <ul class="nav nav-tabs">
     <li<?php if ($geo == "zip") { echo ' class="active"';} ?>><a href="#tab-zip" data-toggle="tab">ZIP code</a></li>
     <li<?php if ($geo == "city") { echo ' class="active"';} ?>><a href="#tab-city" data-toggle="tab">Major City</a></li>
-    <li<?php if ($geo == "geonameid") { echo ' class="active"';} ?>><a href="#tab-search" data-toggle="tab">Search</a></li>
+    <li<?php if ($geo == "geoname") { echo ' class="active"';} ?>><a href="#tab-search" data-toggle="tab">Search</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane<?php if ($geo == "zip") { echo ' active';} ?>" id="tab-zip">
@@ -140,7 +140,7 @@ Use Ashkenazis Hebrew transliterations</label>
 <input type="submit" class="btn btn-primary" value="Get new HTML tags">
 </fieldset></form>
     </div><!-- #tab-city -->
-    <div class="tab-pane<?php if ($geo == "geonameid") { echo ' active';} ?>" id="tab-search">
+    <div class="tab-pane<?php if ($geo == "geoname") { echo ' active';} ?>" id="tab-search">
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
 <fieldset>
 <input type="hidden" name="geo" value="geoname">
