@@ -48,11 +48,15 @@ my $opt_shabbat;
 my $opt_daily;
 my $opt_dryrun = 0;
 my $opt_randsleep;
+my $opt_twitter = 1;
+my $opt_facebook = 1;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "verbose|v" => \$opt_verbose,
      "dryrun|n" => \$opt_dryrun,
+     "facebook!" => \$opt_facebook,
+     "twitter!" => \$opt_twitter,
      "daily" => \$opt_daily,
      "shabbat" => \$opt_shabbat,
      "randsleep=i" => \$opt_randsleep)) {
@@ -68,7 +72,7 @@ exit_if_yomtov();
 
 INFO("Reading $Hebcal::CONFIG_INI_PATH");
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH)
-    or die "$Hebcal::CONFIG_INI_PATH: $!\n";
+    or LOGDIE "$Hebcal::CONFIG_INI_PATH: $!\n";
 
 my $EMAIL_FROM = $Config->{_}->{"hebcal.email.facebook.from"};
 my $EMAIL_TO = $Config->{_}->{"hebcal.email.facebook.to"};
@@ -76,6 +80,7 @@ my $EMAIL_CC = "michael\@radwin.org";
 my $HEBCAL = $Hebcal::HEBCAL_BIN;
 
 my $email_subj;			# will be populated if there's an email to send
+my $slug;			# if we want to link to URL on Twitter
 
 if ($opt_shabbat) {
   # get the date for this upcoming saturday
@@ -91,6 +96,7 @@ if ($opt_shabbat) {
     INFO("Found $subj");
     if ($subj =~ /^Parashat/) {
 	$parasha = $subj;
+	$slug = get_twitter_slug($subj);
     } elsif ($subj =~ /^Shabbat/) {
 	$special_shabbat = $subj;
     }
@@ -118,6 +124,7 @@ if ($opt_daily) {
       if ($subj =~ /^Erev (.+)$/) {
 	my $holiday = $1;
 	$email_subj = "$holiday begins tonight at sundown.";
+	$slug = get_twitter_slug($subj);
 	if ($holiday eq "Tish'a B'Av") {
 	  $email_subj .= " Tzom Kal. We wish you an easy fast.";
 	} elsif ($holiday eq "Yom Kippur") {
@@ -129,22 +136,26 @@ if ($opt_daily) {
 	}
       } elsif ($subj eq "Chanukah: 1 Candle") {
 	$email_subj = "Light the first Chanukah candle tonight at sundown. Chag Urim Sameach!";
+	$slug = get_twitter_slug($subj);
       }
     } elsif (Hebcal::event_date_matches($evt, $tomorrow[0], $tomorrow[1], $tomorrow[2])) {
       INFO("Tomorrow is $subj");
       if ($subj =~ /^Rosh Chodesh/ && $subj ne $today_subj) {
 	$email_subj = "$subj begins tonight at sundown. Chodesh Tov!";
+	$slug = get_twitter_slug($subj);
       } elsif ($subj eq "Shmini Atzeret") {
 	$email_subj = "$subj begins tonight at sundown. Chag Sameach!";
+	$slug = get_twitter_slug($subj);
       } elsif ($subj =~ /^(Tzom|Asara|Ta\'anit) /) {
 	$email_subj = "$subj begins tomorrow at dawn. Tzom Kal. We wish you an easy fast.";
+	$slug = get_twitter_slug($subj);
       }
     }
   }
 }
 
 if ($email_subj) {
-    INFO("Email subject is $email_subj");
+    INFO("STATUS=$email_subj");
 
     if ($opt_randsleep) {
       my $sleep = int(rand($opt_randsleep));
@@ -161,15 +172,39 @@ if ($email_subj) {
 	   "Subject" => $email_subj,
 	 );
 
-    INFO("Sending mail from $EMAIL_FROM to $EMAIL_TO...");
-    if (! $opt_dryrun) {
-	Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
-		or croak "Can't send mail!";
+    if ($opt_facebook) {
+	INFO("Sending mail from $EMAIL_FROM to $EMAIL_TO...");
+	if (! $opt_dryrun) {
+	    Hebcal::sendmail_v2($EMAIL_FROM, \%headers, "", $opt_verbose)
+		    or croak "Can't send mail!";
+	}
+    }
+
+    if ($opt_twitter) {
+	my $twitter_subj = $email_subj;
+	$twitter_subj =~ s/Torah/\#Torah/;
+	if ($slug) {
+	    if (index($slug, "/") == 0) {
+		$slug = "http://www.hebcal.com${slug}";
+	    }
+	    $twitter_subj .= " " . $slug;
+	}
+	INFO("Twitter status: $twitter_subj");
+	if (! $opt_dryrun) {
+	    system("./post_twitter.py", $twitter_subj) == 0
+		or LOGDIE("system failed: $?");
+	}
     }
 }
 
 INFO("Done");
 exit(0);
+
+sub get_twitter_slug {
+    my($subj) = @_;
+    my($slug,undef,undef) = Hebcal::get_holiday_anchor($subj,0,undef);
+    $slug;
+}
 
 sub exit_if_yomtov {
     my $subj = Hebcal::get_today_yomtov();
