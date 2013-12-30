@@ -164,6 +164,7 @@ form("Please select at least one event option.")
 	(!defined $q->param("o") || $q->param("o") eq "off") &&
 	(!defined $q->param("c") || $q->param("c") eq "off") &&
 	(!defined $q->param("d") || $q->param("d") eq "off") &&
+	(!defined $q->param("F") || $q->param("F") eq "off") &&
 	(!defined $q->param("s") || $q->param("s") eq "off"));
 
 
