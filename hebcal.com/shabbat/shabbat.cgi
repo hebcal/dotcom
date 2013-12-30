@@ -534,7 +534,6 @@ EOHTML
     # Synagogues link
     $url = "/link/?";
     $url .= get_link_args($q, 1);
-    $url .= "&type=shabbat";
 
     Hebcal::out_html($cfg, qq{<a class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
 		     qq{href="}, url_html($url), qq{"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});
@@ -543,7 +542,7 @@ EOHTML
 
     # Email
     my $email_form = <<EOHTML;
-<form class="form-inline" action="/email/">
+<form class="form-inline" action="/email/" method="post">
 <fieldset>
 <input type="hidden" name="v" value="1">
 EOHTML
@@ -551,6 +550,9 @@ EOHTML
     if ($q->param("zip")) {
 	$email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
 	$email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
+    } elsif ($q->param("geonameid")) {
+	$email_form .= qq{<input type="hidden" name="geo" value="geoname">\n};
+	$email_form .= qq{<input type="hidden" name="geonameid" value="} . $q->param("geonameid") . qq{">\n};
     } else {
 	$email_form .= qq{<input type="hidden" name="geo" value="city">\n};
 	$email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
