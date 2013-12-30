@@ -157,6 +157,7 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
+<link rel="stylesheet" type="text/css" href="/i/typeahead.css">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style type="text/css">
@@ -293,23 +294,15 @@ Hebrew Birthdays and Anniversaries.</p>
 <h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_334_candle.png" width="20" height="25" alt="">
 Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
-<form action="/shabbat/" method="get" class="form form-inline">
-<input type="hidden" name="geo" value="zip">
-<label>ZIP code:
-<input type="text" name="zip" size="5" maxlength="5" class="input-mini"
-<?php if (isset($param["zip"])) { echo "value=\"$param[zip]\" "; } ?>
-pattern="\d*" id="zip"></label>
+<form action="/shabbat/" method="get" class="form form-inline" id="shabbat-form">
+<input type="hidden" name="geo" value="geoname">
+<input type="hidden" name="geonameid" id="geonameid" value="">
+<div class="city-typeahead" style="margin-bottom:12px">
+<input type="text" id="city-typeahead" class="form-control" placeholder="Search for city">
+</div>
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "50"; } ?>">
-<button type="submit" class="btn"><i class="icon-time"></i> Shabbat Times &raquo;</button>
 </form>
-<?php if (isset($param["zip"]) || isset($param["city"])) { ?>
-<p><a class="btn" href="/shabbat/fridge.cgi?<?php
-  echo isset($param["zip"]) ? "zip=$param[zip]" : "city=$param[city]" ?>&amp;year=<?php
-  echo $hebyear ?>"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
-<?php } else { ?>
-<p><a class="btn" href="/home/shabbat/fridge"><i class="icon-print"></i> Print times for <?php echo $hebyear ?> &raquo;</a></p>
-<?php } ?>
 </div><!-- .span6 -->
 
 <div class="span6">
@@ -323,6 +316,30 @@ Torah Readings</h2>
 </div><!-- .span12 -->
 
 <?php
-echo html_footer_bootstrap();
+$xtra_html = <<<EOD
+<script src="/i/hogan.min.js"></script>
+<script src="/i/typeahead-0.9.3.min.js"></script>
+<script type="text/javascript">
+$('#city-typeahead').typeahead({
+  name: 'hebcal-city',
+  remote: "/complete.php?q=%QUERY",
+  template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
+  limit: 6,
+  engine: Hogan
+}).on('typeahead:selected', function (obj, datum, name) {
+  console.debug(datum);
+  $('#geonameid').val(datum.id);
+  $('#shabbat-form').submit();
+}).bind("keyup keypress", function(e) {
+  var code = e.keyCode || e.which; 
+  if (code == 13) {               
+    e.preventDefault();
+    return false;
+  }
+});
+</script>
+EOD;
+    echo html_footer_bootstrap(true, $xtra_html);
+    exit();
 ?>
 
