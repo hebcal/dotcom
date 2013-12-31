@@ -210,6 +210,12 @@ $("#city-typeahead").typeahead({
 }).on('typeahead:selected', function (obj, datum, name) {
   console.debug(datum);
   $('#geonameid').val(datum.id);
+}).bind("keyup keypress", function(e) {
+  var code = e.keyCode || e.which; 
+  if (code == 13) {               
+    e.preventDefault();
+    return false;
+  }
 });
 </script>
 EOD;
