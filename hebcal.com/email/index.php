@@ -8,7 +8,12 @@ require "../pear/Hebcal/common.inc";
 $sender = "webmaster@hebcal.com";
 
 header("Cache-Control: private");
-echo html_header_bootstrap("Shabbat Candle Lighting Times by Email");
+
+$xtra_head = <<<EOD
+<link rel="stylesheet" type="text/css" href="/i/typeahead.css">
+EOD;
+echo html_header_bootstrap("Shabbat Candle Lighting Times by Email",
+			   $xtra_head);
 
 $param = array();
 if (!isset($_REQUEST["v"]) && !isset($_REQUEST["e"])
@@ -56,6 +61,8 @@ else
 	    }
 	    if (isset($param["city"])) {
 		$param["geo"] = "city";
+	    } elseif (isset($param["geonameid"])) {
+		$param["geo"] = "geoname";
 	    }
 	    $is_update = true;
 	}
@@ -101,11 +108,15 @@ function write_sub_info($param) {
 
     if ($param["geo"] == "zip")
     {
-	$geo_sql = "email_candles_zipcode='$param[zip]',email_candles_city=NULL";
+	$geo_sql = "email_candles_zipcode='$param[zip]',email_candles_city=NULL,email_candles_geonameid=NULL";
     }
-    else if ($param["geo"] == "city")
+    elseif ($param["geo"] == "geoname")
     {
-	$geo_sql = "email_candles_city='$param[city]',email_candles_zipcode=NULL";
+	$geo_sql = "email_candles_geonameid='$param[geonameid]',email_candles_city=NULL,email_candles_zipcode=NULL";
+    }
+    elseif ($param["geo"] == "city")
+    {
+	$geo_sql = "email_candles_city='$param[city]',email_candles_zipcode=NULL,email_candles_geonameid=NULL";
     }
 
     $sql = <<<EOD
@@ -128,6 +139,7 @@ function get_sub_info($email) {
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
+       email_candles_geonameid,
        email_candles_havdalah
 FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_address = '$email'
@@ -147,10 +159,11 @@ EOD;
     }
 
     list($id,$address,$status,$created,$zip,$city,
+	 $geonameid,
 	 $havdalah) = mysql_fetch_row($result);
 
     global $hebcal_cities_old;
-    if (isset($hebcal_cities_old[$city])) {
+    if (isset($city) && isset($hebcal_cities_old[$city])) {
 	$city = $hebcal_cities_old[$city];
     }
     $val = array(
@@ -160,6 +173,7 @@ EOD;
 	"m" => $havdalah,
 	"zip" => $zip,
 	"city" => $city,
+	"geonameid" => $geonameid,
 	"t" => $created,
 	);
 
@@ -185,8 +199,8 @@ function write_staging_info($param, $old_encoded)
 	    $rand .= pack("CCCC", $p1, $p2, $p3, $p4);
 	}
 
-	# As of PHP 4.2.0, there is no need to seed the random 
-	# number generator as this is now done automatically.
+	// As of PHP 4.2.0, there is no need to seed the random 
+	// number generator as this is now done automatically.
 	$rand .= pack("V", rand());
 
 	$encoded = bin2hex($rand);
@@ -200,7 +214,12 @@ function write_staging_info($param, $old_encoded)
 	$location_name = "email_candles_zipcode";
 	$location_value = $param["zip"];
     }
-    else if ($param["geo"] == "city")
+    elseif ($param["geo"] == "geoname")
+    {
+	$location_name = "email_candles_geonameid";
+	$location_value = $param["geonameid"];
+    }
+    elseif ($param["geo"] == "city")
     {
 	$location_name = "email_candles_city";
 	$location_value = $param["city"];
@@ -247,6 +266,7 @@ function form($param, $message = "", $help = "") {
     if ($pos !== false) {
 	$action = substr($action, 0, $pos);
     }
+    $geo = $param["geo"] ? $param["geo"] : "zip";
 ?>
 <div id="email-form" class="well well-small">
 <form action="<?php echo $action ?>" method="post">
@@ -255,26 +275,36 @@ function form($param, $message = "", $help = "") {
 <input type="email" name="em"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 </label>
-<?php if (isset($param["geo"]) && $param["geo"] == "city") { ?>
+<?php if ($geo == "city") { ?>
 <label>Closest City:
 <?php
 echo html_city_select(isset($param["city"]) ? $param["city"] : "IL-Jerusalem");
 ?>
 </label>
-&nbsp;&nbsp;<small>(or select by <a
-href="<?php echo $action ?>?geo=zip">zip code</a>)</small>
+&nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
+or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>)</small>
 <input type="hidden" name="geo" value="city">
-<?php } else { ?>
+<?php } elseif ($geo == "zip") { ?>
 <label>ZIP code:
 <input type="text" name="zip" class="input-mini" maxlength="5"
 pattern="\d*" value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
-&nbsp;&nbsp;<small>(or select by <a
+&nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
+or select by <a
 href="<?php echo $action ?>?geo=city">closest city</a>)</small>
 <input type="hidden" name="geo" value="zip">
+<?php } else { ?>
+<input type="hidden" name="geo" value="geoname">
+<input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
+<div class="city-typeahead form-inline" style="margin-bottom:12px">
+<input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
+</div>
+&nbsp;&nbsp;<small>(or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>
+or <a href="<?php echo $action ?>?geo=city">closest city</a>)</small>
 <?php } ?>
 <label>Havdalah minutes past sundown:
 <input type="text" name="m" pattern="\d*" value="<?php
   echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3">
+<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>
 </label>
 <input type="hidden" name="v" value="1">
 <?php global $is_update, $default_unsubscribe;
@@ -302,7 +332,32 @@ offers.</p>
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 </div><!-- #privacy-policy -->
 <?php
-    echo html_footer_bootstrap();
+$xtra_html = <<<EOD
+<script src="/i/hogan.min.js"></script>
+<script src="/i/typeahead-0.9.3.min.js"></script>
+<script type="text/javascript">
+$("#city-typeahead").typeahead({
+    name: "hebcal-city",
+    remote: "/complete.php?q=%QUERY",
+    template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
+    limit: 7,
+    engine: Hogan
+}).on('typeahead:selected', function (obj, datum, name) {
+  console.debug(datum);
+  $('#geonameid').val(datum.id);
+}).bind("keyup keypress", function(e) {
+  var code = e.keyCode || e.which; 
+  if (code == 13) {               
+    e.preventDefault();
+    return false;
+  }
+});
+$('#havdalahInfo').click(function(e){
+ e.preventDefault();
+}).tooltip();</script>
+</script>
+EOD;
+    echo html_footer_bootstrap(true, $xtra_html);
     exit();
 }
 
@@ -325,8 +380,8 @@ function subscribe($param) {
 	if (!preg_match('/^\d{5}$/', $param["zip"]))
 	{
 	    form($param,
-	    "Sorry, <strong>" . $param["zip"] . "</strong> does\n" .
-	    "not appear to be a 5-digit zip code.");
+		 "Sorry, <strong>" . htmlspecialchars($param["zip"]) . "</strong> does\n" .
+		 "not appear to be a 5-digit zip code.");
 	}
 
 	list($city,$state,$tzid,$latitude,$longitude,
@@ -336,7 +391,7 @@ function subscribe($param) {
 	if (!$state)
 	{
 	    form($param,
-	    "Sorry, can't find\n".  "<strong>" . $param["zip"] .
+		 "Sorry, can't find\n".  "<strong>" . htmlspecialchars($param["zip"]) .
 	    "</strong> in the zip code database.\n",
 	    "<ul><li>Please try a nearby zip code</li></ul>");
 	}
@@ -345,8 +400,40 @@ function subscribe($param) {
 	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["city"]);
+	unset($param["geonameid"]);
     }
-    else if ($param["geo"] == "city")
+    elseif ($param["geo"] == "geoname")
+    {
+	if (!$param["geonameid"])
+	{
+	    form($param,
+	    "Please search for your city for candle lighting times.");
+	}
+
+	if (!preg_match('/^\d+$/', $param["geonameid"]))
+	{
+	    form($param,
+		 "Sorry, <strong>" . htmlspecialchars($param["geonameid"]) . "</strong> does\n" .
+		 "not appear to be a valid geonameid.");
+	}
+
+	list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+	    hebcal_get_geoname($param["geonameid"]);
+
+	if (!isset($tzid))
+	{
+	    form($param,
+	    "Sorry, <strong>" . htmlspecialchars($param["geonameid"]) . "</strong> is\n" .
+	    "not a recoginized geonameid.");
+	}
+
+	$city_descr = "$name, $admin1, $country";
+	$tz_descr = "Time zone: " . $tzid;
+
+	unset($param["zip"]);
+	unset($param["city"]);
+    }
+    elseif ($param["geo"] == "city")
     {
 	if (!$param["city"])
 	{
@@ -369,14 +456,15 @@ function subscribe($param) {
 	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["zip"]);
+	unset($param["geonameid"]);
     }
     else
     {
 	$param["geo"] = "zip";
-	form($param, "Sorry, missing zip or city field.");
+	form($param, "Sorry, missing location (zip, city, geonameid) field.");
     }
 
-    # check for old sub
+    // check for old sub
     if (isset($param["prev"]) && $param["prev"] != $param["em"]) {
 	$info = get_sub_info($param["prev"]);
 	if (isset($info["status"]) && $info["status"] == "active") {
@@ -384,7 +472,7 @@ function subscribe($param) {
 	}
     }
 
-    # check if email address already verified
+    // check if email address already verified
     $info = get_sub_info($param["em"]);
     if (isset($info["status"]) && $info["status"] == "active")
     {
