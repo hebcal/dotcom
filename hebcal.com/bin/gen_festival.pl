@@ -741,6 +741,40 @@ sub begins_at_dawn {
     return ($f =~ /^(Tzom|Asara|Ta\'anit) /) ? 1 : 0;
 }
 
+sub get_nav_inner {
+    my($festivals,$f) = @_;
+
+    my @subfest_nav;
+    foreach my $part (@{$SUBFESTIVALS{$f}}) {
+	if ($festivals->{'festival'}->{$part}->{'kriyah'}) {
+	    my $part2;
+	    if ($part =~ /^$f(.*)/i) {
+		$part2 = "reading$1";
+	    } else {
+		$part2 = $part;
+	    }
+
+	    my $slug = Hebcal::make_anchor($part2);
+	    $slug =~ s/\.html$//;
+	    push(@subfest_nav, [$slug, $part]);
+	}
+    }
+
+    if (scalar(@subfest_nav) == 0) {
+	return undef;
+    } elsif (scalar(@subfest_nav) == 1) {
+	@subfest_nav = ( [ $subfest_nav[0]->[0], "Torah Reading" ] );
+    }
+
+    my @nav_inner;
+    push(@nav_inner, ["dates", "Dates"]) if defined $OBSERVED{$f};
+    push(@nav_inner, ["books", "Books"]) if $DO_AMAZON && $festivals->{"festival"}->{$SUBFESTIVALS{$f}->[0]}->{"books"}->{"book"};
+    push(@nav_inner, @subfest_nav);
+    push(@nav_inner, ["ref", "References"]);
+
+    return \@nav_inner;
+}
+
 sub write_festival_page
 {
     my($festivals,$f) = @_;
@@ -816,6 +850,16 @@ EOHTML
 
     print OUT2 read_more_from($f,$about,$wikipedia);
 
+    my $nav_inner = get_nav_inner($festivals, $f);
+    if ($nav_inner) {
+	print OUT2 qq{<div class="pagination"><ul>\n};
+	foreach my $inner (@{$nav_inner}) {
+	    my($slug,$part) = @{$inner};
+	    print OUT2 qq{\t<li><a href="#$slug">$part</a></li>\n};
+	}
+	print OUT2 qq{</ul></div><!-- .pagination -->\n};
+    }
+
     if (defined $OBSERVED{$f})
     {
 	my $rise_or_set = begins_when($f);
@@ -863,7 +907,11 @@ EOHTML
 
     if (@{$SUBFESTIVALS{$f}} == 1)
     {
-	write_festival_part($festivals, $SUBFESTIVALS{$f}->[0]);
+	my $part = $SUBFESTIVALS{$f}->[0];
+	if ($festivals->{'festival'}->{$part}->{'kriyah'}) {
+	    print OUT2 qq{\n<h3 id="reading">Torah Reading</h3>\n};
+	    write_festival_part($festivals, $part);
+	}
     }
     else
     {
