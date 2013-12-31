@@ -9,7 +9,8 @@ require "Net/SMTP.php";
 
 function email_address_valid($str)
 {
-    $addr = Mail_RFC822::parseAddressList($str, '', false, true);
+    $mailRFC822 = new Mail_RFC822($str, '', false, true, null);
+    $addr = $mailRFC822->parseAddressList();
     if (!is_array($addr)) {
 	return false;
     }
