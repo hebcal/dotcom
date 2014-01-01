@@ -798,7 +798,7 @@ sub write_sedra_page
     }
 
     if (defined $parashah2id{$h}) {
-	$intro_summary .= "\nParashat $h is the " . ordinate($parashah2id{$h})
+	$intro_summary .= "\nParashat $h is the " . Hebcal::ordinate($parashah2id{$h})
 	    . " weekly Torah portion in the annual Jewish cycle of Torah reading."
     }
 
@@ -1683,27 +1683,4 @@ sub get_saturday
     }
 
     $sat;
-}
-
-########################################################################
-# from Lingua::EN::Numbers::Ordinate
-########################################################################
-
-sub ordsuf ($) {
-  return 'th' if not(defined($_[0])) or not( 0 + $_[0] );
-   # 'th' for undef, 0, or anything non-number.
-  my $n = abs($_[0]);  # Throw away the sign.
-  return 'th' unless $n == int($n); # Best possible, I guess.
-  $n %= 100;
-  return 'th' if $n == 11 or $n == 12 or $n == 13;
-  $n %= 10;
-  return 'st' if $n == 1; 
-  return 'nd' if $n == 2;
-  return 'rd' if $n == 3;
-  return 'th';
-}
-
-sub ordinate ($) {
-  my $i = $_[0] || 0;
-  return $i . ordsuf($i);
 }

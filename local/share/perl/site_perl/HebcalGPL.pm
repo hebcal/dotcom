@@ -41,6 +41,19 @@ our $SHVAT = 11;
 our $ADAR_I = 12;
 our $ADAR_II = 13;
 
+our @HEB_MONTH_NAME =
+(
+  [
+    "VOID", "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+    "Cheshvan", "Kislev", "Tevet", "Sh'vat", "Adar", "Nisan"
+  ],
+  [
+    "VOID", "Nisan", "Iyyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+    "Cheshvan", "Kislev", "Tevet", "Sh'vat", "Adar I", "Adar II",
+    "Nisan"
+  ]
+);
+
 sub MONTHS_IN_HEB ($) {
     LEAP_YR_HEB($_[0]) ? 13 :12;
 }

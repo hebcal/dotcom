@@ -816,6 +816,13 @@ sub get_dow($$$)
     $dow == 7 ? 0 : $dow;
 }
 
+# format the result of HebcalGPL::greg2hebrew
+sub format_hebrew_date {
+    my($hdate) = @_;
+    my $hm = $HebcalGPL::HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}];
+    sprintf("%s of %s, %d", ordinate($hdate->{"dd"}), $hm, $hdate->{"yy"});
+}
+
 sub get_default_hebrew_year {
     my($year,$month,$day) = @_;
     my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
@@ -3015,6 +3022,29 @@ sub sendmail_v2
     }
 
     1;
+}
+
+########################################################################
+# from Lingua::EN::Numbers::Ordinate
+########################################################################
+
+sub ordsuf ($) {
+  return 'th' if not(defined($_[0])) or not( 0 + $_[0] );
+   # 'th' for undef, 0, or anything non-number.
+  my $n = abs($_[0]);  # Throw away the sign.
+  return 'th' unless $n == int($n); # Best possible, I guess.
+  $n %= 100;
+  return 'th' if $n == 11 or $n == 12 or $n == 13;
+  $n %= 10;
+  return 'st' if $n == 1;
+  return 'nd' if $n == 2;
+  return 'rd' if $n == 3;
+  return 'th';
+}
+
+sub ordinate ($) {
+  my $i = $_[0] || 0;
+  return $i . ordsuf($i);
 }
 
 # avoid warnings

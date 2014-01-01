@@ -132,27 +132,10 @@ if ($opts{'H'}) {
     $HEB_YR = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
 }
 
-my %GREG2HEB;
 my $NUM_YEARS = 9;
 my $NUM_YEARS_MAIN_INDEX = 5;
 my $meta_greg_yr1 = $HEB_YR - 3761 - 1;
 my $meta_greg_yr2 = $meta_greg_yr1 + $NUM_YEARS + 1;
-print "Gregorian-to-Hebrew date map...\n" if $opts{"v"};
-foreach my $i (0 .. $NUM_YEARS) {
-    my $yr = $HEB_YR + $i - 1;
-    my @events = Hebcal::invoke_hebcal("./hebcal -d -x -h -H $yr", '', 0);
-
-    for (my $i = 0; $i < @events; $i++) {
-	my $subj = $events[$i]->[$Hebcal::EVT_IDX_SUBJ];
-	if ($subj =~ /^\d+\w+ of [^,]+, \d+$/) {
-	    my $isotime = sprintf("%04d%02d%02d",
-				  $events[$i]->[$Hebcal::EVT_IDX_YEAR],
-				  $events[$i]->[$Hebcal::EVT_IDX_MON] + 1,
-				  $events[$i]->[$Hebcal::EVT_IDX_MDAY]);
-	    $GREG2HEB{$isotime} = $subj;
-	}
-    }
-}
 
 my %OBSERVED;
 print "Observed holidays...\n" if $opts{"v"};
@@ -873,10 +856,10 @@ EOHTML
 	my $displayed_upcoming = 0;
 	foreach my $evt (@{$OBSERVED{$f}}) {
 	    next unless defined $evt;
-	    my $isotime = sprintf("%04d%02d%02d",
-				  $evt->[$Hebcal::EVT_IDX_YEAR],
-				  $evt->[$Hebcal::EVT_IDX_MON] + 1,
-				  $evt->[$Hebcal::EVT_IDX_MDAY]);
+	    my $hebdate = HebcalGPL::greg2hebrew($evt->[$Hebcal::EVT_IDX_YEAR],
+						 $evt->[$Hebcal::EVT_IDX_MON] + 1,
+						 $evt->[$Hebcal::EVT_IDX_MDAY]);
+	    my $greg2heb = Hebcal::format_hebrew_date($hebdate);
 	    my($gy,$gm,$gd) = day_event_observed($f,$evt);
 	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
 	    my $style = "";
@@ -895,7 +878,7 @@ EOHTML
 		$nofollow,
 		$gy, $gm,
 		$html5time, $Hebcal::DoW[$dow],
-		$gd, $Hebcal::MoY_long{$gm}, $gy, $GREG2HEB{$isotime};
+		$gd, $Hebcal::MoY_long{$gm}, $gy, $greg2heb;
 	}
 	print OUT2 <<EOHTML;
 </ul>
