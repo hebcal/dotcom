@@ -137,9 +137,10 @@ my $NUM_YEARS_MAIN_INDEX = 5;
 my $meta_greg_yr1 = $HEB_YR - 3761 - 1;
 my $meta_greg_yr2 = $meta_greg_yr1 + $NUM_YEARS + 1;
 
-my %OBSERVED;
+my @EVENTS_BY_HEBYEAR;
+my @EVENTS_BY_GREGYEAR;
 print "Observed holidays...\n" if $opts{"v"};
-holidays_observed(\%OBSERVED);
+holidays_observed();
 
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
@@ -318,8 +319,8 @@ EOHTML
 	print OUT3 qq{<tr><td><a href="$slug" title="$short_descr">$f</a></td>\n};
 	foreach my $i (0 .. $NUM_YEARS_MAIN_INDEX) {
 	    print OUT3 "<td class=\"date-obs\">";
-	    if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[$i]) {
-		my $evt = $OBSERVED{$f}->[$i];
+	    if (defined $EVENTS_BY_HEBYEAR[$i]->{$f}) {
+		my $evt = $EVENTS_BY_HEBYEAR[$i]->{$f};
 		print OUT3 table_cell_observed($f, $evt, 0);
 	    }
 	    print OUT3 "</td>\n";
@@ -363,8 +364,8 @@ EOHTML
 
 	print OUT4 qq{<tr><td><a href="$slug">$f</a></td>\n};
 	print OUT4 "<td>";
-	if (defined $OBSERVED{$f} && defined $OBSERVED{$f}->[$i]) {
-	  my $evt = $OBSERVED{$f}->[$i];
+	if (defined $EVENTS_BY_HEBYEAR[$i]->{$f}) {
+	  my $evt = $EVENTS_BY_HEBYEAR[$i]->{$f};
 	  print OUT4 table_cell_observed($f, $evt, 1);
 	}
 	print OUT4 "</td>\n<td>$short_descr</td>\n";
@@ -725,7 +726,7 @@ sub begins_at_dawn {
 }
 
 sub get_nav_inner {
-    my($festivals,$f) = @_;
+    my($festivals,$f,$observed) = @_;
 
     my @subfest_nav;
     foreach my $part (@{$SUBFESTIVALS{$f}}) {
@@ -750,7 +751,7 @@ sub get_nav_inner {
     }
 
     my @nav_inner;
-    push(@nav_inner, ["dates", "Dates"]) if defined $OBSERVED{$f};
+    push(@nav_inner, ["dates", "Dates"]) if scalar(@{$observed});
     push(@nav_inner, ["books", "Books"]) if $DO_AMAZON && $festivals->{"festival"}->{$SUBFESTIVALS{$f}->[0]}->{"books"}->{"book"};
     push(@nav_inner, @subfest_nav);
     push(@nav_inner, ["ref", "References"]);
@@ -833,7 +834,8 @@ EOHTML
 
     print OUT2 read_more_from($f,$about,$wikipedia);
 
-    my $nav_inner = get_nav_inner($festivals, $f);
+    my $observed = observed_event_list($f);
+    my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
 	print OUT2 qq{<div class="pagination"><ul>\n};
 	foreach my $inner (@{$nav_inner}) {
@@ -843,8 +845,7 @@ EOHTML
 	print OUT2 qq{</ul></div><!-- .pagination -->\n};
     }
 
-    if (defined $OBSERVED{$f})
-    {
+    if (scalar(@{$observed})) {
 	my $rise_or_set = begins_when($f);
 
 	print OUT2 <<EOHTML;
@@ -854,8 +855,7 @@ $f begins in the Diaspora on:
 EOHTML
 	;
 	my $displayed_upcoming = 0;
-	foreach my $evt (@{$OBSERVED{$f}}) {
-	    next unless defined $evt;
+	foreach my $evt (@{$observed}) {
 	    my $hebdate = HebcalGPL::greg2hebrew($evt->[$Hebcal::EVT_IDX_YEAR],
 						 $evt->[$Hebcal::EVT_IDX_MON] + 1,
 						 $evt->[$Hebcal::EVT_IDX_MDAY]);
@@ -1077,39 +1077,48 @@ sub print_aliyah
     print OUT2 qq{<br>\n};
 }
 
-sub holidays_observed
-{
-    my($current) = @_;
-
-    foreach my $i (0 .. $NUM_YEARS)
-    {
+sub holidays_observed {
+    foreach my $i (0 .. $NUM_YEARS) {
 	my $yr = $HEB_YR + $i - 1;
 	my $cmd = "./hebcal";
 	$cmd .= " -i" if $opts{"i"};
 	$cmd .= " -H $yr";
 	my @events = Hebcal::invoke_hebcal($cmd, "", 0);
-	foreach my $evt (@events) {
-	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	    next if $subj =~ /^Erev /;
+	$EVENTS_BY_HEBYEAR[$i] = build_event_begin_hash(\@events);
 
-	    # Since Chanukah doesn't have an Erev, skip a day
-	    next if $subj =~ /^Chanukah: 1 Candle$/;
-
-	    my $subj_copy = $subj;
-	    $subj_copy =~ s/ \d{4}$//;
-	    $subj_copy =~ s/ \(CH\'\'M\)$//;
-	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
-	    if ($subj ne "Rosh Chodesh Adar II") {
-		$subj_copy =~ s/ [IV]+$//;
-	    }
-	    $subj_copy =~ s/: \d Candles?$//;
-	    $subj_copy =~ s/: 8th Day$//;
-
-	    $current->{$subj_copy}->[$i] = $evt
-		unless (defined $current->{$subj_copy} &&
-			defined $current->{$subj_copy}->[$i]);
-	}
+	my $yr2 = $meta_greg_yr1 + $i;
+	my $cmd2 = "./hebcal";
+	$cmd2 .= " -i" if $opts{"i"};
+	$cmd2 .= " $yr2";
+	my @events2 = Hebcal::invoke_hebcal($cmd2, "", 0);
+	$EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2);
     }
+}
+
+sub build_event_begin_hash {
+    my($events) = @_;
+    my $dest = {};
+    foreach my $evt (@{$events}) {
+	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+	next if $subj =~ /^Erev /;
+
+	# Since Chanukah doesn't have an Erev, skip a day
+	next if $subj =~ /^Chanukah: 1 Candle$/;
+
+	my $subj_copy = $subj;
+	$subj_copy =~ s/ \d{4}$//;
+	$subj_copy =~ s/ \(CH\'\'M\)$//;
+	$subj_copy =~ s/ \(Hoshana Raba\)$//;
+	if ($subj ne "Rosh Chodesh Adar II") {
+	    $subj_copy =~ s/ [IV]+$//;
+	}
+	$subj_copy =~ s/: \d Candles?$//;
+	$subj_copy =~ s/: 8th Day$//;
+
+	$dest->{$subj_copy} = $evt
+	    unless defined $dest->{$subj_copy};
+    }
+    $dest;
 }
 
 sub findError {
@@ -1127,22 +1136,32 @@ sub findError {
     return undef;
 }
 
+sub observed_event_list {
+    my($f) = @_;
+
+    my @result;
+    foreach my $i (0 .. $NUM_YEARS) {
+	my $evt = $EVENTS_BY_HEBYEAR[$i]->{$f};
+	push(@result, $evt) if defined $evt;
+    }
+
+    return \@result;
+}
+
 sub get_next_observed_str {
     my($f) = @_;
 
     my $next_observed = ". ";
-    if (defined $OBSERVED{$f}) {
-	my $rise_or_set = begins_when($f);
-	foreach my $evt (@{$OBSERVED{$f}}) {
-	    next unless defined $evt;
+    my $observed = observed_event_list($f);
+    foreach my $evt (@{$observed}) {
+	my $time = Hebcal::event_to_time($evt);
+	if ($time >= $NOW) {
 	    my($gy,$gm,$gd) = day_event_observed($f, $evt);
-	    my $time = Hebcal::event_to_time($evt);
-	    if ($time >= $NOW) {
-		my $dow = Hebcal::get_dow($gy, $gm, $gd);
-		$next_observed = sprintf ", begins %s on %s, %02d %s %04d. ", $rise_or_set,
-		    $Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
-		last;
-	    }
+	    my $dow = Hebcal::get_dow($gy, $gm, $gd);
+	    my $rise_or_set = begins_when($f);
+	    $next_observed = sprintf ", begins %s on %s, %02d %s %04d. ", $rise_or_set,
+		$Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
+	    last;
 	}
     }
 
