@@ -53,18 +53,12 @@ echo html_header_bootstrap($page_title, $xtra_head);
 </div>
 
 <p class="lead">Jewish holiday files for Microsoft
-Outlook, Apple iCal, iPhone, iPad, Android (via Google Calendar),
+Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files.</p>
 
-<p>These holidays are for Jews living in the
-Diaspora (anywhere outside of modern Israel). Click the icons below to
-subscribe in your device or web/desktop application.</p>
-
-<p>For advanced options such as candle-lighting times and Torah
-readings, visit our <a href="/hebcal/">custom Jewish calendar</a>
-page. See also <a href="/home/category/import">help importing into
-apps</a> for step-by-step instructions.</p>
+<p>Click the icons below to download/subscribe in your device or web/desktop application.</p>
+<p>This holiday schedule is designed for Jews living in the Diaspora (anywhere outside of modern Israel).</p>
 </div><!-- .span12 -->
 
 <?php
@@ -110,6 +104,7 @@ border="0"></a>
 } // function cal_row()
 ?>
 <div class="clearfix">
+<hr>
 <?php
 cal_row("jewish-holidays", "Jewish Holidays",
 	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah");
@@ -127,20 +122,21 @@ cal_row("omer", "Days of the Omer",
 cal_row("daf-yomi", "Daf Yomi",
 	"Daily regimen of learning the Talmud");
 ?>
+<div class="row-fluid">
+ <div class="span7">
+  <h4>Advanced Settings</h4>
+  Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc.
+ </div><!-- .span7 -->
+ <div class="span5" style="text-align:center; margin-top:20px">
+   <a class="btn btn-success btn-large" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil icon-white"></i> Customize your calendar &raquo;</a>
+ </div><!-- .span5 -->
+</div><!-- .row-fluid -->
+<hr>
 </div><!-- .clearfix -->
 
 <div class="clearfix">
-<p class="lead">To get a customized feed with candle lighting times for Shabbat
-and holidays, Torah readings, etc, follow these instructions:</p>
-
-<ol>
-<li>Go to <a
-    href="http://www.hebcal.com/hebcal/">http://www.hebcal.com/hebcal/</a>
-<li>Fill out the form with your preferences and click the <strong>Create
-    Calendar</strong> button
-<li>Click the <strong>Download...</strong> button
-<li>Follow the instructions for your favorite application or mobile device
-</ol>
+<p class="lead">See our <a href="/home/category/import">help importing into
+apps</a> for step-by-step instructions.</p>
 </div><!-- .clearfix -->
 
 <?php echo html_footer_bootstrap(); ?>
