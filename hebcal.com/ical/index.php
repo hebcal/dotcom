@@ -2,7 +2,7 @@
 /***********************************************************************
  * Jewish Holiday downloads for desktop, mobile and web calendars
  *
- * Copyright (c) 2013  Michael J. Radwin.
+ * Copyright (c) 2014  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -52,13 +52,16 @@ echo html_header_bootstrap($page_title, $xtra_head);
 <h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
 </div>
 
-<p class="lead">Jewish holiday files for Microsoft
+<p class="lead">Free Jewish holidays for Microsoft
 Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files.</p>
 
-<p>Click the icons below to download/subscribe in your device or web/desktop application.</p>
-<p>This holiday schedule is designed for Jews living in the Diaspora (anywhere outside of modern Israel).</p>
+<p>Click the icons below to download/subscribe in your device or web/desktop 
+application. Subscribers to these feeds receive perpetual updates.</p>
+
+<p>This holiday schedule is designed for Jews living in the Diaspora
+(anywhere outside of modern Israel).</p>
 </div><!-- .span12 -->
 
 <?php
