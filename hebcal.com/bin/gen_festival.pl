@@ -346,7 +346,7 @@ EOHTML
 
     print OUT4 "<tr><th>Holiday</th>";
     my $yr = $HEB_YR + $i - 1;
-    print OUT4 "<th>Hebrew Year $yr</th>";
+    print OUT4 "<th>Dates</th>";
     print OUT4 "<th>Description</th>";
     print OUT4 "</tr>\n";
 
@@ -382,11 +382,15 @@ EOHTML
 sub get_index_body_preamble {
     my($page_title,$do_multi_year,$heb_year,$div_class) = @_;
 
+    my $when = $heb_year ? " for Hebrew Year $heb_year" : "";
     my $str = <<EOHTML;
 <div class="$div_class">
 <div class="page-header">
 <h1>$page_title</h1>
 </div>
+<p class="lead">Dates of major and minor Jewish holidays$when. Each
+holiday page includes a brief overview of special observances and
+customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <strong>Sep 19-20</strong>, then the holiday begins at
@@ -411,8 +415,8 @@ EOHTML
 
     $str .= <<EOHTML;
 <div class="btn-toolbar">
-<a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download</a>
 <a class="btn btn-small download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="icon-print"></i> Print PDF</a>
+<a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download to Outlook, iPhone, Google</a>
 <a class="btn btn-small" title="Hebcal Custom Calendar" href="$custom_link"><i class="icon-pencil"></i> Customize your calendar</a>
 </div><!-- .btn-toolbar -->
 EOHTML
@@ -706,7 +710,8 @@ sub day_event_observed {
     if (!begins_at_dawn($f) && $f ne "Leil Selichot") {
 	($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
     }
-    return ($gy,$gm,$gd);
+    my $dow = Hebcal::get_dow($gy,$gm,$gd);
+    return ($gy,$gm,$gd,$dow);
 }
 
 sub begins_when {
@@ -860,8 +865,7 @@ EOHTML
 						 $evt->[$Hebcal::EVT_IDX_MON] + 1,
 						 $evt->[$Hebcal::EVT_IDX_MDAY]);
 	    my $greg2heb = Hebcal::format_hebrew_date($hebdate);
-	    my($gy,$gm,$gd) = day_event_observed($f,$evt);
-	    my $dow = Hebcal::get_dow($gy,$gm,$gd);
+	    my($gy,$gm,$gd,$dow) = day_event_observed($f,$evt);
 	    my $style = "";
 	    if (!$displayed_upcoming) {
 	      my $time = Hebcal::event_to_time($evt);
@@ -1156,8 +1160,7 @@ sub get_next_observed_str {
     foreach my $evt (@{$observed}) {
 	my $time = Hebcal::event_to_time($evt);
 	if ($time >= $NOW) {
-	    my($gy,$gm,$gd) = day_event_observed($f, $evt);
-	    my $dow = Hebcal::get_dow($gy, $gm, $gd);
+	    my($gy,$gm,$gd,$dow) = day_event_observed($f, $evt);
 	    my $rise_or_set = begins_when($f);
 	    $next_observed = sprintf ", begins %s on %s, %02d %s %04d. ", $rise_or_set,
 		$Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
