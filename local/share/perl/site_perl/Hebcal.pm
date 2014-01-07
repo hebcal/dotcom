@@ -2746,6 +2746,10 @@ sub vcalendar_write_contents
 		if ($loc) {
 		    $uid .= "-" . $loc;
 		}
+
+		if (defined $cconfig->{"latitude"}) {
+		    out_html(undef, qq{GEO:}, $cconfig->{"latitude"}, ";", $cconfig->{"longitude"}, $endl);
+		}
 	    }
 
 	    out_html(undef, qq{UID:$uid$endl});
@@ -2765,9 +2769,9 @@ sub vcalendar_write_contents
 
 	    if (defined $alarm) {
 		out_html(undef, "BEGIN:VALARM${endl}",
-			 "X-WR-ALARMUID:${uid}-alarm${endl}",
-			 "ACTION:AUDIO${endl}",
-			 "TRIGGER:-PT${alarm}${endl}",
+			 "ACTION:DISPLAY${endl}",
+			 "DESCRIPTION:REMINDER${endl}",
+			 "TRIGGER;RELATED=START:-PT${alarm}${endl}",
 			 "END:VALARM${endl}");
 	    }
 	}
