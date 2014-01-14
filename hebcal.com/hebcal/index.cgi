@@ -20,7 +20,7 @@
 #  * Redistributions in binary form must reproduce the above
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
-#    provided with the distribution. 
+#    provided with the distribution.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -125,7 +125,7 @@ if (! defined $pi) {
 form("") unless $q->param("v");
 
 if (defined $q->param("year") && $q->param("year") eq "now" &&
-    defined $q->param("month") && 
+    defined $q->param("month") &&
     (($q->param("month") eq "now") || ($q->param("month") eq "x")))
 {
     $q->param("year", $this_year);
@@ -489,7 +489,7 @@ sub pdf_display {
     $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
     $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
     my $lg = $q->param("lg") || "s";
-    if ($lg eq "h") {
+    if ($lg =~ /h/) {
 	$pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
     }
 
@@ -552,7 +552,7 @@ sub pdf_display {
 		 PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN,
 		 PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN);
 	$g->stroke();
-	$g->endpath(); 
+	$g->endpath();
 
 	$text->font($pdf_font{'plain'},10);
 	for (my $i = 0; $i < scalar(@Hebcal::DoW_long); $i++) {
@@ -571,7 +571,7 @@ sub pdf_display {
 		$g->stroke;
 		$g->endpath();
 	    }
-    
+
 	    # Loop through the rows
 	    foreach my $r (0 .. $rows - 1) {
 		my $y = PDF_HEIGHT - PDF_TMARGIN - $r * ($rowheight + $vspace);
@@ -647,37 +647,57 @@ sub pdf_render_event {
 	$text->text($time_formatted . " ");
     }
 
-    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-    if ($lg eq "h" && $hebrew) {
-	my $str = scalar reverse($hebrew);
-	$str =~ s/(\d+)/scalar reverse($1)/ge;
-	$str =~ s/\(/\cA/g;
-	$str =~ s/\)/\(/g;
-	$str =~ s/\cA/\)/g;
-	$text->font($pdf_font{'hebrew'}, 10);
-	$text->text($str);
-    } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
-	$text->font($pdf_font{'bold'}, 8);
-	$text->text($subj);
-    } elsif (length($subj) >= 25) {
-	# lazy eval on font that might not be used
-	if (! defined $pdf_font{'condensed'}) {
-	    $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
-	}
-	$text->font($pdf_font{'condensed'}, 9);
-	$text->fillcolor("#000000");
-	$text->text($subj);
-    } elsif ($subj =~ /^Havdalah \((\d+) min\)$/) {
-	my $minutes = $1;
-	$text->font($pdf_font{'plain'}, 8);
-	$text->text("Havdalah");
-	$text->font($pdf_font{'plain'}, 6);
-	$text->text(" ($minutes min)");
-    } else {
-	$text->font($pdf_font{'plain'}, 8);
-	$text->text($subj);
+    if ($lg =~ /[as]/) {
+        if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+            $text->font($pdf_font{'bold'}, 8);
+            $text->text($subj);
+        }
+        elsif (length($subj) >= 25) {
+            # lazy load this font if we haven't used it yet
+            if (!defined $pdf_font{'condensed'}) {
+                $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
+            }
+            $text->font($pdf_font{'condensed'}, 9);
+            $text->fillcolor("#000000");
+            $text->text($subj);
+        }
+        elsif ($subj =~ /^Havdalah \((\d+) min\)$/) {
+            my $minutes = $1;
+            $text->font($pdf_font{'plain'}, 8);
+            $text->text("Havdalah");
+            $text->font($pdf_font{'plain'}, 6);
+            $text->text(" ($minutes min)");
+        }
+        else {
+            $text->font($pdf_font{'plain'}, 8);
+            $text->text($subj);
+        }
+	$text->cr(-12);
     }
-    $text->cr(-12);
+
+    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+    if ( $lg =~ /h/ && $hebrew ) {
+        if ( $subj =~ /^Havdalah \((\d+) min\)$/ ) {
+            my $minutes = $1;
+            $text->font($pdf_font{'hebrew'}, 8);
+            $text->text("\x{05EA}\x{05D5}\x{05E7}\x{05D3} $minutes - ");
+
+            $hebrew =~ s/ - .+$//; # remove minutes
+            my $str = scalar reverse($hebrew);
+            $text->font($pdf_font{'hebrew'}, 10);
+            $text->text($str);
+        }
+        else {
+            my $str = scalar reverse($hebrew);
+            $str =~ s/(\d+)/scalar reverse($1)/ge;
+            $str =~ s/\(/\cA/g;
+            $str =~ s/\)/\(/g;
+            $str =~ s/\cA/\)/g;
+            $text->font( $pdf_font{'hebrew'}, 10 );
+            $text->text($str);
+            $text->cr(-12);
+        }
+    }
 }
 
 
@@ -1088,8 +1108,8 @@ $("#city-typeahead").typeahead({
   $('#lodeg').val(lodeg);
   $('#lomin').val(lomin);
 }).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which; 
-  if (code == 13) {               
+  var code = e.keyCode || e.which;
+  if (code == 13) {
     e.preventDefault();
     return false;
   }
@@ -1260,7 +1280,7 @@ EOHTML
 	    && (!defined $q->param("yt") || $q->param("yt") eq "G"))
 	{
 	    my $future_years = $greg_year1 - $this_year;
-	    my $new_url = Hebcal::self_url($q, 
+	    my $new_url = Hebcal::self_url($q,
 					   {"yt" => "H", "month" => "x"},
 					   "&amp;");
 	    Hebcal::out_html(undef, qq{<div class="alert alert-block">
@@ -1299,15 +1319,8 @@ accurate.
     if ($numEntries > 0) {
 	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
 
-	# don't offer "Print PDF" button on Hebrew-only language setting
-	my $print_pdf_btn_class = "btn download";
-	my $lang = $q->param("lg");
-	if ($lang && $lang eq "h") {
-	    $print_pdf_btn_class .= " disabled";
-	}
-
 	my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-	Hebcal::out_html(undef, qq{<a class="$print_pdf_btn_class" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
+	Hebcal::out_html(undef, qq{<a class="btn download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
 
 	if (param_true("c")) {
 	    # Fridge
@@ -1315,7 +1328,7 @@ accurate.
 	    $url .= Hebcal::get_geo_args($q, "&amp;");
 	    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 	    $url .= "&amp;year=$hyear";
-	    
+
 	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
 	}
     }
@@ -1363,7 +1376,7 @@ EOHTML
 	Hebcal::out_html(undef, $email_form);
     }
 
-    if ($numEntries == 0) {    
+    if ($numEntries == 0) {
 	Hebcal::out_html(undef,
 	qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
     }
@@ -1575,7 +1588,7 @@ sub write_html_cal
     }
     Hebcal::out_html(undef,
 		     qq{<div id="cal-$id" class="$class"$style$dir>\n},
-		     $cal->as_HTML(), 
+		     $cal->as_HTML(),
 		     qq{</div><!-- #cal-$id -->\n});
 }
 
