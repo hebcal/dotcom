@@ -327,7 +327,7 @@ sub my_invoke_hebcal {
 	foreach my $evt (@events) {
 	    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 	    my($year,$mon,$mday) = Hebcal::event_ymd($evt);
-	
+
 	    if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
 	    {
 		$greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $1;
@@ -409,12 +409,14 @@ EOHTML
 
     if ($q->param("ref_url"))
     {
-	my $ref_text = $q->param("ref_text") ? $q->param("ref_text") : 
-	    $q->param("ref_url");
+    	my $ref_url = $q->param("ref_url");
+	my $ref_text = $q->param("ref_text") || $ref_url;
 	Hebcal::out_html($cfg,
-			  "<center><big><a href=\"", $q->param("ref_url"),
-			  "\">Click\nhere to return to $ref_text",
-			  "</a></big></center>\n");
+		qq{<div class="alert alert-block alert-info" style="margin-top:12px">},
+		qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n},
+		qq{<p>Welcome to the Hebcal Yahrzeit + Anniversary Calendar.</p>\n},
+		qq{<p><a href="$ref_url">Return to $ref_text</a></p>\n},
+		qq{</div><!-- .alert-info -->});
     }
 
 form(1) unless scalar(@inputs) >= 1;
@@ -533,7 +535,7 @@ sub form
 qq{<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>20 October 1994 (after
-sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</b>'s
+sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</b>&apos;s
 yahrzeit.</strong>
 <p>If you know the Hebrew but not the Gregorian date, use the <a
 href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
