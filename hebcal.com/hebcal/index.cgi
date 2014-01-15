@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -675,27 +675,29 @@ sub pdf_render_event {
 	$text->cr(-12);
     }
 
-    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-    if ( $lg =~ /h/ && $hebrew ) {
-        if ( $subj =~ /^Havdalah \((\d+) min\)$/ ) {
-            my $minutes = $1;
-            $text->font($pdf_font{'hebrew'}, 8);
-            $text->text("\x{05EA}\x{05D5}\x{05E7}\x{05D3} $minutes - ");
+    if ( $lg =~ /h/ ) {
+        my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+        if ($hebrew) {
+            if ( $subj =~ /^Havdalah \((\d+) min\)$/ ) {
+                my $minutes = $1;
+                $text->font( $pdf_font{'hebrew'}, 8 );
+                $text->text("\x{05EA}\x{05D5}\x{05E7}\x{05D3} $minutes - ");
 
-            $hebrew =~ s/ - .+$//; # remove minutes
-            my $str = scalar reverse($hebrew);
-            $text->font($pdf_font{'hebrew'}, 10);
-            $text->text($str);
-        }
-        else {
-            my $str = scalar reverse($hebrew);
-            $str =~ s/(\d+)/scalar reverse($1)/ge;
-            $str =~ s/\(/\cA/g;
-            $str =~ s/\)/\(/g;
-            $str =~ s/\cA/\)/g;
-            $text->font( $pdf_font{'hebrew'}, 10 );
-            $text->text($str);
-            $text->cr(-12);
+                $hebrew =~ s/ - .+$//;    # remove minutes
+                my $str = scalar reverse($hebrew);
+                $text->font( $pdf_font{'hebrew'}, 10 );
+                $text->text($str);
+            }
+            else {
+                my $str = scalar reverse($hebrew);
+                $str =~ s/(\d+)/scalar reverse($1)/ge;
+                $str =~ s/\(/\cA/g;
+                $str =~ s/\)/\(/g;
+                $str =~ s/\cA/\)/g;
+                $text->font( $pdf_font{'hebrew'}, 10 );
+                $text->text($str);
+                $text->cr(-12);
+            }
         }
     }
 }
