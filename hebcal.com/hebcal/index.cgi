@@ -421,7 +421,8 @@ sub translate_subject
 	$subj2 .= hebrew_span($hebrew);
 	return $subj2;
     } else {
-	die "unknown lang \"$lang\" for $subj";
+	warn "unknown lang \"$lang\" for $subj";
+        return $subj;
     }
 }
 
