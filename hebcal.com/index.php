@@ -164,6 +164,7 @@ $xtra_head = <<<EOD
 ul.inline li:after{content:"\\00a0\\00b7"}
 ul.inline li:last-child:after{content:""}
 </style>
+<link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
 EOD;
 echo html_header_bootstrap("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
