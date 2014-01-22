@@ -173,7 +173,8 @@ my @triennial_readings;
 #my @triennial_alt_readings;
 my @triennial_events;
 my @bereshit_indices;
-for (my $i = 0; $i < 3; $i++) {
+my $max_triennial_cycles = 5;
+for (my $i = 0; $i < $max_triennial_cycles; $i++) {
     my $year_offset = ($i - 1) * 3;
     my $cycle_start_year = $hebrew_year - ($year_num - 1) + $year_offset;
     $cycle_start_years[$i] = $cycle_start_year;
@@ -189,19 +190,23 @@ for (my $i = 0; $i < 3; $i++) {
 }
 
 my %special;
-foreach my $yr (($cycle_start_years[0] - 1) .. ($cycle_start_years[2] + 10)) {
+my $special_start_year = $cycle_start_years[0] - 1;
+my $special_end_year = math_max( $hebrew_year + $extra_years - 1,
+    $cycle_start_years[ $max_triennial_cycles - 1 ] + 3 );
+foreach my $yr ($special_start_year .. $special_end_year) {
+    INFO("Special readings for $yr");
     my $cmd = "$HEBCAL_CMD -H $yr";
     my @ev = Hebcal::invoke_hebcal($cmd, "", 0);
-    special_readings(\@ev);
+    special_readings(\%special, \@ev);
 
     # hack for Pinchas
     $cmd = "$HEBCAL_CMD -s -h -x -H $yr";
     my @ev2 = Hebcal::invoke_hebcal($cmd, "", 0);
-    special_pinchas(\@ev2);
+    special_pinchas(\%special, \@ev2);
 }
 
 if ($opts{'t'}) {
-    for (my $i = 0; $i < 3; $i++) {
+    for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	triennial_csv($axml,
 		      $triennial_events[$i],
 		      $bereshit_indices[$i],
@@ -281,6 +286,11 @@ if ($opts{'d'}) {
 
 
 exit(0);
+
+sub math_max {
+    my ( $a, $b ) = @_;
+    return $a > $b ? $a : $b;
+}
 
 sub get_tri_events
 {
@@ -553,7 +563,7 @@ title="Download $basename"><i class="icon-download-alt"></i> $yr</a>
     }
 
     my $triennial_download_html = "";
-    for (my $i = 0; $i < 3; $i++) {
+    for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	my $start_year = $cycle_start_years[$i];
 	my $triennial_range = triennial_csv_range($start_year);
 	my $triennial_basename = triennial_csv_basename($start_year);
@@ -1283,7 +1293,7 @@ sub get_special_aliyah
 }
 
 sub special_pinchas {
-    my($events) = @_;
+    my($special, $events) = @_;
     foreach my $evt (@{$events}) {
 	next unless "Parashat Pinchas" eq $evt->[$Hebcal::EVT_IDX_SUBJ];
 	my($year,$month,$day) = Hebcal::event_ymd($evt);
@@ -1292,20 +1302,20 @@ sub special_pinchas {
 	if ($hebdate->{"mm"} > 4
 	    || ($hebdate->{"mm"} == 4 && $hebdate->{"dd"} > 17)) {
 	    my $dt = Hebcal::date_format_sql($year, $month, $day);
-	    $special{$dt}->{"H"} = "Jeremiah 1:1 - 2:3";
-	    $special{$dt}->{"reason"} = "Pinchas occurring after 17 Tammuz";
+	    $special->{$dt}->{"H"} = "Jeremiah 1:1 - 2:3";
+	    $special->{$dt}->{"reason"} = "Pinchas occurring after 17 Tammuz";
 	}
     }
 }
 
 sub special_readings
 {
-    my($events) = @_;
+    my($special, $events) = @_;
 
     for (my $i = 0; $i < @{$events}; $i++) {
 	my($year,$month,$day) = Hebcal::event_ymd($events->[$i]);
 	my $dt = Hebcal::date_format_sql($year, $month, $day);
-	next if defined $special{$dt};
+	next if defined $special->{$dt};
 
 	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
 
@@ -1331,7 +1341,7 @@ sub special_readings
 	    my($year0,$month0,$day0) =
 		Date::Calc::Add_Delta_Days($year, $month, $day, -1);
 	    $dt = Hebcal::date_format_sql($year0, $month0, $day0);
-	    next if defined $special{$dt};
+	    next if defined $special->{$dt};
 	} elsif ($dow != 6) {
 	    next;
 	}
@@ -1349,8 +1359,8 @@ sub special_readings
 	    my $haft =
 		$fxml->{'festival'}->{$h}->{'kriyah'}->{'haft'}->{'reading'};
 	    if (defined $haft) {
-		$special{$dt}->{"H"} = $haft;
-		$special{$dt}->{"reason"} = $h;
+		$special->{$dt}->{"H"} = $haft;
+		$special->{$dt}->{"reason"} = $h;
 	    }
 
 	    my $a;
@@ -1369,16 +1379,16 @@ sub special_readings
 	    if ($a) {
 		if ($chanukah_day) {
 		    $h .= " - Day $chanukah_day";
-		    $special{$dt}->{"reason"} = $h;
+		    $special->{$dt}->{"reason"} = $h;
 		}
 		my $maftir_reading = sprintf("%s %s - %s",
 					     $a->{'book'},
 					     $a->{'begin'},
 					     $a->{'end'});
-		$special{$dt}->{"M"} = $a;
+		$special->{$dt}->{"M"} = $a;
 	    }
 	    my $a8 = get_special_aliyah($h, "8");
-	    $special{$dt}->{"8"} = $a8 if $a8;
+	    $special->{$dt}->{"8"} = $a8 if $a8;
 	}
     }
 
