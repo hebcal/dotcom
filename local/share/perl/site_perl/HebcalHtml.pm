@@ -115,11 +115,17 @@ sub download_html_bootstrap {
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
     my $vhost = $q->virtual_host();
-    my $webcal_href = $yahrzeit_mode ? $ical_href : "webcal://" . $vhost . $subical_href;
+    my $webcal_href;
+    if ($yahrzeit_mode) {
+    	$webcal_href = $ical1;
+    	$ical_href = $ical1;
+    } else {
+    	$webcal_href = join("", "webcal://", $vhost, $subical_href);
+    }
     my $title_esc = $title ? URI::Escape::uri_escape_utf8("Hebcal $title")
 	: URI::Escape::uri_escape_utf8("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
- 
+
     my $ol_ics_title = "Outlook 2007, 2010, 2013 (Windows)";
     my $ol_csv_title = "Outlook 97, 98, 2000, 2002, 2003 (Windows)";
     my $ical_title = "Mac OS X Calendar (Desktop)";
