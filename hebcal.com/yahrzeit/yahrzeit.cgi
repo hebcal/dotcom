@@ -434,12 +434,7 @@ if (scalar(@events) > 0) {
 	$filename = "anniversary";
     }
 
-    my @names = sort keys %input_names;
-    if (scalar(@names) > 3) {
-	@names = @names[0 .. 2];
-    }
-    @names = map { Hebcal::make_anchor($_) } @names;
-    $filename .= "_" . join("_", @names);
+    $filename .= "_"  . POSIX::strftime("%Y%m%d%H%M%S", gmtime(time()));
 
     remove_empty_parameters($q);
     Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events, undef, 1));
