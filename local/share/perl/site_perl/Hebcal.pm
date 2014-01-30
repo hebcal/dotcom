@@ -455,36 +455,40 @@ sub format_hebcal_event_time {
     sprintf("%d:%02d%s", $hour, $min, $suffix);
 }
 
-sub invoke_hebcal
-{
-    my($cmd,$memo,$want_sephardic,$month_filter,$no_minor_fasts,$no_special_shabbat) = @_;
-    my(@events,$prev);
-    local($_);
-    local(*HEBCAL);
+sub get_invoke_hebcal_cache {
+    my($cmd) = @_;
 
-    my $cmd_smashed;
-    if (index($cmd, " -Y") == -1) {
-	$cmd_smashed = $cmd;
-	$cmd_smashed =~ s/^\S+//;
-	$cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
-	$cmd_smashed =~ s/\s+//g;
-	$cmd_smashed =~ s/\'//g;
-	$cmd_smashed =~ s/\//_/g;
-    } else {
-	$cmd_smashed = "";
-    }
+    # don't bother to cache if we're generating user Yahrzeit dates
+    return undef if index( $cmd, " -Y" ) != -1;
 
-    my $hccache;
+    my $cmd_smashed = $cmd;
+    $cmd_smashed =~ s/^\S+//;
+    $cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
+    $cmd_smashed =~ s/\s+//g;
+    $cmd_smashed =~ s/\'//g;
+    $cmd_smashed =~ s/\//_/g;
+
     my $login = getlogin() || getpwuid($<) || "UNKNOWN";
     my $hccache_dir = "/tmp/${login}-cache/cmd";
 
-    unless (-d $hccache_dir) {
-	system("/bin/mkdir", "-p", $hccache_dir);
+    unless ( -d $hccache_dir ) {
+        system( "/bin/mkdir", "-p", $hccache_dir );
     }
-    my $hccache_file = "$hccache_dir/$cmd_smashed";
 
-    @events = ();
-    if ($cmd_smashed eq "") {
+    return "$hccache_dir/$cmd_smashed";
+}
+
+sub invoke_hebcal
+{
+    my($cmd,$memo,$want_sephardic,$month_filter,$no_minor_fasts,$no_special_shabbat) = @_;
+    local($_);
+    local(*HEBCAL);
+
+    my $hccache;
+    my $hccache_file = get_invoke_hebcal_cache($cmd);
+
+    my @events;
+    if (! defined $hccache_file) {
 	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
     } elsif (open(HEBCAL,"<$hccache_file")) {
 	# will read data from cachefile, not pipe
@@ -493,7 +497,7 @@ sub invoke_hebcal
 	$hccache = open(HCCACHE,">$hccache_file.$$");
     }
 
-    $prev = '';
+    my $prev = '';
     while (<HEBCAL>)
     {
 	print HCCACHE $_ if $hccache;
@@ -1075,7 +1079,7 @@ sub get_torah_book_id {
 	$bid = $book;
     } else {
 	$book = lc($book);
-	if ($book eq 'genesis') { $bid = 1; } 
+	if ($book eq 'genesis') { $bid = 1; }
 	elsif ($book eq 'exodus') { $bid = 2; }
 	elsif ($book eq 'leviticus') { $bid = 3; }
 	elsif ($book eq 'numbers') { $bid = 4; }
@@ -2034,17 +2038,17 @@ END:VTIMEZONE
 
 # Zip-Codes.com TimeZone IDs
 #
-# Code 	Description 
-#  4	Atlantic (GMT -04:00) 
-#  5	Eastern (GMT -05:00) 
-#  6	Central (GMT -06:00) 
-#  7	Mountain (GMT -07:00) 
-#  8	Pacific (GMT -08:00) 
-#  9	Alaska (GMT -09:00) 
-# 10	Hawaii-Aleutian Islands (GMT -10:00) 
-# 11	American Samoa (GMT -11:00) 
-# 13	Marshall Islands (GMT +12:00) 
-# 14	Guam (GMT +10:00) 
+# Code 	Description
+#  4	Atlantic (GMT -04:00)
+#  5	Eastern (GMT -05:00)
+#  6	Central (GMT -06:00)
+#  7	Mountain (GMT -07:00)
+#  8	Pacific (GMT -08:00)
+#  9	Alaska (GMT -09:00)
+# 10	Hawaii-Aleutian Islands (GMT -10:00)
+# 11	American Samoa (GMT -11:00)
+# 13	Marshall Islands (GMT +12:00)
+# 14	Guam (GMT +10:00)
 # 15	Palau (GMT +9:00)
 my %ZIPCODES_TZ_MAP = (
 '0' => 'UTC',
@@ -2189,7 +2193,7 @@ sub process_args_common_geopos {
     my($long_deg,$long_min,$lat_deg,$lat_min) =
 	($q->param("lodeg"),$q->param("lomin"),
 	 $q->param("ladeg"),$q->param("lamin"));
-    
+
     $q->param("lodir","w") unless ($q->param("lodir") eq "e");
     $q->param("ladir","n") unless ($q->param("ladir") eq "s");
 
@@ -2217,15 +2221,15 @@ sub process_args_common_geopos {
 	&& defined $q->param("dst")) {
 	my $tz = $q->param("tz");
 	my $dst = $q->param("dst");
-	if ($tz eq "0" && $dst eq "none") { 
+	if ($tz eq "0" && $dst eq "none") {
 	    $q->param("tzid", "UTC");
-	} elsif ($tz eq "2" && $dst eq "israel") { 
+	} elsif ($tz eq "2" && $dst eq "israel") {
 	    $q->param("tzid", "Asia/Jerusalem");
-	} elsif ($tz eq "0" && $dst eq "eu") { 
+	} elsif ($tz eq "0" && $dst eq "eu") {
 	    $q->param("tzid", "Europe/London");
-	} elsif ($tz eq "1" && $dst eq "eu") { 
+	} elsif ($tz eq "1" && $dst eq "eu") {
 	    $q->param("tzid", "Europe/Paris");
-	} elsif ($tz eq "2" && $dst eq "eu") { 
+	} elsif ($tz eq "2" && $dst eq "eu") {
 	    $q->param("tzid", "Europe/Athens");
 	} elsif ($dst eq "usa" && defined $ZIPCODES_TZ_MAP{int($tz * -1)}) {
 	    $q->param("tzid", $ZIPCODES_TZ_MAP{int($tz * -1)});
@@ -2530,7 +2534,7 @@ sub vcalendar_write_contents
 
 	$title =~ s/,/\\,/g;
 
-	out_html(undef, 
+	out_html(undef,
 	qq{VERSION:2.0$endl},
 	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v4.13//EN$endl},
 	qq{CALSCALE:GREGORIAN$endl},
@@ -2704,7 +2708,7 @@ sub vcalendar_write_contents
 	    out_html(undef, ";TZID=$tzid") if $tzid;
 	    out_html(undef, qq{:$end_date$endl});
         }
-	
+
 	if ($is_icalendar) {
 	    if ($evt->[$EVT_IDX_UNTIMED] == 0 ||
 		$evt->[$EVT_IDX_YOMTOV] == 1) {
@@ -2904,7 +2908,7 @@ sub sendmail_v2
 
     eval("use Email::Valid");
     eval("use Net::SMTP");
-    
+
     if (! Email::Valid->address($return_path))
     {
 	warn "Hebcal.pm: Return-Path $return_path is invalid"
