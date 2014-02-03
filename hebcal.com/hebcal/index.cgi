@@ -1023,22 +1023,34 @@ EOHTML
 	"</label>\n");
     }
 
-    if ($q->param("geo") ne "none") {
-	Hebcal::out_html(undef,
-	"<label>Havdalah minutes past sundown: ",
-	$q->textfield(-name => "m",
-		      -pattern => '\d*',
-		      -style => "width:auto",
-		      -size => 2,
-		      -maxlength => 2,
-		      -default => $Hebcal::havdalah_min),
-	qq{&nbsp;<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="bottom" },
-	qq{title="Use 42 min for three medium-sized stars, },
-	qq{50 min for three small stars, },
-	qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
-	"</label>\n",
-	);
-
+    if ( $q->param("geo") ne "none" ) {
+        Hebcal::out_html(
+            undef,
+            "<label>Candle-lighting minutes before sundown: ",
+            $q->textfield(
+                -name      => "b",
+                -pattern   => '\d*',
+                -style     => "width:auto",
+                -size      => 2,
+                -maxlength => 2,
+                -default   => 18
+            ),
+            "</label>\n",
+            "<label>Havdalah minutes past sundown: ",
+            $q->textfield(
+                -name      => "m",
+                -pattern   => '\d*',
+                -style     => "width:auto",
+                -size      => 2,
+                -maxlength => 2,
+                -default   => $Hebcal::havdalah_min
+            ),
+            qq{&nbsp;<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="bottom" },
+            qq{title="Use 42 min for three medium-sized stars, },
+            qq{50 min for three small stars, },
+            qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
+            "</label>\n",
+        );
     }
 
     Hebcal::out_html(undef, qq{</fieldset>\n});

@@ -2371,8 +2371,12 @@ sub process_args_common {
     return @status unless $status[0];
     my($cmd,$latitude,$longitude,$city_descr) = @status[1..4];
 
-    $cmd .= " -m " . $q->param('m')
-	if (defined $q->param('m') && $q->param('m') =~ /^\d+$/);
+    # candle-lighting minutes before sundown (-b)
+    # and Havdalah mins after sundown (-m)
+    foreach (qw(b m)) {
+        $cmd .= join('', ' -', $_, ' ', $q->param($_))
+            if defined $q->param($_) && $q->param($_) =~ /^\d+$/;
+    }
 
     foreach (qw(a i)) {
 	$cmd .= ' -' . $_
