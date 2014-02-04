@@ -338,13 +338,6 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-m
 function my_footer() {
 ?>
 <div class="row-fluid">
-<p>Looking for your child's Bar/Bat Mitzvah Parashah?
-Enter the Gregorian date of birth below and click <strong>Gregorian to Hebrew</strong>.
-You'll see the Parashat ha-Shavua listed under the Hebrew Date (or the name of a holiday
-if your child was born during a festival). Pick the Saturday on or after that same Hebrew date,
-13 years in the future.</p>
-</div><!-- .row-fluid -->
-<div class="row-fluid">
 <div class="span6">
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
