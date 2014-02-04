@@ -4,12 +4,24 @@ $request_uri = $_SERVER["REQUEST_URI"];
 $ics_question = strpos($request_uri, ".ics%3F");
 if ($ics_question !== false) {
     $request_uri = substr($request_uri, 0, $ics_question)
-	. urldecode(substr($request_uri, $ics_question));
+        . urldecode(substr($request_uri, $ics_question));
+    header("HTTP/1.1 301 Moved");
+    header("Status: 301 Moved");
+    header("Location: $url_prefix$request_uri");
+    echo "Moved.\n";
+    exit();
 }
-$args = strstr($request_uri, "?");
-if ($args !== false) {
+$args_pos = strpos($request_uri, "?");
+if ($args_pos !== false) {
+    $args = substr($request_uri, $args_pos);
     if (strncmp($args, "?subscribe=1%3B", 15) == 0) {
 	$args = str_replace("%3B", ";", $args); // reverse iOS ; => %3B conversion
+        header("HTTP/1.1 301 Moved");
+        header("Status: 301 Moved");
+        $firstpart = substr($request_uri, 0, $args_pos);
+        header("Location: $url_prefix$firstpart$args");
+        echo "Moved.\n";
+        exit();
     }
     $arg2 = str_replace(";", "&", substr($args, 1));
     parse_str($arg2, $param);
@@ -69,19 +81,19 @@ body{padding-top:0}
 <header role="banner">
 
 <div id="inner-header" class="clearfix">
-  
+
 <div class="navbar navbar-fixed-top">
 <div class="navbar-inner">
 <div class="container-fluid nav-container">
   <nav role="navigation">
   <a class="brand" id="logo" title="Jewish Calendar" href="/">Hebcal</a>
-								
+
   <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
   <span class="icon-bar"></span>
   <span class="icon-bar"></span>
   <span class="icon-bar"></span>
   </a>
-								
+
 <div class="nav-collapse">
   <ul id="menu-default" class="nav"><li id="menu-item-441" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Jewish Holidays" href="http://www.hebcal.com/holidays/" >Holidays</a></li>
 <li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Hebrew Date Converter" href="http://www.hebcal.com/converter/" >Date Converter</a></li>
@@ -92,7 +104,7 @@ body{padding-top:0}
 </ul>								</div>
 
 </nav>
-							
+
 <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
 <input name="s" id="s" type="text" class="search-query" placeholder="Search">
 </form>
@@ -106,7 +118,7 @@ body{padding-top:0}
 </header> <!-- end header -->
 
 <div class="container-fluid">
-  
+
 <div id="content" class="clearfix row-fluid">
 
 <div id="main" class="span12 clearfix" role="main">
@@ -120,7 +132,7 @@ body{padding-top:0}
 <p>Please check your request for typing errors and retry.</p>
 
 </div> <!-- end #main -->
-    
+
 </div> <!-- end #content -->
 
 <footer role="contentinfo">
@@ -156,7 +168,7 @@ body{padding-top:0}
 <div class="span3">
 <p><small>Except where otherwise noted, content on
 <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
-is licensed under a 
+is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
 Commons Attribution 3.0 License</a>.</small></p>
 </div><!-- .span3 -->
