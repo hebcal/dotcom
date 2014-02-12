@@ -146,7 +146,7 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
 	list($city,$state,$tzid,$latitude,$longitude,
 	     $lat_deg,$lat_min,$long_deg,$long_min) =
-	    hebcal_get_zipcode_fields($param["zip"]);
+	    hebcal_get_zipcode_fields($info["zip"]);
 	$city_descr = "$city, $state " . $info["zip"];
 	unset($info["city"]);
 	unset($info["geonameid"]);
