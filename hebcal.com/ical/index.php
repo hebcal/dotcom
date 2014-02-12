@@ -57,89 +57,79 @@ Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files.</p>
 
-<p>Click the icons below to download/subscribe in your device or web/desktop 
+<p>Click the buttons below to download/subscribe in your device or web/desktop
 application. Subscribers to these feeds receive perpetual updates.</p>
-
-<p>This holiday schedule is designed for Jews living in the Diaspora
-(anywhere outside of modern Israel).</p>
 </div><!-- .span12 -->
 
 <?php
-function cal_row($path,$title,$subtitle,$suppress_outlook=false) {
+function cal_span6($path,$title,$subtitle,$suppress_outlook=false) {
     $url_noproto = $_SERVER["HTTP_HOST"] . "/ical/" . $path . ".ics";
     $webcal = "webcal://" . $url_noproto;
     $http_esc = urlencode("http://" . $url_noproto);
 ?>
-<div class="row-fluid">
-<div class="span7">
-<h4><?php echo $title ?></h4>
-<?php echo $subtitle ?></div>
-<div class="span1"><a class="download" id="quick-ical-<?php echo $path ?>"
-title="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
-href="<?php echo $webcal ?>"><img
-src="/i/ical-64x64.png" width="64" height="64"
-alt="Subscribe to <?php echo $title ?> in iCal, iPhone, iPad"
-border="0"></a></div>
-<div class="span2"><a class="download" id="quick-gcal-<?php echo $path ?>"
+<div class="span6">
+<h3><?php echo $title ?></h3>
+<p><?php echo $subtitle ?></p>
+<div class="btn-toolbar">
+<a class="btn btn-small download" id="quick-ical-<?php echo $path ?>"
+title="Subscribe to <?php echo $title ?> for iPhone, iPad, Mac OS X Desktop"
+href="<?php echo $webcal ?>"><i class="icon-download-alt"></i> iPhone, iPad, Mac OS X</a>
+<a class="btn btn-small download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
-href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><img
-src="http://www.google.com/calendar/images/ext/gc_button6.gif"
-width="114" height="36" border="0"
-alt="Add <?php echo $title ?> to Google Calendar"></a>
-</div>
-<div class="span2">
-<?php if ($suppress_outlook) { ?>
-<em>(Outlook download not available)</em>
-<?php } else { ?>
-<a class="download" id="quick-csv-<?php echo $path ?>"
+href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i class="icon-download-alt"></i> Google Calendar</a>
+<?php if (!$suppress_outlook) { ?>
+<a class="btn btn-small download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
-href="<?php echo $path ?>.csv" download="<?php echo $path ?>.csv"><img
-src="/i/outlook-149x53.png" width="149" height="53"
-alt="Download <?php echo $title ?> to Microsoft Outlook"
-border="0"></a>
+href="<?php echo $path ?>.csv" download="<?php echo $path ?>.csv"><i class="icon-download-alt"></i> Outlook CSV</a>
 <?php
     } // suppress_outlook
 ?>
-</div>
-</div><!-- .row-fluid -->
-<hr>
+</div><!-- .btn-toolbar -->
+</div><!-- .span6 -->
 <?php
 } // function cal_row()
-?>
-<div class="clearfix">
+function cal_divider() {
+?></div><!-- .row-fluid -->
 <hr>
-<?php
-cal_row("jewish-holidays", "Jewish Holidays",
-	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah");
-cal_row("jewish-holidays-all", "Jewish Holidays (all)",
-	"Also includes Rosh Chodesh, minor fasts, and special Shabbatot");
-cal_row("hdate-en", "Hebrew calendar dates (English transliteration)",
-	"Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week");
-cal_row("hdate-he", "Hebrew calendar dates (Hebrew)",
-	"Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week",
-	true);
-cal_row("torah-readings-diaspora", "Torah Readings",
-	"Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha");
-cal_row("omer", "Days of the Omer",
-	"7 weeks from the second night of Pesach to the day before Shavuot");
-cal_row("daf-yomi", "Daf Yomi",
-	"Daily regimen of learning the Talmud");
-?>
 <div class="row-fluid">
- <div class="span7">
-  <h4>Advanced Settings</h4>
-  Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc.
- </div><!-- .span7 -->
- <div class="span5" style="text-align:center; margin-top:20px">
-   <a class="btn btn-success btn-large" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil icon-white"></i> Customize your calendar &raquo;</a>
- </div><!-- .span5 -->
-</div><!-- .row-fluid -->
-<hr>
-</div><!-- .clearfix -->
-
+<?php
+} // cal_divider
+?>
 <div class="clearfix">
+<div class="row-fluid">
+<?php
+cal_span6("jewish-holidays", "Jewish Holidays",
+	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).");
+?>
+<div class="span6">
+<h3>Advanced Settings</h3>
+Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc.
+<div class="btn-toolbar">
+  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil icon-white"></i> Customize your calendar &raquo;</a>
+</div>
+</div><!-- .span6 -->
+<?php
+cal_divider();
+cal_span6("jewish-holidays-all", "Jewish Holidays (all)",
+	"Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.");
+cal_span6("torah-readings-diaspora", "Torah Readings",
+  "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.");
+cal_divider();
+cal_span6("hdate-en", "Hebrew calendar dates (English)",
+  "Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.");
+cal_span6("hdate-he", "Hebrew calendar dates (Hebrew)",
+	"Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
+	true);
+cal_divider();
+cal_span6("omer", "Days of the Omer",
+	"7 weeks from the second night of Pesach to the day before Shavuot.");
+cal_span6("daf-yomi", "Daf Yomi",
+	"Daily regimen of learning the Talmud.");
+cal_divider();
+?>
 <p class="lead">See our <a href="/home/category/import">help importing into
 apps</a> for step-by-step instructions.</p>
+</div><!-- .row-fluid -->
 </div><!-- .clearfix -->
 
 <?php echo html_footer_bootstrap(); ?>
