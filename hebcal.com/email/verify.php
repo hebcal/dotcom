@@ -80,10 +80,11 @@ if (!isset($info["em"])) {
 if (isset($param["commit"]) && $param["commit"] == "1") {
     global $hebcal_db;
     hebcal_open_mysql_db();
+    $ip = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : $_SERVER["REMOTE_ADDR"];
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='active',
-    email_ip='$_SERVER[REMOTE_ADDR]'
+    email_ip='$ip'
 WHERE email_id = '$info[id]'
 EOD;
 
@@ -97,8 +98,6 @@ EOD;
 	"@hebcal.com";
     $subject = "Your subscription to hebcal is complete";
 
-    $ip = $_SERVER["REMOTE_ADDR"];
-
     $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
     $unsub_url = $url_prefix . "/email/?e=" .
 	urlencode(base64_encode($info["em"]));
@@ -110,7 +109,6 @@ EOD;
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
 		     "X-Sender" => $sender,
-		     "Precedence" => "bulk",
 		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
 		     "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",

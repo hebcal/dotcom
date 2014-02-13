@@ -5,6 +5,9 @@ set_include_path(".:/usr/local/php5/lib/pear");
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 
+$remoteAddr = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ?
+    $_SERVER["HTTP_X_FORWARDED_FOR"] : $_SERVER["REMOTE_ADDR"];
+
 $sender = "webmaster@hebcal.com";
 
 header("Cache-Control: private");
@@ -44,7 +47,7 @@ if (isset($param["v"]) && $param["v"])
 
     // email is OK, write canonicalized version
     $email = $to_addr;
-    
+
     $param["em"] = strtolower($email);
 }
 else
@@ -124,7 +127,7 @@ UPDATE hebcal_shabbat_email
 SET email_status='active',
     $geo_sql,
     email_candles_havdalah='$param[m]',
-    email_ip='$_SERVER[REMOTE_ADDR]',
+    email_ip='$remoteAddr',
     email_optin_announce='0'
 WHERE email_address = '$param[em]'
 EOD;
@@ -193,13 +196,13 @@ function write_staging_info($param, $old_encoded)
 	$now = time();
 	$rand = pack("V", $now);
 
-	if ($_SERVER["REMOTE_ADDR"])
+	if ($remoteAddr)
 	{
-	    list($p1,$p2,$p3,$p4) = explode(".", $_SERVER["REMOTE_ADDR"]);
+	    list($p1,$p2,$p3,$p4) = explode(".", $remoteAddr);
 	    $rand .= pack("CCCC", $p1, $p2, $p3, $p4);
 	}
 
-	// As of PHP 4.2.0, there is no need to seed the random 
+	// As of PHP 4.2.0, there is no need to seed the random
 	// number generator as this is now done automatically.
 	$rand .= pack("V", rand());
 
@@ -232,7 +235,7 @@ REPLACE INTO hebcal_shabbat_email
  $location_name, email_ip)
 VALUES ('$encoded', '$param[em]', 'pending', NOW(),
 	'$param[m]', '0',
-	'$location_value', '$_SERVER[REMOTE_ADDR]')
+	'$location_value', '$remoteAddr')
 EOD;
 
     $result = mysql_query($sql, $hebcal_db)
@@ -313,7 +316,7 @@ or <a href="<?php echo $action ?>?geo=city">closest city</a>)</small>
     if ($is_update) { ?>
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
-<?php } ?> 
+<?php } ?>
 <button type="submit" class="<?php echo $modify_class ?>" name="modify" value="1">
 <?php echo ($is_update) ? "Update Subscription" : "Subscribe"; ?></button>
 <button type="submit" class="<?php echo $unsub_class ?>" name="unsubscribe" value="1">Unsubscribe</button>
@@ -346,8 +349,8 @@ $("#city-typeahead").typeahead({
   console.debug(datum);
   $('#geonameid').val(datum.id);
 }).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which; 
-  if (code == 13) {               
+  var code = e.keyCode || e.which;
+  if (code == 13) {
     e.preventDefault();
     return false;
   }
@@ -485,7 +488,7 @@ function subscribe($param) {
 	    "@hebcal.com";
 	$subject = "Your subscription is updated";
 
-	$ip = $_SERVER["REMOTE_ADDR"];
+	$ip = $remoteAddr;
 
 	$headers = array("From" => "\"$from_name\" <$from_addr>",
 			 "To" => $param["em"],
@@ -550,7 +553,7 @@ EOD
     $from_addr = "no-reply@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
-    $ip = $_SERVER["REMOTE_ADDR"];
+    $ip = $remoteAddr;
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $param["em"],
@@ -583,7 +586,7 @@ apologies and ignore this message.</div>
 <div>Regards,
 <br>hebcal.com</div>
 <div><br></div>
-<div>[$_SERVER[REMOTE_ADDR]]</div>
+<div>[$remoteAddr]</div>
 </div>
 EOD;
 
@@ -630,7 +633,7 @@ function sql_unsub($em) {
     hebcal_open_mysql_db();
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
-SET email_status='unsubscribed',email_ip='$_SERVER[REMOTE_ADDR]'
+SET email_status='unsubscribed',email_ip='$remoteAddr'
 WHERE email_address = '$em'
 EOD;
 
@@ -678,7 +681,7 @@ EOD
 	"@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";
 
-    $ip = $_SERVER["REMOTE_ADDR"];
+    $ip = $remoteAddr;
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $param["em"],
