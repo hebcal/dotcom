@@ -1,8 +1,5 @@
 <?php
 
-//$incpath = get_include_path();
-//set_include_path("$incpath:" . $_SERVER["DOCUMENT_ROOT"] . "/pear");
-
 require "Mail.php";
 require "Mail/RFC822.php";
 require "Net/SMTP.php";
@@ -35,20 +32,14 @@ function smtp_send($return_path, $recipients, $headers, $body)
     if (!($mail = new Mail())) {
 	return ('unable to instantiate Mail object');
     }
-    $hebcal_ini = parse_ini_file("/home/hebcal/local/etc/hebcal-dot-com.ini");
-    $host = "ssl://" . $hebcal_ini["hebcal.email.adhoc.host"];
-    $port = 465;
-    $username = $hebcal_ini["hebcal.email.adhoc.user"];
-    $password = $hebcal_ini["hebcal.email.adhoc.password"];
+
+    $host = "localhost";
+    $port = 25;
     if (!($smtp = new Net_SMTP($host, $port))) {
 	return ('unable to instantiate Net_SMTP object');
     }
     if (!$smtp->connect()) {
 	return ('unable to connect to smtp server');
-    }
-
-    if (!$smtp->auth($username, $password)) {
-	return ('unable to authenticate to smtp server');
     }
 
     list($from, $text_headers) = $mail->prepareHeaders($headers);
