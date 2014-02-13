@@ -1,6 +1,6 @@
 <?php
 // don't visit DreamHost php4 /usr/local/lib/php
-set_include_path(".:/usr/local/php5/lib/pear");
+//set_include_path(".:/usr/local/php5/lib/pear");
 
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
@@ -107,6 +107,7 @@ lighting times and Torah portion by email.</p>
 
 function write_sub_info($param) {
     global $hebcal_db;
+    global $remoteAddr;
     hebcal_open_mysql_db();
 
     if ($param["geo"] == "zip")
@@ -187,6 +188,7 @@ EOD;
 
 function write_staging_info($param, $old_encoded)
 {
+    global $remoteAddr;
     if ($old_encoded)
     {
 	$encoded = $old_encoded;
@@ -488,6 +490,7 @@ function subscribe($param) {
 	    "@hebcal.com";
 	$subject = "Your subscription is updated";
 
+        global $remoteAddr;
 	$ip = $remoteAddr;
 
 	$headers = array("From" => "\"$from_name\" <$from_addr>",
@@ -553,6 +556,7 @@ EOD
     $from_addr = "no-reply@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
+    global $remoteAddr;
     $ip = $remoteAddr;
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
@@ -630,6 +634,7 @@ EOD
 
 function sql_unsub($em) {
     global $hebcal_db;
+    global $remoteAddr;
     hebcal_open_mysql_db();
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
@@ -681,6 +686,7 @@ EOD
 	"@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";
 
+    global $remoteAddr;
     $ip = $remoteAddr;
 
     $headers = array("From" => "\"$from_name\" <$from_addr>",
