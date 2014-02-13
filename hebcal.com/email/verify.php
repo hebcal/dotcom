@@ -1,7 +1,4 @@
 <?php
-// don't visit DreamHost php4 /usr/local/lib/php
-set_include_path(".:/usr/local/php5/lib/pear");
-
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 
@@ -108,7 +105,6 @@ EOD;
 		     "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
-		     "X-Sender" => $sender,
 		     "X-Mailer" => "hebcal web",
 		     "Message-ID" =>
 		     "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",
