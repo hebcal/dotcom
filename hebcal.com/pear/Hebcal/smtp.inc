@@ -1,7 +1,7 @@
 <?php
 
-$incpath = get_include_path();
-set_include_path("$incpath:" . $_SERVER["DOCUMENT_ROOT"] . "/pear");
+//$incpath = get_include_path();
+//set_include_path("$incpath:" . $_SERVER["DOCUMENT_ROOT"] . "/pear");
 
 require "Mail.php";
 require "Mail/RFC822.php";
@@ -50,27 +50,27 @@ function smtp_send($return_path, $recipients, $headers, $body)
     if (!$smtp->auth($username, $password)) {
 	return ('unable to authenticate to smtp server');
     }
-    
+
     list($from, $text_headers) = $mail->prepareHeaders($headers);
     if (!isset($from)) {
 	return ('No from address given');
     }
-        
+
     if (!($smtp->mailFrom($return_path))) {
 	return ('unable to set sender to [' . $return_path . ']');
     }
-        
+
     $recipients = $mail->parseRecipients($recipients);
     foreach($recipients as $recipient) {
-	if (!$smtp->rcptTo($recipient)) { 
+	if (!$smtp->rcptTo($recipient)) {
 	    return ('unable to add recipient [' . $recipient . ']');
 	}
     }
-    
-    if (!$smtp->data($text_headers . "\n" . $body)) {
+
+    if (!$smtp->data($text_headers . "\r\n" . $body)) {
 	return ('unable to send data');
     }
-        
+
     $smtp->disconnect();
     return true;
 }
