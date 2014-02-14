@@ -146,7 +146,8 @@ Use Ashkenazis Hebrew transliterations</label>
 <input type="hidden" name="geo" value="geoname">
 <input type="hidden" name="geonameid" id="geonameid" value="">
 <div class="city-typeahead form-inline" style="margin-bottom:12px">
-<input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
+<input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php
+  echo isset($param["city-typeahead"]) ? htmlentities($param["city-typeahead"]) : "" ?>">
 </div>
 <label>Havdalah minutes past sundown:
 <input type="text" name="m" value="<?php echo $m ?>" size="3" maxlength="3" style="width:auto">
@@ -165,7 +166,7 @@ Use Ashkenazis Hebrew transliterations</label>
 <h2 id="fonts">Customize Fonts</h2>
 
 <p>To change the fonts to match the rest of your site, you can add a
-CSS stylesheet like this to the 
+CSS stylesheet like this to the
 <tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
 page:</p>
 
@@ -186,7 +187,7 @@ ul.hebcal-results li {
   line-height: normal;
 }
 .hebcal-results .candles { color: red; font-size: large }
-.hebcal-results .havdalah { color: green } 
+.hebcal-results .havdalah { color: green }
 .hebcal-results .parashat { color: black; background: #ff9 }
 .hebcal-results .holiday { display: none }
 &lt;/style&gt;
@@ -211,8 +212,8 @@ $("#city-typeahead").typeahead({
   console.debug(datum);
   $('#geonameid').val(datum.id);
 }).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which; 
-  if (code == 13) {               
+  var code = e.keyCode || e.which;
+  if (code == 13) {
     e.preventDefault();
     return false;
   }

@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2013  Michael J. Radwin.
+ * Copyright (c) 2014  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -122,6 +122,14 @@ else
     $jd = jewishtojd($hmnum, $hd, $hy);
     $greg = jdtogregorian($jd);
     list($gm, $gd, $gy) = explode("/", $greg, 3);
+}
+
+// remove leading zeros, if any
+if ($gm[0] == "0") {
+    $gm = $gm[1];
+}
+if ($gd[0] == "0") {
+    $gd = $gd[1];
 }
 
 $dow = jddayofweek($jd, 2);
