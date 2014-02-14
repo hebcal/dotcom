@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2013 Michael J. Radwin.
+# Copyright (c) 2014 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -63,7 +63,7 @@ if ($^V && $^V ge v5.8.1) {
 # constants
 ########################################################################
 
-our $WEBDIR = $ENV{"DOCUMENT_ROOT"} || "/home/hebcal/web/hebcal.com";
+our $WEBDIR = $ENV{"DOCUMENT_ROOT"} || "/var/www";
 our $HEBCAL_BIN = "$WEBDIR/bin/hebcal";
 our $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
 our $CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
@@ -73,8 +73,7 @@ my $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
 
 my $CONFIG_INI;
 my $HOSTNAME;
-my $CACHE_DIR = $ENV{"DOCUMENT_ROOT"} || ($ENV{"HOME"} . "/tmp");
-$CACHE_DIR .= "/cache/";
+my $CACHE_DIR = $WEBDIR . "/cache/";
 
 # boolean options
 our @opts = qw(c o s i a d D F);
