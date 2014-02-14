@@ -7,6 +7,6 @@ export PATH
 
 if [ -d $CACHEDIR ]; then
     mv -f $CACHEDIR $CACHEDIR.$$
-    find $HCACHEDIR.$$ -type f -delete
+    find $CACHEDIR.$$ -type f -delete
     rm -rf $CACHEDIR.$$
 fi
