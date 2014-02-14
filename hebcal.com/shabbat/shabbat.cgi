@@ -4,7 +4,7 @@
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times
 # and Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -154,7 +154,7 @@ sub process_args
 	my @ev2 = Hebcal::invoke_hebcal("$cmd 12 $fri_year", $loc, 0);
 	@events = (@ev2, @events);
     }
-    
+
     (\@events,$city_descr,$cmd);
 }
 
@@ -177,7 +177,7 @@ sub display_wml
     my($items) = @_;
 
     my $title = 'Hebcal Shabbat Times';
-	
+
     print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
 
     Hebcal::out_html($cfg,
@@ -295,20 +295,20 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 
     foreach my $item (@{$items}) {
 	my $subj = $item->{'subj'};
-	if (defined $item->{'time'}) { 
+	if (defined $item->{'time'}) {
 	    $subj .= ": " . $item->{'time'};
 	}
 
 	my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
 
-	Hebcal::out_html($cfg, 
+	Hebcal::out_html($cfg,
 qq{<item>
 <title>$subj</title>
 <link>$link</link>
 <guid isPermaLink="false">$guid</guid>
 <description>$item->{'date'}</description>
 <category>$item->{'class'}</category>
-<pubDate>$item->{'pubDate'}</pubDate> 
+<pubDate>$item->{'pubDate'}</pubDate>
 });
 
 	if ($item->{'class'} eq "candles" && defined $latitude) {
@@ -364,7 +364,7 @@ sub display_html_common
 	{
 	    Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$link">$item->{'subj'}</a>});
 	}
-    
+
 	Hebcal::out_html($cfg,qq{</li>\n});
     }
 
@@ -403,7 +403,7 @@ ul.hebcal-results{list-style-type:none}
 	$loc_class = $q->param('geonameid');
     } else {
 	$loc_class = lc($q->param('city'));
-	$loc_class =~ s/\s+/-/g; 
+	$loc_class =~ s/\s+/-/g;
     }
 
     Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
@@ -474,7 +474,7 @@ sub display_html
     display_html_common($items);
 
     Hebcal::out_html(undef, "<hr>\n");
-    
+
     more_from_hebcal();
 
     form($cfg,0,'','');
@@ -535,7 +535,7 @@ EOHTML
     $url = "/link/?";
     $url .= get_link_args($q, 1);
 
-    Hebcal::out_html($cfg, qq{<a class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
+    Hebcal::out_html($cfg, qq{<a rel="nofollow" class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
 		     qq{href="}, url_html($url), qq{"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});
 
     Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
