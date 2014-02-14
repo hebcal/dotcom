@@ -4,6 +4,7 @@ Disallow: /hebcal/index.cgi/*.ics
 Disallow: /hebcal/index.cgi/*.vcs
 Disallow: /hebcal/index.cgi/*.csv
 Disallow: /hebcal/index.cgi/*.dba
+Disallow: /link/
 
 User-Agent: OmniExplorer_Bot
 Disallow: /hebcal/
