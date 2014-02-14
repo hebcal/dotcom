@@ -1,0 +1,4 @@
+<FilesMatch "\.(js|json|xml)$">
+  Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
