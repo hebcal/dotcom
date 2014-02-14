@@ -1,7 +1,15 @@
-DefaultType text/html
+ForceType text/html
 <IfModule mod_deflate.c>
 SetOutputFilter DEFLATE
 </IfModule>
+
+<Files "*.csv">
+ ForceType text/csv
+</Files>
+
+<Files "*.xml">
+ ForceType text/xml
+</Files>
 
 Redirect permanent /sedrot/achreimot.html http://www.hebcal.com/sedrot/achreimot
 Redirect permanent /sedrot/achreimotkedoshim.html http://www.hebcal.com/sedrot/achreimotkedoshim
