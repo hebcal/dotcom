@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -96,15 +96,17 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     my $outfile = "$Hebcal::WEBDIR/etc/hdate-en.js";
     DEBUG("Creating $outfile");
-    open(OUT,">$outfile") || LOGDIE "$outfile: $!";
+    open(OUT,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print OUT "document.write(\"$hdate\");\n";
     close(OUT);
+    rename("$outfile.$$", $outfile) || LOGDIE "$outfile: $!\n";
 
     $outfile = "$Hebcal::WEBDIR/etc/hdate-he.js";
     DEBUG("Creating $outfile");
-    open(OUT,">$outfile") || LOGDIE "$outfile: $!";
+    open(OUT,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print OUT "document.write(\"$hebrew\");\n";
     close(OUT);
+    rename("$outfile.$$", $outfile) || LOGDIE "$outfile: $!\n";
 
     my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
@@ -121,23 +123,25 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $outfile = "$Hebcal::WEBDIR/etc/hdate-en.xml";
     DEBUG("Creating $outfile");
-    open(RSS,">$outfile") || LOGDIE "$outfile: $!";
+    open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print RSS rss_hebdate("en-us",
 	 $hdate,
 	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_source=rss&amp;utm_campaign=rss-hdate-en",
 	 $hdate,
 	 $pubDate);
     close(RSS);
+    rename("$outfile.$$", $outfile) || LOGDIE "$outfile: $!\n";
 
     $outfile = "$Hebcal::WEBDIR/etc/hdate-he.xml";
     DEBUG("Creating $outfile");
-    open(RSS,">$outfile") || LOGDIE "$outfile: $!";
+    open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print RSS rss_hebdate("he",
 	 $hebrew,
 	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;utm_source=rss&amp;utm_campaign=rss-hdate-he",
 	 $hebrew,
 	 $pubDate);
     close(RSS);
+    rename("$outfile.$$", $outfile) || LOGDIE "$outfile: $!\n";
 }
 exit(0);
 
@@ -198,7 +202,7 @@ sub rss_parasha_inner {
 				  $syear);
     my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
     DEBUG("Creating $outfile");
-    open(RSS,">$outfile") || LOGDIE "$outfile: $!";
+    open(RSS,">$outfile.$$") || LOGDIE "$outfile: $!";
     my $link = "http://$HOSTNAME$href?utm_source=rss&amp;utm_campaign=rss-parasha";
     my $channel_link = "http://$HOSTNAME/sedrot/";
     my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
@@ -225,6 +229,7 @@ sub rss_parasha_inner {
 </rss>
 };
     close(RSS);
+    rename("$outfile.$$", $outfile) || LOGDIE "$outfile: $!\n";
     1;
 }
 
