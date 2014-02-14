@@ -12,6 +12,9 @@ HEBCAL_BIN=/home/hebcal/local/bin
 0 0 1 * * www-data mv -f /tmp/mradwin-cache /tmp/mradwin-cache.$$ && rm -rf /tmp/mradwin-cache.$$
 0 0 1 * * www-data mv -f /tmp/www-data-cache /tmp/www-data-cache.$$ && rm -rf /tmp/www-data-cache.$$
 
+# every hour, prune cached .ics files that are more than 48 hours old
+10 * * * * www-data nice find /var/www/export -type f -name '*.ics' -mtime +1 -delete
+
 # update static page at the beginning of each month
 0 0 1 * * mradwin curl -o - 'http://www.hebcal.com/hebcal/?bogus=bogus' | perl -pi -e 's/\?bogus=bogus//g' > $HEBCAL_WEB/hebcal/default.new && mv -f $HEBCAL_WEB/hebcal/default.new $HEBCAL_WEB/hebcal/default.html
 
