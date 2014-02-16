@@ -115,6 +115,7 @@ sub download_html_bootstrap {
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
     my $vhost = "download.hebcal.com";
+    $ical_href = join("", "http://", $vhost, $ical_href);
     my $webcal_href;
     if ($yahrzeit_mode) {
     	$webcal_href = $ical1;
