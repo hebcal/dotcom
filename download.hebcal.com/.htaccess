@@ -1,0 +1,2 @@
+RedirectMatch ^/$ http://www.hebcal.com/
+RedirectMatch ^/ical/$ http://www.hebcal.com/ical/
