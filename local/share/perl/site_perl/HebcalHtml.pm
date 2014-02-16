@@ -114,7 +114,7 @@ sub download_html_bootstrap {
     my $ical_href = Hebcal::get_vcalendar_cache_fn($args) . "?" . $args;
     my $subical_href = $ical_href;
     $subical_href =~ s/\?dl=1/\?subscribe=1/g;
-    my $vhost = $q->virtual_host();
+    my $vhost = "download.hebcal.com";
     my $webcal_href;
     if ($yahrzeit_mode) {
     	$webcal_href = $ical1;

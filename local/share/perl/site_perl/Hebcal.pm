@@ -1809,7 +1809,7 @@ sub download_href
 	$script_name =~ s,/\w+\.cgi$,/,;
     }
 
-    my $href = $script_name;
+    my $href = "http://download.hebcal.com" . $script_name;
     $href .= $cgi if $cgi;
     $href .= "/$filename.$ext?dl=1";
     foreach my $key ($q->param()) {

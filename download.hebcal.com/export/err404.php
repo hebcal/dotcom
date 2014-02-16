@@ -30,17 +30,17 @@ if ($args_pos !== false) {
 	header("Status: 200 OK");
 	header("Content-Type: text/calendar; charset=UTF-8");
 	if ($param["v"] == "1") {
-	    $localurl = "http://localhost:8080/hebcal/index.cgi/export.ics" . $args;
+	    $localurl = "$url_prefix/hebcal/index.cgi/export.ics" . $args;
 	} elseif ($param["v"] == "yahrzeit") {
-	    $localurl = "http://localhost:8080/yahrzeit/yahrzeit.cgi/export.ics" . $args;
+	    $localurl = "$url_prefix/yahrzeit/yahrzeit.cgi/export.ics" . $args;
 	}
 	$ch = curl_init($localurl);
-	$user_agent = "hebcal-export/20130721";
+	$user_agent = "hebcal-export/20140216";
 	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
 	$ref_url = $url_prefix . $request_uri;
 	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER,
-		    array("X-Forwarded-For: " . $_SERVER["HTTP_X_FORWARDED_FOR"]));
+		    array("X-Forwarded-For: " . $_SERVER["REMOTE_ADDR"]));
 	curl_exec($ch);
 	curl_close($ch);
 	exit();
