@@ -961,7 +961,7 @@ sub get_holiday_anchor($$$)
 	    $anchor = lc($anchor);
 	    $anchor =~ s/[^\w]//g;
 
-	    $href = 'http://' . $q->virtual_host()
+	    $href = 'http://www.hebcal.com'
 		if ($q);
 	    $href .= "/sedrot/$anchor";
 
@@ -982,7 +982,7 @@ sub get_holiday_anchor($$$)
 	    $anchor = lc($anchor);
 	    $anchor =~ s/[^\w]//g;
 
-	    $href = 'http://' . $q->virtual_host()
+	    $href = 'http://www.hebcal.com'
 		if ($q);
 	    $href .= "/sedrot/$anchor";
 
@@ -1051,7 +1051,7 @@ sub get_holiday_anchor($$$)
 	    $subj_copy =~ s/: 8th Day$//;
 	    $subj_copy =~ s/^Erev //;
 
-	    $href = 'http://' . $q->virtual_host()
+	    $href = 'http://www.hebcal.com'
 		if ($q);
 	    $href .= "/holidays/" . make_anchor($subj_copy);
 	}
