@@ -63,9 +63,10 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 
 <?php
 function cal_span6($path,$title,$subtitle,$suppress_outlook=false) {
-    $url_noproto = $_SERVER["HTTP_HOST"] . "/ical/" . $path . ".ics";
+    $url_noproto = "download.hebcal.com/ical/" . $path . ".ics";
     $webcal = "webcal://" . $url_noproto;
     $http_esc = urlencode("http://" . $url_noproto);
+    $csv_url = "http://download.hebcal.com/ical/" . $path . ".csv";
 ?>
 <div class="span6">
 <h3><?php echo $title ?></h3>
@@ -80,7 +81,7 @@ href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i clas
 <?php if (!$suppress_outlook) { ?>
 <a class="btn btn-small download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
-href="<?php echo $path ?>.csv" download="<?php echo $path ?>.csv"><i class="icon-download-alt"></i> Outlook CSV</a>
+href="<?php echo $csv_url ?>" download="<?php echo $path ?>.csv"><i class="icon-download-alt"></i> Outlook CSV</a>
 <?php
     } // suppress_outlook
 ?>
