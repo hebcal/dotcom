@@ -112,6 +112,7 @@ if ($type == "g2h")
 {
     $jd = gregoriantojd($gm, $gd, $gy);
     $hebdate = jdtojewish($jd);
+    $debug = $hebdate;
     list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
     $hm = $hnum_to_str[$hmnum];
 //    $hmstr = jdmonthname($jd,4);
@@ -121,6 +122,7 @@ else
     $hmnum = $hmstr_to_num[$hm];
     $jd = jewishtojd($hmnum, $hd, $hy);
     $greg = jdtogregorian($jd);
+    $debug = $greg;
     list($gm, $gd, $gy) = explode("/", $greg, 3);
 }
 
@@ -134,7 +136,7 @@ if ($gd[0] == "0") {
 
 $dow = jddayofweek($jd, 2);
 
-if ($hm == "Adar1" && !is_leap_year($hy)) {
+if (strncmp("Adar", $hm, 4) == 0 && !is_leap_year($hy)) {
     $month_name = "Adar";
 } else {
     $month_name = $hmstr_to_hebcal[$hm];
@@ -223,6 +225,7 @@ href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a
 }
 ?>
 <div id="converter-results">
+<!-- <?php echo $debug ?> -->
 <ul class="unstyled">
 <li class="big-list"><span class="nobr"><?php echo $first ?></span> = <strong class="nobr"><?php echo $second ?></strong></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><?php echo $hebrew ?></li>

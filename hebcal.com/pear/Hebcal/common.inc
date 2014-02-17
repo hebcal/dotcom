@@ -264,7 +264,7 @@ function is_leap_year($hyear) {
 
 function format_hebrew_date($hd, $hm, $hy) {
     global $hmstr_to_hebcal;
-    if ($hm == "Adar1" && !is_leap_year($hy)) {
+    if (strncmp("Adar", $hm, 4) == 0 && !is_leap_year($hy)) {
 	$month_name = "Adar";
     } else {
 	$month_name = $hmstr_to_hebcal[$hm];
@@ -317,7 +317,7 @@ LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
 WHERE g.geonameid = '$geonameid'
 EOD;
 
-    $query = $db->query($sql); 
+    $query = $db->query($sql);
     if (!$query) {
 	error_log("Loading geonameid $geonameid from $file: " . $db->lastErrorMsg());
 	die();
@@ -351,7 +351,7 @@ FROM ZIPCodes_Primary
 WHERE ZipCode = '$zip'
 EOD;
 
-    $query = $db->query($sql); 
+    $query = $db->query($sql);
     if (!$query) {
 	error_log("Loading zip $zip from $file: " . $db->lastErrorMsg());
 	die();
