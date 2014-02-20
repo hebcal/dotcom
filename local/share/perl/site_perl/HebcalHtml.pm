@@ -221,7 +221,7 @@ EOHTML
     } else {
 	my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", $ics_title, 0);
 	$gcal = <<EOHTML;
-<p><a title="Add to Google Calendar"
+<p><a title="Add $ics_title to Google Calendar"
 class="download" id="dl-gcal-sub" rel="nofollow"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
