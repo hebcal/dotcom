@@ -346,7 +346,7 @@ sub download_html_modal {
 <div id="hcdl-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-  <h3 id="hcdl-modalLabel">Download $title</h3>
+  <h3 id="hcdl-modalLabel">Download $title Calendar</h3>
  </div>
  <div class="modal-body">
 $html
