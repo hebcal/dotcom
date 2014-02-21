@@ -69,7 +69,3 @@
 .city-typeahead .tt-suggestion {
   padding: 8px 20px;
 }
-
-.city-typeahead .tt-suggestion + .tt-suggestion {
-  border-top: 1px solid #ccc;
-}
