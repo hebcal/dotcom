@@ -2,7 +2,7 @@
 /***********************************************************************
  * Hebcal homepage
  *
- * Copyright (c) 2013  Michael J. Radwin.
+ * Copyright (c) 2014  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -157,7 +157,7 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
-<link rel="stylesheet" type="text/css" href="/i/typeahead.css">
+<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style type="text/css">
