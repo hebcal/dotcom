@@ -217,11 +217,9 @@ $("#city-typeahead").typeahead({
   if (typeof datum.geo === "string" && datum.geo == "zip") {
     $('#geo').val('zip');
     $('#zip').val(datum.id);
-    $('#geonameid').remove();
   } else {
     $('#geo').val('geoname');
     $('#geonameid').val(datum.id);
-    $('#zip').remove();
   }
 }).bind("keyup keypress", function(e) {
   var code = e.keyCode || e.which;
