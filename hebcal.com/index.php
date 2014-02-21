@@ -74,7 +74,7 @@ if (isset($sedra) && isset($sedra[$iso])) {
 
     foreach ($events as $subj) {
 	if (strncmp($subj, "Erev ", 5) == 0) {
-	    $subj = substr($subj, 5); 
+	    $subj = substr($subj, 5);
 	}
 
 	if (strncmp($subj, "Rosh Chodesh ", 13) == 0) {
@@ -296,8 +296,9 @@ Hebrew Birthdays and Anniversaries.</p>
 Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
 <form action="/shabbat/" method="get" class="form form-inline" id="shabbat-form">
-<input type="hidden" name="geo" value="geoname">
+<input type="hidden" name="geo" id="geo" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="">
+<input type="hidden" name="zip" id="zip" value="">
 <div class="city-typeahead" style="margin-bottom:12px">
 <input type="text" id="city-typeahead" class="form-control" placeholder="Search for city">
 </div>
@@ -318,22 +319,33 @@ Torah Readings</h2>
 
 <?php
 $xtra_html = <<<EOD
-<script src="/i/hogan.min.js"></script>
 <script src="/i/typeahead-0.9.3.min.js"></script>
 <script type="text/javascript">
 $('#city-typeahead').typeahead({
   name: 'hebcal-city',
   remote: "/complete.php?q=%QUERY",
-  template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
-  limit: 6,
-  engine: Hogan
+  template: function(ctx) {
+    if (typeof ctx.geo === "string" && ctx.geo == "zip") {
+      return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
+    } else {
+      return '<p><strong>' + ctx.asciiname + '</strong> - <small>' + ctx.admin1 + ', ' + ctx.country + '</small></p>';
+    }
+  },
+  limit: 8
 }).on('typeahead:selected', function (obj, datum, name) {
-  console.debug(datum);
-  $('#geonameid').val(datum.id);
+  if (typeof datum.geo === "string" && datum.geo == "zip") {
+    $('#geo').val('zip');
+    $('#zip').val(datum.id);
+    $('#geonameid').remove();
+  } else {
+    $('#geo').val('geoname');
+    $('#geonameid').val(datum.id);
+    $('#zip').remove();
+  }
   $('#shabbat-form').submit();
 }).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which; 
-  if (code == 13) {               
+  var code = e.keyCode || e.which;
+  if (code == 13) {
     e.preventDefault();
     return false;
   }
