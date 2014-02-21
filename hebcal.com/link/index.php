@@ -63,7 +63,7 @@ ul.hebcal-results { list-style-type: none }
 <script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushXml.js"></script>
 <script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushCss.js"></script>
 <link type="text/css" rel="stylesheet" href="/i/sh-3.0.83/styles/shCoreDefault.css">
-<link rel="stylesheet" type="text/css" href="/i/typeahead.css">
+<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 EOD;
 
@@ -143,7 +143,8 @@ Use Ashkenazis Hebrew transliterations</label>
     <div class="tab-pane<?php if ($geo == "geoname") { echo ' active';} ?>" id="tab-search">
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
 <fieldset>
-<input type="hidden" name="geo" value="geoname">
+<input type="hidden" name="geo" id="geo" value="geoname">
+<input type="hidden" name="zip" id="zip" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="">
 <div class="city-typeahead form-inline" style="margin-bottom:12px">
 <input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php
@@ -199,18 +200,29 @@ very powerful and flexible.</p>
 
 <?php
 $xtra_html = <<<EOD
-<script src="/i/hogan.min.js"></script>
 <script src="/i/typeahead-0.9.3.min.js"></script>
 <script type="text/javascript">
 $("#city-typeahead").typeahead({
     name: "hebcal-city",
     remote: "/complete.php?q=%QUERY",
-    template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
-    limit: 7,
-    engine: Hogan
+    limit: 5,
+    template: function(ctx) {
+      if (typeof ctx.geo === "string" && ctx.geo == "zip") {
+        return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
+      } else {
+        return '<p><strong>' + ctx.asciiname + '</strong> - <small>' + ctx.admin1 + ', ' + ctx.country + '</small></p>';
+      }
+    }
 }).on('typeahead:selected', function (obj, datum, name) {
-  console.debug(datum);
-  $('#geonameid').val(datum.id);
+  if (typeof datum.geo === "string" && datum.geo == "zip") {
+    $('#geo').val('zip');
+    $('#zip').val(datum.id);
+    $('#geonameid').remove();
+  } else {
+    $('#geo').val('geoname');
+    $('#geonameid').val(datum.id);
+    $('#zip').remove();
+  }
 }).bind("keyup keypress", function(e) {
   var code = e.keyCode || e.which;
   if (code == 13) {

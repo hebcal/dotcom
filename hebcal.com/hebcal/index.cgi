@@ -779,7 +779,7 @@ EOHTML
 ;
 
     if (defined $q->param("geo") && $q->param("geo") eq "pos") {
-	$xtra_head .= qq{<link rel="stylesheet" type="text/css" href="/i/typeahead.css">\n};
+	$xtra_head .= qq{<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">\n};
     }
 
     Hebcal::out_html(undef,
@@ -1099,15 +1099,19 @@ JSCRIPT_END
 # don't interpolate this next part
     if ($q->param("geo") eq "pos") {
 	$xtra_html .=<<'JSCRIPT_END';
-<script src="/i/hogan.min.js"></script>
 <script src="/i/typeahead-0.9.3.min.js"></script>
 <script type="text/javascript">
 $("#city-typeahead").typeahead({
     name: "hebcal-city",
     remote: "/complete.php?q=%QUERY",
-    template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
     limit: 7,
-    engine: Hogan
+    template: function(ctx) {
+        if (typeof ctx.geo === "string" && ctx.geo == "zip") {
+          return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
+        } else {
+          return '<p><strong>' + ctx.asciiname + '</strong> - <small>' + ctx.admin1 + ', ' + ctx.country + '</small></p>';
+        }
+    }
 }).on('typeahead:selected', function (obj, datum, name) {
   $('#tzid').val(datum.timezone);
   var ladir = datum.latitude < 0 ? 's' : 'n';
