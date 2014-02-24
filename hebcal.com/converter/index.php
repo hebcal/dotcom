@@ -60,8 +60,10 @@ if (isset($_GET["h2g"]) && $_GET["h2g"] &&
 	form(true, "Hebrew day out of valid range 1-30", "");
     }
 
-    if ($hm == "Adar2" && !is_leap_year($hy)) {
-	$hm = "Adar1";
+    if (strncmp("Adar", $hm, 4) == 0 && !is_leap_year($hy)) {
+        $hm = "Adar";
+    } elseif ($hm == "Adar" && is_leap_year($hy)) {
+        $hm = "Adar1";
     }
 }
 else

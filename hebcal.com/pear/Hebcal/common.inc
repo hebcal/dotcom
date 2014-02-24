@@ -222,6 +222,7 @@ $hmstr_to_num = array(
     );
 
 $hnum_to_str = array_flip($hmstr_to_num);
+$hmstr_to_num["Adar"] = 6;
 
 $hmstr_to_hebcal = array(
     "Nisan" => "Nisan",
@@ -235,6 +236,7 @@ $hmstr_to_hebcal = array(
     "Kislev" => "Kislev",
     "Tevet" => "Tevet",
     "Shvat" => "Sh'vat",
+    "Adar" => "Adar",
     "Adar1" => "Adar I",
     "Adar2" => "Adar II",
     );
