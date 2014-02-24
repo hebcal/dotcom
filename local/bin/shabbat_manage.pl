@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -55,7 +55,7 @@ my $DBPASS = $Config->{_}->{"hebcal.mysql.password"};
 my $DBNAME = $Config->{_}->{"hebcal.mysql.dbname"};
 
 my $site = "hebcal.com";
-my $DSN = "DBI:mysql:database=$dbname;host=$dbhost";
+my $DSN = "DBI:mysql:database=$DBNAME;host=$DBHOST";
 
 my $err_notsub =
 "The email address used to send your message is not subscribed
@@ -106,7 +106,7 @@ unless (defined $to) {
 }
 
 if ($to =~ /shabbat-subscribe/i) {
-    shabbat_log(0, "subscribe_useweb"); 
+    shabbat_log(0, "subscribe_useweb");
     error_email($err_useweb);
     exit(0);
 } elsif ($to =~ /shabbat-unsubscribe\@/i) {

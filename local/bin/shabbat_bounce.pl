@@ -4,7 +4,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -56,7 +56,7 @@ my $DBPASS = $Config->{_}->{"hebcal.mysql.password"};
 my $DBNAME = $Config->{_}->{"hebcal.mysql.dbname"};
 
 my $site = "hebcal.com";
-my $DSN = "DBI:mysql:database=$dbname;host=$dbhost";
+my $DSN = "DBI:mysql:database=$DBNAME;host=$DBHOST";
 
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
@@ -72,7 +72,7 @@ if (!$email_address) {
 }
 
 my $bounce = eval { Mail::DeliveryStatus::BounceParser->new($message->as_string()) };
-if ($@) { 
+if ($@) {
     # couldn't parse.  ignore this message.
     warn "bounceparser unable to parse message, bailing";
     exit(0);
@@ -91,6 +91,12 @@ if ($@) {
 $email_address =~ s/\'/\\\'/g;
 $bounce_reason =~ s/\'/\\\'/g;
 $bounce_reason =~ s/\s+/ /g;
+
+if (open(LOG, ">>/home/hebcal/local/var/log/bounce.log")) {
+    my $t = time();
+    print LOG "from=$email_address time=$t std_reason=$std_reason\n";
+    close(LOG);
+}
 
 my $dbh = DBI->connect($DSN, $DBUSER, $DBPASS);
 
