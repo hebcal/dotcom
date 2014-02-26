@@ -59,12 +59,6 @@ if (isset($_GET["h2g"]) && $_GET["h2g"] &&
     } elseif ($hd > 30 || $hd < 1) {
 	form(true, "Hebrew day out of valid range 1-30", "");
     }
-
-    if (strncmp("Adar", $hm, 4) == 0 && !is_leap_year($hy)) {
-        $hm = "Adar";
-    } elseif ($hm == "Adar" && is_leap_year($hy)) {
-        $hm = "Adar1";
-    }
 }
 else
 {
@@ -139,10 +133,12 @@ if ($gd[0] == "0") {
 $dow = jddayofweek($jd, 2);
 
 if (strncmp("Adar", $hm, 4) == 0 && !is_leap_year($hy)) {
-    $month_name = "Adar";
-} else {
-    $month_name = $hmstr_to_hebcal[$hm];
+    $hm = "Adar";
+} elseif ($hm == "Adar" && is_leap_year($hy)) {
+    $hm = "Adar1";
 }
+
+$month_name = $hmstr_to_hebcal[$hm];
 $hebrew = build_hebrew_date($month_name, $hd, $hy);
 
 if ($type == "g2h")
