@@ -2166,6 +2166,7 @@ WHERE g.geonameid = ?
 	$cconfig->{"city"} = $name;
 	$cconfig->{"tzid"} = $tzid;
 	$cconfig->{"geo"} = "geoname";
+        $cconfig->{"geonameid"} = $q->param('geonameid');
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
@@ -2739,6 +2740,8 @@ sub vcalendar_write_contents
 		    $loc =~ s/[^\w]/-/g;
 		    $loc =~ s/-+/-/g;
 		    $loc =~ s/-$//g;
+                } elsif (defined $cconfig->{"geonameid"}) {
+                    $loc = "g" . $cconfig->{"geonameid"};
 		} elsif (defined $cconfig->{"long_deg"}
 			 && defined $cconfig->{"long_min"}
 			 && defined $cconfig->{"lat_deg"}
