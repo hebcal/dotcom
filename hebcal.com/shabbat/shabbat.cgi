@@ -425,7 +425,7 @@ ul.hebcal-results{list-style-type:none}
     Hebcal::out_html($cfg, qq{<div class="copyright">
 <small>Powered by <a target="$tgt" href="$url">Hebcal $shabbat Times</a></small>
 </div><!-- .copyright -->
-</div><!-- #hebcal-$loc_class -->
+</div><!-- .hebcal-$loc_class -->
 </div><!-- #hebcal -->
 });
     }
