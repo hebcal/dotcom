@@ -2735,13 +2735,13 @@ sub vcalendar_write_contents
 		my $loc;
 		if (defined $cconfig->{"zip"}) {
 		    $loc = $cconfig->{"zip"};
+                } elsif (defined $cconfig->{"geonameid"}) {
+                    $loc = "g" . $cconfig->{"geonameid"};
 		} elsif (defined $cconfig->{"city"}) {
 		    $loc = lc($cconfig->{"city"});
 		    $loc =~ s/[^\w]/-/g;
 		    $loc =~ s/-+/-/g;
 		    $loc =~ s/-$//g;
-                } elsif (defined $cconfig->{"geonameid"}) {
-                    $loc = "g" . $cconfig->{"geonameid"};
 		} elsif (defined $cconfig->{"long_deg"}
 			 && defined $cconfig->{"long_min"}
 			 && defined $cconfig->{"lat_deg"}
