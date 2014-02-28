@@ -16,6 +16,10 @@ sub vcl_recv {
     unset req.http.cookie;
   }
 
+  if (req.url ~ "^/shabbat/.*cfg=") {
+    unset req.http.cookie;
+  }
+
     if (req.http.Accept-Encoding) {
         if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg)$") {
             # No point in compressing these
