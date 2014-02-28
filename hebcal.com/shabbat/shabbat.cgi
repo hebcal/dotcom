@@ -81,7 +81,8 @@ my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
 # only set expiry if there are CGI arguments
 if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/) {
-    print "Expires: ", Hebcal::http_date($saturday), "\015\012";
+    my $delta = $saturday - time();
+    print "Cache-Control: max-age=$delta\015\012";
 } elsif (defined $ENV{'HTTP_COOKIE'}) {
     # private cache only if we're tailoring results by cookie
     print "Cache-Control: private\015\012";
