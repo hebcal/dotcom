@@ -79,6 +79,14 @@ my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
+# only set expiry if there are CGI arguments
+if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/) {
+    print "Expires: ", Hebcal::http_date($saturday), "\015\012";
+} elsif (defined $ENV{'HTTP_COOKIE'}) {
+    # private cache only if we're tailoring results by cookie
+    print "Cache-Control: private\015\012";
+}
+
 my($latitude,$longitude);
 my %cconfig;
 my $content_type = "text/html";
@@ -96,8 +104,6 @@ if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
 my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,$cconfig{"tzid"});
 
-my $cache = Hebcal::cache_begin($q,0);
-
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
 		     $cfg eq "widget" || $cfg eq "json"))
 {
@@ -112,7 +118,6 @@ else
     display_html($items);
 }
 
-Hebcal::cache_end() if $cache;
 exit(0);
 
 sub process_args
@@ -642,7 +647,6 @@ sub form($$$$)
 	Hebcal::out_html($cfg,qq{<p>$message</p>\n},
 		  qq{<do type="accept" label="Back">\n},
 		  qq{<prev/>\n</do>\n</card>\n</wml>\n});
-	Hebcal::cache_end() if $cache;
 	exit(0);
     }
 
@@ -759,7 +763,6 @@ EOHTML
     Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').click(function(e){e.preventDefault()}).tooltip()</script>\n");
     Hebcal::out_html($cfg, "</body></html>\n");
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
-    Hebcal::cache_end() if $cache;
     exit(0);
 }
 
