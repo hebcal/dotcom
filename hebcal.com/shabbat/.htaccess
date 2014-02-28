@@ -7,34 +7,3 @@ Redirect /shabbat/shabbat.pl http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.html http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.pl http://www.hebcal.com/shabbat/
 Redirect /shabbat/index.cgi http://www.hebcal.com/shabbat/
-
-RewriteEngine On
-RewriteBase /shabbat/
-
-RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{QUERY_STRING} !^$
-RewriteCond %{REQUEST_URI} ^/shabbat/$
-RewriteCond %{HTTP:Cache-Control} !max-age=0
-RewriteCond "%{DOCUMENT_ROOT}/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.html" -f
-RewriteRule ^ "/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.html" [L]
-
-RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{QUERY_STRING} !^$
-RewriteCond %{HTTP:Cache-Control} !max-age=0
-RewriteCond %{REQUEST_URI} ^/shabbat/$
-RewriteCond "%{DOCUMENT_ROOT}/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.js" -f
-RewriteRule ^ "/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.js" [L]
-
-RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{QUERY_STRING} !^$
-RewriteCond %{HTTP:Cache-Control} !max-age=0
-RewriteCond %{REQUEST_URI} ^/shabbat/$
-RewriteCond "%{DOCUMENT_ROOT}/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.xml" -f
-RewriteRule ^ "/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.xml" [L]
-
-RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{QUERY_STRING} !^$
-RewriteCond %{HTTP:Cache-Control} !max-age=0
-RewriteCond %{REQUEST_URI} ^/shabbat/$
-RewriteCond "%{DOCUMENT_ROOT}/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.json" -f
-RewriteRule ^ "/cache/shabbat/shabbat_cgi/%{QUERY_STRING}.json" [L]
