@@ -9,14 +9,10 @@ HEBCAL_BIN=/home/hebcal/local/bin
 0 0 * * * www-data nice $HEBCAL_WEB/bin/cache_cleanup.sh
 
 # monthly cache cleanup
-0 0 1 * * www-data mv -f /tmp/mradwin-cache /tmp/mradwin-cache.$$ && rm -rf /tmp/mradwin-cache.$$
 0 0 1 * * www-data mv -f /tmp/www-data-cache /tmp/www-data-cache.$$ && rm -rf /tmp/www-data-cache.$$
 
-# every hour, prune cached .ics files that are more than 48 hours old
-10 * * * * www-data nice find /var/www/export -type f -name '*.ics' -mtime +1 -delete
-
 # update static page at the beginning of each month
-0 0 1 * * mradwin curl -o - 'http://www.hebcal.com/hebcal/?bogus=bogus' | perl -pi -e 's/\?bogus=bogus//g' > $HEBCAL_WEB/hebcal/default.new && mv -f $HEBCAL_WEB/hebcal/default.new $HEBCAL_WEB/hebcal/default.html
+0 0 1 * * mradwin curl --silent -o - 'http://www.hebcal.com/hebcal/?bogus=bogus' | perl -pi -e 's/\?bogus=bogus//g' > $HEBCAL_WEB/hebcal/default.new && mv -f $HEBCAL_WEB/hebcal/default.new $HEBCAL_WEB/hebcal/default.html
 
 # update hebcal.com holiday.inc for front page at midnight
 0 0 * * * hebcal nice $HEBCAL_WEB/bin/gen_current.pl
@@ -24,25 +20,25 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # update hebcal.com commentary at 11am on wednesday
 11 11 * * 3 hebcal touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null 2>&1
 
-# shabbat: regular emails at 5:03am and 11:03am pacific on Thursdays
-3 5,11 * * 4 hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# shabbat: regular emails at 8:43am and 2:43pm Eastern on Thursdays
+43 8,2 * * 4 hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
-# shabbat: post to Facebook wall on Thursday between 10:17-10:37am Pacific
+# shabbat: post to Facebook wall on Thursday between 1:17-1:37pm Eastern
 # Sleep a random amount, not greater than 30 minutes
-17 10 * * 4 hebcal nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
+17 13 * * 4 hebcal nice $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800
 
-# post to Facebook wall Sunday-Friday between 8:03-8:33am Pacific
-3 8 * * 0-5 hebcal nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
+# post to Facebook wall Sunday-Friday between 11:03-11:33am Eastern
+3 11 * * 0-5 hebcal nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
 
 # special Sukkot - 17 Sep 2010 at 8:45am (+ 9/24/2013)
 #45 8 17 9 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 #45 8 24 9 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
-# clear bounces at 8:03am on friday
-3 8 * * 5 hebcal nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
+# clear bounces at 1:03pm on friday
+3 13 * * 5 hebcal nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
 
 # MySQL backups
-#30 0 * * * hebcal nice $HEBCAL_BIN/email_list_snapshot.sh
+30 0 * * * hebcal nice $HEBCAL_BIN/email_list_snapshot.sh
 
 # don't run fetchmail as a daemon, run it from cron
 #*/6 * * * * hebcal /home/hebcal/local/bin/fetchmail -s > /dev/null 2>&1
