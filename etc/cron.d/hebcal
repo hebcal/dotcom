@@ -20,8 +20,8 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # update hebcal.com commentary at 11am on wednesday
 11 11 * * 3 hebcal touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null 2>&1
 
-# shabbat: regular emails at 8:43am and 2:43pm Eastern on Thursdays
-43 8,2 * * 4 hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# shabbat: regular emails at 8:53am and 2:53pm Eastern on Thursdays
+53 8,14 * * 4 hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
 # shabbat: post to Facebook wall on Thursday between 1:17-1:37pm Eastern
 # Sleep a random amount, not greater than 30 minutes
