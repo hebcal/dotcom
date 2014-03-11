@@ -4,8 +4,8 @@ set -x
 
 TMPFILE=`mktemp /tmp/hebcal.XXXXXX`
 YEAR=`date +'%Y'`
-ICS_URL="http://www.hebcal.com/hebcal/index.cgi/export.ics"
-CSV_URL="http://www.hebcal.com/hebcal/index.cgi/hebcal_usa.csv"
+ICS_URL="http://download.hebcal.com/hebcal/index.cgi/export.ics"
+CSV_URL="http://download.hebcal.com/hebcal/index.cgi/hebcal_usa.csv"
 
 fetch_urls () {
     file=$1
