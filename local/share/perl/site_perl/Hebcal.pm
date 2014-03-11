@@ -2527,7 +2527,6 @@ sub vcalendar_write_contents
 
     my @gmtime_now = gmtime(time());
     my $dtstamp = strftime("%Y%m%dT%H%M%SZ", @gmtime_now);
-    my $utm_campaign = strftime("ical-%Y", @gmtime_now);
 
     out_html(undef, qq{BEGIN:VCALENDAR$endl});
 
@@ -2638,9 +2637,11 @@ sub vcalendar_write_contents
 	}
 
 	if ($href) {
-	  if ($href =~ m,/(sedrot|holidays)/.+,) {
-	    $href .= "?utm_source=ical&utm_campaign=$utm_campaign";
-	  }
+          if ($href =~ m,/sedrot/(.+)$,) {
+             $href = "http://hebcal.com/s/$1";
+          } elsif ($href =~ m,/holidays/(.+)$,) {
+             $href = "http://hebcal.com/h/$1";
+          }
 	  out_html(undef, qq{URL:}, $href, $endl) if $is_icalendar;
 	  $memo .= "\\n\\n" if $memo;
 	  $memo .= $href;
