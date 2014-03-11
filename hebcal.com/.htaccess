@@ -95,3 +95,6 @@ Redirect permanent /news/2010/03/yahoo_calendar_and_windows_live_.html http://ww
 RedirectMatch permanent ^/news(/)?$ http://www.hebcal.com/home/category/news
 
 Redirect gone /shabbat/cities.html
+
+RedirectMatch ^/s/(.*)$ http://www.hebcal.com/sedrot/$1?utm_source=redir&utm_campaign=redir-2014
+RedirectMatch ^/h/(.*)$ http://www.hebcal.com/holidays/$1?utm_source=redir&utm_campaign=redir-2014
