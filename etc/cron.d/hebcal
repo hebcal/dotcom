@@ -41,4 +41,4 @@ HEBCAL_BIN=/home/hebcal/local/bin
 30 0 * * * hebcal nice $HEBCAL_BIN/email_list_snapshot.sh
 
 # don't run fetchmail as a daemon, run it from cron
-#*/6 * * * * hebcal /home/hebcal/local/bin/fetchmail -s > /dev/null 2>&1
+*/6 * * * * hebcal /usr/bin/fetchmail -s > /dev/null 2>&1
