@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -339,8 +339,8 @@ sub mail_user
     if (($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} >= 15)
         || ($hebdate->{"mm"} == $HebcalGPL::ELUL && $hebdate->{"dd"} >= 20)) {
         my $next_year = $hebdate->{"yy"} + 1;
-        my $fridge_loc = defined $cfg->{"zip"}
-            ? "zip=" . $cfg->{"zip"}
+        my $fridge_loc = defined $cfg->{zip} ? "zip=" . $cfg->{zip}
+            : defined $cfg->{geonameid} ? "geonameid=" . $cfg->{geonameid}
             : "city=" . URI::Escape::uri_escape_utf8($cfg->{"city"});
 
         my $erev_rh = day_before_rosh_hashana($hebdate->{"yy"} + 1);
