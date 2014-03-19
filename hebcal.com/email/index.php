@@ -60,7 +60,9 @@ else
 	$info = get_sub_info($param["em"]);
 	if (isset($info["status"]) && $info["status"] == "active") {
 	    foreach ($info as $k => $v) {
-		$param[$k] = $v;
+                if (isset($v)) {
+                    $param[$k] = $v;
+                }
 	    }
             if (isset($param["geonameid"])) {
                 $param["geo"] = "geoname";
@@ -271,7 +273,7 @@ function form($param, $message = "", $help = "") {
     if ($pos !== false) {
 	$action = substr($action, 0, $pos);
     }
-    $geo = $param["geo"] ? $param["geo"] : "zip";
+    $geo = isset($param["geo"]) ? $param["geo"] : "zip";
     if ($geo == "geoname" && !isset($param["city-typeahead"])) {
         list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
             hebcal_get_geoname($param["geonameid"]);
