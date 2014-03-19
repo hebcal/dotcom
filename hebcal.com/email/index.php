@@ -13,7 +13,7 @@ $sender = "webmaster@hebcal.com";
 header("Cache-Control: private");
 
 $xtra_head = <<<EOD
-<link rel="stylesheet" type="text/css" href="/i/typeahead.css">
+<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
 EOD;
 echo html_header_bootstrap("Shabbat Candle Lighting Times by Email",
 			   $xtra_head);
@@ -62,10 +62,10 @@ else
 	    foreach ($info as $k => $v) {
 		$param[$k] = $v;
 	    }
-	    if (isset($param["city"])) {
+            if (isset($param["geonameid"])) {
+                $param["geo"] = "geoname";
+	    } elseif (isset($param["city"])) {
 		$param["geo"] = "city";
-	    } elseif (isset($param["geonameid"])) {
-		$param["geo"] = "geoname";
 	    }
 	    $is_update = true;
 	}
@@ -272,9 +272,14 @@ function form($param, $message = "", $help = "") {
 	$action = substr($action, 0, $pos);
     }
     $geo = $param["geo"] ? $param["geo"] : "zip";
+    if ($geo == "geoname" && !isset($param["city-typeahead"])) {
+        list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+            hebcal_get_geoname($param["geonameid"]);
+        $param["city-typeahead"] = "$name, $admin1, $country";
+    }
 ?>
 <div id="email-form" class="well well-small">
-<form action="<?php echo $action ?>" method="post">
+<form id="f1" action="<?php echo $action ?>" method="post">
 <fieldset>
 <label>E-mail address:
 <input type="email" name="em"
@@ -288,17 +293,18 @@ echo html_city_select(isset($param["city"]) ? $param["city"] : "IL-Jerusalem");
 </label>
 &nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
 or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>)</small>
-<input type="hidden" name="geo" value="city">
+<input type="hidden" name="geo" id="geo" value="city">
 <?php } elseif ($geo == "zip") { ?>
 <label>ZIP code:
-<input type="text" name="zip" class="input-mini" maxlength="5"
+<input type="text" name="zip" id="zip" class="input-mini" maxlength="5"
 pattern="\d*" value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
 &nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
 or select by <a
 href="<?php echo $action ?>?geo=city">closest city</a>)</small>
-<input type="hidden" name="geo" value="zip">
+<input type="hidden" name="geo" id="geo" value="zip">
 <?php } else { ?>
-<input type="hidden" name="geo" value="geoname">
+<input type="hidden" name="geo" id="geo" value="geoname">
+<input type="hidden" id="zip" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
 <div class="city-typeahead form-inline" style="margin-bottom:12px">
 <input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
@@ -338,18 +344,29 @@ href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.
 </div><!-- #privacy-policy -->
 <?php
 $xtra_html = <<<EOD
-<script src="/i/hogan.min.js"></script>
 <script src="/i/typeahead-0.9.3.min.js"></script>
 <script type="text/javascript">
 $("#city-typeahead").typeahead({
     name: "hebcal-city",
     remote: "/complete.php?q=%QUERY",
-    template: '<p><strong>{{asciiname}}</strong> - <small>{{admin1}}, {{country}}</small></p>',
-    limit: 7,
-    engine: Hogan
+  template: function(ctx) {
+    if (typeof ctx.geo === "string" && ctx.geo == "zip") {
+      return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
+    } else {
+      return '<p><strong>' + ctx.asciiname + '</strong> - <small>' + ctx.admin1 + ', ' + ctx.country + '</small></p>';
+    }
+  },
+    limit: 7
 }).on('typeahead:selected', function (obj, datum, name) {
-  console.debug(datum);
-  $('#geonameid').val(datum.id);
+  if (typeof datum.geo === "string" && datum.geo == "zip") {
+    $('#geo').val('zip');
+    $('#zip').val(datum.id);
+    $('#geonameid').remove();
+  } else {
+    $('#geo').val('geoname');
+    $('#geonameid').val(datum.id);
+    $('#zip').remove();
+  }
 }).bind("keyup keypress", function(e) {
   var code = e.keyCode || e.which;
   if (code == 13) {
