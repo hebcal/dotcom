@@ -225,7 +225,7 @@ sub exit_if_yomtov {
 sub parse_all_configs {
     INFO("Parsing all configs");
     while(my($to,$cfg) = each(%SUBS)) {
-        parse_config($cfg);
+        parse_config($to,$cfg);
     }
 }
 
@@ -588,7 +588,7 @@ sub get_zipinfo
 }
 
 sub parse_config {
-    my($cfg) = @_;
+    my($to,$cfg) = @_;
 
     my $city_descr;
     my $is_jerusalem = 0;
@@ -617,7 +617,9 @@ WHERE g.geonameid = ?
         my($name,$asciiname,$country,$admin1);
         ($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array;
         $sth->finish;
-        $city_descr = "$name, $admin1, $country";
+        $city_descr = $name;
+        $city_descr .= ", $admin1" if $admin1;
+        $city_descr .= ", $country";
         $is_israel = 1 if $country eq "Israel";
         $is_jerusalem = 1 if $is_israel && $name eq "Jerusalem";
     } elsif (defined $cfg->{city}) {
@@ -642,6 +644,11 @@ WHERE g.geonameid = ?
         ERROR("no geographic key in config");
         return undef;
     }
+
+    WARN("Unknown lat/long for to=$to, id=$cfg->{id}")
+        unless defined $latitude && defined $longitude;
+    WARN("Unknown tzid for to=$to, id=$cfg->{id}")
+        unless defined $tzid;
 
     my $cmd = "$HOME/web/hebcal.com/bin/hebcal";
     if ($is_jerusalem) {
