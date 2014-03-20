@@ -274,7 +274,7 @@ function form($param, $message = "", $help = "") {
 	$action = substr($action, 0, $pos);
     }
     $geo = isset($param["geo"]) ? $param["geo"] : "zip";
-    if ($geo == "geoname" && !isset($param["city-typeahead"])) {
+    if ($geo == "geoname" && !isset($param["city-typeahead"]) && isset($param["geonameid"])) {
         list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
             hebcal_get_geoname($param["geonameid"]);
         $param["city-typeahead"] = "$name, $admin1, $country";
