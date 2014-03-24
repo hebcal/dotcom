@@ -1492,7 +1492,7 @@ sub html_header_bootstrap {
     my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $xtra_stylesheet = $hebrew_stylesheet
-	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
+	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"//fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
 	: "";
     my $str = <<EOHTML;
 <!DOCTYPE html>
