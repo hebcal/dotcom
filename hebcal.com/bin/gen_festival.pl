@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -168,7 +168,7 @@ foreach my $f (@FESTIVALS)
 }
 
 my $pagead_300x250=<<EOHTML;
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
  style="display:inline-block;width:300px;height:250px"
@@ -978,7 +978,7 @@ $pager
 </div><!-- .span10 -->
 <div class="span2">
 <h5>Advertisement</h5>
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:160px;height:600px"
