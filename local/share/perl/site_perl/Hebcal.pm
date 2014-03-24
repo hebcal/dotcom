@@ -2499,8 +2499,10 @@ sub vcalendar_write_contents
 
     my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
 
+    my $cache_webpath;
     if ($is_icalendar) {
-	$cache = $ENV{"DOCUMENT_ROOT"} . get_vcalendar_cache_fn() . ".$$";
+        $cache_webpath = get_vcalendar_cache_fn();
+	$cache = $ENV{"DOCUMENT_ROOT"} . $cache_webpath . ".$$";
 	my $dir = $cache;
 	$dir =~ s,/[^/]+$,,;	# dirname
 	unless (-d $dir) {
@@ -2539,12 +2541,18 @@ sub vcalendar_write_contents
 
 	out_html(undef,
 	qq{VERSION:2.0$endl},
-	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v4.13//EN$endl},
+	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v5.1//EN$endl},
 	qq{CALSCALE:GREGORIAN$endl},
 	qq{METHOD:PUBLISH$endl},
 	qq{X-LOTUS-CHARSET:UTF-8$endl},
 	qq{X-PUBLISHED-TTL:PT7D$endl},
 	qq{X-WR-CALNAME:Hebcal $title$endl});
+
+        if (defined $cache_webpath && $ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/) {
+           my $qs = $1;
+           $qs =~ s/;/&/g;
+           out_html(undef, qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs$endl});
+        }
 
 	# include an iCal description
 	if (defined $q->param("v"))
