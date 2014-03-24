@@ -161,6 +161,8 @@ if ($Config) {
     $DO_AMAZON = 0;
 }
 
+write_wordpress_export();
+
 foreach my $f (@FESTIVALS)
 {
     print "   $f...\n" if $opts{"v"};
@@ -184,6 +186,94 @@ print "Index page...\n" if $opts{"v"};
 write_index_page($fxml);
 
 exit(0);
+
+sub write_wordpress_export {
+    my $fn = "$outdir/hebcal.wordpress.xml";
+    open(OUT5, ">$fn.$$") || die "$fn.$$: $!\n";
+    print OUT5 <<EOXML;
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+    xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:wp="http://wordpress.org/export/1.2/"
+>
+<channel>
+    <title>Hebcal</title>
+    <link>http://www.hebcal.com/home</link>
+    <description>Jewish Calendar</description>
+    <pubDate>Mon, 24 Mar 2014 18:39:07 +0000</pubDate>
+    <language>en-US</language>
+    <wp:wxr_version>1.2</wp:wxr_version>
+    <wp:base_site_url>http://www.hebcal.com/home</wp:base_site_url>
+    <wp:base_blog_url>http://www.hebcal.com/home</wp:base_blog_url>
+    <wp:author><wp:author_id>1</wp:author_id>
+    <wp:author_login>mradwin</wp:author_login>
+    <wp:author_email>michael\@radwin.org</wp:author_email>
+    <wp:author_display_name><![CDATA[mradwin]]></wp:author_display_name>
+    <wp:author_first_name><![CDATA[]]></wp:author_first_name>
+    <wp:author_last_name><![CDATA[]]></wp:author_last_name></wp:author>
+EOXML
+;
+
+    my $post_id = 1000;
+    foreach my $f (@FESTIVALS) {
+        my $slug = Hebcal::make_anchor($f);
+        my $about = get_var($fxml, $f, 'about');
+        my $descr;
+        if ($about) {
+            $descr = trim($about->{'content'});
+        }
+        my $wikipedia_descr;
+        my $wikipedia = get_var($fxml, $f, 'wikipedia', 1);
+        if ($wikipedia) {
+            $wikipedia_descr = trim($wikipedia->{'content'});
+        }
+        my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
+        $post_id++;
+        print OUT5 <<EOXML;
+            <item>
+                <title>$f</title>
+        <link>/holidays/$slug</link>
+        <pubDate>Mon, 24 Mar 2014 18:36:03 +0000</pubDate>
+        <dc:creator><![CDATA[mradwin]]></dc:creator>
+        <guid isPermaLink="false">http://www.hebcal.com/home/?page_id=$post_id</guid>
+        <description></description>
+        <content:encoded><![CDATA[$long_descr]]></content:encoded>
+        <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+        <wp:post_id>$post_id</wp:post_id>
+        <wp:post_date>2014-03-24 11:36:03</wp:post_date>
+        <wp:post_date_gmt>2014-03-24 18:36:03</wp:post_date_gmt>
+        <wp:comment_status>open</wp:comment_status>
+        <wp:ping_status>open</wp:ping_status>
+        <wp:post_name>$slug</wp:post_name>
+        <wp:status>publish</wp:status>
+        <wp:post_parent>112</wp:post_parent>
+        <wp:menu_order>0</wp:menu_order>
+        <wp:post_type>page</wp:post_type>
+        <wp:post_password></wp:post_password>
+        <wp:is_sticky>0</wp:is_sticky>
+        <wp:postmeta>
+            <wp:meta_key>_edit_last</wp:meta_key>
+            <wp:meta_value><![CDATA[1]]></wp:meta_value>
+        </wp:postmeta>
+        <wp:postmeta>
+            <wp:meta_key>_wp_page_template</wp:meta_key>
+            <wp:meta_value><![CDATA[default]]></wp:meta_value>
+        </wp:postmeta>
+        <wp:postmeta>
+            <wp:meta_key>_links_to</wp:meta_key>
+            <wp:meta_value><![CDATA[/holidays/$slug]]></wp:meta_value>
+        </wp:postmeta>
+    </item>
+EOXML
+;
+    }
+    print OUT5 qq{</channel>\n</rss>\n};
+    close(OUT5);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
+}
 
 sub trim
 {
@@ -950,7 +1040,7 @@ Jewish Holidays: A Guide &amp; Commentary</a></em>
 href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
 <dd>Mechon Mamre
 <dt><em><a class="amzn" id="jps-tanakh-1"
-title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text" 
+title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
 <dd>Jewish Publication Society
@@ -1127,7 +1217,7 @@ sub build_event_begin_hash {
 
 sub findError {
     my $xml = shift;
-    
+
     return undef unless ref($xml) eq 'HASH';
 
     if (exists $xml->{Error}) { return $xml->{Error}; };
