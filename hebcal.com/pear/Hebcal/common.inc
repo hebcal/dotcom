@@ -526,7 +526,7 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true,
     }
 
     $xtra_stylesheet = $hebrew_stylesheet
-	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
+	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"//fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
 	: "";
 
     $html = <<<EOD
