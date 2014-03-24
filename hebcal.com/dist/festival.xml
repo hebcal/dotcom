@@ -496,7 +496,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Esther">
  The Fast of Esther (Ta'anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish
  fast from dawn until dusk on Purim eve, commemorating the three-day
- fast observed by the Jewish people in the story of Purim. 
+ fast observed by the Jewish people in the story of Purim.
  If the date of the Fast of Esther falls on Shabbat (Saturday), the fast
  is instead observed on the preceding Thursday.
  Like other minor fasts, Ta'anit Esther begins at dawn (first light) and
@@ -1169,7 +1169,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </wikipedia>
  <books>
   <book ASIN="0827600453" author="H. L. Ginsberg">
-  Five Megilloth and Jonah 
+  Five Megilloth and Jonah
   </book>
   <book ASIN="1580130909">
   </book>
@@ -1274,7 +1274,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Shabbat after Tish'a B'Av (Shabbat of Consolation).
 The first of seven Shabbatot leading up to Rosh Hashanah.
 Named after the Haftarah (from Isaiah 40) which begins
-with the verse 
+with the verse
 נַחֲמוּ נַחֲמוּ, עַמִּי
 ("Comfort, oh comfort my people")
  </about>
@@ -1399,70 +1399,96 @@ with the verse
 </festival>
 <festival id="Rosh Chodesh Adar" hebrew="רֹאשׁ חודש אַדָר" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
- Beginning of new Hebrew month of Adar. Corresponds to February or March on the Gregorian calendar
+ Beginning of new Hebrew month of Adar.
+ Adar is the 12th month of the Hebrew year.
+ Corresponds to February or March on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Adar I" hebrew="רֹאשׁ חודש אַדָר א׳" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
- Beginning of new Hebrew month of Adar I (on leap years). Corresponds to February or March on the Gregorian calendar
+ Beginning of new Hebrew month of Adar I (on leap years).
+ Adar I is the 12th month of the Hebrew year.
+ Corresponds to February or March on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Adar II" hebrew="רֹאשׁ חודש אַדָר ב׳" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
- Beginning of new Hebrew month of Adar II (on leap years). Corresponds to February or March on the Gregorian calendar
+ Beginning of new Hebrew month of Adar II (on leap years).
+ Adar II (sometimes "Adar Bet" or "Adar Sheni") is the 13th month of the Hebrew year, ocurring only on leap years.
+ Corresponds to February or March on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Av" hebrew="רֹאשׁ חודש אָב" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/av/default.htm">
- Beginning of new Hebrew month of Av. Corresponds to July or August on the Gregorian calendar
+ Beginning of new Hebrew month of Av.
+ Av is the 5th month of the Hebrew year.
+ Corresponds to July or August on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Cheshvan" hebrew="רֹאשׁ חודש חֶשְׁוָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/marcheshvan/default.htm">
- Beginning of new Hebrew month of Cheshvan. Corresponds to October or November on the Gregorian calendar
+ Beginning of new Hebrew month of Cheshvan.
+ Cheshvan is the 8th month of the Hebrew year.
+ Corresponds to October or November on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Elul" hebrew="רֹאשׁ חודש אֱלוּל" yomtov="0">
  <about href="http://www.ou.org/chagim/elul/rchelul.htm">
- Beginning of new Hebrew month of Elul. Corresponds to August or September on the Gregorian calendar
+ Beginning of new Hebrew month of Elul.
+ Elul is the 6th month of the Hebrew year.
+ Corresponds to August or September on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Iyyar" hebrew="רֹאשׁ חודש אִיָיר" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/iyar/roshch.htm">
- Beginning of new Hebrew month of Iyyar. Corresponds to April or May on the Gregorian calendar
+ Beginning of new Hebrew month of Iyyar.
+ Iyyar (somtimes transliterated Iyar) is the 2nd month of the Hebrew year.
+ Corresponds to April or May on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Kislev" hebrew="רֹאשׁ חודש כִּסְלֵו" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/kislev/default.htm">
- Beginning of new Hebrew month of Kislev. Corresponds to November or December on the Gregorian calendar
+ Beginning of new Hebrew month of Kislev.
+ Kislev is the 9th month of the Hebrew year.
+ Corresponds to November or December on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Nisan" hebrew="רֹאשׁ חודש נִיסָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/nisan/default.htm">
- Beginning of new Hebrew month of Nisan. Corresponds to March or April on the Gregorian calendar
+ Beginning of new Hebrew month of Nisan.
+ Nisan (sometimes transliterated Nissan) is the 1st month of the Hebrew year.
+ rresponds to March or April on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Sh'vat" hebrew="רֹאשׁ חודש שְׁבָט" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/shevat/default.htm">
- Beginning of new Hebrew month of Sh'vat. Corresponds to January or February on the Gregorian calendar
+ Beginning of new Hebrew month of Sh'vat.
+ Sh'vat (sometimes transliterated Shevat) is the 11th month of the Hebrew year.
+ Corresponds to January or February on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Sivan" hebrew="רֹאשׁ חודש סִיוָן" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm">
- Beginning of new Hebrew month of Sivan. Corresponds to May or June on the Gregorian calendar
+ Beginning of new Hebrew month of Sivan.
+ Sivan is the 3rd month of the Hebrew year.
+ Corresponds to May or June on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Tamuz" hebrew="רֹאשׁ חודש תָּמוּז" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/tammuz/default.htm">
- Beginning of new Hebrew month of Tamuz. Corresponds to June or July on the Gregorian calendar
+ Beginning of new Hebrew month of Tamuz.
+ Tamuz (sometimes transliterated Tammuz) is the 4th month of the Hebrew year.
+ Corresponds to June or July on the Gregorian calendar
  </about>
 </festival>
 <festival id="Rosh Chodesh Tevet" hebrew="רֹאשׁ חודש טֵבֵת" yomtov="0">
  <about href="http://www.ou.org/chagim/roshchodesh/tevet/default.htm">
- Beginning of new Hebrew month of Tevet. Corresponds to December or January on the Gregorian calendar
+ Beginning of new Hebrew month of Tevet.
+ Tevet is the 10th month of the Hebrew year.
+ Corresponds to December or January on the Gregorian calendar
  </about>
 </festival>
- 
+
 <!-- Other Hebcal holidays -->
 <festival id="Pesach Sheni" hebrew="פֶּסַח שני" yomtov="0">
  <about href="http://en.wikipedia.org/wiki/Pesach_Sheni">
@@ -1603,7 +1629,7 @@ with the verse
  <wikipedia href="http://en.wikipedia.org/wiki/Selichot#Selichot_of_the_High_Holidays">
    Selichot or slichot (Hebrew: סליחות) are Jewish penitential poems and
    prayers, especially those said in the period leading up to the High
-   Holidays, and on Fast Days. 
+   Holidays, and on Fast Days.
    In the Ashkenazic tradition, it begins on the Saturday night before Rosh
    Hashanah. If, however, the first day of Rosh Hashanah falls on Monday or
    Tuesday, Selichot are said beginning the Saturday night prior to ensure
