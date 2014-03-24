@@ -371,7 +371,7 @@ Hebrew feed &raquo;</a></p>
 </div><!-- .span9 -->
 <div class="span3" role="complementary">
 <h5>Advertisement</h5>
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 200x200 text only -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:200px;height:200px"

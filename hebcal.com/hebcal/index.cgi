@@ -1405,7 +1405,7 @@ EOHTML
     my $header_ad = <<EOHTML;
 <div class="span4">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
  style="display:inline-block;width:300px;height:250px"
