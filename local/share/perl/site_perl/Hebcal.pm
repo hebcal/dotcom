@@ -2709,18 +2709,18 @@ sub vcalendar_write_contents
 	}
 	out_html(undef, qq{:$date$endl});
 
-	if ($is_icalendar && $evt->[$EVT_IDX_UNTIMED])
-	{
-	    # avoid using DTEND since Apple iCal and Lotus Notes
-	    # seem to interpret all-day events differently
-	    out_html(undef, qq{DURATION:P1D$endl});
-	}
-	else
-	{
-	    out_html(undef, qq{DTEND});
-	    out_html(undef, ";TZID=$tzid") if $tzid;
-	    out_html(undef, qq{:$end_date$endl});
+        # for all-day untimed, use DTEND;VALUE=DATE intsead of DURATION:P1D.
+        # It's more compatible with everthing except ancient versions of
+        # Lotus Notes circa 2004
+        out_html(undef, qq{DTEND});
+        if ($is_icalendar) {
+            if ($evt->[$EVT_IDX_UNTIMED]) {
+                out_html(undef, ";VALUE=DATE");
+            } elsif ($tzid) {
+                out_html(undef, ";TZID=$tzid");
+            }
         }
+        out_html(undef, qq{:$end_date$endl});
 
 	if ($is_icalendar) {
 	    if ($evt->[$EVT_IDX_UNTIMED] == 0 ||
