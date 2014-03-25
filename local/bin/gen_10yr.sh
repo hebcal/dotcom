@@ -4,8 +4,9 @@ set -x
 
 TMPFILE=`mktemp /tmp/hebcal.XXXXXX`
 YEAR=`date +'%Y'`
-ICS_URL="http://download.hebcal.com/hebcal/index.cgi/export.ics"
-CSV_URL="http://download.hebcal.com/hebcal/index.cgi/hebcal_usa.csv"
+DOWNLOAD_URL="http://download.hebcal.com"
+ICS_URL="${DOWNLOAD_URL}/hebcal/index.cgi/export.ics"
+CSV_URL="${DOWNLOAD_URL}/hebcal/index.cgi/hebcal_usa.csv"
 
 fetch_urls () {
     file=$1
@@ -23,6 +24,7 @@ update_ics_name() {
     perl -pi -e "s/^X-WR-CALNAME:.*/X-WR-CALNAME:${name}\r/" "${file}.ics"
     perl -pi -e "s/^X-WR-CALDESC:.*/X-WR-CALDESC:${desc}\r/" "${file}.ics"
     perl -pi -e "s/^X-PUBLISHED-TTL:PT7D/X-PUBLISHED-TTL:PT30D/" "${file}.ics"
+    perl -pi -e "s,^X-ORIGINAL-URL:.*,X-ORIGINAL-URL:${DOWNLOAD_URL}/ical/${file}.ics\r," "${file}.ics"
 }
 
 
