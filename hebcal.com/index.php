@@ -328,7 +328,11 @@ $('#city-typeahead').typeahead({
     if (typeof ctx.geo === "string" && ctx.geo == "zip") {
       return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
     } else {
-      return '<p><strong>' + ctx.asciiname + '</strong> - <small>' + ctx.admin1 + ', ' + ctx.country + '</small></p>';
+      var s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
+      if (ctx.admin1) {
+        s += ctx.admin1 + ', ';
+      }
+      return s + ctx.country + '</small></p>';
     }
   },
   limit: 8
