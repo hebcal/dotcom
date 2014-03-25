@@ -66,19 +66,17 @@ local halachic authority for correct candle-lighting times.
 </div><!-- .alert -->
 };
 
-sub accordion_bootstrap {
-    my($title,$anchor,$inner) = @_;
+sub tab_body {
+    my($tab) = @_;
+    my($short_title,$long_title,$slug,$content) = @{$tab};
+    my $class_xtra = $slug eq "ios" ? " active" : "";
     my $s = <<EOHTML;
-<div class="accordion-group">
- <div class="accordion-heading">
-  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#${anchor}-body">$title</a>
- </div>
- <div id="${anchor}-body" class="accordion-body collapse">
-  <div class="accordion-inner">
-   $inner
-  </div>
- </div><!-- #${anchor}-body -->
+<div id="${slug}-body" class="tab-pane$class_xtra">
+<p class="lead">If you use $long_title, try this:</p>
+<div>
+$content
 </div>
+</div><!-- #${slug}-body -->
 EOHTML
 ;
     return $s;
@@ -322,18 +320,33 @@ EOHTML
     $pdf_btn =~ s/icon-download-alt/icon-print/;
     my $pdf = "<p>$pdf_btn</p>\n";
 
-    my $s = qq{<div class="accordion" id="accordion2">\n};
-    $s .= accordion_bootstrap($pdf_title, "pdf", $pdf) unless $yahrzeit_mode;
-    $s .= accordion_bootstrap($ios_title, "ios", $ios);
-    $s .= accordion_bootstrap($ol_ics_title, "ol-ics", $ol_ics);
-    $s .= accordion_bootstrap($ol_csv_title, "ol-csv", $ol_csv);
-    $s .= accordion_bootstrap($gcal_title, "gcal", $gcal);
-    $s .= accordion_bootstrap($wlive_title, "wlive", $wlive);
-    $s .= accordion_bootstrap($ical_title, "ical", $ical);
-    $s .= accordion_bootstrap($ol_mac_title, "ol-mac", $ol_mac);
-    $s .= accordion_bootstrap($ycal_title, "ycal", $ycal);
-    $s .= accordion_bootstrap($palm_title, "palm", $palm);
-    $s .= qq{</div><!-- #accordion2 -->\n};
+    my @nav_tabs = (
+        ["iPhone", $ios_title, "ios", $ios],
+        ["Outlook", $ol_ics_title, "ol-ics", $ol_ics],
+        ["Google", $gcal_title, "gcal", $gcal],
+        ["Mac OS X", $ical_title, "ical", $ical],
+        ["Outlook.com", $wlive_title, "wlive", $wlive],
+        ["Outlook Mac", $ol_mac_title, "ol-mac", $ol_mac],
+        ["Yahoo!", $ycal_title, "ycal", $ycal],
+        ["CSV", $ol_csv_title, "ol-csv", $ol_csv],
+        ["Palm", $palm_title, "palm", $palm],
+    );
+
+    unless ($yahrzeit_mode) {
+        push(@nav_tabs, ["PDF", $pdf_title, "pdf", $pdf]);
+    }
+
+    my $s = qq{<ul class="nav nav-pills" id="download-tabs">\n};
+    foreach my $tab (@nav_tabs) {
+        my($short_title,$long_title,$slug,$content) = @{$tab};
+        my $class = $slug eq "ios" ? qq{ class="active"} : "";
+        $s .= qq{<li$class><a href="#${slug}-body" data-toggle="tab">$short_title</a></li>\n};
+    }
+    $s .= qq{</ul><!-- #download-tabs -->\n<hr style="margin:0 0 12px 0">\n<div class="tab-content">\n};
+    foreach my $tab (@nav_tabs) {
+        $s .= tab_body($tab);
+    }
+    $s .= qq{</div><!-- .tab-content -->\n};
 
     return $s;
 }
@@ -349,12 +362,13 @@ sub download_html_modal {
   <h3 id="hcdl-modalLabel">Download $title Calendar</h3>
  </div>
  <div class="modal-body">
+<p>Save to the calendar of your choice.</p>
 $html
- </div>
+ </div><!-- .modal-body -->
  <div class="modal-footer">
    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
  </div>
-</div>
+</div><!-- #hcdl-modal -->
 EOHTML
 ;
     return $s;
