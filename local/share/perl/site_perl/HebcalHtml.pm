@@ -72,7 +72,7 @@ sub tab_body {
     my $class_xtra = $slug eq "ios" ? " active" : "";
     my $s = <<EOHTML;
 <div id="${slug}-body" class="tab-pane$class_xtra">
-<p class="lead">If you use $long_title, try this:</p>
+<p class="lead">$long_title</p>
 <div>
 $content
 </div>
@@ -359,10 +359,10 @@ sub download_html_modal {
 <div id="hcdl-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-  <h3 id="hcdl-modalLabel">Download $title Calendar</h3>
+  <h3 id="hcdl-modalLabel">Download</h3>
  </div>
  <div class="modal-body">
-<p>Save to the calendar of your choice.</p>
+<p>Export <strong>$title Calendar</strong> to your calendar app.</p>
 $html
  </div><!-- .modal-body -->
  <div class="modal-footer">
