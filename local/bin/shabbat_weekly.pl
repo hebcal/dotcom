@@ -557,6 +557,7 @@ EOD
         } elsif ($geonameid) {
             $cfg->{geonameid} = $geonameid;
         } elsif ($city) {
+            $city =~ s/\+/ /g;
             if (defined($Hebcal::CITIES_OLD{$city})) {
                 $city = $Hebcal::CITIES_OLD{$city};
             } elsif (! defined $Hebcal::CITY_LATLONG{$city}) {
@@ -624,17 +625,11 @@ WHERE g.geonameid = ?
         $is_jerusalem = 1 if $is_israel && $name eq "Jerusalem";
     } elsif (defined $cfg->{city}) {
         my $city = $cfg->{city};
-        $city =~ s/\+/ /g;
+        ($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
+        $tzid = $Hebcal::CITY_TZID{$city};
+        $is_israel = 1 if $Hebcal::CITY_COUNTRY{$city} eq "IL"
         if ($city eq "Jerusalem" || $city eq "IL-Jerusalem") {
             $is_israel = $is_jerusalem = 1;
-        } else {
-            if (! defined $Hebcal::CITY_LATLONG{$city}) {
-                WARN("unknown city [$city]");
-                return undef;
-            }
-            ($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
-            $tzid = $Hebcal::CITY_TZID{$city};
-            $is_israel = 1 if $Hebcal::CITY_COUNTRY{$city} eq "IL"
         }
 
         my $country = Hebcal::woe_country($city);
@@ -653,7 +648,6 @@ WHERE g.geonameid = ?
     my $cmd = "$HOME/web/hebcal.com/bin/hebcal";
     if ($is_jerusalem) {
         $cmd .= " -C 'Jerusalem'";
-        ($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{"IL-Jerusalem"}};
     } else {
         my($lat_deg,$lat_min,$long_deg,$long_min) =
             Hebcal::latlong_to_hebcal($latitude, $longitude);
