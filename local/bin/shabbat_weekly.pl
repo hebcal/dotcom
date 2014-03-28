@@ -627,7 +627,7 @@ WHERE g.geonameid = ?
         my $city = $cfg->{city};
         ($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
         $tzid = $Hebcal::CITY_TZID{$city};
-        $is_israel = 1 if $Hebcal::CITY_COUNTRY{$city} eq "IL"
+        $is_israel = 1 if $Hebcal::CITY_COUNTRY{$city} eq "IL";
         if ($city eq "Jerusalem" || $city eq "IL-Jerusalem") {
             $is_israel = $is_jerusalem = 1;
         }
