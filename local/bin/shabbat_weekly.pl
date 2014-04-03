@@ -561,7 +561,8 @@ EOD
             if (defined($Hebcal::CITIES_OLD{$city})) {
                 $city = $Hebcal::CITIES_OLD{$city};
             } elsif (! defined $Hebcal::CITY_LATLONG{$city}) {
-                LOGCROAK "unknown city $city for id=$id;email=$email";
+                WARN("unknown city $city for id=$id;email=$email");
+                next;
             }
             $cfg->{city} = $city;
         }
