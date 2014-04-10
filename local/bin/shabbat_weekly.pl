@@ -583,7 +583,7 @@ sub get_zipinfo
     if (defined $ZIP_CACHE{$zip}) {
         return @{$ZIP_CACHE{$zip}};
     } else {
-        my @f = Hebcal::zipcode_get_zip_fields($ZIPS_DBH, $zip);
+        my @f = Hebcal::zipcode_get_v2_zip($ZIPS_DBH, $zip);
         $ZIP_CACHE{$zip} = \@f;
         return @f;
     }
@@ -597,13 +597,15 @@ sub parse_config {
     my $is_israel = 0;
     my($latitude,$longitude,$tzid);
     if (defined $cfg->{zip}) {
-        my($city,$state);
-        ($city,$state,$tzid,$latitude,$longitude) = get_zipinfo($cfg->{zip});
+        my($CityMixedCase,$State,$Latitude,$Longitude,$TimeZone,$DayLightSaving) = get_zipinfo($cfg->{zip});
+        $latitude = $Latitude;
+        $longitude = $Longitude;
+        $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
         unless (defined $state) {
             WARN("unknown zipcode [$cfg->{zip}]");
             return undef;
         }
-        $city_descr = "$city, $state " . $cfg->{zip};
+        $city_descr = "$CityMixedCase, $State " . $cfg->{zip};
     } elsif (defined $cfg->{geonameid}) {
         my $sql = qq{
 SELECT g.name, g.asciiname, c.country, a.name, g.latitude, g.longitude, g.timezone
@@ -642,7 +644,7 @@ WHERE g.geonameid = ?
     }
 
     WARN("Unknown lat/long for to=$to, id=$cfg->{id}")
-        unless defined $latitude && defined $longitude;
+        unless defined $latitude && defined $longitude && $latitude ne "" && $longitude ne "";
     WARN("Unknown tzid for to=$to, id=$cfg->{id}")
         unless defined $tzid;
 
