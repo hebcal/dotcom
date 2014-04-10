@@ -601,7 +601,7 @@ sub parse_config {
         $latitude = $Latitude;
         $longitude = $Longitude;
         $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
-        unless (defined $state) {
+        unless (defined $State) {
             WARN("unknown zipcode [$cfg->{zip}]");
             return undef;
         }
