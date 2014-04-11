@@ -643,8 +643,13 @@ WHERE g.geonameid = ?
         return undef;
     }
 
-    WARN("Unknown lat/long for to=$to, id=$cfg->{id}")
-        unless defined $latitude && defined $longitude && $latitude ne "" && $longitude ne "";
+    if (! defined $latitude || ! defined $longitude || $latitude eq "" || $longitude eq "") {
+        WARN("Undefined lat/long for to=$to, id=$cfg->{id}");
+        return undef;
+    } elsif ($latitude eq "0" && $longitude eq "0") {
+        WARN("Suspicious zero lat/long for to=$to, id=$cfg->{id}");
+        return undef;
+    }
     WARN("Unknown tzid for to=$to, id=$cfg->{id}")
         unless defined $tzid;
 
