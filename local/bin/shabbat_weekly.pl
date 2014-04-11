@@ -225,7 +225,8 @@ sub exit_if_yomtov {
 sub parse_all_configs {
     INFO("Parsing all configs");
     while(my($to,$cfg) = each(%SUBS)) {
-        parse_config($to,$cfg);
+        my $status = parse_config($to,$cfg);
+        delete $SUBS{$to} unless $status;
     }
 }
 
@@ -639,7 +640,7 @@ WHERE g.geonameid = ?
         $country = "USA" if $country eq "United States of America";
         $city_descr = Hebcal::woe_city($city) . ", $country";
     } else {
-        ERROR("no geographic key in config");
+        ERROR("no geographic key in config for to=$to, id=$cfg->{id}");
         return undef;
     }
 
@@ -674,7 +675,7 @@ WHERE g.geonameid = ?
     $cfg->{cmd} = $cmd;
     $cfg->{loc} = $city_descr;
 
-    ($cmd,$city_descr);
+    1;
 }
 
 sub smtp_reconnect
