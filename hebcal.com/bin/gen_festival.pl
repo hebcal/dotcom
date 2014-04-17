@@ -187,6 +187,13 @@ my $pagead_300x250=<<EOHTML;
 EOHTML
 ;
 
+my $yomtov_html=<<EOHTML;
+<p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
+obligations and restrictions to Shabbat in the sense that normal "work"
+is forbidden.</p>
+EOHTML
+;
+
 INFO("Index page...");
 write_index_page($fxml);
 
@@ -323,18 +330,23 @@ sub format_single_day {
 sub format_single_day_html {
     my($gy,$gm,$gd,$show_year) = @_;
     my($gy0,$gm0,$gd0) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
-    return "<span title=\"begins at sundown on " . format_single_day($gy0,$gm0,$gd0,0)
-	. "\">" . format_single_day($gy,$gm,$gd,$show_year) . "</span>";
+    my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
+    return "<time datetime=\"$html5time\" title=\"begins at sundown on "
+        . format_single_day($gy0,$gm0,$gd0,0)
+        . "\">" . format_single_day($gy,$gm,$gd,$show_year) . "</time>";
 }
 
 sub format_date_range {
     my($gy1,$gm1,$gd1,$gy2,$gm2,$gd2,$show_year) = @_;
     my $str = format_single_day_html($gy1,$gm1,$gd1,0) . "-";
+    my $html5time = sprintf("%04d-%02d-%02d", $gy2, $gm2, $gd2);
+    $str .= qq{<time datetime="$html5time">};
     if ($gm1 == $gm2) {
-	$str .= $gd2;
+        $str .= $gd2;
     } else {
-	$str .= format_single_day($gy2,$gm2,$gd2,0);
+        $str .= format_single_day($gy2,$gm2,$gd2,0);
     }
+    $str .= qq{</time>};
     return $show_year ? ($str . ", " . $gy2) : $str;
 }
 
@@ -452,10 +464,11 @@ sub table_row_one_year_only {
 }
 
 sub table_header_one_year_only {
-    my($fh,$table_id) = @_;
+    my($fh,$table_id,$show_year) = @_;
+    my $col2width = $show_year ? 180 : 112;
     print $fh <<EOHTML;
 <table class="table table-striped" id="$table_id">
-<col style="width:180px"><col style="width:180px"><col>
+<col style="width:180px"><col style="width:${col2width}px"><col>
 <tbody>
 EOHTML
 ;
@@ -490,20 +503,9 @@ customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <strong>Sep 19-20</strong>, then the holiday begins at
-sundown on <strong>Sep 18</strong> and ends at sundown on <strong>Sep 20</strong>.
-Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
-obligations and restrictions to Shabbat in the sense that normal "work"
-is forbidden.</p>
+sundown on <strong>Sep 18</strong> and ends at sundown on <strong>Sep 20</strong>.</p>
 EOHTML
 ;
-
-    if ($do_multi_year) {
-      $str .= <<EOHTML;
-<p>The tables of holidays below include the current year and 4 years
-into the future for the Diaspora.</p>
-EOHTML
-;
-    }
 
     my $custom_link =
         $current_year ? "/hebcal/?v=0&amp;year=$current_year&amp;yt=$year_type" : "/hebcal/";
@@ -513,7 +515,7 @@ EOHTML
 <div class="btn-toolbar">
 <a class="btn btn-small download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="icon-print"></i> Print PDF</a>
 <a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download to Outlook, iPhone, Google</a>
-<a class="btn btn-small" title="Hebcal Custom Calendar" href="$custom_link"><i class="icon-pencil"></i> Customize your calendar</a>
+<a class="btn btn-small" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><i class="icon-pencil"></i> Customize your calendar</a>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -614,6 +616,7 @@ EOHTML
     foreach my $section (@sections) {
         my($heading,$table_id) = get_heading_and_table_id($section);
         print OUT3 "<h3>", $heading, "</h3>\n";
+        print OUT3 $yomtov_html if $heading eq "Major holidays";
         table_index($festivals, $table_id, @{$section->[0]});
     }
 
@@ -637,7 +640,7 @@ EOHTML
 sub pagination_hebrew {
     my($current_year) = @_;
 
-    my $s = qq{<div class="pagination pagination-small"><ul>\n};
+    my $s = qq{<div class="pagination"><ul>\n};
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $HEB_YR + $j - 1;
         my $other_greg_yr1 = $other_yr - 3761;
@@ -649,7 +652,7 @@ sub pagination_hebrew {
         } else {
             $s .= qq{<li>};
         }
-        $s .= qq{<a title="Hebrew Year $other_yr" href="$other_slug">$other_slug</a></li>\n};
+        $s .= qq{<a title="$other_slug" href="$other_slug">$other_yr</a></li>\n};
     }
     $s .= qq{</ul></div>\n};
 
@@ -659,7 +662,7 @@ sub pagination_hebrew {
 sub pagination_greg {
     my($current_year) = @_;
 
-    my $s = qq{<div class="pagination pagination-small"><ul>\n};
+    my $s = qq{<div class="pagination"><ul>\n};
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $meta_greg_yr1 + $j;
         if ($current_year == $j) {
@@ -667,7 +670,7 @@ sub pagination_greg {
         } else {
             $s .= qq{<li>};
         }
-        $s .= qq{<a title="Gregorian Year $other_yr" href="$other_yr">$other_yr</a></li>\n};
+        $s .= qq{<a href="$other_yr">$other_yr</a></li>\n};
     }
     $s .= qq{</ul></div>\n};
 
@@ -709,16 +712,27 @@ EOHTML
 ;
 
     print $fh qq{<div class="row-fluid">\n};
+
+    foreach my $section (@{$sections}) {
+        my($heading,$table_id) = get_heading_and_table_id($section);
+        print $fh "<h3>", $heading, "</h3>\n";
+        print $fh $yomtov_html if $heading eq "Major holidays";
+        table_header_one_year_only($fh, $table_id);
+        my @events;
+        foreach my $f (@{$section->[0]}) {
+            my $evt = $EVENTS_BY_GREGYEAR[$i]->{$f};
+            push(@events, $evt) if defined $evt;
+        }
+        @events = sort { Hebcal::event_to_time($a) <=> Hebcal::event_to_time($b) } @events;
+        foreach my $evt (@events) {
+            my $f = $evt->[$Hebcal::EVT_IDX_SUBJ];
+            table_row_one_year_only($fh,$festivals,$f,$evt,0);
+        }
+        table_footer_one_year_only($fh, $table_id);
+    }
+
     print $fh pagination_greg($i);
     print $fh pagination_hebrew(-1);
-
-    my $table_id = "hebcal-all";
-    table_header_one_year_only($fh, $table_id);
-    foreach my $evt (@{$EVENTS_BY_GREGYEAR[$i]}) {
-        my $f = $evt->[$Hebcal::EVT_IDX_SUBJ];
-        table_row_one_year_only($fh,$festivals,$f,$evt,0);
-    }
-    table_footer_one_year_only($fh, $table_id);
 
     print $fh qq{</div><!-- .row-fluid -->\n};
 
@@ -766,18 +780,20 @@ EOHTML
 ;
     print $fh qq{<div class="row-fluid">\n};
     print $fh qq{<div class="span12">\n};
-    print $fh pagination_greg(-1);
-    print $fh pagination_hebrew($i);
 
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
         print $fh "<h3>", $heading, "</h3>\n";
+        print $fh $yomtov_html if $heading eq "Major holidays";
         table_header_one_year_only($fh, $table_id);
         foreach my $f (@{$section->[0]}) {
             table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f},1);
         }
         table_footer_one_year_only($fh, $table_id);
     }
+
+    print $fh pagination_greg(-1);
+    print $fh pagination_hebrew($i);
 
     print $fh qq{</div><!-- .span12 -->\n};
     print $fh qq{</div><!-- .row-fluid -->\n};
@@ -1282,7 +1298,7 @@ sub holidays_observed {
 	$cmd2 .= " -i" if $opts{"i"};
 	$cmd2 .= " $yr2";
 	my @events2 = Hebcal::invoke_hebcal($cmd2, "", 0);
-	$EVENTS_BY_GREGYEAR[$i] = filter_events(\@events2);
+	$EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2);
     }
 }
 
