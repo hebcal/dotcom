@@ -52,6 +52,7 @@ use RequestSignatureHelper;
 use Config::Tiny;
 use DBI;
 use Carp;
+use Log::Log4perl qw(:easy);
 use strict;
 
 my $eval_use_Image_Magick = 0;
@@ -69,6 +70,10 @@ Getopt::Std::getopts('hvH:i', \%opts) || die "$usage\n";
 $opts{'h'} && die "$usage\n";
 (@ARGV == 2) || die "$usage";
 
+# Just log to STDERR
+my $loglevel = $opts{"v"} ? $INFO : $WARN;
+Log::Log4perl->easy_init($loglevel);
+
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
 my($festival_in) = shift;
@@ -78,7 +83,7 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
-print "Reading $festival_in...\n" if $opts{"v"};
+INFO("Reading $festival_in...");
 my $fxml = XML::Simple::XMLin($festival_in);
 
 my $NOW = time();
@@ -139,7 +144,7 @@ my $meta_greg_yr2 = $meta_greg_yr1 + $NUM_YEARS + 1;
 
 my @EVENTS_BY_HEBYEAR;
 my @EVENTS_BY_GREGYEAR;
-print "Observed holidays...\n" if $opts{"v"};
+INFO("Observed holidays...");
 holidays_observed();
 
 my %seph2ashk = reverse %Hebcal::ashk2seph;
@@ -161,11 +166,11 @@ if ($Config) {
     $DO_AMAZON = 0;
 }
 
-write_wordpress_export();
+# write_wordpress_export();
 
 foreach my $f (@FESTIVALS)
 {
-    print "   $f...\n" if $opts{"v"};
+    INFO("   $f");
     write_festival_page($fxml,$f);
 }
 
@@ -182,7 +187,7 @@ my $pagead_300x250=<<EOHTML;
 EOHTML
 ;
 
-print "Index page...\n" if $opts{"v"};
+INFO("Index page...");
 write_index_page($fxml);
 
 exit(0);
@@ -299,7 +304,7 @@ sub get_var
     my $value = $festivals->{'festival'}->{$subf}->{$name};
 
     if (! defined $value) {
-	warn "ERROR: no $name for $f" unless $nowarn;
+	WARN("ERROR: no $name for $f") unless $nowarn;
     }
 
     if (ref($value) eq 'SCALAR') {
@@ -628,6 +633,7 @@ sub write_hebrew_year_index_page {
     my $greg_yr1 = $heb_year - 3761;
     my $greg_yr2 = $greg_yr1 + 1;
 
+    INFO("    $heb_year");
     my $slug = "$greg_yr1-$greg_yr2";
     my $fn = "$outdir/$slug";
     open(OUT4, ">$fn.$$") || die "$fn.$$: $!\n";
@@ -758,7 +764,7 @@ sub write_festival_part
 	print OUT2 qq{</h4>\n};
 
 	if (! $torah_href) {
-	    warn "$f: missing Torah href\n";
+	    WARN("$f: missing Torah href");
 	}
 
 	if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
@@ -789,7 +795,7 @@ sub write_festival_part
 	print OUT2 qq{</h4>\n};
 
 	if (! $haft_href) {
-	    warn "$f: missing Haft href\n";
+	    WARN("$f: missing Haft href");
 	}
     }
 }
@@ -865,7 +871,7 @@ sub write_festival_page
     if ($about) {
 	$descr = trim($about->{'content'});
     }
-    warn "$f: missing About description\n" unless $descr;
+    WARN("$f: missing About description") unless $descr;
 
     my $fn = "$outdir/$slug";
     open(OUT2, ">$fn.$$") || die "$fn.$$: $!\n";
