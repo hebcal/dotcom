@@ -139,7 +139,8 @@ if ($opts{'H'}) {
 
 my $NUM_YEARS = 9;
 my $NUM_YEARS_MAIN_INDEX = 5;
-my $meta_greg_yr1 = $HEB_YR - 3761 - 1;
+my $FIRST_GREG_YR = $HEB_YR - 3761;
+my $meta_greg_yr1 = $FIRST_GREG_YR - 1;
 my $meta_greg_yr2 = $meta_greg_yr1 + $NUM_YEARS + 1;
 
 my @EVENTS_BY_HEBYEAR;
@@ -664,7 +665,7 @@ sub pagination_greg {
 
     my $s = qq{<div class="pagination"><ul>\n};
     foreach my $j (0 .. $NUM_YEARS) {
-        my $other_yr = $meta_greg_yr1 + $j;
+        my $other_yr = $FIRST_GREG_YR + $j;
         if ($current_year == $j) {
             $s .= qq{<li class="active">};
         } else {
@@ -680,7 +681,7 @@ sub pagination_greg {
 sub write_greg_year_index_page {
     my($i,$festivals,$sections) = @_;
 
-    my $greg_year = $meta_greg_yr1 + $i;
+    my $greg_year = $FIRST_GREG_YR + $i;
 
     INFO("    $greg_year");
     my $fn = "$outdir/$greg_year";
@@ -1293,7 +1294,7 @@ sub holidays_observed {
 	my @events = Hebcal::invoke_hebcal($cmd, "", 0);
 	$EVENTS_BY_HEBYEAR[$i] = build_event_begin_hash(\@events);
 
-	my $yr2 = $meta_greg_yr1 + $i;
+	my $yr2 = $FIRST_GREG_YR + $i;
 	my $cmd2 = "./hebcal";
 	$cmd2 .= " -i" if $opts{"i"};
 	$cmd2 .= " $yr2";

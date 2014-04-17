@@ -14,7 +14,7 @@ do
     curl -o $TMPFILE "$URL?year=${hyear}&yt=H&${ARGS}" && cp $TMPFILE $outfile
     chmod 0644 $outfile
 
-    gyear=$((year + i - 2))
+    gyear=$((year + i - 1))
     outfile="hebcal-${gyear}.pdf"
     curl -o $TMPFILE "$URL?year=${gyear}&yt=G&${ARGS}" && cp $TMPFILE $outfile
     chmod 0644 $outfile
