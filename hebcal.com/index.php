@@ -274,6 +274,11 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
   $greg_yr1 = $hebyear - 3761;
   $greg_yr2 = $greg_yr1 + 1;
   $greg_range = $greg_yr1 . "-" . $greg_yr2;
+
+  // for the first 7 months of the year, just show the current Gregorian year
+  if ($gm < 8) {
+    $greg_range = $gy;
+  }
 ?>
 <p><a class="btn" href="/holidays/<?php echo $greg_range ?>"><i class="icon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
 <p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
