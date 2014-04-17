@@ -521,6 +521,15 @@ EOHTML
     return $str;
 }
 
+sub get_heading_and_table_id {
+    my($section) = @_;
+    my $heading = $section->[1];
+    my $table_id = lc($heading);
+    $table_id =~ s/\s+/-/g;
+    $table_id = "hebcal-$table_id";
+    return ($heading,$table_id);
+}
+
 sub write_index_page
 {
     my($festivals) = @_;
@@ -569,9 +578,8 @@ EOHTML
 
     my @table_ids;
     foreach my $section (@sections) {
-      my $table_id = lc($section->[1]);
-      $table_id =~ s/\s+/-/g;
-      push(@table_ids, "hebcal-$table_id");
+        my($heading,$table_id) = get_heading_and_table_id($section);
+        push(@table_ids, $table_id);
     }
 
     my $td_sep = " tr td,\n#";
@@ -604,11 +612,9 @@ EOHTML
     print OUT3 qq{<div class="span12">\n};
 
     foreach my $section (@sections) {
-      my $heading = $section->[1];
-      print OUT3 "<h3>", $heading, "</h3>\n";
-      my $table_id = lc($heading);
-      $table_id =~ s/\s+/-/g;
-      table_index($festivals, "hebcal-$table_id", @{$section->[0]});
+        my($heading,$table_id) = get_heading_and_table_id($section);
+        print OUT3 "<h3>", $heading, "</h3>\n";
+        table_index($festivals, $table_id, @{$section->[0]});
     }
 
     print OUT3 qq{</div><!-- .span12 -->\n};
@@ -620,11 +626,11 @@ EOHTML
 
     # SEO - one page per year
     foreach my $i (0 .. $NUM_YEARS) {
-	write_hebrew_year_index_page($i,
-				     $festivals,
-				     \@sections,
-				     $xtra_head);
-        write_greg_year_index_page($i, $festivals);
+        write_hebrew_year_index_page($i,
+             $festivals,
+             \@sections,
+             $xtra_head);
+        write_greg_year_index_page($i, $festivals, \@sections);
     }
 }
 
@@ -669,7 +675,7 @@ sub pagination_greg {
 }
 
 sub write_greg_year_index_page {
-    my($i,$festivals) = @_;
+    my($i,$festivals,$sections) = @_;
 
     my $greg_year = $meta_greg_yr1 + $i;
 
@@ -764,11 +770,8 @@ EOHTML
     print $fh pagination_hebrew($i);
 
     foreach my $section (@{$sections}) {
-        my $heading = $section->[1];
+        my($heading,$table_id) = get_heading_and_table_id($section);
         print $fh "<h3>", $heading, "</h3>\n";
-        my $table_id = lc($heading);
-        $table_id =~ s/\s+/-/g;
-        $table_id = "hebcal-$table_id";
         table_header_one_year_only($fh, $table_id);
         foreach my $f (@{$section->[0]}) {
             table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f},1);
