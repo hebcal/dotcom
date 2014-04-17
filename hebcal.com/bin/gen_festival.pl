@@ -430,8 +430,29 @@ EOHTML
 ;
 }
 
-sub table_one_year_only {
-    my($fh,$festivals,$table_id,$i,@holidays) = @_;
+sub table_row_one_year_only {
+    my($fh,$festivals,$f,$evt) = @_;
+    my $descr;
+    my $about = get_var($festivals, $f, 'about');
+    if ($about) {
+        $descr = trim($about->{'content'});
+    }
+    die "no descr for $f" unless $descr;
+
+    my $slug = Hebcal::make_anchor($f);
+    my $short_descr = $descr;
+    $short_descr =~ s/\..*//;
+
+    print $fh qq{<tr><td><a href="$slug">$f</a></td>\n};
+    print $fh "<td>";
+    print $fh table_cell_observed($f, $evt, 1)
+        if defined $evt;
+    print $fh "</td>\n<td>$short_descr</td>\n";
+    print $fh "</tr>\n";
+}
+
+sub table_header_one_year_only {
+    my($fh,$table_id) = @_;
     print $fh <<EOHTML;
 <table class="table table-striped" id="$table_id">
 <col style="width:180px"><col style="width:180px"><col>
@@ -440,38 +461,14 @@ EOHTML
 ;
 
     print $fh "<tr><th>Holiday</th>";
-    my $yr = $HEB_YR + $i - 1;
     print $fh "<th>Dates</th>";
     print $fh "<th>Description</th>";
     print $fh "</tr>\n";
+}
 
-    foreach my $f (@holidays) {
-        my $descr;
-        my $about = get_var($festivals, $f, 'about');
-        if ($about) {
-            $descr = trim($about->{'content'});
-        }
-        die "no descr for $f" unless $descr;
-
-        my $slug = Hebcal::make_anchor($f);
-        my $short_descr = $descr;
-        $short_descr =~ s/\..*//;
-
-        print $fh qq{<tr><td><a href="$slug">$f</a></td>\n};
-        print $fh "<td>";
-        if (defined $EVENTS_BY_HEBYEAR[$i]->{$f}) {
-            my $evt = $EVENTS_BY_HEBYEAR[$i]->{$f};
-            print $fh table_cell_observed($f, $evt, 1);
-        }
-        print $fh "</td>\n<td>$short_descr</td>\n";
-        print $fh "</tr>\n";
-    }
-
-    print $fh <<EOHTML;
-</tbody>
-</table>
-EOHTML
-;
+sub table_footer_one_year_only {
+    my($fh,$table_id) = @_;
+    print $fh "</tbody>\n</table><!-- #$table_id -->\n";
 }
 
 sub get_index_body_preamble {
@@ -709,6 +706,15 @@ EOHTML
     print $fh qq{<div class="row-fluid">\n};
     print $fh pagination_greg($i);
     print $fh pagination_hebrew(-1);
+
+    my $table_id = "hebcal-all";
+    table_header_one_year_only($fh, $table_id);
+    foreach my $evt (@{$EVENTS_BY_GREGYEAR[$i]}) {
+        my $f = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        table_row_one_year_only($fh,$festivals,$f,$evt);
+    }
+    table_footer_one_year_only($fh, $table_id);
+
     print $fh qq{</div><!-- .row-fluid -->\n};
 
     print $fh Hebcal::html_footer_bootstrap(undef, undef);
@@ -763,7 +769,12 @@ EOHTML
         print $fh "<h3>", $heading, "</h3>\n";
         my $table_id = lc($heading);
         $table_id =~ s/\s+/-/g;
-        table_one_year_only($fh, $festivals, "hebcal-$table_id", $i, @{$section->[0]});
+        $table_id = "hebcal-$table_id";
+        table_header_one_year_only($fh, $table_id);
+        foreach my $f (@{$section->[0]}) {
+            table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f});
+        }
+        table_footer_one_year_only($fh, $table_id);
     }
 
     print $fh qq{</div><!-- .span12 -->\n};
@@ -1269,32 +1280,46 @@ sub holidays_observed {
 	$cmd2 .= " -i" if $opts{"i"};
 	$cmd2 .= " $yr2";
 	my @events2 = Hebcal::invoke_hebcal($cmd2, "", 0);
-	$EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2);
+	$EVENTS_BY_GREGYEAR[$i] = filter_events(\@events2);
     }
+}
+
+sub filter_events {
+    my($events) = @_;
+    my $dest = [];
+    my %seen;
+    foreach my $evt (@{$events}) {
+        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        next if $subj =~ /^Erev /;
+
+        # Since Chanukah doesn't have an Erev, skip a day
+        next if $subj =~ /^Chanukah: 1 Candle$/;
+
+        my $subj_copy = $subj;
+        $subj_copy =~ s/ \d{4}$//;
+        $subj_copy =~ s/ \(CH\'\'M\)$//;
+        $subj_copy =~ s/ \(Hoshana Raba\)$//;
+        if ($subj ne "Rosh Chodesh Adar II") {
+            $subj_copy =~ s/ [IV]+$//;
+        }
+        $subj_copy =~ s/: \d Candles?$//;
+        $subj_copy =~ s/: 8th Day$//;
+
+        next if defined $seen{$subj_copy};
+        $evt->[$Hebcal::EVT_IDX_SUBJ] = $subj_copy;
+        push(@{$dest}, $evt);
+        $seen{$subj_copy} = 1;
+    }
+    $dest;
 }
 
 sub build_event_begin_hash {
     my($events) = @_;
+    my $filtered = filter_events($events);
     my $dest = {};
-    foreach my $evt (@{$events}) {
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-	next if $subj =~ /^Erev /;
-
-	# Since Chanukah doesn't have an Erev, skip a day
-	next if $subj =~ /^Chanukah: 1 Candle$/;
-
-	my $subj_copy = $subj;
-	$subj_copy =~ s/ \d{4}$//;
-	$subj_copy =~ s/ \(CH\'\'M\)$//;
-	$subj_copy =~ s/ \(Hoshana Raba\)$//;
-	if ($subj ne "Rosh Chodesh Adar II") {
-	    $subj_copy =~ s/ [IV]+$//;
-	}
-	$subj_copy =~ s/: \d Candles?$//;
-	$subj_copy =~ s/: 8th Day$//;
-
-	$dest->{$subj_copy} = $evt
-	    unless defined $dest->{$subj_copy};
+    foreach my $evt (@{$filtered}) {
+        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        $dest->{$subj} = $evt
     }
     $dest;
 }
