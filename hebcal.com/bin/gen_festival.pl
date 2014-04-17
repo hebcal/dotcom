@@ -431,7 +431,7 @@ EOHTML
 }
 
 sub table_row_one_year_only {
-    my($fh,$festivals,$f,$evt) = @_;
+    my($fh,$festivals,$f,$evt,$show_year) = @_;
     my $descr;
     my $about = get_var($festivals, $f, 'about');
     if ($about) {
@@ -445,7 +445,7 @@ sub table_row_one_year_only {
 
     print $fh qq{<tr><td><a href="$slug">$f</a></td>\n};
     print $fh "<td>";
-    print $fh table_cell_observed($f, $evt, 1)
+    print $fh table_cell_observed($f, $evt, $show_year)
         if defined $evt;
     print $fh "</td>\n<td>$short_descr</td>\n";
     print $fh "</tr>\n";
@@ -672,7 +672,6 @@ sub write_greg_year_index_page {
     my($i,$festivals) = @_;
 
     my $greg_year = $meta_greg_yr1 + $i;
-#    $EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2);
 
     INFO("    $greg_year");
     my $fn = "$outdir/$greg_year";
@@ -681,7 +680,7 @@ sub write_greg_year_index_page {
     my $page_title = "Jewish Holidays $greg_year";
 
     my $meta = <<EOHTML;
-<meta name="description" content="Dates of major and minor Jewish holidays for years $greg_year, observances and customs, holiday Torah readings.">
+<meta name="description" content="Dates of major and minor Jewish holidays for $greg_year, observances and customs, holiday Torah readings.">
 EOHTML
 ;
 
@@ -711,7 +710,7 @@ EOHTML
     table_header_one_year_only($fh, $table_id);
     foreach my $evt (@{$EVENTS_BY_GREGYEAR[$i]}) {
         my $f = $evt->[$Hebcal::EVT_IDX_SUBJ];
-        table_row_one_year_only($fh,$festivals,$f,$evt);
+        table_row_one_year_only($fh,$festivals,$f,$evt,0);
     }
     table_footer_one_year_only($fh, $table_id);
 
@@ -772,7 +771,7 @@ EOHTML
         $table_id = "hebcal-$table_id";
         table_header_one_year_only($fh, $table_id);
         foreach my $f (@{$section->[0]}) {
-            table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f});
+            table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f},1);
         }
         table_footer_one_year_only($fh, $table_id);
     }
