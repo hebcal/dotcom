@@ -1836,30 +1836,6 @@ sub export_http_header($$)
                      -last_modified => http_date($time));
 }
 
-sub get_browser_endl($)
-{
-    my($ua) = @_;
-    my $endl;
-
-    if ($ua && $ua =~ /^Mozilla\/[1-4]/)
-    {
-	if ($ua =~ /compatible/)
-	{
-	    $endl = "\015\012";
-	}
-	else
-	{
-	    $endl = "\012";	# netscape 4.x and below want unix LF only
-	}
-    }
-    else
-    {
-	$endl = "\015\012";
-    }
-
-    $endl;
-}
-
 ########################################################################
 # export to vCalendar
 ########################################################################
@@ -2493,316 +2469,327 @@ sub torah_calendar_memo {
     return $memo;
 }
 
-sub vcalendar_write_contents
-{
+sub ical_write_line {
+    foreach (@_, "\015\012") {
+        print STDOUT;
+        print CACHE if $cache;
+    }
+}
+
+sub ical_write_evt {
+    my($q, $evt, $is_icalendar, $dtstamp, $cconfig, $tzid, $dbh, $sth) = @_;
+
+    my $subj = $evt->[$EVT_IDX_SUBJ];
+
+    ical_write_line(qq{BEGIN:VEVENT});
+    ical_write_line(qq{DTSTAMP:}, $dtstamp);
+
+    my $category = $is_icalendar ? "Holiday" : "HOLIDAY";
+    ical_write_line(qq{CATEGORIES:}, $category);
+
+    my ( $href, $hebrew, $dummy_memo ) = get_holiday_anchor( $subj, 0, $q );
+
+    $subj =~ s/,/\\,/g;
+
+    if ($is_icalendar) {
+        $subj = translate_subject( $q, $subj, $hebrew );
+    }
+
+    ical_write_line(qq{CLASS:PUBLIC});
+    ical_write_line(qq{SUMMARY:}, $subj);
+
+    my $memo = "";
+    if (   $evt->[$EVT_IDX_UNTIMED] == 0
+        && defined $cconfig
+        && defined $cconfig->{"city"} )
+    {
+        ical_write_line(qq{LOCATION:}, $cconfig->{"city"});
+    }
+    elsif ( $evt->[$EVT_IDX_MEMO] ) {
+        $memo = $evt->[$EVT_IDX_MEMO];
+    }
+    elsif ( defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/ ) {
+        my ( $year, $mon, $mday ) = event_ymd($evt);
+        $memo = torah_calendar_memo( $dbh, $sth, $year, $mon, $mday );
+    }
+
+    if ($href) {
+        if ( $href =~ m,/sedrot/(.+)$, ) {
+            $href = "http://hebcal.com/s/$1";
+        }
+        elsif ( $href =~ m,/holidays/(.+)$, ) {
+            $href = "http://hebcal.com/h/$1";
+        }
+        ical_write_line(qq{URL:}, $href) if $is_icalendar;
+        $memo .= "\\n\\n" if $memo;
+        $memo .= $href;
+    }
+
+    if ($memo) {
+        $memo =~ s/,/\\,/g;
+        $memo =~ s/;/\\;/g;
+        ical_write_line(qq{DESCRIPTION:}, $memo);
+    }
+
+    my ( $year, $mon, $mday ) = event_ymd($evt);
+    my $date = sprintf( "%04d%02d%02d", $year, $mon, $mday );
+    my $end_date = $date;
+
+    if ( $evt->[$EVT_IDX_UNTIMED] == 0 ) {
+        my $hour = $evt->[$EVT_IDX_HOUR];
+        my $min  = $evt->[$EVT_IDX_MIN];
+
+        $hour += 12 if $hour < 12;
+        $date .= sprintf( "T%02d%02d00", $hour, $min );
+
+        $min += $evt->[$EVT_IDX_DUR];
+        if ( $min >= 60 ) {
+            $hour++;
+            $min -= 60;
+        }
+
+        $end_date .= sprintf( "T%02d%02d00", $hour, $min );
+    }
+    else {
+        my ( $year, $mon, $mday ) = event_ymd($evt);
+        my ( $gy, $gm, $gd ) = Date::Calc::Add_Delta_Days( $year, $mon, $mday, 1 );
+        $end_date = sprintf( "%04d%02d%02d", $gy, $gm, $gd );
+
+        # for vCalendar Palm Desktop and Outlook 2000 seem to
+        # want midnight to midnight for all-day events.
+        # Midnight to 23:59:59 doesn't seem to work as expected.
+        if ( !$is_icalendar ) {
+            $date     .= "T000000";
+            $end_date .= "T000000";
+        }
+    }
+
+    # for all-day untimed, use DTEND;VALUE=DATE intsead of DURATION:P1D.
+    # It's more compatible with everthing except ancient versions of
+    # Lotus Notes circa 2004
+    my $dtstart = "DTSTART";
+    my $dtend = "DTEND";
+    if ($is_icalendar) {
+        if ( $evt->[$EVT_IDX_UNTIMED] ) {
+            $dtstart .= ";VALUE=DATE";
+            $dtend .= ";VALUE=DATE";
+        }
+        elsif ($tzid) {
+            $dtstart .= ";TZID=$tzid";
+            $dtend .= ";TZID=$tzid";
+        }
+    }
+    ical_write_line($dtstart, ":", $date);
+    ical_write_line($dtend, ":", $end_date);
+
+    if ($is_icalendar) {
+        if (   $evt->[$EVT_IDX_UNTIMED] == 0
+            || $evt->[$EVT_IDX_YOMTOV] == 1 )
+        {
+            ical_write_line("TRANSP:OPAQUE");    # show as busy
+            ical_write_line("X-MICROSOFT-CDO-BUSYSTATUS:OOF");
+        }
+        else {
+            ical_write_line("TRANSP:TRANSPARENT");    # show as free
+            ical_write_line("X-MICROSOFT-CDO-BUSYSTATUS:FREE");
+        }
+
+        my $date_copy = $date;
+        $date_copy =~ s/T\d+$//;
+
+        my $subj_utf8 = encode_utf8( $evt->[$EVT_IDX_SUBJ] );
+        my $digest    = Digest::MD5::md5_hex($subj_utf8);
+        my $uid       = "hebcal-$date_copy-$digest";
+
+        if ( $evt->[$EVT_IDX_UNTIMED] == 0
+            && defined $cconfig )
+        {
+            my $loc;
+            if ( defined $cconfig->{"zip"} ) {
+                $loc = $cconfig->{"zip"};
+            }
+            elsif ( defined $cconfig->{"geonameid"} ) {
+                $loc = "g" . $cconfig->{"geonameid"};
+            }
+            elsif ( defined $cconfig->{"city"} ) {
+                $loc = lc( $cconfig->{"city"} );
+                $loc =~ s/[^\w]/-/g;
+                $loc =~ s/-+/-/g;
+                $loc =~ s/-$//g;
+            }
+            elsif (defined $cconfig->{"long_deg"}
+                && defined $cconfig->{"long_min"}
+                && defined $cconfig->{"lat_deg"}
+                && defined $cconfig->{"lat_min"} )
+            {
+                $loc = join( "-",
+                    "pos",                  $cconfig->{"long_deg"},
+                    $cconfig->{"long_min"}, $cconfig->{"lat_deg"},
+                    $cconfig->{"lat_min"} );
+            }
+
+            if ($loc) {
+                $uid .= "-" . $loc;
+            }
+
+            if ( defined $cconfig->{"latitude"} ) {
+                ical_write_line(qq{GEO:}, $cconfig->{"latitude"},
+                    ";", $cconfig->{"longitude"});
+            }
+        }
+
+        ical_write_line(qq{UID:$uid});
+
+        my $alarm;
+        if ( $evt->[$EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/ ) {
+            $alarm = "3H";    # 9pm Omer alarm evening before
+        }
+        elsif ($evt->[$EVT_IDX_SUBJ] =~ /^Yizkor \(.+\)$/
+            || $evt->[$EVT_IDX_SUBJ]
+            =~ /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/ )
+        {
+            $alarm = "12H";    # noon the day before
+        }
+        elsif ( $evt->[$EVT_IDX_SUBJ] eq 'Candle lighting' ) {
+            $alarm = "10M";    # ten minutes
+        }
+
+        if ( defined $alarm ) {
+            ical_write_line("BEGIN:VALARM");
+            ical_write_line("ACTION:DISPLAY");
+            ical_write_line("DESCRIPTION:REMINDER");
+            ical_write_line("TRIGGER;RELATED=START:-PT${alarm}");
+            ical_write_line("END:VALARM");
+        }
+    }
+
+    ical_write_line("END:VEVENT");
+}
+
+sub vcalendar_write_contents {
     my($q,$events,$title,$cconfig) = @_;
 
-    my $is_icalendar = ($q->path_info() =~ /\.ics$/) ? 1 : 0;
+    my $is_icalendar = ( $q->path_info() =~ /\.ics$/ ) ? 1 : 0;
 
     my $cache_webpath;
     if ($is_icalendar) {
         $cache_webpath = get_vcalendar_cache_fn();
-	$cache = $ENV{"DOCUMENT_ROOT"} . $cache_webpath . ".$$";
-	my $dir = $cache;
-	$dir =~ s,/[^/]+$,,;	# dirname
-	unless (-d $dir) {
-	    system("/bin/mkdir", "-p", $dir);
-	}
-	if (open(CACHE, ">$cache")) {
-	    if ($^V && $^V ge v5.8.1) {
-		binmode(CACHE, ":utf8");
-	    }
-	} else {
-	    $cache = undef;
-	}
-	export_http_header($q, 'text/calendar; charset=UTF-8');
-    } else {
-	export_http_header($q, 'text/x-vCalendar');
+        $cache         = $ENV{"DOCUMENT_ROOT"} . $cache_webpath . ".$$";
+        my $dir = $cache;
+        $dir =~ s,/[^/]+$,,;    # dirname
+        unless ( -d $dir ) {
+            system( "/bin/mkdir", "-p", $dir );
+        }
+        if ( open( CACHE, ">$cache" ) ) {
+            if ( $^V && $^V ge v5.8.1 ) {
+                binmode( CACHE, ":utf8" );
+            }
+        }
+        else {
+            $cache = undef;
+        }
+        export_http_header( $q, 'text/calendar; charset=UTF-8' );
     }
-
-    my $endl = get_browser_endl($q->user_agent());
+    else {
+        export_http_header( $q, 'text/x-vCalendar' );
+    }
 
     my $tzid;
-    if ($is_icalendar && defined $cconfig && defined $cconfig->{"tzid"}) {
-	$tzid = $cconfig->{"tzid"};
+    if ( $is_icalendar && defined $cconfig && defined $cconfig->{"tzid"} ) {
+        $tzid = $cconfig->{"tzid"};
     }
 
-    my @gmtime_now = gmtime(time());
-    my $dtstamp = strftime("%Y%m%dT%H%M%SZ", @gmtime_now);
+    my @gmtime_now = gmtime( time() );
+    my $dtstamp = strftime( "%Y%m%dT%H%M%SZ", @gmtime_now );
 
-    out_html(undef, qq{BEGIN:VCALENDAR$endl});
+    ical_write_line("BEGIN:VCALENDAR");
 
     if ($is_icalendar) {
-	if (defined $cconfig && defined $cconfig->{"city"}) {
-	    $title = $cconfig->{"city"} . " " . $title;
-	}
-
-	$title =~ s/,/\\,/g;
-
-	out_html(undef,
-	qq{VERSION:2.0$endl},
-	qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v5.1//EN$endl},
-	qq{CALSCALE:GREGORIAN$endl},
-	qq{METHOD:PUBLISH$endl},
-	qq{X-LOTUS-CHARSET:UTF-8$endl},
-	qq{X-PUBLISHED-TTL:PT7D$endl},
-	qq{X-WR-CALNAME:Hebcal $title$endl});
-
-        if (defined $cache_webpath && $ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/) {
-           my $qs = $1;
-           $qs =~ s/;/&/g;
-           out_html(undef, qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs$endl});
+        if ( defined $cconfig && defined $cconfig->{"city"} ) {
+            $title = $cconfig->{"city"} . " " . $title;
         }
 
-	# include an iCal description
-	if (defined $q->param("v"))
-	{
-	    my $desc;
-	    if ($q->param("v") eq "yahrzeit") {
-		$desc = "Yahrzeits + Anniversaries from www.hebcal.com";
-	    } else {
-		$desc = "Jewish Holidays from www.hebcal.com";
-	    }
-	    out_html(undef, qq{X-WR-CALDESC:$desc$endl});
-	}
-    } else {
-	out_html(undef, qq{VERSION:1.0$endl},
-		 qq{METHOD:PUBLISH$endl});
+        $title =~ s/,/\\,/g;
+
+        ical_write_line(qq{VERSION:2.0});
+        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v5.2//EN});
+        ical_write_line(qq{CALSCALE:GREGORIAN});
+        ical_write_line(qq{METHOD:PUBLISH});
+        ical_write_line(qq{X-LOTUS-CHARSET:UTF-8});
+        ical_write_line(qq{X-PUBLISHED-TTL:PT7D});
+        ical_write_line(qq{X-WR-CALNAME:Hebcal $title});
+
+        if (   defined $cache_webpath
+            && defined $ENV{"REQUEST_URI"}
+            && $ENV{"REQUEST_URI"} =~ /\?(.+)$/ )
+        {
+            my $qs = $1;
+            $qs =~ s/;/&/g;
+            ical_write_line(qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs});
+        }
+
+        # include an iCal description
+        if ( defined $q->param("v") ) {
+            my $desc;
+            if ( $q->param("v") eq "yahrzeit" ) {
+                $desc = "Yahrzeits + Anniversaries from www.hebcal.com";
+            }
+            else {
+                $desc = "Jewish Holidays from www.hebcal.com";
+            }
+            ical_write_line(qq{X-WR-CALDESC:$desc});
+        }
+    }
+    else {
+        ical_write_line(qq{VERSION:1.0});
+        ical_write_line(qq{METHOD:PUBLISH});
     }
 
     if ($tzid) {
-	out_html(undef, qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid$endl});
-	my $vtimezone_ics = $ENV{"DOCUMENT_ROOT"} . "/zoneinfo/" . $tzid . ".ics";
-	if (defined $VTIMEZONE{$tzid}) {
-	    my $vt = $VTIMEZONE{$tzid};
-	    $vt =~ s/\n/$endl/g;
-	    out_html(undef, $vt);
-	} elsif (open(VTZ,$vtimezone_ics)) {
-	    my $in_vtz = 0;
-	    while(<VTZ>) {
-		$in_vtz = 1 if /^BEGIN:VTIMEZONE/;
-		out_html(undef, $_) if $in_vtz;
-		$in_vtz = 0 if /^END:VTIMEZONE/;
-	    }
-	    close(VTZ);
-	}
+        ical_write_line(qq{X-WR-TIMEZONE;VALUE=TEXT:$tzid});
+        my $vtimezone_ics
+            = $ENV{"DOCUMENT_ROOT"} . "/zoneinfo/" . $tzid . ".ics";
+        if ( defined $VTIMEZONE{$tzid} ) {
+            my $vt = $VTIMEZONE{$tzid};
+            $vt =~ s/\n/\015\012/g;
+            out_html( undef, $vt );
+        }
+        elsif ( open( VTZ, $vtimezone_ics ) ) {
+            my $in_vtz = 0;
+            while (<VTZ>) {
+                $in_vtz = 1 if /^BEGIN:VTIMEZONE/;
+                out_html( undef, $_ ) if $in_vtz;
+                $in_vtz = 0 if /^END:VTIMEZONE/;
+            }
+            close(VTZ);
+        }
     }
 
     unless ($eval_use_DBI) {
-	eval("use DBI");
-	$eval_use_DBI = 1;
+        eval("use DBI");
+        $eval_use_DBI = 1;
     }
 
     # don't raise error if we can't open DB
-    my $dbh = DBI->connect("dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "");
+    my $dbh = DBI->connect( "dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "" );
     my $sth;
-    if (defined $dbh) {
-      $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
-      if (! defined $sth) {
-	$dbh = undef;
-      }
-    }
-
-    foreach my $evt (@{$events}) {
-	out_html(undef, qq{BEGIN:VEVENT$endl});
-	out_html(undef, qq{DTSTAMP:$dtstamp$endl});
-
-	if ($is_icalendar) {
-	    out_html(undef, qq{CATEGORIES:Holiday$endl});
-#	    out_html(undef, qq{STATUS:CONFIRMED$endl});
-	} else {
-	    out_html(undef, qq{CATEGORIES:HOLIDAY$endl});
-	}
-
-	my $subj = $evt->[$EVT_IDX_SUBJ];
-
-	my($href,$hebrew,$dummy_memo) = get_holiday_anchor($subj,0,$q);
-
-	$subj =~ s/,/\\,/g;
-
-	if ($is_icalendar) {
-	    $subj = translate_subject($q,$subj,$hebrew);
-	}
-
-	out_html(undef, qq{CLASS:PUBLIC$endl}, qq{SUMMARY:$subj$endl});
-
-	my $memo = "";
-	if ($evt->[$EVT_IDX_UNTIMED] == 0
-	    && defined $cconfig
-	    && defined $cconfig->{"city"})
-	{
-	    out_html(undef, qq{LOCATION:}, $cconfig->{"city"}, $endl);
-	}
-	elsif ($evt->[$EVT_IDX_MEMO])
- 	{
-	    $memo = $evt->[$EVT_IDX_MEMO];
-	}
-	elsif (defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/)
-	{
-	    my($year,$mon,$mday) = event_ymd($evt);
-	    $memo = torah_calendar_memo($dbh, $sth,
-					$year, $mon, $mday);
-	}
-
-	if ($href) {
-          if ($href =~ m,/sedrot/(.+)$,) {
-             $href = "http://hebcal.com/s/$1";
-          } elsif ($href =~ m,/holidays/(.+)$,) {
-             $href = "http://hebcal.com/h/$1";
-          }
-	  out_html(undef, qq{URL:}, $href, $endl) if $is_icalendar;
-	  $memo .= "\\n\\n" if $memo;
-	  $memo .= $href;
-	}
-
-	if ($memo) {
-	  $memo =~ s/,/\\,/g;
-	  $memo =~ s/;/\\;/g;
-	  out_html(undef, qq{DESCRIPTION:}, $memo, $endl);
-	}
-
-	my($year,$mon,$mday) = event_ymd($evt);
-	my $date = sprintf("%04d%02d%02d",
-			   $year, $mon, $mday);
-	my $end_date = $date;
-
-	if ($evt->[$EVT_IDX_UNTIMED] == 0)
-	{
-	    my $hour = $evt->[$EVT_IDX_HOUR];
-	    my $min = $evt->[$EVT_IDX_MIN];
-
-	    $hour += 12 if $hour < 12;
-	    $date .= sprintf("T%02d%02d00", $hour, $min);
-
-	    $min += $evt->[$EVT_IDX_DUR];
-	    if ($min >= 60)
-	    {
-		$hour++;
-		$min -= 60;
-	    }
-
-	    $end_date .= sprintf("T%02d%02d00", $hour, $min);
-	}
-	else
-	{
-	    my($year,$mon,$mday) = event_ymd($evt);
-	    my($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($year, $mon, $mday, 1);
-	    $end_date = sprintf("%04d%02d%02d", $gy, $gm, $gd);
-
-	    # for vCalendar Palm Desktop and Outlook 2000 seem to
-	    # want midnight to midnight for all-day events.
-	    # Midnight to 23:59:59 doesn't seem to work as expected.
-	    if (!$is_icalendar)
-	    {
-		$date .= "T000000";
-		$end_date .= "T000000";
-	    }
-	}
-
-	out_html(undef, qq{DTSTART});
-	if ($is_icalendar) {
-	    if ($evt->[$EVT_IDX_UNTIMED]) {
-		out_html(undef, ";VALUE=DATE");
-	    } elsif ($tzid) {
-		out_html(undef, ";TZID=$tzid");
-	    }
-	}
-	out_html(undef, qq{:$date$endl});
-
-        # for all-day untimed, use DTEND;VALUE=DATE intsead of DURATION:P1D.
-        # It's more compatible with everthing except ancient versions of
-        # Lotus Notes circa 2004
-        out_html(undef, qq{DTEND});
-        if ($is_icalendar) {
-            if ($evt->[$EVT_IDX_UNTIMED]) {
-                out_html(undef, ";VALUE=DATE");
-            } elsif ($tzid) {
-                out_html(undef, ";TZID=$tzid");
-            }
+    if ( defined $dbh ) {
+        $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+        if ( !defined $sth ) {
+            $dbh = undef;
         }
-        out_html(undef, qq{:$end_date$endl});
-
-	if ($is_icalendar) {
-	    if ($evt->[$EVT_IDX_UNTIMED] == 0 ||
-		$evt->[$EVT_IDX_YOMTOV] == 1) {
-		out_html(undef, "TRANSP:OPAQUE$endl"); # show as busy
-		out_html(undef, "X-MICROSOFT-CDO-BUSYSTATUS:OOF$endl");
-	    } else {
-		out_html(undef, "TRANSP:TRANSPARENT$endl"); # show as free
-		out_html(undef, "X-MICROSOFT-CDO-BUSYSTATUS:FREE$endl");
-	    }
-
-	    my $date_copy = $date;
-	    $date_copy =~ s/T\d+$//;
-
-	    my $subj_utf8 = encode_utf8($evt->[$EVT_IDX_SUBJ]);
-	    my $digest = Digest::MD5::md5_hex($subj_utf8);
-	    my $uid = "hebcal-$date_copy-$digest";
-
-	    if ($evt->[$EVT_IDX_UNTIMED] == 0
-		&& defined $cconfig) {
-		my $loc;
-		if (defined $cconfig->{"zip"}) {
-		    $loc = $cconfig->{"zip"};
-                } elsif (defined $cconfig->{"geonameid"}) {
-                    $loc = "g" . $cconfig->{"geonameid"};
-		} elsif (defined $cconfig->{"city"}) {
-		    $loc = lc($cconfig->{"city"});
-		    $loc =~ s/[^\w]/-/g;
-		    $loc =~ s/-+/-/g;
-		    $loc =~ s/-$//g;
-		} elsif (defined $cconfig->{"long_deg"}
-			 && defined $cconfig->{"long_min"}
-			 && defined $cconfig->{"lat_deg"}
-			 && defined $cconfig->{"lat_min"}) {
-		    $loc = join("-", "pos",
-				$cconfig->{"long_deg"},
-				$cconfig->{"long_min"},
-				$cconfig->{"lat_deg"},
-				$cconfig->{"lat_min"});
-		}
-
-		if ($loc) {
-		    $uid .= "-" . $loc;
-		}
-
-		if (defined $cconfig->{"latitude"}) {
-		    out_html(undef, qq{GEO:}, $cconfig->{"latitude"}, ";", $cconfig->{"longitude"}, $endl);
-		}
-	    }
-
-	    out_html(undef, qq{UID:$uid$endl});
-
-	    my $alarm;
-	    if ($evt->[$EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/) {
-		$alarm = "3H";	# 9pm Omer alarm evening before
-	    }
-	    elsif ($evt->[$EVT_IDX_SUBJ] =~ /^Yizkor \(.+\)$/ ||
-		   $evt->[$EVT_IDX_SUBJ] =~
-		   /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/) {
-		$alarm = "12H";	# noon the day before
-	    }
-	    elsif ($evt->[$EVT_IDX_SUBJ] eq 'Candle lighting') {
-		$alarm = "10M";	# ten minutes
-	    }
-
-	    if (defined $alarm) {
-		out_html(undef, "BEGIN:VALARM${endl}",
-			 "ACTION:DISPLAY${endl}",
-			 "DESCRIPTION:REMINDER${endl}",
-			 "TRIGGER;RELATED=START:-PT${alarm}${endl}",
-			 "END:VALARM${endl}");
-	    }
-	}
-
-	out_html(undef, qq{END:VEVENT$endl});
     }
 
-    out_html(undef, qq{END:VCALENDAR$endl});
+    foreach my $evt ( @{$events} ) {
+        ical_write_evt( $q, $evt, $is_icalendar, $dtstamp, $cconfig, $tzid,
+            $dbh, $sth );
+    }
 
-    if (defined $dbh) {
-      undef $sth;
-      $dbh->disconnect();
+    ical_write_line("END:VCALENDAR");
+
+    if ( defined $dbh ) {
+        undef $sth;
+        $dbh->disconnect();
     }
 
     cache_end();
@@ -2834,7 +2821,7 @@ sub csv_write_contents($$$)
     my($q,$events,$euro) = @_;
 
     export_http_header($q, 'text/x-csv');
-    my $endl = get_browser_endl($q->user_agent());
+    my $endl = "\015\012";
 
     print STDOUT
 	qq{"Subject","Start Date","Start Time","End Date",},
