@@ -435,7 +435,7 @@ sub hebrew_span
 sub plus4_events {
     my($cmd,$title,$events) = @_;
 
-    if (defined $q->param("month") && $q->param("month") eq "x") {
+    if (defined $q->param("month") && $q->param("month") eq "x" && $EXTRA_YEARS) {
 	for (my $i = 1; $i <= $EXTRA_YEARS; $i++)
 	{
 	    my $cmd2 = $cmd;
@@ -1326,7 +1326,7 @@ accurate.
 
     if ($numEntries > 0) {
 	my $download_title = $date;
-	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/) {
+	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
 	    my $plus4 = $1 + $EXTRA_YEARS;
 	    $download_title .= "-" . $plus4;
 	}
