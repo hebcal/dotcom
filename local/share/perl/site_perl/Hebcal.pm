@@ -2476,10 +2476,28 @@ sub ical_write_line {
     }
 }
 
+my $OMER_TODO = 0;
+
 sub ical_write_evt {
     my($q, $evt, $is_icalendar, $dtstamp, $cconfig, $tzid, $dbh, $sth) = @_;
 
     my $subj = $evt->[$EVT_IDX_SUBJ];
+
+    if ( $OMER_TODO && $subj =~ /^(\d+)\w+ day of the Omer$/ ) {
+        my $omer_day = $1;
+        my ( $year, $mon, $mday ) = event_ymd($evt);
+        my ( $gy, $gm, $gd ) = Date::Calc::Add_Delta_Days( $year, $mon, $mday, -1 );
+        my $dtstart = sprintf( "%04d%02d%02dT204500", $gy, $gm, $gd );
+        my $uid = sprintf( "hebcal-omer-%04d%02d%02d-%02d", $year, $mon, $mday, $omer_day);
+        ical_write_line(qq{BEGIN:VTODO});
+        ical_write_line(qq{SUMMARY:}, $subj);
+        ical_write_line(qq{DTSTART:}, $dtstart);
+        ical_write_line(qq{DUE:}, $dtstart);
+        ical_write_line(qq{DTSTAMP:}, $dtstamp);
+        ical_write_line(qq{UID:}, $uid);
+        ical_write_line(qq{END:VTODO});
+        return 1;
+    }
 
     ical_write_line(qq{BEGIN:VEVENT});
     ical_write_line(qq{DTSTAMP:}, $dtstamp);
