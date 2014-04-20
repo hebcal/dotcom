@@ -2491,10 +2491,16 @@ sub ical_write_evt {
         my $uid = sprintf( "hebcal-omer-%04d%02d%02d-%02d", $year, $mon, $mday, $omer_day);
         ical_write_line(qq{BEGIN:VTODO});
         ical_write_line(qq{SUMMARY:}, $subj);
+        ical_write_line(qq{STATUS:NEEDS-ACTION});
         ical_write_line(qq{DTSTART:}, $dtstart);
         ical_write_line(qq{DUE:}, $dtstart);
         ical_write_line(qq{DTSTAMP:}, $dtstamp);
         ical_write_line(qq{UID:}, $uid);
+        ical_write_line("BEGIN:VALARM");
+        ical_write_line("ACTION:DISPLAY");
+        ical_write_line("DESCRIPTION:REMINDER");
+        ical_write_line("TRIGGER;VALUE=DATE-TIME:", $dtstart);
+        ical_write_line("END:VALARM");
         ical_write_line(qq{END:VTODO});
         return 1;
     }
