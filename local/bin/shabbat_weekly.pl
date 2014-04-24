@@ -326,7 +326,7 @@ sub mail_user
 
     my $encoded = MIME::Base64::encode_base64($to);
     chomp($encoded);
-    my $unsub_url = "http://www.hebcal.com/email/?" .
+    my $unsub_url = "https://www.hebcal.com/email/?" .
         "e=" . URI::Escape::uri_escape_utf8($encoded);
 
     my $html_body = "";

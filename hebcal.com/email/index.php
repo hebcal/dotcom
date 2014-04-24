@@ -594,7 +594,7 @@ EOD
 		     "X-Originating-IP" => "[$ip]",
 		     "Subject" => $subject);
 
-    $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
+    $url_prefix = "https://" . $_SERVER["HTTP_HOST"];
     $body = <<<EOD
 <div dir="ltr">
 <div>Hello,</div>

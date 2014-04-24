@@ -95,7 +95,7 @@ EOD;
 	"@hebcal.com";
     $subject = "Your subscription to hebcal is complete";
 
-    $url_prefix = "http://" . $_SERVER["HTTP_HOST"];
+    $url_prefix = "https://" . $_SERVER["HTTP_HOST"];
     $unsub_url = $url_prefix . "/email/?e=" .
 	urlencode(base64_encode($info["em"]));
 

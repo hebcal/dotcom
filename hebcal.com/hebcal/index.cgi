@@ -1367,7 +1367,7 @@ accurate.
 	&& $q->param("geo") && $q->param("geo") =~ /^city|zip|geoname$/) {
 	# Email
 	my $email_form = <<EOHTML;
-<form class="form-inline" action="/email/" method="post">
+<form class="form-inline" action="https://www.hebcal.com/email/" method="post">
 <fieldset>
 <input type="hidden" name="v" value="1">
 EOHTML
