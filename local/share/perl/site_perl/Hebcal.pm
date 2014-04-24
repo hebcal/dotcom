@@ -1331,18 +1331,18 @@ sub html_footer_bootstrap
 <div class="span3">
 <ul class="nav nav-list">
 <li class="nav-header">About Us</li>
-<li><a href="/home/about">About Hebcal</a></li>
-<li><a href="/home/category/news">News</a></li>
-<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
+<li><a href="http://www.hebcal.com/home/about">About Hebcal</a></li>
+<li><a href="http://www.hebcal.com/home/category/news">News</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></li>
 </ul>
 </div><!-- .span3 -->
 <div class="span3">
 <ul class="nav nav-list">
 <li class="nav-header">Connect</li>
-<li><a href="/home/help">Help</a></li>
-<li><a href="/home/about/contact">Contact Us</a></li>
-<li><a href="/home/about/donate">Donate</a></li>
-<li><a href="/home/developer-apis">Developer APIs</a></li>
+<li><a href="http://www.hebcal.com/home/help">Help</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact Us</a></li>
+<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
+<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
 </ul>
 </div><!-- .span3 -->
 <div class="span3">
@@ -1443,8 +1443,8 @@ my $HTML_MENU_ITEMS_V2 =
      [ "/converter/",	"Date Converter", "Hebrew Date Converter" ],
      [ "/shabbat/",	"Shabbat",	"Shabbat Times" ],
      [ "/sedrot/",	"Torah",	"Torah Readings" ],
-     [ "/home/about",	"About",	"About" ],
-     [ "/home/help",	"Help",		"Help" ],
+     [ "http://www.hebcal.com/home/about",	"About",	"About" ],
+     [ "http://www.hebcal.com/home/help",	"Help",		"Help" ],
     ];
 
 sub html_menu_item_bootstrap {
@@ -1543,7 +1543,7 @@ $xtra_head</head>
    <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
    <div class="nav-collapse collapse">
     $menu
-    <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
+    <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
     <input name="s" id="s" type="text" class="search-query" placeholder="Search">
     </form>
    </div><!-- .nav-collapse -->
