@@ -139,7 +139,7 @@ EOD;
 }
 
 function get_sub_info($email) {
-    error_log("get_sub_info($email);");
+    //error_log("get_sub_info($email);");
     global $hebcal_db;
     hebcal_open_mysql_db();
     $sql = <<<EOD
@@ -151,7 +151,7 @@ FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_address = '$email'
 EOD;
 
-    error_log($sql);
+    //error_log($sql);
     $result = mysql_query($sql, $hebcal_db);
     if (!$result) {
 	error_log("Invalid query 1: " . mysql_error());
@@ -285,7 +285,7 @@ function form($param, $message = "", $help = "") {
 <fieldset>
 <label>E-mail address:
 <input type="email" name="em"
-value="<?php echo htmlspecialchars($param["em"]) ?>">
+value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?>">
 </label>
 <?php if ($geo == "city") { ?>
 <label>Closest City:
