@@ -85,15 +85,16 @@ EOHTML
 sub download_button_html {
     my($q,$filename,$href,$id,$button_text,$button_and_icon) = @_;
 
-    my $nofollow_month = defined $q->param("month") && $q->param("month") =~ /^\d+$/
-	? qq{ rel="nofollow"} : "";
+    my $nofollow =
+        (($filename =~ /\.(dba|vcs)$/) || (defined $q->param("month") && $q->param("month") =~ /^\d+$/))
+        ? qq{ rel="nofollow"} : "";
 
     my $html5download = ($href =~ m,^(webcal://|http://calendar\.live\.com),) ? "" : qq{ download="$filename"};
 
     my $class = $button_and_icon ? "btn download" : "download";
     my $icon = $button_and_icon ? qq{<i class="icon-download-alt"></i> } : "";
 
-    return qq{<a class="$class" id="$id" title="$filename" href="$href"${nofollow_month}${html5download}>${icon}Download $button_text</a>};
+    return qq{<a class="$class" id="$id" title="$filename" href="$href"${nofollow}${html5download}>${icon}Download $button_text</a>};
 }
 
 sub download_html_bootstrap {
