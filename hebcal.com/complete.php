@@ -58,7 +58,7 @@ EOD;
     }
 
     $sql = <<<EOD
-SELECT geonameid, longname,
+SELECT geonameid,
 asciiname, admin1, country,
 population, latitude, longitude, timezone
 FROM geoname_fulltext
@@ -74,11 +74,20 @@ EOD;
     }
 
     while ($res = $query->fetchArray(SQLITE3_ASSOC)) {
+        $longname = $res["asciiname"];
+        if (!empty($res["admin1"])
+            && strncmp($res["admin1"], $res["asciiname"], strlen($res["asciiname"])) != 0) {
+            $longname .= ", " . $res["admin1"];
+            $a1tokens = explode(" ", $res["admin1"]);
+        } else {
+            $a1tokens = array();
+        }
+        $longname .= ", " . $res["country"];
         $tokens = array_merge(explode(" ", $res["asciiname"]),
-                  explode(" ", $res["admin1"]),
+                  $a1tokens,
                   explode(" ", $res["country"]));
         $search_results[] = array("id" => $res["geonameid"],
-                      "value" => $res["longname"],
+                      "value" => $longname,
                       "admin1" => $res["admin1"],
                       "asciiname" => $res["asciiname"],
                       "country" => $res["country"],
