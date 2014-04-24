@@ -426,18 +426,18 @@ my @events = my_invoke_hebcal();
 if (scalar(@events) > 0) {
     $q->param("v", "yahrzeit");
 
-    my $filename;
+    my $title;
     my @types = keys %input_types;
     if (scalar(@types) == 1) {
-	$filename = lc($types[0]);
+        $title = $types[0];
     } else {
-	$filename = "anniversary";
+        $title = "Anniversary";
     }
 
-    $filename .= "_"  . POSIX::strftime("%Y%m%d%H%M%S", gmtime(time()));
+    my $filename = join("_", lc($title), POSIX::strftime("%Y%m%d%H%M%S", gmtime(time())));
 
     remove_empty_parameters($q);
-    Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events, undef, 1));
+    Hebcal::out_html($cfg, HebcalHtml::download_html_modal($q, $filename, \@events, $title, 1));
 
     Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
     Hebcal::out_html($cfg, HebcalHtml::download_html_modal_button());
