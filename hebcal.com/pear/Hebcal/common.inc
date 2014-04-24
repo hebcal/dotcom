@@ -3,7 +3,7 @@
 /***********************************************************************
  * Hebcal PHP helper functions
  *
- * Copyright (c) 2013  Michael J. Radwin.
+ * Copyright (c) 2014  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -465,8 +465,8 @@ $HTML_MENU_ITEMS_V2 =
 	array( "/converter/",	"Date Converter", "Hebrew Date Converter" ),
 	array( "/shabbat/",	"Shabbat",	"Shabbat Times" ),
 	array( "/sedrot/",	"Torah",	"Torah Readings" ),
-	array( "/home/about",	"About",	"About" ),
-	array( "/home/help",	"Help",		"Help" ),
+	array( "http://www.hebcal.com/home/about",	"About",	"About" ),
+	array( "http://www.hebcal.com/home/help",	"Help",		"Help" ),
     );
 
 function html_menu_item_bootstrap($path, $title, $tooltip, $selected) {
@@ -575,7 +575,7 @@ $xtra_head</head>
      $logo
      <div class="nav-collapse collapse">
      $menu
-     <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="/home/">
+     <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
      <input name="s" id="s" type="text" class="search-query" placeholder="Search">
      </form>
      </div><!-- .nav-collapse -->
@@ -618,18 +618,18 @@ function html_footer_bootstrap($last_updated = true, $xtra_html = "") {
 <div class="span3">
 <ul class="nav nav-list">
 <li class="nav-header">About Us</li>
-<li><a href="/home/about">About Hebcal</a></li>
-<li><a href="/home/category/news">News</a></li>
-<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
+<li><a href="http://www.hebcal.com/home/about">About Hebcal</a></li>
+<li><a href="http://www.hebcal.com/home/category/news">News</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></li>
 </ul>
 </div><!-- .span3 -->
 <div class="span3">
 <ul class="nav nav-list">
 <li class="nav-header">Connect</li>
-<li><a href="/home/help">Help</a></li>
-<li><a href="/home/about/contact">Contact Us</a></li>
-<li><a href="/home/about/donate">Donate</a></li>
-<li><a href="/home/developer-apis">Developer APIs</a></li>
+<li><a href="http://www.hebcal.com/home/help">Help</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact Us</a></li>
+<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
+<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
 </ul>
 </div><!-- .span3 -->
 <div class="span3">
