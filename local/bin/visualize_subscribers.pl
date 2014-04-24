@@ -32,7 +32,7 @@ while(my($to,$cfg) = each(%SUBS)) {
     $countries{$cfg->{cc}}++;
 }
 
-my $json = "[\n";
+my $json = qq{[\n["Country", "Subscribers"],\n};
 while(my($country,$count) = each(%countries)) {
     $json .= qq{["$country", $count],\n}
 }
