@@ -333,11 +333,12 @@ $('#city-typeahead').typeahead({
     if (typeof ctx.geo === "string" && ctx.geo == "zip") {
       return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
     } else {
-      var s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
-      if (ctx.admin1) {
+      var ctry = ctx.country == "United Kingdom" ? "UK" : ctx.country,
+        s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
+      if (typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
         s += ctx.admin1 + ', ';
       }
-      return s + ctx.country + '</small></p>';
+      return s + ctry + '</small></p>';
     }
   },
   limit: 8

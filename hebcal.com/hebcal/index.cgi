@@ -1109,7 +1109,12 @@ $("#city-typeahead").typeahead({
         if (typeof ctx.geo === "string" && ctx.geo == "zip") {
           return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
         } else {
-          return '<p><strong>' + ctx.asciiname + '</strong> - <small>' + ctx.admin1 + ', ' + ctx.country + '</small></p>';
+          var ctry = ctx.country == "United Kingdom" ? "UK" : ctx.country,
+            s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
+          if (typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
+            s += ctx.admin1 + ', ';
+          }
+          return s + ctry + '</small></p>';
         }
     }
 }).on('typeahead:selected', function (obj, datum, name) {
