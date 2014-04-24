@@ -299,7 +299,7 @@ or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>)</small>
 <?php } elseif ($geo == "zip") { ?>
 <label>ZIP code:
 <input type="text" name="zip" id="zip" class="input-mini" maxlength="5"
-pattern="\d*" value="<?php echo htmlspecialchars($param["zip"]) ?>"></label>
+pattern="\d*" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>"></label>
 &nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
 or select by <a
 href="<?php echo $action ?>?geo=city">closest city</a>)</small>
