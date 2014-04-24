@@ -717,7 +717,7 @@ sub dba_display
     $basename =~ s,^.*/,,;
 
     Palm::DBA::write_header($basename);
-    Palm::DBA::write_contents(\@events, $cconfig{"tzid"});
+    Palm::DBA::write_contents(\@events, $cconfig{"tzid"} || "UTC");
 }
 
 sub csv_display
