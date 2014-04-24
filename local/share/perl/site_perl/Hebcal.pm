@@ -2128,7 +2128,9 @@ WHERE g.geonameid = ?
     my($lat_deg,$lat_min,$long_deg,$long_min) =
 	latlong_to_hebcal($latitude, $longitude);
     my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-    my $city_descr = "$name, $admin1, $country";
+    my $city_descr = $name;
+    $city_descr .= ", $admin1" if $admin1 && index($admin1, $name) != 0;
+    $city_descr .= ", $country";
     if ($country eq "Israel") {
 	$q->param('i','on');
     }
