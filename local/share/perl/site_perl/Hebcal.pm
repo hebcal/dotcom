@@ -73,7 +73,6 @@ my $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
 
 my $CONFIG_INI;
 my $HOSTNAME;
-my $CACHE_DIR = $WEBDIR . "/cache/";
 
 # boolean options
 our @opts = qw(c o s i a d D F);
@@ -1124,50 +1123,20 @@ sub script_name($)
 
 my $cache = undef;
 sub cache_begin {
-    my($q,$munge_qs) = @_;
+    my($cache_webpath) = @_;
 
-    my $orig_qs = $ENV{'QUERY_STRING'} || $ENV{'REDIRECT_QUERY_STRING'};
-    return undef unless $orig_qs;
-
-    # don't bother to cache a jQuery JSONP request (param "_" with timestamp value)
-    return undef if $orig_qs =~ /&_=\d/;
-
-    my $script_name = $q->script_name();
-    $script_name =~ s/\./_/g;
-
-    my $dir = $CACHE_DIR . $script_name;
-    unless (-d $dir) {
-	system("/bin/mkdir", "-p", $dir) == 0 or return undef;
+    # update the global variable
+    $cache = join("", $ENV{"DOCUMENT_ROOT"}, $cache_webpath, ".", $$);
+    my $dir = $cache;
+    $dir =~ s,/[^/]+$,,;    # dirname
+    unless ( -d $dir ) {
+        system( "/bin/mkdir", "-p", $dir );
     }
-
-    my $qs;
-    if ($munge_qs) {
-	$qs = get_munged_qs($orig_qs);
+    if ( open( CACHE, ">$cache" ) ) {
+        binmode( CACHE, ":utf8" );
     } else {
-	my $ext = "html";
-	if (defined $q->param("cfg")) {
-	    my $cfg = $q->param("cfg");
-	    if ($cfg eq "r") {
-		$ext = "xml";
-	    } elsif ($cfg eq "j") {
-		$ext = "js";
-	    } elsif ($cfg eq "json") {
-		$ext = "json";
-	    }
-	    # otherwise use .html default
-	}
-	$qs = "${orig_qs}.${ext}";
+        $cache = undef;
     }
-    $cache = "$dir/$qs.$$";
-    if (!open(CACHE, ">$cache")) {
-	$cache = undef;
-	return undef;
-    }
-
-    if ($^V && $^V ge v5.8.1) {
-	binmode(CACHE, ":utf8");
-    }
-
     $cache;
 }
 
@@ -2700,20 +2669,7 @@ sub vcalendar_write_contents {
     my $cache_webpath;
     if ($is_icalendar) {
         $cache_webpath = get_vcalendar_cache_fn();
-        $cache         = $ENV{"DOCUMENT_ROOT"} . $cache_webpath . ".$$";
-        my $dir = $cache;
-        $dir =~ s,/[^/]+$,,;    # dirname
-        unless ( -d $dir ) {
-            system( "/bin/mkdir", "-p", $dir );
-        }
-        if ( open( CACHE, ">$cache" ) ) {
-            if ( $^V && $^V ge v5.8.1 ) {
-                binmode( CACHE, ":utf8" );
-            }
-        }
-        else {
-            $cache = undef;
-        }
+        cache_begin($cache_webpath);
         export_http_header( $q, 'text/calendar; charset=UTF-8' );
     }
     else {
