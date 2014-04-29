@@ -515,7 +515,7 @@ EOHTML
     $str .= <<EOHTML;
 <div class="btn-toolbar">
 <a class="btn btn-small download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="icon-print"></i> Print PDF</a>
-<a class="btn btn-small" title="for desktop, mobile and web calendars" href="/ical/"><i class="icon-download-alt"></i> Download to Outlook, iPhone, Google</a>
+<a class="btn btn-small" title="export to Outlook, iPhone, Google and more" href="/ical/"><i class="icon-download-alt"></i> Download Calendar</a>
 <a class="btn btn-small" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><i class="icon-pencil"></i> Customize your calendar</a>
 </div><!-- .btn-toolbar -->
 EOHTML
