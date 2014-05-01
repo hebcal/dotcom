@@ -37,6 +37,7 @@ use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
+use utf8;
 use Hebcal ();
 use POSIX qw(strftime);
 use MIME::Base64 ();
@@ -48,6 +49,7 @@ use Carp;
 use Log::Log4perl qw(:easy);
 use Config::Tiny;
 use MIME::Lite;
+use Encode qw/encode decode/;
 use Date::Calc;
 use HebcalGPL ();
 use URI::Escape;
@@ -399,12 +401,14 @@ $unsub_url
 
     my $msgid = $cfg->{"id"} . "." . time();
 
+    my $subj_mime = $subject eq utf8::decode($subject)
+        ? $subject : encode('MIME-Q', $subject);
     my %headers =
         (
          "From" => "Hebcal <shabbat-owner\@hebcal.com>",
          "To" => $to,
          "Reply-To" => "no-reply\@hebcal.com",
-         "Subject" => $subject,
+         "Subject" => $subj_mime,
          "List-Unsubscribe" => "<$unsub_url&unsubscribe=1>",
          "List-Id" => "<shabbat.hebcal.com>",
          "Errors-To" => $return_path,
