@@ -2890,127 +2890,30 @@ sub sendmail_v2
 {
     my($return_path,$headers,$body,$verbose) = @_;
 
-    eval("use Email::Valid");
-    eval("use Net::SMTP");
-
-    if (! Email::Valid->address($return_path))
-    {
-	warn "Hebcal.pm: Return-Path $return_path is invalid"
-	    if $verbose;
-	return 0;
-    }
-
-    my($from) = $headers->{'From'};
-    if (!$from || ! Email::Valid->address($from))
-    {
-	warn "Hebcal.pm: From $from is invalid"
-	    if $verbose;
-	return 0;
-    }
-
-    my(%recipients);
-    foreach my $hdr ('To', 'Cc', 'Bcc')
-    {
-	if (defined $headers->{$hdr})
-	{
-	    foreach my $addr (split(/\s*,\s*/, $headers->{$hdr}))
-	    {
-		next unless $addr;
-		next unless Email::Valid->address($addr);
-		$recipients{Email::Valid->address($addr)} = 1;
-	    }
-	}
-    }
-
-    if (! keys %recipients)
-    {
-	warn "Hebcal.pm: no recipients!"
-	    if $verbose;
-	return 0;
-    }
-
-    unless ($CONFIG_INI) {
-	$CONFIG_INI = Config::Tiny->read($CONFIG_INI_PATH)
-	    or die "$CONFIG_INI_PATH: $!";
-    }
-
-    my $sendmail_host = $CONFIG_INI->{_}->{"hebcal.email.adhoc.host"};
-    my $sendmail_user = $CONFIG_INI->{_}->{"hebcal.email.adhoc.user"};
-    my $sendmail_pass = $CONFIG_INI->{_}->{"hebcal.email.adhoc.password"};
-
-    my $smtp = Net::SMTP->new($sendmail_host, Timeout => 20);
-    unless ($smtp) {
-        return 0;
-    }
-
-    $smtp->auth($sendmail_user, $sendmail_pass);
-
-    my $message = '';
-    while (my($key,$val) = each %{$headers})
-    {
-	next if lc($key) eq 'bcc';
-	while (chomp($val)) {}
-	$message .= "$key: $val\n";
-    }
+    eval("use MIME::Lite");
 
     if (!$HOSTNAME) {
-	$HOSTNAME = `/bin/hostname -f`;
-	chomp($HOSTNAME);
+        $HOSTNAME = `/bin/hostname -f`;
+        chomp($HOSTNAME);
     }
 
-    if (! defined $headers->{'X-Sender'})
-    {
-	my($login) = getlogin() || getpwuid($<) || "UNKNOWN";
-	$message .= "X-Sender: $login\@$HOSTNAME\n";
+    $headers->{"X-Mailer"} ||= "Hebcal.pm mail v5.3";
+    $headers->{"Message-ID"} ||= "<HEBCAL." . time() . ".$$\@$HOSTNAME>";
+
+    my $msg = MIME::Lite->new(Type => $headers->{'Content-Type'});
+    while (my($key,$val) = each %{$headers}) {
+        while (chomp($val)) {}
+        $msg->add($key => $val);
     }
 
-    if (! defined $headers->{'X-Mailer'})
-    {
-	$message .= "X-Mailer: hebcal mail v4.13\n";
-    }
+    $msg->replace("Return-Path" => $return_path);
 
-    if (! defined $headers->{'Message-ID'})
-    {
-	$message .= "Message-ID: <HEBCAL." . time() . ".$$\@$HOSTNAME>\n";
-    }
-
-    $message .= "\n" . $body;
-
-    my @recip = keys %recipients;
-
-    $smtp->hello($HOSTNAME);
-    unless ($smtp->mail($return_path)) {
-        warn "smtp mail() failure for @recip\n"
-	    if $verbose;
+    eval { $msg->send("smtp", "localhost", Timeout => 20); };
+    if ($@) {
+        warn $@ if $verbose;
         return 0;
-    }
-    foreach (@recip) {
-	next unless $_;
-        unless($smtp->to($_)) {
-            warn "smtp to() failure for $_\n"
-		if $verbose;
-            return 0;
-        }
-    }
-    unless($smtp->data()) {
-        warn "smtp data() failure for @recip\n"
-	    if $verbose;
-        return 0;
-    }
-    unless($smtp->datasend($message)) {
-        warn "smtp datasend() failure for @recip\n"
-	    if $verbose;
-        return 0;
-    }
-    unless($smtp->dataend()) {
-        warn "smtp dataend() failure for @recip\n"
-	    if $verbose;
-        return 0;
-    }
-    unless($smtp->quit) {
-        warn "smtp quit failure for @recip\n"
-	    if $verbose;
-        return 0;
+    } else {
+        return 1;
     }
 
     1;
