@@ -43,7 +43,6 @@ use POSIX qw(strftime);
 use MIME::Base64 ();
 use Time::Local ();
 use DBI ();
-use Hebcal::SMTP;
 use Getopt::Long ();
 use Carp;
 use Log::Log4perl qw(:easy);
@@ -111,8 +110,6 @@ if (! keys(%SUBS) && !$opt_all) {
     LOGCROAK "$ARGV[0]: not found";
 }
 
-my($LOGIN) = getlogin() || getpwuid($<) || "UNKNOWN";
-
 my $now = time;
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
     localtime($now);
@@ -165,13 +162,11 @@ if ($opt_log) {
 
 parse_all_configs();
 
-my $HOSTNAME = `/bin/hostname -f`;
-chomp($HOSTNAME);
-
-my @SMTP;
-my @SMTP_AUTH;
-my $SMTP_NUM_CONNECTIONS;
 my %ZIP_CACHE;
+
+# default config for MIME::Lite
+MIME::Lite->send("smtp", "localhost", Timeout=>10);
+
 mail_all();
 
 close(LOG) if $opt_log;
@@ -183,37 +178,6 @@ Hebcal::zipcode_close_db($GEONAME_DBH);
 
 INFO("Success!");
 exit(0);
-
-sub open_smtp_connections {
-    if ($Config->{_}->{"hebcal.email.shabbat.alt.enabled"}) {
-        @SMTP_AUTH = ();
-        for (my $i = 1; $i <= 4; $i++) {
-            push(@SMTP_AUTH, [$Config->{_}->{"hebcal.email.shabbat.alt.host"},
-                              $Config->{_}->{"hebcal.email.shabbat.alt.u$i"},
-                              $Config->{_}->{"hebcal.email.shabbat.alt.p$i"}]);
-        }
-    } else {
-        @SMTP_AUTH = (
-             [$Config->{_}->{"hebcal.email.shabbat.host"},
-              $Config->{_}->{"hebcal.email.shabbat.user"},
-              $Config->{_}->{"hebcal.email.shabbat.password"}],
-            );
-    }
-    $SMTP_NUM_CONNECTIONS = scalar(@SMTP_AUTH);
-    INFO("Opening $SMTP_NUM_CONNECTIONS SMTP connections");
-    for (my $i = 0; $i < $SMTP_NUM_CONNECTIONS; $i++) {
-        $SMTP[$i] = undef;
-        smtp_reconnect($i, 1);
-    }
-    INFO("SMTP connections open; will sleep for $opt_sleeptime usec between messages");
-}
-
-sub close_smtp_connections {
-    INFO("Closing $SMTP_NUM_CONNECTIONS SMTP connections");
-    foreach my $smtp (@SMTP) {
-        $smtp->quit();
-    }
-}
 
 sub exit_if_yomtov {
     my $subj = Hebcal::get_today_yomtov();
@@ -234,7 +198,6 @@ sub parse_all_configs {
 
 sub mail_all {
     my $MAX_FAILURES = 100;
-    my $RECONNECT_INTERVAL = 50;
     my $failures = 0;
     for (my $attempts = 0; $attempts < 3; $attempts++) {
         my @addrs = keys %SUBS;
@@ -243,17 +206,15 @@ sub mail_all {
         # sort the addresses by timezone so we mail eastern users first
         INFO("Sorting $count users by lat/long");
         @addrs = sort by_timezone @addrs;
-        open_smtp_connections();
         INFO("About to mail $count users");
         for (my $i = 0; $i < $count; $i++) {
             my $to = $addrs[$i];
-            my $server_num = $i % $SMTP_NUM_CONNECTIONS;
             if (($i % 200 == 0) || ($i + 1 == $count)) {
                 my $cfg = $SUBS{$to};
                 my $loc = $cfg->{loc};
                 INFO("Sending mail #" . ($i + 1) . "/$count ($loc)");
             }
-            my $status = mail_user($to, $SMTP[$server_num]);
+            my $status = mail_user($to);
             if ($status == $STATUS_FAIL_AND_CONTINUE) {
                 # count this as a real failure but don't try the address again
                 WARN("Failure on mail #$i/$count ($to), won't try this address again");
@@ -261,23 +222,16 @@ sub mail_all {
                 ++$failures;
             } elsif ($status == $STATUS_OK) {
                 delete $SUBS{$to};
-                # reconnect every so often
-                if (($i % $RECONNECT_INTERVAL) == ($RECONNECT_INTERVAL - 1)) {
-                    smtp_reconnect($server_num, 1);
-                }
             } else {
-                WARN("Failure on mail #$i/$count ($to), reconnecting...");
+                WARN("Failure on mail #$i/$count ($to)");
                 if (++$failures >= $MAX_FAILURES) {
                     ERROR("Got $failures failures, giving up");
                     return;
                 }
-                # reconnect to see if this helps
-                smtp_reconnect($server_num, 1);
             }
             usleep($opt_sleeptime) unless $opt_sleeptime == 0 || $i == ($count - 1);
         }
         INFO("Sent $count messages, $failures failures");
-        close_smtp_connections();
     }
 }
 
@@ -309,7 +263,7 @@ sub by_timezone {
 
 sub mail_user
 {
-    my($to,$smtp) = @_;
+    my($to) = @_;
 
     my $cfg = $SUBS{$to} or LOGCROAK "invalid user $to";
 
@@ -418,7 +372,7 @@ $unsub_url
 
     return $STATUS_OK if $opt_dryrun;
 
-    my $status = my_sendmail($smtp,$return_path,\%headers,$body,$html_body);
+    my $status = my_sendmail($return_path,\%headers,$body,$html_body);
     if ($opt_log) {
         my $log_status = ($status == $STATUS_OK) ? 1 : 0;
         my $log_loc = $cfg->{zip} || $cfg->{geonameid} || $cfg->{city};
@@ -682,62 +636,17 @@ WHERE g.geonameid = ?
     1;
 }
 
-sub smtp_reconnect
-{
-    my($server_num,$debug) = @_;
-
-    LOGCROAK "server number $server_num too large"
-        if $server_num >= $SMTP_NUM_CONNECTIONS;
-
-    if (defined $SMTP[$server_num]) {
-        $SMTP[$server_num]->quit();
-        $SMTP[$server_num] = undef;
-    }
-    my $host = $SMTP_AUTH[$server_num]->[0];
-    my $user = $SMTP_AUTH[$server_num]->[1];
-    my $password = $SMTP_AUTH[$server_num]->[2];
-    my $smtp = smtp_connect($host, $user, $password, $debug)
-        or LOGCROAK "Can't connect to $host as $user";
-    $SMTP[$server_num] = $smtp;
-    return $smtp;
-}
-
-sub smtp_connect
-{
-    my($s,$user,$password,$debug) = @_;
-
-    # try 3 times to avoid intermittent failures
-    for (my $i = 0; $i < 3; $i++) {
-        my $smtp = Hebcal::SMTP->new($s,
-                                       Hello => $HOSTNAME,
-                                       Port => 465,
-                                       Timeout => 20,
-                                       Debug => $debug);
-        if ($smtp) {
-            $smtp->auth($user, $password)
-                or WARN("Can't authenticate as $user\n" . $smtp->debug_txt());
-            return $smtp;
-        } else {
-            my $sec = 5;
-            WARN("Could not connect to $s, retry in $sec seconds");
-            sleep($sec);
-        }
-    }
-
-    undef;
-}
-
 sub my_sendmail
 {
-    my($smtp,$return_path,$headers,$body,$html_body) = @_;
+    my($return_path,$headers,$body,$html_body) = @_;
 
     my $msg = MIME::Lite->new(Type => 'multipart/alternative');
     while (my($key,$val) = each %{$headers}) {
         while (chomp($val)) {}
         $msg->add($key => $val);
     }
-    $msg->add("X-Sender" => "$LOGIN\@$HOSTNAME");
     $msg->replace("X-Mailer" => "hebcal mail");
+    $msg->replace("Return-Path" => $return_path);
 
     my $part = MIME::Lite->new(Top  => 0,
                                Type => "text/plain",
@@ -753,34 +662,13 @@ sub my_sendmail
     $part2->attr("content-type.charset" => "UTF-8");
     $msg->attach($part2);
 
-
-    my $to = $headers->{"To"};
-    my $rv = $smtp->mail($return_path);
-    unless ($rv) {
-        WARN("smtp mail() failure for $to\n" . $smtp->debug_txt());
+    eval { $msg->send; };
+    if ($@) {
+        WARN($@);
         return $STATUS_TRY_LATER;
+    } else {
+        return $STATUS_OK;
     }
-
-    $rv = $smtp->to($to);
-    unless ($rv) {
-        WARN("smtp to() failure for $to\n" . $smtp->debug_txt());
-        return $STATUS_TRY_LATER;
-    }
-
-    $rv = $smtp->data();
-    $rv = $smtp->datasend($msg->as_string);
-    $rv = $smtp->dataend();
-    unless ($rv) {
-        my $debug_txt = $smtp->debug_txt();
-        if ($debug_txt =~ /<<< 554 Message rejected: Address blacklisted/) {
-            INFO("$to 554 Message rejected: Address blacklisted\n");
-            return $STATUS_FAIL_AND_CONTINUE;
-        }
-        WARN("smtp dataend() failure for $to\n" . $debug_txt);
-        return $STATUS_TRY_LATER;
-    }
-
-    $STATUS_OK;
 }
 
 sub usage {
