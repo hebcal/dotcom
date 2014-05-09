@@ -126,7 +126,6 @@ $site};
 	 "From" =>
 	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
 	 "To" => $email,
-	 "MIME-Version" => "1.0",
 	 "Content-Type" => "text/plain",
 	 "Subject" => "You have been unsubscribed from hebcal",
 	 );
