@@ -834,6 +834,17 @@ sub write_sedra_page
 
     write_sedra_sidebar($parshiot,$h);
 
+
+    my $audio = "";
+    if (defined $parashah2id{$h}) {
+        my($c1,$v1) = ($torah =~ /^\w+\s+(\d+):(\d+)/);
+        my $url = Hebcal::get_bible_ort_org_url($torah, $c1, $v1, $parashah2id{$h});
+        $url =~ s/&/&amp;/g;
+        my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
+        #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
+        $audio = qq{ <a class="outbound" title="Audio from World ORT" href="$url">$img</a>};
+    }
+
     print OUT2 <<EOHTML;
 <div class="span10">
 <div class="page-header">
@@ -842,7 +853,7 @@ sub write_sedra_page
 $intro_summary
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
-title="Translation from JPS Tanakh">$torah</a></h3>
+title="Translation from JPS Tanakh">$torah</a>$audio</h3>
 <div class="row-fluid">
 <div class="span3">
 <h4>Full Kriyah</h4>
@@ -1014,9 +1025,6 @@ Chumash: The Stone Edition (Artscroll Series)</a></em>
 href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
-<dt><em><a class="outbound"
-href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
-<dd>Mechon Mamre
 </dl>
 EOHTML
 ;
@@ -1143,18 +1151,15 @@ sub format_aliyah
     $torah ||= $aliyah->{"book"}; # special maftirs
     $torah =~ s/\s+.+$//;
 
+    my $sefaria_verses = $info;
+    $sefaria_verses =~ s/:/./g;
+    my $sefaria_url = "http://www.sefaria.org/$torah.$sefaria_verses/he/Wikisource_Tanach_with_Trope?lang=he-en";
+
     if ($show_book) {
 	$info = "$torah $info";
     }
 
-    if (defined $parashah2id{$h}) {
-#	my $url = Hebcal::get_mechon_mamre_url($torah, $c1, $v1);
-#	my $title = "Hebrew-English bible text";
-	my $url = Hebcal::get_bible_ort_org_url($torah, $c1, $v1, $parashah2id{$h});
-	$url =~ s/&/&amp;/g;
-	my $title = "Hebrew-English bible text from ORT";
-	$info = qq{<a class="outbound" title="$title"\nhref="$url">$info</a>};
-    }
+    $info = qq{<a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="$sefaria_url">$info</a>};
 
     my $label = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
     $info = "$label: $info\n";
