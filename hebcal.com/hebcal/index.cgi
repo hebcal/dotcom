@@ -1511,7 +1511,11 @@ EOHTML
 	if (defined $href && $href ne "")
 	{
 	    my $atitle = $memo ? qq{ title="$memo"} : "";
-	    $subj = qq{<a$atitle href="$href">$subj</a>};
+	    my $aclass = "";
+	    if ($href =~ /^http/ && $href !~ m,^http://www\.hebcal\.com,) {
+	      $aclass = qq{ class="outbound"};
+	    }
+	    $subj = qq{<a$atitle$aclass href="$href">$subj</a>};
 	}
 
 	if ($q->param("vis"))
