@@ -835,14 +835,14 @@ sub write_sedra_page
     write_sedra_sidebar($parshiot,$h);
 
 
-    my $audio = "";
+    my $ort_tikkun = "";
     if (defined $parashah2id{$h}) {
         my($c1,$v1) = ($torah =~ /^\w+\s+(\d+):(\d+)/);
         my $url = Hebcal::get_bible_ort_org_url($torah, $c1, $v1, $parashah2id{$h});
         $url =~ s/&/&amp;/g;
-        my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
+        #my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
         #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
-        $audio = qq{ <a class="outbound" title="Audio from World ORT" href="$url">$img</a>};
+        $ort_tikkun = qq{<a class="outbound btn btn-default btn-small" href="$url"><i class="icon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
     }
 
     print OUT2 <<EOHTML;
@@ -851,9 +851,11 @@ sub write_sedra_page
 <h1 class="entry-title">Parashat $h / <span lang="he" dir="rtl">$hebrew</span></h1>
 </div>
 $intro_summary
+<div class="row-fluid">
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
-title="Translation from JPS Tanakh">$torah</a>$audio</h3>
+title="Translation from JPS Tanakh">$torah</a></h3>
+$ort_tikkun
 <div class="row-fluid">
 <div class="span3">
 <h4>Full Kriyah</h4>
