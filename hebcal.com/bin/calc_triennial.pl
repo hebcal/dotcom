@@ -10,7 +10,7 @@
 #   A Complete Triennial System for Reading the Torah
 #   http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -842,7 +842,7 @@ sub write_sedra_page
         $url =~ s/&/&amp;/g;
         #my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
         #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
-        $ort_tikkun = qq{<a class="outbound btn btn-default btn-small" href="$url"><i class="icon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
+        $ort_tikkun = qq{<a class="outbound btn btn-default btn-small" rel="nofollow" href="$url"><i class="icon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
     }
 
     print OUT2 <<EOHTML;
