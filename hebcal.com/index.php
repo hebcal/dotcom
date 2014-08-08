@@ -265,8 +265,8 @@ Holiday Calendar</h2>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 <?php
-  if (($hmnum == 12 && $hd >= 15) || ($hmnum == 13)) {
-      // it's past the 15th of Av (12th month) or Elul (13th month)
+  if (($hmnum == 12 && $hd >= 10) || ($hmnum == 13)) {
+      // it's past the Tish'a B'Av (12th month) or anytime in Elul (13th month)
       $hebyear = $hy + 1;
   } else {
       $hebyear = $hy;
