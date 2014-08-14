@@ -504,7 +504,7 @@ customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <strong>Sep 19-20</strong>, then the holiday begins at
-sundown on <strong>Sep 18</strong> and ends at sundown on <strong>Sep 20</strong>.</p>
+sundown on <strong>Sep 18</strong> and ends at nightfall on <strong>Sep 20</strong>.</p>
 EOHTML
 ;
 
