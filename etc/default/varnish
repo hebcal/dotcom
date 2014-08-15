@@ -20,7 +20,6 @@ MEMLOCK=82000
 
 # Default varnish instance name is the local nodename.  Can be overridden with
 # the -n switch, to have more instances on a single server.
-# You may need to uncomment this variable for alternatives 1 and 3 below.
 # INSTANCE=$(uname -n)
 
 # This file contains 4 alternatives, please use only one.
@@ -29,8 +28,6 @@ MEMLOCK=82000
 #
 # Listen on port 6081, administration on localhost:6082, and forward to
 # content server on localhost:8080.  Use a 1GB fixed-size cache file.
-#
-# This example uses the INSTANCE variable above, which you need to uncomment.
 #
 # DAEMON_OPTS="-a :6081 \
 #              -T localhost:6082 \
@@ -43,18 +40,17 @@ MEMLOCK=82000
 ## Alternative 2, Configuration with VCL
 #
 # Listen on port 6081, administration on localhost:6082, and forward to
-# one content server selected by the vcl file, based on the request.
+# one content server selected by the vcl file, based on the request.  Use a 1GB
+# fixed-size cache file.
 #
 DAEMON_OPTS="-a :80 \
              -T localhost:6082 \
              -f /etc/varnish/default.vcl \
              -S /etc/varnish/secret \
-             -s malloc,256m"
+             -s malloc,768m"
 
 
 ## Alternative 3, Advanced configuration
-#
-# This example uses the INSTANCE variable above, which you need to uncomment.
 #
 # See varnishd(1) for more information.
 #
