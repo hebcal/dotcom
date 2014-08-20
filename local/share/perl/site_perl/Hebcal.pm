@@ -1093,6 +1093,34 @@ sub get_mechon_mamre_url {
 		   $bid, $chapter, $verse);
 }
 
+sub get_book_and_verses {
+    my($aliyah,$torah) = @_;
+
+    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
+    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
+    my($info);
+    if ($c1 == $c2) {
+        $info = "$c1:$v1-$v2";
+    } else {
+        $info = "$c1:$v1-$c2:$v2";
+    }
+
+    $torah ||= $aliyah->{"book"}; # special maftirs
+    $torah =~ s/\s+.+$//;
+
+    return ($torah, $info);
+}
+
+sub get_sefaria_url {
+    my($book,$verses) = @_;
+
+    my $sefaria_verses = $verses;
+    $sefaria_verses =~ s/:/./g;
+
+    my $sefaria_url = "http://www.sefaria.org/$book.$sefaria_verses/he/Wikisource_Tanach_with_Trope?lang=he-en";
+    return $sefaria_url;
+}
+
 sub get_bible_ort_org_url {
     my($book,$chapter,$verse,$parsha_id) = @_;
     my $bid = get_torah_book_id($book);

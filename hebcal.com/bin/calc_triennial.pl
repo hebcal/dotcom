@@ -854,7 +854,7 @@ $intro_summary
 <div class="row-fluid">
 <h3 id="torah">Torah Portion: <a class="outbound"
 href="$torah_href"
-title="Translation from JPS Tanakh">$torah</a></h3>
+title="English translation from JPS Tanakh">$torah</a></h3>
 $ort_tikkun
 <div class="row-fluid">
 <div class="span3">
@@ -917,7 +917,7 @@ EOHTML
     print OUT2 <<EOHTML;
 <h3 id="haftarah">Haftarah$ashk: <a class="outbound"
 href="$haftarah_href"
-title="Translation from JPS Tanakh">$haftarah</a>$seph</h3>
+title="English translation from JPS Tanakh">$haftarah</a>$seph</h3>
 EOHTML
 ;
 
@@ -1141,24 +1141,13 @@ sub format_aliyah
 {
     my($aliyah,$h,$torah,$show_book) = @_;
 
-    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
-    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
-    my($info);
-    if ($c1 == $c2) {
-	$info = "$c1:$v1-$v2";
-    } else {
-	$info = "$c1:$v1-$c2:$v2";
-    }
+    my($book,$verses) = Hebcal::get_book_and_verses($aliyah, $torah);
+    my $sefaria_url = Hebcal::get_sefaria_url($book,$verses);
 
-    $torah ||= $aliyah->{"book"}; # special maftirs
-    $torah =~ s/\s+.+$//;
-
-    my $sefaria_verses = $info;
-    $sefaria_verses =~ s/:/./g;
-    my $sefaria_url = "http://www.sefaria.org/$torah.$sefaria_verses/he/Wikisource_Tanach_with_Trope?lang=he-en";
+    my $info = $verses;
 
     if ($show_book) {
-	$info = "$torah $info";
+        $info = "$book $info";
     }
 
     $info = qq{<a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="$sefaria_url">$info</a>};

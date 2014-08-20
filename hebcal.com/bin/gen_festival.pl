@@ -864,7 +864,7 @@ sub write_festival_part
 	my $torah_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'torah'}->{'href'};
 
 	print OUT2 qq{\n<h4 id="$slug-torah" style="margin-bottom:8px">Torah Portion: };
-	print OUT2 qq{<a class="outbound" href="$torah_href"\ntitle="Translation from JPS Tanakh">}
+	print OUT2 qq{<a class="outbound" href="$torah_href"\ntitle="English translation from JPS Tanakh">}
 	    if ($torah_href);
 	print OUT2 $torah;
 	print OUT2 qq{</a>}
@@ -895,7 +895,7 @@ sub write_festival_part
 	my $haft_href = $festivals->{'festival'}->{$f}->{'kriyah'}->{'haft'}->{'href'};
 
 	print OUT2 qq{\n<h4 id="$slug-haft">Haftarah: };
-	print OUT2 qq{<a class="outbound" href="$haft_href"\ntitle="Translation from JPS Tanakh">}
+	print OUT2 qq{<a class="outbound" href="$haft_href"\ntitle="English translation from JPS Tanakh">}
 	    if ($haft_href);
 	print OUT2 $haft;
 	print OUT2 qq{</a>}
@@ -1246,33 +1246,15 @@ sub read_more_from {
   return $html;
 }
 
-sub format_aliyah_info {
-    my($aliyah) = @_;
-
-    my($c1,$v1) = ($aliyah->{'begin'} =~ /^([^:]+):([^:]+)$/);
-    my($c2,$v2) = ($aliyah->{'end'}   =~ /^([^:]+):([^:]+)$/);
-    my $info = $aliyah->{'book'} . " ";
-    if ($c1 eq $c2) {
-	$info .= "$c1:$v1-$v2";
-    } else {
-	$info .= "$c1:$v1-$c2:$v2";
-    }
-    $info;
-}
-
 sub print_aliyah
 {
     my($aliyah) = @_;
 
-    my($c1,$v1) = ($aliyah->{'begin'} =~ /^([^:]+):([^:]+)$/);
-#    my $url = Hebcal::get_mechon_mamre_url($aliyah->{'book'}, $c1, $v1);
-#    my $title = "Hebrew-English bible text";
-    my $url = Hebcal::get_bible_ort_org_url($aliyah->{'book'}, $c1, $v1, $aliyah->{'parsha'});
-    $url =~ s/&/&amp;/g;
-    my $title = "Hebrew-English bible text from ORT";
-    my $info = qq{<a class="outbound" title="$title"\nhref="$url">}
-	. format_aliyah_info($aliyah)
-	. qq{</a>};
+    my($book,$verses) = Hebcal::get_book_and_verses($aliyah, undef);
+    my $url = Hebcal::get_sefaria_url($book,$verses);
+
+    my $title = "Hebrew-English text and commentary from Sefaria.org";
+    my $info = qq{<a class="outbound" title="$title"\nhref="$url">$book $verses</a>};
 
     my($label) = ($aliyah->{'num'} eq 'M') ? 'maf' : $aliyah->{'num'};
     print OUT2 qq{$label: $info};
