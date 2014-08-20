@@ -1,20 +1,38 @@
-# This is a basic VCL configuration file for varnish.  See the vcl(7)
-# man page for details on VCL syntax and semantics.
-# 
-# Default backend definition.  Set this to point to your content
-# server.
-# 
+#
+# This is an example VCL file for Varnish.
+#
+# It does not do anything by default, delegating control to the
+# builtin VCL. The builtin VCL is called when there is no explicit
+# return statement.
+#
+# See the VCL chapters in the Users Guide at https://www.varnish-cache.org/docs/
+# and http://varnish-cache.org/trac/wiki/VCLExamples for more examples.
+
+# Marker to tell the VCL compiler that this VCL has been adapted to the
+# new 4.0 format.
+vcl 4.0;
+
+# Default backend definition. Set this to point to your content server.
 backend default {
-    .host = "127.0.0.1";
+#    .host = "w1.hebcal.com";
+    .host = "10.128.109.86";
     .port = "8080";
 }
 
 sub vcl_recv {
+  if (req.url ~ "^/ical/.*\.ics" || req.url ~ "^/export/") {
+    return(synth(750, "Moved Temporarily"));
+  }
+
+    # Happens before we check if we have this in cache already.
+    # 
+    # Typically you clean up the request here, removing cookies you don't need,
+    # rewriting the request, etc.
   if (req.url ~ "^/i/"
-	|| req.url ~ "^/holidays/"
-	|| req.url ~ "^/torah/"
-	|| req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-master/"
-	|| req.url ~ "^/home/wp-includes/js/") {
+        || req.url ~ "^/holidays/"
+        || req.url ~ "^/torah/"
+        || req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-master/"
+        || req.url ~ "^/home/wp-includes/js/") {
     unset req.http.cookie;
   }
 
@@ -22,132 +40,45 @@ sub vcl_recv {
     unset req.http.cookie;
   }
 
+  if (req.url ~ "^/favicon\.ico") {
+    unset req.http.cookie;
+    unset req.http.user-agent;
+  }
+
     if (req.http.Accept-Encoding) {
         if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg)$") {
             # No point in compressing these
-            remove req.http.Accept-Encoding;
+            unset req.http.Accept-Encoding;
         } elsif (req.http.Accept-Encoding ~ "gzip") {
             set req.http.Accept-Encoding = "gzip";
         } elsif (req.http.Accept-Encoding ~ "deflate" && req.http.user-agent !~ "MSIE") {
             set req.http.Accept-Encoding = "deflate";
         } else {
             # unkown algorithm
-            remove req.http.Accept-Encoding;
+            unset req.http.Accept-Encoding;
         }
     }
 }
 
-#
-# Below is a commented-out copy of the default VCL logic.  If you
-# redefine any of these subroutines, the built-in logic will be
-# appended to your code.
-# sub vcl_recv {
-#     if (req.restarts == 0) {
-# 	if (req.http.x-forwarded-for) {
-# 	    set req.http.X-Forwarded-For =
-# 		req.http.X-Forwarded-For + ", " + client.ip;
-# 	} else {
-# 	    set req.http.X-Forwarded-For = client.ip;
-# 	}
-#     }
-#     if (req.request != "GET" &&
-#       req.request != "HEAD" &&
-#       req.request != "PUT" &&
-#       req.request != "POST" &&
-#       req.request != "TRACE" &&
-#       req.request != "OPTIONS" &&
-#       req.request != "DELETE") {
-#         /* Non-RFC2616 or CONNECT which is weird. */
-#         return (pipe);
-#     }
-#     if (req.request != "GET" && req.request != "HEAD") {
-#         /* We only deal with GET and HEAD by default */
-#         return (pass);
-#     }
-#     if (req.http.Authorization || req.http.Cookie) {
-#         /* Not cacheable by default */
-#         return (pass);
-#     }
-#     return (lookup);
-# }
-# 
-# sub vcl_pipe {
-#     # Note that only the first request to the backend will have
-#     # X-Forwarded-For set.  If you use X-Forwarded-For and want to
-#     # have it set for all requests, make sure to have:
-#     # set bereq.http.connection = "close";
-#     # here.  It is not set by default as it might break some broken web
-#     # applications, like IIS with NTLM authentication.
-#     return (pipe);
-# }
-# 
-# sub vcl_pass {
-#     return (pass);
-# }
-# 
-# sub vcl_hash {
-#     hash_data(req.url);
-#     if (req.http.host) {
-#         hash_data(req.http.host);
-#     } else {
-#         hash_data(server.ip);
-#     }
-#     return (hash);
-# }
-# 
-# sub vcl_hit {
-#     return (deliver);
-# }
-# 
-# sub vcl_miss {
-#     return (fetch);
-# }
-# 
-# sub vcl_fetch {
-#     if (beresp.ttl <= 0s ||
-#         beresp.http.Set-Cookie ||
-#         beresp.http.Vary == "*") {
-# 		/*
-# 		 * Mark as "Hit-For-Pass" for the next 2 minutes
-# 		 */
-# 		set beresp.ttl = 120 s;
-# 		return (hit_for_pass);
-#     }
-#     return (deliver);
-# }
-# 
-# sub vcl_deliver {
-#     return (deliver);
-# }
-# 
-# sub vcl_error {
-#     set obj.http.Content-Type = "text/html; charset=utf-8";
-#     set obj.http.Retry-After = "5";
-#     synthetic {"
-# <?xml version="1.0" encoding="utf-8"?>
-# <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-#  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-# <html>
-#   <head>
-#     <title>"} + obj.status + " " + obj.response + {"</title>
-#   </head>
-#   <body>
-#     <h1>Error "} + obj.status + " " + obj.response + {"</h1>
-#     <p>"} + obj.response + {"</p>
-#     <h3>Guru Meditation:</h3>
-#     <p>XID: "} + req.xid + {"</p>
-#     <hr>
-#     <p>Varnish cache server</p>
-#   </body>
-# </html>
-# "};
-#     return (deliver);
-# }
-# 
-# sub vcl_init {
-# 	return (ok);
-# }
-# 
-# sub vcl_fini {
-# 	return (ok);
-# }
+sub vcl_synth {
+    if (resp.status == 750) {
+        set resp.http.Location = "http://download.hebcal.com" + req.url;
+        set resp.status = 301;
+	synthetic("Moved.");
+        return(deliver);
+    }
+}
+
+sub vcl_backend_response {
+    # Happens after we have read the response headers from the backend.
+    # 
+    # Here you clean the response headers, removing silly Set-Cookie headers
+    # and other mistakes your backend does.
+}
+
+sub vcl_deliver {
+    # Happens when we have all the pieces we need, and are about to send the
+    # response to the client.
+    # 
+    # You can do accounting or modifying the final object here.
+}
