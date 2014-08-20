@@ -1151,8 +1151,8 @@ Jewish Holidays: A Guide &amp; Commentary</a></em>
 
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
 	print OUT2 qq{<dt><em><a class="outbound"
-href="http://www.mechon-mamre.org/p/pt/pt0.htm">Hebrew - English Bible</a></em>
-<dd>Mechon Mamre
+href="http://www.sefaria.org/">Sefaria Tanach</a></em>
+<dd>Sefaria.org
 <dt><em><a class="amzn" id="jps-tanakh-1"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:

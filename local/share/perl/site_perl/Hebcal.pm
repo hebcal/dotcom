@@ -1086,13 +1086,6 @@ sub get_torah_book_id {
     return $bid;
 }
 
-sub get_mechon_mamre_url {
-    my($book,$chapter,$verse) = @_;
-    my $bid = get_torah_book_id($book);
-    return sprintf("http://www.mechon-mamre.org/p/pt/pt%02d%02d.htm#%s",
-		   $bid, $chapter, $verse);
-}
-
 sub get_book_and_verses {
     my($aliyah,$torah) = @_;
 
