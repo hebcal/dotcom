@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -95,8 +95,10 @@ my $head = <<EOHTML;
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
+<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
 <script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-967247-1']);
@@ -139,7 +141,7 @@ my $numEntries = scalar(@{$evts});
 Hebcal::out_html($cfg,
 		 qq{<div align="center">\n<h4 style="margin:24px 0 0">Candle Lighting Times for $short_city<br>\nHebrew Year $hebrew_year ($evts->[0]->[$Hebcal::EVT_IDX_YEAR] - $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR])</h4>\n});
 Hebcal::out_html($cfg, qq{<p style="margin:0 0 4px">www.hebcal.com</p>\n});
-    
+
 Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
 
 my $items = filter_events($evts);
