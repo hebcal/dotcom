@@ -1089,10 +1089,10 @@ sub get_torah_book_id {
 sub get_book_and_verses {
     my($aliyah,$torah) = @_;
 
-    my($c1,$v1) = ($aliyah->{'begin'} =~ /^(\d+):(\d+)$/);
-    my($c2,$v2) = ($aliyah->{'end'}   =~ /^(\d+):(\d+)$/);
+    my($c1,$v1) = split(/:/, $aliyah->{'begin'}, 2);
+    my($c2,$v2) = split(/:/, $aliyah->{'end'}, 2);
     my($info);
-    if ($c1 == $c2) {
+    if ($c1 eq $c2) {
         $info = "$c1:$v1-$v2";
     } else {
         $info = "$c1:$v1-$c2:$v2";
