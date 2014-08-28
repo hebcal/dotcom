@@ -466,7 +466,7 @@ sub table_row_one_year_only {
 
 sub table_header_one_year_only {
     my($fh,$table_id,$show_year) = @_;
-    my $col2width = $show_year ? 180 : 112;
+    my $col2width = $show_year ? 148 : 112;
     print $fh <<EOHTML;
 <table class="table table-striped" id="$table_id">
 <col style="width:180px"><col style="width:${col2width}px"><col>
@@ -718,7 +718,7 @@ EOHTML
         my($heading,$table_id) = get_heading_and_table_id($section);
         print $fh "<h3>", $heading, "</h3>\n";
         print $fh $yomtov_html if $heading eq "Major holidays";
-        table_header_one_year_only($fh, $table_id);
+        table_header_one_year_only($fh, $table_id, 0);
         my @events;
         foreach my $f (@{$section->[0]}) {
             my $evt = $EVENTS_BY_GREGYEAR[$i]->{$f};
@@ -786,7 +786,7 @@ EOHTML
         my($heading,$table_id) = get_heading_and_table_id($section);
         print $fh "<h3>", $heading, "</h3>\n";
         print $fh $yomtov_html if $heading eq "Major holidays";
-        table_header_one_year_only($fh, $table_id);
+        table_header_one_year_only($fh, $table_id, 1);
         foreach my $f (@{$section->[0]}) {
             table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f},1);
         }
