@@ -4,3 +4,7 @@ Redirect /converter/converter.pl http://www.hebcal.com/converter/
 Redirect /converter/converter.cgi http://www.hebcal.com/converter/
 #Redirect /converter/index.html http://www.hebcal.com/converter/
 Redirect /converter/index.pl http://www.hebcal.com/converter/
+
+ExpiresActive On
+ExpiresByType application/json A63072000
+ExpiresByType text/xml A63072000
