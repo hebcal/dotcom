@@ -61,7 +61,7 @@ else
     }
 
     if (isset($param["em"])) {
-	$info = get_sub_info($param["em"]);
+	$info = get_sub_info($param["em"], true);
 	if (isset($info["status"]) && $info["status"] == "active") {
 	    foreach ($info as $k => $v) {
                 if (isset($v)) {
@@ -142,7 +142,7 @@ EOD;
     return mysql_query($sql, $hebcal_db);
 }
 
-function get_sub_info($email) {
+function get_sub_info($email, $expected_present = false) {
     //error_log("get_sub_info($email);");
     global $hebcal_db;
     hebcal_open_mysql_db();
@@ -164,7 +164,9 @@ EOD;
 
     $num_rows = mysql_num_rows($result);
     if ($num_rows != 1) {
-	error_log("get_sub_info got $num_rows rows, expected 1");
+    	if ($num_rows != 0 || $expected_present) {
+	    error_log("get_sub_info got $num_rows rows, expected 1");
+    	}
 	return array();
     }
 
@@ -495,14 +497,14 @@ function subscribe($param) {
 
     // check for old sub
     if (isset($param["prev"]) && $param["prev"] != $param["em"]) {
-	$info = get_sub_info($param["prev"]);
+	$info = get_sub_info($param["prev"], false);
 	if (isset($info["status"]) && $info["status"] == "active") {
 	    sql_unsub($param["prev"]);
 	}
     }
 
     // check if email address already verified
-    $info = get_sub_info($param["em"]);
+    $info = get_sub_info($param["em"], false);
     if (isset($info["status"]) && $info["status"] == "active")
     {
 	write_sub_info($param);
@@ -672,7 +674,7 @@ EOD;
 function unsubscribe($param) {
     global $sender;
     $html_email = htmlentities($param["em"]);
-    $info = get_sub_info($param["em"]);
+    $info = get_sub_info($param["em"], true);
 
     if (isset($info["status"]) && $info["status"] == "unsubscribed") {
 	$html = <<<EOD
