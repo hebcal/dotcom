@@ -165,7 +165,7 @@ EOD;
     $num_rows = mysql_num_rows($result);
     if ($num_rows != 1) {
     	if ($num_rows != 0 || $expected_present) {
-	    error_log("get_sub_info got $num_rows rows, expected 1");
+	    error_log("get_sub_info($email) got $num_rows rows, expected 1");
     	}
 	return array();
     }
