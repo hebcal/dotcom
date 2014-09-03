@@ -29,6 +29,10 @@ foreach($_REQUEST as $key => $value) {
     $param[$key] = trim($value);
 }
 
+if (!isset($param["m"])) {
+    $param["m"] = 50;
+}
+
 if (isset($param["v"]) && $param["v"])
 {
     $email = $param["em"];
@@ -262,10 +266,6 @@ function form($param, $message = "", $help = "") {
   <?php echo $message; echo $help; ?>
 </div><!-- .alert -->
 <?php
-    }
-
-    if (!isset($param["m"])) {
-	$param["m"] = 50;
     }
 
     $action = $_SERVER["PHP_SELF"];
