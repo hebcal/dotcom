@@ -85,10 +85,10 @@ else
     form($param);
 }
 
-if ($param["modify"]) {
+if (isset($param["modify"]) && $param["modify"]) {
     subscribe($param);
 }
-elseif ($param["unsubscribe"]) {
+elseif (isset($param["unsubscribe"]) && $param["unsubscribe"]) {
     unsubscribe($param);
 }
 else {
@@ -708,6 +708,7 @@ EOD
 
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-owner@hebcal.com";
+    $reply_to = "no-reply@hebcal.com";
     $return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
 	"@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";
