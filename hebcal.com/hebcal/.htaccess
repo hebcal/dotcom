@@ -58,3 +58,8 @@ RewriteRule ^index\.cgi/hebcal_2006_30309\.ics$ http://download.hebcal.com/expor
 # replace all others with a 410 Gone
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^index\.cgi/hebcal_.*\.ics$ - [G,L]
+
+# stop serving out very old iCalendar and vCalendar files
+RewriteRule ^index\.cgi/hebcal_200[0-9].*\.ics - [G,L]
+RewriteRule ^index\.cgi/hebcal_200[0-9].*\.vcs - [G,L]
+
