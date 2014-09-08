@@ -157,23 +157,23 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
-<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
+<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style type="text/css">
-ul.inline li:after{content:"\\00a0\\00b7"}
-ul.inline li:last-child:after{content:""}
+ul.list-inline li:after{content:"\\00a0\\00b7"}
+ul.list-inline li:last-child:after{content:""}
 </style>
 <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
 EOD;
-echo html_header_bootstrap("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
+echo html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
 		     false);
 ?>
-<div class="span12">
+<div class="col-md-12">
 <div class="clearfix">
 <h1 class="hidden-phone">Hebcal Jewish Calendar</h1>
-<ul class="inline">
+<ul class="list-inline">
 <?php
 echo "<li><time datetime=\"", date("Y-m-d"), "\">", date("D, j F Y"), "</time>\n";
 $hm = $hnum_to_str[$hmnum];
@@ -207,14 +207,14 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 }
 
 function holiday_greeting($blurb, $long_text) { ?>
-<div class="row-fluid">
-<div class="span8">
+<div class="row">
+<div class="col-md-8">
 <div class="alert alert-success">
  <strong><?php echo $blurb ?>!</strong>
  <?php echo $long_text ?>.
 </div><!-- .alert -->
-</div><!-- .span8 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-md-8 -->
+</div><!-- .row -->
 <?php
 }
 
@@ -258,8 +258,8 @@ if (isset($rosh_chodesh)) {
 ?>
 </div><!-- .clearfix -->
 
-<div class="row-fluid">
-<div class="span6">
+<div class="row">
+<div class="col-md-6">
 <h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_045_calendar.png" width="23" height="24" alt="">
 Holiday Calendar</h2>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
@@ -280,89 +280,106 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
     $greg_range = $gy;
   }
 ?>
-<p><a class="btn" href="/holidays/<?php echo $greg_range ?>"><i class="icon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
-<p><a class="btn" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil"></i> Customize your calendar &raquo;</a></p>
-</div><!-- .span6 -->
+<p><a class="btn btn-default" href="/holidays/<?php echo $greg_range ?>"><i class="glyphicon glyphicon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
+<p><a class="btn btn-default" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-pencil"></i> Customize your calendar &raquo;</a></p>
+</div><!-- .col-md-6 -->
 
-<div class="span6">
+<div class="col-md-6">
 <h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_081_refresh.png" width="25" height="26" alt="">
 Convert Dates</h2>
 <p>Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
-<p><a class="btn" href="/converter/"><i class="icon-refresh"></i> Date Converter &raquo;</a></p>
+<p><a class="btn btn-default" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter &raquo;</a></p>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries.</p>
-<p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
-</div><!-- .span6 -->
-</div><!-- .row-fluid -->
+<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicon glyphicon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+</div><!-- .col-md-6 -->
+</div><!-- .row -->
 
-<div class="row-fluid">
-<div class="span6">
+<div class="row">
+<div class="col-md-6">
 <h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_334_candle.png" width="20" height="25" alt="">
 Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
-<form action="/shabbat/" method="get" class="form form-inline" id="shabbat-form">
+<form action="/shabbat/" method="get" role="form" id="shabbat-form">
 <input type="hidden" name="geo" id="geo" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="">
 <input type="hidden" name="zip" id="zip" value="">
 <div class="city-typeahead" style="margin-bottom:12px">
-<input type="text" id="city-typeahead" class="form-control" placeholder="Search for city">
+<input type="text" id="city-typeahead" class="form-control typeahead" placeholder="Search for city">
 </div>
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "50"; } ?>">
 </form>
-</div><!-- .span6 -->
+</div><!-- .col-md-6 -->
 
-<div class="span6">
+<div class="col-md-6">
 <h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_351_book_open.png" width="24" height="22" alt="">
 Torah Readings</h2>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
-<p><a class="btn" href="/sedrot/"><i class="icon-book"></i> Torah Readings &raquo;</a></p>
-</div><!-- .span6 -->
-</div><!-- .row-fluid -->
+<p><a class="btn btn-default" href="/sedrot/"><i class="glyphicon glyphicon-book"></i> Torah Readings &raquo;</a></p>
+</div><!-- .col-md-6 -->
+</div><!-- .row -->
 
-</div><!-- .span12 -->
+</div><!-- .col-md-12 -->
 
 <?php
 $xtra_html = <<<EOD
-<script src="/i/typeahead-0.9.3.min.js"></script>
+<script src="/i/typeahead-0.10.5.min.js"></script>
 <script type="text/javascript">
-$('#city-typeahead').typeahead({
-  name: 'hebcal-city',
-  remote: "/complete.php?q=%QUERY",
-  template: function(ctx) {
-    if (typeof ctx.geo === "string" && ctx.geo == "zip") {
-      return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
+var hebcalCities = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: '/complete.php?q=%QUERY'
+});
+
+hebcalCities.initialize();
+
+$('#city-typeahead').typeahead(null, {
+    name: 'hebcal-city',
+    displayKey: 'value',
+    source: hebcalCities.ttAdapter(),
+    templates: {
+        empty: function(ctx) {
+          var encodedStr = ctx.query.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+          });
+          return '<div class="tt-suggestion">Sorry, no city names match <b>' + encodedStr + '</b>.</div>';
+        },
+        suggestion: function(ctx) {
+            if (typeof ctx.geo === "string" && ctx.geo == "zip") {
+                return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
+            } else {
+                var ctry = ctx.country == "United Kingdom" ? "UK" : ctx.country,
+                    s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
+                if (typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
+                    s += ctx.admin1 + ', ';
+                }
+                return s + ctry + '</small></p>';
+            }
+        }
+    },
+    limit: 8
+}).on('typeahead:selected', function(obj, datum, name) {
+    if (typeof datum.geo === "string" && datum.geo == "zip") {
+        $('#geo').val('zip');
+        $('#zip').val(datum.id);
+        $('#geonameid').remove();
     } else {
-      var ctry = ctx.country == "United Kingdom" ? "UK" : ctx.country,
-        s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
-      if (typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
-        s += ctx.admin1 + ', ';
-      }
-      return s + ctry + '</small></p>';
+        $('#geo').val('geoname');
+        $('#geonameid').val(datum.id);
+        $('#zip').remove();
     }
-  },
-  limit: 8
-}).on('typeahead:selected', function (obj, datum, name) {
-  if (typeof datum.geo === "string" && datum.geo == "zip") {
-    $('#geo').val('zip');
-    $('#zip').val(datum.id);
-    $('#geonameid').remove();
-  } else {
-    $('#geo').val('geoname');
-    $('#geonameid').val(datum.id);
-    $('#zip').remove();
-  }
-  $('#shabbat-form').submit();
+    $('#shabbat-form').submit();
 }).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which;
-  if (code == 13) {
-    e.preventDefault();
-    return false;
-  }
+    var code = e.keyCode || e.which;
+    if (code == 13) {
+        e.preventDefault();
+        return false;
+    }
 });
 </script>
 EOD;
-    echo html_footer_bootstrap(true, $xtra_html);
+    echo html_footer_bootstrap3(true, $xtra_html);
     exit();
 ?>
 
