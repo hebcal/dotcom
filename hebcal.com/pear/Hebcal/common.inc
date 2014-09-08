@@ -644,7 +644,7 @@ also under a cc-by licence.</small></p>
 </footer>
 </div> <!-- .container -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
