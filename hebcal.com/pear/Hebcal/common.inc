@@ -508,6 +508,113 @@ function html_menu_bootstrap($selected) {
     return $str;
 }
 
+function html_menu_bootstrap3($selected) {
+    global $HTML_MENU_ITEMS_V2;
+    $str = "<ul class=\"nav navbar-nav\">";
+    foreach ($HTML_MENU_ITEMS_V2 as $item) {
+        $path = $item[0];
+        $title = $item[1];
+        $tooltip = $item[2];
+        if (isset($item[3])) {
+            $str .= "<li class=\"dropdown\">";
+            $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <span class=\"caret\"></span></a>";
+            $str .= "<ul class=\"dropdown-menu\" role=\"menu\">";
+            for ($i = 3; isset($item[$i]); $i++) {
+                $str .= html_menu_item_bootstrap($item[$i][0], $item[$i][1], $item[$i][2], $selected);
+                $str .= "</li>";
+            }
+            $str .= "</ul>";
+        } else {
+            $str .= html_menu_item_bootstrap($path, $title, $tooltip, $selected);
+        }
+        $str .= "</li>";
+    }
+    $str .= "</ul>";
+    return $str;
+}
+
+function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true, $hebrew_stylesheet=false) {
+    if ($title_append_suffix) {
+        $title .= " | Hebcal Jewish Calendar";
+    }
+    $self = $_SERVER["PHP_SELF"];
+    $pos = strpos($self, "index.php");
+    if ($pos !== false) {
+        $self = substr($self, 0, $pos);
+    }
+    $menu = html_menu_bootstrap3($self);
+
+    if ($self == "/") {
+        $logo = '<span class="navbar-brand" id="logo" title="Hebcal Jewish Calendar">Hebcal</span>';
+    } else {
+        $logo = '<a class="navbar-brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
+    }
+
+    $xtra_stylesheet = $hebrew_stylesheet
+        ? "<link rel=\"stylesheet\" type=\"text/css\" href=\"//fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
+        : "";
+
+    $html = <<<EOD
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+$xtra_stylesheet<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-967247-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<style type="text/css">
+.label{text-transform:none}
+:lang(he) {
+  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
+  font-size:125%;
+  direction:rtl;
+}
+@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+}
+</style>
+$xtra_head</head>
+<body>
+
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      $logo
+    </div>
+    <div class="navbar-collapse collapse">
+    $menu
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+     <input name="s" id="s" type="text" class="form-control" placeholder="Search">
+    </form>
+    </div><!--/.navbar-collapse -->
+  </div>
+</div>
+
+<div class="container">
+<div id="content" class="clearfix row">
+EOD;
+    return $html;
+}
+
+
 function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true, $hebrew_stylesheet=false) {
     if ($title_append_suffix) {
 	$title .= " | Hebcal Jewish Calendar";
@@ -670,6 +777,90 @@ EOD;
 
     return $html;
 }
+
+
+function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
+    $last_updated_text = "";
+    if ($last_updated) {
+    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
+    $last_updated_text = "<p><time datetime=\""
+        . date("c", $stat[9]) . "\">"
+        . date("j F Y", $stat[9]). "</time>"
+        . "</p>";
+    }
+
+    $html = <<<EOD
+</div><!-- #content -->
+
+<footer role="contentinfo">
+<hr>
+<div id="inner-footer" class="clearfix">
+<div class="row">
+<div class="col-md-3">
+<ul class="nav nav-list">
+<li class="nav-header">Products</li>
+<li><a href="/holidays/">Jewish Holidays</a></li>
+<li><a href="/converter/">Hebrew Date Converter</a></li>
+<li><a href="/shabbat/">Shabbat Times</a></li>
+<li><a href="/sedrot/">Torah Readings</a></li>
+</ul>
+</div><!-- .col-md-3 -->
+<div class="col-md-3">
+<ul class="nav nav-list">
+<li class="nav-header">About Us</li>
+<li><a href="http://www.hebcal.com/home/about">About Hebcal</a></li>
+<li><a href="http://www.hebcal.com/home/category/news">News</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></li>
+</ul>
+</div><!-- .col-md-3 -->
+<div class="col-md-3">
+<ul class="nav nav-list">
+<li class="nav-header">Connect</li>
+<li><a href="http://www.hebcal.com/home/help">Help</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact Us</a></li>
+<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
+<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .col-md-3 -->
+<div class="col-md-3">
+$last_updated_text
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
+rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
+also under a cc-by licence.</small></p>
+</div><!-- .col-md-3 -->
+</div><!-- .row -->
+</div><!-- #inner-footer -->
+</footer>
+</div> <!-- .container -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('a.amzn').click(function(){
+    _gaq.push(['_trackEvent','outbound-amzn',$(this).attr('id')]);
+  });
+  $('a.outbound').click(function(){
+    var c=$(this).attr('href');
+    if(c&&c.indexOf("http://")===0){
+      var d=c.indexOf("/",7);
+      if(d>7) {
+    _gaq.push(['_trackEvent','outbound-article',c.substring(7,d)]);
+      }
+    }
+  });
+  $('a.download').click(function(){
+    _gaq.push(['_trackEvent','download',$(this).attr('id')]);
+  });
+});
+</script>
+$xtra_html</body></html>
+EOD;
+
+    return $html;
+}
+
 
 function get_saturday($gy, $gm, $gd) {
     $timestamp = mktime(12, 34, 56, $gm, $gd, $gy);
