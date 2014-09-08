@@ -5,9 +5,16 @@ if (isset($_SERVER["HTTP_IF_MODIFIED_SINCE"])) {
     exit;
 }
 
+$qraw = isset($_REQUEST["q"]) ? trim($_REQUEST["q"]) : "";
+if (strlen($qraw) == 0) {
+    header("HTTP/1.1 404 Not Found");
+    echo "Not Found\n";
+    exit;
+}
+
 $search_results = array();
 
-if (isset($_REQUEST["q"]) && is_numeric($_REQUEST["q"])) {
+if (is_numeric($qraw)) {
     require("./pear/Hebcal/common.inc");
 
     $file = $_SERVER["DOCUMENT_ROOT"] . "/hebcal/zips.sqlite3";
@@ -20,13 +27,13 @@ if (isset($_REQUEST["q"]) && is_numeric($_REQUEST["q"])) {
     $sql = <<<EOD
 SELECT ZipCode,CityMixedCase,State,Latitude,Longitude,TimeZone,DayLightSaving
 FROM ZIPCodes_Primary
-WHERE ZipCode LIKE '$_REQUEST[q]%'
+WHERE ZipCode LIKE '$qraw%'
 LIMIT 10
 EOD;
 
     $query = $db->query($sql);
     if (!$query) {
-        error_log("Querying '$_REQUEST[q]' from $file: " . $db->lastErrorMsg());
+        error_log("Querying '$qraw' from $file: " . $db->lastErrorMsg());
         die();
     }
 
@@ -57,19 +64,20 @@ EOD;
         die();
     }
 
+    $qe = SQLite3::escapeString($qraw);
     $sql = <<<EOD
 SELECT geonameid,
 asciiname, admin1, country,
 population, latitude, longitude, timezone
 FROM geoname_fulltext
-WHERE longname MATCH '"$_REQUEST[q]*"'
+WHERE longname MATCH '"$qe*"'
 ORDER BY population DESC
 LIMIT 10
 EOD;
 
     $query = $db->query($sql);
     if (!$query) {
-        error_log("Querying '$_REQUEST[q]' from $file: " . $db->lastErrorMsg());
+        error_log("Querying '$qe' from $file: " . $db->lastErrorMsg());
         die();
     }
 
