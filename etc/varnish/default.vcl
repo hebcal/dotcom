@@ -24,6 +24,10 @@ sub vcl_recv {
     return(synth(750, "Moved Temporarily"));
   }
 
+  if (req.url ~ "^/yahrzeit/undefined") {
+    return(synth(751, "Not Found"));
+  }
+
     # Happens before we check if we have this in cache already.
     # 
     # Typically you clean up the request here, removing cookies you don't need,
@@ -65,6 +69,11 @@ sub vcl_synth {
         set resp.http.Location = "http://download.hebcal.com" + req.url;
         set resp.status = 301;
 	synthetic("Moved.");
+        return(deliver);
+    }
+    if (resp.status == 751) {
+        set resp.status = 404;
+	synthetic("Not Found.");
         return(deliver);
     }
 }
