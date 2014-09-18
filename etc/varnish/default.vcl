@@ -44,7 +44,7 @@ sub vcl_recv {
     unset req.http.cookie;
   }
 
-  if (req.url ~ "^/favicon\.ico") {
+  if (req.url ~ "^/favicon\.ico" || req.url ~ "^/etc/") {
     unset req.http.cookie;
     unset req.http.user-agent;
   }
