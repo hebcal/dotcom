@@ -569,7 +569,6 @@ $xtra_stylesheet<script>
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-967247-1', 'auto');
   ga('send', 'pageview');
-
 </script>
 <style type="text/css">
 .label{text-transform:none}
@@ -648,7 +647,6 @@ $xtra_stylesheet<script>
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-967247-1', 'auto');
   ga('send', 'pageview');
 </script>
@@ -754,19 +752,19 @@ also under a cc-by licence.</small></p>
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.amzn').click(function(){
-    ga('send','event','outbound-amzn',$(this).attr('id')]);
+    ga('send','event','outbound-amzn',$(this).attr('id'));
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
     if(c&&c.indexOf("http://")===0){
       var d=c.indexOf("/",7);
       if(d>7) {
-	ga('send','event','outbound-article',c.substring(7,d)]);
+	ga('send','event','outbound-article',c.substring(7,d));
       }
     }
   });
   $('a.download').click(function(){
-    ga('send','event','download',$(this).attr('id')]);
+    ga('send','event','download',$(this).attr('id'));
   });
 });
 </script>
@@ -837,19 +835,19 @@ also under a cc-by licence.</small></p>
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.amzn').click(function(){
-    ga('send','event','outbound-amzn',$(this).attr('id')]);
+    ga('send','event','outbound-amzn',$(this).attr('id'));
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
     if(c&&c.indexOf("http://")===0){
       var d=c.indexOf("/",7);
       if(d>7) {
-        ga('send','event','outbound-article',c.substring(7,d)]);
+        ga('send','event','outbound-article',c.substring(7,d));
       }
     }
   });
   $('a.download').click(function(){
-    ga('send','event','download',$(this).attr('id')]);
+    ga('send','event','download',$(this).attr('id'));
   });
 });
 </script>
