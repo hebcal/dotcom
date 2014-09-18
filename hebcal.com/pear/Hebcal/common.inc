@@ -567,7 +567,6 @@ $xtra_stylesheet<script>
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-967247-1', 'auto');
   ga('send', 'pageview');
 
@@ -644,15 +643,14 @@ function html_header_bootstrap($title, $xtra_head="", $title_append_suffix=true,
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
 <link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
-$xtra_stylesheet<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-967247-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+$xtra_stylesheet<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-967247-1', 'auto');
+  ga('send', 'pageview');
 </script>
 <style type="text/css">
 .navbar{position:static}
@@ -756,19 +754,19 @@ also under a cc-by licence.</small></p>
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.amzn').click(function(){
-    _gaq.push(['_trackEvent','outbound-amzn',$(this).attr('id')]);
+    ga('send','event','outbound-amzn',$(this).attr('id')]);
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
     if(c&&c.indexOf("http://")===0){
       var d=c.indexOf("/",7);
       if(d>7) {
-	_gaq.push(['_trackEvent','outbound-article',c.substring(7,d)]);
+	ga('send','event','outbound-article',c.substring(7,d)]);
       }
     }
   });
   $('a.download').click(function(){
-    _gaq.push(['_trackEvent','download',$(this).attr('id')]);
+    ga('send','event','download',$(this).attr('id')]);
   });
 });
 </script>
@@ -839,19 +837,19 @@ also under a cc-by licence.</small></p>
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.amzn').click(function(){
-    _gaq.push(['_trackEvent','outbound-amzn',$(this).attr('id')]);
+    ga('send','event','outbound-amzn',$(this).attr('id')]);
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
     if(c&&c.indexOf("http://")===0){
       var d=c.indexOf("/",7);
       if(d>7) {
-    _gaq.push(['_trackEvent','outbound-article',c.substring(7,d)]);
+        ga('send','event','outbound-article',c.substring(7,d)]);
       }
     }
   });
   $('a.download').click(function(){
-    _gaq.push(['_trackEvent','download',$(this).attr('id')]);
+    ga('send','event','download',$(this).attr('id')]);
   });
 });
 </script>
