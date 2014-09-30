@@ -1110,7 +1110,10 @@ sub get_sefaria_url {
     my $sefaria_verses = $verses;
     $sefaria_verses =~ s/:/./g;
 
-    my $sefaria_url = "http://www.sefaria.org/$book.$sefaria_verses/he/Wikisource_Tanach_with_Trope?lang=he-en";
+#    my $sefaria_text = "Wikisource_Tanach_with_Trope";
+    my $sefaria_text = "Tanach_with_Ta%27amei_Hamikra";
+
+    my $sefaria_url = "http://www.sefaria.org/$book.$sefaria_verses/he/$sefaria_text?lang=he-en";
     return $sefaria_url;
 }
 
