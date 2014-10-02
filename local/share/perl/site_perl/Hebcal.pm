@@ -633,6 +633,9 @@ sub events_to_dict
 		      "tz" => undef,
 		      "dst" => undef,
 		      });
+
+    $tzid ||= "UTC";
+
     my @items;
     foreach my $evt (@{$events}) {
 	my $time = event_to_time($evt);
@@ -643,52 +646,47 @@ sub events_to_dict
 
 	my $min = $evt->[$EVT_IDX_MIN];
 	my $hour24 = $evt->[$EVT_IDX_HOUR];
+        if ($evt->[$EVT_IDX_UNTIMED]) {
+            $min = $hour24 = 0;
+        }
 
 	my %item;
 	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
 	$item{"date"} = strftime($format, localtime($time));
 
-	if ($evt->[$EVT_IDX_UNTIMED] == 0)
-	{
-	    my $dt = DateTime->new(
-				   year       => $year,
-				   month      => $mon,
-				   day        => $mday,
-				   hour       => $hour24,
-				   minute     => $min,
-				   second     => 0,
-				   time_zone  => $tzid,
-				  );
+        my $dt = DateTime->new(
+                           year       => $year,
+                           month      => $mon,
+                           day        => $mday,
+                           hour       => $hour24,
+                           minute     => $min,
+                           second     => 0,
+                           time_zone  => $tzid,
+                          );
 
-	    my $tzOffset = $dt->offset();
-	    my $tz = int($tzOffset / 3600);
-	    my $tzMin = abs(int((($tzOffset / 3600) - $tz) * 60));
+        my $tzOffset = $dt->offset();
+        my $tz = int($tzOffset / 3600);
+        my $tzMin = abs(int((($tzOffset / 3600) - $tz) * 60));
 
+        my $dow = $DoW[get_dow($year, $mon, $mday)];
+        $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d%02d",
+                               $dow,
+                               $mday,
+                               $MoY_short[$mon - 1],
+                               $year, $hour24, $min,
+                               $tz > 0 ? "+" : "-",
+                               abs($tz), $tzMin);
+
+	if ($evt->[$EVT_IDX_UNTIMED]) {
+            $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
+        } else {
 	    $item{"dc:date"} =
 		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:%02d",
 			$year,$mon,$mday,
 			$hour24,$min,0,
 			$tz > 0 ? "+" : "-",
 			abs($tz), $tzMin);
-
-	    my $dow = $DoW[get_dow($year, $mon, $mday)];
-	    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d%02d",
-				       $dow, $mday,
-				       $MoY_short[$mon - 1],
-				       $year, $hour24, $min,
-				       $tz > 0 ? "+" : "-",
-				       abs($tz), $tzMin);
-	}
-	else
-	{
-	    $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-	    my $dow = $DoW[get_dow($year, $mon, $mday)];
-	    $item{"pubDate"} = sprintf("%s, %02d %s %d 00:00:00 +0000",
-				       $dow,
-				       $mday,
-				       $MoY_short[$mon - 1],
-				       $year);
 	}
 
 	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
