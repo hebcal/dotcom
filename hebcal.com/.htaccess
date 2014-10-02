@@ -26,7 +26,10 @@ RewriteCond %{REMOTE_ADDR} ^129\.98\.232\.
 RewriteRule ^etc/hdate-en.xml - [F,L]
 
 # virus-infected host
-Deny from 203.231.0.1
+SetEnvIF X-Forwarded-For "129.98.212.203" DenyFromIP
+SetEnvIF X-Forwarded-For "203.231.0.1" DenyFromIP
+SetEnvIF X-Forwarded-For "216.157.24.28" DenyFromIP
+Deny from env=DenyFromIP
 
 AddType text/calendar;charset=UTF-8 ics
 AddType text/javascript;charset=UTF-8 js
