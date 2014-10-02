@@ -2,6 +2,10 @@
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 
+function get_return_path($mailto) {
+    return "shabbat-return+" . strtr($mailto, "@", "=") . "@hebcal.com";
+}
+
 function bad_request($err) {
     header("HTTP/1.0 400 Bad Request");
     echo "$err\n";
@@ -91,8 +95,6 @@ EOD;
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-owner@hebcal.com";
     $reply_to = "no-reply@hebcal.com";
-    $return_path = "shabbat-return-" . strtr($info["em"], "@", "=") .
-	"@hebcal.com";
     $subject = "Your subscription to hebcal is complete";
 
     $url_prefix = "https://" . $_SERVER["HTTP_HOST"];
@@ -123,7 +125,7 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 EOD;
 
-    $err = smtp_send($return_path, $info["em"], $headers, $body);
+    $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
     echo html_header_bootstrap("Email Subscription Confirmed");
 ?>
 <p class="lead">Confirm your subscription to weekly Shabbat

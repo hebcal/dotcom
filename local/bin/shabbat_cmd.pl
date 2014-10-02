@@ -117,10 +117,6 @@ Shabbat candle lighting time list.
 Regards,
 $site};
 
-    my $email_mangle = $email;
-    $email_mangle =~ s/\@/=/g;
-    my $return_path = sprintf('shabbat-return-%s@%s', $email_mangle, $site);
-
     my %headers =
 	(
 	 "From" =>
@@ -130,7 +126,7 @@ $site};
 	 "Subject" => "You have been unsubscribed from hebcal",
 	 );
 
-    Hebcal::sendmail_v2($return_path,\%headers,$body);
+    Hebcal::sendmail_v2(Hebcal::shabbat_return_path($email),\%headers,$body);
 }
 
 

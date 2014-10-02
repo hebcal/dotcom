@@ -145,7 +145,7 @@ sub extract_return_addr {
 	    warn $Email::Valid::Details;
 	}
 
-	if ($to =~ /shabbat-return-([^\@]+)\@/i) {
+	if ($to =~ /shabbat-return(?:[-+])([^\@]+)\@/i) {
 	    $email_address = $1;
 	    $email_address =~ s/=/\@/;
 	}

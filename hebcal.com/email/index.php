@@ -99,6 +99,9 @@ else {
 echo html_footer_bootstrap();
 exit();
 
+function get_return_path($mailto) {
+    return "shabbat-return+" . strtr($mailto, "@", "=") . "@hebcal.com";
+}
 
 function echo_lead_text() {
     global $echoed_lead_text;
@@ -512,8 +515,6 @@ function subscribe($param) {
 	$from_name = "Hebcal Subscription Notification";
     	$from_addr = "shabbat-owner@hebcal.com";
 	$reply_to = "no-reply@hebcal.com";
-	$return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
-	    "@hebcal.com";
 	$subject = "Your subscription is updated";
 
         global $remoteAddr;
@@ -548,7 +549,7 @@ subscription for $city_descr.</div>
 </div>
 EOD;
 
-	$err = smtp_send($return_path, $param["em"], $headers, $body);
+	$err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
 
 	$html_email = htmlentities($param["em"]);
 	$html = <<<EOD
@@ -577,8 +578,6 @@ EOD
     $encoded = write_staging_info($param, $old_encoded);
 
     $from_name = "Hebcal Subscription Notification";
-    $return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
-	"@hebcal.com";
     $from_addr = "no-reply@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
@@ -620,7 +619,7 @@ apologies and ignore this message.</div>
 </div>
 EOD;
 
-    $err = smtp_send($return_path, $param["em"], $headers, $body);
+    $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
     $html_email = htmlentities($param["em"]);
 
     if ($err === true)
@@ -709,8 +708,6 @@ EOD
     $from_name = "Hebcal Subscription Notification";
     $from_addr = "shabbat-owner@hebcal.com";
     $reply_to = "no-reply@hebcal.com";
-    $return_path = "shabbat-return-" . strtr($param["em"], "@", "=") .
-	"@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";
 
     global $remoteAddr;
@@ -740,7 +737,7 @@ Shabbat candle lighting time list.</div>
 </div>
 EOD;
 
-    $err = smtp_send($return_path, $param["em"], $headers, $body);
+    $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
 
     $html = <<<EOD
 <div class="alert alert-success alert-block">

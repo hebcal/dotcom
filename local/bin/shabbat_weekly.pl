@@ -349,9 +349,7 @@ $unsub_url
 </div>
 };
 
-    my $email_mangle = $to;
-    $email_mangle =~ s/\@/=/g;
-    my $return_path = sprintf('shabbat-return-%s@hebcal.com', $email_mangle);
+    my $return_path = Hebcal::shabbat_return_path($to);
 
     my $msgid = $cfg->{"id"} . "." . time();
 

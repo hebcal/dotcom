@@ -2907,6 +2907,12 @@ sub csv_write_contents($$$)
 # for managing email shabbat list
 ########################################################################
 
+sub shabbat_return_path {
+    my($to) = @_;
+    $to =~ s/\@/=/g;
+    return join('', 'shabbat-return+', $to, '@hebcal.com');
+}
+
 sub sendmail_v2
 {
     my($return_path,$headers,$body,$verbose) = @_;
