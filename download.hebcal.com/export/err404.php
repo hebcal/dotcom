@@ -6,7 +6,6 @@ if ($ics_question !== false) {
     $request_uri = substr($request_uri, 0, $ics_question)
         . urldecode(substr($request_uri, $ics_question));
     header("HTTP/1.1 301 Moved");
-    header("Status: 301 Moved");
     header("Location: $url_prefix$request_uri");
     echo "Moved.\n";
     exit();
@@ -15,9 +14,8 @@ $args_pos = strpos($request_uri, "?");
 if ($args_pos !== false) {
     $args = substr($request_uri, $args_pos);
     if (strncmp($args, "?subscribe=1%3B", 15) == 0) {
-	$args = str_replace("%3B", ";", $args); // reverse iOS ; => %3B conversion
+        $args = str_replace("%3B", ";", $args); // reverse iOS ; => %3B conversion
         header("HTTP/1.1 301 Moved");
-        header("Status: 301 Moved");
         $firstpart = substr($request_uri, 0, $args_pos);
         header("Location: $url_prefix$firstpart$args");
         echo "Moved.\n";
@@ -26,29 +24,38 @@ if ($args_pos !== false) {
     $arg2 = str_replace(";", "&", substr($args, 1));
     parse_str($arg2, $param);
     if (isset($param["v"]) && ($param["v"] == "1" || $param["v"] == "yahrzeit")) {
-	header("HTTP/1.1 200 OK");
-	header("Status: 200 OK");
-	header("Content-Type: text/calendar; charset=UTF-8");
-	if ($param["v"] == "1") {
-	    $url = "http://localhost:8080/hebcal/index.cgi/export.ics" . $args;
-	} elseif ($param["v"] == "yahrzeit") {
-	    $url = "http://localhost:8080/yahrzeit/yahrzeit.cgi/export.ics" . $args;
-	}
-	$ch = curl_init($url);
-	$user_agent = "hebcal-export/20130721";
-	curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
-	$ref_url = $url_prefix . $request_uri;
-	curl_setopt($ch, CURLOPT_REFERER, $ref_url);
-	curl_setopt($ch, CURLOPT_HTTPHEADER,
-		    array("X-Forwarded-For: " . $_SERVER["REMOTE_ADDR"]));
-	curl_exec($ch);
-	curl_close($ch);
-	exit();
+        $now = date("Y");
+        if (isset($param["subscribe"]) && $param["subscribe"] == "1"
+            && isset($param["yt"]) && $param["yt"] == "G"
+            && isset($param["year"]) && is_numeric($param["year"])
+            && (($now > $param["year"] + 4)
+                || (isset($param["month"]) && $param["month"] != "x" && $now > $param["year"] + 1))) {
+            header("HTTP/1.1 410 Gone");
+            header("Content-Type: text/plain");
+            echo "Gone.\n";
+            exit();
+        }
+        header("HTTP/1.1 200 OK");
+        header("Content-Type: text/calendar; charset=UTF-8");
+        if ($param["v"] == "1") {
+            $url = "http://localhost:8080/hebcal/index.cgi/export.ics" . $args;
+        } elseif ($param["v"] == "yahrzeit") {
+            $url = "http://localhost:8080/yahrzeit/yahrzeit.cgi/export.ics" . $args;
+        }
+        $ch = curl_init($url);
+        $user_agent = "hebcal-export/20130721";
+        curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+        $ref_url = $url_prefix . $request_uri;
+        curl_setopt($ch, CURLOPT_REFERER, $ref_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+                    array("X-Forwarded-For: " . $_SERVER["REMOTE_ADDR"]));
+        curl_exec($ch);
+        curl_close($ch);
+        exit();
     }
 }
 
 header("HTTP/1.1 404 Not Found");
-header("Status: 404 Not Found");
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -101,7 +108,8 @@ body{padding-top:0}
 <li id="menu-item-445" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Torah Readings" href="http://www.hebcal.com/sedrot/" >Torah</a></li>
 <li id="menu-item-324" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="http://www.hebcal.com/home/about" >About</a></li>
 <li id="menu-item-328" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent"><a href="http://www.hebcal.com/home/help" >Help</a></li>
-</ul>								</div>
+</ul>
+</div>
 
 </nav>
 
