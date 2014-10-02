@@ -19,35 +19,39 @@ backend default {
     .port = "8080";
 }
 
-sub vcl_recv {
-  if (req.url ~ "^/ical/.*\.ics" || req.url ~ "^/export/") {
-    return(synth(750, "Moved Temporarily"));
-  }
+acl purge {
+    "localhost";
+}
 
-  if (req.url ~ "^/yahrzeit/undefined") {
-    return(synth(751, "Not Found"));
-  }
+sub vcl_recv {
+    if (req.url ~ "^/ical/.*\.ics" || req.url ~ "^/export/") {
+        return(synth(750, "Moved Temporarily"));
+    }
+
+    if (req.url ~ "^/yahrzeit/undefined") {
+        return(synth(751, "Not Found"));
+    }
 
     # Happens before we check if we have this in cache already.
-    # 
+    #
     # Typically you clean up the request here, removing cookies you don't need,
     # rewriting the request, etc.
-  if (req.url ~ "^/i/"
+    if (req.url ~ "^/i/"
         || req.url ~ "^/holidays/"
         || req.url ~ "^/torah/"
         || req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-master/"
         || req.url ~ "^/home/wp-includes/js/") {
-    unset req.http.cookie;
-  }
+        unset req.http.cookie;
+    }
 
-  if (req.url ~ "^/shabbat/\?" || req.url ~ "\?.*cfg=") {
-    unset req.http.cookie;
-  }
+    if (req.url ~ "^/shabbat/\?" || req.url ~ "\?.*cfg=") {
+        unset req.http.cookie;
+    }
 
-  if (req.url ~ "^/favicon\.ico" || req.url ~ "^/etc/") {
-    unset req.http.cookie;
-    unset req.http.user-agent;
-  }
+    if (req.url ~ "^/favicon\.ico" || req.url ~ "^/etc/") {
+        unset req.http.cookie;
+        unset req.http.user-agent;
+    }
 
     if (req.http.Accept-Encoding) {
         if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg)$") {
@@ -61,6 +65,13 @@ sub vcl_recv {
             # unkown algorithm
             unset req.http.Accept-Encoding;
         }
+    }
+
+    if (req.method == "PURGE") {
+        if (!client.ip ~ purge) {
+            return(synth(405, "Not allowed."));
+        }
+        return (purge);
     }
 }
 
@@ -80,7 +91,7 @@ sub vcl_synth {
 
 sub vcl_backend_response {
     # Happens after we have read the response headers from the backend.
-    # 
+    #
     # Here you clean the response headers, removing silly Set-Cookie headers
     # and other mistakes your backend does.
 }
@@ -88,6 +99,6 @@ sub vcl_backend_response {
 sub vcl_deliver {
     # Happens when we have all the pieces we need, and are about to send the
     # response to the client.
-    # 
+    #
     # You can do accounting or modifying the final object here.
 }
