@@ -389,16 +389,7 @@ sub parse_date_descr($$)
 	($subj,$hour,$min) = ($1,$2,$3);
 	$hour += 12 unless $hour == 0;	# timed events are always evening
 					# except for midnight
-
-	if ($subj eq 'Candle lighting')
-	{
-	    $dur = 18;
-	}
-	else
-	{
-	    $dur = 1;
-	}
-
+        $dur = 1;
 	$untimed = 0;
     }
     else
