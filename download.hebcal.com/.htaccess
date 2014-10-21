@@ -1,6 +1,0 @@
-AddDefaultCharset UTF-8
-
-AddType text/calendar;charset=UTF-8 ics
-
-RedirectMatch ^/$ http://www.hebcal.com/
-RedirectMatch ^/ical/$ http://www.hebcal.com/ical/
