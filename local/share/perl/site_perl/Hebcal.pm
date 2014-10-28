@@ -1578,7 +1578,7 @@ sub gen_cookie($)
 	    $retval .= '&zip=' . $q->param('zip');
 	} elsif ($q->param('geo') eq 'city') {
 	    $retval .= '&city=' . URI::Escape::uri_escape_utf8($q->param('city'));
-	} elsif ($q->param('geo') eq 'geonameid') {
+	} elsif ($q->param('geo') eq 'geoname') {
 	    $retval .= '&geonameid=' . $q->param('geonameid');
 	} elsif ($q->param('geo') eq 'pos') {
 	    $retval .= '&lodeg=' . $q->param('lodeg');
@@ -2116,6 +2116,7 @@ WHERE g.geonameid = ?
     if ($country eq "Israel") {
 	$q->param('i','on');
     }
+    $q->param("geo", "geoname");
     foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead)) {
 	$q->delete($_);
     }
