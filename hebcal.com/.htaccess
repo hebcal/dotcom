@@ -20,13 +20,13 @@ RewriteRule ^ /wap-shabbat.php [L]
 # crawler gone awry
 # Albert Einstein College of Medicine
 # Bronx, NY
-RewriteBase /
-RewriteCond %{REMOTE_ADDR} ^129\.98\.212\.203 [OR]
-RewriteCond %{REMOTE_ADDR} ^129\.98\.232\.
-RewriteRule ^etc/hdate-en.xml - [F,L]
+#RewriteBase /
+#RewriteCond %{REMOTE_ADDR} ^129\.98\.212\.203 [OR]
+#RewriteCond %{REMOTE_ADDR} ^129\.98\.232\.
+#RewriteRule ^etc/hdate-en.xml - [F,L]
 
 # virus-infected host
-SetEnvIF X-Forwarded-For "129.98.212.203" DenyFromIP
+#SetEnvIF X-Forwarded-For "129.98.212.203" DenyFromIP
 SetEnvIF X-Forwarded-For "203.231.0.1" DenyFromIP
 SetEnvIF X-Forwarded-For "216.157.24.28" DenyFromIP
 Deny from env=DenyFromIP
