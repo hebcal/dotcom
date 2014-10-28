@@ -1254,6 +1254,9 @@ sub latlong_to_hebcal {
     $latitude =~ s/^(-?)0+/$1/;
     $longitude =~ s/^(-?)0+/$1/;
 
+    $latitude = 0 if $latitude eq "";
+    $longitude = 0 if $longitude eq "";
+
     my $lat_deg = int($latitude);
     my $long_deg = int($longitude) * -1;
 
