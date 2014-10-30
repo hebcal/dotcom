@@ -109,6 +109,7 @@ sub get_candidates
 	AND a.bounce_address = e.email_address
 	AND e.email_status = 'active'
 	AND (a.bounce_std_reason = 'user_unknown' OR
+         a.bounce_std_reason = 'amzn_abuse' OR
 	     a.bounce_std_reason = 'domain_error')
 	GROUP by a.bounce_address
     };

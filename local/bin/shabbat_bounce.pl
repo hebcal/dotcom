@@ -35,9 +35,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
-    if 0; # not running under some shell
-
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
@@ -64,27 +61,32 @@ my $header = $message->head();
 my($email_address,$bounce_reason);
 my($std_reason);
 
-$email_address = extract_return_addr($header->get("X-Original-To"));
+$email_address = extract_return_addr($header->get("Delivered-To"));
 $email_address ||= extract_return_addr($header->get("To"));
 
 if (!$email_address) {
     die "can't find email address in message";
 }
 
-my $bounce = eval { Mail::DeliveryStatus::BounceParser->new($message->as_string()) };
-if ($@) {
-    # couldn't parse.  ignore this message.
-    warn "bounceparser unable to parse message, bailing";
-    exit(0);
+my $daemon_from = $header->get("From");
+if ($daemon_from eq 'complaints@email-abuse.amazonses.com') {
+    $bounce_reason = $std_reason = "amzn_abuse";
 } else {
-    # don't worry about transient failures with SMTP servers
-    exit(0) unless $bounce->is_bounce();
+    my $bounce = eval { Mail::DeliveryStatus::BounceParser->new($message->as_string()) };
+    if ($@) {
+        # couldn't parse.  ignore this message.
+        warn "bounceparser unable to parse message, bailing";
+        exit(0);
+    } else {
+        # don't worry about transient failures with SMTP servers
+        exit(0) unless $bounce->is_bounce();
 
-    my @reports = $bounce->reports;
-    foreach my $report (@reports) {
-	$std_reason = $report->get("std_reason");
-	exit(0) if ($std_reason eq "over_quota");
-	$bounce_reason = $report->get("reason");
+        my @reports = $bounce->reports;
+        foreach my $report (@reports) {
+            $std_reason = $report->get("std_reason");
+            exit(0) if ($std_reason eq "over_quota");
+            $bounce_reason = $report->get("reason");
+        }
     }
 }
 
@@ -135,20 +137,20 @@ sub extract_return_addr {
     my $email_address;
 
     if ($to) {
-	chomp($to);
-	if ($to =~ /^[^<]*<([^>]+)>/) {
-	    $to = $1;
-	}
-	if (Email::Valid->address($to)) {
-	    $to = Email::Valid->address($to);
-	} else {
-	    warn $Email::Valid::Details;
-	}
+        chomp($to);
+        if ($to =~ /^[^<]*<([^>]+)>/) {
+            $to = $1;
+        }
+        if (Email::Valid->address($to)) {
+            $to = Email::Valid->address($to);
+        } else {
+            warn $Email::Valid::Details;
+        }
 
-	if ($to =~ /shabbat-return(?:[-+])([^\@]+)\@/i) {
-	    $email_address = $1;
-	    $email_address =~ s/=/\@/;
-	}
+        if ($to =~ /shabbat-return(?:[-+])([^\@]+)\@/i) {
+            $email_address = $1;
+            $email_address =~ s/=/\@/;
+        }
     }
 
     $email_address;
