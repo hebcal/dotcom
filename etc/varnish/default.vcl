@@ -12,6 +12,8 @@
 # new 4.0 format.
 vcl 4.0;
 
+import vsthrottle;
+
 # Default backend definition. Set this to point to your content server.
 backend default {
 #    .host = "w1.hebcal.com";
@@ -72,6 +74,11 @@ sub vcl_recv {
             return(synth(405, "Not allowed."));
         }
         return (purge);
+    }
+
+    if (vsthrottle.is_denied(client.identity, 40, 10s)) {
+        # Client has exceeded 40 reqs per 10s
+        return (synth(429, "Too Many Requests"));
     }
 }
 
