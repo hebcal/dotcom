@@ -222,12 +222,12 @@ EOHTML
 
     Hebcal::out_html($cfg,"<p><a class=\"goto\" title=\"Previous\" href=\"",
 		     $url_base . ($hebrew_year - 1) .
-		     "\">&larr;&nbsp;", $hebrew_year - 1,
+		     "\" rel=\"nofollow\">&larr;&nbsp;", $hebrew_year - 1,
 		     "</a>&nbsp;&nbsp;&nbsp;",
 		     "Times in <strong>bold</strong> indicate holidays.",
 		     "&nbsp;&nbsp;&nbsp;<a class=\"goto\" title=\"Next\" href=\"",
 		     $url_base . ($hebrew_year + 1) .
-		     "\">", $hebrew_year + 1, "&nbsp;&rarr;</a>",
+		     "\" rel=\"nofollow\">", $hebrew_year + 1, "&nbsp;&rarr;</a>",
 		     "</p>\n");
 }
 
