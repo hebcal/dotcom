@@ -30,9 +30,12 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # post to Facebook wall Sunday-Friday between 11:03-11:33am Eastern
 3 11 * * 0-5 hebcal nice $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800
 
-# special Sukkot - 17 Sep 2010 at 8:45am (+ 9/24/2013)
-#45 8 17 9 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
-#45 8 24 9 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# special RH - 23 Sep 2014 at 14:56pm
+#54 15 23 9 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# special Sukkot - 7 Oct 2014 at 11:56am
+#56 11  7 10 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
+# special SimchatTorah - 14 Oct 2014 at 11:56am
+#56 11 14 10 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
 # clear bounces at 1:03pm on friday
 3 13 * * 5 hebcal nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
@@ -41,4 +44,4 @@ HEBCAL_BIN=/home/hebcal/local/bin
 30 0 * * * hebcal nice $HEBCAL_BIN/email_list_snapshot.sh
 
 # don't run fetchmail as a daemon, run it from cron
-*/6 * * * * hebcal /usr/bin/fetchmail -s > /dev/null 2>&1
+*/5 * * * * hebcal /usr/bin/fetchmail >> /home/hebcal/.fetchmail.log 2>&1
