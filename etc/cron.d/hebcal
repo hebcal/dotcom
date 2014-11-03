@@ -6,13 +6,9 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # debug
 #* * * * * hebcal nice touch /tmp/croncheck.hebcal.tmp
 
-0 0 * * * www-data nice $HEBCAL_WEB/bin/cache_cleanup.sh
-
 # monthly cache cleanup
 0 0 1 * * www-data mv -f /tmp/www-data-cache /tmp/www-data-cache.$$ && rm -rf /tmp/www-data-cache.$$
-
-# update static page at the beginning of each month
-0 0 1 * * mradwin curl --silent -o - 'http://www.hebcal.com/hebcal/?bogus=bogus' | perl -pi -e 's/\?bogus=bogus//g' > $HEBCAL_WEB/hebcal/default.new && mv -f $HEBCAL_WEB/hebcal/default.new $HEBCAL_WEB/hebcal/default.html
+0 0 1 * * hebcal mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
 
 # update hebcal.com holiday.inc for front page at midnight
 0 0 * * * hebcal nice $HEBCAL_WEB/bin/gen_current.pl
