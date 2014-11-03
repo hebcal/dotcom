@@ -30,6 +30,11 @@ sub vcl_recv {
         return(synth(750, "Moved Temporarily"));
     }
 
+    if (req.url ~ "^/yahrzeit/yahrzeit.cgi/.*\.(ics|vcs|csv|dba)"
+        || req.url ~ "^/hebcal/index.cgi/.*\.(ics|vcs|csv|dba|pdf)") {
+        return(synth(750, "Moved Temporarily"));
+    }
+
     if (req.url ~ "^/yahrzeit/undefined") {
         return(synth(751, "Not Found"));
     }
