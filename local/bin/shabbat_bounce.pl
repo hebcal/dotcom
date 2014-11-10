@@ -58,28 +58,29 @@ if (!$email_address) {
 }
 
 my $daemon_from = $header->get("From");
+chomp($daemon_from);
 if ($daemon_from eq 'complaints@email-abuse.amazonses.com') {
     $bounce_reason = $std_reason = "amzn_abuse";
 } else {
     my $bounce = eval { Mail::DeliveryStatus::BounceParser->new($message->as_string()) };
     if ($@) {
-        # couldn't parse.  ignore this message.
-        warn "bounceparser unable to parse message, bailing";
-        exit(0);
+        $bounce_reason = $std_reason = "parse_fail";
     } else {
-        # don't worry about transient failures with SMTP servers
-        exit(0) unless $bounce->is_bounce();
-
-        my @reports = $bounce->reports;
-        foreach my $report (@reports) {
-            $std_reason = $report->get("std_reason");
-            exit(0) if ($std_reason eq "over_quota");
-            $bounce_reason = $report->get("reason");
+        if ($bounce->is_bounce()) {
+            my @reports = $bounce->reports;
+            foreach my $report (@reports) {
+                $std_reason = $report->get("std_reason");
+                $bounce_reason = $report->get("reason");
+            }
+        } else {
+            $bounce_reason = $std_reason = "transient_fail";
         }
     }
 }
 
-$bounce_reason =~ s/\s+/ /g;
+if ($bounce_reason) {
+    $bounce_reason =~ s/\s+/ /g;
+}
 
 if (open(LOG, ">>/home/hebcal/local/var/log/bounce.log")) {
     my $t = time();
