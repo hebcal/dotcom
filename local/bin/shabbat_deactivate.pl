@@ -108,9 +108,10 @@ sub get_candidates {
 	     hebcal_shabbat_bounce b
 	WHERE e.email_address = b.email_address
 	AND e.email_status = 'active'
-	AND (b.std_reason = 'user_unknown' OR
-         b.std_reason = 'amzn_abuse' OR
-	     b.std_reason = 'domain_error')
+	AND b.std_reason IN('user_unknown',
+                        'user_disabled',
+                        'domain_error',
+                        'amzn_abuse')
 	GROUP by b.email_address
     };
     my $sth = $dbh->prepare($sql);
