@@ -13,20 +13,12 @@ create table hebcal_shabbat_email (
     index (email_status)
 );
 
-create table hebcal_shabbat_bounce_address (
-    bounce_id int NOT NULL auto_increment,
-    bounce_address varchar(200) NOT NULL,
-    bounce_std_reason varchar(16),
-    bounce_timestamp timestamp,
-    primary key (bounce_id),
-    unique (bounce_address)
-);
-
-create table hebcal_shabbat_bounce_reason (
-    bounce_id int NOT NULL,
-    bounce_time datetime not null,
-    bounce_reason varchar(200),
-    index (bounce_id)
+create table hebcal_shabbat_bounce (
+    id int NOT NULL auto_increment PRIMARY KEY,
+    email_address varchar(200) NOT NULL,
+    timestamp timestamp NOT NULL,
+    std_reason varchar(16),
+    full_reason varchar(200)
 );
 
 create table hebcal_zips (

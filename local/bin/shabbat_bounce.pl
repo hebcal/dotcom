@@ -44,17 +44,6 @@ use Email::Valid ();
 use Mail::DeliveryStatus::BounceParser ();
 use Config::Tiny;
 
-my $ini_path = "/home/hebcal/local/etc/hebcal-dot-com.ini";
-my $Config = Config::Tiny->read($ini_path)
-    or die "$ini_path: $!\n";
-my $DBHOST = $Config->{_}->{"hebcal.mysql.host"};
-my $DBUSER = $Config->{_}->{"hebcal.mysql.user"};
-my $DBPASS = $Config->{_}->{"hebcal.mysql.password"};
-my $DBNAME = $Config->{_}->{"hebcal.mysql.dbname"};
-
-my $site = "hebcal.com";
-my $DSN = "DBI:mysql:database=$DBNAME;host=$DBHOST";
-
 my $message = new Mail::Internet \*STDIN;
 my $header = $message->head();
 
@@ -90,8 +79,6 @@ if ($daemon_from eq 'complaints@email-abuse.amazonses.com') {
     }
 }
 
-$email_address =~ s/\'/\\\'/g;
-$bounce_reason =~ s/\'/\\\'/g;
 $bounce_reason =~ s/\s+/ /g;
 
 if (open(LOG, ">>/home/hebcal/local/var/log/bounce.log")) {
@@ -100,37 +87,30 @@ if (open(LOG, ">>/home/hebcal/local/var/log/bounce.log")) {
     close(LOG);
 }
 
-my $dbh = DBI->connect($DSN, $DBUSER, $DBPASS);
-
-my $sql = <<EOD
-SELECT bounce_id
-FROM hebcal_shabbat_bounce_address
-WHERE hebcal_shabbat_bounce_address.bounce_address = '$email_address'
-EOD
-;
-
-my($id) = $dbh->selectrow_array($sql);
-if (!$id) {
-    $sql = <<EOD
-INSERT INTO hebcal_shabbat_bounce_address
-       (bounce_address, bounce_id, bounce_std_reason)
-VALUES ('$email_address', NULL, '$std_reason')
-EOD
-;
-    $dbh->do($sql);
-    $id = $dbh->{"mysql_insertid"};
-}
-
-$sql = <<EOD
-INSERT INTO hebcal_shabbat_bounce_reason
-       (bounce_id, bounce_time, bounce_reason)
-VALUES ($id, NOW(), '$bounce_reason')
-EOD
-;
-$dbh->do($sql);
+my $dbh = open_database();
+my $sql = "INSERT INTO hebcal_shabbat_bounce (email_address,std_reason,full_reason) VALUES (?,?,?)";
+my $sth = $dbh->prepare($sql);
+$sth->execute($email_address,$std_reason,$bounce_reason)
+    or die $dbh->errstr;
 
 $dbh->disconnect;
 exit(0);
+
+sub open_database {
+    my $ini_path = "/home/hebcal/local/etc/hebcal-dot-com.ini";
+    my $Config = Config::Tiny->read($ini_path)
+        or die "$ini_path: $!\n";
+    my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
+    my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
+    my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
+    my $dbname = $Config->{_}->{"hebcal.mysql.dbname"};
+
+    my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
+    my $dbh = DBI->connect($dsn, $dbuser, $dbpass)
+        or die "DB Connection not made: $DBI::errstr";
+
+    return $dbh;
+}
 
 sub extract_return_addr {
     my($to) = @_;

@@ -61,10 +61,9 @@ if (!Getopt::Long::GetOptions("help|h" => \$opt_help,
 $opt_help && Usage();
 @ARGV && Usage();
 
-my @addrs;
-my @ids;
-my $dbh = get_candidates();
-deactivate_subs($dbh) unless $opt_dryrun;
+my $dbh = open_database();
+my $addrs = get_candidates($dbh);
+deactivate_subs($dbh, $addrs) unless $opt_dryrun;
 $dbh->disconnect;
 exit(0);
 
@@ -85,13 +84,10 @@ EOF
     exit(1);
 }
 
-sub get_candidates
-{
-    my $site = "hebcal.com";
-
+sub open_database {
     my $ini_path = "/home/hebcal/local/etc/hebcal-dot-com.ini";
     my $Config = Config::Tiny->read($ini_path)
-	or die "$ini_path: $!\n";
+        or die "$ini_path: $!\n";
     my $dbhost = $Config->{_}->{"hebcal.mysql.host"};
     my $dbuser = $Config->{_}->{"hebcal.mysql.user"};
     my $dbpass = $Config->{_}->{"hebcal.mysql.password"};
@@ -100,43 +96,44 @@ sub get_candidates
     my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
     my $dbh = DBI->connect($dsn, $dbuser, $dbpass);
 
+    return $dbh;
+}
+
+sub get_candidates {
+    my($dbh) = @_;
     my $sql = qq{
-	SELECT DISTINCT a.bounce_address,r.bounce_id,count(r.bounce_id)
+	SELECT b.email_address,count(1)
 	FROM hebcal_shabbat_email e,
-	     hebcal_shabbat_bounce_address a,
-	     hebcal_shabbat_bounce_reason r
-	WHERE r.bounce_id = a.bounce_id
-	AND a.bounce_address = e.email_address
+	     hebcal_shabbat_bounce b
+	WHERE e.email_address = b.email_address
 	AND e.email_status = 'active'
-	AND (a.bounce_std_reason = 'user_unknown' OR
-         a.bounce_std_reason = 'amzn_abuse' OR
-	     a.bounce_std_reason = 'domain_error')
-	GROUP by a.bounce_address
+	AND (b.std_reason = 'user_unknown' OR
+         b.std_reason = 'amzn_abuse' OR
+	     b.std_reason = 'domain_error')
+	GROUP by b.email_address
     };
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
 
-    while (my($email,$id,$count) = $sth->fetchrow_array)
+    my @addrs;
+    while (my($email,$count) = $sth->fetchrow_array)
     {
 	if ($count > $opt_count)
 	{
 	    print "$email ($count bounces)\n" unless $opt_quiet;
 	    push(@addrs, $email);
-	    push(@ids, $id);
 	}
     }
 
-    $dbh;
+    return \@addrs;
 }
 
 sub deactivate_subs
 {
-    my($dbh) = @_;
+    my($dbh,$addrs) = @_;
 
-    return undef unless @ids;
-
-    foreach my $e (@addrs)
+    foreach my $e (@{$addrs})
     {
 	my $sql = <<EOD
 UPDATE hebcal_shabbat_email
@@ -148,20 +145,6 @@ EOD
 
 	shabbat_log(1, "bounce", $e);
     }
-
-    my $id_sql = "bounce_id = '" . shift(@ids) . "'";
-    foreach my $id (@ids)
-    {
-	$id_sql .= " OR bounce_id = '$id'";
-    }
-
-    my $sql = "DELETE from hebcal_shabbat_bounce_reason WHERE "
-	. $id_sql;
-    $dbh->do($sql);
-
-    $sql = "DELETE from hebcal_shabbat_bounce_address WHERE "
-	. $id_sql;
-    $dbh->do($sql);
 }
 
 sub shabbat_log
