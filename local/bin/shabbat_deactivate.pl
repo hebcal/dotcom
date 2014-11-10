@@ -94,7 +94,8 @@ sub open_database {
     my $dbname = $Config->{_}->{"hebcal.mysql.dbname"};
 
     my $dsn = "DBI:mysql:database=$dbname;host=$dbhost";
-    my $dbh = DBI->connect($dsn, $dbuser, $dbpass);
+    my $dbh = DBI->connect($dsn, $dbuser, $dbpass)
+        or die "DB Connection not made: $DBI::errstr";
 
     return $dbh;
 }
