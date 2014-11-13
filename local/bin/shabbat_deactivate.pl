@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2014  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -52,7 +52,7 @@ my $opt_count = $COUNT_DEFAULT;
 
 if (!Getopt::Long::GetOptions("help|h" => \$opt_help,
                 "count=i" => \$opt_count,
-		"quiet" => \$opt_quiet,
+                "quiet" => \$opt_quiet,
                 "dryrun|n" => \$opt_dryrun))
 {
     Usage();
@@ -103,29 +103,29 @@ sub open_database {
 sub get_candidates {
     my($dbh) = @_;
     my $sql = qq{
-	SELECT b.email_address,count(1)
-	FROM hebcal_shabbat_email e,
-	     hebcal_shabbat_bounce b
-	WHERE e.email_address = b.email_address
-	AND e.email_status = 'active'
-	AND b.std_reason IN('user_unknown',
+        SELECT b.email_address,std_reason,count(1)
+        FROM hebcal_shabbat_email e,
+             hebcal_shabbat_bounce b
+        WHERE e.email_address = b.email_address
+        AND e.email_status = 'active'
+        AND b.std_reason IN('user_unknown',
                         'user_disabled',
                         'domain_error',
                         'amzn_abuse')
-	GROUP by b.email_address
+        GROUP by b.email_address
     };
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
-	or die "can't execute the query: " . $sth->errstr;
+        or die "can't execute the query: " . $sth->errstr;
 
     my @addrs;
-    while (my($email,$count) = $sth->fetchrow_array)
+    while (my($email,$std_reason,$count) = $sth->fetchrow_array)
     {
-	if ($count > $opt_count)
-	{
-	    print "$email ($count bounces)\n" unless $opt_quiet;
-	    push(@addrs, $email);
-	}
+        if ($count > $opt_count || $std_reason eq "amzn_abuse")
+        {
+            print "$email ($count bounces)\n" unless $opt_quiet;
+            push(@addrs, $email);
+        }
     }
 
     return \@addrs;
@@ -137,15 +137,15 @@ sub deactivate_subs
 
     foreach my $e (@{$addrs})
     {
-	my $sql = <<EOD
+        my $sql = <<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='bounce'
 WHERE email_address = '$e'
 EOD
 ;
-	$dbh->do($sql);
+        $dbh->do($sql);
 
-	shabbat_log(1, "bounce", $e);
+        shabbat_log(1, "bounce", $e);
     }
 }
 
@@ -154,8 +154,8 @@ sub shabbat_log
     my($status,$code,$to) = @_;
     if (open(LOG, ">>/home/hebcal/local/var/log/subscribers.log"))
     {
-	my $t = time();
-	print LOG "status=$status to=$to code=$code time=$t\n";
-	close(LOG);
+        my $t = time();
+        print LOG "status=$status to=$to code=$code time=$t\n";
+        close(LOG);
     }
 }
