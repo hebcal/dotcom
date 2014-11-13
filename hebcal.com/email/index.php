@@ -512,7 +512,7 @@ function subscribe($param) {
     {
 	write_sub_info($param);
 
-	$from_name = "Hebcal Subscription Notification";
+	$from_name = "Hebcal";
     	$from_addr = "shabbat-owner@hebcal.com";
 	$reply_to = "no-reply@hebcal.com";
 	$subject = "Your subscription is updated";
@@ -577,7 +577,7 @@ EOD
 
     $encoded = write_staging_info($param, $old_encoded);
 
-    $from_name = "Hebcal Subscription Notification";
+    $from_name = "Hebcal";
     $from_addr = "no-reply@hebcal.com";
     $subject = "Please confirm your request to subscribe to hebcal";
 
@@ -705,7 +705,7 @@ EOD
         return false;
     }
 
-    $from_name = "Hebcal Subscription Notification";
+    $from_name = "Hebcal";
     $from_addr = "shabbat-owner@hebcal.com";
     $reply_to = "no-reply@hebcal.com";
     $subject = "You have been unsubscribed from hebcal";

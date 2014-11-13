@@ -120,7 +120,7 @@ $site};
     my %headers =
 	(
 	 "From" =>
-	 "Hebcal Subscription Notification <shabbat-owner\@$site>",
+	 "Hebcal <shabbat-owner\@$site>",
 	 "To" => $email,
 	 "Content-Type" => "text/plain",
 	 "Subject" => "You have been unsubscribed from hebcal",

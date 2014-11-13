@@ -92,7 +92,7 @@ EOD;
     mysql_query($sql, $hebcal_db)
 	or die("Invalid query 2: " . mysql_error());
 
-    $from_name = "Hebcal Subscription Notification";
+    $from_name = "Hebcal";
     $from_addr = "shabbat-owner@hebcal.com";
     $reply_to = "no-reply@hebcal.com";
     $subject = "Your subscription to hebcal is complete";
