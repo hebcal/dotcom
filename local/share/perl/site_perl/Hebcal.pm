@@ -2922,6 +2922,7 @@ sub sendmail_v2
 
     my $msg = MIME::Lite->new(Type => $headers->{'Content-Type'});
     while (my($key,$val) = each %{$headers}) {
+        next if $keq eq 'Content-Type';
         while (chomp($val)) {}
         $msg->add($key => $val);
     }
