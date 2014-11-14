@@ -18,7 +18,8 @@ create table hebcal_shabbat_bounce (
     email_address varchar(200) NOT NULL,
     timestamp timestamp NOT NULL,
     std_reason varchar(16),
-    full_reason varchar(200)
+    full_reason varchar(200),
+    deactivated tinyint(1) NOT NULL
 );
 
 create table hebcal_zips (

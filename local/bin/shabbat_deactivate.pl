@@ -112,6 +112,7 @@ sub get_candidates {
                         'user_disabled',
                         'domain_error',
                         'amzn_abuse')
+        AND b.deactivated = 0
         GROUP by b.email_address
     };
     my $sth = $dbh->prepare($sql);
@@ -146,6 +147,14 @@ EOD
         $dbh->do($sql);
 
         shabbat_log(1, "bounce", $e);
+
+        $sql = <<EOD
+UPDATE hebcal_shabbat_bounce
+SET deactivated=1
+WHERE email_address = '$e'
+EOD
+;
+        $dbh->do($sql);
     }
 }
 
