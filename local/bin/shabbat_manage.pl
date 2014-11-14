@@ -116,15 +116,6 @@ if ($to =~ /shabbat-subscribe/i) {
 }
 exit(0);
 
-sub my_url_escape
-{
-    my($str) = @_;
-
-    $str =~ s/([^\w\$. -])/sprintf("%%%02X", ord($1))/eg;
-    $str =~ s/ /+/g;
-
-    $str;
-}
 
 sub unsubscribe
 {

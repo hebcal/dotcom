@@ -1,15 +1,2 @@
-# $Id$
-# $URL$
-
-set postmaster postmaster@hebcal.com
-set logfile ./fetchmail.log
-
-poll mail.hebcal.com
-proto pop3
-
-user rwodz1mzr1wnbtrq@hebcal.com
-pass xxxxxxxxxxxxxxxx
-options ssl
-mda /usr/bin/procmail
-fetchall
-flush
+poll pop.gmail.com proto POP3
+  user "shabbat@hebcal.com" password "xxxxxxxxxxxxxx" mda "/usr/bin/procmail -d %T" ssl

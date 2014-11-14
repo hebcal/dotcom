@@ -1,18 +1,29 @@
-# $Id$
-# $URL$
-
 SHELL=/bin/sh
-VERBOSE=off
+VERBOSE=on
 LOGFILE=$HOME/.procmail.log
 HCBIN=/home/hebcal/local/bin
+MAILDIR=$HOME/mail
 
 :0
 * ^TO(shabbat-subscribe|shabbat-unsubscribe)
-| $HCBIN/shabbat_manage.pl
+{
+  :0 c:
+  | $HCBIN/shabbat_manage.pl
+
+  :0:
+  manage-saved
+}
+
 
 :0
 * ^TO(shabbat-return)
-| $HCBIN/shabbat_bounce.pl
+{
+  :0 c:
+  | $HCBIN/shabbat_bounce.pl
+
+  :0:
+  return-saved
+}
 
 :0
 /dev/null
