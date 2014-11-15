@@ -520,11 +520,12 @@ function subscribe($param) {
         global $remoteAddr;
 	$ip = $remoteAddr;
 
+        $unsub_addr = "shabbat-unsubscribe+" . $info["id"] . "@hebcal.com";
+
 	$headers = array("From" => "\"$from_name\" <$from_addr>",
 			 "To" => $param["em"],
 			 "Reply-To" => $reply_to,
-			 "List-Unsubscribe" =>
-			 "<mailto:shabbat-unsubscribe@hebcal.com>",
+			 "List-Unsubscribe" => "<mailto:$unsub_addr>",
 			 "MIME-Version" => "1.0",
 			 "Content-Type" => "text/html; charset=UTF-8",
 			 "X-Sender" => $sender,

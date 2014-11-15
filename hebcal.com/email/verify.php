@@ -101,10 +101,12 @@ EOD;
     $unsub_url = $url_prefix . "/email/?e=" .
 	urlencode(base64_encode($info["em"]));
 
+    $unsub_addr = "shabbat-unsubscribe+" . $info["id"] . "@hebcal.com";
+
     $headers = array("From" => "\"$from_name\" <$from_addr>",
 		     "To" => $info["em"],
 		     "Reply-To" => $reply_to,
-		     "List-Unsubscribe" => "<$unsub_url&unsubscribe=1&v=1>",
+             "List-Unsubscribe" => "<mailto:$unsub_addr>",
 		     "MIME-Version" => "1.0",
 		     "Content-Type" => "text/plain",
 		     "X-Mailer" => "hebcal web",
