@@ -109,8 +109,11 @@ if ($to =~ /shabbat-subscribe/i) {
     shabbat_log(0, "subscribe_useweb");
     error_email($err_useweb);
     exit(0);
+} elsif ($to =~ /shabbat-unsubscribe(?:[-+])([^\@]+)\@/i) {
+    my $email_id = $1;
+    unsubscribe($from, $email_id);
 } elsif ($to =~ /shabbat-unsubscribe\@/i) {
-    unsubscribe();
+    unsubscribe($from, undef);
 } else {
     shabbat_log(0, "badto");
 }
@@ -119,16 +122,16 @@ exit(0);
 
 sub unsubscribe
 {
-    my $email = $from;
+    my($email,$email_id) = @_;
 
     my $dbh = DBI->connect($DSN, $DBUSER, $DBPASS);
 
-    my $sql = <<EOD
-SELECT email_status,email_id
-FROM   hebcal_shabbat_email
-WHERE  email_address = '$email'
-EOD
-;
+    my $sql = "SELECT email_status,email_id FROM hebcal_shabbat_email";
+    if ($email_id) {
+        $sql .= " WHERE email_id = '$email_id'";
+    } else {
+        $sql .= " WHERE email_address = '$email'";
+    }
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
 	or die "can't execute the query: " . $sth->errstr;
@@ -158,7 +161,7 @@ EOD
     $sql = <<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='unsubscribed'
-WHERE email_address = '$email'
+WHERE email_id = '$encoded'
 EOD
 ;
     $dbh->do($sql);

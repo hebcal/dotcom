@@ -352,6 +352,7 @@ $unsub_url
     my $return_path = Hebcal::shabbat_return_path($to);
 
     my $msgid = $cfg->{"id"} . "." . time();
+    my $unsub_addr = "shabbat-unsubscribe+" . $cfg->{"id"} . "\@hebcal.com";
 
     my $subj_mime = $subject eq utf8::decode($subject)
         ? $subject : encode('MIME-Q', $subject);
@@ -361,7 +362,7 @@ $unsub_url
          "To" => $to,
          "Reply-To" => "no-reply\@hebcal.com",
          "Subject" => $subj_mime,
-         "List-Unsubscribe" => "<$unsub_url&unsubscribe=1>",
+         "List-Unsubscribe" => "<mailto:$unsub_addr>",
          "List-Id" => "<shabbat.hebcal.com>",
          "Errors-To" => $return_path,
 #        "Precedence" => "bulk",
