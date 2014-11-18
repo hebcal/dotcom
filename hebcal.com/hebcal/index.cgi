@@ -1352,6 +1352,8 @@ accurate.
 	    $url .= Hebcal::get_geo_args($q, "&amp;");
 	    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 	    $url .= "&amp;year=$hyear";
+	    $url .= "&amp;m=" . $q->param("m")
+		if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
 	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
 	}

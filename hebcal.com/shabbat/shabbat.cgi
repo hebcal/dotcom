@@ -520,6 +520,8 @@ sub more_from_hebcal {
     $url = "/shabbat/fridge.cgi?";
     $url .= get_link_args($q, 0);
     $url .= "&year=" . $hyear;
+    $url .= "&m=" . $q->param("m")
+        if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
 		     qq{href="}, url_html($url),
 		     qq{"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});

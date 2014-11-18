@@ -522,16 +522,10 @@ sub invoke_hebcal
 	    }
 	}
 
-	# if Candle lighting and Havdalah are on the same day it is
-	# a bug in hebcal for unix involving shabbos and chag overlap.
-	# suppress inconsistent times until we can get hebcal fixed.
-	if ($subj =~ /^Havdalah/ && $#events >= 0 &&
-	    $events[$#events]->[$EVT_IDX_MDAY] == $mday &&
-	    $events[$#events]->[$EVT_IDX_SUBJ] =~ /^Candle lighting/)
-	{
-	    pop(@events);
-	    next;
-	}
+        # Suppress Havdalah when it's on same day as Candle lighting
+        next if ($subj =~ /^Havdalah/ && $#events >= 0 &&
+            $events[$#events]->[$EVT_IDX_MDAY] == $mday &&
+            $events[$#events]->[$EVT_IDX_SUBJ] =~ /^Candle lighting/);
 
 	next if $subj eq 'Havdalah (0 min)';
 
