@@ -1294,7 +1294,11 @@ sub filter_events {
         next if $subj =~ /^Erev /;
 
         # Since Chanukah doesn't have an Erev, skip a day
-        next if $subj =~ /^Chanukah: 1 Candle$/;
+        # Also, avoid the case where "Chanukah" ends in January
+        if ($subj =~ /^Chanukah:/) {
+           next unless $subj eq "Chanukah: 2 Candles";
+           $subj = "Chanukah";
+        }
 
         my $subj_copy = $subj;
         $subj_copy =~ s/ \d{4}$//;
@@ -1303,8 +1307,6 @@ sub filter_events {
         if ($subj ne "Rosh Chodesh Adar II") {
             $subj_copy =~ s/ [IV]+$//;
         }
-        $subj_copy =~ s/: \d Candles?$//;
-        $subj_copy =~ s/: 8th Day$//;
 
         next if defined $seen{$subj_copy};
         $evt->[$Hebcal::EVT_IDX_SUBJ] = $subj_copy;
