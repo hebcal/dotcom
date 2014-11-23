@@ -732,19 +732,6 @@ sub csv_display
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
-sub alt_candles_text
-{
-    my($q,$geo) = @_;
-
-    my $class = ($geo eq $q->param("geo")) ? qq{ class="active"} : "";
-    my $text = $long_candles_text{$geo};
-    my $c = ($geo eq "none") ? "off" : "on";
-    qq{<li$class>}
-	. $q->a({-href => $script_name . "?c=$c;geo=" . $geo,
-	       -onClick => "return s1('" . $geo . "', '" . $c . "')" }, $text)
-	. qq{</li>\n};
-}
-
 sub form
 {
     my($message,$help) = @_;
@@ -1007,16 +994,14 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
     my $xtra_html=<<JSCRIPT_END;
 <script type="text/javascript">
 var d=document;
-function s1(geo,c){d.f1.geo.value=geo;d.f1.c.value=c;d.f1.v.value='0';
-d.f1.submit();return false;}
 function s6(val){
 if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
 if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
-d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;d.f1.mf.checked=false;d.f1.ss.checked=false;}}
-d.getElementById("nx").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
-d.getElementById("mf").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
-d.getElementById("ss").onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+d.getElementById("nh").onclick=function(){if(this.checked==false){d.f1.nx.checked=false;d.f1.mf.checked=false;d.f1.ss.checked=false;}};
+["nx","mf","ss"].forEach(function(x){
+ d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+});
 </script>
 JSCRIPT_END
 	;
