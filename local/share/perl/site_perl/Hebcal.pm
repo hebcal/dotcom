@@ -469,7 +469,8 @@ sub get_invoke_hebcal_cache {
 
 sub invoke_hebcal
 {
-    my($cmd,$memo,$want_sephardic,$month_filter,$no_minor_fasts,$no_special_shabbat) = @_;
+    my($cmd,$memo,$want_sephardic,$month_filter,
+        $no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays) = @_;
     local($_);
     local(*HEBCAL);
 
@@ -486,6 +487,10 @@ sub invoke_hebcal
 	$hccache = open(HCCACHE,">$hccache_file.$$");
     }
 
+    my $modern_holidays = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim";
+    my @modern_holidays = split(/,/, $modern_holidays);
+    my $minor_holidays = "Tu BiShvat,Purim Katan,Shushan Purim,Pesach Sheni,Lag B'Omer,Leil Selichot";
+    my @minor_holidays = split(/,/, $minor_holidays);
     my $prev = '';
     while (<HEBCAL>)
     {
@@ -508,7 +513,7 @@ sub invoke_hebcal
 	    parse_date_descr($date,$descr);
 
 	# not typically used
-	if ($no_special_shabbat || $no_minor_fasts) {
+	if ($no_special_shabbat || $no_minor_fasts || $no_minor_holidays || $no_modern_holidays) {
 	    my $subj_copy = $subj;
 	    $subj_copy = $ashk2seph{$subj_copy}
 		if defined $ashk2seph{$subj_copy};
@@ -520,6 +525,16 @@ sub invoke_hebcal
 		next if $subj_copy =~ /^Ta\'anit /;
 		next if $subj_copy eq "Asara B'Tevet";
 	    }
+            if ($no_minor_holidays) {
+                foreach my $h (@modern_holidays) {
+                    next if $subj_copy eq $h;
+                }
+            }
+            if ($no_modern_holidays) {
+                foreach my $h (@minor_holidays) {
+                    next if $subj_copy eq $h;
+                }
+            }
 	}
 
         # Suppress Havdalah when it's on same day as Candle lighting
@@ -663,6 +678,10 @@ sub events_to_dict
                                $tz > 0 ? "+" : "-",
                                abs($tz), $tzMin);
 
+        if ($evt->[$EVT_IDX_YOMTOV]) {
+            $item{"yomtov"} = 1;
+        }
+
 	if ($evt->[$EVT_IDX_UNTIMED]) {
             $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
         } else {
@@ -765,6 +784,8 @@ sub json_transform_items {
 	    if $item->{"class"} =~ /^(parashat|holiday)$/;
 	$out->{hebrew} = $item->{"hebrew"}
 	    if defined $item->{"hebrew"};
+        $out->{yomtov} = \1
+            if $item->{"yomtov"};
 	push(@out, $out);
     }
     \@out;
