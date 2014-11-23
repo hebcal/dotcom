@@ -467,6 +467,39 @@ sub get_invoke_hebcal_cache {
     return "$hccache_dir/$cmd_smashed";
 }
 
+sub filter_event {
+    my($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays) = @_;
+    if ($no_special_shabbat || $no_minor_fasts || $no_minor_holidays || $no_modern_holidays) {
+        my $subj_copy = $subj;
+        $subj_copy = $ashk2seph{$subj_copy}
+            if defined $ashk2seph{$subj_copy};
+        if ($no_special_shabbat) {
+            return 1 if $subj_copy =~ /^Shabbat /;
+        }
+        if ($no_minor_fasts) {
+            return 1 if $subj_copy =~ /^Tzom /;
+            return 1 if $subj_copy =~ /^Ta\'anit /;
+            return 1 if $subj_copy eq "Asara B'Tevet";
+        }
+        if ($no_minor_holidays) {
+            my $minor_holidays = "Tu BiShvat,Purim Katan,Shushan Purim,Pesach Sheni,Lag B'Omer,Leil Selichot";
+            my @minor_holidays = split(/,/, $minor_holidays);
+            foreach my $h (@minor_holidays) {
+                return 1 if $subj_copy eq $h;
+            }
+        }
+        if ($no_modern_holidays) {
+            my $modern_holidays = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim";
+            my @modern_holidays = split(/,/, $modern_holidays);
+            foreach my $h (@modern_holidays) {
+                return 1 if $subj_copy eq $h;
+            }
+        }
+    }
+    return 0;
+}
+
+
 sub invoke_hebcal
 {
     my($cmd,$memo,$want_sephardic,$month_filter,
@@ -487,10 +520,6 @@ sub invoke_hebcal
 	$hccache = open(HCCACHE,">$hccache_file.$$");
     }
 
-    my $modern_holidays = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim";
-    my @modern_holidays = split(/,/, $modern_holidays);
-    my $minor_holidays = "Tu BiShvat,Purim Katan,Shushan Purim,Pesach Sheni,Lag B'Omer,Leil Selichot";
-    my @minor_holidays = split(/,/, $minor_holidays);
     my $prev = '';
     while (<HEBCAL>)
     {
@@ -512,30 +541,7 @@ sub invoke_hebcal
 	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
 	    parse_date_descr($date,$descr);
 
-	# not typically used
-	if ($no_special_shabbat || $no_minor_fasts || $no_minor_holidays || $no_modern_holidays) {
-	    my $subj_copy = $subj;
-	    $subj_copy = $ashk2seph{$subj_copy}
-		if defined $ashk2seph{$subj_copy};
-	    if ($no_special_shabbat) {
-		next if $subj_copy =~ /^Shabbat /;
-	    }
-	    if ($no_minor_fasts) {
-		next if $subj_copy =~ /^Tzom /;
-		next if $subj_copy =~ /^Ta\'anit /;
-		next if $subj_copy eq "Asara B'Tevet";
-	    }
-            if ($no_minor_holidays) {
-                foreach my $h (@modern_holidays) {
-                    next if $subj_copy eq $h;
-                }
-            }
-            if ($no_modern_holidays) {
-                foreach my $h (@minor_holidays) {
-                    next if $subj_copy eq $h;
-                }
-            }
-	}
+        next if filter_event($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays);
 
         # Suppress Havdalah when it's on same day as Candle lighting
         next if ($subj =~ /^Havdalah/ && $#events >= 0 &&
@@ -1630,7 +1636,7 @@ sub gen_cookie($)
 	    if !defined $q->param($_) || $q->param($_) eq 'off';
     }
 
-    foreach (qw(ss mf)) {
+    foreach (qw(ss mf mi mo)) {
 	if (defined $q->param($_)) {
 	    $retval .= "&$_=" . $q->param($_);
 	} elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
@@ -1736,7 +1742,7 @@ sub process_cookie($$)
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 
-    foreach (qw(nh nx ss mf lg)) {
+    foreach (qw(nh nx ss mf lg mi mo)) {
 	$q->param($_, $c->param($_))
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
