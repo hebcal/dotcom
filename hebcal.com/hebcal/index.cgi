@@ -927,7 +927,7 @@ EOHTML
         $q->hidden(-name => "geonameid", -id => "geonameid"),
         "\n");
 
-    if (! $q->param('city-typeahead')) {
+    if ($q->param("c") eq "on" && ! $q->param('city-typeahead')) {
         if ($q->param("geo") eq "zip"
             && defined $q->param("zip") && $q->param("zip") =~ /^\d{5}$/) {
             $q->param('city-typeahead', $q->param('zip'));
@@ -936,7 +936,7 @@ EOHTML
             my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
                 Hebcal::geoname_lookup($q->param('geonameid'));
             if ($name) {
-                my $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
+                my $city_descr = Hebcal::geoname_city_descr($asciiname,$admin1,$country);
                 $q->param('city-typeahead', $city_descr);
             }
         } elsif ($q->param("geo") eq "city" && $q->param("city")
