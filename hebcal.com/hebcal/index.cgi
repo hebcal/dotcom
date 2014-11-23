@@ -1024,7 +1024,7 @@ JSCRIPT_END
     $xtra_html .= "<script>\$('#havdalahInfo').tooltip()</script>\n";
 
     $xtra_html .= qq{<script src="/i/typeahead-0.10.5.min.js"></script>\n};
-    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.2.js"></script>\n};
+    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.2.min.js"></script>\n};
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
