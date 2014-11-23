@@ -36,18 +36,22 @@ $('#city-typeahead').typeahead(null, {
         $('#geo').val('zip');
         $('#zip').val(datum.id);
         $('#c').val('on');
+        $('#geonameid').val('');
+        $('#city').val('');
     } else {
         $('#geo').val('geoname');
         $('#geonameid').val(datum.id);
         $('#c').val('on');
+        $('#zip').val('');
+        $('#city').val('');
     }
-    $('#shabbat-form').submit();
 }).bind("keyup keypress", function(e) {
     if (!$(this).val()) {
         $('#geo').val('none');
         $('#c').val('off');
         $('#geonameid').val('');
         $('#zip').val('');
+        $('#city').val('');
     }
     var code = e.keyCode || e.which;
     if (code == 13) {
