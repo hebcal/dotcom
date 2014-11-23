@@ -33,7 +33,8 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # special SimchatTorah - 14 Oct 2014 at 11:56am
 #56 11 14 10 * hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
-# clear bounces at 1:03pm on friday
+# clear bounces at 8:50am Thu and 1:03pm on friday
+50 8 * * 4 hebcal nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
 3 13 * * 5 hebcal nice $HEBCAL_BIN/shabbat_deactivate.pl -count 2
 
 # MySQL backups
