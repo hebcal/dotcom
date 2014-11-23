@@ -775,12 +775,9 @@ legend {
   line-height: 30px;
 }
 </style>
+<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
 EOHTML
 ;
-
-    if (defined $q->param("geo") && $q->param("geo") eq "pos") {
-	$xtra_head .= qq{<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">\n};
-    }
 
     Hebcal::out_html(undef,
 		     Hebcal::html_header_bootstrap("Custom Calendar",
@@ -918,114 +915,45 @@ EOHTML
 
     Hebcal::out_html(undef, qq{<fieldset><legend>Candle lighting times</legend>\n});
     $q->param("c","off") unless defined $q->param("c");
-    $q->param("geo","zip") unless defined $q->param("geo");
+    $q->param("geo","geoname") unless defined $q->param("geo");
 
     Hebcal::out_html(undef,
-    $q->hidden(-name => "c"),
-    $q->hidden(-name => "geo",
-	       -default => "zip"),
-    "\n");
+        $q->hidden(-name => "c", -id => "c"),
+        $q->hidden(-name => "geo",
+            -id => "geo",
+            -default => "geoname"),
+        $q->hidden(-name => "zip", -id => "zip"),
+        $q->hidden(-name => "city", -id => "city"),
+        $q->hidden(-name => "geonameid", -id => "geonameid"),
+        "\n");
 
-    Hebcal::out_html(undef, qq{<ul class="nav nav-tabs">});
-    foreach my $type ("none", "zip", "city", "pos")
-    {
-	Hebcal::out_html(undef, alt_candles_text($q, $type));
-    }
-    Hebcal::out_html(undef, qq{</ul>\n});
-
-    if ($q->param("geo") eq "city")
-    {
-	Hebcal::out_html(undef,
-			 "<label>Large City: ",
-			 Hebcal::html_city_select($q->param("city")),
-			 "</label>\n");
-    }
-    elsif ($q->param("geo") eq "pos")
-    {
-	Hebcal::out_html(undef,
-	qq{<div class="city-typeahead form-inline" style="margin-bottom:12px">\n},
-	$q->textfield(-name => "city-typeahead",
-		      -id => "city-typeahead",
-		      -class => "form-control input-xlarge",
-		      -placeholder => "Search for city"),
-	qq{</div>\n},
-	qq{<div class="form-inline">\n},
-	"<label>",
-	$q->textfield(-name => "ladeg",
-		      -id => "ladeg",
-		      -style => "width:auto",
-		      -pattern => '\d*',
-		      -size => 3,
-		      -maxlength => 2),
-	" deg</label>\n",
-	"<label>",
-	$q->textfield(-name => "lamin",
-		      -id => "lamin",
-		      -style => "width:auto",
-		      -pattern => '\d*',
-		      -size => 2,
-		      -maxlength => 2),
-	" min</label>\n",
-	$q->popup_menu(-name => "ladir",
-		       -id => "ladir",
-		       -class => "input-medium",
-		       -values => ["n","s"],
-		       -default => "n",
-		       -labels => {"n" => "North Latitude",
-				   "s" => "South Latitude"}),
-	qq{</div>\n},
-	qq{<div class="form-inline">\n},
-	"<label>",
-	$q->textfield(-name => "lodeg",
-		      -id => "lodeg",
-		      -style => "width:auto",
-		      -pattern => '\d*',
-		      -size => 3,
-		      -maxlength => 3),
-	" deg</label>\n",
-	"<label>",
-	$q->textfield(-name => "lomin",
-		      -id => "lomin",
-		      -style => "width:auto",
-		      -pattern => '\d*',
-		      -size => 2,
-		      -maxlength => 2),
-	" min</label>\n",
-	$q->popup_menu(-name => "lodir",
-		       -id => "lodir",
-		       -class => "input-medium",
-		       -values => ["w","e"],
-		       -default => "w",
-		       -labels => {"e" => "East Longitude",
-				   "w" => "West Longitude"}),
-	qq{</div>\n});
-    }
-    elsif ($q->param("geo") ne "none")
-    {
-	# default is Zip Code
-	Hebcal::out_html(undef,
-	"<label>ZIP code: ",
-	$q->textfield(-name => "zip",
-		      -style => "width:auto",
-		      -pattern => '\d*',
-		      -size => 5,
-		      -maxlength => 5),
-	"</label>\n");
+    if (! $q->param('city-typeahead')) {
+        if ($q->param("geo") eq "zip"
+            && defined $q->param("zip") && $q->param("zip") =~ /^\d{5}$/) {
+            $q->param('city-typeahead', $q->param('zip'));
+        } elsif ($q->param("geo") eq "geoname"
+            && defined $q->param("geonameid") && $q->param("geonameid") =~ /^\d+$/) {
+            my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+                Hebcal::geoname_lookup($q->param('geonameid'));
+            if ($name) {
+                my $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
+                $q->param('city-typeahead', $city_descr);
+            }
+        } elsif ($q->param("geo") eq "city" && $q->param("city")
+            && Hebcal::validate_city($q->param("city"))) {
+            my $city = Hebcal::validate_city($q->param("city"));
+            my $city_descr = Hebcal::woe_city_descr($city);
+            $q->param('city-typeahead', $city_descr);
+        }
     }
 
-    if ($q->param("geo") eq "pos") {
-	Hebcal::out_html(undef,
-	"<label>Time zone: ",
-	$q->popup_menu(-name => "tzid",
-		       -id => "tzid",
-		       -values => Hebcal::get_timezones(),
-		       -default => "UTC"),
-	"</label>\n");
-    }
-
-    if ( $q->param("geo") ne "none" ) {
-        Hebcal::out_html(
-            undef,
+    Hebcal::out_html(undef,
+    qq{<div class="city-typeahead form-inline" style="margin-bottom:12px">\n},
+    $q->textfield(-name => "city-typeahead",
+          -id => "city-typeahead",
+          -class => "form-control input-xlarge",
+          -placeholder => "Search for city"),
+    qq{</div>\n},
             "<label>Candle-lighting minutes before sundown: ",
             $q->textfield(
                 -name      => "b",
@@ -1051,7 +979,6 @@ EOHTML
             qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
             "</label>\n",
         );
-    }
 
     Hebcal::out_html(undef, qq{</fieldset>\n});
     Hebcal::out_html(undef, qq{</div><!-- .span6 -->\n});
@@ -1096,52 +1023,8 @@ JSCRIPT_END
 
     $xtra_html .= "<script>\$('#havdalahInfo').tooltip()</script>\n";
 
-# don't interpolate this next part
-    if ($q->param("geo") eq "pos") {
-	$xtra_html .=<<'JSCRIPT_END';
-<script src="/i/typeahead-0.9.3.min.js"></script>
-<script type="text/javascript">
-$("#city-typeahead").typeahead({
-    name: "hebcal-city",
-    remote: "/complete.php?q=%QUERY",
-    limit: 7,
-    template: function(ctx) {
-        if (typeof ctx.geo === "string" && ctx.geo == "zip") {
-          return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
-        } else {
-          var ctry = ctx.country == "United Kingdom" ? "UK" : ctx.country,
-            s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
-          if (typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
-            s += ctx.admin1 + ', ';
-          }
-          return s + ctry + '</small></p>';
-        }
-    }
-}).on('typeahead:selected', function (obj, datum, name) {
-  $('#tzid').val(datum.timezone);
-  var ladir = datum.latitude < 0 ? 's' : 'n';
-  var ladeg = Math.floor(Math.abs(datum.latitude));
-  var lamin = Math.floor((Math.abs(datum.latitude) - ladeg) * 60);
-  $('#ladir').val(ladir);
-  $('#ladeg').val(ladeg);
-  $('#lamin').val(lamin);
-  var lodir = datum.longitude < 0 ? 'w' : 'e';
-  var lodeg = Math.floor(Math.abs(datum.longitude));
-  var lomin = Math.floor((Math.abs(datum.longitude) - lodeg) * 60);
-  $('#lodir').val(lodir);
-  $('#lodeg').val(lodeg);
-  $('#lomin').val(lomin);
-}).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which;
-  if (code == 13) {
-    e.preventDefault();
-    return false;
-  }
-});
-</script>
-JSCRIPT_END
-;
-    }
+    $xtra_html .= qq{<script src="/i/typeahead-0.10.5.min.js"></script>\n};
+    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.2.js"></script>\n};
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");

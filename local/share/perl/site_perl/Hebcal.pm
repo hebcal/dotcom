@@ -1372,6 +1372,15 @@ sub woe_country
     $country_name;
 }
 
+sub woe_city_descr {
+    my($id) = @_;
+    my $country = woe_country($id);
+    $country = "USA" if $country eq "United States of America";
+    $country = "UK" if $country eq "United Kingdom";
+    my $city_descr = woe_city($id) . ", $country";
+    return $city_descr;
+}
+
 sub sort_city_info
 {
     return woe_city($a) . ", " . woe_country($a)
@@ -1660,8 +1669,8 @@ sub process_cookie($$)
 		$q->param('zip',$c->param('zip'));
 	    }
 	} elsif (defined $c->param('geonameid') && $c->param('geonameid') =~ /^\d+$/ &&
-	    (! defined $q->param('geo') || $q->param('geo') eq 'geonameid')) {
-	    $q->param('geo','geonameid');
+	    (! defined $q->param('geo') || $q->param('geo') eq 'geoname')) {
+	    $q->param('geo','geoname');
 	    $q->param('c','on');
 	    if (! defined $q->param('geonameid') || $q->param('geonameid') =~ /^\s*$/) {
 		$q->param('geonameid',$c->param('geonameid'));
@@ -1760,7 +1769,12 @@ sub get_geo_args {
     } elsif (defined $q->param('city') && $q->param('city') ne '') {
 	return 'city=' . URI::Escape::uri_escape_utf8($q->param('city'));
     } elsif (defined $q->param('geonameid') && $q->param('geonameid') =~ /^\d+$/) {
-	return 'geonameid=' . $q->param('geonameid');
+        my $retval = 'geonameid=' . $q->param('geonameid');
+        if ($q->param("city-typeahead")) {
+            $retval .= join('', $separator, "city-typeahead=",
+                URI::Escape::uri_escape_utf8($q->param("city-typeahead")));
+        }
+        return $retval;
     } elsif (defined $q->param('geo') && $q->param('geo') eq 'pos') {
 	my $sep = '';
 	my $retval = '';
@@ -2083,8 +2097,8 @@ sub process_args_common_zip {
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
 
-sub process_args_common_geoname {
-    my($q,$cconfig) = @_;
+sub geoname_lookup {
+    my($geonameid) = @_;
     my $dbh = zipcode_open_db($GEONAME_SQLITE_FILE);
     $dbh->{sqlite_unicode} = 1;
     my $sql = qq{
@@ -2095,18 +2109,31 @@ LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
 WHERE g.geonameid = ?
 };
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
-    $sth->execute($q->param('geonameid')) or die $dbh->errstr;
+    $sth->execute($geonameid) or die $dbh->errstr;
     my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array;
     $sth->finish;
     zipcode_close_db($dbh);
     undef($dbh);
+    return ($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid);
+}
 
-    my($lat_deg,$lat_min,$long_deg,$long_min) =
-	latlong_to_hebcal($latitude, $longitude);
-    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+sub geoname_city_descr {
+    my($name,$admin1,$country) = @_;
     my $city_descr = $name;
     $city_descr .= ", $admin1" if $admin1 && index($admin1, $name) != 0;
     $city_descr .= ", $country";
+    return $city_descr;
+}
+
+sub process_args_common_geoname {
+    my($q,$cconfig) = @_;
+    my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+      geoname_lookup($q->param('geonameid'));
+
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+        latlong_to_hebcal($latitude, $longitude);
+    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {
 	$q->param('i','on');
     }
@@ -2247,10 +2274,7 @@ sub process_args_common_city {
 
     my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 
-    my $country = woe_country($city);
-    $country = "USA" if $country eq "United States of America";
-    $country = "UK" if $country eq "United Kingdom";
-    my $city_descr = woe_city($city) . ", $country";
+    my $city_descr = woe_city_descr($city);
 
     if ($CITY_COUNTRY{$city} eq 'IL') {
 	$q->param('i','on');
