@@ -1636,7 +1636,7 @@ sub gen_cookie($)
 	    if !defined $q->param($_) || $q->param($_) eq 'off';
     }
 
-    foreach (qw(ss mf mi mo)) {
+    foreach (qw(ss mf min mod)) {
 	if (defined $q->param($_)) {
 	    $retval .= "&$_=" . $q->param($_);
 	} elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
@@ -1742,7 +1742,7 @@ sub process_cookie($$)
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 
-    foreach (qw(nh nx ss mf lg mi mo)) {
+    foreach (qw(nh nx ss mf lg min mod)) {
 	$q->param($_, $c->param($_))
 	    if (! defined $q->param($_) && defined $c->param($_));
     }

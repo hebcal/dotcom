@@ -258,8 +258,8 @@ my $g_loc = (defined $cconfig{"city"} && $cconfig{"city"} ne "") ?
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
 my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
 my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
-my $g_nmi = (defined $q->param("mi") && $q->param("mi") =~ /^on|1$/) ? 0 : 1;
-my $g_nmo = (defined $q->param("mo") && $q->param("mo") =~ /^on|1$/) ? 0 : 1;
+my $g_nminor = (defined $q->param("min") && $q->param("min") =~ /^on|1$/) ? 0 : 1;
+my $g_nmodern = (defined $q->param("mod") && $q->param("mod") =~ /^on|1$/) ? 0 : 1;
 
 if ($cfg eq "html") {
     results_page($g_date, $g_filename);
@@ -294,7 +294,7 @@ sub param_true
 sub json_events
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
 
     print STDOUT $q->header(-type => $content_type,
@@ -314,11 +314,11 @@ sub javascript_events
 {
     my($v2) = @_;
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $cmd2 = $cmd;
     $cmd2 =~ s/(\d+)$/$1+1/e;
     my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
-				    $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				    $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@events, @ev2);
 
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
@@ -443,7 +443,7 @@ sub plus4_events {
 	    my $cmd2 = $cmd;
 	    $cmd2 =~ s/(\d+)$/$1+$i/e;
 	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
-					    $g_nmf, $g_nss, $g_nmi, $g_nmo);
+					    $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 	    push(@{$events}, @ev2);
 	}
 	if ($g_date =~ /(\d+)/) {
@@ -459,7 +459,7 @@ sub plus4_events {
 sub vcalendar_display
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -477,7 +477,7 @@ my %pdf_font;
 
 sub pdf_display {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = "Jewish Calendar $g_date";
     if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
@@ -711,7 +711,7 @@ sub dba_display
     eval("use Palm::DBA");
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     Hebcal::export_http_header($q, $content_type);
 
@@ -725,7 +725,7 @@ sub dba_display
 sub csv_display
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -836,11 +836,11 @@ EOHTML
 		 -label => "Major Holidays"),
     "</label>\n",
     qq{<label class="checkbox">},
-    $q->checkbox(-name => "mi",
-         -id => "mi",
+    $q->checkbox(-name => "min",
+         -id => "min",
          -checked => 1,
          -label => "Minor Holidays"),
-    qq{\n<small class="muted">(Tu BiShvat, Lag B'Omer, etc.)</small></label>\n},
+    qq{\n<small class="muted">(Tu BiShvat, Lag B'Omer, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "nx",
 		 -id => "nx",
@@ -852,19 +852,19 @@ EOHTML
 		 -id => "mf",
 		 -checked => 1,
 		 -label => "Minor Fasts"),
-    qq{\n<small class="muted">(Ta'anit Esther, Tzom Gedaliah, etc.)</small></label>\n},
+    qq{\n<small class="muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "ss",
 		 -id => "ss",
 		 -checked => 1,
 		 -label => "Special Shabbatot"),
-    qq{\n<small class="muted">(Shabbat Shekalim, Zachor, etc.)</small></label>\n},
+    qq{\n<small class="muted">(Shabbat Shekalim, Zachor, ...)</small></label>\n},
     qq{<label class="checkbox">},
-    $q->checkbox(-name => "mo",
-         -id => "mo",
+    $q->checkbox(-name => "mod",
+         -id => "mod",
          -checked => 1,
          -label => "Modern Holidays"),
-    qq{\n<small class="muted">(Yom HaShoah, Yom HaAtzma'ut, etc.)</small></label>\n},
+    qq{\n<small class="muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "o",
 		 -label => "Days of the Omer"),
@@ -987,7 +987,7 @@ EOHTML
     Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
     Hebcal::out_html(undef,
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "nh", "mf", "ss", "mi", "mo"],
+	       -values => ["nx", "nh", "mf", "ss", "min", "mod"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",
@@ -1014,12 +1014,12 @@ if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
 d.getElementById("nh").onclick=function(){
  if (this.checked == false) {
-  ["nx","mf","ss","mi","mo"].forEach(function(x){
+  ["nx","mf","ss","min","mod"].forEach(function(x){
    d.f1[x].checked = false;
   });
  }
 };
-["nx","mf","ss","mi","mo"].forEach(function(x){
+["nx","mf","ss","min","mod"].forEach(function(x){
  d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
 });
 </script>
@@ -1175,7 +1175,7 @@ EOHTML
     Hebcal::out_html(undef, "<!-- $cmd -->\n");
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nmi, $g_nmo);
+				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $numEntries = scalar(@events);
 
