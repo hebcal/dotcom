@@ -81,7 +81,7 @@ if (!isset($info["em"])) {
 if (isset($param["commit"]) && $param["commit"] == "1") {
     global $hebcal_db;
     hebcal_open_mysql_db();
-    $ip = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : $_SERVER["REMOTE_ADDR"];
+    $ip = $_SERVER["REMOTE_ADDR"];
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='active',
