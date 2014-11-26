@@ -86,7 +86,11 @@ sub vcl_recv {
         return (synth(429, "Too Many Requests"));
     }
 
-    set req.http.X-Client-IP = client.ip;
+    if (req.http.X-Forwarded-Proto == "https") {
+        set req.http.X-Client-IP = req.http.X-Forwarded-For;
+    } else {
+        set req.http.X-Client-IP = client.ip;
+    }
 }
 
 sub vcl_synth {
