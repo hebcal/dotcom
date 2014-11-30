@@ -37,7 +37,7 @@
 
 .tt-dropdown-menu {
   width: 360px;
-  margin-top: 4px;
+  margin-top: 2px;
   padding: 8px 0;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -51,7 +51,7 @@
 }
 
 .tt-suggestion {
-  padding: 3px 20px;
+  padding: 5px 20px;
   font-size: 14px;
   line-height: 1.2;
 }

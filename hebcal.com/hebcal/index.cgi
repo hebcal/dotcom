@@ -779,7 +779,7 @@ legend {
   line-height: 30px;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.2.min.css">
+<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.3.min.css">
 EOHTML
 ;
 
