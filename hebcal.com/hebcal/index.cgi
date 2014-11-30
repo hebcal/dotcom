@@ -145,13 +145,13 @@ if (defined $q->param("year") && $q->param("year") eq "now" &&
 form("Please specify a year.")
     if !defined $q->param("year") || $q->param("year") eq "";
 
-form("Sorry, invalid year\n<strong>" . $q->param("year") . "</strong>.")
+form("Sorry, invalid year <strong>" . $q->param("year") . "</strong>.")
     if $q->param("year") !~ /^\d+$/ || $q->param("year") == 0;
 
 form("Sorry, Hebrew year must be 3762 or later.")
     if $q->param("yt") && $q->param("yt") eq "H" && $q->param("year") < 3762;
 
-form("Sorry, invalid Havdalah minutes\n<strong>" . $q->param("m") . "</strong>.")
+form("Sorry, invalid Havdalah minutes <strong>" . $q->param("m") . "</strong>.")
     if defined $q->param("m") &&
     $q->param("m") ne "" && $q->param("m") !~ /^\d+$/;
 
