@@ -509,7 +509,7 @@ sub more_from_hebcal {
     # link to hebcal full calendar
     my $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
     $url .= get_link_args($q, 1);
-    $url .= 'month=now&year=now';
+    $url .= '&month=now&year=now';
     foreach my $opt (qw(c s maj min mod mf ss nx vis)) {
         $url .= join("", "&", $opt, "=on");
     }
