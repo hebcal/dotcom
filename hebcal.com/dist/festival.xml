@@ -1021,6 +1021,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <book ASIN="0807409103" author="">
     The Complete Chanukah Songbook
   </book>
+  <book ASIN="1930143346" author="Noam Zion and Barbara Spectre">
+    A Different Light: The Big Book of Hanukkah
+  </book>
  </books>
 </festival>
 <festival id="Chanukah: 1 Candle" hebrew="חֲנוּכָּה: א׳ נֵר" yomtov="0">
