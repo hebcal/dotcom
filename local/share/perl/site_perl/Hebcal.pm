@@ -636,8 +636,6 @@ sub events_to_dict
 		      "c" => undef,
 		      "nh" => undef,
 		      "nx" => undef,
-		      "tz" => undef,
-		      "dst" => undef,
 		      });
 
     $tzid ||= "UTC";
@@ -1624,14 +1622,14 @@ sub gen_cookie($)
 	    if defined $q->param('m') && $q->param('m') ne '';
     }
 
-    foreach (@opts)
+    foreach (@opts, "lg")
     {
 	next if $_ eq 'c' || $_ eq 'H';
 	$retval .= "&$_=" . $q->param($_)
 	    if defined $q->param($_) && $q->param($_) ne '';
     }
 
-    foreach (qw(nh nx)) {
+    foreach (qw(maj nx)) {
 	$retval .= "&$_=off"
 	    if !defined $q->param($_) || $q->param($_) eq 'off';
     }
@@ -1642,11 +1640,6 @@ sub gen_cookie($)
 	} elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
 	    $retval .= "&$_=off";
 	}
-    }
-
-    if (defined $q->param("lg") && $q->param("lg") ne '')
-    {
-	$retval .= "&lg=" . $q->param("lg");
     }
 
     $retval;
@@ -2346,7 +2339,7 @@ sub process_args_common {
 
     if ($handle_cookie) {
 	# default setttings needed for cookie
-	foreach (qw(c nh nx)) {
+	foreach (qw(c maj nx)) {
 	    $q->param($_, "on");
 	}
 

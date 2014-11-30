@@ -742,6 +742,13 @@ sub csv_display
     Hebcal::csv_write_contents($q, \@events, $euro);
 }
 
+sub my_radio_group {
+    my($q,@p) = @_;
+    my $s = $q->radio_group(@p);
+    $s =~ s/<input([^>]+)>([^<]+)/<label class="radio"><input$1>$2<\/label>/g;
+    $s;
+}
+
 sub form
 {
     my($message,$help) = @_;
@@ -798,6 +805,23 @@ EOHTML
 
     }
 
+    my $year_type_radio = my_radio_group($q,
+        -name => "yt",
+        -values => ["G", "H"],
+        -default => "G",
+        -onClick => "s6(this.value)",
+        -labels => {"G" => "Gregorian (common era)",
+                    "H" => "Hebrew Year"}
+        );
+
+    my $diaspora_israel_radio = my_radio_group($q,
+        -name => "i",
+        -values => ["off", "on"],
+        -default => "off",
+        -labels => {"off" => "Diaspora",
+                    "on" => "Israel"}
+        );
+
     Hebcal::out_html(undef,
     qq{<form id="f1" name="f1" action="$script_name">\n},
     qq{<div class="row-fluid">\n},
@@ -822,16 +846,11 @@ EOHTML
 		   -labels => \%Hebcal::MoY_long),
     "</label>\n",
     qq{</div><!-- .form-inline -->\n},
-    $q->radio_group(-name => "yt",
-		    -values => ["G", "H"],
-		    -default => "G",
-		    -onClick => "s6(this.value)",
-		    -labels =>
-		    {"G" => " Gregorian (common era) ",
-		     "H" => " Hebrew Year"}),
+    $year_type_radio,
     qq{\n<p><small class="muted">Use all digits to specify a year.\n},
     qq{You probably aren't interested in 08, but rather 2008.</small></p>\n},
     $q->hidden(-name => "v",-value => 1,-override => 1),
+    $diaspora_israel_radio,
     qq{</fieldset>\n}
     );
 
@@ -884,16 +903,7 @@ EOHTML
     qq{<label class="checkbox">},
     $q->checkbox(-name => "s",
 		 -label => "Weekly Torah portion on Saturdays"),
-    "</label>\n",
-    $q->radio_group(-name => "i",
-		    -values => ["off", "on"],
-		    -default => "off",
-		    -labels =>
-		    {"off" => "\nDiaspora ",
-		     "on" => "\nIsrael "}),
-    "\n <small>(<a\n",
-    "href=\"/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes\">What\n",
-    "is the difference?</a>)</small>");
+    "</label>\n");
 
     Hebcal::out_html(undef, qq{</fieldset>\n});
     Hebcal::out_html(undef, qq{</div><!-- .span6 -->\n});
