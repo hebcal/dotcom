@@ -779,7 +779,7 @@ legend {
   line-height: 30px;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
+<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.2.min.css">
 EOHTML
 ;
 
@@ -971,7 +971,7 @@ EOHTML
     $q->textfield(-name => "city-typeahead",
           -id => "city-typeahead",
           -class => "form-control input-xlarge",
-          -placeholder => "Search for city"),
+          -placeholder => "Search for city or ZIP code"),
     qq{</div>\n},
             "<label>Candle-lighting minutes before sundown: ",
             $q->textfield(
@@ -1005,7 +1005,7 @@ EOHTML
     Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
     Hebcal::out_html(undef,
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "maj", "mf", "ss", "min", "mod"],
+	       -values => ["nx", "maj", "mf", "ss", "min", "mod", "vis"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",
@@ -1047,7 +1047,7 @@ JSCRIPT_END
     $xtra_html .= "<script>\$('#havdalahInfo').tooltip()</script>\n";
 
     $xtra_html .= qq{<script src="/i/typeahead-0.10.5.min.js"></script>\n};
-    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.2.min.js"></script>\n};
+    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.3.min.js"></script>\n};
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");

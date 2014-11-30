@@ -1,7 +1,8 @@
 var hebcalCities = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: '/complete.php?q=%QUERY'
+    remote: '/complete.php?q=%QUERY',
+    limit: 8
 });
 
 hebcalCities.initialize();
@@ -29,8 +30,7 @@ $('#city-typeahead').typeahead(null, {
                 return s + ctry + '</small></p>';
             }
         }
-    },
-    limit: 8
+    }
 }).on('typeahead:selected', function(obj, datum, name) {
     if (typeof datum.geo === "string" && datum.geo == "zip") {
         $('#geo').val('zip');
