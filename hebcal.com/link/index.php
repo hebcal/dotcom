@@ -52,7 +52,7 @@ if (isset($param["a"]) && ($param["a"] == "1" || $param["a"] == "on")) {
     $ashk = "";
 }
 
-$url_base = "http://www.hebcal.com/shabbat/?${geo_link}&amp;m=${m}";
+$url_base = "//www.hebcal.com/shabbat/?${geo_link}&amp;m=${m}";
 $url_base_double = htmlentities($url_base);
 
 $xtra_head = <<<EOD
