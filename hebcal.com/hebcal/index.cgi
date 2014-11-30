@@ -158,8 +158,16 @@ form("Sorry, invalid Havdalah minutes\n<strong>" . $q->param("m") . "</strong>."
 $q->param("c","on")
     if (defined $q->param("zip") && $q->param("zip") =~ /^\d{5}$/);
 
+# map old "nh=on" to 3 new parameters for Major, Minor and Modern holdays
+if (defined $q->param("nh") && $q->param("nh") =~ /^(on|1)$/) {
+    foreach my $opt (qw(maj min mod)) {
+        $q->param($opt, "on");
+    }
+    $q->delete("nh");
+}
+
 form("Please select at least one event option.")
-    if ((!defined $q->param("nh") || $q->param("nh") eq "off") &&
+    if ((!defined $q->param("maj") || $q->param("maj") eq "off") &&
 	(!defined $q->param("nx") || $q->param("nx") eq "off") &&
 	(!defined $q->param("o") || $q->param("o") eq "off") &&
 	(!defined $q->param("c") || $q->param("c") eq "off") &&
@@ -202,7 +210,7 @@ foreach (@Hebcal::opts)
 
 $cmd .= " -a"
     if defined $q->param("lg") && $q->param("lg") =~ /^a/;
-$cmd .= " -h" if !defined $q->param("nh") || $q->param("nh") eq "off";
+$cmd .= " -h" if !defined $q->param("maj") || $q->param("maj") eq "off";
 $cmd .= " -x" if !defined $q->param("nx") || $q->param("nx") eq "off";
 
 if ($q->param("yt") && $q->param("yt") eq "H")
@@ -830,8 +838,8 @@ EOHTML
     Hebcal::out_html(undef, qq{<fieldset><legend>Include events</legend>\n});
     Hebcal::out_html(undef,
     qq{<label class="checkbox">},
-    $q->checkbox(-name => "nh",
-		 -id => "nh",
+    $q->checkbox(-name => "maj",
+		 -id => "maj",
 		 -checked => 1,
 		 -label => "Major Holidays"),
     "</label>\n",
@@ -987,7 +995,7 @@ EOHTML
     Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
     Hebcal::out_html(undef,
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "nh", "mf", "ss", "min", "mod"],
+	       -values => ["nx", "maj", "mf", "ss", "min", "mod"],
 	       "-override"=>1),
     "\n",
     $q->submit(-name => ".s",
@@ -1012,7 +1020,7 @@ function s6(val){
 if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
 if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
 return false;}
-d.getElementById("nh").onclick=function(){
+d.getElementById("maj").onclick=function(){
  if (this.checked == false) {
   ["nx","mf","ss","min","mod"].forEach(function(x){
    d.f1[x].checked = false;
@@ -1020,7 +1028,7 @@ d.getElementById("nh").onclick=function(){
  }
 };
 ["nx","mf","ss","min","mod"].forEach(function(x){
- d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.nh.checked=true;}}
+ d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
 });
 </script>
 JSCRIPT_END

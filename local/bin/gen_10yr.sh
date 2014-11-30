@@ -29,13 +29,13 @@ update_ics_name() {
 
 
 FILE="jewish-holidays"
-fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;nh=on;i=off;lg=s;c=off;geo=none;ny=10;nx=off;mf=off;ss=off"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;maj=on;min=off;mod=off;i=off;lg=s;c=off;geo=none;ny=10;nx=off;mf=off;ss=off"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "http:\\/\\/www.hebcal.com\\/"
 
 FILE="jewish-holidays-all"
-fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;nh=on;i=off;lg=s;c=off;geo=none;ny=10;nx=on;mf=on;ss=on"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;maj=on;min=on;mod=on;i=off;lg=s;c=off;geo=none;ny=10;nx=on;mf=on;ss=on"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "http:\\/\\/www.hebcal.com\\/"

@@ -1742,7 +1742,14 @@ sub process_cookie($$)
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 
-    foreach (qw(nh nx ss mf lg min mod)) {
+    if (defined $c->param("nh")) {
+        foreach my $opt (qw(maj min mod)) {
+            $c->param($opt, $c->param("nh"));
+        }
+        $c->delete("nh");
+    }
+
+    foreach (qw(maj nx ss mf lg min mod)) {
 	$q->param($_, $c->param($_))
 	    if (! defined $q->param($_) && defined $c->param($_));
     }

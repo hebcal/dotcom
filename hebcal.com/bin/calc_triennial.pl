@@ -1072,8 +1072,12 @@ sub format_html_date {
   $gm =~ s/^0//;
   $gd =~ s/^0//;
   my $nofollow = $gy > $this_year + 2 ? qq{ rel="nofollow"} : "";
+  my $args = "";
+  foreach my $opt (qw(s maj min mod mf ss nx D vis)) {
+    $args .= join("", "&amp;", $opt, "=on");
+  }
   sprintf "<a title=\"%s %d holiday calendar\"%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
-    "&amp;s=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off#hebcal-results\">%02d %s %d</a>",
+    $args . "&amp;set=off#hebcal-results\">%02d %s %d</a>",
     $Hebcal::MoY_long{$gm}, $gy,
     $nofollow,
     $gy, $gm,

@@ -1080,8 +1080,12 @@ EOHTML
 	    }
 	    my $nofollow = $gy > $this_year + 2 ? qq{ rel="nofollow"} : "";
 	    my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
+        my $args = "";
+        foreach my $opt (qw(s maj min mod mf ss nx D vis)) {
+            $args .= join("", "&amp;", $opt, "=on");
+        }
 	    printf OUT2 "<li><a%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
-		"&amp;nx=on&amp;mf=on&amp;ss=on&amp;nh=on&amp;D=on&amp;vis=on&amp;set=off\"$style>" .
+		$args . "&amp;set=off\"$style>" .
 		"<time datetime=\"%s\">%s, %02d %s %04d</time></a> $rise_or_set (%s)\n",
 		$nofollow,
 		$gy, $gm,
