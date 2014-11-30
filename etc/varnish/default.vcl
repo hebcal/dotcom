@@ -81,9 +81,15 @@ sub vcl_recv {
         return (purge);
     }
 
-    if (vsthrottle.is_denied(client.identity, 40, 10s)) {
-        # Client has exceeded 40 reqs per 10s
+    if (vsthrottle.is_denied(client.identity, 60, 10s)) {
+        # Client has exceeded 60 reqs per 10s
         return (synth(429, "Too Many Requests"));
+    }
+
+    if (req.http.X-Forwarded-Proto == "https") {
+        set req.http.X-Client-IP = req.http.X-Forwarded-For;
+    } else {
+        set req.http.X-Client-IP = client.ip;
     }
 }
 

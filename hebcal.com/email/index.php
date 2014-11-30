@@ -5,8 +5,7 @@
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 
-$remoteAddr = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ?
-    $_SERVER["HTTP_X_FORWARDED_FOR"] : $_SERVER["REMOTE_ADDR"];
+$remoteAddr = $_SERVER["REMOTE_ADDR"];
 
 $sender = "webmaster@hebcal.com";
 
