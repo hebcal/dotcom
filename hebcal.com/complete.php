@@ -1,14 +1,44 @@
 <?php
+/************************************************************************
+ * Geonames autocomplete remote JSON data souce for Twitter typeahead.js
+ *
+ * Copyright (c) 2014, Michael J. Radwin
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * - Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ * - Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ***********************************************************************/
+
 if (isset($_SERVER["HTTP_IF_MODIFIED_SINCE"])) {
-    header("HTTP/1.0 304 Not Modified");
-    echo "Not Modified\n";
+    header("HTTP/1.1 304 Not Modified");
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode(array("status" => "Not Modified")), "\n";
     exit;
 }
 
 $qraw = isset($_REQUEST["q"]) ? trim($_REQUEST["q"]) : "";
 if (strlen($qraw) == 0) {
     header("HTTP/1.1 404 Not Found");
-    echo "Not Found\n";
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode(array("error" => "Not Found")), "\n";
     exit;
 }
 
@@ -115,7 +145,8 @@ EOD;
 
 if (count($search_results) == 0) {
     header("HTTP/1.1 404 Not Found");
-    echo "Not Found\n";
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode(array("error" => "Not Found")), "\n";
 } else {
     header("Content-Type: application/json; charset=UTF-8");
     echo json_encode($search_results, 0);
