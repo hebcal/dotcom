@@ -48,6 +48,13 @@ if (isset($_GET["h2g"]) && $_GET["h2g"] &&
     $hy = $_GET["hy"];
     $hm = $_GET["hm"];
 
+    $always29 = array(
+            "Iyyar" => true,
+            "Tamuz" => true,
+            "Elul"  => true,
+            "Tevet" => true,
+        );
+
     if (!is_numeric($hd)) {
 	form(true, "Hebrew day must be numeric", "");
     } elseif (!is_numeric($hy)) {
@@ -58,6 +65,8 @@ if (isset($_GET["h2g"]) && $_GET["h2g"] &&
 	form(true, "Hebrew year must be in the common era (3761 and above)", "");
     } elseif ($hd > 30 || $hd < 1) {
 	form(true, "Hebrew day out of valid range 1-30", "");
+    } elseif ($hd == 30 && isset($always29[$hm])) {
+        form(true, "Hebrew day out of valid range 1-29 for $hm", "");
     }
 }
 else
@@ -129,6 +138,10 @@ if ($type == "g2h")
 else
 {
     $hmnum = $hmstr_to_num[$hm];
+    if ($hmnum == 6 && !is_leap_year($hy)) {
+        $hmnum = 7;
+        $hm = "Adar";
+    }
     $max_hd = cal_days_in_month(CAL_JEWISH, $hmnum, $hy);
     if ($hd > $max_hd) {
         form(true, "Hebrew day $hd out of valid range 1-$max_hd for $hm in year $hy", "");
