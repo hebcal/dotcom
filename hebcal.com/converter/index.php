@@ -301,6 +301,20 @@ echo html_header_bootstrap("Hebrew Date Converter - $hebdate", $xtra_head, true,
 function form($head, $message, $help = "") {
     global $gm, $gd, $gy, $hm, $hd, $hy, $hmstr_to_hebcal;
 
+    if ($message && isset($_GET["cfg"])) {
+        header("HTTP/1.1 400 Bad Request");
+        if ($_GET["cfg"] == "json") {
+            header("Content-Type: application/json; charset=UTF-8");
+            $arr = array("error" => $message);
+            echo json_encode($arr, 0);
+            exit();
+        } elseif ($_GET["cfg"] == "xml") {
+            header("Content-Type: text/xml; charset=UTF-8");
+            echo "<?xml version=\"1.0\" ?>\n<error message=\"$message\" />\n";
+            exit();
+        }
+    }
+
     if ($head) {
 	my_header($message);
     }
