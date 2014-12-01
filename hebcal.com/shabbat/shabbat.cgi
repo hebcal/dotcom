@@ -50,6 +50,11 @@ use URI::Escape;
 use URI;
 use POSIX qw(strftime);
 
+use Benchmark qw(:hireswallclock :all);
+
+my @benchmarks;
+push(@benchmarks, Benchmark->new);
+
 # process form params
 my($q) = new CGI;
 my($script_name) = $q->script_name();
@@ -101,8 +106,11 @@ if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
     undef($cfg);
 }
 
+push(@benchmarks, Benchmark->new);
 my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
+push(@benchmarks, Benchmark->new);
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,$cconfig{"tzid"});
+push(@benchmarks, Benchmark->new);
 
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
 		     $cfg eq "widget" || $cfg eq "json"))
@@ -177,6 +185,13 @@ sub self_url
     $url;
 }
 
+sub timestamp_comment {
+    my $tend = Benchmark->new;
+    my $tdiff = timediff($tend, $benchmarks[0]);
+    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), "; ",
+        timestr($tdiff), " -->\n");
+}
+
 sub display_wml
 {
     my($items) = @_;
@@ -216,7 +231,7 @@ qq{<?xml version="1.0"?>
     }
 
     Hebcal::out_html($cfg, "</card>\n</wml>\n");
-    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
+    timestamp_comment();
 }
 
 
@@ -327,7 +342,7 @@ qq{<geo:lat>$latitude</geo:lat>
     }
 
     Hebcal::out_html($cfg, "</channel>\n</rss>\n");
-    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
+    timestamp_comment();
 }
 
 sub display_html_common
@@ -439,7 +454,7 @@ ul.hebcal-results{list-style-type:none}
 	Hebcal::out_html($cfg, "</body></html>\n");
     }
 
-    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
+    timestamp_comment();
 }
 
 sub display_html
@@ -622,6 +637,11 @@ EOHTML
 					     $xtra_head . $xtra_head2),
 			 $head_divs
 	    );
+
+    for (my $i = 1; $i < scalar(@benchmarks); $i++) {
+        my $tdiff = timediff($benchmarks[$i], $benchmarks[$i-1]);
+        Hebcal::out_html($cfg, "<!-- ", timestr($tdiff), " -->\n");
+    }
 }
 
 sub form($$$$)
@@ -767,7 +787,7 @@ EOHTML
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
     Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').click(function(e){e.preventDefault()}).tooltip()</script>\n");
     Hebcal::out_html($cfg, "</body></html>\n");
-    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), " -->\n");
+    timestamp_comment();
     exit(0);
 }
 
