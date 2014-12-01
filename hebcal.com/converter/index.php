@@ -69,6 +69,14 @@ else
 	$gd = $_GET["gd"];
 	$gy = $_GET["gy"];
 
+        // remove leading zeros, if any
+        if ($gm[0] == "0") {
+            $gm = $gm[1];
+        }
+        if ($gd[0] == "0") {
+            $gd = $gd[1];
+        }
+
 	if (!is_numeric($gd)) {
 	    form(true, "Gregorian day must be numeric", "");
 	} elseif (!is_numeric($gm)) {
@@ -82,6 +90,11 @@ else
 	} elseif ($gy > 9999 || $gy < 1) {
 	    form(true, "Gregorian year out of valid range 0001-9999", "");
 	}
+
+        $max_gd = cal_days_in_month(CAL_GREGORIAN, $gm, $gy);
+        if ($gd > $max_gd) {
+            form(true, "Gregorian day $gd out of valid range 1-$max_gd for $MoY_long[$gm] $gy", "");
+        }
 
 	// after sunset?
 	if (isset($_GET["gs"]) && $_GET["gs"])
@@ -116,6 +129,10 @@ if ($type == "g2h")
 else
 {
     $hmnum = $hmstr_to_num[$hm];
+    $max_hd = cal_days_in_month(CAL_JEWISH, $hmnum, $hy);
+    if ($hd > $max_hd) {
+        form(true, "Hebrew day $hd out of valid range 1-$max_hd for $hm in year $hy", "");
+    }
     $jd = jewishtojd($hmnum, $hd, $hy);
     $greg = jdtogregorian($jd);
     $debug = $greg;
