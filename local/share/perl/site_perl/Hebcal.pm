@@ -622,14 +622,37 @@ sub event_to_time
 				  "","","");
 }
 
+sub event_tz_offset {
+    my($year,$mon,$mday,$hour24,$min,$tzid) = @_;
+
+    unless ($eval_use_DateTime) {
+        eval("use DateTime");
+        $eval_use_DateTime = 1;
+    }
+
+    my $dt = DateTime->new(
+       year       => $year,
+       month      => $mon,
+       day        => $mday,
+       hour       => $hour24,
+       minute     => $min,
+       second     => 0,
+       time_zone  => $tzid,
+    );
+
+    my $tzOffset = $dt->offset();
+    my $tz = int($tzOffset / 3600);
+    my $tzMin = abs(int((($tzOffset / 3600) - $tz) * 60));
+
+    sprintf("%s%02d%02d",
+        $tz > 0 ? "+" : "-",
+        abs($tz),
+        $tzMin);
+}
+
 sub events_to_dict
 {
     my($events,$cfg,$q,$friday,$saturday,$tzid) = @_;
-
-    unless ($eval_use_DateTime) {
-	eval("use DateTime");
-	$eval_use_DateTime = 1;
-    }
 
     my $url = "http://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
@@ -659,42 +682,23 @@ sub events_to_dict
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
 	$item{"date"} = strftime($format, localtime($time));
 
-        my $dt = DateTime->new(
-                           year       => $year,
-                           month      => $mon,
-                           day        => $mday,
-                           hour       => $hour24,
-                           minute     => $min,
-                           second     => 0,
-                           time_zone  => $tzid,
-                          );
-
-        my $tzOffset = $dt->offset();
-        my $tz = int($tzOffset / 3600);
-        my $tzMin = abs(int((($tzOffset / 3600) - $tz) * 60));
+        my $tzOffset = event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
 
         my $dow = $DoW[get_dow($year, $mon, $mday)];
-        $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s%02d%02d",
+        $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s",
                                $dow,
                                $mday,
                                $MoY_short[$mon - 1],
                                $year, $hour24, $min,
-                               $tz > 0 ? "+" : "-",
-                               abs($tz), $tzMin);
+                               $tzOffset);
 
         if ($evt->[$EVT_IDX_YOMTOV]) {
             $item{"yomtov"} = 1;
         }
 
-	if ($evt->[$EVT_IDX_UNTIMED]) {
-            $item{"dc:date"} = sprintf("%04d-%02d-%02d",$year,$mon,$mday);
-        } else {
-	    $item{"dc:date"} =
-		sprintf("%04d-%02d-%02dT%02d:%02d:%02d%s%02d:%02d",
-			$year,$mon,$mday,
-			$hour24,$min,0,
-			$tz > 0 ? "+" : "-",
-			abs($tz), $tzMin);
+        $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
+	if (!$evt->[$EVT_IDX_UNTIMED]) {
+            $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset);
 	}
 
 	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
