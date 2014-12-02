@@ -50,6 +50,10 @@ use URI::Escape;
 use Hebcal ();
 use HebcalHtml ();
 use HTML::CalendarMonthSimple ();
+use Benchmark qw(:hireswallclock :all);
+
+my @benchmarks;
+push(@benchmarks, Benchmark->new);
 
 my $http_expires = "Tue, 02 Jun 2037 20:00:00 GMT";
 my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
@@ -120,6 +124,8 @@ if (! defined $pi) {
 } else {
     $cfg = "html";
 }
+
+push(@benchmarks, Benchmark->new);
 
 # decide whether this is a results page or a blank form
 form("") unless $q->param("v");
@@ -749,6 +755,13 @@ sub my_radio_group {
     $s;
 }
 
+sub timestamp_comment {
+    my $tend = Benchmark->new;
+    my $tdiff = timediff($tend, $benchmarks[0]);
+    Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), "; ",
+        timestr($tdiff), " -->\n");
+}
+
 sub form
 {
     my($message,$help) = @_;
@@ -1051,7 +1064,7 @@ JSCRIPT_END
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
-    Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
+    timestamp_comment();
 
     exit(0);
     1;
@@ -1194,6 +1207,7 @@ EOHTML
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
 				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    push(@benchmarks, Benchmark->new);
 
     my $numEntries = scalar(@events);
 
@@ -1407,6 +1421,8 @@ EOHTML
 	Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
     }
 
+    push(@benchmarks, Benchmark->new);
+
     foreach my $evt (@events) {
 	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
@@ -1482,6 +1498,8 @@ EOHTML
 	}
     }
 
+    push(@benchmarks, Benchmark->new);
+
     if (!$q->param("vis")) {
 	Hebcal::out_html(undef, qq{</tbody></table>\n});
     }
@@ -1492,13 +1510,21 @@ EOHTML
 	}
     }
 
+    push(@benchmarks, Benchmark->new);
+
     Hebcal::out_html(undef, "</p>") unless $q->param("vis");
     Hebcal::out_html(undef, $nav_pagination);
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
     Hebcal::out_html(undef, "</body></html>\n");
-    Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), " -->\n");
+
+    for (my $i = 1; $i < scalar(@benchmarks); $i++) {
+        my $tdiff = timediff($benchmarks[$i], $benchmarks[$i-1]);
+        Hebcal::out_html($cfg, "<!-- ", timestr($tdiff), " -->\n");
+    }
+
+    timestamp_comment();
 
     1;
 }
