@@ -109,7 +109,9 @@ if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
 push(@benchmarks, Benchmark->new);
 my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
 push(@benchmarks, Benchmark->new);
-my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,$cconfig{"tzid"});
+my $ignore_tz = ($cfg eq "r" || $cfg eq "json") ? 0 : 1;
+my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
+    $cconfig{"tzid"},$ignore_tz);
 push(@benchmarks, Benchmark->new);
 
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||

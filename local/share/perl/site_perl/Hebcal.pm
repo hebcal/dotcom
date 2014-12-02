@@ -652,7 +652,7 @@ sub event_tz_offset {
 
 sub events_to_dict
 {
-    my($events,$cfg,$q,$friday,$saturday,$tzid) = @_;
+    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz) = @_;
 
     my $url = "http://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
@@ -682,7 +682,8 @@ sub events_to_dict
 	    "%A, %d %b %Y" : "%A, %d %B %Y";
 	$item{"date"} = strftime($format, localtime($time));
 
-        my $tzOffset = event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
+        my $tzOffset = $ignore_tz ? ""
+            : event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
 
         my $dow = $DoW[get_dow($year, $mon, $mday)];
         $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s",
@@ -698,7 +699,9 @@ sub events_to_dict
 
         $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
 	if (!$evt->[$EVT_IDX_UNTIMED]) {
-            $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset);
+            my $tzOffset2 = $tzOffset;
+            $tzOffset2 =~ s/(\d\d)$/:$1/;
+            $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset2);
 	}
 
 	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
