@@ -750,7 +750,7 @@ sub events_to_dict
 }
 
 sub items_to_json {
-    my($items,$q,$city_descr,$latitude,$longitude) = @_;
+    my($items,$q,$city_descr,$latitude,$longitude,$cconfig) = @_;
 
     unless ($eval_use_JSON) {
 	eval("use JSON");
@@ -773,6 +773,10 @@ sub items_to_json {
     if (defined $latitude) {
 	$out->{latitude} = $latitude;
 	$out->{longitude} = $longitude;
+    }
+
+    if (defined $cconfig) {
+        $out->{location} = $cconfig;
     }
 
     my $json = JSON->new;
@@ -2182,7 +2186,7 @@ sub process_args_common_geoname {
 	$cconfig->{"city"} = $name;
 	$cconfig->{"tzid"} = $tzid;
 	$cconfig->{"geo"} = "geoname";
-        $cconfig->{"geonameid"} = $q->param('geonameid');
+        $cconfig->{"geonameid"} = int($q->param('geonameid'));
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }

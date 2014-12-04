@@ -321,7 +321,7 @@ sub json_events
 	$title .= " "  . $cconfig{"title"};
     }
     Hebcal::items_to_json($items,$q,$title,
-			  $cconfig{"latitude"},$cconfig{"longitude"});
+        $cconfig{"latitude"},$cconfig{"longitude"},\%cconfig);
 }
 
 sub javascript_events
