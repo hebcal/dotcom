@@ -555,9 +555,11 @@ sub invoke_hebcal
 	    $memo2 = (get_holiday_anchor($subj,$want_sephardic,undef))[2];
 	}
 
-	push(@events,
-	     [$subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,
-	      ($untimed ? $memo2 : $memo),$yomtov]);
+	push(@events, [
+                $subj, $untimed,
+                int($min), int($hour), int($mday), int($mon), int($year),
+                $dur, ($untimed ? $memo2 : $memo), $yomtov
+                ]);
     }
     close(HEBCAL);
     if ($hccache) {
@@ -666,7 +668,8 @@ sub events_to_dict
     my @items;
     foreach my $evt (@{$events}) {
 	my $time = event_to_time($evt);
-	next if ($friday && $time < $friday) || ($saturday && $time > $saturday);
+        next if ($friday && $time < $friday);
+        last if ($saturday && $time > $saturday);
 
 	my $subj = $evt->[$EVT_IDX_SUBJ];
 	my($year,$mon,$mday) = event_ymd($evt);
