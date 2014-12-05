@@ -741,9 +741,10 @@ sub events_to_dict
 		$item{"class"} = "holiday";
 	    }
 
-	    my($href,$hebrew) = get_holiday_anchor($subj,0,$q);
+	    my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
 	    $item{"link"} = $href if $href;
 	    $item{"hebrew"} = $hebrew if $hebrew;
+            $item{"memo"} = $memo if $memo;
 	}
 
 	push(@items, \%item);
@@ -804,6 +805,8 @@ sub json_transform_items {
 	    if defined $item->{"hebrew"};
         $out->{yomtov} = \1
             if $item->{"yomtov"};
+        $out->{memo} = $item->{"memo"}
+            if $item->{"memo"};
 	push(@out, $out);
     }
     \@out;
