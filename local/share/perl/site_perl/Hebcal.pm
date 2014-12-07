@@ -2165,7 +2165,7 @@ sub geoname_city_descr {
     my($name,$admin1,$country) = @_;
     my $city_descr = $name;
     $city_descr .= ", $admin1" if $admin1 && index($admin1, $name) != 0;
-    $city_descr .= ", $country";
+    $city_descr .= ", $country" if $country;
     return $city_descr;
 }
 
