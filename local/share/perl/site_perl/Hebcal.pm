@@ -2115,7 +2115,7 @@ sub process_args_common_zip {
     undef($DB);
 
     unless (defined $state) {
-	my $message = "Sorry, can't find\n".  "<strong>" . $q->param('zip') .
+	my $message = "Sorry, can't find <strong>" . $q->param('zip') .
 	    "</strong> in the zip code database.";
 	my $help = "<ul><li>Please try a nearby zip code</li></ul>";
 	return (0,$message,$help);
@@ -2174,6 +2174,13 @@ sub process_args_common_geoname {
     my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
       geoname_lookup($q->param('geonameid'));
 
+    unless (defined $name) {
+        my $message = "Sorry, can't find <strong>" . $q->param('geonameid') .
+            "</strong> in the location database.";
+        my $help = "<ul><li>Please search for a different location</li></ul>";
+        return (0, $message, $help);
+    }
+
     my($lat_deg,$lat_min,$long_deg,$long_min) =
         latlong_to_hebcal($latitude, $longitude);
     my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
@@ -2206,7 +2213,7 @@ sub process_args_common_geopos {
 	my $value = $q->param($key);
 	my $message;
 	if ($value !~ /^\d+$/) {
-	    $message = "Sorry, all latitude/longitude\narguments must be numeric.";
+	    $message = "Sorry, all latitude/longitude arguments must be numeric.";
 	}
 	if ($value > $maxval{$key}) {
 	    my $keyname = (substr($key, 1, 1) eq "a") ? "latitude" : "longitude";
