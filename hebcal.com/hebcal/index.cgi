@@ -1060,7 +1060,7 @@ JSCRIPT_END
     $xtra_html .= "<script>\$('#havdalahInfo').tooltip()</script>\n";
 
     $xtra_html .= qq{<script src="/i/typeahead-0.10.5.min.js"></script>\n};
-    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.3.min.js"></script>\n};
+    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.4.min.js"></script>\n};
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
@@ -1418,7 +1418,21 @@ EOHTML
     Hebcal::out_html(undef, $nav_pagination);
 
     if (!$q->param("vis")) {
+#        html_table_events(\@events);
 	Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
+        my $script .= <<EOHTML;
+<script>
+var months = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+var dow = 'Sun Mon Tue Wed Thu Fri Sat'.split(' ');
+HEBCAL.events.forEach(function(evt) {
+  var dt = new Date(evt.date), dtStr = dt.getUTC;
+  document.write("<tr><td>");
+  document.write(dow[dt.getUTCDay()]);
+  document.write("</td><td>...</td><td>...</td></tr>");
+});
+</script>
+EOHTML
+    ;
     }
 
     push(@benchmarks, Benchmark->new);
@@ -1527,6 +1541,16 @@ EOHTML
     timestamp_comment();
 
     1;
+}
+
+sub html_table_events {
+    my($events) = @_;
+    my $dict = Hebcal::events_to_dict($events,"json",$q,0,0,$cconfig{"tzid"},1);
+    my $items = Hebcal::json_transform_items($dict);
+    eval("use JSON");
+    my $json = JSON->new;
+    my $out = $json->encode($items);
+    Hebcal::out_html($cfg, "<script>\nvar HEBCAL=HEBCAL||{};\nHEBCAL.events=", $out, ";\n</script>\n");
 }
 
 sub write_html_cal
