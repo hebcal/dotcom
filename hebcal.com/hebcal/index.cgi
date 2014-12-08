@@ -1037,6 +1037,8 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
 
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
     my $xtra_html=<<JSCRIPT_END;
+<script src="/i/typeahead-0.10.5.min.js"></script>
+<script src="/i/hebcal-typeahead-1.5.min.js"></script>
 <script type="text/javascript">
 var d=document;
 function s6(val){
@@ -1053,14 +1055,11 @@ d.getElementById("maj").onclick=function(){
 ["nx","mf","ss","min","mod"].forEach(function(x){
  d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
 });
+window['hebcal'].createCityTypeahead(false);
+\$('#havdalahInfo').tooltip();
 </script>
 JSCRIPT_END
 	;
-
-    $xtra_html .= "<script>\$('#havdalahInfo').tooltip()</script>\n";
-
-    $xtra_html .= qq{<script src="/i/typeahead-0.10.5.min.js"></script>\n};
-    $xtra_html .= qq{<script src="/i/hebcal-typeahead-1.4.min.js"></script>\n};
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
