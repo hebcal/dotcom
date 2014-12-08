@@ -607,7 +607,7 @@ $xtra_head</head>
 </div>
 
 <div class="container">
-<div id="content" class="clearfix row">
+<div id="content">
 EOD;
     return $html;
 }

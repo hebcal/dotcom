@@ -170,8 +170,8 @@ echo html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - 
 		     $xtra_head,
 		     false);
 ?>
+<div class="row" id="title-top">
 <div class="col-md-12">
-<div class="clearfix">
 <h1 class="hidden-phone">Hebcal Jewish Calendar</h1>
 <ul class="list-inline">
 <?php
@@ -220,6 +220,8 @@ function holiday_greeting($blurb, $long_text) { ?>
 
 ?></ul>
 <p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
+</div><!-- .col-md-12 -->
+</div><!-- #title-top -->
 <?php
 if (isset($rosh_chodesh)) {
     $anchor = hebcal_make_anchor("Rosh Chodesh $rosh_chodesh");
@@ -256,7 +258,6 @@ if (isset($rosh_chodesh)) {
      holiday_greeting("Tzom Kal", "We wish you an easy fast");
 }
 ?>
-</div><!-- .clearfix -->
 
 <div class="row">
 <div class="col-md-6">
@@ -319,8 +320,6 @@ Torah Readings</h2>
 <p><a class="btn btn-default" href="/sedrot/"><i class="glyphicon glyphicon-book"></i> Torah Readings &raquo;</a></p>
 </div><!-- .col-md-6 -->
 </div><!-- .row -->
-
-</div><!-- .col-md-12 -->
 
 <?php
 $xtra_html = <<<EOD
