@@ -172,7 +172,7 @@ echo html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - 
 ?>
 <div class="row" id="title-top">
 <div class="col-md-12">
-<h1 class="hidden-phone">Hebcal Jewish Calendar</h1>
+<h1 class="hidden-xs">Hebcal Jewish Calendar</h1>
 <ul class="list-inline">
 <?php
 echo "<li><time datetime=\"", date("Y-m-d"), "\">", date("D, j F Y"), "</time>\n";
