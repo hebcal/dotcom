@@ -584,9 +584,7 @@ WHERE g.geonameid = ?
         my($name,$asciiname,$country,$admin1);
         ($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array;
         $sth->finish;
-        $city_descr = $name;
-        $city_descr .= ", $admin1" if $admin1;
-        $city_descr .= ", $country";
+        $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
         $is_israel = 1 if $country eq "Israel";
         $is_jerusalem = 1 if $is_israel && $name eq "Jerusalem";
     } elsif (defined $cfg->{city}) {

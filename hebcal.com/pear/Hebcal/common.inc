@@ -303,6 +303,17 @@ function hebcal_open_mysql_db() {
     return true;
 }
 
+function geoname_city_descr($name,$admin1,$country) {
+    $city_descr = $name;
+    if ($admin1 && strncmp($name, $admin1, strlen($name)) != 0) {
+        $city_descr .= ", $admin1";
+    }
+    if ($country) {
+        $city_descr .= ", $country";
+    }
+    return $city_descr;
+}
+
 function hebcal_get_geoname($geonameid) {
     $file = $_SERVER["DOCUMENT_ROOT"] . "/hebcal/geonames.sqlite3";
     $db = new SQLite3($file);

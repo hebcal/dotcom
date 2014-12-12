@@ -301,15 +301,37 @@ Hebrew Birthdays and Anniversaries.</p>
 <h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_334_candle.png" width="20" height="25" alt="">
 Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
-<form action="/shabbat/" method="get" role="form" id="shabbat-form">
-<input type="hidden" name="geo" id="geo" value="">
-<input type="hidden" name="geonameid" id="geonameid" value="">
-<input type="hidden" name="zip" id="zip" value="">
-<div class="city-typeahead" style="margin-bottom:12px">
-<input type="text" id="city-typeahead" class="form-control typeahead" placeholder="Search for city">
+<form class="form-inline" action="/shabbat/" method="get" role="form" id="shabbat-form">
+<?php
+$geo = $geonameid = $zip = $city_descr = "";
+if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
+    $geonameid = $param["geonameid"];
+    $geo = "geoname";
+    list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+        hebcal_get_geoname($geonameid);
+    $city_descr = geoname_city_descr($name,$admin1,$country);
+} elseif (isset($param["zip"]) && is_numeric($param["zip"])) {
+    $zip = $param["zip"];
+    $geo = "zip";
+    list($city,$state,$tzid,$latitude,$longitude,$lat_deg,$lat_min,$long_deg,$long_min) =
+        hebcal_get_zipcode_fields($zip);
+    $city_descr = "$city, $state $zip";
+}
+?>
+<input type="hidden" name="geo" id="geo" value="<?php echo $geo ?>">
+<input type="hidden" name="geonameid" id="geonameid" value="<?php echo $geonameid ?>">
+<input type="hidden" name="zip" id="zip" value="<?php echo $zip ?>">
+<div class="form-group">
+  <div class="input-group">
+    <label class="sr-only" for="city-typeahead">City</label>
+    <div class="city-typeahead" style="margin-bottom:12px">
+    <input type="text" id="city-typeahead" class="form-control typeahead" style="width:360px" placeholder="Search for city" value="<?php echo $city_descr ?>">
+    </div>
+  </div>
 </div>
 <input type="hidden" name="m" value="<?php
   if (isset($param["m"])) { echo $param["m"]; } else { echo "50"; } ?>">
+<button type="submit" class="btn btn-default">Go</button>
 </form>
 </div><!-- .col-md-6 -->
 

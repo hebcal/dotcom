@@ -2204,6 +2204,24 @@ sub process_args_common_geoname {
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
 
+sub legacy_tz_dst_to_tzid {
+    my($tz,$dst) = @_;
+    if ($tz eq "0" && $dst eq "none") {
+        return "UTC";
+    } elsif ($tz eq "2" && $dst eq "israel") {
+        return "Asia/Jerusalem";
+    } elsif ($tz eq "0" && $dst eq "eu") {
+        return "Europe/London";
+    } elsif ($tz eq "1" && $dst eq "eu") {
+        return "Europe/Paris";
+    } elsif ($tz eq "2" && $dst eq "eu") {
+        return "Europe/Athens";
+    } elsif ($dst eq "usa" && defined $ZIPCODES_TZ_MAP{int($tz * -1)}) {
+        return $ZIPCODES_TZ_MAP{int($tz * -1)};
+    }
+    return undef;
+}
+
 sub process_args_common_geopos {
     my($q,$cconfig) = @_;
 
@@ -2214,8 +2232,7 @@ sub process_args_common_geopos {
 	my $message;
 	if ($value !~ /^\d+$/) {
 	    $message = "Sorry, all latitude/longitude arguments must be numeric.";
-	}
-	if ($value > $maxval{$key}) {
+	} elsif ($value > $maxval{$key}) {
 	    my $keyname = (substr($key, 1, 1) eq "a") ? "latitude" : "longitude";
 	    $keyname .= (substr($key, 2, 1) eq "d") ? " degrees" : " minutes";
 	    $message = "Sorry, $keyname <strong>$value</strong> out of valid range 0-$maxval{$key}";
@@ -2252,21 +2269,8 @@ sub process_args_common_geopos {
     if (! defined $q->param("tzid")
 	&& defined $q->param("tz")
 	&& defined $q->param("dst")) {
-	my $tz = $q->param("tz");
-	my $dst = $q->param("dst");
-	if ($tz eq "0" && $dst eq "none") {
-	    $q->param("tzid", "UTC");
-	} elsif ($tz eq "2" && $dst eq "israel") {
-	    $q->param("tzid", "Asia/Jerusalem");
-	} elsif ($tz eq "0" && $dst eq "eu") {
-	    $q->param("tzid", "Europe/London");
-	} elsif ($tz eq "1" && $dst eq "eu") {
-	    $q->param("tzid", "Europe/Paris");
-	} elsif ($tz eq "2" && $dst eq "eu") {
-	    $q->param("tzid", "Europe/Athens");
-	} elsif ($dst eq "usa" && defined $ZIPCODES_TZ_MAP{int($tz * -1)}) {
-	    $q->param("tzid", $ZIPCODES_TZ_MAP{int($tz * -1)});
-	}
+        my $tzid = legacy_tz_dst_to_tzid($q->param("tz"), $q->param("dst"));
+        $q->param("tzid", $tzid) if $tzid;
     }
 
     if (! defined $q->param("tzid")) {

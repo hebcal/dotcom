@@ -281,7 +281,7 @@ function form($param, $message = "", $help = "") {
     if ($geo == "geoname" && !isset($param["city-typeahead"]) && isset($param["geonameid"])) {
         list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
             hebcal_get_geoname($param["geonameid"]);
-        $param["city-typeahead"] = "$name, $admin1, $country";
+        $param["city-typeahead"] = geoname_city_descr($name,$admin1,$country);
     }
 ?>
 <div id="email-form" class="well well-small">
@@ -460,7 +460,7 @@ function subscribe($param) {
 	    "not a recoginized geonameid.");
 	}
 
-	$city_descr = "$name, $admin1, $country";
+    $city_descr = geoname_city_descr($name,$admin1,$country);
 	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["zip"]);

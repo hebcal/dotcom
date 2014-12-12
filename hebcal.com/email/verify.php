@@ -151,7 +151,7 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
     } elseif (isset($info["geonameid"]) && preg_match('/^\d+$/', $info["geonameid"])) {
 	list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
 	    hebcal_get_geoname($info["geonameid"]);
-	$city_descr = "$name, $admin1, $country";
+    $city_descr = geoname_city_descr($name,$admin1,$country);
 	unset($info["zip"]);
 	unset($info["city"]);
     } else {
