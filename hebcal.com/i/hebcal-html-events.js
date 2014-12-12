@@ -11,7 +11,13 @@ window['hebcal'].getEventTableStr = function(events) {
             mday = "0" + String(mday);
         }
         if (evt.link) {
-            subject = '<a href="' + evt.link + '">' + subject + '</a>';
+            var atitle = evt.memo ? ' title="' + evt.memo + '"' : '',
+                aclass = evt.category;
+            if (evt.link.substring(0, 4) === 'http' &&
+                evt.link.substring(0, 21) !== 'http://www.hebcal.com') {
+                aclass += ' outbound';
+            }
+            subject = '<a class="' + aclass + '"' + atitle + ' href="' + evt.link + '">' + subject + '</a>';
         }
         s += "<tr><td>" + dow[dt.getUTCDay()] + "</td>";
         s += "<td>" + mday + "-" + months[dt.getUTCMonth()] + "-" + dt.getUTCFullYear() + "</td>";
