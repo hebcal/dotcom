@@ -800,7 +800,7 @@ sub json_transform_items {
 		   date => $item->{"dc:date"},
 		  };
 	$out->{link} = $item->{"link"}
-	    if $item->{"class"} =~ /^(parashat|holiday)$/;
+	    if $item->{"class"} =~ /^(parashat|holiday|dafyomi)$/;
 	$out->{hebrew} = $item->{"hebrew"}
 	    if defined $item->{"hebrew"};
         $out->{yomtov} = \1
