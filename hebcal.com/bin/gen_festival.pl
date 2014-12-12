@@ -1304,13 +1304,7 @@ sub filter_events {
            $subj = "Chanukah";
         }
 
-        my $subj_copy = $subj;
-        $subj_copy =~ s/ \d{4}$//;
-        $subj_copy =~ s/ \(CH\'\'M\)$//;
-        $subj_copy =~ s/ \(Hoshana Raba\)$//;
-        if ($subj ne "Rosh Chodesh Adar II") {
-            $subj_copy =~ s/ [IV]+$//;
-        }
+        my $subj_copy = Hebcal::get_holiday_basename($subj);
 
         next if defined $seen{$subj_copy};
         $evt->[$Hebcal::EVT_IDX_SUBJ] = $subj_copy;

@@ -168,14 +168,7 @@ sub filter_events {
 	    $reason = "Rosh Hashana";
 	} else {
 	    $yom_tov = $events->[$i+1]->[$Hebcal::EVT_IDX_YOMTOV];
-	    $reason = $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ];
-	    $reason =~ s/ \(CH\'\'M\)$//;
-	    $reason =~ s/ \(Hoshana Raba\)$//;
-	    $reason =~ s/ [IV]+$//;
-	    $reason =~ s/: \d Candles?$//;
-	    $reason =~ s/: 8th Day$//;
-	    $reason =~ s/^Erev //;
-	    $reason =~ s/ \d{4}$//;
+	    $reason = Hebcal::get_holiday_basename($events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ]);
 	}
 
 	my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON];

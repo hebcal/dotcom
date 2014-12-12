@@ -962,6 +962,24 @@ sub make_anchor($)
     return $anchor;
 }
 
+sub get_holiday_basename {
+    my($subj) = @_;
+
+    my $subj_copy = $subj;
+    $subj_copy =~ s/ \d{4}$//;               # Rosh Hashana
+    $subj_copy =~ s/ \(CH\'\'M\)$//;
+    $subj_copy =~ s/ \(Hoshana Raba\)$//;
+    if ($subj ne "Rosh Chodesh Adar II") {
+        $subj_copy =~ s/ [IV]+$//;
+    }
+
+    $subj_copy =~ s/: \d Candles?$//;
+    $subj_copy =~ s/: 8th Day$//;
+    $subj_copy =~ s/^Erev //;
+
+    $subj_copy;
+}
+
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;
@@ -1068,16 +1086,9 @@ sub get_holiday_anchor($$$)
 	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
 	    $subj ne 'No sunset today.')
 	{
-	    $subj_copy =~ s/ \(CH\'\'M\)$//;
-	    $subj_copy =~ s/ \(Hoshana Raba\)$//;
-	    $subj_copy =~ s/ [IV]+$//;
-	    $subj_copy =~ s/: \d Candles?$//;
-	    $subj_copy =~ s/: 8th Day$//;
-	    $subj_copy =~ s/^Erev //;
-
 	    $href = 'http://www.hebcal.com'
 		if ($q);
-	    $href .= "/holidays/" . make_anchor($subj_copy);
+	    $href .= "/holidays/" . make_anchor(get_holiday_basename($subj_copy));
 	}
 
 	if (defined $HebcalConst::HOLIDAY_DESCR{$subj_copy}) {

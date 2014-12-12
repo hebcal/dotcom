@@ -407,7 +407,8 @@ sub gen_subject_and_body {
     foreach my $evt (@{$events}) {
         # holiday is at 12:00:01 am
         my $time = Hebcal::event_to_time($evt);
-        next if $time < $midnight || $time > $endofweek;
+        next if $time < $midnight;
+        last if $time > $endofweek;
 
         my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
         my $strtime = strftime("%A, %B %d", localtime($time));
@@ -443,13 +444,9 @@ sub gen_subject_and_body {
         {
             my($year,$mon,$mday) = Hebcal::event_ymd($evt);
             my $dow = Hebcal::get_dow($year,$mon,$mday);
-            if ($dow == 6) {
-                my $subj_copy = $subj;
-                $subj_copy =~ s/ \(CH\'\'M\)$//;
-                $subj_copy =~ s/ \(Hoshana Raba\)$//;
-                $subj_copy =~ s/ [IV]+$//;
-                $subj_copy =~ s/ \d{4}$//; # Rosh Hashana
-                if ($HebcalConst::YOMTOV{$subj_copy} && ! defined $sedra) {
+            if ($dow == 6 && ! defined $sedra && $subj !~ /^Erev /) {
+                my $subj_copy = Hebcal::get_holiday_basename($subj);
+                if ($HebcalConst::YOMTOV{$subj_copy}) {
                     # Pesach, Sukkot, Shavuot, Shmini Atz, Simchat Torah, RH, YK
                     $sedra = $subj_copy;
                 }
