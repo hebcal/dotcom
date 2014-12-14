@@ -76,6 +76,18 @@ $hebnum_months = array(
     "Adar II"   => "\327\220\326\267\327\223\326\270\327\250 \327\221\327\263",
     );
 
+$hebnum_months_inprefix = array(
+    "Iyyar"     => "בְּאִיָּר",
+    "Tamuz"     => "בְּתַמּוּז",
+    "Elul"      => "בֶּאֱלוּל",
+    "Tishrei"   => "בְּתִשְׁרֵי",
+    "Kislev"    => "בְּכִסְלֵו",
+    "Sh'vat"    => "בִּשְׁבָט",
+    "Adar"      => "בַּאֲדָר",
+    "Adar I"    => "בַּאֲדָר א׳",
+    "Adar II"   => "בַּאֲדָר ב׳",
+    );
+
 function hebnum_to_array($num)
 {
     $result = array();
@@ -139,14 +151,13 @@ function hebnum_to_string($num)
 function build_hebrew_date($hm, $hd, $hy)
 {
     global $hebnum_months;
+    global $hebnum_months_inprefix;
 
-    $vowel = "\326\260"; # Sheva U+05B0
-    $month_prefix = " \327\221\326\274";
-    if ($hm == "Sh'vat") {
-	$vowel = "\326\264"; # Hiriq U+05B4
-    }
-    return hebnum_to_string($hd) . $month_prefix . $vowel .
-        $hebnum_months[$hm] . " " . hebnum_to_string($hy);
+    $month_inprefix = isset($hebnum_months_inprefix[$hm])
+	? $hebnum_months_inprefix[$hm]
+	: "\327\221\326\274\326\260" . $hebnum_months[$hm];
+
+    return hebnum_to_string($hd) . " " . $month_inprefix . " " . hebnum_to_string($hy);
 }
 
 ?>
