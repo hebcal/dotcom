@@ -1446,7 +1446,7 @@ EOHTML
       },
       isRTL: lang === 'h',
       fixedWeekCount: false,
-      aspectRatio: 1.667,
+      contentHeight: 580,
       defaultDate: evts[0].start,
       events: evts
   });
