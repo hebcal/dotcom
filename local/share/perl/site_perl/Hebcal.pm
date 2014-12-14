@@ -714,6 +714,9 @@ sub events_to_dict
 	$item{"about"} = $url . "#" . $anchor;
 	$item{"subj"} = $subj;
 
+        my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
+        $item{"hebrew"} = $hebrew if $hebrew;
+
 	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
 	    $item{"class"} = ($subj eq "Candle lighting") ?
@@ -729,6 +732,9 @@ sub events_to_dict
 	}
 	else
 	{
+            $item{"link"} = $href if $href;
+            $item{"memo"} = $memo if $memo;
+
 	    if ($subj =~ /^(Parshas|Parashat)\s+/) {
 		$item{"class"} = "parashat";
 	    } elsif ($subj =~ /^(\d+)\w+ day of the Omer$/) {
@@ -740,11 +746,6 @@ sub events_to_dict
 	    } else {
 		$item{"class"} = "holiday";
 	    }
-
-	    my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
-	    $item{"link"} = $href if $href;
-	    $item{"hebrew"} = $hebrew if $hebrew;
-            $item{"memo"} = $memo if $memo;
 	}
 
 	push(@items, \%item);

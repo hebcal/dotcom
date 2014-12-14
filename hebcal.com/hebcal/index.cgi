@@ -49,7 +49,6 @@ use Date::Calc ();
 use URI::Escape;
 use Hebcal ();
 use HebcalHtml ();
-use HTML::CalendarMonthSimple ();
 use Benchmark qw(:hireswallclock :all);
 
 my @benchmarks;
@@ -1169,12 +1168,48 @@ sub results_page
 			    -charset => "UTF-8");
 
     my $xtra_head = <<EOHTML;
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.css">
 <style type="text/css">
-div.cal { margin-bottom: 18px }
-div.pbba { page-break-before: always }
-.evt {font-size:85%;}
-.hl {background:#ff9;}
-\@media print { div.pbba { page-break-before: always } }
+.fc-event.hebdate, .fc-event.omer {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#999;
+}
+.fc-event.dafyomi {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#08c;
+}
+.fc-event.candles, .fc-event.havdalah {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#333;
+}
+.fc-event.holiday {
+  background-color:#3a87ad;
+  border-color:#3a87ad;
+  color:#FFF;
+}
+.fc-event.holiday.yomtov {
+  background-color:#ffd446;
+  border-color:#ffd446;
+  color:#333;
+}
+.fc-event.parashat {
+  background-color:#257e4a;
+  border-color:#257e4a;
+  color:#FFF;
+}
+.fc-event.hebrew .fc-title {
+  font-family:'Alef Hebrew','SBL Hebrew',David;
+  font-size:110%;
+  font-weight:normal;
+  direction:rtl;
+}
+.fc-event.hebrew .fc-time {
+  direction:ltr;
+  unicode-bidi: bidi-override;
+}
 </style>
 EOHTML
 ;
@@ -1349,187 +1384,79 @@ EOHTML
     }
     Hebcal::out_html(undef, $header_ad);
 
-    Hebcal::out_html(undef, "<div class=\"span12\" id=\"hebcal-results\">\n");
-
-    my @html_cals;
-    my %html_cals;
-    my @html_cal_ids;
-
-    # make blank calendar month objects for every month in the date range
-    if ($numEntries > 0 && $q->param("vis")) {
-	my $start_month;
-	my $start_year = $events[0]->[$Hebcal::EVT_IDX_YEAR];
-	my $end_month;
-	my $end_year = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
-
-	if ($q->param("month") eq "x" &&
-	    (! defined $q->param("yt") || $q->param("yt") eq "G")) {
-	    $start_month = 1;
-	    $end_month = 12;
-	} else {
-	    $start_month = $events[0]->[$Hebcal::EVT_IDX_MON] + 1;
-	    $end_month = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
-	}
-
-	my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
-	for (my @dt = ($start_year, $start_month, 1);
-	     Date::Calc::Date_to_Days(@dt) <= $end_days;
-	     @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1))
-	{
-	    my $cal = new_html_cal($dt[0], $dt[1]);
-	    my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
-	    push(@html_cals, $cal);
-	    push(@html_cal_ids, $cal_id);
-	    $html_cals{$cal_id} = $cal;
-	}
-    }
-
-    my $prev_nofollow = ($q->param("month") =~ /^\d+$/
-			 || $greg_year1 < $this_year
-			) ? " nofollow" : "";
-    my $next_nofollow = ($q->param("month") =~ /^\d+$/
-			 || $greg_year2 > $this_year + 2
-			) ? " nofollow" : "";
-
-    my $nav_pagination = <<EOHTML;
-<div class="pagination pagination-centered">
-<ul>
-<li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
-EOHTML
-    ;
-    foreach my $cal_id (@html_cal_ids) {
-	if ($cal_id =~ /^(\d{4})-(\d{2})$/) {
-	    my $year = $1;
-	    my $mon = $2;
-	    $mon =~ s/^0//;
-	    my $mon_long = $Hebcal::MoY_long{$mon};
-	    my $mon_short = $Hebcal::MoY_short[$mon-1];
-	    $nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
-	}
-    }
-    $nav_pagination .= <<EOHTML;
-<li><a href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
-</ul>
-</div><!-- .pagination -->
-EOHTML
-    ;
-
-    Hebcal::out_html(undef, $nav_pagination);
-
-    if (!$q->param("vis")) {
-#        html_table_events(\@events);
-	Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
-        my $script .= <<EOHTML;
-<script>
-var months = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
-var dow = 'Sun Mon Tue Wed Thu Fri Sat'.split(' ');
-HEBCAL.events.forEach(function(evt) {
-  var dt = new Date(evt.date), dtStr = dt.getUTC;
-  document.write("<tr><td>");
-  document.write(dow[dt.getUTCDay()]);
-  document.write("</td><td>...</td><td>...</td></tr>");
-});
-</script>
-EOHTML
-    ;
-    }
+    Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
+    Hebcal::out_html(undef, qq{<div id="hebcal-full-calendar"></div>\n});
 
     push(@benchmarks, Benchmark->new);
-
-    foreach my $evt (@events) {
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-
-	my($year,$mon,$mday) = Hebcal::event_ymd($evt);
-
-	my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-
-	$subj = translate_subject($q,$subj,$hebrew);
-
-	if (defined $href && $href ne "")
-	{
-	    my $atitle = $memo ? qq{ title="$memo"} : "";
-	    my $aclass = "";
-	    if ($href =~ /^http/ && $href !~ m,^http://www\.hebcal\.com,) {
-	      $aclass = qq{ class="outbound"};
-	    }
-	    $subj = qq{<a$atitle$aclass href="$href">$subj</a>};
-	}
-
-	if ($q->param("vis"))
-	{
-	    my $cal_subj;
-	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
-		$cal_subj = $subj;
-	    } else {
-		my $time_formatted = Hebcal::format_evt_time($evt, "p");
-		$cal_subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
-	    }
-
-	    $cal_subj =~
-		s/ Havdalah \((\d+) min\)$/ Havdalah <small>($1 min)<\/small>/;
-	    $cal_subj =~ s/Daf Yomi: //;
-
-	    my $cal_id = sprintf("%04d-%02d", $year, $mon);
-	    my $cal = $html_cals{$cal_id};
-
-	    $cal->setcontent($mday, "")
-		if $cal->getcontent($mday) eq "&nbsp;";
-
-	    $cal->addcontent($mday, "<br>\n")
-		if $cal->getcontent($mday) ne "";
-
-	    my $class = "evt";
-	    if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
-	    {
-		$class .= " hl";
-	    }
-	    elsif (($evt->[$Hebcal::EVT_IDX_SUBJ] =~
-		    /^\d+\w+.+, \d{4,}$/) ||
-		   ($evt->[$Hebcal::EVT_IDX_SUBJ] =~
-		    /^\d+\w+ day of the Omer$/))
-	    {
-		$class .= " muted";
-	    }
-
-	    $cal->addcontent($mday, qq{<span class="$class">$cal_subj</span>});
-	}
-	else
-	{
-	    my $subj_copy;
-	    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
-		$subj_copy = $subj;
-	    } else {
-		my $time_formatted = Hebcal::format_evt_time($evt, "pm");
-		$subj_copy = $subj . ": " . $time_formatted;
-	    }
-	    Hebcal::out_html(undef,
-			     qq{<tr>},
-			     qq{<td>}, $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)], qq{</td>},
-			     qq{<td>}, sprintf("%02d-%s-%04d", $mday, $Hebcal::MoY_short[$mon-1], $year), qq{</td>},
-			     qq{<td>}, $subj_copy, qq{</td>},
-			     qq{</tr>\n});
-	}
-    }
-
+    html_table_events(\@events);
     push(@benchmarks, Benchmark->new);
-
-    if (!$q->param("vis")) {
-	Hebcal::out_html(undef, qq{</tbody></table>\n});
-    }
-
-    if (@html_cals) {
-	for (my $i = 0; $i < @html_cals; $i++) {
-	    write_html_cal($q, \@html_cals, \@html_cal_ids, $i);
-	}
-    }
-
-    push(@benchmarks, Benchmark->new);
-
-    Hebcal::out_html(undef, "</p>") unless $q->param("vis");
-    Hebcal::out_html(undef, $nav_pagination);
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
+    my $xtra_html=<<JSCRIPT_END;
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.js"></script>
+<script type="text/javascript">
+\$(document).ready(function() {
+  var lang = '$lang';
+  var evts = window['hebcal'].events.map(function(src) {
+      var allDay = src.date.indexOf('T') == -1,
+          title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
+          dest = {
+              title: title,
+              start: src.date,
+              className: src.category,
+              allDay: allDay
+          };
+      if (src.yomtov) {
+          dest.className += " yomtov";
+      }
+      if (src.memo) {
+          dest.description = src.memo;
+      }
+      if (src.link) {
+          dest.url = src.link;
+      }
+      if (src.hebrew) {
+          dest.hebrew = src.hebrew;
+          if (lang === 'h') {
+            dest.title = src.hebrew;
+            dest.className += " hebrew";
+          }
+      }
+      return dest;
+  });
+  if (lang === 'ah' || lang === 'sh') {
+      var dest = [];
+      evts.forEach(function(evt) {
+          dest.push(evt);
+          if (evt.hebrew) {
+              var tmp = \$.extend({}, evt, {
+                  title: evt.hebrew,
+                  className: evt.className + " hebrew"
+              });
+              dest.push(tmp);
+          }
+      });
+      evts = dest;
+  }
+  \$('#hebcal-full-calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'prev,next'
+      },
+      isRTL: lang === 'h',
+      fixedWeekCount: false,
+      aspectRatio: 1.667,
+      defaultDate: evts[0].start,
+      events: evts
+  });
+});
+</script>
+JSCRIPT_END
+        ;
+
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
 
     for (my $i = 1; $i < scalar(@benchmarks); $i++) {
@@ -1549,53 +1476,8 @@ sub html_table_events {
     eval("use JSON");
     my $json = JSON->new;
     my $out = $json->encode($items);
-    Hebcal::out_html($cfg, "<script>\nvar HEBCAL=HEBCAL||{};\nHEBCAL.events=", $out, ";\n</script>\n");
+    Hebcal::out_html($cfg, "<script>\nwindow['hebcal']=window['hebcal']||{};\nwindow['hebcal'].events=", $out, ";\n</script>\n");
 }
-
-sub write_html_cal
-{
-    my($q,$cals,$cal_ids,$i) = @_;
-    my $lang = $q->param("lg");
-    my $dir = "";
-    if ($lang && $lang eq "h") {
-	$dir = qq{ dir="rtl"};
-    }
-    my $cal = $cals->[$i];
-    my $id = $cal_ids->[$i];
-    my $style = "";
-    my $class = "cal";
-    if ($i != 0) {
-	$class .= " pbba";
-	$style = qq{ style="page-break-before:always"};
-    }
-    if ($id eq sprintf("%04d-%02d", $this_year, $this_mon)) {
-	Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
-    }
-    Hebcal::out_html(undef,
-		     qq{<div id="cal-$id" class="$class"$style$dir>\n},
-		     $cal->as_HTML(),
-		     qq{</div><!-- #cal-$id -->\n});
-}
-
-sub new_html_cal
-{
-    my($year,$month) = @_;
-
-    my $cal = new HTML::CalendarMonthSimple("year" => $year,
-					    "month" => $month);
-    $cal->border(1);
-    $cal->tableclass("table table-bordered");
-    $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
-
-    my $end_day = Date::Calc::Days_in_Month($year, $month);
-    for (my $mday = 1; $mday <= $end_day ; $mday++)
-    {
-	$cal->setcontent($mday, "&nbsp;");
-    }
-
-    $cal;
-}
-
 
 # local variables:
 # mode: cperl
