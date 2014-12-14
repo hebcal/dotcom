@@ -347,6 +347,18 @@ my %monthnames =
      "Adar II"	=> "\x{5D0}\x{5B7}\x{5D3}\x{5B8}\x{5E8} \x{5D1}\x{5F3}",
      );
 
+my %monthnames_inprefix = (
+    "Iyyar"     => "בְּאִיָּר",
+    "Tamuz"     => "בְּתַמּוּז",
+    "Elul"      => "בֶּאֱלוּל",
+    "Tishrei"   => "בְּתִשְׁרֵי",
+    "Kislev"    => "בְּכִסְלֵו",
+    "Sh'vat"    => "בִּשְׁבָט",
+    "Adar"      => "בַּאֲדָר",
+    "Adar I"    => "בַּאֲדָר א׳",
+    "Adar II"   => "בַּאֲדָר ב׳",
+);
+
 my $URCHIN = qq{<script type="text/javascript">
 (function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){ga("send","event","outbound-amzn",this.id)}}}
 if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){ga("send","event","outbound-article",c.substring(7,d))}}}}
@@ -921,8 +933,10 @@ sub build_hebrew_date($$$)
 {
     my($hm,$hd,$hy) = @_;
 
-    my $s = hebnum_to_string($hd) . " \x{5D1}\x{5BC}\x{5B0}" .
-	$monthnames{$hm};
+    my $inprefix = $monthnames_inprefix{$hm}
+	|| "\x{5D1}\x{5BC}\x{5B0}" . $monthnames{$hm};
+    
+    my $s = hebnum_to_string($hd) . " " . $inprefix;
     if (defined $hy) {
 	$s .= " " . hebnum_to_string($hy);
     }
