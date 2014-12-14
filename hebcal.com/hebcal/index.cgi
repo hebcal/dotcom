@@ -1168,7 +1168,7 @@ sub results_page
 			    -charset => "UTF-8");
 
     my $xtra_head = <<EOHTML;
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.css">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.css">
 <style type="text/css">
 .fc-event.hebdate, .fc-event.omer {
   background-color:#FFF;
@@ -1229,6 +1229,7 @@ EOHTML
     }
 
     my $head_divs = <<EOHTML;
+<div class="row-fluid">
 <div class="span8">
 <div class="page-header">
 <h1>Jewish Calendar $date$h1_extra</h1>
@@ -1367,25 +1368,22 @@ EOHTML
 <div class="span4">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- 300x250, created 10/14/10 -->
+<!-- banner-320x100 -->
 <ins class="adsbygoogle"
- style="display:inline-block;width:300px;height:250px"
+ style="display:inline-block;width:320px;height:100px"
  data-ad-client="ca-pub-7687563417622459"
- data-ad-slot="1140358973"></ins>
+ data-ad-slot="1867606375"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span4 -->
+</div><!-- .row-fluid -->
 EOHTML
 ;
-    # slow down Mediapartners-Google/2.1 so it doesn't crawl us so fast
-    if (defined $ENV{"REMOTE_ADDR"} && $ENV{"REMOTE_ADDR"} =~ /^66\.249\./) {
-	sleep(3);
-    }
     Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
-    Hebcal::out_html(undef, qq{<div id="hebcal-full-calendar"></div>\n});
+    Hebcal::out_html(undef, qq{<div id="full-calendar"></div>\n});
 
     push(@benchmarks, Benchmark->new);
     html_table_events(\@events);
@@ -1439,17 +1437,24 @@ EOHTML
       });
       evts = dest;
   }
-  \$('#hebcal-full-calendar').fullCalendar({
+  \$('#full-calendar').fullCalendar({
       header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'prev,next'
+        left: 'title',
+        center: '',
+        right: 'today prev,next'
       },
       isRTL: lang === 'h',
       fixedWeekCount: false,
       aspectRatio: 1.667,
       defaultDate: evts[0].start,
       events: evts
+  });
+  \$("body").keydown(function(e) {
+    if (e.keyCode == 37) {
+      \$('#full-calendar').fullCalendar('prev');
+    } else if(e.keyCode == 39) {
+      \$('#full-calendar').fullCalendar('next');
+    }
   });
 });
 </script>

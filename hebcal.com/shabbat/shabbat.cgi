@@ -625,6 +625,7 @@ EOHTML
 ;
     $city_descr ||= "UNKNOWN";
 	my $head_divs = <<EOHTML;
+<div class="row-fluid">
 <div class="span10">
 <div class="page-header">
 <h1>Shabbat Times <small>$city_descr</small></h1>
@@ -782,6 +783,7 @@ EOHTML
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span2 -->
+</div><!-- .row-fluid -->
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs2);

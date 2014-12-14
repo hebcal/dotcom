@@ -832,6 +832,8 @@ sub write_sedra_page
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
+    print OUT2 qq{<div class="row-fluid">\n};
+
     write_sedra_sidebar($parshiot,$h);
 
 
@@ -1033,6 +1035,7 @@ EOHTML
 
     print OUT2 <<EOHTML;
 </div><!-- .span10 -->
+</div><!-- .row-fluid -->
 EOHTML
 ;
     print OUT2 $html_footer;

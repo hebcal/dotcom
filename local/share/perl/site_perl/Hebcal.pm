@@ -1591,7 +1591,7 @@ $xtra_head</head>
 </div><!-- .navbar -->
 
 <div class="container">
-<div id="content" class="clearfix row-fluid">
+<div id="content">
 EOHTML
 ;
     return $str;

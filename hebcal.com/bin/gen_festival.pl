@@ -1032,6 +1032,7 @@ EOHTML
     $pager .= qq{</ul>\n};
 
     print OUT2 <<EOHTML;
+<div class="row-fluid">
 <div class="span10">
 $pager
 <div class="page-header">
@@ -1196,6 +1197,7 @@ $pager
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .span2 -->
+</div><!-- .row-fluid -->
 EOHTML
 ;
     print OUT2 Hebcal::html_footer_bootstrap(undef, undef);
