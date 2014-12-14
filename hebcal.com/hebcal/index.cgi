@@ -1390,12 +1390,13 @@ EOHTML
     push(@benchmarks, Benchmark->new);
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
+    my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
-  var lang = '$lang';
+  var lang = '$lang', singleMonth = $single_month;
   var evts = window['hebcal'].events.map(function(src) {
       var allDay = src.date.indexOf('T') == -1,
           title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
@@ -1441,7 +1442,7 @@ EOHTML
       header: {
         left: 'title',
         center: '',
-        right: 'prev,next'
+        right: singleMonth ? '' : 'prev,next'
       },
       isRTL: lang === 'h',
       fixedWeekCount: false,
@@ -1449,13 +1450,15 @@ EOHTML
       defaultDate: evts[0].start,
       events: evts
   });
-  \$("body").keydown(function(e) {
-    if (e.keyCode == 37) {
-      \$('#full-calendar').fullCalendar('prev');
-    } else if(e.keyCode == 39) {
-      \$('#full-calendar').fullCalendar('next');
-    }
-  });
+  if (!singleMonth) {
+      \$("body").keydown(function(e) {
+        if (e.keyCode == 37) {
+          \$('#full-calendar').fullCalendar('prev');
+        } else if(e.keyCode == 39) {
+          \$('#full-calendar').fullCalendar('next');
+        }
+      });
+  }
 });
 </script>
 JSCRIPT_END
