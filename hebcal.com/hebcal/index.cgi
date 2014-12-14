@@ -1441,7 +1441,7 @@ EOHTML
       header: {
         left: 'title',
         center: '',
-        right: 'today prev,next'
+        right: 'prev,next'
       },
       isRTL: lang === 'h',
       fixedWeekCount: false,
