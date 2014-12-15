@@ -325,7 +325,7 @@ if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
   <div class="input-group">
     <label class="sr-only" for="city-typeahead">City</label>
     <div class="city-typeahead" style="margin-bottom:12px">
-    <input type="text" id="city-typeahead" class="form-control typeahead" style="width:360px" placeholder="Search for city" value="<?php echo $city_descr ?>">
+    <input type="text" id="city-typeahead" class="form-control typeahead" style="width:360px" placeholder="Search for city or ZIP code" value="<?php echo $city_descr ?>">
     </div>
   </div>
 </div>
