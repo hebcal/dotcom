@@ -935,7 +935,7 @@ sub build_hebrew_date($$$)
 
     my $inprefix = $monthnames_inprefix{$hm}
 	|| "\x{5D1}\x{5BC}\x{5B0}" . $monthnames{$hm};
-    
+
     my $s = hebnum_to_string($hd) . " " . $inprefix;
     if (defined $hy) {
 	$s .= " " . hebnum_to_string($hy);
@@ -1101,9 +1101,10 @@ sub get_holiday_anchor($$$)
 	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
 	    $subj ne 'No sunset today.')
 	{
+            $subj_copy = get_holiday_basename($subj_copy);
 	    $href = 'http://www.hebcal.com'
 		if ($q);
-	    $href .= "/holidays/" . make_anchor(get_holiday_basename($subj_copy));
+	    $href .= "/holidays/" . make_anchor($subj_copy);
 	}
 
 	if (defined $HebcalConst::HOLIDAY_DESCR{$subj_copy}) {
