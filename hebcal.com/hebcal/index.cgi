@@ -1396,47 +1396,52 @@ EOHTML
 <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
-  var lang = '$lang', singleMonth = $single_month;
-  var evts = window['hebcal'].events.map(function(src) {
-      var allDay = src.date.indexOf('T') == -1,
-          title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
-          dest = {
-              title: title,
-              start: src.date,
-              className: src.category,
-              allDay: allDay
-          };
-      if (src.yomtov) {
-          dest.className += " yomtov";
-      }
-      if (src.memo) {
-          dest.description = src.memo;
-      }
-      if (src.link) {
-          dest.url = src.link;
-      }
-      if (src.hebrew) {
-          dest.hebrew = src.hebrew;
-          if (lang === 'h') {
-            dest.title = src.hebrew;
-            dest.className += " hebrew";
+  var lang = '$lang',
+      evts = transformHebcalEvents(window['hebcal'].events, lang),
+      singleMonth = $single_month;
+  function transformHebcalEvents(events, lang) {
+      var evts = events.map(function(src) {
+          var allDay = src.date.indexOf('T') == -1,
+              title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
+              dest = {
+                  title: title,
+                  start: src.date,
+                  className: src.category,
+                  allDay: allDay
+              };
+          if (src.yomtov) {
+              dest.className += " yomtov";
           }
-      }
-      return dest;
-  });
-  if (lang === 'ah' || lang === 'sh') {
-      var dest = [];
-      evts.forEach(function(evt) {
-          dest.push(evt);
-          if (evt.hebrew) {
-              var tmp = \$.extend({}, evt, {
-                  title: evt.hebrew,
-                  className: evt.className + " hebrew"
-              });
-              dest.push(tmp);
+          if (src.memo) {
+              dest.description = src.memo;
           }
+          if (src.link) {
+              dest.url = src.link;
+          }
+          if (src.hebrew) {
+              dest.hebrew = src.hebrew;
+              if (lang === 'h') {
+                dest.title = src.hebrew;
+                dest.className += " hebrew";
+              }
+          }
+          return dest;
       });
-      evts = dest;
+      if (lang === 'ah' || lang === 'sh') {
+          var dest = [];
+          evts.forEach(function(evt) {
+              dest.push(evt);
+              if (evt.hebrew) {
+                  var tmp = \$.extend({}, evt, {
+                      title: evt.hebrew,
+                      className: evt.className + " hebrew"
+                  });
+                  dest.push(tmp);
+              }
+          });
+          evts = dest;
+      }
+      return evts;
   }
   \$('#full-calendar').fullCalendar({
       header: {
