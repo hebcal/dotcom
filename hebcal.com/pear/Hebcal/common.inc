@@ -843,6 +843,7 @@ also under a cc-by licence.</small></p>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+$xtra_html
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.amzn').click(function(){
@@ -862,7 +863,7 @@ $(document).ready(function(){
   });
 });
 </script>
-$xtra_html</body></html>
+</body></html>
 EOD;
 
     return $html;
