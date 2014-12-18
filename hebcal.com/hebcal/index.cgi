@@ -1036,7 +1036,7 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
 
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
     my $xtra_html=<<JSCRIPT_END;
-<script src="/i/typeahead-0.10.5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
 <script src="/i/hebcal-typeahead-1.5.min.js"></script>
 <script type="text/javascript">
 var d=document;

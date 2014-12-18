@@ -261,7 +261,7 @@ if (isset($rosh_chodesh)) {
 
 <div class="row">
 <div class="col-md-6">
-<h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_045_calendar.png" width="23" height="24" alt="">
+<h2><i class="glyphicon glyphicon-calendar"></i>
 Holiday Calendar</h2>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
@@ -286,7 +286,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div><!-- .col-md-6 -->
 
 <div class="col-md-6">
-<h2><img style="vertical-align:middle" src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_081_refresh.png" width="25" height="26" alt="">
+<h2><i class="glyphicon glyphicon-refresh"></i>
 Convert Dates</h2>
 <p>Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 <p><a class="btn btn-default" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter &raquo;</a></p>
@@ -345,7 +345,7 @@ Torah Readings</h2>
 
 <?php
 $xtra_html = <<<EOD
-<script src="/i/typeahead-0.10.5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
 <script src="/i/hebcal-typeahead-1.5.min.js"></script>
 <script type="text/javascript">
 window['hebcal'].createCityTypeahead(true);
