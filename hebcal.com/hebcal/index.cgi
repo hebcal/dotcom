@@ -1391,16 +1391,16 @@ EOHTML
     Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
-
-    if ($q->param('month') eq 'x') {
-        Hebcal::out_html(undef, qq{<p><small>Use <span class="label label-lightgrey"><i class="icon-arrow-left"></i></span> and <span class="label label-lightgrey"><i class="icon-arrow-right"></i></span> to navigate through the year.</small></p>\n});
-    }
-
     Hebcal::out_html(undef, qq{<div id="full-calendar"></div>\n});
 
     push(@benchmarks, Benchmark->new);
     html_table_events(\@events);
     push(@benchmarks, Benchmark->new);
+
+    if ($q->param('month') eq 'x') {
+        Hebcal::out_html(undef, qq{<p><small>Use <span class="label label-lightgrey"><i class="icon-arrow-left"></i></span> and <span class="label label-lightgrey"><i class="icon-arrow-right"></i></span> to navigate through the year.</small></p>\n});
+    }
+
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
     my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
