@@ -1662,29 +1662,22 @@ sub gen_cookie($)
 	    $retval .= '&tzid=' . URI::Escape::uri_escape_utf8($q->param('tzid'))
 	        if defined $q->param('tzid') && $q->param('tzid') ne '';
 	}
-	$retval .= '&m=' . $q->param('m')
-	    if defined $q->param('m') && $q->param('m') ne '';
+        foreach (qw(m b geo)) {
+            $retval .= "&$_=" . $q->param($_)
+                if defined $q->param($_) && $q->param($_) ne '';
+        }
     }
 
-    foreach (@opts, "lg")
-    {
-	next if $_ eq 'c' || $_ eq 'H';
-	$retval .= "&$_=" . $q->param($_)
-	    if defined $q->param($_) && $q->param($_) ne '';
+    # boolean options
+    foreach (@opts, qw(maj nx ss mf min mod)) {
+        if (defined $q->param($_)) {
+            $retval .= "&$_=" . $q->param($_);
+        } elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
+            $retval .= "&$_=off";
+        }
     }
 
-    foreach (qw(maj nx)) {
-	$retval .= "&$_=off"
-	    if !defined $q->param($_) || $q->param($_) eq 'off';
-    }
-
-    foreach (qw(ss mf min mod)) {
-	if (defined $q->param($_)) {
-	    $retval .= "&$_=" . $q->param($_);
-	} elsif (!defined $q->param($_) || $q->param($_) eq 'off') {
-	    $retval .= "&$_=off";
-	}
-    }
+    $retval .= "&lg=" . $q->param('lg') if defined $q->param('lg');
 
     $retval;
 }
