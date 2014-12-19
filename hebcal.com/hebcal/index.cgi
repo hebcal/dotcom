@@ -1204,6 +1204,14 @@ sub results_page
   direction:ltr;
   unicode-bidi: bidi-override;
 }
+.label-lightgrey {
+  background-color: #e7e7e7;
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+}
+
 </style>
 EOHTML
 ;
@@ -1380,6 +1388,11 @@ EOHTML
     Hebcal::out_html(undef, $header_ad);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
+
+    if ($q->param('month') eq 'x') {
+        Hebcal::out_html(undef, qq{<p><small>Use <span class="label label-lightgrey"><i class="icon-arrow-left"></i></span> and <span class="label label-lightgrey"><i class="icon-arrow-right"></i></span> to navigate through the year.</small></p>\n});
+    }
+
     Hebcal::out_html(undef, qq{<div id="full-calendar"></div>\n});
 
     push(@benchmarks, Benchmark->new);
