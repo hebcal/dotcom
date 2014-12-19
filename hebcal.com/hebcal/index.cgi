@@ -849,14 +849,7 @@ EOHTML
 		  -size => 4,
 		  -maxlength => 4),
     "</label>\n",
-    qq{<label>Month: },
-    $q->popup_menu(-name => "month",
-		   -id => "month",
-		   -values => ["x",1..12],
-		   -default => "x",
-		   -class => "input-medium",
-		   -labels => \%Hebcal::MoY_long),
-    "</label>\n",
+    $q->hidden(-name => "month",-value => "x",-override => "x"),
     qq{</div><!-- .form-inline -->\n},
     $year_type_radio,
     qq{\n<p><small class="muted">Use all digits to specify a year.\n},
@@ -1041,8 +1034,9 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
 <script type="text/javascript">
 var d=document;
 function s6(val){
-if(val=='G'){d.f1.year.value=$this_year;d.f1.month.value=$this_mon;}
-if(val=='H'){d.f1.year.value=$hyear;d.f1.month.value='x';}
+d.f1.month.value='x';
+if(val=='G'){d.f1.year.value=$this_year;}
+if(val=='H'){d.f1.year.value=$hyear;}
 return false;}
 d.getElementById("maj").onclick=function(){
  if (this.checked == false) {
