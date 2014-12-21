@@ -1411,7 +1411,8 @@ EOHTML
   var lang = '$lang',
       evts = transformHebcalEvents(window['hebcal'].events, lang),
       defaultDate = isDateInRange(evts[0].start, evts[evts.length-1].start, moment()) ? moment() : evts[0].start,
-      singleMonth = $single_month;
+      singleMonth = $single_month,
+      rightNav = singleMonth ? '' : (lang === 'h' ? 'next prev' : 'prev next');
   function isDateInRange(begin, end, now) {
     var t = now ? moment(now) : moment();
     return (t.isSame(begin) || t.isAfter(begin)) && (t.isSame(end) || t.isBefore(end));
@@ -1464,7 +1465,7 @@ EOHTML
       header: {
         left: 'title',
         center: '',
-        right: singleMonth ? '' : 'prev,next'
+        right: rightNav
       },
       isRTL: lang === 'h',
       fixedWeekCount: false,
