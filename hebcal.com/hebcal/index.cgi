@@ -1393,7 +1393,6 @@ EOHTML
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
     Hebcal::out_html(undef, qq{<div id="full-calendar"></div>\n});
 
-    push(@benchmarks, Benchmark->new);
     html_table_events(\@events);
     push(@benchmarks, Benchmark->new);
 
@@ -1411,7 +1410,12 @@ EOHTML
 \$(document).ready(function() {
   var lang = '$lang',
       evts = transformHebcalEvents(window['hebcal'].events, lang),
+      defaultDate = isDateInRange(evts[0].start, evts[evts.length-1].start, moment()) ? moment() : evts[0].start,
       singleMonth = $single_month;
+  function isDateInRange(begin, end, now) {
+    var t = now ? moment(now) : moment();
+    return (t.isSame(begin) || t.isAfter(begin)) && (t.isSame(end) || t.isBefore(end));
+  }
   function transformHebcalEvents(events, lang) {
       var evts = events.map(function(src) {
           var allDay = src.date.indexOf('T') == -1,
@@ -1465,7 +1469,7 @@ EOHTML
       isRTL: lang === 'h',
       fixedWeekCount: false,
       contentHeight: 580,
-      defaultDate: evts[0].start,
+      defaultDate: defaultDate,
       events: evts
   });
   if (!singleMonth) {
