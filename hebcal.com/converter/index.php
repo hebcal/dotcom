@@ -296,11 +296,6 @@ $xtra_head = <<<EOD
 #converter-results .jumbo {
   font-size: 37px;
 }
-.pseudo-legend {
-  font-size: 17px;
-  font-weight: bold;
-  line-height: 30px;
-}
 .nobr { white-space: nowrap }
 </style>
 EOD;
