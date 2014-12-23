@@ -1207,9 +1207,10 @@ sub get_parashah_links {
     $links = [ $links ] unless ref($links) eq "ARRAY";
     foreach my $l (@{$links}) {
         if ($l->{'rel'} eq 'drash:ou.org') {
-            my $cid = $l->{'cid'};
-            # TODO link instead to https://www.ou.org/torah/parsha/#?post_terms.parshiot.name=Beha'alotecha
-            $out->{ou} = "http://www.ou.org/index.php/torah/browse_parsha/C$cid/";
+            my $target = $l->{'target'};
+            $target =~ s/ /\%20/g;
+            $target =~ s/\'/\%27/g;
+            $out->{ou} = "https://www.ou.org/torah/parsha/#?post_terms.parshiot.name=$target";
         } elsif ($l->{'rel'} eq 'drash:torah.org') {
             $out->{torg} = $l->{'href'};
         } elsif ($l->{'rel'} eq 'drash:reformjudaism.org') {
