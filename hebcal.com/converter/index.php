@@ -240,21 +240,21 @@ if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
 
 if ($gy < 1752) {
 ?>
-<div class="alert alert-block">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Results for year 1752 C.E. and earlier may be inaccurate.
 <p>Hebcal does not take into account a correction of ten days that
 was introduced by Pope Gregory XIII known as the Gregorian
 Reformation.<sup><a
-href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a></sup></p>
+href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption">[1]</a></sup></p>
 </div><!-- .alert -->
 <?php
 }
 ?>
 <div id="converter-results">
 <!-- <?php echo $debug ?> -->
-<ul class="unstyled">
+<ul class="list-unstyled">
 <li class="big-list"><span class="nobr"><?php echo $first ?></span> = <strong class="nobr"><?php echo $second ?></strong></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><?php echo $hebrew ?></li>
 <?php
@@ -305,9 +305,10 @@ $xtra_head = <<<EOD
 </style>
 EOD;
 
-echo html_header_bootstrap("Hebrew Date Converter - $hebdate", $xtra_head, true, true);
+echo html_header_bootstrap3("Hebrew Date Converter - $hebdate", $xtra_head, true, true);
 ?>
-<div class="span9">
+<div class="row">
+<div class="col-md-9">
 <?php
 }
 
@@ -334,8 +335,8 @@ function form($head, $message, $help = "") {
 
     if ($message) {
 ?>
-<div class="alert alert-error">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <?php echo $message; echo $help; ?>
 </div><!-- .alert -->
 <?php
@@ -347,41 +348,50 @@ function form($head, $message, $help = "") {
 	$action = substr($action, 0, $pos);
     }
 ?>
-<div id="converter-form" class="well well-small">
+<div id="converter-form">
+<div class="row">
+<div class="col-md-6">
+<h5>Convert from Gregorian to Hebrew date</h5>
 <form class="form-inline" action="<?php echo $action ?>">
-<div class="pseudo-legend">Hebrew Date Converter</div>
-<fieldset>
-<div class="controls controls-row">
-<input style="width:auto" type="text" name="gd" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
+<div class="form-group">
+<input type="text" name="gd" placeholder="day" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
 <?php
 global $MoY_long;
-echo html_form_select("gm", $MoY_long, $gm, 1, "", false, 'class="input-medium"');
+echo html_form_select("gm", $MoY_long, $gm, 1, "", false, 'class="form-control" style="width:120px"');
 ?>
-<input style="width:auto" type="text" name="gy" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
-</div><!-- .controls-row -->
-<div class="controls">
+<input type="text" name="gy" placeholder="year" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
+</div><!-- .form-group -->
+<div class="clearfix">
+<div class="checkbox">
 <label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
 After sunset</label>
-</div><!-- .controls -->
-<div class="controls">
-<button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Gregorian to Hebrew</button>
-</div><!-- .controls -->
-</fieldset>
+</div><!-- .checkbox -->
+</div><!-- .clearfix -->
+<div class="form-group">
+<button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Hebrew</button>
+</div><!-- .form-group -->
 </form>
+</div><!-- .col-md-6 -->
 
+<div class="col-md-6">
+<h5>Convert from Hebrew to Gregorian date</h5>
 <form class="form-inline" action="<?php echo $action ?>">
-<fieldset>
-<div class="controls controls-row">
-<input style="width:auto" type="text" name="hd" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
+<div class="form-group">
+<input type="text" name="hd" placeholder="day" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
 <?php
-echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-medium"');
+echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="form-control" style="width:120px"');
 ?>
-<input style="width:auto" type="text" name="hy" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
-</div><!-- .controls-row -->
-<div class="controls">
-<button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Hebrew to Gregorian</button>
-</div><!-- .controls -->
-</fieldset></form></div><!-- #converter-form -->
+<input type="text" name="hy" placeholder="year" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
+</div><!-- .form-group -->
+<div class="clearfix">
+<div class="form-group">
+<button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Gregorian</button>
+</div><!-- .form-group -->
+</div><!-- .clearfix -->
+</form>
+</div><!-- .col-md-6 -->
+</div><!-- .row -->
+</div><!-- #converter-form -->
 <?php
 
     my_footer();
@@ -390,30 +400,31 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="input-m
 
 function my_footer() {
 ?>
-<div class="row-fluid">
-<div class="span6">
+<hr>
+<div class="row">
+<div class="col-md-6">
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
-<p><a class="btn" href="/yahrzeit/"><i class="icon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
-</div><!-- .span6 -->
-<div class="span6">
+<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicon glyphicon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+</div><!-- .col-md-6 -->
+<div class="col-md-6">
 <h5>Hebrew Date Feeds</h5>
 <p>Today's Hebrew date for your RSS reader.</p>
-<p><a class="btn" href="/etc/hdate-en.xml"
+<p><a class="btn btn-default" href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in English Transliteration RSS">
 English transliteration feed &raquo;</a></p>
-<p><a class="btn" href="/etc/hdate-he.xml"
+<p><a class="btn btn-default" href="/etc/hdate-he.xml"
 title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS">
 Hebrew feed &raquo;</a></p>
-</div><!-- .span6 -->
-</div><!-- .row-fluid -->
-</div><!-- .span9 -->
-<div class="span3" role="complementary">
+</div><!-- .col-md-6 -->
+</div><!-- .row -->
+</div><!-- .col-md-9 -->
+<div class="col-md-3" role="complementary">
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 200x200 text only -->
@@ -424,10 +435,11 @@ Hebrew feed &raquo;</a></p>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-</div><!-- .span3 -->
+</div><!-- .col-md-3 -->
+</div><!-- .row -->
 <?php
 
-    echo html_footer_bootstrap();
+    echo html_footer_bootstrap3();
     exit();
 }
 
