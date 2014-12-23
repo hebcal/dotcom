@@ -771,13 +771,38 @@ EOHTML
 ;
 }
 
+sub write_drash_links {
+    my($drash,$h) = @_;
+
+    my $has_drash = $drash->{ou} || $drash->{torg} || $drash->{reform};
+    if ($has_drash) {
+        print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
+    }
+
+    if ($drash->{ou}) {
+        print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Orthodox Union"\nhref="$drash->{ou}">OU Torah</a>\n};
+    }
+
+    if ($drash->{torg}) {
+        print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Project Genesis"\nhref="$drash->{torg}">Torah.org</a>\n};
+    }
+
+    if ($drash->{reform}) {
+        print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Reform Judaism"\nhref="$drash->{reform}">Reform Judaism</a>\n};
+    }
+
+    if ($has_drash) {
+        print OUT2 qq{</ul>\n};
+    }
+}
+
 sub write_sedra_page
 {
     my($parshiot,$h,$prev,$next,$triennial_readings) = @_;
 
     my($hebrew,$torah,$haftarah,$haftarah_seph,
        $torah_href,$haftarah_href,
-       $drash_ou,$drash_torg) = get_parashah_info($parshiot,$h);
+       $drash) = get_parashah_info($parshiot,$h);
 
     if ($hebrew) {
 	$hebrew = Hebcal::hebrew_strip_nikkud($hebrew);
@@ -959,22 +984,7 @@ EOHTML
 	}
     }
 
-    my $has_drash = $drash_ou || $drash_torg;
-    if ($has_drash) {
-	print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
-    }
-
-    if ($drash_ou) {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Orthodox Union"\nhref="$drash_ou">OU Torah</a>\n};
-    }
-
-    if ($drash_torg) {
-	print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Project Genesis"\nhref="$drash_torg">Torah.org</a>\n};
-    }
-
-    if ($has_drash) {
-	print OUT2 qq{</ul>\n};
-    }
+    write_drash_links($drash,$h);
 
     if (defined $parashah_date_sql{$h}) {
 	print OUT2 <<EOHTML;
@@ -1170,6 +1180,28 @@ sub format_aliyah
     $info;
 }
 
+sub get_parashah_links {
+    my($parashah) = @_;
+    my $out = {};
+    my $links = $parashah->{'links'}->{'link'};
+    $links = [ $links ] unless ref($links) eq "ARRAY";
+    foreach my $l (@{$links}) {
+        if ($l->{'rel'} eq 'drash:ou.org') {
+            my $cid = $l->{'cid'};
+            # TODO link instead to https://www.ou.org/torah/parsha/#?post_terms.parshiot.name=Beha'alotecha
+            $out->{ou} = "http://www.ou.org/index.php/torah/browse_parsha/C$cid/";
+        } elsif ($l->{'rel'} eq 'drash:torah.org') {
+            $out->{torg} = $l->{'href'};
+        } elsif ($l->{'rel'} eq 'drash:reformjudaism.org') {
+            my $target = $l->{'target'};
+            $out->{reform} = "http://www.reformjudaism.org/learning/torah-study/$target";
+        } elsif ($l->{'rel'} eq 'torah') {
+            $out->{torah} = $l->{'href'};
+        }
+    }
+    return $out;
+}
+
 sub get_parashah_info
 {
     my($parshiot,$h) = @_;
@@ -1179,8 +1211,7 @@ sub get_parashah_info
     my($hebrew);
     my($torah,$haftarah,$haftarah_seph);
     my($torah_href,$haftarah_href);
-    my $drash_ou;
-    my $drash_torg;
+    my $links;
     if ($h =~ /^([^-]+)-(.+)$/ &&
 	defined $combined{$1} && defined $combined{$2})
     {
@@ -1205,41 +1236,18 @@ sub get_parashah_info
 	$haftarah = $parshiot->{'parsha'}->{$ph}->{'haftara'};
 	$haftarah_seph = $parshiot->{'parsha'}->{$ph}->{'sephardic'};
 
-	my $links = $parshiot->{'parsha'}->{$ph}->{'links'}->{'link'};
-	foreach my $l (@{$links})
-	{
-	    if ($l->{'rel'} eq 'torah')
-	    {
-		$torah_href = $l->{'href'};
-	    }
-	}
+        my $links0 = get_parashah_links($parshiot->{'parsha'}->{$ph});
+        my $torah_href0 = $links0->{torah};
 
-	$haftarah_href = $torah_href;
+	$haftarah_href = $torah_href0;
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
 
 	# for now, link torah reading to first part
-	$links = $parshiot->{'parsha'}->{$p1}->{'links'}->{'link'};
-	foreach my $l (@{$links})
-	{
-	    if ($l->{'rel'} eq 'torah')
-	    {
-		$torah_href = $l->{'href'};
-	    }
-	}
+        my $links1 = get_parashah_links($parshiot->{'parsha'}->{$p1});
+        $torah_href = $links1->{torah};
 
 	# grab drash for the combined reading
-	$links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
-	$links = [ $links ] unless ref($links) eq "ARRAY";
-	foreach my $l (@{$links})
-	{
-	    if ($l->{'rel'} eq 'drash:ou.org') {
-		my $cid = $l->{'cid'};
-		$drash_ou = "http://www.ou.org/index.php/torah/browse_parsha/C$cid/";
-	    } elsif ($l->{'rel'} eq 'drash:torah.org') {
-		$drash_torg = $l->{'href'};
-	    }
-	}
-
+        $links = get_parashah_links($parshiot->{'parsha'}->{$h});
     }
     else
     {
@@ -1250,25 +1258,15 @@ sub get_parashah_info
 	$haftarah = $parshiot->{'parsha'}->{$h}->{'haftara'};
 	$haftarah_seph = $parshiot->{'parsha'}->{$h}->{'sephardic'};
 
-	my $links = $parshiot->{'parsha'}->{$h}->{'links'}->{'link'};
-	foreach my $l (@{$links})
-	{
-	    if ($l->{'rel'} eq 'drash:ou.org') {
-		my $cid = $l->{'cid'};
-		$drash_ou = "http://www.ou.org/index.php/torah/browse_parsha/C$cid/";
-	    } elsif ($l->{'rel'} eq 'drash:torah.org') {
-		$drash_torg = $l->{'href'};
-	    } elsif ($l->{'rel'} eq 'torah') {
-		$torah_href = $l->{'href'};
-	    }
-	}
+        $links = get_parashah_links($parshiot->{'parsha'}->{$h});
+        $torah_href = $links->{torah};
 
 	$haftarah_href = $torah_href;
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
     }
 
     ($hebrew,$torah,$haftarah,$haftarah_seph,
-     $torah_href,$haftarah_href,$drash_ou,$drash_torg);
+     $torah_href,$haftarah_href,$links);
 }
 
 sub get_special_aliyah

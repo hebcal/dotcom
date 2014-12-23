@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=1" />
  <link rel="drash:ou.org" cid="1371" />
+ <link rel="drash:reformjudaism.org" target="breishit" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/bereshit.shtml" />
 </links>
 <fullkriyah>
@@ -90,6 +91,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=2" />
  <link rel="drash:ou.org" cid="1372" />
+ <link rel="drash:reformjudaism.org" target="noach" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/noah.shtml" />
 </links>
 <fullkriyah>
@@ -142,6 +144,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=3" />
  <link rel="drash:ou.org" cid="1374" />
+ <link rel="drash:reformjudaism.org" target="lech-lcha" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/lekhlekha.shtml" />
 </links>
 <fullkriyah>
@@ -194,6 +197,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=4" />
  <link rel="drash:ou.org" cid="1375" />
+ <link rel="drash:reformjudaism.org" target="vayeira" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayera.shtml" />
 </links>
 <fullkriyah>
@@ -246,6 +250,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=5" />
  <link rel="drash:ou.org" cid="1376" />
+ <link rel="drash:reformjudaism.org" target="chayei-sarah" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hayyeisarah.shtml" />
 </links>
 <fullkriyah>
@@ -298,6 +303,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=6" />
  <link rel="drash:ou.org" cid="1377" />
+ <link rel="drash:reformjudaism.org" target="toldot" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/toldot.shtml" />
 </links>
 <fullkriyah>
@@ -350,6 +356,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=7" />
  <link rel="drash:ou.org" cid="1378" />
+ <link rel="drash:reformjudaism.org" target="vayeitzei" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayetze.shtml" />
 </links>
 <fullkriyah>
@@ -402,6 +409,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=8" />
  <link rel="drash:ou.org" cid="1379" />
+ <link rel="drash:reformjudaism.org" target="vayishlach" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayishlah.shtml"/>
 </links>
 <fullkriyah>
@@ -454,6 +462,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=9" />
  <link rel="drash:ou.org" cid="1380" />
+ <link rel="drash:reformjudaism.org" target="vayeishev" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayeishev.shtml" />
 </links>
 <fullkriyah>
@@ -506,6 +515,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=10" />
  <link rel="drash:ou.org" cid="1381" />
+ <link rel="drash:reformjudaism.org" target="mikeitz" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mikketz.shtml" />
 </links>
 <fullkriyah>
@@ -558,6 +568,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=11" />
  <link rel="drash:ou.org" cid="1382" />
+ <link rel="drash:reformjudaism.org" target="vayigash" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayiggash.shtml" />
 </links>
 <fullkriyah>
@@ -610,6 +621,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=12" />
  <link rel="drash:ou.org" cid="1373" />
+ <link rel="drash:reformjudaism.org" target="va-ychi" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayehi.shtml" />
 </links>
 <fullkriyah>
@@ -662,6 +674,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=21" />
  <link rel="drash:ou.org" cid="1384" />
+ <link rel="drash:reformjudaism.org" target="shmot" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shemot.shtml" />
 </links>
 <fullkriyah>
@@ -714,6 +727,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=22" />
  <link rel="drash:ou.org" cid="1385" />
+ <link rel="drash:reformjudaism.org" target="va-eira" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vaera.shtml" />
 </links>
 <fullkriyah>
@@ -766,6 +780,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=23" />
  <link rel="drash:ou.org" cid="1386" />
+ <link rel="drash:reformjudaism.org" target="bo" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/bo.shtml" />
 </links>
 <fullkriyah>
@@ -818,6 +833,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=24" />
  <link rel="drash:ou.org" cid="1387" />
+ <link rel="drash:reformjudaism.org" target="bshalach" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/beshallah.shtml" />
 </links>
 <fullkriyah>
@@ -870,6 +886,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=25" />
  <link rel="drash:ou.org" cid="1388" />
+ <link rel="drash:reformjudaism.org" target="yitro" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/yitro.shtml" />
 </links>
 <fullkriyah>
@@ -927,6 +944,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=26" />
  <link rel="drash:ou.org" cid="1389" />
+ <link rel="drash:reformjudaism.org" target="mishpatim" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mishpatim.shtml" />
 </links>
 <fullkriyah>
@@ -979,6 +997,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=27" />
  <link rel="drash:ou.org" cid="1390" />
+ <link rel="drash:reformjudaism.org" target="trumah" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/terumah.shtml" />
 </links>
 <fullkriyah>
@@ -1031,6 +1050,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=28" />
  <link rel="drash:ou.org" cid="1391" />
+ <link rel="drash:reformjudaism.org" target="ttzaveh" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/tetzaveh.shtml" />
 </links>
 <fullkriyah>
@@ -1083,6 +1103,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=29" />
  <link rel="drash:ou.org" cid="1392" />
+ <link rel="drash:reformjudaism.org" target="ki-tisa" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/kitissa.shtml" />
 </links>
 <fullkriyah>
@@ -1135,6 +1156,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=30" />
  <link rel="drash:ou.org" cid="1393" />
+ <link rel="drash:reformjudaism.org" target="vayakheil" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayakhel.shtml" />
 </links>
 <fullkriyah>
@@ -1202,6 +1224,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=31" />
  <link rel="drash:ou.org" cid="1394" />
+ <link rel="drash:reformjudaism.org" target="pkudei" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/pkudei.shtml" />
 </links>
 <fullkriyah>
@@ -1251,6 +1274,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=41" />
  <link rel="drash:ou.org" cid="1396" />
+ <link rel="drash:reformjudaism.org" target="vayikra" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayikra.shtml" />
 </links>
 <fullkriyah>
@@ -1303,6 +1327,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=42" />
  <link rel="drash:ou.org" cid="1397" />
+ <link rel="drash:reformjudaism.org" target="tzav" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/tzav.shtml" />
 </links>
 <fullkriyah>
@@ -1355,6 +1380,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=43" />
  <link rel="drash:ou.org" cid="1398" />
+ <link rel="drash:reformjudaism.org" target="shmini" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shemini.shtml" />
 </links>
 <fullkriyah>
@@ -1407,6 +1433,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=44" />
  <link rel="drash:ou.org" cid="1399" />
+ <link rel="drash:reformjudaism.org" target="tazria" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/tazria.shtml" />
 </links>
 <fullkriyah>
@@ -1461,6 +1488,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=45" />
  <link rel="drash:ou.org" cid="1400" />
+ <link rel="drash:reformjudaism.org" target="mtzora" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/metzora.shtml" />
 </links>
 <fullkriyah>
@@ -1506,6 +1534,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=46" />
  <link rel="drash:ou.org" cid="1401" />
+ <link rel="drash:reformjudaism.org" target="acharei-mot" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/ahareimot.shtml" />
 </links>
 <fullkriyah>
@@ -1560,6 +1589,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=48" />
  <link rel="drash:ou.org" cid="1402" />
+ <link rel="drash:reformjudaism.org" target="kdoshim" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/kedoshim.shtml" />
 </links>
 <fullkriyah>
@@ -1614,6 +1644,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=49" />
  <link rel="drash:ou.org" cid="1403" />
+ <link rel="drash:reformjudaism.org" target="emor" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/emor.shtml" />
 </links>
 <fullkriyah>
@@ -1666,6 +1697,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=50" />
  <link rel="drash:ou.org" cid="1404" />
+ <link rel="drash:reformjudaism.org" target="bhar" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/behar.shtml" />
 </links>
 <fullkriyah>
@@ -1720,6 +1752,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=51" />
  <link rel="drash:ou.org" cid="1405" />
+ <link rel="drash:reformjudaism.org" target="bchukotai" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/behukkotai.shtml" />
 </links>
 <fullkriyah>
@@ -1765,6 +1798,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=61" />
  <link rel="drash:ou.org" cid="1407" />
+ <link rel="drash:reformjudaism.org" target="bmidbar" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/bamidbar.shtml" />
 </links>
 <fullkriyah>
@@ -1817,6 +1851,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=62" />
  <link rel="drash:ou.org" cid="1408" />
+ <link rel="drash:reformjudaism.org" target="naso" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/naso.shtml" />
 </links>
 <fullkriyah>
@@ -1869,6 +1904,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=63" />
  <link rel="drash:ou.org" cid="1409" />
+ <link rel="drash:reformjudaism.org" target="bhaalotcha" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/behaalothekha.shtml" />
 </links>
 <fullkriyah>
@@ -1921,6 +1957,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=65" />
  <link rel="drash:ou.org" cid="1410" />
+ <link rel="drash:reformjudaism.org" target="shlach-lcha" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shelahlekha.shtml" />
 </links>
 <fullkriyah>
@@ -1973,6 +2010,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=66" />
  <link rel="drash:ou.org" cid="1411" />
+ <link rel="drash:reformjudaism.org" target="korach" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/korah.shtml" />
 </links>
 <fullkriyah>
@@ -2025,6 +2063,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=67" />
  <link rel="drash:ou.org" cid="1412" />
+ <link rel="drash:reformjudaism.org" target="chukat" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hukkat.shtml" />
 </links>
 <fullkriyah>
@@ -2113,6 +2152,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=68" />
  <link rel="drash:ou.org" cid="1413" />
+ <link rel="drash:reformjudaism.org" target="balak" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/balak.shtml" />
 </links>
 <fullkriyah>
@@ -2183,6 +2223,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=69" />
  <link rel="drash:ou.org" cid="1414" />
+ <link rel="drash:reformjudaism.org" target="pinchas" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/pinhas.shtml" />
 </links>
 <fullkriyah>
@@ -2235,6 +2276,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=70" />
  <link rel="drash:ou.org" cid="1415" />
+ <link rel="drash:reformjudaism.org" target="matot" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot.shtml" />
 </links>
 <fullkriyah>
@@ -2287,6 +2329,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=71" />
  <link rel="drash:ou.org" cid="1416" />
+ <link rel="drash:reformjudaism.org" target="mas-ei" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/masei.shtml" />
 </links>
 <fullkriyah>
@@ -2330,6 +2373,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=81" />
  <link rel="drash:ou.org" cid="1418" />
+ <link rel="drash:reformjudaism.org" target="dvarim" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/devarim.shtml" />
 </links>
 <fullkriyah>
@@ -2382,6 +2426,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=82" />
  <link rel="drash:ou.org" cid="1419" />
+ <link rel="drash:reformjudaism.org" target="va-etchanan" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vaethannan.shtml" />
 </links>
 <fullkriyah>
@@ -2466,6 +2511,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=83" />
  <link rel="drash:ou.org" cid="1420" />
+ <link rel="drash:reformjudaism.org" target="eikev" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/ekev.shtml" />
 </links>
 <fullkriyah>
@@ -2518,6 +2564,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=84" />
  <link rel="drash:ou.org" cid="1421" />
+ <link rel="drash:reformjudaism.org" target="reih" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/reih.shtml" />
 </links>
 <fullkriyah>
@@ -2570,6 +2617,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=85" />
  <link rel="drash:ou.org" cid="1422" />
+ <link rel="drash:reformjudaism.org" target="shoftim" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shoftim.shtml" />
 </links>
 <fullkriyah>
@@ -2622,6 +2670,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=86" />
  <link rel="drash:ou.org" cid="1423" />
+ <link rel="drash:reformjudaism.org" target="ki-teitzei" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/kitetzei.shtml" />
 </links>
 <fullkriyah>
@@ -2674,6 +2723,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=87" />
  <link rel="drash:ou.org" cid="1424" />
+ <link rel="drash:reformjudaism.org" target="ki-tavo" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/kitavo.shtml" />
 </links>
 <fullkriyah>
@@ -2726,6 +2776,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=88" />
  <link rel="drash:ou.org" cid="1425" />
+ <link rel="drash:reformjudaism.org" target="nitzavim" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/nitzavim.shtml" />
 </links>
 <fullkriyah>
@@ -2760,6 +2811,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=89" />
  <link rel="drash:ou.org" cid="1426" />
+ <link rel="drash:reformjudaism.org" target="vayeilech" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vayelekh.shtml" />
 </links>
 <fullkriyah>
@@ -2794,6 +2846,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=90" />
  <link rel="drash:ou.org" cid="1427" />
+ <link rel="drash:reformjudaism.org" target="haazinu" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/haazinu.shtml" />
 </links>
 <fullkriyah>
@@ -2828,6 +2881,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <links>
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=91" />
  <link rel="drash:ou.org" cid="1428" />
+ <link rel="drash:reformjudaism.org" target="vzot-habrachah" />
  <link rel="torah" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vezothaberakha.shtml" />
 </links>
 <fullkriyah>
