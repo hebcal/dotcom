@@ -237,6 +237,7 @@ my %parashah_date_sql;
 my(%parashah_time);
 my($saturday) = get_saturday();
 readings_for_current_year($axml);
+my $past_readings = readings_for_past_years();
 
 my %next_reading;
 my $NOW = time();
@@ -258,7 +259,7 @@ foreach my $h (@parashah_list) {
 	    next unless $dt;
 	    my($year,$month,$day) = split(/-/, $dt);
 	    my $time = Date::Calc::Date_to_Time($year,$month,$day,12,59,59);
-	    if ($time >= $NOW && $dt lt $next_reading{$h}) {
+	    if ($time >= $NOW && defined $next_reading{$h} && $dt lt $next_reading{$h}) {
 		$next_reading{$h} = $dt;
 		last;
 	    }
@@ -774,26 +775,32 @@ EOHTML
 sub write_drash_links {
     my($drash,$h) = @_;
 
-    my $has_drash = $drash->{ou} || $drash->{torg} || $drash->{reform};
-    if ($has_drash) {
-        print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
+    my @sites = qw(ou torg reform uscj);
+    my $count = 0;
+    foreach my $site (@sites) {
+        $count++ if $drash->{$site};
+    }
+    return 0 unless $count;
+
+    print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
+
+    my %site_name = (
+        "ou" => "Orthodox Union",
+        "torg" => "Torah.org",
+        "reform" => "Reform Judaism",
+        "uscj" => "United Synagogue of Conservative Judaism",
+    );
+
+    foreach my $site (@sites) {
+        if ($drash->{$site}) {
+            my $name = $site_name{$site};
+            print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from $name" href="$drash->{$site}">$name</a>\n};
+        }
     }
 
-    if ($drash->{ou}) {
-        print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Orthodox Union"\nhref="$drash->{ou}">OU Torah</a>\n};
-    }
+    print OUT2 qq{</ul>\n};
 
-    if ($drash->{torg}) {
-        print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Project Genesis"\nhref="$drash->{torg}">Torah.org</a>\n};
-    }
-
-    if ($drash->{reform}) {
-        print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from Reform Judaism"\nhref="$drash->{reform}">Reform Judaism</a>\n};
-    }
-
-    if ($has_drash) {
-        print OUT2 qq{</ul>\n};
-    }
+    return $count;
 }
 
 sub write_sedra_page
@@ -1180,8 +1187,21 @@ sub format_aliyah
     $info;
 }
 
+sub most_recent_past_reading {
+    my($h) = @_;
+    my $latest_before_now;
+    foreach my $dt (@{$past_readings->{$h}}) {
+        my($year,$month,$day) = split(/-/, $dt);
+        my $time = Date::Calc::Date_to_Time($year,$month,$day,12,59,59);
+        if ($time < $NOW) {
+            $latest_before_now = $dt;
+        }
+    }
+    return $latest_before_now;
+}
+
 sub get_parashah_links {
-    my($parashah) = @_;
+    my($h,$parashah) = @_;
     my $out = {};
     my $links = $parashah->{'links'}->{'link'};
     $links = [ $links ] unless ref($links) eq "ARRAY";
@@ -1195,6 +1215,15 @@ sub get_parashah_links {
         } elsif ($l->{'rel'} eq 'drash:reformjudaism.org') {
             my $target = $l->{'target'};
             $out->{reform} = "http://www.reformjudaism.org/learning/torah-study/$target";
+        } elsif ($l->{'rel'} eq 'drash:uscj.org') {
+            my $target = $l->{'target'};
+            my $dt = most_recent_past_reading($h);
+            if ($target && $dt) {
+                my($year,$month,$day) = split(/-/, $dt);
+                my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
+                my $hyear = $hebdate->{"yy"};
+                $out->{uscj} = "http://uscj.org/JewishLivingandLearning/WeeklyParashah/TorahSparks/Archive/_$hyear/$target$hyear.aspx";
+            }
         } elsif ($l->{'rel'} eq 'torah') {
             $out->{torah} = $l->{'href'};
         }
@@ -1236,18 +1265,18 @@ sub get_parashah_info
 	$haftarah = $parshiot->{'parsha'}->{$ph}->{'haftara'};
 	$haftarah_seph = $parshiot->{'parsha'}->{$ph}->{'sephardic'};
 
-        my $links0 = get_parashah_links($parshiot->{'parsha'}->{$ph});
+        my $links0 = get_parashah_links($ph,$parshiot->{'parsha'}->{$ph});
         my $torah_href0 = $links0->{torah};
 
 	$haftarah_href = $torah_href0;
 	$haftarah_href =~ s/.shtml$/_haft.shtml/;
 
 	# for now, link torah reading to first part
-        my $links1 = get_parashah_links($parshiot->{'parsha'}->{$p1});
+        my $links1 = get_parashah_links($p1,$parshiot->{'parsha'}->{$p1});
         $torah_href = $links1->{torah};
 
 	# grab drash for the combined reading
-        $links = get_parashah_links($parshiot->{'parsha'}->{$h});
+        $links = get_parashah_links($h,$parshiot->{'parsha'}->{$h});
     }
     else
     {
@@ -1258,7 +1287,7 @@ sub get_parashah_info
 	$haftarah = $parshiot->{'parsha'}->{$h}->{'haftara'};
 	$haftarah_seph = $parshiot->{'parsha'}->{$h}->{'sephardic'};
 
-        $links = get_parashah_links($parshiot->{'parsha'}->{$h});
+        $links = get_parashah_links($h,$parshiot->{'parsha'}->{$h});
         $torah_href = $links->{torah};
 
 	$haftarah_href = $torah_href;
@@ -1590,6 +1619,23 @@ sub write_holiday_event_to_csv_and_db {
 	}
     }
     return undef;
+}
+
+sub readings_for_past_years {
+    my $past = {};
+    foreach my $i (0 .. 18) {
+        my $yr = $hebrew_year - 18 + $i;
+        INFO("readings_for_past_years: $yr");
+        my @events = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -x -h -H $yr", "", 0);
+        foreach my $evt (@events) {
+            next unless $evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/;
+            my $h = $1;
+            my($year,$month,$day) = Hebcal::event_ymd($evt);
+            my $dt = Hebcal::date_format_sql($year, $month, $day);
+            push(@{$past->{$h}}, $dt);
+        }
+    }
+    return $past;
 }
 
 sub readings_for_current_year
