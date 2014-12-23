@@ -297,6 +297,9 @@ $xtra_head = <<<EOD
   font-size: 37px;
 }
 .nobr { white-space: nowrap }
+#converter-form .form-inline .form-control {
+  display: inline-block;
+}
 </style>
 EOD;
 
