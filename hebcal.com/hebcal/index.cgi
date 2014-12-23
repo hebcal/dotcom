@@ -1065,6 +1065,27 @@ JSCRIPT_END
     1;
 }
 
+sub possibly_set_cookie {
+    my $set_cookie = param_true("set") || ! defined $q->param("set");
+    if ($set_cookie) {
+        my $newcookie = Hebcal::gen_cookie($q);
+        if (! $C_cookie)
+        {
+            my_set_cookie($newcookie);
+        }
+        else
+        {
+            my $cmp1 = $newcookie;
+            my $cmp2 = $C_cookie;
+
+            $cmp1 =~ s/^C=t=\d+\&?//;
+            $cmp2 =~ s/^C=t=\d+\&?//;
+
+            my_set_cookie($newcookie) if $cmp1 ne $cmp2;
+        }
+    }
+}
+
 sub my_set_cookie
 {
     my($str) = @_;
@@ -1074,10 +1095,152 @@ sub my_set_cookie
     }
 }
 
+sub nav_pagination {
+    my($events) = @_;
+
+    my($prev_url,$next_url,$prev_title,$next_title) = next_and_prev_urls($q);
+
+    my $numEntries = scalar(@{$events});
+    my $start_month;
+    my $start_year = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
+    my $end_month;
+    my $end_year = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+
+    if ($q->param("month") eq "x" &&
+        (! defined $q->param("yt") || $q->param("yt") eq "G")) {
+        $start_month = 1;
+        $end_month = 12;
+    } else {
+        $start_month = $events->[0]->[$Hebcal::EVT_IDX_MON] + 1;
+        $end_month = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
+    }
+
+    my @dates;
+    my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
+    for (my @dt = ($start_year, $start_month, 1);
+         Date::Calc::Date_to_Days(@dt) <= $end_days;
+         @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1)) {
+            push(@dates, \@dt);
+    }
+
+    my $prev_nofollow = ($q->param("month") =~ /^\d+$/
+             || $start_year < $this_year
+            ) ? " nofollow" : "";
+    my $next_nofollow = ($q->param("month") =~ /^\d+$/
+             || $end_year > $this_year + 2
+            ) ? " nofollow" : "";
+
+    my $nav_pagination = <<EOHTML;
+<div class="pagination pagination-centered">
+<ul>
+<li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
+EOHTML
+    ;
+
+    foreach my $dt (@dates) {
+        my $year = $dt->[0];
+        my $mon = $dt->[1];
+        my $mon_long = $Hebcal::MoY_long{$mon};
+        my $mon_short = $Hebcal::MoY_short[$mon-1];
+        my $cal_id = sprintf("%04d-%02d", $year, $mon);
+        $nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
+    }
+    $nav_pagination .= <<EOHTML;
+<li><a href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
+</ul>
+</div><!-- .pagination -->
+EOHTML
+    ;
+
+    return $nav_pagination;
+}
+
+sub next_and_prev_urls {
+    my($q) = @_;
+    my($prev_url,$next_url,$prev_title,$next_title);
+
+    if ($q->param("month") =~ /^\d{1,2}$/ &&
+        $q->param("month") >= 1 && $q->param("month") <= 12)
+    {
+        my($pm,$nm,$py,$ny);
+
+        if ($q->param("month") == 1)
+        {
+            $pm = 12;
+            $nm = 2;
+            $py = $q->param("year") - 1;
+            $ny = $q->param("year");
+        }
+        elsif ($q->param("month") == 12)
+        {
+            $pm = 11;
+            $nm = 1;
+            $py = $q->param("year");
+            $ny = $q->param("year") + 1;
+        }
+        else
+        {
+            $pm = $q->param("month") - 1;
+            $nm = $q->param("month") + 1;
+            $ny = $py = $q->param("year");
+        }
+
+        $prev_url = Hebcal::self_url($q, {"year" => $py, "month" => $pm}, "&amp;");
+        $prev_title = sprintf("%s %04d", $Hebcal::MoY_long{$pm}, $py);
+
+        $next_url = Hebcal::self_url($q, {"year" => $ny, "month" => $nm}, "&amp;");
+        $next_title = sprintf("%s %04d", $Hebcal::MoY_long{$nm}, $ny);
+    }
+    else
+    {
+        $prev_url = Hebcal::self_url($q, {"year" => ($q->param("year") - 1)}, "&amp;");
+        $prev_title = sprintf("%04d", ($q->param("year") - 1));
+
+        $next_url = Hebcal::self_url($q, {"year" => ($q->param("year") + 1)}, "&amp;");
+        $next_title = sprintf("%04d", ($q->param("year") + 1));
+    }
+    return ($prev_url,$next_url,$prev_title,$next_title);
+}
+
+sub email_form_html {
+    my($q) = @_;
+    my $email_form = <<EOHTML;
+<form class="form-inline" action="https://www.hebcal.com/email/" method="post">
+<fieldset>
+<input type="hidden" name="v" value="1">
+EOHTML
+;
+    if ($q->param("zip")) {
+        $email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
+        $email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
+    } elsif ($q->param("geonameid")) {
+        $email_form .= qq{<input type="hidden" name="geo" value="geoname">\n};
+        $email_form .= qq{<input type="hidden" name="geonameid" value="} . $q->param("geonameid") . qq{">\n};
+    } else {
+        $email_form .= qq{<input type="hidden" name="geo" value="city">\n};
+        $email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
+    }
+
+    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
+        $email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
+    }
+
+    $email_form .= <<EOHTML;
+<p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
+<div class="input-append input-prepend">
+<span class="add-on"><i class="icon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
+<button type="submit" class="btn" name="modify" value="1"> Sign up</button>
+</div>
+</fieldset>
+</form>
+EOHTML
+;
+    return $email_form;
+}
+
 sub results_page
 {
     my($date,$filename) = @_;
-    my($prev_url,$next_url,$prev_title,$next_title);
 
     if (param_true("c"))
     {
@@ -1093,67 +1256,7 @@ sub results_page
 	}
     }
 
-    my $set_cookie = param_true("set") || ! defined $q->param("set");
-    if ($set_cookie) {
-	my $newcookie = Hebcal::gen_cookie($q);
-	if (! $C_cookie)
-	{
-	    my_set_cookie($newcookie);
-	}
-	else
-	{
-	    my $cmp1 = $newcookie;
-	    my $cmp2 = $C_cookie;
-
-	    $cmp1 =~ s/^C=t=\d+\&?//;
-	    $cmp2 =~ s/^C=t=\d+\&?//;
-
-	    my_set_cookie($newcookie)
-		if $cmp1 ne $cmp2;
-	}
-    }
-
-    # next and prev urls
-    if ($q->param("month") =~ /^\d{1,2}$/ &&
-	$q->param("month") >= 1 && $q->param("month") <= 12)
-    {
-	my($pm,$nm,$py,$ny);
-
-	if ($q->param("month") == 1)
-	{
-	    $pm = 12;
-	    $nm = 2;
-	    $py = $q->param("year") - 1;
-	    $ny = $q->param("year");
-	}
-	elsif ($q->param("month") == 12)
-	{
-	    $pm = 11;
-	    $nm = 1;
-	    $py = $q->param("year");
-	    $ny = $q->param("year") + 1;
-	}
-	else
-	{
-	    $pm = $q->param("month") - 1;
-	    $nm = $q->param("month") + 1;
-	    $ny = $py = $q->param("year");
-	}
-
-	$prev_url = Hebcal::self_url($q, {"year" => $py, "month" => $pm}, "&amp;");
-	$prev_title = sprintf("%s %04d", $Hebcal::MoY_long{$pm}, $py);
-
-	$next_url = Hebcal::self_url($q, {"year" => $ny, "month" => $nm}, "&amp;");
-	$next_title = sprintf("%s %04d", $Hebcal::MoY_long{$nm}, $ny);
-    }
-    else
-    {
-	$prev_url = Hebcal::self_url($q, {"year" => ($q->param("year") - 1)}, "&amp;");
-	$prev_title = sprintf("%04d", ($q->param("year") - 1));
-
-	$next_url = Hebcal::self_url($q, {"year" => ($q->param("year") + 1)}, "&amp;");
-	$next_title = sprintf("%04d", ($q->param("year") + 1));
-    }
+    possibly_set_cookie();
 
     my $results_title = "Jewish Calendar $date";
     if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
@@ -1214,7 +1317,9 @@ sub results_page
   border: 1px solid #cfcfcf;
   border-radius: 2px;
 }
-
+.table-event.yomtov {
+  background:#ff9;
+}
 </style>
 EOHTML
 ;
@@ -1239,9 +1344,7 @@ EOHTML
     my $head_divs = <<EOHTML;
 <div class="row-fluid">
 <div class="span8">
-<div class="page-header">
 <h1>Jewish Calendar $date$h1_extra</h1>
-</div>
 EOHTML
 ;
     Hebcal::out_html(undef, $head_divs);
@@ -1329,40 +1432,8 @@ accurate.
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
 
     if ($numEntries > 0 && param_true("c")
-	&& $q->param("geo") && $q->param("geo") =~ /^city|zip|geoname$/) {
-	# Email
-	my $email_form = <<EOHTML;
-<form class="form-inline" action="https://www.hebcal.com/email/" method="post">
-<fieldset>
-<input type="hidden" name="v" value="1">
-EOHTML
-;
-	if ($q->param("zip")) {
-	    $email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
-	    $email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
-	} elsif ($q->param("geonameid")) {
-	    $email_form .= qq{<input type="hidden" name="geo" value="geoname">\n};
-	    $email_form .= qq{<input type="hidden" name="geonameid" value="} . $q->param("geonameid") . qq{">\n};
-	} else {
-	    $email_form .= qq{<input type="hidden" name="geo" value="city">\n};
-	    $email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
-	}
-
-	if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
-	    $email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
-	}
-
-	$email_form .= <<EOHTML;
-<p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
-<div class="input-append input-prepend">
-<span class="add-on"><i class="icon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
-<button type="submit" class="btn" name="modify" value="1"> Sign up</button>
-</div>
-</fieldset>
-</form>
-EOHTML
-;
-	Hebcal::out_html(undef, $email_form);
+        && $q->param("geo") && $q->param("geo") =~ /^city|zip|geoname$/) {
+        Hebcal::out_html(undef, email_form_html($q));
     }
 
     if ($numEntries == 0) {
@@ -1397,7 +1468,7 @@ EOHTML
     push(@benchmarks, Benchmark->new);
 
     if ($q->param('month') eq 'x') {
-        Hebcal::out_html(undef, qq{<p><small>Use <span class="label label-lightgrey"><i class="icon-arrow-left"></i></span> and <span class="label label-lightgrey"><i class="icon-arrow-right"></i></span> to navigate through the year.</small></p>\n});
+        Hebcal::out_html(undef, qq{<div id="keyboard-nav-hint"><p><small>Use <span class="label label-lightgrey"><i class="icon-arrow-left"></i></span> and <span class="label label-lightgrey"><i class="icon-arrow-right"></i></span> to navigate through the year.</small></p></div>\n});
     }
 
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
@@ -1461,7 +1532,8 @@ EOHTML
       }
       return evts;
   }
-  \$('#full-calendar').fullCalendar({
+  function renderCalendar() {
+    \$('#full-calendar').fullCalendar({
       header: {
         left: 'title',
         center: '',
@@ -1472,8 +1544,8 @@ EOHTML
       contentHeight: 580,
       defaultDate: defaultDate,
       events: evts
-  });
-  if (!singleMonth) {
+    });
+    if (!singleMonth) {
       \$("body").keydown(function(e) {
         if (e.keyCode == 37) {
           \$('#full-calendar').fullCalendar('prev');
@@ -1481,7 +1553,10 @@ EOHTML
           \$('#full-calendar').fullCalendar('next');
         }
       });
+    }
   }
+  renderCalendar();
+  window['hebcal'].fullCalendarEvents = evts;
 });
 </script>
 JSCRIPT_END
