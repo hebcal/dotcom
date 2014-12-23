@@ -418,6 +418,7 @@ EOHTML
 				   "single single-post",
 				   $xtra_head);
     print OUT1 <<EOHTML;
+<div class="row-fluid">
 <div class="page-header">
 <h1>Torah Readings</h1>
 </div>
@@ -470,6 +471,7 @@ height="14"> Parashat ha-Shavua feed (Diaspora)</a>
 style="border:none" alt="View the raw XML source" width="14"
 height="14"> Parashat ha-Shavua feed (Israel)</a>
 </div><!-- .btn-toolbar -->
+</div><!-- .row-fluid -->
 
 <div class="row-fluid">
 <div class="span4">
@@ -518,7 +520,6 @@ EOHTML
 </div><!-- .span4 -->
 </div><!-- .row-fluid -->
 <div class="row-fluid">
-<div class="span12">
 <h3>Parashat ha-Shavua by Hebrew year</h3>
 <div class="pagination">
 <ul>
@@ -549,7 +550,6 @@ EOHTML
     print OUT1 <<EOHTML;
 </ul>
 </div><!-- .pagination -->
-</div><!-- .span12 -->
 </div><!-- .row-fluid -->
 EOHTML
 ;
@@ -576,7 +576,6 @@ title="Download $triennial_basename"><i class="icon-download-alt"></i> $triennia
 
     print OUT1 <<EOHTML;
 <div class="row-fluid">
-<div class="span12">
 <h3 id="download">Download aliyah-by-aliyah breakdown of Torah readings</h3>
 <p class="lead">Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
@@ -617,7 +616,6 @@ $triennial_download_html
 <tr><td>1-Nov-2003</td><td>Noach</td><td>Haftara</td><td>Isaiah 54:1 &#8211; 55:5</td><td></td></tr>
 </tbody>
 </table>
-</div><!-- .span12 -->
 </div><!-- .row-fluid -->
 EOHTML
 ;
@@ -1053,6 +1051,7 @@ EOHTML
     print OUT2 <<EOHTML;
 </div><!-- .span10 -->
 </div><!-- .row-fluid -->
+</div><!-- .row-fluid -->
 EOHTML
 ;
     print OUT2 $html_footer;
@@ -1212,7 +1211,9 @@ sub get_parashah_links {
             $target =~ s/\'/\%27/g;
             $out->{ou} = "https://www.ou.org/torah/parsha/#?post_terms.parshiot.name=$target";
         } elsif ($l->{'rel'} eq 'drash:torah.org') {
-            $out->{torg} = $l->{'href'};
+            my $href = $l->{'href'};
+            $href =~ s/&/&amp;/g;
+            $out->{torg} = $href;
         } elsif ($l->{'rel'} eq 'drash:reformjudaism.org') {
             my $target = $l->{'target'};
             $out->{reform} = "http://www.reformjudaism.org/learning/torah-study/$target";
