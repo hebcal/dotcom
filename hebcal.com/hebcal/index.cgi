@@ -1251,6 +1251,45 @@ EOHTML
     return $email_form;
 }
 
+sub results_page_warnings {
+    my($events) = @_;
+
+    if (defined $events && defined $events->[0]) {
+        my $greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
+
+        Hebcal::out_html(undef, $HebcalHtml::gregorian_warning)
+            if ($greg_year1 <= 1752);
+
+        if ($greg_year1 >= 3762
+            && (!defined $q->param("yt") || $q->param("yt") eq "G"))
+        {
+            my $future_years = $greg_year1 - $this_year;
+            my $new_url = Hebcal::self_url($q,
+                                           {"yt" => "H", "month" => "x"},
+                                           "&amp;");
+            Hebcal::out_html(undef, qq{<div class="alert alert-block">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+<strong>Note!</strong>
+You are viewing a calendar for <strong>Gregorian</strong> year $greg_year1, which
+is $future_years years <em>in the future</em>.</span><br>
+Did you really mean to do this? Perhaps you intended to get the calendar
+for <a href="$new_url">Hebrew year $greg_year1</a>?<br>
+If you really intended to use Gregorian year $greg_year1, please
+continue. Hebcal.com results this far in the future should be
+accurate.
+</div><!-- .alert -->
+});
+        }
+    }
+
+    Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
+        if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
+
+    my $latitude = $cconfig{"latitude"};
+    Hebcal::out_html(undef, $HebcalHtml::usno_warning)
+        if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
+}
+
 sub results_page
 {
     my($date,$filename) = @_;
@@ -1374,46 +1413,9 @@ EOHTML
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@benchmarks, Benchmark->new);
 
+    results_page_warnings(\@events);
+
     my $numEntries = scalar(@events);
-
-    my($greg_year1,$greg_year2) = (0,0);
-    if ($numEntries > 0)
-    {
-        $greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
-        $greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
-
-        Hebcal::out_html(undef, $HebcalHtml::gregorian_warning)
-            if ($greg_year1 <= 1752);
-
-        if ($greg_year1 >= 3762
-            && (!defined $q->param("yt") || $q->param("yt") eq "G"))
-        {
-            my $future_years = $greg_year1 - $this_year;
-            my $new_url = Hebcal::self_url($q,
-                                           {"yt" => "H", "month" => "x"},
-                                           "&amp;");
-            Hebcal::out_html(undef, qq{<div class="alert alert-block">
-<button type="button" class="close" data-dismiss="alert">&times;</button>
-<strong>Note!</strong>
-You are viewing a calendar for <strong>Gregorian</strong> year $greg_year1, which
-is $future_years years <em>in the future</em>.</span><br>
-Did you really mean to do this? Perhaps you intended to get the calendar
-for <a href="$new_url">Hebrew year $greg_year1</a>?<br>
-If you really intended to use Gregorian year $greg_year1, please
-continue. Hebcal.com results this far in the future should be
-accurate.
-</div><!-- .alert -->
-});
-        }
-    }
-
-    Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
-        if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
-
-    my $latitude = $cconfig{"latitude"};
-    Hebcal::out_html(undef, $HebcalHtml::usno_warning)
-        if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
-
     if ($numEntries > 0) {
         my $download_title = $date;
         if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
@@ -1495,8 +1497,8 @@ EOHTML
 ;
     Hebcal::out_html(undef, $header_ad);
 
-    html_table_events(\@events);
-    push(@benchmarks, Benchmark->new);
+#    html_table_events(\@events);
+#    push(@benchmarks, Benchmark->new);
 
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
 
@@ -1521,6 +1523,10 @@ EOHTML
 
     my $nav_pagination = nav_pagination(\@events);
     Hebcal::out_html(undef, $nav_pagination);
+
+    if (!$q->param("vis")) {
+        Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
+    }
 
     push(@benchmarks, Benchmark->new);
 
@@ -1631,6 +1637,7 @@ EOHTML
 JSCRIPT_END
         ;
 
+    $xtra_html = "";
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
 
