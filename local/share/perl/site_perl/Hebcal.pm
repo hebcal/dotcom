@@ -664,6 +664,26 @@ sub event_tz_offset {
         $tzMin);
 }
 
+sub event_category {
+    my($subj) = @_;
+
+    if ($subj eq "Candle lighting" || $subj eq "No sunset today.") {
+        return "candles";
+    } elsif ($subj =~ /Havdalah/) {
+        return "havdalah";
+    } elsif ($subj =~ /^(Parshas|Parashat)\s+/) {
+        return "parashat";
+    } elsif ($subj =~ /^(\d+)\w+ day of the Omer$/) {
+        return "omer";
+    } elsif ($subj =~ /^Daf Yomi:/) {
+        return "dafyomi";
+    } elsif ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/) {
+        return "hebdate";
+    } else {
+        return "holiday";
+    }
+}
+
 sub events_to_dict
 {
     my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz) = @_;
@@ -725,20 +745,18 @@ sub events_to_dict
 	$anchor =~ s/_$//g;
 	$item{"about"} = $url . "#" . $anchor;
 	$item{"subj"} = $subj;
+        $item{"class"} = event_category($subj);
 
         my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
         $item{"hebrew"} = $hebrew if $hebrew;
 
 	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
 	{
-	    $item{"class"} = ($subj eq "Candle lighting") ?
-		"candles" : "havdalah";
 	    $item{"time"} = format_evt_time($evt, "pm");
 	    $item{"link"} = $url . "#" . $anchor;
 	}
 	elsif ($subj eq "No sunset today.")
 	{
-	    $item{"class"} = "candles";
 	    $item{"link"} = $url . "#top";
 	    $item{"time"} = "";
 	}
@@ -746,18 +764,6 @@ sub events_to_dict
 	{
             $item{"link"} = $href if $href;
             $item{"memo"} = $memo if $memo;
-
-	    if ($subj =~ /^(Parshas|Parashat)\s+/) {
-		$item{"class"} = "parashat";
-	    } elsif ($subj =~ /^(\d+)\w+ day of the Omer$/) {
-		$item{"class"} = "omer";
-	    } elsif ($subj =~ /^Daf Yomi:/) {
-		$item{"class"} = "dafyomi";
-	    } elsif ($subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/) {
-		$item{"class"} = "hebdate";
-	    } else {
-		$item{"class"} = "holiday";
-	    }
 	}
 
 	push(@items, \%item);
