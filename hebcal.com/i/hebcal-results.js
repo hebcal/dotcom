@@ -60,7 +60,7 @@ window['hebcal'].transformHebcalEvents = function(events, lang) {
             title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
             dest = {
                 title: title,
-                start: src.date,
+                start: moment(src.date, moment.ISO_8601),
                 className: window['hebcal'].getEventClassName(src),
                 allDay: allDay
             };
@@ -113,6 +113,7 @@ window['hebcal'].renderCalendar = function(lang, singleMonth) {
         fixedWeekCount: false,
         contentHeight: 580,
         defaultDate: defaultDate,
+        timezone: false,
         events: evts
     });
     if (!singleMonth) {
@@ -131,7 +132,7 @@ window['hebcal'].splitByMonth = function(events) {
         prevMonth = '',
         monthEvents;
     events.forEach(function(evt) {
-        var m = moment(evt.date),
+        var m = moment(evt.date, moment.ISO_8601),
             month = m.format("YYYY-MM");
         if (month !== prevMonth) {
             prevMonth = month;
@@ -147,7 +148,7 @@ window['hebcal'].splitByMonth = function(events) {
 };
 
 window['hebcal'].tableRow = function(evt) {
-    var m = moment(evt.date),
+    var m = moment(evt.date, moment.ISO_8601),
         dow = m.format('ddd'),
         dateStr = m.format('DD-MMM-YYYY'),
         subj = evt.title,
@@ -161,7 +162,7 @@ window['hebcal'].tableRow = function(evt) {
 
 window['hebcal'].monthHtml = function(month) {
     var date = month.month + "-01",
-        m = moment(date),
+        m = moment(date, moment.ISO_8601),
         calId = 'cal-' + month.month,
         divBegin = '<div id="' + calId + '">',
         divEnd = '</div><!-- #' + calId + ' -->',
