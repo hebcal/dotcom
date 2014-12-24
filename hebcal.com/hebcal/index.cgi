@@ -1325,9 +1325,30 @@ sub results_page
 <style type="text/css">
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
-.evt {font-size:85%;}
-.hl {background:#ff9;}
 \@media print { div.pbba { page-break-before: always } }
+.fc-emulated-table th, .fc-emulated-table td {
+  padding: 4px;
+}
+.fc-event {
+    display: block; /* make the <a> tag block */
+    font-size: .85em;
+    line-height: 1.3;
+    border-radius: 3px;
+    border: 1px solid #3a87ad; /* default BORDER color */
+    background-color: #3a87ad; /* default BACKGROUND color */
+    margin: 1px 2px 0; /* spacing between events and edges */
+    padding: 0 1px;
+}
+.fc-time {
+  font-weight: bold;
+}
+.fc-event a {
+    color: #fff;
+}
+.fc-event a:hover,
+.fc-event a:focus {
+    color: #fff;
+}
 .fc-event.hebdate, .fc-event.omer {
   background-color:#FFF;
   border-color:#FFF;
@@ -1337,6 +1358,13 @@ div.pbba { page-break-before: always }
   background-color:#FFF;
   border-color:#FFF;
   color:#08c;
+}
+.fc-event.dafyomi a {
+    color: #0088cc;
+}
+.fc-event.dafyomi a:hover,
+.fc-event.dafyomi a:focus {
+    color: #005580;
 }
 .fc-event.candles, .fc-event.havdalah {
   background-color:#FFF;
@@ -1532,12 +1560,17 @@ EOHTML
 
     foreach my $evt (@events) {
         my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $category = Hebcal::event_category($subj);
 
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
         my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
 
         $subj = translate_subject($q,$subj,$hebrew);
+        $subj = qq{<span class="fc-title">$subj</span>};
+
+        my $a_start = "";
+        my $a_end = "";
 
         if (defined $href && $href ne "")
         {
@@ -1546,7 +1579,8 @@ EOHTML
             if ($href =~ /^http/ && $href !~ m,^http://www\.hebcal\.com,) {
               $aclass = qq{ class="outbound"};
             }
-            $subj = qq{<a$atitle$aclass href="$href">$subj</a>};
+            $a_start = qq{<a$atitle$aclass href="$href">};
+            $a_end = qq{</a>};
         }
 
         if ($q->param("vis"))
@@ -1556,11 +1590,12 @@ EOHTML
                 $cal_subj = $subj;
             } else {
                 my $time_formatted = Hebcal::format_evt_time($evt, "p");
-                $cal_subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
+                $cal_subj = sprintf(qq{<span class="fc-time">%s</span> %s},
+                    $time_formatted, $subj);
             }
 
             $cal_subj =~
-                s/ Havdalah \((\d+) min\)$/ Havdalah <small>($1 min)<\/small>/;
+                s/Havdalah \((\d+) min\)/Havdalah <small>($1 min)<\/small>/;
             $cal_subj =~ s/Daf Yomi: //;
 
             my $cal_id = sprintf("%04d-%02d", $year, $mon);
@@ -1569,23 +1604,16 @@ EOHTML
             $cal->setcontent($mday, "")
                 if $cal->getcontent($mday) eq "&nbsp;";
 
-            $cal->addcontent($mday, "<br>\n")
+            $cal->addcontent($mday, "\n")
                 if $cal->getcontent($mday) ne "";
 
-            my $class = "evt";
+            my $class = "fc-event $category";
             if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
             {
-                $class .= " hl";
-            }
-            elsif (($evt->[$Hebcal::EVT_IDX_SUBJ] =~
-                    /^\d+\w+.+, \d{4,}$/) ||
-                   ($evt->[$Hebcal::EVT_IDX_SUBJ] =~
-                    /^\d+\w+ day of the Omer$/))
-            {
-                $class .= " muted";
+                $class .= " yomtov";
             }
 
-            $cal->addcontent($mday, qq{<span class="$class">$cal_subj</span>});
+            $cal->addcontent($mday, qq{<div class="$class">$a_start$cal_subj$a_end</div>});
         }
         else
         {
@@ -1600,7 +1628,7 @@ EOHTML
                              qq{<tr>},
                              qq{<td>}, $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)], qq{</td>},
                              qq{<td>}, sprintf("%02d-%s-%04d", $mday, $Hebcal::MoY_short[$mon-1], $year), qq{</td>},
-                             qq{<td>}, $subj_copy, qq{</td>},
+                             qq{<td>$a_start}, $subj_copy, qq{$a_end</td>},
                              qq{</tr>\n});
         }
     }
@@ -1693,7 +1721,7 @@ sub new_html_cal
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
                                             "month" => $month);
     $cal->border(1);
-    $cal->tableclass("table table-bordered");
+    $cal->tableclass("table table-bordered fc-emulated-table");
     $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
 
     my $end_day = Date::Calc::Days_in_Month($year, $month);
