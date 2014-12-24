@@ -1405,6 +1405,21 @@ accurate.
     }
 
     Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
+    my $btn_group = qq{<div class="btn-group">
+<button class="btn btn-default"><i class="icon-list"></i> List</button>
+<button class="btn btn-default"><i class="icon-calendar"></i> Month</button>
+</div>
+<div class="btn-group">
+<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+<ul class="dropdown-menu">
+  <li><a href="#">Action</a></li>
+  <li><a href="#">Another action</a></li>
+  <li><a href="#">Something else here</a></li>
+  <li class="divider"></li>
+  <li><a href="#">Separated link</a></li>
+</ul>
+</div>
+};
 
     if ($numEntries > 0) {
 	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
@@ -1477,86 +1492,12 @@ EOHTML
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.3/fullcalendar.min.js"></script>
+<script src="/i/hebcal-results.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
   var lang = '$lang',
-      evts = transformHebcalEvents(window['hebcal'].events, lang),
-      defaultDate = isDateInRange(evts[0].start, evts[evts.length-1].start, moment()) ? moment() : evts[0].start,
-      singleMonth = $single_month,
-      rightNav = singleMonth ? '' : (lang === 'h' ? 'next prev' : 'prev next');
-  function isDateInRange(begin, end, now) {
-    var t = now ? moment(now) : moment();
-    return (t.isSame(begin) || t.isAfter(begin)) && (t.isSame(end) || t.isBefore(end));
-  }
-  function transformHebcalEvents(events, lang) {
-      var evts = events.map(function(src) {
-          var allDay = src.date.indexOf('T') == -1,
-              title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
-              dest = {
-                  title: title,
-                  start: src.date,
-                  className: src.category,
-                  allDay: allDay
-              };
-          if (src.yomtov) {
-              dest.className += " yomtov";
-          }
-          if (src.memo) {
-              dest.description = src.memo;
-          }
-          if (src.link) {
-              dest.url = src.link;
-          }
-          if (src.hebrew) {
-              dest.hebrew = src.hebrew;
-              if (lang === 'h') {
-                dest.title = src.hebrew;
-                dest.className += " hebrew";
-              }
-          }
-          return dest;
-      });
-      if (lang === 'ah' || lang === 'sh') {
-          var dest = [];
-          evts.forEach(function(evt) {
-              dest.push(evt);
-              if (evt.hebrew) {
-                  var tmp = \$.extend({}, evt, {
-                      title: evt.hebrew,
-                      className: evt.className + " hebrew"
-                  });
-                  dest.push(tmp);
-              }
-          });
-          evts = dest;
-      }
-      return evts;
-  }
-  function renderCalendar() {
-    \$('#full-calendar').fullCalendar({
-      header: {
-        left: 'title',
-        center: '',
-        right: rightNav
-      },
-      isRTL: lang === 'h',
-      fixedWeekCount: false,
-      contentHeight: 580,
-      defaultDate: defaultDate,
-      events: evts
-    });
-    if (!singleMonth) {
-      \$("body").keydown(function(e) {
-        if (e.keyCode == 37) {
-          \$('#full-calendar').fullCalendar('prev');
-        } else if(e.keyCode == 39) {
-          \$('#full-calendar').fullCalendar('next');
-        }
-      });
-    }
-  }
-  renderCalendar();
-  window['hebcal'].fullCalendarEvents = evts;
+      singleMonth = $single_month;
+  window['hebcal'].renderCalendar(lang, singleMonth);
 });
 </script>
 JSCRIPT_END
