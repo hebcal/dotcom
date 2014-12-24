@@ -68,7 +68,7 @@ my %long_candles_text =
 # process form params
 my $q = new CGI;
 
-$q->delete(".s");		# we don't care about submit button
+$q->delete(".s");               # we don't care about submit button
 
 my $script_name = $q->script_name();
 $script_name =~ s,/[^/]+$,/,;
@@ -83,19 +83,19 @@ if (! $q->param("v") && $C_cookie)
 foreach my $key ($q->param()) {
     my $val = $q->param($key);
     if (defined $val) {
-	my $orig = $val;
-	if ($key eq "city" || $key eq "city-typeahead") {
-	    $val = decode_utf8($val);
-	} elsif ($key eq "tzid") {
-	    $val =~ s/[^\/\w\.\s-]//g; # allow forward-slash in tzid
-	} else {
-	    # sanitize input to prevent people from trying to hack the site.
-	    # remove anthing other than word chars, white space, or hyphens.
-	    $val =~ s/[^\w\.\s-]//g;
-	}
-	$val =~ s/^\s+//g;		# nuke leading
-	$val =~ s/\s+$//g;		# and trailing whitespace
-	$q->param($key, $val) if $val ne $orig;
+        my $orig = $val;
+        if ($key eq "city" || $key eq "city-typeahead") {
+            $val = decode_utf8($val);
+        } elsif ($key eq "tzid") {
+            $val =~ s/[^\/\w\.\s-]//g; # allow forward-slash in tzid
+        } else {
+            # sanitize input to prevent people from trying to hack the site.
+            # remove anthing other than word chars, white space, or hyphens.
+            $val =~ s/[^\w\.\s-]//g;
+        }
+        $val =~ s/^\s+//g;              # nuke leading
+        $val =~ s/\s+$//g;              # and trailing whitespace
+        $q->param($key, $val) if $val ne $orig;
     }
 }
 
@@ -119,7 +119,7 @@ if (! defined $pi) {
 } elsif (defined $q->param("cfg") && $q->param("cfg") =~ /^(e|e2|json)$/) {
     $cfg = $q->param("cfg");
     $content_type = $q->param("cfg") eq "json"
-	? "application/json" : "text/javascript";
+        ? "application/json" : "text/javascript";
 } else {
     $cfg = "html";
 }
@@ -135,14 +135,14 @@ if (defined $q->param("year") && $q->param("year") eq "now" &&
 {
     $q->param("year", $this_year);
     $q->param("month", $this_mon)
-	if $q->param("month") eq "now";
+        if $q->param("month") eq "now";
 
     my $end_day = Date::Calc::Days_in_Month($this_year, $this_mon);
     my $end_of_month =
-	Time::Local::timelocal(59,59,23,
-			       $end_day,
-			       $this_mon - 1,
-			       $this_year - 1900);
+        Time::Local::timelocal(59,59,23,
+                               $end_day,
+                               $this_mon - 1,
+                               $this_year - 1900);
 
     $http_expires = Hebcal::http_date($end_of_month);
 }
@@ -173,12 +173,12 @@ if (defined $q->param("nh") && $q->param("nh") =~ /^(on|1)$/) {
 
 form("Please select at least one event option.")
     if ((!defined $q->param("maj") || $q->param("maj") eq "off") &&
-	(!defined $q->param("nx") || $q->param("nx") eq "off") &&
-	(!defined $q->param("o") || $q->param("o") eq "off") &&
-	(!defined $q->param("c") || $q->param("c") eq "off") &&
-	(!defined $q->param("d") || $q->param("d") eq "off") &&
-	(!defined $q->param("F") || $q->param("F") eq "off") &&
-	(!defined $q->param("s") || $q->param("s") eq "off"));
+        (!defined $q->param("nx") || $q->param("nx") eq "off") &&
+        (!defined $q->param("o") || $q->param("o") eq "off") &&
+        (!defined $q->param("c") || $q->param("c") eq "off") &&
+        (!defined $q->param("d") || $q->param("d") eq "off") &&
+        (!defined $q->param("F") || $q->param("F") eq "off") &&
+        (!defined $q->param("s") || $q->param("s") eq "off"));
 
 
 my %cconfig;
@@ -187,30 +187,30 @@ my $cmd = "./hebcal";
 if (param_true("c")) {
     my @status = Hebcal::process_args_common($q, 0, 0, \%cconfig);
     unless ($status[0]) {
-	form($status[1], $status[2]);
+        form($status[1], $status[2]);
     }
     if ($cconfig{"geo"} eq "pos" && defined $q->param("city-typeahead") && $q->param("city-typeahead") !~ /^\s*$/) {
-	my $city = $q->param("city-typeahead");
-	$city =~ s/^\s+//;
-	$city =~ s/\s+$//;
-	$cconfig{"title_pos"} = $cconfig{"title"};
-	$cconfig{"title"} = $city;
-	$city =~ s/,.+//;
-	$cconfig{"city"} = $city;
+        my $city = $q->param("city-typeahead");
+        $city =~ s/^\s+//;
+        $city =~ s/\s+$//;
+        $cconfig{"title_pos"} = $cconfig{"title"};
+        $cconfig{"title"} = $city;
+        $city =~ s/,.+//;
+        $cconfig{"city"} = $city;
     }
     $cmd = $status[1];
 } else {
     $q->param("c","off");
     $cconfig{"geo"} = "none";
     foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir m tz dst tzid)) {
-	$q->delete($_);
+        $q->delete($_);
     }
 }
 
 foreach (@Hebcal::opts)
 {
     $cmd .= " -" . $_
-	if defined $q->param($_) && $q->param($_) =~ /^on|1$/
+        if defined $q->param($_) && $q->param($_) =~ /^on|1$/
 }
 
 $cmd .= " -a"
@@ -259,7 +259,7 @@ if (defined $q->param("month") && defined $q->param("year") &&
 {
     $g_filename .= "_" . lc($Hebcal::MoY_short[$q->param("month")-1]);
     $g_date = sprintf("%s %04d", $Hebcal::MoY_long{$q->param("month")},
-		    $q->param("year"));
+                    $q->param("year"));
 }
 else
 {
@@ -307,17 +307,17 @@ sub param_true
 sub json_events
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
 
     print STDOUT $q->header(-type => $content_type,
-			    -charset => "UTF-8",
-			    -access_control_allow_origin => '*',
-			    );
+                            -charset => "UTF-8",
+                            -access_control_allow_origin => '*',
+                            );
 
     my $title = "Hebcal $g_date";
     if (defined $cconfig{"title"} && $cconfig{"title"} ne "") {
-	$title .= " "  . $cconfig{"title"};
+        $title .= " "  . $cconfig{"title"};
     }
     Hebcal::items_to_json($items,$q,$title,
         $cconfig{"latitude"},$cconfig{"longitude"},\%cconfig);
@@ -327,25 +327,25 @@ sub javascript_events
 {
     my($v2) = @_;
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $cmd2 = $cmd;
     $cmd2 =~ s/(\d+)$/$1+1/e;
     my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
-				    $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                    $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@events, @ev2);
 
     my $time = defined $ENV{"SCRIPT_FILENAME"} ?
-	(stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
+        (stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
 
     print STDOUT $q->header(-type => $content_type,
-			    -charset => "UTF-8",
-			    -last_modified => Hebcal::http_date($time),
-			    -expires => $http_expires,
-			    -access_control_allow_origin => '*',
-			    );
+                            -charset => "UTF-8",
+                            -last_modified => Hebcal::http_date($time),
+                            -expires => $http_expires,
+                            -access_control_allow_origin => '*',
+                            );
 
     if ($v2) {
-	print STDOUT <<EOJS;
+        print STDOUT <<EOJS;
 if(typeof HEBCAL=="undefined"||!HEBCAL){var HEBCAL={};}
 HEBCAL.eraw=[
 EOJS
@@ -353,63 +353,63 @@ EOJS
     }
     my $first = 1;
     foreach my $evt (@events) {
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
 
-	my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+        my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
-	my $img_url = "";
-	my $img_w = 0;
-	my $img_h = 0;
+        my $img_url = "";
+        my $img_w = 0;
+        my $img_h = 0;
 
-	if ($q->param("img"))
-	{
-	    if ($subj =~ /^Candle lighting/)
-	    {
-		$img_url = "http://www.hebcal.com/i/sm_candles.gif";
-		$img_w = 40;
-		$img_h = 69;
-	    }
-	    elsif ($subj =~ /Havdalah/)
-	    {
-		$img_url = "http://www.hebcal.com/i/havdalah.gif";
-		$img_w = 46;
-		$img_h = 59;
-	    }
-	}
+        if ($q->param("img"))
+        {
+            if ($subj =~ /^Candle lighting/)
+            {
+                $img_url = "http://www.hebcal.com/i/sm_candles.gif";
+                $img_w = 40;
+                $img_h = 69;
+            }
+            elsif ($subj =~ /Havdalah/)
+            {
+                $img_url = "http://www.hebcal.com/i/havdalah.gif";
+                $img_w = 46;
+                $img_h = 59;
+            }
+        }
 
-	my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
+        my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
 
-	$subj = translate_subject($q,$subj,$hebrew);
+        $subj = translate_subject($q,$subj,$hebrew);
 
-	if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
-	{
-	    my $time_formatted = Hebcal::format_evt_time($evt, "p");
-	    $subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
-	}
+        if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+        {
+            my $time_formatted = Hebcal::format_evt_time($evt, "p");
+            $subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
+        }
 
-	if ($v2) {
-	    print STDOUT "," unless $first;
-	    $first = 0;
-	    printf STDOUT "{d:%04d%02d%02d,s:\"%s\"",
-	    $year, $mon, $mday, $subj;
-	    if ($href) {
-		my $href2 = $href;
-		$href2 =~ s,^http://www.hebcal.com/,,;
-		print STDOUT ",a:\"$href2\"";
-	    }
-	    if ($img_url) {
-		printf STDOUT ",is:\"%s\",iw:%d,ih:%d",
-	    	$img_url, $img_w, $img_h;
-	    }
-	    print STDOUT "}";
-	} else {
-	    #DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
-	    printf("DefineEvent(%04d%02d%02d,\"%s\",\"%s\",\"%s\",%d,%d);\015\012",
-		   $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
-	}
+        if ($v2) {
+            print STDOUT "," unless $first;
+            $first = 0;
+            printf STDOUT "{d:%04d%02d%02d,s:\"%s\"",
+            $year, $mon, $mday, $subj;
+            if ($href) {
+                my $href2 = $href;
+                $href2 =~ s,^http://www.hebcal.com/,,;
+                print STDOUT ",a:\"$href2\"";
+            }
+            if ($img_url) {
+                printf STDOUT ",is:\"%s\",iw:%d,ih:%d",
+                $img_url, $img_w, $img_h;
+            }
+            print STDOUT "}";
+        } else {
+            #DefineEvent(EventDate,EventDescription,EventLink,Image,Width,Height)
+            printf("DefineEvent(%04d%02d%02d,\"%s\",\"%s\",\"%s\",%d,%d);\015\012",
+                   $year, $mon, $mday, $subj, $href, $img_url, $img_w, $img_h);
+        }
     }
     if ($v2) {
-	print STDOUT <<EOJS;
+        print STDOUT <<EOJS;
 ];
 HEBCAL.jec2events=[];
 for (var i=0;i<HEBCAL.eraw.length;i++){
@@ -427,16 +427,16 @@ sub translate_subject
 
     my $lang = $q->param("lg") || "s";
     if ($lang eq "s" || $lang eq "a" || !$hebrew) {
-	return $subj;
+        return $subj;
     } elsif ($lang eq "h") {
-	return hebrew_span($hebrew);
+        return hebrew_span($hebrew);
     } elsif ($lang eq "ah" || $lang eq "sh") {
-	my $subj2 = $subj;
-	$subj2 .= $q->param("vis") ? "\n<br>" : "\n/ ";
-	$subj2 .= hebrew_span($hebrew);
-	return $subj2;
+        my $subj2 = $subj;
+        $subj2 .= $q->param("vis") ? "\n<br>" : "\n/ ";
+        $subj2 .= hebrew_span($hebrew);
+        return $subj2;
     } else {
-	warn "unknown lang \"$lang\" for $subj";
+        warn "unknown lang \"$lang\" for $subj";
         return $subj;
     }
 }
@@ -451,18 +451,18 @@ sub plus4_events {
     my($cmd,$title,$events) = @_;
 
     if (defined $q->param("month") && $q->param("month") eq "x" && $EXTRA_YEARS) {
-	for (my $i = 1; $i <= $EXTRA_YEARS; $i++)
-	{
-	    my $cmd2 = $cmd;
-	    $cmd2 =~ s/(\d+)$/$1+$i/e;
-	    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
-					    $g_nmf, $g_nss, $g_nminor, $g_nmodern);
-	    push(@{$events}, @ev2);
-	}
-	if ($g_date =~ /(\d+)/) {
-	    my $plus4 = $1 + $EXTRA_YEARS;
-	    ${$title} .= "-" . $plus4;
-	}
+        for (my $i = 1; $i <= $EXTRA_YEARS; $i++)
+        {
+            my $cmd2 = $cmd;
+            $cmd2 =~ s/(\d+)$/$1+$i/e;
+            my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
+                                            $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+            push(@{$events}, @ev2);
+        }
+        if ($g_date =~ /(\d+)/) {
+            my $plus4 = $1 + $EXTRA_YEARS;
+            ${$title} .= "-" . $plus4;
+        }
     }
 
     1;
@@ -472,7 +472,7 @@ sub plus4_events {
 sub vcalendar_display
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -490,30 +490,30 @@ my %pdf_font;
 
 sub pdf_display {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = "Jewish Calendar $g_date";
     if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
-	$title .= " "  . $cconfig{"city"};
+        $title .= " "  . $cconfig{"city"};
     }
 
     eval("use PDF::API2");
     my $pdf = PDF::API2->new();
     $pdf->info("Author" => "Hebcal Jewish Calendar (www.hebcal.com)",
-	       "Title" => $title);
+               "Title" => $title);
 
     $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
     $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
     my $lg = $q->param("lg") || "s";
     if ($lg =~ /h/) {
-	$pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
+        $pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
     }
 
     my %cells;
     foreach my $evt (@events) {
-	my($year,$mon,$mday) = Hebcal::event_ymd($evt);
-	my $cal_id = sprintf("%04d-%02d", $year, $mon);
-	push(@{$cells{$cal_id}{$mday}}, $evt);
+        my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+        my $cal_id = sprintf("%04d-%02d", $year, $mon);
+        push(@{$cells{$cal_id}{$mday}}, $evt);
     }
 
     # add blank months in the middle, even if there are no events
@@ -522,120 +522,120 @@ sub pdf_display {
     my($end_year,$end_month,$end_mday) = Hebcal::event_ymd($events[$numEntries - 1]);
     my $end_days = Date::Calc::Date_to_Days($end_year, $end_month, 1);
     for (my @dt = ($start_year, $start_month, 1);
-	 Date::Calc::Date_to_Days(@dt) <= $end_days;
-	 @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1)) {
-	my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
-	if (! defined $cells{$cal_id}) {
-	    $cells{$cal_id}{"dummy"} = [];
-	}
+         Date::Calc::Date_to_Days(@dt) <= $end_days;
+         @dt = Date::Calc::Add_Delta_YM(@dt, 0, 1)) {
+        my $cal_id = sprintf("%04d-%02d", $dt[0], $dt[1]);
+        if (! defined $cells{$cal_id}) {
+            $cells{$cal_id}{"dummy"} = [];
+        }
     }
 
     foreach my $year_month (sort keys %cells) {
-	my($year,$month) = split(/-/, $year_month);
-	$month =~ s/^0//;
+        my($year,$month) = split(/-/, $year_month);
+        $month =~ s/^0//;
 
-	my $month_name = Date::Calc::Month_to_Text($month);
-	my $daysinmonth = Date::Calc::Days_in_Month($year,$month);
-	my $day = 1;
+        my $month_name = Date::Calc::Month_to_Text($month);
+        my $daysinmonth = Date::Calc::Days_in_Month($year,$month);
+        my $day = 1;
 
-	# returns "1" for Monday, "2" for Tuesday .. until "7" for Sunday
-	my $dow = Date::Calc::Day_of_Week($year,$month,$day);
-	$dow = 0 if $dow == 7; # treat Sunday as day 0 (not day 7 as Date::Calc does)
+        # returns "1" for Monday, "2" for Tuesday .. until "7" for Sunday
+        my $dow = Date::Calc::Day_of_Week($year,$month,$day);
+        $dow = 0 if $dow == 7; # treat Sunday as day 0 (not day 7 as Date::Calc does)
 
-	my($hspace, $vspace) = (0, 0); # Space between columns and rows
-	my $rows = 5;
-	if (($daysinmonth == 31 && $dow >= 5) || ($daysinmonth == 30 && $dow == 6)) {
-	    $rows = 6;
-	}
+        my($hspace, $vspace) = (0, 0); # Space between columns and rows
+        my $rows = 5;
+        if (($daysinmonth == 31 && $dow >= 5) || ($daysinmonth == 30 && $dow == 6)) {
+            $rows = 6;
+        }
 
-	my $colwidth = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN - (PDF_COLUMNS - 1) * $hspace) / PDF_COLUMNS;
-	my $rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN - ($rows - 1) * $vspace) / $rows;
+        my $colwidth = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN - (PDF_COLUMNS - 1) * $hspace) / PDF_COLUMNS;
+        my $rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN - ($rows - 1) * $vspace) / $rows;
 
-	my $page = $pdf->page;
-	$page->mediabox(PDF_WIDTH, PDF_HEIGHT);
-	$page->cropbox(PDF_WIDTH, PDF_HEIGHT);
-	$page->trimbox(PDF_WIDTH, PDF_HEIGHT);
+        my $page = $pdf->page;
+        $page->mediabox(PDF_WIDTH, PDF_HEIGHT);
+        $page->cropbox(PDF_WIDTH, PDF_HEIGHT);
+        $page->trimbox(PDF_WIDTH, PDF_HEIGHT);
 
-	my $text = $page->text(); # Add the Text object
-	$text->translate(PDF_WIDTH / 2, PDF_HEIGHT - PDF_TMARGIN + 24); # Position the Text object
-	$text->font($pdf_font{'bold'}, 24); # Assign a font to the Text object
-	$text->text_center("$month_name $year"); # Draw the string
+        my $text = $page->text(); # Add the Text object
+        $text->translate(PDF_WIDTH / 2, PDF_HEIGHT - PDF_TMARGIN + 24); # Position the Text object
+        $text->font($pdf_font{'bold'}, 24); # Assign a font to the Text object
+        $text->text_center("$month_name $year"); # Draw the string
 
-	my $g = $page->gfx();
-	$g->strokecolor("#aaaaaa");
-	$g->linewidth(1);
-	$g->rect(PDF_LMARGIN, PDF_BMARGIN,
-		 PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN,
-		 PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN);
-	$g->stroke();
-	$g->endpath();
+        my $g = $page->gfx();
+        $g->strokecolor("#aaaaaa");
+        $g->linewidth(1);
+        $g->rect(PDF_LMARGIN, PDF_BMARGIN,
+                 PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN,
+                 PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN);
+        $g->stroke();
+        $g->endpath();
 
-	$text->font($pdf_font{'plain'},10);
-	for (my $i = 0; $i < scalar(@Hebcal::DoW_long); $i++) {
-	    my $x = PDF_LMARGIN + $i * ($colwidth + $hspace) + ($colwidth / 2);
-	    $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
-	    $text->text_center($Hebcal::DoW_long[$i]);
-	}
+        $text->font($pdf_font{'plain'},10);
+        for (my $i = 0; $i < scalar(@Hebcal::DoW_long); $i++) {
+            my $x = PDF_LMARGIN + $i * ($colwidth + $hspace) + ($colwidth / 2);
+            $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
+            $text->text_center($Hebcal::DoW_long[$i]);
+        }
 
-	# Loop through the columns
-	foreach my $c (0 .. PDF_COLUMNS - 1) {
-	    my $x = PDF_LMARGIN + $c * ($colwidth + $hspace);
-	    if ($c > 0) {
-		# Print a vertical grid line
-		$g->move($x, PDF_BMARGIN);
-		$g->line($x, PDF_HEIGHT - PDF_TMARGIN);
-		$g->stroke;
-		$g->endpath();
-	    }
+        # Loop through the columns
+        foreach my $c (0 .. PDF_COLUMNS - 1) {
+            my $x = PDF_LMARGIN + $c * ($colwidth + $hspace);
+            if ($c > 0) {
+                # Print a vertical grid line
+                $g->move($x, PDF_BMARGIN);
+                $g->line($x, PDF_HEIGHT - PDF_TMARGIN);
+                $g->stroke;
+                $g->endpath();
+            }
 
-	    # Loop through the rows
-	    foreach my $r (0 .. $rows - 1) {
-		my $y = PDF_HEIGHT - PDF_TMARGIN - $r * ($rowheight + $vspace);
-		if ($r > 0) {
-		    # Print a horizontal grid line
-		    $g->move(PDF_LMARGIN, $y);
-		    $g->line(PDF_WIDTH - PDF_RMARGIN, $y);
-		    $g->stroke;
-		    $g->endpath();
-		}
-	    }
-	}
+            # Loop through the rows
+            foreach my $r (0 .. $rows - 1) {
+                my $y = PDF_HEIGHT - PDF_TMARGIN - $r * ($rowheight + $vspace);
+                if ($r > 0) {
+                    # Print a horizontal grid line
+                    $g->move(PDF_LMARGIN, $y);
+                    $g->line(PDF_WIDTH - PDF_RMARGIN, $y);
+                    $g->stroke;
+                    $g->endpath();
+                }
+            }
+        }
 
-	my $xpos = PDF_LMARGIN + $colwidth - 4;
-	$xpos += ($dow * $colwidth);
-	my $ypos = PDF_HEIGHT - PDF_TMARGIN - 12;
-	for (my $mday = 1; $mday <= $daysinmonth; $mday++) {
-	    # render day number
-	    $text->font($pdf_font{'plain'}, 11);
-	    $text->fillcolor("#000000");
-	    $text->translate($xpos, $ypos);
-	    $text->text_right($mday);
+        my $xpos = PDF_LMARGIN + $colwidth - 4;
+        $xpos += ($dow * $colwidth);
+        my $ypos = PDF_HEIGHT - PDF_TMARGIN - 12;
+        for (my $mday = 1; $mday <= $daysinmonth; $mday++) {
+            # render day number
+            $text->font($pdf_font{'plain'}, 11);
+            $text->fillcolor("#000000");
+            $text->translate($xpos, $ypos);
+            $text->text_right($mday);
 
-	    # events within day $mday
-	    if (defined $cells{$year_month}{$mday}) {
-		$text->translate($xpos - $colwidth + 8, $ypos - 18);
-		foreach my $evt (@{$cells{$year_month}{$mday}}) {
-		    pdf_render_event($pdf, $text, $evt, $lg);
-		}
-	    }
+            # events within day $mday
+            if (defined $cells{$year_month}{$mday}) {
+                $text->translate($xpos - $colwidth + 8, $ypos - 18);
+                foreach my $evt (@{$cells{$year_month}{$mday}}) {
+                    pdf_render_event($pdf, $text, $evt, $lg);
+                }
+            }
 
-	    $xpos += $colwidth;	# move to the right by one cell
-	    if (++$dow == 7) {
-		$dow = 0;
-		$xpos = PDF_LMARGIN + $colwidth - 4;
-		$ypos -= $rowheight; # move down the page
-	    }
-	}
+            $xpos += $colwidth; # move to the right by one cell
+            if (++$dow == 7) {
+                $dow = 0;
+                $xpos = PDF_LMARGIN + $colwidth - 4;
+                $ypos -= $rowheight; # move down the page
+            }
+        }
 
-	$text->fillcolor("#000000");
-	$text->font($pdf_font{'plain'}, 8);
-	if (param_true("c")) {
-	    $text->translate(PDF_LMARGIN, PDF_BMARGIN - 12);
-	    $text->text("Candle lighting times for " . $cconfig{"title"});
-	}
+        $text->fillcolor("#000000");
+        $text->font($pdf_font{'plain'}, 8);
+        if (param_true("c")) {
+            $text->translate(PDF_LMARGIN, PDF_BMARGIN - 12);
+            $text->text("Candle lighting times for " . $cconfig{"title"});
+        }
 
-	$text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
-	$text->text_right("Provided by www.hebcal.com with a Creative Commons Attribution 3.0 license");
+        $text->translate(PDF_WIDTH - PDF_RMARGIN, PDF_BMARGIN - 12);
+        $text->text_right("Provided by www.hebcal.com with a Creative Commons Attribution 3.0 license");
     }
 
     print STDOUT $q->header(-type => $content_type);
@@ -650,17 +650,17 @@ sub pdf_render_event {
     my $color = "#000000";
     my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
     if (($subj =~ /^\d+\w+.+, \d{4,}$/) || ($subj =~ /^\d+\w+ day of the Omer$/)) {
-	$color = "#666666";
+        $color = "#666666";
     } elsif ($subj =~ /^Daf Yomi: (.+)$/) {
-	$subj = $1;
-	$color = "#666666";
+        $subj = $1;
+        $color = "#666666";
     }
     $text->fillcolor($color);
 
     if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0) {
-	my $time_formatted = Hebcal::format_evt_time($evt, "p");
-	$text->font($pdf_font{'bold'}, 8);
-	$text->text($time_formatted . " ");
+        my $time_formatted = Hebcal::format_evt_time($evt, "p");
+        $text->font($pdf_font{'bold'}, 8);
+        $text->text($time_formatted . " ");
     }
 
     if ($lg =~ /[as]/) {
@@ -688,7 +688,7 @@ sub pdf_render_event {
             $text->font($pdf_font{'plain'}, 8);
             $text->text($subj);
         }
-	$text->cr(-12);
+        $text->cr(-12);
     }
 
     if ( $lg =~ /h/ ) {
@@ -724,7 +724,7 @@ sub dba_display
     eval("use Palm::DBA");
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     Hebcal::export_http_header($q, $content_type);
 
@@ -738,7 +738,7 @@ sub dba_display
 sub csv_display
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -766,19 +766,19 @@ sub form
     my($message,$help) = @_;
 
     print STDOUT $q->header(-type => $content_type,
-			    -charset => "UTF-8");
+                            -charset => "UTF-8");
 
     if ($message ne "" && $cfg ne "html") {
-	if ($cfg =~ /^(e|e2)$/) {
-	    $message =~ s/\"/\\"/g;
-	    print STDOUT qq{alert("Error: $message");\n};
-	} elsif ($cfg eq "json") {
-	    $message =~ s/\"/\\"/g;
-	    print STDOUT "{\"error\":\"$message\"}\n";
-	} else {
-	    print STDOUT $message, "\n";
-	}
-	exit(0);
+        if ($cfg =~ /^(e|e2)$/) {
+            $message =~ s/\"/\\"/g;
+            print STDOUT qq{alert("Error: $message");\n};
+        } elsif ($cfg eq "json") {
+            $message =~ s/\"/\\"/g;
+            print STDOUT "{\"error\":\"$message\"}\n";
+        } else {
+            print STDOUT $message, "\n";
+        }
+        exit(0);
     }
 
     my $xtra_head = <<EOHTML;
@@ -796,11 +796,11 @@ EOHTML
 ;
 
     Hebcal::out_html(undef,
-		     Hebcal::html_header_bootstrap("Custom Calendar",
-					 $script_name,
-					 "single single-post",
-					 $xtra_head)
-	);
+                     Hebcal::html_header_bootstrap("Custom Calendar",
+                                         $script_name,
+                                         "single single-post",
+                                         $xtra_head)
+        );
     my $head_divs = <<EOHTML;
 <p class="lead">Customize your calendar of Jewish holidays, candle
 lighting times, and Torah readings.</p>
@@ -809,11 +809,11 @@ EOHTML
     Hebcal::out_html(undef, $head_divs);
 
     if ($message ne "") {
-	$help = "" unless defined $help;
-	$message = qq{<div class="alert alert-error alert-block">\n} .
-	    qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n} .
-	    $message . $help . "</div>";
-	Hebcal::out_html(undef, $message, "\n");
+        $help = "" unless defined $help;
+        $message = qq{<div class="alert alert-error alert-block">\n} .
+            qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n} .
+            $message . $help . "</div>";
+        Hebcal::out_html(undef, $message, "\n");
 
     }
 
@@ -842,12 +842,12 @@ EOHTML
     qq{<div class="form-inline">\n},
     qq{<label>Year: },
     $q->textfield(-name => "year",
-		  -id => "year",
-		  -pattern => '\d*',
-		  -default => $this_year,
-		  -style => "width:auto",
-		  -size => 4,
-		  -maxlength => 4),
+                  -id => "year",
+                  -pattern => '\d*',
+                  -default => $this_year,
+                  -style => "width:auto",
+                  -size => 4,
+                  -maxlength => 4),
     "</label>\n",
     $q->hidden(-name => "month",
         -id => "month",
@@ -866,9 +866,9 @@ EOHTML
     Hebcal::out_html(undef,
     qq{<label class="checkbox">},
     $q->checkbox(-name => "maj",
-		 -id => "maj",
-		 -checked => 1,
-		 -label => "Major Holidays"),
+                 -id => "maj",
+                 -checked => 1,
+                 -label => "Major Holidays"),
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "min",
@@ -878,21 +878,21 @@ EOHTML
     qq{\n<small class="muted">(Tu BiShvat, Lag B'Omer, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "nx",
-		 -id => "nx",
-		 -checked => 1,
-		 -label => "Rosh Chodesh"),
+                 -id => "nx",
+                 -checked => 1,
+                 -label => "Rosh Chodesh"),
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "mf",
-		 -id => "mf",
-		 -checked => 1,
-		 -label => "Minor Fasts"),
+                 -id => "mf",
+                 -checked => 1,
+                 -label => "Minor Fasts"),
     qq{\n<small class="muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "ss",
-		 -id => "ss",
-		 -checked => 1,
-		 -label => "Special Shabbatot"),
+                 -id => "ss",
+                 -checked => 1,
+                 -label => "Special Shabbatot"),
     qq{\n<small class="muted">(Shabbat Shekalim, Zachor, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "mod",
@@ -902,15 +902,15 @@ EOHTML
     qq{\n<small class="muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label>\n},
     qq{<label class="checkbox">},
     $q->checkbox(-name => "o",
-		 -label => "Days of the Omer"),
+                 -label => "Days of the Omer"),
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "F",
-		 -label => "Daf Yomi"),
+                 -label => "Daf Yomi"),
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "s",
-		 -label => "Weekly Torah portion on Saturdays"),
+                 -label => "Weekly Torah portion on Saturdays"),
     "</label>\n");
 
     Hebcal::out_html(undef, qq{</fieldset>\n});
@@ -921,22 +921,22 @@ EOHTML
     "<fieldset><legend>Other options</legend>",
     "<label>Event titles: ",
     $q->popup_menu(-name => "lg",
-		   -values => ["s", "sh", "a", "ah", "h"],
-		   -default => "s",
-		   -labels => \%Hebcal::lang_names),
+                   -values => ["s", "sh", "a", "ah", "h"],
+                   -default => "s",
+                   -labels => \%Hebcal::lang_names),
     "</label>\n",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "vis",
-		 -checked => 1,
-		 -label => "Display visual calendar grid"),
+                 -checked => 1,
+                 -label => "Display visual calendar grid"),
     "</label>",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "D",
-		 -label => "Show Hebrew date for dates with some event"),
+                 -label => "Show Hebrew date for dates with some event"),
     "</label>",
     qq{<label class="checkbox">},
     $q->checkbox(-name => "d",
-		 -label => "Show Hebrew date for entire date range"),
+                 -label => "Show Hebrew date for entire date range"),
     "</label>",
     "</fieldset>\n");
 
@@ -1013,12 +1013,12 @@ EOHTML
     Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
     Hebcal::out_html(undef,
     $q->hidden(-name => ".cgifields",
-	       -values => ["nx", "maj", "mf", "ss", "min", "mod", "vis"],
-	       "-override"=>1),
+               -values => ["nx", "maj", "mf", "ss", "min", "mod", "vis"],
+               "-override"=>1),
     "\n",
     $q->submit(-name => ".s",
-	       -class => "btn btn-primary",
-	       -value => "Create Calendar"),
+               -class => "btn btn-primary",
+               -value => "Create Calendar"),
     qq{</div><!-- .clearfix -->\n},
     qq{</form>\n});
 
@@ -1055,7 +1055,7 @@ window['hebcal'].createCityTypeahead(false);
 \$('#havdalahInfo').tooltip();
 </script>
 JSCRIPT_END
-	;
+        ;
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
@@ -1090,8 +1090,8 @@ sub my_set_cookie
 {
     my($str) = @_;
     if ($str =~ /&/) {
-	print STDOUT "Cache-Control: private\015\012Set-Cookie: ",
-    	$str, "; expires=", $cookie_expires, "; path=/\015\012";
+        print STDOUT "Cache-Control: private\015\012Set-Cookie: ",
+        $str, "; expires=", $cookie_expires, "; path=/\015\012";
     }
 }
 
@@ -1259,28 +1259,28 @@ sub results_page
 
     if (param_true("c"))
     {
-	if ($cconfig{"geo"} eq "zip")
-	{
-	    $filename .= "_" . $q->param("zip");
-	}
-	elsif (defined $cconfig{"city"} && $cconfig{"city"} ne "")
-	{
-	    my $tmp = $cconfig{"city"};
-	    $tmp =~ s/[^A-Za-z0-9]/_/g;
-	    $filename .= "_" . $tmp;
-	}
+        if ($cconfig{"geo"} eq "zip")
+        {
+            $filename .= "_" . $q->param("zip");
+        }
+        elsif (defined $cconfig{"city"} && $cconfig{"city"} ne "")
+        {
+            my $tmp = $cconfig{"city"};
+            $tmp =~ s/[^A-Za-z0-9]/_/g;
+            $filename .= "_" . $tmp;
+        }
     }
 
     possibly_set_cookie();
 
     my $results_title = "Jewish Calendar $date";
     if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
-	$results_title .= " "  . $cconfig{"city"};
+        $results_title .= " "  . $cconfig{"city"};
     }
 
     print STDOUT $q->header(-expires => $http_expires,
-			    -type => $content_type,
-			    -charset => "UTF-8");
+                            -type => $content_type,
+                            -charset => "UTF-8");
 
     my $xtra_head = <<EOHTML;
 <style type="text/css">
@@ -1347,14 +1347,14 @@ EOHTML
     my $lang_hebrew = ($lang && $lang =~ /h/) ? 1 : 0;
 
     Hebcal::out_html(undef,
-		     Hebcal::html_header_bootstrap(
-			$results_title, $script_name, "ignored",
-			$xtra_head, 0, $lang_hebrew)
-	);
+                     Hebcal::html_header_bootstrap(
+                        $results_title, $script_name, "ignored",
+                        $xtra_head, 0, $lang_hebrew)
+        );
 
     my $h1_extra = "";
     if (param_true("c")) {
-	$h1_extra = "<br><small>" . $cconfig{"title"} . "</small>";
+        $h1_extra = "<br><small>" . $cconfig{"title"} . "</small>";
     } else {
         my $where = param_true("i") ? "Israel" : "Diaspora";
         $h1_extra = " <small>$where</small>";
@@ -1371,7 +1371,7 @@ EOHTML
     Hebcal::out_html(undef, "<!-- $cmd -->\n");
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
-				       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@benchmarks, Benchmark->new);
 
     my $numEntries = scalar(@events);
@@ -1379,20 +1379,20 @@ EOHTML
     my($greg_year1,$greg_year2) = (0,0);
     if ($numEntries > 0)
     {
-	$greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
-	$greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+        $greg_year1 = $events[0]->[$Hebcal::EVT_IDX_YEAR];
+        $greg_year2 = $events[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
 
-	Hebcal::out_html(undef, $HebcalHtml::gregorian_warning)
-	    if ($greg_year1 <= 1752);
+        Hebcal::out_html(undef, $HebcalHtml::gregorian_warning)
+            if ($greg_year1 <= 1752);
 
-	if ($greg_year1 >= 3762
-	    && (!defined $q->param("yt") || $q->param("yt") eq "G"))
-	{
-	    my $future_years = $greg_year1 - $this_year;
-	    my $new_url = Hebcal::self_url($q,
-					   {"yt" => "H", "month" => "x"},
-					   "&amp;");
-	    Hebcal::out_html(undef, qq{<div class="alert alert-block">
+        if ($greg_year1 >= 3762
+            && (!defined $q->param("yt") || $q->param("yt") eq "G"))
+        {
+            my $future_years = $greg_year1 - $this_year;
+            my $new_url = Hebcal::self_url($q,
+                                           {"yt" => "H", "month" => "x"},
+                                           "&amp;");
+            Hebcal::out_html(undef, qq{<div class="alert alert-block">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>Note!</strong>
 You are viewing a calendar for <strong>Gregorian</strong> year $greg_year1, which
@@ -1404,23 +1404,23 @@ continue. Hebcal.com results this far in the future should be
 accurate.
 </div><!-- .alert -->
 });
-	}
+        }
     }
 
     Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
-	if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
+        if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
 
     my $latitude = $cconfig{"latitude"};
     Hebcal::out_html(undef, $HebcalHtml::usno_warning)
-	if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
+        if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 
     if ($numEntries > 0) {
-	my $download_title = $date;
-	if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
-	    my $plus4 = $1 + $EXTRA_YEARS;
-	    $download_title .= "-" . $plus4;
-	}
-	Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
+        my $download_title = $date;
+        if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
+            my $plus4 = $1 + $EXTRA_YEARS;
+            $download_title .= "-" . $plus4;
+        }
+        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
     }
 
     Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
@@ -1441,27 +1441,27 @@ accurate.
 };
 
     if ($numEntries > 0) {
-	Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
+        Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
 
-	my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-	Hebcal::out_html(undef, qq{<a class="btn download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
+        my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
+        Hebcal::out_html(undef, qq{<a class="btn download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
 
-	if (param_true("c")) {
-	    # Fridge
-	    my $url = "/shabbat/fridge.cgi?";
-	    $url .= Hebcal::get_geo_args($q, "&amp;");
-	    my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
-	    $url .= "&amp;year=$hyear";
-	    $url .= "&amp;m=" . $q->param("m")
-		if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
+        if (param_true("c")) {
+            # Fridge
+            my $url = "/shabbat/fridge.cgi?";
+            $url .= Hebcal::get_geo_args($q, "&amp;");
+            my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
+            $url .= "&amp;year=$hyear";
+            $url .= "&amp;m=" . $q->param("m")
+                if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
-	    Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
-	}
+            Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
+        }
     }
 
     Hebcal::out_html(undef, qq{<a class="btn" href="},
-		     Hebcal::self_url($q, {"v" => "0"}, "&amp;"),
-		     qq{" title="Change calendar options"><i class="icon-cog"></i> Settings</a>\n});
+                     Hebcal::self_url($q, {"v" => "0"}, "&amp;"),
+                     qq{" title="Change calendar options"><i class="icon-cog"></i> Settings</a>\n});
 
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
 
@@ -1471,8 +1471,8 @@ accurate.
     }
 
     if ($numEntries == 0) {
-	Hebcal::out_html(undef,
-	qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
+        Hebcal::out_html(undef,
+        qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
     }
 
     Hebcal::out_html(undef, "</div><!-- .span8 -->\n");
