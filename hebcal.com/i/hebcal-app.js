@@ -149,16 +149,17 @@ window['hebcal'].splitByMonth = function(events) {
 
 window['hebcal'].tableRow = function(evt) {
     var m = moment(evt.date, moment.ISO_8601),
-        dateStr = m.format('ddd DD MMM, YYYY'),
+        dateStr = m.format('ddd DD MMM'),
         allDay = evt.date.indexOf('T') == -1,
         subj = allDay ? evt.title : evt.title.substring(0, evt.title.indexOf(':')),
         timeStr = allDay ? '' : evt.title.substring(evt.title.indexOf(':') + 2),
+        timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<td>' + timeStr + '</td>',
         className = window['hebcal'].getEventClassName(evt);
     if (evt.link) {
         var atitle = evt.memo ? ' title="' + evt.memo + '"' : '';
         subj = '<a' + atitle + ' href="' + evt.link + '">' + subj + '</a>';
     }
-    return '<tr><td>' + dateStr + '</td><td>' + timeStr + '</td><td><span class="table-event ' + className + '">' + subj + '</span></td></tr>';
+    return '<tr><td>' + dateStr + '</td>' + timeTd + '<td><span class="table-event ' + className + '">' + subj + '</span></td></tr>';
 };
 
 window['hebcal'].monthHtml = function(month) {
@@ -167,7 +168,8 @@ window['hebcal'].monthHtml = function(month) {
         divBegin = '<div class="month-table">',
         divEnd = '</div><!-- .month-table -->',
         heading = '<h3>' + m.format('MMMM YYYY') + '</h3>',
-        tableHead = '<table class="table table-striped"><col style="width:140px"><col style="width:24px"><col><tbody>',
+        timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:24px">',
+        tableHead = '<table class="table table-striped"><col style="width:100px">' + timeColumn + '<col><tbody>',
         tableFoot = '</tbody></table>',
         tableContents = month.events.map(window['hebcal'].tableRow);
     return divBegin + heading + tableHead + tableContents.join('') + tableFoot + divEnd;
