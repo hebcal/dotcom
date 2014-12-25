@@ -1631,7 +1631,7 @@ EOHTML
     my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="/i/hebcal-app.js"></script>
+<script src="/i/hebcal-app-1.0.min.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
     \$('button#toggle-month').on('click', function() {
