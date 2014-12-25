@@ -1454,29 +1454,20 @@ EOHTML
     }
 
     Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
-    my $btn_group = qq{<div class="btn-group">
-<button class="btn btn-default"><i class="icon-list"></i> List</button>
-<button class="btn btn-default"><i class="icon-calendar"></i> Month</button>
-</div>
-<div class="btn-group">
-<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
-<ul class="dropdown-menu">
-  <li><a href="#">Action</a></li>
-  <li><a href="#">Another action</a></li>
-  <li><a href="#">Something else here</a></li>
-  <li class="divider"></li>
-  <li><a href="#">Separated link</a></li>
-</ul>
+    my $btn_group = qq{<div class="btn-group" data-toggle="buttons-radio">
+<button type="button" class="btn btn-default btn-small active"><i class="icon-calendar"></i> Month</button>
+<button type="button" class="btn btn-default btn-small"><i class="icon-list"></i> List</button>
 </div>
 };
+    Hebcal::out_html(undef, $btn_group);
 
     if ($numEntries > 0) {
         Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
 
         my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-        Hebcal::out_html(undef, qq{<a class="btn download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print PDF</a>\n});
-
-        if (param_true("c")) {
+        if (!param_true("c")) {
+            Hebcal::out_html(undef, qq{<a class="btn btn-default btn-small download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print</a>\n});
+        } else {
             # Fridge
             my $url = "/shabbat/fridge.cgi?";
             $url .= Hebcal::get_geo_args($q, "&amp;");
@@ -1485,20 +1476,30 @@ EOHTML
             $url .= "&amp;m=" . $q->param("m")
                 if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
-            Hebcal::out_html(undef, qq{<a class="btn" href="$url"><i class="icon-print"></i> Candle-lighting times</a>\n});
+            my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
+            $email_url .= Hebcal::get_geo_args($q, "&amp;");
+            $email_url .= "&amp;m=" . $q->param("m")
+                if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
+
+            my $more_button = qq{<div class="btn-group">
+<button class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+<ul class="dropdown-menu">
+  <li><a class="download" id="pdf" href="$pdf_url">Print</a></li>
+  <li><a href="$url">Compact candle-lighting times</a></li>
+  <li class="divider"></li>
+  <li><a href="$email_url">Email weekly Shabbat times</a></li>
+</ul>
+</div>
+};
+            Hebcal::out_html(undef, $more_button);
         }
     }
 
-    Hebcal::out_html(undef, qq{<a class="btn" href="},
+    Hebcal::out_html(undef, qq{<a class="btn btn-default btn-small" href="},
                      Hebcal::self_url($q, {"v" => "0"}, "&amp;"),
                      qq{" title="Change calendar options"><i class="icon-cog"></i> Settings</a>\n});
 
     Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
-
-    if ($numEntries > 0 && param_true("c")
-        && $q->param("geo") && $q->param("geo") =~ /^city|zip|geoname$/) {
-        Hebcal::out_html(undef, email_form_html($q));
-    }
 
     if ($numEntries == 0) {
         Hebcal::out_html(undef,
