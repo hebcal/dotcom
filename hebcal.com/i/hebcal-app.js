@@ -149,39 +149,40 @@ window['hebcal'].splitByMonth = function(events) {
 
 window['hebcal'].tableRow = function(evt) {
     var m = moment(evt.date, moment.ISO_8601),
-        dow = m.format('ddd'),
-        dateStr = m.format('DD-MMM-YYYY'),
-        subj = evt.title,
+        dateStr = m.format('ddd DD MMM, YYYY'),
+        allDay = evt.date.indexOf('T') == -1,
+        subj = allDay ? evt.title : evt.title.substring(0, evt.title.indexOf(':')),
+        timeStr = allDay ? '' : evt.title.substring(evt.title.indexOf(':') + 2),
         className = window['hebcal'].getEventClassName(evt);
     if (evt.link) {
         var atitle = evt.memo ? ' title="' + evt.memo + '"' : '';
         subj = '<a' + atitle + ' href="' + evt.link + '">' + subj + '</a>';
     }
-    return '<tr><td>' + dow + '</td><td>' + dateStr + '</td><td><span class="table-event ' + className + '">' + subj + '</span></td></tr>';
+    return '<tr><td>' + dateStr + '</td><td>' + timeStr + '</td><td><span class="table-event ' + className + '">' + subj + '</span></td></tr>';
 };
 
 window['hebcal'].monthHtml = function(month) {
     var date = month.month + "-01",
         m = moment(date, moment.ISO_8601),
-        calId = 'cal-' + month.month,
-        divBegin = '<div id="' + calId + '">',
-        divEnd = '</div><!-- #' + calId + ' -->',
+        divBegin = '<div class="month-table">',
+        divEnd = '</div><!-- .month-table -->',
         heading = '<h3>' + m.format('MMMM YYYY') + '</h3>',
-        tableHead = '<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>',
+        tableHead = '<table class="table table-striped"><col style="width:140px"><col style="width:24px"><col><tbody>',
         tableFoot = '</tbody></table>',
         tableContents = month.events.map(window['hebcal'].tableRow);
     return divBegin + heading + tableHead + tableContents.join('') + tableFoot + divEnd;
 };
 
 window['hebcal'].renderMonthTables = function() {
-    var months = window['hebcal'].eventsByMonth || window['hebcal'].splitByMonth(window['hebcal'].events),
-        monthHtmls = months.map(window['hebcal'].monthHtml);
-
-    window['hebcal'].eventsByMonth = months;
-
-    $('#full-calendar').fullCalendar('destroy');
-    $('body').off('keydown');
-    $('#hebcal-results').html(monthHtmls.join(''));
+    if (typeof window['hebcal'].monthTablesRendered === 'undefined') {
+        var months = window['hebcal'].splitByMonth(window['hebcal'].events);
+        months.forEach(function(month) {
+            var html = window['hebcal'].monthHtml(month),
+                selector = '#cal-' + month.month + ' .agenda';
+            $(selector).html(html);
+        });
+        window['hebcal'].monthTablesRendered = true;
+    }
 }
 
 window['hebcal'].createCityTypeahead = function(autoSubmit) {

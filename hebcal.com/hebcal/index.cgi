@@ -432,7 +432,7 @@ sub translate_subject
         return hebrew_span($hebrew);
     } elsif ($lang eq "ah" || $lang eq "sh") {
         my $subj2 = $subj;
-        $subj2 .= $q->param("vis") ? "\n<br>" : "\n/ ";
+        $subj2 .= "\n<br>";
         $subj2 .= hebrew_span($hebrew);
         return $subj2;
     } else {
@@ -926,11 +926,6 @@ EOHTML
                    -labels => \%Hebcal::lang_names),
     "</label>\n",
     qq{<label class="checkbox">},
-    $q->checkbox(-name => "vis",
-                 -checked => 1,
-                 -label => "Display visual calendar grid"),
-    "</label>",
-    qq{<label class="checkbox">},
     $q->checkbox(-name => "D",
                  -label => "Show Hebrew date for dates with some event"),
     "</label>",
@@ -1013,7 +1008,7 @@ EOHTML
     Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
     Hebcal::out_html(undef,
     $q->hidden(-name => ".cgifields",
-               -values => ["nx", "maj", "mf", "ss", "min", "mod", "vis"],
+               -values => ["nx", "maj", "mf", "ss", "min", "mod"],
                "-override"=>1),
     "\n",
     $q->submit(-name => ".s",
@@ -1296,8 +1291,8 @@ sub results_page_toolbar {
     my $html = <<EOHTML;
 <div class="btn-toolbar">
   <div class="btn-group" data-toggle="buttons-radio">
-    <button type="button" class="btn btn-default btn-small active"><i class="icon-calendar"></i> Month</button>
-    <button type="button" class="btn btn-default btn-small"><i class="icon-list"></i> List</button>
+    <button id="toggle-month" type="button" class="btn btn-default btn-small active"><i class="icon-calendar"></i> Month</button>
+    <button id="toggle-list" type="button" class="btn btn-default btn-small"><i class="icon-list"></i> List</button>
   </div>
 EOHTML
 ;
@@ -1527,9 +1522,6 @@ EOHTML
 ;
     Hebcal::out_html(undef, $header_ad);
 
-#    html_table_events(\@events);
-#    push(@benchmarks, Benchmark->new);
-
     Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
 
     my @html_cals;
@@ -1537,7 +1529,7 @@ EOHTML
     my @html_cal_ids;
 
     # make blank calendar month objects for every month in the date range
-    if ($numEntries > 0 && $q->param("vis")) {
+    if ($numEntries > 0) {
         my($start_month,$start_year,$end_month,$end_year) = get_start_and_end(\@events);
         my $dates = month_start_dates($start_month,$start_year,$end_month,$end_year);
         foreach my $dt (@{$dates}) {
@@ -1553,10 +1545,6 @@ EOHTML
 
     my $nav_pagination = nav_pagination(\@events);
     Hebcal::out_html(undef, $nav_pagination);
-
-    if (!$q->param("vis")) {
-        Hebcal::out_html(undef, qq{<table class="table table-striped"><col style="width:20px"><col style="width:110px"><col><tbody>\n});
-    }
 
     push(@benchmarks, Benchmark->new);
 
@@ -1585,71 +1573,45 @@ EOHTML
             $a_end = qq{</a>};
         }
 
-        if ($q->param("vis"))
-        {
-            my $cal_subj;
-            if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
-                $cal_subj = $subj;
-            } else {
-                my $time_formatted = Hebcal::format_evt_time($evt, "p");
-                $cal_subj = sprintf(qq{<span class="fc-time">%s</span> %s},
-                    $time_formatted, $subj);
-            }
-
-            $cal_subj =~
-                s/Havdalah \((\d+) min\)/Havdalah <small>($1 min)<\/small>/;
-            $cal_subj =~ s/Daf Yomi: //;
-
-            my $cal_id = sprintf("%04d-%02d", $year, $mon);
-            my $cal = $html_cals{$cal_id};
-
-            $cal->setcontent($mday, "")
-                if $cal->getcontent($mday) eq "&nbsp;";
-
-            $cal->addcontent($mday, "\n")
-                if $cal->getcontent($mday) ne "";
-
-            my $class = "fc-event $category";
-            if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
-            {
-                $class .= " yomtov";
-            }
-
-            $cal->addcontent($mday, qq{<div class="$class">$a_start$cal_subj$a_end</div>});
+        my $cal_subj;
+        if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
+            $cal_subj = $subj;
+        } else {
+            my $time_formatted = Hebcal::format_evt_time($evt, "p");
+            $cal_subj = sprintf(qq{<span class="fc-time">%s</span> %s},
+                $time_formatted, $subj);
         }
-        else
+
+        $cal_subj =~
+            s/Havdalah \((\d+) min\)/Havdalah <small>($1 min)<\/small>/;
+        $cal_subj =~ s/Daf Yomi: //;
+
+        my $cal_id = sprintf("%04d-%02d", $year, $mon);
+        my $cal = $html_cals{$cal_id};
+
+        $cal->setcontent($mday, "")
+            if $cal->getcontent($mday) eq "&nbsp;";
+
+        $cal->addcontent($mday, "\n")
+            if $cal->getcontent($mday) ne "";
+
+        my $class = "fc-event $category";
+        if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
         {
-            my $subj_copy;
-            if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
-                $subj_copy = $subj;
-            } else {
-                my $time_formatted = Hebcal::format_evt_time($evt, "pm");
-                $subj_copy = $subj . ": " . $time_formatted;
-            }
-            Hebcal::out_html(undef,
-                             qq{<tr>},
-                             qq{<td>}, $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)], qq{</td>},
-                             qq{<td>}, sprintf("%02d-%s-%04d", $mday, $Hebcal::MoY_short[$mon-1], $year), qq{</td>},
-                             qq{<td>$a_start}, $subj_copy, qq{$a_end</td>},
-                             qq{</tr>\n});
+            $class .= " yomtov";
         }
+
+        $cal->addcontent($mday, qq{<div class="$class">$a_start$cal_subj$a_end</div>});
     }
 
     push(@benchmarks, Benchmark->new);
 
-    if (!$q->param("vis")) {
-        Hebcal::out_html(undef, qq{</tbody></table>\n});
-    }
-
-    if (@html_cals) {
-        for (my $i = 0; $i < @html_cals; $i++) {
-            write_html_cal($q, \@html_cals, \@html_cal_ids, $i);
-        }
+    for (my $i = 0; $i < @html_cals; $i++) {
+        write_html_cal($q, \@html_cals, \@html_cal_ids, $i);
     }
 
     push(@benchmarks, Benchmark->new);
 
-    Hebcal::out_html(undef, "</p>") unless $q->param("vis");
     Hebcal::out_html(undef, $nav_pagination);
 
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
@@ -1663,20 +1625,29 @@ EOHTML
         Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
     }
 
+    html_table_events(\@events);
+    push(@benchmarks, Benchmark->new);
+
     my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="/i/hebcal-app.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
-  var lang = '$lang',
-      singleMonth = $single_month;
+    \$('button#toggle-month').on('click', function() {
+        \$('div.agenda').hide();
+        \$('div.cal').show();
+    });
+    \$('button#toggle-list').on('click', function() {
+        \$('div.cal').hide();
+        window['hebcal'].renderMonthTables();
+        \$('div.agenda').show();
+    });
 });
 </script>
 JSCRIPT_END
         ;
 
-    $xtra_html = "";
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
 
@@ -1720,8 +1691,12 @@ sub write_html_cal
         Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
     }
     Hebcal::out_html(undef,
-                     qq{<div id="cal-$id" class="$class"$style$dir>\n},
+                     qq{<div id="cal-$id">\n},
+                     qq{<div class="$class"$style$dir>\n},
                      $cal->as_HTML(),
+                     qq{</div><!-- .cal -->\n},
+                     qq{<div class="agenda">\n},
+                     qq{</div><!-- .agenda -->\n},
                      qq{</div><!-- #cal-$id -->\n});
 }
 
