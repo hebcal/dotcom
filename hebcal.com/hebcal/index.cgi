@@ -1290,6 +1290,61 @@ accurate.
         if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 }
 
+sub results_page_toolbar {
+    my($filename) = @_;
+
+    my $html = <<EOHTML;
+<div class="btn-toolbar">
+  <div class="btn-group" data-toggle="buttons-radio">
+    <button type="button" class="btn btn-default btn-small active"><i class="icon-calendar"></i> Month</button>
+    <button type="button" class="btn btn-default btn-small"><i class="icon-list"></i> List</button>
+  </div>
+EOHTML
+;
+
+    $html .= HebcalHtml::download_html_modal_button();
+
+    my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
+    if (!param_true("c")) {
+        $html .= qq{  <a class="btn btn-default btn-small download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print</a>\n};
+    } else {
+        # Fridge
+        my $url = "/shabbat/fridge.cgi?";
+        $url .= Hebcal::get_geo_args($q, "&amp;");
+        my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
+        $url .= "&amp;year=$hyear";
+        $url .= "&amp;m=" . $q->param("m")
+            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
+
+        my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
+        $email_url .= Hebcal::get_geo_args($q, "&amp;");
+        $email_url .= "&amp;m=" . $q->param("m")
+            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
+
+        $html .= <<EOHTML;
+  <div class="btn-group">
+    <button class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a class="download" id="pdf" href="$pdf_url">Print</a></li>
+      <li><a href="$url">Compact candle-lighting times</a></li>
+      <li class="divider"></li>
+      <li><a href="$email_url">Email weekly Shabbat times</a></li>
+    </ul>
+  </div>
+EOHTML
+;
+    }
+
+    my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
+    $html .= <<EOHTML;
+  <a class="btn btn-default btn-small" href="$settings_url" title="Change calendar options"><i class="icon-cog"></i> Settings</a>
+</div><!-- .btn-toolbar -->
+EOHTML
+;
+
+    return $html;
+}
+
 sub results_page
 {
     my($date,$filename) = @_;
@@ -1444,64 +1499,10 @@ EOHTML
     results_page_warnings(\@events);
 
     my $numEntries = scalar(@events);
-    if ($numEntries > 0) {
-        my $download_title = $date;
-        if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
-            my $plus4 = $1 + $EXTRA_YEARS;
-            $download_title .= "-" . $plus4;
-        }
-        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
-    }
-
-    Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
-    my $btn_group = qq{<div class="btn-group" data-toggle="buttons-radio">
-<button type="button" class="btn btn-default btn-small active"><i class="icon-calendar"></i> Month</button>
-<button type="button" class="btn btn-default btn-small"><i class="icon-list"></i> List</button>
-</div>
-};
-    Hebcal::out_html(undef, $btn_group);
 
     if ($numEntries > 0) {
-        Hebcal::out_html(undef, HebcalHtml::download_html_modal_button());
-
-        my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-        if (!param_true("c")) {
-            Hebcal::out_html(undef, qq{<a class="btn btn-default btn-small download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print</a>\n});
-        } else {
-            # Fridge
-            my $url = "/shabbat/fridge.cgi?";
-            $url .= Hebcal::get_geo_args($q, "&amp;");
-            my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
-            $url .= "&amp;year=$hyear";
-            $url .= "&amp;m=" . $q->param("m")
-                if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
-
-            my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
-            $email_url .= Hebcal::get_geo_args($q, "&amp;");
-            $email_url .= "&amp;m=" . $q->param("m")
-                if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
-
-            my $more_button = qq{<div class="btn-group">
-<button class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
-<ul class="dropdown-menu">
-  <li><a class="download" id="pdf" href="$pdf_url">Print</a></li>
-  <li><a href="$url">Compact candle-lighting times</a></li>
-  <li class="divider"></li>
-  <li><a href="$email_url">Email weekly Shabbat times</a></li>
-</ul>
-</div>
-};
-            Hebcal::out_html(undef, $more_button);
-        }
-    }
-
-    Hebcal::out_html(undef, qq{<a class="btn btn-default btn-small" href="},
-                     Hebcal::self_url($q, {"v" => "0"}, "&amp;"),
-                     qq{" title="Change calendar options"><i class="icon-cog"></i> Settings</a>\n});
-
-    Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
-
-    if ($numEntries == 0) {
+        Hebcal::out_html(undef, results_page_toolbar($filename));
+    } else {
         Hebcal::out_html(undef,
         qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
     }
@@ -1652,6 +1653,15 @@ EOHTML
     Hebcal::out_html(undef, $nav_pagination);
 
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
+
+    if ($numEntries > 0) {
+        my $download_title = $date;
+        if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
+            my $plus4 = $1 + $EXTRA_YEARS;
+            $download_title .= "-" . $plus4;
+        }
+        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
+    }
 
     my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
     my $xtra_html=<<JSCRIPT_END;
