@@ -1355,6 +1355,15 @@ sub zipcode_get_zip_fields($$)
      $Latitude,$Longitude,$lat_deg,$lat_min,$long_deg,$long_min);
 }
 
+sub html_footer_bootstrap3 {
+    my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
+    my $html = html_footer_bootstrap($q,$rcsrev,$noclosebody,$xtra_html);
+    $html =~ s/row-fluid/row/g;
+    $html =~ s/span3/col-md-3/g;
+    $html =~ s,/i/bootstrap-2.3.1/js/bootstrap.min.js,//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js,;
+    return $html;
+}
+
 sub html_footer_bootstrap
 {
     my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
@@ -1547,6 +1556,78 @@ sub html_menu_bootstrap {
     $str .= qq{</ul>};
     return $str;
 }
+
+
+sub html_header_bootstrap3 {
+    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title,$hebrew_stylesheet) = @_;
+    $xtra_head = "" unless $xtra_head;
+    my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
+    my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
+    my $alefhebrew = q"@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.ttf) format('truetype')}@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:700;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.ttf) format('truetype')}";
+    my $xtra_stylesheet = $hebrew_stylesheet
+        ? "<!-- http://fonts.googleapis.com/earlyaccess/alefhebrew.css -->\n<style type=\"text/css\">\n$alefhebrew\n</style>\n"
+        : "";
+
+    my $logo = '<a class="navbar-brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
+    my $str = <<EOHTML;
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+$xtra_stylesheet<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-967247-1', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
+</script>
+<style type="text/css">
+.label{text-transform:none}
+:lang(he) {
+  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
+  font-size:125%;
+  direction:rtl;
+}
+\@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+}
+</style>
+$xtra_head</head>
+<body>
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      $logo
+    </div>
+    <div class="navbar-collapse collapse">
+    $menu
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+     <input name="s" id="s" type="text" class="form-control" placeholder="Search">
+    </form>
+    </div><!--/.navbar-collapse -->
+  </div>
+</div>
+
+<div class="container">
+<div id="content">
+EOHTML
+;
+    return $str;
+}
+
 
 sub html_header_bootstrap {
     my($title,$base_href,$body_class,$xtra_head,$suppress_site_title,$hebrew_stylesheet) = @_;
