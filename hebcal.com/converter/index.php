@@ -306,7 +306,7 @@ EOD;
 echo html_header_bootstrap3("Hebrew Date Converter - $hebdate", $xtra_head, true, true);
 ?>
 <div class="row">
-<div class="col-md-9">
+<div class="col-sm-9">
 <?php
 }
 
@@ -348,7 +348,7 @@ function form($head, $message, $help = "") {
 ?>
 <div id="converter-form">
 <div class="row">
-<div class="col-md-6">
+<div class="col-sm-6">
 <h5>Convert from Gregorian to Hebrew date</h5>
 <form class="form-inline" action="<?php echo $action ?>">
 <div class="form-group">
@@ -369,9 +369,9 @@ After sunset</label>
 <button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Hebrew</button>
 </div><!-- .form-group -->
 </form>
-</div><!-- .col-md-6 -->
+</div><!-- .col-sm-6 -->
 
-<div class="col-md-6">
+<div class="col-sm-6">
 <h5>Convert from Hebrew to Gregorian date</h5>
 <form class="form-inline" action="<?php echo $action ?>">
 <div class="form-group">
@@ -387,7 +387,7 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="form-co
 </div><!-- .form-group -->
 </div><!-- .clearfix -->
 </form>
-</div><!-- .col-md-6 -->
+</div><!-- .col-sm-6 -->
 </div><!-- .row -->
 </div><!-- #converter-form -->
 <?php
@@ -400,13 +400,13 @@ function my_footer() {
 ?>
 <hr>
 <div class="row">
-<div class="col-md-6">
+<div class="col-sm-6">
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
 <p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicon glyphicon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
-</div><!-- .col-md-6 -->
-<div class="col-md-6">
+</div><!-- .col-sm-6 -->
+<div class="col-sm-6">
 <h5>Hebrew Date Feeds</h5>
 <p>Today's Hebrew date for your RSS reader.</p>
 <p><a class="btn btn-default" href="/etc/hdate-en.xml"
@@ -419,10 +419,10 @@ title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS">
 Hebrew feed &raquo;</a></p>
-</div><!-- .col-md-6 -->
+</div><!-- .col-sm-6 -->
 </div><!-- .row -->
-</div><!-- .col-md-9 -->
-<div class="col-md-3" role="complementary">
+</div><!-- .col-sm-9 -->
+<div class="col-sm-3" role="complementary">
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 200x200 text only -->
@@ -433,7 +433,7 @@ Hebrew feed &raquo;</a></p>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-</div><!-- .col-md-3 -->
+</div><!-- .col-sm-3 -->
 </div><!-- .row -->
 <?php
 
