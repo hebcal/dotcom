@@ -556,44 +556,37 @@ EOHTML
 EOHTML
 ;
 
-    my $full_kriyah_download_html = "";
+    my $full_kriyah_download_html = action_button_download_html("Full Kriyah");
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $basename = "fullkriyah-$yr.csv";
-	$full_kriyah_download_html .= qq{<a class="btn btn-default download" id="leyning-fullkriyah-$yr" href="$basename"
-title="Download $basename"><i class="glyphicon glyphicon-download-alt"></i> $yr</a>
-};
+        $full_kriyah_download_html .= qq{<li><a class="download" id="leyning-fullkriyah-$yr" href="$basename" download="$basename">$basename</a>};
     }
+    $full_kriyah_download_html .= qq{</ul>\n</div>\n};
 
-    my $triennial_download_html = "";
+    my $triennial_download_html = action_button_download_html("Triennial");
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	my $start_year = $cycle_start_years[$i];
 	my $triennial_range = triennial_csv_range($start_year);
 	my $triennial_basename = triennial_csv_basename($start_year);
-	$triennial_download_html .= qq{
-<a class="btn btn-default download" id="leyning-triennial-$start_year" href="$triennial_basename"
-title="Download $triennial_basename"><i class="glyphicon glyphicon-download-alt"></i> $triennial_range</a>
-};
+	$triennial_download_html .= qq{<li><a class="download" id="leyning-triennial-$start_year" href="$triennial_basename" download="$triennial_basename"> $triennial_basename</a></li>};
     }
+    $triennial_download_html .= qq{</ul>\n</div>\n};
 
     print OUT1 <<EOHTML;
-<h3 id="download">Download aliyah-by-aliyah breakdown of Torah readings</h3>
+<h3 id="download">Download leyning spreadsheet <small>aliyah-by-aliyah breakdown of Torah readings</small></h3>
 <p class="lead">Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
 <p>Note that they follow the Diaspora <a
 href="/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes">sedra
 scheme</a>.</p>
-<h4>Full Kriyah</h4>
 <div class="btn-toolbar">
 $full_kriyah_download_html
-</div><!-- .btn-toolbar -->
-<h4>Triennial</h4>
-<div class="btn-toolbar">
 $triennial_download_html
 </div><!-- .btn-toolbar -->
-<h4>Leyning spreadsheet file format</h4>
-<p>The format of the CSV files looks something like this:</p>
+<p> </p>
+<p>Example content:</p>
 <table class="table table-striped table-condensed">
 <tbody>
 <tr><th>Date</th><th>Parashah</th><th>Aliyah</th><th>Reading</th><th>Verses</th></tr>
@@ -628,6 +621,19 @@ EOHTML
     rename("$fn.$$", $fn) || croak "$fn: $!\n";
 
     1;
+}
+
+sub action_button_download_html {
+    my($button_title) = @_;
+    my $action_button_download_html = <<EOHTML;
+<div class="btn-group">
+ <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+  Download $button_title <span class="caret"></span>
+ </button>
+ <ul class="dropdown-menu" role="menu">
+EOHTML
+;
+    return $action_button_download_html;
 }
 
 sub date_sql_to_dd_MMM_yyyy {
