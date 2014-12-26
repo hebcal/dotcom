@@ -1359,7 +1359,7 @@ sub html_footer_bootstrap3 {
     my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
     my $html = html_footer_bootstrap($q,$rcsrev,$noclosebody,$xtra_html);
     $html =~ s/row-fluid/row/g;
-    $html =~ s/span3/col-md-3/g;
+    $html =~ s/span3/col-sm-3/g;
     $html =~ s,/i/bootstrap-2.3.1/js/bootstrap.min.js,//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js,;
     return $html;
 }

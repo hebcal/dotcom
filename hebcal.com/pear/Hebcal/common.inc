@@ -807,7 +807,7 @@ function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
 <hr>
 <div id="inner-footer" class="clearfix">
 <div class="row">
-<div class="col-md-3">
+<div class="col-sm-3">
 <ul class="nav nav-list">
 <li class="nav-header">Products</li>
 <li><a href="/holidays/">Jewish Holidays</a></li>
@@ -815,16 +815,16 @@ function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
 <li><a href="/shabbat/">Shabbat Times</a></li>
 <li><a href="/sedrot/">Torah Readings</a></li>
 </ul>
-</div><!-- .col-md-3 -->
-<div class="col-md-3">
+</div><!-- .col-sm-3 -->
+<div class="col-sm-3">
 <ul class="nav nav-list">
 <li class="nav-header">About Us</li>
 <li><a href="http://www.hebcal.com/home/about">About Hebcal</a></li>
 <li><a href="http://www.hebcal.com/home/category/news">News</a></li>
 <li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></li>
 </ul>
-</div><!-- .col-md-3 -->
-<div class="col-md-3">
+</div><!-- .col-sm-3 -->
+<div class="col-sm-3">
 <ul class="nav nav-list">
 <li class="nav-header">Connect</li>
 <li><a href="http://www.hebcal.com/home/help">Help</a></li>
@@ -832,14 +832,14 @@ function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
 <li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
 <li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
 </ul>
-</div><!-- .col-md-3 -->
-<div class="col-md-3">
+</div><!-- .col-sm-3 -->
+<div class="col-sm-3">
 $last_updated_text
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
 rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
 <p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
 also under a cc-by licence.</small></p>
-</div><!-- .col-md-3 -->
+</div><!-- .col-sm-3 -->
 </div><!-- .row -->
 </div><!-- #inner-footer -->
 </footer>
