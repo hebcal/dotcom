@@ -623,7 +623,7 @@ $xtra_head</head>
 
 <!-- Static navbar -->
 <div class="navbar navbar-default navbar-static-top" role="navigation">
-  <div class="container">
+  <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="sr-only">Toggle navigation</span>
