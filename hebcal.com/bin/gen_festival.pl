@@ -514,9 +514,9 @@ EOHTML
 
     $str .= <<EOHTML;
 <div class="btn-toolbar">
-<a class="btn btn-small download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="icon-print"></i> Print PDF</a>
-<a class="btn btn-small" title="export to Outlook, iPhone, Google and more" href="/ical/"><i class="icon-download-alt"></i> Download Calendar</a>
-<a class="btn btn-small" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><i class="icon-pencil"></i> Customize your calendar</a>
+<a class="btn btn-default btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="glyphicon glyphicon-print"></i> Print PDF</a>
+<a class="btn btn-default btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><i class="glyphicon glyphicon-download-alt"></i> Download Calendar</a>
+<a class="btn btn-default btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><i class="glyphicon glyphicon-pencil"></i> Customize your calendar</a>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -597,22 +597,22 @@ EOHTML
 
 
     my $page_title = "Jewish Holidays";
-    print OUT3 Hebcal::html_header_bootstrap(
+    print OUT3 Hebcal::html_header_bootstrap3(
 	$page_title, "/holidays/", "ignored",  $meta . $xtra_head);
 
-    print OUT3 qq{<div class="row-fluid">\n};
-    print OUT3 get_index_body_preamble($page_title, 1, undef, undef, "span8");
+    print OUT3 qq{<div class="row">\n};
+    print OUT3 get_index_body_preamble($page_title, 1, undef, undef, "col-sm-8");
     print OUT3 <<EOHTML;
-</div><!-- .span8 -->
-<div class="span4">
+</div><!-- .col-sm-8 -->
+<div class="col-sm-4">
 <h5>Advertisement</h5>
 $pagead_300x250
-</div><!-- .span4 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
 EOHTML
 ;
-    print OUT3 qq{<div class="row-fluid">\n};
-    print OUT3 qq{<div class="span12">\n};
+    print OUT3 qq{<div class="row">\n};
+    print OUT3 qq{<div class="col-sm-12">\n};
 
     foreach my $section (@sections) {
         my($heading,$table_id) = get_heading_and_table_id($section);
@@ -621,9 +621,9 @@ EOHTML
         table_index($festivals, $table_id, @{$section->[0]});
     }
 
-    print OUT3 qq{</div><!-- .span12 -->\n};
-    print OUT3 qq{</div><!-- .row-fluid -->\n};
-    print OUT3 Hebcal::html_footer_bootstrap(undef, undef);
+    print OUT3 qq{</div><!-- .col-sm-12 -->\n};
+    print OUT3 qq{</div><!-- .row -->\n};
+    print OUT3 Hebcal::html_footer_bootstrap3(undef, undef);
 
     close(OUT3);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -641,7 +641,7 @@ EOHTML
 sub pagination_hebrew {
     my($current_year) = @_;
 
-    my $s = qq{<div class="pagination"><ul>\n};
+    my $s = qq{<nav><ul class="pagination">\n};
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $HEB_YR + $j - 1;
         my $other_greg_yr1 = $other_yr - 3761;
@@ -655,7 +655,7 @@ sub pagination_hebrew {
         }
         $s .= qq{<a title="$other_slug" href="$other_slug">$other_yr</a></li>\n};
     }
-    $s .= qq{</ul></div>\n};
+    $s .= qq{</ul></nav>\n};
 
     return $s;
 }
@@ -663,7 +663,7 @@ sub pagination_hebrew {
 sub pagination_greg {
     my($current_year) = @_;
 
-    my $s = qq{<div class="pagination"><ul>\n};
+    my $s = qq{<nav><ul class="pagination">\n};
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $FIRST_GREG_YR + $j;
         if ($current_year == $j) {
@@ -673,7 +673,7 @@ sub pagination_greg {
         }
         $s .= qq{<a href="$other_yr">$other_yr</a></li>\n};
     }
-    $s .= qq{</ul></div>\n};
+    $s .= qq{</ul></nav>\n};
 
     return $s;
 }
@@ -694,25 +694,25 @@ sub write_greg_year_index_page {
 EOHTML
 ;
 
-    print $fh Hebcal::html_header_bootstrap($page_title,
+    print $fh Hebcal::html_header_bootstrap3($page_title,
                          "/holidays/$greg_year",
                          "single single-post",
                          $meta,
                          0);
 
-    print $fh qq{<div class="row-fluid">\n};
-    print $fh get_index_body_preamble($page_title, 0, "G", $greg_year, "span8");
+    print $fh qq{<div class="row">\n};
+    print $fh get_index_body_preamble($page_title, 0, "G", $greg_year, "col-sm-8");
     print $fh <<EOHTML;
-</div><!-- .span8 -->
-<div class="span4">
+</div><!-- .col-sm-8 -->
+<div class="col-sm-4">
 <h5>Advertisement</h5>
 $pagead_300x250
-</div><!-- .span4 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
 EOHTML
 ;
 
-    print $fh qq{<div class="row-fluid">\n};
+    print $fh qq{<div class="row">\n};
 
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
@@ -735,9 +735,9 @@ EOHTML
     print $fh pagination_greg($i);
     print $fh pagination_hebrew(-1);
 
-    print $fh qq{</div><!-- .row-fluid -->\n};
+    print $fh qq{</div><!-- .row -->\n};
 
-    print $fh Hebcal::html_footer_bootstrap(undef, undef);
+    print $fh Hebcal::html_footer_bootstrap3(undef, undef);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -762,25 +762,25 @@ sub write_hebrew_year_index_page {
 EOHTML
 ;
 
-    print $fh Hebcal::html_header_bootstrap($page_title,
+    print $fh Hebcal::html_header_bootstrap3($page_title,
         "/holidays/$slug",
         "single single-post",
         $meta . $xtra_head,
         0);
 
-    print $fh qq{<div class="row-fluid">\n};
-    print $fh get_index_body_preamble($page_title, 0, "H", $heb_year, "span8");
+    print $fh qq{<div class="row">\n};
+    print $fh get_index_body_preamble($page_title, 0, "H", $heb_year, "col-sm-8");
     print $fh <<EOHTML;
-</div><!-- .span8 -->
-<div class="span4">
+</div><!-- .col-sm-8 -->
+<div class="col-sm-4">
 <h5>Advertisement</h5>
 $pagead_300x250
-</div><!-- .span4 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
 EOHTML
 ;
-    print $fh qq{<div class="row-fluid">\n};
-    print $fh qq{<div class="span12">\n};
+    print $fh qq{<div class="row">\n};
+    print $fh qq{<div class="col-sm-12">\n};
 
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
@@ -796,9 +796,9 @@ EOHTML
     print $fh pagination_greg(-1);
     print $fh pagination_hebrew($i);
 
-    print $fh qq{</div><!-- .span12 -->\n};
-    print $fh qq{</div><!-- .row-fluid -->\n};
-    print $fh Hebcal::html_footer_bootstrap(undef, undef);
+    print $fh qq{</div><!-- .col-sm-12 -->\n};
+    print $fh qq{</div><!-- .row -->\n};
+    print $fh Hebcal::html_footer_bootstrap3(undef, undef);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -1007,7 +1007,7 @@ sub write_festival_page
 EOHTML
 ;
 
-    print OUT2 Hebcal::html_header_bootstrap(
+    print OUT2 Hebcal::html_header_bootstrap3(
 	 $page_title, "/holidays/$slug", "ignored", $meta, 0, 1);
 
     my $wikipedia_descr;
@@ -1018,7 +1018,7 @@ EOHTML
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
     $long_descr =~ s/(\p{script=Hebrew}[\p{script=Hebrew}\s]+\p{script=Hebrew})/<span lang="he" dir="rtl">$1<\/span>/g;
 
-    my $pager = qq{<ul class="pager hidden-phone">\n};
+    my $pager = qq{<ul class="pager hidden-xs">\n};
     my $prev = $PREV{$f};
     if ($prev) {
 	my $prev_slug = Hebcal::make_anchor($prev);
@@ -1032,8 +1032,8 @@ EOHTML
     $pager .= qq{</ul>\n};
 
     print OUT2 <<EOHTML;
-<div class="row-fluid">
-<div class="span10">
+<div class="row">
+<div class="col-sm-10">
 $pager
 <div class="page-header">
 <h1>$f / <span lang="he" dir="rtl">$hebrew</span></h1>
@@ -1047,12 +1047,12 @@ EOHTML
     my $observed = observed_event_list($f);
     my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
-	print OUT2 qq{<div class="pagination"><ul>\n};
+	print OUT2 qq{<nav><ul class="pagination">\n};
 	foreach my $inner (@{$nav_inner}) {
 	    my($slug,$part) = @{$inner};
 	    print OUT2 qq{\t<li><a href="#$slug">$part</a></li>\n};
 	}
-	print OUT2 qq{</ul></div><!-- .pagination -->\n};
+	print OUT2 qq{</ul></nav><!-- .pagination -->\n};
     }
 
     if (scalar(@{$observed})) {
@@ -1184,8 +1184,8 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
 
     print OUT2 <<EOHTML;
 $pager
-</div><!-- .span10 -->
-<div class="span2">
+</div><!-- .col-sm-10 -->
+<div class="col-sm-2">
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
@@ -1196,11 +1196,11 @@ $pager
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-</div><!-- .span2 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-sm-2 -->
+</div><!-- .row -->
 EOHTML
 ;
-    print OUT2 Hebcal::html_footer_bootstrap(undef, undef);
+    print OUT2 Hebcal::html_footer_bootstrap3(undef, undef);
 
     close(OUT2);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
