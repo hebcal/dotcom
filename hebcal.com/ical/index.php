@@ -45,9 +45,10 @@ $xtra_head = <<<EOD
 }
 </style>
 EOD;
-echo html_header_bootstrap($page_title, $xtra_head);
+echo html_header_bootstrap3($page_title, $xtra_head);
 ?>
-<div class="span12">
+<div class="row">
+<div class="col-sm-12">
 <div class="page-header">
 <h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
 </div>
@@ -59,78 +60,78 @@ iCalendar (.ics) files.</p>
 
 <p>Click the buttons below to download/subscribe in your device or web/desktop
 application. Subscribers to these feeds receive perpetual updates.</p>
-</div><!-- .span12 -->
-
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 <?php
-function cal_span6($path,$title,$subtitle,$suppress_outlook=false) {
+function cal_item($path,$title,$subtitle,$suppress_outlook=false) {
     $url_noproto = "download.hebcal.com/ical/" . $path . ".ics";
     $webcal = "webcal://" . $url_noproto;
     $http_esc = urlencode("http://" . $url_noproto);
     $csv_url = "http://download.hebcal.com/ical/" . $path . ".csv";
 ?>
-<div class="span6">
+<div class="col-sm-6">
 <h3><?php echo $title ?></h3>
 <p><?php echo $subtitle ?></p>
 <div class="btn-toolbar">
-<a class="btn btn-small download" id="quick-ical-<?php echo $path ?>"
+<a class="btn btn-default btn-sm download" id="quick-ical-<?php echo $path ?>"
 title="Subscribe to <?php echo $title ?> for iPhone, iPad, Mac OS X Desktop"
-href="<?php echo $webcal ?>"><i class="icon-download-alt"></i> iPhone, iPad, Mac OS X</a>
-<a class="btn btn-small download" id="quick-gcal-<?php echo $path ?>"
+href="<?php echo $webcal ?>"><i class="glyphicon glyphicon-download-alt"></i> iPhone, iPad, Mac OS X</a>
+<a class="btn btn-default btn-sm download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
-href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i class="icon-download-alt"></i> Google Calendar</a>
+href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i class="glyphicon glyphicon-download-alt"></i> Google Calendar</a>
 <?php if (!$suppress_outlook) { ?>
-<a class="btn btn-small download" id="quick-csv-<?php echo $path ?>"
+<a class="btn btn-default btn-sm download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
-href="<?php echo $csv_url ?>" download="<?php echo $path ?>.csv"><i class="icon-download-alt"></i> Outlook CSV</a>
+href="<?php echo $csv_url ?>" download="<?php echo $path ?>.csv"><i class="glyphicon glyphicon-download-alt"></i> Outlook CSV</a>
 <?php
     } // suppress_outlook
 ?>
 </div><!-- .btn-toolbar -->
-</div><!-- .span6 -->
+</div><!-- .col-sm-6 -->
 <?php
 } // function cal_row()
 function cal_divider() {
-?></div><!-- .row-fluid -->
+?></div><!-- .row -->
 <hr>
-<div class="row-fluid">
+<div class="row">
 <?php
 } // cal_divider
 ?>
-<div class="clearfix">
-<div class="row-fluid">
+<div class="row">
 <?php
-cal_span6("jewish-holidays", "Jewish Holidays",
+cal_item("jewish-holidays", "Jewish Holidays",
 	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).");
 ?>
-<div class="span6">
+<div class="col-sm-6">
 <h3>Advanced Settings</h3>
 Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc.
 <div class="btn-toolbar">
-  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal/"><i class="icon-pencil icon-white"></i> Customize your calendar &raquo;</a>
+  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-pencil glyphicon glyphicon-white"></i> Customize your calendar &raquo;</a>
 </div>
-</div><!-- .span6 -->
+</div><!-- .col-sm-6 -->
 <?php
 cal_divider();
-cal_span6("jewish-holidays-all", "Jewish Holidays (all)",
+cal_item("jewish-holidays-all", "Jewish Holidays (all)",
 	"Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.");
-cal_span6("torah-readings-diaspora", "Torah Readings",
+cal_item("torah-readings-diaspora", "Torah Readings",
   "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.");
 cal_divider();
-cal_span6("hdate-en", "Hebrew calendar dates (English)",
+cal_item("hdate-en", "Hebrew calendar dates (English)",
   "Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.");
-cal_span6("hdate-he", "Hebrew calendar dates (Hebrew)",
+cal_item("hdate-he", "Hebrew calendar dates (Hebrew)",
 	"Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
 	true);
 cal_divider();
-cal_span6("omer", "Days of the Omer",
+cal_item("omer", "Days of the Omer",
 	"7 weeks from the second night of Pesach to the day before Shavuot.");
-cal_span6("daf-yomi", "Daf Yomi",
+cal_item("daf-yomi", "Daf Yomi",
 	"Daily regimen of learning the Talmud.");
 cal_divider();
 ?>
+<div class="col-sm-12">
 <p class="lead">See our <a href="/home/category/import">help importing into
 apps</a> for step-by-step instructions.</p>
-</div><!-- .row-fluid -->
-</div><!-- .clearfix -->
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 
-<?php echo html_footer_bootstrap(); ?>
+<?php echo html_footer_bootstrap3(); ?>
