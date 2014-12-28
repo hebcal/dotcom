@@ -459,18 +459,16 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 ?>
 ';
 
+    my $download_button_diaspora = download_torah_button("Diaspora", "index.xml");
+    my $download_button_israel = download_torah_button("Israel", "israel.xml");
 
     print OUT1 <<EOHTML;
 <div class="btn-toolbar">
+$download_button_diaspora
+$download_button_israel
 <a class="btn btn-default" title="Download aliyah-by-aliyah breakdown"
 href="#download"><i
 class="glyphicon glyphicon-download-alt"></i> Leyning spreadsheet</a>
-<a class="btn btn-default" href="index.xml"><img src="/i/feed-icon-14x14.png"
-style="border:none" alt="View the raw XML source" width="14"
-height="14"> Parashat ha-Shavua feed (Diaspora)</a>
-<a class="btn btn-default" href="israel.xml"><img src="/i/feed-icon-14x14.png"
-style="border:none" alt="View the raw XML source" width="14"
-height="14"> Parashat ha-Shavua feed (Israel)</a>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
@@ -556,7 +554,7 @@ EOHTML
 EOHTML
 ;
 
-    my $full_kriyah_download_html = action_button_download_html("Full Kriyah");
+    my $full_kriyah_download_html = action_button_download_html("Download Full Kriyah");
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $basename = "fullkriyah-$yr.csv";
@@ -564,7 +562,7 @@ EOHTML
     }
     $full_kriyah_download_html .= qq{</ul>\n</div>\n};
 
-    my $triennial_download_html = action_button_download_html("Triennial");
+    my $triennial_download_html = action_button_download_html("Download Triennial");
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	my $start_year = $cycle_start_years[$i];
 	my $triennial_range = triennial_csv_range($start_year);
@@ -623,12 +621,30 @@ EOHTML
     1;
 }
 
+sub download_torah_button {
+    my($where,$rss_href) = @_;
+
+    my $filename = "torah-readings-" . lc($where);
+    my $html = action_button_download_html("Download for $where");
+    $html .= <<EOHTML;
+  <li><a class="download" id="quick-ical-$filename" href="webcal://download.hebcal.com/ical/$filename.ics">iPhone, iPad, Mac OS X</a></li>
+  <li><a class="download" id="quick-gcal-$filename" href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F$filename.ics">Google Calendar</a></li>
+  <li><a class="download" id="quick-csv-$filename" href="http://download.hebcal.com/ical/$filename.csv" download="$filename.csv">Microsoft Outlook CSV</a>
+  <li class="divider"></li>
+  <li><a href="$rss_href">Parashat ha-Shavua RSS feed</a></li>
+ </ul>
+</div><!-- .btn-group -->
+EOHTML
+;
+    return $html;
+}
+
 sub action_button_download_html {
     my($button_title) = @_;
     my $action_button_download_html = <<EOHTML;
 <div class="btn-group">
  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-  Download $button_title <span class="caret"></span>
+  $button_title <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
 EOHTML
