@@ -584,6 +584,29 @@ $xtra_stylesheet<script>
   ga('send', 'pageview');
 </script>
 <style type="text/css">
+.hebcal-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  color: #777;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+.hebcal-footer p {
+  margin-bottom: 2px;
+}
+.bullet-list-inline {
+  padding-left: 0;
+  margin-left: -3px;
+  list-style: none;
+}
+.bullet-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.bullet-list-inline li:after{content:"\\00a0\\00a0\\00b7"}
+.bullet-list-inline li:last-child:after{content:""}
 .label{text-transform:none}
 :lang(he) {
   font-family:'Alef Hebrew','SBL Hebrew',David,serif;
@@ -793,55 +816,33 @@ EOD;
 function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
     $last_updated_text = "";
     if ($last_updated) {
-    $stat = stat($_SERVER["SCRIPT_FILENAME"]);
-    $last_updated_text = "<p><time datetime=\""
-        . date("c", $stat[9]) . "\">"
-        . date("j F Y", $stat[9]). "</time>"
-        . "</p>";
+        $stat = stat($_SERVER["SCRIPT_FILENAME"]);
+        $last_updated_text = "<li><time datetime=\""
+            . date("c", $stat[9]) . "\">"
+            . date("j F Y", $stat[9]). "</time></li>";
     }
 
     $html = <<<EOD
 </div><!-- #content -->
 
-<footer role="contentinfo">
-<hr>
-<div id="inner-footer" class="clearfix">
+<footer role="contentinfo" class="hebcal-footer">
 <div class="row">
-<div class="col-sm-3">
-<ul class="nav nav-list">
-<li class="nav-header">Products</li>
-<li><a href="/holidays/">Jewish Holidays</a></li>
-<li><a href="/converter/">Hebrew Date Converter</a></li>
-<li><a href="/shabbat/">Shabbat Times</a></li>
-<li><a href="/sedrot/">Torah Readings</a></li>
-</ul>
-</div><!-- .col-sm-3 -->
-<div class="col-sm-3">
-<ul class="nav nav-list">
-<li class="nav-header">About Us</li>
-<li><a href="http://www.hebcal.com/home/about">About Hebcal</a></li>
-<li><a href="http://www.hebcal.com/home/category/news">News</a></li>
-<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></li>
-</ul>
-</div><!-- .col-sm-3 -->
-<div class="col-sm-3">
-<ul class="nav nav-list">
-<li class="nav-header">Connect</li>
-<li><a href="http://www.hebcal.com/home/help">Help</a></li>
-<li><a href="http://www.hebcal.com/home/about/contact">Contact Us</a></li>
-<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
-<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
-</ul>
-</div><!-- .col-sm-3 -->
-<div class="col-sm-3">
-$last_updated_text
+<div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
 rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
 <p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
 also under a cc-by licence.</small></p>
-</div><!-- .col-sm-3 -->
+<ul class="bullet-list-inline">
+$last_updated_text
+<li><a href="http://www.hebcal.com/home/about">About</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy</a></li>
+<li><a href="http://www.hebcal.com/home/help">Help</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact</a></li>
+<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
+<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .col-sm-12 -->
 </div><!-- .row -->
-</div><!-- #inner-footer -->
 </footer>
 </div> <!-- .container -->
 

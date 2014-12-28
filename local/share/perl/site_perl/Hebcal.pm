@@ -1373,51 +1373,29 @@ sub html_footer_bootstrap
 
     my $hhmts = strftime("%d %B %Y", localtime($mtime));
     my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
-    my $last_updated_text = qq{<p><time datetime="$dc_date">$hhmts</time></p>};
+    my $last_updated_text = qq{<li><time datetime="$dc_date">$hhmts</time></li>};
 
     my $str = <<EOHTML;
 </div><!-- #content -->
 
-<footer role="contentinfo">
-<hr>
-<div id="inner-footer" class="clearfix">
-<div class="row-fluid">
-<div class="span3">
-<ul class="nav nav-list">
-<li class="nav-header">Products</li>
-<li><a href="/holidays/">Jewish Holidays</a></li>
-<li><a href="/converter/">Hebrew Date Converter</a></li>
-<li><a href="/shabbat/">Shabbat Times</a></li>
-<li><a href="/sedrot/">Torah Readings</a></li>
-</ul>
-</div><!-- .span3 -->
-<div class="span3">
-<ul class="nav nav-list">
-<li class="nav-header">About Us</li>
-<li><a href="http://www.hebcal.com/home/about">About Hebcal</a></li>
-<li><a href="http://www.hebcal.com/home/category/news">News</a></li>
-<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy Policy</a></li>
-</ul>
-</div><!-- .span3 -->
-<div class="span3">
-<ul class="nav nav-list">
-<li class="nav-header">Connect</li>
+<footer role="contentinfo" class="hebcal-footer">
+<div class="row">
+<div class="col-sm-12">
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
+rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
+also under a cc-by licence.</small></p>
+<ul class="bullet-list-inline">
+$last_updated_text
+<li><a href="http://www.hebcal.com/home/about">About</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy</a></li>
 <li><a href="http://www.hebcal.com/home/help">Help</a></li>
-<li><a href="http://www.hebcal.com/home/about/contact">Contact Us</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact</a></li>
 <li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
 <li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
 </ul>
-</div><!-- .span3 -->
-<div class="span3">
-$last_updated_text
-<p><small>Except where otherwise noted, content on this site is licensed under a <a
-rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
-Commons Attribution 3.0 License</a>.</small></p>
-<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
-also under a cc-by licence.</small></p>
-</div><!-- .span3 -->
-</div><!-- .row-fluid -->
-</div><!-- #inner-footer -->
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 </footer>
 </div> <!-- .container -->
 
@@ -1593,6 +1571,29 @@ $xtra_stylesheet<script>
   font-size:125%;
   direction:rtl;
 }
+.hebcal-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  color: #777;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+.hebcal-footer p {
+  margin-bottom: 2px;
+}
+.bullet-list-inline {
+  padding-left: 0;
+  margin-left: -3px;
+  list-style: none;
+}
+.bullet-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.bullet-list-inline li:after{content:"\\00a0\\00a0\\00b7"}
+.bullet-list-inline li:last-child:after{content:""}
 \@media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
@@ -1666,6 +1667,29 @@ body{
   font-weight:normal;
   direction:rtl;
 }
+.hebcal-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  color: #777;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+.hebcal-footer p {
+  margin-bottom: 2px;
+}
+.bullet-list-inline {
+  padding-left: 0;
+  margin-left: -3px;
+  list-style: none;
+}
+.bullet-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.bullet-list-inline li:after{content:"\\00a0\\00a0\\00b7"}
+.bullet-list-inline li:last-child:after{content:""}
 \@media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
