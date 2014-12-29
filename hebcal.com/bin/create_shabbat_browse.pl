@@ -154,20 +154,25 @@ ORDER BY g.asciiname};
 <div class="col-sm-12">
 <h1>$country<small> Shabbat Candle Lighting Times</small></h1>
 <p class="lead">$shabbat_formatted</p>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+<div class="row">
 EOHTML
     ;
 
     if ($#results < 30 || $count_distinct_admin1 == 1) {
+        print $fh qq{<div class="col-sm-12">\n};
         print $fh qq{<ul class="list-unstyled">\n};
         my $show_admin1 = $count_distinct_admin1 > 1 ? 1 : 0;
         foreach my $res (@results) {
             write_candle_lighting($fh,$res,$iso,$show_admin1);
         }
         print $fh qq{</ul>\n};
+        print $fh qq{</div><!-- .col-sm-12 -->\n};
     } else {
         foreach my $admin1 (sort keys %admin1) {
             my $anchor = Hebcal::make_anchor($admin1);
-            print $fh qq{<div id="$anchor"><h3>$admin1</h3>\n};
+            print $fh qq{<div class="col-sm-3" id="$anchor"><h3>$admin1</h3>\n};
             print $fh qq{<ul class="list-unstyled">\n};
             foreach my $res (@{$admin1{$admin1}}) {
                 write_candle_lighting($fh,$res,$iso,0);
@@ -177,7 +182,6 @@ EOHTML
         }
     }
 
-    print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
 
     print $fh Hebcal::html_footer_bootstrap3(undef, undef);
@@ -192,8 +196,8 @@ sub write_candle_lighting {
     my($fh,$info,$iso,$show_admin1) = @_;
     my($geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid) = @{$info};
     my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$name,$admin1);
-    my $comma_admin1 = $admin1 && $show_admin1 ? ", $admin1" : "";
-    print $fh qq{<li><a href="/shabbat/?geo=geoname&amp;geonameid=$geonameid">$name</a>$comma_admin1 - $hour_min</li>\n};
+    my $comma_admin1 = $show_admin1 && $admin1 && index($admin1, $name) != 0 ? "<small>, $admin1</small>" : "";
+    print $fh qq{<li><a href="/shabbat/?geo=geoname&amp;geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
 }
 
 sub get_candle_lighting {
@@ -225,15 +229,25 @@ sub write_index_page {
     open(my $fh, ">$fn.$$") || die "$fn.$$: $!\n";
 
     my $page_title = "Shabbat Candle Lighting Times";
+    my $xtra_head = qq{<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">};
+
     print $fh Hebcal::html_header_bootstrap3($page_title,
-        "/shabbat/browse/", "ignored");
+        "/shabbat/browse/", "ignored", $xtra_head);
 
     print $fh <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<div class="page-header">
 <h1>$page_title</h1>
-</div>
+<p class="lead">Candle-lighting and Havdalah times. Weekly Torah portion.</p>
+<form action="/shabbat/" method="get" role="form" id="shabbat-form">
+  <input type="hidden" name="geo" id="geo" value="geoname">
+  <input type="hidden" name="geonameid" id="geonameid">
+  <input type="hidden" name="zip" id="zip">
+  <label class="sr-only" for="city-typeahead">City</label>
+  <div class="city-typeahead" style="margin-bottom:12px">
+    <input type="text" id="city-typeahead" class="form-control input-lg typeahead" placeholder="Search for city or ZIP code">
+  </div>
+</form>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <div class="row">
@@ -259,7 +273,16 @@ EOHTML
 
     print $fh qq{</div><!-- .row -->\n};
 
-    print $fh Hebcal::html_footer_bootstrap3(undef, undef);
+    my $xtra_html=<<JSCRIPT_END;
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script src="/i/hebcal-app-1.2.min.js"></script>
+<script type="text/javascript">
+window['hebcal'].createCityTypeahead(true);
+</script>
+JSCRIPT_END
+        ;
+
+    print $fh Hebcal::html_footer_bootstrap3(undef, undef, undef, $xtra_html);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
