@@ -485,27 +485,12 @@ sub filter_event {
         my $subj_copy = $subj;
         $subj_copy = $ashk2seph{$subj_copy}
             if defined $ashk2seph{$subj_copy};
-        if ($no_special_shabbat) {
-            return 1 if $subj_copy =~ /^Shabbat /;
-        }
-        if ($no_minor_fasts) {
-            return 1 if $subj_copy =~ /^Tzom /;
-            return 1 if $subj_copy =~ /^Ta\'anit /;
-            return 1 if $subj_copy eq "Asara B'Tevet";
-        }
-        if ($no_minor_holidays) {
-            my $minor_holidays = "Tu BiShvat,Purim Katan,Shushan Purim,Pesach Sheni,Lag B'Omer,Leil Selichot";
-            my @minor_holidays = split(/,/, $minor_holidays);
-            foreach my $h (@minor_holidays) {
-                return 1 if $subj_copy eq $h;
-            }
-        }
-        if ($no_modern_holidays) {
-            my $modern_holidays = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim";
-            my @modern_holidays = split(/,/, $modern_holidays);
-            foreach my $h (@modern_holidays) {
-                return 1 if $subj_copy eq $h;
-            }
+        my $type = $HebcalConst::HOLIDAY_TYPE{$subj_copy};
+        if ($type) {
+            return 1 if $no_special_shabbat && $type eq 'shabbat';
+            return 1 if $no_minor_fasts && $type eq 'fast';
+            return 1 if $no_minor_holidays && $type eq 'minor';
+            return 1 if $no_modern_holidays && $type eq 'modern';
         }
     }
     return 0;

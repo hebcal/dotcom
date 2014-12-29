@@ -101,8 +101,9 @@ foreach my $h (sort keys %{$axml->{"parsha"}})
 }
 print O ");\n\n";
 
+my @festivals = sort keys %{$fxml->{"festival"}};
 print O "%HebcalConst::HOLIDAYS = (\n";
-foreach my $f (sort keys %{$fxml->{"festival"}})
+foreach my $f (@festivals)
 {
     if (defined $fxml->{"festival"}->{$f}->{"hebrew"})
     {
@@ -114,7 +115,7 @@ foreach my $f (sort keys %{$fxml->{"festival"}})
 print O ");\n\n";
 
 print O "%HebcalConst::YOMTOV = (\n";
-foreach my $f (sort keys %{$fxml->{"festival"}})
+foreach my $f (@festivals)
 {
     if (defined $fxml->{"festival"}->{$f}->{"yomtov"}
 	&& $fxml->{"festival"}->{$f}->{"yomtov"} eq "1")
@@ -126,8 +127,18 @@ foreach my $f (sort keys %{$fxml->{"festival"}})
 }
 print O ");\n\n";
 
+print O "%HebcalConst::HOLIDAY_TYPE = (\n";
+foreach my $f (@festivals) {
+    if (defined $fxml->{"festival"}->{$f}->{"type"}) {
+        my $k = $f;
+        $k =~ s/\'/\\\'/g;
+        print O "'$k'=>'", $fxml->{"festival"}->{$f}->{"type"}, "',\n";
+    }
+}
+print O ");\n\n";
+
 print O "%HebcalConst::HOLIDAY_DESCR = (\n";
-foreach my $f (sort keys %{$fxml->{"festival"}})
+foreach my $f (@festivals)
 {
     my $value = $fxml->{"festival"}->{$f}->{"about"};
     if (defined $value)

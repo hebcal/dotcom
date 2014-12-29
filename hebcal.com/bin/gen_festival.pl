@@ -47,6 +47,7 @@ use HTTP::Request;
 use POSIX qw(strftime);
 use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
+use HebcalConst;
 use Date::Calc;
 use RequestSignatureHelper;
 use Config::Tiny;
@@ -963,6 +964,31 @@ sub get_nav_inner {
     return \@nav_inner;
 }
 
+sub breadcrumb {
+    my($f) = @_;
+    my $type = $HebcalConst::HOLIDAY_TYPE{$f};
+    my $nav_parent;
+    if ($type eq "roshchodesh") {
+        $nav_parent = "Rosh Chodesh";
+    } elsif ($type eq "shabbat") {
+        $nav_parent = "Special Shabbatot";
+    } elsif ($type eq "fast") {
+        $nav_parent = "Minor fasts";
+    } else {
+        $nav_parent = ucfirst($type) . " holidays";
+    }
+    my $nav_anchor = Hebcal::make_anchor($nav_parent);
+    my $html =<<EOHTML
+<ol class="breadcrumb hidden-xs">
+  <li><a href="/holidays/">Holidays</a></li>
+  <li><a href="/holidays/#$nav_anchor">$nav_parent</a></li>
+  <li class="active">$f</li>
+</ol>
+EOHTML
+;
+    return $html;
+}
+
 sub write_festival_page
 {
     my($festivals,$f) = @_;
@@ -1013,18 +1039,7 @@ EOHTML
     my $long_descr = $wikipedia_descr ? $wikipedia_descr : $descr;
     $long_descr =~ s/(\p{script=Hebrew}[\p{script=Hebrew}\s]+\p{script=Hebrew})/<span lang="he" dir="rtl">$1<\/span>/g;
 
-    my $pager = qq{<ul class="pager hidden-xs">\n};
-    my $prev = $PREV{$f};
-    if ($prev) {
-	my $prev_slug = Hebcal::make_anchor($prev);
-	$pager .= qq{<li class="previous"><a title="Previous Holiday" href="$prev_slug" rel="prev">&larr; $prev</a></li>\n};
-    }
-    my $next = $NEXT{$f};
-    if ($next) {
-	my $next_slug = Hebcal::make_anchor($next);
-	$pager .= qq{<li class="next"><a title="Next Holiday" href="$next_slug" rel="next">$next &rarr;</a></li>\n};
-    }
-    $pager .= qq{</ul>\n};
+    my $pager = breadcrumb($f);
 
     print OUT2 <<EOHTML;
 <div class="row">

@@ -157,7 +157,7 @@ Rosh Chodesh: 4
 every other day (e.g. fast days): 3
 -->
 <!-- Strassfeld p. 229 -->
-<festival id="Pesach" hebrew="פֶּסַח" yomtov="1">
+<festival id="Pesach" hebrew="פֶּסַח" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread. Also called Chag HaMatzot
  (the Festival of Matzah), it commemorates the Exodus and freedom of
@@ -187,7 +187,7 @@ every other day (e.g. fast days): 3
   </book>
  </books>
 </festival>
-<festival id="Pesach I" hebrew="פֶּסַח יוֹם א׳" yomtov="1">
+<festival id="Pesach I" hebrew="פֶּסַח יוֹם א׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
  </about>
@@ -219,7 +219,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10"/>
  </kriyah>
 </festival>
-<festival id="Pesach II" hebrew="פֶּסַח יוֹם ב׳" yomtov="1">
+<festival id="Pesach II" hebrew="פֶּסַח יוֹם ב׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
  </about>
@@ -234,7 +234,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="M" book="Numbers" begin="28:16" end="28:25" numverses="10"/>
  </kriyah>
 </festival>
-<festival id="Pesach III (CH''M)" hebrew="פֶּסַח יוֹם ג׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Pesach III (CH''M)" hebrew="פֶּסַח יוֹם ג׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Pesach Chol ha-Moed Day 1" hebrew="פֶּסַח יוֹם ג׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -248,7 +248,7 @@ every other day (e.g. fast days): 3
  </kriyah>
 </festival>
 <!-- Strassfeld p. 230 -->
-<festival id="Pesach IV (CH''M)" hebrew="פֶּסַח יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Pesach IV (CH''M)" hebrew="פֶּסַח יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Pesach Chol ha-Moed Day 2" hebrew="פֶּסַח יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -261,7 +261,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Pesach V (CH''M)" hebrew="פֶּסַח יוֹם ה׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Pesach V (CH''M)" hebrew="פֶּסַח יוֹם ה׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Pesach Chol ha-Moed Day 3" hebrew="פֶּסַח יוֹם ה׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -274,7 +274,7 @@ every other day (e.g. fast days): 3
   <aliyah parsha="41" num="4" book="Numbers" begin="28:19" end="28:25" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Pesach VI (CH''M)" hebrew="פֶּסַח יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Pesach VI (CH''M)" hebrew="פֶּסַח יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Pesach Chol ha-Moed Day 4" hebrew="פֶּסַח יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
@@ -308,7 +308,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Pesach VII" hebrew="פֶּסַח יוֹם ז׳" yomtov="1">
+<festival id="Pesach VII" hebrew="פֶּסַח יוֹם ז׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
  </about>
@@ -340,7 +340,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Pesach VIII" hebrew="פֶּסַח יוֹם ח׳" yomtov="1">
+<festival id="Pesach VIII" hebrew="פֶּסַח יוֹם ח׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidaya.htm">
  Passover, the Feast of Unleavened Bread
  </about>
@@ -372,7 +372,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:19" end="28:25" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Shavuot" hebrew="שָׁבוּעוֹת" yomtov="1">
+<festival id="Shavuot" hebrew="שָׁבוּעוֹת" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidayc.htm">
  Festival of Weeks, commemorates the giving of the Torah at Mount Sinai
  </about>
@@ -401,7 +401,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   </book>
  </books>
 </festival>
-<festival id="Shavuot I" hebrew="שָׁבוּעוֹת יוֹם א׳" yomtov="1">
+<festival id="Shavuot I" hebrew="שָׁבוּעוֹת יוֹם א׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidayc.htm">
  Festival of Weeks, commemorates the giving of the Torah at Mount Sinai
  </about>
@@ -416,7 +416,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="28:26" end="28:31" numverses="6"/>
  </kriyah>
 </festival>
-<festival id="Shavuot II" hebrew="שָׁבוּעוֹת יוֹם ב׳" yomtov="1">
+<festival id="Shavuot II" hebrew="שָׁבוּעוֹת יוֹם ב׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holidayc.htm">
  Festival of Weeks, commemorates the giving of the Torah at Mount Sinai
  </about>
@@ -450,7 +450,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <!-- Fast Days -->
-<festival id="Asara B'Tevet" hebrew="עֲשָׂרָה בְּטֵבֵת" yomtov="0">
+<festival id="Asara B'Tevet" hebrew="עֲשָׂרָה בְּטֵבֵת" yomtov="0" type="fast">
  <about href="http://www.ou.org/chagim/roshchodesh/tevet/fast.htm">
  Fast commemorating the siege of Jerusalem
  </about>
@@ -468,7 +468,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Ta'anit Bechorot" hebrew="תַּעֲנִית בְּכוֹרוֹת" yomtov="0">
+<festival id="Ta'anit Bechorot" hebrew="תַּעֲנִית בְּכוֹרוֹת" yomtov="0" type="fast">
  <about href="http://www.jewfaq.org/holidaye.htm">
  Fast of the First Born
  </about>
@@ -489,7 +489,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Ta'anit Esther" hebrew="תַּעֲנִית אֶסְתֵּר" yomtov="0">
+<festival id="Ta'anit Esther" hebrew="תַּעֲנִית אֶסְתֵּר" yomtov="0" type="fast">
  <about href="http://www.jewfaq.org/holidaye.htm">
  Fast of Esther
  </about>
@@ -509,7 +509,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Tzom Gedaliah" hebrew="צוֹם גְּדַלְיָה" yomtov="0">
+<festival id="Tzom Gedaliah" hebrew="צוֹם גְּדַלְיָה" yomtov="0" type="fast">
  <about href="http://www.aish.com/h/hh/rh/guide/Fast_of_Gedalia.html">
  Fast of the Seventh Month, commemorates the assassination of the Jewish
  governor of Judah
@@ -529,7 +529,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="21" num="3" book="Exodus" begin="34:4" end="34:10" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Tzom Tammuz" hebrew="צוֹם תָּמוּז" yomtov="0">
+<festival id="Tzom Tammuz" hebrew="צוֹם תָּמוּז" yomtov="0" type="fast">
  <about href="http://www.ou.org/yerushalayim/17betammuz/">
  Fast commemorating breaching of the walls of Jerusalem by Nebuchadnezzar
  </about>
@@ -550,8 +550,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Erev Tish'a B'Av" hebrew="עֶרֶב תִּשְׁעָה בְּאָב" yomtov="0" />
-<festival id="Tish'a B'Av" hebrew="תִּשְׁעָה בְּאָב" yomtov="0">
+<festival id="Erev Tish'a B'Av" hebrew="עֶרֶב תִּשְׁעָה בְּאָב" yomtov="0" type="major"/>
+<festival id="Tish'a B'Av" hebrew="תִּשְׁעָה בְּאָב" yomtov="0" type="major">
  <about href="http://www.jewfaq.org/holidayd.htm">
  The Ninth of Av, fast commemorating the destruction of the two Temples
  </about>
@@ -585,7 +585,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Rosh Hashana" hebrew="רֹאשׁ הַשָּׁנָה" yomtov="1">
+<festival id="Rosh Hashana" hebrew="רֹאשׁ הַשָּׁנָה" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
@@ -620,7 +620,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </books>
 </festival>
 
-<festival id="Rosh Hashana I" hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳" yomtov="1">
+<festival id="Rosh Hashana I" hebrew="רֹאשׁ הַשָּׁנָה יוֹם א׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
@@ -652,7 +652,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:1" end="29:6" numverses="6"/>
  </kriyah>
 </festival>
-<festival id="Rosh Hashana II" hebrew="רֹאשׁ הַשָּׁנָה יוֹם ב׳" yomtov="1">
+<festival id="Rosh Hashana II" hebrew="רֹאשׁ הַשָּׁנָה יוֹם ב׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
@@ -667,7 +667,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:1" end="29:6" numverses="6"/>
  </kriyah>
 </festival>
-<festival id="Yom Kippur" hebrew="יוֹם כִּפּוּר" yomtov="1">
+<festival id="Yom Kippur" hebrew="יוֹם כִּפּוּר" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday4.htm">
  Day of Atonement
  </about>
@@ -743,7 +743,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="30" num="3" book="Leviticus" begin="19:11" end="19:18"/>
  </kriyah>
 </festival>
-<festival id="Sukkot" hebrew="סוּכּוֹת" yomtov="1">
+<festival id="Sukkot" hebrew="סוּכּוֹת" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
  </about>
@@ -764,7 +764,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   </book>
  </books>
 </festival>
-<festival id="Sukkot I" hebrew="סוּכּוֹת יוֹם א׳" yomtov="1">
+<festival id="Sukkot I" hebrew="סוּכּוֹת יוֹם א׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
  </about>
@@ -796,7 +796,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="M" book="Numbers" begin="29:12" end="29:16" numverses="5"/>
  </kriyah>
 </festival>
-<festival id="Sukkot II" hebrew="סוּכּוֹת יוֹם ב׳" yomtov="1">
+<festival id="Sukkot II" hebrew="סוּכּוֹת יוֹם ב׳" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
  </about>
@@ -813,7 +813,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <!-- Strassfeld p. 231 -->
-<festival id="Sukkot III (CH''M)" hebrew="סוּכּוֹת יוֹם ג׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Sukkot III (CH''M)" hebrew="סוּכּוֹת יוֹם ג׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Sukkot Chol ha-Moed Day 1" hebrew="סוּכּוֹת יוֹם ג׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
@@ -826,7 +826,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="4" book="Numbers" begin="29:17" end="29:22"/>
  </kriyah>
 </festival>
-<festival id="Sukkot IV (CH''M)" hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Sukkot IV (CH''M)" hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Sukkot Chol ha-Moed Day 2" hebrew="סוּכּוֹת יוֹם ד׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
@@ -839,7 +839,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="4" book="Numbers" begin="29:20" end="29:25"/>
  </kriyah>
 </festival>
-<festival id="Sukkot V (CH''M)" hebrew="סוּכּוֹת יוֹם ה׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Sukkot V (CH''M)" hebrew="סוּכּוֹת יוֹם ה׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Sukkot Chol ha-Moed Day 3" hebrew="סוּכּוֹת יוֹם ה׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
@@ -852,7 +852,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="4" book="Numbers" begin="29:23" end="29:28"/>
  </kriyah>
 </festival>
-<festival id="Sukkot VI (CH''M)" hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Sukkot VI (CH''M)" hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 <festival id="Sukkot Chol ha-Moed Day 4" hebrew="סוּכּוֹת יוֹם ו׳ (חֹל הַמוֹעד)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
@@ -887,7 +887,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah-day4 parsha="41" num="M" book="Numbers" begin="29:26" end="29:31" numverses="6"/>
  </kriyah>
 </festival>
-<festival id="Sukkot VII (Hoshana Raba)" hebrew="סוּכּוֹת יוֹם ז׳ (הוֹשַׁנָא רַבָּה)" yomtov="0"/>
+<festival id="Sukkot VII (Hoshana Raba)" hebrew="סוּכּוֹת יוֹם ז׳ (הוֹשַׁנָא רַבָּה)" yomtov="0" type="major"/>
 <festival id="Sukkot Chol ha-Moed Day 5 (Hoshana Raba)" hebrew="סוּכּוֹת יוֹם ז׳ (הוֹשַׁנָא רַבָּה)" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
@@ -900,7 +900,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
   <aliyah parsha="41" num="4" book="Numbers" begin="29:29" end="29:34"/>
  </kriyah>
 </festival>
-<festival id="Shmini Atzeret" hebrew="שְׁמִינִי עֲצֶרֶת" yomtov="1">
+<festival id="Shmini Atzeret" hebrew="שְׁמִינִי עֲצֶרֶת" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday6.htm">
  Eighth Day of Assembly
  </about>
@@ -944,7 +944,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Erev Simchat Torah" hebrew="עֶרֶב שִׂמְחַת תּוֹרָה" yomtov="1">
+<festival id="Erev Simchat Torah" hebrew="עֶרֶב שִׂמְחַת תּוֹרָה" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday6.htm">
  Day of Celebrating the Torah
  </about>
@@ -968,7 +968,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Simchat Torah" hebrew="שִׂמְחַת תּוֹרָה" yomtov="1">
+<festival id="Simchat Torah" hebrew="שִׂמְחַת תּוֹרָה" yomtov="1" type="major">
  <about href="http://www.jewfaq.org/holiday6.htm">
  Day of Celebrating the Torah
  </about>
@@ -996,7 +996,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hanukkah2_haft.shtml
  -->
 
-<festival id="Chanukah" hebrew="חֲנוּכָּה" yomtov="0">
+<festival id="Chanukah" hebrew="חֲנוּכָּה" yomtov="0" type="major">
  <about href="http://www.jewfaq.org/holiday7.htm">
  The Jewish festival of rededication, also known as the Festival of
  Lights. Sometimes spelled Hanukkah, Chanukkah, Hanukah, or Hannukah
@@ -1026,24 +1026,15 @@ the readings for the third, fourth, and fifth days are moved ahead.
   </book>
  </books>
 </festival>
-<festival id="Chanukah: 1 Candle" hebrew="חֲנוּכָּה: א׳ נֵר" yomtov="0">
-</festival>
-<festival id="Chanukah: 2 Candles" hebrew="חֲנוּכָּה: ב׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 3 Candles" hebrew="חֲנוּכָּה: ג׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 4 Candles" hebrew="חֲנוּכָּה: ד׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 5 Candles" hebrew="חֲנוּכָּה: ה׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 6 Candles" hebrew="חֲנוּכָּה: ו׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 7 Candles" hebrew="חֲנוּכָּה: ז׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 8 Candles" hebrew="חֲנוּכָּה: ח׳ נֵרוֹת" yomtov="0">
-</festival>
-<festival id="Chanukah: 8th Day" hebrew="חֲנוּכָּה: יוֹם ח׳" yomtov="0">
-</festival>
+<festival id="Chanukah: 1 Candle" hebrew="חֲנוּכָּה: א׳ נֵר" yomtov="0" type="major" />
+<festival id="Chanukah: 2 Candles" hebrew="חֲנוּכָּה: ב׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 3 Candles" hebrew="חֲנוּכָּה: ג׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 4 Candles" hebrew="חֲנוּכָּה: ד׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 5 Candles" hebrew="חֲנוּכָּה: ה׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 6 Candles" hebrew="חֲנוּכָּה: ו׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 7 Candles" hebrew="חֲנוּכָּה: ז׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 8 Candles" hebrew="חֲנוּכָּה: ח׳ נֵרוֹת" yomtov="0" type="major" />
+<festival id="Chanukah: 8th Day" hebrew="חֲנוּכָּה: יוֹם ח׳" yomtov="0" type="major" />
 <festival id="Shabbat Chanukah">
  <kriyah>
   <haft reading="Zechariah 2:14-4:7" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/hanukkah_haft.shtml"/>
@@ -1156,8 +1147,8 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <!--  Strassfeld p. 232 -->
-<festival id="Erev Purim" hebrew="עֶרֶב פּוּרִים" yomtov="0" />
-<festival id="Purim" hebrew="פּוּרִים" yomtov="0">
+<festival id="Erev Purim" hebrew="עֶרֶב פּוּרִים" yomtov="0" type="major"/>
+<festival id="Purim" hebrew="פּוּרִים" yomtov="0" type="major">
  <about href="http://www.jewfaq.org/holiday9.htm">
  Purim is one of the most joyous and fun holidays on the Jewish
  calendar. It commemorates a time when the Jewish people living in
@@ -1191,13 +1182,13 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Purim Katan" hebrew="פּוּרִים קָטָן" yomtov="0">
+<festival id="Purim Katan" hebrew="פּוּרִים קָטָן" yomtov="0" type="minor">
  <about href="http://www.hebcal.com/home/121/purim-katan">
  Minor Purim celebration during Adar I on leap years
  </about>
 </festival>
 
-<festival id="Shushan Purim" hebrew="שׁוּשָׁן פּוּרִים" yomtov="0">
+<festival id="Shushan Purim" hebrew="שׁוּשָׁן פּוּרִים" yomtov="0" type="minor">
  <about href="http://www.ou.org/chagim/purim/when.htm">
  Purim celebrated in Jerusalem and walled cities
  </about>
@@ -1210,7 +1201,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 
 <!-- Special Shabbatot -->
-<festival id="Shabbat HaChodesh" hebrew="שַׁבָּת הַחֹדֶשׁ" yomtov="0">
+<festival id="Shabbat HaChodesh" hebrew="שַׁבָּת הַחֹדֶשׁ" yomtov="0" type="shabbat">
  <about href="http://www.ou.org/chagim/fourshabbatot/hachodesh.htm">
  Shabbat before Rosh Chodesh Nissan
  </about>
@@ -1242,7 +1233,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Shabbat HaGadol" hebrew="שַׁבָּת הַגָּדוֹל" yomtov="0">
+<festival id="Shabbat HaGadol" hebrew="שַׁבָּת הַגָּדוֹל" yomtov="0" type="shabbat">
  <about href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
  Shabbat before Pesach
  </about>
@@ -1257,7 +1248,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Shabbat Chazon" hebrew="שַׁבָּת חֲזוֹן" yomtov="0">
+<festival id="Shabbat Chazon" hebrew="שַׁבָּת חֲזוֹן" yomtov="0" type="shabbat">
  <about href="http://www.ou.org/yerushalayim/tishabav/chazon.html">
  Shabbat before Tish'a B'Av (Shabbat of Prophecy/Shabbat of Vision)
  </about>
@@ -1272,7 +1263,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </wikipedia>
 </festival>
 
-<festival id="Shabbat Nachamu" hebrew="שַׁבָּת נַחֲמוּ" yomtov="0">
+<festival id="Shabbat Nachamu" hebrew="שַׁבָּת נַחֲמוּ" yomtov="0" type="shabbat">
  <about href="http://www.jewfaq.org/special.htm#Nachamu">
  Shabbat after Tish'a B'Av (Shabbat of Consolation).
 The first of seven Shabbatot leading up to Rosh Hashanah.
@@ -1295,7 +1286,7 @@ with the verse
 -->
 </festival>
 
-<festival id="Shabbat Parah" hebrew="שַׁבָּת פּרה" yomtov="0">
+<festival id="Shabbat Parah" hebrew="שַׁבָּת פּרה" yomtov="0" type="shabbat">
  <about href="http://www.ou.org/chagim/fourshabbatot/parah.htm">
  Shabbat of the Red Heifer
  </about>
@@ -1314,7 +1305,7 @@ with the verse
  </kriyah>
 </festival>
 
-<festival id="Shabbat Shekalim" hebrew="שַׁבָּת שְׁקָלִים" yomtov="0">
+<festival id="Shabbat Shekalim" hebrew="שַׁבָּת שְׁקָלִים" yomtov="0" type="shabbat">
  <about href="http://www.ou.org/chagim/fourshabbatot/shekalim.htm">
  Shabbat before Rosh Chodesh Adar
  </about>
@@ -1348,7 +1339,7 @@ with the verse
  </kriyah>
 </festival>
 
-<festival id="Shabbat Shuva" hebrew="שַׁבָּת שׁוּבָה" yomtov="0">
+<festival id="Shabbat Shuva" hebrew="שַׁבָּת שׁוּבָה" yomtov="0" type="shabbat">
  <about href="http://www.ou.org/chagim/roshchodesh/tishrei/aseretyemai.htm#shabbat">
  Shabbat that falls between Rosh Hashanah and Yom Kippur (Shabbat of Returning)
  </about>
@@ -1365,7 +1356,7 @@ with the verse
  </kriyah>
 </festival>
 
-<festival id="Shabbat Zachor" hebrew="שַׁבָּת זָכוֹר" yomtov="0">
+<festival id="Shabbat Zachor" hebrew="שַׁבָּת זָכוֹר" yomtov="0" type="shabbat">
  <about href="http://www.ou.org/chagim/fourshabbatot/zachor.htm">
  Shabbat before Purim
  </about>
@@ -1386,7 +1377,7 @@ with the verse
 </festival>
 
 <!-- Rosh Chodesh -->
-<festival id="Shabbat Rosh Chodesh" hebrew="שבת ראש חודש">
+<festival id="Shabbat Rosh Chodesh" hebrew="שבת ראש חודש" type="shabbat">
  <about attr="dummy">When Shabbat falls on Rosh Chodesh</about>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/holidays_maf.shtml#roshhodesh_maf"/>
@@ -1394,97 +1385,97 @@ with the verse
   <aliyah parsha="41" num="M" book="Numbers" begin="28:9" end="28:15" numverses="7"/>
  </kriyah>
 </festival>
-<festival id="Shabbat Machar Chodesh" hebrew="שבת מחר חודש">
+<festival id="Shabbat Machar Chodesh" hebrew="שבת מחר חודש" type="shabbat">
  <about attr="dummy">When Shabbat falls the day before Rosh Chodesh</about>
  <kriyah>
   <haft reading="I Samuel 20:18 - 20:42" href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/maharhodesh_haft.shtml"/>
  </kriyah>
 </festival>
-<festival id="Rosh Chodesh Adar" hebrew="רֹאשׁ חודש אַדָר" yomtov="0">
+<festival id="Rosh Chodesh Adar" hebrew="רֹאשׁ חודש אַדָר" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
  Beginning of new Hebrew month of Adar.
  Adar is the 12th month of the Hebrew year.
  Corresponds to February or March on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Adar I" hebrew="רֹאשׁ חודש אַדָר א׳" yomtov="0">
+<festival id="Rosh Chodesh Adar I" hebrew="רֹאשׁ חודש אַדָר א׳" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
  Beginning of new Hebrew month of Adar I (on leap years).
  Adar I is the 12th month of the Hebrew year.
  Corresponds to February or March on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Adar II" hebrew="רֹאשׁ חודש אַדָר ב׳" yomtov="0">
+<festival id="Rosh Chodesh Adar II" hebrew="רֹאשׁ חודש אַדָר ב׳" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/adar/default.htm">
  Beginning of new Hebrew month of Adar II (on leap years).
  Adar II (sometimes "Adar Bet" or "Adar Sheni") is the 13th month of the Hebrew year, ocurring only on leap years.
  Corresponds to February or March on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Av" hebrew="רֹאשׁ חודש אָב" yomtov="0">
+<festival id="Rosh Chodesh Av" hebrew="רֹאשׁ חודש אָב" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/av/default.htm">
  Beginning of new Hebrew month of Av.
  Av is the 5th month of the Hebrew year.
  Corresponds to July or August on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Cheshvan" hebrew="רֹאשׁ חודש חֶשְׁוָן" yomtov="0">
+<festival id="Rosh Chodesh Cheshvan" hebrew="רֹאשׁ חודש חֶשְׁוָן" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/marcheshvan/default.htm">
  Beginning of new Hebrew month of Cheshvan.
  Cheshvan is the 8th month of the Hebrew year.
  Corresponds to October or November on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Elul" hebrew="רֹאשׁ חודש אֱלוּל" yomtov="0">
+<festival id="Rosh Chodesh Elul" hebrew="רֹאשׁ חודש אֱלוּל" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/elul/rchelul.htm">
  Beginning of new Hebrew month of Elul.
  Elul is the 6th month of the Hebrew year.
  Corresponds to August or September on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Iyyar" hebrew="רֹאשׁ חודש אִיָיר" yomtov="0">
+<festival id="Rosh Chodesh Iyyar" hebrew="רֹאשׁ חודש אִיָיר" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/iyar/roshch.htm">
  Beginning of new Hebrew month of Iyyar.
  Iyyar (somtimes transliterated Iyar) is the 2nd month of the Hebrew year.
  Corresponds to April or May on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Kislev" hebrew="רֹאשׁ חודש כִּסְלֵו" yomtov="0">
+<festival id="Rosh Chodesh Kislev" hebrew="רֹאשׁ חודש כִּסְלֵו" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/kislev/default.htm">
  Beginning of new Hebrew month of Kislev.
  Kislev is the 9th month of the Hebrew year.
  Corresponds to November or December on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Nisan" hebrew="רֹאשׁ חודש נִיסָן" yomtov="0">
+<festival id="Rosh Chodesh Nisan" hebrew="רֹאשׁ חודש נִיסָן" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/nisan/default.htm">
  Beginning of new Hebrew month of Nisan.
  Nisan (sometimes transliterated Nissan) is the 1st month of the Hebrew year.
  rresponds to March or April on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Sh'vat" hebrew="רֹאשׁ חודש שְׁבָט" yomtov="0">
+<festival id="Rosh Chodesh Sh'vat" hebrew="רֹאשׁ חודש שְׁבָט" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/shevat/default.htm">
  Beginning of new Hebrew month of Sh'vat.
  Sh'vat (sometimes transliterated Shevat) is the 11th month of the Hebrew year.
  Corresponds to January or February on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Sivan" hebrew="רֹאשׁ חודש סִיוָן" yomtov="0">
+<festival id="Rosh Chodesh Sivan" hebrew="רֹאשׁ חודש סִיוָן" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/sivan/default.htm">
  Beginning of new Hebrew month of Sivan.
  Sivan is the 3rd month of the Hebrew year.
  Corresponds to May or June on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Tamuz" hebrew="רֹאשׁ חודש תָּמוּז" yomtov="0">
+<festival id="Rosh Chodesh Tamuz" hebrew="רֹאשׁ חודש תָּמוּז" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/tammuz/default.htm">
  Beginning of new Hebrew month of Tamuz.
  Tamuz (sometimes transliterated Tammuz) is the 4th month of the Hebrew year.
  Corresponds to June or July on the Gregorian calendar
  </about>
 </festival>
-<festival id="Rosh Chodesh Tevet" hebrew="רֹאשׁ חודש טֵבֵת" yomtov="0">
+<festival id="Rosh Chodesh Tevet" hebrew="רֹאשׁ חודש טֵבֵת" yomtov="0" type="roshchodesh">
  <about href="http://www.ou.org/chagim/roshchodesh/tevet/default.htm">
  Beginning of new Hebrew month of Tevet.
  Tevet is the 10th month of the Hebrew year.
@@ -1493,16 +1484,16 @@ with the verse
 </festival>
 
 <!-- Other Hebcal holidays -->
-<festival id="Pesach Sheni" hebrew="פֶּסַח שני" yomtov="0">
+<festival id="Pesach Sheni" hebrew="פֶּסַח שני" yomtov="0" type="minor">
  <about href="http://en.wikipedia.org/wiki/Pesach_Sheni">
  Second Passover, one month after Passover
  </about>
 </festival>
-<festival id="Lag B'Omer" hebrew="ל״ג בְּעוֹמֶר" yomtov="0">
+<festival id="Lag B'Omer" hebrew="ל״ג בְּעוֹמֶר" yomtov="0" type="minor">
  <about href="http://en.wikipedia.org/wiki/Lag_Ba%27omer">
  33rd day of counting the Omer
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Lag_BaOmer">
+ <wikipedia href="http://en.wikipedia.org/wiki/Lag_BaOmer" type="minor">
  Lag BaOmer (Hebrew: ל״ג בעומר), also known as Lag LaOmer amongst
  Sephardi Jews, is a Jewish holiday celebrated on the thirty-third day
  of the Counting of the Omer, which occurs on the 18th day of
@@ -1513,7 +1504,7 @@ with the verse
  spirit.
  </wikipedia>
 </festival>
-<festival id="Tu BiShvat" hebrew="טוּ בִּשְׁבָט" yomtov="0">
+<festival id="Tu BiShvat" hebrew="טוּ בִּשְׁבָט" yomtov="0" type="minor">
  <about href="http://www.jewfaq.org/holiday8.htm">
  New Year for Trees
  </about>
@@ -1533,7 +1524,7 @@ with the verse
 </festival>
 
 <!-- New Holidays -->
-<festival id="Yom HaAtzma'ut" hebrew="יוֹם הָעַצְמָאוּת" yomtov="0">
+<festival id="Yom HaAtzma'ut" hebrew="יוֹם הָעַצְמָאוּת" yomtov="0" type="modern">
  <about href="http://en.wikipedia.org/wiki/Yom_Ha%27atzmaut">
  Israeli Independence Day. Commemorates the declaration of independence
  of Israel in 1948. Note that Hebcal displays modern holidays like
@@ -1546,7 +1537,7 @@ with the verse
   <book ASIN="0822576686"/>
  </books>
 </festival>
-<festival id="Yom HaShoah" hebrew="יוֹם הַשּׁוֹאָה" yomtov="0">
+<festival id="Yom HaShoah" hebrew="יוֹם הַשּׁוֹאָה" yomtov="0" type="modern">
  <about href="http://en.wikipedia.org/wiki/Yom_HaShoah">
  Holocaust Memorial Day
  </about>
@@ -1569,7 +1560,7 @@ with the verse
   <book ASIN="1550652893"/>
  </books>
 </festival>
-<festival id="Yom HaZikaron" hebrew="יוֹם הַזִּכָּרוֹן" yomtov="0">
+<festival id="Yom HaZikaron" hebrew="יוֹם הַזִּכָּרוֹן" yomtov="0" type="modern">
  <about href="http://en.wikipedia.org/wiki/Yom_Hazikaron">
  Israeli Memorial Day. Note that Hebcal displays modern holidays like
  Yom HaZikaron according to the Israeli schedule. Although Yom Hazikaron
@@ -1578,7 +1569,7 @@ with the verse
  which always follows it) would conflict with Shabbat
  </about>
 </festival>
-<festival id="Yom Yerushalayim" hebrew="יוֹם יְרוּשָׁלַיִם" yomtov="0">
+<festival id="Yom Yerushalayim" hebrew="יוֹם יְרוּשָׁלַיִם" yomtov="0" type="modern">
  <about href="http://en.wikipedia.org/wiki/Jerusalem_Day">
  Jerusalem Day.  Commemorates the re-unification of Jerusalem in 1967
  </about>
@@ -1591,7 +1582,7 @@ with the verse
  the 2,000-year-old prayer of "Next Year in Jerusalem".
  </wikipedia>
 </festival>
-<festival id="Days of the Omer" hebrew="עוֹמֶר" yomtov="0">
+<festival id="Days of the Omer" hebrew="עוֹמֶר" yomtov="0" type="minor">
  <about href="http://www.jewfaq.org/holidayb.htm">
  7 weeks from the second night of Pesach to the day before Shavuot
  </about>
@@ -1622,10 +1613,10 @@ with the verse
 <festival id="Candle lighting" hebrew="הדלקת נרות"/>
 <festival id="Havdalah" hebrew="הַבדָלָה"/>
 <!-- for Israel -->
-<festival id="Pesach II (CH''M)" hebrew="פֶּסַח יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0"/>
-<festival id="Sukkot II (CH''M)" hebrew="סוּכּוֹת יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0"/>
+<festival id="Pesach II (CH''M)" hebrew="פֶּסַח יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
+<festival id="Sukkot II (CH''M)" hebrew="סוּכּוֹת יוֹם ב׳ (חֹל הַמוֹעד)" yomtov="0" type="major"/>
 
-<festival id="Leil Selichot" hebrew="סליחות" yomtov="0">
+<festival id="Leil Selichot" hebrew="סליחות" yomtov="0" type="minor">
  <about href="http://www.jewfaq.org/elul.htm#Selichot">
  Prayers for forgivenes in preparation for the High Holidays
  </about>
