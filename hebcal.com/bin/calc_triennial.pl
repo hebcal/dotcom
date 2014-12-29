@@ -899,9 +899,16 @@ sub write_sedra_page
         $ort_tikkun = qq{<a class="outbound btn btn-default btn-sm" rel="nofollow" href="$url"><i class="glyphicon glyphicon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
     }
 
+    my($torah_book,undef) = split(/ /, $torah, 2);
+
     print OUT2 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
+<ol class="breadcrumb hidden-xs">
+  <li><a href="/sedrot/">Torah Readings</a></li>
+  <li><a href="/sedrot/#$torah_book">$torah_book</a></li>
+  <li class="active">$h</li>
+</ol>
 <div class="page-header">
 <h1 class="entry-title">Parashat $h / <span lang="he" dir="rtl">$hebrew</span></h1>
 </div>
