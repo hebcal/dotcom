@@ -113,23 +113,6 @@ foreach my $node (@{$fxml->{'groups'}->{'group'}})
     push(@FESTIVALS, $f);
 }
 
-my(%PREV,%NEXT);
-{
-    my $f2;
-    foreach my $f (@FESTIVALS)
-    {
-	$PREV{$f} = $f2;
-	$f2 = $f;
-    }
-
-    $f2 = undef;
-    foreach my $f (reverse @FESTIVALS)
-    {
-	$NEXT{$f} = $f2;
-	$f2 = $f;
-    }
-}
-
 my $HEB_YR;
 if ($opts{'H'}) {
     $HEB_YR = $opts{'H'};
