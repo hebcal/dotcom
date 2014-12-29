@@ -42,6 +42,7 @@ use utf8;
 use open ":utf8";
 use Getopt::Std ();
 use Hebcal ();
+use Date::Calc ();
 use Carp;
 use Log::Log4perl qw(:easy);
 use strict;
@@ -72,16 +73,26 @@ $dbh->{sqlite_unicode} = 1;
 
 my $countries = get_countries();
 
-write_index_page($countries);
+my($fri_year,$fri_month,$fri_day) = Hebcal::upcoming_dow(5); # friday
+my $shabbat_formatted = Date::Calc::Date_to_Text_Long($fri_year,$fri_month,$fri_day);
 
+my $written_countries = {};
+foreach my $continent (keys %Hebcal::CONTINENTS) {
+    $written_countries->{$continent} = [];
+}
 foreach my $continent (keys %Hebcal::CONTINENTS) {
     foreach my $iso_country (@{$countries->{$continent}}) {
         my $iso = $iso_country->[0];
         my $country = $iso_country->[1];
         my $anchor = Hebcal::make_anchor($country);
-        write_country_page($iso,$anchor,$country);
+        my $ok = write_country_page($iso,$anchor,$country);
+        if ($ok) {
+            push(@{$written_countries->{$continent}}, [$iso, $country]);
+        }
     }
 }
+
+write_index_page($written_countries);
 
 Hebcal::zipcode_close_db($dbh);
 undef($dbh);
@@ -106,7 +117,30 @@ sub get_countries {
 sub write_country_page {
     my($iso,$anchor,$country) = @_;
 
-    INFO($country);
+    my $sql = qq{SELECT g.geonameid, g.name, g.asciiname, a.name, g.latitude, g.longitude, g.timezone
+FROM geoname g
+LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
+WHERE g.country = ?
+ORDER BY g.asciiname};
+    my $sth = $dbh->prepare($sql) or die $dbh->errstr;
+    $sth->execute($iso) or die $dbh->errstr;
+
+    my @results;
+    my %admin1;
+    while (my($geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array) {
+        $admin1 ||= '';
+        push(@results, [$geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid]);
+        $admin1{$admin1} = [] unless defined $admin1{$admin1};
+        push(@{$admin1{$admin1}}, [$geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid]);
+    }
+    $sth->finish;
+
+    my $num_results = scalar(@results);
+    my $count_distinct_admin1 = scalar(keys(%admin1));
+
+    INFO("$country - $num_results, $count_distinct_admin1 admin1 regions");
+
+    return 0 if $num_results == 0;
 
     my $fn = "$outdir/$anchor";
     open(my $fh, ">$fn.$$") || die "$fn.$$: $!\n";
@@ -118,37 +152,70 @@ sub write_country_page {
     print $fh <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<div class="page-header">
 <h1>$country<small> Shabbat Candle Lighting Times</small></h1>
-</div>
-</div><!-- .col-sm-12 -->
-</div><!-- .row -->
-<div class="row">
-<ul class="bullet-list-inline">
+<p class="lead">$shabbat_formatted</p>
 EOHTML
     ;
 
-    my $sql = qq{SELECT g.geonameid, g.name, g.asciiname, a.name
-FROM geoname g
-LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
-WHERE g.country = ?
-ORDER BY g.asciiname};
-    my $sth = $dbh->prepare($sql) or die $dbh->errstr;
-    $sth->execute($iso) or die $dbh->errstr;
-    while (my($geonameid,$name,$asciiname,$admin1) = $sth->fetchrow_array) {
-        print $fh qq{<li><a href="/shabbat/?geo=geoname&amp;geonameid=$geonameid">$name</a></li>\n};
+    if ($#results < 30 || $count_distinct_admin1 == 1) {
+        print $fh qq{<ul class="list-unstyled">\n};
+        my $show_admin1 = $count_distinct_admin1 > 1 ? 1 : 0;
+        foreach my $res (@results) {
+            write_candle_lighting($fh,$res,$iso,$show_admin1);
+        }
+        print $fh qq{</ul>\n};
+    } else {
+        foreach my $admin1 (sort keys %admin1) {
+            my $anchor = Hebcal::make_anchor($admin1);
+            print $fh qq{<div id="$anchor"><h3>$admin1</h3>\n};
+            print $fh qq{<ul class="list-unstyled">\n};
+            foreach my $res (@{$admin1{$admin1}}) {
+                write_candle_lighting($fh,$res,$iso,0);
+            }
+            print $fh qq{</ul>\n};
+            print $fh qq{</div><!-- #$anchor -->\n};
+        }
     }
-    $sth->finish;
 
-    print $fh qq{</ul>\n};
+    print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
 
     print $fh Hebcal::html_footer_bootstrap3(undef, undef);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
+
+    return $num_results;
 }
 
+sub write_candle_lighting {
+    my($fh,$info,$iso,$show_admin1) = @_;
+    my($geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid) = @{$info};
+    my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$name,$admin1);
+    my $comma_admin1 = $admin1 && $show_admin1 ? ", $admin1" : "";
+    print $fh qq{<li><a href="/shabbat/?geo=geoname&amp;geonameid=$geonameid">$name</a>$comma_admin1 - $hour_min</li>\n};
+}
+
+sub get_candle_lighting {
+    my($latitude,$longitude,$tzid,$country,$name,$admin1) = @_;
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+        Hebcal::latlong_to_hebcal($latitude, $longitude);
+    my $cmd = "./hebcal -h -x -c -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    if ($country eq "IL") {
+        $cmd .= " -i";
+        $cmd .= " -b 40" if $admin1 eq "Jerusalem District";
+    }
+    $cmd .= " $fri_year";
+    my @events = Hebcal::invoke_hebcal($cmd, "", 0, $fri_month);
+    foreach my $evt (@events) {
+        my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
+        if ($gm == $fri_month && $gd == $fri_day
+            && $evt->[$Hebcal::EVT_IDX_SUBJ] eq "Candle lighting") {
+            return Hebcal::format_evt_time($evt, "pm");
+        }
+    }
+    return undef;
+}
 
 sub write_index_page {
     my($countries) = @_;

@@ -69,7 +69,7 @@ our $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
 our $CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 
 my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
-my $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
+our $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
 
 my $CONFIG_INI;
 my $HOSTNAME;
@@ -1551,7 +1551,7 @@ sub html_header_bootstrap3 {
 <!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
-<title>$title</title>
+<title>$title2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
