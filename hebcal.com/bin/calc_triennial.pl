@@ -436,10 +436,10 @@ list($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 $gm = $mon + 1;
 $gd = $mday;
 $gy = $year + 1900;
-$century = substr($gy, 0, 2);
-$fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$gy.inc";
-@include($fn);
 list($saturday_gy,$saturday_gm,$saturday_gd) = get_saturday($gy, $gm, $gd);
+$century = substr($saturday_gy, 0, 2);
+$fn = $_SERVER["DOCUMENT_ROOT"] . "/converter/sedra/$century/$saturday_gy.inc";
+@include($fn);
 $saturday_iso = sprintf("%04d%02d%02d", $saturday_gy, $saturday_gm, $saturday_gd);
 if (isset($sedra) && isset($sedra[$saturday_iso])) {
     if (is_array($sedra[$saturday_iso])) {
