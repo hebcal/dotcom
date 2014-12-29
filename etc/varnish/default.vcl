@@ -46,7 +46,9 @@ sub vcl_recv {
     if (req.url ~ "^/i/"
         || req.url ~ "^/holidays/"
         || req.url ~ "^/torah/"
-        || req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-master/"
+        || req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-.*/"
+        || req.url ~ "^/home/wp-content/plugins/syntaxhighlighter/"
+        || req.url ~ "^/home/wp-content/uploads/"
         || req.url ~ "^/home/wp-includes/js/") {
         unset req.http.cookie;
     }
