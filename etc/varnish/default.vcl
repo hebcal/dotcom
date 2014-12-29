@@ -45,7 +45,7 @@ sub vcl_recv {
     # rewriting the request, etc.
     if (req.url ~ "^/i/"
         || req.url ~ "^/holidays/"
-        || req.url ~ "^/torah/"
+        || req.url ~ "^/sedrot/"
         || req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-.*/"
         || req.url ~ "^/home/wp-content/plugins/syntaxhighlighter/"
         || req.url ~ "^/home/wp-content/uploads/"
