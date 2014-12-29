@@ -1,4 +1,4 @@
 ExpiresActive On
 ExpiresDefault A63072000
-FileETag None
+FileETag MTime Size
 Header unset P3P
