@@ -397,7 +397,7 @@ sub table_cell_observed {
 sub table_index {
     my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
-<table class="table" id="$table_id">
+<table class="table table-condensed">
 <col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 <tbody>
 EOHTML
@@ -468,7 +468,7 @@ sub table_header_one_year_only {
     my($fh,$table_id,$show_year) = @_;
     my $col2width = $show_year ? 148 : 112;
     print $fh <<EOHTML;
-<table class="table table-striped" id="$table_id">
+<table class="table table-striped table-condensed">
 <col style="width:180px"><col style="width:${col2width}px"><col>
 <tbody>
 EOHTML
@@ -482,7 +482,7 @@ EOHTML
 
 sub table_footer_one_year_only {
     my($fh,$table_id) = @_;
-    print $fh "</tbody>\n</table><!-- #$table_id -->\n";
+    print $fh "</tbody>\n</table>\n";
 }
 
 sub get_index_body_preamble {
@@ -529,7 +529,6 @@ sub get_heading_and_table_id {
     my $heading = $section->[1];
     my $table_id = lc($heading);
     $table_id =~ s/\s+/-/g;
-    $table_id = "hebcal-$table_id";
     return ($heading,$table_id);
 }
 
@@ -585,20 +584,9 @@ EOHTML
         push(@table_ids, $table_id);
     }
 
-    my $td_sep = " tr td,\n#";
-    my $xtra_head = qq{<style type="text/css">\n};
-    $xtra_head .= "#" . join($td_sep, @table_ids) . $td_sep;
-    $xtra_head .= join(" tr th,\n#", @table_ids);
-    $xtra_head .= " tr th {\n  padding: 4px;\n}\n";
-
-    $xtra_head .= "#" . join(" td.date-obs,\n#", @table_ids);
-    $xtra_head .= " td.date-obs {\n  font-size: 12px;\n  line-height:16px;\n}\n";
-    $xtra_head .= "</style>\n";
-
-
     my $page_title = "Jewish Holidays";
     print OUT3 Hebcal::html_header_bootstrap3(
-	$page_title, "/holidays/", "ignored",  $meta . $xtra_head);
+        $page_title, "/holidays/", "ignored",  $meta);
 
     print OUT3 qq{<div class="row">\n};
     print OUT3 get_index_body_preamble($page_title, 1, undef, undef, "col-sm-8");
@@ -616,9 +604,11 @@ EOHTML
 
     foreach my $section (@sections) {
         my($heading,$table_id) = get_heading_and_table_id($section);
+        print OUT3 qq{<div id="$table_id">\n};
         print OUT3 "<h3>", $heading, "</h3>\n";
         print OUT3 $yomtov_html if $heading eq "Major holidays";
         table_index($festivals, $table_id, @{$section->[0]});
+        print OUT3 qq{</div><!-- #$table_id -->\n};
     }
 
     print OUT3 qq{</div><!-- .col-sm-12 -->\n};
@@ -632,8 +622,7 @@ EOHTML
     foreach my $i (0 .. $NUM_YEARS) {
         write_hebrew_year_index_page($i,
              $festivals,
-             \@sections,
-             $xtra_head);
+             \@sections);
         write_greg_year_index_page($i, $festivals, \@sections);
     }
 }
@@ -713,9 +702,11 @@ EOHTML
 ;
 
     print $fh qq{<div class="row">\n};
+    print $fh qq{<div class="col-sm-12">\n};
 
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
+        print $fh qq{<div id="$table_id">\n};
         print $fh "<h3>", $heading, "</h3>\n";
         print $fh $yomtov_html if $heading eq "Major holidays";
         table_header_one_year_only($fh, $table_id, 0);
@@ -730,11 +721,13 @@ EOHTML
             table_row_one_year_only($fh,$festivals,$f,$evt,0);
         }
         table_footer_one_year_only($fh, $table_id);
+        print $fh qq{</div><!-- #$table_id -->\n};
     }
 
     print $fh pagination_greg($i);
     print $fh pagination_hebrew(-1);
 
+    print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
 
     print $fh Hebcal::html_footer_bootstrap3(undef, undef);
@@ -744,7 +737,7 @@ EOHTML
 }
 
 sub write_hebrew_year_index_page {
-    my($i,$festivals,$sections,$xtra_head) = @_;
+    my($i,$festivals,$sections) = @_;
 
     my $heb_year = $HEB_YR + $i - 1;
     my $greg_yr1 = $heb_year - 3761;
@@ -765,7 +758,7 @@ EOHTML
     print $fh Hebcal::html_header_bootstrap3($page_title,
         "/holidays/$slug",
         "single single-post",
-        $meta . $xtra_head,
+        $meta,
         0);
 
     print $fh qq{<div class="row">\n};
@@ -784,6 +777,7 @@ EOHTML
 
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
+        print $fh qq{<div id="$table_id">\n};
         print $fh "<h3>", $heading, "</h3>\n";
         print $fh $yomtov_html if $heading eq "Major holidays";
         table_header_one_year_only($fh, $table_id, 1);
@@ -791,6 +785,7 @@ EOHTML
             table_row_one_year_only($fh,$festivals,$f,$EVENTS_BY_HEBYEAR[$i]->{$f},1);
         }
         table_footer_one_year_only($fh, $table_id);
+        print $fh qq{</div><!-- #$table_id -->\n};
     }
 
     print $fh pagination_greg(-1);
