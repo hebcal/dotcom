@@ -183,7 +183,7 @@ sub self_url
 {
     my $url = join('',
 		   "http://", $q->virtual_host(), $script_name,
-		   "?geo=", $q->param('geo'), "&", get_link_args($q, 1));
+		   "?geo=", $q->param('geo'), "&", get_link_args($q));
     $url;
 }
 
@@ -503,7 +503,7 @@ sub display_html
 }
 
 sub get_link_args {
-    my($q,$do_havdalah_mins) = @_;
+    my($q) = @_;
 
     my $url = Hebcal::get_geo_args($q);
 
@@ -512,10 +512,8 @@ sub get_link_args {
 	    if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
     }
 
-    if ($do_havdalah_mins) {
-	$url .= "&m=" . $q->param("m")
-	    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
-    }
+    $url .= "&m=" . $q->param("m")
+        if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
 
     $url;
 }
@@ -525,7 +523,7 @@ sub more_from_hebcal {
 
     # link to hebcal full calendar
     my $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
-    $url .= get_link_args($q, 1);
+    $url .= get_link_args($q);
     $url .= '&month=now&year=now';
     foreach my $opt (qw(c s maj min mod mf ss nx vis)) {
         $url .= join("", "&", $opt, "=on");
@@ -538,10 +536,8 @@ sub more_from_hebcal {
 
     # Fridge calendar
     $url = "/shabbat/fridge.cgi?";
-    $url .= get_link_args($q, 0);
+    $url .= get_link_args($q);
     $url .= "&year=" . $hyear;
-    $url .= "&m=" . $q->param("m")
-        if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
     Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
 		     qq{href="}, url_html($url),
 		     qq{"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
@@ -560,7 +556,7 @@ EOHTML
 
     # Synagogues link
     $url = "/link/?";
-    $url .= get_link_args($q, 1);
+    $url .= get_link_args($q);
 
     Hebcal::out_html($cfg, qq{<a rel="nofollow" class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
 		     qq{href="}, url_html($url), qq{"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});

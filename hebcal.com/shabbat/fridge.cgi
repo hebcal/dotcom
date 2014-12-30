@@ -252,6 +252,12 @@ sub process_args
     my($q) = @_;
 
     my %cconfig;
+
+    # force a valid Havdalah setting for yomtov starting Motzei Shabbat
+    if (defined $q->param('m') && $q->param('m') eq '0') {
+        $q->param('m', $Hebcal::havdalah_min);
+    }
+
     my @status = Hebcal::process_args_common($q, 0, 1, \%cconfig);
     unless ($status[0]) {
 	print "Status: 400 Bad Request\r\n", "Content-Type: text/html\r\n\r\n",

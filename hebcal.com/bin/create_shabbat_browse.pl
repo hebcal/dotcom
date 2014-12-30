@@ -239,6 +239,10 @@ sub write_index_page {
 <div class="col-sm-12">
 <h1>$page_title</h1>
 <p class="lead">Candle-lighting and Havdalah times. Weekly Torah portion.</p>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+<div class="row">
+<div class="col-sm-10 col-sm-offset-1">
 <form action="/shabbat/" method="get" role="form" id="shabbat-form">
   <input type="hidden" name="geo" id="geo" value="geoname">
   <input type="hidden" name="geonameid" id="geonameid">
@@ -248,7 +252,7 @@ sub write_index_page {
     <input type="text" id="city-typeahead" class="form-control input-lg typeahead" placeholder="Search for city or ZIP code">
   </div>
 </form>
-</div><!-- .col-sm-12 -->
+</div><!-- .col-sm-10 -->
 </div><!-- .row -->
 <div class="row">
 EOHTML
