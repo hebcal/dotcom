@@ -1376,6 +1376,9 @@ sub results_page
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
 \@media print { div.pbba { page-break-before: always } }
+.fc-emulated-table {
+  table-layout: fixed;
+}
 .fc-emulated-table th, .fc-emulated-table td {
   padding: 4px;
 }
@@ -1589,12 +1592,6 @@ EOHTML
         my $cal_id = sprintf("%04d-%02d", $year, $mon);
         my $cal = $html_cals{$cal_id};
 
-        $cal->setcontent($mday, "")
-            if $cal->getcontent($mday) eq "&nbsp;";
-
-        $cal->addcontent($mday, "\n")
-            if $cal->getcontent($mday) ne "";
-
         my $class = "fc-event $category";
         if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
         {
@@ -1683,6 +1680,9 @@ sub write_html_cal
     }
     my $cal = $cals->[$i];
     my $id = $cal_ids->[$i];
+    my($year,$month) = split(/-/, $id, 2);
+    $month =~ s/^0//;
+    my $header = sprintf("<h3>%s %s</h3>", $Hebcal::MoY_long{$month}, $year);
     my $style = "";
     my $class = "cal";
     if ($i != 0) {
@@ -1692,10 +1692,14 @@ sub write_html_cal
     if ($id eq sprintf("%04d-%02d", $this_year, $this_mon)) {
         Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
     }
+    my $cal_html = $cal->as_HTML();
+    $cal_html =~ s/ border="0" width="100%">/>/;
+    $cal_html =~ s/<td width="14%" valign="top" align="left">/<td>/g;
     Hebcal::out_html(undef,
                      qq{<div id="cal-$id">\n},
                      qq{<div class="$class"$style$dir>\n},
-                     $cal->as_HTML(),
+                     $header,
+                     $cal_html,
                      qq{</div><!-- .cal -->\n},
                      qq{<div class="agenda">\n},
                      qq{</div><!-- .agenda -->\n},
@@ -1708,15 +1712,9 @@ sub new_html_cal
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
                                             "month" => $month);
-    $cal->border(1);
+    $cal->border(0);
     $cal->tableclass("table table-bordered fc-emulated-table");
-    $cal->header(sprintf("<h2>%s %04d</h2>", $Hebcal::MoY_long{$month}, $year));
-
-    my $end_day = Date::Calc::Days_in_Month($year, $month);
-    for (my $mday = 1; $mday <= $end_day ; $mday++)
-    {
-        $cal->setcontent($mday, "&nbsp;");
-    }
+    $cal->header('');
 
     $cal;
 }
