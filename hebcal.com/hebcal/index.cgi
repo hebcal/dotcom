@@ -308,7 +308,7 @@ sub json_events
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
-    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"});
+    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"},0,1);
 
     print STDOUT $q->header(-type => $content_type,
                             -charset => "UTF-8",
@@ -1666,7 +1666,7 @@ JSCRIPT_END
 
 sub html_table_events {
     my($events) = @_;
-    my $dict = Hebcal::events_to_dict($events,"json",$q,0,0,$cconfig{"tzid"},1);
+    my $dict = Hebcal::events_to_dict($events,"json",$q,0,0,$cconfig{"tzid"},1,0);
     my $items = Hebcal::json_transform_items($dict);
     eval("use JSON");
     my $json = JSON->new;

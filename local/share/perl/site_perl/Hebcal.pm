@@ -670,7 +670,7 @@ sub event_category {
 }
 
 sub event_to_dict {
-    my($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$luach_memo) = @_;
+    my($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$dbh,$sth) = @_;
 
     my $subj = $evt->[$EVT_IDX_SUBJ];
     my($year,$mon,$mday) = event_ymd($evt);
@@ -735,12 +735,24 @@ sub event_to_dict {
         $item{"memo"} = $memo if $memo;
     }
 
+    if (defined $dbh && $item{"class"} eq "parashat") {
+        my($torah_reading,$special_maftir,$haftarah_reading) =
+            torah_calendar_memo_inner($dbh, $sth, $year, $mon, $mday);
+        if ($torah_reading) {
+            my $leyning = {};
+            $leyning->{torah} = $torah_reading if $torah_reading;
+            $leyning->{maftir} = $special_maftir if $special_maftir;
+            $leyning->{haftarah} = $haftarah_reading if $haftarah_reading;
+            $item{"leyning"} = $leyning;
+        }
+    }
+
     return \%item;
 }
 
 sub events_to_dict
 {
-    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz,$luach_memo) = @_;
+    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz,$include_leyning) = @_;
 
     my $url = "http://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
@@ -751,13 +763,35 @@ sub events_to_dict
 
     $tzid ||= "UTC";
 
+    my $dbh;
+    my $sth;
+    if ($include_leyning) {
+        unless ($eval_use_DBI) {
+            eval("use DBI");
+            $eval_use_DBI = 1;
+        }
+        # don't raise error if we can't open DB
+        $dbh = DBI->connect("dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "");
+        if (defined $dbh) {
+            $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+            if (!defined $sth) {
+                $dbh = undef;
+            }
+        }
+    }
+
     my @items;
     foreach my $evt (@{$events}) {
         my $time = event_to_time($evt);
         next if ($friday && $time < $friday);
         last if ($saturday && $time > $saturday);
-        my $item = event_to_dict($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$luach_memo);
+        my $item = event_to_dict($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$dbh,$sth);
         push(@items, $item);
+    }
+
+    if (defined $dbh) {
+        undef $sth;
+        $dbh->disconnect();
     }
 
     \@items;
@@ -817,6 +851,8 @@ sub json_transform_items {
             if $item->{"yomtov"};
         $out->{memo} = $item->{"memo"}
             if $item->{"memo"};
+        $out->{leyning} = $item->{"leyning"}
+            if $item->{"leyning"};
 	push(@out, $out);
     }
     \@out;
@@ -2618,7 +2654,7 @@ sub get_vcalendar_cache_fn
 }
 
 
-sub torah_calendar_memo {
+sub torah_calendar_memo_inner {
     my($dbh,$sth,$gy,$gm,$gd) = @_;
     my $date_sql = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
     my $rv = $sth->execute($date_sql) or die $dbh->errstr;
@@ -2635,6 +2671,13 @@ sub torah_calendar_memo {
 	}
     }
     $sth->finish;
+    return ($torah_reading,$special_maftir,$haftarah_reading);
+}
+
+sub torah_calendar_memo {
+    my($dbh,$sth,$gy,$gm,$gd) = @_;
+    my($torah_reading,$special_maftir,$haftarah_reading) =
+        torah_calendar_memo_inner($dbh,$sth,$gy,$gm,$gd);
     my $memo;
     if ($torah_reading) {
 	$memo = "Torah: $torah_reading";
