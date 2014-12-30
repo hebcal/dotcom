@@ -144,6 +144,10 @@ sub process_args
 	$q->param("geo", "city");
     }
 
+    if (! defined $q->param('m')) {
+        $q->param('m', $Hebcal::havdalah_min);
+    }
+
     my @status = Hebcal::process_args_common($q, 1, 1, $cconfig);
     unless ($status[0]) {
 	form($cfg, 1, $status[1], $status[2]);

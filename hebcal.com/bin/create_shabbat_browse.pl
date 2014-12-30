@@ -197,7 +197,7 @@ sub write_candle_lighting {
     my($geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid) = @{$info};
     my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$name,$admin1);
     my $comma_admin1 = $show_admin1 && $admin1 && index($admin1, $name) != 0 ? "<small>, $admin1</small>" : "";
-    print $fh qq{<li><a href="/shabbat/?geo=geoname&amp;geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
+    print $fh qq{<li><a href="/shabbat/?geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
 }
 
 sub get_candle_lighting {
