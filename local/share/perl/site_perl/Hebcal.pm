@@ -669,9 +669,78 @@ sub event_category {
     }
 }
 
+sub event_to_dict {
+    my($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$luach_memo) = @_;
+
+    my $subj = $evt->[$EVT_IDX_SUBJ];
+    my($year,$mon,$mday) = event_ymd($evt);
+
+    my $min = $evt->[$EVT_IDX_MIN];
+    my $hour24 = $evt->[$EVT_IDX_HOUR];
+    if ($evt->[$EVT_IDX_UNTIMED]) {
+        $min = $hour24 = 0;
+    }
+
+    my %item;
+    my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
+        "%A, %d %b %Y" : "%A, %d %B %Y";
+    $item{"date"} = strftime($format, localtime($time));
+
+    my $tzOffset = $ignore_tz ? ""
+        : event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
+
+    my $dow = $DoW[get_dow($year, $mon, $mday)];
+    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s",
+                           $dow,
+                           $mday,
+                           $MoY_short[$mon - 1],
+                           $year, $hour24, $min,
+                           $tzOffset);
+
+    if ($evt->[$EVT_IDX_YOMTOV]) {
+        $item{"yomtov"} = 1;
+    }
+
+    $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
+    if (!$evt->[$EVT_IDX_UNTIMED]) {
+        my $tzOffset2 = $tzOffset;
+        $tzOffset2 =~ s/(\d\d)$/:$1/;
+        $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset2);
+    }
+
+    my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
+    $anchor =~ s/[^\w]/_/g;
+    $anchor =~ s/_+/_/g;
+    $anchor =~ s/_$//g;
+    $item{"about"} = $url . "#" . $anchor;
+    $item{"subj"} = $subj;
+    $item{"class"} = event_category($subj);
+
+    my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
+    $item{"hebrew"} = $hebrew if $hebrew;
+
+    if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
+    {
+        $item{"time"} = format_evt_time($evt, "pm");
+        $item{"link"} = $url . "#" . $anchor;
+    }
+    elsif ($subj eq "No sunset today.")
+    {
+        $item{"link"} = $url . "#top";
+        $item{"time"} = "";
+    }
+    else
+    {
+        $item{"link"} = $href if $href;
+        $item{"memo"} = $memo if $memo;
+    }
+
+    return \%item;
+}
+
 sub events_to_dict
 {
-    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz) = @_;
+    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz,$luach_memo) = @_;
 
     my $url = "http://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
@@ -684,74 +753,11 @@ sub events_to_dict
 
     my @items;
     foreach my $evt (@{$events}) {
-	my $time = event_to_time($evt);
+        my $time = event_to_time($evt);
         next if ($friday && $time < $friday);
         last if ($saturday && $time > $saturday);
-
-	my $subj = $evt->[$EVT_IDX_SUBJ];
-	my($year,$mon,$mday) = event_ymd($evt);
-
-	my $min = $evt->[$EVT_IDX_MIN];
-	my $hour24 = $evt->[$EVT_IDX_HOUR];
-        if ($evt->[$EVT_IDX_UNTIMED]) {
-            $min = $hour24 = 0;
-        }
-
-	my %item;
-	my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
-	    "%A, %d %b %Y" : "%A, %d %B %Y";
-	$item{"date"} = strftime($format, localtime($time));
-
-        my $tzOffset = $ignore_tz ? ""
-            : event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
-
-        my $dow = $DoW[get_dow($year, $mon, $mday)];
-        $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s",
-                               $dow,
-                               $mday,
-                               $MoY_short[$mon - 1],
-                               $year, $hour24, $min,
-                               $tzOffset);
-
-        if ($evt->[$EVT_IDX_YOMTOV]) {
-            $item{"yomtov"} = 1;
-        }
-
-        $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
-	if (!$evt->[$EVT_IDX_UNTIMED]) {
-            my $tzOffset2 = $tzOffset;
-            $tzOffset2 =~ s/(\d\d)$/:$1/;
-            $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset2);
-	}
-
-	my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
-	$anchor =~ s/[^\w]/_/g;
-	$anchor =~ s/_+/_/g;
-	$anchor =~ s/_$//g;
-	$item{"about"} = $url . "#" . $anchor;
-	$item{"subj"} = $subj;
-        $item{"class"} = event_category($subj);
-
-        my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
-        $item{"hebrew"} = $hebrew if $hebrew;
-
-	if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
-	{
-	    $item{"time"} = format_evt_time($evt, "pm");
-	    $item{"link"} = $url . "#" . $anchor;
-	}
-	elsif ($subj eq "No sunset today.")
-	{
-	    $item{"link"} = $url . "#top";
-	    $item{"time"} = "";
-	}
-	else
-	{
-            $item{"link"} = $href if $href;
-            $item{"memo"} = $memo if $memo;
-	}
-
-	push(@items, \%item);
+        my $item = event_to_dict($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$luach_memo);
+        push(@items, $item);
     }
 
     \@items;
