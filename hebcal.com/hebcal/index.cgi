@@ -1379,8 +1379,14 @@ div.pbba { page-break-before: always }
 .fc-emulated-table {
   table-layout: fixed;
 }
-.fc-emulated-table th, .fc-emulated-table td {
+.fc-emulated-table tr th, .fc-emulated-table tr td {
   padding: 4px;
+}
+.fc-emulated-table tr th {
+  text-align: center;
+}
+.fc-emulated-table tr td {
+  height: 90px;
 }
 .fc-event {
     display: block; /* make the <a> tag block */
@@ -1712,6 +1718,9 @@ sub new_html_cal
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
                                             "month" => $month);
+    $cal->saturday('Sat');
+    $cal->sunday('Sun');
+    $cal->weekdays('Mon','Tue','Wed','Thu','Fri');
     $cal->border(0);
     $cal->tableclass("table table-bordered fc-emulated-table");
     $cal->header('');
