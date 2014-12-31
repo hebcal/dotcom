@@ -369,7 +369,7 @@ if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
 </div><!-- .col-sm-6 -->
 
 <div class="col-sm-6">
-<h2><h2><span class="glyphicons book_open"></span>
+<h2><span class="glyphicons book_open"></span>
 Torah Readings</h2>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
 <p><a class="btn btn-default" href="/sedrot/"><i class="glyphicon glyphicon-book"></i> Torah Readings &raquo;</a></p>
