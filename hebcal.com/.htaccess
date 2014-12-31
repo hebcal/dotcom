@@ -28,7 +28,7 @@ RewriteRule ^ /wap-shabbat.php [L]
 # virus-infected host
 #SetEnvIF X-Forwarded-For "129.98.212.203" DenyFromIP
 SetEnvIF X-Forwarded-For "203.231.0.1" DenyFromIP
-SetEnvIF X-Forwarded-For "216.157.24.28" DenyFromIP
+#SetEnvIF X-Forwarded-For "216.157.24.28" DenyFromIP
 Deny from env=DenyFromIP
 
 AddType text/calendar;charset=UTF-8 ics
@@ -99,5 +99,5 @@ RedirectMatch permanent ^/news(/)?$ http://www.hebcal.com/home/category/news
 
 Redirect gone /shabbat/cities.html
 
-RedirectMatch ^/s/(.*)$ http://www.hebcal.com/sedrot/$1?utm_source=redir&utm_campaign=redir-2014
-RedirectMatch ^/h/(.*)$ http://www.hebcal.com/holidays/$1?utm_source=redir&utm_campaign=redir-2014
+RedirectMatch ^/s/(.*)$ http://www.hebcal.com/sedrot/$1?utm_source=redir&utm_campaign=redir-2015
+RedirectMatch ^/h/(.*)$ http://www.hebcal.com/holidays/$1?utm_source=redir&utm_campaign=redir-2015
