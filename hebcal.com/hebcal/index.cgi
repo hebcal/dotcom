@@ -644,6 +644,7 @@ sub pdf_display {
     }
 
     print STDOUT $q->header(-type => $content_type,
+                            -charset => '',
                             -cache_control => $http_cache_control);
     binmode(STDOUT, ":raw");
     print STDOUT $pdf->stringify();
