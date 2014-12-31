@@ -1133,10 +1133,9 @@ sub month_start_dates {
 }
 
 sub nav_pagination {
-    my($events) = @_;
+    my($start_month,$start_year,$end_month,$end_year) = @_;
 
     my($prev_url,$next_url,$prev_title,$next_title) = next_and_prev_urls($q);
-    my($start_month,$start_year,$end_month,$end_year) = get_start_and_end($events);
 
     my $prev_nofollow = ($q->param("month") =~ /^\d+$/
              || $start_year < $this_year
@@ -1544,10 +1543,12 @@ EOHTML
     my @html_cals;
     my %html_cals;
     my @html_cal_ids;
+    my $nav_pagination = "";
 
     # make blank calendar month objects for every month in the date range
     if ($numEntries > 0) {
         my($start_month,$start_year,$end_month,$end_year) = get_start_and_end(\@events);
+        $nav_pagination = nav_pagination($start_month,$start_year,$end_month,$end_year);
         my $dates = month_start_dates($start_month,$start_year,$end_month,$end_year);
         foreach my $dt (@{$dates}) {
             my $year = $dt->[0];
@@ -1560,7 +1561,6 @@ EOHTML
         }
     }
 
-    my $nav_pagination = nav_pagination(\@events);
     Hebcal::out_html(undef, $nav_pagination);
 
     push(@benchmarks, Benchmark->new);
