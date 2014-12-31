@@ -54,8 +54,8 @@ use Benchmark qw(:hireswallclock :all);
 my @benchmarks;
 push(@benchmarks, Benchmark->new);
 
-my $http_expires = "Tue, 02 Jun 2037 20:00:00 GMT";
-my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
+my $http_expires;
+my $http_cache_control = "max-age=63072000";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
@@ -297,6 +297,14 @@ if ($cfg eq "html") {
 close(STDOUT);
 exit(0);
 
+# two years from now
+sub http_expires {
+    unless ($http_expires) {
+        $http_expires = Hebcal::http_date(time() + 63072000);
+    }
+    return $http_expires;
+}
+
 sub param_true
 {
     my($k) = @_;
@@ -312,6 +320,7 @@ sub json_events
 
     print STDOUT $q->header(-type => $content_type,
                             -charset => "UTF-8",
+                            -cache_control => $http_cache_control,
                             -access_control_allow_origin => '*',
                             );
 
@@ -334,13 +343,9 @@ sub javascript_events
                                     $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@events, @ev2);
 
-    my $time = defined $ENV{"SCRIPT_FILENAME"} ?
-        (stat($ENV{"SCRIPT_FILENAME"}))[9] : time;
-
     print STDOUT $q->header(-type => $content_type,
                             -charset => "UTF-8",
-                            -last_modified => Hebcal::http_date($time),
-                            -expires => $http_expires,
+                            -cache_control => $http_cache_control,
                             -access_control_allow_origin => '*',
                             );
 
@@ -638,7 +643,8 @@ sub pdf_display {
         $text->text_right("Provided by www.hebcal.com with a Creative Commons Attribution 3.0 license");
     }
 
-    print STDOUT $q->header(-type => $content_type);
+    print STDOUT $q->header(-type => $content_type,
+                            -cache_control => $http_cache_control);
     binmode(STDOUT, ":raw");
     print STDOUT $pdf->stringify();
     $pdf->end();
@@ -1085,6 +1091,7 @@ sub my_set_cookie
 {
     my($str) = @_;
     if ($str =~ /&/) {
+        my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
         print STDOUT "Cache-Control: private\015\012Set-Cookie: ",
         $str, "; expires=", $cookie_expires, "; path=/\015\012";
     }
@@ -1367,7 +1374,7 @@ sub results_page
         $results_title .= " "  . $cconfig{"city"};
     }
 
-    print STDOUT $q->header(-expires => $http_expires,
+    print STDOUT $q->header(-expires => http_expires(),
                             -type => $content_type,
                             -charset => "UTF-8");
 
