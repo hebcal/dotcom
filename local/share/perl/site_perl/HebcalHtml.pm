@@ -91,7 +91,7 @@ sub download_button_html {
 
     my $html5download = ($href =~ m,^(webcal://|http://calendar\.live\.com),) ? "" : qq{ download="$filename"};
 
-    my $class = $button_and_icon ? "btn download" : "download";
+    my $class = $button_and_icon ? "btn btn-default download" : "download";
     my $icon = $button_and_icon ? qq{<i class="icon-download-alt"></i> } : "";
 
     return qq{<a class="$class" id="$id" title="$filename" href="$href"${nofollow}${html5download}>${icon}Download $button_text</a>};
@@ -362,7 +362,7 @@ sub download_html_modal {
   <div class="modal-content">
  <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-  <h3 id="hcdl-modalLabel">Download</h3>
+  <h3 class="modal-title" id="hcdl-modalLabel">Download</h3>
  </div>
  <div class="modal-body">
 <p>Export <strong>$title Calendar</strong> to your calendar app.</p>
@@ -371,14 +371,16 @@ $html
  <div class="modal-footer">
    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
  </div>
-</div><!-- #hcdl-modal -->
+  </div><!-- .modal-content -->
+ </div><!-- .modal-dialog -->
+</div><!-- .modal -->
 EOHTML
 ;
     return $s;
 }
 
 sub download_html_modal_button {
-    return qq{<a href="#hcdl-modal" role="button" class="btn btn-default btn-small" data-toggle="modal">Download ...</a>};
+    return qq{<a href="#hcdl-modal" role="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#hcdl-modal">Download ...</a>};
 }
 
 
