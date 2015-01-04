@@ -40,26 +40,35 @@ use lib "/home/hebcal/local/share/perl/site_perl";
 
 use utf8;
 use open ":utf8";
-use Getopt::Std ();
+use Getopt::Long ();
 use Hebcal ();
 use Date::Calc ();
 use Carp;
 use Log::Log4perl qw(:easy);
 use strict;
 
-$0 =~ s,.*/,,;  # basename
-my $usage = "usage: $0 [-hv] output-dir
-  -h                Display usage information
-  -v                Verbose mode
-";
+my $opt_indexonly = 0;
+my $opt_help;
+my $opt_verbose = 0;
 
-my %opts;
-Getopt::Std::getopts('hv', \%opts) || die "$usage\n";
-$opts{'h'} && die "$usage\n";
-(@ARGV == 1) || die "$usage";
+if (!Getopt::Long::GetOptions
+    ("help|h" => \$opt_help,
+     "indexonly" => \$opt_indexonly,
+     "verbose|v+" => \$opt_verbose)) {
+    usage();
+}
 
-# Just log to STDERR
-my $loglevel = $opts{"v"} ? $INFO : $WARN;
+$opt_help && usage();
+(@ARGV == 1) || usage();
+
+my $loglevel;
+if ($opt_verbose == 0) {
+    $loglevel = $WARN;
+} elsif ($opt_verbose == 1) {
+    $loglevel = $INFO;
+} else {
+    $loglevel = $DEBUG;
+}
 Log::Log4perl->easy_init($loglevel);
 
 my $outdir = shift;
@@ -85,7 +94,12 @@ foreach my $continent (keys %Hebcal::CONTINENTS) {
         my $iso = $iso_country->[0];
         my $country = $iso_country->[1];
         my $anchor = Hebcal::make_anchor($country);
-        my $ok = write_country_page($iso,$anchor,$country);
+        my $ok;
+        if ($opt_indexonly) {
+            $ok = 1;
+        } else {
+            $ok = write_country_page($iso,$anchor,$country);
+        }
         if ($ok) {
             push(@{$written_countries->{$continent}}, [$iso, $country]);
         }
@@ -97,6 +111,15 @@ write_index_page($written_countries);
 Hebcal::zipcode_close_db($dbh);
 undef($dbh);
 exit(0);
+
+sub usage {
+    my $usage = "usage: $0 [-hv] output-dir
+  --help        Display usage information
+  --verbose     Verbose mode
+  --indexonly   Only generate index
+";
+    die "$usage\n";
+}
 
 sub get_countries {
     my %countries;
