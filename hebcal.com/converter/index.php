@@ -352,12 +352,12 @@ function form($head, $message, $help = "") {
 <h5>Convert from Gregorian to Hebrew date</h5>
 <form class="form-inline" action="<?php echo $action ?>">
 <div class="form-group">
-<input type="text" class="form-control" name="gd" placeholder="day" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
+<input type="text" class="form-control" style="width:48px" name="gd" placeholder="day" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
 <?php
 global $MoY_long;
-echo html_form_select("gm", $MoY_long, $gm, 1, "", false, 'class="form-control" style="width:120px"');
+echo html_form_select("gm", $MoY_long, $gm, 0, "", false, 'class="form-control" style="width:120px"');
 ?>
-<input type="text" class="form-control" name="gy" placeholder="year" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
+<input type="text" class="form-control" style="width:66px" name="gy" placeholder="year" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
 </div><!-- .form-group -->
 <div class="clearfix">
 <div class="checkbox">
@@ -375,11 +375,11 @@ After sunset</label>
 <h5>Convert from Hebrew to Gregorian date</h5>
 <form class="form-inline" action="<?php echo $action ?>">
 <div class="form-group">
-<input type="text" class="form-control" name="hd" placeholder="day" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
+<input type="text" class="form-control" style="width:48px" name="hd" placeholder="day" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
 <?php
-echo html_form_select("hm", $hmstr_to_hebcal, $hm, 1, "", false, 'class="form-control" style="width:120px"');
+echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-control" style="width:120px"');
 ?>
-<input type="text" class="form-control" name="hy" placeholder="year" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
+<input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .form-group -->
 <div class="clearfix">
 <div class="form-group">
