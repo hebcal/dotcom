@@ -199,7 +199,7 @@ sub format_items
     my($q,$items) = @_;
 
     my $table_head = <<EOHTML;
-<table style="width:auto" id="fridge-table">
+<table style="width:380px" id="fridge-table">
 <col><col><col><col>
 <col style="border-left:solid;border-width:1px;border-color:#999999"><col><col><col>
 <tbody>
