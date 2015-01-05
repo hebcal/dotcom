@@ -45,6 +45,9 @@ use Hebcal ();
 use Date::Calc;
 use URI::Escape;
 use POSIX ();
+use Benchmark qw(:hireswallclock :all);
+
+my $t0 = Benchmark->new;
 
 # process form params
 my($q) = new CGI;
@@ -159,6 +162,10 @@ print qq{</div><!-- align=center -->
 </body>
 </html>
 };
+
+my $tend = Benchmark->new;
+my $tdiff = timediff($tend, $t0);
+print "<!-- ", timestr($tdiff), " -->\n";
 
 exit(0);
 
