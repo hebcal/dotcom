@@ -62,76 +62,71 @@ header("HTTP/1.1 404 Not Found");
 <meta charset="UTF-8">
 <title><?php echo $_SERVER["REDIRECT_STATUS"] ?> Not Found</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-967247-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-967247-1', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
 </script>
 <style type="text/css">
-.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
-.navbar{position:static}
-body{padding-top:0}
-@media print{
- a[href]:after{content:""}
- .sidebar-nav{display:none}
+.hebcal-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  color: #777;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
 }
+.hebcal-footer p {
+  margin-bottom: 2px;
+}
+.bullet-list-inline {
+  padding-left: 0;
+  margin-left: -3px;
+  list-style: none;
+}
+.bullet-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.bullet-list-inline li:after{content:"\00a0\00a0\00b7"}
+.bullet-list-inline li:last-child:after{content:""}
 </style>
 </head>
-<body class="error404">
-<header role="banner">
-
-<div id="inner-header" class="clearfix">
-
-<div class="navbar navbar-fixed-top">
-<div class="navbar-inner">
-<div class="container-fluid nav-container">
-  <nav role="navigation">
-  <a class="brand" id="logo" title="Jewish Calendar" href="/">Hebcal</a>
-
-  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-  </a>
-
-<div class="nav-collapse">
-  <ul id="menu-default" class="nav"><li id="menu-item-441" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Jewish Holidays" href="http://www.hebcal.com/holidays/" >Holidays</a></li>
-<li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Hebrew Date Converter" href="http://www.hebcal.com/converter/" >Date Converter</a></li>
-<li id="menu-item-440" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Shabbat Times" href="http://www.hebcal.com/shabbat/" >Shabbat</a></li>
-<li id="menu-item-445" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Torah Readings" href="http://www.hebcal.com/sedrot/" >Torah</a></li>
-<li id="menu-item-324" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="http://www.hebcal.com/home/about" >About</a></li>
-<li id="menu-item-328" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent"><a href="http://www.hebcal.com/home/help" >Help</a></li>
-</ul>
+<body>
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+    </div>
+    <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav"><li><a href="/holidays/" title="Jewish Holidays">Holidays</a></li><li><a href="/converter/" title="Hebrew Date Converter">Date Converter</a></li><li><a href="/shabbat/" title="Shabbat Times">Shabbat</a></li><li><a href="/sedrot/" title="Torah Readings">Torah</a></li><li><a href="http://www.hebcal.com/home/about" title="About">About</a></li><li><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul>
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+     <input name="s" id="s" type="text" class="form-control" placeholder="Search">
+    </form>
+    </div><!--/.navbar-collapse -->
+  </div>
 </div>
 
-</nav>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm-12">
 
-<form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
-<input name="s" id="s" type="text" class="search-query" placeholder="Search">
-</form>
-
-</div>
-</div>
-</div>
-
-</div> <!-- end #inner-header -->
-
-</header> <!-- end header -->
-
-<div class="container-fluid">
-
-<div id="content" class="clearfix row-fluid">
-
-<div id="main" class="span12 clearfix" role="main">
-
-<div class="page-header"><h1>Not Found</h1></div>
+<h1>Not Found</h1>
 
 <p class="lead">The requested URL
 <?php echo htmlspecialchars($_SERVER["REQUEST_URI"]) ?>
@@ -139,52 +134,30 @@ body{padding-top:0}
 
 <p>Please check your request for typing errors and retry.</p>
 
-</div> <!-- end #main -->
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+</div><!-- #content -->
 
-</div> <!-- end #content -->
-
-<footer role="contentinfo">
-<hr>
-<div id="inner-footer" class="clearfix">
-<div class="row-fluid">
-<div class="span3">
-<ul class="nav nav-list">
-<li class="nav-header">Products</li>
-<li><a href="/holidays/">Jewish Holidays</a></li>
-<li><a href="/converter/">Hebrew Date Converter</a></li>
-<li><a href="/shabbat/">Shabbat Times</a></li>
-<li><a href="/sedrot/">Torah Readings</a></li>
+<footer role="contentinfo" class="hebcal-footer">
+<div class="row">
+<div class="col-sm-12">
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
+rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
+also under a cc-by licence.</small></p>
+<ul class="bullet-list-inline">
+<li><time datetime="2015-01-01T15:26:56Z">01 January 2015</time></li>
+<li><a href="http://www.hebcal.com/home/about">About</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy</a></li>
+<li><a href="http://www.hebcal.com/home/help">Help</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact</a></li>
+<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
+<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
 </ul>
-</div><!-- .span3 -->
-<div class="span3">
-<ul class="nav nav-list">
-<li class="nav-header">About Us</li>
-<li><a href="/home/about">About Hebcal</a></li>
-<li><a href="/home/category/news">News</a></li>
-<li><a href="/home/about/privacy-policy">Privacy Policy</a></li>
-</ul>
-</div><!-- .span3 -->
-<div class="span3">
-<ul class="nav nav-list">
-<li class="nav-header">Connect</li>
-<li><a href="/home/help">Help</a></li>
-<li><a href="/home/about/contact">Contact Us</a></li>
-<li><a href="/home/about/donate">Donate</a></li>
-<li><a href="/home/developer-apis">Developer APIs</a></li>
-</ul>
-</div><!-- .span3 -->
-<div class="span3">
-<p><small>Except where otherwise noted, content on
-<span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">this site</span>
-is licensed under a
-<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
-Commons Attribution 3.0 License</a>.</small></p>
-</div><!-- .span3 -->
-</div><!-- .row-fluid -->
-</div><!-- #inner-footer -->
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 </footer>
 </div> <!-- .container -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
-</body></html>
+</body>
+</html>
