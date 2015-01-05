@@ -20,7 +20,7 @@
 #  * Redistributions in binary form must reproduce the above
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials
-#    provided with the distribution. 
+#    provided with the distribution.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -78,15 +78,17 @@ EOHTML
 }
 
 my $body=<<EOHTML;
-<div class="page-title">
+<div class="row">
+<div class="col-sm-12">
 <h1>$title</h1>
-</div>
 $entry_content
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 EOHTML
 ;
 print $q->header(),
-    Hebcal::html_header_bootstrap($title, Hebcal::script_name($q), "single single-post"),
+    Hebcal::html_header_bootstrap3($title, Hebcal::script_name($q), "single single-post"),
     $body,
-    Hebcal::html_footer_bootstrap($q,undef);
+    Hebcal::html_footer_bootstrap3($q,undef);
 exit(0);
 
