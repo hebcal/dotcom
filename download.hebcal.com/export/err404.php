@@ -134,6 +134,19 @@ header("HTTP/1.1 404 Not Found");
 
 <p>Please check your request for typing errors and retry.</p>
 
+<p>Or, search using the form below.</p>
+
+<form action="http://www.hebcal.com/home/" method="get" class="form-inline">
+<fieldset>
+<div class="input-group">
+<input type="text" name="s" id="search" placeholder="Search" value="" class="form-control" />
+<span class="input-group-btn">
+<button type="submit" class="btn btn-default">Search</button>
+</span>
+</div>
+</fieldset>
+</form>
+
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 </div><!-- #content -->
