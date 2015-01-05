@@ -97,7 +97,7 @@ my $header = <<EOHTML;
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -110,11 +110,15 @@ my $header = <<EOHTML;
 </script>
 <style type="text/css">
 body {
-  font-family: 'PT Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 #content {
   font-size: 0.92em;
   line-height: 1.25;
+}
+h4 {
+  font-weight: 600;
+  margin:24px 0 0;
 }
 #fridge-table td {
   padding: 0px 4px;
@@ -122,8 +126,8 @@ body {
 #fridge-table td.leftpad {
   padding: 0 0 0 6px;
 }
-.yomtov { font-weight:700 }
-.narrow { font-family: 'PT Sans Narrow', sans-serif }
+.yomtov { font-weight:600 }
+.narrow { font-family: 'Open Sans Condensed', sans-serif }
 \@media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
@@ -145,7 +149,7 @@ print $header;
 my $numEntries = scalar(@{$evts});
 my $greg_year1 = $evts->[0]->[$Hebcal::EVT_IDX_YEAR];
 my $greg_year2 = $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR];
-print qq{<h4 style="margin:24px 0 0">Candle Lighting Times for $short_city
+print qq{<h4>Candle Lighting Times for $short_city
 <br>Hebrew Year $hebrew_year ($greg_year1 - $greg_year2)</h4>
 <p style="margin:0 0 4px">www.hebcal.com</p>
 <!-- $cmd_pretty -->
