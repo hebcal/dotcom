@@ -353,11 +353,13 @@ EOHTML
 }
 
 sub download_html_modal {
-    my($q,$filename,$events,$title,$yahrzeit_mode) = @_;
+    my($q,$filename,$events,$title,$yahrzeit_mode,$bootstrap3) = @_;
+
+    my $outer_class = $bootstrap3 ? "modal fade" : "modal hide fade";
 
     my $html = download_html_bootstrap($q,$filename,$events,$title,$yahrzeit_mode);
     my $s = <<EOHTML;
-<div class="modal fade" id="hcdl-modal" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
+<div class="$outer_class" id="hcdl-modal" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-dialog">
   <div class="modal-content">
  <div class="modal-header">

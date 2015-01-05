@@ -1627,15 +1627,6 @@ EOHTML
 
     Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
 
-    if ($numEntries > 0) {
-        my $download_title = $date;
-        if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
-            my $plus4 = $1 + $EXTRA_YEARS;
-            $download_title .= "-" . $plus4;
-        }
-        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title));
-    }
-
     html_table_events(\@events);
     push(@benchmarks, Benchmark->new);
 
@@ -1660,6 +1651,16 @@ JSCRIPT_END
         ;
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
+
+    if ($numEntries > 0) {
+        my $download_title = $date;
+        if (defined $q->param("month") && $q->param("month") eq "x" && $date =~ /(\d+)/ && $EXTRA_YEARS) {
+            my $plus4 = $1 + $EXTRA_YEARS;
+            $download_title .= "-" . $plus4;
+        }
+        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title, 0, 0));
+    }
+
     Hebcal::out_html(undef, "</body></html>\n");
 
     for (my $i = 1; $i < scalar(@benchmarks); $i++) {

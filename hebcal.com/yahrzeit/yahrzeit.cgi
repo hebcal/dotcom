@@ -494,7 +494,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
         my $filename = join("_", lc($title), POSIX::strftime("%Y%m%d%H%M%S", gmtime(time())));
 
         remove_empty_parameters($q);
-        $xtra_html = HebcalHtml::download_html_modal($q, $filename, \@events, $title, 1);
+        $xtra_html = HebcalHtml::download_html_modal($q, $filename, \@events, $title, 1, 1);
     }
 
     Hebcal::out_html($cfg, qq{<h3 id="form">Enter more dates and names</h3>\n});
