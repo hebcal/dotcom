@@ -535,8 +535,8 @@ sub form
 qq{<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>20 October 1994 (after
-sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</b>&apos;s
-yahrzeit.</strong>
+sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</strong>&apos;s
+yahrzeit.</p>
 <p>If you know the Hebrew but not the Gregorian date, use the <a
 href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
