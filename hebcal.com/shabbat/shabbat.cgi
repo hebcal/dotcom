@@ -499,8 +499,6 @@ sub display_html
 
     display_html_common($items);
 
-    Hebcal::out_html(undef, "<hr>\n");
-
     more_from_hebcal();
 
     form($cfg,0,'','');
@@ -523,84 +521,51 @@ sub get_link_args {
 }
 
 sub more_from_hebcal {
-    Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
+    # Fridge calendar
+    my $url = "/shabbat/fridge.cgi?";
+    $url .= get_link_args($q);
+    $url .= "&year=" . $hyear;
+    my $fridge_href = url_html($url);
 
     # link to hebcal full calendar
-    my $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
+    $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
     $url .= get_link_args($q);
-    $url .= '&month=now&year=now';
+    $url .= '&month=x&year=now';
     foreach my $opt (qw(c s maj min mod mf ss nx vis)) {
         $url .= join("", "&", $opt, "=on");
     }
+    my $full_calendar_href = url_html($url);
 
-    my $month_name = join(" ", $Hebcal::MoY_short[$this_mon-1], $this_year);
-    Hebcal::out_html($cfg, qq{<a class="btn btn-default" href="},
-                     url_html($url),
-                     qq{"><span class="glyphicon glyphicon-calendar"></span> $month_name calendar &raquo;</a>\n});
-
-    # Fridge calendar
-    $url = "/shabbat/fridge.cgi?";
-    $url .= get_link_args($q);
-    $url .= "&year=" . $hyear;
-    Hebcal::out_html($cfg, qq{<a class="btn btn-default" title="Print and post on your refrigerator"\n},
-                     qq{href="}, url_html($url),
-                     qq{"><span class="glyphicon glyphicon-print"></span> Print candle-lighting times &raquo;</a>\n});
-
-    # RSS
     my $rss_href = url_html(self_url() . "&cfg=r");
-    my $rss_html = <<EOHTML;
-<a class="btn btn-default" title="RSS feed of candle lighting times"
-href="$rss_href"><img
-src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="RSS feed of candle lighting times"> RSS feed &raquo;</a>
-EOHTML
-;
+    my $developer_api_href = url_html("/link/?" . get_link_args($q));
 
-    Hebcal::out_html($cfg, $rss_html);
+    my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
+    $email_url .= Hebcal::get_geo_args($q, "&amp;");
+    $email_url .= "&amp;m=" . $q->param("m")
+        if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
-    # Synagogues link
-    $url = "/link/?";
-    $url .= get_link_args($q);
-
-    Hebcal::out_html($cfg, qq{<a rel="nofollow" class="btn btn-default" title="Candle lighting and Torah portion for your synagogue site"\n},
-                     qq{href="}, url_html($url), qq{"><span class="glyphicon glyphicon-wrench"></span> Developer API &raquo;</a>\n});
-
-    Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
-
-    # Email
-    my $email_form = <<EOHTML;
-<form class="form-inline" action="https://www.hebcal.com/email/" method="post">
-<fieldset>
-<input type="hidden" name="v" value="1">
-EOHTML
-;
-    if ($q->param("zip")) {
-        $email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
-        $email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
-    } elsif ($q->param("geonameid")) {
-        $email_form .= qq{<input type="hidden" name="geo" value="geoname">\n};
-        $email_form .= qq{<input type="hidden" name="geonameid" value="} . $q->param("geonameid") . qq{">\n};
-    } else {
-        $email_form .= qq{<input type="hidden" name="geo" value="city">\n};
-        $email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
-    }
-
-    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
-        $email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
-    }
-
-    $email_form .= <<EOHTML;
-<p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
-<div class="input-group">
-  <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-  <input type="email" class="form-control" name="em" placeholder="Email address">
+    my $html = <<EOHTML;
+<div>
+  <a class="btn btn-default" title="Compact candle-lighting times for $hyear"
+  href="$fridge_href"><span class="glyphicon glyphicon-print"></span> Print</a>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      More <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="$full_calendar_href"><span class="glyphicon glyphicon-calendar"></span> $this_year calendar</a></li>
+      <li><a href="$email_url"><span class="glyphicon glyphicon-envelope"></span> Email weekly Shabbat times</a></li>
+      <li><a title="RSS feed of candle lighting times" href="$rss_href">
+      <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij4KPGc+CjxwYXRoIGQ9Ik0yMS41LDAgTDIuNSwwIEMxLjEyNSwwIDAsMS4xMjUgMCwyLjUgTDAsMjEuNSBDMCwyMi44NzUgMS4xMjUsMjQgMi41LDI0IEwyMS41LDI0IEMyMi44NzUsMjQgMjQsMjIuODc1IDI0LDIxLjUgTDI0LDIuNSBDMjQsMS4xMjUgMjIuODc1LDAgMjEuNSwwIE02LjE4MiwxOS45OCBDNC45NzcsMTkuOTggNCwxOS4wMDUgNCwxNy44IEM0LDE2LjU5NiA0Ljk3NywxNS42MTkgNi4xODIsMTUuNjE5IEM3LjM4NSwxNS42MTkgOC4zNjQsMTYuNTk2IDguMzY0LDE3LjggQzguMzYzLDE5LjAwNSA3LjM4NSwxOS45OCA2LjE4MiwxOS45OCBNMTEuNjUzLDIwIEMxMS42NTMsMTcuOTQzIDEwLjg1NSwxNi4wMDYgOS40MSwxNC41NTMgQzcuOTY3LDEzLjEwMiA2LjA1NiwxMi4zMDIgNCwxMi4zMDIgTDQsOS4xNTMgQzkuODI2LDkuMTUzIDE0LjgwMywxNC4xNzQgMTQuODAzLDIwLjAwMSBMMTEuNjUzLDIwLjAwMSBMMTEuNjUzLDIwIE0xNy4yMTcsMjAgQzE3LjIxNywxMi42NzcgMTEuMTk4LDYuNzE5IDQsNi43MTkgTDQsMy41NyBDMTIuOTEsMy41NyAyMC4zNjUsMTAuOTQgMjAuMzY1LDIwIEwxNy4yMTcsMjAgWiIvPgo8L2c+Cjwvc3ZnPgo=" width="14" height="14">
+      RSS feed</a></li>
+      <li><a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="$developer_api_href"><span class="glyphicon glyphicon-wrench"></span> Developer API</a></li>
+    </ul>
+  </div><!-- .btn-group -->
 </div>
-<button type="submit" class="btn btn-default" name="modify" value="1">Sign up</button>
-</fieldset>
-</form>
 EOHTML
 ;
-    Hebcal::out_html($cfg, $email_form);
+
+    Hebcal::out_html($cfg, $html);
 }
 
 sub my_head {
@@ -682,16 +647,56 @@ sub form($$$$)
 
     Hebcal::out_html($cfg, $message);
 
+    if ($q->param("geo") eq "zip"
+        && defined $q->param("zip") && $q->param("zip") =~ /^\d{5}$/) {
+        $q->param('city-typeahead', $q->param('zip'));
+    } elsif ($q->param("geo") eq "geoname"
+        && defined $q->param("geonameid") && $q->param("geonameid") =~ /^\d+$/) {
+        my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+            Hebcal::geoname_lookup($q->param('geonameid'));
+        if ($name) {
+            my $city_descr = Hebcal::geoname_city_descr($asciiname,$admin1,$country);
+            $q->param('city-typeahead', $city_descr);
+        }
+    } elsif ($q->param("geo") eq "city" && $q->param("city")
+        && Hebcal::validate_city($q->param("city"))) {
+        my $city = Hebcal::validate_city($q->param("city"));
+        my $city_descr = Hebcal::woe_city_descr($city);
+        $q->param('city-typeahead', $city_descr);
+    }
+
+    my $form_hidden = join("",
+        $q->hidden(-name => "geo",
+                   -id => "geo",
+                   -default => "geoname"),
+        $q->hidden(-name => "zip", -id => "zip"),
+        $q->hidden(-name => "city", -id => "city"),
+        $q->hidden(-name => "geonameid", -id => "geonameid"),
+    );
+    my $form_city_typeahead = $q->textfield(
+        -name => "city-typeahead",
+        -id => "city-typeahead",
+        -class => "form-control typeahead",
+        -placeholder => "Search for city or ZIP code");
+    my $form_havdalah_min = $q->textfield(
+        -name      => "m",
+        -id        => "m1",
+        -pattern   => '\d*',
+        -class     => "form-control",
+        -style     => "width:60px",
+        -size      => 2,
+        -maxlength => 2,
+        -default   => $Hebcal::havdalah_min
+    );
+
     my $form_html = <<EOHTML;
     <hr>
 <form action="/shabbat/" method="get" role="form" id="shabbat-form">
-  <input type="hidden" name="geo" id="geo" value="geoname">
-  <input type="hidden" name="geonameid" id="geonameid">
-  <input type="hidden" name="zip" id="zip">
-  <label class="sr-only" for="city-typeahead">City</label>
+$form_hidden
   <div class="form-group">
+    <label for="city-typeahead">City</label>
     <div class="city-typeahead" style="margin-bottom:12px">
-      <input type="text" id="city-typeahead" class="form-control input-lg typeahead" placeholder="Search for city or ZIP code" value="">
+      $form_city_typeahead
     </div>
   </div>
   <div class="form-group">
@@ -699,7 +704,7 @@ sub form($$$$)
       Havdalah minutes past sundown
       <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
     </label>
-    <input type="text" name="m" value="50" size="2" maxlength="2" pattern="\\d*" class="form-control" style="width:60px" id="m1">
+    $form_havdalah_min
   </div>
   <input type="submit" value="Get Shabbat Times" class="btn btn-primary">
 </form>
@@ -709,7 +714,29 @@ EOHTML
     Hebcal::out_html($cfg, $form_html);
 
     my $footer_divs2=<<EOHTML;
-    <p><a href="/shabbat/browse/">Shabat times for world cities</a></p>
+<hr>
+<ul class="bullet-list-inline">
+<li><a href="/shabbat/?city=IL-Jerusalem">Jerusalem</a></li>
+<li><a href="/shabbat/?city=IL-Tel%20Aviv">Tel Aviv</a></li>
+<li><a href="/shabbat/?city=US-New%20York-NY">New York</a></li>
+<li><a href="/shabbat/?city=US-Los%20Angeles-CA">Los Angeles</a></li>
+<li><a href="/shabbat/?city=GB-London">London</a></li>
+<li><a href="/shabbat/?city=US-Miami-FL">Miami</a></li>
+<li><a href="/shabbat/?city=CA-Montreal">Montreal</a></li>
+<li><a href="/shabbat/?city=US-Baltimore-MD">Baltimore</a></li>
+<li><a href="/shabbat/?city=CA-Toronto">Toronto</a></li>
+<li><a href="/shabbat/?geonameid=5100280">Lakewood, NJ</a></li>
+<li><a href="/shabbat/?city=US-Chicago-IL">Chicago</a></li>
+<li><a href="/shabbat/?geonameid=5110302">Brooklyn</a></li>
+<li><a href="/shabbat/?city=US-San%20Francisco-CA">San Francisco</a></li>
+<li><a href="/shabbat/?geonameid=4148411">Boca Raton</a></li>
+<li><a href="/shabbat/?city=US-Washington-DC">Washington, DC</a></li>
+<li><a href="/shabbat/?geonameid=5809844">Seattle</a></li>
+<li><a href="/shabbat/?city=AU-Melbourne">Melbourne</a></li>
+<li><a href="/shabbat/?city=US-Boston-MA">Boston</a></li>
+<li><a href="/shabbat/?city=CA-Toronto">Toronto</a></li>
+<li><a href="/shabbat/browse/">More ...</a></li>
+</ul>
 </div><!-- .col-sm-10 -->
 <div class="col-sm-2" role="complementary">
 <h5>Advertisement</h5>
