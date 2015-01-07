@@ -36,8 +36,8 @@ use strict;
 use URI::Escape;
 use CGI qw(-no_xhtml);
 
-$HebcalHtml::gregorian_warning = qq{<div class="alert alert-block">
-<button type="button" class="close" data-dismiss="alert">&times;</button>
+$HebcalHtml::gregorian_warning = qq{<div class="alert alert-warning alert-dismissible alert-block">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Results for year 1752 C.E. and earlier may be inaccurate.
 <p>Hebcal does not take into account a correction of ten days that
@@ -47,8 +47,8 @@ href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a
 </div><!-- .alert -->
 };
 
-$HebcalHtml::indiana_warning = qq{<div class="alert alert-block">
-<button type="button" class="close" data-dismiss="alert">&times;</button>
+$HebcalHtml::indiana_warning = qq{<div class="alert alert-warning alert-dismissible alert-block">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Indiana has confusing time zone &amp; Daylight Saving Time
 rules.</span><br>Please check <a
@@ -57,8 +57,8 @@ Indiana?</a> to make sure the above settings are correct.
 </div><!-- .alert -->
 };
 
-$HebcalHtml::usno_warning =  qq{<div class="alert alert-block">
-<button type="button" class="close" data-dismiss="alert">&times;</button>
+$HebcalHtml::usno_warning =  qq{<div class="alert alert-warning alert-dismissible alert-block">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Candle-lighting times are guaranteed to be wrong at extreme
 northern or southern latitudes.</span><br>Please consult your

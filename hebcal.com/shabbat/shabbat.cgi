@@ -499,8 +499,6 @@ sub display_html
 
     display_html_common($items);
 
-    more_from_hebcal();
-
     form($cfg,0,'','');
 }
 
@@ -535,8 +533,7 @@ sub more_from_hebcal {
         $url .= join("", "&", $opt, "=on");
     }
     my $full_calendar_href = url_html($url);
-
-    my $rss_href = url_html(self_url() . "&cfg=r");
+    my $rss_href = url_html("/shabbat/?cfg=r&" . get_link_args($q));
     my $developer_api_href = url_html("/link/?" . get_link_args($q));
 
     my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
@@ -565,7 +562,7 @@ sub more_from_hebcal {
 EOHTML
 ;
 
-    Hebcal::out_html($cfg, $html);
+    return $html;
 }
 
 sub my_head {
@@ -586,24 +583,18 @@ ul.hebcal-results li {
 EOHTML
 ;
     $city_descr ||= "UNKNOWN";
-        my $head_divs = <<EOHTML;
+    my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-10">
 <h1>Shabbat Times <small>$city_descr</small></h1>
 EOHTML
 ;
-        Hebcal::out_html($cfg,
-                         Hebcal::html_header_bootstrap3($title,
-                                             $script_name,
-                                             "ignored",
-                                             $xtra_head . $xtra_head2),
-                         $head_divs
-            );
 
-    for (my $i = 1; $i < scalar(@benchmarks); $i++) {
-        my $tdiff = timediff($benchmarks[$i], $benchmarks[$i-1]);
-        Hebcal::out_html($cfg, "<!-- ", timestr($tdiff), " -->\n");
-    }
+    Hebcal::out_html($cfg,
+        Hebcal::html_header_bootstrap3($title, $script_name, "",
+            $xtra_head . $xtra_head2),
+        $head_divs
+    );
 }
 
 sub form($$$$)
@@ -640,8 +631,8 @@ sub form($$$$)
     if ($message ne '')
     {
         $help = '' unless defined $help;
-        $message = qq{<div class="alert alert-error alert-block">\n} .
-            qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n} .
+        $message = qq{<div class="alert alert-danger alert-dismissible">\n} .
+            qq{<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n} .
             $message . $help . "</div>";
     }
 
@@ -690,7 +681,7 @@ sub form($$$$)
     );
 
     my $form_html = <<EOHTML;
-    <hr>
+<hr>
 <form action="/shabbat/" method="get" role="form" id="shabbat-form">
 $form_hidden
   <div class="form-group">
@@ -712,6 +703,8 @@ EOHTML
 ;
 
     Hebcal::out_html($cfg, $form_html);
+
+    my $more_from_hebcal = more_from_hebcal();
 
     my $footer_divs2=<<EOHTML;
 <hr>
@@ -739,6 +732,7 @@ EOHTML
 </ul>
 </div><!-- .col-sm-10 -->
 <div class="col-sm-2" role="complementary">
+$more_from_hebcal
 <h5>Advertisement</h5>
 <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
