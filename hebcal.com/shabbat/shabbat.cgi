@@ -534,22 +534,22 @@ sub more_from_hebcal {
     }
 
     my $month_name = join(" ", $Hebcal::MoY_short[$this_mon-1], $this_year);
-    Hebcal::out_html($cfg, qq{<a class="btn" href="},
+    Hebcal::out_html($cfg, qq{<a class="btn btn-default" href="},
                      url_html($url),
-                     qq{"><i class="icon-calendar"></i> $month_name calendar &raquo;</a>\n});
+                     qq{"><span class="glyphicon glyphicon-calendar"></span> $month_name calendar &raquo;</a>\n});
 
     # Fridge calendar
     $url = "/shabbat/fridge.cgi?";
     $url .= get_link_args($q);
     $url .= "&year=" . $hyear;
-    Hebcal::out_html($cfg, qq{<a class="btn" title="Print and post on your refrigerator"\n},
+    Hebcal::out_html($cfg, qq{<a class="btn btn-default" title="Print and post on your refrigerator"\n},
                      qq{href="}, url_html($url),
-                     qq{"><i class="icon-print"></i> Print candle-lighting times &raquo;</a>\n});
+                     qq{"><span class="glyphicon glyphicon-print"></span> Print candle-lighting times &raquo;</a>\n});
 
     # RSS
     my $rss_href = url_html(self_url() . "&cfg=r");
     my $rss_html = <<EOHTML;
-<a class="btn" title="RSS feed of candle lighting times"
+<a class="btn btn-default" title="RSS feed of candle lighting times"
 href="$rss_href"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="RSS feed of candle lighting times"> RSS feed &raquo;</a>
@@ -562,8 +562,8 @@ EOHTML
     $url = "/link/?";
     $url .= get_link_args($q);
 
-    Hebcal::out_html($cfg, qq{<a rel="nofollow" class="btn" title="Candle lighting and Torah portion for your synagogue site"\n},
-                     qq{href="}, url_html($url), qq{"><i class="icon-wrench"></i> Developer API &raquo;</a>\n});
+    Hebcal::out_html($cfg, qq{<a rel="nofollow" class="btn btn-default" title="Candle lighting and Torah portion for your synagogue site"\n},
+                     qq{href="}, url_html($url), qq{"><span class="glyphicon glyphicon-wrench"></span> Developer API &raquo;</a>\n});
 
     Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
 
@@ -591,10 +591,11 @@ EOHTML
 
     $email_form .= <<EOHTML;
 <p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
-<div class="input-append input-prepend">
-<span class="add-on"><i class="icon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
-<button type="submit" class="btn" name="modify" value="1"> Sign up</button>
+<div class="input-group">
+  <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+  <input type="email" class="form-control" name="em" placeholder="Email address">
 </div>
+<button type="submit" class="btn btn-default" name="modify" value="1">Sign up</button>
 </fieldset>
 </form>
 EOHTML
@@ -607,6 +608,7 @@ sub my_head {
     my $rss_href = url_html(self_url() . "&cfg=r");
     my $xtra_head2 = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
+<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 <style type="text/css">
 ul.hebcal-results { list-style-type:none }
 ul.hebcal-results li {
@@ -615,28 +617,20 @@ ul.hebcal-results li {
   font-weight: 200;
   line-height: normal;
 }
-.pseudo-legend {
-  font-size: 17px;
-  font-weight: bold;
-  line-height: 30px;
-}
 </style>
 EOHTML
 ;
     $city_descr ||= "UNKNOWN";
         my $head_divs = <<EOHTML;
-<div class="row-fluid">
-<div class="span10">
-<div class="page-header">
+<div class="row">
+<div class="col-sm-10">
 <h1>Shabbat Times <small>$city_descr</small></h1>
-</div>
-
 EOHTML
 ;
         Hebcal::out_html($cfg,
-                         Hebcal::html_header_bootstrap($title,
+                         Hebcal::html_header_bootstrap3($title,
                                              $script_name,
-                                             "single single-post",
+                                             "ignored",
                                              $xtra_head . $xtra_head2),
                          $head_divs
             );
@@ -686,92 +680,38 @@ sub form($$$$)
             $message . $help . "</div>";
     }
 
-    Hebcal::out_html($cfg,
-        qq{$message\n},
-        qq{<div id="hebcal-form-zipcode" class="well well-small">\n},
-        qq{<div class="pseudo-legend">World cities</div>\n});
+    Hebcal::out_html($cfg, $message);
 
-    Hebcal::out_html(undef, qq{<div class="btn-toolbar">\n});
-    my %groups;
-    while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
-        my($country,$city,$latitude,$longitude,$tzName,$woeid) = @{$info};
-        my $grp = ($country =~ /^US|CA|IL$/)
-            ? $country
-            : $HebcalConst::COUNTRIES{$country}->[1];
-        $groups{$grp} = [] unless defined $groups{$grp};
-        push(@{$groups{$grp}}, [$id, $country, Hebcal::woe_country($id), $city]);
-    }
-    foreach my $grp (qw(US CA IL EU NA SA AS OC AF AN)) {
-        next unless defined $groups{$grp};
-        my $label;
-        if ($grp eq "US") {
-            $label = "USA";
-        } elsif ($grp eq "CA" || $grp eq "IL") {
-            $label = $HebcalConst::COUNTRIES{$grp}->[0];
-        } else {
-            $label = $Hebcal::CONTINENTS{$grp};
-        }
-        my $btn_html=<<EOHTML;
-<div class="btn-group">
-<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">$label <span class="caret"></span></button>
-<ul class="dropdown-menu">
+    my $form_html = <<EOHTML;
+    <hr>
+<form action="/shabbat/" method="get" role="form" id="shabbat-form">
+  <input type="hidden" name="geo" id="geo" value="geoname">
+  <input type="hidden" name="geonameid" id="geonameid">
+  <input type="hidden" name="zip" id="zip">
+  <label class="sr-only" for="city-typeahead">City</label>
+  <div class="form-group">
+    <div class="city-typeahead" style="margin-bottom:12px">
+      <input type="text" id="city-typeahead" class="form-control input-lg typeahead" placeholder="Search for city or ZIP code" value="">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="m1">
+      Havdalah minutes past sundown
+      <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+    </label>
+    <input type="text" name="m" value="50" size="2" maxlength="2" pattern="\\d*" class="form-control" style="width:60px" id="m1">
+  </div>
+  <input type="submit" value="Get Shabbat Times" class="btn btn-primary">
+</form>
 EOHTML
 ;
-        foreach my $info (sort {$a->[3] cmp $b->[3]} @{$groups{$grp}}) {
-            my($id,$cc,$country,$city) = @{$info};
-            my $city_country = $city;
-            $country = "UK" if $country eq "United Kingdom";
-            $city_country .= ", $country" unless $grp=~ /^US|CA|IL$/;
 
-            my $url = "/shabbat/?city=" . URI::Escape::uri_escape_utf8($id);
-            $btn_html .= qq{<li><a href="$url">$city_country</a></li>\n};
-        }
-        $btn_html .= qq{</ul></div><!-- /btn-group -->\n};
-        Hebcal::out_html(undef, $btn_html);
-    }
-
-    Hebcal::out_html(undef, qq{</div><!-- .btn-toolbar -->\n});
-
-    Hebcal::out_html($cfg,
-        qq{<div class="pseudo-legend">United States of America</div>\n});
-
-    Hebcal::out_html($cfg,
-        qq{<form action="$script_name">},
-        qq{<fieldset>\n},
-        $q->hidden(-name => 'geo',
-                   -value => 'zip',
-                   -override => 1),
-        qq{<label for="zip">ZIP code:\n},
-        $q->textfield(-name => 'zip',
-                      -id => 'zip',
-                      -pattern => '\d*',
-                      -class => 'input-mini',
-                      -size => 5,
-                      -maxlength => 5),
-        qq{</label>});
-
-    Hebcal::out_html($cfg,
-        qq{<label>Havdalah minutes past sundown:\n},
-        $q->textfield(-name => 'm',
-                      -id => 'm1',
-                      -pattern => '\d*',
-                      -style => "width:auto",
-                      -size => 2,
-                      -maxlength => 2,
-                      -default => $Hebcal::havdalah_min),
-        qq{&nbsp;<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" },
-        qq{title="Use 42 min for three medium-sized stars, },
-        qq{50 min for three small stars, },
-        qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
-        "</label>",
-        qq{<input\ntype="submit" value="Get Shabbat Times" class="btn btn-primary">\n},
-        qq{</fieldset></form>});
-
-    Hebcal::out_html(undef, qq{</div><!-- #hebcal-form-zipcode -->\n});
+    Hebcal::out_html($cfg, $form_html);
 
     my $footer_divs2=<<EOHTML;
-</div><!-- .span10 -->
-<div class="span2" role="complementary">
+    <p><a href="/shabbat/browse/">Shabat times for world cities</a></p>
+</div><!-- .col-sm-10 -->
+<div class="col-sm-2" role="complementary">
 <h5>Advertisement</h5>
 <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
@@ -782,13 +722,24 @@ EOHTML
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-</div><!-- .span2 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-sm-2 -->
+</div><!-- .row -->
 EOHTML
 ;
     Hebcal::out_html(undef, $footer_divs2);
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1));
+
+    my $xtra_html=<<JSCRIPT_END;
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script src="/i/hebcal-app-1.2.min.js"></script>
+<script type="text/javascript">
+window['hebcal'].createCityTypeahead(false);
+\$('#havdalahInfo').click(function(e){e.preventDefault()}).tooltip();
+</script>
+JSCRIPT_END
+        ;
+
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q, undef, 1, $xtra_html));
     Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').click(function(e){e.preventDefault()}).tooltip()</script>\n");
     Hebcal::out_html($cfg, "</body></html>\n");
     timestamp_comment();
