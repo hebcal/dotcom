@@ -542,22 +542,20 @@ sub more_from_hebcal {
         if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
     my $html = <<EOHTML;
-<div>
-  <a class="btn btn-default" title="Compact candle-lighting times for $hyear"
-  href="$fridge_href"><span class="glyphicon glyphicon-print"></span> Print</a>
-  <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-      More <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="$full_calendar_href"><span class="glyphicon glyphicon-calendar"></span> $this_year calendar</a></li>
-      <li><a href="$email_url"><span class="glyphicon glyphicon-envelope"></span> Email weekly Shabbat times</a></li>
-      <li><a title="RSS feed of candle lighting times" href="$rss_href">
-      <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij4KPGc+CjxwYXRoIGQ9Ik0yMS41LDAgTDIuNSwwIEMxLjEyNSwwIDAsMS4xMjUgMCwyLjUgTDAsMjEuNSBDMCwyMi44NzUgMS4xMjUsMjQgMi41LDI0IEwyMS41LDI0IEMyMi44NzUsMjQgMjQsMjIuODc1IDI0LDIxLjUgTDI0LDIuNSBDMjQsMS4xMjUgMjIuODc1LDAgMjEuNSwwIE02LjE4MiwxOS45OCBDNC45NzcsMTkuOTggNCwxOS4wMDUgNCwxNy44IEM0LDE2LjU5NiA0Ljk3NywxNS42MTkgNi4xODIsMTUuNjE5IEM3LjM4NSwxNS42MTkgOC4zNjQsMTYuNTk2IDguMzY0LDE3LjggQzguMzYzLDE5LjAwNSA3LjM4NSwxOS45OCA2LjE4MiwxOS45OCBNMTEuNjUzLDIwIEMxMS42NTMsMTcuOTQzIDEwLjg1NSwxNi4wMDYgOS40MSwxNC41NTMgQzcuOTY3LDEzLjEwMiA2LjA1NiwxMi4zMDIgNCwxMi4zMDIgTDQsOS4xNTMgQzkuODI2LDkuMTUzIDE0LjgwMywxNC4xNzQgMTQuODAzLDIwLjAwMSBMMTEuNjUzLDIwLjAwMSBMMTEuNjUzLDIwIE0xNy4yMTcsMjAgQzE3LjIxNywxMi42NzcgMTEuMTk4LDYuNzE5IDQsNi43MTkgTDQsMy41NyBDMTIuOTEsMy41NyAyMC4zNjUsMTAuOTQgMjAuMzY1LDIwIEwxNy4yMTcsMjAgWiIvPgo8L2c+Cjwvc3ZnPgo=" width="14" height="14">
-      RSS feed</a></li>
-      <li><a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="$developer_api_href"><span class="glyphicon glyphicon-wrench"></span> Developer API</a></li>
-    </ul>
-  </div><!-- .btn-group -->
+<div style="padding-bottom:20px">
+<h5>$cconfig{"city"}</h5>
+<ul class="list-unstyled">
+  <li>
+    <span class="glyphicon glyphicon-print"></span>
+    <a title="Compact candle-lighting times for $hyear" href="$fridge_href"> Print</a>
+  </li>
+  <li><span class="glyphicon glyphicon-calendar"></span> <a href="$full_calendar_href">$this_year calendar</a></li>
+  <li><span class="glyphicon glyphicon-envelope"></span> <a href="$email_url">Email weekly Shabbat times</a></li>
+  <li>
+  <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij4KPGc+CjxwYXRoIGQ9Ik0yMS41LDAgTDIuNSwwIEMxLjEyNSwwIDAsMS4xMjUgMCwyLjUgTDAsMjEuNSBDMCwyMi44NzUgMS4xMjUsMjQgMi41LDI0IEwyMS41LDI0IEMyMi44NzUsMjQgMjQsMjIuODc1IDI0LDIxLjUgTDI0LDIuNSBDMjQsMS4xMjUgMjIuODc1LDAgMjEuNSwwIE02LjE4MiwxOS45OCBDNC45NzcsMTkuOTggNCwxOS4wMDUgNCwxNy44IEM0LDE2LjU5NiA0Ljk3NywxNS42MTkgNi4xODIsMTUuNjE5IEM3LjM4NSwxNS42MTkgOC4zNjQsMTYuNTk2IDguMzY0LDE3LjggQzguMzYzLDE5LjAwNSA3LjM4NSwxOS45OCA2LjE4MiwxOS45OCBNMTEuNjUzLDIwIEMxMS42NTMsMTcuOTQzIDEwLjg1NSwxNi4wMDYgOS40MSwxNC41NTMgQzcuOTY3LDEzLjEwMiA2LjA1NiwxMi4zMDIgNCwxMi4zMDIgTDQsOS4xNTMgQzkuODI2LDkuMTUzIDE0LjgwMywxNC4xNzQgMTQuODAzLDIwLjAwMSBMMTEuNjUzLDIwLjAwMSBMMTEuNjUzLDIwIE0xNy4yMTcsMjAgQzE3LjIxNywxMi42NzcgMTEuMTk4LDYuNzE5IDQsNi43MTkgTDQsMy41NyBDMTIuOTEsMy41NyAyMC4zNjUsMTAuOTQgMjAuMzY1LDIwIEwxNy4yMTcsMjAgWiIvPgo8L2c+Cjwvc3ZnPgo=" width="14" height="14">
+  <a title="RSS feed of candle lighting times" href="$rss_href">RSS feed</a></li>
+  <li><span class="glyphicon glyphicon-wrench"></span> <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="$developer_api_href">Developer API</a></li>
+</ul>
 </div>
 EOHTML
 ;
@@ -585,7 +583,7 @@ EOHTML
     $city_descr ||= "UNKNOWN";
     my $head_divs = <<EOHTML;
 <div class="row">
-<div class="col-sm-10">
+<div class="col-sm-9">
 <h1>Shabbat Times <small>$city_descr</small></h1>
 EOHTML
 ;
@@ -707,7 +705,25 @@ EOHTML
     my $more_from_hebcal = more_from_hebcal();
 
     my $footer_divs2=<<EOHTML;
+</div><!-- .col-sm-9 -->
+<div class="col-sm-3" role="complementary">
+$more_from_hebcal
+<h5>Advertisement</h5>
+<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 200x200 text only -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:200px;height:200px"
+     data-ad-client="ca-pub-7687563417622459"
+     data-ad-slot="5114852649"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .col-sm-3 -->
+</div><!-- .row -->
 <hr>
+<div class="row">
+<div class="col-sm-12">
+<p>Shabbat times for world cities</p>
 <ul class="bullet-list-inline">
 <li><a href="/shabbat/?city=IL-Jerusalem">Jerusalem</a></li>
 <li><a href="/shabbat/?city=IL-Tel%20Aviv">Tel Aviv</a></li>
@@ -730,20 +746,7 @@ EOHTML
 <li><a href="/shabbat/?city=CA-Toronto">Toronto</a></li>
 <li><a href="/shabbat/browse/">More ...</a></li>
 </ul>
-</div><!-- .col-sm-10 -->
-<div class="col-sm-2" role="complementary">
-$more_from_hebcal
-<h5>Advertisement</h5>
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- skyscraper text only -->
-<ins class="adsbygoogle"
-     style="display:inline-block;width:160px;height:600px"
-     data-ad-client="ca-pub-7687563417622459"
-     data-ad-slot="7666032223"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .col-sm-2 -->
+</div><!-- .col-sm-12 -->
 </div><!-- .row -->
 EOHTML
 ;
