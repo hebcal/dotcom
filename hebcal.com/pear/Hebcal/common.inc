@@ -289,7 +289,7 @@ function hebcal_open_mysqli_db() {
 	$dbuser = $hebcal_ini["hebcal.mysql.user"];
 	$dbname = $hebcal_ini["hebcal.mysql.dbname"];
 	$hebcal_db = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-        if (mysqli_connect_errno($mysqli)) {
+        if (mysqli_connect_errno($hebcal_db)) {
             error_log("Failed to connect to MySQL: " . mysqli_connect_error());
 	    die();
 	}

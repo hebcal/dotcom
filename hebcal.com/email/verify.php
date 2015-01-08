@@ -125,7 +125,7 @@ To modify your subscription or to unsubscribe completely, visit:
 $unsub_url
 EOD;
 
-    $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
+    $err = smtp_send(get_return_path($info["em"]), $info["em"], $headers, $body);
     echo html_header_bootstrap3("Email Subscription Confirmed");
 ?>
 <div class="row">
@@ -164,7 +164,6 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 	unset($info["zip"]);
 	unset($info["geonameid"]);
     }
-    $tz_descr = "Time zone: " . $tzid;
     echo html_header_bootstrap3("Confirm Email Subscription");
 ?>
 <div class="row">
@@ -172,7 +171,7 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 <p class="lead">Confirm your subscription to weekly Shabbat
 candle lighting times and Torah portion by email.</p>
 <p>Email: <strong><?php echo $info["em"] ?></strong>
-<br>Location: <?php echo $city_descr ?> &nbsp;&nbsp;(<?php echo $tz_descr ?>)
+<br>Location: <?php echo $city_descr ?>
 </p>
 <form method="post" action="<?php echo $_SERVER["PHP_SELF"] ?>">
 <input type="hidden" name="k" value="<?php echo $info["id"] ?>">
