@@ -128,8 +128,10 @@ $unsub_url
 EOD;
 
     $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
-    echo html_header_bootstrap("Email Subscription Confirmed");
+    echo html_header_bootstrap3("Email Subscription Confirmed");
 ?>
+<div class="row">
+<div class="col-sm-12">
 <p class="lead">Confirm your subscription to weekly Shabbat
 candle lighting times and Torah portion by email.</p>
 <div class="alert alert-success">
@@ -137,8 +139,10 @@ candle lighting times and Torah portion by email.</p>
 A confirmation message has been sent
 to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 </div>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 <?php
-    echo html_footer_bootstrap();
+    echo html_footer_bootstrap3();
     exit();
 } else {
     if (isset($info["zip"]) && preg_match('/^\d{5}$/', $info["zip"])) {
@@ -163,11 +167,12 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
 	unset($info["geonameid"]);
     }
     $tz_descr = "Time zone: " . $tzid;
-    echo html_header_bootstrap("Confirm Email Subscription");
+    echo html_header_bootstrap3("Confirm Email Subscription");
 ?>
+<div class="row">
+<div class="col-sm-12">
 <p class="lead">Confirm your subscription to weekly Shabbat
 candle lighting times and Torah portion by email.</p>
-<div class="well">
 <p>Email: <strong><?php echo $info["em"] ?></strong>
 <br>Location: <?php echo $city_descr ?> &nbsp;&nbsp;(<?php echo $tz_descr ?>)
 </p>
@@ -176,15 +181,16 @@ candle lighting times and Torah portion by email.</p>
 <input type="hidden" name="commit" value="1">
 <button type="submit" name="sub1" id="sub1" value="1" class="btn btn-success">Confirm Subscription</button>
 </form>
-</div><!-- .well -->
 <h3>Email Privacy Policy</h3>
 <p>We will never sell or give your email address to anyone.
 <br>We will never use your email address to send you unsolicited
 offers.</p>
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 <?php
- echo html_footer_bootstrap();
+ echo html_footer_bootstrap3();
  exit();
 }
 ?>

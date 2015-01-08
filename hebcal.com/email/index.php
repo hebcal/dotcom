@@ -12,9 +12,9 @@ $sender = "webmaster@hebcal.com";
 header("Cache-Control: private");
 
 $xtra_head = <<<EOD
-<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.1.min.css">
+<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 EOD;
-echo html_header_bootstrap("Shabbat Candle Lighting Times by Email",
+echo html_header_bootstrap3("Shabbat Candle Lighting Times by Email",
 			   $xtra_head);
 
 $param = array();
@@ -95,7 +95,7 @@ else {
     // form always writes footer and exits
 }
 
-echo html_footer_bootstrap();
+echo html_footer_bootstrap3();
 exit();
 
 function get_return_path($mailto) {
@@ -106,6 +106,8 @@ function echo_lead_text() {
     global $echoed_lead_text;
     if (!$echoed_lead_text) {
 ?>
+<div class="row">
+<div class="col-sm-12">
 <p class="lead">Subscribe to weekly Shabbat candle
 lighting times and Torah portion by email.</p>
 <?php
@@ -265,8 +267,8 @@ function form($param, $message = "", $help = "") {
 
     if ($message != "") {
 ?>
-<div class="alert alert-error">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
+<div class="alert alert-danger alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <?php echo $message; echo $help; ?>
 </div><!-- .alert -->
 <?php
@@ -284,49 +286,60 @@ function form($param, $message = "", $help = "") {
         $param["city-typeahead"] = geoname_city_descr($name,$admin1,$country);
     }
 ?>
-<div id="email-form" class="well well-small">
+<div id="email-form">
 <form id="f1" action="<?php echo $action ?>" method="post">
-<fieldset>
-<label>E-mail address:
-<input type="email" name="em"
+<div class="form-group">
+<label for="em">E-mail address</label>
+<input type="email" name="em" id="em" class="form-control" placeholder="user@example.com"
 value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?>">
-</label>
+</div>
 <?php if ($geo == "city") { ?>
-<label>Closest City:
+<div class="form-group">
+<label for="city">Major City
+&nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
+or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>)</small>
+</label>
 <?php
 echo html_city_select(isset($param["city"]) ? $param["city"] : "IL-Jerusalem");
 ?>
-</label>
-&nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
-or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>)</small>
+</div>
 <input type="hidden" name="geo" id="geo" value="city">
 <?php } elseif ($geo == "zip") { ?>
-<label>ZIP code:
-<input type="text" name="zip" id="zip" class="input-mini" maxlength="5"
-pattern="\d*" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>"></label>
+<div class="form-group">
+<label for="zip">ZIP code
 &nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
 or select by <a
-href="<?php echo $action ?>?geo=city">closest city</a>)</small>
+href="<?php echo $action ?>?geo=city">major city</a>)</small>
+</label>
+<input type="text" name="zip" id="zip" class="form-control" maxlength="5"
+pattern="\d*" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>">
+</div>
 <input type="hidden" name="geo" id="geo" value="zip">
 <?php } else { ?>
+<div class="form-group">
+<label for="city-typeahead">City
+&nbsp;&nbsp;<small>(or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>
+or <a href="<?php echo $action ?>?geo=city">major city</a>)</small>
+</label>
 <input type="hidden" name="geo" id="geo" value="geoname">
 <input type="hidden" id="zip" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
-<div class="city-typeahead form-inline" style="margin-bottom:12px">
-<input type="text" name="city-typeahead" id="city-typeahead" class="form-control input-xlarge" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
+<div class="city-typeahead" style="margin-bottom:12px">
+<input type="text" name="city-typeahead" id="city-typeahead" class="form-control" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
 </div>
-&nbsp;&nbsp;<small>(or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>
-or <a href="<?php echo $action ?>?geo=city">closest city</a>)</small>
+</div>
 <?php } ?>
-<label>Havdalah minutes past sundown:
-<input type="text" name="m" pattern="\d*" value="<?php
-  echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3">
+<div class="form-group">
+<label for="m">Havdalah minutes past sundown
 <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>
 </label>
+<input type="text" name="m" id="m" class="form-control" pattern="\d*" value="<?php
+  echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3">
+</div>
 <input type="hidden" name="v" value="1">
 <?php global $is_update, $default_unsubscribe;
-    $modify_class = $default_unsubscribe ? "btn" : "btn btn-primary";
-    $unsub_class = $default_unsubscribe ? "btn btn-primary" : "btn";
+    $modify_class = $default_unsubscribe ? "btn btn-default" : "btn btn-primary";
+    $unsub_class = $default_unsubscribe ? "btn btn-primary" : "btn btn-default";
     if ($is_update) { ?>
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
@@ -338,6 +351,7 @@ value="<?php echo htmlspecialchars($param["em"]) ?>">
 </form>
 </div><!-- #email-form -->
 
+<hr>
 <p>You&apos;ll receive a maximum of one message per week, typically on Thursday morning.</p>
 
 <div id="privacy-policy">
@@ -348,49 +362,20 @@ offers.</p>
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 </div><!-- #privacy-policy -->
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 <?php
 $xtra_html = <<<EOD
-<script src="/i/typeahead-0.9.3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script src="/i/hebcal-app-1.2.min.js"></script>
 <script type="text/javascript">
-$("#city-typeahead").typeahead({
-    name: "hebcal-city",
-    remote: "/complete.php?q=%QUERY",
-  template: function(ctx) {
-    if (typeof ctx.geo === "string" && ctx.geo == "zip") {
-      return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
-    } else {
-      var ctry = ctx.country == "United Kingdom" ? "UK" : ctx.country,
-        s = '<p><strong>' + ctx.asciiname + '</strong> - <small>';
-      if (typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
-        s += ctx.admin1 + ', ';
-      }
-      return s + ctry + '</small></p>';
-    }
-  },
-    limit: 7
-}).on('typeahead:selected', function (obj, datum, name) {
-  if (typeof datum.geo === "string" && datum.geo == "zip") {
-    $('#geo').val('zip');
-    $('#zip').val(datum.id);
-    $('#geonameid').remove();
-  } else {
-    $('#geo').val('geoname');
-    $('#geonameid').val(datum.id);
-    $('#zip').remove();
-  }
-}).bind("keyup keypress", function(e) {
-  var code = e.keyCode || e.which;
-  if (code == 13) {
-    e.preventDefault();
-    return false;
-  }
-});
+window['hebcal'].createCityTypeahead(false);
 $('#havdalahInfo').click(function(e){
  e.preventDefault();
-}).tooltip();</script>
+}).tooltip();
 </script>
 EOD;
-    echo html_footer_bootstrap(true, $xtra_html);
+    echo html_footer_bootstrap3(true, $xtra_html);
     exit();
 }
 
@@ -553,7 +538,7 @@ EOD;
 
 	$html_email = htmlentities($param["em"]);
 	$html = <<<EOD
-<div class="alert alert-success alert-block">
+<div class="alert alert-success">
 <strong>Success!</strong> Your subsciption information has been updated.
 <p>Email: <strong>$html_email</strong>
 <br>Location: $city_descr &nbsp;&nbsp;($tz_descr)</p>
@@ -642,7 +627,7 @@ EOD
     else
     {
 	$html = <<<EOD
-<div class="alert alert-error alert-block">
+<div class="alert alert-danger">
 <h4>Server Error</h4>
 Sorry, we are temporarily unable to send email
 to <strong>$html_email</strong>.
@@ -677,7 +662,7 @@ function unsubscribe($param) {
 
     if (isset($info["status"]) && $info["status"] == "unsubscribed") {
 	$html = <<<EOD
-<div class="alert">
+<div class="alert alert-warning">
 <strong>$html_email</strong>
 is already removed from the email subscription list.
 </div>
@@ -695,7 +680,7 @@ EOD
 
     if (sql_unsub($param["em"]) === false) {
         $html = <<<EOD
-<div class="alert alert-error alert-block">
+<div class="alert alert-danger">
 <h4>Database Error</h4>
 Sorry, a database error occurred on our servers. Please try again later.
 </div>
@@ -740,7 +725,7 @@ EOD;
     $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
 
     $html = <<<EOD
-<div class="alert alert-success alert-block">
+<div class="alert alert-success">
 <h4>Unsubscribed</h4>
 You have been removed from the email subscription list.
 A confirmation message has been sent to <strong>$html_email</strong>.

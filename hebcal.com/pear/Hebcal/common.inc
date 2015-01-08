@@ -109,7 +109,7 @@ function city_cmp($a, $b) {
 
 function html_city_select($selected_city = false) {
     global $hebcal_cities, $hebcal_countries, $hebcal_continents;
-    $retval = "<select name=\"city\" class=\"input-xlarge\">\n";
+    $retval = "<select name=\"city\" class=\"form-control\">\n";
     $groups = array();
     $special_countries = array("US"=>1,"CA"=>1,"IL"=>1);
     foreach ($hebcal_cities as $id => $info) {
