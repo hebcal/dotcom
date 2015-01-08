@@ -16,6 +16,9 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # update hebcal.com commentary at 11am on wednesday
 11 11 * * 3 hebcal touch $HEBCAL_WEB/bin/calc_triennial.pl && sleep 2 && nice make -C $HEBCAL_WEB/bin > /dev/null 2>&1
 
+# update Shabbat browse pages at 12:03am on Sundays
+0 3 * * 0 hebcal nice $HEBCAL_WEB/bin/create_shabbat_browse.pl $HEBCAL_WEB/shabbat/browse
+
 # shabbat: regular emails at 8:53am and 2:53pm Eastern on Thursdays
 53 8,14 * * 4 hebcal nice $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
 
