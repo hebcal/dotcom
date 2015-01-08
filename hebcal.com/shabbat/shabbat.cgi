@@ -543,7 +543,7 @@ sub more_from_hebcal {
 
     my $html = <<EOHTML;
 <div style="padding-bottom:20px">
-<h5>$cconfig{"city"}</h5>
+<h4>$cconfig{"city"}</h4>
 <ul class="list-unstyled">
   <li>
     <span class="glyphicon glyphicon-print"></span>
@@ -709,7 +709,7 @@ EOHTML
 <div class="col-sm-3" role="complementary">
 $more_from_hebcal
 <h5>Advertisement</h5>
-<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 200x200 text only -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:200px;height:200px"
