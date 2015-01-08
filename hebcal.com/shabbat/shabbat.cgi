@@ -716,7 +716,7 @@ $form_hidden
   <div class="form-group">
     <label for="m1">
       Havdalah minutes past sundown
-      <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+      <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
     </label>
     $form_havdalah_min
   </div>
@@ -759,7 +759,7 @@ EOHTML
 $more_from_hebcal
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- responsive -->
+<!-- responsive textonly -->
 <ins class="adsbygoogle"
      style="display:block"
      data-ad-client="ca-pub-7687563417622459"
@@ -786,7 +786,6 @@ JSCRIPT_END
         ;
 
     Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q, undef, 1, $xtra_html));
-    Hebcal::out_html($cfg, "<script>\$('#havdalahInfo').click(function(e){e.preventDefault()}).tooltip()</script>\n");
     Hebcal::out_html($cfg, "</body></html>\n");
     timestamp_comment();
     exit(0);
