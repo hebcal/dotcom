@@ -165,8 +165,11 @@ ul.list-inline li:after{content:"\\00a0\\00b7"}
 ul.list-inline li:last-child:after{content:""}
 @font-face {
   font-family: 'Glyphicons Regular';
-  src: url('/i/glyphicons_pro_1.8/glyphicons/web/html_css/fonts/glyphicons-regular.eot');
-  src: url('/i/glyphicons_pro_1.8/glyphicons/web/html_css/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('/i/glyphicons_pro_1.8/glyphicons/web/html_css/fonts/glyphicons-regular.woff') format('woff'), url('/i/glyphicons_pro_1.8/glyphicons/web/html_css/fonts/glyphicons-regular.ttf') format('truetype'), url('/i/glyphicons_pro_1.8/glyphicons/web/html_css/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
+  src: url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.eot');
+  src: url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'),
+    url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.woff') format('woff'),
+    url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.ttf') format('truetype'),
+    url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -181,19 +184,19 @@ ul.list-inline li:last-child:after{content:""}
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.glyphicons.candle:before {
+.glyphicons.glyphicons-candle:before {
   content: "\E335";
 }
-.glyphicons.book_open:before {
+.glyphicons.glyphicons-book_open:before {
   content: "\E352";
 }
-.glyphicons.parents:before {
+.glyphicons.glyphicons-parents:before {
   content: "\E025";
 }
-.glyphicons.cogwheels:before {
+.glyphicons.glyphicons-cogwheels:before {
   content: "\E138";
 }
-.glyphicons.settings:before {
+.glyphicons.glyphicons-settings:before {
   content: "\E281";
 }
 </style>
@@ -325,13 +328,13 @@ Convert Dates</h2>
 <p><a class="btn btn-default" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter &raquo;</a></p>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries.</p>
-<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicons parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicons glyphicons-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
 
 <div class="row">
 <div class="col-sm-6">
-<h2><span class="glyphicons candle"></span>
+<h2><span class="glyphicons glyphicons-candle"></span>
 Shabbat Times</h2>
 <p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
 <form class="form-inline" action="/shabbat/" method="get" role="form" id="shabbat-form">
@@ -369,7 +372,7 @@ if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
 </div><!-- .col-sm-6 -->
 
 <div class="col-sm-6">
-<h2><span class="glyphicons book_open"></span>
+<h2><span class="glyphicons glyphicons-book_open"></span>
 Torah Readings</h2>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
 <p><a class="btn btn-default" href="/sedrot/"><i class="glyphicon glyphicon-book"></i> Torah Readings &raquo;</a></p>
