@@ -331,7 +331,7 @@ or <a href="<?php echo $action ?>?geo=city">major city</a>)</small>
 <?php } ?>
 <div class="form-group">
 <label for="m">Havdalah minutes past sundown
-<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="right" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>
+<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
 </label>
 <input type="text" name="m" id="m" class="form-control" pattern="\d*" value="<?php
   echo htmlspecialchars($param["m"]) ?>" class="input-mini" maxlength="3">
