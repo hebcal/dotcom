@@ -279,28 +279,23 @@ function hebcal_get_ini() {
     return parse_ini_file("/home/hebcal/local/etc/hebcal-dot-com.ini");
 }
 
-function hebcal_open_mysql_db() {
+function hebcal_open_mysqli_db() {
     global $hebcal_db;
     global $hebcal_db_open;
-    global $hebcal_ini;
     if (!isset($hebcal_db_open)) {
 	$hebcal_ini = hebcal_get_ini();
 	$dbpass = $hebcal_ini["hebcal.mysql.password"];
 	$dbhost = $hebcal_ini["hebcal.mysql.host"];
 	$dbuser = $hebcal_ini["hebcal.mysql.user"];
 	$dbname = $hebcal_ini["hebcal.mysql.dbname"];
-	$hebcal_db = mysql_pconnect($dbhost, $dbuser, $dbpass);
-	if (!$hebcal_db) {
-	    error_log("Could not connect: " . mysql_error());
-	    die();
-	}
-	if (!mysql_select_db($dbname, $hebcal_db)) {
-	    error_log("Could not USE $dbname: " . mysql_error());
+	$hebcal_db = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+        if (mysqli_connect_errno($mysqli)) {
+            error_log("Failed to connect to MySQL: " . mysqli_connect_error());
 	    die();
 	}
 	$hebcal_db_open = true;
     }
-    return true;
+    return $hebcal_db;
 }
 
 function geoname_city_descr($name,$admin1,$country) {

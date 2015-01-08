@@ -13,8 +13,6 @@ function bad_request($err) {
 }
 
 function get_sub_info($id) {
-    global $hebcal_db;
-    hebcal_open_mysql_db();
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
@@ -24,16 +22,17 @@ FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_id = '$id'
 EOD;
 
-    $result = mysql_query($sql, $hebcal_db)
-	or die("Invalid query 1: " . mysql_error());
+    $mysqli = hebcal_open_mysqli_db();
+    $result = mysqli_query($mysqli, $sql)
+	or die("Invalid query 1: " . mysqli_error($mysqli));
 
-    if (mysql_num_rows($result) != 1) {
+    if (mysqli_num_rows($result) != 1) {
 	return array();
     }
 
     list($id,$address,$status,$created,$zip,$city,
 	 $geonameid,
-	 $havdalah,$optin_announce) = mysql_fetch_row($result);
+	 $havdalah,$optin_announce) = mysqli_fetch_row($result);
 
     $val = array(
 	"id" => $id,
@@ -47,7 +46,7 @@ EOD;
 	"t" => $created,
 	);
 
-    mysql_free_result($result);
+    mysqli_free_result($result);
 
     return $val;
 }
@@ -79,8 +78,6 @@ if (!isset($info["em"])) {
 }
 
 if (isset($param["commit"]) && $param["commit"] == "1") {
-    global $hebcal_db;
-    hebcal_open_mysql_db();
     $ip = $_SERVER["REMOTE_ADDR"];
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
@@ -89,8 +86,9 @@ SET email_status='active',
 WHERE email_id = '$info[id]'
 EOD;
 
-    mysql_query($sql, $hebcal_db)
-	or die("Invalid query 2: " . mysql_error());
+    $mysqli = hebcal_open_mysqli_db();
+    mysqli_query($mysqli, $sql)
+	or die("Invalid query 2: " . mysqli_error($mysqli));
 
     $from_name = "Hebcal";
     $from_addr = "shabbat-owner@hebcal.com";

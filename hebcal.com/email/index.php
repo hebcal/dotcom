@@ -116,9 +116,7 @@ lighting times and Torah portion by email.</p>
 }
 
 function write_sub_info($param) {
-    global $hebcal_db;
     global $remoteAddr;
-    hebcal_open_mysql_db();
 
     if ($param["geo"] == "zip")
     {
@@ -143,13 +141,12 @@ SET email_status='active',
 WHERE email_address = '$param[em]'
 EOD;
 
-    return mysql_query($sql, $hebcal_db);
+    $mysqli = hebcal_open_mysqli_db();
+    return mysqli_query($mysqli, $sql);
 }
 
 function get_sub_info($email, $expected_present = false) {
     //error_log("get_sub_info($email);");
-    global $hebcal_db;
-    hebcal_open_mysql_db();
     $sql = <<<EOD
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
@@ -160,13 +157,14 @@ WHERE hebcal_shabbat_email.email_address = '$email'
 EOD;
 
     //error_log($sql);
-    $result = mysql_query($sql, $hebcal_db);
+    $mysqli = hebcal_open_mysqli_db();
+    $result = mysqli_query($mysqli, $sql);
     if (!$result) {
-	error_log("Invalid query 1: " . mysql_error());
+	error_log("Invalid query 1: " . mysqli_error($mysqli));
 	return array();
     }
 
-    $num_rows = mysql_num_rows($result);
+    $num_rows = mysqli_num_rows($result);
     if ($num_rows != 1) {
     	if ($num_rows != 0 || $expected_present) {
 	    error_log("get_sub_info($email) got $num_rows rows, expected 1");
@@ -176,7 +174,7 @@ EOD;
 
     list($id,$address,$status,$created,$zip,$city,
 	 $geonameid,
-	 $havdalah) = mysql_fetch_row($result);
+	 $havdalah) = mysqli_fetch_row($result);
 
     global $hebcal_cities_old;
     if (isset($city) && isset($hebcal_cities_old[$city])) {
@@ -193,7 +191,7 @@ EOD;
 	"t" => $created,
 	);
 
-    mysql_free_result($result);
+    mysqli_free_result($result);
 
     return $val;
 }
@@ -223,9 +221,6 @@ function write_staging_info($param, $old_encoded)
 	$encoded = bin2hex($rand);
     }
 
-    global $hebcal_db;
-    hebcal_open_mysql_db();
-
     if ($param["geo"] == "zip")
     {
 	$location_name = "email_candles_zipcode";
@@ -252,11 +247,12 @@ VALUES ('$encoded', '$param[em]', 'pending', NOW(),
 	'$location_value', '$remoteAddr')
 EOD;
 
-    $result = mysql_query($sql, $hebcal_db)
-	or die("Invalid query 2: " . mysql_error());
+    $mysqli = hebcal_open_mysqli_db();
+    $result = mysqli_query($mysqli, $sql)
+	or die("Invalid query 2: " . mysqli_error($mysqli));
 
-    if (mysql_affected_rows($hebcal_db) < 1) {
-	die("Strange numrows from MySQL:" . mysql_error());
+    if (mysqli_affected_rows($mysqli) < 1) {
+	die("Strange numrows from MySQL:" . mysqli_error($mysqli));
     }
 
     return $encoded;
@@ -643,16 +639,15 @@ EOD
 }
 
 function sql_unsub($em) {
-    global $hebcal_db;
     global $remoteAddr;
-    hebcal_open_mysql_db();
     $sql = <<<EOD
 UPDATE hebcal_shabbat_email
 SET email_status='unsubscribed',email_ip='$remoteAddr'
 WHERE email_address = '$em'
 EOD;
 
-   return mysql_query($sql, $hebcal_db);
+    $mysqli = hebcal_open_mysqli_db();
+    return mysqli_query($mysqli, $sql);
 }
 
 function unsubscribe($param) {
