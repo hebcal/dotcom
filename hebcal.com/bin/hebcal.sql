@@ -6,6 +6,7 @@ create table hebcal_shabbat_email (
     email_updated timestamp,
     email_candles_zipcode varchar(5),
     email_candles_city varchar(20),
+    email_candles_geonameid int,
     email_candles_havdalah tinyint,
     email_optin_announce tinyint(1),
     email_ip varchar(16),
