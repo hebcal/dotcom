@@ -564,7 +564,7 @@ sub more_from_hebcal {
         if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
     my $html = <<EOHTML;
-<div style="padding-bottom:20px">
+<div style="padding-bottom:16px">
 <h4>$cconfig{"city"}</h4>
 <ul class="list-unstyled nav-list">
   <li>
@@ -730,24 +730,7 @@ EOHTML
     my $more_from_hebcal = more_from_hebcal();
 
     my $footer_divs2=<<EOHTML;
-</div><!-- .col-sm-9 -->
-<div class="col-sm-3" role="complementary">
-$more_from_hebcal
-<h5>Advertisement</h5>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- 200x200 text only -->
-<ins class="adsbygoogle"
-     style="display:inline-block;width:200px;height:200px"
-     data-ad-client="ca-pub-7687563417622459"
-     data-ad-slot="5114852649"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .col-sm-3 -->
-</div><!-- .row -->
 <hr>
-<div class="row">
-<div class="col-sm-12">
 <p>Shabbat times for world cities</p>
 <ul class="bullet-list-inline">
 <li><a href="/shabbat/?city=IL-Jerusalem">Jerusalem</a></li>
@@ -771,7 +754,21 @@ $more_from_hebcal
 <li><a href="/shabbat/?city=CA-Toronto">Toronto</a></li>
 <li><a href="/shabbat/browse/">More ...</a></li>
 </ul>
-</div><!-- .col-sm-12 -->
+</div><!-- .col-sm-9 -->
+<div class="col-sm-3" role="complementary">
+$more_from_hebcal
+<h5>Advertisement</h5>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- responsive -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7687563417622459"
+     data-ad-slot="5981467974"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .col-sm-3 -->
 </div><!-- .row -->
 EOHTML
 ;
