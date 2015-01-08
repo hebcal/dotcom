@@ -52,8 +52,7 @@ use POSIX qw(strftime);
 
 use Benchmark qw(:hireswallclock :all);
 
-my @benchmarks;
-push(@benchmarks, Benchmark->new);
+my $t0 = Benchmark->new;
 
 # process form params
 my($q) = new CGI;
@@ -106,13 +105,10 @@ if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
     undef($cfg);
 }
 
-push(@benchmarks, Benchmark->new);
 my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
-push(@benchmarks, Benchmark->new);
 my $ignore_tz = (defined $cfg && ($cfg eq "r" || $cfg eq "json")) ? 0 : 1;
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
     $cconfig{"tzid"},$ignore_tz);
-push(@benchmarks, Benchmark->new);
 
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
                      $cfg eq "widget" || $cfg eq "json"))
@@ -193,7 +189,7 @@ sub self_url
 
 sub timestamp_comment {
     my $tend = Benchmark->new;
-    my $tdiff = timediff($tend, $benchmarks[0]);
+    my $tdiff = timediff($tend, $t0);
     Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), "; ",
         timestr($tdiff), " -->\n");
 }
