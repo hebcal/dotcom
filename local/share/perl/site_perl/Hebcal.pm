@@ -2322,6 +2322,8 @@ WHERE g.geonameid = ?
 
 sub geoname_city_descr {
     my($name,$admin1,$country) = @_;
+    $country = "USA" if $country eq "United States";
+    $country = "UK" if $country eq "United Kingdom";
     my $city_descr = $name;
     $city_descr .= ", $admin1" if $admin1 && index($admin1, $name) != 0;
     $city_descr .= ", $country" if $country;
