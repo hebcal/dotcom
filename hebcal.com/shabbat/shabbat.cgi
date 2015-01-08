@@ -4,7 +4,7 @@
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times
 # and Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -566,7 +566,7 @@ sub more_from_hebcal {
     my $html = <<EOHTML;
 <div style="padding-bottom:20px">
 <h4>$cconfig{"city"}</h4>
-<ul class="list-unstyled">
+<ul class="list-unstyled nav-list">
   <li>
     <span class="glyphicon glyphicon-print"></span>
     <a title="Compact candle-lighting times for $hyear" href="$fridge_href"> Print</a>
@@ -598,6 +598,9 @@ ul.hebcal-results li {
   font-size: 21px;
   font-weight: 200;
   line-height: normal;
+}
+ul.list-unstyled.nav-list li {
+  margin-bottom: 6px;
 }
 </style>
 EOHTML
