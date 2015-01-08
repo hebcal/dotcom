@@ -126,6 +126,31 @@ else
 
 exit(0);
 
+sub possibly_set_cookie {
+    my $cookies = Hebcal::get_cookies($q);
+    my $newcookie = Hebcal::gen_cookie($q);
+    if (! defined $cookies->{"C"}) {
+        my_set_cookie($newcookie);
+    } else {
+        my $cmp1 = $newcookie;
+        my $cmp2 = $cookies->{"C"};
+
+        $cmp1 =~ s/^C=t=\d+\&?//;
+        $cmp2 =~ s/^t=\d+\&?//;
+
+        my_set_cookie($newcookie) if $cmp1 ne $cmp2;
+    }
+}
+
+sub my_set_cookie {
+    my($str) = @_;
+    if ($str =~ /&/) {
+        my $cookie_expires = "Tue, 02-Jun-2037 20:00:00 GMT";
+        print STDOUT "Cache-Control: private\015\012Set-Cookie: ",
+        $str, "; expires=", $cookie_expires, "; path=/\015\012";
+    }
+}
+
 sub process_args
 {
     my($q,$cconfig) = @_;
@@ -465,6 +490,7 @@ sub display_html
 
     my $title = "Shabbat Candle Lighting Times for $city_descr";
 
+    possibly_set_cookie();
     print $q->header(-type => $content_type, -charset => "UTF-8");
 
     my @description_items;
