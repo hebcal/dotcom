@@ -592,7 +592,10 @@ sub my_head {
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 <style type="text/css">
-ul.hebcal-results { list-style-type:none }
+ul.hebcal-results {
+  list-style-type:none;
+  padding-left: 0;
+}
 ul.hebcal-results li {
   margin-bottom: 11px;
   font-size: 21px;
