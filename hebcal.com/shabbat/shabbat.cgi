@@ -444,11 +444,11 @@ ul.hebcal-results{list-style-type:none}
     }
 
     my $loc_class = '';
-    if (defined $q->param('zip') && $q->param('zip') ne '') {
-        $loc_class = $q->param('zip');
-    } elsif (defined $q->param('geonameid') && $q->param('geonameid') ne '') {
-        $loc_class = $q->param('geonameid');
-    } else {
+    if ($cconfig{"geo"} eq "zip") {
+        $loc_class = $cconfig{"zip"};
+    } elsif ($cconfig{"geo"} eq "geoname") {
+        $loc_class = $cconfig{"geonameid"};
+    } elsif ($cconfig{"geo"} eq "city") {
         $loc_class = lc($q->param('city'));
         $loc_class =~ s/\s+/-/g;
     }
@@ -548,7 +548,7 @@ sub more_from_hebcal {
     my $fridge_href = url_html($url);
 
     # link to hebcal full calendar
-    $url = join('', "/hebcal/?v=1&geo=", $q->param('geo'), "&");
+    $url = join('', "/hebcal/?v=1&geo=", $cconfig{"geo"}, "&");
     $url .= get_link_args($q);
     $url .= '&month=x&year=now';
     foreach my $opt (qw(c s maj min mod mf ss nx vis)) {
@@ -664,24 +664,6 @@ sub form($$$$)
 
     Hebcal::out_html($cfg, $message);
 
-    if ($q->param("geo") eq "zip"
-        && defined $q->param("zip") && $q->param("zip") =~ /^\d{5}$/) {
-        $q->param('city-typeahead', $q->param('zip'));
-    } elsif ($q->param("geo") eq "geoname"
-        && defined $q->param("geonameid") && $q->param("geonameid") =~ /^\d+$/) {
-        my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
-            Hebcal::geoname_lookup($q->param('geonameid'));
-        if ($name) {
-            my $city_descr = Hebcal::geoname_city_descr($asciiname,$admin1,$country);
-            $q->param('city-typeahead', $city_descr);
-        }
-    } elsif ($q->param("geo") eq "city" && $q->param("city")
-        && Hebcal::validate_city($q->param("city"))) {
-        my $city = Hebcal::validate_city($q->param("city"));
-        my $city_descr = Hebcal::woe_city_descr($city);
-        $q->param('city-typeahead', $city_descr);
-    }
-
     my $form_hidden = join("",
         $q->hidden(-name => "geo",
                    -id => "geo",
@@ -694,6 +676,7 @@ sub form($$$$)
         -name => "city-typeahead",
         -id => "city-typeahead",
         -class => "form-control typeahead",
+        -default => $cconfig{"title"},
         -placeholder => "Search for city or ZIP code");
     my $form_havdalah_min = $q->textfield(
         -name      => "m",
@@ -730,7 +713,7 @@ EOHTML
 
     Hebcal::out_html($cfg, $form_html);
 
-    my $more_from_hebcal = more_from_hebcal();
+    my $more_from_hebcal = $cconfig{"geo"} ? more_from_hebcal() : "";
 
     my $footer_divs2=<<EOHTML;
 <hr>
