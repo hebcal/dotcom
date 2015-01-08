@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2014  Michael J. Radwin.
+ * Copyright (c) 2015  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -425,11 +425,12 @@ Hebrew feed &raquo;</a></p>
 <div class="col-sm-3" role="complementary">
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- 200x200 text only -->
+<!-- responsive textonly -->
 <ins class="adsbygoogle"
-     style="display:inline-block;width:200px;height:200px"
+     style="display:block"
      data-ad-client="ca-pub-7687563417622459"
-     data-ad-slot="5114852649"></ins>
+     data-ad-slot="5981467974"
+     data-ad-format="auto"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
