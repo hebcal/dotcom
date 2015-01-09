@@ -411,7 +411,6 @@ function subscribe($param) {
 	}
 
 	$city_descr = "$city, $state " . $param["zip"];
-	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["city"]);
 	unset($param["geonameid"]);
@@ -442,7 +441,6 @@ function subscribe($param) {
 	}
 
     $city_descr = geoname_city_descr($name,$admin1,$country);
-	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["zip"]);
 	unset($param["city"]);
@@ -467,7 +465,6 @@ function subscribe($param) {
 	$city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
 
 	$tzid = $hebcal_cities[$param["city"]][4];
-	$tz_descr = "Time zone: " . $tzid;
 
 	unset($param["zip"]);
 	unset($param["geonameid"]);
@@ -537,7 +534,7 @@ EOD;
 <div class="alert alert-success">
 <strong>Success!</strong> Your subsciption information has been updated.
 <p>Email: <strong>$html_email</strong>
-<br>Location: $city_descr &nbsp;&nbsp;($tz_descr)</p>
+<br>Location: $city_descr</p>
 </div>
 EOD
 	     ;
@@ -685,45 +682,10 @@ EOD
         return false;
     }
 
-    $from_name = "Hebcal";
-    $from_addr = "shabbat-owner@hebcal.com";
-    $reply_to = "no-reply@hebcal.com";
-    $subject = "You have been unsubscribed from hebcal";
-
-    global $remoteAddr;
-    $ip = $remoteAddr;
-
-    $headers = array("From" => "\"$from_name\" <$from_addr>",
-		     "To" => $param["em"],
-		     "Reply-To" => $reply_to,
-		     "MIME-Version" => "1.0",
-		     "Content-Type" => "text/html; charset=UTF-8",
-		     "X-Sender" => $sender,
-		     "X-Mailer" => "hebcal web",
-		     "Message-ID" =>
-		     "<Hebcal.Web.".time().".".posix_getpid()."@hebcal.com>",
-		     "X-Originating-IP" => "[$ip]",
-		     "Subject" => $subject);
-
-    $body = <<<EOD
-<div dir="ltr">
-<div>Hello,</div>
-<div><br></div>
-<div>Per your request, you have been removed from the weekly
-Shabbat candle lighting time list.</div>
-<div><br></div>
-<div>Regards,
-<br>hebcal.com</div>
-</div>
-EOD;
-
-    $err = smtp_send(get_return_path($param["em"]), $param["em"], $headers, $body);
-
     $html = <<<EOD
 <div class="alert alert-success">
 <h4>Unsubscribed</h4>
-You have been removed from the email subscription list.
-A confirmation message has been sent to <strong>$html_email</strong>.
+<strong>$html_email</strong> has been removed from the email subscription list.
 </div>
 EOD
 	     ;
