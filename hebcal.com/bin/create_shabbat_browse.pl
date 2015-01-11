@@ -227,7 +227,7 @@ sub get_candle_lighting {
     my($latitude,$longitude,$tzid,$country,$name,$admin1) = @_;
     my($lat_deg,$lat_min,$long_deg,$long_min) =
         Hebcal::latlong_to_hebcal($latitude, $longitude);
-    my $cmd = "./hebcal -h -x -c -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = $Hebcal::HEBCAL_BIN . " -h -x -c -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
     if ($country eq "IL") {
         $cmd .= " -i";
         $cmd .= " -b 40" if $admin1 eq "Jerusalem District";
