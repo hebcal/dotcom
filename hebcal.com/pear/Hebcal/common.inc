@@ -586,6 +586,11 @@ $xtra_stylesheet<script>
  a[href]:after{content:""}
  .sidebar-nav{display:none}
 }
+@media (min-width: 768px) {
+  input#s {
+    width: 132px;
+  }
+}
 </style>
 $xtra_head</head>
 <body>
