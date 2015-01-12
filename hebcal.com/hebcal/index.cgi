@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -757,7 +757,7 @@ sub csv_display
 sub my_radio_group {
     my($q,@p) = @_;
     my $s = $q->radio_group(@p);
-    $s =~ s/<input([^>]+)>([^<]+)/<label class="radio"><input$1>$2<\/label>/g;
+    $s =~ s/<input([^>]+)>([^<]+)/<div class="radio"><label><input$1>$2<\/label><\/div>/g;
     $s;
 }
 
@@ -791,24 +791,19 @@ sub form
     my $xtra_head = <<EOHTML;
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,Torah,parsha">
 <meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
-<style type="text/css">
-legend {
-  font-size: 17px;
-  font-weight: bold;
-  line-height: 30px;
-}
-</style>
-<link rel="stylesheet" type="text/css" href="/i/hebcal-typeahead-v1.3.min.css">
+<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 EOHTML
 ;
 
     Hebcal::out_html(undef,
-                     Hebcal::html_header_bootstrap("Custom Calendar",
+                     Hebcal::html_header_bootstrap3("Custom Calendar",
                                          $script_name,
-                                         "single single-post",
+                                         "",
                                          $xtra_head)
         );
     my $head_divs = <<EOHTML;
+<div class="row">
+<div class="col-sm-12">
 <p class="lead">Customize your calendar of Jewish holidays, candle
 lighting times, and Torah readings.</p>
 EOHTML
@@ -843,27 +838,27 @@ EOHTML
 
     Hebcal::out_html(undef,
     qq{<form id="f1" name="f1" action="$script_name">\n},
-    qq{<div class="row-fluid">\n},
-    qq{<div class="span6">\n},
+    qq{<div class="row">\n},
+    qq{<div class="col-sm-6">\n},
     qq{<fieldset><legend>Jewish Holidays for</legend>\n},
-    qq{<div class="form-inline">\n},
-    qq{<label>Year: },
+    qq{<div class="form-group"><label class="sr-only" for="year">Year</label>},
     $q->textfield(-name => "year",
                   -id => "year",
                   -pattern => '\d*',
                   -default => $this_year,
-                  -style => "width:auto",
+                  -class => "form-control",
+                  -style => "width: 80px",
+                  -placeholder => "Year",
                   -size => 4,
                   -maxlength => 4),
-    "</label>\n",
+    "</div>\n",
     $q->hidden(-name => "month",
         -id => "month",
         -value => "x",
         -override => "x"),
-    qq{</div><!-- .form-inline -->\n},
     $year_type_radio,
-    qq{\n<p><small class="muted">Use all digits to specify a year.\n},
-    qq{You probably aren't interested in 08, but rather 2008.</small></p>\n},
+    qq{\n<span class="help-block"><small>Use all digits to specify a year.\n},
+    qq{You probably aren't interested in 08, but rather 2008.</small></span>\n},
     $q->hidden(-name => "v",-value => 1,-override => 1),
     $diaspora_israel_radio,
     qq{</fieldset>\n}
@@ -871,75 +866,77 @@ EOHTML
 
     Hebcal::out_html(undef, qq{<fieldset><legend>Include events</legend>\n});
     Hebcal::out_html(undef,
-    qq{<label class="checkbox">},
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "maj",
                  -id => "maj",
                  -checked => 1,
                  -label => "Major Holidays"),
-    "</label>\n",
-    qq{<label class="checkbox">},
+    "</label></div>\n",
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "min",
          -id => "min",
          -checked => 1,
          -label => "Minor Holidays"),
-    qq{\n<small class="muted">(Tu BiShvat, Lag B'Omer, ...)</small></label>\n},
-    qq{<label class="checkbox">},
+    qq{\n<small class="text-muted">(Tu BiShvat, Lag B'Omer, ...)</small></label></div>\n},
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "nx",
                  -id => "nx",
                  -checked => 1,
                  -label => "Rosh Chodesh"),
-    "</label>\n",
-    qq{<label class="checkbox">},
+    "</label></div>\n",
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "mf",
                  -id => "mf",
                  -checked => 1,
                  -label => "Minor Fasts"),
-    qq{\n<small class="muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label>\n},
-    qq{<label class="checkbox">},
+    qq{\n<small class="text-muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label></div>\n},
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "ss",
                  -id => "ss",
                  -checked => 1,
                  -label => "Special Shabbatot"),
-    qq{\n<small class="muted">(Shabbat Shekalim, Zachor, ...)</small></label>\n},
-    qq{<label class="checkbox">},
+    qq{\n<small class="text-muted">(Shabbat Shekalim, Zachor, ...)</small></label></div>\n},
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "mod",
          -id => "mod",
          -checked => 1,
          -label => "Modern Holidays"),
-    qq{\n<small class="muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label>\n},
-    qq{<label class="checkbox">},
+    qq{\n<small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label></div>\n},
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "o",
                  -label => "Days of the Omer"),
-    "</label>\n",
-    qq{<label class="checkbox">},
+    "</label></div>\n",
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "F",
                  -label => "Daf Yomi"),
-    "</label>\n",
-    qq{<label class="checkbox">},
+    "</label></div>\n",
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "s",
                  -label => "Weekly Torah portion on Saturdays"),
-    "</label>\n");
+    "</label></div>\n");
 
     Hebcal::out_html(undef, qq{</fieldset>\n});
-    Hebcal::out_html(undef, qq{</div><!-- .span6 -->\n});
+    Hebcal::out_html(undef, qq{</div><!-- .col-sm-6 -->\n});
 
-    Hebcal::out_html(undef, qq{<div class="span6">\n});
+    Hebcal::out_html(undef, qq{<div class="col-sm-6">\n});
     Hebcal::out_html(undef,
     "<fieldset><legend>Other options</legend>",
-    "<label>Event titles: ",
+    qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
+                   -id => "lg",
                    -values => ["s", "sh", "a", "ah", "h"],
                    -default => "s",
+                   -class => "form-control",
                    -labels => \%Hebcal::lang_names),
-    "</label>\n",
-    qq{<label class="checkbox">},
+    "</div>\n",
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "D",
                  -label => "Show Hebrew date for dates with some event"),
-    "</label>",
-    qq{<label class="checkbox">},
+    "</label></div>",
+    qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "d",
                  -label => "Show Hebrew date for entire date range"),
-    "</label>",
+    "</label></div>",
     "</fieldset>\n");
 
     Hebcal::out_html(undef, qq{<fieldset><legend>Candle lighting times</legend>\n});
@@ -977,47 +974,52 @@ EOHTML
     }
 
     Hebcal::out_html(undef,
-    qq{<div class="city-typeahead form-inline" style="margin-bottom:12px">\n},
+    qq{<div class="form-group"><label for="city-typeahead">City</label>
+<div class="city-typeahead" style="margin-bottom:12px">},
     $q->textfield(-name => "city-typeahead",
           -id => "city-typeahead",
-          -class => "form-control input-xlarge",
+          -class => "form-control typeahead",
           -placeholder => "Search for city or ZIP code"),
-    qq{</div>\n},
-            "<label>Candle-lighting minutes before sundown: ",
+    qq{</div></div>\n},
+            qq{<div class="form-group"><label for="b1">Candle-lighting minutes before sundown</label>},
             $q->textfield(
                 -name      => "b",
+                -id        => "b1",
                 -pattern   => '\d*',
-                -style     => "width:auto",
+                -class     => "form-control",
+                -style     => "width:60px",
                 -size      => 2,
                 -maxlength => 2,
                 -default   => 18
             ),
-            "</label>\n",
-            "<label>Havdalah minutes past sundown: ",
+            "</div>\n",
+            qq{<div class="form-group"><label for="m1">Havdalah minutes past sundown
+<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+</label>},
             $q->textfield(
                 -name      => "m",
                 -pattern   => '\d*',
-                -style     => "width:auto",
+                -class     => "form-control",
+                -style     => "width:60px",
                 -size      => 2,
                 -maxlength => 2,
                 -default   => $Hebcal::havdalah_min
             ),
-            qq{&nbsp;<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="bottom" },
-            qq{title="Use 42 min for three medium-sized stars, },
-            qq{50 min for three small stars, },
-            qq{72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><i class="icon icon-info-sign"></i></a>},
-            "</label>\n",
+            qq{</div>\n},
         );
 
+    Hebcal::out_html(undef, qq{
+<p><small>Hebcal computes candle-lighting times according to the method defined
+by the U.S. Naval Observatory (USNO). The USNO claims accuracy within 2
+minutes except at extreme northern or southern latitudes. <a
+href="/home/94/how-accurate-are-candle-lighting-times">Read more
+&raquo;</a></small></p>});
+
     Hebcal::out_html(undef, qq{</fieldset>\n});
-    Hebcal::out_html(undef, qq{</div><!-- .span6 -->\n});
-    Hebcal::out_html(undef, qq{</div><!-- .row-fluid -->\n});
+    Hebcal::out_html(undef, qq{</div><!-- .col-sm-6 -->\n});
+    Hebcal::out_html(undef, qq{</div><!-- .row -->\n});
     Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
     Hebcal::out_html(undef,
-    $q->hidden(-name => ".cgifields",
-               -values => ["nx", "maj", "mf", "ss", "min", "mod"],
-               "-override"=>1),
-    "\n",
     $q->submit(-name => ".s",
                -class => "btn btn-primary",
                -value => "Create Calendar"),
@@ -1025,11 +1027,8 @@ EOHTML
     qq{</form>\n});
 
     Hebcal::out_html(undef, qq{
-<p>Hebcal computes candle-lighting times according to the method defined
-by the U.S. Naval Observatory (USNO). The USNO claims accuracy within 2
-minutes except at extreme northern or southern latitudes. <a
-href="/home/94/how-accurate-are-candle-lighting-times">Read more
-&raquo;</a></p>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
 });
 
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
@@ -1059,7 +1058,7 @@ window['hebcal'].createCityTypeahead(false);
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
     timestamp_comment();
 
@@ -1145,8 +1144,8 @@ sub nav_pagination {
             ) ? " nofollow" : "";
 
     my $nav_pagination = <<EOHTML;
-<div class="pagination pagination-centered">
-<ul>
+<nav class="text-center">
+<ul class="pagination">
 <li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
     ;
@@ -1162,8 +1161,8 @@ EOHTML
     }
     $nav_pagination .= <<EOHTML;
 <li><a href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
-</ul>
-</div><!-- .pagination -->
+</ul><!-- .pagination -->
+</nav>
 EOHTML
     ;
 
@@ -1243,7 +1242,7 @@ EOHTML
     $email_form .= <<EOHTML;
 <p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
 <div class="input-append input-prepend">
-<span class="add-on"><i class="icon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
+<span class="add-on"><i class="glyphicon glyphicon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
 <button type="submit" class="btn" name="modify" value="1"> Sign up</button>
 </div>
 </fieldset>
@@ -1298,8 +1297,8 @@ sub results_page_toolbar {
     my $html = <<EOHTML;
 <div class="btn-toolbar">
   <div class="btn-group" data-toggle="buttons-radio">
-    <button id="toggle-month" type="button" class="btn btn-default btn-small active"><i class="icon-calendar"></i> Month</button>
-    <button id="toggle-list" type="button" class="btn btn-default btn-small"><i class="icon-list"></i> List</button>
+    <button id="toggle-month" type="button" class="btn btn-default btn-sm active"><i class="glyphicon glyphicon-calendar"></i> Month</button>
+    <button id="toggle-list" type="button" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-list"></i> List</button>
   </div>
 EOHTML
 ;
@@ -1308,7 +1307,7 @@ EOHTML
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     if (!param_true("c")) {
-        $html .= qq{  <a class="btn btn-default btn-small download" id="pdf" href="$pdf_url"><i class="icon-print"></i> Print</a>\n};
+        $html .= qq{  <a class="btn btn-default btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicon glyphicon-print"></i> Print</a>\n};
     } else {
         # Fridge
         my $url = "/shabbat/fridge.cgi?";
@@ -1325,7 +1324,7 @@ EOHTML
 
         $html .= <<EOHTML;
   <div class="btn-group">
-    <button class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
     <ul class="dropdown-menu">
       <li><a class="download" id="pdf" href="$pdf_url">Print</a></li>
       <li><a href="$url">Compact candle-lighting times</a></li>
@@ -1339,7 +1338,7 @@ EOHTML
 
     my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
     $html .= <<EOHTML;
-  <a class="btn btn-default btn-small" href="$settings_url" title="Change calendar options"><i class="icon-cog"></i> Settings</a>
+  <a class="btn btn-default btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicon glyphicon-cog"></i> Settings</a>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -1480,8 +1479,8 @@ EOHTML
     my $lang_hebrew = ($lang && $lang =~ /h/) ? 1 : 0;
 
     Hebcal::out_html(undef,
-                     Hebcal::html_header_bootstrap(
-                        $results_title, $script_name, "ignored",
+                     Hebcal::html_header_bootstrap3(
+                        $results_title, $script_name, "",
                         $xtra_head, 0, $lang_hebrew)
         );
 
@@ -1494,8 +1493,8 @@ EOHTML
     }
 
     my $head_divs = <<EOHTML;
-<div class="row-fluid">
-<div class="span8">
+<div class="row">
+<div class="col-sm-8">
 <h1>Jewish Calendar $date$h1_extra</h1>
 EOHTML
 ;
@@ -1518,10 +1517,10 @@ EOHTML
         qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
     }
 
-    Hebcal::out_html(undef, "</div><!-- .span8 -->\n");
+    Hebcal::out_html(undef, "</div><!-- .col-sm-8 -->\n");
 
     my $header_ad = <<EOHTML;
-<div class="span4">
+<div class="col-sm-4">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- banner-320x100 -->
@@ -1532,8 +1531,8 @@ EOHTML
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-</div><!-- .span4 -->
-</div><!-- .row-fluid -->
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
 EOHTML
 ;
     Hebcal::out_html(undef, $header_ad);
@@ -1650,7 +1649,7 @@ EOHTML
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap($q,undef,1,$xtra_html));
+    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q,undef,1,$xtra_html));
 
     if ($numEntries > 0) {
         my $download_title = $date;
@@ -1658,7 +1657,7 @@ JSCRIPT_END
             my $plus4 = $1 + $EXTRA_YEARS;
             $download_title .= "-" . $plus4;
         }
-        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title, 0, 0));
+        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title, 0, 1));
     }
 
     Hebcal::out_html(undef, "</body></html>\n");
