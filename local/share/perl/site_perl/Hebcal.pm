@@ -1738,7 +1738,7 @@ $xtra_head</head>
    <span class="icon-bar"></span>
    <span class="icon-bar"></span>
    </a>
-   <a class="brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+   <a href="/" class="brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal"></a>
    <div class="nav-collapse collapse">
     $menu
     <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
