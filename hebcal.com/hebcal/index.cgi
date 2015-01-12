@@ -931,10 +931,12 @@ EOHTML
     "</div>\n",
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "D",
+                 -id => "d1",
                  -label => "Show Hebrew date for dates with some event"),
     "</label></div>",
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "d",
+                 -id => "d2",
                  -label => "Show Hebrew date for entire date range"),
     "</label></div>",
     "</fieldset>\n");
@@ -1052,6 +1054,16 @@ d.getElementById("maj").onclick=function(){
 ["nx","mf","ss","min","mod"].forEach(function(x){
  d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
 });
+d.getElementById("d1").onclick=function(){
+  if (this.checked) {
+    d.getElementById("d2").checked = false;
+  }
+}
+d.getElementById("d2").onclick=function(){
+  if (this.checked) {
+    d.getElementById("d1").checked = false;
+  }
+}
 window['hebcal'].createCityTypeahead(false);
 \$('#havdalahInfo').tooltip();
 </script>

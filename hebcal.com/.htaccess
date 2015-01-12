@@ -4,6 +4,7 @@ DirectoryIndex index.php index.html
 
 <IfModule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/html text/css text/javascript
+AddOutputFilterByType DEFLATE image/svg+xml application/javascript
 </IfModule>
 
 ErrorDocument 404 /missing.html
