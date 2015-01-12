@@ -523,11 +523,12 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
         $self = substr($self, 0, $pos);
     }
     $menu = html_menu_bootstrap3($self);
-
+    $logoImage = '<img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal">';
+    $logoIdClassTitle = 'class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"';
     if ($self == "/") {
-        $logo = '<span class="navbar-brand" id="logo" title="Hebcal Jewish Calendar">Hebcal</span>';
+        $logo = '<span ' . $logoIdClassTitle . '>' . $logoImage . '</span>';
     } else {
-        $logo = '<a class="navbar-brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>';
+        $logo = '<a href="/" ' . $logoIdClassTitle . '>' . $logoImage . '</a>';
     }
 
     $alefhebrew = "@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.ttf) format('truetype')}@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:700;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.ttf) format('truetype')}";
