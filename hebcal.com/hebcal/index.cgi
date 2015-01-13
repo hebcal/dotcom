@@ -202,7 +202,7 @@ if (param_true("c")) {
 } else {
     $q->param("c","off");
     $cconfig{"geo"} = "none";
-    foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir m tz dst tzid)) {
+    foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir m b city-typeahead geonameid tz dst tzid)) {
         $q->delete($_);
     }
 }
@@ -768,6 +768,76 @@ sub timestamp_comment {
         timestr($tdiff), " -->\n");
 }
 
+sub latlong_form_html {
+    my $html = join("",
+        qq{<div class="form-group form-inline">\n},
+        $q->textfield(-name => "ladeg",
+                  -id => "ladeg",
+                  -placeholder => "deg",
+                  -class => "form-control",
+                  -style => "width: 60px",
+                  -pattern => '\d*',
+                  -size => 3,
+                  -maxlength => 2),
+        qq{ <label for="ladeg">degrees</label>\n},
+        $q->textfield(-name => "lamin",
+                  -id => "lamin",
+                  -placeholder => "min",
+                  -class => "form-control",
+                  -style => "width: 45px",
+                  -pattern => '\d*',
+                  -size => 2,
+                  -maxlength => 2),
+        qq{ <label for="lamin">minutes</label>\n},
+        $q->popup_menu(-name => "ladir",
+                   -id => "ladir",
+                   -class => "form-control",
+                   -style => "width: 160px",
+                   -values => ["n","s"],
+                   -default => "n",
+                   -labels => {"n" => "North Latitude",
+                       "s" => "South Latitude"}),
+        qq{</div><!-- .form-group -->\n},
+        qq{<div class="form-group form-inline">\n},
+        $q->textfield(-name => "lodeg",
+                  -id => "lodeg",
+                  -placeholder => "deg",
+                  -class => "form-control",
+                  -style => "width: 60px",
+                  -pattern => '\d*',
+                  -size => 3,
+                  -maxlength => 3),
+        qq{ <label for="lodeg">degrees</label>\n},
+        $q->textfield(-name => "lomin",
+                  -id => "lomin",
+                  -placeholder => "min",
+                  -class => "form-control",
+                  -style => "width: 45px",
+                  -pattern => '\d*',
+                  -size => 2,
+                  -maxlength => 2),
+        qq{ <label for="lomin">minutes</label>\n},
+        $q->popup_menu(-name => "lodir",
+                   -id => "lodir",
+                   -class => "form-control",
+                   -style => "width: 160px",
+                   -values => ["w","e"],
+                   -default => "w",
+                   -labels => {"e" => "East Longitude",
+                       "w" => "West Longitude"}),
+        qq{</div><!-- .form-group -->\n},
+        qq{<div class="form-group">\n},
+        qq{<label for="tzid">Time zone</label>\n},
+        $q->popup_menu(-name => "tzid",
+                   -id => "tzid",
+                   -class => "form-control",
+                   -values => Hebcal::get_timezones(),
+                   -default => "UTC"),
+        qq{</div><!-- .form-group -->\n},
+    );
+    return $html;
+}
+
 sub form
 {
     my($message,$help) = @_;
@@ -812,8 +882,8 @@ EOHTML
 
     if ($message ne "") {
         $help = "" unless defined $help;
-        $message = qq{<div class="alert alert-error alert-block">\n} .
-            qq{<button type="button" class="close" data-dismiss="alert">&times;</button>\n} .
+        $message = qq{<div class="alert alert-danger alert-dismissible">\n} .
+            qq{<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n} .
             $message . $help . "</div>";
         Hebcal::out_html(undef, $message, "\n");
 
@@ -975,14 +1045,21 @@ EOHTML
         }
     }
 
-    Hebcal::out_html(undef,
-    qq{<div class="form-group"><label for="city-typeahead">City</label>
+    if (defined $q->param("geo") && $q->param("geo") eq "pos") {
+        Hebcal::out_html(undef, latlong_form_html());
+    } else {
+        Hebcal::out_html(undef,
+            qq{<div class="form-group"><label for="city-typeahead">City</label>
 <div class="city-typeahead" style="margin-bottom:12px">},
-    $q->textfield(-name => "city-typeahead",
-          -id => "city-typeahead",
-          -class => "form-control typeahead",
-          -placeholder => "Search for city or ZIP code"),
-    qq{</div></div>\n},
+            $q->textfield(-name => "city-typeahead",
+                  -id => "city-typeahead",
+                  -class => "form-control typeahead",
+                  -placeholder => "Search for city or ZIP code"),
+            qq{</div></div>\n}
+        );
+    }
+
+    Hebcal::out_html(undef,
             qq{<div class="form-group"><label for="b1">Candle-lighting minutes before sundown</label>},
             $q->textfield(
                 -name      => "b",
@@ -1280,8 +1357,8 @@ sub results_page_warnings {
             my $new_url = Hebcal::self_url($q,
                                            {"yt" => "H", "month" => "x"},
                                            "&amp;");
-            Hebcal::out_html(undef, qq{<div class="alert alert-block">
-<button type="button" class="close" data-dismiss="alert">&times;</button>
+            Hebcal::out_html(undef, qq{<div class="alert alert-warning alert-dismissible">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Note!</strong>
 You are viewing a calendar for <strong>Gregorian</strong> year $greg_year1, which
 is $future_years years <em>in the future</em>.</span><br>
@@ -1532,7 +1609,7 @@ EOHTML
         Hebcal::out_html(undef, results_page_toolbar($filename));
     } else {
         Hebcal::out_html(undef,
-        qq{<div class="alert">No Hebrew Calendar events for $date</div>\n});
+        qq{<div class="alert alert-warning">No Hebrew Calendar events for $date</div>\n});
     }
 
     Hebcal::out_html(undef, "</div><!-- .col-sm-8 -->\n");

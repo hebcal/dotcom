@@ -2520,7 +2520,7 @@ sub process_args_common_none {
     my($q,$cconfig) = @_;
     $q->param("geo","none");
     $q->param("c","off");
-    foreach (qw(m zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead geonameid)) {
+    foreach (qw(m b zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead geonameid)) {
 	$q->delete($_);
     }
     if (defined $cconfig) {
