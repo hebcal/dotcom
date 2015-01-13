@@ -1398,7 +1398,7 @@ sub results_page_toolbar {
 EOHTML
 ;
 
-    $html .= HebcalHtml::download_html_modal_button();
+    $html .= HebcalHtml::download_html_modal_button(" btn-sm");
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     if (!param_true("c")) {

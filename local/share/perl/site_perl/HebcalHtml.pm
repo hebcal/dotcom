@@ -382,7 +382,9 @@ EOHTML
 }
 
 sub download_html_modal_button {
-    return qq{<a href="#hcdl-modal" role="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#hcdl-modal">Download ...</a>};
+    my($className) = @_;
+    $className ||= "";
+    return qq{<a href="#hcdl-modal" role="button" class="btn btn-default$className" data-toggle="modal" data-target="#hcdl-modal">Download ...</a>};
 }
 
 
