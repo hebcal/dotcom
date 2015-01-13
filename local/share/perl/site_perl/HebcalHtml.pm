@@ -36,7 +36,7 @@ use strict;
 use URI::Escape;
 use CGI qw(-no_xhtml);
 
-$HebcalHtml::gregorian_warning = qq{<div class="alert alert-warning alert-dismissible alert-block">
+$HebcalHtml::gregorian_warning = qq{<div class="alert alert-warning alert-dismissible">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Results for year 1752 C.E. and earlier may be inaccurate.
@@ -47,7 +47,7 @@ href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a
 </div><!-- .alert -->
 };
 
-$HebcalHtml::indiana_warning = qq{<div class="alert alert-warning alert-dismissible alert-block">
+$HebcalHtml::indiana_warning = qq{<div class="alert alert-warning alert-dismissible">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Indiana has confusing time zone &amp; Daylight Saving Time
@@ -57,7 +57,7 @@ Indiana?</a> to make sure the above settings are correct.
 </div><!-- .alert -->
 };
 
-$HebcalHtml::usno_warning =  qq{<div class="alert alert-warning alert-dismissible alert-block">
+$HebcalHtml::usno_warning =  qq{<div class="alert alert-warning alert-dismissible">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Candle-lighting times are guaranteed to be wrong at extreme
@@ -92,7 +92,7 @@ sub download_button_html {
     my $html5download = ($href =~ m,^(webcal://|http://calendar\.live\.com),) ? "" : qq{ download="$filename"};
 
     my $class = $button_and_icon ? "btn btn-default download" : "download";
-    my $icon = $button_and_icon ? qq{<i class="icon-download-alt"></i> } : "";
+    my $icon = $button_and_icon ? qq{<span class="glyphicon glyphicon-download-alt"></span> } : "";
 
     return qq{<a class="$class" id="$id" title="$filename" href="$href"${nofollow}${html5download}>${icon}Download $button_text</a>};
 }
@@ -162,7 +162,7 @@ EOHTML
 					      "Outlook CSV - European date format (day/month/year)", 1);
     my $ol_csv = <<EOHTML;
 Select one of:
-<ul class="unstyled">
+<ul class="list-unstyled">
 <li>$ol_csv_btn_usa</li>
 <li>$ol_csv_btn_eur</li>
 </ul>
