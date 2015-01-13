@@ -1,79 +1,93 @@
 <!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
-<title>hebcal.com Source Distribution | Hebcal - Jewish Calendar</title>
+<title>Vaera - Torah Portion - פרשת וארא | Hebcal Jewish Calendar</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-967247-1']);
-_gaq.push(['_trackPageview']);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+<!-- http://fonts.googleapis.com/earlyaccess/alefhebrew.css -->
+<style type="text/css">
+@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.ttf) format('truetype')}@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:700;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.ttf) format('truetype')}
+</style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-967247-1', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
 </script>
 <style type="text/css">
-.hebrew {font-family:'SBL Hebrew',Arial;direction:rtl}
-.navbar{position:static}
-body{padding-top:0}
+.label{text-transform:none}
+:lang(he) {
+  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
+  font-size:125%;
+  direction:rtl;
+}
+.hebcal-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  color: #777;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+.hebcal-footer p {
+  margin-bottom: 2px;
+}
+.bullet-list-inline {
+  padding-left: 0;
+  margin-left: -3px;
+  list-style: none;
+}
+.bullet-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.bullet-list-inline li:after{content:"\00a0\00a0\00b7"}
+.bullet-list-inline li:last-child:after{content:""}
 @media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
 }
+@media (min-width: 768px) {
+  input#s {
+    width: 132px;
+  }
+}
 </style>
-
+<meta name="description" content="Parashat Vaera (Exodus 6:2 - 9:35). Read on 17 January 2015 in the Diaspora. Torah reading, Haftarah, links to audio and commentary.">
 </head>
-
-<body class="error404">
-<header role="banner">
-
-<div id="inner-header" class="clearfix">
-  
-<div class="navbar navbar-fixed-top">
-<div class="navbar-inner">
-<div class="container-fluid nav-container">
-  <nav role="navigation">
-  <a class="brand" id="logo" title="Jewish Calendar" href="/">Hebcal</a>
-								
-  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-  </a>
-								
-<div class="nav-collapse">
-  <ul id="menu-default" class="nav"><li id="menu-item-441" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Jewish Holidays" href="http://www.hebcal.com/holidays/" >Holidays</a></li>
-<li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Hebrew Date Converter" href="http://www.hebcal.com/converter/" >Date Converter</a></li>
-<li id="menu-item-440" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Shabbat Times" href="http://www.hebcal.com/shabbat/" >Shabbat</a></li>
-<li id="menu-item-445" class="menu-item menu-item-type-post_type menu-item-object-page"><a title="Torah Readings" href="http://www.hebcal.com/sedrot/" >Torah</a></li>
-<li id="menu-item-324" class="menu-item menu-item-type-post_type menu-item-object-page"><a href="http://www.hebcal.com/home/about" >About</a></li>
-<li id="menu-item-328" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent"><a href="http://www.hebcal.com/home/help" >Help</a></li>
-</ul>								</div>
-
-</nav>
-							
-<form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
-<input name="s" id="s" type="text" class="search-query" placeholder="Search">
-</form>
-
-</div>
-</div>
+<body>
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal"></a>
+    </div>
+    <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav"><li><a href="/holidays/" title="Jewish Holidays">Holidays</a></li><li><a href="/converter/" title="Hebrew Date Converter">Date Converter</a></li><li><a href="/shabbat/" title="Shabbat Times">Shabbat</a></li><li><a href="/sedrot/" title="Torah Readings">Torah</a></li><li><a href="http://www.hebcal.com/home/about" title="About">About</a></li><li><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul>
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+     <input name="s" id="s" type="text" class="form-control" placeholder="Search">
+    </form>
+    </div><!--/.navbar-collapse -->
+  </div>
 </div>
 
-</div> <!-- end #inner-header -->
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm-12">
 
-</header> <!-- end header -->
-
-<div class="container-fluid">
-  
-<div id="content" class="clearfix row-fluid">
-
-<div id="main" class="span12 clearfix" role="main">
-
-<div class="page-header"><h1>hebcal.com Source Distribution</h1></div>
+<h1>hebcal.com Source Distribution</h1>
 
 <p>The <a href="https://github.com/hebcal/dotcom">hebcal.com source
 code</a> is Copyright &copy; 2013 Michael J. Radwin and is released

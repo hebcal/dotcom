@@ -140,7 +140,7 @@ my $AWS_HOST;
 my $ua;
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
 my $DO_AMAZON = 1;
-if ($Config) {
+if ($Config && $Config->{_}->{"hebcal.aws.product-api.host"}) {
     $AWS_HOST = $Config->{_}->{"hebcal.aws.product-api.host"};
     $helper = new RequestSignatureHelper (
     +RequestSignatureHelper::kAWSAccessKeyId => $Config->{_}->{"hebcal.aws.product-api.id"},
@@ -479,9 +479,7 @@ sub get_index_body_preamble {
     }
     my $str = <<EOHTML;
 <div class="$div_class">
-<div class="page-header">
 <h1>$page_title</h1>
-</div>
 <p class="lead">Dates of major and minor Jewish holidays$when. Each
 holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
@@ -1028,9 +1026,7 @@ EOHTML
 <div class="row">
 <div class="col-sm-10">
 $pager
-<div class="page-header">
 <h1>$f / <span lang="he" dir="rtl">$hebrew</span></h1>
-</div>
 <p class="lead">$long_descr.</p>
 EOHTML
 ;

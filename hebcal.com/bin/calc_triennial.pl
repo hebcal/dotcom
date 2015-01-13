@@ -420,10 +420,7 @@ EOHTML
     print OUT1 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<div class="page-header">
 <h1>Torah Readings</h1>
-</div>
-
 <p class="lead">Weekly Torah readings (Parashat ha-Shavua) including
 verses for each aliyah and accompanying Haftarah. Includes
 both traditional (full kriyah) and triennial reading schemes.</p>
@@ -909,12 +906,10 @@ sub write_sedra_page
   <li><a href="/sedrot/#$torah_book">$torah_book</a></li>
   <li class="active">$h</li>
 </ol>
-<div class="page-header">
-<h1 class="entry-title">Parashat $h / <span lang="he" dir="rtl">$hebrew</span></h1>
-</div>
+<h1><span class="hidden-xs">Parashat</span> $h / <span lang="he" dir="rtl">$hebrew</span></h1>
 $intro_summary
-<h3 id="torah">Torah Portion: <a class="outbound"
-href="$torah_href"
+<h3 id="torah"><span class="hidden-xs">Torah Portion:</span>
+<a class="outbound" href="$torah_href"
 title="English translation from JPS Tanakh">$torah</a></h3>
 $ort_tikkun
 </div><!-- .col-sm-12 -->
