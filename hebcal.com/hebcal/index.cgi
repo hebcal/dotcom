@@ -1308,10 +1308,16 @@ sub results_page_toolbar {
 
     my $html = <<EOHTML;
 <div class="btn-toolbar">
-  <div class="btn-group" data-toggle="buttons-radio">
-    <button id="toggle-month" type="button" class="btn btn-default btn-sm active"><i class="glyphicon glyphicon-calendar"></i> Month</button>
-    <button id="toggle-list" type="button" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-list"></i> List</button>
-  </div>
+  <div class="btn-group" data-toggle="buttons">
+   <label class="btn btn-default btn-sm active">
+    <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
+    <span class="glyphicon glyphicon-calendar"></span> Month
+   </label>
+   <label class="btn btn-default btn-sm">
+    <input type="radio" name="view" id="toggle-list" autocomplete="off">
+    <span class="glyphicon glyphicon-list"></span> List
+   </label>
+  </div><!-- .btn-group -->
 EOHTML
 ;
 
@@ -1647,11 +1653,11 @@ EOHTML
 <script src="/i/hebcal-app-1.2.min.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
-    \$('button#toggle-month').on('click', function() {
+    \$('#toggle-month').on('change', function() {
         \$('div.agenda').hide();
         \$('div.cal').show();
     });
-    \$('button#toggle-list').on('click', function() {
+    \$('#toggle-list').on('change', function() {
         \$('div.cal').hide();
         window['hebcal'].renderMonthTables();
         \$('div.agenda').show();
