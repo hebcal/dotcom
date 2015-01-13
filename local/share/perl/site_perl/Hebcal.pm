@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2014 Michael J. Radwin.
+# Copyright (c) 2015 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1384,16 +1384,6 @@ sub zipcode_get_zip_fields($$)
 
 sub html_footer_bootstrap3 {
     my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
-    my $html = html_footer_bootstrap($q,$rcsrev,$noclosebody,$xtra_html);
-    $html =~ s/row-fluid/row/g;
-    $html =~ s/span3/col-sm-3/g;
-    $html =~ s,/i/bootstrap-2.3.1/js/bootstrap.min.js,//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js,;
-    return $html;
-}
-
-sub html_footer_bootstrap
-{
-    my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
 
     my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
 	(stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
@@ -1427,7 +1417,7 @@ $last_updated_text
 </div> <!-- .container -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="/i/bootstrap-2.3.1/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 EOHTML
 ;
 
@@ -1653,101 +1643,6 @@ $xtra_head</head>
     </div><!--/.navbar-collapse -->
   </div>
 </div>
-
-<div class="container">
-<div id="content">
-EOHTML
-;
-    return $str;
-}
-
-
-sub html_header_bootstrap {
-    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title,$hebrew_stylesheet) = @_;
-    $xtra_head = "" unless $xtra_head;
-    my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
-    my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
-    my $xtra_stylesheet = $hebrew_stylesheet
-	? "<link rel=\"stylesheet\" type=\"text/css\" href=\"//fonts.googleapis.com/earlyaccess/alefhebrew.css\">\n"
-	: "";
-    my $str = <<EOHTML;
-<!DOCTYPE html>
-<html><head>
-<meta charset="UTF-8">
-<title>$title2</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" id="bootstrap-css" href="/i/bootstrap-2.3.1/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" id="bootstrap-responsive-css" href="/i/bootstrap-2.3.1/css/bootstrap-responsive.min.css" media="all">
-$xtra_stylesheet<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-967247-1', 'auto');
-  ga('set', 'anonymizeIp', true);
-  ga('send', 'pageview');
-</script>
-<style type="text/css">
-.navbar{position:static}
-body{
- padding-top:0;
- color:#222222;
-}
-:lang(he) {
-  font-family:'Alef Hebrew','SBL Hebrew',David;
-  font-size:125%;
-  font-weight:normal;
-  direction:rtl;
-}
-.hebcal-footer {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  margin-top: 40px;
-  color: #777;
-  text-align: center;
-  border-top: 1px solid #e5e5e5;
-}
-.hebcal-footer p {
-  margin-bottom: 2px;
-}
-.bullet-list-inline {
-  padding-left: 0;
-  margin-left: -3px;
-  list-style: none;
-}
-.bullet-list-inline > li {
-  display: inline-block;
-  padding-right: 3px;
-  padding-left: 3px;
-}
-.bullet-list-inline li:after{content:"\\00a0\\00a0\\00b7"}
-.bullet-list-inline li:last-child:after{content:""}
-\@media print{
- a[href]:after{content:""}
- .sidebar-nav{display:none}
-}
-</style>
-$xtra_head</head>
-<body>
-
-<div class="navbar navbar-fixed-top">
- <div class="navbar-inner">
-   <div class="container-fluid nav-container">
-   <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-   <span class="icon-bar"></span>
-   <span class="icon-bar"></span>
-   <span class="icon-bar"></span>
-   </a>
-   <a href="/" class="brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal"></a>
-   <div class="nav-collapse collapse">
-    $menu
-    <form class="navbar-search pull-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
-    <input name="s" id="s" type="text" class="search-query" placeholder="Search">
-    </form>
-   </div><!-- .nav-collapse -->
-   </div><!-- .container -->
- </div><!-- .navbar-inner -->
-</div><!-- .navbar -->
 
 <div class="container">
 <div id="content">
