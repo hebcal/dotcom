@@ -583,7 +583,7 @@ WHERE g.geonameid = ?
         $sth->finish;
         $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
         $is_israel = 1 if $country eq "Israel";
-        $is_jerusalem = 1 if $is_israel && $name eq "Jerusalem";
+        $is_jerusalem = 1 if $is_israel && $admin1 eq "Jerusalem District";
     } elsif (defined $cfg->{city}) {
         my $city = $cfg->{city};
         ($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
