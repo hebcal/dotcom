@@ -1380,6 +1380,11 @@ accurate.
         if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 }
 
+sub settings_button_html {
+    my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
+    return qq{<a class="btn btn-default btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicon glyphicon-cog"></i> Settings</a>};
+}
+
 sub results_page_toolbar {
     my($filename) = @_;
 
@@ -1431,9 +1436,9 @@ EOHTML
 ;
     }
 
-    my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
+    my $settings_button_html = settings_button_html();
     $html .= <<EOHTML;
-  <a class="btn btn-default btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicon glyphicon-cog"></i> Settings</a>
+  $settings_button_html
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -1609,7 +1614,9 @@ EOHTML
         Hebcal::out_html(undef, results_page_toolbar($filename));
     } else {
         Hebcal::out_html(undef,
-        qq{<div class="alert alert-warning">No Hebrew Calendar events for $date</div>\n});
+            qq{<div class="alert alert-warning">No Hebrew Calendar events for $date</div>\n},
+            settings_button_html(),
+        );
     }
 
     Hebcal::out_html(undef, "</div><!-- .col-sm-8 -->\n");
