@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 set -x
 
 TMPFILE=`mktemp /tmp/tmp.XXXXXXXXXX`
-URL="http://www.hebcal.com/hebcal/index.cgi/export.pdf"
+URL="http://download.hebcal.com/hebcal/index.cgi/export.pdf"
 ARGS="month=x&v=1&nh=on&i=off&lg=s&c=off&geo=none&ny=1&nx=on&mf=on&ss=on&d=on"
 
 year=`date +'%Y'`
