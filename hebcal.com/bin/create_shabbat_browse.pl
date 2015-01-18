@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -218,21 +218,22 @@ EOHTML
 sub write_candle_lighting {
     my($fh,$info,$iso,$show_admin1) = @_;
     my($geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid) = @{$info};
-    my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$name,$admin1);
+    my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$asciiname,$admin1);
     my $comma_admin1 = $show_admin1 && $admin1 && index($admin1, $name) != 0 ? "<small>, $admin1</small>" : "";
     print $fh qq{<li><a href="/shabbat/?geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
 }
 
 sub get_candle_lighting {
-    my($latitude,$longitude,$tzid,$country,$name,$admin1) = @_;
+    my($latitude,$longitude,$tzid,$country,$asciiname,$admin1) = @_;
     my($lat_deg,$lat_min,$long_deg,$long_min) =
         Hebcal::latlong_to_hebcal($latitude, $longitude);
-    my $cmd = $Hebcal::HEBCAL_BIN . " -h -x -c -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = $Hebcal::HEBCAL_BIN . " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
     if ($country eq "IL") {
         $cmd .= " -i";
         $cmd .= " -b 40" if $admin1 eq "Jerusalem District";
     }
-    $cmd .= " $fri_year";
+    $cmd .= " -m 50 -c -s $fri_year";
+    DEBUG("$asciiname, $admin1, $country - $cmd");
     my @events = Hebcal::invoke_hebcal($cmd, "", 0, $fri_month);
     foreach my $evt (@events) {
         my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
