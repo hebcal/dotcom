@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Generates the festival pages for http://www.hebcal.com/holidays/
+# Generates pages for http://www.hebcal.com/shabbat/browse/
 #
 # Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
@@ -84,6 +84,10 @@ my $countries = get_countries();
 
 my($fri_year,$fri_month,$fri_day) = Hebcal::upcoming_dow(5); # friday
 my $shabbat_formatted = Date::Calc::Date_to_Text_Long($fri_year,$fri_month,$fri_day);
+my $parsha = get_parashat_hashavua();
+if ($parsha) {
+    $shabbat_formatted .= " - " . $parsha;
+}
 
 my $written_countries = {};
 foreach my $continent (keys %Hebcal::CONTINENTS) {
@@ -168,14 +172,17 @@ ORDER BY g.asciiname};
     my $fn = "$outdir/$anchor";
     open(my $fh, ">$fn.$$") || die "$fn.$$: $!\n";
 
-    my $page_title = "$country Shabbat Candle Lighting Times";
+    my $title_date = $shabbat_formatted;
+    $title_date =~ s/^Friday, //;
+
+    my $page_title = "$country Shabbat Times - $title_date";
     print $fh Hebcal::html_header_bootstrap3($page_title,
         "/shabbat/browse/$anchor", "ignored");
 
     print $fh <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<h1>$country<small> Shabbat Candle Lighting Times</small></h1>
+<h1>$country <small>Shabbat Candle Lighting Times</small></h1>
 <p class="lead">$shabbat_formatted</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
@@ -213,6 +220,25 @@ EOHTML
     rename("$fn.$$", $fn) || die "$fn: $!\n";
 
     return $num_results;
+}
+
+sub get_parashat_hashavua {
+    my($syear,$smonth,$sday) = Hebcal::upcoming_dow(6); # saturday
+    DEBUG("Shabbat is $syear-$smonth-$sday");
+
+    my $cmd = "$Hebcal::HEBCAL_BIN -s -h -x $syear";
+    DEBUG("Invoking $cmd");
+
+    my @events = Hebcal::invoke_hebcal($cmd, "", 0, $smonth);
+    my $parsha;
+    foreach my $evt (@events) {
+        if ($evt->[$Hebcal::EVT_IDX_MDAY] == $sday) {
+            $parsha = $evt->[$Hebcal::EVT_IDX_SUBJ];
+            last;
+        }
+    }
+
+    return $parsha;
 }
 
 sub write_candle_lighting {
