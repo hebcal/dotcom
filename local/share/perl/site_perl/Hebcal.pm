@@ -469,11 +469,11 @@ sub get_invoke_hebcal_cache {
     $cmd_smashed =~ s/\'//g;
     $cmd_smashed =~ s/\//_/g;
 
-    my $login = getlogin() || getpwuid($<) || "UNKNOWN";
-    my $hccache_dir = "/tmp/${login}-cache/cmd";
+    my $hccache_dir = "/tmp/hebcal-cache/cmd";
 
     unless ( -d $hccache_dir ) {
         system( "/bin/mkdir", "-p", $hccache_dir );
+        chmod 01777, $hccache_dir;
     }
 
     return "$hccache_dir/$cmd_smashed";
