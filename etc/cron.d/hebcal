@@ -1,5 +1,5 @@
 SHELL=/bin/sh
-MAILTO="michael@radwin.org"
+MAILTO="mradwin@hebcal.com"
 HEBCAL_WEB=/var/www
 HEBCAL_BIN=/home/hebcal/local/bin
 
@@ -7,8 +7,7 @@ HEBCAL_BIN=/home/hebcal/local/bin
 #* * * * * hebcal nice touch /tmp/croncheck.hebcal.tmp
 
 # monthly cache cleanup
-0 0 1 * * www-data mv -f /tmp/www-data-cache /tmp/www-data-cache.$$ && rm -rf /tmp/www-data-cache.$$
-0 0 1 * * hebcal mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
+0 0 1 * * www-data mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
 
 # update hebcal.com holiday.inc for front page at midnight
 0 0 * * * hebcal nice $HEBCAL_WEB/bin/gen_current.pl
