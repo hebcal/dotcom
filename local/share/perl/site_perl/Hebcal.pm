@@ -371,19 +371,30 @@ my @TIMEZONES;
 my $TIMEZONE_LIST_INIT;
 
 sub get_timezones {
-    open(ZONE_TAB, $ZONE_TAB) || die "$ZONE_TAB: $!";
-    my @zones;
-    while(<ZONE_TAB>) {
-	chomp;
-	next if /^\#/;
-	my($country,$latlong,$tz,$comments) = split(/\s+/, $_, 4);
-	push(@zones, $tz);
+    if (!$TIMEZONE_LIST_INIT) {
+        open(ZONE_TAB, $ZONE_TAB) || die "$ZONE_TAB: $!";
+        my @zones;
+        while(<ZONE_TAB>) {
+            chomp;
+            next if /^\#/;
+            my($country,$latlong,$tz,$comments) = split(/\s+/, $_, 4);
+            push(@zones, $tz);
+        }
+        close(ZONE_TAB);
+        @TIMEZONES = sort @zones;
+        unshift(@TIMEZONES, "UTC");
+        $TIMEZONE_LIST_INIT = 1;
     }
-    close(ZONE_TAB);
-    @TIMEZONES = sort @zones;
-    unshift(@TIMEZONES, "UTC");
-    $TIMEZONE_LIST_INIT = 1;
     \@TIMEZONES;
+}
+
+sub is_timezone_valid {
+    my($tzid) = @_;
+    my $timezones = get_timezones();
+    foreach my $tz (@{$timezones}) {
+        return 1 if $tzid eq $tz;
+    }
+    return 0;
 }
 
 ########################################################################
@@ -2338,6 +2349,11 @@ sub process_args_common_geopos {
 
     if (! defined $q->param("tzid")) {
 	return (0, "Please select a Time zone", undef);
+    }
+
+    if (!is_timezone_valid($q->param("tzid"))) {
+        return (0, "Sorry, invalid Time zone <strong>" .
+            $q->param("tzid") . "</strong>", undef);
     }
 
     my $tzid = $q->param("tzid");
