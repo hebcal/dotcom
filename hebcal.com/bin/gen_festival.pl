@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -469,13 +469,37 @@ sub table_footer_one_year_only {
     print $fh "</tbody>\n</table>\n";
 }
 
+sub rosh_hashana_ymd {
+    my($year_type,$current_year) = @_;
+    my $evt;
+    if ($year_type eq "H") {
+        my $i = $current_year - $HEB_YR + 1;
+        $evt = $EVENTS_BY_HEBYEAR[$i]->{"Rosh Hashana"};
+    } else {
+        my $i = $current_year - $FIRST_GREG_YR;
+        $evt = $EVENTS_BY_GREGYEAR[$i]->{"Rosh Hashana"};
+    }
+    return Hebcal::event_ymd($evt);
+}
+
 sub get_index_body_preamble {
     my($page_title,$do_multi_year,$year_type,$current_year,$div_class) = @_;
 
     my $when = "";
+    my $rh_erev = "Sep 18";
+    my $rh_range = "Sep 19-20";
+    my $rh_end = "Sep 20";
     if ($current_year) {
         $when = $year_type eq "H" ?
             " for Hebrew Year $current_year" : " for $current_year";
+
+        my($rh1y,$rh1m,$rh1d) = rosh_hashana_ymd($year_type,$current_year);
+        my($rh2y,$rh2m,$rh2d) = Date::Calc::Add_Delta_Days($rh1y,$rh1m,$rh1d,1);
+        my($rh0y,$rh0m,$rh0d) = Date::Calc::Add_Delta_Days($rh1y,$rh1m,$rh1d,-1);
+
+        $rh_erev = format_single_day($rh0y, $rh0m, $rh0d, 0);
+        $rh_range = format_date_plus_delta($rh1y, $rh1m, $rh1d, 1, 0);
+        $rh_end = format_single_day($rh2y, $rh2m, $rh2d, 0);
     }
     my $str = <<EOHTML;
 <div class="$div_class">
@@ -485,8 +509,8 @@ holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
-Hashana were listed as <strong>Sep 19-20</strong>, then the holiday begins at
-sundown on <strong>Sep 18</strong> and ends at nightfall on <strong>Sep 20</strong>.</p>
+Hashana were listed as <strong>$rh_range</strong>, then the holiday begins at
+sundown on <strong>$rh_erev</strong> and ends at nightfall on <strong>$rh_end</strong>.</p>
 EOHTML
 ;
 
@@ -496,9 +520,9 @@ EOHTML
 
     $str .= <<EOHTML;
 <div class="btn-toolbar">
-<a class="btn btn-default btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><i class="glyphicon glyphicon-print"></i> Print PDF</a>
-<a class="btn btn-default btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><i class="glyphicon glyphicon-download-alt"></i> Download Calendar</a>
-<a class="btn btn-default btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><i class="glyphicon glyphicon-pencil"></i> Customize your calendar</a>
+  <a class="btn btn-default btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><span class="glyphicon glyphicon-print"></span> Print</a>
+  <a class="btn btn-default btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+  <a class="btn btn-default btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><span class="glyphicon glyphicon-pencil"></span> Customize</a>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -609,32 +633,19 @@ EOHTML
     }
 }
 
-sub pagination_hebrew {
-    my($current_year) = @_;
-
-    my $s = qq{<nav><ul class="pagination">\n};
-    foreach my $j (0 .. $NUM_YEARS) {
-        my $other_yr = $HEB_YR + $j - 1;
-        my $other_greg_yr1 = $other_yr - 3761;
-        my $other_greg_yr2 = $other_greg_yr1 + 1;
-        my $other_slug = "$other_greg_yr1-$other_greg_yr2";
-
-        if ($current_year == $j) {
-            $s .= qq{<li class="active">};
-        } else {
-            $s .= qq{<li>};
-        }
-        $s .= qq{<a title="$other_slug" href="$other_slug">$other_yr</a></li>\n};
-    }
-    $s .= qq{</ul></nav>\n};
-
-    return $s;
+sub pagination_greg_url {
+    my($year) = @_;
+    return "/hebcal/?year=$year&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on";
 }
 
 sub pagination_greg {
     my($current_year) = @_;
 
-    my $s = qq{<nav><ul class="pagination">\n};
+    my $s = qq{<nav><ul class="pagination pagination-sm" style="margin: 12px 0 0 0">\n};
+
+    my $prev_year = $FIRST_GREG_YR - 1;
+    $s .= qq{<li><a title="$prev_year" aria-label="Previous" href="} . pagination_greg_url($prev_year) . qq{"><span aria-hidden="true">&laquo;</span></a></li>\n};
+
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $FIRST_GREG_YR + $j;
         if ($current_year == $j) {
@@ -644,6 +655,10 @@ sub pagination_greg {
         }
         $s .= qq{<a href="$other_yr">$other_yr</a></li>\n};
     }
+
+    my $next_year = $FIRST_GREG_YR + $NUM_YEARS + 1;
+    $s .= qq{<li><a title="$next_year" aria-label="Next" href="} . pagination_greg_url($next_year) . qq{"><span aria-hidden="true">&raquo;</span></a></li>\n};
+
     $s .= qq{</ul></nav>\n};
 
     return $s;
@@ -686,6 +701,8 @@ EOHTML
     print $fh qq{<div class="row">\n};
     print $fh qq{<div class="col-sm-12">\n};
 
+    print $fh pagination_greg($i);
+
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
         print $fh qq{<div id="$table_id">\n};
@@ -705,9 +722,6 @@ EOHTML
         table_footer_one_year_only($fh, $table_id);
         print $fh qq{</div><!-- #$table_id -->\n};
     }
-
-    print $fh pagination_greg($i);
-    print $fh pagination_hebrew(-1);
 
     print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
@@ -757,6 +771,8 @@ EOHTML
     print $fh qq{<div class="row">\n};
     print $fh qq{<div class="col-sm-12">\n};
 
+    print $fh pagination_greg(-1);
+
     foreach my $section (@{$sections}) {
         my($heading,$table_id) = get_heading_and_table_id($section);
         print $fh qq{<div id="$table_id">\n};
@@ -769,9 +785,6 @@ EOHTML
         table_footer_one_year_only($fh, $table_id);
         print $fh qq{</div><!-- #$table_id -->\n};
     }
-
-    print $fh pagination_greg(-1);
-    print $fh pagination_hebrew($i);
 
     print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
