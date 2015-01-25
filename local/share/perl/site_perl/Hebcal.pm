@@ -2352,8 +2352,8 @@ sub process_args_common_geopos {
     }
 
     if (!is_timezone_valid($q->param("tzid"))) {
-        return (0, "Sorry, invalid Time zone <strong>" .
-            $q->param("tzid") . "</strong>", undef);
+        return (0, "Sorry, can't find <strong>" . $q->param("tzid")
+            . "</strong> in our Time zone database", undef);
     }
 
     my $tzid = $q->param("tzid");

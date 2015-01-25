@@ -116,10 +116,10 @@ if (! defined $pi) {
 } elsif ($pi =~ /[^\/]+\.[vi]cs$/) {
     $cfg = "ics";
     $content_type = "text/calendar";
-} elsif (defined $q->param("cfg") && $q->param("cfg") =~ /^(e|e2|json)$/) {
+} elsif (defined $q->param("cfg") && $q->param("cfg") =~ /^(e|e2|json|fc)$/) {
     $cfg = $q->param("cfg");
-    $content_type = $q->param("cfg") eq "json"
-        ? "application/json" : "text/javascript";
+    $content_type = substr($q->param("cfg"), 0, 1) eq "e"
+        ? "text/javascript" : "application/json";
 } else {
     $cfg = "html";
 }
@@ -145,6 +145,22 @@ if (defined $q->param("year") && $q->param("year") eq "now" &&
                                $this_year - 1900);
 
     $http_expires = Hebcal::http_date($end_of_month);
+}
+
+if ($cfg eq "fc" && defined $q->param("start") && defined $q->param("end")) {
+    my $start_year = -1;
+    if ($q->param("start") =~ /^(\d{4})-\d{2}-\d{2}$/) {
+        $start_year = $1;
+        $q->param("year", $start_year);
+        $q->param("month", "x");
+        $q->param("yt", "G");
+    }
+    if ($q->param("end") =~ /^(\d{4})-\d{2}-\d{2}$/) {
+        my $y2 = $1;
+        if ($y2 ne $start_year) {
+            $q->param("ny", 2);
+        }
+    }
 }
 
 form("Please specify a year.")
@@ -276,20 +292,22 @@ my $g_nmodern = (defined $q->param("mod") && $q->param("mod") =~ /^on|1$/) ? 0 :
 
 if ($cfg eq "html") {
     results_page($g_date, $g_filename);
-} elsif ($cfg eq "csv") {
-    csv_display();
-} elsif ($cfg eq "dba") {
-    dba_display();
-} elsif ($cfg eq "pdf") {
-    pdf_display();
+} elsif ($cfg eq "json") {
+    json_events();
 } elsif ($cfg eq "ics") {
     vcalendar_display();
+} elsif ($cfg eq "csv") {
+    csv_display();
+} elsif ($cfg eq "pdf") {
+    pdf_display();
+} elsif ($cfg eq "fc") {
+    fullcalendar_events();
+} elsif ($cfg eq "dba") {
+    dba_display();
 } elsif ($cfg eq "e") {
     javascript_events(0);
 } elsif ($cfg eq "e2") {
     javascript_events(1);
-} elsif ($cfg eq "json") {
-    json_events();
 } else {
     die "unknown cfg \"$cfg\"";
 }
@@ -310,6 +328,79 @@ sub param_true
     my($k) = @_;
     my $v = $q->param($k);
     return ((defined $v) && ($v ne "off") && ($v ne "0") && ($v ne "")) ? 1 : 0;
+}
+
+sub fullcalendar_event {
+    my($evt) = @_;
+
+    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+    my $hour24 = $evt->[$Hebcal::EVT_IDX_HOUR];
+    my $allDay = $evt->[$Hebcal::EVT_IDX_UNTIMED];
+
+    my $start = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
+    if (!$allDay) {
+        $start .= sprintf("T%02d:%02d:00", $hour24, $min);
+    }
+
+    my $className = Hebcal::event_category($subj);
+    $className .= " yomtov" if $evt->[$Hebcal::EVT_IDX_YOMTOV];
+
+    my $out = {
+        title => $subj,
+        allDay => $allDay ? \1 : \0,
+        className => $className,
+        start => $start,
+    };
+
+    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
+    $out->{"hebrew"} = $hebrew if $hebrew;
+    $out->{"url"} = $href if $href;
+    $out->{"description"} = $memo if $memo;
+
+    return $out;
+}
+
+sub fullcalendar_filter_events {
+    my($events) = @_;
+    my($sy,$sm,$sd) = split(/-/, $q->param("start"), 3);
+    my $start_julian = Date::Calc::Date_to_Days($sy,$sm,$sd);
+    my($ey,$em,$ed) = split(/-/, $q->param("end"), 3);
+    my $end_julian = Date::Calc::Date_to_Days($ey,$em,$ed);
+    my @out;
+    foreach my $evt (@{$events}) {
+        my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+        my $julian = Date::Calc::Date_to_Days($year,$mon,$mday);
+        next if $julian < $start_julian;
+        last if $julian > $end_julian;
+        push(@out, $evt);
+    }
+    return \@out;
+}
+
+sub fullcalendar_events {
+    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+
+    my $title = $g_date;
+    plus4_events($cmd, \$title, \@events);
+
+    print STDOUT $q->header(-type => $content_type,
+                            -charset => "UTF-8",
+                            -cache_control => $http_cache_control,
+                            -access_control_allow_origin => '*',
+                            );
+
+    my $filtered = fullcalendar_filter_events(\@events);
+    my @out;
+    foreach my $evt (@{$filtered}) {
+        push(@out, fullcalendar_event($evt));
+    }
+
+    eval("use JSON");
+    my $json = JSON->new;
+    print STDOUT $json->encode(\@out);
 }
 
 sub json_events
@@ -842,15 +933,20 @@ sub form
 {
     my($message,$help) = @_;
 
+    my $http_status = $message eq "" ? "200 OK" : "400 Bad Request";
+
     print STDOUT $q->header(-type => $content_type,
-                            -charset => "UTF-8");
+                            -charset => "UTF-8",
+                            -status => $http_status);
 
     if ($message ne "" && $cfg ne "html") {
         if ($cfg =~ /^(e|e2)$/) {
             $message =~ s/\"/\\"/g;
+            $message =~ s/\n/\\n/g;
             print STDOUT qq{alert("Error: $message");\n};
-        } elsif ($cfg eq "json") {
+        } elsif ($content_type eq "application/json") {
             $message =~ s/\"/\\"/g;
+            $message =~ s/\n/\\n/g;
             print STDOUT "{\"error\":\"$message\"}\n";
         } else {
             print STDOUT $message, "\n";
