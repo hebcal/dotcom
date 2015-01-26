@@ -249,36 +249,6 @@ sub cache_end {
     1;
 }
 
-sub out_html
-{
-    my($cfg,@args) = @_;
-
-    if (defined $cfg && $cfg eq 'j')
-    {
-        print STDOUT "document.write(\"";
-        print CACHE "document.write(\"" if $cache;
-        foreach (@args)
-        {
-            s/\"/\\\"/g;
-            s/\n/\\n/g;
-            print STDOUT;
-            print CACHE if $cache;
-        }
-        print STDOUT "\");\n";
-        print CACHE "\");\n" if $cache;
-    }
-    else
-    {
-        foreach (@args)
-        {
-            print STDOUT;
-            print CACHE if $cache;
-        }
-    }
-
-    1;
-}
-
 sub export_http_header($$) {
     my($q,$mime) = @_;
 

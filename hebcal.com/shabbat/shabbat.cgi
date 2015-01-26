@@ -126,6 +126,27 @@ else
 
 exit(0);
 
+sub out_html {
+    my($cfg,@args) = @_;
+
+    if (defined $cfg && $cfg eq 'j') {
+        print STDOUT "document.write(\"";
+        foreach (@args) {
+            s/\"/\\\"/g;
+            s/\n/\\n/g;
+            print STDOUT;
+        }
+        print STDOUT "\");\n";
+    }
+    else {
+        foreach (@args) {
+            print STDOUT;
+        }
+    }
+
+    1;
+}
+
 sub possibly_set_cookie {
     my $cookies = Hebcal::get_cookies($q);
     my $newcookie = Hebcal::gen_cookie($q);
@@ -215,7 +236,7 @@ sub self_url
 sub timestamp_comment {
     my $tend = Benchmark->new;
     my $tdiff = timediff($tend, $t0);
-    Hebcal::out_html($cfg, "<!-- generated ", scalar(localtime), "; ",
+    out_html($cfg, "<!-- generated ", scalar(localtime), "; ",
         timestr($tdiff), " -->\n");
 }
 
@@ -227,7 +248,7 @@ sub display_wml
 
     print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
 
-    Hebcal::out_html($cfg,
+    out_html($cfg,
 qq{<?xml version="1.0"?>
 <!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
 "http://www.wapforum.org/DTD/wml_1.1.xml">
@@ -241,23 +262,23 @@ qq{<?xml version="1.0"?>
         my $subj = $item->{'subj'};
         $subj =~ s/^Candle lighting/Candles/;
 
-        Hebcal::out_html($cfg, "<p>$subj");
+        out_html($cfg, "<p>$subj");
 
         if ($item->{'class'} =~ /^(candles|havdalah)$/)
         {
             my $pm = $item->{'time'};
             $pm =~ s/pm$/p/;
-            Hebcal::out_html($cfg, ": $pm");
+            out_html($cfg, ": $pm");
         }
         elsif ($item->{'class'} eq 'holiday')
         {
-            Hebcal::out_html($cfg, "<br/>\n", $item->{'date'});
+            out_html($cfg, "<br/>\n", $item->{'date'});
         }
 
-        Hebcal::out_html($cfg, "</p>\n");
+        out_html($cfg, "</p>\n");
     }
 
-    Hebcal::out_html($cfg, "</card>\n</wml>\n");
+    out_html($cfg, "</card>\n</wml>\n");
     timestamp_comment();
 }
 
@@ -326,7 +347,7 @@ sub display_rss
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
     my $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
-    Hebcal::out_html($cfg,
+    out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
@@ -348,7 +369,7 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 
         my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
 
-        Hebcal::out_html($cfg,
+        out_html($cfg,
 qq{<item>
 <title>$subj</title>
 <link>$link</link>
@@ -359,16 +380,16 @@ qq{<item>
 });
 
         if ($item->{'class'} eq "candles" && defined $latitude) {
-            Hebcal::out_html($cfg,
+            out_html($cfg,
 qq{<geo:lat>$latitude</geo:lat>
 <geo:long>$longitude</geo:long>
 });
       }
 
-        Hebcal::out_html($cfg, "</item>\n");
+        out_html($cfg, "</item>\n");
     }
 
-    Hebcal::out_html($cfg, "</channel>\n</rss>\n");
+    out_html($cfg, "</channel>\n</rss>\n");
     timestamp_comment();
 }
 
@@ -376,13 +397,13 @@ sub display_html_common
 {
     my($items) = @_;
 
-    Hebcal::out_html($cfg,"<!-- $cmd_pretty -->\n");
-    Hebcal::out_html($cfg,"<ul class=\"hebcal-results\">\n");
+    out_html($cfg,"<!-- $cmd_pretty -->\n");
+    out_html($cfg,"<ul class=\"hebcal-results\">\n");
 
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
     foreach my $item (@{$items}) {
-        Hebcal::out_html($cfg,qq{<li class="$item->{'class'}">});
+        out_html($cfg,qq{<li class="$item->{'class'}">});
 
         my $anchor = '';
         if (!$cfg)
@@ -399,23 +420,23 @@ sub display_html_common
 
         if ($item->{'class'} =~ /^(candles|havdalah)$/)
         {
-            Hebcal::out_html($cfg,qq{<a$anchor></a>})
+            out_html($cfg,qq{<a$anchor></a>})
                 unless $cfg;
-            Hebcal::out_html($cfg,qq{$item->{'subj'}: <strong>$item->{'time'}</strong> on $item->{'date'}});
+            out_html($cfg,qq{$item->{'subj'}: <strong>$item->{'time'}</strong> on $item->{'date'}});
         }
         elsif ($item->{'class'} eq 'holiday')
         {
-            Hebcal::out_html($cfg,qq{<a$anchor target="$tgt" href="$link">$item->{'subj'}</a> occurs on $item->{'date'}});
+            out_html($cfg,qq{<a$anchor target="$tgt" href="$link">$item->{'subj'}</a> occurs on $item->{'date'}});
         }
         elsif ($item->{'class'} eq 'parashat')
         {
-            Hebcal::out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$link">$item->{'subj'}</a>});
+            out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$link">$item->{'subj'}</a>});
         }
 
-        Hebcal::out_html($cfg,qq{</li>\n});
+        out_html($cfg,qq{</li>\n});
     }
 
-    Hebcal::out_html($cfg,"</ul>\n");
+    out_html($cfg,"</ul>\n");
 }
 
 sub display_javascript
@@ -428,7 +449,7 @@ sub display_javascript
 
     if ($cfg eq "i" || $cfg eq "widget") {
         print $q->header(-type => $content_type, -charset => "UTF-8");
-        Hebcal::out_html($cfg, qq{<!DOCTYPE html>
+        out_html($cfg, qq{<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
@@ -453,7 +474,7 @@ ul.hebcal-results{list-style-type:none}
         $loc_class =~ s/\s+/-/g;
     }
 
-    Hebcal::out_html($cfg, qq{<div id="hebcal">\n},
+    out_html($cfg, qq{<div id="hebcal">\n},
                      qq{<div class="hebcal-$loc_class">\n},
                      qq{<h3>$shabbat times for $city_descr</h3>\n});
 
@@ -469,7 +490,7 @@ ul.hebcal-results{list-style-type:none}
         $url = "javascript:widget.openURL('" . $url . "');";
     }
 
-    Hebcal::out_html($cfg, qq{<div class="copyright">
+    out_html($cfg, qq{<div class="copyright">
 <small>Powered by <a target="$tgt" href="$url">Hebcal $shabbat Times</a></small>
 </div><!-- .copyright -->
 </div><!-- .hebcal-$loc_class -->
@@ -478,7 +499,7 @@ ul.hebcal-results{list-style-type:none}
     }
 
     if ($cfg eq "i" || $cfg eq "widget") {
-        Hebcal::out_html($cfg, "</body></html>\n");
+        out_html($cfg, "</body></html>\n");
     }
 
     timestamp_comment();
@@ -513,10 +534,10 @@ sub display_html
         . join(". ", @description_items) . qq{.">\n};
     my_head($title,$xtra_head);
 
-    Hebcal::out_html($cfg, $HebcalHtml::indiana_warning)
+    out_html($cfg, $HebcalHtml::indiana_warning)
         if ($city_descr =~ / IN /);
 
-    Hebcal::out_html(undef, $HebcalHtml::usno_warning)
+    out_html(undef, $HebcalHtml::usno_warning)
         if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 
     display_html_common($items);
@@ -616,7 +637,7 @@ EOHTML
 EOHTML
 ;
 
-    Hebcal::out_html($cfg,
+    out_html($cfg,
         HebcalHtml::header_bootstrap3($title, $script_name, "",
             $xtra_head . $xtra_head2),
         $head_divs
@@ -648,7 +669,7 @@ sub form($$$$)
 
     if (defined $cfg && $cfg eq 'w')
     {
-        Hebcal::out_html($cfg,qq{<p>$message</p>\n},
+        out_html($cfg,qq{<p>$message</p>\n},
                   qq{<do type="accept" label="Back">\n},
                   qq{<prev/>\n</do>\n</card>\n</wml>\n});
         exit(0);
@@ -662,7 +683,7 @@ sub form($$$$)
             $message . $help . "</div>";
     }
 
-    Hebcal::out_html($cfg, $message);
+    out_html($cfg, $message);
 
     my $form_hidden = join("",
         $q->hidden(-name => "geo",
@@ -711,7 +732,7 @@ $form_hidden
 EOHTML
 ;
 
-    Hebcal::out_html($cfg, $form_html);
+    out_html($cfg, $form_html);
 
     my $more_from_hebcal = $cconfig{"geo"} ? more_from_hebcal() : "";
 
@@ -758,7 +779,7 @@ $more_from_hebcal
 </div><!-- .row -->
 EOHTML
 ;
-    Hebcal::out_html(undef, $footer_divs2);
+    out_html(undef, $footer_divs2);
 
 
     my $xtra_html=<<JSCRIPT_END;
@@ -771,8 +792,8 @@ window['hebcal'].createCityTypeahead(false);
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, HebcalHtml::footer_bootstrap3($q, undef, 1, $xtra_html));
-    Hebcal::out_html($cfg, "</body></html>\n");
+    out_html(undef, HebcalHtml::footer_bootstrap3($q, undef, 1, $xtra_html));
+    out_html($cfg, "</body></html>\n");
     timestamp_comment();
     exit(0);
 }
