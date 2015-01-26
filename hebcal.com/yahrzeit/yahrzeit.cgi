@@ -49,6 +49,7 @@ use Encode qw(decode_utf8);
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
+use HebcalExport ();
 use POSIX ();
 use Date::Calc ();
 
@@ -92,13 +93,8 @@ foreach my $key ($q->param())
     }
 }
 
-my $cfg = $q->param("cfg");
-$cfg ||= "";
-
 my $count;
-if ($cfg eq "i" || $cfg eq "j") {
-    $count = 1;
-} elsif (defined $q->param("count") && $q->param("count") =~ /^\d+$/) {
+if (defined $q->param("count") && $q->param("count") =~ /^\d+$/) {
     $count = $q->param("count");
 } else {
     $count = 1;
@@ -197,7 +193,7 @@ sub vcalendar_display
     }
     $title .= " for " . join('\, ', @names);
 
-    Hebcal::vcalendar_write_contents($q, \@events, $title, undef);
+    HebcalExport::vcalendar_write_contents($q, \@events, $title, undef);
 }
 
 sub dba_display
@@ -206,7 +202,7 @@ sub dba_display
 
     my @events = my_invoke_hebcal();
 
-    Hebcal::export_http_header($q, "application/x-palm-dba");
+    HebcalExport::export_http_header($q, "application/x-palm-dba");
 
     my $path_info = $q->path_info();
     $path_info =~ s,^.*/,,;
@@ -220,7 +216,7 @@ sub csv_display
     my @events = my_invoke_hebcal();
 
     my $euro = defined $q->param("euro") ? 1 : 0;
-    Hebcal::csv_write_contents($q, \@events, $euro);
+    HebcalExport::csv_write_contents($q, \@events, $euro);
 }
 
 
@@ -375,49 +371,29 @@ sub my_invoke_hebcal {
 }
 
 sub results_page {
-    my $type =  ($cfg eq "j") ? "text/javascript" : "text/html";
+    my $type = "text/html";
 
     print STDOUT $q->header(-type => "$type;charset=UTF-8");
 
-    if ($cfg eq "j")
-    {
-        # nothing
-    }
-    else
-    {
-        my $xtra_head = <<EOHTML;
+    my $xtra_head = <<EOHTML;
 <meta name="keywords" content="yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish">
 EOHTML
 ;
 
-        Hebcal::out_html($cfg,
-                         HebcalHtml::header_bootstrap3("Yahrzeit + Anniversary Calendar",
-                                             $script_name,
-                                             "single single-post",
-                                             $xtra_head)
-            );
-        Hebcal::out_html($cfg, qq{<div class="row">\n<div class="col-sm-12">\n});
-    }
-
-    if ($cfg eq "i" || $cfg eq "j")
-    {
-        my $self_url = join("", "http://", $q->virtual_host(), $script_name);
-        Hebcal::out_html
-            ($cfg,
-             "<h3><a target=\"_top\"\nhref=\"$self_url\">Yahrzeit,\n",
-             "Birthday and Anniversary\nCalendar</a></h3>\n");
-    }
+    print HebcalHtml::header_bootstrap3("Yahrzeit + Anniversary Calendar",
+        $script_name, "", $xtra_head);
+    print qq{<div class="row">\n<div class="col-sm-12">\n};
 
     if ($q->param("ref_url"))
     {
         my $ref_url = $q->param("ref_url");
         my $ref_text = $q->param("ref_text") || $ref_url;
-        Hebcal::out_html($cfg, qq{<div class="alert alert-info alert-dismissible" role="alert" style="margin-top:12px">
+        print qq{<div class="alert alert-info alert-dismissible" role="alert" style="margin-top:12px">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <p>Welcome to the Hebcal Yahrzeit + Anniversary Calendar.</p>
 <p><a href="$ref_url">Return to $ref_text</a></p>
 </div><!-- .alert -->
-});
+};
     }
 
     form(1,'') unless scalar(@inputs) >= 1;
@@ -427,15 +403,14 @@ EOHTML
     if (scalar(@events) > 0) {
         $q->param("v", "yahrzeit");
 
-        Hebcal::out_html($cfg, qq{<div class="btn-toolbar">\n});
-        Hebcal::out_html($cfg, HebcalHtml::download_html_modal_button());
-        Hebcal::out_html($cfg, qq{<a class="btn btn-default" href="#form"><i class="glyphicon glyphicon-cog"></i> Enter more dates and names</a>\n});
-        Hebcal::out_html($cfg, qq{</div><!-- .btn-toolbar -->\n});
+        print qq{<div class="btn-toolbar">\n};
+        print HebcalHtml::download_html_modal_button();
+        print qq{<a class="btn btn-default" href="#form"><i class="glyphicon glyphicon-cog"></i> Enter more dates and names</a>\n};
+        print qq{</div><!-- .btn-toolbar -->\n};
 
-        Hebcal::out_html($cfg,
-                          qq{<p>Yahrzeit candles should be lit
+        print qq{<p>Yahrzeit candles should be lit
 the evening before the date specified. This is because the Jewish
-day actually begins at sundown on the previous night.</p>\n});
+day actually begins at sundown on the previous night.</p>\n};
     }
 
     foreach my $evt (@events) {
@@ -443,19 +418,20 @@ day actually begins at sundown on the previous night.</p>\n});
                                            $evt->[$Hebcal::EVT_IDX_MON] + 1,
                                            $evt->[$Hebcal::EVT_IDX_MDAY]);
         if ($hdate->{"mm"} >= $HebcalGPL::ADAR_I) {
-            Hebcal::out_html($cfg, qq{<div class="alert alert-info alert-dismissible" role="alert">
+            print qq{<div class="alert alert-info alert-dismissible" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Note:</strong> the results below contain one or more anniversary in Adar.
 To learn more about how Hebcal handles these dates, read <a
 href="/home/54/how-does-hebcal-determine-an-anniversary-occurring-in-adar">How
 does Hebcal determine an anniversary occurring in Adar?</a>
 </div><!-- .alert -->
-});
+};
             last;
         }
     }
 
-    Hebcal::out_html($cfg, qq{<table class="table table-condensed table-striped">}) unless ($q->param("yizkor"));
+    print qq{<table class="table table-condensed table-striped">}
+        unless $q->param("yizkor");
 
     my $prev_year = 0;
     foreach my $evt (@events)
@@ -465,21 +441,19 @@ does Hebcal determine an anniversary occurring in Adar?</a>
 
         if ($year != $prev_year && $q->param("yizkor"))
         {
-            Hebcal::out_html($cfg, "</table>") unless $prev_year == 0;
-            Hebcal::out_html($cfg, qq{<h4>$year</h4>\n<table class="table table-condensed table-striped">});
+            print "</table>" unless $prev_year == 0;
+            print qq{<h4>$year</h4>\n<table class="table table-condensed table-striped">};
         }
 
         my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 
-        Hebcal::out_html
-            ($cfg,
-             sprintf(qq{<tr><td style="width:130px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
-                     $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
-                     HebcalHtml::html_entify($subj)));
+        printf(qq{<tr><td style="width:130px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
+            $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
+            HebcalHtml::html_entify($subj));
         $prev_year = $year;
     }
 
-    Hebcal::out_html($cfg, "</table>\n");
+    print "</table>\n";
 
     my $xtra_html = '';
     if (scalar(@events) > 0) {
@@ -497,7 +471,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
         $xtra_html = HebcalHtml::download_html_modal($q, $filename, \@events, $title, 1, 1);
     }
 
-    Hebcal::out_html($cfg, qq{<h3 id="form">Enter more dates and names</h3>\n});
+    print qq{<h3 id="form">Enter more dates and names</h3>\n};
 
     form(0,$xtra_html);
 }
@@ -531,8 +505,7 @@ sub form
 {
     my($head,$xtra_html) = @_;
 
-    Hebcal::out_html($cfg,
-qq{<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
+    print qq{<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>20 October 1994 (after
 sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</strong>&apos;s
@@ -541,13 +514,13 @@ yahrzeit.</p>
 href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
 <form method="post" action="/yahrzeit/">
-});
+};
 
     for (my $i = 1; $i <= $count; $i++) {
-        show_row($q,$cfg,$i,\%Hebcal::MoY_long);
+        show_row($q,$i,\%Hebcal::MoY_long);
     }
 
-    Hebcal::out_html($cfg, qq{<div class="checkbox">\n<label>},
+    print qq{<div class="checkbox">\n<label>},
     $q->checkbox(-name => "hebdate",
                  -checked => "checked",
                  -label => "Include Hebrew dates"),
@@ -572,41 +545,30 @@ and then come back to this page.</p>
     $q->hidden(-name => ".cgifields",
                -values => ["hebdate", "yizkor"],
                -override => 1), "\n",
-    qq{<input type="submit" class=\"btn btn-primary\" value="Create Calendar"></form>\n});
+    qq{<input type="submit" class=\"btn btn-primary\" value="Create Calendar"></form>\n};
 
-    if ($cfg eq "i")
-    {
-        Hebcal::out_html($cfg, "</body></html>\n");
-    }
-    elsif ($cfg eq "j")
-    {
-        # nothing
-    }
-    else
-    {
-        Hebcal::out_html($cfg,qq{
+    print qq{
 <p>Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
-});
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+};
 
-        Hebcal::out_html($cfg, qq{</div><!-- .col-sm-12 -->\n</div><!-- .row -->\n});
-        Hebcal::out_html($cfg, HebcalHtml::footer_bootstrap3($q,undef,0,$xtra_html));
-    }
+    print HebcalHtml::footer_bootstrap3($q,undef,0,$xtra_html);
 
     exit(0);
 }
 
 sub show_row {
-    my($q,$cfg,$i,$months) = @_;
+    my($q,$i,$months) = @_;
 
     my $style = "border-bottom:1px solid #dddddd;padding:4px";
     if (($i - 1) % 2 == 0) {
         $style .= ";background-color:#f9f9f9";
     }
-    Hebcal::out_html
-        ($cfg,
-         qq{<div class="form-inline" style="$style">\n},
+
+    print qq{<div class="form-inline" style="$style">\n},
          $q->popup_menu(-name => "t$i",
                         -class => "form-control",
                         -values => ["Yahrzeit","Birthday","Anniversary"]),
@@ -643,8 +605,7 @@ sub show_row {
                       -label => " After sunset"),
          qq{</label>\n},
          qq{</div><!-- .checkbox -->\n},
-         qq{</div><!-- .form-inline -->\n},
-         );
+         qq{</div><!-- .form-inline -->\n};
 }
 
 # local variables:
