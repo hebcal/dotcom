@@ -49,7 +49,6 @@ use Encode qw(decode_utf8);
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
-use HebcalExport ();
 use POSIX ();
 use Date::Calc ();
 
@@ -193,6 +192,7 @@ sub vcalendar_display
     }
     $title .= " for " . join('\, ', @names);
 
+    eval("use HebcalExport");
     HebcalExport::vcalendar_write_contents($q, \@events, $title, undef);
 }
 
@@ -202,6 +202,7 @@ sub dba_display
 
     my @events = my_invoke_hebcal();
 
+    eval("use HebcalExport");
     HebcalExport::export_http_header($q, "application/x-palm-dba");
 
     my $path_info = $q->path_info();
@@ -216,6 +217,7 @@ sub csv_display
     my @events = my_invoke_hebcal();
 
     my $euro = defined $q->param("euro") ? 1 : 0;
+    eval("use HebcalExport");
     HebcalExport::csv_write_contents($q, \@events, $euro);
 }
 
