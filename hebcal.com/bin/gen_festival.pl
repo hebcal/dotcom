@@ -47,6 +47,7 @@ use HTTP::Request;
 use POSIX qw(strftime);
 use Digest::SHA qw(hmac_sha256_base64);
 use Hebcal ();
+use HebcalHtml ();
 use HebcalConst;
 use Date::Calc;
 use RequestSignatureHelper;
@@ -591,7 +592,7 @@ EOHTML
     }
 
     my $page_title = "Jewish Holidays";
-    print OUT3 Hebcal::html_header_bootstrap3(
+    print OUT3 HebcalHtml::header_bootstrap3(
         $page_title, "/holidays/", "ignored",  $meta);
 
     print OUT3 qq{<div class="row">\n};
@@ -619,7 +620,7 @@ EOHTML
 
     print OUT3 qq{</div><!-- .col-sm-12 -->\n};
     print OUT3 qq{</div><!-- .row -->\n};
-    print OUT3 Hebcal::html_footer_bootstrap3(undef, undef);
+    print OUT3 HebcalHtml::footer_bootstrap3(undef, undef);
 
     close(OUT3);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -680,7 +681,7 @@ sub write_greg_year_index_page {
 EOHTML
 ;
 
-    print $fh Hebcal::html_header_bootstrap3($page_title,
+    print $fh HebcalHtml::header_bootstrap3($page_title,
                          "/holidays/$greg_year",
                          "single single-post",
                          $meta,
@@ -726,7 +727,7 @@ EOHTML
     print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
 
-    print $fh Hebcal::html_footer_bootstrap3(undef, undef);
+    print $fh HebcalHtml::footer_bootstrap3(undef, undef);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -751,7 +752,7 @@ sub write_hebrew_year_index_page {
 EOHTML
 ;
 
-    print $fh Hebcal::html_header_bootstrap3($page_title,
+    print $fh HebcalHtml::header_bootstrap3($page_title,
         "/holidays/$slug",
         "single single-post",
         $meta,
@@ -788,7 +789,7 @@ EOHTML
 
     print $fh qq{</div><!-- .col-sm-12 -->\n};
     print $fh qq{</div><!-- .row -->\n};
-    print $fh Hebcal::html_footer_bootstrap3(undef, undef);
+    print $fh HebcalHtml::footer_bootstrap3(undef, undef);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -1022,7 +1023,7 @@ sub write_festival_page
 EOHTML
 ;
 
-    print OUT2 Hebcal::html_header_bootstrap3(
+    print OUT2 HebcalHtml::header_bootstrap3(
 	 $page_title, "/holidays/$slug", "ignored", $meta, 0, 1);
 
     my $wikipedia_descr;
@@ -1202,7 +1203,7 @@ $pager
 </div><!-- .row -->
 EOHTML
 ;
-    print OUT2 Hebcal::html_footer_bootstrap3(undef, undef);
+    print OUT2 HebcalHtml::footer_bootstrap3(undef, undef);
 
     close(OUT2);
     rename("$fn.$$", $fn) || die "$fn: $!\n";

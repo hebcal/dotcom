@@ -617,7 +617,7 @@ EOHTML
 ;
 
     Hebcal::out_html($cfg,
-        Hebcal::html_header_bootstrap3($title, $script_name, "",
+        HebcalHtml::header_bootstrap3($title, $script_name, "",
             $xtra_head . $xtra_head2),
         $head_divs
     );
@@ -771,7 +771,7 @@ window['hebcal'].createCityTypeahead(false);
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q, undef, 1, $xtra_html));
+    Hebcal::out_html(undef, HebcalHtml::footer_bootstrap3($q, undef, 1, $xtra_html));
     Hebcal::out_html($cfg, "</body></html>\n");
     timestamp_comment();
     exit(0);

@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 2014 Michael J. Radwin.
+# Copyright (c) 2015 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -34,6 +34,7 @@ package HebcalHtml;
 
 use strict;
 use URI::Escape;
+use POSIX qw(strftime);
 use CGI qw(-no_xhtml);
 
 $HebcalHtml::gregorian_warning = qq{<div class="alert alert-warning alert-dismissible">
@@ -103,8 +104,8 @@ sub download_html_bootstrap {
     my($greg_year1,$greg_year2) = (0,0);
     my($numEntries) = scalar(@{$events});
     if ($numEntries > 0) {
-	$greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
-	$greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+        $greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
+        $greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
     }
 
     my $ical1 = Hebcal::download_href($q, $filename, "ics");
@@ -117,13 +118,13 @@ sub download_html_bootstrap {
     $ical_href = join("", "http://", $vhost, $ical_href);
     my $webcal_href;
     if ($yahrzeit_mode) {
-    	$webcal_href = $ical1;
-    	$ical_href = $ical1;
+        $webcal_href = $ical1;
+        $ical_href = $ical1;
     } else {
-    	$webcal_href = join("", "webcal://", $vhost, $subical_href);
+        $webcal_href = join("", "webcal://", $vhost, $subical_href);
     }
     my $title_esc = $title ? URI::Escape::uri_escape_utf8("Hebcal $title")
-	: URI::Escape::uri_escape_utf8("Hebcal $filename");
+        : URI::Escape::uri_escape_utf8("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
 
     my $ol_ics_title = "Outlook 2007, 2010, 2013 (Windows)";
@@ -137,7 +138,7 @@ sub download_html_bootstrap {
     my $palm_title = "Palm Desktop (Windows-only)";
 
     my $ol_ics_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ol-ics",
-					  "Outlook Internet Calendar Subscription", 1);
+                                          "Outlook Internet Calendar Subscription", 1);
     my $ol_ics = <<EOHTML;
 <p>$ol_ics_btn</p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
@@ -146,8 +147,8 @@ ICS (Internet Calendar Subscription) file into Outlook</a></p>
 EOHTML
 ;
     if (!$yahrzeit_mode) {
-	my $ol_ics_alt_btn = download_button_html($q, $ics_title, $ical_href, "dl-ol-ics-alt", $ics_title, 0);
-	$ol_ics .= <<EOHTML
+        my $ol_ics_alt_btn = download_button_html($q, $ics_title, $ical_href, "dl-ol-ics-alt", $ics_title, 0);
+        $ol_ics .= <<EOHTML
 <p>Alternate option: $ol_ics_alt_btn
 and then import manually into Microsoft Outlook.</p>
 EOHTML
@@ -156,10 +157,10 @@ EOHTML
 
     my $href_ol_usa = Hebcal::download_href($q, "${filename}_usa", "csv");
     my $ol_csv_btn_usa = download_button_html($q, "${filename}_usa.csv", $href_ol_usa, "dl-ol-csv-usa",
-					      "Outlook CSV - USA date format (month/day/year)", 1);
+                                              "Outlook CSV - USA date format (month/day/year)", 1);
     my $href_ol_eur = Hebcal::download_href($q, "${filename}_eur", "csv") . ";euro=1";
     my $ol_csv_btn_eur = download_button_html($q, "${filename}_eur.csv", $href_ol_eur, "dl-ol-csv-eur",
-					      "Outlook CSV - European date format (day/month/year)", 1);
+                                              "Outlook CSV - European date format (day/month/year)", 1);
     my $ol_csv = <<EOHTML;
 Select one of:
 <ul class="list-unstyled">
@@ -178,8 +179,8 @@ href="http://www.hebcal.com/home/79/apple-ical-import-hebcal-jewish-calendar">Im
 EOHTML
 ;
     if (!$yahrzeit_mode) {
-	my $ical_alt_btn = download_button_html($q, $ics_title, $ical_href, "dl-ical-alt", $ics_title, 0);
-	$ical .= <<EOHTML;
+        my $ical_alt_btn = download_button_html($q, $ics_title, $ical_href, "dl-ical-alt", $ics_title, 0);
+        $ical .= <<EOHTML;
 <p>Alternate option: $ical_alt_btn
 and then import manually into Apple iCal.</p>
 EOHTML
@@ -211,15 +212,15 @@ EOHTML
     my $gcal_href = URI::Escape::uri_escape_utf8($full_http_href);
     my $gcal;
     if ($yahrzeit_mode) {
-	my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", "$ics_title for Google Calendar", 1);
-	$gcal = <<EOHTML;
+        my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", "$ics_title for Google Calendar", 1);
+        $gcal = <<EOHTML;
 <p>$gcal_btn</p>
 <p>Step-by-step: <a href="http://www.hebcal.com/home/59/google-calendar-alternative-instructions">Import into Google Calendar</a></p>
 EOHTML
 ;
     } else {
-	my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", $ics_title, 0);
-	$gcal = <<EOHTML;
+        my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", $ics_title, 0);
+        $gcal = <<EOHTML;
 <p><a title="Add $ics_title to Google Calendar"
 class="download" id="dl-gcal-sub" rel="nofollow"
 href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
@@ -238,8 +239,8 @@ EOHTML
     # Windows Live Calendar
 
     my $wlive_btn = download_button_html($q, $ics_title,
-					 "http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}",
-					 "dl-wlive", "to Outlook.com Calendar", 1);
+                                         "http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}",
+                                         "dl-wlive", "to Outlook.com Calendar", 1);
     my $wlive = <<EOHTML;
 <p>$wlive_btn</p>
 <p>Step-by-step: <a
@@ -281,21 +282,21 @@ EOHTML
     my $palm_dba = "";
     my $dst;
     if ($q->param("geo") && $q->param("geo") ne "off"
-	&& $q->param("c") && $q->param("c") ne "off") {
-	if (defined $q->param("dst") && $q->param("dst") ne "") {
-	    $dst = $q->param("dst");
-	}
-	elsif ($q->param("geo") eq "city" && $q->param("city")
-	       && defined $Hebcal::city_dst{$q->param("city")}) {
-	    $dst = $Hebcal::city_dst{$q->param("city")};
-	}
+        && $q->param("c") && $q->param("c") ne "off") {
+        if (defined $q->param("dst") && $q->param("dst") ne "") {
+            $dst = $q->param("dst");
+        }
+        elsif ($q->param("geo") eq "city" && $q->param("city")
+               && defined $Hebcal::city_dst{$q->param("city")}) {
+            $dst = $Hebcal::city_dst{$q->param("city")};
+        }
     }
 
     if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-	(!defined($dst) || $dst eq "usa" || $dst eq "none")) {
-	my $dba_href = Hebcal::download_href($q, $filename, 'dba');
-	my $palm_dba_btn = download_button_html($q, "$filename.dba", $dba_href, "dl-dba", "$filename.dba", 1);
-	$palm_dba = <<EOHTML;
+        (!defined($dst) || $dst eq "usa" || $dst eq "none")) {
+        my $dba_href = Hebcal::download_href($q, $filename, 'dba');
+        my $palm_dba_btn = download_button_html($q, "$filename.dba", $dba_href, "dl-dba", "$filename.dba", 1);
+        $palm_dba = <<EOHTML;
 <h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
 <p>$palm_dba_btn</p>
 <p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
@@ -385,6 +386,223 @@ sub download_html_modal_button {
     my($className) = @_;
     $className ||= "";
     return qq{<a href="#hcdl-modal" role="button" class="btn btn-default$className" data-toggle="modal" data-target="#hcdl-modal">Download ...</a>};
+}
+
+my $HTML_MENU_ITEMS_V2 =
+    [
+     [ "/holidays/",    "Holidays",     "Jewish Holidays" ],
+     [ "/converter/",   "Date Converter", "Hebrew Date Converter" ],
+     [ "/shabbat/",     "Shabbat",      "Shabbat Times" ],
+     [ "/sedrot/",      "Torah",        "Torah Readings" ],
+     [ "http://www.hebcal.com/home/about",      "About",        "About" ],
+     [ "http://www.hebcal.com/home/help",       "Help",         "Help" ],
+    ];
+
+sub html_menu_item_bootstrap {
+    my($path,$title,$tooltip,$selected) = @_;
+    my $class = undef;
+    if ($path eq $selected) {
+        $class = "active";
+    }
+    my $str = qq{<li};
+    if ($class) {
+        $str .= qq{ class="$class"};
+    }
+    $str .= qq{><a href="$path" title="$tooltip">$title</a>};
+    return $str;
+}
+
+sub html_menu_bootstrap {
+    my($selected,$menu_items) = @_;
+    my $str = qq{<ul class="nav navbar-nav">};
+    foreach my $item (@{$menu_items}) {
+        my $path = $item->[0];
+        my $title = $item->[1];
+        my $tooltip = $item->[2];
+        if (defined $item->[3]) {
+            $str .= "<li class=\"dropdown\">";
+            $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <b class=\"caret\"></b></a>";
+            $str .= "<ul class=\"dropdown-menu\">";
+            for (my $i = 3; defined $item->[$i]; $i++) {
+                $str .= html_menu_item_bootstrap($item->[$i]->[0], $item->[$i]->[1], $item->[$i]->[2], $selected);
+                $str .= qq{</li>};
+            }
+            $str .= qq{</ul>};
+        } else {
+            $str .= html_menu_item_bootstrap($path, $title, $tooltip, $selected);
+        }
+        $str .= qq{</li>};
+    }
+    $str .= qq{</ul>};
+    return $str;
+}
+
+
+sub header_bootstrap3 {
+    my($title,$base_href,$body_class,$xtra_head,$suppress_site_title,$hebrew_stylesheet) = @_;
+    $xtra_head = "" unless $xtra_head;
+    my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
+    my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
+    my $alefhebrew = q"@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.ttf) format('truetype')}@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:700;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.ttf) format('truetype')}";
+    my $xtra_stylesheet = $hebrew_stylesheet
+        ? "<!-- http://fonts.googleapis.com/earlyaccess/alefhebrew.css -->\n<style type=\"text/css\">\n$alefhebrew\n</style>\n"
+        : "";
+
+    my $logo = '<a href="/" class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal"></a>';
+    my $str = <<EOHTML;
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>$title2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+$xtra_stylesheet<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-967247-1', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
+</script>
+<style type="text/css">
+.label{text-transform:none}
+:lang(he) {
+  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
+  font-size:125%;
+  direction:rtl;
+}
+.hebcal-footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  color: #777;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+.hebcal-footer p {
+  margin-bottom: 2px;
+}
+.bullet-list-inline {
+  padding-left: 0;
+  margin-left: -3px;
+  list-style: none;
+}
+.bullet-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.bullet-list-inline li:after{content:"\\00a0\\00a0\\00b7"}
+.bullet-list-inline li:last-child:after{content:""}
+\@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+}
+\@media (min-width: 768px) {
+  input#s {
+    width: 132px;
+  }
+}
+</style>
+$xtra_head</head>
+<body>
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      $logo
+    </div>
+    <div class="navbar-collapse collapse">
+    $menu
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+     <input name="s" id="s" type="text" class="form-control" placeholder="Search">
+    </form>
+    </div><!--/.navbar-collapse -->
+  </div>
+</div>
+
+<div class="container">
+<div id="content">
+EOHTML
+;
+    return $str;
+}
+
+my $URCHIN = qq{<script type="text/javascript">
+(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){ga("send","event","outbound-amzn",this.id)}}}
+if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){ga("send","event","outbound-article",c.substring(7,d))}}}}
+if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){ga("send","event","download",this.id)}}}}}}})();
+</script>
+};
+
+sub footer_bootstrap3 {
+    my($q,$rcsrev,$noclosebody,$xtra_html) = @_;
+
+    my($mtime) = (defined $ENV{'SCRIPT_FILENAME'}) ?
+        (stat($ENV{'SCRIPT_FILENAME'}))[9] : time;
+
+    my $hhmts = strftime("%d %B %Y", localtime($mtime));
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime($mtime)) . "Z";
+    my $last_updated_text = qq{<li><time datetime="$dc_date">$hhmts</time></li>};
+
+    my $str = <<EOHTML;
+</div><!-- #content -->
+
+<footer role="contentinfo" class="hebcal-footer">
+<div class="row">
+<div class="col-sm-12">
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
+rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
+also under a cc-by licence.</small></p>
+<ul class="bullet-list-inline">
+$last_updated_text
+<li><a href="http://www.hebcal.com/home/about">About</a></li>
+<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy</a></li>
+<li><a href="http://www.hebcal.com/home/help">Help</a></li>
+<li><a href="http://www.hebcal.com/home/about/contact">Contact</a></li>
+<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
+<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+</footer>
+</div> <!-- .container -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+EOHTML
+;
+
+    $str .= $URCHIN;
+    $str .= $xtra_html if $xtra_html;
+
+    if ($noclosebody) {
+        return $str;
+    } else {
+        return $str . "</body></html>\n";
+    }
+}
+
+sub html_entify($)
+{
+    local($_) = @_;
+
+    s/&/&amp;/g;
+    s/</&lt;/g;
+    s/>/&gt;/g;
+    s/"/&quot;/g; #"#
+    s/\s+/ /g;
+
+    $_;
 }
 
 

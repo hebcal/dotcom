@@ -10,7 +10,7 @@
 #   A Complete Triennial System for Reading the Torah
 #   http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -48,6 +48,7 @@ use strict;
 use utf8;
 use open ":utf8";
 use Hebcal ();
+use HebcalHtml ();
 use HebcalGPL ();
 use Date::Calc ();
 use Getopt::Std ();
@@ -270,7 +271,7 @@ foreach my $h (@parashah_list) {
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
-my $html_footer = Hebcal::html_footer_bootstrap3(undef, undef, 0);
+my $html_footer = HebcalHtml::footer_bootstrap3(undef, undef, 0);
 
 foreach my $h (@parashah_list) {
     write_sedra_page($axml,$h,$prev{$h},$next{$h},
@@ -413,7 +414,7 @@ sub write_index_page
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
 EOHTML
 ;
-    print OUT1 Hebcal::html_header_bootstrap3("Torah Readings",
+    print OUT1 HebcalHtml::header_bootstrap3("Torah Readings",
 				   "/sedrot/",
 				   "single single-post",
 				   $xtra_head);
@@ -876,7 +877,7 @@ sub write_sedra_page
 
     $description .= " Torah reading, Haftarah, links to audio and commentary.";
 
-    print OUT2 Hebcal::html_header_bootstrap3(
+    print OUT2 HebcalHtml::header_bootstrap3(
 	"$h - Torah Portion - $hebrew", "/sedrot/$anchor", "ignored",
 	qq{<meta name="description" content="$description">\n}, 0, 1);
 

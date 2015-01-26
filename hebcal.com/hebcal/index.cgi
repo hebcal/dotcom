@@ -962,7 +962,7 @@ EOHTML
 ;
 
     Hebcal::out_html(undef,
-                     Hebcal::html_header_bootstrap3("Custom Calendar",
+                     HebcalHtml::header_bootstrap3("Custom Calendar",
                                          $script_name,
                                          "",
                                          $xtra_head)
@@ -1243,7 +1243,7 @@ window['hebcal'].createCityTypeahead(false);
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q,undef,1,$xtra_html));
+    Hebcal::out_html(undef, HebcalHtml::footer_bootstrap3($q,undef,1,$xtra_html));
     Hebcal::out_html(undef, "</body></html>\n");
     timestamp_comment();
 
@@ -1675,7 +1675,7 @@ EOHTML
     my $lang_hebrew = ($lang && $lang =~ /h/) ? 1 : 0;
 
     Hebcal::out_html(undef,
-                     Hebcal::html_header_bootstrap3(
+                     HebcalHtml::header_bootstrap3(
                         $results_title, $script_name, "",
                         $xtra_head, 0, $lang_hebrew)
         );
@@ -1847,7 +1847,7 @@ EOHTML
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, Hebcal::html_footer_bootstrap3($q,undef,1,$xtra_html));
+    Hebcal::out_html(undef, HebcalHtml::footer_bootstrap3($q,undef,1,$xtra_html));
 
     if ($numEntries > 0) {
         my $download_title = $date;

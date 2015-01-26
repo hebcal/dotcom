@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -391,7 +391,7 @@ EOHTML
 ;
 
         Hebcal::out_html($cfg,
-                         Hebcal::html_header_bootstrap3("Yahrzeit + Anniversary Calendar",
+                         HebcalHtml::header_bootstrap3("Yahrzeit + Anniversary Calendar",
                                              $script_name,
                                              "single single-post",
                                              $xtra_head)
@@ -475,7 +475,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
             ($cfg,
              sprintf(qq{<tr><td style="width:130px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
                      $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
-                     Hebcal::html_entify($subj)));
+                     HebcalHtml::html_entify($subj)));
         $prev_year = $year;
     }
 
@@ -591,7 +591,7 @@ instructions</a>.</p>
 });
 
         Hebcal::out_html($cfg, qq{</div><!-- .col-sm-12 -->\n</div><!-- .row -->\n});
-        Hebcal::out_html($cfg, Hebcal::html_footer_bootstrap3($q,undef,0,$xtra_html));
+        Hebcal::out_html($cfg, HebcalHtml::footer_bootstrap3($q,undef,0,$xtra_html));
     }
 
     exit(0);

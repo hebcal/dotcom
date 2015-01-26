@@ -42,6 +42,7 @@ use utf8;
 use open ":utf8";
 use Getopt::Long ();
 use Hebcal ();
+use HebcalHtml ();
 use Date::Calc ();
 use Carp;
 use Log::Log4perl qw(:easy);
@@ -176,7 +177,7 @@ ORDER BY g.asciiname};
     $title_date =~ s/^Friday, //;
 
     my $page_title = "$country Shabbat Times - $title_date";
-    print $fh Hebcal::html_header_bootstrap3($page_title,
+    print $fh HebcalHtml::header_bootstrap3($page_title,
         "/shabbat/browse/$anchor", "ignored");
 
     print $fh <<EOHTML;
@@ -214,7 +215,7 @@ EOHTML
 
     print $fh qq{</div><!-- .row -->\n};
 
-    print $fh Hebcal::html_footer_bootstrap3(undef, undef);
+    print $fh HebcalHtml::footer_bootstrap3(undef, undef);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";
@@ -281,7 +282,7 @@ sub write_index_page {
     my $page_title = "Shabbat Candle Lighting Times";
     my $xtra_head = qq{<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">};
 
-    print $fh Hebcal::html_header_bootstrap3($page_title,
+    print $fh HebcalHtml::header_bootstrap3($page_title,
         "/shabbat/browse/", "ignored", $xtra_head);
 
     print $fh <<EOHTML;
@@ -336,7 +337,7 @@ window['hebcal'].createCityTypeahead(true);
 JSCRIPT_END
         ;
 
-    print $fh Hebcal::html_footer_bootstrap3(undef, undef, undef, $xtra_html);
+    print $fh HebcalHtml::footer_bootstrap3(undef, undef, undef, $xtra_html);
 
     close($fh);
     rename("$fn.$$", $fn) || die "$fn: $!\n";

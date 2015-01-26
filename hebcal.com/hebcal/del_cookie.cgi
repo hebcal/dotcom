@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2013  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -44,6 +44,7 @@ use strict;
 use CGI qw(-no_xhtml);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
+use HebcalHtml ();
 
 # process form params
 my $q = new CGI;
@@ -87,8 +88,8 @@ $entry_content
 EOHTML
 ;
 print $q->header(),
-    Hebcal::html_header_bootstrap3($title, Hebcal::script_name($q), "single single-post"),
+    HebcalHtml::header_bootstrap3($title, Hebcal::script_name($q), "single single-post"),
     $body,
-    Hebcal::html_footer_bootstrap3($q,undef);
+    HebcalHtml::footer_bootstrap3($q,undef);
 exit(0);
 
