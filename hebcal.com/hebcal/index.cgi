@@ -572,7 +572,8 @@ sub vcalendar_display
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
-    Hebcal::vcalendar_write_contents($q, \@events, $title, \%cconfig);
+    eval("use HebcalExport");
+    HebcalExport::vcalendar_write_contents($q, \@events, $title, \%cconfig);
 }
 
 use constant PDF_WIDTH => 792;
@@ -820,11 +821,12 @@ sub pdf_render_event {
 sub dba_display
 {
     eval("use Palm::DBA");
+    eval("use HebcalExport");
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
-    Hebcal::export_http_header($q, $content_type);
+    HebcalExport::export_http_header($q, $content_type);
 
     my $basename = $q->path_info();
     $basename =~ s,^.*/,,;
@@ -842,7 +844,8 @@ sub csv_display
     plus4_events($cmd, \$title, \@events);
 
     my $euro = defined $q->param("euro") ? 1 : 0;
-    Hebcal::csv_write_contents($q, \@events, $euro);
+    eval("use HebcalExport");
+    HebcalExport::csv_write_contents($q, \@events, $euro);
 }
 
 sub my_radio_group {
@@ -855,8 +858,8 @@ sub my_radio_group {
 sub timestamp_comment {
     my $tend = Benchmark->new;
     my $tdiff = timediff($tend, $benchmarks[0]);
-    Hebcal::out_html(undef, "<!-- generated ", scalar(localtime), "; ",
-        timestr($tdiff), " -->\n");
+    print "<!-- generated ", scalar(localtime), "; ",
+        timestr($tdiff), " -->\n";
 }
 
 sub latlong_form_html {
@@ -961,12 +964,9 @@ sub form
 EOHTML
 ;
 
-    Hebcal::out_html(undef,
-                     HebcalHtml::header_bootstrap3("Custom Calendar",
-                                         $script_name,
-                                         "",
-                                         $xtra_head)
-        );
+    print HebcalHtml::header_bootstrap3("Custom Calendar",
+        $script_name, "", $xtra_head);
+
     my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
@@ -974,15 +974,14 @@ EOHTML
 lighting times, and Torah readings.</p>
 EOHTML
 ;
-    Hebcal::out_html(undef, $head_divs);
+    print $head_divs;
 
     if ($message ne "") {
         $help = "" unless defined $help;
         $message = qq{<div class="alert alert-danger alert-dismissible">\n} .
             qq{<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n} .
             $message . $help . "</div>";
-        Hebcal::out_html(undef, $message, "\n");
-
+        print $message, "\n";
     }
 
     my $year_type_radio = my_radio_group($q,
@@ -1002,8 +1001,7 @@ EOHTML
                     "on" => "Israel"}
         );
 
-    Hebcal::out_html(undef,
-    qq{<form id="f1" name="f1" action="$script_name">\n},
+    print qq{<form id="f1" name="f1" action="$script_name">\n},
     qq{<div class="row">\n},
     qq{<div class="col-sm-6">\n},
     qq{<fieldset><legend>Jewish Holidays for</legend>\n},
@@ -1027,11 +1025,9 @@ EOHTML
     qq{You probably aren't interested in 08, but rather 2008.</small></span>\n},
     $q->hidden(-name => "v",-value => 1,-override => 1),
     $diaspora_israel_radio,
-    qq{</fieldset>\n}
-    );
+    qq{</fieldset>\n};
 
-    Hebcal::out_html(undef, qq{<fieldset><legend>Include events</legend>\n});
-    Hebcal::out_html(undef,
+    print qq{<fieldset><legend>Include events</legend>\n},
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "maj",
                  -id => "maj",
@@ -1079,13 +1075,11 @@ EOHTML
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "s",
                  -label => "Weekly Torah portion on Saturdays"),
-    "</label></div>\n");
+    "</label></div>\n";
 
-    Hebcal::out_html(undef, qq{</fieldset>\n});
-    Hebcal::out_html(undef, qq{</div><!-- .col-sm-6 -->\n});
-
-    Hebcal::out_html(undef, qq{<div class="col-sm-6">\n});
-    Hebcal::out_html(undef,
+    print qq{</fieldset>\n},
+    qq{</div><!-- .col-sm-6 -->\n},
+    qq{<div class="col-sm-6">\n},
     "<fieldset><legend>Other options</legend>",
     qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
@@ -1105,13 +1099,13 @@ EOHTML
                  -id => "d2",
                  -label => "Show Hebrew date for entire date range"),
     "</label></div>",
-    "</fieldset>\n");
+    "</fieldset>\n";
 
-    Hebcal::out_html(undef, qq{<fieldset><legend>Candle lighting times</legend>\n});
+    print qq{<fieldset><legend>Candle lighting times</legend>\n};
     $q->param("c","off") unless defined $q->param("c");
     $q->param("geo","geoname") unless defined $q->param("geo");
 
-    Hebcal::out_html(undef,
+    print
         $q->hidden(-name => "c", -id => "c"),
         $q->hidden(-name => "geo",
             -id => "geo",
@@ -1119,7 +1113,7 @@ EOHTML
         $q->hidden(-name => "zip", -id => "zip"),
         $q->hidden(-name => "city", -id => "city"),
         $q->hidden(-name => "geonameid", -id => "geonameid"),
-        "\n");
+        "\n";
 
     if ($q->param("c") eq "on" && ! $q->param('city-typeahead')) {
         if ($q->param("geo") eq "zip"
@@ -1142,21 +1136,18 @@ EOHTML
     }
 
     if (defined $q->param("geo") && $q->param("geo") eq "pos") {
-        Hebcal::out_html(undef, latlong_form_html());
+        print latlong_form_html();
     } else {
-        Hebcal::out_html(undef,
-            qq{<div class="form-group"><label for="city-typeahead">City</label>
+        print qq{<div class="form-group"><label for="city-typeahead">City</label>
 <div class="city-typeahead" style="margin-bottom:12px">},
             $q->textfield(-name => "city-typeahead",
                   -id => "city-typeahead",
                   -class => "form-control typeahead",
                   -placeholder => "Search for city or ZIP code"),
-            qq{</div></div>\n}
-        );
+            qq{</div></div>\n};
     }
 
-    Hebcal::out_html(undef,
-            qq{<div class="form-group"><label for="b1">Candle-lighting minutes before sundown</label>},
+    print qq{<div class="form-group"><label for="b1">Candle-lighting minutes before sundown</label>},
             $q->textfield(
                 -name      => "b",
                 -id        => "b1",
@@ -1180,31 +1171,30 @@ EOHTML
                 -maxlength => 2,
                 -default   => $Hebcal::havdalah_min
             ),
-            qq{</div>\n},
-        );
+            qq{</div>\n};
 
-    Hebcal::out_html(undef, qq{
+    print qq{
 <p><small>Hebcal computes candle-lighting times according to the method defined
 by the U.S. Naval Observatory (USNO). The USNO claims accuracy within 2
 minutes except at extreme northern or southern latitudes. <a
 href="/home/94/how-accurate-are-candle-lighting-times">Read more
-&raquo;</a></small></p>});
+&raquo;</a></small></p>
+</fieldset>
+</div><!-- .col-sm-6 -->
+</div><!-- .row -->
+<div class="clearfix" style="margin-top:10px">
+};
 
-    Hebcal::out_html(undef, qq{</fieldset>\n});
-    Hebcal::out_html(undef, qq{</div><!-- .col-sm-6 -->\n});
-    Hebcal::out_html(undef, qq{</div><!-- .row -->\n});
-    Hebcal::out_html(undef, qq{<div class="clearfix" style="margin-top:10px">\n});
-    Hebcal::out_html(undef,
-    $q->submit(-name => ".s",
+    print $q->submit(-name => ".s",
                -class => "btn btn-primary",
-               -value => "Create Calendar"),
-    qq{</div><!-- .clearfix -->\n},
-    qq{</form>\n});
+               -value => "Create Calendar");
 
-    Hebcal::out_html(undef, qq{
+    print qq{
+</div><!-- .clearfix -->
+</form>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
-});
+};
 
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
     my $xtra_html=<<JSCRIPT_END;
@@ -1243,8 +1233,8 @@ window['hebcal'].createCityTypeahead(false);
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, HebcalHtml::footer_bootstrap3($q,undef,1,$xtra_html));
-    Hebcal::out_html(undef, "</body></html>\n");
+    print HebcalHtml::footer_bootstrap3($q,undef,1,$xtra_html);
+    print "</body></html>\n";
     timestamp_comment();
 
     exit(0);
@@ -1443,7 +1433,7 @@ sub results_page_warnings {
     if (defined $events && defined $events->[0]) {
         my $greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
 
-        Hebcal::out_html(undef, $HebcalHtml::gregorian_warning)
+        print $HebcalHtml::gregorian_warning
             if ($greg_year1 <= 1752);
 
         if ($greg_year1 >= 3762
@@ -1453,7 +1443,7 @@ sub results_page_warnings {
             my $new_url = Hebcal::self_url($q,
                                            {"yt" => "H", "month" => "x"},
                                            "&amp;");
-            Hebcal::out_html(undef, qq{<div class="alert alert-warning alert-dismissible">
+            print qq{<div class="alert alert-warning alert-dismissible">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Note!</strong>
 You are viewing a calendar for <strong>Gregorian</strong> year $greg_year1, which
@@ -1464,15 +1454,15 @@ If you really intended to use Gregorian year $greg_year1, please
 continue. Hebcal.com results this far in the future should be
 accurate.
 </div><!-- .alert -->
-});
+};
         }
     }
 
-    Hebcal::out_html(undef, $HebcalHtml::indiana_warning)
+    print $HebcalHtml::indiana_warning
         if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
 
     my $latitude = $cconfig{"latitude"};
-    Hebcal::out_html(undef, $HebcalHtml::usno_warning)
+    print $HebcalHtml::usno_warning
         if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 }
 
@@ -1674,11 +1664,8 @@ EOHTML
     my $lang = $q->param("lg");
     my $lang_hebrew = ($lang && $lang =~ /h/) ? 1 : 0;
 
-    Hebcal::out_html(undef,
-                     HebcalHtml::header_bootstrap3(
-                        $results_title, $script_name, "",
-                        $xtra_head, 0, $lang_hebrew)
-        );
+    print HebcalHtml::header_bootstrap3($results_title,
+        $script_name, "", $xtra_head, 0, $lang_hebrew);
 
     my $h1_extra = "";
     if (param_true("c")) {
@@ -1692,11 +1679,10 @@ EOHTML
 <div class="row">
 <div class="col-sm-8">
 <h1>Jewish Calendar $date$h1_extra</h1>
+<!-- $cmd -->
 EOHTML
 ;
-    Hebcal::out_html(undef, $head_divs);
-
-    Hebcal::out_html(undef, "<!-- $cmd -->\n");
+    print $head_divs;
 
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
@@ -1707,15 +1693,13 @@ EOHTML
     my $numEntries = scalar(@events);
 
     if ($numEntries > 0) {
-        Hebcal::out_html(undef, results_page_toolbar($filename));
+        print results_page_toolbar($filename);
     } else {
-        Hebcal::out_html(undef,
-            qq{<div class="alert alert-warning">No Hebrew Calendar events for $date</div>\n},
-            settings_button_html(),
-        );
+        print qq{<div class="alert alert-warning">No Hebrew Calendar events for $date</div>\n},
+            settings_button_html();
     }
 
-    Hebcal::out_html(undef, "</div><!-- .col-sm-8 -->\n");
+    print "</div><!-- .col-sm-8 -->\n";
 
     my $header_ad = <<EOHTML;
 <div class="col-sm-4">
@@ -1733,9 +1717,9 @@ EOHTML
 </div><!-- .row -->
 EOHTML
 ;
-    Hebcal::out_html(undef, $header_ad);
+    print $header_ad;
 
-    Hebcal::out_html(undef, "<div id=\"hebcal-results\">\n");
+    print "<div id=\"hebcal-results\">\n";
 
     my @html_cals;
     my %html_cals;
@@ -1758,7 +1742,7 @@ EOHTML
         }
     }
 
-    Hebcal::out_html(undef, $nav_pagination);
+    print $nav_pagination;
 
     push(@benchmarks, Benchmark->new);
 
@@ -1820,9 +1804,9 @@ EOHTML
 
     push(@benchmarks, Benchmark->new);
 
-    Hebcal::out_html(undef, $nav_pagination);
+    print $nav_pagination;
 
-    Hebcal::out_html(undef, "</div><!-- #hebcal-results -->\n");
+    print "</div><!-- #hebcal-results -->\n";
 
     html_table_events(\@events);
     push(@benchmarks, Benchmark->new);
@@ -1847,7 +1831,7 @@ EOHTML
 JSCRIPT_END
         ;
 
-    Hebcal::out_html(undef, HebcalHtml::footer_bootstrap3($q,undef,1,$xtra_html));
+    print HebcalHtml::footer_bootstrap3($q,undef,1,$xtra_html);
 
     if ($numEntries > 0) {
         my $download_title = $date;
@@ -1855,14 +1839,14 @@ JSCRIPT_END
             my $plus4 = $1 + $EXTRA_YEARS;
             $download_title .= "-" . $plus4;
         }
-        Hebcal::out_html(undef, HebcalHtml::download_html_modal($q, $filename, \@events, $download_title, 0, 1));
+        print HebcalHtml::download_html_modal($q, $filename, \@events, $download_title, 0, 1);
     }
 
-    Hebcal::out_html(undef, "</body></html>\n");
+    print "</body></html>\n";
 
     for (my $i = 1; $i < scalar(@benchmarks); $i++) {
         my $tdiff = timediff($benchmarks[$i], $benchmarks[$i-1]);
-        Hebcal::out_html($cfg, "<!-- ", timestr($tdiff), " -->\n");
+        print "<!-- ", timestr($tdiff), " -->\n";
     }
 
     timestamp_comment();
@@ -1878,8 +1862,8 @@ sub html_table_events {
     my $json = JSON->new;
     my $out = $json->encode($items);
     my $json_cconfig = $json->encode(\%cconfig);
-    Hebcal::out_html($cfg, "<script>\nwindow['hebcal']=window['hebcal']||{};\nwindow['hebcal'].events=",
-        $out, ";\nwindow['hebcal'].cconfig=", $json_cconfig, ";\n</script>\n");
+    print "<script>\nwindow['hebcal']=window['hebcal']||{};\nwindow['hebcal'].events=",
+        $out, ";\nwindow['hebcal'].cconfig=", $json_cconfig, ";\n</script>\n";
 }
 
 sub write_html_cal
@@ -1902,20 +1886,19 @@ sub write_html_cal
         $style = qq{ style="page-break-before:always"};
     }
     if ($id eq sprintf("%04d-%02d", $this_year, $this_mon)) {
-        Hebcal::out_html(undef, qq{<div id="cal-current"></div>\n});
+        print qq{<div id="cal-current"></div>\n};
     }
     my $cal_html = $cal->as_HTML();
     $cal_html =~ s/ border="0" width="100%">/>/;
     $cal_html =~ s/<td width="14%" valign="top" align="left">/<td>/g;
-    Hebcal::out_html(undef,
-                     qq{<div id="cal-$id">\n},
-                     qq{<div class="$class"$style$dir>\n},
-                     $header,
-                     $cal_html,
-                     qq{</div><!-- .cal -->\n},
-                     qq{<div class="agenda">\n},
-                     qq{</div><!-- .agenda -->\n},
-                     qq{</div><!-- #cal-$id -->\n});
+    print qq{<div id="cal-$id">\n},
+        qq{<div class="$class"$style$dir>\n},
+        $header,
+        $cal_html,
+        qq{</div><!-- .cal -->\n},
+        qq{<div class="agenda">\n},
+        qq{</div><!-- .agenda -->\n},
+        qq{</div><!-- #cal-$id -->\n};
 }
 
 sub new_html_cal
