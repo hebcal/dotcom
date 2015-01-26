@@ -39,7 +39,6 @@ use Date::Calc ();
 use Hebcal ();
 use Encode qw(encode_utf8 decode_utf8);
 use Digest::MD5 ();
-use URI::Escape;
 use POSIX qw(strftime);
 
 ########################################################################
@@ -244,16 +243,6 @@ sub cache_end {
         my $newfn = $fn;
         $newfn =~ s/\.\d+$//;   # no pid
         rename($fn, $newfn);
-        if ($newfn =~ m,^(.+)/([^/]+)$,) {
-            my $dir = $1;
-            my $qs = $2;
-            my $qs2 = URI::Escape::uri_unescape($qs);
-            if ($qs2 ne $qs) {
-                # also symlink URL-decoded version for mod_rewrite internal redirect
-                unlink("$dir/$qs2");
-                symlink($qs, "$dir/$qs2");
-            }
-        }
         $cache = undef;
     }
 
@@ -599,13 +588,17 @@ sub vcalendar_write_contents {
         if ( defined $VTIMEZONE{$tzid} ) {
             my $vt = $VTIMEZONE{$tzid};
             $vt =~ s/\n/\015\012/g;
-            out_html( undef, $vt );
+            print STDOUT $vt;
+            print CACHE $vt if $cache;
         }
         elsif ( open( VTZ, $vtimezone_ics ) ) {
             my $in_vtz = 0;
             while (<VTZ>) {
                 $in_vtz = 1 if /^BEGIN:VTIMEZONE/;
-                out_html( undef, $_ ) if $in_vtz;
+                if ($in_vtz) {
+                    print STDOUT $_;
+                    print CACHE $_ if $cache;
+                }
                 $in_vtz = 0 if /^END:VTIMEZONE/;
             }
             close(VTZ);
