@@ -59,12 +59,6 @@ my $http_cache_control = "max-age=63072000";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
-my %long_candles_text =
-    ("pos" => "latitude/longitude",
-     "city" => "large cities",
-     "zip" => "zip code",
-     "none" => "none");
-
 # process form params
 my $q = new CGI;
 
@@ -147,19 +141,20 @@ if (defined $q->param("year") && $q->param("year") eq "now" &&
     $http_expires = Hebcal::http_date($end_of_month);
 }
 
-if ($cfg eq "fc" && defined $q->param("start") && defined $q->param("end")) {
-    my $start_year = -1;
-    if ($q->param("start") =~ /^(\d{4})-\d{2}-\d{2}$/) {
-        $start_year = $1;
-        $q->param("year", $start_year);
-        $q->param("month", "x");
-        $q->param("yt", "G");
+if ($cfg eq "fc") {
+    foreach my $param (qw(start end)) {
+        form("Please specify required parameter '$param'")
+            unless defined $q->param($param);
+        form("Parameter '$param' must match format YYYY-MM-DD")
+            unless $q->param($param) =~ /^\d{4}-\d{2}-\d{2}$/;
     }
-    if ($q->param("end") =~ /^(\d{4})-\d{2}-\d{2}$/) {
-        my $y2 = $1;
-        if ($y2 ne $start_year) {
-            $q->param("ny", 2);
-        }
+    my($sy,$sm,$sd) = split(/-/, $q->param("start"), 3);
+    my($ey,$em,$ed) = split(/-/, $q->param("end"), 3);
+    $q->param("year", $sy);
+    $q->param("month", "x");
+    $q->param("yt", "G");
+    if ($ey ne $sy) {
+        $q->param("ny", 2);
     }
 }
 
