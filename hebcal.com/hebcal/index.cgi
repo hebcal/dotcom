@@ -1600,13 +1600,11 @@ div.pbba { page-break-before: always }
   border-color:#FFF;
   color:#999;
 }
-.fc-event.dafyomi {
+.fc-event.dafyomi,
+.fc-event.dafyomi a {
   background-color:#FFF;
   border-color:#FFF;
   color:#08c;
-}
-.fc-event.dafyomi a {
-    color: #0088cc;
 }
 .fc-event.dafyomi a:hover,
 .fc-event.dafyomi a:focus {
@@ -1622,7 +1620,8 @@ div.pbba { page-break-before: always }
   border-color:#3a87ad;
   color:#FFF;
 }
-.fc-event.holiday.yomtov {
+.fc-event.holiday.yomtov,
+.fc-event.holiday.yomtov a {
   background-color:#ffd446;
   border-color:#ffd446;
   color:#333;
