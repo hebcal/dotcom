@@ -867,7 +867,9 @@ the readings for the third, fourth, and fifth days are moved ahead.
 </festival>
 <festival id="Sukkot Shabbat Chol ha-Moed" hebrew="סוּכּוֹת שַׁבָּת חֹל הַמוֹעד" yomtov="0">
  <about href="http://www.jewfaq.org/holiday5.htm">
- Feast of Tabernacles
+The maftir changes depending on what day of Chol ha-Moed Shabbat falls.
+If Shabbat falls on the first day of Chol ha-Moed, the maftir is Num. 29:17-22;
+the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  </about>
  <kriyah>
   <torah href="http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/shabbat_sukkot.shtml"/>
