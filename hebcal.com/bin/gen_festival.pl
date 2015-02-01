@@ -445,7 +445,7 @@ sub table_row_one_year_only {
     print $fh "<td>";
     print $fh table_cell_observed($f, $evt, $show_year)
         if defined $evt;
-    print $fh "</td>\n<td>$short_descr</td>\n";
+    print $fh qq{</td>\n<td class="hidden-xs">$short_descr</td>\n};
     print $fh "</tr>\n";
 }
 
@@ -454,14 +454,14 @@ sub table_header_one_year_only {
     my $col2width = $show_year ? 148 : 112;
     print $fh <<EOHTML;
 <table class="table table-striped table-condensed">
-<col style="width:180px"><col style="width:${col2width}px"><col>
+<col style="width:180px"><col style="width:${col2width}px"><col class="hidden-xs">
 <tbody>
 EOHTML
 ;
 
     print $fh "<tr><th>Holiday</th>";
     print $fh "<th>Dates</th>";
-    print $fh "<th>Description</th>";
+    print $fh qq{<th class="hidden-xs">Description</th>};
     print $fh "</tr>\n";
 }
 
