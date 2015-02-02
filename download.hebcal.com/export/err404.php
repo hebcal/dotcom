@@ -110,10 +110,10 @@ header("HTTP/1.1 404 Not Found");
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" id="logo" title="Hebcal Jewish Calendar" href="/">Hebcal</a>
+      <a class="navbar-brand" id="logo" title="Hebcal Jewish Calendar" href="http://www.hebcal.com/">Hebcal</a>
     </div>
     <div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav"><li><a href="/holidays/" title="Jewish Holidays">Holidays</a></li><li><a href="/converter/" title="Hebrew Date Converter">Date Converter</a></li><li><a href="/shabbat/" title="Shabbat Times">Shabbat</a></li><li><a href="/sedrot/" title="Torah Readings">Torah</a></li><li><a href="http://www.hebcal.com/home/about" title="About">About</a></li><li><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul>
+    <ul class="nav navbar-nav"><li><a href="http://www.hebcal.com/holidays/" title="Jewish Holidays">Holidays</a></li><li><a href="http://www.hebcal.com/converter/" title="Hebrew Date Converter">Date Converter</a></li><li><a href="http://www.hebcal.com/shabbat/" title="Shabbat Times">Shabbat</a></li><li><a href="http://www.hebcal.com/sedrot/" title="Torah Readings">Torah</a></li><li><a href="http://www.hebcal.com/home/about" title="About">About</a></li><li><a href="http://www.hebcal.com/home/help" title="Help">Help</a></li></ul>
     <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
      <input name="s" id="s" type="text" class="form-control" placeholder="Search">
     </form>
