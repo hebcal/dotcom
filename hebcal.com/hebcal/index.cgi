@@ -123,13 +123,10 @@ push(@benchmarks, Benchmark->new);
 # decide whether this is a results page or a blank form
 form("") unless $q->param("v");
 
-if (defined $q->param("year") && $q->param("year") eq "now" &&
-    defined $q->param("month") &&
-    (($q->param("month") eq "now") || ($q->param("month") eq "x")))
-{
+if (defined $q->param("year") && $q->param("year") eq "now") {
     $q->param("year", $this_year);
     $q->param("month", $this_mon)
-        if $q->param("month") eq "now";
+        if defined $q->param("month") && $q->param("month") eq "now";
 
     my $end_day = Date::Calc::Days_in_Month($this_year, $this_mon);
     my $end_of_month =
