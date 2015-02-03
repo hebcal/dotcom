@@ -51,7 +51,7 @@ use HebcalGPL;
 
 our $eval_use_DBI;
 my $eval_use_DateTime;
-my $eval_use_JSON;
+our $eval_use_JSON;
 
 if ($^V && $^V ge v5.8.1) {
     binmode(STDOUT, ":utf8");
@@ -508,6 +508,7 @@ sub invoke_hebcal
 
     my $hccache;
     my $hccache_file = get_invoke_hebcal_cache($cmd);
+    my $hccache_tmpfile = "$hccache_file.$$";
 
     my @events;
     if (! defined $hccache_file) {
@@ -516,7 +517,7 @@ sub invoke_hebcal
 	# will read data from cachefile, not pipe
     } else {
 	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
-	$hccache = open(HCCACHE,">$hccache_file.$$");
+	$hccache = open(HCCACHE,">$hccache_tmpfile");
     }
 
     my $prev = '';
@@ -561,9 +562,16 @@ sub invoke_hebcal
                 ]);
     }
     close(HEBCAL);
+
     if ($hccache) {
-	close(HCCACHE);
-	rename("$hccache_file.$$", $hccache_file);
+        close(HCCACHE);
+        my $fsize = (stat($hccache_tmpfile))[7];
+        if ($fsize) {
+            rename($hccache_tmpfile, $hccache_file);
+        } else {
+            warn "Ignoring empty cachefile $hccache_tmpfile";
+            unlink($hccache_tmpfile);
+        }
     }
 
     @events;
