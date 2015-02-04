@@ -346,6 +346,7 @@ sub display_rss
 
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
+    my $lang = defined $q->param("lg") && index($q->param("lg"), "h") > -1 ? "he" : "en-us";
     my $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
     out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
@@ -355,14 +356,14 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 <link>$url&amp;$utm_param</link>
 <atom:link href="$url&amp;cfg=r" rel="self" type="application/rss+xml" />
 <description>Weekly Shabbat candle lighting times for $city_descr</description>
-<language>en-us</language>
+<language>$lang</language>
 <copyright>Copyright (c) $this_year Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$lastBuildDate</lastBuildDate>
 <!-- $cmd_pretty -->
 });
 
     foreach my $item (@{$items}) {
-        my $subj = $item->{'subj'};
+        my $subj = $lang eq "he" ? $item->{'hebrew'} : $item->{'subj'};
         if (defined $item->{'time'}) {
             $subj .= ": " . $item->{'time'};
         }
