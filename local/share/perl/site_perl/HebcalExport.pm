@@ -584,7 +584,10 @@ sub vcalendar_write_contents {
     my $dbh = DBI->connect( "dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE", "", "" );
     my $sth;
     if ( defined $dbh ) {
-        $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+        my $v = $q->param("i");
+        my $israel = ((defined $v) && ($v ne "off") && ($v ne "0") && ($v ne "")) ? 1 : 0;
+        my $table = $israel ? "leyning_israel" : "leyning";
+        $sth = $dbh->prepare("SELECT num,reading FROM $table WHERE dt = ?");
         if ( !defined $sth ) {
             $dbh = undef;
         }

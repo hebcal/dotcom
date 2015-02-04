@@ -399,7 +399,8 @@ sub json_events
 {
     my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
-    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"},0,1);
+    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"},0,
+        1, param_true("i"));
 
     print STDOUT $q->header(-type => $content_type,
                             -charset => "UTF-8",

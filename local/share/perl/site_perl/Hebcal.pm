@@ -762,7 +762,7 @@ sub event_to_dict {
 
 sub events_to_dict
 {
-    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz,$include_leyning) = @_;
+    my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz,$include_leyning,$israel) = @_;
 
     my $url = "http://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
@@ -783,7 +783,8 @@ sub events_to_dict
         # don't raise error if we can't open DB
         $dbh = DBI->connect("dbi:SQLite:dbname=$LUACH_SQLITE_FILE", "", "");
         if (defined $dbh) {
-            $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
+            my $table = $israel ? "leyning_israel" : "leyning";
+            $sth = $dbh->prepare("SELECT num,reading FROM $table WHERE dt = ?");
             if (!defined $sth) {
                 $dbh = undef;
             }
