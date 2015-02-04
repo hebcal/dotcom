@@ -493,7 +493,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 ';
 
     my $download_button_diaspora = download_torah_button("Diaspora", "index.xml");
-    my $download_button_israel = download_torah_button("Israel", "israel.xml");
+    my $download_button_israel = download_torah_button("Israel", "israel.xml", "israel-he.xml");
 
     print OUT1 <<EOHTML;
 <div class="btn-toolbar">
@@ -655,16 +655,23 @@ EOHTML
 }
 
 sub download_torah_button {
-    my($where,$rss_href) = @_;
+    my($where,$rss_href,$rss_href2) = @_;
 
     my $filename = "torah-readings-" . lc($where);
     my $html = action_button_download_html("Download for $where");
+    my $feed_title = "Parashat ha-Shavua RSS feed";
+    my $rss_html2 = "";
+    if ($rss_href2) {
+        $rss_html2 = qq{  <li><a href="$rss_href2">$feed_title (Hebrew)</a></li>};
+        $feed_title .= " (Translit.)";
+    }
     $html .= <<EOHTML;
   <li><a class="download" id="quick-ical-$filename" href="webcal://download.hebcal.com/ical/$filename.ics">iPhone, iPad, Mac OS X</a></li>
   <li><a class="download" id="quick-gcal-$filename" href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F$filename.ics">Google Calendar</a></li>
   <li><a class="download" id="quick-csv-$filename" href="http://download.hebcal.com/ical/$filename.csv" download="$filename.csv">Microsoft Outlook CSV</a>
   <li class="divider"></li>
-  <li><a href="$rss_href">Parashat ha-Shavua RSS feed</a></li>
+  <li><a href="$rss_href">$feed_title</a></li>
+$rss_html2
  </ul>
 </div><!-- .btn-group -->
 EOHTML

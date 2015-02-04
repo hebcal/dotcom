@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2015  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -33,12 +33,11 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ########################################################################
 
-require 5.008_001;
-
 use lib "/home/hebcal/local/share/perl";
 use lib "/home/hebcal/local/share/perl/site_perl";
 
 use strict;
+use utf8;
 use open ":utf8";
 use Hebcal ();
 use Date::Calc ();
@@ -70,20 +69,12 @@ if ($opt_verbose == 0) {
 # Just log to STDERR
 Log::Log4perl->easy_init($loglevel);
 
-my $dsn = "dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE";
-DEBUG("Connecting to $dsn");
-my $dbh = DBI->connect($dsn, "", "")
-    or LOGDIE("$dsn: $DBI::errstr");
-my $sth = $dbh->prepare("SELECT num,reading FROM leyning WHERE dt = ?");
-
 my($syear,$smonth,$sday) = Hebcal::upcoming_dow(6); # saturday
 DEBUG("Shabbat is $syear-$smonth-$sday");
 
-rss_parasha($syear,$smonth,$sday,"index",1);
-rss_parasha($syear,$smonth,$sday,"israel",0);
-
-undef $sth;
-undef $dbh;
+rss_parasha($syear,$smonth,$sday,"index",1,"en-us");
+rss_parasha($syear,$smonth,$sday,"israel",0,"en-us");
+rss_parasha($syear,$smonth,$sday,"israel-he",0,"he");
 
 my $hdate = `$Hebcal::HEBCAL_BIN -T -x -h | grep -v Omer`;
 chomp($hdate);
@@ -121,12 +112,13 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $hmonth =~ s/[^A-Za-z0-9]+//g;
 
+    my $url = "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_source=rss";
     $outfile = "$Hebcal::WEBDIR/etc/hdate-en.xml";
     DEBUG("Creating $outfile");
     open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print RSS rss_hebdate("en-us",
 	 $hdate,
-	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_source=rss&amp;utm_campaign=rss-hdate-en",
+         "$url&amp;utm_campaign=rss-hdate-en",
 	 $hdate,
 	 $pubDate);
     close(RSS);
@@ -137,7 +129,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print RSS rss_hebdate("he",
 	 $hebrew,
-	 "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;heb=on&amp;utm_source=rss&amp;utm_campaign=rss-hdate-he",
+         "$url&amp;utm_campaign=rss-hdate-he",
 	 $hebrew,
 	 $pubDate);
     close(RSS);
@@ -146,7 +138,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 exit(0);
 
 sub rss_parasha {
-    my($syear,$smonth,$sday,$basename,$diaspora) = @_;
+    my($syear,$smonth,$sday,$basename,$diaspora,$lang) = @_;
 
     my $cmd = "$Hebcal::HEBCAL_BIN -s -h -x";
     $cmd .= " -i" unless $diaspora;
@@ -162,14 +154,21 @@ sub rss_parasha {
 	$description .= " (Israel)";
     }
 
+    if ($lang eq "he") {
+        $title = "פרשת השבוע בישראל";
+    }
+
     DEBUG("Invoking $cmd");
     my @events = Hebcal::invoke_hebcal($cmd, "", 0, $smonth);
     my $parasha = find_parasha_hashavuah(\@events, $sday);
     if ($parasha) {
 	DEBUG("This week's Torah Portion is $parasha");
 	my $outfile = "$Hebcal::WEBDIR/sedrot/$basename.xml";
-	rss_parasha_inner($parasha,$syear,$smonth,$sday,
-			  $outfile,$title,$description);
+        my($dbh,$sth) = open_leyning_db($diaspora);
+        rss_parasha_inner($parasha,$syear,$smonth,$sday,
+                $outfile,$title,$description,$lang,$dbh,$sth);
+        undef $sth;
+        $dbh->disconnect();
     }
 }
 
@@ -183,13 +182,44 @@ sub find_parasha_hashavuah {
     return undef;
 }
 
+sub open_leyning_db {
+    my($diaspora) = @_;
+    my $dsn = "dbi:SQLite:dbname=$Hebcal::LUACH_SQLITE_FILE";
+    DEBUG("Connecting to $dsn");
+    my $dbh = DBI->connect($dsn, "", "")
+        or LOGDIE("$dsn: $DBI::errstr");
+    my $table = $diaspora ? "leyning" : "leyning_israel";
+    my $sth = $dbh->prepare("SELECT num,reading FROM $table WHERE dt = ?");
+    return ($dbh,$sth);
+}
+
 sub rss_parasha_inner {
-    my($parasha,$syear,$smonth,$sday,$outfile,$title,$description) = @_;
-    my $href = Hebcal::get_holiday_anchor($parasha,undef,undef);
+    my($parasha,$syear,$smonth,$sday,$outfile,$title,$description,$lang,$dbh,$sth) = @_;
+    my($href,$hebrew,undef) = Hebcal::get_holiday_anchor($parasha,undef,undef);
     return 0 unless $href;
 
-    my $stime = sprintf("%02d %s %d",
-			$sday, Date::Calc::Month_to_Text($smonth), $syear);
+    my $month_text = Date::Calc::Month_to_Text($smonth);
+
+    if ($lang eq "he") {
+        $parasha = $hebrew;
+        my %Hebrew_MoY = (
+            "January" => "יָנוּאָר",
+            "February" => "פֶבְּרוּאָר",
+            "March" => "מֶרְץ",
+            "April" => "אַפְּרִיל",
+            "May" => "מַאי",
+            "June" => "יוּנִי",
+            "July" => "יוּלִי",
+            "August" => "אוֹגוּסְט",
+            "September" => "סֶפְּטֶמְבֶּר",
+            "October" => "אוֹקְטוֹבֶּר",
+            "November" => "נוֹבֶמְבֶּר",
+            "December" => "דֶּצֶמְבֶּר",
+            );
+        $month_text = $Hebrew_MoY{$month_text};
+    }
+
+    my $stime = sprintf("%02d %s %d", $sday, $month_text, $syear);
 
     my $pubDate = strftime("%a, %d %b %Y %H:%M:%S GMT",
 			   gmtime(time()));
@@ -215,7 +245,7 @@ sub rss_parasha_inner {
 <link>$channel_link</link>
 <atom:link href="${channel_link}index.xml" rel="self" type="application/rss+xml" />
 <description>$description</description>
-<language>en-us</language>
+<language>$lang</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate>$pubDate</lastBuildDate>
 <item>
