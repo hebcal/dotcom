@@ -45,6 +45,7 @@ use POSIX qw(strftime);
 use DBI;
 use Getopt::Long ();
 use Log::Log4perl qw(:easy);
+use File::Basename;
 
 my $HOSTNAME = "www.hebcal.com";
 my $opt_help;
@@ -238,12 +239,13 @@ sub rss_parasha_inner {
     my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
     $memo =~ s/\\n/<\/p>\n<p>/g;
     $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
+    my $basename = basename($outfile);
     print RSS qq{<?xml version="1.0" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title>$title</title>
 <link>$channel_link</link>
-<atom:link href="${channel_link}index.xml" rel="self" type="application/rss+xml" />
+<atom:link href="${channel_link}${basename}" rel="self" type="application/rss+xml" />
 <description>$description</description>
 <language>$lang</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
