@@ -51,7 +51,7 @@ use Hebcal ();
 use HebcalHtml ();
 use HebcalGPL ();
 use Date::Calc ();
-use Getopt::Std ();
+use Getopt::Long ();
 use XML::Simple ();
 use POSIX qw(strftime);
 use Carp;
@@ -60,19 +60,39 @@ use DBI;
 
 $0 =~ s,.*/,,;  # basename
 
-my($usage) = "usage: $0 [-hitf] [-H <year>] [-d d.sqlite3] aliyah.xml festival.xml output-dir
-    -h        Display usage information.
-    -i        Use Israeli sedra scheme (disables triennial functionality!).
-    -t        Dump triennial readings to comma separated values
-    -f        Dump full kriyah readings to comma separated values
-    -H <year> Start with hebrew year <year> (default this year)
-    -d DBFILE Write state to SQLite3 file
+my $usage = "usage: $0 [options] aliyah.xml festival.xml output-dir
+    --help            Display usage information.
+    --[no]html        Enable/Disable HTML pages (default true).
+    --israel          Use Israeli sedra scheme (disables triennial functionality!).
+    --triennial       Dump triennial readings to comma separated values
+    --fullkriyah      Dump full kriyah readings to comma separated values
+    --hebyear YEAR    Start with hebrew year YEAR (default this year)
+    --dbfile DBFILE   Write state to SQLite3 file
 ";
 
-my %opts;
-Getopt::Std::getopts('hH:tfd:i', \%opts) || croak "$usage\n";
-$opts{'h'} && croak "$usage\n";
-(@ARGV == 3) || croak "$usage";
+my $opt_help;
+my $opt_verbose = 0;
+my $opt_html = 1;
+my $opt_israel;
+my $opt_csv_tri;
+my $opt_csv_fk;
+my $opt_hebyear;
+my $opt_dbfile;
+
+if (!Getopt::Long::GetOptions
+    ("help|h" => \$opt_help,
+     "verbose|v+" => \$opt_verbose,
+     "html!" => \$opt_html,
+     "israel|i" => \$opt_israel,
+     "triennial|t" => \$opt_csv_tri,
+     "fullkriyah|f" => \$opt_csv_fk,
+     "hebyear=i" => \$opt_hebyear,
+     "dbfile|D=s" => \$opt_dbfile)) {
+    croak $usage;
+}
+
+$opt_help && croak $usage;
+(@ARGV == 3) || croak $usage;
 
 Log::Log4perl->easy_init($INFO);
 
@@ -91,7 +111,7 @@ my $extra_years = 13;
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
 my $HEBCAL_CMD = "./hebcal";
-$HEBCAL_CMD .= " -i" if $opts{"i"};
+$HEBCAL_CMD .= " -i" if $opt_israel;
 
 my $aliyah_in = shift;
 my $festival_in = shift;
@@ -112,7 +132,7 @@ my $fxml = XML::Simple::XMLin($festival_in);
 my %triennial_aliyot;
 my %triennial_aliyot_alt;
 read_aliyot_metadata($axml, \%triennial_aliyot, \%triennial_aliyot_alt)
-    unless $opts{"i"};
+    unless $opt_israel;
 
 my(@all_inorder,@combined,%combined,%parashah2id);
 foreach my $h (keys %{$axml->{'parsha'}})
@@ -158,8 +178,8 @@ INFO("Finished building internal data structures");
 
 ## load 4 years of hebcal event data
 my($hebrew_year);
-if ($opts{'H'}) {
-    $hebrew_year = $opts{'H'};
+if ($opt_hebyear) {
+    $hebrew_year = $opt_hebyear;
 } else {
     my($yy,$mm,$dd) = Date::Calc::Today();
     $hebrew_year = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
@@ -183,7 +203,7 @@ for (my $i = 0; $i < $max_triennial_cycles; $i++) {
     my($bereshit_idx,$pattern,$events) = get_tri_events($cycle_start_year);
     $triennial_events[$i] = $events;
     $bereshit_indices[$i] = $bereshit_idx;
-    unless ($opts{"i"}) {
+    unless ($opt_israel) {
 	my $cycle_option = calc_variation_options($axml,$pattern);
 	$triennial_readings[$i] = cycle_readings(\%triennial_aliyot,$bereshit_idx,$events,$cycle_option);
 #	$triennial_alt_readings[$i] = cycle_readings(\%triennial_aliyot_alt,$bereshit_idx,$events,$cycle_option);
@@ -206,7 +226,7 @@ foreach my $yr ($special_start_year .. $special_end_year) {
     special_pinchas(\%special, \@ev2);
 }
 
-if ($opts{'t'}) {
+if ($opt_csv_tri) {
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	triennial_csv($axml,
 		      $triennial_events[$i],
@@ -217,27 +237,21 @@ if ($opts{'t'}) {
 }
 
 my $DBH;
-my $SQL_INSERT_INTO_LEYNING =
-  "INSERT INTO leyning (dt, parashah, num, reading) VALUES (?, ?, ?, ?)";
-if ($opts{'d'}) {
-  my $dbfile = $opts{'d'};
-  $DBH = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
-		     { RaiseError => 1, AutoCommit => 0 })
-    or croak $DBI::errstr;
-  my @sql = ("DROP TABLE IF EXISTS leyning",
-	     "CREATE TABLE leyning (dt TEXT NOT NULL, parashah TEXT NOT NULL, num TEXT NOT NULL, reading TEXT NOT NULL)",
-	     "CREATE INDEX leyning_dt ON leyning (dt)",
-	     );
-  foreach my $sql (@sql) {
-    $DBH->do($sql)
-      or croak $DBI::errstr;
-  }
+my $SQL_INSERT_INTO_LEYNING;
+if ($opt_dbfile) {
+    ($DBH,$SQL_INSERT_INTO_LEYNING) = db_open($opt_dbfile);
 }
 
 my %parashah_date_sql;
 my(%parashah_time);
 my($saturday) = get_saturday();
 readings_for_current_year($axml);
+
+if (!$opt_html) {
+    db_cleanup($DBH) if $opt_dbfile;
+    exit(0);
+}
+
 my $past_readings = readings_for_past_years();
 
 my %next_reading;
@@ -280,14 +294,35 @@ foreach my $h (@parashah_list) {
 
 write_index_page($axml);
 
-if ($opts{'d'}) {
-  $DBH->commit;
-  $DBH->disconnect;
-  $DBH = undef;
-}
-
+db_cleanup($DBH) if $opt_dbfile;
 
 exit(0);
+
+sub db_open {
+    my($dbfile) = @_;
+    my $table = $opt_israel ? "leyning_israel" : "leyning";
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "",
+                           { RaiseError => 1, AutoCommit => 0 })
+        or croak $DBI::errstr;
+    my @sql = ("DROP TABLE IF EXISTS $table",
+         "CREATE TABLE $table (dt TEXT NOT NULL, parashah TEXT NOT NULL, num TEXT NOT NULL, reading TEXT NOT NULL)",
+         "CREATE INDEX ${table}_dt ON $table (dt)",
+         );
+    foreach my $sql (@sql) {
+        DEBUG($sql);
+        $dbh->do($sql)
+            or croak $DBI::errstr;
+    }
+    my $sql_insert =
+      "INSERT INTO $table (dt, parashah, num, reading) VALUES (?, ?, ?, ?)";
+    return ($dbh,$sql_insert);
+}
+
+sub db_cleanup {
+    my($dbh) = @_;
+    $dbh->commit;
+    $dbh->disconnect;
+}
 
 sub math_max {
     my ( $a, $b ) = @_;
@@ -1680,7 +1715,7 @@ sub readings_for_current_year
 	my $basename = "fullkriyah-$yr.csv";
 	my $filename = "$outdir/$basename";
 	my $tmpfile = "$outdir/.$basename.$$";
-	if ($opts{"f"}) {
+	if ($opt_csv_fk) {
 	    INFO("readings_for_current_year: $filename");
 	    open(CSV, ">$tmpfile") || croak "$tmpfile: $!\n";
 	    print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
@@ -1695,7 +1730,7 @@ sub readings_for_current_year
 		$parashah_time{$h} = Hebcal::event_to_time($evt)
 		    if $i == 1;	# second year in array
 
-		if ($opts{'f'}) {
+		if ($opt_csv_fk) {
 		    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
 		    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
 		    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
@@ -1703,12 +1738,12 @@ sub readings_for_current_year
 		    csv_extra_newline();
 		    $wrote_csv{$dt} = 1;
 		}
-	    } elsif ($opts{'f'} && ! defined $wrote_csv{$dt}) {
+	    } elsif ($opt_csv_fk && ! defined $wrote_csv{$dt}) {
 		# write out non-sedra (holiday) event to DB and CSV
 		write_holiday_event_to_csv_and_db($evt);
 	    }
 	}
-	if ($opts{"f"}) {
+	if ($opt_csv_fk) {
 	    close(CSV);
 	    rename($tmpfile, $filename) || croak "rename $tmpfile => $filename: $!\n";
 	}

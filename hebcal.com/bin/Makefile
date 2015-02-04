@@ -36,10 +36,17 @@ $(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
 $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 	mkdir -p $(SEDROT)
 	./calc_triennial.pl \
-		-f \
-		-t \
-		-d $(DBDIR)/luach.sqlite3 \
-		 $(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)
+		--fullkriyah \
+		--triennial \
+		--dbfile $(DBDIR)/luach.sqlite3 \
+		$(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)
+	mkdir -p $(SEDROT)-israel
+	./calc_triennial.pl \
+		--israel \
+		--nohtml \
+		--fullkriyah \
+		--dbfile $(DBDIR)/luach.sqlite3 \
+		$(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)-israel
 
 $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)
