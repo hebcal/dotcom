@@ -67,12 +67,8 @@ ul.hebcal-results { list-style-type: none }
   margin-bottom: 80px;
 }
 </style>
-<script type="text/javascript" src="/i/sh-3.0.83/scripts/shCore.js"></script>
-<script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushXml.js"></script>
-<script type="text/javascript" src="/i/sh-3.0.83/scripts/shBrushCss.js"></script>
-<link type="text/css" rel="stylesheet" href="/i/sh-3.0.83/styles/shCoreDefault.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
-<script type="text/javascript">SyntaxHighlighter.all();</script>
 EOD;
 
 echo html_header_bootstrap3("Add weekly Shabbat candle-lighting times to your synagogue website",
@@ -99,9 +95,8 @@ src="//www.hebcal.com/shabbat/?geo=${geo}&amp;${geo_link}&amp;m=${m}&amp;cfg=j&a
 EOHTML;
 $script_tag_double = htmlentities($script_tag);
 ?>
-<pre class="brush:html;auto-links:false">
-<?php echo $script_tag_double ?>
-</pre>
+<pre><code class="html"><?php echo $script_tag_double ?>
+</code></pre>
 
 <p>The result will look like this (<a href="#fonts">customize fonts</a>):</p>
 
@@ -151,8 +146,7 @@ synagogue's web page.</p>
 <tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
 page:</p>
 
-<pre class="brush:css">
-#hebcal {
+<pre><code class="css">#hebcal {
  font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
  font-size: small;
 }
@@ -170,7 +164,7 @@ ul.hebcal-results li {
 .hebcal-results .havdalah { color: green }
 .hebcal-results .parashat { color: black; background: #ff9 }
 .hebcal-results .holiday { display: none }
-</pre>
+</code></pre>
 
 <p>Those fonts and colors are just an example.  <a
 href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
@@ -179,9 +173,11 @@ very powerful and flexible.</p>
 </div><!-- .row -->
 <?php
 $xtra_html = <<<EOD
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
 <script src="/i/hebcal-app-1.2.min.js"></script>
 <script type="text/javascript">
+hljs.initHighlightingOnLoad();
 window['hebcal'].createCityTypeahead(false);
 $('#havdalahInfo').click(function(e){
  e.preventDefault();
