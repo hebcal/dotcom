@@ -1238,6 +1238,7 @@ sub format_aliyah
 
     my($book,$verses) = Hebcal::get_book_and_verses($aliyah, $torah);
     my $sefaria_url = Hebcal::get_sefaria_url($book,$verses);
+    $sefaria_url =~ s/&/&amp;/g;
 
     my $info = $verses;
 
