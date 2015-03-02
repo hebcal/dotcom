@@ -2,7 +2,7 @@
 /***********************************************************************
  * Hebcal homepage
  *
- * Copyright (c) 2014  Michael J. Radwin.
+ * Copyright (c) 2015  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -125,7 +125,10 @@ function format_greg_date_for_erev($hmonth, $hday, $hyear) {
 $jd = gregoriantojd($gm, $gd, $gy);
 $hebdate = jdtojewish($jd);
 list($hmnum, $hd, $hy) = explode("/", $hebdate, 3);
-$purim_month_num = is_leap_year($hy) ? 7 : 6;
+// With PHP 5.5, the functionality changed regarding Adar in a non-leap year.
+// Prior to 5.5, the month was returned as 6.
+// In 5.5 and 5.6, the month is returned as 7.
+$purim_month_num = 7;
 if ($hmnum == 13 && $hd >= 1) {
     $shana_tova = true;		// month 13 == Elul
     $erev_rh = format_greg_date_for_erev(13, 29, $hy);
@@ -297,7 +300,7 @@ if (isset($rosh_chodesh)) {
 
 <div class="row">
 <div class="col-sm-6">
-<h2><i class="glyphicon glyphicon-calendar"></i>
+<h2><span class="glyphicon glyphicon-calendar"></span>
 Holiday Calendar</h2>
 <p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
@@ -322,7 +325,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div><!-- .col-sm-6 -->
 
 <div class="col-sm-6">
-<h2><i class="glyphicon glyphicon-refresh"></i>
+<h2><span class="glyphicon glyphicon-refresh"></span>
 Convert Dates</h2>
 <p>Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 <p><a class="btn btn-default" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter &raquo;</a></p>
