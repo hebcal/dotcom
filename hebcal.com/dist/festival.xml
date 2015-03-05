@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2014  Michael J. Radwin.
+Copyright (c) 2015  Michael J. Radwin.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or
@@ -1164,16 +1164,17 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  of Esther (Megillat Esther).
  </wikipedia>
  <books>
-  <book ASIN="0827600453" author="H. L. Ginsberg">
-  Five Megilloth and Jonah
+  <book ASIN="0827606990" author="Adele Berlin">
+  JPS Commentary on Esther
   </book>
-  <book ASIN="1580130909">
+  <book ASIN="082760890X" author="H. L. Ginsberg">
+  Five Megilloth and Jonah
   </book>
   <book ASIN="0827607881" author="J. T. Waldman">
   Megillat Esther
   </book>
-  <book ASIN="0827606990" author="Adele Berlin">
-  JPS Commentary on Esther
+  <book ASIN="0823422232" author="Eric A. Kimmel">
+    The Story of Esther: A Purim Tale
   </book>
  </books>
  <kriyah>
