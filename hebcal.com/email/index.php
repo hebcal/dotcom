@@ -69,9 +69,11 @@ else
 	    }
             if (isset($param["geonameid"])) {
                 $param["geo"] = "geoname";
-	    } elseif (isset($param["city"])) {
-		$param["geo"] = "city";
-	    }
+            } elseif (isset($param["zip"])) {
+                $param["geo"] = "zip";
+            } elseif (isset($param["city"])) {
+                $param["geo"] = "city";
+            }
 	    $is_update = true;
 	}
     }
@@ -79,7 +81,6 @@ else
     if (isset($param["unsubscribe"]) && $param["unsubscribe"]) {
 	$default_unsubscribe = true;
     }
-
 
     form($param);
 }
