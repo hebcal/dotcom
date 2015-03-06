@@ -307,9 +307,9 @@ sub get_link_and_guid {
     my $utm_param;
     if (defined $cfg) {
         if ($cfg eq "r") {
-            $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
+            $utm_param = "utm_source=shabbat1c&amp;utm_medium=rss";
         } else {
-            $utm_param = "utm_source=shabbat1c&amp;utm_campaign=shabbat1c";
+            $utm_param = "utm_source=shabbat1c&amp;utm_medium=api";
         }
     }
 
@@ -347,7 +347,7 @@ sub display_rss
     my $lastBuildDate = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 
     my $lang = defined $q->param("lg") && index($q->param("lg"), "h") > -1 ? "he" : "en-us";
-    my $utm_param = "utm_source=rss&amp;utm_campaign=shabbat1c";
+    my $utm_param = "utm_source=shabbat1c&amp;utm_medium=rss";
     out_html($cfg,
 qq{<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -485,7 +485,7 @@ ul.hebcal-results{list-style-type:none}
     if ($cfg ne "x") {
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
-    my $url = url_html(self_url() . "&utm_source=shabbat1c&utm_campaign=shabbat1c");
+    my $url = url_html(self_url() . "&utm_source=shabbat1c&utm_medium=js");
     if ($cfg eq "widget")
     {
         $url = "javascript:widget.openURL('" . $url . "');";

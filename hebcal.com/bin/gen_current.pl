@@ -113,13 +113,13 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $hmonth =~ s/[^A-Za-z0-9]+//g;
 
-    my $url = "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_source=rss";
+    my $url = "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_medium=rss";
     $outfile = "$Hebcal::WEBDIR/etc/hdate-en.xml";
     DEBUG("Creating $outfile");
     open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print RSS rss_hebdate("en-us",
 	 $hdate,
-         "$url&amp;utm_campaign=rss-hdate-en",
+         "$url&amp;utm_source=rss-hdate-en",
 	 $hdate,
 	 $pubDate);
     close(RSS);
@@ -130,7 +130,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
     open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
     print RSS rss_hebdate("he",
 	 $hebrew,
-         "$url&amp;utm_campaign=rss-hdate-he",
+         "$url&amp;utm_source=rss-hdate-he",
 	 $hebrew,
 	 $pubDate);
     close(RSS);
@@ -234,7 +234,7 @@ sub rss_parasha_inner {
     my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
     DEBUG("Creating $outfile");
     open(RSS,">$outfile.$$") || LOGDIE "$outfile: $!";
-    my $link = "http://$HOSTNAME$href?utm_source=rss&amp;utm_campaign=rss-parasha";
+    my $link = "http://$HOSTNAME$href?utm_medium=rss&amp;utm_source=rss-parasha";
     my $channel_link = "http://$HOSTNAME/sedrot/";
     my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
     $memo =~ s/\\n/<\/p>\n<p>/g;
