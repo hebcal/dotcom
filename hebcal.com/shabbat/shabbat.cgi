@@ -309,7 +309,7 @@ sub get_link_and_guid {
         if ($cfg eq "r") {
             $utm_param = "utm_source=shabbat1c&amp;utm_medium=rss";
         } else {
-            $utm_param = "utm_source=shabbat1c&amp;utm_medium=api";
+            $utm_param = "utm_source=shabbat1c&amp;utm_medium=js";
         }
     }
 
