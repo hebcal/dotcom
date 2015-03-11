@@ -746,13 +746,16 @@ sub event_to_dict {
     }
 
     if (defined $dbh && $item{"class"} eq "parashat") {
-        my($torah_reading,$special_maftir,$haftarah_reading) =
+        my $leyning0 =
             torah_calendar_memo_inner($dbh, $sth, $year, $mon, $mday);
-        if ($torah_reading) {
+        if ($leyning0 && $leyning0->{'T'}) {
             my $leyning = {};
-            $leyning->{torah} = $torah_reading if $torah_reading;
-            $leyning->{maftir} = $special_maftir if $special_maftir;
-            $leyning->{haftarah} = $haftarah_reading if $haftarah_reading;
+            $leyning->{torah} = $leyning0->{'T'} if $leyning0->{'T'};
+            $leyning->{maftir} = $leyning0->{'M'} if $leyning0->{'M'} && $leyning0->{'M'} =~ / \| /;
+            $leyning->{haftarah} = $leyning0->{'H'} if $leyning0->{'H'};
+            while(my($k,$v) = each(%{$leyning0})) {
+                $leyning->{$k} = $v if $k =~ /^\d$/;
+            }
             $item{"leyning"} = $leyning;
         }
     }
@@ -2052,37 +2055,29 @@ sub torah_calendar_memo_inner {
     my($dbh,$sth,$gy,$gm,$gd) = @_;
     my $date_sql = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
     my $rv = $sth->execute($date_sql) or die $dbh->errstr;
-    my $torah_reading;
-    my $haftarah_reading;
-    my $special_maftir;
+    my $result = {};
     while(my($aliyah_num,$aliyah_reading) = $sth->fetchrow_array) {
-	if ($aliyah_num eq "T") {
-	    $torah_reading = $aliyah_reading;
-	} elsif ($aliyah_num eq "M" && $aliyah_reading =~ / \| /) {
-	    $special_maftir = $aliyah_reading;
-	} elsif ($aliyah_num eq "H") {
-	    $haftarah_reading = $aliyah_reading;
-	}
+        $result->{$aliyah_num} = $aliyah_reading;
     }
     $sth->finish;
-    return ($torah_reading,$special_maftir,$haftarah_reading);
+    return $result;
 }
 
 sub torah_calendar_memo {
     my($dbh,$sth,$gy,$gm,$gd) = @_;
-    my($torah_reading,$special_maftir,$haftarah_reading) =
-        torah_calendar_memo_inner($dbh,$sth,$gy,$gm,$gd);
+    my $leyning = torah_calendar_memo_inner($dbh,$sth,$gy,$gm,$gd);
     my $memo;
-    if ($torah_reading) {
-	$memo = "Torah: $torah_reading";
-	if ($special_maftir) {
-	    $memo .= "\\nMaftir: ";
-	    $memo .= $special_maftir;
-	}
-	if ($haftarah_reading) {
-	    $memo .= "\\nHaftarah: ";
-	    $memo .= $haftarah_reading;
-	}
+    if ($leyning && $leyning->{'T'}) {
+        $memo = "Torah: " . $leyning->{'T'};
+        if ($leyning->{'8'}) {
+            $memo .= "\\n8th aliyah: " . $leyning->{'8'};
+        }
+        if ($leyning->{'M'} && $leyning->{'M'} =~ / \| /) {
+            $memo .= "\\nMaftir: " . $leyning->{'M'};
+        }
+        if ($leyning->{'H'}) {
+            $memo .= "\\nHaftarah: " . $leyning->{'H'};
+        }
     }
     return $memo;
 }
