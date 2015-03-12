@@ -138,8 +138,8 @@ if ($hmnum == 13 && $hd >= 1) {
 } elseif ($hmnum == $purim_month_num && $hd >= 2 && $hd <= 13) {
     // for two weeks before Purim, show greeting
     $erev_purim = format_greg_date_for_erev($purim_month_num, 13, $hy);
-} elseif (($hmnum == $purim_month_num && $hd >= 24) || ($hmnum == 8 && $hd <= 14)) {
-    // for three weeks before Pesach, show greeting
+} elseif (($hmnum == $purim_month_num && $hd >= 17) || ($hmnum == 8 && $hd <= 14)) {
+    // for four weeks before Pesach, show greeting
     $erev_pesach = format_greg_date_for_erev(8, 14, $hy);
 } elseif ($hmnum == 3 && $hd >= 3 && $hd <= 24) {
     // for three weeks before Chanukah, show greeting
