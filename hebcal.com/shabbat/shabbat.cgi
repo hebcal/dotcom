@@ -130,13 +130,13 @@ sub out_html {
     my($cfg,@args) = @_;
 
     if (defined $cfg && $cfg eq 'j') {
-        print STDOUT "_w(\"";
+        print STDOUT "\"";
         foreach (@args) {
             s/\"/\\\"/g;
             s/\n/\\n/g;
             print STDOUT;
         }
-        print STDOUT "\");\n";
+        print STDOUT "\",";
     }
     else {
         foreach (@args) {
@@ -465,7 +465,7 @@ ul.hebcal-results{list-style-type:none}
         print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
     }
 
-    print "(function(){function _w(s){document.write(s);}\n"
+    print "(function(){document.write(["
         if $cfg eq "j";
 
     my $loc_class = '';
@@ -508,7 +508,7 @@ ul.hebcal-results{list-style-type:none}
 
     timestamp_comment();
 
-    print "})();\n"
+    print "''].join(''));})();\n"
         if $cfg eq "j";
 }
 
