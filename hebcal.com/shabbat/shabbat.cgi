@@ -130,7 +130,7 @@ sub out_html {
     my($cfg,@args) = @_;
 
     if (defined $cfg && $cfg eq 'j') {
-        print STDOUT "document.write(\"";
+        print STDOUT "_w(\"";
         foreach (@args) {
             s/\"/\\\"/g;
             s/\n/\\n/g;
@@ -465,6 +465,9 @@ ul.hebcal-results{list-style-type:none}
         print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
     }
 
+    print "(function(){function _w(s){document.write(s);}\n"
+        if $cfg eq "j";
+
     my $loc_class = '';
     if ($cconfig{"geo"} eq "zip") {
         $loc_class = $cconfig{"zip"};
@@ -504,6 +507,9 @@ ul.hebcal-results{list-style-type:none}
     }
 
     timestamp_comment();
+
+    print "})();\n"
+        if $cfg eq "j";
 }
 
 sub display_html
