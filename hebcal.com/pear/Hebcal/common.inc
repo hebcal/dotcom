@@ -523,7 +523,7 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
         $self = substr($self, 0, $pos);
     }
     $menu = html_menu_bootstrap3($self);
-    $logoImage = '<img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal">';
+    $logoImage = '<img src="/i/hebcal-logo-1.2.svg" width="77" height="21" alt="Hebcal">';
     $logoIdClassTitle = 'class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"';
     if ($self == "/") {
         $logo = '<span ' . $logoIdClassTitle . '>' . $logoImage . '</span>';

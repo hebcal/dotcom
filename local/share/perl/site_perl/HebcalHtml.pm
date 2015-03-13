@@ -448,7 +448,7 @@ sub header_bootstrap3 {
         ? "<!-- http://fonts.googleapis.com/earlyaccess/alefhebrew.css -->\n<style type=\"text/css\">\n$alefhebrew\n</style>\n"
         : "";
 
-    my $logo = '<a href="/" class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.1.svg" width="77" height="21" alt="Hebcal"></a>';
+    my $logo = '<a href="/" class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.2.svg" width="77" height="21" alt="Hebcal"></a>';
     my $str = <<EOHTML;
 <!DOCTYPE html>
 <html><head>
