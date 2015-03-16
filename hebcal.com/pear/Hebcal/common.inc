@@ -3,7 +3,7 @@
 /***********************************************************************
  * Hebcal PHP helper functions
  *
- * Copyright (c) 2014  Michael J. Radwin.
+ * Copyright (c) 2015  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -635,7 +635,7 @@ function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
     $html = <<<EOD
 </div><!-- #content -->
 
-<footer role="contentinfo" class="hebcal-footer">
+<footer role="contentinfo" class="hebcal-footer hidden-print">
 <div class="row">
 <div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
