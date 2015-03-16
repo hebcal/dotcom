@@ -520,7 +520,7 @@ EOHTML
     my $pdf_heb_year = $current_year || $HEB_YR;
 
     $str .= <<EOHTML;
-<div class="btn-toolbar">
+<div class="btn-toolbar hidden-print">
   <a class="btn btn-default btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><span class="glyphicon glyphicon-print"></span> Print</a>
   <a class="btn btn-default btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
   <a class="btn btn-default btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><span class="glyphicon glyphicon-pencil"></span> Customize</a>
@@ -599,7 +599,7 @@ EOHTML
     print OUT3 get_index_body_preamble($page_title, 1, undef, undef, "col-sm-8");
     print OUT3 <<EOHTML;
 </div><!-- .col-sm-8 -->
-<div class="col-sm-4">
+<div class="col-sm-4 hidden-print">
 <h5>Advertisement</h5>
 $pagead_300x250
 </div><!-- .col-sm-4 -->
@@ -642,7 +642,7 @@ sub pagination_greg_url {
 sub pagination_greg {
     my($current_year) = @_;
 
-    my $s = qq{<nav><ul class="pagination pagination-sm" style="margin: 12px 0 0 0">\n};
+    my $s = qq{<nav class="hidden-print"><ul class="pagination pagination-sm" style="margin: 12px 0 0 0">\n};
 
     my $prev_year = $FIRST_GREG_YR - 1;
     $s .= qq{<li><a title="$prev_year" aria-label="Previous" href="} . pagination_greg_url($prev_year) . qq{"><span aria-hidden="true">&laquo;</span></a></li>\n};
@@ -691,7 +691,7 @@ EOHTML
     print $fh get_index_body_preamble($page_title, 0, "G", $greg_year, "col-sm-8");
     print $fh <<EOHTML;
 </div><!-- .col-sm-8 -->
-<div class="col-sm-4">
+<div class="col-sm-4 hidden-print">
 <h5>Advertisement</h5>
 $pagead_300x250
 </div><!-- .col-sm-4 -->
@@ -762,7 +762,7 @@ EOHTML
     print $fh get_index_body_preamble($page_title, 0, "H", $heb_year, "col-sm-8");
     print $fh <<EOHTML;
 </div><!-- .col-sm-8 -->
-<div class="col-sm-4">
+<div class="col-sm-4 hidden-print">
 <h5>Advertisement</h5>
 $pagead_300x250
 </div><!-- .col-sm-4 -->
@@ -1050,7 +1050,7 @@ EOHTML
     my $observed = observed_event_list($f);
     my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
-	print OUT2 qq{<nav><ul class="pagination">\n};
+	print OUT2 qq{<nav class="hidden-print"><ul class="pagination">\n};
 	foreach my $inner (@{$nav_inner}) {
 	    my($slug,$part) = @{$inner};
 	    print OUT2 qq{\t<li><a href="#$slug">$part</a></li>\n};
@@ -1188,7 +1188,7 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
     print OUT2 <<EOHTML;
 $pager
 </div><!-- .col-sm-10 -->
-<div class="col-sm-2">
+<div class="col-sm-2 hidden-print">
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->

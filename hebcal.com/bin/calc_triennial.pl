@@ -844,7 +844,7 @@ sub write_drash_links {
     }
     return 0 unless $count;
 
-    print OUT2 qq{<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
+    print OUT2 qq{<div class="hidden-print">\n<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
 
     my %site_name = (
         "ou" => "Orthodox Union",
@@ -860,7 +860,7 @@ sub write_drash_links {
         }
     }
 
-    print OUT2 qq{</ul>\n};
+    print OUT2 qq{</ul>\n</div><!-- .hidden-print -->\n};
 
     return $count;
 }
@@ -936,7 +936,7 @@ sub write_sedra_page
         $url =~ s/&/&amp;/g;
         #my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
         #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
-        $ort_tikkun = qq{<a class="outbound btn btn-default btn-sm" rel="nofollow" href="$url"><i class="glyphicon glyphicon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
+        $ort_tikkun = qq{<a class="outbound btn btn-default btn-sm hidden-print" rel="nofollow" href="$url"><i class="glyphicon glyphicon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
     }
 
     my($torah_book,undef) = split(/ /, $torah, 2);
@@ -944,7 +944,7 @@ sub write_sedra_page
     print OUT2 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<ol class="breadcrumb hidden-xs">
+<ol class="breadcrumb hidden-xs hidden-print">
   <li><a href="/sedrot/">Torah Readings</a></li>
   <li><a href="/sedrot/#$torah_book">$torah_book</a></li>
   <li class="active">$h</li>

@@ -346,7 +346,7 @@ function form($head, $message, $help = "") {
 	$action = substr($action, 0, $pos);
     }
 ?>
-<div id="converter-form">
+<div id="converter-form" class="hidden-print">
 <div class="row">
 <div class="col-sm-6">
 <h5>Convert from Gregorian to Hebrew date</h5>
@@ -398,8 +398,8 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-co
 
 function my_footer() {
 ?>
-<hr>
-<div class="row">
+<hr class="hidden-print">
+<div class="row hidden-print">
 <div class="col-sm-6">
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
@@ -422,7 +422,7 @@ Hebrew feed &raquo;</a></p>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
 </div><!-- .col-sm-9 -->
-<div class="col-sm-3" role="complementary">
+<div class="col-sm-3 hidden-print" role="complementary">
 <h5>Advertisement</h5>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- responsive textonly -->

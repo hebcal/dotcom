@@ -419,7 +419,7 @@ EOHTML
     if (scalar(@events) > 0) {
         $q->param("v", "yahrzeit");
 
-        print qq{<div class="btn-toolbar">\n};
+        print qq{<div class="btn-toolbar hidden-print">\n};
         print HebcalHtml::download_html_modal_button();
         print qq{<a class="btn btn-default" href="#form"><i class="glyphicon glyphicon-cog"></i> Enter more dates and names</a>\n};
         print qq{</div><!-- .btn-toolbar -->\n};
@@ -487,7 +487,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
         $xtra_html = HebcalHtml::download_html_modal($q, $filename, \@events, $title, 1, 1);
     }
 
-    print qq{<h3 id="form">Enter more dates and names</h3>\n};
+    print qq{<h3 id="form" class="hidden-print">Enter more dates and names</h3>\n};
 
     form(0,$xtra_html);
 }
@@ -521,7 +521,8 @@ sub form
 {
     my($head,$xtra_html) = @_;
 
-    print qq{<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
+    print qq{<div class="hidden-print">
+<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>20 October 1994 (after
 sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</strong>&apos;s
@@ -529,7 +530,8 @@ yahrzeit.</p>
 <p>If you know the Hebrew but not the Gregorian date, use the <a
 href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
-<form class="yahrzeit-form" method="post" action="/yahrzeit/">
+</div><!-- .hidden-print -->
+<form class="yahrzeit-form hidden-print" method="post" action="/yahrzeit/">
 };
 
     for (my $i = 1; $i <= $count; $i++) {
@@ -564,7 +566,7 @@ and then come back to this page.</p>
     qq{<input type="submit" class=\"btn btn-primary\" value="Create Calendar"></form>\n};
 
     print qq{
-<p>Would you like to use this calendar for your website? See
+<p class="hidden-print">Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
 </div><!-- .col-sm-12 -->
