@@ -1305,7 +1305,7 @@ sub nav_pagination {
             ) ? " nofollow" : "";
 
     my $nav_pagination = <<EOHTML;
-<nav class="text-center">
+<nav class="text-center hidden-print">
 <ul class="pagination">
 <li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
@@ -1461,7 +1461,7 @@ sub results_page_toolbar {
     my($filename) = @_;
 
     my $html = <<EOHTML;
-<div class="btn-toolbar">
+<div class="btn-toolbar hidden-print">
   <div class="btn-group" data-toggle="buttons">
    <label class="btn btn-default btn-sm active">
     <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
@@ -1687,7 +1687,7 @@ EOHTML
     print "</div><!-- .col-sm-8 -->\n";
 
     my $header_ad = <<EOHTML;
-<div class="col-sm-4">
+<div class="col-sm-4 hidden-print">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- banner-320x100 -->
