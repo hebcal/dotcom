@@ -974,7 +974,7 @@ sub breadcrumb {
     }
     my $nav_anchor = Hebcal::make_anchor($nav_parent);
     my $html =<<EOHTML
-<ol class="breadcrumb hidden-xs">
+<ol class="breadcrumb hidden-xs hidden-print">
   <li><a href="/holidays/">Holidays</a></li>
   <li><a href="/holidays/#$nav_anchor">$nav_parent</a></li>
   <li class="active">$f</li>
