@@ -841,13 +841,6 @@ sub csv_display
     HebcalExport::csv_write_contents($q, \@events, $euro);
 }
 
-sub my_radio_group {
-    my($q,@p) = @_;
-    my $s = $q->radio_group(@p);
-    $s =~ s/<input([^>]+)>([^<]+)/<div class="radio"><label><input$1>$2<\/label><\/div>/g;
-    $s;
-}
-
 sub timestamp_comment {
     my $tend = Benchmark->new;
     my $tdiff = timediff($tend, $benchmarks[0]);
@@ -977,7 +970,7 @@ EOHTML
         print $message, "\n";
     }
 
-    my $year_type_radio = my_radio_group($q,
+    my $year_type_radio = HebcalHtml::radio_group($q,
         -name => "yt",
         -values => ["G", "H"],
         -default => "G",
@@ -986,7 +979,7 @@ EOHTML
                     "H" => "Hebrew Year"}
         );
 
-    my $diaspora_israel_radio = my_radio_group($q,
+    my $diaspora_israel_radio = HebcalHtml::radio_group($q,
         -name => "i",
         -values => ["off", "on"],
         -default => "off",

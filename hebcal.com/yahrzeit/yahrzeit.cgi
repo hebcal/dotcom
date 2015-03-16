@@ -135,7 +135,7 @@ foreach my $key (1 .. $count)
         my $gy = $q->param("y$key");
 
         # after sunset?
-        if ($q->param("s$key"))
+        if (param_true("s$key"))
         {
             ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,1);
         }
@@ -379,6 +379,20 @@ sub results_page {
 
     my $xtra_head = <<EOHTML;
 <meta name="keywords" content="yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish">
+<style type="text/css">
+\@media (min-width: 768px) {
+ .form-inline .radio label {
+    padding-left: 8px;
+ }
+}
+div.yahrzeit-row {
+  border-bottom:1px solid #dddddd;
+  padding:4px;
+}
+.yahrzeit-form > div.yahrzeit-row:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+</style>
 EOHTML
 ;
 
@@ -515,7 +529,7 @@ yahrzeit.</p>
 <p>If you know the Hebrew but not the Gregorian date, use the <a
 href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
-<form method="post" action="/yahrzeit/">
+<form class="yahrzeit-form" method="post" action="/yahrzeit/">
 };
 
     for (my $i = 1; $i <= $count; $i++) {
@@ -565,12 +579,7 @@ instructions</a>.</p>
 sub show_row {
     my($q,$i,$months) = @_;
 
-    my $style = "border-bottom:1px solid #dddddd;padding:4px";
-    if (($i - 1) % 2 == 0) {
-        $style .= ";background-color:#f9f9f9";
-    }
-
-    print qq{<div class="form-inline" style="$style">\n},
+    print qq{<div class="form-inline yahrzeit-row">\n},
          $q->popup_menu(-name => "t$i",
                         -class => "form-control",
                         -values => ["Yahrzeit","Birthday","Anniversary"]),
@@ -601,13 +610,19 @@ sub show_row {
          $q->textfield(-name => "n$i",
                        -placeholder => "Name (optional)",
                        -class => "form-control"),
-         qq{<div class="checkbox">\n},
-         qq{<label>},
-         $q->checkbox(-name => "s$i",
-                      -label => " After sunset"),
-         qq{</label>\n},
-         qq{</div><!-- .checkbox -->\n},
+         HebcalHtml::radio_group($q,
+            -name => "s$i",
+            -values => ["off", "on"],
+            -default => "off",
+            -labels => {"off" => " Before sunset",
+                        "on" => " After sunset"}),
          qq{</div><!-- .form-inline -->\n};
+}
+
+sub param_true {
+    my($k) = @_;
+    my $v = $q->param($k);
+    return ((defined $v) && ($v ne "off") && ($v ne "0") && ($v ne "")) ? 1 : 0;
 }
 
 # local variables:

@@ -605,6 +605,13 @@ sub html_entify($)
     $_;
 }
 
+sub radio_group {
+    my($q,@p) = @_;
+    my $s = $q->radio_group(@p);
+    $s =~ s/<input([^>]+)>([^<]+)/<div class="radio"><label><input$1>$2<\/label><\/div>/g;
+    $s;
+}
+
 
 # avoid warnings
 if ($^W && 0)
