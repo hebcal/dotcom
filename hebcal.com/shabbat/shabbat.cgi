@@ -404,8 +404,6 @@ sub display_html_common
     my $tgt = $q->param('tgt') ? $q->param('tgt') : '_top';
 
     foreach my $item (@{$items}) {
-        out_html($cfg,qq{<li class="$item->{'class'}">});
-
         my $anchor = '';
         if (!$cfg)
         {
@@ -414,6 +412,8 @@ sub display_html_common
             $anchor = qq{ id="$anchor"};
         }
 
+        out_html($cfg,qq{<li class="$item->{'class'}"$anchor>});
+
         my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
         if (defined $cfg && $cfg eq "widget") {
             $link = "javascript:widget.openURL('" . $link . "');";
@@ -421,17 +421,15 @@ sub display_html_common
 
         if ($item->{'class'} =~ /^(candles|havdalah)$/)
         {
-            out_html($cfg,qq{<a$anchor></a>})
-                unless $cfg;
-            out_html($cfg,qq{$item->{'subj'}: <strong>$item->{'time'}</strong> on $item->{'date'}});
+            out_html($cfg,qq{$item->{'subj'}: <time datetime="$item->{'dc:date'}"><strong>$item->{'time'}</strong> on $item->{'date'}</time>});
         }
         elsif ($item->{'class'} eq 'holiday')
         {
-            out_html($cfg,qq{<a$anchor target="$tgt" href="$link">$item->{'subj'}</a> occurs on $item->{'date'}});
+            out_html($cfg,qq{<a target="$tgt" href="$link">$item->{'subj'}</a> occurs on <time datetime="$item->{'dc:date'}">$item->{'date'}</time>});
         }
         elsif ($item->{'class'} eq 'parashat')
         {
-            out_html($cfg,qq{This week\'s Torah portion is <a$anchor target="$tgt" href="$link">$item->{'subj'}</a>});
+            out_html($cfg,qq{This week\'s Torah portion is <a target="$tgt" href="$link">$item->{'subj'}</a>});
         }
 
         out_html($cfg,qq{</li>\n});
