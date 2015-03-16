@@ -465,7 +465,7 @@ ul.hebcal-results{list-style-type:none}
         print "Content-Type: $content_type; charset=UTF-8\015\012\015\012";
     }
 
-    print "(function(){document.write(["
+    print "document.write(["
         if $cfg eq "j";
 
     my $loc_class = '';
@@ -508,7 +508,7 @@ ul.hebcal-results{list-style-type:none}
 
     timestamp_comment();
 
-    print "''].join(''));})();\n"
+    print "''].join(''));\n"
         if $cfg eq "j";
 }
 
