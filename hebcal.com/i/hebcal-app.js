@@ -3,7 +3,7 @@
  *
  * requries jQuery, Moment.js, and FullCalendar.io
  *
- * Copyright (c) 2014  Michael J. Radwin.
+ * Copyright (c) 2015  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -260,6 +260,21 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
         }
         var code = e.keyCode || e.which;
         if (code == 13) {
+            var val0 = $('#city-typeahead').typeahead('val'),
+                val = (typeof val0 === 'string') ? val0.trim() : '',
+                numericRe = /^\d+$/;
+            if (val.length == 5 && numericRe.test(val)) {
+                $('#geo').val('zip');
+                $('#zip').val(val);
+                if (autoSubmit) {
+                    $('#geonameid').remove();
+                } else {
+                    $('#c').val('on');
+                    $('#geonameid').val('');
+                    $('#city').val('');
+                }
+                return true; // allow form to submit
+            }
             e.preventDefault();
             return false;
         }

@@ -364,7 +364,7 @@ href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.
 <?php
 $xtra_html = <<<EOD
 <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-1.2.min.js"></script>
+<script src="/i/hebcal-app-1.3.min.js"></script>
 <script type="text/javascript">
 window['hebcal'].createCityTypeahead(false);
 $('#havdalahInfo').click(function(e){

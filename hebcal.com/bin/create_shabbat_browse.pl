@@ -330,7 +330,7 @@ EOHTML
 
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-1.2.min.js"></script>
+<script src="/i/hebcal-app-1.3.min.js"></script>
 <script type="text/javascript">
 window['hebcal'].createCityTypeahead(true);
 </script>

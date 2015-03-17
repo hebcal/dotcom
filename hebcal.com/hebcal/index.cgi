@@ -1185,7 +1185,7 @@ href="/home/94/how-accurate-are-candle-lighting-times">Read more
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-1.2.min.js"></script>
+<script src="/i/hebcal-app-1.3.min.js"></script>
 <script type="text/javascript">
 var d=document;
 function s6(val){
@@ -1799,7 +1799,7 @@ EOHTML
     my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="/i/hebcal-app-1.2.min.js"></script>
+<script src="/i/hebcal-app-1.3.min.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
     \$('#toggle-month').on('change', function() {
