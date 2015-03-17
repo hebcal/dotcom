@@ -1242,7 +1242,7 @@ sub read_more_from {
     $wikipedia_href = $wikipedia->{'href'};
   }
   if ($about_href || $wikipedia_href) {
-    $html = qq{\n<p><em>Read more from };
+    $html = qq{\n<p class="hidden-print"><em>Read more from };
     if ($about_href) {
       $html .= read_more_hyperlink($f,$about_href, $primary_source);
       $html .= " or " if ($wikipedia_href && $primary_source ne "Wikipedia");
