@@ -505,7 +505,7 @@ sub get_index_body_preamble {
     my $str = <<EOHTML;
 <div class="$div_class">
 <h1>$page_title</h1>
-<p class="lead">Dates of major and minor Jewish holidays$when. Each
+<p class="lead hidden-print">Dates of major and minor Jewish holidays$when. Each
 holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
