@@ -2069,6 +2069,9 @@ sub torah_calendar_memo {
     my $memo;
     if ($leyning && $leyning->{'T'}) {
         $memo = "Torah: " . $leyning->{'T'};
+        if ($leyning->{'7'} && $leyning->{'7'} =~ / \| /) {
+            $memo .= "\\n7th aliyah: " . $leyning->{'7'};
+        }
         if ($leyning->{'8'}) {
             $memo .= "\\n8th aliyah: " . $leyning->{'8'};
         }
