@@ -1209,7 +1209,7 @@ sub get_sefaria_url {
     my $sefaria_verses = $verses;
     $sefaria_verses =~ s/:/./g;
 
-    my $sefaria_url = "http://www.sefaria.org/$book.$sefaria_verses?lang=he-en&layout=block&sidebarLang=all";
+    my $sefaria_url = "http://www.sefaria.org/$book.$sefaria_verses?lang=he-en&layout=heLeft&sidebarLang=all";
     return $sefaria_url;
 }
 

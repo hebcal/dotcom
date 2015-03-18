@@ -865,6 +865,26 @@ sub write_drash_links {
     return $count;
 }
 
+sub aliyot_combine_67 {
+    my($aliyot) = @_;
+    my %out = map { $_->{"num"} => $_ } @{$aliyot};
+    my $a6 = $out{6};
+    my $a7 = $out{7};
+    my $aa = {
+        "book" => $a6->{"book"},
+        "parsha" => $a6->{"parsha"},
+        "begin" => $a6->{"begin"},
+        "end" => $a7->{"end"},
+        "num" => "6",
+    };
+    if ($a6->{"numverses"} && $a7->{"numverses"}) {
+        $aa->{"numverses"} = $a6->{"numverses"} + $a7->{"numverses"};
+    }
+    $out{6} = $aa;
+    delete $out{7};
+    return \%out;
+}
+
 sub write_sedra_page
 {
     my($parshiot,$h,$prev,$next,$triennial_readings) = @_;
@@ -965,10 +985,12 @@ EOHTML
 ;
 
     my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
+    my %fk_aliyot;
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			@{$aliyot})
     {
 	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah);
+        $fk_aliyot{$aliyah->{'num'}} = $aliyah;
     }
 
     print OUT2 "</ol>\n</div><!-- .col-sm-3 fk -->\n";
@@ -980,7 +1002,9 @@ EOHTML
     if (defined $parashah_date_sql{$h}) {
 	my %sp_dates;
 	foreach my $dt (@{$parashah_date_sql{$h}}) {
-	    if (defined $dt && (defined $special{$dt}->{"M"} || defined $special{$dt}->{"8"})) {
+            if (defined $dt && (defined $special{$dt}->{"M"}
+                || defined $special{$dt}->{"7"}
+                || defined $special{$dt}->{"8"})) {
 		my $reason = $special{$dt}->{"reason"};
 		push(@{$sp_dates{$reason}}, $dt);
 	    }
@@ -988,11 +1012,21 @@ EOHTML
 
 	if (keys %sp_dates) {
             print OUT2 qq{<div class="row">\n<div class="col-sm-12">\n};
-	    print OUT2 qq{<h4>Special Maftir</h4>\n};
+	    print OUT2 qq{<h4>Special Readings</h4>\n};
 	    foreach my $reason (sort keys %sp_dates) {
 		my $info = "";
 		my $count = 0;
-		foreach my $aliyah ("8", "M") {
+                # combine 6th + 7th aliyah if there's a special 7th aliyah
+                if (defined $special{$sp_dates{$reason}->[0]}->{"7"}) {
+                    my $aliyot6 = aliyot_combine_67($aliyot);
+                    foreach my $num (1..6) {
+                        my $aa = $aliyot6->{$num};
+                        $info .= "<br>\n" if $num != 1;
+                        $info .= format_aliyah($aa, $h, $torah, 1);
+                    }
+                    $count = 6;
+                }
+		foreach my $aliyah (qw(7 8 M)) {
 		  my $aa = $special{$sp_dates{$reason}->[0]}->{$aliyah};
 		  if ($aa) {
 		    my $aa_parashah = $all_inorder[$aa->{'parsha'} - 1];
@@ -1492,8 +1526,10 @@ sub special_readings
 					     $a->{'end'});
 		$special->{$dt}->{"M"} = $a;
 	    }
-	    my $a8 = get_special_aliyah($h, "8");
-	    $special->{$dt}->{"8"} = $a8 if $a8;
+            foreach my $num (1..8) {
+                my $aa = get_special_aliyah($h, $num);
+                $special->{$dt}->{$num} = $aa if $aa;
+            }
 	}
     }
 
@@ -1520,8 +1556,13 @@ sub csv_parasha_event_inner
     $book =~ s/\s+.+$//;
 
     my %aliyot = map { $_->{"num"} => $_ } @{$aliyot};
-    $aliyot{"M"} = $special{$dt}->{"M"} if defined $special{$dt}->{"M"};
-    $aliyot{"8"} = $special{$dt}->{"8"} if defined $special{$dt}->{"8"};
+    if (defined $special{$dt}->{"7"}) {
+        my $aliyot6 = aliyot_combine_67($aliyot);
+        $aliyot{"6"} = $aliyot6->{6};
+    }
+    foreach my $num (qw(7 8 M)) {
+        $aliyot{$num} = $special{$dt}->{$num} if defined $special{$dt}->{$num};
+    }
 
     my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } values %aliyot;
     foreach my $aliyah (@sorted_aliyot) {
