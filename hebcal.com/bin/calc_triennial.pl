@@ -507,7 +507,7 @@ class="glyphicon glyphicon-download-alt"></i> Leyning spreadsheet</a>
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-sm-4">
+<div class="col-xs-4">
 <h3 id="Genesis">Genesis</h3>
 <ol class="list-unstyled">
 EOHTML
@@ -520,23 +520,23 @@ EOHTML
 	$book =~ s/\s+.+$//;
 
 	if ($prev_book ne $book) {
-	    print OUT1 "</ol>\n</div><!-- .col-sm-4 -->\n";
+	    print OUT1 "</ol>\n</div><!-- .col-xs-4 -->\n";
 	    if ($book_count++ % 3 == 0) {
 		print OUT1 qq{</div><!-- .row -->\n<div class="row">\n};
 	    }
-	    print OUT1 qq{<div class="col-sm-4">\n<h3 id="$book">$book</h3>\n<ol class="list-unstyled">\n};
+	    print OUT1 qq{<div class="col-xs-4">\n<h3 id="$book">$book</h3>\n<ol class="list-unstyled">\n};
 	}
 	$prev_book = $book;
 
 	my $anchor = lc($h);
 	$anchor =~ s/[^\w]//g;
-	print OUT1 qq{<li><a href="$anchor">Parashat $h</a>\n};
+	print OUT1 qq{<li><a href="$anchor">$h</a>\n};
     }
 
     print OUT1 <<EOHTML;
 </ol>
-</div><!-- .col-sm-4 -->
-<div class="col-sm-4">
+</div><!-- .col-xs-4 -->
+<div class="col-xs-4">
 <h3 id="DoubledParshiyot">Doubled Parshiyot</h3>
 <ol class="list-unstyled">
 EOHTML
@@ -545,12 +545,12 @@ EOHTML
     foreach my $h (@combined) {
 	my $anchor = lc($h);
 	$anchor =~ s/[^\w]//g;
-	print OUT1 qq{<li><a href="$anchor">Parashat $h</a>\n};
+	print OUT1 qq{<li><a href="$anchor">$h</a>\n};
     }
 
     print OUT1 <<EOHTML;
 </ol>
-</div><!-- .col-sm-4 -->
+</div><!-- .col-xs-4 -->
 </div><!-- .row -->
 <div class="row">
 <div class="col-sm-12">
@@ -1181,13 +1181,13 @@ sub write_sedra_tri_cells {
     }
     foreach my $yr (1 .. 3) {
 	print OUT2 <<EOHTML;
-<div class="col-sm-3">
-<h4>Triennial Year $yr</h4>
-<div class="muted">$tri_date[$yr]</div>
+<div class="col-xs-3">
+<h4>Triennial Year $yr
+<br><small>$tri_date[$yr]</small></h4>
 EOHTML
 ;
 	print_tri_cell($triennial_readings,$h,$yr,$torah);
-	print OUT2 qq{</div><!-- .col-sm-3 tri$yr -->\n};
+	print OUT2 qq{</div><!-- .col-xs-3 tri$yr -->\n};
     }
     1;
 }
