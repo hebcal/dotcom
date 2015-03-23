@@ -1180,10 +1180,10 @@ sub write_sedra_tri_cells {
 	}
     }
     foreach my $yr (1 .. 3) {
+        my $read_on_html = $tri_date[$yr] ? qq{\n<br><small>$tri_date[$yr]</small>} : "";
 	print OUT2 <<EOHTML;
 <div class="col-xs-3">
-<h4>Triennial Year $yr
-<br><small>$tri_date[$yr]</small></h4>
+<h4>Triennial Year $yr$read_on_html</h4>
 EOHTML
 ;
 	print_tri_cell($triennial_readings,$h,$yr,$torah);
@@ -1223,18 +1223,18 @@ sub print_tri_cell
     {
 	my($p1,$p2) = split(/-/, $h);
 
-	print OUT2 "<p>Read separately. See:</p>\n<ul>\n";
+	print OUT2 qq{<p>Read separately. See:</p>\n<ul class="list-unstyled">\n};
 
 	my($anchor) = lc($p1);
 	$anchor =~ s/[^\w]//g;
 	print OUT2 "<li><a href=\"$anchor\">$p1</a>\n";
-	print OUT2 qq{- <span class="muted">},
+	print OUT2 qq{- <span class="text-muted">},
 	    $triennial_readings->{$p1}->[$yr]->[1], qq{</span>\n};
 
 	$anchor = lc($p2);
 	$anchor =~ s/[^\w]//g;
 	print OUT2 "<li><a href=\"$anchor\">$p2</a>\n";
-	print OUT2 qq{- <span class="muted">},
+	print OUT2 qq{- <span class="text-muted">},
 	    $triennial_readings->{$p2}->[$yr]->[1], qq{</span>\n};
 	print OUT2 "</ul>\n";
 	return;
