@@ -107,3 +107,4 @@ $(DISTDIR)/hebcal-dot-com.tar.gz: $(patsubst %,../../../%,$(RELEASEFILES))
 clean:
 		rm -f $(SEDROT)/*
 		rm -f $(HOLIDAYS)/*
+		rm -f ../shabbat/browse/*
