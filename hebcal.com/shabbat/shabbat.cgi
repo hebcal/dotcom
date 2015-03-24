@@ -58,6 +58,8 @@ my $t0 = Benchmark->new;
 my($q) = new CGI;
 my($script_name) = $q->script_name();
 $script_name =~ s,/[^/]+$,/,;
+my $is_legacy_js = (defined $ENV{'QUERY_STRING'}
+    && $ENV{'QUERY_STRING'} =~ /^geo=zip;zip=\d+;m=\d+;cfg=j$/) ? 1 : 0;
 
 foreach my $key ($q->param()) {
     my $val = $q->param($key);
@@ -130,13 +132,21 @@ sub out_html {
     my($cfg,@args) = @_;
 
     if (defined $cfg && $cfg eq 'j') {
-        print STDOUT "\"";
+        if ($is_legacy_js) {
+            print STDOUT "document.write(\"";
+        } else {
+            print STDOUT "\"";
+        }
         foreach (@args) {
             s/\"/\\\"/g;
             s/\n/\\n/g;
             print STDOUT;
         }
-        print STDOUT "\",";
+        if ($is_legacy_js) {
+            print STDOUT "\");\n";
+        } else {
+            print STDOUT "\",";
+        }
     }
     else {
         foreach (@args) {
@@ -464,7 +474,7 @@ ul.hebcal-results{list-style-type:none}
     }
 
     print "document.write(["
-        if $cfg eq "j";
+        if $cfg eq "j" && !$is_legacy_js;
 
     my $loc_class = '';
     if ($cconfig{"geo"} eq "zip") {
@@ -507,7 +517,7 @@ ul.hebcal-results{list-style-type:none}
     timestamp_comment();
 
     print "''].join(''));\n"
-        if $cfg eq "j";
+        if $cfg eq "j" && !$is_legacy_js;
 }
 
 sub display_html
