@@ -103,3 +103,7 @@ $(DISTDIR)/hebcal-dot-com.tar.gz: $(patsubst %,../../../%,$(RELEASEFILES))
 	cd ../../.. && tar -cvf $(DISTDIR)/hebcal-dot-com.tar $(RELEASEFILES)
 	rm -f $(DISTDIR)/hebcal-dot-com.tar.gz
 	gzip -9 $(DISTDIR)/hebcal-dot-com.tar
+
+clean:
+		rm -f $(SEDROT)/*
+		rm -f $(HOLIDAYS)/*

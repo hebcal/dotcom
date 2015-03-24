@@ -354,13 +354,11 @@ EOHTML
 }
 
 sub download_html_modal {
-    my($q,$filename,$events,$title,$yahrzeit_mode,$bootstrap3) = @_;
-
-    my $outer_class = $bootstrap3 ? "modal fade" : "modal hide fade";
+    my($q,$filename,$events,$title,$yahrzeit_mode) = @_;
 
     my $html = download_html_bootstrap($q,$filename,$events,$title,$yahrzeit_mode);
     my $s = <<EOHTML;
-<div class="$outer_class" id="hcdl-modal" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
+<div class="modal fade" id="hcdl-modal" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
  <div class="modal-dialog">
   <div class="modal-content">
  <div class="modal-header">
@@ -455,8 +453,8 @@ sub header_bootstrap3 {
 <meta charset="UTF-8">
 <title>$title2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 $xtra_stylesheet<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -578,7 +576,7 @@ $last_updated_text
 </div> <!-- .container -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 EOHTML
 ;
 
