@@ -90,7 +90,7 @@ the appropriate place in your HTML:</p>
 <?php
 $script_tag = <<<EOHTML
 <script type="text/javascript" charset="utf-8"
-src="//www.hebcal.com/shabbat/?geo=${geo}&amp;${geo_link}&amp;m=${m}&amp;cfg=j&amp;tgt=_top">
+src="//$_SERVER[HTTP_HOST]/shabbat/?geo=${geo}&amp;${geo_link}&amp;m=${m}&amp;cfg=j&amp;tgt=_top">
 </script>
 EOHTML;
 $script_tag_double = htmlentities($script_tag);
