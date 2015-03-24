@@ -837,7 +837,7 @@ EOHTML
 sub write_drash_links {
     my($drash,$h) = @_;
 
-    my @sites = qw(ou torg reform uscj);
+    my @sites = qw(ou torg reform uscj chabad);
     my $count = 0;
     foreach my $site (@sites) {
         $count++ if $drash->{$site};
@@ -850,6 +850,7 @@ sub write_drash_links {
         "ou" => "Orthodox Union",
         "torg" => "Torah.org",
         "reform" => "Reform Judaism",
+        "chabad" => "Chabad",
         "uscj" => "United Synagogue of Conservative Judaism",
     );
 
@@ -1335,6 +1336,9 @@ sub get_parashah_links {
             }
         } elsif ($l->{'rel'} eq 'torah') {
             $out->{torah} = $l->{'href'};
+        } elsif ($l->{'rel'} eq 'drash:chabad.org') {
+            my $target = $l->{'target'};
+            $out->{chabad} = "http://www.chabad.org/article.asp?aid=$target";
         }
     }
     return $out;
