@@ -459,7 +459,8 @@ EOHTML
 <h1>Torah Readings</h1>
 <p class="lead">Weekly Torah readings (Parashat ha-Shavua) including
 verses for each aliyah and accompanying Haftarah. Includes
-both traditional (full kriyah) and triennial reading schemes.</p>
+both traditional (full kriyah) and <a
+href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading schemes.</p>
 EOHTML
     ;
 
