@@ -2,6 +2,6 @@
 
 set -x
 
-nice wget --mirror --no-parent http://tzurl.org/zoneinfo/
+nice wget --mirror --no-parent --limit-rate=40k http://tzurl.org/zoneinfo/
 find tzurl.org/zoneinfo/ -name 'index.html*' -delete
-rsync -av tzurl.org/zoneinfo/ /home/hebcal/web/hebcal.com/zoneinfo/
+rsync -av tzurl.org/zoneinfo/ /var/www/zoneinfo/
