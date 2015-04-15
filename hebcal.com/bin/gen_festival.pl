@@ -1220,7 +1220,7 @@ sub read_more_from {
   my $primary_source = "";
   if ($about) {
     $about_href = $about->{'href'};
-    if ($about_href && $about_href =~ /^http:\/\/([^\/]+)/i) {
+    if ($about_href && $about_href =~ /^https?:\/\/([^\/]+)/i) {
       my $more = $1;
       $more =~ s/^www\.//i;
       if ($more eq 'hebcal.com') {
