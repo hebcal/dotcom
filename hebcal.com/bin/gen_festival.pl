@@ -804,18 +804,16 @@ sub get_torah_and_maftir {
     my($torah,$maftir,$book,$begin,$end);
     foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
 			    @{$aliyot}) {
-	if ($aliyah->{'num'} eq 'M') {
+        my $anum = $aliyah->{'num'};
+        if ($anum eq 'M') {
 	    $maftir = sprintf("%s %s - %s",
 			      $aliyah->{'book'},
 			      $aliyah->{'begin'},
 			      $aliyah->{'end'});
-	}
-
-	if ($aliyah->{'num'} =~ /^\d+$/) {
-	    if (($book && $aliyah->{'book'} eq $book) ||
-		($aliyah->{'num'} eq '8')) {
-		$end = $aliyah->{'end'};
-	    }
+        } elsif ($anum =~ /^\d+$/) {
+            if ($anum >= 7 || ($book && $aliyah->{'book'} eq $book)) {
+                $end = $aliyah->{'end'};
+            }
 	    $book = $aliyah->{'book'} unless $book;
 	    $begin = $aliyah->{'begin'} unless $begin;
 	}
