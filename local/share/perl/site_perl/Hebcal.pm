@@ -508,7 +508,7 @@ sub invoke_hebcal
 
     my $hccache;
     my $hccache_file = get_invoke_hebcal_cache($cmd);
-    my $hccache_tmpfile = "$hccache_file.$$";
+    my $hccache_tmpfile = $hccache_file ? "$hccache_file.$$" : undef;
 
     my @events;
     if (! defined $hccache_file) {
