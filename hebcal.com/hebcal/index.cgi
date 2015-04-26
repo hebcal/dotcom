@@ -47,6 +47,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use Time::Local ();
 use Date::Calc ();
 use URI::Escape;
+use File::Basename;
 use Hebcal ();
 use HebcalHtml ();
 use Benchmark qw(:hireswallclock :all);
@@ -98,16 +99,16 @@ my $cfg;
 my $pi = $q->path_info();
 if (! defined $pi) {
     $cfg = "html";
-} elsif ($pi =~ /[^\/]+\.csv$/) {
+} elsif ($pi =~ /\.csv$/) {
     $cfg = "csv";
     $content_type = "text/x-csv";
-} elsif ($pi =~ /[^\/]+\.dba$/) {
+} elsif ($pi =~ /\.dba$/) {
     $cfg = "dba";
     $content_type = "application/x-palm-dba";
-} elsif ($pi =~ /[^\/]+\.pdf$/) {
+} elsif ($pi =~ /\.pdf$/) {
     $cfg = "pdf";
     $content_type = "application/pdf";
-} elsif ($pi =~ /[^\/]+\.[vi]cs$/) {
+} elsif ($pi =~ /\.[vi]cs$/) {
     $cfg = "ics";
     $content_type = "text/calendar";
 } elsif (defined $q->param("cfg") && $q->param("cfg") =~ /^(e|e2|json|fc)$/) {
@@ -821,8 +822,7 @@ sub dba_display
 
     HebcalExport::export_http_header($q, $content_type);
 
-    my $basename = $q->path_info();
-    $basename =~ s,^.*/,,;
+    my $basename = basename($q->path_info());
 
     Palm::DBA::write_header($basename);
     Palm::DBA::write_contents(\@events, $cconfig{"tzid"} || 'America/New_York');

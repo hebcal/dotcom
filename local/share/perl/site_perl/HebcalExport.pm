@@ -493,8 +493,13 @@ sub vcalendar_write_contents {
     my $cache_webpath;
     if ($is_icalendar) {
         $cache_webpath = Hebcal::get_vcalendar_cache_fn();
-        cache_begin($cache_webpath);
-        export_http_header( $q, 'text/calendar; charset=UTF-8' );
+#        cache_begin($cache_webpath);
+        my $mime_type = 'text/calendar; charset=UTF-8';
+        if ($q->param('subscribe')) {
+            print $q->header(-type => $mime_type);
+        } else {
+            export_http_header( $q, $mime_type );
+        }
     }
     else {
         export_http_header( $q, 'text/x-vCalendar' );

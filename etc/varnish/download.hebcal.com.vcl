@@ -25,6 +25,7 @@ sub vcl_recv {
     # rewriting the request, etc.
 
     unset req.http.cookie;
+    set req.http.X-Client-IP = client.ip;
 
     if (req.http.Accept-Encoding) {
         if (req.http.Accept-Encoding ~ "gzip") {
