@@ -216,39 +216,6 @@ END:VTIMEZONE
 ",
  );
 
-my $cache = undef;
-sub cache_begin {
-    my($cache_webpath) = @_;
-
-    # update the global variable
-    $cache = join("", $ENV{"DOCUMENT_ROOT"}, $cache_webpath, ".", $$);
-    my $dir = $cache;
-    $dir =~ s,/[^/]+$,,;    # dirname
-    unless ( -d $dir ) {
-        system( "/bin/mkdir", "-p", $dir );
-    }
-    if ( open( CACHE, ">$cache" ) ) {
-        binmode( CACHE, ":utf8" );
-    } else {
-        $cache = undef;
-    }
-    $cache;
-}
-
-sub cache_end {
-    if ($cache)
-    {
-        close(CACHE);
-        my $fn = $cache;
-        my $newfn = $fn;
-        $newfn =~ s/\.\d+$//;   # no pid
-        rename($fn, $newfn);
-        $cache = undef;
-    }
-
-    1;
-}
-
 sub export_http_header($$) {
     my($q,$mime) = @_;
 
@@ -267,7 +234,6 @@ sub export_http_header($$) {
 sub ical_write_line {
     foreach (@_, "\015\012") {
         print STDOUT;
-        print CACHE if $cache;
     }
 }
 
@@ -493,7 +459,6 @@ sub vcalendar_write_contents {
     my $cache_webpath;
     if ($is_icalendar) {
         $cache_webpath = Hebcal::get_vcalendar_cache_fn();
-#        cache_begin($cache_webpath);
         my $mime_type = 'text/calendar; charset=UTF-8';
         if ($q->param('subscribe')) {
             print $q->header(-type => $mime_type);
@@ -564,7 +529,6 @@ sub vcalendar_write_contents {
             my $vt = $VTIMEZONE{$tzid};
             $vt =~ s/\n/\015\012/g;
             print STDOUT $vt;
-            print CACHE $vt if $cache;
         }
         elsif ( open( VTZ, $vtimezone_ics ) ) {
             my $in_vtz = 0;
@@ -572,7 +536,6 @@ sub vcalendar_write_contents {
                 $in_vtz = 1 if /^BEGIN:VTIMEZONE/;
                 if ($in_vtz) {
                     print STDOUT $_;
-                    print CACHE $_ if $cache;
                 }
                 $in_vtz = 0 if /^END:VTIMEZONE/;
             }
@@ -610,7 +573,6 @@ sub vcalendar_write_contents {
         $dbh->disconnect();
     }
 
-    cache_end();
     1;
 }
 
