@@ -58,6 +58,7 @@ use Log::Log4perl qw(:easy);
 use strict;
 
 my $eval_use_Image_Magick = 0;
+my @DOW_TINY = qw(x M Tu W Th F Sa Su);
 
 $0 =~ s,.*/,,;  # basename
 my($usage) = "usage: $0 [-hvi] [-H <year>] festival.xml output-dir
@@ -342,37 +343,60 @@ sub format_date_plus_delta {
     return format_date_range($gy1,$gm1,$gd1,$gy2,$gm2,$gd2,$show_year);
 }
 
+sub short_day_of_week {
+    my($gy1,$gm1,$gd1,$delta) = @_;
+    my $dow = Date::Calc::Day_of_Week($gy1,$gm1,$gd1);
+    my $s = $DOW_TINY[$dow];
+    if ($delta) {
+        my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy1,$gm1,$gd1,$delta);
+        my $dow2 = Date::Calc::Day_of_Week($gy2,$gm2,$gd2);
+        $s .= "&#8209;" . $DOW_TINY[$dow2];
+    }
+    return qq{ <small class="text-muted">$s</small>};
+}
+
 sub table_cell_observed {
     my($f,$evt,$show_year) = @_;
     my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
     my $s = "";
     if ($f eq "Chanukah") {
 	$s .= format_date_plus_delta($gy, $gm, $gd, 7, $show_year);
+        $s .= short_day_of_week($gy, $gm, $gd, 7);
     } elsif ($f eq "Purim" || $f eq "Tish'a B'Av") {
 	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
+        $s .= short_day_of_week($gy, $gm, $gd, 0);
     } elsif (begins_at_dawn($f) || $f eq "Leil Selichot") {
 	$s .= format_single_day($gy, $gm, $gd, $show_year);
+        $s .= short_day_of_week($gy, $gm, $gd, 0);
     } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
 	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
+        $s .= short_day_of_week($gy, $gm, $gd, 0);
     } else {
 	$s .= "<strong>"; # begin yomtov
 	if ($f eq "Rosh Hashana" || $f eq "Shavuot") {
 	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
+            $s .= short_day_of_week($gy, $gm, $gd, 1);
 	} elsif ($f eq "Yom Kippur" || $f eq "Shmini Atzeret" || $f eq "Simchat Torah") {
 	    $s .= format_single_day_html($gy, $gm, $gd, $show_year);
+            $s .= short_day_of_week($gy, $gm, $gd, 0);
 	} elsif ($f eq "Sukkot") {
 	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
+            $s .= short_day_of_week($gy, $gm, $gd, 1);
 	    $s .= "</strong><br>";
 	    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
 	    $s .= format_date_plus_delta($gy2, $gm2, $gd2, 4, $show_year);
+            $s .= short_day_of_week($gy2, $gm2, $gd2, 4);
 	} elsif ($f eq "Pesach") {
 	    $s .= format_date_plus_delta($gy, $gm, $gd, 1, $show_year);
+            $s .= short_day_of_week($gy, $gm, $gd, 1);
 	    $s .= "</strong><br>";
 	    my($gy2,$gm2,$gd2) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 2);
 	    $s .= format_date_plus_delta($gy2, $gm2, $gd2, 3, $show_year);
+            $s .= short_day_of_week($gy2, $gm2, $gd2, 3);
 	    $s .= "<br><strong>";
 	    my($gy3,$gm3,$gd3) = Date::Calc::Add_Delta_Days($gy, $gm, $gd, 6);
 	    $s .= format_date_plus_delta($gy3, $gm3, $gd3, 1, $show_year);
+            $s .= short_day_of_week($gy3, $gm3, $gd3, 1);
 	}
 	$s .= "</strong>" unless $f eq "Sukkot";
     }
@@ -393,7 +417,7 @@ EOHTML
 	my $yr = $HEB_YR + $i - 1;
 	my $greg_yr1 = $yr - 3761;
 	my $greg_yr2 = $greg_yr1 + 1;
-	print OUT3 "<th><a href=\"$greg_yr1-$greg_yr2\">$yr<br>($greg_yr1-$greg_yr2)</a></th>";
+	print OUT3 "<th><a href=\"$greg_yr1-$greg_yr2\">$yr<br>($greg_yr1&#8209;$greg_yr2)</a></th>";
     }
     print OUT3 "</tr>\n";
 
@@ -451,7 +475,7 @@ sub table_row_one_year_only {
 
 sub table_header_one_year_only {
     my($fh,$table_id,$show_year) = @_;
-    my $col2width = $show_year ? 148 : 112;
+    my $col2width = $show_year ? 180 : 156;
     print $fh <<EOHTML;
 <table class="table table-striped table-condensed">
 <col style="width:180px"><col style="width:${col2width}px"><col class="hidden-xs">
