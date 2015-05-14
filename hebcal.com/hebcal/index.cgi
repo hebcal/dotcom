@@ -621,6 +621,7 @@ sub pdf_display {
         }
     }
 
+    my $pdf_rtl = ($lg eq "h") ? 1 : 0;
     foreach my $year_month (sort keys %cells) {
         my($year,$month) = split(/-/, $year_month);
         $month =~ s/^0//;
@@ -663,7 +664,10 @@ sub pdf_display {
 
         $text->font($pdf_font{'plain'},10);
         for (my $i = 0; $i < scalar(@Hebcal::DoW_long); $i++) {
-            my $x = PDF_LMARGIN + $i * ($colwidth + $hspace) + ($colwidth / 2);
+            my $edge_offset = $i * ($colwidth + $hspace) + ($colwidth / 2);
+            my $x = $pdf_rtl
+                ? PDF_WIDTH - PDF_RMARGIN - $edge_offset
+                : PDF_LMARGIN + $edge_offset;
             $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
             $text->text_center($Hebcal::DoW_long[$i]);
         }
@@ -692,8 +696,12 @@ sub pdf_display {
             }
         }
 
-        my $xpos = PDF_LMARGIN + $colwidth - 4;
-        $xpos += ($dow * $colwidth);
+        my $xpos_newrow = $pdf_rtl
+            ? PDF_WIDTH - PDF_RMARGIN - 4
+            : PDF_LMARGIN + $colwidth - 4;
+        my $xpos_multiplier = $pdf_rtl ? -1 : 1;
+        my $xpos = $xpos_newrow;
+        $xpos += ($dow * $colwidth) * $xpos_multiplier;
         my $ypos = PDF_HEIGHT - PDF_TMARGIN - 12;
         for (my $mday = 1; $mday <= $daysinmonth; $mday++) {
             # render day number
@@ -710,10 +718,10 @@ sub pdf_display {
                 }
             }
 
-            $xpos += $colwidth; # move to the right by one cell
+            $xpos += $colwidth * $xpos_multiplier; # move to the right by one cell
             if (++$dow == 7) {
                 $dow = 0;
-                $xpos = PDF_LMARGIN + $colwidth - 4;
+                $xpos = $xpos_newrow;
                 $ypos -= $rowheight; # move down the page
             }
         }
