@@ -79,6 +79,20 @@ our $havdalah_min = 50;
 our @DoW = qw(Sun Mon Tue Wed Thu Fri Sat);
 our @DoW_long = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
 our @MoY_short = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+our @MoY_hebrew = (
+     "יָנוּאָר",
+     "פֶבְּרוּאָר",
+     "מֶרְץ",
+     "אַפְּרִיל",
+     "מַאי",
+     "יוּנִי",
+     "יוּלִי",
+     "אוֹגוּסְט",
+     "סֶפְּטֶמְבֶּר",
+     "אוֹקְטוֹבֶּר",
+     "נוֹבֶמְבֶּר",
+     "דֶּצֶמְבֶּר",
+    );
 our %MoY_long = (
 	     'x' => '- Entire year -',
 	     1   => 'January',

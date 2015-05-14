@@ -626,7 +626,17 @@ sub pdf_display {
         my($year,$month) = split(/-/, $year_month);
         $month =~ s/^0//;
 
-        my $month_name = Date::Calc::Month_to_Text($month);
+        my $month_title;
+        my $month_font;
+        if ($pdf_rtl) {
+            my $s = Hebcal::hebrew_strip_nikkud($Hebcal::MoY_hebrew[$month - 1]);
+            $month_font = 'hebrew';
+            $month_title = join(" ", $year, scalar reverse($s));
+        } else {
+            $month_font = 'bold';
+            $month_title = join(" ",
+                Date::Calc::Month_to_Text($month), $year);
+        }
         my $daysinmonth = Date::Calc::Days_in_Month($year,$month);
         my $day = 1;
 
@@ -650,8 +660,8 @@ sub pdf_display {
 
         my $text = $page->text(); # Add the Text object
         $text->translate(PDF_WIDTH / 2, PDF_HEIGHT - PDF_TMARGIN + 24); # Position the Text object
-        $text->font($pdf_font{'bold'}, 24); # Assign a font to the Text object
-        $text->text_center("$month_name $year"); # Draw the string
+        $text->font($pdf_font{$month_font}, 24); # Assign a font to the Text object
+        $text->text_center($month_title); # Draw the string
 
         my $g = $page->gfx();
         $g->strokecolor("#aaaaaa");
