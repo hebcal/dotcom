@@ -40,13 +40,12 @@ $(SEDROT)/bereshit: calc_triennial.pl $(XML_ALIYAH) $(XML_FESTIVAL)
 		--triennial \
 		--dbfile $(DBDIR)/luach.sqlite3 \
 		$(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)
-	mkdir -p $(SEDROT)-israel
 	./calc_triennial.pl \
 		--israel \
 		--nohtml \
 		--fullkriyah \
 		--dbfile $(DBDIR)/luach.sqlite3 \
-		$(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)-israel
+		$(DISTDIR)/aliyah.xml $(DISTDIR)/festival.xml $(SEDROT)
 
 $(HOLIDAYS)/purim: gen_festival.pl $(XML_FESTIVAL)
 	mkdir -p $(HOLIDAYS)

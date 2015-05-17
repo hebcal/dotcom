@@ -588,15 +588,19 @@ EOHTML
 EOHTML
 ;
 
-    my $full_kriyah_download_html = action_button_download_html("Download Full Kriyah");
+    my $full_kriyah_download_html = action_button_download_html("Full Kriyah (Diaspora)");
+    my $fk_israel_download_html = action_button_download_html("Full Kriyah (Israel)");
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $basename = "fullkriyah-$yr.csv";
         $full_kriyah_download_html .= qq{<li><a class="download" id="leyning-fullkriyah-$yr" href="$basename" download="$basename">$basename</a>};
+        $basename = "fullkriyah-il-$yr.csv";
+        $fk_israel_download_html .= qq{<li><a class="download" id="leyning-fullkriyah-il-$yr" href="$basename" download="$basename">$basename</a>};
     }
     $full_kriyah_download_html .= qq{</ul>\n</div>\n};
+    $fk_israel_download_html .= qq{</ul>\n</div>\n};
 
-    my $triennial_download_html = action_button_download_html("Download Triennial");
+    my $triennial_download_html = action_button_download_html("Triennial (Diaspora)");
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	my $start_year = $cycle_start_years[$i];
 	my $triennial_range = triennial_csv_range($start_year);
@@ -610,12 +614,10 @@ EOHTML
 <p class="lead">Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
-<p>Note that they follow the Diaspora <a
-href="/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes">sedra
-scheme</a>.</p>
 <div class="btn-toolbar">
 $full_kriyah_download_html
 $triennial_download_html
+$fk_israel_download_html
 </div><!-- .btn-toolbar -->
 <p> </p>
 <p>Example content:</p>
@@ -1766,7 +1768,9 @@ sub readings_for_current_year
     my %wrote_csv;
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
-	my $basename = "fullkriyah-$yr.csv";
+        my $basename = "fullkriyah";
+        $basename .= "-il" if $opt_israel;
+        $basename .= "-$yr.csv";
 	my $filename = "$outdir/$basename";
 	my $tmpfile = "$outdir/.$basename.$$";
 	if ($opt_csv_fk) {
