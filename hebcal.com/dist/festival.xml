@@ -145,6 +145,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <group>Leil Selichot</group>
  <group>Shabbat Rosh Chodesh</group>
  <group>Shabbat Machar Chodesh</group>
+ <group>Sigd</group>
+ <group>Tu B'Av</group>
 </groups>
 
 <!--
@@ -1631,6 +1633,29 @@ with the verse
    Hashanah. If, however, the first day of Rosh Hashanah falls on Monday or
    Tuesday, Selichot are said beginning the Saturday night prior to ensure
    that Selichot are recited at least four times.
+ </wikipedia>
+</festival>
+<festival id="Sigd" hebrew="סיגד" yomtov="0" type="modern">
+ <about href="http://en.wikipedia.org/wiki/Sigd">
+ Ethiopian Jewish holiday occurring 50 days after Yom Kippur
+ </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Sigd">
+ Sigd is an Amharic word meaning "prostration" or "worship" and is the commonly used name
+ for a holiday celebrated by the Ethiopian Jewish community on the 29th of the Hebrew
+ month of Cheshvan. This date is exactly 50 days after Yom Kippur, usually falling out in
+ late October or November, and according to Ethiopian Jewish tradition is also the date
+ that G-d first revealed himself to Moses.
+ </wikipedia>
+</festival>
+<festival id="Tu B'Av" hebrew="טוּ בְּאָב" yomtov="0" type="minor">
+ <about href="http://en.wikipedia.org/wiki/Tu_B%27Av">
+ Jewish holiday of love, similar to Valentine's Day
+ </about>
+ <wikipedia href="http://en.wikipedia.org/wiki/Tu_B%27Av">
+ Tu B'Av (Hebrew: ט״ו באב, the fifteenth of the month Av) is a minor Jewish holiday.
+ In modern-day Israel, it is celebrated as a holiday of love (Hebrew: חג האהבה‎,
+ Hag HaAhava), similar to Valentine's Day. It has been said to be a "great day for
+ weddings".
  </wikipedia>
 </festival>
 </festivals>
