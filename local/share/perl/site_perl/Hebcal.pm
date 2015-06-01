@@ -129,7 +129,7 @@ our %CONTINENTS =
      'AN' => 'Antarctica',
     );
 
-our %CITIES_OLD = (
+my %CITIES_OLD = (
 'Ashdod' => 'IL-Ashdod',
 'Atlanta' => 'US-Atlanta-GA',
 'Austin' => 'US-Austin-TX',
