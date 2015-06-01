@@ -296,7 +296,7 @@ value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?
 <div class="form-group">
 <label for="city-typeahead">City</label>
 <input type="hidden" name="geo" id="geo" value="<?php echo $geo ?>">
-<input type="hidden" id="zip" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>">
+<input type="hidden" name="zip" id="zip" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>">
 <input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
 <div class="city-typeahead" style="margin-bottom:12px">
 <input type="text" name="city-typeahead" id="city-typeahead" class="form-control" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
