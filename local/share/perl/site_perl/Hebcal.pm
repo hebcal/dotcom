@@ -187,17 +187,6 @@ our %CITIES_OLD = (
 'IL-Bene Beraq' => 'IL-Bnei Brak',
 );
 
-# based on cities.txt and loaded into HebcalConst.pm
-our %CITY_TZID = ();
-our %CITY_COUNTRY = ();
-our %CITY_LATLONG = ();
-while(my($id,$info) = each(%HebcalConst::CITIES_NEW)) {
-    my($country,$city,$latitude,$longitude,$tzName,$woeid) = @{$info};
-    $CITY_TZID{$id} = $tzName;
-    $CITY_COUNTRY{$id} = $country;
-    $CITY_LATLONG{$id} = [$latitude,$longitude];
-}
-
 # translate from Askenazic transiliterations to Separdic
 our %ashk2seph =
  (
@@ -1333,32 +1322,12 @@ sub zipcode_get_zip_fields($$)
      $Latitude,$Longitude,$lat_deg,$lat_min,$long_deg,$long_min);
 }
 
-sub woe_city
-{
-    my($id) = @_;
-    return $HebcalConst::CITIES_NEW{$id}->[1];
-}
-
-sub woe_country_code
-{
-    my($id) = @_;
-    return $HebcalConst::CITIES_NEW{$id}->[0];
-}
-
-sub woe_country
-{
-    my($id) = @_;
-    my $country_name = $HebcalConst::COUNTRIES{woe_country_code($id)}->[0];
-    $country_name =~ s/,\s+.+$//;
-    $country_name;
-}
-
 sub woe_city_descr {
     my($id) = @_;
-    my $country = woe_country($id);
-    $country = "USA" if $country eq "United States of America";
-    $country = "UK" if $country eq "United Kingdom";
-    my $city_descr = woe_city($id) . ", $country";
+    my $geonameid = $HebcalConst::CITIES2{$id};
+    my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+      geoname_lookup($geonameid);
+    my $city_descr = geoname_city_descr($name,$admin1,$country);
     return $city_descr;
 }
 
@@ -1466,16 +1435,19 @@ sub process_cookie($$)
 	    }
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
-	    $q->param('city',$c->param('city'))
-		unless $q->param('city');
-	    $q->param('geo','city');
-	    $q->param('c','on');
-	    if (defined $CITY_COUNTRY{$q->param('city')} &&
-		$CITY_COUNTRY{$q->param('city')} eq 'IL')
-	    {
-		$q->param('i','on');
-		$c->param('i','on');
-	    }
+            my $city = validate_city($c->param("city"));
+            if (defined $city) {
+                my $geonameid = $HebcalConst::CITIES2{$city};
+                if (defined $geonameid) {
+                    $q->param('geo','geoname');
+                    $q->param('c','on');
+                    $q->param('geonameid',$geonameid);
+                }
+                if ($city =~ /^IL-/) {
+                    $q->param('i','on');
+                    $c->param('i','on');
+                }
+            }
 	} elsif (defined $c->param('lodeg') &&
 		 defined $c->param('lomin') &&
 		 defined $c->param('lodir') &&
@@ -1634,31 +1606,6 @@ my %ZIPCODES_TZ_MAP = (
 '14' => 'Pacific/Guam',
 '15' => 'Pacific/Palau',
 );
-
-sub process_args_common_jerusalem {
-    my($q,$cconfig) = @_;
-    # special case for candles 40 minutes before sunset...
-    my $city = "IL-Jerusalem";
-    $q->param("city", $city);
-    $q->param("geo","city");
-
-    my($latitude,$longitude) = @{$CITY_LATLONG{$city}};
-    my $cmd = "./hebcal -C 'Jerusalem'";
-    my $city_descr = "Jerusalem, Israel";
-    $q->param("i", "on");
-    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid geonameid city-typeahead)) {
-	$q->delete($_);
-    }
-    if (defined $cconfig) {
-	$cconfig->{"latitude"} = $latitude;
-	$cconfig->{"longitude"} = $longitude;
-	$cconfig->{"title"} = $city_descr;
-	$cconfig->{"city"} = "Jerusalem";
-	$cconfig->{"tzid"} = "Asia/Jerusalem";
-	$cconfig->{"geo"} = "city";
-    }
-    (1,$cmd,$latitude,$longitude,$city_descr);
-}
 
 sub process_args_common_zip {
     my($q,$cconfig) = @_;
@@ -1889,31 +1836,43 @@ sub process_args_common_city {
 	}
     }
 
-    $q->param("city", $city);
-    $q->param("geo","city");
+    my $geonameid = $HebcalConst::CITIES2{$city};
+    my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+      geoname_lookup($geonameid);
 
-    my($latitude,$longitude) = @{$CITY_LATLONG{$city}};
+    unless (defined $name) {
+        my $message = "Sorry, can't find <strong>" . $geonameid .
+            "</strong> in the location database.";
+        my $help = "<ul><li>Please search for a different location</li></ul>";
+        return (0, $message, $help);
+    }
+
+    $q->param("geo", "geoname");
+    $q->param("geonameid", $geonameid);
+    foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead)) {
+        $q->delete($_);
+    }
+
     my($lat_deg,$lat_min,$long_deg,$long_min) =
 	latlong_to_hebcal($latitude, $longitude);
-    my $tzid = $CITY_TZID{$city};
 
     my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
 
-    my $city_descr = woe_city_descr($city);
+    my $city_descr = geoname_city_descr($name,$admin1,$country);
+    if ($country eq "Israel") {
+        $q->param('i','on');
+        $q->param('b','40')
+            if ! defined $q->param('b') && $admin1 eq "Jerusalem District";
+    }
 
-    if ($CITY_COUNTRY{$city} eq 'IL') {
-	$q->param('i','on');
-    }
-    foreach (qw(zip lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead geonameid)) {
-	$q->delete($_);
-    }
     if (defined $cconfig) {
 	$cconfig->{"latitude"} = $latitude;
 	$cconfig->{"longitude"} = $longitude;
 	$cconfig->{"title"} = $city_descr;
-	$cconfig->{"city"} = woe_city($city);
+        $cconfig->{"city"} = $name;
 	$cconfig->{"tzid"} = $tzid;
-	$cconfig->{"geo"} = "city";
+        $cconfig->{"geo"} = "geoname";
+        $cconfig->{"geonameid"} = $geonameid;
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
@@ -1948,17 +1907,10 @@ sub process_args_common {
     }
 
     my @status;
-    if (defined $q->param("city") &&
-	($q->param("city") eq "Jerusalem" || $q->param("city") eq "IL-Jerusalem")) {
-	@status = process_args_common_jerusalem($q, $cconfig);
-    } elsif (defined $q->param('zip') && $q->param('zip') ne '') {
+    if (defined $q->param('zip') && $q->param('zip') ne '') {
 	@status = process_args_common_zip($q, $cconfig);
     } elsif (defined $q->param('geonameid') && $q->param('geonameid') =~ /^\d+$/) {
-	if ($q->param('geonameid') == 281184) {
-	    @status = process_args_common_jerusalem($q, $cconfig);
-	} else {
-	    @status = process_args_common_geoname($q, $cconfig);
-	}
+        @status = process_args_common_geoname($q, $cconfig);
     } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
 	     defined $q->param("ladeg") && defined $q->param("lamin") &&
 	     defined $q->param("lodir") && defined $q->param("ladir") &&
@@ -1999,7 +1951,7 @@ sub validate_city {
     if (defined($CITIES_OLD{$city})) {
 	return $CITIES_OLD{$city};
     }
-    if (defined($CITY_TZID{$city})) {
+    if (defined($HebcalConst::CITIES2{$city})) {
 	return $city;
     }
     return undef;

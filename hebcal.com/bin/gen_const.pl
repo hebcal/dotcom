@@ -11,7 +11,7 @@ my $outfile_js = shift;
 
 my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
-my $CITIES_TXT = "../dist/cities.txt";
+my $CITIES_TXT = "../dist/cities2.txt";
 my $COUNTRIES_TXT = "../dist/countries.txt";
 
 my $axml = XMLin($SEDROT_XML);
@@ -61,15 +61,13 @@ print OJS "};\n";
 
 
 my %seen;
-print O "\%HebcalConst::CITIES_NEW = (\n";
-print OPHP "\$hebcal_cities = array(\n";
-print OJS "HEBCAL.cities={";
+print O "\%HebcalConst::CITIES2 = (\n";
+print OPHP "\$hebcal_cities2 = array(\n";
+print OJS "HEBCAL.cities2={";
 $first = 1;
 while(<CITIES>) {
     chomp;
-    my($id,$geonameid,$country,$city,$population,$latitude,$longitude,$tzName) = split(/\|/);
-    die "$CITIES_TXT:$. something looks fishy"
-	if $latitude eq "" || $longitude eq "" || $tzName !~ m,/,;
+    my($id,$geonameid) = split(/\|/);
     if (defined $seen{$id} || defined $seen{$geonameid}) {
 	die "$CITIES_TXT:$. duplicate $id $geonameid";
     }
@@ -77,12 +75,11 @@ while(<CITIES>) {
     $seen{$geonameid} = 1;
     print OJS "," unless $first;
     $first = 0;
-    print OJS qq{"$id":["$country","$city",$latitude,$longitude,"$tzName",$geonameid]};
+    print OJS qq{"$id":$geonameid};
 
     $id =~ s/\'//g;
-    $city =~ s/\'/\\\'/g;
-    print O "'$id'=>['$country','$city',$latitude,$longitude,'$tzName',$geonameid],\n";
-    print OPHP "'$id'=>array('$country','$city',$latitude,$longitude,'$tzName',$geonameid),\n";
+    print O "'$id'=>$geonameid,\n";
+    print OPHP "'$id'=>$geonameid,\n";
 }
 close(CITIES);
 print O ");\n\n";

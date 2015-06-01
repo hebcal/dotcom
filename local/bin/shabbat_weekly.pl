@@ -520,11 +520,12 @@ EOD
             $city =~ s/\+/ /g;
             if (defined($Hebcal::CITIES_OLD{$city})) {
                 $city = $Hebcal::CITIES_OLD{$city};
-            } elsif (! defined $Hebcal::CITY_LATLONG{$city}) {
-                WARN("unknown city $city for id=$id;email=$email");
-                next;
             }
-            $cfg->{city} = $city;
+            my $geonameid2 = $HebcalConst::CITIES2{$city};
+            if (! defined $geonameid2) {
+                WARN("unknown city $city for id=$id;email=$email");
+            }
+            $cfg->{geonameid} = $geonameid2;
         }
         $SUBS{$email} = $cfg;
         $count++;
@@ -584,18 +585,6 @@ WHERE g.geonameid = ?
         $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
         $is_israel = 1 if $country eq "Israel";
         $is_jerusalem = 1 if $is_israel && $admin1 eq "Jerusalem District";
-    } elsif (defined $cfg->{city}) {
-        my $city = $cfg->{city};
-        ($latitude,$longitude) = @{$Hebcal::CITY_LATLONG{$city}};
-        $tzid = $Hebcal::CITY_TZID{$city};
-        $is_israel = 1 if $Hebcal::CITY_COUNTRY{$city} eq "IL";
-        if ($city eq "Jerusalem" || $city eq "IL-Jerusalem") {
-            $is_israel = $is_jerusalem = 1;
-        }
-
-        my $country = Hebcal::woe_country($city);
-        $country = "USA" if $country eq "United States of America";
-        $city_descr = Hebcal::woe_city($city) . ", $country";
     } else {
         ERROR("no geographic key in config for to=$to, id=$cfg->{id}");
         return undef;
