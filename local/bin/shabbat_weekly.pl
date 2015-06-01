@@ -518,9 +518,7 @@ EOD
             $cfg->{geonameid} = $geonameid;
         } elsif ($city) {
             $city =~ s/\+/ /g;
-            if (defined($Hebcal::CITIES_OLD{$city})) {
-                $city = $Hebcal::CITIES_OLD{$city};
-            }
+            $city = Hebcal::validate_city($city);
             my $geonameid2 = $HebcalConst::CITIES2{$city};
             if (! defined $geonameid2) {
                 WARN("unknown city $city for id=$id;email=$email");
