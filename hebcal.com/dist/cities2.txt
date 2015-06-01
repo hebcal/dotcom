@@ -1,3 +1,4 @@
+AD-Andorra La Vella|3041563
 AE-Abu Dhabi|292968
 AE-Dubai|292223
 AF-Kabul|1138958
@@ -30,6 +31,7 @@ BF-Ouagadougou|2357048
 BG-Sofia|727011
 BH-Manama|290340
 BI-Bujumbura|425378
+BJ-Porto-novo|2392087
 BM-Hamilton|3573197
 BN-Bandar Seri Begawan|1820906
 BO-La Paz|3911925
@@ -96,6 +98,7 @@ CO-Barranquilla|3689147
 CO-Bogota|3688689
 CO-Cali|3687925
 CO-Medellin|3674962
+CR-San José|3621849
 CU-Havana|3553478
 CV-Praia|3374333
 CW-Willemstad|3513090
@@ -122,6 +125,8 @@ ET-Addis Ababa|344979
 FI-Helsinki|658225
 FJ-Suva|2198148
 FK-Stanley|3426691
+FO-Tórshavn|2611396
+FR-Marseilles|2995469
 FR-Paris|2988507
 GA-Libreville|2399697
 GB-Belfast|2655984
@@ -192,18 +197,19 @@ IL-Tiberias|293322
 IM-Douglas|3042237
 IN-Ahmadabad|1279233
 IN-Bangalore|1277333
+IN-Bombay|1275339
+IN-Calcutta|1275004
 IN-Chennai|1264527
 IN-Cochin|1273874
-IN-New Delhi|1261481
 IN-Hyderabad|1269843
 IN-Jaipur|1269515
 IN-Kanpur|1267995
-IN-Calcutta|1275004
-IN-Bombay|1275339
+IN-New Delhi|1261481
 IN-Pune|1259229
 IN-Surat|1255364
 IQ-Baghdad|98182
 IR-Tehran|112931
+IS-Reykjavík|3413829
 IT-Milano|3173435
 IT-Rome|3169070
 JM-Kingston|3489854
@@ -222,6 +228,7 @@ KN-Basseterre|3575551
 KP-Pyongyang|1871859
 KR-Busan|1838524
 KR-Seoul|1835848
+KW-Kuwait|285787
 KY-George Town|3580661
 KZ-Almaty|1526384
 KZ-Astana|1526273
@@ -232,6 +239,7 @@ LI-Vaduz|3042030
 LR-Monrovia|2274895
 LS-Maseru|932505
 LT-Vilnius|593116
+LU-Luxemburg|2960316
 LV-Riga|456172
 LY-Tripoli|2210247
 MA-Casablanca|2553604
@@ -262,6 +270,7 @@ MY-Kota Bharu|1736376
 MY-Kuala Lumpur|1735161
 MZ-Maputo|1040652
 NA-Windhoek|3352136
+NC-Nouméa|2139521
 NE-Niamey|2440485
 NG-Abuja|2352778
 NG-Lagos|2332459
@@ -271,9 +280,10 @@ NO-Oslo|3143244
 NP-Kathmandu|1283240
 NU-Alofi|4036284
 NZ-Auckland|2193733
-NZ-Wellington|2179537
 NZ-Christchurch|2192362
+NZ-Wellington|2179537
 OM-Muscat|287286
+PA-Panama City|3703443
 PE-Lima|3936456
 PF-Papeete|4033936
 PG-Port Moresby|2088122
@@ -309,11 +319,14 @@ SL-Freetown|2408770
 SN-Dakar|2253354
 SO-Mogadishu|53654
 SR-Paramaribo|3383330
+ST-São Tomé|2410763
 SV-San Salvador|3583361
 SY-Aleppo|170063
 SY-Damascus|170654
 SZ-Mbabane|934985
 TC-Cockburn Town|3576994
+TD-Ndjamena|2427123
+TG-Lomé|2365267
 TH-Bangkok|1609350
 TJ-Dushanbe|1221874
 TM-Ashgabat|162183
@@ -348,12 +361,14 @@ US-Honolulu-HI|5856195
 US-Houston-TX|4699066
 US-Lakewood-NJ|5100280
 US-Las Vegas-NV|5506956
+US-Livingston-NY|5100572
 US-Los Angeles-CA|5368361
 US-Memphis-TN|4641239
 US-Miami-FL|4164138
 US-Milwaukee-WI|5263045
 US-Monsey-NY|5127315
 US-New Haven-CT|4839366
+US-New York-NY|5128581
 US-Omaha-NE|5074472
 US-Orlando-FL|4167147
 US-Passaic-NJ|5102443
@@ -364,12 +379,14 @@ US-Portland-OR|5746545
 US-Providence-RI|5224151
 US-Richmond-VA|4781708
 US-Rochester-NY|5134086
+US-Saint Louis-MO|4407066
 US-Saint Paul-MN|5045360
 US-San Diego-CA|5391811
 US-San Francisco-CA|5391959
 US-Seattle-WA|5809844
 US-Silver Spring-MD|4369596
 US-Teaneck-NJ|5105262
+US-Washington-DC|4140963
 US-White Plains-NY|5144336
 UY-Montevideo|3441575
 UZ-Tashkent|1512569
@@ -390,21 +407,3 @@ ZA-Johannesburg|993800
 ZA-Pretoria|964137
 ZM-Lusaka|909137
 ZW-Harare|890299
-AD-Andorra La Vella
-BJ-Porto-novo
-CR-San José
-FO-Tórshavn
-FR-Marseilles
-IS-Reykjavík
-KW-Kuwait|285787
-LU-Luxemburg|2960316
-NC-Nouméa
-PA-Panama City|3703443
-ST-São Tomé|2410763
-TD-Ndjamena
-TG-Lomé|2365267
-US-Livingston-NY|5100572
-US-New York-NY|5128581
-US-Saint Louis-MO|4407066
-US-Washington-DC|4140963
-
