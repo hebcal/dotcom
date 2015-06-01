@@ -156,13 +156,16 @@ to <strong><?php echo htmlentities($info["em"]) ?></strong>.
     $city_descr = geoname_city_descr($name,$admin1,$country);
 	unset($info["zip"]);
 	unset($info["city"]);
-    } else {
-	global $hebcal_cities, $hebcal_countries;
-	$city_info = $hebcal_cities[$info["city"]];
-	$city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
-	$tzid = $hebcal_cities[$info["city"]][4];
-	unset($info["zip"]);
-	unset($info["geonameid"]);
+    } elseif (isset($info["city"])) {
+        $geonameid = hebcal_city_to_geoname($info["city"]);
+        if ($geonameid !== false) {
+            list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
+                hebcal_get_geoname($geonameid);
+            $city_descr = geoname_city_descr($name,$admin1,$country);
+            $info["geonameid"] = $geonameid;
+            unset($info["zip"]);
+            unset($info["city"]);
+        }
     }
     echo html_header_bootstrap3("Confirm Email Subscription");
 ?>

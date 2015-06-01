@@ -103,76 +103,21 @@ $hebcal_cities_old = array(
 'Washington DC' => 'US-Washington-DC',
 );
 
+function hebcal_city_to_geoname($city) {
+    global $hebcal_cities2;
+    global $hebcal_cities_old;
+    $city = trim($city);
+    if (isset($hebcal_cities_old[$city])) {
+        $city = $hebcal_cities_old[$city];
+    }
+    if (isset($hebcal_cities2[$city])) {
+        return $hebcal_cities2[$city];
+    }
+    return false;
+}
+
 function city_cmp($a, $b) {
     return strcmp($a[3], $b[3]);
-}
-
-function html_city_select($selected_city = false) {
-    global $hebcal_cities, $hebcal_countries, $hebcal_continents;
-    $retval = "<select name=\"city\" class=\"form-control\">\n";
-    $groups = array();
-    $special_countries = array("US"=>1,"CA"=>1,"IL"=>1);
-    foreach ($hebcal_cities as $id => $info) {
-	$country = $info[0];
-	$city = $info[1];
-	$grp = isset($special_countries[$country])
-	    ? $country
-	    : $hebcal_countries[$country][1];
-	if (!isset($groups[$grp])) {
-	    $groups[$grp] = array();
-	}
-	$groups[$grp][] = array($id, $country, $hebcal_countries[$country][0], $city);
-    }
-    foreach (explode(" ", "US CA IL EU NA SA AS OC AF") as $grp) {
-	$label = isset($special_countries[$grp])
-	    ? $hebcal_countries[$grp][0]
-	    : $hebcal_continents[$grp];
-	$retval .= "<optgroup label=\"$label\">\n";
-	usort($groups[$grp], "city_cmp");
-	foreach ($groups[$grp] as $info) {
-	    $id = $info[0];
-	    $cc = $info[1];
-	    $country = $info[2];
-	    $city = $info[3];
-	    $city_country = $city;
-	    if ($cc == "US") {
-		$city_country .= ", USA";
-	    } elseif ($cc == "GB") {
-		$city_country .= ", UK";
-	    } else {
-		$city_country .= ", $country";
-	    }
-	    $retval .= "<option";
-	    if ($selected_city && $id == $selected_city) {
-		$retval .= " selected";
-	    }
-	    $retval .= " value=\"$id\">$city_country</option>\n";
-	}
-	$retval .= "</optgroup>\n";
-    }
-    $retval .= "</select>\n";
-    return $retval;
-}
-
-function hebcal_tz_names() {
-    global $TIMEZONE_LIST_INIT, $TIMEZONE_ARRAY;
-    if (!isset($TIMEZONE_LIST_INIT)) {
-	$TIMEZONE_LIST_INIT = true;
-	$TIMEZONE_ARRAY = array();
-	$zone_tab = "/usr/share/zoneinfo/zone.tab";
-	if (($fh = fopen($zone_tab, "r")) !== FALSE) {
-	    while (($line = fgets($fh)) !== FALSE) {
-		if (substr($line, 0, 1) != "#") {
-		    $fields = preg_split("/\s+/", $line);
-		    $TIMEZONE_ARRAY[] = $fields[2];
-		}
-	    }
-	    fclose($fh);
-	    sort($TIMEZONE_ARRAY);
-	}
-	array_unshift($TIMEZONE_ARRAY, "UTC");
-    }
-    return $TIMEZONE_ARRAY;
 }
 
 $ZIPCODES_TZ_MAP = array(
@@ -666,9 +611,9 @@ $(document).ready(function(){
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
-    if(c&&c.indexOf("http://")===0){
-      var d=c.indexOf("/",7);
-      if(d>7) {
+    if(c&&c.indexOf("http")===0){
+      var d=c.indexOf("/",8);
+      if(d>8) {
         ga('send','event','outbound-article',c.substring(7,d));
       }
     }

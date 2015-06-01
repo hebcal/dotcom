@@ -28,6 +28,15 @@ foreach($_REQUEST as $key => $value) {
     $param[$key] = trim($value);
 }
 
+if (isset($param["city"])) {
+    $geonameid = hebcal_city_to_geoname($param["city"]);
+    unset($param["city"]);
+    if ($geonameid !== false) {
+        $param["geo"] = "geoname";
+        $param["geonameid"] = $geonameid;
+    }
+}
+
 if (!isset($param["m"])) {
     $param["m"] = 50;
 }
@@ -71,8 +80,6 @@ else
                 $param["geo"] = "geoname";
             } elseif (isset($param["zip"])) {
                 $param["geo"] = "zip";
-            } elseif (isset($param["city"])) {
-                $param["geo"] = "city";
             }
 	    $is_update = true;
 	}
@@ -126,10 +133,6 @@ function write_sub_info($param) {
     elseif ($param["geo"] == "geoname")
     {
 	$geo_sql = "email_candles_geonameid='$param[geonameid]',email_candles_city=NULL,email_candles_zipcode=NULL";
-    }
-    elseif ($param["geo"] == "city")
-    {
-	$geo_sql = "email_candles_city='$param[city]',email_candles_zipcode=NULL,email_candles_geonameid=NULL";
     }
 
     $sql = <<<EOD
@@ -232,11 +235,6 @@ function write_staging_info($param, $old_encoded)
 	$location_name = "email_candles_geonameid";
 	$location_value = $param["geonameid"];
     }
-    elseif ($param["geo"] == "city")
-    {
-	$location_name = "email_candles_city";
-	$location_value = $param["city"];
-    }
 
     $sql = <<<EOD
 REPLACE INTO hebcal_shabbat_email
@@ -290,34 +288,8 @@ function form($param, $message = "", $help = "") {
 <input type="email" name="em" id="em" class="form-control" placeholder="user@example.com"
 value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?>">
 </div>
-<?php if ($geo == "city") { ?>
 <div class="form-group">
-<label for="city">Major City
-&nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
-or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>)</small>
-</label>
-<?php
-echo html_city_select(isset($param["city"]) ? $param["city"] : "IL-Jerusalem");
-?>
-</div>
-<input type="hidden" name="geo" id="geo" value="city">
-<?php } elseif ($geo == "zip") { ?>
-<div class="form-group">
-<label for="zip">ZIP code
-&nbsp;&nbsp;<small>(or <a href="<?php echo $action ?>?geo=geoname">search</a>
-or select by <a
-href="<?php echo $action ?>?geo=city">major city</a>)</small>
-</label>
-<input type="text" name="zip" id="zip" class="form-control" maxlength="5"
-pattern="\d*" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>">
-</div>
-<input type="hidden" name="geo" id="geo" value="zip">
-<?php } else { ?>
-<div class="form-group">
-<label for="city-typeahead">City
-&nbsp;&nbsp;<small>(or select by <a href="<?php echo $action ?>?geo=zip">ZIP code</a>
-or <a href="<?php echo $action ?>?geo=city">major city</a>)</small>
-</label>
+<label for="city-typeahead">City</label>
 <input type="hidden" name="geo" id="geo" value="geoname">
 <input type="hidden" id="zip" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
@@ -325,7 +297,6 @@ or <a href="<?php echo $action ?>?geo=city">major city</a>)</small>
 <input type="text" name="city-typeahead" id="city-typeahead" class="form-control" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
 </div>
 </div>
-<?php } ?>
 <div class="form-group">
 <label for="m">Havdalah minutes past sundown
 <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
@@ -446,34 +417,10 @@ function subscribe($param) {
 	unset($param["zip"]);
 	unset($param["city"]);
     }
-    elseif ($param["geo"] == "city")
-    {
-	if (!$param["city"])
-	{
-	    form($param,
-	    "Please select a city for candle lighting times.");
-	}
-
-	global $hebcal_cities, $hebcal_countries;
-	if (!isset($hebcal_cities[$param["city"]]))
-	{
-	    form($param,
-	    "Sorry, <strong>" . htmlspecialchars($param["city"]) . "</strong> is\n" .
-	    "not a recoginized city.");
-	}
-
-	$city_info = $hebcal_cities[$param["city"]];
-	$city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
-
-	$tzid = $hebcal_cities[$param["city"]][4];
-
-	unset($param["zip"]);
-	unset($param["geonameid"]);
-    }
     else
     {
-	$param["geo"] = "zip";
-	form($param, "Sorry, missing location (zip, city, geonameid) field.");
+	$param["geo"] = "geoname";
+	form($param, "Sorry, missing location (zip, geonameid) field.");
     }
 
     // check for old sub

@@ -18,7 +18,15 @@ function my_geoname_city_descr($geonameid) {
     return geoname_city_descr($name,$admin1,$country);
 }
 
-$geo = $geonameid = $zip = $city = $city_descr = "";
+$geo = $geonameid = $zip = $city_descr = "";
+
+if (isset($param["city"])) {
+    $geonameid = hebcal_city_to_geoname($param["city"]);
+    unset($param["city"]);
+    if ($geonameid !== false) {
+        $param["geonameid"] = $geonameid;
+    }
+}
 
 if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
     $geonameid = $param["geonameid"];
@@ -32,15 +40,6 @@ if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
         hebcal_get_zipcode_fields($zip);
     $city_descr = "$city, $state $zip";
     $geo_link = "zip=$zip";
-} elseif (isset($param["city"]) && isset($hebcal_cities[$param["city"]])) {
-    $city = $param["city"];
-    if (isset($hebcal_cities_old[$city])) {
-        $city = $hebcal_cities_old[$city];
-    }
-    $geo = "city";
-    $city_info = $hebcal_cities[$city];
-    $city_descr = $city_info[1] . ", " . $hebcal_countries[$city_info[0]][0];
-    $geo_link = "city=" . urlencode($city);
 } else {
     $geonameid = 281184;
     $geo = "geoname";
@@ -113,7 +112,6 @@ synagogue's web page.</p>
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
 <input type="hidden" name="geo" id="geo" value="geoname">
 <input type="hidden" name="zip" id="zip" value="">
-<input type="hidden" name="city" id="city" value="">
 <input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
 
 <div class="form-group">

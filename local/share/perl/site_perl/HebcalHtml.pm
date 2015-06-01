@@ -280,20 +280,7 @@ EOHTML
 
     # only offer DBA export when we know timegm() will work
     my $palm_dba = "";
-    my $dst;
-    if ($q->param("geo") && $q->param("geo") ne "off"
-        && $q->param("c") && $q->param("c") ne "off") {
-        if (defined $q->param("dst") && $q->param("dst") ne "") {
-            $dst = $q->param("dst");
-        }
-        elsif ($q->param("geo") eq "city" && $q->param("city")
-               && defined $Hebcal::city_dst{$q->param("city")}) {
-            $dst = $Hebcal::city_dst{$q->param("city")};
-        }
-    }
-
-    if ($greg_year1 > 1969 && $greg_year2 < 2038 &&
-        (!defined($dst) || $dst eq "usa" || $dst eq "none")) {
+    if ($greg_year1 > 1969 && $greg_year2 < 2038) {
         my $dba_href = Hebcal::download_href($q, $filename, 'dba');
         my $palm_dba_btn = download_button_html($q, "$filename.dba", $dba_href, "dl-dba", "$filename.dba", 1);
         $palm_dba = <<EOHTML;
