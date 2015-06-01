@@ -12,7 +12,6 @@ my $outfile_js = shift;
 my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
 my $CITIES_TXT = "../dist/cities2.txt";
-my $COUNTRIES_TXT = "../dist/countries.txt";
 
 my $axml = XMLin($SEDROT_XML);
 $axml || die $SEDROT_XML;
@@ -22,9 +21,6 @@ $fxml || die $HOLIDAYS_XML;
 
 open(CITIES, $CITIES_TXT) || die "$CITIES_TXT: $!";
 binmode(CITIES, ":utf8");
-
-open(COUNTRIES, $COUNTRIES_TXT) || die "$COUNTRIES_TXT: $!";
-binmode(COUNTRIES, ":utf8");
 
 open(O,">$outfile_pm.$$") || die "$outfile_pm.$$: $!\n";
 binmode(O, ":utf8");
@@ -38,33 +34,11 @@ print OJS "if(typeof HEBCAL==\"undefined\"||!HEBCAL){var HEBCAL={};}\n";
 print O "package HebcalConst;\n\n";
 print O "use utf8;\n\n";
 
-print O "\%HebcalConst::COUNTRIES = (\n";
-print OPHP "\$hebcal_countries = array(\n";
-print OJS "HEBCAL.countries={";
-my $first = 1;
-while(<COUNTRIES>) {
-    chomp;
-    my($code,$name,$full_name,$iso3,$number,$continent_code) = split(/\|/);
-
-    print OJS "," unless $first;
-    $first = 0;
-    print OJS qq{"$code":["$name","$continent_code"]};
-
-    $name =~ s/\'/\\\'/g;
-    print O "'$code'=>['$name','$continent_code'],\n";
-    print OPHP "'$code'=>array('$name','$continent_code'),\n";
-}
-close(COUNTRIES);
-print O ");\n\n";
-print OPHP ");\n\n";
-print OJS "};\n";
-
-
 my %seen;
 print O "\%HebcalConst::CITIES2 = (\n";
 print OPHP "\$hebcal_cities2 = array(\n";
 print OJS "HEBCAL.cities2={";
-$first = 1;
+my $first = 1;
 while(<CITIES>) {
     chomp;
     my($id,$geonameid) = split(/\|/);
