@@ -279,6 +279,11 @@ function form($param, $message = "", $help = "") {
         list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
             hebcal_get_geoname($param["geonameid"]);
         $param["city-typeahead"] = geoname_city_descr($name,$admin1,$country);
+    } elseif ($geo == "zip" && isset($param["zip"])) {
+        list($city,$state,$tzid,$latitude,$longitude,
+             $lat_deg,$lat_min,$long_deg,$long_min) =
+            hebcal_get_zipcode_fields($param["zip"]);
+        $param["city-typeahead"] = "$city, $state " . $param["zip"];
     }
 ?>
 <div id="email-form">
@@ -290,8 +295,8 @@ value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?
 </div>
 <div class="form-group">
 <label for="city-typeahead">City</label>
-<input type="hidden" name="geo" id="geo" value="geoname">
-<input type="hidden" id="zip" value="">
+<input type="hidden" name="geo" id="geo" value="<?php echo $geo ?>">
+<input type="hidden" id="zip" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>">
 <input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
 <div class="city-typeahead" style="margin-bottom:12px">
 <input type="text" name="city-typeahead" id="city-typeahead" class="form-control" placeholder="Search for city" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
