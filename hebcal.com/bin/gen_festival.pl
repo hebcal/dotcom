@@ -453,7 +453,7 @@ EOHTML
 }
 
 sub table_row_one_year_only {
-    my($fh,$festivals,$f,$evt,$show_year) = @_;
+    my($fh,$festivals,$f,$evt,$show_year,$evt2) = @_;
     my $descr;
     my $about = get_var($festivals, $f, 'about');
     if ($about) {
@@ -469,6 +469,10 @@ sub table_row_one_year_only {
     print $fh "<td>";
     print $fh table_cell_observed($f, $evt, $show_year)
         if defined $evt;
+    if (defined $evt2) {
+        print $fh "<br>";
+        print $fh table_cell_observed($f, $evt2, $show_year);
+    }
     print $fh qq{</td>\n<td class="hidden-xs">$short_descr</td>\n};
     print $fh "</tr>\n";
 }
@@ -502,7 +506,7 @@ sub rosh_hashana_ymd {
         $evt = $EVENTS_BY_HEBYEAR[$i]->{"Rosh Hashana"};
     } else {
         my $i = $current_year - $FIRST_GREG_YR;
-        $evt = $EVENTS_BY_GREGYEAR[$i]->{"Rosh Hashana"};
+        $evt = $EVENTS_BY_GREGYEAR[$i]->{"Rosh Hashana"}->[0];
     }
     return Hebcal::event_ymd($evt);
 }
@@ -735,14 +739,21 @@ EOHTML
         print $fh $yomtov_html if $heading eq "Major holidays";
         table_header_one_year_only($fh, $table_id, 0);
         my @events;
+        my $asara_btevet2;
         foreach my $f (@{$section->[0]}) {
-            my $evt = $EVENTS_BY_GREGYEAR[$i]->{$f};
-            push(@events, $evt) if defined $evt;
+            my $evts = $EVENTS_BY_GREGYEAR[$i]->{$f};
+            if (defined $evts) {
+                push(@events, $evts->[0]);
+                if ($f eq "Asara B'Tevet" && defined $evts->[1]) {
+                    $asara_btevet2 = $evts->[1];
+                }
+            }
         }
         @events = sort { Hebcal::event_to_time($a) <=> Hebcal::event_to_time($b) } @events;
         foreach my $evt (@events) {
             my $f = $evt->[$Hebcal::EVT_IDX_SUBJ];
-            table_row_one_year_only($fh,$festivals,$f,$evt,0);
+            my $evt2 = $f eq "Asara B'Tevet" ? $asara_btevet2 : undef;
+            table_row_one_year_only($fh,$festivals,$f,$evt,0,$evt2);
         }
         table_footer_one_year_only($fh, $table_id);
         print $fh qq{</div><!-- #$table_id -->\n};
@@ -1305,14 +1316,14 @@ sub holidays_observed {
 	$cmd .= " -i" if $opts{"i"};
 	$cmd .= " -H $yr";
 	my @events = Hebcal::invoke_hebcal($cmd, "", 0);
-	$EVENTS_BY_HEBYEAR[$i] = build_event_begin_hash(\@events);
+        $EVENTS_BY_HEBYEAR[$i] = build_event_begin_hash(\@events, 0);
 
 	my $yr2 = $FIRST_GREG_YR + $i;
 	my $cmd2 = "./hebcal";
 	$cmd2 .= " -i" if $opts{"i"};
 	$cmd2 .= " $yr2";
 	my @events2 = Hebcal::invoke_hebcal($cmd2, "", 0);
-	$EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2);
+        $EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2, 1);
     }
 }
 
@@ -1336,18 +1347,23 @@ sub filter_events {
         next if defined $seen{$subj_copy};
         $evt->[$Hebcal::EVT_IDX_SUBJ] = $subj_copy;
         push(@{$dest}, $evt);
-        $seen{$subj_copy} = 1;
+        $seen{$subj_copy} = 1 unless $subj_copy eq "Asara B'Tevet";
     }
     $dest;
 }
 
 sub build_event_begin_hash {
-    my($events) = @_;
+    my($events,$multi) = @_;
     my $filtered = filter_events($events);
     my $dest = {};
     foreach my $evt (@{$filtered}) {
         my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-        $dest->{$subj} = $evt
+        if ($multi) {
+            $dest->{$subj} = [] unless defined $dest->{$subj};
+            push(@{$dest->{$subj}}, $evt);
+        } else {
+            $dest->{$subj} = $evt;
+        }
     }
     $dest;
 }
