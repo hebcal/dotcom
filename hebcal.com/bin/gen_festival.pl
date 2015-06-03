@@ -1050,9 +1050,15 @@ sub write_festival_page
     }
 
     my $next_observed = get_next_observed_str($f);
+    my $next_observed_meta = ". ";
+    my $next_observed_para = "";
+    if ($next_observed) {
+        $next_observed_meta = ", $next_observed. ";
+        $next_observed_para = qq{<p class="lead">$f $next_observed.</p>};
+    }
 
     my $meta = <<EOHTML;
-<meta name="description" content="Jewish holiday of $f$next_observed$descr. Holiday Torah readings, dates observed.">
+<meta name="description" content="Jewish holiday of $f$next_observed_meta$descr. Holiday Torah readings, dates observed.">
 EOHTML
 ;
 
@@ -1075,6 +1081,7 @@ EOHTML
 $pager
 <h1>$f / <span lang="he" dir="rtl">$hebrew</span></h1>
 <p class="lead">$long_descr.</p>
+$next_observed_para
 EOHTML
 ;
 
@@ -1096,7 +1103,7 @@ EOHTML
 
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>
-$f begins in the Diaspora on:
+$f begins on:
 <ul>
 EOHTML
 	;
@@ -1398,14 +1405,14 @@ sub observed_event_list {
 sub get_next_observed_str {
     my($f) = @_;
 
-    my $next_observed = ". ";
+    my $next_observed = "";
     my $observed = observed_event_list($f);
     foreach my $evt (@{$observed}) {
 	my $time = Hebcal::event_to_time($evt);
 	if ($time >= $NOW) {
 	    my($gy,$gm,$gd,$dow) = day_event_observed($f, $evt);
 	    my $rise_or_set = begins_when($f);
-	    $next_observed = sprintf ", begins %s on %s, %02d %s %04d. ", $rise_or_set,
+	    $next_observed = sprintf "begins %s on %s, %02d %s %04d", $rise_or_set,
 		$Hebcal::DoW[$dow], $gd, $Hebcal::MoY_long{$gm}, $gy;
 	    last;
 	}
