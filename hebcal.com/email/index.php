@@ -5,6 +5,17 @@
 require "../pear/Hebcal/smtp.inc";
 require "../pear/Hebcal/common.inc";
 
+function city_to_geonameid($param) {
+    $geonameid = hebcal_city_to_geoname($param["city"]);
+    //error_log("city_to_geonameid $param[city] => $geonameid");
+    unset($param["city"]);
+    if ($geonameid !== false) {
+        $param["geo"] = "geoname";
+        $param["geonameid"] = $geonameid;
+    }
+    return $param;
+}
+
 $remoteAddr = $_SERVER["REMOTE_ADDR"];
 
 $sender = "webmaster@hebcal.com";
@@ -29,12 +40,7 @@ foreach($_REQUEST as $key => $value) {
 }
 
 if (isset($param["city"])) {
-    $geonameid = hebcal_city_to_geoname($param["city"]);
-    unset($param["city"]);
-    if ($geonameid !== false) {
-        $param["geo"] = "geoname";
-        $param["geonameid"] = $geonameid;
-    }
+    $param = city_to_geonameid($param);
 }
 
 if (!isset($param["m"])) {
@@ -43,7 +49,7 @@ if (!isset($param["m"])) {
 
 if (isset($param["v"]) && $param["v"])
 {
-    $email = $param["em"];
+    $email = isset($param["em"]) ? $param["em"] : false;
     if (!$email)
     {
 	form($param,
@@ -76,10 +82,12 @@ else
                     $param[$k] = $v;
                 }
 	    }
-            if (isset($param["geonameid"])) {
-                $param["geo"] = "geoname";
+            if (isset($param["city"])) {
+                $param = city_to_geonameid($param);
             } elseif (isset($param["zip"])) {
                 $param["geo"] = "zip";
+            } elseif (isset($param["geonameid"])) {
+                $param["geo"] = "geoname";
             }
 	    $is_update = true;
 	}
@@ -195,6 +203,7 @@ EOD;
 	"t" => $created,
 	);
 
+    //error_log("get_sub_info($email) got " . json_encode($val));
     mysqli_free_result($result);
 
     return $val;
@@ -297,9 +306,9 @@ value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?
 <label for="city-typeahead">City</label>
 <input type="hidden" name="geo" id="geo" value="<?php echo $geo ?>">
 <input type="hidden" name="zip" id="zip" value="<?php if (isset($param["zip"])) { echo htmlspecialchars($param["zip"]); } ?>">
-<input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
+<input type="hidden" name="geonameid" id="geonameid" value="<?php if (isset($param["geonameid"])) { echo htmlspecialchars($param["geonameid"]); } ?>">
 <div class="city-typeahead" style="margin-bottom:12px">
-<input type="text" name="city-typeahead" id="city-typeahead" class="form-control" placeholder="Search for city or ZIP code" value="<?php echo htmlentities($param["city-typeahead"]) ?>">
+<input type="text" name="city-typeahead" id="city-typeahead" class="form-control" placeholder="Search for city or ZIP code" value="<?php if (isset($param["city-typeahead"])) { echo htmlentities($param["city-typeahead"]); } ?>">
 </div>
 </div>
 <div class="form-group">
