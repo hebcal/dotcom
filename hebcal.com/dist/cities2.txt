@@ -187,7 +187,7 @@ IL-Lod|294421
 IL-Modiin|6693679
 IL-Nazareth|294098
 IL-Netanya|294071
-IL-Petach Tikvah|6693674
+IL-Petach Tikvah|293918
 IL-Ra'anana|293807
 IL-Ramat Gan|293788
 IL-Ramla|293768
