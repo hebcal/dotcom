@@ -561,7 +561,7 @@ sub parse_config {
         $longitude = $Longitude;
         $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
         unless (defined $State) {
-            WARN("unknown zipcode [$cfg->{zip}]");
+            WARN("unknown zipcode=$cfg->{zip} for to=$to, id=$cfg->{id}");
             return undef;
         }
         $city_descr = "$CityMixedCase, $State " . $cfg->{zip};
@@ -580,6 +580,10 @@ WHERE g.geonameid = ?
         my($name,$asciiname,$country,$admin1);
         ($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array;
         $sth->finish;
+        unless (defined $name) {
+            WARN("unknown geonameid=$cfg->{geonameid} for to=$to, id=$cfg->{id}");
+            return undef;
+        }
         $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
         $is_israel = 1 if $country eq "Israel";
         $is_jerusalem = 1 if $is_israel && $admin1 eq "Jerusalem District";
