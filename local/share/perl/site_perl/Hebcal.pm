@@ -1734,6 +1734,49 @@ sub legacy_tz_dst_to_tzid {
     return undef;
 }
 
+sub process_args_common_geopos2 {
+    my($q,$cconfig) = @_;
+
+    my $tzid = $q->param("tzid");
+    if (! defined $tzid) {
+        return (0, "Please select a Time zone", undef);
+    } elsif (!is_timezone_valid($tzid)) {
+        return (0, "Sorry, can't find <strong>$tzid</strong> in our time zone database", undef);
+    }
+
+    my $latitude = $q->param("latitude");
+    my $longitude = $q->param("longitude");
+    foreach my $value ($latitude, $longitude) {
+        if ($value !~ /^[-+]?[0-9]*\.?[0-9]+$/) {
+            return (0, "Sorry, latitude/longitude arguments must be numeric.", undef);
+        }
+    }
+
+    if (abs($latitude) > 90) {
+        my $message = "Sorry, latitude <strong>$latitude</strong> out of valid range -90 thru +90";
+        return (0, $message, undef);
+    } elsif (abs($longitude) > 180) {
+        my $message = "Sorry, longitude <strong>$longitude</strong> out of valid range -180 thru +180";
+        return (0, $message, undef);
+    }
+
+    my $city_descr .= "$latitude, $longitude, $tzid";
+
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+        latlong_to_hebcal($latitude, $longitude);
+
+    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+
+    if (defined $cconfig) {
+        $cconfig->{"latitude"} = $latitude;
+        $cconfig->{"longitude"} = $longitude;
+        $cconfig->{"title"} = $city_descr;
+        $cconfig->{"tzid"} = $tzid;
+        $cconfig->{"geo"} = "pos";
+    }
+    (1,$cmd,$latitude,$longitude,$city_descr);
+}
+
 sub process_args_common_geopos {
     my($q,$cconfig) = @_;
 
@@ -1911,6 +1954,9 @@ sub process_args_common {
 	@status = process_args_common_zip($q, $cconfig);
     } elsif (defined $q->param('geonameid') && $q->param('geonameid') =~ /^\d+$/) {
         @status = process_args_common_geoname($q, $cconfig);
+    } elsif (defined $q->param("latitude") && defined $q->param("longitude") &&
+             $q->param("latitude") ne '' && $q->param("latitude") ne '') {
+        @status = process_args_common_geopos2($q, $cconfig);
     } elsif (defined $q->param("lodeg") && defined $q->param("lomin") &&
 	     defined $q->param("ladeg") && defined $q->param("lamin") &&
 	     defined $q->param("lodir") && defined $q->param("ladir") &&
