@@ -1760,7 +1760,7 @@ sub process_args_common_geopos2 {
         return (0, $message, undef);
     }
 
-    my $city_descr .= "$latitude, $longitude, $tzid";
+    my $city_descr = "$latitude, $longitude, $tzid";
 
     my($lat_deg,$lat_min,$long_deg,$long_min) =
         latlong_to_hebcal($latitude, $longitude);
