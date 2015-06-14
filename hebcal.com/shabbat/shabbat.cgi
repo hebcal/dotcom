@@ -807,6 +807,7 @@ window['hebcal'].createCityTypeahead(false);
 JSCRIPT_END
         ;
 
+    delete $ENV{'SCRIPT_FILENAME'};
     out_html(undef, HebcalHtml::footer_bootstrap3($q, undef, 1, $xtra_html));
     out_html($cfg, "</body></html>\n");
     timestamp_comment();
