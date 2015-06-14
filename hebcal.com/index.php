@@ -390,7 +390,7 @@ $xtra_html = <<<EOD
 window['hebcal'].createCityTypeahead(true);
 </script>
 EOD;
-    echo html_footer_bootstrap3(true, $xtra_html);
+    echo html_footer_bootstrap3(false, $xtra_html);
     exit();
 ?>
 
