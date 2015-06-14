@@ -438,7 +438,7 @@ Hebrew feed &raquo;</a></p>
 </div><!-- .row -->
 <?php
 
-    echo html_footer_bootstrap3();
+    echo html_footer_bootstrap3(false);
     exit();
 }
 
