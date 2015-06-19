@@ -586,7 +586,7 @@ WHERE g.geonameid = ?
         }
         $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
         $is_israel = 1 if $country eq "Israel";
-        $is_jerusalem = 1 if $is_israel && ($admin1 eq "Jerusalem District" || index($name, "Jerusalem") == 0);
+        $is_jerusalem = 1 if $is_israel && (index($admin1, "Jerusalem") == 0 || index($name, "Jerusalem") == 0);
     } else {
         ERROR("no geographic key in config for to=$to, id=$cfg->{id}");
         return undef;
