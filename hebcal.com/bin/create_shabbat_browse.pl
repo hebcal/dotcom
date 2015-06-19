@@ -51,10 +51,12 @@ use strict;
 my $opt_indexonly = 0;
 my $opt_help;
 my $opt_verbose = 0;
+my @opt_country;
 
 if (!Getopt::Long::GetOptions
     ("help|h" => \$opt_help,
      "indexonly" => \$opt_indexonly,
+     "country=s" => \@opt_country,
      "verbose|v+" => \$opt_verbose)) {
     usage();
 }
@@ -122,6 +124,7 @@ sub usage {
   --help        Display usage information
   --verbose     Verbose mode
   --indexonly   Only generate index
+  --country=ISO Only generate for ISO country code
 ";
     die "$usage\n";
 }
@@ -131,7 +134,12 @@ sub get_countries {
     foreach my $continent (keys %Hebcal::CONTINENTS) {
         $countries{$continent} = [];
     }
-    my $sql = qq{SELECT Continent, ISO, Country FROM country ORDER BY Continent, Country};
+    my $sql = qq{SELECT Continent, ISO, Country FROM country};
+    if (@opt_country) {
+        my $s = join("','", @opt_country);
+        $sql .= qq{ WHERE ISO IN ('$s')};
+    }
+    $sql .= qq{ ORDER BY Continent, Country};
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
     $sth->execute() or die $dbh->errstr;
     while (my($continent,$iso,$country) = $sth->fetchrow_array) {
