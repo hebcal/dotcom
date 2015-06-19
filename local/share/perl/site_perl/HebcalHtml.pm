@@ -440,8 +440,8 @@ sub header_bootstrap3 {
 <meta charset="UTF-8">
 <title>$title2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 $xtra_stylesheet<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -481,6 +481,11 @@ $xtra_stylesheet<script>
 }
 .bullet-list-inline li:after{content:"\\00a0\\00a0\\00b7"}
 .bullet-list-inline li:last-child:after{content:""}
+.pagination {margin: 12px 0}
+.h1, .h2, .h3, h1, h2, h3 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
 \@media print{
  a[href]:after{content:""}
  .sidebar-nav{display:none}
@@ -562,8 +567,8 @@ $last_updated_text
 </footer>
 </div> <!-- .container -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 EOHTML
 ;
 
