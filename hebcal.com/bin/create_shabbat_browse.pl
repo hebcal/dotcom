@@ -257,7 +257,7 @@ sub get_candle_lighting {
     my $cmd = $Hebcal::HEBCAL_BIN . " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
     if ($country eq "IL") {
         $cmd .= " -i";
-        $cmd .= " -b 40" if $admin1 eq "Jerusalem District";
+        $cmd .= " -b 40" if index($admin1, "Jerusalem") == 0;
     }
     $cmd .= " -m 50 -c -s $fri_year";
     DEBUG("$asciiname, $admin1, $country - $cmd");
