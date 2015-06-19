@@ -1697,8 +1697,10 @@ sub process_args_common_geoname {
     my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {
 	$q->param('i','on');
-        $q->param('b','40')
-            if ! defined $q->param('b') && $admin1 eq "Jerusalem District";
+        if ($admin1 eq "Jerusalem District"
+                || index($name, "Jerusalem") == 0) {
+            $q->param('b','40');
+        }
     }
     $q->param("geo", "geoname");
     foreach (qw(zip city lodeg lomin ladeg lamin lodir ladir tz dst tzid city-typeahead)) {
@@ -1904,8 +1906,10 @@ sub process_args_common_city {
     my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {
         $q->param('i','on');
-        $q->param('b','40')
-            if ! defined $q->param('b') && $admin1 eq "Jerusalem District";
+        if ($admin1 eq "Jerusalem District"
+                || index($name, "Jerusalem") == 0) {
+            $q->param('b','40');
+        }
     }
 
     if (defined $cconfig) {
