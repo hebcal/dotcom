@@ -113,7 +113,9 @@ foreach my $continent (keys %Hebcal::CONTINENTS) {
     }
 }
 
-write_index_page($written_countries);
+if (scalar(@opt_country) == 0) {
+    write_index_page($written_countries);
+}
 
 Hebcal::zipcode_close_db($dbh);
 undef($dbh);
