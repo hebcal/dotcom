@@ -602,14 +602,9 @@ WHERE g.geonameid = ?
     WARN("Unknown tzid for to=$to, id=$cfg->{id}")
         unless defined $tzid;
 
-    my $cmd = "$HOME/web/hebcal.com/bin/hebcal";
-    if ($is_jerusalem) {
-        $cmd .= " -C 'Jerusalem'";
-    } else {
-        my($lat_deg,$lat_min,$long_deg,$long_min) =
-            Hebcal::latlong_to_hebcal($latitude, $longitude);
-        $cmd .= " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
-    }
+    my $cmd = $Hebcal::HEBCAL_BIN;
+    $cmd .= Hebcal::cmd_latlong($latitude,$longitude,$tzid);
+    $cmd .= " -b 40" if $is_jerusalem;
 
     $cmd .= " -i" if $is_israel;
 

@@ -1316,10 +1316,7 @@ sub zipcode_get_zip_fields($$)
     }
 
     my $tzid = get_usa_tzid($State,$TimeZone,$DayLightSaving);
-    my($lat_deg,$lat_min,$long_deg,$long_min) =
-	latlong_to_hebcal($Latitude, $Longitude);
-    ($CityMixedCase,$State,$tzid,
-     $Latitude,$Longitude,$lat_deg,$lat_min,$long_deg,$long_min);
+    ($CityMixedCase,$State,$tzid,$Latitude,$Longitude);
 }
 
 sub woe_city_descr {
@@ -1617,7 +1614,7 @@ sub process_args_common_zip {
     }
 
     my $DB = zipcode_open_db();
-    my($city,$state,$tzid,$latitude,$longitude,$lat_deg,$lat_min,$long_deg,$long_min) =
+    my($city,$state,$tzid,$latitude,$longitude) =
 	zipcode_get_zip_fields($DB, $q->param("zip"));
     zipcode_close_db($DB);
     undef($DB);
@@ -1629,7 +1626,9 @@ sub process_args_common_zip {
 	return (0,$message,$help);
     }
 
-    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = "./hebcal";
+    $cmd .= cmd_latlong($latitude,$longitude,$tzid);
+
     my $city_descr = "$city, $state " . $q->param('zip');
 
     $q->param("geo", "zip");
@@ -1691,9 +1690,8 @@ sub process_args_common_geoname {
         return (0, $message, $help);
     }
 
-    my($lat_deg,$lat_min,$long_deg,$long_min) =
-        latlong_to_hebcal($latitude, $longitude);
-    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = "./hebcal";
+    $cmd .= cmd_latlong($latitude,$longitude,$tzid);
     my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {
 	$q->param('i','on');
@@ -1736,6 +1734,15 @@ sub legacy_tz_dst_to_tzid {
     return undef;
 }
 
+sub cmd_latlong {
+    my($latitude,$longitude,$tzid) = @_;
+
+    my($lat_deg,$lat_min,$long_deg,$long_min) =
+        latlong_to_hebcal($latitude, $longitude);
+
+    return " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+}
+
 sub process_args_common_geopos2 {
     my($q,$cconfig) = @_;
 
@@ -1764,10 +1771,8 @@ sub process_args_common_geopos2 {
 
     my $city_descr = "$latitude, $longitude, $tzid";
 
-    my($lat_deg,$lat_min,$long_deg,$long_min) =
-        latlong_to_hebcal($latitude, $longitude);
-
-    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = "./hebcal";
+    $cmd .= cmd_latlong($latitude,$longitude,$tzid);
 
     if (defined $cconfig) {
         $cconfig->{"latitude"} = $latitude;
@@ -1898,10 +1903,8 @@ sub process_args_common_city {
         $q->delete($_);
     }
 
-    my($lat_deg,$lat_min,$long_deg,$long_min) =
-	latlong_to_hebcal($latitude, $longitude);
-
-    my $cmd = "./hebcal -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = "./hebcal";
+    $cmd .= cmd_latlong($latitude,$longitude,$tzid);
 
     my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {

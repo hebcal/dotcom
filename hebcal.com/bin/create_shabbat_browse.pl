@@ -262,9 +262,8 @@ sub write_candle_lighting {
 
 sub get_candle_lighting {
     my($latitude,$longitude,$tzid,$country,$asciiname,$admin1) = @_;
-    my($lat_deg,$lat_min,$long_deg,$long_min) =
-        Hebcal::latlong_to_hebcal($latitude, $longitude);
-    my $cmd = $Hebcal::HEBCAL_BIN . " -L $long_deg,$long_min -l $lat_deg,$lat_min -z '$tzid'";
+    my $cmd = $Hebcal::HEBCAL_BIN;
+    $cmd .= Hebcal::cmd_latlong($latitude,$longitude,$tzid);
     if ($country eq "IL") {
         $cmd .= " -i";
         $cmd .= " -b 40" if index($admin1, "Jerusalem") == 0;
