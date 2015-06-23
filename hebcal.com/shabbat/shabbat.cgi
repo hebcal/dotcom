@@ -109,8 +109,11 @@ if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
 
 my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
 my $ignore_tz = (defined $cfg && ($cfg eq "r" || $cfg eq "json")) ? 0 : 1;
+my $include_leyning = (defined $cfg && $cfg eq "json") ? 1 : 0;
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
-    $cconfig{"tzid"},$ignore_tz);
+    $cconfig{"tzid"},$ignore_tz,
+    $include_leyning,
+    $cconfig{"tzid"} eq "Asia/Jerusalem" ? 1 : 0);
 
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
                      $cfg eq "widget" || $cfg eq "json"))
