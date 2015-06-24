@@ -1644,6 +1644,7 @@ sub process_args_common_zip {
 	$cconfig->{"zip"} = $q->param("zip");
 	$cconfig->{"tzid"} = $tzid;
 	$cconfig->{"geo"} = "zip";
+        $cconfig->{"country"} = "USA";
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
@@ -1712,6 +1713,8 @@ sub process_args_common_geoname {
 	$cconfig->{"tzid"} = $tzid;
 	$cconfig->{"geo"} = "geoname";
         $cconfig->{"geonameid"} = int($q->param('geonameid'));
+        $cconfig->{"country"} = $country;
+        $cconfig->{"admin1"} = $admin1;
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
@@ -1923,6 +1926,8 @@ sub process_args_common_city {
 	$cconfig->{"tzid"} = $tzid;
         $cconfig->{"geo"} = "geoname";
         $cconfig->{"geonameid"} = $geonameid;
+        $cconfig->{"country"} = $country;
+        $cconfig->{"admin1"} = $admin1;
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
