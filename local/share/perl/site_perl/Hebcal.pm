@@ -404,8 +404,9 @@ sub parse_date_descr($$)
     if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
     {
 	($subj,$hour,$min) = ($1,$2,$3);
-	$hour += 12 unless $hour == 0;	# timed events are always evening
-					# except for midnight
+        # for now, timed events are always afternoon/evening.
+        # eventually, we'll use the -E switch and this can be removed
+	$hour += 12 if $hour > 0 && $hour < 12;
         $dur = 1;
 	$untimed = 0;
     }
