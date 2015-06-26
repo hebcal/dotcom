@@ -974,8 +974,7 @@ EOHTML
     my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<p class="lead">Customize your calendar of Jewish holidays, candle
-lighting times, and Torah readings.</p>
+<p class="lead">Customize, print &amp; download your calendar of Jewish holidays.</p>
 EOHTML
 ;
     print $head_divs;
