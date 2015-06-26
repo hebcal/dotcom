@@ -1006,32 +1006,18 @@ EOHTML
         );
 
     print qq{<form id="f1" name="f1" action="$script_name">\n},
-    qq{<div class="row">\n},
-    qq{<div class="col-sm-6">\n},
-    qq{<fieldset><legend>Jewish Holidays for</legend>\n},
-    qq{<div class="form-group"><label class="sr-only" for="year">Year</label>},
-    $q->textfield(-name => "year",
-                  -id => "year",
-                  -pattern => '\d*',
-                  -default => $this_year,
-                  -class => "form-control",
-                  -style => "width: 80px",
-                  -placeholder => "Year",
-                  -size => 4,
-                  -maxlength => 4),
-    "</div>\n",
+    $q->hidden(-name => "v",-value => 1,-override => 1),
+    $q->hidden(-name => "year",
+        -id => "year",
+        -default => $this_year),
     $q->hidden(-name => "month",
         -id => "month",
         -value => "x",
         -override => "x"),
-    $year_type_radio,
-    qq{\n<span class="help-block"><small>Use all digits to specify a year.\n},
-    qq{You probably aren't interested in 08, but rather 2008.</small></span>\n},
-    $q->hidden(-name => "v",-value => 1,-override => 1),
-    $diaspora_israel_radio,
-    qq{</fieldset>\n};
+    qq{<div class="row">\n},
+    qq{<div class="col-sm-6">\n};
 
-    print qq{<fieldset><legend>Include events</legend>\n},
+    print qq{<fieldset>\n},
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "maj",
                  -id => "maj",
@@ -1081,10 +1067,15 @@ EOHTML
                  -label => "Weekly Torah portion on Saturdays"),
     "</label></div>\n";
 
-    print qq{</fieldset>\n},
-    qq{</div><!-- .col-sm-6 -->\n},
-    qq{<div class="col-sm-6">\n},
-    "<fieldset><legend>Other options</legend>",
+    print qq{<strong>Holiday schedule</strong>},
+    $diaspora_israel_radio;
+
+    print qq{</fieldset>\n};
+    print qq{</div><!-- .col-sm-6 -->\n},
+    qq{<div class="col-sm-6">\n};
+
+
+    print qq{<fieldset>\n},
     qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
                    -id => "lg",
@@ -1101,11 +1092,14 @@ EOHTML
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "d",
                  -id => "d2",
-                 -label => "Show Hebrew date for entire date range"),
-    "</label></div>",
-    "</fieldset>\n";
+                 -label => "Show Hebrew date every day of the year"),
+    "</label></div>\n";
 
-    print qq{<fieldset><legend>Candle lighting times</legend>\n};
+    print qq{</fieldset>\n};
+
+
+   print qq{<fieldset>\n};
+  #   print qq{<fieldset><legend>Candle lighting times</legend>\n};
     $q->param("c","off") unless defined $q->param("c");
     $q->param("geo","geoname") unless defined $q->param("geo");
 
@@ -1142,7 +1136,7 @@ EOHTML
     if (defined $q->param("geo") && $q->param("geo") eq "pos") {
         print latlong_form_html();
     } else {
-        print qq{<div class="form-group"><label for="city-typeahead">City</label>
+        print qq{<div class="form-group"><label for="city-typeahead">Candle lighting times</label>
 <div class="city-typeahead" style="margin-bottom:12px">},
             $q->textfield(-name => "city-typeahead",
                   -id => "city-typeahead",
@@ -1178,11 +1172,6 @@ EOHTML
             qq{</div>\n};
 
     print qq{
-<p><small>Hebcal computes candle-lighting times according to the method defined
-by the U.S. Naval Observatory (USNO). The USNO claims accuracy within 2
-minutes except at extreme northern or southern latitudes. <a
-href="/home/94/how-accurate-are-candle-lighting-times">Read more
-&raquo;</a></small></p>
 </fieldset>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
