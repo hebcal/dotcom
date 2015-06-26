@@ -1065,7 +1065,7 @@ EOHTML
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "mod",
          -id => "mod",
-         -checked => 1,
+         -checked => 0,
          -label => "Modern Holidays"),
     qq{\n<small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label></div>\n},
     qq{<div class="checkbox"><label>},
