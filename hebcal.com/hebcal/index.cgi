@@ -1006,13 +1006,6 @@ EOHTML
 
     print qq{<form id="f1" name="f1" action="$script_name">\n},
     $q->hidden(-name => "v",-value => 1,-override => 1),
-    $q->hidden(-name => "year",
-        -id => "year",
-        -default => $this_year),
-    $q->hidden(-name => "month",
-        -id => "month",
-        -value => "x",
-        -override => "x"),
     qq{<div class="row">\n},
     qq{<div class="col-sm-6">\n};
 
@@ -1074,8 +1067,29 @@ EOHTML
     qq{<div class="col-sm-6">\n};
 
 
-    print qq{<fieldset>\n},
-    qq{<div class="form-group"><label for="lg">Event titles</label>},
+    print qq{<fieldset>\n};
+
+    print qq{<div class="form-group"><label for="year">Year</label>},
+    $q->textfield(-name => "year",
+                  -id => "year",
+                  -pattern => '\d*',
+                  -default => $this_year,
+                  -class => "form-control",
+                  -style => "width: 80px",
+                  -placeholder => "Year",
+                  -size => 4,
+                  -maxlength => 4),
+    "</div>\n",
+    $q->hidden(-name => "yt",
+        -id => "yt",
+        -value => "G",
+        -override => "G"),
+    $q->hidden(-name => "month",
+        -id => "month",
+        -value => "x",
+        -override => "x");
+
+    print qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
                    -id => "lg",
                    -values => ["s", "sh", "a", "ah", "h"],
