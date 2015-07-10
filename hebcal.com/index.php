@@ -214,15 +214,13 @@ ul.list-inline li:last-child:after{content:""}
 }
 .icon-block {
   display: block;
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   margin-right: auto;
   margin-top: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   margin-left: auto;
-  padding-top: 33px;
-  padding-right: 33px;
-  padding-left: 32px;
+  padding: 20px;
   border: 3px solid #e4ebeb;
   border-radius: 200px;
 }
@@ -232,14 +230,11 @@ ul.list-inline li:last-child:after{content:""}
 .first-row {
   padding-top: 40px;
 }
-@media (max-width: 767px) {
-  .btn-lg,
-  .btn-group-lg > .btn {
-    padding: 5px 10px;
-    font-size: 12px;
-    line-height: 1.5;
-    border-radius: 3px;
-  }
+.pad-bot {
+  padding-bottom: 32px;
+}
+.icon-lg {
+  font-size:44px;
 }
 </style>
 <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
@@ -356,21 +351,21 @@ if ($gm < 8) {
 <div class="container">
 <div id="content" class="first-row">
 <div class="row">
-<div class="col-xs-8">
+<div class="col-sm-8">
 <p class="lead">Holidays, candle lighting times, and Torah readings for
 <a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?></a>
 and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
-<div class="col-xs-4">
+<div class="col-sm-4 text-center pad-bot">
 <p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
 </div>
 </div><!-- .row -->
 <div class="row">
-<div class="col-xs-8">
+<div class="col-sm-8">
 <p class="lead">Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 </div>
-<div class="col-xs-4">
+<div class="col-sm-4 text-center pad-bot">
 <p><a class="btn btn-default btn-lg" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter</a></p>
 </div>
 </div><!-- .row -->
@@ -378,9 +373,9 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 <div class="row">
 <div class="col-sm-4">
 <span class="icon-block">
- <span class="glyphicons glyphicons-candle" style="font-size:54px"></span>
+ <span class="glyphicons glyphicons-candle icon-lg"></span>
 </span>
-<h2>Candle lighting</h2>
+<h3>Candle lighting</h3>
 <p>Shabbat and holiday candle-lighting and Havdalah times for over 50,000 world cities.
 <br><a href="/shabbat/?geonameid=281184">Jerusalem</a> &middot;
 <a href="/shabbat/?geonameid=5128581">New York</a> &middot;
@@ -390,9 +385,9 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 
 <div class="col-sm-4">
 <span class="icon-block">
- <span class="glyphicons glyphicons-parents" style="font-size:54px"></span>
+ <span class="glyphicons glyphicons-parents icon-lg"></span>
 </span>
-<h2>Yahrzeits and Birthdays</h2>
+<h3>Yahrzeits and Birthdays</h3>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries for the next 20 years.
 <br><a href="/yahrzeit/">Get started &raquo;</a></p>
@@ -400,27 +395,27 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 
 <div class="col-sm-4">
 <span class="icon-block">
- <span class="glyphicons glyphicons-book_open" style="font-size:54px"></span>
+ <span class="glyphicons glyphicons-book_open icon-lg"></span>
 </span>
-<h2>Torah readings</h2>
+<h3>Torah readings</h3>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.
 <br><a href="/sedrot/">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
 
 <div class="row" style="margin-top:40px">
-<div class="col-sm-3">
+<div class="col-sm-2">
 <span class="icon-block">
- <span class="glyphicons glyphicons-embed-close" style="font-size:54px"></span>
+ <span class="glyphicons glyphicons-embed-close icon-lg"></span>
 </span>
-</div><!-- .col-sm-3 -->
-<div class="col-sm-9">
-<h2>Synagogue integrations &amp; Developer APIs</h2>
+</div><!-- .col-sm-2 -->
+<div class="col-sm-10">
+<h3>Synagogue integrations &amp; Developer APIs</h3>
 <p>Our mission at Hebcal.com is to increase awareness of Jewish holidays
 and to help Jews to be observant of the mitzvot. To that end, we've built
 several ways that you can integrate Hebcal.com content directly onto your website.
 <a href="/home/developer-apis">Learn more &raquo;</a></p>
-</div><!-- .col-sm-9 -->
+</div><!-- .col-sm-10 -->
 
 </div><!-- .row -->
 
