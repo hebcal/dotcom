@@ -202,16 +202,42 @@ ul.list-inline li:last-child:after{content:""}
 .glyphicons.glyphicons-settings:before {
   content: "\E281";
 }
+.h1, .h2, .h3, h1, h2, h3 {
+  font-family: 'Merriweather', serif;
+  font-weight: 400;
+}
+.icon-block {
+  display: block;
+  width: 120px;
+  height: 120px;
+  margin-right: auto;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: auto;
+  padding-top: 33px;
+  padding-right: 33px;
+  padding-left: 32px;
+  border: 3px solid #e4ebeb;
+  border-radius: 200px;
+}
+.masthead {
+  text-align: center;
+}
+.first-row {
+  padding-top: 40px;
+}
 </style>
 <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
+<link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
 EOD;
-echo html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
+$header = html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
 		     false);
+$header = preg_replace('/<!-- \.navbar -->.+/s', '<!-- .navbar -->', $header);
+echo $header;
 ?>
-<div class="row" id="title-top">
-<div class="col-sm-12">
-<h1 class="hidden-xs">Hebcal Jewish Calendar</h1>
+<div class="masthead" tabindex="-1">
+<div class="container">
 <ul class="list-inline">
 <?php
 echo "<li><time datetime=\"", date("Y-m-d"), "\">", date("D, j F Y"), "</time>\n";
@@ -247,7 +273,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 
 function holiday_greeting($blurb, $long_text) { ?>
 <div class="row">
-<div class="col-sm-8">
+<div class="col-sm-8 col-sm-offset-2">
 <div class="alert alert-success">
  <strong><?php echo $blurb ?>!</strong>
  <?php echo $long_text ?>.
@@ -258,9 +284,7 @@ function holiday_greeting($blurb, $long_text) { ?>
 }
 
 ?></ul>
-<p class="lead">Free Jewish holiday calendars, Hebrew date converters and Shabbat times.</p>
-</div><!-- .col-sm-12 -->
-</div><!-- #title-top -->
+<h1>Jewish holiday calendars &amp; Hebrew date converter</h1>
 <?php
 if (isset($rosh_chodesh)) {
     $anchor = hebcal_make_anchor("Rosh Chodesh $rosh_chodesh");
@@ -296,90 +320,93 @@ if (isset($rosh_chodesh)) {
 } elseif (isset($fast_day)) {
      holiday_greeting("Tzom Kal", "We wish you an easy fast");
 }
-?>
 
-<div class="row">
-<div class="col-sm-6">
-<h2><span class="glyphicon glyphicon-calendar"></span>
-Holiday Calendar</h2>
-<p>Holidays, candle lighting times, and Torah readings for any year 0001-9999.
-Download to Outlook, iPhone, Google Calendar, and more.</p>
-<?php
-  if (($hmnum == 12 && $hd >= 10) || ($hmnum == 13)) {
-      // it's past the Tish'a B'Av (12th month) or anytime in Elul (13th month)
-      $hebyear = $hy + 1;
-  } else {
-      $hebyear = $hy;
-  }
-  $greg_yr1 = $hebyear - 3761;
-  $greg_yr2 = $greg_yr1 + 1;
-  $greg_range = $greg_yr1 . "-" . $greg_yr2;
+if (($hmnum == 12 && $hd >= 10) || ($hmnum == 13)) {
+    // it's past the Tish'a B'Av (12th month) or anytime in Elul (13th month)
+    $hebyear = $hy + 1;
+} else {
+    $hebyear = $hy;
+}
+$greg_yr1 = $hebyear - 3761;
+$greg_yr2 = $greg_yr1 + 1;
+$greg_range = $greg_yr1 . "-" . $greg_yr2;
 
-  // for the first 7 months of the year, just show the current Gregorian year
-  if ($gm < 8) {
+// for the first 7 months of the year, just show the current Gregorian year
+if ($gm < 8) {
     $greg_range = $gy;
-  }
+}
 ?>
-<p><a class="btn btn-default" href="/holidays/<?php echo $greg_range ?>"><i class="glyphicon glyphicon-calendar"></i> <?php echo $greg_range ?> Holidays &raquo;</a></p>
-<p><a class="btn btn-default" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-pencil"></i> Customize your calendar &raquo;</a></p>
-</div><!-- .col-sm-6 -->
-
-<div class="col-sm-6">
-<h2><span class="glyphicon glyphicon-refresh"></span>
-Convert Dates</h2>
-<p>Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
-<p><a class="btn btn-default" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter &raquo;</a></p>
-<p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
-Hebrew Birthdays and Anniversaries.</p>
-<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicons glyphicons-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
-</div><!-- .col-sm-6 -->
+</div><!-- .container -->
+</div><!-- .masthead -->
+<div class="container">
+<div id="content" class="first-row">
+<div class="row">
+<div class="col-xs-7">
+<p class="lead">Holidays, candle lighting times, and Torah readings for
+<a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?></a>
+and any year, past or present.
+Download to Outlook, iPhone, Google Calendar, and more.</p>
+</div>
+<div class="col-xs-5">
+<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
+</div>
+</div><!-- .row -->
+<div class="row">
+<div class="col-xs-7">
+<p class="lead">Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
+</div>
+<div class="col-xs-5">
+<p><a class="btn btn-default btn-lg" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter</a></p>
+</div>
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-sm-6">
-<h2><span class="glyphicons glyphicons-candle"></span>
-Shabbat Times</h2>
-<p>Candle-lighting and Havdalah times. Weekly Torah portion.</p>
-<form class="form-inline" action="/shabbat/" method="get" role="form" id="shabbat-form">
-<?php
-$geo = $geonameid = $zip = $city_descr = "";
-if (isset($param["geonameid"]) && is_numeric($param["geonameid"])) {
-    $geonameid = $param["geonameid"];
-    $geo = "geoname";
-    list($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
-        hebcal_get_geoname($geonameid);
-    $city_descr = geoname_city_descr($name,$admin1,$country);
-} elseif (isset($param["zip"]) && is_numeric($param["zip"])) {
-    $zip = $param["zip"];
-    $geo = "zip";
-    list($city,$state,$tzid,$latitude,$longitude,$lat_deg,$lat_min,$long_deg,$long_min) =
-        hebcal_get_zipcode_fields($zip);
-    $city_descr = "$city, $state $zip";
-}
-?>
-<input type="hidden" name="geo" id="geo" value="<?php echo $geo ?>">
-<input type="hidden" name="geonameid" id="geonameid" value="<?php echo $geonameid ?>">
-<input type="hidden" name="zip" id="zip" value="<?php echo $zip ?>">
-<div class="form-group">
-  <div class="input-group">
-    <label class="sr-only" for="city-typeahead">City</label>
-    <div class="city-typeahead" style="margin-bottom:12px">
-    <input type="text" id="city-typeahead" class="form-control typeahead" style="width:290px" placeholder="Search for city or ZIP code" value="<?php echo $city_descr ?>">
-    </div>
-  </div>
-</div>
-<input type="hidden" name="m" value="<?php
-  if (isset($param["m"])) { echo $param["m"]; } else { echo "50"; } ?>">
-<button type="submit" class="btn btn-default">Go</button>
-</form>
-</div><!-- .col-sm-6 -->
+<div class="col-sm-4">
+<span class="icon-block">
+ <span class="glyphicons glyphicons-candle" style="font-size:54px"></span>
+</span>
+<h2>Candle lighting</h2>
+<p>Shabbat and holiday candle-lighting and Havdalah times for over 50,000 world cities.
+<br><a href="/shabbat/?geonameid=281184">Jerusalem</a> &middot;
+<a href="/shabbat/?geonameid=5128581">New York</a> &middot;
+<a href="/shabbat/?geonameid=2643743">London</a> &middot;
+<a href="/shabbat/browse/">more...</a></p>
+</div><!-- .col-sm-4 -->
 
-<div class="col-sm-6">
-<h2><span class="glyphicons glyphicons-book_open"></span>
-Torah Readings</h2>
-<p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.</p>
-<p><a class="btn btn-default" href="/sedrot/"><i class="glyphicon glyphicon-book"></i> Torah Readings &raquo;</a></p>
-</div><!-- .col-sm-6 -->
+<div class="col-sm-4">
+<span class="icon-block">
+ <span class="glyphicons glyphicons-parents" style="font-size:54px"></span>
+</span>
+<h2>Yahrzeits and Birthdays</h2>
+<p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
+Hebrew Birthdays and Anniversaries for the next 20 years.
+<br><a href="/yahrzeit/">Get started &raquo;</a></p>
+</div><!-- .col-sm-4 -->
+
+<div class="col-sm-4">
+<span class="icon-block">
+ <span class="glyphicons glyphicons-book_open" style="font-size:54px"></span>
+</span>
+<h2>Torah readings</h2>
+<p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.
+<br><a href="/sedrot/">See more &raquo;</a></p>
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
+
+<div class="row" style="margin-top:40px">
+<div class="col-sm-3">
+<span class="icon-block">
+ <span class="glyphicon glyphicon-wrench" style="font-size:54px"></span>
+</span>
+</div><!-- .col-sm-3 -->
+<div class="col-sm-9">
+<h2>Synagogue integrations &amp; Developer APIs</h2>
+<p>Our mission at Hebcal.com is to increase awareness of Jewish holidays
+and to help Jews to be observant of the mitzvot. To that end, we've built
+several ways that you can integrate Hebcal.com content directly onto your website.
+<a href="/home/developer-apis">Learn more &raquo;</a></p>
+</div><!-- .col-sm-9 -->
+
 </div><!-- .row -->
 
 <?php

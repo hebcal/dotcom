@@ -540,8 +540,6 @@ $xtra_stylesheet<script>
 </style>
 $xtra_head</head>
 <body>
-
-<!-- Static navbar -->
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -560,7 +558,7 @@ $xtra_head</head>
     </form>
     </div><!--/.navbar-collapse -->
   </div>
-</div>
+</div><!-- .navbar -->
 
 <div class="container">
 <div id="content">
