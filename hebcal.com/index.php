@@ -226,6 +226,15 @@ ul.list-inline li:last-child:after{content:""}
 .first-row {
   padding-top: 40px;
 }
+@media (max-width: 767px) {
+  .btn-lg,
+  .btn-group-lg > .btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+  }
+}
 </style>
 <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
 <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
@@ -341,21 +350,21 @@ if ($gm < 8) {
 <div class="container">
 <div id="content" class="first-row">
 <div class="row">
-<div class="col-xs-7">
+<div class="col-xs-8">
 <p class="lead">Holidays, candle lighting times, and Torah readings for
 <a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?></a>
 and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
-<div class="col-xs-5">
+<div class="col-xs-4">
 <p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
 </div>
 </div><!-- .row -->
 <div class="row">
-<div class="col-xs-7">
+<div class="col-xs-8">
 <p class="lead">Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 </div>
-<div class="col-xs-5">
+<div class="col-xs-4">
 <p><a class="btn btn-default btn-lg" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter</a></p>
 </div>
 </div><!-- .row -->
