@@ -202,6 +202,12 @@ ul.list-inline li:last-child:after{content:""}
 .glyphicons.glyphicons-settings:before {
   content: "\E281";
 }
+.glyphicons.glyphicons-embed-close:before {
+  content: "\E119";
+}
+.glyphicons.glyphicons-git-branch:before {
+  content: "\E423";
+}
 .h1, .h2, .h3, h1, h2, h3 {
   font-family: 'Merriweather', serif;
   font-weight: 400;
@@ -405,7 +411,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <div class="row" style="margin-top:40px">
 <div class="col-sm-3">
 <span class="icon-block">
- <span class="glyphicon glyphicon-wrench" style="font-size:54px"></span>
+ <span class="glyphicons glyphicons-embed-close" style="font-size:54px"></span>
 </span>
 </div><!-- .col-sm-3 -->
 <div class="col-sm-9">
