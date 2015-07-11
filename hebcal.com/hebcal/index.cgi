@@ -1467,6 +1467,10 @@ accurate.
     print $HebcalHtml::indiana_warning
         if (defined $cconfig{"state"} && $cconfig{"state"} eq "IN");
 
+    print $HebcalHtml::arizona_warning
+        if (defined $cconfig{"state"} && $cconfig{"state"} eq "AZ"
+            && defined $cconfig{"tzid"} && $cconfig{"tzid"} eq "America/Denver");
+
     my $latitude = $cconfig{"latitude"};
     print $HebcalHtml::usno_warning
         if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));

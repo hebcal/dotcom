@@ -555,6 +555,10 @@ sub display_html
     out_html($cfg, $HebcalHtml::indiana_warning)
         if ($city_descr =~ / IN /);
 
+    out_html($cfg, $HebcalHtml::arizona_warning)
+        if (defined $cconfig{"state"} && $cconfig{"state"} eq "AZ"
+            && defined $cconfig{"tzid"} && $cconfig{"tzid"} eq "America/Denver");
+
     out_html(undef, $HebcalHtml::usno_warning)
         if (defined $latitude && ($latitude >= 60.0 || $latitude <= -60.0));
 

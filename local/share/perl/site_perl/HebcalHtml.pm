@@ -52,9 +52,19 @@ $HebcalHtml::indiana_warning = qq{<div class="alert alert-warning alert-dismissi
 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <strong>Warning!</strong>
 Indiana has confusing time zone &amp; Daylight Saving Time
-rules.</span><br>Please check <a
+rules.<br>Please check <a
 href="http://en.wikipedia.org/wiki/Time_in_Indiana">What time is it in
 Indiana?</a> to make sure the above settings are correct.
+</div><!-- .alert -->
+};
+
+$HebcalHtml::arizona_warning = qq{<div class="alert alert-warning alert-dismissible">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<strong>Warning!</strong>
+These candle lighting times are for an Arizona county that observes
+Daylight Saving Time rules. Please see <a
+href="http://www.timeanddate.com/time/us/arizona-no-dst.html">No
+DST in most of Arizona</a> to learn more.
 </div><!-- .alert -->
 };
 
