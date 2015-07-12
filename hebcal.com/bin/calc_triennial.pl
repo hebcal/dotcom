@@ -226,6 +226,12 @@ foreach my $yr ($special_start_year .. $special_end_year) {
     special_pinchas(\%special, \@ev2);
 }
 
+my $DBH;
+my $SQL_INSERT_INTO_LEYNING;
+if ($opt_dbfile) {
+    ($DBH,$SQL_INSERT_INTO_LEYNING) = db_open($opt_dbfile);
+}
+
 if ($opt_csv_tri) {
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	triennial_csv($axml,
@@ -234,12 +240,6 @@ if ($opt_csv_tri) {
 		      $triennial_readings[$i],
 		      $cycle_start_years[$i]);
     }
-}
-
-my $DBH;
-my $SQL_INSERT_INTO_LEYNING;
-if ($opt_dbfile) {
-    ($DBH,$SQL_INSERT_INTO_LEYNING) = db_open($opt_dbfile);
 }
 
 my %parashah_date_sql;
@@ -1547,16 +1547,19 @@ sub special_readings
 # if $dbh is defined (for fullkriyah), also write to the leyning DB.
 sub csv_parasha_event_inner
 {
-    my($evt,$h,$verses,$aliyot,$dbh) = @_;
+    my($evt,$h,$verses,$aliyot,$dbh,$tri) = @_;
 
     my($year,$month,$day) = Hebcal::event_ymd($evt);
     my $stime2 = Hebcal::date_format_csv($year, $month, $day);
     my $dt = Hebcal::date_format_sql($year, $month, $day);
 
+    my $sth;
     if (defined $dbh) {
-      my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
-      my $rv = $sth->execute($dt, $h, "T", $verses)
-	or croak "can't execute the query: " . $sth->errstr;
+      $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
+      if (!$tri) {
+        my $rv = $sth->execute($dt, $h, "T", $verses)
+          or croak "can't execute the query: " . $sth->errstr;
+      }
     }
 
     my $book = $verses;
@@ -1591,8 +1594,10 @@ sub csv_parasha_event_inner
 	  if $aliyah->{'numverses'};
 	print CSV "\015\012";
 	if (defined $dbh) {
-	  my $sth = $dbh->prepare($SQL_INSERT_INTO_LEYNING);
-	  my $rv = $sth->execute($dt, $h, $aliyah->{'num'}, $aliyah_text)
+          my $aliyah_num = $tri
+                ? "Tri" . $aliyah->{'num'}
+                : $aliyah->{'num'};
+	  my $rv = $sth->execute($dt, $h, $aliyah_num, $aliyah_text)
 	    or croak "can't execute the query: " . $sth->errstr;
 	}
     }
@@ -1732,7 +1737,7 @@ sub write_holiday_event_to_csv_and_db {
 	    }
 	    my $verses = get_festival_torah_verses($aliyot);
 	    if ($verses) {
-		csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
+		csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH,0);
 		my $haftarah_reading = $fest->{"kriyah"}->{"haft"}->{"reading"};
 		csv_haftarah_event_inner($evt,$h,$haftarah_reading,$DBH)
 		    if defined $haftarah_reading;
@@ -1791,7 +1796,7 @@ sub readings_for_current_year
 		if ($opt_csv_fk) {
 		    my $aliyot = $parshiot->{'parsha'}->{$h}->{'fullkriyah'}->{'aliyah'};
 		    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
-		    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH);
+		    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH,0);
 		    csv_haftarah_event($evt,$h,$parshiot,$DBH);
 		    csv_extra_newline();
 		    $wrote_csv{$dt} = 1;
@@ -1843,7 +1848,7 @@ sub triennial_csv
 	    my $h = $1;
 	    my $aliyot = $readings->{$h}->[$yr]->[0];
 	    my $verses = $parshiot->{'parsha'}->{$h}->{'verse'};
-	    csv_parasha_event_inner($evt,$h,$verses,$aliyot,undef);
+	    csv_parasha_event_inner($evt,$h,$verses,$aliyot,$DBH,1);
 	    csv_haftarah_event($evt,$h,$parshiot,undef);
 	    csv_extra_newline();
 	}
