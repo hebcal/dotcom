@@ -755,12 +755,20 @@ sub event_to_dict {
         if ($leyning0 && $leyning0->{'T'}) {
             my $leyning = {};
             $leyning->{torah} = $leyning0->{'T'} if $leyning0->{'T'};
-            $leyning->{maftir} = $leyning0->{'M'} if $leyning0->{'M'} && $leyning0->{'M'} =~ / \| /;
+            $leyning->{maftir} = $leyning0->{'M'} if $leyning0->{'M'};
             $leyning->{haftarah} = $leyning0->{'H'} if $leyning0->{'H'};
+            my $triennial = {};
+            $triennial->{maftir} = $leyning0->{'TriM'}
+                if $leyning0->{'TriM'} && $leyning0->{'TriM'};
             while(my($k,$v) = each(%{$leyning0})) {
                 $leyning->{$k} = $v if $k =~ /^\d$/;
+                if ($k =~ /^Tri(\d)$/) {
+                    my $n = $1;
+                    $triennial->{$n} = $v;
+                }
             }
             $item{"leyning"} = $leyning;
+            $leyning->{"triennial"} = $triennial if scalar keys %{$triennial};
         }
     }
 
