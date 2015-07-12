@@ -160,7 +160,6 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
-<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style type="text/css">
@@ -223,6 +222,10 @@ ul.list-inline li:last-child:after{content:""}
   padding: 20px;
   border: 3px solid #e4ebeb;
   border-radius: 200px;
+}
+a.icon-block {
+  color: #666;
+  text-decoration: none;
 }
 .masthead {
   text-align: center;
@@ -372,9 +375,9 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 
 <div class="row">
 <div class="col-sm-4">
-<span class="icon-block">
+<a class="icon-block" href="/shabbat/">
  <span class="glyphicons glyphicons-candle icon-lg"></span>
-</span>
+</a>
 <h3>Candle lighting</h3>
 <p>Shabbat and holiday candle-lighting and Havdalah times for over 50,000 world cities.
 <br><a href="/shabbat/?geonameid=281184">Jerusalem</a> &middot;
@@ -384,9 +387,9 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4">
-<span class="icon-block">
+<a class="icon-block" href="/yahrzeit/">
  <span class="glyphicons glyphicons-parents icon-lg"></span>
-</span>
+</a>
 <h3>Yahrzeits and Birthdays</h3>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries for the next 20 years.
@@ -394,9 +397,9 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4">
-<span class="icon-block">
+<a class="icon-block" href="/sedrot/">
  <span class="glyphicons glyphicons-book_open icon-lg"></span>
-</span>
+</a>
 <h3>Torah readings</h3>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.
 <br><a href="/sedrot/">See more &raquo;</a></p>
@@ -405,16 +408,13 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 
 <div class="row" style="margin-top:40px">
 <div class="col-sm-2">
-<span class="icon-block">
+<a class="icon-block" href="/home/developer-apis">
  <span class="glyphicons glyphicons-embed-close icon-lg"></span>
-</span>
+</a>
 </div><!-- .col-sm-2 -->
 <div class="col-sm-10">
-<h3>Synagogue integrations &amp; Developer APIs</h3>
-<p>Our mission at Hebcal.com is to increase awareness of Jewish holidays
-and to help Jews to be observant of the mitzvot. To that end, we've built
-several ways that you can integrate Hebcal.com content directly onto your website.
-<a href="/home/developer-apis">Learn more &raquo;</a></p>
+<h3>Developer APIs</h3>
+<p>We're part of the Open Source Judaism movement. Embed Hebcal.com content directly onto your synagogue website with our JavaScript, JSON and RSS APIs, available under a Creative Commons Attribution 3.0 License. <a href="/home/developer-apis">Learn more &raquo;</a></p>
 </div><!-- .col-sm-10 -->
 
 </div><!-- .row -->
@@ -422,10 +422,6 @@ several ways that you can integrate Hebcal.com content directly onto your websit
 <?php
 $xtra_html = <<<EOD
 <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-1.3.min.js"></script>
-<script type="text/javascript">
-window['hebcal'].createCityTypeahead(true);
-</script>
 EOD;
     echo html_footer_bootstrap3(false, $xtra_html);
     exit();
