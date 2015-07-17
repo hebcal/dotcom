@@ -557,13 +557,13 @@ sub parse_config {
     my($latitude,$longitude,$tzid);
     if (defined $cfg->{zip}) {
         my($CityMixedCase,$State,$Latitude,$Longitude,$TimeZone,$DayLightSaving) = get_zipinfo($cfg->{zip});
-        $latitude = $Latitude;
-        $longitude = $Longitude;
-        $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
         unless (defined $State) {
             WARN("unknown zipcode=$cfg->{zip} for to=$to, id=$cfg->{id}");
             return undef;
         }
+        $latitude = $Latitude;
+        $longitude = $Longitude;
+        $tzid = Hebcal::get_usa_tzid($State,$TimeZone,$DayLightSaving);
         $city_descr = "$CityMixedCase, $State " . $cfg->{zip};
     } elsif (defined $cfg->{geonameid}) {
         my $sql = qq{
