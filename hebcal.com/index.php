@@ -406,6 +406,36 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
 
+<div class="row">
+<div class="col-sm-4">
+<a class="icon-block" href="/holidays/">
+ <span class="glyphicon glyphicon-calendar icon-lg"></span>
+</a>
+<h3>Holidays</h3>
+<p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
+<br><a href="/holidays/">Get started &raquo;</a></p>
+</div><!-- .col-sm-4 -->
+
+<div class="col-sm-4">
+<a class="icon-block" href="/ical/">
+ <span class="glyphicon glyphicon-download-alt icon-lg"></span>
+</a>
+<h3>Download</h3>
+<p>Download Jewish holidays and Hebrew dates for Microsoft Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar), or to any desktop program that supports iCalendar (.ics) files
+<br><a href="/ical/">Get started &raquo;</a></p>
+</div><!-- .col-sm-4 -->
+
+<div class="col-sm-4">
+<a class="icon-block" href="/email/">
+ <span class="glyphicon glyphicon-envelope icon-lg"></span>
+</a>
+<h3>Email</h3>
+<p>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.
+<br><a href="/email/">Sign up &raquo;</a></p>
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
+
+
 <div class="row" style="margin-top:40px">
 <div class="col-sm-2">
 <a class="icon-block" href="/home/developer-apis">
