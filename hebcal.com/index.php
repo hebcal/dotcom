@@ -343,9 +343,11 @@ if (($hmnum == 12 && $hd >= 10) || ($hmnum == 13)) {
 $greg_yr1 = $hebyear - 3761;
 $greg_yr2 = $greg_yr1 + 1;
 $greg_range = $greg_yr1 . "-" . $greg_yr2;
+$year_get_args = "&amp;yt=H&amp;year=$hebyear&amp;month=x";
 
 // for the first 7 months of the year, just show the current Gregorian year
 if ($gm < 8) {
+    $year_get_args = "&amp;yt=G&amp;year=$gy&amp;month=x";
     $greg_range = $gy;
 }
 ?>
@@ -361,7 +363,7 @@ and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
+<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=off&amp;lg=s&amp;c=off<?php echo $year_get_args ?>"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
 </div>
 </div><!-- .row -->
 <div class="row">

@@ -198,15 +198,6 @@ if (param_true("c")) {
     unless ($status[0]) {
         form($status[1], $status[2]);
     }
-    if ($cconfig{"geo"} eq "pos" && defined $q->param("city-typeahead") && $q->param("city-typeahead") !~ /^\s*$/) {
-        my $city = $q->param("city-typeahead");
-        $city =~ s/^\s+//;
-        $city =~ s/\s+$//;
-        $cconfig{"title_pos"} = $cconfig{"title"};
-        $cconfig{"title"} = $city;
-        $city =~ s/,.+//;
-        $cconfig{"city"} = $city;
-    }
     $cmd = $status[1];
 } else {
     $q->param("c","off");
@@ -1080,14 +1071,19 @@ EOHTML
                   -size => 4,
                   -maxlength => 4),
     "</div>\n",
-    $q->hidden(-name => "yt",
-        -id => "yt",
-        -value => "G",
-        -override => "G"),
     $q->hidden(-name => "month",
         -id => "month",
         -value => "x",
         -override => "x");
+
+    if (defined $q->param("yt") && $q->param("yt") eq "H") {
+        print $year_type_radio;
+    } else {
+        print $q->hidden(-name => "yt",
+                -id => "yt",
+                -value => "G",
+                -override => "G");
+    }
 
     print qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
@@ -1126,23 +1122,24 @@ EOHTML
         $q->hidden(-name => "geonameid", -id => "geonameid"),
         "\n";
 
+    my $city_typeahead_value = "";
     if ($q->param("c") eq "on" && ! $q->param('city-typeahead')) {
         if ($q->param("geo") eq "zip"
             && defined $q->param("zip") && $q->param("zip") =~ /^\d{5}$/) {
-            $q->param('city-typeahead', $q->param('zip'));
+            $city_typeahead_value = $q->param('zip');
         } elsif ($q->param("geo") eq "geoname"
             && defined $q->param("geonameid") && $q->param("geonameid") =~ /^\d+$/) {
             my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
                 Hebcal::geoname_lookup($q->param('geonameid'));
             if ($name) {
                 my $city_descr = Hebcal::geoname_city_descr($asciiname,$admin1,$country);
-                $q->param('city-typeahead', $city_descr);
+                $city_typeahead_value = $city_descr;
             }
         } elsif ($q->param("geo") eq "city" && $q->param("city")
             && Hebcal::validate_city($q->param("city"))) {
             my $city = Hebcal::validate_city($q->param("city"));
             my $city_descr = Hebcal::woe_city_descr($city);
-            $q->param('city-typeahead', $city_descr);
+            $city_typeahead_value = $city_descr;
         }
     }
 
@@ -1151,7 +1148,7 @@ EOHTML
     } else {
         print qq{<div class="form-group"><label for="city-typeahead">Candle lighting times</label>
 <div class="city-typeahead" style="margin-bottom:12px">},
-            $q->textfield(-name => "city-typeahead",
+            $q->textfield(-value => $city_typeahead_value,
                   -id => "city-typeahead",
                   -class => "form-control typeahead",
                   -placeholder => "Search for city or ZIP code"),
@@ -1234,7 +1231,9 @@ d.getElementById("d2").onclick=function(){
   }
 }
 window['hebcal'].createCityTypeahead(false);
-\$('#havdalahInfo').tooltip();
+\$('#havdalahInfo').click(function(e){
+ e.preventDefault();
+}).tooltip();
 </script>
 JSCRIPT_END
         ;
