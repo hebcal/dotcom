@@ -363,7 +363,7 @@ and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=off&amp;lg=s&amp;c=off<?php echo $year_get_args ?>"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
+<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a></p>
 </div>
 </div><!-- .row -->
 <div class="row">
