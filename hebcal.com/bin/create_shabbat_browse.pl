@@ -266,7 +266,7 @@ sub get_candle_lighting {
     $cmd .= Hebcal::cmd_latlong($latitude,$longitude,$tzid);
     if ($country eq "IL") {
         $cmd .= " -i";
-        $cmd .= " -b 40" if index($admin1, "Jerusalem") == 0;
+        $cmd .= " -b 40" if $admin1 && index($admin1, "Jerusalem") == 0;
     }
     $cmd .= " -m 50 -c -s $fri_year";
     DEBUG("$asciiname, $admin1, $country - $cmd");

@@ -1705,7 +1705,7 @@ sub process_args_common_geoname {
     my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {
 	$q->param('i','on');
-        if (index($admin1, "Jerusalem") == 0
+        if ($admin1 && index($admin1, "Jerusalem") == 0
                 || index($name, "Jerusalem") == 0) {
             $q->param('b','40');
         }
@@ -1921,7 +1921,7 @@ sub process_args_common_city {
     my $city_descr = geoname_city_descr($name,$admin1,$country);
     if ($country eq "Israel") {
         $q->param('i','on');
-        if (index($admin1, "Jerusalem") == 0
+        if ($admin1 && index($admin1, "Jerusalem") == 0
                 || index($name, "Jerusalem") == 0) {
             $q->param('b','40');
         }
