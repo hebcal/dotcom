@@ -97,7 +97,7 @@ my $header = <<EOHTML;
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -210,7 +210,7 @@ sub format_items
     my($q,$items) = @_;
 
     my $table_head = <<EOHTML;
-<table style="width:380px" id="fridge-table">
+<table style="width:396px" id="fridge-table">
 <col><col><col><col>
 <col style="border-left:solid;border-width:1px;border-color:#999999"><col><col><col>
 <tbody>
@@ -267,7 +267,7 @@ sub format_row {
     print qq{<td class="}, join(" ", @class, "leftpad"), qq{">}, $month, "</td>",
          qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $day, "</td>",
          qq{<td class="}, join(" ", @class, @narrow), qq{">}, $subject, "</td>",
-         qq{<td class="}, join(" ", @class), qq{">}, $time, "</td>";
+         qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $time, "</td>";
 }
 
 sub process_args
