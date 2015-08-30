@@ -241,7 +241,7 @@ a.icon-block {
 }
 </style>
 <link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
-<link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
 EOD;
 $header = html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
