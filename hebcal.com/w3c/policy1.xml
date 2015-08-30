@@ -6,14 +6,14 @@
     <EXPIRY max-age="604800"/>
 
 <POLICY
-    discuri="http://www.hebcal.com/privacy/"
-    opturi="http://www.hebcal.com/privacy/#cookies"
+    discuri="https://www.hebcal.com/privacy/"
+    opturi="https://www.hebcal.com/privacy/#cookies"
     name="Hebcal">
     <!-- Description of the entity making this policy statement. -->
     <ENTITY>
     <DATA-GROUP>
 <DATA ref="#business.contact-info.online.email">webmaster@hebcal.com</DATA>
-<DATA ref="#business.contact-info.online.uri">http://www.hebcal.com</DATA>
+<DATA ref="#business.contact-info.online.uri">https://www.hebcal.com</DATA>
 <DATA ref="#business.contact-info.postal.city">Los Angeles</DATA>
 <DATA ref="#business.contact-info.postal.stateprov">CA</DATA>
 <DATA ref="#business.contact-info.postal.postalcode">90035</DATA>

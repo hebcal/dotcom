@@ -1,9 +1,9 @@
 DirectoryIndex shabbat.cgi
 
-Redirect /shabbat/fridge.php http://www.hebcal.com/home/shabbat/fridge
-Redirect /shabbat/shabbat.html http://www.hebcal.com/shabbat/
-Redirect /shabbat/shabbat.htm http://www.hebcal.com/shabbat/
-Redirect /shabbat/shabbat.pl http://www.hebcal.com/shabbat/
-Redirect /shabbat/index.html http://www.hebcal.com/shabbat/
-Redirect /shabbat/index.pl http://www.hebcal.com/shabbat/
-Redirect /shabbat/index.cgi http://www.hebcal.com/shabbat/
+Redirect /shabbat/fridge.php https://www.hebcal.com/home/shabbat/fridge
+Redirect /shabbat/shabbat.html https://www.hebcal.com/shabbat/
+Redirect /shabbat/shabbat.htm https://www.hebcal.com/shabbat/
+Redirect /shabbat/shabbat.pl https://www.hebcal.com/shabbat/
+Redirect /shabbat/index.html https://www.hebcal.com/shabbat/
+Redirect /shabbat/index.pl https://www.hebcal.com/shabbat/
+Redirect /shabbat/index.cgi https://www.hebcal.com/shabbat/

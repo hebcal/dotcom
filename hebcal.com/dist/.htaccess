@@ -1,5 +1,5 @@
-Redirect /dist/fullkriyah.csv http://www.hebcal.com/sedrot/fullkriyah-5774.csv
-Redirect /dist/triennial.csv http://www.hebcal.com/sedrot/triennial-5774-5777.csv
+Redirect /dist/fullkriyah.csv https://www.hebcal.com/sedrot/fullkriyah-5774.csv
+Redirect /dist/triennial.csv https://www.hebcal.com/sedrot/triennial-5774-5777.csv
 
 Redirect /dist/cities.txt https://raw.githubusercontent.com/hebcal/dotcom/master/hebcal.com/dist/cities.txt
 Redirect /dist/countries.txt https://raw.githubusercontent.com/hebcal/dotcom/master/hebcal.com/dist/countries.txt

@@ -1,14 +1,14 @@
-Header set P3P "policyref=\"http://www.hebcal.com/w3c/p3p.xml\", CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
+Header set P3P "policyref=\"https://www.hebcal.com/w3c/p3p.xml\", CP=\"ALL CURa ADMa DEVa TAIa PSAa OUR BUS IND PHY ONL COM NAV INT PRE\""
 
 DirectoryIndex index.cgi
 
-Redirect /hebcal/hebcal.html http://www.hebcal.com/hebcal/
-Redirect /hebcal/hebcal.htm http://www.hebcal.com/hebcal/
-Redirect /hebcal/hebcal.pl http://www.hebcal.com/hebcal/
-Redirect /hebcal/index.html http://www.hebcal.com/hebcal/
-Redirect /hebcal/index.pl http://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal.html https://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal.htm https://www.hebcal.com/hebcal/
+Redirect /hebcal/hebcal.pl https://www.hebcal.com/hebcal/
+Redirect /hebcal/index.html https://www.hebcal.com/hebcal/
+Redirect /hebcal/index.pl https://www.hebcal.com/hebcal/
 
-RedirectMatch ^/hebcal/del_cookie$ http://www.hebcal.com/hebcal/del_cookie.cgi
+RedirectMatch ^/hebcal/del_cookie$ https://www.hebcal.com/hebcal/del_cookie.cgi
 
 #ExpiresActive On
 #ExpiresByType application/json A63072000
