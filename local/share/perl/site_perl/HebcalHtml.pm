@@ -152,7 +152,7 @@ sub download_html_bootstrap {
     my $ol_ics = <<EOHTML;
 <p>$ol_ics_btn</p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
-href="http://www.hebcal.com/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
+href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
 EOHTML
 ;
@@ -178,14 +178,14 @@ Select one of:
 <li>$ol_csv_btn_eur</li>
 </ul>
 Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
-href="http://www.hebcal.com/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
+href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 EOHTML
 ;
     my $ical_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ical-sub", "to Mac Calendar", 1);
     my $ical = <<EOHTML;
 <p>$ical_btn</p>
 <p>Step-by-step: <a title="Apple iCal - import Hebcal Jewish calendar"
-href="http://www.hebcal.com/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple Mac OS X Desktop Calendar</a></p>
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple Mac OS X Desktop Calendar</a></p>
 EOHTML
 ;
     if (!$yahrzeit_mode) {
@@ -201,7 +201,7 @@ EOHTML
     my $ol_mac = <<EOHTML;
 <p>$ol_mac_btn</p>
 <p>Step-by-step: <a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
-href="http://www.hebcal.com/home/186/outlook-2011-mac-import">Import .ics file into
+href="/home/186/outlook-2011-mac-import">Import .ics file into
 Outlook 2011 for Mac OS X</a></p>
 EOHTML
 ;
@@ -209,7 +209,7 @@ EOHTML
     my $ios = <<EOHTML;
 <p>$ios_btn</p>
 <p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
-href="http://www.hebcal.com/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p>
+href="/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p>
 EOHTML
 ;
 
@@ -225,7 +225,7 @@ EOHTML
         my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", "$ics_title for Google Calendar", 1);
         $gcal = <<EOHTML;
 <p>$gcal_btn</p>
-<p>Step-by-step: <a href="http://www.hebcal.com/home/59/google-calendar-alternative-instructions">Import into Google Calendar</a></p>
+<p>Step-by-step: <a href="/home/59/google-calendar-alternative-instructions">Import into Google Calendar</a></p>
 EOHTML
 ;
     } else {
@@ -239,7 +239,7 @@ src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to 
 $gcal_btn
 and then <a
 title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
-href="http://www.hebcal.com/home/59/google-calendar-alternative-instructions">follow
+href="/home/59/google-calendar-alternative-instructions">follow
 our Google Calendar import instructions</a>.</p>
 EOHTML
 ;
@@ -297,7 +297,7 @@ EOHTML
 <h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
 <p>$palm_dba_btn</p>
 <p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
-href="http://www.hebcal.com/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
+href="/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
 EOHTML
 ;
     }
@@ -308,7 +308,7 @@ EOHTML
 <h5>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)</h5>
 <p>$palm_vcs_btn</p>
 <p>Step-by-step: <a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
-href="http://www.hebcal.com/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
+href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
 $palm_dba
 EOHTML
 ;
@@ -389,8 +389,8 @@ my $HTML_MENU_ITEMS_V2 =
      [ "/converter/",   "Date Converter", "Hebrew Date Converter" ],
      [ "/shabbat/",     "Shabbat",      "Shabbat Times" ],
      [ "/sedrot/",      "Torah",        "Torah Readings" ],
-     [ "http://www.hebcal.com/home/about",      "About",        "About" ],
-     [ "http://www.hebcal.com/home/help",       "Help",         "Help" ],
+     [ "/home/about",      "About",        "About" ],
+     [ "/home/help",       "Help",         "Help" ],
     ];
 
 sub html_menu_item_bootstrap {
@@ -522,7 +522,7 @@ $xtra_head</head>
     </div>
     <div class="navbar-collapse collapse">
     $menu
-    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="/home/">
      <input name="s" id="s" type="text" class="form-control" placeholder="Search">
     </form>
     </div><!--/.navbar-collapse -->
@@ -565,12 +565,12 @@ rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creat
 also under a cc-by licence.</small></p>
 <ul class="bullet-list-inline">
 $last_updated_text
-<li><a href="http://www.hebcal.com/home/about">About</a></li>
-<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy</a></li>
-<li><a href="http://www.hebcal.com/home/help">Help</a></li>
-<li><a href="http://www.hebcal.com/home/about/contact">Contact</a></li>
-<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
-<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
+<li><a href="/home/about">About</a></li>
+<li><a href="/home/about/privacy-policy">Privacy</a></li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact</a></li>
+<li><a href="/home/about/donate">Donate</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
 </ul>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->

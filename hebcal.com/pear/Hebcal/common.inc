@@ -416,8 +416,8 @@ $HTML_MENU_ITEMS_V2 =
 	array( "/converter/",	"Date Converter", "Hebrew Date Converter" ),
 	array( "/shabbat/",	"Shabbat",	"Shabbat Times" ),
 	array( "/sedrot/",	"Torah",	"Torah Readings" ),
-	array( "http://www.hebcal.com/home/about",	"About",	"About" ),
-	array( "http://www.hebcal.com/home/help",	"Help",		"Help" ),
+	array( "/home/about",	"About",	"About" ),
+	array( "/home/help",	"Help",		"Help" ),
     );
 
 function html_menu_item_bootstrap($path, $title, $tooltip, $selected) {
@@ -553,7 +553,7 @@ $xtra_head</head>
     </div>
     <div class="navbar-collapse collapse">
     $menu
-    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="http://www.hebcal.com/home/">
+    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="/home/">
      <input name="s" id="s" type="text" class="form-control" placeholder="Search">
     </form>
     </div><!--/.navbar-collapse -->
@@ -587,12 +587,12 @@ rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creat
 also under a cc-by licence.</small></p>
 <ul class="bullet-list-inline">
 $last_updated_text
-<li><a href="http://www.hebcal.com/home/about">About</a></li>
-<li><a href="http://www.hebcal.com/home/about/privacy-policy">Privacy</a></li>
-<li><a href="http://www.hebcal.com/home/help">Help</a></li>
-<li><a href="http://www.hebcal.com/home/about/contact">Contact</a></li>
-<li><a href="http://www.hebcal.com/home/about/donate">Donate</a></li>
-<li><a href="http://www.hebcal.com/home/developer-apis">Developer APIs</a></li>
+<li><a href="/home/about">About</a></li>
+<li><a href="/home/about/privacy-policy">Privacy</a></li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact</a></li>
+<li><a href="/home/about/donate">Donate</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
 </ul>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
