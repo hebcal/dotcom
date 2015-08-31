@@ -294,7 +294,7 @@ sub mail_user
     my @today = Date::Calc::Today();
     my $hebdate = HebcalGPL::greg2hebrew($today[0], $today[1], $today[2]);
     if (($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} >= 15)
-        || ($hebdate->{"mm"} == $HebcalGPL::ELUL && $hebdate->{"dd"} >= 20)) {
+        || ($hebdate->{"mm"} == $HebcalGPL::ELUL && $hebdate->{"dd"} >= 16)) {
         my $next_year = $hebdate->{"yy"} + 1;
         my $fridge_loc = defined $cfg->{zip} ? "zip=" . $cfg->{zip}
             : defined $cfg->{geonameid} ? "geonameid=" . $cfg->{geonameid}
