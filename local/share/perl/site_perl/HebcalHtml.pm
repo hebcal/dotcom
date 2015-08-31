@@ -380,7 +380,7 @@ EOHTML
 sub download_html_modal_button {
     my($className) = @_;
     $className ||= "";
-    return qq{<a href="#hcdl-modal" role="button" class="btn btn-default$className" data-toggle="modal" data-target="#hcdl-modal">Download ...</a>};
+    return qq{<a href="#hcdl-modal" role="button" class="btn btn-default$className" data-toggle="modal" data-target="#hcdl-modal"><span class="glyphicon glyphicon-download-alt"></span> Download</a>};
 }
 
 my $HTML_MENU_ITEMS_V2 =
