@@ -396,6 +396,10 @@ div.yahrzeit-row {
 EOHTML
 ;
 
+    if (scalar(@inputs) >= 1) {
+        $xtra_head .= qq{<meta name="robots" content="noindex">\n};
+    }
+
     print HebcalHtml::header_bootstrap3("Yahrzeit + Anniversary Calendar",
         $script_name, "", $xtra_head);
     print qq{<div class="row">\n<div class="col-sm-12">\n};
