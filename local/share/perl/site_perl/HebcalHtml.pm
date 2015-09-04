@@ -44,7 +44,7 @@ Results for year 1752 C.E. and earlier may be inaccurate.
 <p>Hebcal does not take into account a correction of ten days that
 was introduced by Pope Gregory XIII known as the Gregorian
 Reformation.<sup><a
-href="http://en.wikipedia.org/wiki/Gregorian_calendar#Adoption_in_Europe">[1]</a></sup></p>
+href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a></sup></p>
 </div><!-- .alert -->
 };
 
