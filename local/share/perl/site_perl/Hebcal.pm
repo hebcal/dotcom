@@ -407,7 +407,7 @@ sub parse_date_descr($$)
         # for now, timed events are always afternoon/evening.
         # eventually, we'll use the -E switch and this can be removed
 	$hour += 12 if $hour > 0 && $hour < 12;
-        $dur = 1;
+        $dur = 0;
 	$untimed = 0;
     }
     else
