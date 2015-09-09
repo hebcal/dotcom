@@ -83,8 +83,8 @@ sub vcl_recv {
         return (purge);
     }
 
-    if (vsthrottle.is_denied(client.identity, 60, 10s)) {
-        # Client has exceeded 60 reqs per 10s
+    if (vsthrottle.is_denied(client.identity, 90, 10s)) {
+        # Client has exceeded 90 reqs per 10s
         return (synth(429, "Too Many Requests"));
     }
 
