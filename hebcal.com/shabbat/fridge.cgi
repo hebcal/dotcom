@@ -264,9 +264,13 @@ sub format_row {
     if (length($subject) > 14) {
         push(@narrow, "narrow");
     }
+    my $subj_class = join(" ", @class, @narrow);
+    if ($subj_class) {
+        $subj_class = qq{ class="$subj_class"};
+    }
     print qq{<td class="}, join(" ", @class, "leftpad"), qq{">}, $month, "</td>",
          qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $day, "</td>",
-         qq{<td class="}, join(" ", @class, @narrow), qq{">}, $subject, "</td>",
+         qq{<td$subj_class>}, $subject, "</td>",
          qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $time, "</td>";
 }
 
