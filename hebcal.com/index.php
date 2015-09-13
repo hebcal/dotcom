@@ -428,12 +428,12 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4">
-<a class="icon-block" href="/email/">
+<a class="icon-block" href="https://www.hebcal.com/email/">
  <span class="glyphicon glyphicon-envelope icon-lg"></span>
 </a>
 <h3>Email</h3>
 <p>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.
-<br><a href="/email/">Sign up &raquo;</a></p>
+<br><a href="https://www.hebcal.com/email/">Sign up &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
 
