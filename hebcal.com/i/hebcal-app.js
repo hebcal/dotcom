@@ -151,10 +151,19 @@ window['hebcal'].tableRow = function(evt) {
     var m = moment(evt.date, moment.ISO_8601),
         dateStr = m.format('ddd DD MMM'),
         allDay = evt.date.indexOf('T') == -1,
+        lang = window['hebcal'].lang || 's',
         subj = allDay ? evt.title : evt.title.substring(0, evt.title.indexOf(':')),
         timeStr = allDay ? '' : evt.title.substring(evt.title.indexOf(':') + 2),
         timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<td>' + timeStr + '</td>',
         className = window['hebcal'].getEventClassName(evt);
+    if (evt.hebrew) {
+        var hebrewHtml = '<span lang="he" dir="rtl">' + evt.hebrew + '</span>';
+        if (lang == 'h') {
+            subj = hebrewHtml;
+        } else if (lang.indexOf('h') != -1) {
+            subj += " / " + hebrewHtml;
+        }
+    }
     if (evt.link) {
         var atitle = evt.memo ? ' title="' + evt.memo + '"' : '';
         subj = '<a' + atitle + ' href="' + evt.link + '">' + subj + '</a>';

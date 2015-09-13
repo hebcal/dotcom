@@ -1202,7 +1202,7 @@ EOHTML
     my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-1.3.min.js"></script>
+<script src="/i/hebcal-app-1.4.min.js"></script>
 <script type="text/javascript">
 var d=document;
 function s6(val){
@@ -1822,7 +1822,7 @@ EOHTML
     my $single_month = $q->param('month') eq 'x' ? 'false' : 'true';
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="/i/hebcal-app-1.3.min.js"></script>
+<script src="/i/hebcal-app-1.4.min.js"></script>
 <script type="text/javascript">
 \$(document).ready(function() {
     \$('#toggle-month').on('change', function() {
@@ -1834,6 +1834,9 @@ EOHTML
         window['hebcal'].renderMonthTables();
         \$('div.agenda').show();
     });
+    if (\$(window).width() < 768) {
+        \$('#toggle-list').click();
+    }
 });
 </script>
 JSCRIPT_END
@@ -1870,8 +1873,11 @@ sub html_table_events {
     my $json = JSON->new;
     my $out = $json->encode($items);
     my $json_cconfig = $json->encode(\%cconfig);
-    print "<script>\nwindow['hebcal']=window['hebcal']||{};\nwindow['hebcal'].events=",
-        $out, ";\nwindow['hebcal'].cconfig=", $json_cconfig, ";\n</script>\n";
+    my $lang = $q->param("lg");
+    print "<script>\nwindow['hebcal']=window['hebcal']||{};\n",
+        "window['hebcal'].lang='$lang';\n",
+        "window['hebcal'].events=", $out, ";\n",
+        "window['hebcal'].cconfig=", $json_cconfig, ";\n</script>\n";
 }
 
 sub write_html_cal
