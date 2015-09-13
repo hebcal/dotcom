@@ -1501,8 +1501,10 @@ EOHTML
     $html .= HebcalHtml::download_html_modal_button(" btn-sm");
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
+    my $btn_print_html = qq{<a class="btn btn-default btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicon glyphicon-print"></i> Print</a>};
+
     if (!param_true("c")) {
-        $html .= qq{  <a class="btn btn-default btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicon glyphicon-print"></i> Print</a>\n};
+        $html .= $btn_print_html;
     } else {
         # Fridge
         my $url = "/shabbat/fridge.cgi?";
@@ -1512,19 +1514,21 @@ EOHTML
         $url .= "&amp;m=" . $q->param("m")
             if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
-        my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
-        $email_url .= Hebcal::get_geo_args($q, "&amp;");
-        $email_url .= "&amp;m=" . $q->param("m")
-            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
+#        my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
+#        $email_url .= Hebcal::get_geo_args($q, "&amp;");
+#        $email_url .= "&amp;m=" . $q->param("m")
+#            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
         $html .= <<EOHTML;
   <div class="btn-group">
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+    $btn_print_html
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
     <ul class="dropdown-menu">
-      <li><a class="download" id="pdf" href="$pdf_url">Print</a></li>
-      <li><a href="$url">Compact candle-lighting times</a></li>
-      <li class="divider"></li>
-      <li><a href="$email_url">Email weekly Shabbat times</a></li>
+      <li><a class="download" id="pdf" href="$pdf_url">Monthly calendar</a></li>
+      <li><a href="$url">Candle-lighting times only</a></li>
     </ul>
   </div>
 EOHTML
