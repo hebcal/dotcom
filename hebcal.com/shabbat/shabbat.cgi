@@ -80,6 +80,10 @@ foreach my $key ($q->param()) {
     }
 }
 
+foreach my $opt (qw(maj min mod mf ss nx)) {
+    $q->param($opt, "on") unless defined $q->param($opt);
+}
+
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 
