@@ -28,29 +28,13 @@ package_upgrade: true
 
 packages:
   - git
-  - make
   - sqlite3
-  - autoconf
-  - automake
   - sysstat
   - iptables-persistent
   - libsasl2-modules
   - postfix
   - heirloom-mailx
-  - s3cmd
-  - fetchmail
-  - procmail
-  - rcs
-  - mysql-server
-  - mysql-client
   - apache2
-  - php5
-  - php5-mysql
-  - php-pear
-  - php5-sqlite
-  - php5-json
-  - php5-curl
-  - php5-imagick
   - libdate-calc-perl
   - libdatetime-perl
   - libpdf-api2-perl
@@ -63,40 +47,51 @@ packages:
   - libhtml-calendarmonthsimple-perl
   - libjson-perl
   - libjson-xs-perl
-  - libemail-valid-perl
-  - libmail-deliverystatus-bounceparser-perl
   - nagios-plugins-basic
   - nagios-plugins-common
+  - apt-transport-https
 
 write_files:
-  - path: /etc/mysql/conf.d/hebcal.cnf
+  - path: /etc/default/varnish
     permissions: '0644'
     content: |
-        # Hebcal-specific settings for mysql
-        [mysqld]
-        key_buffer_size      = 2M
-        max_allowed_packet   = 1M
-        sort_buffer_size     = 64K
-        read_buffer_size     = 256K
-        read_rnd_buffer_size = 256K
-        thread_stack         = 128K
-        thread_cache_size    = 4
-        query_cache_limit    = 256K
-        query_cache_size     = 4M
-  - path: /etc/php5/apache2/conf.d/50-hebcal.ini
+      # Creted by Hebcal cloud-config.yaml
+      START=yes
+      NFILES=131072
+      MEMLOCK=82000
+      INSTANCE=$(uname -n)
+      DAEMON_OPTS="-a :80 \
+                   -T localhost:6082 \
+                   -f /etc/varnish/default.vcl \
+                   -S /etc/varnish/secret \
+                   -s file,/var/lib/varnish/$INSTANCE/varnish_storage.bin,16G"
+  - path: /etc/varnish/default.vcl
     permissions: '0644'
     content: |
-        ; configuration for php Hebcal
-        ; priority=50
-        date.timezone=America/New_York
-        opcache.memory_consumption=128
-        opcache.interned_strings_buffer=8
-        opcache.max_accelerated_files=4000
-        opcache.revalidate_freq=60
-        opcache.fast_shutdown=1
-        opcache.enable_cli=1
-        opcache.save_comments=0
-        opcache.enable_file_override=1
+      # Creted by Hebcal cloud-config.yaml
+      vcl 4.0;
+      backend default {
+          .host = "127.0.0.1";
+          .port = "8080";
+      }
+      sub vcl_recv {
+          unset req.http.cookie;
+          set req.http.X-Client-IP = client.ip;
+          if (req.http.Accept-Encoding) {
+              if (req.http.Accept-Encoding ~ "gzip") {
+                  set req.http.Accept-Encoding = "gzip";
+              } elsif (req.http.Accept-Encoding ~ "deflate" && req.http.user-agent !~ "MSIE") {
+                  set req.http.Accept-Encoding = "deflate";
+              } else {
+                  # unkown algorithm
+                  unset req.http.Accept-Encoding;
+              }
+          }
+      }
+      sub vcl_backend_response {
+      }
+      sub vcl_deliver {
+      }
 
 runcmd:
   - service iptables-persistent flush
@@ -122,10 +117,7 @@ runcmd:
   - perl -pi -e 's/MinSpareServers\s+\d+/MinSpareServers 30/' /etc/apache2/mods-available/mpm_prefork.conf
   - perl -pi -e 's/MaxSpareServers\s+\d+/MaxSpareServers 30/' /etc/apache2/mods-available/mpm_prefork.conf
   - perl -pi -e 's/MaxRequestWorkers\s+\d+/MaxRequestWorkers 60/' /etc/apache2/mods-available/mpm_prefork.conf
-  - pear install Mail
-  - pear install Net_SMTP
-  - pear install Auth_SASL
-  - fallocate -l 2G /swapfile
+  - fallocate -l 4G /swapfile
   - chmod 600 /swapfile
   - mkswap /swapfile
   - swapon /swapfile
@@ -140,9 +132,17 @@ runcmd:
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - service ssh reload
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
-  - cp /tmp/dotcom/etc/cron.d/hebcal /etc/cron.d/hebcal
-  - cp /tmp/dotcom/etc/mysql/my.cnf /etc/mysql/my.cnf
-  - service mysql restart
   - cp /tmp/dotcom/etc/postfix/main.cf /etc/postfix/main.cf
-  - cp /tmp/dotcom/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+  - cp /tmp/dotcom/etc/apache2/sites-available/download.hebcal.com.conf /etc/apache2/sites-available/download.hebcal.com.conf
+  - ln -s ../sites-available/download.hebcal.com.conf /etc/apache2/sites-enabled
+  - rm -f /etc/apache2/sites-enabled/000-default.conf
   - service apache2 restart
+  - curl https://repo.varnish-cache.org/GPG-key.txt | apt-key add -
+  - echo "deb https://repo.varnish-cache.org/ubuntu/ trusty varnish-4.1" >> /etc/apt/sources.list.d/varnish-cache.list
+  - apt-get update
+  - apt-get -y install varnish
+  - mv /etc/varnish/default.vcl /etc/varnish/default.vcl.orig 
+  - mv /etc/default/varnish /etc/default/varnish.orig 
+  - cp /tmp/dotcom/etc/varnish/download.hebcal.com.vcl /etc/varnish/default.vcl
+  - cp /tmp/dotcom/etc/default/varnish-download.hebcal.com /etc/default/varnish
+  - service varnish restart
