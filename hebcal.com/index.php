@@ -33,10 +33,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **********************************************************************/
 
+/*
 if (isset($_COOKIE["C"])) {
     header("Cache-Control: private");
     parse_str($_COOKIE["C"], $param);
 }
+*/
 
 require("./pear/Hebcal/common.inc");
 
@@ -381,7 +383,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 <a class="icon-block" href="/shabbat/">
  <span class="glyphicons glyphicons-candle icon-lg"></span>
 </a>
-<h3>Candle lighting</h3>
+<h3 class="text-center">Candle lighting</h3>
 <p>Shabbat and holiday candle-lighting and Havdalah times for over 50,000 world cities.
 <br><a href="/shabbat/?geonameid=281184">Jerusalem</a> &middot;
 <a href="/shabbat/?geonameid=5128581">New York</a> &middot;
@@ -393,7 +395,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 <a class="icon-block" href="/yahrzeit/">
  <span class="glyphicons glyphicons-parents icon-lg"></span>
 </a>
-<h3>Yahrzeits and Birthdays</h3>
+<h3 class="text-center">Yahrzeits and Birthdays</h3>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries for the next 20 years.
 <br><a href="/yahrzeit/">Get started &raquo;</a></p>
@@ -403,7 +405,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="/sedrot/">
  <span class="glyphicons glyphicons-book_open icon-lg"></span>
 </a>
-<h3>Torah readings</h3>
+<h3 class="text-center">Torah readings</h3>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.
 <br><a href="/sedrot/">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->
@@ -414,7 +416,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="/holidays/">
  <span class="glyphicon glyphicon-calendar icon-lg"></span>
 </a>
-<h3>Holidays</h3>
+<h3 class="text-center">Holidays</h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
 <br><a href="/holidays/">Get started &raquo;</a></p>
 </div><!-- .col-sm-4 -->
@@ -423,7 +425,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="/ical/">
  <span class="glyphicon glyphicon-download-alt icon-lg"></span>
 </a>
-<h3>Download</h3>
+<h3 class="text-center">Download</h3>
 <p>Download Jewish holidays and Hebrew dates for Microsoft Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar), or to any desktop program that supports iCalendar (.ics) files
 <br><a href="/ical/">Get started &raquo;</a></p>
 </div><!-- .col-sm-4 -->
@@ -432,7 +434,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="https://www.hebcal.com/email/">
  <span class="glyphicon glyphicon-envelope icon-lg"></span>
 </a>
-<h3>Email</h3>
+<h3 class="text-center">Email</h3>
 <p>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.
 <br><a href="https://www.hebcal.com/email/">Sign up &raquo;</a></p>
 </div><!-- .col-sm-4 -->
