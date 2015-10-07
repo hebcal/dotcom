@@ -48,7 +48,7 @@ use Hebcal ();
 use HebcalHtml ();
 use URI::Escape;
 use URI;
-use POSIX qw(strftime);
+use POSIX qw(strftime tzset);
 
 use Benchmark qw(:hireswallclock :all);
 
@@ -83,18 +83,6 @@ foreach my $key ($q->param()) {
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 my $hyear = Hebcal::get_default_hebrew_year($this_year,$this_mon,$this_day);
 
-my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
-
-# only set expiry if there are CGI arguments
-if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/) {
-    print "Expires: ", Hebcal::http_date($saturday), "\015\012";
-} elsif (defined $ENV{'HTTP_COOKIE'}) {
-    # private cache only if we're tailoring results by cookie
-    print "Cache-Control: private\015\012";
-}
-
-my($latitude,$longitude);
-my %cconfig;
 my $content_type = "text/html";
 my $cfg = $q->param("cfg");
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
@@ -107,13 +95,33 @@ if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
     undef($cfg);
 }
 
-my($evts,$city_descr,$cmd_pretty) = process_args($q,\%cconfig);
+my($latitude,$longitude);
+my %cconfig;
+my($city_descr,$cmd) = process_args($q,\%cconfig);
+
+if ($cconfig{"tzid"}) {
+    $ENV{TZ} = $cconfig{"tzid"};
+    tzset();
+}
+my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
+
+# only set expiry if there are CGI arguments
+if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/) {
+    print "Expires: ", Hebcal::http_date($saturday), "\015\012";
+} elsif (defined $ENV{'HTTP_COOKIE'}) {
+    # private cache only if we're tailoring results by cookie
+    print "Cache-Control: private\015\012";
+}
+
+my $evts = get_events($city_descr,$cmd,$fri_year,$sat_year);
+
 my $ignore_tz = (defined $cfg && ($cfg eq "r" || $cfg eq "json")) ? 0 : 1;
 my $include_leyning = (defined $cfg && $cfg eq "json") ? 1 : 0;
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
     $cconfig{"tzid"},$ignore_tz,
     $include_leyning,
     $cconfig{"tzid"} eq "Asia/Jerusalem" ? 1 : 0);
+my $cmd_pretty = $cmd;
 
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
                      $cfg eq "widget" || $cfg eq "json"))
@@ -219,6 +227,12 @@ sub process_args
         $cmd .= ' -h -x';
     }
 
+    ($city_descr,$cmd);
+}
+
+sub get_events {
+    my($city_descr,$cmd,$fri_year,$sat_year) = @_;
+
     my $loc = (defined $city_descr && $city_descr ne '') ?
         "in $city_descr" : '';
 
@@ -229,7 +243,7 @@ sub process_args
         @events = (@ev2, @events);
     }
 
-    (\@events,$city_descr,$cmd);
+    \@events;
 }
 
 sub url_html {
