@@ -256,8 +256,12 @@ sub write_candle_lighting {
     my($fh,$info,$iso,$show_admin1) = @_;
     my($geonameid,$name,$asciiname,$admin1,$latitude,$longitude,$tzid) = @{$info};
     my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$asciiname,$admin1);
-    my $comma_admin1 = $show_admin1 && $admin1 && index($admin1, $name) != 0 ? "<small>, $admin1</small>" : "";
-    print $fh qq{<li><a href="/shabbat/?geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
+    if ($hour_min) {
+        my $comma_admin1 = $show_admin1 && $admin1 && index($admin1, $name) != 0 ? "<small>, $admin1</small>" : "";
+        print $fh qq{<li><a href="/shabbat/?geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
+    } else {
+        INFO("No candle-lighting on $shabbat_formatted for $asciiname, $iso");
+    }
 }
 
 sub get_candle_lighting {
@@ -272,9 +276,9 @@ sub get_candle_lighting {
     DEBUG("$asciiname, $admin1, $country - $cmd");
     my @events = Hebcal::invoke_hebcal($cmd, "", 0, $fri_month);
     foreach my $evt (@events) {
+        next unless $evt->[$Hebcal::EVT_IDX_SUBJ] eq "Candle lighting";
         my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
-        if ($gm == $fri_month && $gd == $fri_day
-            && $evt->[$Hebcal::EVT_IDX_SUBJ] eq "Candle lighting") {
+        if ($gm == $fri_month && $gd == $fri_day) {
             return Hebcal::format_evt_time($evt, "pm");
         }
     }
