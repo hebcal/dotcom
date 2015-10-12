@@ -404,9 +404,6 @@ sub parse_date_descr($$)
     if ($descr =~ /^(.+)\s*:\s*(\d+):(\d+)\s*$/)
     {
 	($subj,$hour,$min) = ($1,$2,$3);
-        # for now, timed events are always afternoon/evening.
-        # eventually, we'll use the -E switch and this can be removed
-	$hour += 12 if $hour > 0 && $hour < 12;
         $dur = 0;
 	$untimed = 0;
     }
@@ -454,7 +451,7 @@ sub format_evt_time {
 sub format_hebcal_event_time {
     my($hour,$min,$suffix) = @_;
     $suffix = "pm" unless defined $suffix;
-    if ($hour == 0) {
+    if ($hour < 12) {
 	$suffix =~ s/p/a/;
 	$suffix =~ s/P/A/;
     }
@@ -509,6 +506,12 @@ sub invoke_hebcal
         $no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays) = @_;
     local($_);
     local(*HEBCAL);
+
+    # if candle-lighting times requested, force 24-hour clock for proper AM/PM
+    if (index($cmd, " -c") != -1) {
+        $cmd =~ s/ -c/ -E -c/;
+        warn $cmd;
+    }
 
     my $hccache;
     my $hccache_file = get_invoke_hebcal_cache($cmd);
