@@ -510,7 +510,6 @@ sub invoke_hebcal
     # if candle-lighting times requested, force 24-hour clock for proper AM/PM
     if (index($cmd, " -c") != -1) {
         $cmd =~ s/ -c/ -E -c/;
-        warn $cmd;
     }
 
     my $hccache;
