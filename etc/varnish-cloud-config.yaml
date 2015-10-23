@@ -51,7 +51,7 @@ runcmd:
   - iptables -A INPUT -p tcp --dport http -j ACCEPT
   - iptables -A INPUT -p tcp --dport https -j ACCEPT
   - iptables -A INPUT -p icmp -j ACCEPT
-  - iptables -A INPUT -s 10.128.0.0/16 -j ACCEPT
+  - iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT
   - iptables -A INPUT -j DROP
   - iptables -I INPUT 1 -i lo -j ACCEPT
   - service iptables-persistent save

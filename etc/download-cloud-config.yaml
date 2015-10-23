@@ -52,7 +52,7 @@ packages:
   - apt-transport-https
 
 write_files:
-  - path: /etc/default/varnish
+  - path: /etc/default/varnish.hebcal
     permissions: '0644'
     content: |
       # Creted by Hebcal cloud-config.yaml
@@ -65,7 +65,7 @@ write_files:
                    -f /etc/varnish/default.vcl \
                    -S /etc/varnish/secret \
                    -s file,/var/lib/varnish/$INSTANCE/varnish_storage.bin,16G"
-  - path: /etc/varnish/default.vcl
+  - path: /etc/varnish/default.vcl.hebcal
     permissions: '0644'
     content: |
       # Creted by Hebcal cloud-config.yaml
@@ -101,7 +101,7 @@ runcmd:
   - iptables -A INPUT -p tcp --dport http -j ACCEPT
   - iptables -A INPUT -p tcp --dport https -j ACCEPT
   - iptables -A INPUT -p icmp -j ACCEPT
-  - iptables -A INPUT -s 10.128.0.0/16 -j ACCEPT
+  - iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT
   - iptables -A INPUT -j DROP
   - iptables -I INPUT 1 -i lo -j ACCEPT
   - service iptables-persistent save
