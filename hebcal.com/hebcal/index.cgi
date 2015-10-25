@@ -853,7 +853,8 @@ sub csv_display
 sub timestamp_comment {
     my $tend = Benchmark->new;
     my $tdiff = timediff($tend, $benchmarks[0]);
-    print "<!-- generated ", scalar(localtime), "; ",
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "Z";
+    print "<!-- generated ", $dc_date, "; ",
         timestr($tdiff), " -->\n";
 }
 

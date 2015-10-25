@@ -267,7 +267,8 @@ sub self_url
 sub timestamp_comment {
     my $tend = Benchmark->new;
     my $tdiff = timediff($tend, $t0);
-    out_html($cfg, "<!-- generated ", scalar(localtime), "; ",
+    my $dc_date = strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "Z";
+    out_html($cfg, "<!-- generated ", $dc_date, "; ",
         timestr($tdiff), " -->\n");
 }
 
