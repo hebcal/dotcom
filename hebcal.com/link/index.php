@@ -140,8 +140,8 @@ synagogue's web page.</p>
 <h2 id="fonts">Customize Fonts</h2>
 
 <p>To change the fonts to match the rest of your site, you can add a
-&lt;style type="text/css"&gt; stylesheet like this to the
-<tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
+<code>&lt;style type="text/css"&gt;</code> stylesheet like this to the
+<code>&lt;head&gt; ... &lt;/head&gt;</code> section at the top of your web
 page:</p>
 
 <script src="https://gist.github.com/mjradwin/fc4f38384a6335ab9963.js"></script>
