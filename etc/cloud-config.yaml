@@ -67,6 +67,7 @@ packages:
   - libmail-deliverystatus-bounceparser-perl
   - nagios-plugins-basic
   - nagios-plugins-common
+  - python-magic
 
 write_files:
   - path: /etc/mysql/conf.d/hebcal.cnf
