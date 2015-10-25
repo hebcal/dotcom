@@ -144,25 +144,7 @@ synagogue's web page.</p>
 <tt>&lt;head&gt; ... &lt;/head&gt;</tt> section at the top of your web
 page:</p>
 
-<pre><code class="css">#hebcal {
- font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
- font-size: small;
-}
-#hebcal h3 {
- font-family: Georgia,Palatino,"Times New Roman",Times,serif;
-}
-ul.hebcal-results { list-style-type:none }
-ul.hebcal-results li {
-  margin-bottom: 11px;
-  font-size: 21px;
-  font-weight: 200;
-  line-height: normal;
-}
-.hebcal-results .candles { color: red; font-size: large }
-.hebcal-results .havdalah { color: green }
-.hebcal-results .parashat { color: black; background: #ff9 }
-.hebcal-results .holiday { display: none }
-</code></pre>
+<script src="https://gist.github.com/mjradwin/fc4f38384a6335ab9963.js"></script>
 
 <p>Those fonts and colors are just an example.  <a
 href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
