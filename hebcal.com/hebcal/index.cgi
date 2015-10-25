@@ -49,6 +49,7 @@ use Date::Calc ();
 use URI::Escape;
 use File::Basename;
 use Hebcal ();
+use HebcalGPL ();
 use HebcalHtml ();
 use Benchmark qw(:hireswallclock :all);
 
@@ -125,9 +126,16 @@ push(@benchmarks, Benchmark->new);
 form("") unless $q->param("v");
 
 if (defined $q->param("year") && $q->param("year") eq "now") {
-    $q->param("year", $this_year);
-    $q->param("month", $this_mon)
-        if defined $q->param("month") && $q->param("month") eq "now";
+    my($yy,$mm,$dd) = Date::Calc::Today();
+    if (defined $q->param("yt") && $q->param("yt") eq "H") {
+        my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
+        $q->param("year", $hebdate->{"yy"});
+        $q->param("month", "x");
+    } else {
+        $q->param("year", $this_year);
+        $q->param("month", $this_mon)
+            if defined $q->param("month") && $q->param("month") eq "now";        
+    }
 
     my $end_day = Date::Calc::Days_in_Month($this_year, $this_mon);
     my $end_of_month =
