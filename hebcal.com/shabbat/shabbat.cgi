@@ -508,7 +508,7 @@ ul.hebcal-results{list-style-type:none}
         $loc_class =~ s/\s+/-/g;
     }
 
-    out_html($cfg, qq{<div id="hebcal">\n},
+    out_html($cfg, qq{<div id="hebcal" class="hebcal-container">\n},
                      qq{<div class="hebcal-$loc_class">\n},
                      qq{<h3>$shabbat times for $city_descr</h3>\n});
 
@@ -528,7 +528,7 @@ ul.hebcal-results{list-style-type:none}
 <small>Powered by <a target="$tgt" href="$url">Hebcal $shabbat Times</a></small>
 </div><!-- .copyright -->
 </div><!-- .hebcal-$loc_class -->
-</div><!-- #hebcal -->
+</div><!-- .hebcal-container -->
 });
     }
 
