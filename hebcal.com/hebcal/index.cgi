@@ -51,6 +51,7 @@ use File::Basename;
 use Hebcal ();
 use HebcalGPL ();
 use HebcalHtml ();
+use POSIX qw(strftime);
 use Benchmark qw(:hireswallclock :all);
 
 my @benchmarks;
