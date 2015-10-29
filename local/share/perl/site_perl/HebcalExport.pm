@@ -299,12 +299,7 @@ sub ical_write_evt {
     }
 
     if ($href) {
-        if ( $href =~ m,/sedrot/(.+)$, ) {
-            $href = "http://hebcal.com/s/$1";
-        }
-        elsif ( $href =~ m,/holidays/(.+)$, ) {
-            $href = "http://hebcal.com/h/$1";
-        }
+        $href = Hebcal::shorten_anchor($href);
         ical_write_line(qq{URL:}, $href) if $is_icalendar;
         $memo .= "\\n\\n" if $memo;
         $memo .= $href;

@@ -1056,6 +1056,17 @@ sub get_holiday_basename {
     $subj_copy;
 }
 
+sub shorten_anchor {
+    my($href) = @_;
+    if ( $href =~ m,/sedrot/(.+)$, ) {
+        $href = "http://hebcal.com/s/$1";
+    }
+    elsif ( $href =~ m,/holidays/(.+)$, ) {
+        $href = "http://hebcal.com/h/$1";
+    }
+    $href;
+}
+
 sub get_holiday_anchor($$$)
 {
     my($subj,$want_sephardic,$q) = @_;

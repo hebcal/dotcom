@@ -187,6 +187,7 @@ if ($email_subj) {
 	if ($slug) {
 	    if (index($slug, "/") == 0) {
 		$slug = "http://www.hebcal.com${slug}";
+                $slug = Hebcal::shorten_anchor($slug);
 	    }
 	    $twitter_subj .= " " . $slug;
 	}
