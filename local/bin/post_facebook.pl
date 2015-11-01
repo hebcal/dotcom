@@ -42,6 +42,7 @@ use Getopt::Long ();
 use Carp;
 use Log::Log4perl qw(:easy);
 use File::Basename;
+use Config::Tiny;
 
 my $opt_help;
 my $opt_verbose = 0;
