@@ -108,6 +108,27 @@ sub download_button_html {
     return qq{<a class="$class" id="$id" title="$filename" href="$href"${nofollow}${html5download}>${icon}Download $button_text</a>};
 }
 
+# replace download URL with a subscribe URL.
+# uses year=now and recalculates md5 cache URLs
+sub get_subscribe_href {
+    my($q,$filename) = @_;
+
+    my $year_orig = $q->param("year");
+    $q->param("year", "now");
+
+    my $ical1 = Hebcal::download_href($q, $filename, "ics");
+    $ical1 =~ /\?(.+)$/;
+    my $args = $1;
+    my $ical_href = Hebcal::get_vcalendar_cache_fn($args) . "?" . $args;
+    my $subical_href = $ical_href;
+    $subical_href =~ s/\?dl=1/\?subscribe=1/;
+
+    # restore to orig
+    $q->param("year", $year_orig);
+
+    $subical_href;
+}
+
 sub download_html_bootstrap {
     my($q,$filename,$events,$title,$yahrzeit_mode) = @_;
 
@@ -122,8 +143,7 @@ sub download_html_bootstrap {
     $ical1 =~ /\?(.+)$/;
     my $args = $1;
     my $ical_href = Hebcal::get_vcalendar_cache_fn($args) . "?" . $args;
-    my $subical_href = $ical_href;
-    $subical_href =~ s/\?dl=1/\?subscribe=1/g;
+    my $subical_href = get_subscribe_href($q,$filename);
     my $vhost = "download.hebcal.com";
     $ical_href = join("", "http://", $vhost, $ical_href);
     my $webcal_href;
