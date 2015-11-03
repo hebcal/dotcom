@@ -1887,7 +1887,7 @@ sub html_table_events {
     my $json = JSON->new;
     my $out = $json->encode($items);
     my $json_cconfig = $json->encode(\%cconfig);
-    my $lang = $q->param("lg");
+    my $lang = $q->param("lg") || "s";
     print "<script>\nwindow['hebcal']=window['hebcal']||{};\n",
         "window['hebcal'].lang='$lang';\n",
         "window['hebcal'].events=", $out, ";\n",
