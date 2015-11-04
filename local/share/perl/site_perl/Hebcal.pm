@@ -698,20 +698,10 @@ sub event_to_dict {
     }
 
     my %item;
+    $item{"evt"} = $evt;
     my $format = (defined $cfg && $cfg =~ /^[ij]$/) ?
         "%A, %d %b %Y" : "%A, %d %B %Y";
     $item{"date"} = strftime($format, localtime($time));
-
-    my $tzOffset = $ignore_tz ? ""
-        : event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
-
-    my $dow = $DoW[get_dow($year, $mon, $mday)];
-    $item{"pubDate"} = sprintf("%s, %02d %s %d %02d:%02d:00 %s",
-                           $dow,
-                           $mday,
-                           $MoY_short[$mon - 1],
-                           $year, $hour24, $min,
-                           $tzOffset);
 
     if ($evt->[$EVT_IDX_YOMTOV]) {
         $item{"yomtov"} = 1;
@@ -719,7 +709,8 @@ sub event_to_dict {
 
     $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
     if (!$evt->[$EVT_IDX_UNTIMED]) {
-        my $tzOffset2 = $tzOffset;
+        my $tzOffset2 = $ignore_tz ? "" :
+            event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
         $tzOffset2 =~ s/(\d\d)$/:$1/;
         $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset2);
     }

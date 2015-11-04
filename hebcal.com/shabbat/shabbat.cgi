@@ -365,6 +365,24 @@ sub get_link_and_guid {
     return ($link, $guid);
 }
 
+sub evt_pubdate {
+    my($evt) = @_;
+
+    my $sec = 0;
+    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+    my $hour24 = $evt->[$Hebcal::EVT_IDX_HOUR];
+    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
+        $min = $hour24 = 0;
+        $sec = 1;
+    }
+    my $time = Time::Local::timelocal($sec,$min,$hour24,
+        $evt->[$Hebcal::EVT_IDX_MDAY],
+        $evt->[$Hebcal::EVT_IDX_MON],
+        $evt->[$Hebcal::EVT_IDX_YEAR] - 1900,
+        "","","");
+    return strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime($time));
+}
+
 sub display_rss
 {
     my($items) = @_;
@@ -400,6 +418,7 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
             $subj .= ": " . $item->{'time'};
         }
 
+        my $pubDate = evt_pubdate($item->{"evt"});
         my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
 
         out_html($cfg,
@@ -409,7 +428,7 @@ qq{<item>
 <guid isPermaLink="false">$guid</guid>
 <description>$item->{'date'}</description>
 <category>$item->{'class'}</category>
-<pubDate>$item->{'pubDate'}</pubDate>
+<pubDate>$pubDate</pubDate>
 });
 
         if ($item->{'class'} eq "candles" && defined $latitude) {
