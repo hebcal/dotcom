@@ -39,12 +39,12 @@ recipient_delimiter = +
 inet_interfaces = loopback-only
 
 smtp_sasl_auth_enable = yes
-smtp_sasl_security_options = noanonymous
+smtp_sasl_security_options =
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_use_tls = yes
 smtp_tls_security_level = encrypt
 smtp_tls_note_starttls_offer = yes
-relayhost = [email-smtp.us-east-1.amazonaws.com]
+relayhost = [smtp-relay.gmail.com]:587
 
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
 inet_protocols = all
