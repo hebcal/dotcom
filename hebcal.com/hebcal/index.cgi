@@ -993,16 +993,16 @@ EOHTML
         -values => ["G", "H"],
         -default => "G",
         -onClick => "s6(this.value)",
-        -labels => {"G" => "Gregorian (common era)",
-                    "H" => "Hebrew Year"}
+        -labels => {"G" => "Gregorian year (common era)",
+                    "H" => "Hebrew year"}
         );
 
     my $diaspora_israel_radio = HebcalHtml::radio_group($q,
         -name => "i",
         -values => ["off", "on"],
         -default => "off",
-        -labels => {"off" => "Diaspora",
-                    "on" => "Israel"}
+        -labels => {"off" => "Diaspora holiday schedule",
+                    "on" => "Israel holiday schedule"}
         );
 
     print qq{<form id="f1" name="f1" action="$script_name">\n},
@@ -1060,17 +1060,9 @@ EOHTML
                  -label => "Weekly Torah portion on Saturdays"),
     "</label></div>\n";
 
-    print qq{<strong>Holiday schedule</strong>},
-    $diaspora_israel_radio;
+    print $diaspora_israel_radio;
 
-    print qq{</fieldset>\n};
-    print qq{</div><!-- .col-sm-6 -->\n},
-    qq{<div class="col-sm-6">\n};
-
-
-    print qq{<fieldset>\n};
-
-    print qq{<div class="form-group"><label for="year">Year</label>},
+    print qq{<div class="form-group"><label for="year" class="sr-only">Year</label>},
     $q->textfield(-name => "year",
                   -id => "year",
                   -pattern => '\d*',
@@ -1086,14 +1078,12 @@ EOHTML
         -value => "x",
         -override => "x");
 
-    if (defined $q->param("yt") && $q->param("yt") eq "H") {
-        print $year_type_radio;
-    } else {
-        print $q->hidden(-name => "yt",
-                -id => "yt",
-                -value => "G",
-                -override => "G");
-    }
+    print $year_type_radio;
+
+    print qq{</fieldset>\n};
+    print qq{</div><!-- .col-sm-6 -->\n},
+    qq{<div class="col-sm-6">\n};
+    print qq{<fieldset>\n};
 
     print qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
