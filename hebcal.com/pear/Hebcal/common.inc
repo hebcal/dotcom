@@ -591,7 +591,6 @@ $last_updated_text
 <li><a href="/home/about/privacy-policy">Privacy</a></li>
 <li><a href="/home/help">Help</a></li>
 <li><a href="/home/about/contact">Contact</a></li>
-<li><a href="/home/about/donate">Donate</a></li>
 <li><a href="/home/developer-apis">Developer APIs</a></li>
 </ul>
 </div><!-- .col-sm-12 -->
