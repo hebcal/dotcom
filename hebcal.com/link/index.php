@@ -152,10 +152,12 @@ very powerful and flexible.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <?php
+$js_typeahead_url = hebcal_js_typeahead_bundle_url();
+$js_hebcal_app_url = hebcal_js_app_url();
 $xtra_html = <<<EOD
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-1.4.min.js"></script>
+<script src="$js_typeahead_url"></script>
+<script src="$js_hebcal_app_url"></script>
 <script type="text/javascript">
 hljs.initHighlightingOnLoad();
 window['hebcal'].createCityTypeahead(false);

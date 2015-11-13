@@ -686,4 +686,12 @@ function html_form_select($name, $entries, $default = '', $size = 1,
     return $str;
 }
 
+function hebcal_js_app_url() {
+    return "/i/hebcal-app-1.5.min.js";
+}
+
+function hebcal_js_typeahead_bundle_url() {
+    return "//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js";
+}
+
 ?>

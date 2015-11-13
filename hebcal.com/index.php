@@ -455,8 +455,9 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 </div><!-- .row -->
 
 <?php
+$js_typeahead_url = hebcal_js_typeahead_bundle_url();
 $xtra_html = <<<EOD
-<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script src="$js_typeahead_url"></script>
 EOD;
     echo html_footer_bootstrap3(false, $xtra_html);
     exit();

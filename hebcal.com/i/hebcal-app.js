@@ -156,6 +156,9 @@ window['hebcal'].tableRow = function(evt) {
         timeStr = allDay ? '' : evt.title.substring(evt.title.indexOf(':') + 2),
         timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<td>' + timeStr + '</td>',
         className = window['hebcal'].getEventClassName(evt);
+    if (subj.startsWith('Daf Yomi: ')) {
+        subj = sub.substring(10);
+    }
     if (evt.hebrew) {
         var hebrewHtml = '<span lang="he" dir="rtl">' + evt.hebrew + '</span>';
         if (lang == 'h') {
