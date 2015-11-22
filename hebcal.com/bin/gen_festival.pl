@@ -1512,13 +1512,16 @@ sub amazon_recommended_book {
 
     my $byauthor = $author ? qq{<br>by $author} : "";
     my $html = <<EOHTML
-<td style="width:200px; text-align:center; vertical-align:top"><a
-class="amzn" id="$anchor-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"
-alt="$bktitle" width="$width" height="$height" style="border:none; padding:4px"></a>
-<br>
+<div class="col-xs-3">
+<div class="thumbnail">
+<a class="amzn" id="$anchor-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"
+alt="$bktitle" width="$width" height="$height" style="border:none"></a>
+<div class="caption">
 <a class="amzn" id="$anchor-$asin-2" title="$bktitle" href="$link">$shorttitle</a>
 $byauthor
-</td>
+</div><!-- .caption -->
+</div><!-- .thumbnail -->
+</div><!-- .col-xs-3 -->
 EOHTML
 ;
     return $html;
@@ -1538,11 +1541,11 @@ sub amazon_recommended_books {
     my $anchor = Hebcal::make_anchor($f);
     $anchor =~ s/\.html$//;
 
-    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<table style="padding:6px"><tr>\n};
+    print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<div class="row">\n};
     foreach my $book (@{$books}) {
         my $html = amazon_recommended_book($book,$anchor);
         print OUT2 $html;
     }
 
-    print OUT2 qq{</tr></table>\n};
+    print OUT2 qq{</div><!-- .row -->\n};
 }
