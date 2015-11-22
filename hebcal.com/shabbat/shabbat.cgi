@@ -561,6 +561,40 @@ ul.hebcal-results{list-style-type:none}
         if $cfg eq "j" && !$is_legacy_js;
 }
 
+sub json_ld_markup {
+    my($items) = @_;
+
+    foreach my $item (@{$items}) {
+        if ($item->{"class"} eq "candles") {
+            my $startDate = $item->{"dc:date"};
+            my $admin1 = defined $cconfig{admin1} && $cconfig{admin1} ne $cconfig{city}
+                ? qq/\n      "addressRegion" : "$cconfig{admin1}",/ : "";
+            my $s = <<EOHTML;
+<script type="application/ld+json">
+{
+  "\@context" : "http://schema.org",
+  "\@type" : "Event",
+  "name" : "Shabbat Candle Lighting",
+  "startDate" : "$startDate",
+  "location" : {
+    "\@type" : "Place",
+    "address" : {
+      "\@type" : "PostalAddress",
+      "addressLocality" : "$cconfig{city}",$admin1
+      "addressCountry" : "$cconfig{country}"
+    }
+  }
+}
+</script>
+EOHTML
+;
+            return $s;
+        }
+    }
+
+    return "";
+}
+
 sub display_html
 {
     my($items) = @_;
@@ -586,8 +620,11 @@ sub display_html
             push(@description_items, "$item->{subj} on $datestr");
         }
     }
+
     my $xtra_head = qq{<meta name="description" content="}
         . join(". ", @description_items) . qq{.">\n};
+    $xtra_head .= json_ld_markup($items);
+
     my_head($title,$xtra_head);
 
     out_html($cfg, $HebcalHtml::indiana_warning)
