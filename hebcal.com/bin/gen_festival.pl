@@ -318,7 +318,7 @@ sub format_single_day_html {
     my($gy,$gm,$gd,$show_year) = @_;
     my($gy0,$gm0,$gd0) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
     my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
-    return "<time datetime=\"$html5time\" title=\"begins at sundown on "
+    return "<time itemprop=\"startDate\" content=\"$html5time\" datetime=\"$html5time\" title=\"begins at sundown on "
         . format_single_day($gy0,$gm0,$gd0,0)
         . "\">" . format_single_day($gy,$gm,$gd,$show_year) . "</time>";
 }
@@ -467,7 +467,7 @@ sub table_row_one_year_only {
     my $short_descr = $descr;
     $short_descr =~ s/\..*//;
 
-    print $fh qq{<tr><td><a href="$slug">$f</a></td>\n};
+    print $fh qq{<tr itemscope itemtype="http://schema.org/Event"><td><a href="$slug"><span itemprop="name">$f</span></a></td>\n};
     print $fh "<td>";
     print $fh table_cell_observed($f, $evt, $show_year)
         if defined $evt;
