@@ -483,9 +483,8 @@ sub vcalendar_write_contents {
         $title =~ s/,/\\,/g;
 
         ical_write_line(qq{VERSION:2.0});
-        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v5.2//EN});
+        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v5.3//EN});
         ical_write_line(qq{CALSCALE:GREGORIAN});
-        ical_write_line(qq{METHOD:PUBLISH});
         ical_write_line(qq{X-LOTUS-CHARSET:UTF-8});
         ical_write_line(qq{X-PUBLISHED-TTL:PT7D});
         ical_write_line(qq{X-WR-CALNAME:Hebcal $title});
