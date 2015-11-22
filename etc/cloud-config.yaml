@@ -69,6 +69,7 @@ packages:
   - nagios-plugins-common
   - python-magic
   - python-tweepy
+  - perlmagick
 
 write_files:
   - path: /etc/mysql/conf.d/hebcal.cnf
