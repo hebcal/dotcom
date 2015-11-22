@@ -578,6 +578,7 @@ sub json_ld_markup {
   "startDate" : "$startDate",
   "location" : {
     "\@type" : "Place",
+    "name" : "$city_descr",
     "address" : {
       "\@type" : "PostalAddress",
       "addressLocality" : "$cconfig{city}",$admin1
