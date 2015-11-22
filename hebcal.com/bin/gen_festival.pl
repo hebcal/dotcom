@@ -1471,7 +1471,7 @@ sub aws_bookinfo {
 }
 
 sub amazon_recommended_book {
-    my($book,$anchor) = @_;
+    my($book,$anchor,$thumbnail_width) = @_;
     my $asin = $book->{"ASIN"};
     my $img;
     my $filename;
@@ -1514,7 +1514,7 @@ sub amazon_recommended_book {
 
     my $byauthor = $author ? qq{<br>by $author} : "";
     my $html = <<EOHTML
-<div class="col-xs-3">
+<div class="col-xs-$thumbnail_width">
 <div class="thumbnail">
 <a class="amzn" id="$anchor-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"
 alt="$bktitle" width="$width" height="$height" style="border:none"></a>
@@ -1523,7 +1523,7 @@ alt="$bktitle" width="$width" height="$height" style="border:none"></a>
 $byauthor
 </div><!-- .caption -->
 </div><!-- .thumbnail -->
-</div><!-- .col-xs-3 -->
+</div><!-- .col-xs-$thumbnail_width -->
 EOHTML
 ;
     return $html;
@@ -1544,8 +1544,10 @@ sub amazon_recommended_books {
     $anchor =~ s/\.html$//;
 
     print OUT2 qq{<h3 id="books">Recommended Books</h3>\n<div class="row">\n};
+    my $num_books = scalar @{$books};
+    my $thumbnail_width = $num_books <= 3 ? 4 : 3;
     foreach my $book (@{$books}) {
-        my $html = amazon_recommended_book($book,$anchor);
+        my $html = amazon_recommended_book($book,$anchor,$thumbnail_width);
         print OUT2 $html;
     }
 
