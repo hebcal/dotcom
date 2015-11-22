@@ -406,6 +406,7 @@ sub table_cell_observed {
 sub table_index {
     my($festivals,$table_id,@holidays) = @_;
     print OUT3 <<EOHTML;
+<div class="table-responsive">
 <table class="table table-condensed">
 <col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 <tbody>
@@ -448,6 +449,7 @@ EOHTML
     print OUT3 <<EOHTML;
 </tbody>
 </table>
+</div><!-- .table-responsive -->
 EOHTML
 ;
 }
