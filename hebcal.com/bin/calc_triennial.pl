@@ -110,6 +110,8 @@ my $extra_years = 13;
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
+my $parashat_hebrew = "\x{05E4}\x{05E8}\x{05E9}\x{05EA}";  # Unicode for "parashat"
+
 my $HEBCAL_CMD = "./hebcal";
 $HEBCAL_CMD .= " -i" if $opt_israel;
 
@@ -999,7 +1001,7 @@ sub write_sedra_page
   <li><a href="/sedrot/#$torah_book">$torah_book</a></li>
   <li class="active">$h</li>
 </ol>
-<h1><span class="hidden-xs">Parashat</span> $h / <span lang="he" dir="rtl">$hebrew</span></h1>
+<h1><span class="hidden-xs">Parashat</span> $h / <span class="hidden-xs" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></h1>
 $intro_summary
 <h3 id="torah"><span class="hidden-xs">Torah Portion:</span>
 <a class="outbound" href="$torah_href"
@@ -1377,7 +1379,6 @@ sub get_parashah_info
 {
     my($parshiot,$h) = @_;
 
-    my $parashat = "\x{05E4}\x{05E8}\x{05E9}\x{05EA}";  # Unicode for "parashat"
 
     my($hebrew);
     my($torah,$haftarah,$haftarah_seph);
@@ -1389,11 +1390,9 @@ sub get_parashah_info
 	my($p1,$p2) = ($1,$2);
 
 	# HEBREW PUNCTUATION MAQAF (U+05BE)
-	$hebrew = sprintf("%s %s%s%s",
-			  $parashat,
-			  $parshiot->{'parsha'}->{$p1}->{'hebrew'},
-			  "\x{05BE}",
-			  $parshiot->{'parsha'}->{$p2}->{'hebrew'});
+        $hebrew = join("", $parshiot->{'parsha'}->{$p1}->{'hebrew'},
+                        "\x{05BE}",
+                        $parshiot->{'parsha'}->{$p2}->{'hebrew'});
 
 	my $torah_end = $parshiot->{'parsha'}->{$p2}->{'verse'};
 	$torah_end =~ s/^.+\s+(\d+:\d+)\s*$/$1/;
@@ -1422,9 +1421,7 @@ sub get_parashah_info
     }
     else
     {
-	$hebrew = sprintf("%s %s",
-			  $parashat,
-			  $parshiot->{'parsha'}->{$h}->{'hebrew'});
+        $hebrew = $parshiot->{'parsha'}->{$h}->{'hebrew'};
 	$torah = $parshiot->{'parsha'}->{$h}->{'verse'};
 	$haftarah = $parshiot->{'parsha'}->{$h}->{'haftara'};
 	$haftarah_seph = $parshiot->{'parsha'}->{$h}->{'sephardic'};
