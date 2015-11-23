@@ -1008,7 +1008,7 @@ $ort_tikkun
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <div class="row">
-<div class="col-sm-3">
+<div class="col-xs-12 col-sm-3">
 <h4>Full Kriyah</h4>
 <ol class="list-unstyled">
 EOHTML
@@ -1023,7 +1023,7 @@ EOHTML
         $fk_aliyot{$aliyah->{'num'}} = $aliyah;
     }
 
-    print OUT2 "</ol>\n</div><!-- .col-sm-3 fk -->\n";
+    print OUT2 "</ol>\n</div><!-- fk -->\n";
 
     write_sedra_tri_cells($h,$torah,$triennial_readings->[1]);
 
@@ -1212,12 +1212,12 @@ sub write_sedra_tri_cells {
     foreach my $yr (1 .. 3) {
         my $read_on_html = $tri_date[$yr] ? qq{\n<br><small>$tri_date[$yr]</small>} : "";
 	print OUT2 <<EOHTML;
-<div class="col-xs-3">
+<div class="col-xs-4 col-sm-3">
 <h4>Triennial Year $yr$read_on_html</h4>
 EOHTML
 ;
 	print_tri_cell($triennial_readings,$h,$yr,$torah);
-	print OUT2 qq{</div><!-- .col-xs-3 tri$yr -->\n};
+        print OUT2 qq{</div><!-- tri$yr -->\n};
     }
     1;
 }
