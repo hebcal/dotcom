@@ -889,6 +889,27 @@ sub aliyot_combine_67 {
     return \%out;
 }
 
+sub json_ld_markup {
+    my($h,$startDate) = @_;
+
+    my $s = <<EOHTML;
+<script type="application/ld+json">
+{
+  "\@context" : "http://schema.org",
+  "\@type" : "Event",
+  "name" : "$h Torah Reading",
+  "startDate" : "$startDate",
+  "location" : {
+    "\@type" : "Place",
+    "name" : "Diaspora"
+  }
+}
+</script>
+EOHTML
+;
+    return $s;
+}
+
 sub write_sedra_page
 {
     my($parshiot,$h,$prev,$next,$triennial_readings) = @_;
@@ -943,9 +964,14 @@ sub write_sedra_page
 
     $description .= " Torah reading, Haftarah, links to audio and commentary.";
 
+    my $xtra_head = qq{<meta name="description" content="$description">\n};
+    if ($next_reading{$h}) {
+        $xtra_head .= json_ld_markup($h, $next_reading{$h});
+    }
+
     print OUT2 HebcalHtml::header_bootstrap3(
-	"$h - Torah Portion - $hebrew", "/sedrot/$anchor", "ignored",
-	qq{<meta name="description" content="$description">\n}, 0, 1);
+        "$h - Torah Portion - $hebrew", "/sedrot/$anchor", "",
+        $xtra_head, 0, 1);
 
     my $amazon_link2 =
 	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
