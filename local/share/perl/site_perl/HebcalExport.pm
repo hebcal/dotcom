@@ -451,9 +451,7 @@ sub vcalendar_write_contents {
 
     my $is_icalendar = ( $q->path_info() =~ /\.ics$/ ) ? 1 : 0;
 
-    my $cache_webpath;
     if ($is_icalendar) {
-        $cache_webpath = Hebcal::get_vcalendar_cache_fn();
         my $mime_type = 'text/calendar; charset=UTF-8';
         if ($q->param('subscribe')) {
             print $q->header(-type => $mime_type);
@@ -490,15 +488,6 @@ sub vcalendar_write_contents {
         ical_write_line(qq{X-PUBLISHED-TTL:PT7D});
         ical_write_line(qq{X-WR-CALNAME:Hebcal $title});
 
-        if (   defined $cache_webpath
-            && defined $ENV{"REQUEST_URI"}
-            && $ENV{"REQUEST_URI"} =~ /\?(.+)$/ )
-        {
-            my $qs = $1;
-            $qs =~ s/;/&/g;
-            ical_write_line(qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs});
-        }
-
         # include an iCal description
         if ( defined $q->param("v") ) {
             my $desc;
@@ -507,6 +496,12 @@ sub vcalendar_write_contents {
             }
             else {
                 $desc = "Jewish Holidays from www.hebcal.com";
+                if ( defined $ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/ ) {
+                    my $qs = $1;
+                    $qs =~ s/;/&/g;
+                    my $cache_webpath = Hebcal::get_vcalendar_cache_fn();
+                    ical_write_line(qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs});
+                }
             }
             ical_write_line(qq{X-WR-CALDESC:$desc});
         }
