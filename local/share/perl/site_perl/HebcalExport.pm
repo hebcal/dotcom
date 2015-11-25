@@ -280,11 +280,19 @@ sub ical_write_evt {
         $subj = Hebcal::translate_subject( $q, $subj, $hebrew );
     }
 
+    my $is_dafyomi = 0;
+    if ($subj =~ /^Daf Yomi:\s+(.+)\s*$/) {
+        $subj = $1;
+        $is_dafyomi = 1;
+    }
+
     ical_write_line(qq{CLASS:PUBLIC});
     ical_write_line(qq{SUMMARY:}, $subj);
 
     my $memo = "";
-    if (   $evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
+    if ($is_dafyomi) {
+        ical_write_line(qq{LOCATION:Daf Yomi});
+    } elsif (   $evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
         && defined $cconfig
         && defined $cconfig->{"city"} )
     {
@@ -632,6 +640,11 @@ sub csv_write_contents($$$)
         {
             $memo = '';
             $loc = $1;
+        }
+        elsif ($subj =~ /^Daf Yomi:\s+(.+)\s*$/)
+        {
+            $subj = $1;
+            $loc = 'Daf Yomi';
         }
 
         print STDOUT
