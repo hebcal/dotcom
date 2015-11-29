@@ -393,7 +393,7 @@ sub cycle_readings {
         my $h = $1;
 
         my ( $year, $month, $day ) = Hebcal::event_ymd( $events->[$i] );
-        my $stime = sprintf( "%02d %s %04d", $day, $Hebcal::MoY_long{$month},
+        my $stime = sprintf( "%02d %s %04d", $day, $Hebcal::MoY_short[$month-1],
             $year );
 
         if ( defined $combined{$h} ) {
