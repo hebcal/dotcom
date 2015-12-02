@@ -563,6 +563,21 @@ sub invoke_hebcal
 	    $memo2 = (get_holiday_anchor($subj,$want_sephardic,undef))[2];
 	}
 
+        # merge related candle-lighting times into previously seen Chanukah event object
+        if ($#events >= 0 &&
+                $events[$#events]->[$EVT_IDX_MON] == $mon &&
+                $events[$#events]->[$EVT_IDX_MDAY] == $mday &&
+                $events[$#events]->[$EVT_IDX_SUBJ] =~ /^Chanukah: \d/) {
+            next if $subj =~ /^Havdalah/;
+            if ($subj eq "Candle lighting") {
+                $events[$#events]->[$EVT_IDX_UNTIMED] = 0;
+                $events[$#events]->[$EVT_IDX_HOUR] = int($hour);
+                $events[$#events]->[$EVT_IDX_MIN] = int($min);
+                my $dow = get_dow($year,$mon+1,$mday);
+                next unless $dow == 5; # keep both Chanukah and Friday Candle lighting
+            }
+        }
+
 	push(@events, [
                 $subj, $untimed,
                 int($min), int($hour), int($mday), int($mon), int($year),
