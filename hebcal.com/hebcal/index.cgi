@@ -171,8 +171,10 @@ form("Please specify a year.")
 form("Sorry, invalid year <strong>" . $q->param("year") . "</strong>.")
     if $q->param("year") !~ /^\d+$/ || $q->param("year") == 0;
 
+my $g_year_type = defined $q->param("yt") && $q->param("yt") eq "H" ? "H" : "G";
+
 form("Sorry, Hebrew year must be 3762 or later.")
-    if $q->param("yt") && $q->param("yt") eq "H" && $q->param("year") < 3762;
+    if $g_year_type eq "H" && $q->param("year") < 3762;
 
 form("Sorry, invalid Havdalah minutes <strong>" . $q->param("m") . "</strong>.")
     if defined $q->param("m") &&
@@ -227,7 +229,7 @@ $cmd .= " -a"
 $cmd .= " -h" if !defined $q->param("maj") || $q->param("maj") eq "off";
 $cmd .= " -x" if !defined $q->param("nx") || $q->param("nx") eq "off";
 
-if ($q->param("yt") && $q->param("yt") eq "H")
+if ($g_year_type eq "H")
 {
     $q->param("month", "x");
     $cmd .= " -H";
@@ -263,7 +265,7 @@ my %extra_years_opts = (
     );
 if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
     $EXTRA_YEARS = $q->param("ny") - 1;
-} else {
+} elsif (($g_year_type eq "G" && $q->param("year") >= 2016) || ($g_year_type eq "H" && $q->param("year") >= 5777)) {
     foreach my $opt (keys %extra_years_opts) {
         if (param_true($opt)) {
             my $v = $extra_years_opts{$opt};
@@ -274,8 +276,7 @@ if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
 
 my $g_date;
 my $g_filename = "hebcal_" . $q->param("year");
-$g_filename .= "H"
-    if $q->param("yt") && $q->param("yt") eq "H";
+$g_filename .= "H" if $g_year_type eq "H";
 if (defined $q->param("month") && defined $q->param("year") &&
     $q->param("month") =~ /^\d{1,2}$/ &&
     $q->param("month") >= 1 && $q->param("month") <= 12)
@@ -1300,8 +1301,7 @@ sub get_start_and_end {
     my $end_month;
     my $end_year = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
 
-    if ($q->param("month") eq "x" &&
-        (! defined $q->param("yt") || $q->param("yt") eq "G")) {
+    if ($q->param("month") eq "x" && $g_year_type eq "G") {
         $start_month = 1;
         $end_month = 12;
     } else {
@@ -1455,8 +1455,7 @@ sub results_page_warnings {
         print $HebcalHtml::gregorian_warning
             if ($greg_year1 <= 1752);
 
-        if ($greg_year1 >= 3762
-            && (!defined $q->param("yt") || $q->param("yt") eq "G"))
+        if ($greg_year1 >= 3762 && $g_year_type eq "G")
         {
             my $future_years = $greg_year1 - $this_year;
             my $new_url = Hebcal::self_url($q,
