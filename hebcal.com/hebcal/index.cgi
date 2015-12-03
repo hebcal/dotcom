@@ -254,8 +254,22 @@ else
 $cmd .= " " . $q->param("year");
 
 my $EXTRA_YEARS = 4;
+my %extra_years_opts = (
+    "D" => 2,
+    "d" => 1,
+    "F" => 1,
+    "c" => 1,
+    "o" => 2,
+    );
 if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
     $EXTRA_YEARS = $q->param("ny") - 1;
+} else {
+    foreach my $opt (keys %extra_years_opts) {
+        if (param_true($opt)) {
+            my $v = $extra_years_opts{$opt};
+            $EXTRA_YEARS = $v if $v < $EXTRA_YEARS;
+        }
+    }
 }
 
 my $g_date;
