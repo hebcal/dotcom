@@ -685,7 +685,7 @@ sub event_tz_offset {
 sub event_category {
     my($subj) = @_;
 
-    if ($subj eq "Candle lighting" || $subj eq "No sunset today.") {
+    if ($subj eq "Candle lighting") {
         return "candles";
     } elsif ($subj =~ /Havdalah/) {
         return "havdalah";
@@ -730,6 +730,7 @@ sub event_to_dict {
             event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
         $tzOffset2 =~ s/(\d\d)$/:$1/;
         $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset2);
+        $item{"time"} = format_evt_time($evt, "pm");
     }
 
     my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
@@ -745,13 +746,7 @@ sub event_to_dict {
 
     if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
     {
-        $item{"time"} = format_evt_time($evt, "pm");
         $item{"link"} = $url . "#" . $anchor;
-    }
-    elsif ($subj eq "No sunset today.")
-    {
-        $item{"link"} = $url . "#top";
-        $item{"time"} = "";
     }
     else
     {
@@ -1178,8 +1173,7 @@ sub get_holiday_anchor($$$)
 	    }
 	}
 
-	if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/ &&
-	    $subj ne 'No sunset today.')
+        if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/)
 	{
             $subj_copy = get_holiday_basename($subj_copy);
 	    $href = 'http://www.hebcal.com'
