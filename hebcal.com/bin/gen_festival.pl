@@ -1127,7 +1127,7 @@ EOHTML
 	    my $nofollow = $gy > $this_year + 2 ? qq{ rel="nofollow"} : "";
 	    my $html5time = sprintf("%04d-%02d-%02d", $gy, $gm, $gd);
         my $args = "";
-        foreach my $opt (qw(s maj min mod mf ss nx D vis)) {
+        foreach my $opt (qw(s maj min mod mf ss nx)) {
             $args .= join("", "&amp;", $opt, "=on");
         }
 	    printf OUT2 "<li><a%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
