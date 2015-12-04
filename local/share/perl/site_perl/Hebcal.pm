@@ -744,7 +744,7 @@ sub event_to_dict {
     my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
     $item{"hebrew"} = $hebrew if $hebrew;
 
-    if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
+    if ($item{"class"} eq "candles" || $item{"class"} eq "havdalah")
     {
         $item{"link"} = $url . "#" . $anchor;
     }

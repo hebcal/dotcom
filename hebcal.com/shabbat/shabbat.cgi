@@ -470,17 +470,23 @@ sub display_html_common
             $link = "javascript:widget.openURL('" . $link . "');";
         }
 
-        if ($item->{'class'} =~ /^(candles|havdalah)$/)
-        {
-            out_html($cfg,qq{$item->{'subj'}: <time datetime="$item->{'dc:date'}"><strong>$item->{'time'}</strong> on $item->{'date'}</time>});
-        }
-        elsif ($item->{'class'} eq 'holiday')
-        {
-            out_html($cfg,qq{<a target="$tgt" href="$link">$item->{'subj'}</a> occurs on <time datetime="$item->{'dc:date'}">$item->{'date'}</time>});
-        }
-        elsif ($item->{'class'} eq 'parashat')
-        {
+        if ($item->{class} eq 'parashat') {
             out_html($cfg,qq{This week\'s Torah portion is <a target="$tgt" href="$link">$item->{'subj'}</a>});
+        } elsif ($item->{class} =~ /^(candles|havdalah|holiday)$/) {
+            my $html = "";
+            if ($item->{class} eq 'holiday') {
+                $html = qq{<a target="$tgt" href="$link">};
+            }
+            $html .= $item->{subj};
+            if ($item->{class} eq 'holiday') {
+                $html .= qq{</a>};
+            }
+            if (defined $item->{time}) {
+                $html .= qq{: <time datetime="$item->{'dc:date'}"><strong>$item->{'time'}</strong> on $item->{'date'}</time>};
+            } else {
+                $html .= qq{ occurs on <time datetime="$item->{'dc:date'}">$item->{'date'}</time>};
+            }
+            out_html($cfg,$html);
         }
 
         out_html($cfg,qq{</li>\n});
@@ -670,7 +676,7 @@ sub more_from_hebcal {
     $url = join('', "/hebcal/?v=1&geo=", $cconfig{"geo"}, "&");
     $url .= get_link_args($q);
     $url .= '&month=x&year=now';
-    foreach my $opt (qw(c s maj min mod mf ss nx vis)) {
+    foreach my $opt (qw(c s maj min mod mf ss nx)) {
         $url .= join("", "&", $opt, "=on");
     }
     my $full_calendar_href = url_html($url);
