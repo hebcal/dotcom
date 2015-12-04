@@ -591,7 +591,12 @@ EOHTML
 ;
 
     my $full_kriyah_download_html = action_button_download_html("Full Kriyah (Diaspora)");
+    $full_kriyah_download_html .= qq{<li><a href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a>};
+    $full_kriyah_download_html .= qq{<li class="divider"></li>};
+
     my $fk_israel_download_html = action_button_download_html("Full Kriyah (Israel)");
+    $fk_israel_download_html .= qq{<li><a href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a>};
+    $fk_israel_download_html .= qq{<li class="divider"></li>};
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $basename = "fullkriyah-$yr.csv";
@@ -603,6 +608,9 @@ EOHTML
     $fk_israel_download_html .= qq{</ul>\n</div>\n};
 
     my $triennial_download_html = action_button_download_html("Triennial (Diaspora)");
+    $triennial_download_html .= qq{<li><a href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a>};    
+    $triennial_download_html .= qq{<li class="divider"></li>};
+
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	my $start_year = $cycle_start_years[$i];
 	my $triennial_range = triennial_csv_range($start_year);
@@ -849,7 +857,7 @@ sub write_drash_links {
     }
     return 0 unless $count;
 
-    print OUT2 qq{<div class="hidden-print">\n<h3 id="drash">Commentary</h3>\n<ul class="gtl">\n};
+    print OUT2 qq{<div class="hidden-print">\n<h3 id="drash">Commentary</h3>\n<ul class="bullet-list-inline">\n};
 
     my %site_name = (
         "ou" => "Orthodox Union",
@@ -1131,10 +1139,11 @@ EOHTML
     write_drash_links($drash,$h);
 
     if (defined $parashah_date_sql{$h}) {
+        my $list_style = $combined{$h} ? "list-unstyled" : "bullet-list-inline";
 	print OUT2 <<EOHTML;
 <h3 id="dates">List of Dates</h3>
 Parashat $h is read in the Diaspora on:
-<ul class="list-unstyled">
+<ul class="$list_style">
 EOHTML
 	;
 	my @dates;
@@ -1348,7 +1357,7 @@ sub get_parashah_links {
             my $target = $l->{'target'};
             $target =~ s/ /\%20/g;
             $target =~ s/\'/\%27/g;
-            $out->{ou} = "https://www.ou.org/torah/parsha/#?post_terms.parshiot.name=$target";
+            $out->{ou} = "https://www.ou.org/torah/parsha/#?post_terms.parshiot.name.unanalyzed=$target";
         } elsif ($l->{'rel'} eq 'drash:torah.org') {
             my $href = $l->{'href'};
             $href =~ s/&/&amp;/g;
