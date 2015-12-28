@@ -231,6 +231,16 @@ if (isset($_GET["cfg"]) && $_GET["cfg"] == "json") {
 <hebcal>
 <gregorian year="<?php echo $gy ?>" month="<?php echo $gm ?>" day="<?php echo $gd ?>" />
 <hebrew year="<?php echo $hy ?>" month="<?php echo $month_name ?>" day="<?php echo $hd ?>" str="<?php echo $hebrew ?>" />
+<?php
+    if (!empty($events)) {
+        echo "<events>\n";
+        foreach ($events as $h) {
+            $anchor = hebcal_make_anchor($h);
+            echo "<event name=\"$h\" href=\"http://www.hebcal.com$anchor\" />\n";
+        }
+        echo "</events>\n";
+    }
+?>
 </hebcal>
 <?php
     exit();
