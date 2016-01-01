@@ -257,11 +257,10 @@ $cmd .= " " . $q->param("year");
 
 my $EXTRA_YEARS = 4;
 my %extra_years_opts = (
-    "D" => 2,
+    "D" => 3,
     "d" => 1,
     "F" => 1,
-    "c" => 1,
-    "o" => 2,
+    "o" => 3,
     );
 if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
     $EXTRA_YEARS = $q->param("ny") - 1;
