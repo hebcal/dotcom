@@ -169,11 +169,11 @@ ul.list-inline li:after{content:"\\00a0\\00b7"}
 ul.list-inline li:last-child:after{content:""}
 @font-face {
   font-family: 'Glyphicons Regular';
-  src: url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.eot');
-  src: url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'),
-    url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.woff') format('woff'),
-    url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.ttf') format('truetype'),
-    url('/i/glyphicons_pro_1.9/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
+  src: url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot');
+  src: url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'),
+    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.woff') format('woff'),
+    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.ttf') format('truetype'),
+    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
