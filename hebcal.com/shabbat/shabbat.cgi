@@ -567,14 +567,23 @@ ul.hebcal-results{list-style-type:none}
         if $cfg eq "j" && !$is_legacy_js;
 }
 
+sub get_json_ld_admin1 {
+    if (defined $cconfig{admin1} && $cconfig{admin1} ne $cconfig{city}) {
+        return qq/\n      "addressRegion" : "$cconfig{admin1}",/;
+    } elsif (defined $cconfig{state}) {
+        return qq/\n      "addressRegion" : "$cconfig{state}",/;
+    } else {
+        return "";
+    }
+}
+
 sub json_ld_markup {
     my($items) = @_;
 
     foreach my $item (@{$items}) {
         if ($item->{"class"} eq "candles") {
             my $startDate = $item->{"dc:date"};
-            my $admin1 = defined $cconfig{admin1} && $cconfig{admin1} ne $cconfig{city}
-                ? qq/\n      "addressRegion" : "$cconfig{admin1}",/ : "";
+            my $admin1 = get_json_ld_admin1();
             my $s = <<EOHTML;
 <script type="application/ld+json">
 {
