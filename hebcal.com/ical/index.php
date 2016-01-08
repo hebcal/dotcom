@@ -2,7 +2,7 @@
 /***********************************************************************
  * Jewish Holiday downloads for desktop, mobile and web calendars
  *
- * Copyright (c) 2014  Michael J. Radwin.
+ * Copyright (c) 2016  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -61,15 +61,16 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <?php
-function cal_item($path,$title,$subtitle,$suppress_outlook=false) {
+function cal_item($path,$title,$subtitle,$feed_length,$suppress_outlook=false) {
     $url_noproto = "download.hebcal.com/ical/" . $path . ".ics";
     $webcal = "webcal://" . $url_noproto;
     $http_esc = urlencode("http://" . $url_noproto);
     $csv_url = "http://download.hebcal.com/ical/" . $path . ".csv";
+    $subtitle = preg_replace('/\.\s*$/', '', $subtitle);
 ?>
 <div class="col-sm-6">
 <h3><?php echo $title ?></h3>
-<p><?php echo $subtitle ?></p>
+<p><?php echo $subtitle ?>. <small><?php echo $feed_length ?>-year perpetual feed.</small></p>
 <div class="btn-toolbar">
 <a class="btn btn-default btn-sm download" id="quick-ical-<?php echo $path ?>"
 title="Subscribe to <?php echo $title ?> for iPhone, iPad, Mac OS X Desktop"
@@ -98,7 +99,8 @@ function cal_divider() {
 <div class="row">
 <?php
 cal_item("jewish-holidays", "Jewish Holidays",
-	"Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).");
+  "Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).",
+  10);
 ?>
 <div class="col-sm-6">
 <h3>Advanced Settings</h3>
@@ -110,20 +112,25 @@ Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Isra
 <?php
 cal_divider();
 cal_item("jewish-holidays-all", "Jewish Holidays (all)",
-	"Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.");
+  "Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.",
+  10);
 cal_item("torah-readings-diaspora", "Torah Readings",
-  "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.");
+  "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.",
+  3);
 cal_divider();
 cal_item("hdate-en", "Hebrew calendar dates (English)",
-  "Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.");
+  "Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.",
+  2);
 cal_item("hdate-he", "Hebrew calendar dates (Hebrew)",
-	"Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
-	true);
+  "Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
+  2, true);
 cal_divider();
 cal_item("omer", "Days of the Omer",
-	"7 weeks from the second night of Pesach to the day before Shavuot.");
+  "7 weeks from the second night of Pesach to the day before Shavuot.",
+  2);
 cal_item("daf-yomi", "Daf Yomi",
-	"Daily regimen of learning the Talmud.");
+  "Daily regimen of learning the Talmud",
+  2);
 cal_divider();
 ?>
 <div class="col-sm-12">
