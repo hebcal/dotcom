@@ -580,7 +580,7 @@ sub json_ld_markup {
 {
   "\@context" : "http://schema.org",
   "\@type" : "Event",
-  "name" : "Shabbat Candle Lighting",
+  "name" : "Candle Lighting for $cconfig{city} at $item->{time}",
   "startDate" : "$startDate",
   "location" : {
     "\@type" : "Place",
