@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -173,8 +173,15 @@ form("Sorry, invalid year <strong>" . $q->param("year") . "</strong>.")
 
 my $g_year_type = defined $q->param("yt") && $q->param("yt") eq "H" ? "H" : "G";
 
-form("Sorry, Hebrew year must be 3762 or later.")
-    if $g_year_type eq "H" && $q->param("year") < 3762;
+if ($g_year_type eq "H") {
+    form("Sorry, Hebrew year must be 3762 or later.")
+        if $q->param("year") < 3762;
+    form("Sorry, Hebrew year must be 10665 or earlier.")
+        if $q->param("year") > 10665;
+} else {
+    form("Sorry, Gregorian year must be 9999 or earlier.")
+        if $q->param("year") > 9999;
+}
 
 form("Sorry, invalid Havdalah minutes <strong>" . $q->param("m") . "</strong>.")
     if defined $q->param("m") &&
