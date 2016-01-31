@@ -2,7 +2,7 @@
 /***********************************************************************
  * Hebcal homepage
  *
- * Copyright (c) 2015  Michael J. Radwin.
+ * Copyright (c) 2016  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -64,6 +64,7 @@ if (isset($sedra) && isset($sedra[$iso])) {
 	"Shushan Purim" => true,
 	"Yom HaAtzma'ut" => true,
 	"Lag B'Omer" => true,
+        "Lag BaOmer" => true,
 	"Shmini Atzeret" => true,
 	"Simchat Torah" => true,
 	);

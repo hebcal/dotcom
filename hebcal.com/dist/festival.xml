@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2015  Michael J. Radwin.
+Copyright (c) 2016  Michael J. Radwin.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or
@@ -126,7 +126,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <group>Yom HaZikaron</group>
  <group>Yom HaAtzma'ut</group>
  <group>Pesach Sheni</group>
- <group>Lag B'Omer</group>
+ <group>Lag BaOmer</group>
  <group>Yom Yerushalayim</group>
  <group>Rosh Chodesh Sivan</group>
  <group>Shavuot
@@ -165,7 +165,7 @@ every other day (e.g. fast days): 3
  (the Festival of Matzah), it commemorates the Exodus and freedom of
  the Israelites from ancient Egypt
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Passover">
+ <wikipedia href="https://en.wikipedia.org/wiki/Passover">
  Passover (Hebrew: פֶּסַח Pesach) commemorates the story of the Exodus, in which the
  ancient Israelites were freed from slavery in Egypt. Passover begins
  on the 15th day of the month of Nisan in the Jewish calendar, which is
@@ -378,7 +378,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidayc.htm">
  Festival of Weeks, commemorates the giving of the Torah at Mount Sinai
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Shavuot">
+ <wikipedia href="https://en.wikipedia.org/wiki/Shavuot">
  The festival of Shavuot (or Shavuos, in Ashkenazi usage; Shabhuʿoth
  in Classical and Mizrahi Hebrew Hebrew: שבועות, lit. "Weeks") is a
  Jewish holiday that occurs on the sixth day of the Hebrew month of
@@ -456,7 +456,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="https://www.ou.org/holidays/asarah-btevet/asara_btevet/">
  Fast commemorating the siege of Jerusalem
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Tenth_of_Tevet">
+ <wikipedia href="https://en.wikipedia.org/wiki/Tenth_of_Tevet">
  Tenth of Tevet (Hebrew: עשרה בטבת, Asarah BeTevet), the tenth day of
  the Hebrew month of Tevet, is a minor fast day in Judaism. The fast
  commemorates the siege of Jerusalem by Nebuchadnezzar II of Babylonia.
@@ -474,7 +474,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidaye.htm">
  Fast of the First Born
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_the_Firstborn">
+ <wikipedia href="https://en.wikipedia.org/wiki/Fast_of_the_Firstborn">
  Fast of the Firstborn (Hebrew: תענית בכורות, Ta'anit B'khorot or
  תענית בכורים, Ta'anit B'khorim); is a unique fast day in Judaism
  which usually falls on the day before Passover. Usually, the fast is broken at
@@ -495,7 +495,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidaye.htm">
  Fast of Esther
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Esther">
+ <wikipedia href="https://en.wikipedia.org/wiki/Fast_of_Esther">
  The Fast of Esther (Ta'anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish
  fast from dawn until dusk on Purim eve, commemorating the three-day
  fast observed by the Jewish people in the story of Purim.
@@ -516,7 +516,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  Fast of the Seventh Month, commemorates the assassination of the Jewish
  governor of Judah
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Fast_of_Gedalia">
+ <wikipedia href="https://en.wikipedia.org/wiki/Fast_of_Gedalia">
  The Fast of Gedalia (Hebrew: צוֹם גְּדַלְיָּה), also spelled Gedaliah, is a
  Jewish fast day from dawn until dusk to lament the assassination of
  the righteous governor of Judah of that name, which ended Jewish rule
@@ -557,7 +557,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holidayd.htm">
  The Ninth of Av, fast commemorating the destruction of the two Temples
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Tish%27a_B%27Av">
+ <wikipedia href="https://en.wikipedia.org/wiki/Tish%27a_B%27Av">
   Tisha B'Av (Hebrew: תשעה באב or ט׳ באב, "the Ninth of Av,") is an
   annual fast day in Judaism, named for the ninth day (Tisha) of the
   month of Av in the Hebrew calendar. The fast commemorates the
@@ -591,7 +591,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday2.htm">
  The Jewish New Year. Also spelled Rosh Hashanah
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Rosh_Hashanah">
+ <wikipedia href="https://en.wikipedia.org/wiki/Rosh_Hashanah">
  Rosh Hashanah (Hebrew: ראש השנה), (literally "head of the year"), is
  the Jewish New Year. It is the first of the High Holidays or Yamim
  Noraim ("Days of Awe"), celebrated ten days before Yom Kippur. Rosh
@@ -673,7 +673,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday4.htm">
  Day of Atonement
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Yom_Kippur">
+ <wikipedia href="https://en.wikipedia.org/wiki/Yom_Kippur">
  Yom Kippur (Hebrew: יוֹם כִּפּוּר or יום הכיפורים), Also known as Day of
  Atonement, is the holiest day of the year for the Jews. Its central
  themes are atonement and repentance. Jews traditionally observe this
@@ -749,7 +749,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  <about href="http://www.jewfaq.org/holiday5.htm">
  Feast of Tabernacles
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Sukkot">
+ <wikipedia href="https://en.wikipedia.org/wiki/Sukkot">
  Sukkot (Hebrew: סוכות or סֻכּוֹת, sukkōt, or sukkos, Feast of Booths,
  Feast of Tabernacles) is a Biblical holiday celebrated on the 15th
  day of the month of Tishrei (late September to late October). It is
@@ -908,7 +908,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  <about href="http://www.jewfaq.org/holiday6.htm">
  Eighth Day of Assembly
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Shemini_Atzeret">
+ <wikipedia href="https://en.wikipedia.org/wiki/Shemini_Atzeret">
  Shemini Atzeret (שמיני עצרת - "the Eighth [day] of Assembly")
  is a Jewish holiday. It is
  celebrated on the 22nd day of the Hebrew month of Tishrei (first
@@ -952,7 +952,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  <about href="http://www.jewfaq.org/holiday6.htm">
  Day of Celebrating the Torah
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Simchat_Torah">
+ <wikipedia href="https://en.wikipedia.org/wiki/Simchat_Torah">
  Simchat Torah or Simḥath Torah (also Simkhes Toreh, Hebrew: שִׂמְחַת
  תורָה, lit., "Rejoicing with/of the Torah,") is a celebration marking
  the conclusion of the annual cycle of public Torah readings, and the
@@ -1005,7 +1005,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  The Jewish festival of rededication, also known as the Festival of
  Lights. Sometimes spelled Hanukkah, Chanukkah, Hanukah, or Hannukah
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Hanukkah">
+ <wikipedia href="https://en.wikipedia.org/wiki/Hanukkah">
  Hanukkah (Hebrew: חֲנֻכָּה, usually spelled חנוכה pronounced [χanuˈka] in
  Modern Hebrew, also romanized as Chanukah or Chanuka), also known as
  the Festival of Lights, is an eight-day Jewish holiday commemorating
@@ -1158,7 +1158,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  calendar. It commemorates a time when the Jewish people living in
  Persia were saved from extermination
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Purim">
+ <wikipedia href="https://en.wikipedia.org/wiki/Purim">
  Purim (Hebrew: פּוּרִים, Pûrîm "lots", from the word pur, related to
  Akkadian pūru) is a Jewish holiday that commemorates the deliverance
  of the Jewish people in the ancient Persian Empire from destruction
@@ -1210,7 +1210,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  <about href="https://www.ou.org/holidays/shabbat/four-shabbatot/">
  Shabbat before Rosh Chodesh Nissan
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaChodesh">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaChodesh">
  Shabbat HaChodesh ("Sabbath [of the] month" שבת החודש) precedes the
  first of the Hebrew month of Nisan during which Passover is
  celebrated. Exodus 12:1-20 and the laws of Passover. On the first day
@@ -1239,10 +1239,10 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
 </festival>
 
 <festival id="Shabbat HaGadol" hebrew="שַׁבָּת הַגָּדוֹל" yomtov="0" type="shabbat">
- <about href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
+ <about href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
  Shabbat before Pesach
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol">
  Shabbat HaGadol ("Great Shabbat" שבת הגדול) is the Shabbat
  immediately before Passover. There is a special Haftarah reading on
  this Shabbat of the book of Malachi. Traditionally a lengthy and
@@ -1257,7 +1257,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  <about href="https://www.ou.org/holidays/the-three-weeks/shabbat_chazon/">
  Shabbat before Tish'a B'Av (Shabbat of Prophecy/Shabbat of Vision)
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Chazon">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Chazon">
  Shabbat Chazon ("Sabbath [of] vision" שבת חזון) takes its name from
  the Haftarah that is read on the Shabbat immediately prior to the
  mournful fast of Tisha B'Av, from the words of rebuke and doom coming
@@ -1277,7 +1277,7 @@ with the verse
 נַחֲמוּ נַחֲמוּ, עַמִּי
 ("Comfort, oh comfort my people")
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Nachamu">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Nachamu">
  Shabbat Nachamu ("Sabbath of comfort/ing) takes its name from the
  haftarah from Isaiah in the Book of Isaiah 40:1-26 that speaks of
  "comforting" the Jewish people for their suffering. It the first of
@@ -1295,7 +1295,7 @@ with the verse
  <about href="https://www.ou.org/holidays/four-shabbatot/parshat-parah/">
  Shabbat of the Red Heifer
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Parah">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Parah">
  Shabbat Parah ("Sabbath [of the] red heifer" שבת פרה) takes place on
  the Shabbat before Shabbat HaChodesh, in preparation for Passover. Numbers
  19:1-22 describes the parah adumah ("red heifer") in the Jewish
@@ -1314,7 +1314,7 @@ with the verse
  <about href="https://www.ou.org/holidays/four-shabbatot/shabbat-shekalim/">
  Shabbat before Rosh Chodesh Adar
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shekalim">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shekalim">
  Shabbat Shekalim ("Sabbath [of] shekels" שבת שקלים) read in
  preparation for Purim, requests each adult male Jew contribute half
  of a Biblical shekel for the upkeep of the Tent of Meeting. The Torah
@@ -1348,7 +1348,7 @@ with the verse
  <about href="http://www.ou.org/chagim/roshchodesh/tishrei/aseretyemai.htm#shabbat">
  Shabbat that falls between Rosh Hashanah and Yom Kippur (Shabbat of Returning)
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah">
  Shabbat Shuvah ("Sabbath [of] Return" שבת שובה) refers to the Shabbat
  that occurs during the Ten Days of Repentance between Rosh Hashanah
  and Yom Kippur. Only one Shabbat can occur between these dates. This
@@ -1365,7 +1365,7 @@ with the verse
  <about href="https://www.ou.org/holidays/four-shabbatot/parshat-zachor/">
  Shabbat before Purim
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Zachor">
+ <wikipedia href="https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Zachor">
  Shabbat Zachor ("Sabbath [of] remembrance שבת זכור) is the Shabbat
  immediately preceding Purim. Deuteronomy 25:17-19, describing the
  attack by Amalek, is recounted. There is a tradition from the Talmud
@@ -1490,18 +1490,18 @@ with the verse
 
 <!-- Other Hebcal holidays -->
 <festival id="Pesach Sheni" hebrew="פֶּסַח שני" yomtov="0" type="minor">
- <about href="http://en.wikipedia.org/wiki/Pesach_Sheni">
+ <about href="https://en.wikipedia.org/wiki/Pesach_Sheni">
  Second Passover, one month after Passover
  </about>
 </festival>
-<festival id="Lag B'Omer" hebrew="ל״ג בְּעוֹמֶר" yomtov="0" type="minor">
- <about href="http://en.wikipedia.org/wiki/Lag_Ba%27omer">
+<festival id="Lag BaOmer" hebrew="ל״ג בְּעוֹמֶר" yomtov="0" type="minor">
+ <about href="https://en.wikipedia.org/wiki/Lag_BaOmer">
  33rd day of counting the Omer
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Lag_BaOmer" type="minor">
- Lag BaOmer (Hebrew: ל״ג בעומר), also known as Lag LaOmer amongst
- Sephardi Jews, is a Jewish holiday celebrated on the thirty-third day
- of the Counting of the Omer, which occurs on the 18th day of
+ <wikipedia href="https://en.wikipedia.org/wiki/Lag_BaOmer" type="minor">
+ Lag BaOmer (Hebrew: ל״ג בעומר), also Lag B'Omer, is a Jewish holiday
+ celebrated on the 33rd day of the Counting of the Omer, which
+ occurs on the 18th day of the Hebrew month of
  Iyar. One reason given for the holiday is as the day of passing of
  Rabbi Shimon bar Yochai. Modern Jewish tradition links the holiday to
  the Bar Kokhba Revolt against the Roman Empire (132-135 CE). In
@@ -1513,7 +1513,7 @@ with the verse
  <about href="http://www.jewfaq.org/holiday8.htm">
  New Year for Trees
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Tu_Bishvat">
+ <wikipedia href="https://en.wikipedia.org/wiki/Tu_BiShvat">
  Tu BiShvat or Tu B'Shevat or Tu B'Shvat (Hebrew: ט״ו בשבט‎) is a minor Jewish
  holiday, occurring on the 15th day of the Hebrew month of Shevat.
  It is also called "The New Year of the Trees" or
@@ -1530,7 +1530,7 @@ with the verse
 
 <!-- New Holidays -->
 <festival id="Yom HaAtzma'ut" hebrew="יוֹם הָעַצְמָאוּת" yomtov="0" type="modern">
- <about href="http://en.wikipedia.org/wiki/Yom_Ha%27atzmaut">
+ <about href="https://en.wikipedia.org/wiki/Yom_Ha%27atzmaut">
  Israeli Independence Day. Commemorates the declaration of independence
  of Israel in 1948. Note that Hebcal displays modern holidays like
  Yom HaAtzma'ut according to the Israeli schedule. Although Yom
@@ -1543,10 +1543,10 @@ with the verse
  </books>
 </festival>
 <festival id="Yom HaShoah" hebrew="יוֹם הַשּׁוֹאָה" yomtov="0" type="modern">
- <about href="http://en.wikipedia.org/wiki/Yom_HaShoah">
+ <about href="https://en.wikipedia.org/wiki/Yom_HaShoah">
  Holocaust Memorial Day
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Yom_HaShoah">
+ <wikipedia href="https://en.wikipedia.org/wiki/Yom_HaShoah">
  Yom HaZikaron laShoah ve-laG'vurah (יום הזיכרון לשואה ולגבורה;
  "Holocaust and Heroism Remembrance Day"), known colloquially in
  Israel and abroad as Yom HaShoah (יום השואה) and in English as
@@ -1566,7 +1566,7 @@ with the verse
  </books>
 </festival>
 <festival id="Yom HaZikaron" hebrew="יוֹם הַזִּכָּרוֹן" yomtov="0" type="modern">
- <about href="http://en.wikipedia.org/wiki/Yom_Hazikaron">
+ <about href="https://en.wikipedia.org/wiki/Yom_Hazikaron">
  Israeli Memorial Day. Note that Hebcal displays modern holidays like
  Yom HaZikaron according to the Israeli schedule. Although Yom Hazikaron
  is normally observed on the 4th of Iyyar, it may be moved
@@ -1575,10 +1575,10 @@ with the verse
  </about>
 </festival>
 <festival id="Yom Yerushalayim" hebrew="יוֹם יְרוּשָׁלַיִם" yomtov="0" type="modern">
- <about href="http://en.wikipedia.org/wiki/Jerusalem_Day">
+ <about href="https://en.wikipedia.org/wiki/Jerusalem_Day">
  Jerusalem Day.  Commemorates the re-unification of Jerusalem in 1967
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Jerusalem_Day">
+ <wikipedia href="https://en.wikipedia.org/wiki/Jerusalem_Day">
  Jerusalem Day (Hebrew: יום ירושלים, Yom Yerushalayim) is an Israeli
  national holiday commemorating the reunification of Jerusalem and the
  establishment of Israeli control over the Old City in June 1967. The
@@ -1591,7 +1591,7 @@ with the verse
  <about href="http://www.jewfaq.org/holidayb.htm">
  7 weeks from the second night of Pesach to the day before Shavuot
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Counting_of_the_Omer">
+ <wikipedia href="https://en.wikipedia.org/wiki/Counting_of_the_Omer">
  Counting of the Omer (or Sefirat Ha'omer, Hebrew: ספירת העומר) is a
  verbal counting of each of the forty-nine days between the Jewish
  holidays of Passover and Shavuot. This mitzvah derives from the Torah
@@ -1625,7 +1625,7 @@ with the verse
  <about href="http://www.jewfaq.org/elul.htm#Selichot">
  Prayers for forgiveness in preparation for the High Holidays
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Selichot#Selichot_of_the_High_Holidays">
+ <wikipedia href="https://en.wikipedia.org/wiki/Selichot#Selichot_of_the_High_Holidays">
    Selichot or slichot (Hebrew: סליחות) are Jewish penitential poems and
    prayers, especially those said in the period leading up to the High
    Holidays, and on Fast Days.
@@ -1636,10 +1636,10 @@ with the verse
  </wikipedia>
 </festival>
 <festival id="Sigd" hebrew="סיגד" yomtov="0" type="modern">
- <about href="http://en.wikipedia.org/wiki/Sigd">
+ <about href="https://en.wikipedia.org/wiki/Sigd">
  Ethiopian Jewish holiday occurring 50 days after Yom Kippur
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Sigd">
+ <wikipedia href="https://en.wikipedia.org/wiki/Sigd">
  Sigd is an Amharic word meaning "prostration" or "worship" and is the commonly used name
  for a holiday celebrated by the Ethiopian Jewish community on the 29th of the Hebrew
  month of Cheshvan. This date is exactly 50 days after Yom Kippur, usually falling out in
@@ -1648,10 +1648,10 @@ with the verse
  </wikipedia>
 </festival>
 <festival id="Tu B'Av" hebrew="טוּ בְּאָב" yomtov="0" type="minor">
- <about href="http://en.wikipedia.org/wiki/Tu_B%27Av">
+ <about href="https://en.wikipedia.org/wiki/Tu_B%27Av">
  Jewish holiday of love, similar to Valentine's Day
  </about>
- <wikipedia href="http://en.wikipedia.org/wiki/Tu_B%27Av">
+ <wikipedia href="https://en.wikipedia.org/wiki/Tu_B%27Av">
  Tu B'Av (Hebrew: ט״ו באב, the fifteenth of the month Av) is a minor Jewish holiday.
  In modern-day Israel, it is celebrated as a holiday of love (Hebrew: חג האהבה‎,
  Hag HaAhava), similar to Valentine's Day. It has been said to be a "great day for

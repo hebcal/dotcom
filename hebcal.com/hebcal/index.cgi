@@ -1043,7 +1043,7 @@ EOHTML
          -id => "min",
          -checked => 1,
          -label => "Minor Holidays"),
-    qq{\n<small class="text-muted">(Tu BiShvat, Lag B'Omer, ...)</small></label></div>\n},
+    qq{\n<small class="text-muted">(Tu BiShvat, Lag BaOmer, ...)</small></label></div>\n},
     qq{<div class="checkbox"><label>},
     $q->checkbox(-name => "nx",
                  -id => "nx",

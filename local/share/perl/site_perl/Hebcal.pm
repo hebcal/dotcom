@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2015 Michael J. Radwin.
+# Copyright (c) 2016 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -418,6 +418,7 @@ sub parse_date_descr($$)
 	$subj =~ s/Channukah/Chanukah/; # make spelling consistent
 	$subj =~ s/Purim Koson/Purim Koton/;
 	$subj =~ s/Tu B\'Shvat/Tu BiShvat/;
+        $subj =~ s/Lag B'Omer/Lag BaOmer/;
     }
 
     my($yomtov) = 0;
