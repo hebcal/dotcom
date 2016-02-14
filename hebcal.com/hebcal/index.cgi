@@ -1792,7 +1792,10 @@ EOHTML
             my $memo = $evt->{memo};
             my $atitle = $memo ? qq{ title="$memo"} : "";
             my $aclass = "";
-            if ($href =~ /^http/ && $href !~ m,^http://www\.hebcal\.com,) {
+            if (index($href, "http://www.hebcal.com/") == 0) {
+                $href = substr($href, 21);
+            }
+            if ($href =~ /^http/) {
               $aclass = qq{ class="outbound"};
             }
             $a_start = qq{<a$atitle$aclass href="$href">};

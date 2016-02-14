@@ -292,20 +292,6 @@ my %DAFYOMI = (
    "Niddah" => 0,
 );
 
-# @events is an array of arrays.  these are the indices into each
-# event structure:
-
-our $EVT_IDX_SUBJ = 0;		# title of event
-our $EVT_IDX_UNTIMED = 1;		# 0 if all-day, non-zero if timed
-our $EVT_IDX_MIN = 2;		# minutes, [0 .. 59]
-our $EVT_IDX_HOUR = 3;		# hour of day, [0 .. 23]
-our $EVT_IDX_MDAY = 4;		# day of month, [1 .. 31]
-our $EVT_IDX_MON = 5;		# month of year, [0 .. 11]
-our $EVT_IDX_YEAR = 6;		# year [1 .. 9999]
-our $EVT_IDX_DUR = 7;		# duration in minutes
-our $EVT_IDX_MEMO = 8;		# memo text
-our $EVT_IDX_YOMTOV = 9;		# is the holiday Yom Tov?
-
 my %num2heb =
 (
  1	=> "\x{5D0}",
@@ -445,14 +431,8 @@ sub parse_date_descr($$)
 
 sub format_evt_time {
     my($evt,$suffix) = @_;
-    my($hour,$min);
-    if (ref($evt) eq 'HASH') {
-        $hour = $evt->{hour};
-        $min = $evt->{min};
-    } else {
-        $hour = $evt->[$EVT_IDX_HOUR];
-        $min = $evt->[$EVT_IDX_MIN];
-    }
+    my $hour = $evt->{hour};
+    my $min = $evt->{min};
     format_hebcal_event_time($hour,$min,$suffix);
 }
 
@@ -612,104 +592,6 @@ sub invoke_hebcal_v2 {
     @events;
 }
 
-sub invoke_hebcal
-{
-    my($cmd,$memo,$want_sephardic,$month_filter,
-        $no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays) = @_;
-    local($_);
-    local(*HEBCAL);
-
-    # if candle-lighting times requested, force 24-hour clock for proper AM/PM
-    if (index($cmd, " -c") != -1) {
-        $cmd =~ s/ -c/ -E -c/;
-    }
-
-    my $hccache;
-    my $hccache_file = get_invoke_hebcal_cache($cmd);
-    my $hccache_tmpfile = $hccache_file ? "$hccache_file.$$" : undef;
-
-    my @events;
-    if (! defined $hccache_file) {
-	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
-    } elsif (open(HEBCAL,"<$hccache_file")) {
-	# will read data from cachefile, not pipe
-    } else {
-	open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
-	$hccache = open(HCCACHE,">$hccache_tmpfile");
-    }
-
-    my $prev = '';
-    while (<HEBCAL>)
-    {
-	print HCCACHE $_ if $hccache;
-	next if $_ eq $prev;
-	$prev = $_;
-	chop;
-
-	my($date,$descr) = split(/ /, $_, 2);
-
-	# exec hebcal with entire years, but only return events matching
-	# the month requested
-	if ($month_filter)
-	{
-	    my($mon,$mday,$year) = split(/\//, $date);
-	    next if $month_filter != $mon;
-	}
-
-	my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
-	    parse_date_descr($date,$descr);
-
-        next if filter_event($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays);
-
-        # Suppress Havdalah when it's on same day as Candle lighting
-        next if ($subj =~ /^Havdalah/ && $#events >= 0 &&
-            $events[$#events]->[$EVT_IDX_MDAY] == $mday &&
-            $events[$#events]->[$EVT_IDX_SUBJ] =~ /^Candle lighting/);
-
-	next if $subj eq 'Havdalah (0 min)';
-
-	my $memo2;
-	if ($untimed) {
-	    $memo2 = (get_holiday_anchor($subj,$want_sephardic,undef))[2];
-	}
-
-        # merge related candle-lighting times into previously seen Chanukah event object
-        if ($#events >= 0 &&
-                $events[$#events]->[$EVT_IDX_MON] == $mon &&
-                $events[$#events]->[$EVT_IDX_MDAY] == $mday &&
-                $events[$#events]->[$EVT_IDX_SUBJ] =~ /^Chanukah: \d/) {
-            next if $subj =~ /^Havdalah/;
-            if ($subj eq "Candle lighting") {
-                $events[$#events]->[$EVT_IDX_UNTIMED] = 0;
-                $events[$#events]->[$EVT_IDX_HOUR] = int($hour);
-                $events[$#events]->[$EVT_IDX_MIN] = int($min);
-                my $dow = get_dow($year,$mon+1,$mday);
-                next unless $dow == 5; # keep both Chanukah and Friday Candle lighting
-            }
-        }
-
-	push(@events, [
-                $subj, $untimed,
-                int($min), int($hour), int($mday), int($mon), int($year),
-                $dur, ($untimed ? $memo2 : $memo), $yomtov
-                ]);
-    }
-    close(HEBCAL);
-
-    if ($hccache) {
-        close(HCCACHE);
-        my $fsize = (stat($hccache_tmpfile))[7];
-        if ($fsize) {
-            rename($hccache_tmpfile, $hccache_file);
-        } else {
-            warn "Ignoring empty cachefile $hccache_tmpfile";
-            unlink($hccache_tmpfile);
-        }
-    }
-
-    @events;
-}
-
 sub get_today_yomtov {
     my @events = invoke_hebcal_v2($HEBCAL_BIN, "", 0);
     my($year,$month,$day) = Date::Calc::Today();
@@ -723,15 +605,7 @@ sub get_today_yomtov {
 
 sub event_ymd($) {
   my($evt) = @_;
-  if (ref($evt) eq 'HASH') {
-    return ($evt->{year}, $evt->{mon} + 1, $evt->{mday});
-  } else {
-    return (
-        $evt->[$EVT_IDX_YEAR],
-        $evt->[$EVT_IDX_MON] + 1,
-        $evt->[$EVT_IDX_MDAY]
-    );
-  }
+  return ($evt->{year}, $evt->{mon} + 1, $evt->{mday});
 }
 
 sub event_dates_equal($$) {
@@ -822,20 +696,11 @@ sub event_to_dict {
 
     my($year,$mon,$mday) = event_ymd($evt);
 
-    my($subj,$min,$hour24,$untimed,$yomtov);
-    if (ref($evt) eq 'HASH') {
-        $subj = $evt->{subj};
-        $min = $evt->{min};
-        $hour24 = $evt->{hour};
-        $untimed = $evt->{untimed};
-        $yomtov = $evt->{yomtov};
-    } else {
-        $subj = $evt->[$EVT_IDX_SUBJ];
-        $min = $evt->[$EVT_IDX_MIN];
-        $hour24 = $evt->[$EVT_IDX_HOUR];
-        $untimed = $evt->[$EVT_IDX_UNTIMED];
-        $yomtov = $evt->[$EVT_IDX_YOMTOV];
-    }
+    my $subj = $evt->{subj};
+    my $min = $evt->{min};
+    my $hour24 = $evt->{hour};
+    my $untimed = $evt->{untimed};
+    my $yomtov = $evt->{yomtov};
 
     if ($untimed) {
         $min = $hour24 = 0;
@@ -866,10 +731,9 @@ sub event_to_dict {
     $anchor =~ s/_$//g;
     $item{"about"} = $url . "#" . $anchor;
     $item{"subj"} = $subj;
-    $item{"class"} = event_category($subj);
+    $item{"class"} = $evt->{category};
 
-    my($href,$hebrew,$memo) = get_holiday_anchor($subj,0,$q);
-    $item{"hebrew"} = $hebrew if $hebrew;
+    $item{hebrew} = $evt->{hebrew} if $evt->{hebrew};
 
     if ($item{"class"} eq "candles" || $item{"class"} eq "havdalah")
     {
@@ -877,11 +741,11 @@ sub event_to_dict {
     }
     else
     {
-        $item{"link"} = $href if $href;
-        $item{"memo"} = $memo if $memo;
+        $item{link} = $evt->{href} if $evt->{href};
+        $item{memo} = $evt->{memo} if $evt->{memo};
     }
 
-    if (defined $dbh && $item{"class"} eq "parashat") {
+    if (defined $dbh && $evt->{category} eq "parashat") {
         my $leyning0 =
             torah_calendar_memo_inner($dbh, $sth, $year, $mon, $mday);
         if ($leyning0 && $leyning0->{'T'}) {
