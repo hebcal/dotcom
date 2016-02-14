@@ -445,9 +445,15 @@ sub parse_date_descr($$)
 
 sub format_evt_time {
     my($evt,$suffix) = @_;
-    format_hebcal_event_time($evt->[$EVT_IDX_HOUR],
-			     $evt->[$EVT_IDX_MIN],
-			     $suffix);
+    my($hour,$min);
+    if (ref($evt) eq 'HASH') {
+        $hour = $evt->{hour};
+        $min = $evt->{min};
+    } else {
+        $hour = $evt->[$EVT_IDX_HOUR];
+        $min = $evt->[$EVT_IDX_MIN];
+    }
+    format_hebcal_event_time($hour,$min,$suffix);
 }
 
 
@@ -502,6 +508,109 @@ sub filter_event {
     return 0;
 }
 
+sub invoke_hebcal_v2 {
+    my($cmd,$memo,$want_sephardic,$month_filter,
+        $no_minor_fasts,$no_special_shabbat,
+        $no_minor_holidays,$no_modern_holidays) = @_;
+    local($_);
+    local(*HEBCAL);
+
+    # if candle-lighting times requested, force 24-hour clock for proper AM/PM
+    if (index($cmd, " -c") != -1) {
+        $cmd =~ s/ -c/ -E -c/;
+    }
+
+    my $hccache;
+    my $hccache_file = get_invoke_hebcal_cache($cmd);
+    my $hccache_tmpfile = $hccache_file ? "$hccache_file.$$" : undef;
+
+    my @events;
+    if (! defined $hccache_file) {
+        open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
+    } elsif (open(HEBCAL,"<$hccache_file")) {
+        # will read data from cachefile, not pipe
+    } else {
+        open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
+        $hccache = open(HCCACHE,">$hccache_tmpfile");
+    }
+
+    my $prev = '';
+    while (<HEBCAL>) {
+        print HCCACHE $_ if $hccache;
+        next if $_ eq $prev;
+        $prev = $_;
+        chop;
+
+        my($date,$descr) = split(/ /, $_, 2);
+
+        # exec hebcal with entire years, but only return events matching
+        # the month requested
+        if ($month_filter) {
+            my($mon,$mday,$year) = split(/\//, $date);
+            next if $month_filter != $mon;
+        }
+
+        my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
+            parse_date_descr($date,$descr);
+
+        next if filter_event($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays);
+
+        # Suppress Havdalah when it's on same day as Candle lighting
+        next if ($subj =~ /^Havdalah/ && $#events >= 0 &&
+            $events[$#events]->{mday} == $mday &&
+            $events[$#events]->{subj} =~ /^Candle lighting/);
+
+        next if $subj eq 'Havdalah (0 min)';
+
+        # merge related candle-lighting times into previously seen Chanukah event object
+        if ($#events >= 0 &&
+                $events[$#events]->{mon} == $mon &&
+                $events[$#events]->{mday} == $mday &&
+                $events[$#events]->{subj} =~ /^Chanukah: \d/) {
+            next if $subj =~ /^Havdalah/;
+            if ($subj eq "Candle lighting") {
+                $events[$#events]->{untimed} = 0;
+                $events[$#events]->{hour} = int($hour);
+                $events[$#events]->{min} = int($min);
+                my $dow = get_dow($year,$mon+1,$mday);
+                next unless $dow == 5; # keep both Chanukah and Friday Candle lighting
+            }
+        }
+
+        my($href,$hebrew,$memo2) = get_holiday_anchor($subj,$want_sephardic,1);
+        my $category = event_category($subj);
+        my $evt = {
+            subj => $subj,          # title of event
+            untimed => $untimed,    # 0 if all-day, non-zero if timed
+            min => int($min),       # minutes, [0 .. 59]
+            hour => int($hour),     # hour of day, [0 .. 23]
+            mday => int($mday),     # day of month, [1 .. 31]
+            mon => int($mon),       # month of year, [0 .. 11]
+            year => int($year),     # year [1 .. 9999]
+            dur => $dur,            # duration in minutes
+            memo => ($untimed ? $memo2 : $memo), # memo text
+            yomtov => $yomtov,      # is the holiday Yom Tov?
+            href => $href,
+            hebrew => $hebrew,
+            category => $category,
+        };
+        push(@events, $evt);
+    }
+    close(HEBCAL);
+
+    if ($hccache) {
+        close(HCCACHE);
+        my $fsize = (stat($hccache_tmpfile))[7];
+        if ($fsize) {
+            rename($hccache_tmpfile, $hccache_file);
+        } else {
+            warn "Ignoring empty cachefile $hccache_tmpfile";
+            unlink($hccache_tmpfile);
+        }
+    }
+
+    @events;
+}
 
 sub invoke_hebcal
 {
@@ -602,11 +711,11 @@ sub invoke_hebcal
 }
 
 sub get_today_yomtov {
-    my @events = invoke_hebcal($HEBCAL_BIN, "", 0);
+    my @events = invoke_hebcal_v2($HEBCAL_BIN, "", 0);
     my($year,$month,$day) = Date::Calc::Today();
     for my $evt (@events) {
-	if (event_date_matches($evt,$year,$month,$day) && $evt->[$EVT_IDX_YOMTOV]) {
-	    return $evt->[$EVT_IDX_SUBJ];
+	if (event_date_matches($evt,$year,$month,$day) && $evt->{yomtov}) {
+	    return $evt->{subj};
 	}
     }
     undef;
@@ -614,10 +723,15 @@ sub get_today_yomtov {
 
 sub event_ymd($) {
   my($evt) = @_;
-  my $year = $evt->[$EVT_IDX_YEAR];
-  my $month = $evt->[$EVT_IDX_MON] + 1;
-  my $day = $evt->[$EVT_IDX_MDAY];
-  ($year,$month,$day);
+  if (ref($evt) eq 'HASH') {
+    return ($evt->{year}, $evt->{mon} + 1, $evt->{mday});
+  } else {
+    return (
+        $evt->[$EVT_IDX_YEAR],
+        $evt->[$EVT_IDX_MON] + 1,
+        $evt->[$EVT_IDX_MDAY]
+    );
+  }
 }
 
 sub event_dates_equal($$) {
@@ -629,9 +743,8 @@ sub event_dates_equal($$) {
 
 sub event_date_matches($$$$) {
   my($evt,$gy,$gm,$gd) = @_;
-  return ($evt->[$EVT_IDX_YEAR] == $gy
-	  && $evt->[$EVT_IDX_MON] + 1 == $gm
-	  && $evt->[$EVT_IDX_MDAY] == $gd);
+  my($year,$month,$day) = event_ymd($evt);
+  return (($year == $gy) && ($month == $gm) && ($day == $gd));
 }
 
 sub date_format_sql($$$) {
@@ -647,11 +760,12 @@ sub date_format_csv($$$) {
 sub event_to_time
 {
     my($evt) = @_;
+    my($year,$month,$day) = event_ymd($evt);
     # holiday is at 12:00:01 am
     return Time::Local::timelocal(1,0,0,
-				  $evt->[$EVT_IDX_MDAY],
-				  $evt->[$EVT_IDX_MON],
-				  $evt->[$EVT_IDX_YEAR] - 1900,
+                  $day,
+                  $month - 1,
+                  $year - 1900,
 				  "","","");
 }
 
@@ -706,12 +820,24 @@ sub event_category {
 sub event_to_dict {
     my($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$dbh,$sth) = @_;
 
-    my $subj = $evt->[$EVT_IDX_SUBJ];
     my($year,$mon,$mday) = event_ymd($evt);
 
-    my $min = $evt->[$EVT_IDX_MIN];
-    my $hour24 = $evt->[$EVT_IDX_HOUR];
-    if ($evt->[$EVT_IDX_UNTIMED]) {
+    my($subj,$min,$hour24,$untimed,$yomtov);
+    if (ref($evt) eq 'HASH') {
+        $subj = $evt->{subj};
+        $min = $evt->{min};
+        $hour24 = $evt->{hour};
+        $untimed = $evt->{untimed};
+        $yomtov = $evt->{yomtov};
+    } else {
+        $subj = $evt->[$EVT_IDX_SUBJ];
+        $min = $evt->[$EVT_IDX_MIN];
+        $hour24 = $evt->[$EVT_IDX_HOUR];
+        $untimed = $evt->[$EVT_IDX_UNTIMED];
+        $yomtov = $evt->[$EVT_IDX_YOMTOV];
+    }
+
+    if ($untimed) {
         $min = $hour24 = 0;
     }
 
@@ -721,12 +847,12 @@ sub event_to_dict {
         "%A, %d %b %Y" : "%A, %d %B %Y";
     $item{"date"} = strftime($format, localtime($time));
 
-    if ($evt->[$EVT_IDX_YOMTOV]) {
+    if ($yomtov) {
         $item{"yomtov"} = 1;
     }
 
     $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
-    if (!$evt->[$EVT_IDX_UNTIMED]) {
+    if (!$untimed) {
         my $tzOffset2 = $ignore_tz ? "" :
             event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
         $tzOffset2 =~ s/(\d\d)$/:$1/;
@@ -847,7 +973,7 @@ sub items_to_json {
     my $out = { title => $city_descr,
 		link => "http://" . $q->virtual_host() . self_url($q, {"cfg" => undef}),
 		date => strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00",
-		items => json_transform_items($items),
+		items => json_transform_items($items,$q),
 	      };
 
     if (defined $latitude) {
@@ -865,16 +991,23 @@ sub items_to_json {
 }
 
 sub json_transform_items {
-    my($items) = @_;
+    my($items,$q) = @_;
+    my $lang = $q->param("lg") || "s";
     my @out;
     foreach my $item (@{$items}) {
 	my $subj = $item->{"subj"};
+        my $out = {};
+        if ($lang eq "h" && $item->{hebrew}) {
+            $out->{title_orig} = $subj;
+            $subj = $item->{hebrew};
+#        } elsif (($lang eq "ru" || $lang eq "po")
+#                  && defined $HebcalConst::TRANSLATIONS->{$lang}->{$subj}) {
+#            $subj = $HebcalConst::TRANSLATIONS->{$lang}->{$subj};
+        }
 	$subj .= ": " . $item->{"time"} if defined $item->{"time"};
-	my $out = {
-		   title => $subj,
-		   category => $item->{"class"},
-		   date => $item->{"dc:date"},
-		  };
+        $out->{title} = $subj;
+        $out->{category} = $item->{class};
+        $out->{date} = $item->{"dc:date"};
 	$out->{link} = $item->{"link"}
 	    if $item->{"class"} =~ /^(parashat|holiday|dafyomi)$/;
 	$out->{hebrew} = $item->{"hebrew"}

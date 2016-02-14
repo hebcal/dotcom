@@ -240,10 +240,10 @@ sub get_events {
     my $loc = (defined $city_descr && $city_descr ne '') ?
         "in $city_descr" : '';
 
-    my @events = Hebcal::invoke_hebcal("$cmd $sat_year", $loc, 0);
+    my @events = Hebcal::invoke_hebcal_v2("$cmd $sat_year", $loc, 0);
     if ($sat_year != $fri_year) {
         # Happens when Friday is Dec 31st and Sat is Jan 1st
-        my @ev2 = Hebcal::invoke_hebcal("$cmd 12 $fri_year", $loc, 0);
+        my @ev2 = Hebcal::invoke_hebcal_v2("$cmd 12 $fri_year", $loc, 0);
         @events = (@ev2, @events);
     }
 
@@ -369,16 +369,16 @@ sub evt_pubdate {
     my($evt) = @_;
 
     my $sec = 0;
-    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-    my $hour24 = $evt->[$Hebcal::EVT_IDX_HOUR];
-    if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
+    my $min = $evt->{min};
+    my $hour24 = $evt->{hour};
+    if ($evt->{untimed}) {
         $min = $hour24 = 0;
         $sec = 1;
     }
     my $time = Time::Local::timelocal($sec,$min,$hour24,
-        $evt->[$Hebcal::EVT_IDX_MDAY],
-        $evt->[$Hebcal::EVT_IDX_MON],
-        $evt->[$Hebcal::EVT_IDX_YEAR] - 1900,
+        $evt->{mday},
+        $evt->{mon},
+        $evt->{year} - 1900,
         "","","");
     return strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime($time));
 }

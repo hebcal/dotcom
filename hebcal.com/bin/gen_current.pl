@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -160,7 +160,7 @@ sub rss_parasha {
     }
 
     DEBUG("Invoking $cmd");
-    my @events = Hebcal::invoke_hebcal($cmd, "", 0, $smonth);
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", 0, $smonth);
     my $parasha = find_parasha_hashavuah(\@events, $sday);
     if ($parasha) {
 	DEBUG("This week's Torah Portion is $parasha");
@@ -176,9 +176,9 @@ sub rss_parasha {
 sub find_parasha_hashavuah {
     my($events,$sday) = @_;
     foreach my $evt (@{$events}) {
-	if ($evt->[$Hebcal::EVT_IDX_MDAY] == $sday) {
-	    return $evt->[$Hebcal::EVT_IDX_SUBJ];
-	}
+        if ($evt->{mday} == $sday) {
+            return $evt->{subj};
+        }
     }
     return undef;
 }

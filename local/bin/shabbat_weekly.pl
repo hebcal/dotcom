@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -273,10 +273,10 @@ sub mail_user
 
     DEBUG("to=$to   cmd=$cmd");
 
-    my @events = Hebcal::invoke_hebcal("$cmd $sat_year","",undef);
+    my @events = Hebcal::invoke_hebcal_v2("$cmd $sat_year","",undef);
     if ($sat_year != $year) {
         # Happens when Friday is Dec 31st and Sat is Jan 1st
-        my @ev2 = Hebcal::invoke_hebcal("$cmd $year","",undef);
+        my @ev2 = Hebcal::invoke_hebcal_v2("$cmd $year","",undef);
         @events = (@ev2, @events);
     }
 
@@ -410,7 +410,7 @@ sub gen_subject_and_body {
         next if $time < $midnight;
         last if $time > $endofweek;
 
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->{subj};
         my $strtime = strftime("%A, %B %d", localtime($time));
 
         if ($subj eq "Candle lighting" || $subj =~ /Havdalah/)
@@ -434,8 +434,7 @@ sub gen_subject_and_body {
         elsif ($subj =~ /^(Parshas|Parashat)\s+(.+)$/)
         {
             $sedra = $2;
-            my $url = "http://www.hebcal.com"
-                . Hebcal::get_holiday_anchor($subj,undef,undef);
+            my $url = $evt->{href};
             $body .= "This week's Torah portion is $subj\n";
             $body .= "  $url\n";
             $html_body .= qq{<div>This week's Torah portion is <a href="$url?$UTM_PARAM">$subj</a>.</div>\n<div>&nbsp;</div>\n};
@@ -453,11 +452,10 @@ sub gen_subject_and_body {
             }
 
             $body .= "$subj occurs on $strtime\n";
-            my $hanchor = Hebcal::get_holiday_anchor($subj,undef,undef);
-            my $url = "http://www.hebcal.com" . $hanchor;
-            if ($hanchor && !$holiday_seen{$hanchor}) {
+            my $url = $evt->{href};
+            if ($url && !$holiday_seen{$url}) {
                 $body .= "  $url\n";
-                $holiday_seen{$hanchor} = 1;
+                $holiday_seen{$url} = 1;
             }
             $html_body .= qq{<div><a href="$url?$UTM_PARAM">$subj</a> occurs on $strtime.</div>\n<div>&nbsp;</div>\n};
         }

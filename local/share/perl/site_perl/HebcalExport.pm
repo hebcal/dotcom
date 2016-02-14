@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 2015 Michael J. Radwin.
+# Copyright (c) 2016 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -242,7 +242,7 @@ my $OMER_TODO = 0;
 sub ical_write_evt {
     my($q, $evt, $is_icalendar, $dtstamp, $cconfig, $tzid, $dbh, $sth) = @_;
 
-    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my $subj = $evt->{subj};
 
     if ( $OMER_TODO && $subj =~ /^(\d+)\w+ day of the Omer$/ ) {
         my $omer_day = $1;
@@ -272,12 +272,10 @@ sub ical_write_evt {
     my $category = $is_icalendar ? "Holiday" : "HOLIDAY";
     ical_write_line(qq{CATEGORIES:}, $category);
 
-    my ( $href, $hebrew, $dummy_memo ) = Hebcal::get_holiday_anchor( $subj, 0, $q );
-
     $subj =~ s/,/\\,/g;
 
     if ($is_icalendar) {
-        $subj = Hebcal::translate_subject( $q, $subj, $hebrew );
+        $subj = Hebcal::translate_subject( $q, $subj, $evt->{hebrew} );
     }
 
     my $is_dafyomi = 0;
@@ -292,20 +290,21 @@ sub ical_write_evt {
     my $memo = "";
     if ($is_dafyomi) {
         ical_write_line(qq{LOCATION:Daf Yomi});
-    } elsif (   $evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
+    } elsif (   $evt->{untimed} == 0
         && defined $cconfig
         && defined $cconfig->{"city"} )
     {
         ical_write_line(qq{LOCATION:}, $cconfig->{"city"});
     }
-    elsif ( $evt->[$Hebcal::EVT_IDX_MEMO] ) {
-        $memo = $evt->[$Hebcal::EVT_IDX_MEMO];
+    elsif ( $evt->{memo} ) {
+        $memo = $evt->{memo};
     }
     elsif ( defined $dbh && $subj =~ /^(Parshas|Parashat)\s+/ ) {
         my ( $year, $mon, $mday ) = Hebcal::event_ymd($evt);
         $memo = Hebcal::torah_calendar_memo( $dbh, $sth, $year, $mon, $mday );
     }
 
+    my $href = $evt->{href};
     if ($href) {
         $href = Hebcal::shorten_anchor($href);
         ical_write_line(qq{URL:}, $href) if $is_icalendar;
@@ -323,14 +322,14 @@ sub ical_write_evt {
     my $date = sprintf( "%04d%02d%02d", $year, $mon, $mday );
     my $end_date = $date;
 
-    if ( $evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ) {
-        my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-        my $min  = $evt->[$Hebcal::EVT_IDX_MIN];
+    if ( $evt->{untimed} == 0 ) {
+        my $hour = $evt->{hour};
+        my $min  = $evt->{min};
 
         $hour += 12 if $hour < 12;
         $date .= sprintf( "T%02d%02d00", $hour, $min );
 
-        $min += $evt->[$Hebcal::EVT_IDX_DUR];
+        $min += $evt->{dur};
         if ( $min >= 60 ) {
             $hour++;
             $min -= 60;
@@ -358,7 +357,7 @@ sub ical_write_evt {
     my $dtstart = "DTSTART";
     my $dtend = "DTEND";
     if ($is_icalendar) {
-        if ( $evt->[$Hebcal::EVT_IDX_UNTIMED] ) {
+        if ( $evt->{untimed} ) {
             $dtstart .= ";VALUE=DATE";
             $dtend .= ";VALUE=DATE";
         }
@@ -371,8 +370,7 @@ sub ical_write_evt {
     ical_write_line($dtend, ":", $end_date);
 
     if ($is_icalendar) {
-        if (   $evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
-            || $evt->[$Hebcal::EVT_IDX_YOMTOV] == 1 )
+        if ( $evt->{untimed} == 0 || $evt->{yomtov} == 1 )
         {
             ical_write_line("TRANSP:OPAQUE");    # show as busy
             ical_write_line("X-MICROSOFT-CDO-BUSYSTATUS:OOF");
@@ -385,11 +383,11 @@ sub ical_write_evt {
         my $date_copy = $date;
         $date_copy =~ s/T\d+$//;
 
-        my $subj_utf8 = encode_utf8( $evt->[$Hebcal::EVT_IDX_SUBJ] );
+        my $subj_utf8 = encode_utf8( $evt->{subj} );
         my $digest    = Digest::MD5::md5_hex($subj_utf8);
         my $uid       = "hebcal-$date_copy-$digest";
 
-        if ( $evt->[$Hebcal::EVT_IDX_UNTIMED] == 0
+        if ( $evt->{untimed} == 0
             && defined $cconfig )
         {
             my $loc;
@@ -429,16 +427,15 @@ sub ical_write_evt {
         ical_write_line(qq{UID:$uid});
 
         my $alarm;
-        if ( $evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^(\d+)\w+ day of the Omer$/ ) {
+        if ( $evt->{subj} =~ /^(\d+)\w+ day of the Omer$/ ) {
             $alarm = "3H";    # 9pm Omer alarm evening before
         }
-        elsif ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Yizkor \(.+\)$/
-            || $evt->[$Hebcal::EVT_IDX_SUBJ]
-            =~ /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/ )
+        elsif ($evt->{subj} =~ /^Yizkor \(.+\)$/
+            || $evt->{subj} =~ /\'s (Hebrew Anniversary|Hebrew Birthday|Yahrzeit)/ )
         {
             $alarm = "12H";    # noon the day before
         }
-        elsif ( $evt->[$Hebcal::EVT_IDX_SUBJ] eq 'Candle lighting' ) {
+        elsif ( $evt->{subj} eq 'Candle lighting' ) {
             $alarm = "10M";    # ten minutes
         }
 
@@ -591,8 +588,8 @@ sub csv_write_contents($$$)
         qq{"Location"$endl};
 
     foreach my $evt (@{$events}) {
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-        my $memo = $evt->[$Hebcal::EVT_IDX_MEMO];
+        my $subj = $evt->{subj};
+        my $memo = $evt->{memo};
 
         my $date;
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
@@ -609,14 +606,14 @@ sub csv_write_contents($$$)
         my($end_date) = '';
         my($all_day) = '"true"';
 
-        if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+        if ($evt->{untimed} == 0)
         {
-            my $hour = $evt->[$Hebcal::EVT_IDX_HOUR];
-            my $min = $evt->[$Hebcal::EVT_IDX_MIN];
+            my $hour = $evt->{hour};
+            my $min = $evt->{min};
 
             $start_time = '"' . Hebcal::format_hebcal_event_time($hour, $min, " PM") . '"';
 
-            $min += $evt->[$Hebcal::EVT_IDX_DUR];
+            $min += $evt->{dur};
 
             if ($min >= 60)
             {
@@ -651,8 +648,7 @@ sub csv_write_contents($$$)
             qq{"$subj",$date,$start_time,$end_date,$end_time,},
             qq{$all_day,"$memo",};
 
-        if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0 ||
-            $evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
+        if ($evt->{untimed} == 0 || $evt->{yomtov} == 1)
         {
             print STDOUT qq{"4"};
         }

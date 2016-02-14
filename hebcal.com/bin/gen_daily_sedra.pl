@@ -64,7 +64,7 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
     unless (-d $dir) {
 	system("/bin/mkdir", "-p", $dir) == 0 or die "mkdir $dir failed";
     }
-    my @events = Hebcal::invoke_hebcal("./hebcal -o -S $syear", "", 0);
+    my @events = Hebcal::invoke_hebcal_v2("./hebcal -o -S $syear", "", 0);
 
     my $outfile = "$dir/$syear.inc";
     open(OUT,">$outfile") || die;
@@ -72,10 +72,8 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
 
     my $prev_isodate = "";
     my @subjects = ();
-    for (my $i = 0; $i < @events; $i++) {
-	my $year = $events[$i]->[$Hebcal::EVT_IDX_YEAR];
-	my $month = $events[$i]->[$Hebcal::EVT_IDX_MON] + 1;
-	my $day = $events[$i]->[$Hebcal::EVT_IDX_MDAY];
+    foreach my $evt (@events) {
+        my($year,$month,$day) = Hebcal::event_ymd($evt);
 	my $isodate = sprintf("%04d%02d%02d", $year, $month, $day);
 
 	if ($prev_isodate ne $isodate) {
@@ -86,7 +84,7 @@ for (my $syear = $start_year; $syear <= $end_year; $syear++) {
 	    @subjects = ();
 	}
 
-	push(@subjects, $events[$i]->[$Hebcal::EVT_IDX_SUBJ]);
+	push(@subjects, $evt->{subj});
     }
 
     write_subjects($prev_isodate, \@subjects);

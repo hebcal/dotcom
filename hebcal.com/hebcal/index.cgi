@@ -347,19 +347,19 @@ sub param_true
 sub fullcalendar_event {
     my($evt) = @_;
 
-    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my $subj = $evt->{subj};
     my($year,$mon,$mday) = Hebcal::event_ymd($evt);
-    my $min = $evt->[$Hebcal::EVT_IDX_MIN];
-    my $hour24 = $evt->[$Hebcal::EVT_IDX_HOUR];
-    my $allDay = $evt->[$Hebcal::EVT_IDX_UNTIMED];
+    my $min = $evt->{min};
+    my $hour24 = $evt->{hour};
+    my $allDay = $evt->{untimed};
 
     my $start = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
     if (!$allDay) {
         $start .= sprintf("T%02d:%02d:00", $hour24, $min);
     }
 
-    my $className = Hebcal::event_category($subj);
-    $className .= " yomtov" if $evt->[$Hebcal::EVT_IDX_YOMTOV];
+    my $className = $evt->{category};
+    $className .= " yomtov" if $evt->{yomtov};
 
     my $out = {
         title => $subj,
@@ -368,10 +368,9 @@ sub fullcalendar_event {
         start => $start,
     };
 
-    my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
-    $out->{"hebrew"} = $hebrew if $hebrew;
-    $out->{"url"} = $href if $href;
-    $out->{"description"} = $memo if $memo;
+    $out->{hebrew} = $evt->{hebrew} if $evt->{hebrew};
+    $out->{url} = $evt->{hebrew} if $evt->{hebrew};
+    $out->{description} = $evt->{memo} if $evt->{memo};
 
     return $out;
 }
@@ -394,7 +393,7 @@ sub fullcalendar_filter_events {
 }
 
 sub fullcalendar_events {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
@@ -419,7 +418,7 @@ sub fullcalendar_events {
 
 sub json_events
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"},0,
         1, param_true("i"));
@@ -441,11 +440,11 @@ sub json_events
 sub javascript_events
 {
     my($v2) = @_;
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $cmd2 = $cmd;
     $cmd2 =~ s/(\d+)$/$1+1/e;
-    my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
+    my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, $g_loc, $g_seph, undef,
                                     $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@events, @ev2);
 
@@ -464,7 +463,7 @@ EOJS
     }
     my $first = 1;
     foreach my $evt (@events) {
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->{subj};
 
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
@@ -488,16 +487,15 @@ EOJS
             }
         }
 
-        my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,$q);
+        $subj = translate_subject($q,$subj,$evt->{hebrew});
 
-        $subj = translate_subject($q,$subj,$hebrew);
-
-        if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0)
+        if ($evt->{untimed} == 0)
         {
             my $time_formatted = Hebcal::format_evt_time($evt, "p");
             $subj = sprintf("<strong>%s</strong> %s", $time_formatted, $subj);
         }
 
+        my $href = $evt->{href};
         if ($v2) {
             print STDOUT "," unless $first;
             $first = 0;
@@ -566,7 +564,7 @@ sub plus4_events {
         {
             my $cmd2 = $cmd;
             $cmd2 =~ s/(\d+)$/$1+$i/e;
-            my @ev2 = Hebcal::invoke_hebcal($cmd2, $g_loc, $g_seph, undef,
+            my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, $g_loc, $g_seph, undef,
                                             $g_nmf, $g_nss, $g_nminor, $g_nmodern);
             push(@{$events}, @ev2);
         }
@@ -582,7 +580,7 @@ sub plus4_events {
 
 sub vcalendar_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
@@ -601,7 +599,7 @@ use constant PDF_COLUMNS => 7;
 my %pdf_font;
 
 sub pdf_display {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = "Jewish Calendar $g_date";
@@ -780,7 +778,7 @@ sub pdf_render_event {
     my($pdf,$text,$evt,$lg) = @_;
 
     my $color = "#000000";
-    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my $subj = $evt->{subj};
     if (($subj =~ /^\d+\w+.+, \d{4,}$/) || ($subj =~ /^\d+\w+ day of the Omer$/)) {
         $color = "#666666";
     } elsif ($subj =~ /^Daf Yomi: (.+)$/) {
@@ -789,14 +787,14 @@ sub pdf_render_event {
     }
     $text->fillcolor($color);
 
-    if ($evt->[$Hebcal::EVT_IDX_UNTIMED] == 0) {
+    if ($evt->{untimed} == 0) {
         my $time_formatted = Hebcal::format_evt_time($evt, "p");
         $text->font($pdf_font{'bold'}, 8);
         $text->text($time_formatted . " ");
     }
 
     if ($lg =~ /[as]/) {
-        if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1) {
+        if ($evt->{yomtov} == 1) {
             $text->font($pdf_font{'bold'}, 8);
             $text->text($subj);
         }
@@ -824,7 +822,7 @@ sub pdf_render_event {
     }
 
     if ( $lg =~ /h/ ) {
-        my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
+        my $hebrew = $evt->{hebrew};
         if ($hebrew) {
             if ( $subj =~ /^Havdalah \((\d+) min\)$/ ) {
                 my $minutes = $1;
@@ -856,7 +854,7 @@ sub dba_display
     eval("use Palm::DBA");
     eval("use HebcalExport");
 
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     HebcalExport::export_http_header($q, $content_type);
@@ -869,7 +867,7 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
@@ -1303,16 +1301,16 @@ sub get_start_and_end {
 
     my $numEntries = scalar(@{$events});
     my $start_month;
-    my $start_year = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
+    my $start_year = $events->[0]->{year};
     my $end_month;
-    my $end_year = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+    my $end_year = $events->[$numEntries - 1]->{year};
 
     if ($q->param("month") eq "x" && $g_year_type eq "G") {
         $start_month = 1;
         $end_month = 12;
     } else {
-        $start_month = $events->[0]->[$Hebcal::EVT_IDX_MON] + 1;
-        $end_month = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_MON] + 1;
+        $start_month = $events->[0]->{mon} + 1;
+        $end_month = $events->[$numEntries - 1]->{mon} + 1;
     }
     return ($start_month,$start_year,$end_month,$end_year);
 }
@@ -1456,7 +1454,7 @@ sub results_page_warnings {
     my($events) = @_;
 
     if (defined $events && defined $events->[0]) {
-        my $greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
+        my $greg_year1 = $events->[0]->{year};
 
         print $HebcalHtml::gregorian_warning
             if ($greg_year1 <= 1752);
@@ -1715,7 +1713,7 @@ EOHTML
 ;
     print $head_divs;
 
-    my @events = Hebcal::invoke_hebcal($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@benchmarks, Benchmark->new);
 
@@ -1778,21 +1776,20 @@ EOHTML
     push(@benchmarks, Benchmark->new);
 
     foreach my $evt (@events) {
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
-        my $category = Hebcal::event_category($subj);
+        my $subj = $evt->{subj};
 
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
-        my($href,$hebrew,$memo) = Hebcal::get_holiday_anchor($subj,0,undef);
-
-        $subj = translate_subject($q,$subj,$hebrew);
+        $subj = translate_subject($q,$subj,$evt->{hebrew});
         $subj = qq{<span class="fc-title">$subj</span>};
 
         my $a_start = "";
         my $a_end = "";
 
+        my $href = $evt->{href};
         if (defined $href && $href ne "")
         {
+            my $memo = $evt->{memo};
             my $atitle = $memo ? qq{ title="$memo"} : "";
             my $aclass = "";
             if ($href =~ /^http/ && $href !~ m,^http://www\.hebcal\.com,) {
@@ -1803,7 +1800,7 @@ EOHTML
         }
 
         my $cal_subj;
-        if ($evt->[$Hebcal::EVT_IDX_UNTIMED]) {
+        if ($evt->{untimed}) {
             $cal_subj = $subj;
         } else {
             my $time_formatted = Hebcal::format_evt_time($evt, "p");
@@ -1818,8 +1815,9 @@ EOHTML
         my $cal_id = sprintf("%04d-%02d", $year, $mon);
         my $cal = $html_cals{$cal_id};
 
+        my $category = $evt->{category};
         my $class = "fc-event $category";
-        if ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 1)
+        if ($evt->{yomtov} == 1)
         {
             $class .= " yomtov";
         }
@@ -1891,7 +1889,7 @@ JSCRIPT_END
 sub html_table_events {
     my($events) = @_;
     my $dict = Hebcal::events_to_dict($events,"json",$q,0,0,$cconfig{"tzid"},1,0);
-    my $items = Hebcal::json_transform_items($dict);
+    my $items = Hebcal::json_transform_items($dict,$q);
     eval("use JSON");
     my $json = JSON->new;
     my $out = $json->encode($items);

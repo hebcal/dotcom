@@ -307,23 +307,24 @@ sub my_invoke_hebcal {
                                  $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}]);
             }
 
-            push(@events2, [
-                     $subj,
-                     1, # EVT_IDX_UNTIMED
-                     0, # EVT_IDX_MIN
-                     0, # EVT_IDX_HOUR
-                     $gregdate->{"dd"},
-                     $gregdate->{"mm"} - 1,
-                     $gregdate->{"yy"},
-                     0, # EVT_IDX_DUR
-                     "", # EVT_IDX_MEMO
-                     0, # EVT_IDX_YOMTOV,
-                 ]);
+            my $evt = {
+                subj => $subj,
+                untimed => 1,
+                min => 0,
+                hour => 0,
+                mday => $gregdate->{"dd"},
+                mon => $gregdate->{"mm"} - 1,
+                year => $gregdate->{"yy"},
+                dur => 0,
+                memo => "",
+                yomtov => 0,
+            };
+            push(@events2, $evt);
         }
 
-        my @events = Hebcal::invoke_hebcal("$cmd $year", "", undef);
+        my @events = Hebcal::invoke_hebcal_v2("$cmd $year", "", undef);
         foreach my $evt (@events) {
-            my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+            my $subj = $evt->{subj};
             my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
             if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
@@ -341,18 +342,19 @@ sub my_invoke_hebcal {
                 $subj2 .= " ($greg2heb{$isodate})"
                     if ($q->param("hebdate") && defined $greg2heb{$isodate});
 
-                push(@events2,
-                     [$subj2,
-                      1, # EVT_IDX_UNTIMED
-                      0, # EVT_IDX_MIN
-                      0, # EVT_IDX_HOUR
-                      $evt->[$Hebcal::EVT_IDX_MDAY],
-                      $evt->[$Hebcal::EVT_IDX_MON],
-                      $evt->[$Hebcal::EVT_IDX_YEAR],
-                      0, # EVT_IDX_DUR
-                      "", # EVT_IDX_MEMO
-                      0, # EVT_IDX_YOMTOV,
-                      ]);
+                my $evt2 = {
+                    subj => $subj2,
+                    untimed => 1,
+                    min => 0,
+                    hour => 0,
+                    mday => $evt->{mday},
+                    mon => $evt->{mon},
+                    year => $evt->{year},
+                    dur => 0,
+                    memo => "",
+                    yomtov => 0,
+                };
+                push(@events2, $evt2);
             }
             elsif ($subj eq "Pesach VIII" || $subj eq "Shavuot II" ||
                    $subj eq "Yom Kippur" || $subj eq "Shmini Atzeret")
@@ -361,9 +363,9 @@ sub my_invoke_hebcal {
                     ($q->param("yizkor") eq "on" ||
                      $q->param("yizkor") eq "1");
 
-                my @evt_copy = @{$evt};
-                $evt_copy[$Hebcal::EVT_IDX_SUBJ] = "Yizkor ($subj)";
-                push(@events2, \@evt_copy);
+                my %evt_copy = map { $_, $evt->{$_} } keys %{$evt};
+                $evt_copy{subj} = "Yizkor ($subj)";
+                push(@events2, \%evt_copy);
             }
         }
     }
@@ -434,9 +436,8 @@ day actually begins at sundown on the previous night.</p>\n};
     }
 
     foreach my $evt (@events) {
-        my $hdate = HebcalGPL::greg2hebrew($evt->[$Hebcal::EVT_IDX_YEAR],
-                                           $evt->[$Hebcal::EVT_IDX_MON] + 1,
-                                           $evt->[$Hebcal::EVT_IDX_MDAY]);
+        my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
+        my $hdate = HebcalGPL::greg2hebrew($gy,$gm,$gd);
         if ($hdate->{"mm"} >= $HebcalGPL::ADAR_I) {
             print qq{<div class="alert alert-info alert-dismissible" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -456,7 +457,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
     my $prev_year = 0;
     foreach my $evt (@events)
     {
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->{subj};
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
         if ($year != $prev_year && $q->param("yizkor"))

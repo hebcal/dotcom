@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -368,7 +368,7 @@ sub table_cell_observed {
     } elsif (begins_at_dawn($f) || $f eq "Leil Selichot") {
 	$s .= format_single_day($gy, $gm, $gd, $show_year);
         $s .= short_day_of_week($gy, $gm, $gd, 0);
-    } elsif ($evt->[$Hebcal::EVT_IDX_YOMTOV] == 0) {
+    } elsif ($evt->{yomtov} == 0) {
 	$s .= format_single_day_html($gy, $gm, $gd, $show_year);
         $s .= short_day_of_week($gy, $gm, $gd, 0);
     } else {
@@ -753,7 +753,7 @@ EOHTML
         }
         @events = sort { Hebcal::event_to_time($a) <=> Hebcal::event_to_time($b) } @events;
         foreach my $evt (@events) {
-            my $f = $evt->[$Hebcal::EVT_IDX_SUBJ];
+            my $f = $evt->{subj};
             my $evt2 = $f eq "Asara B'Tevet" ? $asara_btevet2 : undef;
             table_row_one_year_only($fh,$festivals,$f,$evt,0,$evt2);
         }
@@ -1111,9 +1111,8 @@ EOHTML
 	;
 	my $displayed_upcoming = 0;
 	foreach my $evt (@{$observed}) {
-	    my $hebdate = HebcalGPL::greg2hebrew($evt->[$Hebcal::EVT_IDX_YEAR],
-						 $evt->[$Hebcal::EVT_IDX_MON] + 1,
-						 $evt->[$Hebcal::EVT_IDX_MDAY]);
+            my($year,$month,$day) = Hebcal::event_ymd($evt);
+            my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
 	    my $greg2heb = Hebcal::format_hebrew_date($hebdate);
 	    my($gy,$gm,$gd,$dow) = day_event_observed($f,$evt);
 	    my $style = "";
@@ -1324,14 +1323,14 @@ sub holidays_observed {
 	my $cmd = "./hebcal";
 	$cmd .= " -i" if $opts{"i"};
 	$cmd .= " -H $yr";
-	my @events = Hebcal::invoke_hebcal($cmd, "", 0);
+        my @events = Hebcal::invoke_hebcal_v2($cmd, "", 0);
         $EVENTS_BY_HEBYEAR[$i] = build_event_begin_hash(\@events, 0);
 
 	my $yr2 = $FIRST_GREG_YR + $i;
 	my $cmd2 = "./hebcal";
 	$cmd2 .= " -i" if $opts{"i"};
 	$cmd2 .= " $yr2";
-	my @events2 = Hebcal::invoke_hebcal($cmd2, "", 0);
+        my @events2 = Hebcal::invoke_hebcal_v2($cmd2, "", 0);
         $EVENTS_BY_GREGYEAR[$i] = build_event_begin_hash(\@events2, 1);
     }
 }
@@ -1341,7 +1340,7 @@ sub filter_events {
     my $dest = [];
     my %seen;
     foreach my $evt (@{$events}) {
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->{subj};
         next if $subj =~ /^Erev /;
 
         # Since Chanukah doesn't have an Erev, skip a day
@@ -1354,7 +1353,7 @@ sub filter_events {
         my $subj_copy = Hebcal::get_holiday_basename($subj);
 
         next if defined $seen{$subj_copy};
-        $evt->[$Hebcal::EVT_IDX_SUBJ] = $subj_copy;
+        $evt->{subj} = $subj_copy;
         push(@{$dest}, $evt);
         $seen{$subj_copy} = 1 unless $subj_copy eq "Asara B'Tevet";
     }
@@ -1366,7 +1365,7 @@ sub build_event_begin_hash {
     my $filtered = filter_events($events);
     my $dest = {};
     foreach my $evt (@{$filtered}) {
-        my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->{subj};
         if ($multi) {
             $dest->{$subj} = [] unless defined $dest->{$subj};
             push(@{$dest->{$subj}}, $evt);

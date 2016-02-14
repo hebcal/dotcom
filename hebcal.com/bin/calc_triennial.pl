@@ -10,7 +10,7 @@
 #   A Complete Triennial System for Reading the Torah
 #   http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -219,12 +219,12 @@ my $special_end_year = math_max( $hebrew_year + $extra_years - 1,
 foreach my $yr ($special_start_year .. $special_end_year) {
     INFO("Special readings for $yr");
     my $cmd = "$HEBCAL_CMD -H $yr";
-    my @ev = Hebcal::invoke_hebcal($cmd, "", 0);
+    my @ev = Hebcal::invoke_hebcal_v2($cmd, "", 0);
     special_readings(\%special, \@ev);
 
     # hack for Pinchas
     $cmd = "$HEBCAL_CMD -s -h -x -H $yr";
-    my @ev2 = Hebcal::invoke_hebcal($cmd, "", 0);
+    my @ev2 = Hebcal::invoke_hebcal_v2($cmd, "", 0);
     special_pinchas(\%special, \@ev2);
 }
 
@@ -339,14 +339,14 @@ sub get_tri_events
     foreach my $cycle (0 .. 3)
     {
 	my($yr) = $start + $cycle;
-	my @ev = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -h -x -H $yr", "", 0);
+        my @ev = Hebcal::invoke_hebcal_v2("$HEBCAL_CMD -s -h -x -H $yr", "", 0);
 	push(@events, @ev);
     }
 
     my $idx;
     for (my $i = 0; $i < @events; $i++)
     {
-	if ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Parashat Bereshit')
+        if ($events[$i]->{subj} eq 'Parashat Bereshit')
 	{
 	    $idx = $i;
 	    last;
@@ -359,7 +359,7 @@ sub get_tri_events
     my %pattern;
     for (my $i = $idx; $i < @events; $i++)
     {
-	next unless ($events[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/);
+        next unless ($events[$i]->{subj} =~ /^Parashat (.+)/);
 	my $subj = $1;
 
 	if ($subj =~ /^([^-]+)-(.+)$/ &&
@@ -383,7 +383,7 @@ sub cycle_readings {
     my %readings;
     my $yr = 1;
     for ( my $i = $bereshit_idx; $i < @{$events}; $i++ ) {
-        my $subj = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $events->[$i]->{subj};
         if ( $subj eq 'Parashat Bereshit' && $i != $bereshit_idx ) {
             $yr++;
             last if $yr == 4;
@@ -1473,7 +1473,7 @@ sub get_special_aliyah
 sub special_pinchas {
     my($special, $events) = @_;
     foreach my $evt (@{$events}) {
-	next unless "Parashat Pinchas" eq $evt->[$Hebcal::EVT_IDX_SUBJ];
+        next unless "Parashat Pinchas" eq $evt->{subj};
 	my($year,$month,$day) = Hebcal::event_ymd($evt);
 	my $hebdate = HebcalGPL::greg2hebrew($year,$month,$day);
 	# check to see if it's after the 17th of Tammuz
@@ -1497,17 +1497,17 @@ sub special_readings
 
 	my $dow = Date::Calc::Day_of_Week($year, $month, $day);
 
-	my $h = $events->[$i]->[$Hebcal::EVT_IDX_SUBJ];
+        my $h = $events->[$i]->{subj};
 	my $chanukah_day = 0;
 	# hack! for Shabbat Rosh Chodesh
 	if ($dow == 6 && $h =~ /^Rosh Chodesh/
-	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Chanukah: (\d) Candles/
+            && $events->[$i+1]->{subj} =~ /^Chanukah: (\d) Candles/
 	    && $1 > 1
 	    && defined $events->[$i+1]
 	    && Hebcal::event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $h = "Shabbat Rosh Chodesh Chanukah"; # don't set $chanukah_day = 6
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/
-	    && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Shabbat HaChodesh/
+            && $events->[$i+1]->{subj} =~ /^Shabbat HaChodesh/
 	    && defined $events->[$i+1]
 	    && Hebcal::event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $h = "Shabbat HaChodesh (on Rosh Chodesh)";
@@ -1715,7 +1715,7 @@ sub get_festival_xml_for_event {
     my($year,$month,$day) = Hebcal::event_ymd($evt);
     my $dow = Date::Calc::Day_of_Week($year, $month, $day);
 
-    my $h = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my $h = $evt->{subj};
     if ($h =~ /^Rosh Hashana \d{4}/) {
 	$h =~ s/ \d{4}$/ I/;
     } elsif ($dow == 6 && $h =~ /^(Pesach|Sukkot).+\(CH''M\)$/) {
@@ -1746,7 +1746,7 @@ sub get_festival_xml_for_event {
 
     if ($dow == 6 && $h =~ /^Chanukah/) {
 	my $chanukah_haft_id = "Shabbat Chanukah";
-	if ($evt->[$Hebcal::EVT_IDX_SUBJ] eq "Chanukah: 8th Day") {
+        if ($evt->{subj} eq "Chanukah: 8th Day") {
 	    $chanukah_haft_id = "Shabbat Chanukah II";
 	}
 	my $new_fest = { "kriyah" => { "aliyah" => $fest->{"kriyah"}->{"aliyah"},
@@ -1786,9 +1786,9 @@ sub readings_for_past_years {
     foreach my $i (0 .. 18) {
         my $yr = $hebrew_year - 18 + $i;
         INFO("readings_for_past_years: $yr");
-        my @events = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -x -h -H $yr", "", 0);
+        my @events = Hebcal::invoke_hebcal_v2("$HEBCAL_CMD -s -x -h -H $yr", "", 0);
         foreach my $evt (@events) {
-            next unless $evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/;
+            next unless $evt->{subj} =~ /^Parashat (.+)/;
             my $h = $1;
             my($year,$month,$day) = Hebcal::event_ymd($evt);
             my $dt = Hebcal::date_format_sql($year, $month, $day);
@@ -1815,11 +1815,11 @@ sub readings_for_current_year
 	    open(CSV, ">$tmpfile") || croak "$tmpfile: $!\n";
 	    print CSV qq{"Date","Parashah","Aliyah","Reading","Verses"\015\012};
 	}
-	my @events = Hebcal::invoke_hebcal("$HEBCAL_CMD -s -H $yr", "", 0);
+        my @events = Hebcal::invoke_hebcal_v2("$HEBCAL_CMD -s -H $yr", "", 0);
 	foreach my $evt (@events) {
 	    my($year,$month,$day) = Hebcal::event_ymd($evt);
 	    my $dt = Hebcal::date_format_sql($year, $month, $day);
-	    if ($evt->[$Hebcal::EVT_IDX_SUBJ] =~ /^Parashat (.+)/) {
+            if ($evt->{subj} =~ /^Parashat (.+)/) {
 		my $h = $1;
 		$parashah_date_sql{$h}->[$i] = $dt;
 		$parashah_time{$h} = Hebcal::event_to_time($evt)
@@ -1870,7 +1870,7 @@ sub triennial_csv
     for (my $i = $bereshit_idx; $i < @{$events}; $i++)
     {
 	my $evt = $events->[$i];
-	my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        my $subj = $evt->{subj};
 	if ($subj eq "Parashat Bereshit" && $i != $bereshit_idx) {
 	    $yr++;
 	    last if ($yr == 4);

@@ -240,11 +240,11 @@ sub get_parashat_hashavua {
     my $cmd = "$Hebcal::HEBCAL_BIN -s -h -x $syear";
     DEBUG("Invoking $cmd");
 
-    my @events = Hebcal::invoke_hebcal($cmd, "", 0, $smonth);
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", 0, $smonth);
     my $parsha;
     foreach my $evt (@events) {
-        if ($evt->[$Hebcal::EVT_IDX_MDAY] == $sday) {
-            $parsha = $evt->[$Hebcal::EVT_IDX_SUBJ];
+        if ($evt->{mday} == $sday) {
+            $parsha = $evt->{subj};
             last;
         }
     }
@@ -274,9 +274,9 @@ sub get_candle_lighting {
     }
     $cmd .= " -m 50 -c -s $fri_year";
     DEBUG("$asciiname, $admin1, $country - $cmd");
-    my @events = Hebcal::invoke_hebcal($cmd, "", 0, $fri_month);
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", 0, $fri_month);
     foreach my $evt (@events) {
-        next unless $evt->[$Hebcal::EVT_IDX_SUBJ] eq "Candle lighting";
+        next unless $evt->{subj} eq "Candle lighting";
         my($gy,$gm,$gd) = Hebcal::event_ymd($evt);
         if ($gm == $fri_month && $gd == $fri_day) {
             return Hebcal::format_evt_time($evt, "pm");

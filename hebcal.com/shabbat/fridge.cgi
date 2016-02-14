@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -79,7 +79,7 @@ my $hebrew_year = 0;
 my $numEntries2 = scalar(@{$evts});
 for (my $i = 0; $i < $numEntries2; $i++)
 {
-    if ($evts->[$i]->[$Hebcal::EVT_IDX_SUBJ] =~ /^Rosh Hashana (\d{4})$/)
+    if ($evts->[$i]->{subj} =~ /^Rosh Hashana (\d{4})$/)
     {
         $hebrew_year = $1;
         last;
@@ -147,8 +147,8 @@ EOHTML
 print $header;
 
 my $numEntries = scalar(@{$evts});
-my $greg_year1 = $evts->[0]->[$Hebcal::EVT_IDX_YEAR];
-my $greg_year2 = $evts->[$numEntries-1]->[$Hebcal::EVT_IDX_YEAR];
+my $greg_year1 = $evts->[0]->{year};
+my $greg_year2 = $evts->[$numEntries-1]->{year};
 print qq{<h4>Candle Lighting Times for $short_city
 <br>Hebrew Year $hebrew_year ($greg_year1 - $greg_year2)</h4>
 <p style="margin:0 0 4px">www.hebcal.com</p>
@@ -180,23 +180,23 @@ sub filter_events {
     my @items;
     for (my $i = 0; $i < $numEntries; $i++)
     {
-        next unless $events->[$i]->[$Hebcal::EVT_IDX_SUBJ] eq 'Candle lighting';
+        next unless $events->[$i]->{subj} eq 'Candle lighting';
 
         my $reason = "";
         my $yom_tov = 0;
         if (defined $events->[$i+1]
-            && $events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ] =~ /^(Parashat|Parshas) (.+)$/) {
+            && $events->[$i+1]->{subj} =~ /^(Parashat|Parshas) (.+)$/) {
             $reason = $2;
         } elsif ($i == $numEntries - 1) {
             $yom_tov = 1;
             $reason = "Rosh Hashana";
         } else {
-            $yom_tov = $events->[$i+1]->[$Hebcal::EVT_IDX_YOMTOV];
-            $reason = Hebcal::get_holiday_basename($events->[$i+1]->[$Hebcal::EVT_IDX_SUBJ]);
+            $yom_tov = $events->[$i+1]->{yomtov};
+            $reason = Hebcal::get_holiday_basename($events->[$i+1]->{subj});
         }
 
-        my $mon = $events->[$i]->[$Hebcal::EVT_IDX_MON];
-        my $mday = $events->[$i]->[$Hebcal::EVT_IDX_MDAY];
+        my $mon = $events->[$i]->{mon};
+        my $mday = $events->[$i]->{mday};
 
         my $item_time = Hebcal::format_evt_time($events->[$i], "");
 
@@ -309,7 +309,7 @@ sub process_args
         $cmd .= " -H " . $HEB_YR;
     }
 
-    my(@events) = Hebcal::invoke_hebcal($cmd, '', 0);
+    my(@events) = Hebcal::invoke_hebcal_v2($cmd, '', 0);
 
     my $cfg;
     (\@events,$cfg,$city_descr,$short_city,$cmd);

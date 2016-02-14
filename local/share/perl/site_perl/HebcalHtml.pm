@@ -135,8 +135,8 @@ sub download_html_bootstrap {
     my($greg_year1,$greg_year2) = (0,0);
     my($numEntries) = scalar(@{$events});
     if ($numEntries > 0) {
-        $greg_year1 = $events->[0]->[$Hebcal::EVT_IDX_YEAR];
-        $greg_year2 = $events->[$numEntries - 1]->[$Hebcal::EVT_IDX_YEAR];
+        $greg_year1 = $events->[0]->{year};
+        $greg_year2 = $events->[$numEntries - 1]->{year};
     }
 
     my $ical1 = Hebcal::download_href($q, $filename, "ics");
