@@ -1705,7 +1705,7 @@ div.pbba { page-break-before: always }
 EOHTML
 ;
 
-    my $lang = $q->param("lg");
+    my $lang = $q->param("lg") || "s";
     my $lang_hebrew = ($lang && $lang =~ /h/) ? 1 : 0;
 
     print HebcalHtml::header_bootstrap3($results_title,
@@ -1790,7 +1790,6 @@ EOHTML
 
     push(@benchmarks, Benchmark->new);
 
-    my $lang = $q->param("lg") || "s";
     foreach my $evt (@events) {
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
