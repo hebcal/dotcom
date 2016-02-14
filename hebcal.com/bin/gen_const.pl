@@ -12,6 +12,9 @@ my $outfile_js = shift;
 my $SEDROT_XML = "../dist/aliyah.xml";
 my $HOLIDAYS_XML = "../dist/festival.xml";
 my $CITIES_TXT = "../dist/cities2.txt";
+my $podir = "../../hebcal/po";
+
+-d $podir || die "$podir: $!\n";
 
 my $axml = XMLin($SEDROT_XML);
 $axml || die $SEDROT_XML;
@@ -131,6 +134,37 @@ foreach my $f (@festivals)
     }
 }
 print O ");\n\n";
+
+my $translations = {};
+foreach my $pofile (qw(pl ru)) {
+    my $infile = "$podir/$pofile.po";
+    open(IN, $infile) || die "$infile: $!";
+    binmode(IN, ":utf8");
+    my $msgid;
+    $translations->{$pofile} = {};
+    while(<IN>) {
+        if (/^msgid\s+"(.*)"\s*$/) {
+            $msgid = $1;
+        } elsif (/^msgstr\s+"(.+)"\s*$/) {
+            my $msgstr = $1;
+            $translations->{$pofile}{$msgid} = $msgstr;
+        }
+    }
+    close(IN);
+}
+
+print O "\$HebcalConst::TRANSLATIONS = {\n";
+foreach my $pofile (qw(pl ru)) {
+    print O " '$pofile' => {\n";
+    foreach my $msgid (sort keys %{$translations->{$pofile}}) {
+        my $msgstr = $translations->{$pofile}{$msgid};
+        $msgid =~ s/\'/\\\'/g;
+        $msgstr =~ s/\'/\\\'/g;
+        print O "  '$msgid'=>'$msgstr',\n";
+    }
+    print O " },\n";
+}
+print O "};\n\n";
 
 print O "1;\n";
 

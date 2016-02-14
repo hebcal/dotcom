@@ -14,6 +14,8 @@ REFORM_LUACH_TMPDIR = /tmp/hebcal-reform-luach
 REFORM_LUACH_OUTDIR = ../../reformluach.com
 REFORM_LUACH_XML_DATADIR = ../../reformluach.com/cms/data
 XML_REFORM_LUACH = $(REFORM_LUACH_XML_DATADIR)/other/pages.xml
+PODIR = ../../hebcal/po
+POFILES = $(PODIR)/*.po
 
 all: xml2perl sedrot holidays converter
 
@@ -27,7 +29,7 @@ converter: $(CONVERTER_SEDRA)
 
 reform-luach: $(REFORM_LUACH_OUTDIR)/index.html
 
-$(SITE_PERL)/HebcalConst.pm $(CITIES_JSON): $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal
+$(SITE_PERL)/HebcalConst.pm $(CITIES_JSON): $(XML_ALIYAH) $(XML_FESTIVAL) $(CITIES_TXT) gen_const.pl hebcal $(POFILES)
 	./gen_const.pl $(SITE_PERL)/HebcalConst.pm ../pear/Hebcal/const.inc $(CITIES_JSON)
 
 $(CONVERTER_SEDRA): gen_daily_sedra.pl hebcal
