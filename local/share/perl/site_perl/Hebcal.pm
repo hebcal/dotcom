@@ -117,7 +117,9 @@ our %lang_names =
      "sh" => "Sephardic translit. + Hebrew",
      "a"  => "Ashkenazis transliterations",
      "ah" => "Ashkenazis translit. + Hebrew",
-     "h"  => "Hebrew only",
+     "h"  => "Hebrew - עברית",
+     "ru" => "Russian - ру́сский язы́к",
+     "pl" => "Polish - język polski",
      );
 
 our %CONTINENTS =
@@ -430,9 +432,12 @@ sub parse_date_descr($$)
 }
 
 sub format_evt_time {
-    my($evt,$suffix) = @_;
+    my($evt,$suffix,$lang) = @_;
     my $hour = $evt->{hour};
     my $min = $evt->{min};
+    if ($lang && $lang ne "s" && $lang ne "a") {
+        return sprintf("%02d:%02d", $hour, $min);
+    }
     format_hebcal_event_time($hour,$min,$suffix);
 }
 
@@ -680,6 +685,8 @@ sub event_category {
         return "havdalah";
     } elsif ($subj =~ /^(Parshas|Parashat)\s+/) {
         return "parashat";
+    } elsif ($subj =~ /^Rosh Chodesh /) {
+        return "roshchodesh";
     } elsif ($subj =~ /^(\d+)\w+ day of the Omer$/) {
         return "omer";
     } elsif ($subj =~ /^Daf Yomi:/) {
@@ -692,19 +699,7 @@ sub event_category {
 }
 
 sub event_to_dict {
-    my($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$dbh,$sth) = @_;
-
-    my($year,$mon,$mday) = event_ymd($evt);
-
-    my $subj = $evt->{subj};
-    my $min = $evt->{min};
-    my $hour24 = $evt->{hour};
-    my $untimed = $evt->{untimed};
-    my $yomtov = $evt->{yomtov};
-
-    if ($untimed) {
-        $min = $hour24 = 0;
-    }
+    my($evt,$time,$url,$cfg,$lang,$tzid,$ignore_tz,$dbh,$sth) = @_;
 
     my %item;
     $item{"evt"} = $evt;
@@ -712,25 +707,39 @@ sub event_to_dict {
         "%A, %d %b %Y" : "%A, %d %B %Y";
     $item{"date"} = strftime($format, localtime($time));
 
-    if ($yomtov) {
+    if ($evt->{yomtov}) {
         $item{"yomtov"} = 1;
     }
 
+    my($year,$mon,$mday) = event_ymd($evt);
     $item{"dc:date"} = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
-    if (!$untimed) {
+
+    if (!$evt->{untimed}) {
+        my $min = $evt->{min};
+        my $hour24 = $evt->{hour};
         my $tzOffset2 = $ignore_tz ? "" :
             event_tz_offset($year,$mon,$mday,$hour24,$min,$tzid);
         $tzOffset2 =~ s/(\d\d)$/:$1/;
         $item{"dc:date"} .= sprintf("T%02d:%02d:00%s", $hour24, $min, $tzOffset2);
-        $item{"time"} = format_evt_time($evt, "pm");
+        $item{"time"} = format_evt_time($evt, "pm", $lang);
     }
 
+    my $subj = $evt->{subj};
     my $anchor = sprintf("%04d%02d%02d_",$year,$mon,$mday) . lc($subj);
     $anchor =~ s/[^\w]/_/g;
     $anchor =~ s/_+/_/g;
     $anchor =~ s/_$//g;
     $item{"about"} = $url . "#" . $anchor;
-    $item{"subj"} = $subj;
+
+    if ($lang eq "h" || $lang eq "ru" || $lang eq "pl") {
+        my $xsubj = Hebcal::translate_event($evt, $lang);
+        if ($xsubj && $xsubj ne $subj) {
+            $item{title_orig} = $subj;
+            $subj = $xsubj;
+        }
+    }
+
+    $item{subj} = $subj;
     $item{"class"} = $evt->{category};
 
     $item{hebrew} = $evt->{hebrew} if $evt->{hebrew};
@@ -803,11 +812,12 @@ sub events_to_dict
     }
 
     my @items;
+    my $lang = $q->param("lg") || "s";
     foreach my $evt (@{$events}) {
         my $time = event_to_time($evt);
         next if ($friday && $time < $friday);
         last if ($saturday && $time > $saturday);
-        my $item = event_to_dict($evt,$time,$url,$cfg,$q,$tzid,$ignore_tz,$dbh,$sth);
+        my $item = event_to_dict($evt,$time,$url,$cfg,$lang,$tzid,$ignore_tz,$dbh,$sth);
         push(@items, $item);
     }
 
@@ -837,7 +847,7 @@ sub items_to_json {
     my $out = { title => $city_descr,
 		link => "http://" . $q->virtual_host() . self_url($q, {"cfg" => undef}),
 		date => strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00",
-		items => json_transform_items($items,$q),
+		items => json_transform_items($items),
 	      };
 
     if (defined $latitude) {
@@ -855,25 +865,19 @@ sub items_to_json {
 }
 
 sub json_transform_items {
-    my($items,$q) = @_;
-    my $lang = $q->param("lg") || "s";
+    my($items) = @_;
     my @out;
     foreach my $item (@{$items}) {
 	my $subj = $item->{"subj"};
         my $out = {};
-        if ($lang eq "h" && $item->{hebrew}) {
-            $out->{title_orig} = $subj;
-            $subj = $item->{hebrew};
-#        } elsif (($lang eq "ru" || $lang eq "po")
-#                  && defined $HebcalConst::TRANSLATIONS->{$lang}->{$subj}) {
-#            $subj = $HebcalConst::TRANSLATIONS->{$lang}->{$subj};
-        }
-	$subj .= ": " . $item->{"time"} if defined $item->{"time"};
+        $subj .= ": " . $item->{"time"} if defined $item->{"time"};
         $out->{title} = $subj;
+        $out->{title_orig} = $item->{title_orig}
+            if defined $item->{title_orig};
         $out->{category} = $item->{class};
         $out->{date} = $item->{"dc:date"};
 	$out->{link} = $item->{"link"}
-	    if $item->{"class"} =~ /^(parashat|holiday|dafyomi)$/;
+            if $item->{class} =~ /^(parashat|holiday|dafyomi|roshchodesh)$/;
 	$out->{hebrew} = $item->{"hebrew"}
 	    if defined $item->{"hebrew"};
         $out->{yomtov} = \1
@@ -1586,7 +1590,12 @@ sub download_href
 	$script_name =~ s,/\w+\.cgi$,/,;
     }
 
-    my $href = "http://download.hebcal.com" . $script_name;
+    my $vhost = "download.hebcal.com";
+    if ($q->virtual_host() eq "localhost") {
+        $vhost = "localhost:8888";
+    }
+
+    my $href = "http://" . $vhost . $script_name;
     $href .= $cgi if $cgi;
     $href .= "/$filename.$ext?dl=1";
     foreach my $key ($q->param()) {
@@ -2131,19 +2140,61 @@ sub torah_calendar_memo {
     return $memo;
 }
 
-sub translate_subject
-{
-    my($q,$subj,$hebrew) = @_;
+sub translate_event {
+    my($evt,$lang) = @_;
 
-    my $lang = $q->param("lg") || "s";
-    if ($lang eq "s" || $lang eq "a" || !$hebrew) {
-	return $subj;
-    } elsif ($lang eq "h") {
-	return $hebrew;
-    } elsif ($lang eq "ah" || $lang eq "sh") {
-	return "$subj / $hebrew";
+    my $subj = $evt->{subj};
+    if ($lang eq "s" || $lang eq "a") {
+        return $subj;
+    } elsif ($lang eq "h" || $lang eq "ah" || $lang eq "sh") {
+        return $evt->{hebrew};
+    } elsif ($lang eq "ru" || $lang eq "pl") {
+        if ($evt->{category} eq "parashat") {
+            my $s0 = $subj;
+            $s0 =~ s/^Parashat //;
+            my $s1 = $HebcalConst::TRANSLATIONS->{$lang}->{"Parashat"};
+            my $s2 = $HebcalConst::TRANSLATIONS->{$lang}->{$s0};
+            if (defined $s1 && defined $s2) {
+                return $s1 . " " . $s2;
+            }
+        } elsif ($evt->{category} eq "roshchodesh") {
+            my $s0 = $subj;
+            $s0 =~ s/^Rosh Chodesh //;
+            my $s1 = $HebcalConst::TRANSLATIONS->{$lang}->{"Rosh Chodesh %s"};
+            my $s2 = $HebcalConst::TRANSLATIONS->{$lang}->{$s0};
+            if (defined $s1 && defined $s2) {
+                return sprintf($s1, $s2);
+            }
+        } elsif ($evt->{category} eq "havdalah" && $subj =~ /^Havdalah \((\d+) min\)$/) {
+            my $havdalah_min = $1;
+            my $s1 = $HebcalConst::TRANSLATIONS->{$lang}->{"Havdalah"};
+            if (defined $s1) {
+                return $s1 . " ($havdalah_min min)";
+            }
+        } elsif ($evt->{category} eq "dafyomi" && $subj =~ /^Daf Yomi: (.+) (\d+)$/) {
+            my $tractate = $1;
+            my $page = $2;
+            my $s1 = $HebcalConst::TRANSLATIONS->{$lang}->{"Daf Yomi: %s %d"};
+            my $s2 = $HebcalConst::TRANSLATIONS->{$lang}->{$tractate};
+            if (defined $s1 && defined $s2) {
+                return sprintf($s1, $s2, $page);
+            }
+        } elsif ($subj =~ /^Rosh Hashana (\d+)$/) {
+            my $hyear = $1;
+            my $s0 = $HebcalConst::TRANSLATIONS->{$lang}->{"Rosh Hashana"};
+            if (defined $s0) {
+                return $s0 . " " . $hyear;
+            }
+        } else {
+            my $s0 = $HebcalConst::TRANSLATIONS->{$lang}->{$subj};
+            if (defined $s0) {
+                return $s0;
+            }
+        }
+        return undef;   # not found
     } else {
-	die "unknown lang \"$lang\" for $subj";
+        warn "unknown lang \"$lang\" for $subj";
+        return undef;
     }
 }
 

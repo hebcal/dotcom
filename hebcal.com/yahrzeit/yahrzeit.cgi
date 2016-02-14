@@ -218,7 +218,7 @@ sub csv_display
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     eval("use HebcalExport");
-    HebcalExport::csv_write_contents($q, \@events, $euro);
+    HebcalExport::csv_write_contents($q, \@events, $euro, undef);
 }
 
 

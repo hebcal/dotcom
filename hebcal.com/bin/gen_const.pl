@@ -136,7 +136,8 @@ foreach my $f (@festivals)
 print O ");\n\n";
 
 my $translations = {};
-foreach my $pofile (qw(pl ru)) {
+my @langs = qw(pl ru he);
+foreach my $pofile (@langs) {
     my $infile = "$podir/$pofile.po";
     open(IN, $infile) || die "$infile: $!";
     binmode(IN, ":utf8");
@@ -154,7 +155,7 @@ foreach my $pofile (qw(pl ru)) {
 }
 
 print O "\$HebcalConst::TRANSLATIONS = {\n";
-foreach my $pofile (qw(pl ru)) {
+foreach my $pofile (@langs) {
     print O " '$pofile' => {\n";
     foreach my $msgid (sort keys %{$translations->{$pofile}}) {
         my $msgstr = $translations->{$pofile}{$msgid};

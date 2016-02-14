@@ -42,6 +42,7 @@ use CGI qw(-no_xhtml);
 use Encode qw(decode_utf8);
 use CGI::Carp qw(fatalsToBrowser);
 use Hebcal ();
+use HebcalConst;
 use Date::Calc;
 use URI::Escape;
 use POSIX ();
@@ -176,6 +177,7 @@ exit(0);
 sub filter_events {
     my($events) = @_;
 
+    my $lang = $q->param("lg") || "s";
     my $numEntries = scalar(@{$events});
     my @items;
     for (my $i = 0; $i < $numEntries; $i++)
@@ -199,6 +201,18 @@ sub filter_events {
         my $mday = $events->[$i]->{mday};
 
         my $item_time = Hebcal::format_evt_time($events->[$i], "");
+
+        my $s0 = $HebcalConst::TRANSLATIONS->{$lang}->{$reason};
+        if (defined $s0) {
+            $reason = $s0;
+        } elsif (index($reason, "-") != -1) {
+            my($p1,$p2) = split(/-/, $reason);
+            my $s1 = $HebcalConst::TRANSLATIONS->{$lang}->{$p1};
+            my $s2 = $HebcalConst::TRANSLATIONS->{$lang}->{$p2};
+            if (defined $s1 && defined $s2) {
+                $reason = join("-", $s1, $s2);
+            }
+        }
 
         push(@items, [$Hebcal::MoY_short[$mon], $mday, $item_time, $reason, $yom_tov]);
     }

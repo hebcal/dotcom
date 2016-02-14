@@ -49,6 +49,7 @@ use Date::Calc ();
 use URI::Escape;
 use File::Basename;
 use Hebcal ();
+use HebcalConst;
 use HebcalGPL ();
 use HebcalHtml ();
 use POSIX qw(strftime);
@@ -296,8 +297,6 @@ else
     $g_date = sprintf("%04d", $q->param("year"));
 }
 
-my $g_loc = (defined $cconfig{"city"} && $cconfig{"city"} ne "") ?
-    "in " . $cconfig{"city"} : "";
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;
 my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
 my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
@@ -361,15 +360,18 @@ sub fullcalendar_event {
     my $className = $evt->{category};
     $className .= " yomtov" if $evt->{yomtov};
 
+    my $lang = $q->param("lg") || "s";
+    my $xsubj = Hebcal::translate_event($evt, $lang);
+
     my $out = {
-        title => $subj,
+        title => $xsubj || $subj,
         allDay => $allDay ? \1 : \0,
         className => $className,
         start => $start,
     };
 
     $out->{hebrew} = $evt->{hebrew} if $evt->{hebrew};
-    $out->{url} = $evt->{hebrew} if $evt->{hebrew};
+    $out->{url} = $evt->{href} if $evt->{href};
     $out->{description} = $evt->{memo} if $evt->{memo};
 
     return $out;
@@ -393,7 +395,7 @@ sub fullcalendar_filter_events {
 }
 
 sub fullcalendar_events {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
@@ -418,7 +420,7 @@ sub fullcalendar_events {
 
 sub json_events
 {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"},0,
         1, param_true("i"));
@@ -440,11 +442,11 @@ sub json_events
 sub javascript_events
 {
     my($v2) = @_;
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     my $cmd2 = $cmd;
     $cmd2 =~ s/(\d+)$/$1+1/e;
-    my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, $g_loc, $g_seph, undef,
+    my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, "", $g_seph, undef,
                                     $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@events, @ev2);
 
@@ -463,8 +465,6 @@ EOJS
     }
     my $first = 1;
     foreach my $evt (@events) {
-        my $subj = $evt->{subj};
-
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
         my $img_url = "";
@@ -473,13 +473,13 @@ EOJS
 
         if ($q->param("img"))
         {
-            if ($subj =~ /^Candle lighting/)
+            if ($evt->{category} eq "candles")
             {
                 $img_url = "http://www.hebcal.com/i/sm_candles.gif";
                 $img_w = 40;
                 $img_h = 69;
             }
-            elsif ($subj =~ /Havdalah/)
+            elsif ($evt->{category} eq "havdalah")
             {
                 $img_url = "http://www.hebcal.com/i/havdalah.gif";
                 $img_w = 46;
@@ -487,7 +487,7 @@ EOJS
             }
         }
 
-        $subj = translate_subject($q,$subj,$evt->{hebrew});
+        my $subj = my_translate_event($q,$evt);
 
         if ($evt->{untimed} == 0)
         {
@@ -530,20 +530,25 @@ EOJS
     }
 }
 
-sub translate_subject
-{
-    my($q,$subj,$hebrew) = @_;
+sub my_translate_event {
+    my($q,$evt) = @_;
 
     my $lang = $q->param("lg") || "s";
-    if ($lang eq "s" || $lang eq "a" || !$hebrew) {
+    my $subj = $evt->{subj};
+    if ($lang eq "s" || $lang eq "a") {
         return $subj;
-    } elsif ($lang eq "h") {
-        return hebrew_span($hebrew);
+    }
+
+    my $xsubj = Hebcal::translate_event($evt, $lang);
+    if ($lang eq "h") {
+        return $xsubj ? hebrew_span($xsubj) : $subj;
     } elsif ($lang eq "ah" || $lang eq "sh") {
-        my $subj2 = $subj;
-        $subj2 .= "\n<br>";
-        $subj2 .= hebrew_span($hebrew);
-        return $subj2;
+        if (!$xsubj) {
+            return $subj;
+        }
+        return $subj . "\n<br>" . hebrew_span($xsubj);
+    } elsif ($lang eq "ru" || $lang eq "pl") {
+        return $xsubj || $subj;
     } else {
         warn "unknown lang \"$lang\" for $subj";
         return $subj;
@@ -564,7 +569,7 @@ sub plus4_events {
         {
             my $cmd2 = $cmd;
             $cmd2 =~ s/(\d+)$/$1+$i/e;
-            my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, $g_loc, $g_seph, undef,
+            my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, "", $g_seph, undef,
                                             $g_nmf, $g_nss, $g_nminor, $g_nmodern);
             push(@{$events}, @ev2);
         }
@@ -580,7 +585,7 @@ sub plus4_events {
 
 sub vcalendar_display
 {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
@@ -599,7 +604,7 @@ use constant PDF_COLUMNS => 7;
 my %pdf_font;
 
 sub pdf_display {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = "Jewish Calendar $g_date";
@@ -788,12 +793,19 @@ sub pdf_render_event {
     $text->fillcolor($color);
 
     if ($evt->{untimed} == 0) {
-        my $time_formatted = Hebcal::format_evt_time($evt, "p");
+        my $time_formatted = Hebcal::format_evt_time($evt, "p", $lg);
         $text->font($pdf_font{'bold'}, 8);
         $text->text($time_formatted . " ");
     }
 
-    if ($lg =~ /[as]/) {
+    if ($lg eq "ru" || $lg eq "pl") {
+        my $xsubj = Hebcal::translate_event($evt, $lg);
+        if ($xsubj) {
+            $subj = $xsubj;
+        }
+    }
+
+    if ($lg =~ /^(a|s|ah|sh|ru|pl)$/) {
         if ($evt->{yomtov} == 1) {
             $text->font($pdf_font{'bold'}, 8);
             $text->text($subj);
@@ -821,7 +833,7 @@ sub pdf_render_event {
         $text->cr(-12);
     }
 
-    if ( $lg =~ /h/ ) {
+    if ( $lg =~ /^(h|sh|ah)$/ ) {
         my $hebrew = $evt->{hebrew};
         if ($hebrew) {
             if ( $subj =~ /^Havdalah \((\d+) min\)$/ ) {
@@ -854,7 +866,7 @@ sub dba_display
     eval("use Palm::DBA");
     eval("use HebcalExport");
 
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     HebcalExport::export_http_header($q, $content_type);
@@ -867,7 +879,7 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
 
     my $title = $g_date;
@@ -875,7 +887,7 @@ sub csv_display
 
     my $euro = defined $q->param("euro") ? 1 : 0;
     eval("use HebcalExport");
-    HebcalExport::csv_write_contents($q, \@events, $euro);
+    HebcalExport::csv_write_contents($q, \@events, $euro, \%cconfig);
 }
 
 sub timestamp_comment {
@@ -1107,7 +1119,7 @@ EOHTML
     print qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
                    -id => "lg",
-                   -values => ["s", "sh", "a", "ah", "h"],
+                   -values => ["s", "a", "h", "ru", "pl", "sh", "ah"],
                    -default => "s",
                    -class => "form-control",
                    -labels => \%Hebcal::lang_names),
@@ -1531,6 +1543,9 @@ EOHTML
         $url .= "&amp;m=" . $q->param("m")
             if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
+        my $lang = $q->param("lg") || "s";
+        $url .= "&amp;lg=$lang";
+
 #        my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
 #        $email_url .= Hebcal::get_geo_args($q, "&amp;");
 #        $email_url .= "&amp;m=" . $q->param("m")
@@ -1713,7 +1728,7 @@ EOHTML
 ;
     print $head_divs;
 
-    my @events = Hebcal::invoke_hebcal_v2($cmd, $g_loc, $g_seph, $g_month,
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
                                        $g_nmf, $g_nss, $g_nminor, $g_nmodern);
     push(@benchmarks, Benchmark->new);
 
@@ -1775,12 +1790,11 @@ EOHTML
 
     push(@benchmarks, Benchmark->new);
 
+    my $lang = $q->param("lg") || "s";
     foreach my $evt (@events) {
-        my $subj = $evt->{subj};
-
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
 
-        $subj = translate_subject($q,$subj,$evt->{hebrew});
+        my $subj = my_translate_event($q,$evt);
         $subj = qq{<span class="fc-title">$subj</span>};
 
         my $a_start = "";
@@ -1806,7 +1820,7 @@ EOHTML
         if ($evt->{untimed}) {
             $cal_subj = $subj;
         } else {
-            my $time_formatted = Hebcal::format_evt_time($evt, "p");
+            my $time_formatted = Hebcal::format_evt_time($evt, "p", $lang);
             $cal_subj = sprintf(qq{<span class="fc-time">%s</span> %s},
                 $time_formatted, $subj);
         }

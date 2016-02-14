@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 2015 Michael J. Radwin.
+# Copyright (c) 2016 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -145,6 +145,9 @@ sub download_html_bootstrap {
     my $ical_href = Hebcal::get_vcalendar_cache_fn($args) . "?" . $args;
     my $subical_href = get_subscribe_href($q,$filename);
     my $vhost = "download.hebcal.com";
+    if ($q->virtual_host() eq "localhost") {
+        $vhost = "localhost:8888";
+    }
     $ical_href = join("", "http://", $vhost, $ical_href);
     my $webcal_href;
     if ($yahrzeit_mode) {

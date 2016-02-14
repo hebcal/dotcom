@@ -275,7 +275,13 @@ sub ical_write_evt {
     $subj =~ s/,/\\,/g;
 
     if ($is_icalendar) {
-        $subj = Hebcal::translate_subject( $q, $subj, $evt->{hebrew} );
+        my $lang = $q->param("lg") || "s";
+        my $xsubj = Hebcal::translate_event($evt, $lang);
+        if (($lang eq "ah" || $lang eq "sh") && $xsubj) {
+            $subj .= " / " . $xsubj;
+        } elsif ($xsubj) {
+            $subj = $xsubj;
+        }
     }
 
     my $is_dafyomi = 0;
@@ -486,7 +492,14 @@ sub vcalendar_write_contents {
         $title =~ s/,/\\,/g;
 
         ical_write_line(qq{VERSION:2.0});
-        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v5.4//EN});
+        my $lang = $q->param("lg") || "s";
+        my $uclang = "EN";
+        if ($lang eq "ru" || $lang eq "pl") {
+            $uclang = uc($lang);
+        } elsif ($lang eq "h") {
+            $uclang = "HE";
+        }
+        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v6.0//$uclang});
         ical_write_line(qq{CALSCALE:GREGORIAN});
         ical_write_line(qq{METHOD:PUBLISH});
         ical_write_line(qq{X-LOTUS-CHARSET:UTF-8});
@@ -575,9 +588,8 @@ sub vcalendar_write_contents {
 # export to Outlook CSV
 ########################################################################
 
-sub csv_write_contents($$$)
-{
-    my($q,$events,$euro) = @_;
+sub csv_write_contents {
+    my($q,$events,$euro,$cconfig) = @_;
 
     export_http_header($q, 'text/x-csv');
     my $endl = "\015\012";
@@ -587,8 +599,15 @@ sub csv_write_contents($$$)
         qq{"End Time","All day event","Description","Show time as",},
         qq{"Location"$endl};
 
+    my $lang = $q->param("lg") || "s";
     foreach my $evt (@{$events}) {
         my $subj = $evt->{subj};
+        my $xsubj = Hebcal::translate_event($evt, $lang);
+        if (($lang eq "ah" || $lang eq "sh") && $xsubj) {
+            $subj .= " / " . $xsubj;
+        } elsif ($xsubj) {
+            $subj = $xsubj;
+        }
         my $memo = $evt->{memo};
 
         my $date;
@@ -633,10 +652,8 @@ sub csv_write_contents($$$)
         $memo =~ s/\"/''/g;
 
         my $loc = 'Jewish Holidays';
-        if ($memo =~ /^in (.+)\s*$/)
-        {
-            $memo = '';
-            $loc = $1;
+        if ($evt->{untimed} == 0 && defined $cconfig && defined $cconfig->{"city"}) {
+            $loc = $cconfig->{"city"};
         }
         elsif ($subj =~ /^Daf Yomi:\s+(.+)\s*$/)
         {

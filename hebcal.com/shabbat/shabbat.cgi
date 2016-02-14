@@ -237,13 +237,10 @@ sub process_args
 sub get_events {
     my($city_descr,$cmd,$fri_year,$sat_year) = @_;
 
-    my $loc = (defined $city_descr && $city_descr ne '') ?
-        "in $city_descr" : '';
-
-    my @events = Hebcal::invoke_hebcal_v2("$cmd $sat_year", $loc, 0);
+    my @events = Hebcal::invoke_hebcal_v2("$cmd $sat_year", "", 0);
     if ($sat_year != $fri_year) {
         # Happens when Friday is Dec 31st and Sat is Jan 1st
-        my @ev2 = Hebcal::invoke_hebcal_v2("$cmd 12 $fri_year", $loc, 0);
+        my @ev2 = Hebcal::invoke_hebcal_v2("$cmd 12 $fri_year", "", 0);
         @events = (@ev2, @events);
     }
 
@@ -302,7 +299,7 @@ qq{<?xml version="1.0"?>
             $pm =~ s/pm$/p/;
             out_html($cfg, ": $pm");
         }
-        elsif ($item->{'class'} eq 'holiday')
+        elsif ($item->{'class'} =~ /^(holiday|roshchodesh)$/)
         {
             out_html($cfg, "<br/>\n", $item->{'date'});
         }
@@ -472,13 +469,13 @@ sub display_html_common
 
         if ($item->{class} eq 'parashat') {
             out_html($cfg,qq{This week\'s Torah portion is <a target="$tgt" href="$link">$item->{'subj'}</a>});
-        } elsif ($item->{class} =~ /^(candles|havdalah|holiday)$/) {
+        } elsif ($item->{class} =~ /^(candles|havdalah|holiday|roshchodesh)$/) {
             my $html = "";
-            if ($item->{class} eq 'holiday') {
+            if ($item->{class} =~ /^(holiday|roshchodesh)$/) {
                 $html = qq{<a target="$tgt" href="$link">};
             }
             $html .= $item->{subj};
-            if ($item->{class} eq 'holiday') {
+            if ($item->{class} =~ /^(holiday|roshchodesh)$/) {
                 $html .= qq{</a>};
             }
             if (defined $item->{time}) {
@@ -632,7 +629,7 @@ sub display_html
             push(@description_items, "$item->{subj} at $item->{time} on $datestr");
         } elsif ($item->{"class"} eq "parashat") {
             push(@description_items, $item->{subj});
-        } elsif ($item->{"class"} eq "holiday") {
+        } elsif ($item->{"class"} =~ /^(holiday|roshchodesh)$/) {
             push(@description_items, "$item->{subj} on $datestr");
         }
     }
