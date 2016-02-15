@@ -604,7 +604,10 @@ $xtra_html
 <script type="text/javascript">
 $(document).ready(function(){
   $('a.amzn').click(function(){
-    ga('send','event','outbound-amzn',$(this).attr('id'));
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','outbound-amzn',x);
+    }
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
@@ -616,7 +619,10 @@ $(document).ready(function(){
     }
   });
   $('a.download').click(function(){
-    ga('send','event','download',$(this).attr('id'));
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','download',x);
+    }
   });
 });
 </script>

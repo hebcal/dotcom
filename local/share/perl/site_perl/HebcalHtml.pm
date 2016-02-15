@@ -559,10 +559,30 @@ EOHTML
     return $str;
 }
 
-my $URCHIN = qq{<script type="text/javascript">
-(function(){if(document.getElementsByTagName){var b=document.getElementsByTagName("a");if(b&&b.length){for(var a=0;a<b.length;a++){if(b[a]&&b[a].className=="amzn"){if(b[a].id){b[a].onclick=function(){ga("send","event","outbound-amzn",this.id)}}}
-if(b[a]&&b[a].className=="outbound"){b[a].onclick=function(){var c=this.href;if(c&&c.indexOf("http://")===0){var d=c.indexOf("/",7);if(d>7){ga("send","event","outbound-article",c.substring(7,d))}}}}
-if(b[a]&&b[a].className.indexOf("download")!=-1){if(b[a].id){b[a].onclick=function(){ga("send","event","download",this.id)}}}}}}})();
+my $URCHIN = q{<script type="text/javascript">
+$(document).ready(function(){
+  $('a.amzn').click(function(){
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','outbound-amzn',x);
+    }
+  });
+  $('a.outbound').click(function(){
+    var c=$(this).attr('href');
+    if(c&&c.indexOf("http")===0){
+      var d=c.indexOf("/",8);
+      if(d>8) {
+        ga('send','event','outbound-article',c.substring(7,d));
+      }
+    }
+  });
+  $('a.download').click(function(){
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','download',x);
+    }
+  });
+});
 </script>
 };
 
