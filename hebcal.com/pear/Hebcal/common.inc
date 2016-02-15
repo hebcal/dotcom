@@ -3,7 +3,7 @@
 /***********************************************************************
  * Hebcal PHP helper functions
  *
- * Copyright (c) 2015  Michael J. Radwin.
+ * Copyright (c) 2016  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -611,10 +611,11 @@ $(document).ready(function(){
   });
   $('a.outbound').click(function(){
     var c=$(this).attr('href');
-    if(c&&c.indexOf("http")===0){
-      var d=c.indexOf("/",8);
-      if(d>8) {
-        ga('send','event','outbound-article',c.substring(7,d));
+    if (c&&c.length) {
+      var ss=c.indexOf('//');
+      if(ss!=-1) {
+        var d=c.indexOf('/',ss+2),d2=d!=-1?d:c.length;
+        ga('send','event','outbound-article',c.substring(ss+2,d2));
       }
     }
   });
