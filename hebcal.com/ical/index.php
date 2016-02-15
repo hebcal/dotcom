@@ -123,7 +123,7 @@ cal_item("hdate-en", "Hebrew calendar dates (English)",
   2);
 cal_item("hdate-he", "Hebrew calendar dates (Hebrew)",
   "Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
-  2, true);
+  2);
 cal_divider();
 cal_item("omer", "Days of the Omer",
   "7 weeks from the second night of Pesach to the day before Shavuot.",
