@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2011  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -89,12 +89,12 @@ if ($opt_shabbat) {
   my($sat_year,$sat_month,$sat_day) = Hebcal::upcoming_dow(6);
   DEBUG("Shabbat is $sat_year,$sat_month,$sat_day");
 
-  my @ev2 = Hebcal::invoke_hebcal("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
+  my @ev2 = Hebcal::invoke_hebcal_v2("$HEBCAL -s -x $sat_year", "", 0, $sat_month);
   my $parasha;
   my $special_shabbat;
   for my $evt (@ev2) {
-    next unless $evt->[$Hebcal::EVT_IDX_MDAY] == $sat_day;
-    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    next unless $evt->{mday} == $sat_day;
+    my $subj = $evt->{subj};
     INFO("Found $subj");
     if ($subj =~ /^Parashat/) {
 	$parasha = $subj;
@@ -114,12 +114,12 @@ if ($opt_shabbat) {
 }
 
 if ($opt_daily) {
-  my @events = Hebcal::invoke_hebcal($HEBCAL, "", 0);
+  my @events = Hebcal::invoke_hebcal_v2($HEBCAL, "", 0);
   my @today = Date::Calc::Today();
   my @tomorrow = Date::Calc::Add_Delta_Days(@today, 1);
   my $today_subj = "";
   for my $evt (@events) {
-    my $subj = $evt->[$Hebcal::EVT_IDX_SUBJ];
+    my $subj = $evt->{subj};
     if (Hebcal::event_date_matches($evt, $today[0], $today[1], $today[2])) {
       INFO("Today is $subj");
       $today_subj = $subj;
