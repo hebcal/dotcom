@@ -127,6 +127,8 @@ my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
     $cconfig{"tzid"} eq "Asia/Jerusalem" ? 1 : 0);
 my $cmd_pretty = $cmd;
 
+my $rss_href = url_html("/shabbat/?cfg=r&" . get_link_args($q) . "&pubDate=0");
+
 if (defined $cfg && ($cfg =~ /^[ijrw]$/ ||
                      $cfg eq "widget" || $cfg eq "json"))
 {
@@ -673,6 +675,8 @@ sub get_link_args {
     $url .= "&m=" . $q->param("m")
         if (defined $q->param("m") && $q->param("m") =~ /^\d+$/);
 
+    $url .= "&lg=" . $q->param("lg") if $q->param("lg");
+
     $url;
 }
 
@@ -691,7 +695,6 @@ sub more_from_hebcal {
         $url .= join("", "&", $opt, "=on");
     }
     my $full_calendar_href = url_html($url);
-    my $rss_href = url_html("/shabbat/?cfg=r&" . get_link_args($q));
     my $developer_api_href = url_html("/link/?" . get_link_args($q));
 
     my $email_url = "https://www.hebcal.com/email/?geo=" . $cconfig{"geo"} . "&amp;";
@@ -723,9 +726,9 @@ EOHTML
 
 sub my_head {
     my($title,$xtra_head) = @_;
-    my $rss_href = url_html(self_url() . "&cfg=r");
+    my $rss_href2 = "http://" . $q->virtual_host() . $rss_href;
     my $xtra_head2 = <<EOHTML;
-<link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href2">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 <style type="text/css">
 ul.hebcal-results {
