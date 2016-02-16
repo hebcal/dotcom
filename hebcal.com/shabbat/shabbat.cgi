@@ -4,7 +4,7 @@
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times
 # and Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -409,13 +409,18 @@ qq{<?xml version="1.0" encoding="UTF-8"?>
 <!-- $cmd_pretty -->
 });
 
+    my $evtPubDate = 1;
+    if (defined $q->param("pubDate")) {
+        $evtPubDate = $q->param("pubDate") ? 1 : 0;
+    }
+
     foreach my $item (@{$items}) {
         my $subj = $lang eq "he" ? $item->{'hebrew'} : $item->{'subj'};
         if (defined $item->{'time'}) {
             $subj .= ": " . $item->{'time'};
         }
 
-        my $pubDate = evt_pubdate($item->{"evt"});
+        my $pubDate = $evtPubDate ? evt_pubdate($item->{"evt"}) : $lastBuildDate;
         my($link,$guid) = get_link_and_guid($item->{"link"}, $item->{"dc:date"});
 
         out_html($cfg,
