@@ -435,7 +435,7 @@ sub format_evt_time {
     my($evt,$suffix,$lang) = @_;
     my $hour = $evt->{hour};
     my $min = $evt->{min};
-    if ($lang && $lang ne "s" && $lang ne "a") {
+    if ($lang && $lang !~ /^(s|a|sh|ah)$/) {
         return sprintf("%02d:%02d", $hour, $min);
     }
     format_hebcal_event_time($hour,$min,$suffix);
