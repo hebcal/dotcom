@@ -1,0 +1,48 @@
+#cloud-config
+users:
+  - name: mradwin
+    gecos: Michael J. Radwin
+    groups: sudo
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - ssh-dss AAAAB3NzaC1kc3MAAAEBAKCDECinh9zUhHeKibZAumzTqk9MA0VVJJ4EH2Uf2wc1qXZlEA5d6k8LLc7FUZWQ8bn+4BjDEtXlzxAS/t3SmdFJCwaRhzu/5FDZi9usLCCbWsYgUos//uOD37Wpg0fkgIMVi/Jc0L8KceoHACuA9ORV9EIzmvvIFiz8ONKurRilGyL2QMncEN52MQgShv6nhAdFHk99/JAYY7SLhzy8UNBUQunpBJfNNGCHN+IPLMo7hiq5AfQxSHpo6dYeSLRJdWg76CMCf//VC7E/i+6ucHGsO/ZpZ3XVCP7dvt/U1j6qLcm0LWO0n3JrlrEOx9pwGgqyEopoeAaOrXgpydBxm/MAAAAVAIjvZ2FF09u4SQ+LuyQlIMfLB3HVAAABADR6tZndAMf/1p88jwc+Bo5wTglcPkktEXCxPMwrM5/WB6GCFsVGAZsn4/yOq8/Bijgy+RzKZT1is678Jk6Y+Ux1jTv8fjvKzSXn5G6/PT71ayElyKxo3WUTP5m0tnbwLXGBSJz1FfAGv7LHLC7+Crn+1Mlu0N4+JAoxd/C2xK/A1UdeeCwdfHOTuHB0wYEvf0vBSv+6qCv3aKC8cu6kstemijMCCXLPnK0uwls/1lgseeZCz2fOcW1N6kQgrSddHfyqQrQS1Zw22fRYepAYKPUmx3AcFJ6pWp3nZq7eboTRqzcJ8WL1LTrBnArZ/H7u974AuWE2u5hF50k38J8zvJEAAAEAZg9HmKsR/tEGah899pMSCpuTxrVcI3P969qbNq6i4na7S8UE2jd36Vs+bseibHlH+cTm9Fdtey990RuKklBoXlDovOKrmQ2dpzcIDUDyrAs/uRxVHqeZ8KKg9VDsf6xf0kHMX5sCFlge085o8c3AS+bu/pYLRlUpx8LGmshy9HNbHSoU4iAsB/EdRtSnor3vaZozHurPiVM7UwgW9w+C4aK5eQoHL45tTrDefDRCHn+b1w7ZTnEqM/vpHtpBvsN3FErnPVPmTuWl+EBNFRoNE5TzMcBJMa3p80t23VGaa+0mbNPE6VlIzbkXP1jZdw2sEpvE/UxdOnTnN9QAY8g9UA== mradwin@michael-radwins-computer.local
+
+debconf_selections: |     # Need to perserve newlines
+    sysstat sysstat/enable boolean true
+    unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
+    postfix postfix/mailname string hebcal.com
+    postfix postfix/main_mailer_type select Satellite system
+    postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
+
+package_upgrade: true
+
+packages:
+  - git
+  - nagios3
+  - sysstat
+  - netfilter-persistent
+  - libsasl2-modules
+  - postfix
+  - heirloom-mailx
+  - apache2
+  - nagios-plugins-basic
+  - nagios-plugins-common
+
+runcmd:
+  - service netfilter-persistent flush
+  - iptables -F
+  - iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  - iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+  - iptables -A INPUT -p tcp --dport http -j ACCEPT
+  - iptables -A INPUT -p tcp --dport https -j ACCEPT
+  - iptables -A INPUT -p icmp -j ACCEPT
+  - iptables -A INPUT -j DROP
+  - iptables -I INPUT 1 -i lo -j ACCEPT
+  - service netfilter-persistent save
+  - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - service ssh reload
+  - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
+  - cp /tmp/dotcom/etc/postfix/main.cf /etc/postfix/main.cf
+  - rsync -av /tmp/dotcom/etc/nagios3/ /etc/nagios3/
+  - service apache2 restart
+  - chmod g+rx /var/lib/nagios3/*
