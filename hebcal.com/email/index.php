@@ -47,6 +47,7 @@ if (!isset($param["m"])) {
     $param["m"] = 50;
 }
 
+$default_unsubscribe = false;
 if (isset($param["v"]) && $param["v"])
 {
     $email = isset($param["em"]) ? $param["em"] : false;
@@ -118,13 +119,14 @@ function get_return_path($mailto) {
     return "shabbat-return+" . strtr($mailto, "@", "=") . "@hebcal.com";
 }
 
-function echo_lead_text() {
+function echo_lead_text($unsub) {
     global $echoed_lead_text;
     if (!$echoed_lead_text) {
+        $prefix = $unsub ? "Unsubscribe from" : "Subscribe to";
 ?>
 <div class="row">
 <div class="col-sm-12">
-<p class="lead">Subscribe to weekly Shabbat candle
+<p class="lead"><?php echo $prefix ?> weekly Shabbat candle
 lighting times and Torah portion by email.</p>
 <?php
 	$echoed_lead_text = true;
@@ -267,7 +269,9 @@ EOD;
 }
 
 function form($param, $message = "", $help = "") {
-    echo_lead_text();
+    global $is_update, $default_unsubscribe;
+
+    echo_lead_text($default_unsubscribe);
 
     if ($message != "") {
 ?>
@@ -302,6 +306,7 @@ function form($param, $message = "", $help = "") {
 <input type="email" name="em" id="em" class="form-control" placeholder="user@example.com"
 value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?>">
 </div>
+<?php if (!$default_unsubscribe) { ?>
 <div class="form-group">
 <label for="city-typeahead">City</label>
 <input type="hidden" name="geo" id="geo" value="<?php echo $geo ?>">
@@ -318,16 +323,19 @@ value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?
 <input type="text" name="m" id="m" class="form-control" pattern="\d*" value="<?php
   echo htmlspecialchars($param["m"]) ?>" maxlength="3">
 </div>
+<?php } /* !$default_unsubscribe */ ?>
 <input type="hidden" name="v" value="1">
-<?php global $is_update, $default_unsubscribe;
+<?php
     $modify_class = $default_unsubscribe ? "btn btn-default" : "btn btn-primary";
     $unsub_class = $default_unsubscribe ? "btn btn-primary" : "btn btn-default";
     if ($is_update) { ?>
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
 <?php } ?>
+<?php if (!$default_unsubscribe) { ?>
 <button type="submit" class="<?php echo $modify_class ?>" name="modify" value="1">
 <?php echo ($is_update) ? "Update Subscription" : "Subscribe"; ?></button>
+<?php } ?>
 <button type="submit" class="<?php echo $unsub_class ?>" name="unsubscribe" value="1">Unsubscribe</button>
 </fieldset>
 </form>
