@@ -96,16 +96,28 @@ $opt_help && croak $usage;
 
 Log::Log4perl->easy_init($INFO);
 
-my %hebcal_to_strassfeld =
-    (
-     "Pesach III (CH''M)" => "Pesach Chol ha-Moed Day 1",
-     "Pesach IV (CH''M)" => "Pesach Chol ha-Moed Day 2",
-     "Sukkot III (CH''M)" => "Sukkot Chol ha-Moed Day 1",
-     "Sukkot IV (CH''M)" => "Sukkot Chol ha-Moed Day 2",
-     "Sukkot V (CH''M)" => "Sukkot Chol ha-Moed Day 3",
-     "Sukkot VI (CH''M)" => "Sukkot Chol ha-Moed Day 4",
-     "Sukkot VII (Hoshana Raba)" => "Sukkot Chol ha-Moed Day 5 (Hoshana Raba)",
-);
+my %hebcal_to_strassfeld;
+
+if ($opt_israel) {
+    # TODO: figure it out!
+    %hebcal_to_strassfeld = (
+    );
+} else {
+    # TODO: if Shabbat falls on the third day of Chol ha-Moed
+    # Pesach, the readings for the third, fourth, and fifth days are
+    # moved ahead
+    %hebcal_to_strassfeld = (
+         "Pesach III (CH''M)" => "Pesach Chol ha-Moed Day 1",
+         "Pesach IV (CH''M)" => "Pesach Chol ha-Moed Day 2",
+#         "Pesach V (CH''M)" => "Pesach Chol ha-Moed Day 3",
+#         "Pesach VI (CH''M)" => "Pesach Chol ha-Moed Day 4",
+         "Sukkot III (CH''M)" => "Sukkot Chol ha-Moed Day 1",
+         "Sukkot IV (CH''M)" => "Sukkot Chol ha-Moed Day 2",
+         "Sukkot V (CH''M)" => "Sukkot Chol ha-Moed Day 3",
+         "Sukkot VI (CH''M)" => "Sukkot Chol ha-Moed Day 4",
+         "Sukkot VII (Hoshana Raba)" => "Sukkot Chol ha-Moed Day 5 (Hoshana Raba)",
+    );
+}
 my $extra_years = 13;
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
