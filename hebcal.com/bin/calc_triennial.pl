@@ -880,6 +880,7 @@ sub write_drash_links {
     );
 
     foreach my $site (@sites) {
+        next if $site eq "uscj";
         if ($drash->{$site}) {
             my $name = $site_name{$site};
             print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from $name" href="$drash->{$site}">$name</a>\n};
