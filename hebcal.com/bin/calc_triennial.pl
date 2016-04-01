@@ -8,7 +8,7 @@
 #
 # Calculates triennial according to
 #   A Complete Triennial System for Reading the Torah
-#   http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml
+#   http://web.archive.org/web/20160306224926/http://jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
 # Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
@@ -932,6 +932,13 @@ EOHTML
     return $s;
 }
 
+sub sefaria_verse_url {
+    my($verse) = @_;
+    $verse =~ s/ - /-/;
+    $verse =~ s/ /\%20/g;
+    return "http://www.sefaria.org/" . $verse;
+}
+
 sub write_sedra_page
 {
     my($parshiot,$h,$prev,$next,$triennial_readings) = @_;
@@ -1128,9 +1135,12 @@ EOHTML
 		my $sp_verse = $special{$dt}->{"H"};
 		my $sp_festival = $special{$dt}->{"reason"};
 		$sp_festival =~ s/ - Day \d//; # Chanukah
-		my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
+#		my $sp_href = $fxml->{'festival'}->{$sp_festival}->{'kriyah'}->{'haft'}->{'href'};
+                my $sp_href = sefaria_verse_url($sp_verse);
+
 		if ($h eq "Pinchas" && ! defined $sp_href) {
-		  $sp_href = "http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot_haft.shtml";
+#		  $sp_href = "http://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/mattot_haft.shtml";
+                  $sp_href = sefaria_verse_url("Jeremiah 1:1 - 2:3");
 		}
 		my($year,$month,$day) = split(/-/, $dt);
 		my $stime2 = format_html_date($year,$month,$day);
@@ -1201,7 +1211,7 @@ href="$amazon_link2">The
 Chumash: The Stone Edition (Artscroll Series)</a></em>
 <dd>Nosson Scherman, Mesorah Publications, 1993
 <dt><em><a class="outbound"
-href="http://www.jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
+href="http://web.archive.org/web/20160306224926/http://jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
 </dl>
@@ -1386,13 +1396,16 @@ sub get_parashah_links {
                 my $hyear = $hebdate->{"yy"};
                 $out->{uscj} = "http://uscj.org/JewishLivingandLearning/WeeklyParashah/TorahSparks/Archive/_$hyear/$target$hyear.aspx";
             }
-        } elsif ($l->{'rel'} eq 'torah') {
-            $out->{torah} = $l->{'href'};
+#        } elsif ($l->{'rel'} eq 'torah') {
+#            $out->{torah} = $l->{'href'};
         } elsif ($l->{'rel'} eq 'drash:chabad.org') {
             my $target = $l->{'target'};
             $out->{chabad} = "http://www.chabad.org/article.asp?aid=$target";
         }
     }
+
+    $out->{torah} = sefaria_verse_url($parashah->{'verse'});
+
     return $out;
 }
 
@@ -1430,8 +1443,9 @@ sub get_parashah_info
         my $links0 = get_parashah_links($ph,$parshiot->{'parsha'}->{$ph});
         my $torah_href0 = $links0->{torah};
 
-	$haftarah_href = $torah_href0;
-	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+#	$haftarah_href = $torah_href0;
+#	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+        $haftarah_href = sefaria_verse_url($haftarah);
 
 	# for now, link torah reading to first part
         my $links1 = get_parashah_links($p1,$parshiot->{'parsha'}->{$p1});
@@ -1450,8 +1464,9 @@ sub get_parashah_info
         $links = get_parashah_links($h,$parshiot->{'parsha'}->{$h});
         $torah_href = $links->{torah};
 
-	$haftarah_href = $torah_href;
-	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+#	$haftarah_href = $torah_href;
+#	$haftarah_href =~ s/.shtml$/_haft.shtml/;
+        $haftarah_href = sefaria_verse_url($haftarah);
     }
 
     ($hebrew,$torah,$haftarah,$haftarah_seph,
