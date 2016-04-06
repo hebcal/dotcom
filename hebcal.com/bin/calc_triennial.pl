@@ -862,7 +862,7 @@ EOHTML
 sub write_drash_links {
     my($drash,$h) = @_;
 
-    my @sites = qw(ou torg reform uscj chabad);
+    my @sites = qw(ou torg reform jts chabad);
     my $count = 0;
     foreach my $site (@sites) {
         $count++ if $drash->{$site};
@@ -877,10 +877,10 @@ sub write_drash_links {
         "reform" => "Reform Judaism",
         "chabad" => "Chabad",
         "uscj" => "United Synagogue of Conservative Judaism",
+        "jts" => "Jewish Theological Seminary",
     );
 
     foreach my $site (@sites) {
-        next if $site eq "uscj";
         if ($drash->{$site}) {
             my $name = $site_name{$site};
             print OUT2 qq{<li><a class="outbound" title="Parashat $h commentary from $name" href="$drash->{$site}">$name</a>\n};
@@ -1388,6 +1388,19 @@ sub get_parashah_links {
         } elsif ($l->{'rel'} eq 'drash:reformjudaism.org') {
             my $target = $l->{'target'};
             $out->{reform} = "http://www.reformjudaism.org/learning/torah-study/$target";
+        } elsif ($l->{'rel'} eq 'drash:jtsa.edu') {
+            my $cid = $l->{'cid'};
+            my $cid2 = $l->{'cid2'};
+            if ($cid && $cid2 && $cid2 lt $cid) {
+                my $tmp = $cid;
+                $cid = $cid2;
+                $cid2 = $tmp;
+            }
+            my $url = "http://www.jtsa.edu/jts-torah-online?parashah=$cid";
+            if ($cid2) {
+                $url .= "&amp;parashah=$cid2";
+            }
+            $out->{jts} = $url;
         } elsif ($l->{'rel'} eq 'drash:uscj.org') {
             my $target = $l->{'target'};
             my $dt = most_recent_past_reading($h);

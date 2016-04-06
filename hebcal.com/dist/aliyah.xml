@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-Copyright (c) 2015  Michael J. Radwin.
+Copyright (c) 2016  Michael J. Radwin.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or
@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 1:1 - 6:8"
  haftara="Isaiah 42:5 - 43:10" sephardic="Isaiah 42:5 - 42:21">
 <links>
+ <link rel="drash:jtsa.edu" cid="2101" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=1" />
  <link rel="drash:ou.org" target="Bereshit" cid="1371" />
  <link rel="drash:reformjudaism.org" target="breishit" />
@@ -91,6 +92,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 6:9 - 11:32"
  haftara="Isaiah 54:1 - 55:5" sephardic="Isaiah 54:1 - 54:10">
 <links>
+ <link rel="drash:jtsa.edu" cid="2100" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=2" />
  <link rel="drash:ou.org" target="Noach" cid="1372" />
  <link rel="drash:reformjudaism.org" target="noach" />
@@ -146,6 +148,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 12:1 - 17:27"
  haftara="Isaiah 40:27 - 41:16">
 <links>
+ <link rel="drash:jtsa.edu" cid="2099" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=3" />
  <link rel="drash:ou.org" target="Lech Lecha" cid="1374" />
  <link rel="drash:reformjudaism.org" target="lech-lcha" />
@@ -201,6 +204,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 18:1 - 22:24"
  haftara="II Kings 4:1 - 4:37" sephardic="II Kings 4:1 - 4:23">
 <links>
+ <link rel="drash:jtsa.edu" cid="2098" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=4" />
  <link rel="drash:ou.org" target="Vayerah" cid="1375" />
  <link rel="drash:reformjudaism.org" target="vayeira" />
@@ -256,6 +260,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 23:1 - 25:18"
  haftara="I Kings 1:1 - 1:31">
 <links>
+ <link rel="drash:jtsa.edu" cid="2097" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=5" />
  <link rel="drash:ou.org" target="Chayei Sarah" cid="1376" />
  <link rel="drash:reformjudaism.org" target="chayei-sarah" />
@@ -311,6 +316,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 25:19 - 28:9"
  haftara="Malachi 1:1 - 2:7">
 <links>
+ <link rel="drash:jtsa.edu" cid="2096" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=6" />
  <link rel="drash:ou.org" target="Toldot" cid="1377" />
  <link rel="drash:reformjudaism.org" target="toldot" />
@@ -366,6 +372,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 28:10 - 32:3"
  haftara="Hosea 12:13 - 14:10" sephardic="Hosea 11:7 - 12:12">
 <links>
+ <link rel="drash:jtsa.edu" cid="2095" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=7" />
  <link rel="drash:ou.org" target="Vayeitzei" cid="1378" />
  <link rel="drash:reformjudaism.org" target="vayeitzei" />
@@ -421,6 +428,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 32:4 - 36:43"
  haftara="Obadiah 1:1 - 1:21">
 <links>
+ <link rel="drash:jtsa.edu" cid="3748" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=8" />
  <link rel="drash:ou.org" target="Vayishlach" cid="1379" />
  <link rel="drash:reformjudaism.org" target="vayishlach" />
@@ -476,6 +484,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 37:1 - 40:23"
  haftara="Amos 2:6 - 3:8">
 <links>
+ <link rel="drash:jtsa.edu" cid="2094" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=9" />
  <link rel="drash:ou.org" target="Vayeishev" cid="1380" />
  <link rel="drash:reformjudaism.org" target="vayeishev" />
@@ -531,6 +540,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 41:1 - 44:17"
  haftara="I Kings 3:15 - 4:1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2093" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=10" />
  <link rel="drash:ou.org" target="Mikeitz" cid="1381" />
  <link rel="drash:reformjudaism.org" target="mikeitz" />
@@ -586,6 +596,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 44:18 - 47:27"
  haftara="Ezekiel 37:15 - 37:28">
 <links>
+ <link rel="drash:jtsa.edu" cid="2092" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=11" />
  <link rel="drash:ou.org" target="Vayigash" cid="1382" />
  <link rel="drash:reformjudaism.org" target="vayigash" />
@@ -641,6 +652,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Genesis 47:28 - 50:26"
  haftara="I Kings 2:1 - 2:12">
 <links>
+ <link rel="drash:jtsa.edu" cid="2091" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=12" />
  <link rel="drash:ou.org" target="Vayechi" cid="1373" />
  <link rel="drash:reformjudaism.org" target="va-ychi" />
@@ -696,6 +708,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 1:1 - 6:1"
  haftara="Isaiah 27:6 - 28:13; 29:22 - 29:23" sephardic="Jeremiah 1:1 - 2:3">
 <links>
+ <link rel="drash:jtsa.edu" cid="2090" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=21" />
  <link rel="drash:ou.org" target="Shemot" cid="1384" />
  <link rel="drash:reformjudaism.org" target="shmot" />
@@ -751,6 +764,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 6:2 - 9:35"
  haftara="Ezekiel 28:25 - 29:21">
 <links>
+ <link rel="drash:jtsa.edu" cid="2089" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=22" />
  <link rel="drash:ou.org" target="Vaeira" cid="1385" />
  <link rel="drash:reformjudaism.org" target="va-eira" />
@@ -806,6 +820,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 10:1 - 13:16"
  haftara="Jeremiah 46:13 - 46:28">
 <links>
+ <link rel="drash:jtsa.edu" cid="2088" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=23" />
  <link rel="drash:ou.org" target="Bo" cid="1386" />
  <link rel="drash:reformjudaism.org" target="bo" />
@@ -861,6 +876,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 13:17 - 17:16"
  haftara="Judges 4:4 - 5:31" sephardic="Judges 5:1 - 5:31">
 <links>
+ <link rel="drash:jtsa.edu" cid="2087" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=24" />
  <link rel="drash:ou.org" target="Beshalach" cid="1387" />
  <link rel="drash:reformjudaism.org" target="bshalach" />
@@ -916,6 +932,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 18:1 - 20:23"
  haftara="Isaiah 6:1 - 7:6; 9:5 - 9:6" sephardic="Isaiah 6:1 - 6:13">
 <links>
+ <link rel="drash:jtsa.edu" cid="2086" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=25" />
  <link rel="drash:ou.org" target="Yitro" cid="1388" />
  <link rel="drash:reformjudaism.org" target="yitro" />
@@ -976,6 +993,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 21:1 - 24:18"
  haftara="Jeremiah 34:8 - 34:22; 33:25 - 33:26">
 <links>
+ <link rel="drash:jtsa.edu" cid="2085" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=26" />
  <link rel="drash:ou.org" target="Mishpatim" cid="1389" />
  <link rel="drash:reformjudaism.org" target="mishpatim" />
@@ -1031,6 +1049,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 25:1 - 27:19"
  haftara="I Kings 5:26 - 6:13">
 <links>
+ <link rel="drash:jtsa.edu" cid="2084" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=27" />
  <link rel="drash:ou.org" target="Teruma" cid="1390" />
  <link rel="drash:reformjudaism.org" target="trumah" />
@@ -1086,6 +1105,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 27:20 - 30:10"
  haftara="Ezekiel 43:10 - 43:27">
 <links>
+ <link rel="drash:jtsa.edu" cid="2083" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=28" />
  <link rel="drash:ou.org" target="Tetzaveh" cid="1391" />
  <link rel="drash:reformjudaism.org" target="ttzaveh" />
@@ -1141,6 +1161,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 30:11 - 34:35"
  haftara="I Kings 18:1 - 18:39" sephardic="I Kings 18:20 - 18:39">
 <links>
+ <link rel="drash:jtsa.edu" cid="2082" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=29" />
  <link rel="drash:ou.org" target="Ki Tisa" cid="1392" />
  <link rel="drash:reformjudaism.org" target="ki-tisa" />
@@ -1196,6 +1217,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 35:1 - 38:20"
  haftara="I Kings 7:40 - 7:50" sephardic="I Kings 7:13 - 7:26">
 <links>
+ <link rel="drash:jtsa.edu" cid="2081" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=30" />
  <link rel="drash:ou.org" target="Vayakhel" cid="1393" />
  <link rel="drash:reformjudaism.org" target="vayakheil" />
@@ -1266,6 +1288,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Exodus 38:21 - 40:38"
  haftara="I Kings 7:51 - 8:21" sephardic="I Kings 7:40 - 7:50">
 <links>
+ <link rel="drash:jtsa.edu" cid="2080" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=31" />
  <link rel="drash:ou.org" target="Pekudei" cid="1394" />
  <link rel="drash:reformjudaism.org" target="pkudei" />
@@ -1318,6 +1341,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 1:1 - 5:26"
  haftara="Isaiah 43:21 - 44:23">
 <links>
+ <link rel="drash:jtsa.edu" cid="2079" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=41" />
  <link rel="drash:ou.org" target="Vayikra" cid="1396" />
  <link rel="drash:reformjudaism.org" target="vayikra" />
@@ -1373,6 +1397,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 6:1 - 8:36"
  haftara="Jeremiah 7:21 - 8:3; 9:22 - 9:23">
 <links>
+ <link rel="drash:jtsa.edu" cid="2078" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=42" />
  <link rel="drash:ou.org" target="Tzav" cid="1397" />
  <link rel="drash:reformjudaism.org" target="tzav" />
@@ -1428,6 +1453,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 9:1 - 11:47"
  haftara="II Samuel 6:1 - 7:17" sephardic="II Samuel 6:1 - 6:19">
 <links>
+ <link rel="drash:jtsa.edu" cid="2077" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=43" />
  <link rel="drash:ou.org" target="Shemini" cid="1398" />
  <link rel="drash:reformjudaism.org" target="shmini" />
@@ -1483,6 +1509,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 12:1 - 13:59"
  haftara="II Kings 4:42 - 5:19">
 <links>
+ <link rel="drash:jtsa.edu" cid="2076" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=44" />
  <link rel="drash:ou.org" target="Tazria" cid="1399" />
  <link rel="drash:reformjudaism.org" target="tazria" />
@@ -1540,6 +1567,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 14:1 - 15:33"
  haftara="II Kings 7:3 - 7:20">
 <links>
+ <link rel="drash:jtsa.edu" cid="2075" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=45" />
  <link rel="drash:ou.org" target="Metzorah" cid="1400" />
  <link rel="drash:reformjudaism.org" target="mtzora" />
@@ -1588,6 +1616,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 16:1 - 18:30"
  haftara="Ezekiel 22:1 - 22:19" sephardic="Ezekiel 22:1 - 22:16">
 <links>
+ <link rel="drash:jtsa.edu" cid="2074" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=46" />
  <link rel="drash:ou.org" target="Acharei Mot" cid="1401" />
  <link rel="drash:reformjudaism.org" target="acharei-mot" />
@@ -1645,6 +1674,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 19:1 - 20:27"
  haftara="Amos 9:7 - 9:15" sephardic="Ezekiel 20:2 - 20:20">
 <links>
+ <link rel="drash:jtsa.edu" cid="2073" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=48" />
  <link rel="drash:ou.org" target="Kedoshim" cid="1402" />
  <link rel="drash:reformjudaism.org" target="kdoshim" />
@@ -1702,6 +1732,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 21:1 - 24:23"
  haftara="Ezekiel 44:15 - 44:31">
 <links>
+ <link rel="drash:jtsa.edu" cid="2072" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=49" />
  <link rel="drash:ou.org" target="Emor" cid="1403" />
  <link rel="drash:reformjudaism.org" target="emor" />
@@ -1757,6 +1788,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 25:1 - 26:2"
  haftara="Jeremiah 32:6 - 32:27">
 <links>
+ <link rel="drash:jtsa.edu" cid="2071" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=50" />
  <link rel="drash:ou.org" target="Behar" cid="1404" />
  <link rel="drash:reformjudaism.org" target="bhar" />
@@ -1814,6 +1846,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Leviticus 26:3 - 27:34"
  haftara="Jeremiah 16:19 - 17:14">
 <links>
+ <link rel="drash:jtsa.edu" cid="2070" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=51" />
  <link rel="drash:ou.org" target="Bechukotai" cid="1405" />
  <link rel="drash:reformjudaism.org" target="bchukotai" />
@@ -1862,6 +1895,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 1:1 - 4:20"
  haftara="Hosea 2:1 - 2:22">
 <links>
+ <link rel="drash:jtsa.edu" cid="2069" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=61" />
  <link rel="drash:ou.org" target="Bamidbar" cid="1407" />
  <link rel="drash:reformjudaism.org" target="bmidbar" />
@@ -1917,6 +1951,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 4:21 - 7:89"
  haftara="Judges 13:2 - 13:25">
 <links>
+ <link rel="drash:jtsa.edu" cid="2068" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=62" />
  <link rel="drash:ou.org" target="Naso" cid="1408" />
  <link rel="drash:reformjudaism.org" target="naso" />
@@ -1972,6 +2007,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 8:1 - 12:16"
  haftara="Zechariah 2:14 - 4:7">
 <links>
+ <link rel="drash:jtsa.edu" cid="2067" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=63" />
  <link rel="drash:ou.org" target="Beha'alotecha" cid="1409" />
  <link rel="drash:reformjudaism.org" target="bhaalotcha" />
@@ -2027,6 +2063,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 13:1 - 15:41"
  haftara="Joshua 2:1 - 2:24">
 <links>
+ <link rel="drash:jtsa.edu" cid="2066" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=65" />
  <link rel="drash:ou.org" target="Shelach" cid="1410" />
  <link rel="drash:reformjudaism.org" target="shlach-lcha" />
@@ -2082,6 +2119,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 16:1 - 18:32"
  haftara="I Samuel 11:14 - 12:22">
 <links>
+ <link rel="drash:jtsa.edu" cid="2065" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=66" />
  <link rel="drash:ou.org" target="Korach" cid="1411" />
  <link rel="drash:reformjudaism.org" target="korach" />
@@ -2137,6 +2175,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 19:1 - 22:1"
  haftara="Judges 11:1 - 11:33">
 <links>
+ <link rel="drash:jtsa.edu" cid="2064" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=67" />
  <link rel="drash:ou.org" target="Chukat" cid="1412" />
  <link rel="drash:reformjudaism.org" target="chukat" />
@@ -2228,6 +2267,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 22:2 - 25:9"
  haftara="Micah 5:6 - 6:8">
 <links>
+ <link rel="drash:jtsa.edu" cid="2063" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=68" />
  <link rel="drash:ou.org" target="Balak" cid="1413" />
  <link rel="drash:reformjudaism.org" target="balak" />
@@ -2301,6 +2341,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 25:10 - 30:1"
  haftara="I Kings 18:46 - 19:21">
 <links>
+ <link rel="drash:jtsa.edu" cid="2062" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=69" />
  <link rel="drash:ou.org" target="Pinchas" cid="1414" />
  <link rel="drash:reformjudaism.org" target="pinchas" />
@@ -2356,6 +2397,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 30:2 - 32:42"
  haftara="Jeremiah 1:1 - 2:3">
 <links>
+ <link rel="drash:jtsa.edu" cid="2061" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=70" />
  <link rel="drash:ou.org" target="Matot" cid="1415" />
  <link rel="drash:reformjudaism.org" target="matot" />
@@ -2411,6 +2453,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Numbers 33:1 - 36:13"
  haftara="Jeremiah 2:4 - 28; 3:4" sephardic="Jeremiah 2:4 - 28; 4:1 - 4:2">
 <links>
+ <link rel="drash:jtsa.edu" cid="2060" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=71" />
  <link rel="drash:ou.org" target="Masei" cid="1416" />
  <link rel="drash:reformjudaism.org" target="mas-ei" />
@@ -2457,6 +2500,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 1:1 - 3:22"
  haftara="Isaiah 1:1 - 1:27">
 <links>
+ <link rel="drash:jtsa.edu" cid="2059" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=81" />
  <link rel="drash:ou.org" target="Devarim" cid="1418" />
  <link rel="drash:reformjudaism.org" target="dvarim" />
@@ -2512,6 +2556,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 3:23 - 7:11"
  haftara="Isaiah 40:1 - 40:26">
 <links>
+ <link rel="drash:jtsa.edu" cid="2058" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=82" />
  <link rel="drash:ou.org" target="Va'etchanan" cid="1419" />
  <link rel="drash:reformjudaism.org" target="va-etchanan" />
@@ -2599,6 +2644,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 7:12 - 11:25"
  haftara="Isaiah 49:14 - 51:3">
 <links>
+ <link rel="drash:jtsa.edu" cid="2057" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=83" />
  <link rel="drash:ou.org" target="Eikev" cid="1420" />
  <link rel="drash:reformjudaism.org" target="eikev" />
@@ -2654,6 +2700,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 11:26 - 16:17"
  haftara="Isaiah 54:11 - 55:5">
 <links>
+ <link rel="drash:jtsa.edu" cid="2056" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=84" />
  <link rel="drash:ou.org" target="Re'eh" cid="1421" />
  <link rel="drash:reformjudaism.org" target="reih" />
@@ -2709,6 +2756,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 16:18 - 21:9"
  haftara="Isaiah 51:12 - 52:12">
 <links>
+ <link rel="drash:jtsa.edu" cid="2055" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=85" />
  <link rel="drash:ou.org" target="Shoftim" cid="1422" />
  <link rel="drash:reformjudaism.org" target="shoftim" />
@@ -2764,6 +2812,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 21:10 - 25:19"
  haftara="Isaiah 54:1 - 54:10">
 <links>
+ <link rel="drash:jtsa.edu" cid="2054" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=86" />
  <link rel="drash:ou.org" target="Ki Teitzei" cid="1423" />
  <link rel="drash:reformjudaism.org" target="ki-teitzei" />
@@ -2819,6 +2868,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 26:1 - 29:8"
  haftara="Isaiah 60:1 - 60:22">
 <links>
+ <link rel="drash:jtsa.edu" cid="2053" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=87" />
  <link rel="drash:ou.org" target="Ki Tavo" cid="1424" />
  <link rel="drash:reformjudaism.org" target="ki-tavo" />
@@ -2874,6 +2924,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 29:9 - 30:20"
  haftara="Isaiah 61:10 - 63:9">
 <links>
+ <link rel="drash:jtsa.edu" cid="2052" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=88" />
  <link rel="drash:ou.org" target="Nitzavim" cid="1425" />
  <link rel="drash:reformjudaism.org" target="nitzavim" />
@@ -2911,6 +2962,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 31:1 - 31:30"
  haftara="Isaiah 55:6 - 56:8">
 <links>
+ <link rel="drash:jtsa.edu" cid="2051" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=89" />
  <link rel="drash:ou.org" target="Vayeilech" cid="1426" />
  <link rel="drash:reformjudaism.org" target="vayeilech" />
@@ -2948,6 +3000,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 32:1 - 32:52"
  haftara="II Samuel 22:1 - 22:51">
 <links>
+ <link rel="drash:jtsa.edu" cid="2050" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=90" />
  <link rel="drash:ou.org" target="Ha'azinu" cid="1427" />
  <link rel="drash:reformjudaism.org" target="haazinu" />
@@ -2985,6 +3038,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  verse="Deuteronomy 33:1 - 34:12"
  haftara="Joshua 1:1 - 1:18" sephardic="Joshua 1:1 - 1:9">
 <links>
+ <link rel="drash:jtsa.edu" cid="2049" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=91" />
  <link rel="drash:ou.org" target="V'zot Habracha" cid="1428" />
  <link rel="drash:reformjudaism.org" target="vzot-habrachah" />
@@ -3007,6 +3061,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Vayakhel-Pekudei" num="101"
  verse="Exodus 35:1 - 40:38" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2081" cid2="2080" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=30&amp;id2=31" />
  <link rel="drash:chabad.org" target="15569" />
  <link rel="drash:uscj.org" target="VayakhelPekudei" />
@@ -3065,6 +3120,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Tazria-Metzora" num="102"
  verse="Leviticus 12:1 - 15:33" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2076" cid2="2075" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=44&amp;id2=45" />
  <link rel="drash:chabad.org" target="15578" />
  <link rel="drash:uscj.org" target="TazriaMetzora" />
@@ -3121,6 +3177,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Achrei Mot-Kedoshim" num="103"
  verse="Leviticus 16:1 - 20:27" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2074" cid2="2073" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=46&amp;id2=48" />
  <link rel="drash:chabad.org" target="15581" />
  <link rel="drash:uscj.org" target="AhareiMotKedoshim" />
@@ -3177,6 +3234,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Behar-Bechukotai" num="104"
  verse="Leviticus 25:1 - 27:34" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2071" cid2="2070" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=50&amp;id2=51" />
  <link rel="drash:chabad.org" target="15585" />
  <link rel="drash:uscj.org" target="BeharBehukotai" />
@@ -3233,6 +3291,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Chukat-Balak" num="105"
  verse="Numbers 19:1 - 25:9" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2064" cid2="2063" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=67&amp;id2=68" />
  <link rel="drash:chabad.org" target="45613" />
  <link rel="drash:uscj.org" target="Hukkat_Balak" />
@@ -3292,6 +3351,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Matot-Masei" num="106"
  verse="Numbers 30:2 - 36:13" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2061" cid2="2060" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=70&amp;id2=71" />
  <link rel="drash:chabad.org" target="52599" />
  <link rel="drash:uscj.org" target="MattotMassey" />
@@ -3347,6 +3407,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <parsha id="Nitzavim-Vayeilech" num="107"
  verse="Deuteronomy 29:9 - 31:30" combined="1">
 <links>
+ <link rel="drash:jtsa.edu" cid="2052" cid2="2051" />
  <link rel="drash:torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=88&amp;id2=89" />
  <link rel="drash:chabad.org" target="53151" />
  <link rel="drash:uscj.org" target="NitzavimVayelekh" />
