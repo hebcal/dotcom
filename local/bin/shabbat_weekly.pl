@@ -261,6 +261,61 @@ sub by_timezone {
     }
 }
 
+sub special_note {
+    my($cfg) = @_;
+
+    my $special_message;
+
+    # for the last two weeks of Av and the last week or two of Elul
+    my @today = Date::Calc::Today();
+    my $hebdate = HebcalGPL::greg2hebrew($today[0], $today[1], $today[2]);
+    if (($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} >= 15)
+        || ($hebdate->{"mm"} == $HebcalGPL::ELUL && $hebdate->{"dd"} >= 16)) {
+
+        my $loc = $cfg->{loc};
+        my $loc_short = $loc;
+        $loc_short =~ s/,.+$//;
+
+        my $next_year = $hebdate->{"yy"} + 1;
+        my $fridge_loc = defined $cfg->{zip} ? "zip=" . $cfg->{zip}
+            : defined $cfg->{geonameid} ? "geonameid=" . $cfg->{geonameid}
+            : "city=" . URI::Escape::uri_escape_utf8($cfg->{"city"});
+
+        my $erev_rh = day_before_rosh_hashana($hebdate->{"yy"} + 1);
+        my $dow = $Hebcal::DoW[Hebcal::get_dow($erev_rh->{"yy"},
+                                               $erev_rh->{"mm"},
+                                               $erev_rh->{"dd"})];
+        my $when = sprintf("%s, %s %d",
+                           $dow,
+                           $Hebcal::MoY_long{$erev_rh->{"mm"}},
+                           $erev_rh->{"dd"});
+
+        my $url = "http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year";
+        $url .= "&amp;m=" . $cfg->{m}
+            if defined $cfg->{m} && $cfg->{m} =~ /^\d+$/;
+        $url .= "&amp;$UTM_PARAM";
+
+        $special_message = qq{Rosh Hashana begins at sundown on $when. Print your }
+            . qq{<a style="color:#356635" href="$url">}
+            . qq{$loc_short virtual refrigerator magnet</a> for candle lighting times and }
+            . qq{Parashat haShavuah on a compact 5x7 page.};
+    } elsif ($hebdate->{"mm"} == $HebcalGPL::NISAN &&
+             $hebdate->{"dd"} >= 4 &&
+             $hebdate->{"dd"} <= 13) {
+        $special_message = qq{Chag Pesach Sameach! Count the Omer this year with }
+            . qq{<a style="color:#356635" href="https://www.hebcal.com/home/1380/hebcal-voice-amazon-echo-alexa">}
+            . qq{Hebcal by voice on the Amazon Echo/Alexa</a>. Just say, "Alexa, ask Hebcal to count the Omer."};
+    }
+
+    if ($special_message) {
+        my $html_begin = qq{<div style="font-size:14px;font-family:arial,helvetica,sans-serif;padding:8px;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;border-radius:4px">\n};
+        my $html_end   = qq{\n</div>\n<div>&nbsp;</div>\n};
+        $special_message = $html_begin . $special_message . $html_end;
+    }
+
+    return $special_message;
+}
+
 sub mail_user
 {
     my($to) = @_;
@@ -290,37 +345,7 @@ sub mail_user
     my $loc_short = $loc;
     $loc_short =~ s/,.+$//;
 
-    # for the last two weeks of Av and the last week or two of Elul
-    my @today = Date::Calc::Today();
-    my $hebdate = HebcalGPL::greg2hebrew($today[0], $today[1], $today[2]);
-    if (($hebdate->{"mm"} == $HebcalGPL::AV && $hebdate->{"dd"} >= 15)
-        || ($hebdate->{"mm"} == $HebcalGPL::ELUL && $hebdate->{"dd"} >= 16)) {
-        my $next_year = $hebdate->{"yy"} + 1;
-        my $fridge_loc = defined $cfg->{zip} ? "zip=" . $cfg->{zip}
-            : defined $cfg->{geonameid} ? "geonameid=" . $cfg->{geonameid}
-            : "city=" . URI::Escape::uri_escape_utf8($cfg->{"city"});
-
-        my $erev_rh = day_before_rosh_hashana($hebdate->{"yy"} + 1);
-        my $dow = $Hebcal::DoW[Hebcal::get_dow($erev_rh->{"yy"},
-                                               $erev_rh->{"mm"},
-                                               $erev_rh->{"dd"})];
-        my $when = sprintf("%s, %s %d",
-                           $dow,
-                           $Hebcal::MoY_long{$erev_rh->{"mm"}},
-                           $erev_rh->{"dd"});
-
-        my $url = "http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year";
-        $url .= "&amp;m=" . $cfg->{m}
-            if defined $cfg->{m} && $cfg->{m} =~ /^\d+$/;
-        $url .= "&amp;$UTM_PARAM";
-
-        $html_body .= qq{<div style="font-size:14px;font-family:arial,helvetica,sans-serif;padding:8px;color:#468847;background-color:#dff0d8;border-color:#d6e9c6;border-radius:4px">\n};
-        $html_body .= qq{Rosh Hashana begins at sundown on $when. Print your }
-            . qq{<a style="color:#356635" href="$url">}
-            . qq{$loc_short virtual refrigerator magnet</a> for candle lighting times and }
-            . qq{Parashat haShavuah on a compact 5x7 page.\n</div>\n}
-            . qq{<div>&nbsp;</div>\n};
-    }
+    $html_body .= special_note($cfg);
 
     # begin the HTML for the events - main body
     $html_body .= qq{<div style="font-size:18px;font-family:georgia,'times new roman',times,serif;">\n};
