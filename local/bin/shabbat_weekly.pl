@@ -303,8 +303,9 @@ sub special_note {
              $hebdate->{"dd"} >= 4 &&
              $hebdate->{"dd"} <= 13) {
         $special_message = qq{Chag Pesach Sameach! Count the Omer this year with }
-            . qq{<a style="color:#356635" href="https://www.hebcal.com/home/1380/hebcal-voice-amazon-echo-alexa">}
-            . qq{Hebcal by voice on the Amazon Echo/Alexa</a>. Just say, "Alexa, ask Hebcal to count the Omer."};
+            . qq{<a style="color:#356635" href="https://www.hebcal.com/home/1380/hebcal-voice-amazon-echo-alexa?$UTM_PARAM">}
+            . qq{Hebcal by voice on the Amazon Echo/Alexa</a>. Enable the Hebcal skill in your Alexa app }
+            . qq{and then say, "Alexa, ask Hebcal for the Omer count."};
     }
 
     if ($special_message) {
