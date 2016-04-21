@@ -238,11 +238,14 @@ sub process_args
 
 sub get_events {
     my($city_descr,$cmd,$fri_year,$sat_year) = @_;
+    my $no_havdalah = (defined $q->param('m') && $q->param('m') eq "0") ? 1 : 0;
 
-    my @events = Hebcal::invoke_hebcal_v2("$cmd $sat_year", "", 0);
+    my @events = Hebcal::invoke_hebcal_v2("$cmd $sat_year", "", 0,
+        0, 0, 0, 0, 0, $no_havdalah);
     if ($sat_year != $fri_year) {
         # Happens when Friday is Dec 31st and Sat is Jan 1st
-        my @ev2 = Hebcal::invoke_hebcal_v2("$cmd 12 $fri_year", "", 0);
+        my @ev2 = Hebcal::invoke_hebcal_v2("$cmd 12 $fri_year", "", 0,
+            0, 0, 0, 0, 0, $no_havdalah);
         @events = (@ev2, @events);
     }
 

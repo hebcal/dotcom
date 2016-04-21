@@ -496,7 +496,7 @@ sub filter_event {
 sub invoke_hebcal_v2 {
     my($cmd,$memo,$want_sephardic,$month_filter,
         $no_minor_fasts,$no_special_shabbat,
-        $no_minor_holidays,$no_modern_holidays) = @_;
+        $no_minor_holidays,$no_modern_holidays,$no_havdalah) = @_;
     local($_);
     local(*HEBCAL);
 
@@ -540,12 +540,14 @@ sub invoke_hebcal_v2 {
 
         next if filter_event($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays);
 
-        # Suppress Havdalah when it's on same day as Candle lighting
-        next if ($subj =~ /^Havdalah/ && $#events >= 0 &&
-            $events[$#events]->{mday} == $mday &&
-            $events[$#events]->{subj} =~ /^Candle lighting/);
-
-        next if $subj eq 'Havdalah (0 min)';
+        if ($subj =~ /^Havdalah/) {
+            next if $no_havdalah;
+            next if $subj eq 'Havdalah (0 min)';
+            # Suppress Havdalah when it's on same day as Candle lighting
+            next if ($#events >= 0 &&
+                $events[$#events]->{mday} == $mday &&
+                $events[$#events]->{subj} =~ /^Candle lighting/);
+        }
 
         # merge related candle-lighting times into previously seen Chanukah event object
         if ($#events >= 0 &&
@@ -2017,10 +2019,16 @@ sub process_args_common {
     my($cmd,$latitude,$longitude,$city_descr) = @status[1..4];
 
     # candle-lighting minutes before sundown (-b)
+    if (defined $q->param('b') && $q->param('b') =~ /^\d+$/) {
+        my $value = $q->param('b');
+        $cmd .= " -b $value";
+    }
+
     # and Havdalah mins after sundown (-m)
-    foreach (qw(b m)) {
-        $cmd .= join('', ' -', $_, ' ', $q->param($_))
-            if defined $q->param($_) && $q->param($_) =~ /^\d+$/;
+    if (defined $q->param('m') && $q->param('m') =~ /^\d+$/) {
+        # force default value when user specifies 0 (for 2nd day chag)
+        my $value = $q->param('m') || $havdalah_min;
+        $cmd .= " -m $value";
     }
 
     foreach (qw(a i)) {

@@ -394,9 +394,27 @@ sub fullcalendar_filter_events {
     return \@out;
 }
 
+sub my_invoke_hebcal_inner {
+    my($cmd0,$month) = @_;
+    my $no_havdalah = (defined $q->param('m') && $q->param('m') eq "0") ? 1 : 0;
+    my @events = Hebcal::invoke_hebcal_v2(
+        $cmd0, "", $g_seph, $month,
+        $g_nmf, $g_nss, $g_nminor, $g_nmodern,
+        $no_havdalah);
+    return @events;
+}
+
+sub my_invoke_hebcal_cmd {
+    my($cmd2) = @_;
+    return my_invoke_hebcal_inner($cmd2, undef);
+}
+
+sub my_invoke_hebcal {
+    return my_invoke_hebcal_inner($cmd, $g_month);
+}
+
 sub fullcalendar_events {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -420,8 +438,7 @@ sub fullcalendar_events {
 
 sub json_events
 {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
     my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0,$cconfig{"tzid"},0,
         1, param_true("i"));
 
@@ -442,12 +459,10 @@ sub json_events
 sub javascript_events
 {
     my($v2) = @_;
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
     my $cmd2 = $cmd;
     $cmd2 =~ s/(\d+)$/$1+1/e;
-    my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, "", $g_seph, undef,
-                                    $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @ev2 = my_invoke_hebcal_cmd($cmd2);
     push(@events, @ev2);
 
     print STDOUT $q->header(-type => $content_type,
@@ -569,8 +584,7 @@ sub plus4_events {
         {
             my $cmd2 = $cmd;
             $cmd2 =~ s/(\d+)$/$1+$i/e;
-            my @ev2 = Hebcal::invoke_hebcal_v2($cmd2, "", $g_seph, undef,
-                                            $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+            my @ev2 = my_invoke_hebcal_cmd($cmd2);
             push(@{$events}, @ev2);
         }
         if ($g_date =~ /(\d+)/) {
@@ -585,8 +599,7 @@ sub plus4_events {
 
 sub vcalendar_display
 {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -604,8 +617,7 @@ use constant PDF_COLUMNS => 7;
 my %pdf_font;
 
 sub pdf_display {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
 
     my $title = "Jewish Calendar $g_date";
     if (defined $cconfig{"city"} && $cconfig{"city"} ne "") {
@@ -866,8 +878,7 @@ sub dba_display
     eval("use Palm::DBA");
     eval("use HebcalExport");
 
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
 
     HebcalExport::export_http_header($q, $content_type);
 
@@ -879,8 +890,7 @@ sub dba_display
 
 sub csv_display
 {
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
@@ -1728,8 +1738,7 @@ EOHTML
 ;
     print $head_divs;
 
-    my @events = Hebcal::invoke_hebcal_v2($cmd, "", $g_seph, $g_month,
-                                       $g_nmf, $g_nss, $g_nminor, $g_nmodern);
+    my @events = my_invoke_hebcal();
     push(@benchmarks, Benchmark->new);
 
     results_page_warnings(\@events);
