@@ -295,7 +295,7 @@ sub process_args
     my %cconfig;
 
     # force a valid Havdalah setting for yomtov starting Motzei Shabbat
-    if (defined $q->param('m') && $q->param('m') eq '0') {
+    if (!defined $q->param('m') || $q->param('m') eq '0') {
         $q->param('m', $Hebcal::havdalah_min);
     }
 
