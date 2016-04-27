@@ -264,7 +264,7 @@ sub by_timezone {
 sub special_note {
     my($cfg) = @_;
 
-    my $special_message;
+    my $special_message = "";
 
     # for the last two weeks of Av and the last week or two of Elul
     my @today = Date::Calc::Today();
