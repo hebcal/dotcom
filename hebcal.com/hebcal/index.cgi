@@ -268,6 +268,7 @@ my %extra_years_opts = (
     "D" => 3,
     "d" => 1,
     "F" => 1,
+    "c" => 3,
     "o" => 3,
     );
 if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
