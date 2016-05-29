@@ -272,7 +272,7 @@ my %extra_years_opts = (
     );
 if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
     $EXTRA_YEARS = $q->param("ny") - 1;
-} elsif (($g_year_type eq "G" && $q->param("year") >= 2016) || ($g_year_type eq "H" && $q->param("year") >= 5777)) {
+} elsif (($g_year_type eq "G" && $q->param("year") >= 2016) || ($g_year_type eq "H" && $q->param("year") >= 5776)) {
     foreach my $opt (keys %extra_years_opts) {
         if (param_true($opt)) {
             my $v = $extra_years_opts{$opt};
