@@ -175,6 +175,7 @@ EOHTML
 ;
 
 my $yomtov_html=<<EOHTML;
+<p>Holidays begin at sundown on the evening before the date specified.</p>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
