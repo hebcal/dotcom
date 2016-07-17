@@ -1789,6 +1789,10 @@ sub process_args_common_geopos2 {
         return (0, "Sorry, can't find <strong>$tzid</strong> in our time zone database", undef);
     }
 
+    if ($tzid eq 'Asia/Jerusalem' && ! defined $q->param('i')) {
+        $q->param('i','on');
+    }
+
     my $latitude = $q->param("latitude");
     my $longitude = $q->param("longitude");
     foreach my $value ($latitude, $longitude) {
@@ -1884,6 +1888,10 @@ sub process_args_common_geopos {
     $cmd .= " -z '$tzid'";
     $city_descr .= ", $tzid";
 
+    if ($tzid eq 'Asia/Jerusalem' && ! defined $q->param('i')) {
+        $q->param('i','on');
+    }
+ 
     foreach (qw(city zip tz dst geonameid)) {
 	$q->delete($_);
     }
