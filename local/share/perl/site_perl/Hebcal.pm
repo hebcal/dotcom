@@ -224,6 +224,7 @@ our %ashk2seph =
   "Erev Shavuos"		=>	"Erev Shavuot",
   "Shavuos I"			=>	"Shavuot I",
   "Shavuos II"			=>	"Shavuot II",
+  "Leil Selichos"   =>  "Leil Selichot",
 
   # variable holidays
   "Ta'anis Esther"		=>	"Ta'anit Esther",
