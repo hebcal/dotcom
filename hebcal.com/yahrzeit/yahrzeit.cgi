@@ -201,6 +201,21 @@ sub dba_display
     eval("use Palm::DBA");
 
     my @events = my_invoke_hebcal();
+    my @palm_events;
+    foreach my $evt (@events) {
+        my $pevt = [
+            $evt->{subj},
+            $evt->{untimed},
+            $evt->{min},
+            $evt->{hour},
+            $evt->{mday},
+            $evt->{mon},
+            $evt->{year},
+            $evt->{dur},
+            $evt->{memo},
+        ];
+        push(@palm_events, $pevt);
+    }
 
     eval("use HebcalExport");
     HebcalExport::export_http_header($q, "application/x-palm-dba");
@@ -209,7 +224,7 @@ sub dba_display
     $path_info =~ s,^.*/,,;
 
     Palm::DBA::write_header($path_info);
-    Palm::DBA::write_contents(\@events, 'America/New_York');
+    Palm::DBA::write_contents(\@palm_events, 'America/New_York');
 }
 
 sub csv_display
