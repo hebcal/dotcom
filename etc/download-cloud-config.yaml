@@ -105,8 +105,8 @@ runcmd:
   - a2enmod expires
   - a2enmod cgi
   - a2enmod remoteip
-  - a2dismod autoindex
-  - a2dismod ssl
+  - a2dismod -f autoindex
+  - a2dismod -f ssl
   - perl -pi -e 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
   - perl -pi -e 's/StartServers\s+\d+/StartServers 30/' /etc/apache2/mods-available/mpm_prefork.conf
   - perl -pi -e 's/MinSpareServers\s+\d+/MinSpareServers 30/' /etc/apache2/mods-available/mpm_prefork.conf
@@ -125,7 +125,7 @@ runcmd:
   - echo "vm.vfs_cache_pressure = 50" >> /etc/sysctl.conf
   - adduser mradwin hebcal
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-  - service ssh reload
+  - systemctl reload ssh.service
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
   - cp /tmp/dotcom/devops/etc/apache2/sites-available/download.hebcal.com.conf /etc/apache2/sites-available/download.hebcal.com.conf
@@ -134,4 +134,7 @@ runcmd:
   - service apache2 restart
   - mv /etc/varnish/default.vcl /etc/varnish/default.vcl.orig 
   - cp /etc/varnish/default.vcl.hebcal /etc/varnish/default.vcl
-  - service varnish restart
+  - mkdir /var/lib/varnish/hebcal
+  - systemctl enable varnish.service
+  - systemctl daemon-reload
+  - systemctl restart varnish.service
