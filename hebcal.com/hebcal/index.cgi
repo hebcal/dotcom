@@ -290,12 +290,14 @@ if (defined $q->param("month") && defined $q->param("year") &&
     $q->param("month") >= 1 && $q->param("month") <= 12)
 {
     $g_filename .= "_" . lc($Hebcal::MoY_short[$q->param("month")-1]);
+    my $yr = $q->param("year");
     $g_date = sprintf("%s %04d", $Hebcal::MoY_long{$q->param("month")},
-                    $q->param("year"));
+                    $yr);
 }
 else
 {
-    $g_date = sprintf("%04d", $q->param("year"));
+    my $yr = $q->param("year");
+    $g_date = sprintf("%04d", $yr);
 }
 
 my $g_seph = (defined $q->param("i") && $q->param("i") =~ /^on|1$/) ? 1 : 0;

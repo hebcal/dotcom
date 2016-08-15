@@ -1921,10 +1921,11 @@ sub process_args_common_geopos {
 
 sub process_args_common_city {
     my($q,$cconfig) = @_;
-    my $city = validate_city($q->param("city"));
+    my $city0 = $q->param("city");
+    my $city = validate_city($city0);
     if (! defined $city) {
 	if (defined $q->param("cfg") && $q->param("cfg") =~ /^(json|xml|r|e|e2)$/) {
-	    my $city2 = $q->param("city") || "";
+	    my $city2 = $city0 || "";
 	    return (0, "Unknown city '$city2'", undef);
 	} else {
 	    $city = "US-New York-NY";
