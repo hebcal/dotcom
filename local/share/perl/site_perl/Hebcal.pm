@@ -1715,11 +1715,12 @@ sub geoname_city_descr {
 
 sub process_args_common_geoname {
     my($q,$cconfig) = @_;
+    my $geonameid0 = $q->param('geonameid');
     my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
-      geoname_lookup($q->param('geonameid'));
+      geoname_lookup($geonameid0);
 
     unless (defined $name) {
-        my $message = "Sorry, can't find <strong>" . $q->param('geonameid') .
+        my $message = "Sorry, can't find <strong>" . $geonameid0 .
             "</strong> in the location database.";
         my $help = "<ul><li>Please search for a different location</li></ul>";
         return (0, $message, $help);
@@ -1746,7 +1747,7 @@ sub process_args_common_geoname {
 	$cconfig->{"city"} = $name;
 	$cconfig->{"tzid"} = $tzid;
 	$cconfig->{"geo"} = "geoname";
-        $cconfig->{"geonameid"} = int($q->param('geonameid'));
+        $cconfig->{"geonameid"} = int($geonameid0);
         $cconfig->{"country"} = $country;
         $cconfig->{"admin1"} = $admin1;
     }
@@ -1843,9 +1844,10 @@ sub process_args_common_geopos {
 	return (0, $message, undef) if $message;
     }
 
-    my($long_deg,$long_min,$lat_deg,$lat_min) =
-	($q->param("lodeg"),$q->param("lomin"),
-	 $q->param("ladeg"),$q->param("lamin"));
+    my $long_deg = $q->param("lodeg");
+    my $long_min = $q->param("lomin");
+    my $lat_deg = $q->param("ladeg");
+    my $lat_min = $q->param("lamin");
 
     $q->param("lodir","w") unless ($q->param("lodir") eq "e");
     $q->param("ladir","n") unless ($q->param("ladir") eq "s");
