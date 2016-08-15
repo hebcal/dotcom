@@ -56,6 +56,13 @@ packages:
   - make
 
 write_files:
+    - path: /etc/cron.d/hebcal
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      SHELL=/bin/sh
+      MAILTO="mradwin@hebcal.com"
+      0 0 1 * * www-data mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
   - path: /etc/systemd/system/varnish.service.d/customexec.conf
     permissions: '0644'
     content: |
