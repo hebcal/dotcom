@@ -1874,7 +1874,9 @@ sub process_args_common_geopos {
     if (! defined $q->param("tzid")
 	&& defined $q->param("tz")
 	&& defined $q->param("dst")) {
-        my $tzid = legacy_tz_dst_to_tzid($q->param("tz"), $q->param("dst"));
+        my $tz0 = $q->param("tz");
+        my $dst0 = $q->param("dst");
+        my $tzid = legacy_tz_dst_to_tzid($tz0, $dst0);
         $q->param("tzid", $tzid) if $tzid;
     }
 
@@ -1882,12 +1884,12 @@ sub process_args_common_geopos {
 	return (0, "Please select a Time zone", undef);
     }
 
-    if (!is_timezone_valid($q->param("tzid"))) {
-        return (0, "Sorry, can't find <strong>" . $q->param("tzid")
+    my $tzid = $q->param("tzid");
+    if (!is_timezone_valid($tzid)) {
+        return (0, "Sorry, can't find <strong>" . $tzid
             . "</strong> in our Time zone database", undef);
     }
 
-    my $tzid = $q->param("tzid");
     $cmd .= " -z '$tzid'";
     $city_descr .= ", $tzid";
 
