@@ -145,8 +145,9 @@ runcmd:
   - rsync -av /tmp/dotcom/download.hebcal.com/ /var/www/html/
   - rsync -av /tmp/dotcom/hebcal.com/hebcal/ /var/www/html/hebcal/
   - rsync -av /tmp/dotcom/hebcal.com/yahrzeit/ /var/www/html/yahrzeit/
+  - rsync -av /tmp/dotcom/hebcal.com/zoneinfo/ /var/www/html/zoneinfo/
   - git clone https://github.com/hebcal/hebcal.git /tmp/hebcal-cli
-  - cd /tmp/hebcal-cli && ./configure && ./make
+  - cd /tmp/hebcal-cli && ./configure && make
   - rsync -av /tmp/hebcal-cli/hebcal /var/www/html/bin/
   - mkdir -p /home/hebcal/local/share/perl/site_perl
   - rsync -av /tmp/dotcom/local/share/perl/site_perl/ /home/hebcal/local/share/perl/site_perl/
