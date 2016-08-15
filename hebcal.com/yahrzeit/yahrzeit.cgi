@@ -51,6 +51,7 @@ use HebcalGPL ();
 use HebcalHtml ();
 use POSIX ();
 use Date::Calc ();
+use File::Temp ();
 
 my @HEB_MONTH_NAME =
 (
@@ -285,17 +286,17 @@ sub get_birthday_or_anniversary {
 
 sub my_invoke_hebcal {
     my %yahrzeits;
-    my $tmpfile = POSIX::tmpnam();
-    open(T, ">$tmpfile") || die "$tmpfile: $!\n";
+    my($fh,$tmpfile) = File::Temp::tempfile();
+    binmode( $fh, ":utf8" );
     foreach my $input (@inputs) {
         my($key,$gy,$gm,$gd,$name,$type) = @{$input};
         if ($type eq "Yahrzeit") {
             my $hebcal_name = "YahrzeitPerson" . $key;
-            printf T "%02d %02d %4d %s\n", $gm, $gd, $gy, $hebcal_name;
+            printf $fh "%02d %02d %4d %s\n", $gm, $gd, $gy, $hebcal_name;
             $yahrzeits{$hebcal_name} = $name;
         }
     }
-    close(T);
+    close($fh);
 
     my $cmd = "./hebcal -D -x -Y $tmpfile";
 
