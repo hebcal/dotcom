@@ -155,3 +155,4 @@ runcmd:
   - ln -s /tmp/hebcal-cli /tmp/dotcom/hebcal
   - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
+  - /tmp/dotcom/local/bin/update_zoneinfo.sh
