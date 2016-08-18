@@ -1535,7 +1535,7 @@ sub self_url
 	next if $key eq "utm_source" && !exists $override->{"utm_source"};
 	# ignore undef entries in the override hash
 	next if exists $override->{$key} && !defined $override->{$key};
-	my($val) = defined $override->{$key} ?
+	my $val = defined $override->{$key} ?
 	    $override->{$key} : $q->param($key);
 	$url .= "$sep$key=" . URI::Escape::uri_escape_utf8($val);
 	$sep = $next_sep;
