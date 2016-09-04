@@ -167,7 +167,7 @@ sub download_html_bootstrap {
     my $ios_title = "Apple iPhone &amp; iPad";
     my $gcal_title = "Google Calendar";
     my $wlive_title = "Outlook.com Calendar";
-    my $ycal_title = "Yahoo! Calendar";
+    my $ycal_title = "iCalendar (Blackbaud, Yahoo!, etc)";
     my $palm_title = "Palm Desktop (Windows-only)";
 
     my $ol_ics_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ol-ics",
@@ -295,14 +295,9 @@ EOHTML
 <label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
 onfocus="this.select();" onKeyPress="return false;"
 value="${ampersand_http_href}"></small></label>
-<li>Go to your <a href="http://calendar.yahoo.com/">Yahoo! Calendar</a>,
-and click the "<b>+</b>" button next to "Calendars" on the left side of the page
-<li>Click <b>Subscribe to Calendar</b>
-<li>Paste the web address into the "Email or iCal address" window
-<li>Click <b>Next</b> at the top of the page
-<li>Type a name for the calendar in the window after "Display as."
-<li>Choose a color for the calendar in the "Color:" pull-down menu
-<li>Click <b>Save</b> at the top of the page
+<li>Follow additional instructions for 
+<a href="home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
+or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></li>
 </ol>
 </form>
 EOHTML
@@ -349,7 +344,7 @@ EOHTML
         ["Mac OS X", $ical_title, "ical", $ical],
         ["Outlook.com", $wlive_title, "wlive", $wlive],
         ["Outlook Mac", $ol_mac_title, "ol-mac", $ol_mac],
-        ["Yahoo!", $ycal_title, "ycal", $ycal],
+        ["iCalendar", $ycal_title, "ycal", $ycal],
         ["CSV", $ol_csv_title, "ol-csv", $ol_csv],
         ["Palm", $palm_title, "palm", $palm],
     );
