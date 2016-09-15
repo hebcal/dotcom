@@ -178,6 +178,7 @@ sub filter_events {
     my($events) = @_;
 
     my $lang = $q->param("lg") || "s";
+    $lang = "he" if $lang eq "h";
     my $numEntries = scalar(@{$events});
     my @items;
     for (my $i = 0; $i < $numEntries; $i++)
