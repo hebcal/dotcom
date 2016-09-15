@@ -196,7 +196,8 @@ if ($opt_hebyear) {
     $hebrew_year = $opt_hebyear;
 } else {
     my($yy,$mm,$dd) = Date::Calc::Today();
-    $hebrew_year = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
+    my $hebdate = HebcalGPL::greg2hebrew($yy,$mm,$dd);
+    $hebrew_year = $hebdate->{"yy"};
 }
 
 # year I in triennial cycle was 5756
