@@ -1029,7 +1029,7 @@ sub write_sedra_page
   <li><a href="/sedrot/#$torah_book">$torah_book</a></li>
   <li class="active">$h</li>
 </ol>
-<h1><span class="hidden-xs">Parashat</span> $h / <span class="hidden-xs" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></h1>
+<h1><span class="hidden-xs">Parashat</span> $h / <bdo dir="rtl"><span class="hidden-xs" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h1>
 $intro_summary
 <h3 id="torah"><span class="hidden-xs">Torah Portion:</span>
 <a class="outbound" href="$torah_href"
