@@ -200,7 +200,7 @@ sub filter_events {
         my $mon = $events->[$i]->{mon};
         my $mday = $events->[$i]->{mday};
 
-        my $item_time = Hebcal::format_evt_time($events->[$i], "");
+        my $item_time = Hebcal::format_evt_time($events->[$i], "", $lang);
 
         my $s0 = $HebcalConst::TRANSLATIONS->{$lang}->{$reason};
         if (defined $s0) {
