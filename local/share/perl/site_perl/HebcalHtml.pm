@@ -105,7 +105,10 @@ sub download_button_html {
     my $class = $button_and_icon ? "btn btn-default download" : "download";
     my $icon = $button_and_icon ? qq{<span class="glyphicon glyphicon-download-alt"></span> } : "";
 
-    return qq{<a class="$class" id="$id" title="$filename" href="$href"${nofollow}${html5download}>${icon}Download $button_text</a>};
+    my $href_amp = $href;
+    $href_amp =~ s/&/&amp;/g;
+
+    return qq{<a class="$class" id="$id" title="$filename" href="$href_amp"${nofollow}${html5download}>${icon}Download $button_text</a>};
 }
 
 # replace download URL with a subscribe URL.
@@ -271,8 +274,12 @@ EOHTML
     #############################################################
     # Windows Live Calendar
 
+    my $wlive_subical_href = $subical_href;
+    $wlive_subical_href =~ s/&/;/g;
+    my $wlive_http_href = "http://" . $vhost . $wlive_subical_href;
+    my $wlive_href = URI::Escape::uri_escape_utf8($wlive_http_href);
     my $wlive_btn = download_button_html($q, $ics_title,
-                                         "http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&amp;url=${gcal_href}&amp;name=${title_esc}",
+                                         "http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${wlive_href}&name=${title_esc}",
                                          "dl-wlive", "to Outlook.com Calendar", 1);
     my $wlive = <<EOHTML;
 <p>$wlive_btn</p>

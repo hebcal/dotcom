@@ -1558,6 +1558,7 @@ EOHTML
     $html .= HebcalHtml::download_html_modal_button(" btn-sm");
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
+    $pdf_url =~ s/&/&amp;/g;
     my $btn_print_html = qq{<a class="btn btn-default btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicon glyphicon-print"></i> Print</a>};
 
     if (!param_true("c")) {
