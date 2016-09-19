@@ -77,6 +77,14 @@ do_file($dbh,$in_cities,"geoname",19);
 do_file($dbh,$in_admin1,"admin1",4);
 do_file($dbh,$in_israel,"geoname",19,\&filter_places);
 
+$dbh->commit;
+
+do_sql($dbh, qq{update admin1 set name='',asciiname='' where key like 'PS.%';});
+do_sql($dbh, qq{update country set country = '' where iso = 'PS';});
+do_sql($dbh, qq{delete from geoname where geonameid = 7303419;});
+
+$dbh->commit;
+
 do_sql($dbh, qq{DROP TABLE IF EXISTS geoname_fulltext});
 
 do_sql($dbh, qq{CREATE VIRTUAL TABLE geoname_fulltext
