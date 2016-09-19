@@ -157,8 +157,11 @@ runcmd:
   - cd /tmp && unzip cities5000.zip
   - cd /tmp && unzip IL.zip
   - /tmp/dotcom/local/bin/geonames_cities_sqlite.pl /var/www/hebcal/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
+  - mkdir -p /var/www/shabbat/browse
   - chown -R hebcal:hebcal /var/www
   - sudo -u hebcal make -C /var/www/bin converter
   - sudo -u hebcal make -C /var/www/bin holidays
   - sudo -u hebcal make -C /var/www/bin sedrot
+  - sudo -u hebcal /var/www/bin/gen_current.pl
+  - sudo -u hebcal /var/www/bin/create_shabbat_browse.pl -v /var/www/shabbat/browse
   - chown -R www-data:www-data /tmp/hebcal-cache
