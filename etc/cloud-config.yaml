@@ -44,7 +44,6 @@ packages:
   - fetchmail
   - procmail
   - rcs
-  - mysql-server
   - mysql-client
   - apache2
   - php7.0
@@ -77,20 +76,6 @@ packages:
   - perlmagick
 
 write_files:
-  - path: /etc/mysql/conf.d/hebcal.cnf
-    permissions: '0644'
-    content: |
-        # Hebcal-specific settings for mysql
-        [mysqld]
-        key_buffer_size      = 2M
-        max_allowed_packet   = 1M
-        sort_buffer_size     = 64K
-        read_buffer_size     = 256K
-        read_rnd_buffer_size = 256K
-        thread_stack         = 128K
-        thread_cache_size    = 4
-        query_cache_limit    = 256K
-        query_cache_size     = 4M
   - path: /etc/php/7.0/apache2/conf.d/50-hebcal.ini
     permissions: '0644'
     content: |
@@ -149,7 +134,6 @@ runcmd:
   - systemctl reload ssh.service
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/cron.d/hebcal /etc/cron.d/hebcal
-  - systemctl restart mysql.service
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
   - cp /tmp/dotcom/devops/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
   - systemctl restart apache2.service
