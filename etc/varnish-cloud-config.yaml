@@ -32,6 +32,7 @@ packages:
   - git
   - sysstat
   - netfilter-persistent
+  - iptables-persistent
   - libsasl2-modules
   - postfix
   - heirloom-mailx

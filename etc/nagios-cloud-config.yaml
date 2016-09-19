@@ -22,6 +22,7 @@ packages:
   - nagios3
   - sysstat
   - netfilter-persistent
+  - iptables-persistent
   - libsasl2-modules
   - postfix
   - heirloom-mailx
