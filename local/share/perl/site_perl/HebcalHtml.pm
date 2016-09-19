@@ -165,9 +165,9 @@ sub download_html_bootstrap {
 
     my $ol_ics_title = "Outlook 2007, 2010, 2013 (Windows)";
     my $ol_csv_title = "Outlook 97, 98, 2000, 2002, 2003 (Windows)";
-    my $ical_title = "Mac OS X Calendar (Desktop)";
-    my $ol_mac_title = "Outlook 2011 (Mac OS X)";
-    my $ios_title = "Apple iPhone &amp; iPad";
+    my $ical_title = "Apple macOS Calendar (desktop)";
+    my $ol_mac_title = "Outlook for Mac";
+    my $ios_title = "Apple iOS, iPhone &amp; iPad";
     my $gcal_title = "Google Calendar";
     my $wlive_title = "Outlook.com Calendar";
     my $ycal_title = "iCalendar (Blackbaud, Yahoo!, etc)";
@@ -210,15 +210,15 @@ EOHTML
     my $ical_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ical-sub", "to Mac Calendar", 1);
     my $ical = <<EOHTML;
 <p>$ical_btn</p>
-<p>Step-by-step: <a title="Apple iCal - import Hebcal Jewish calendar"
-href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple Mac OS X Desktop Calendar</a></p>
+<p>Step-by-step: <a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple macOS desktop Calendar</a></p>
 EOHTML
 ;
     if (!$yahrzeit_mode) {
         my $ical_alt_btn = download_button_html($q, $ics_title, $ical_href, "dl-ical-alt", $ics_title, 0);
         $ical .= <<EOHTML;
 <p>Alternate option: $ical_alt_btn
-and then import manually into Apple iCal.</p>
+and then import manually into Apple macOS Calendar.app.</p>
 EOHTML
 ;
     }
@@ -226,9 +226,9 @@ EOHTML
     my $ol_mac_btn = download_button_html($q, $ics_title, $ical_href, "dl-ol-mac", "to Outlook for Mac", 1);
     my $ol_mac = <<EOHTML;
 <p>$ol_mac_btn</p>
-<p>Step-by-step: <a title="Outlook 2011 Mac OS X - import Hebcal Jewish calendar"
-href="/home/186/outlook-2011-mac-import">Import .ics file into
-Outlook 2011 for Mac OS X</a></p>
+<p>Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
+href="/home/186/outlook-2011-mac-jewish-holidays">Import .ics file into
+Outlook for Mac</a></p>
 EOHTML
 ;
     my $ios_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ios-sub", "to iPhone/iPad", 1);
@@ -298,7 +298,7 @@ EOHTML
     my $ycal = <<EOHTML;
 <form id="GrabLinkForm" action="#">
 <ol>
-<li>Copy the entire iCal URL here:
+<li>Copy the entire iCalendar URL here:
 <label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
 onfocus="this.select();" onKeyPress="return false;"
 value="${ampersand_http_href}"></small></label>
@@ -348,7 +348,7 @@ EOHTML
         ["iPhone", $ios_title, "ios", $ios],
         ["Outlook", $ol_ics_title, "ol-ics", $ol_ics],
         ["Google", $gcal_title, "gcal", $gcal],
-        ["Mac OS X", $ical_title, "ical", $ical],
+        ["macOS", $ical_title, "ical", $ical],
         ["Outlook.com", $wlive_title, "wlive", $wlive],
         ["Outlook Mac", $ol_mac_title, "ol-mac", $ol_mac],
         ["iCalendar", $ycal_title, "ycal", $ycal],
