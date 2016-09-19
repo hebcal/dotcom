@@ -30,6 +30,7 @@ package_upgrade: true
 packages:
   - git
   - make
+  - gcc
   - sqlite3
   - autoconf
   - automake
@@ -148,8 +149,21 @@ runcmd:
   - systemctl reload ssh.service
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/cron.d/hebcal /etc/cron.d/hebcal
-#  - cp /tmp/dotcom/devops/etc/mysql/my.cnf /etc/mysql/my.cnf
   - systemctl restart mysql.service
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
   - cp /tmp/dotcom/devops/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
   - systemctl restart apache2.service
+  - rsync -a /tmp/dotcom/hebcal.com/ /var/www/
+  - git clone https://github.com/hebcal/hebcal.git /tmp/hebcal-cli
+  - cd /tmp/hebcal-cli && ./configure && make
+  - rsync -av /tmp/hebcal-cli/hebcal /var/www/bin/
+  - mkdir -p /home/hebcal/local/share/perl/site_perl
+  - rsync -av /tmp/dotcom/local/share/perl/site_perl/ /home/hebcal/local/share/perl/site_perl/
+  - rm -rf /tmp/dotcom/hebcal
+  - ln -s /tmp/hebcal-cli /tmp/dotcom/hebcal
+  - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
+  - make -C /tmp/dotcom/hebcal.com/bin xml2perl
+  - chown -R hebcal:hebcal /home/hebcal
+  - rsync -av /tmp/dotcom/hebcal.com/pear/Hebcal/const.inc /var/www/pear/Hebcal/
+  - sudo -u hebcal make -C /var/www/bin sedrot holidays converter
+  - chown -R www-data:www-data /tmp/hebcal-cache
