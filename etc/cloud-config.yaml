@@ -165,5 +165,8 @@ runcmd:
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
   - chown -R hebcal:hebcal /home/hebcal
   - rsync -av /tmp/dotcom/hebcal.com/pear/Hebcal/const.inc /var/www/pear/Hebcal/
-  - sudo -u hebcal make -C /var/www/bin sedrot holidays converter
+  - chown -R hebcal:hebcal /var/www
+  - sudo -u hebcal make -C /var/www/bin converter
+  - sudo -u hebcal make -C /var/www/bin holidays
+  - sudo -u hebcal make -C /var/www/bin sedrot
   - chown -R www-data:www-data /tmp/hebcal-cache
