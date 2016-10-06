@@ -109,12 +109,13 @@ if ($cconfig{"tzid"}) {
 }
 my($friday,$fri_year,$saturday,$sat_year) = get_saturday($q);
 
-# only set expiry if there are CGI arguments
-if (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/) {
-    print "Expires: ", Hebcal::http_date($saturday), "\015\012";
-} elsif (defined $ENV{'HTTP_COOKIE'}) {
+my $hebcal_cookies = Hebcal::get_cookies($q);
+if (defined $hebcal_cookies->{"C"}) {
     # private cache only if we're tailoring results by cookie
     print "Cache-Control: private\015\012";
+} elsif (defined $ENV{'QUERY_STRING'} && $ENV{'QUERY_STRING'} !~ /^\s*$/) {
+    # only set expiry if there are CGI arguments
+    print "Cache-Control: max-age=86400\015\012";
 }
 
 my $evts = get_events($city_descr,$cmd,$fri_year,$sat_year);
