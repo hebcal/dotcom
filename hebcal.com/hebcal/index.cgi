@@ -147,6 +147,7 @@ if (defined $q->param("year") && $q->param("year") eq "now") {
                                $this_year - 1900);
 
     $http_expires = Hebcal::http_date($end_of_month);
+    $http_cache_control = "max-age=2592000";
 }
 
 if ($cfg eq "fc") {
