@@ -585,7 +585,7 @@ EOHTML
     my $major = "Rosh Hashana,Yom Kippur,Sukkot,Shmini Atzeret,Simchat Torah,Chanukah,Purim,Pesach,Shavuot,Tish'a B'Av";
     my @major = split(/,/, $major);
 
-    my $modern = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim,Sigd";
+    my $modern = "Yom HaShoah,Yom HaZikaron,Yom HaAtzma'ut,Yom Yerushalayim,Yom HaAliyah,Sigd";
     my @modern = split(/,/, $modern);
 
     my $public_fasts = "Tzom Gedaliah,Asara B'Tevet,Ta'anit Esther,Ta'anit Bechorot,Tzom Tammuz";

@@ -146,6 +146,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <group>Shabbat Rosh Chodesh</group>
  <group>Shabbat Machar Chodesh</group>
  <group>Sigd</group>
+ <group>Yom HaAliyah</group>
  <group>Tu B'Av</group>
 </groups>
 
@@ -1630,6 +1631,19 @@ with the verse
  month of Cheshvan. This date is exactly 50 days after Yom Kippur, usually falling out in
  late October or November, and according to Ethiopian Jewish tradition is also the date
  that G-d first revealed himself to Moses.
+ </wikipedia>
+</festival>
+<festival id="Yom HaAliyah" hebrew="יום העלייה" yomtov="0" type="modern">
+ <about href="http://amyisraelfoundation.org/yom-haaliyah/">
+ Recognizes Aliyah, immigration to the Jewish State of Israel
+ </about>
+ <wikipedia href="https://en.wikipedia.org/wiki/Yom_HaAliyah">
+  Yom HaAliyah (Aliyah Day) (Hebrew: יום העליה) is an Israeli national holiday celebrated
+  annually on the seventh of the Hebrew month of Cheshvan, to commemorate the historic
+  events which happened on the tenth of the Hebrew month of Nisan (Hebrew: י’ ניסן).
+  The holiday was established to acknowledge Aliyah, immigration to the Jewish state,
+  as a core value of the State of Israel, and honor the ongoing contributions of Olim
+  to Israeli society.
  </wikipedia>
 </festival>
 <festival id="Tu B'Av" hebrew="טוּ בְּאָב" yomtov="0" type="minor">
