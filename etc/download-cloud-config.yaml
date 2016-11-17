@@ -55,6 +55,7 @@ packages:
   - libvarnishapi-dev
   - varnish
   - make
+  - unattended-upgrades
 
 write_files:
     - path: /etc/cron.d/hebcal

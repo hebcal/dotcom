@@ -29,6 +29,7 @@ packages:
   - apache2
   - nagios-plugins-basic
   - nagios-plugins-common
+  - unattended-upgrades
 
 write_files:
   - path: /etc/nagios3/htpasswd.users

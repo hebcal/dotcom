@@ -75,6 +75,7 @@ packages:
   - python-tweepy
   - perlmagick
   - unzip
+  - unattended-upgrades
 
 write_files:
   - path: /etc/php/7.0/apache2/conf.d/50-hebcal.ini

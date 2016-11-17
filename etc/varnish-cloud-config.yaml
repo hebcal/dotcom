@@ -47,6 +47,7 @@ packages:
   - python-docutils
   - varnish
   - libvarnishapi-dev
+  - unattended-upgrades
 
 write_files:
   - path: /etc/systemd/system/varnish.service.d/customexec.conf

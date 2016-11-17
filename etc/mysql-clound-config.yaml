@@ -32,6 +32,7 @@ packages:
   - mysql-server
   - nagios-plugins-basic
   - nagios-plugins-common
+  - unattended-upgrades
 
 write_files:
   - path: /etc/mysql/mysql.conf.d/zzz-hebcal.cnf
@@ -62,6 +63,7 @@ runcmd:
   - iptables -A INPUT -j DROP
   - iptables -I INPUT 1 -i lo -j ACCEPT
   - service netfilter-persistent save
+  - addgroup hebcal
   - adduser mradwin hebcal
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - systemctl reload ssh.service
