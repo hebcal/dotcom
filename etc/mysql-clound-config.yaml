@@ -67,3 +67,7 @@ runcmd:
   - adduser mradwin hebcal
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - systemctl reload ssh.service
+  - cd /tmp
+  - curl -O https://raw.githubusercontent.com/hebcal/dotcom/master/devops/etc/postfix/main.cf
+  - cp main.cf /etc/postfix/main.cf
+  - systemctl reload postfix.service

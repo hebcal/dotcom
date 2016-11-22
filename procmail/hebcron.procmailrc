@@ -1,5 +1,5 @@
 SHELL=/bin/sh
-VERBOSE=on
+#VERBOSE=on
 LOGFILE=$HOME/.procmail.log
 HCBIN=/home/hebcal/local/bin
 MAILDIR=$HOME/mail
@@ -7,7 +7,7 @@ MAILDIR=$HOME/mail
 :0
 * ^TO(shabbat-subscribe|shabbat-unsubscribe)
 {
-  :0 c:
+  :0 c:manage.lock
   | $HCBIN/shabbat_manage.pl
 
   :0:
@@ -18,7 +18,7 @@ MAILDIR=$HOME/mail
 :0
 * ^TO(shabbat-return)
 {
-  :0 c:
+  :0 c:bounce.lock
   | $HCBIN/shabbat_bounce.pl
 
   :0:

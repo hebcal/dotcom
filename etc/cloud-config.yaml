@@ -149,6 +149,12 @@ runcmd:
   - ln -s /tmp/hebcal-cli /tmp/dotcom/hebcal
   - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
+  - cd /home/hebcal/local
+  - mkdir -p bin etc var/log
+  - rsync -av /tmp/dotcom/local/bin/ /home/hebcal/local/bin/
+  - rsync -av /tmp/dotcom/procmail/hebcron.procmailrc /home/hebcal/.procmailrc
+  - rsync -av /tmp/dotcom/procmail/hebcron.fetchmailrc /home/hebcal/.fetchmailrc
+  - chmod 0600 /home/hebcal/.fetchmailrc
   - chown -R hebcal:hebcal /home/hebcal
   - rsync -av /tmp/dotcom/hebcal.com/pear/Hebcal/const.inc /var/www/pear/Hebcal/
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt
