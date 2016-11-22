@@ -1450,14 +1450,14 @@ sub process_cookie($$)
 	    $q->param('c','on');
 	    if (! defined $q->param('zip') || $q->param('zip') =~ /^\s*$/)
 	    {
-		$q->param('zip',$c->param('zip'));
+                $q->param('zip', scalar $c->param('zip'));
 	    }
 	} elsif (defined $c->param('geonameid') && $c->param('geonameid') =~ /^\d+$/ &&
 	    (! defined $q->param('geo') || $q->param('geo') eq 'geoname')) {
 	    $q->param('geo','geoname');
 	    $q->param('c','on');
 	    if (! defined $q->param('geonameid') || $q->param('geonameid') =~ /^\s*$/) {
-		$q->param('geonameid',$c->param('geonameid'));
+                $q->param('geonameid', scalar $c->param('geonameid'));
 	    }
 	} elsif (defined $c->param('city') && $c->param('city') ne '' &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'city')) {
@@ -1482,35 +1482,35 @@ sub process_cookie($$)
 		 defined $c->param('ladir') &&
 		 (! defined $q->param('geo') || $q->param('geo') eq 'pos')) {
 	    foreach (qw(lodeg lomin ladeg lamin lodir ladir)) {
-		$q->param($_, $c->param($_))
+                $q->param($_, scalar $c->param($_))
 		    unless $q->param($_);
 	    }
 	    $q->param('geo','pos');
 	    $q->param('c','on');
-	    $q->param('tzid',$c->param('tzid'))
+            $q->param('tzid', scalar $c->param('tzid'))
 		if (defined $c->param('tzid') && ! defined $q->param('tzid'));
 	}
     }
 
-    $q->param('m',$c->param('m'))
+    $q->param('m', scalar $c->param('m'))
 	if (defined $c->param('m') && ! defined $q->param('m'));
 
     foreach (@opts)
     {
 	next if $_ eq 'c';
-	$q->param($_,$c->param($_))
+        $q->param($_, scalar $c->param($_))
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 
     if (defined $c->param("nh")) {
         foreach my $opt (qw(maj min mod)) {
-            $c->param($opt, $c->param("nh"));
+            $c->param($opt, scalar $c->param("nh"));
         }
         $c->delete("nh");
     }
 
     foreach (qw(maj nx ss mf lg min mod)) {
-	$q->param($_, $c->param($_))
+        $q->param($_, scalar $c->param($_))
 	    if (! defined $q->param($_) && defined $c->param($_));
     }
 

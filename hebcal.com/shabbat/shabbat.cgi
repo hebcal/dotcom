@@ -263,7 +263,7 @@ sub self_url
 {
     my $url = join('',
                    "http://", $q->virtual_host(), $script_name,
-                   "?geo=", $q->param('geo'), "&", get_link_args($q));
+                   "?geo=", scalar $q->param('geo'), "&", get_link_args($q));
     $url;
 }
 
@@ -672,7 +672,7 @@ sub get_link_args {
     my $url = Hebcal::get_geo_args($q);
 
     foreach my $arg (qw(a i)) {
-        $url .= sprintf("&%s=%s", $arg, $q->param($arg))
+        $url .= sprintf("&%s=%s", $arg, scalar $q->param($arg))
             if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
     }
 
