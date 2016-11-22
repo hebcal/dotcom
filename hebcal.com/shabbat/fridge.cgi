@@ -285,7 +285,9 @@ sub format_row {
         push(@class, "yomtov");
     }
     my @narrow = ();
-    if (length($subject) > 14 && ($lang ne "he")) {
+    if ($lang eq "he") {
+        push(@narrow, "text-right");
+    } elsif (length($subject) > 14) {
         push(@narrow, "narrow");
     }
     my $subj_class = join(" ", @class, @narrow);
