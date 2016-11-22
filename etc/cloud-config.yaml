@@ -64,6 +64,7 @@ packages:
   - libconfig-tiny-perl
   - liblog-log4perl-perl
   - libdbd-sqlite3-perl
+  - libdbd-mysql-perl
   - libhtml-calendarmonthsimple-perl
   - libjson-perl
   - libjson-xs-perl
