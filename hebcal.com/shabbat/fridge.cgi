@@ -92,13 +92,22 @@ my $title = "Refrigerator Shabbos Times for $city_descr - $hebrew_year | Hebcal"
 print $q->header(-type => "text/html",
                  -charset => "UTF-8");
 
+my $font_family = "Open Sans";
+my $font_list = "Open+Sans:300,600|Open+Sans+Condensed:300";
+my $lang = $q->param("lg") || "s";
+$lang = "he" if $lang eq "h";
+if ($lang eq "he") {
+    $font_family = "Alef";
+    $font_list .= "|Alef|Alef:700";
+}
+
 my $header = <<EOHTML;
 <!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href='//fonts.googleapis.com/css?family=Open+Sans:300,600|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=$font_list' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -111,7 +120,7 @@ my $header = <<EOHTML;
 </script>
 <style type="text/css">
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: '$font_family', sans-serif;
 }
 #content {
   font-size: 0.92em;
@@ -247,7 +256,7 @@ EOHTML
     my $url_base = $script_name . "?";
     $url_base .= Hebcal::get_geo_args($q, "&amp;");
     foreach my $arg (qw(a i)) {
-        $url_base .= sprintf("&amp;%s=%s", $arg, $q->param($arg))
+        $url_base .= sprintf("&amp;%s=%s", $arg, scalar $q->param($arg))
             if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
     }
     $url_base .= "&amp;year=";
@@ -276,7 +285,7 @@ sub format_row {
         push(@class, "yomtov");
     }
     my @narrow = ();
-    if (length($subject) > 14) {
+    if (length($subject) > 14 && ($lang ne "he")) {
         push(@narrow, "narrow");
     }
     my $subj_class = join(" ", @class, @narrow);
