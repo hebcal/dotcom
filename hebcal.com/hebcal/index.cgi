@@ -58,7 +58,6 @@ use Benchmark qw(:hireswallclock :all);
 my @benchmarks;
 push(@benchmarks, Benchmark->new);
 
-my $http_expires;
 my $http_cache_control = "max-age=63072000";
 
 my($this_year,$this_mon,$this_day) = Date::Calc::Today();
@@ -138,15 +137,6 @@ if (defined $q->param("year") && $q->param("year") eq "now") {
         $q->param("month", $this_mon)
             if defined $q->param("month") && $q->param("month") eq "now";        
     }
-
-    my $end_day = Date::Calc::Days_in_Month($this_year, $this_mon);
-    my $end_of_month =
-        Time::Local::timelocal(59,59,23,
-                               $end_day,
-                               $this_mon - 1,
-                               $this_year - 1900);
-
-    $http_expires = Hebcal::http_date($end_of_month);
     $http_cache_control = "max-age=2592000";
 }
 
@@ -332,13 +322,6 @@ if ($cfg eq "html") {
 close(STDOUT);
 exit(0);
 
-# two years from now
-sub http_expires {
-    unless ($http_expires) {
-        $http_expires = Hebcal::http_date(time() + 63072000);
-    }
-    return $http_expires;
-}
 
 sub param_true
 {
@@ -1635,7 +1618,7 @@ sub results_page
         $results_title .= " "  . $cconfig{"city"};
     }
 
-    print STDOUT $q->header(-expires => http_expires(),
+    print STDOUT $q->header(-cache_control => $http_cache_control,
                             -type => $content_type,
                             -charset => "UTF-8");
 
