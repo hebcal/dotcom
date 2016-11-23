@@ -1189,8 +1189,9 @@ EOHTML
             $city_typeahead_value = $q->param('zip');
         } elsif ($q->param("geo") eq "geoname"
             && defined $q->param("geonameid") && $q->param("geonameid") =~ /^\d+$/) {
+            my $geonameid = $q->param('geonameid');
             my($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) =
-                Hebcal::geoname_lookup($q->param('geonameid'));
+                Hebcal::geoname_lookup($geonameid);
             if ($name) {
                 my $city_descr = Hebcal::geoname_city_descr($asciiname,$admin1,$country);
                 $city_typeahead_value = $city_descr;
