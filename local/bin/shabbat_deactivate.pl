@@ -113,7 +113,7 @@ sub get_candidates {
                         'domain_error',
                         'amzn_abuse')
         AND b.deactivated = 0
-        GROUP by b.email_address
+        GROUP by b.email_address,atd_reason
     };
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
