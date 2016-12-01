@@ -4,7 +4,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2016  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -89,7 +89,7 @@ if (open(LOG, ">>/home/hebcal/local/var/log/bounce.log")) {
 }
 
 my $dbh = open_database();
-my $sql = "INSERT INTO hebcal_shabbat_bounce (email_address,std_reason,full_reason) VALUES (?,?,?)";
+my $sql = "INSERT INTO hebcal_shabbat_bounce (email_address,std_reason,full_reason,deactivated) VALUES (?,?,?,0)";
 my $sth = $dbh->prepare($sql);
 $sth->execute($email_address,$std_reason,$bounce_reason)
     or die $dbh->errstr;
