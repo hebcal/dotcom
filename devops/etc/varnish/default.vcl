@@ -12,6 +12,7 @@
 # new 4.0 format.
 vcl 4.0;
 
+import std;
 import vsthrottle;
 
 # Default backend definition. Set this to point to your content server.
@@ -25,6 +26,11 @@ acl purge {
 }
 
 sub vcl_recv {
+    if (std.port(server.ip) == 443) {
+        set req.http.X-Forwarded-Proto = "https";
+        set req.http.X-Client-IP = client.ip;
+    }
+
     if (req.url ~ "^/ical/.*\.ics" || req.url ~ "^/export/") {
         return(synth(750, "Moved Temporarily"));
     }
@@ -80,14 +86,6 @@ sub vcl_recv {
             return(synth(405, "Not allowed."));
         }
         return (purge);
-    }
-
-    if (req.http.X-Forwarded-Proto == "https") {
-        set req.http.X-Client-IP = req.http.X-Forwarded-For;
-	set client.identity = req.http.X-Forwarded-For;
-    } else {
-        set req.http.X-Client-IP = client.ip;
-	set client.identity = client.ip;
     }
 
     if (vsthrottle.is_denied(client.identity, 90, 10s)) {
