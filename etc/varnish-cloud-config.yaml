@@ -36,7 +36,6 @@ packages:
   - libsasl2-modules
   - postfix
   - heirloom-mailx
-  - pound
   - nagios-plugins-basic
   - nagios-plugins-common
   - apt-transport-https
@@ -48,6 +47,7 @@ packages:
   - varnish
   - libvarnishapi-dev
   - unattended-upgrades
+  - hitch
 
 write_files:
   - path: /etc/systemd/system/varnish.service.d/customexec.conf
@@ -56,7 +56,32 @@ write_files:
       # Creted by Hebcal cloud-config.yaml
       [Service]
       ExecStart=
-      ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s malloc,768m
+      ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -a '[::1]:6086,PROXY' -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s malloc,768m
+  - path: /etc/varnish/acmetool.vcl
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      backend acmetool {
+         .host = "127.0.0.1";
+         .port = "402";
+      }
+      sub vcl_recv {
+          if (req.url ~ "^/.well-known/acme-challenge/") {
+              set req.backend_hint = acmetool;
+              return(pass);
+          }
+      }
+  - path: /etc/hitch/hitch.conf
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      frontend = "[*]:443"
+      ciphers  = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
+      # Send traffic to the Varnish backend using the PROXY protocol
+      backend        = "[::1]:6086"
+      write-proxy-v2 = on
+      # List of PEM files, each with key, certificates and dhparams
+      pem-file = "/var/lib/acme/live/download.hebcal.com/haproxy"
 
 runcmd:
   - service netfilter-persistent flush
@@ -96,8 +121,8 @@ runcmd:
   - systemctl enable varnish.service
   - systemctl daemon-reload
   - systemctl start varnish.service
-  - mv /etc/default/pound /etc/default/pound.orig
-  - mv /etc/pound/pound.cfg /etc/pound/pound.cfg.orig
-  - echo "startup=1" > /etc/default/pound
-  - cp /tmp/dotcom/devops/etc/pound/pound.cfg /etc/pound/pound.cfg
-  - systemctl restart pound.service
+  - add-apt-repository ppa:hlandau/rhea
+  - apt-get update
+  - apt-get install acmetool
+  - mkdir -p /var/lib/acme/conf
+  - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
