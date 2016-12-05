@@ -56,6 +56,7 @@ packages:
   - varnish
   - make
   - unattended-upgrades
+  - hitch
 
 write_files:
     - path: /etc/cron.d/hebcal
@@ -71,7 +72,7 @@ write_files:
       # Creted by Hebcal cloud-config.yaml
       [Service]
       ExecStart=
-      ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s file,/var/lib/varnish/hebcal/varnish_storage.bin,16G
+      ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -a '[::1]:6086,PROXY' -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s file,/var/lib/varnish/hebcal/varnish_storage.bin,16G
   - path: /etc/varnish/hebcal.vcl
     permissions: '0644'
     content: |
@@ -99,6 +100,32 @@ write_files:
       }
       sub vcl_deliver {
       }
+      include "/etc/varnish/acmetool.vcl";
+  - path: /etc/varnish/acmetool.vcl
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      backend acmetool {
+         .host = "127.0.0.1";
+         .port = "402";
+      }
+      sub vcl_recv {
+          if (req.url ~ "^/.well-known/acme-challenge/") {
+              set req.backend_hint = acmetool;
+              return(pass);
+          }
+      }
+  - path: /etc/hitch/hitch.conf
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      frontend = "[*]:443"
+      ciphers  = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
+      # Send traffic to the Varnish backend using the PROXY protocol
+      backend        = "[::1]:6086"
+      write-proxy-v2 = on
+      # List of PEM files, each with key, certificates and dhparams
+      pem-file = "/var/lib/acme/live/download.hebcal.com/haproxy"
 
 runcmd:
   - service netfilter-persistent flush
@@ -165,3 +192,8 @@ runcmd:
   - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
   - /tmp/dotcom/local/bin/update_zoneinfo.sh
+  - add-apt-repository ppa:hlandau/rhea
+  - apt-get update
+  - apt-get install acmetool
+  - mkdir -p /var/lib/acme/conf
+  - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
