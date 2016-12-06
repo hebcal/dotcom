@@ -56,7 +56,7 @@ write_files:
       # Creted by Hebcal cloud-config.yaml
       [Service]
       ExecStart=
-      ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -a '[::1]:6086,PROXY' -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s malloc,768m
+      ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -a '127.0.0.1:6086,PROXY' -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s malloc,768m
   - path: /etc/varnish/acmetool.vcl
     permissions: '0644'
     content: |
@@ -78,7 +78,7 @@ write_files:
       frontend = "[*]:443"
       ciphers  = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
       # Send traffic to the Varnish backend using the PROXY protocol
-      backend        = "[::1]:6086"
+      backend        = "[127.0.0.1]:6086"
       write-proxy-v2 = on
       # List of PEM files, each with key, certificates and dhparams
       pem-file = "/var/lib/acme/live/download.hebcal.com/haproxy"
@@ -106,6 +106,8 @@ runcmd:
   - sysctl vm.vfs_cache_pressure=50
   - echo "vm.swappiness = 10" >> /etc/sysctl.conf
   - echo "vm.vfs_cache_pressure = 50" >> /etc/sysctl.conf
+  - echo "net.netfilter.nf_conntrack_max = 524288" >> /etc/sysctl.conf
+  - echo "net.nf_conntrack_max = 524288" >> /etc/sysctl.conf
   - adduser mradwin hebcal
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - systemctl reload ssh.service
