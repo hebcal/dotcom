@@ -71,6 +71,12 @@ write_files:
               return(pass);
           }
       }
+  - path: /etc/systemd/system/hitch.service.d/limits.conf
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      [Service]
+      LimitNOFILE=32768
   - path: /etc/hitch/hitch.conf
     permissions: '0644'
     content: |
