@@ -28,11 +28,12 @@ my $sqs = new Amazon::SQS::Simple($access_key, $secret_key, Version => '2012-11-
 my $queue_endpoint = $Config->{_}->{"hebcal.aws.sns.email-bounce.url"};
 my $q = $sqs->GetQueue($queue_endpoint);
 
+my $total = 0;
 my $count = 0;
 my @messages;
 do {
     @messages = $q->ReceiveMessageBatch;
-    $count += scalar @messages;
+    $total += scalar @messages;
     foreach my $msg (@messages) {
         my $body = $msg->MessageBody();
         my $event = decode_json $body;
@@ -50,6 +51,7 @@ do {
                 my $std_reason = $bounce_type eq "Permanent" ? get_std_reason($bounce_reason) : $bounce_type;
                 $sth->execute($email_address,$std_reason,$bounce_reason)
                     or die $dbh->errstr;
+                $count++;
             }
         } else {
             warn "Couldn't find Message in JSON payload";
@@ -61,7 +63,7 @@ do {
     }
 } while (@messages);
 
-#print "Processed $count bounces\n";
+print "Processed $count of $total bounces\n";
 $dbh->disconnect;
 exit(0);
 
