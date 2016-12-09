@@ -44,3 +44,6 @@ HEBCAL_BIN=/home/hebcal/local/bin
 
 # don't run fetchmail as a daemon, run it from cron
 */5 * * * * hebcal /usr/bin/fetchmail >> /home/hebcal/.fetchmail.log 2>&1
+
+# process Amazon SQS email bounces every hour
+13 * * * * hebcal nice $HEBCAL_BIN/shabbat_bounce_sqs.pl
