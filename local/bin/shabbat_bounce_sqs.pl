@@ -4,6 +4,7 @@ use strict;
 use DBI ();
 use Config::Tiny;
 use Amazon::SQS::Simple;
+use Mail::DeliveryStatus::BounceParser;
 use JSON;
 
 my $ini_path = "/home/hebcal/local/etc/hebcal-dot-com.ini";
@@ -27,30 +28,63 @@ my $sqs = new Amazon::SQS::Simple($access_key, $secret_key, Version => '2012-11-
 my $queue_endpoint = $Config->{_}->{"hebcal.aws.sns.email-bounce.url"};
 my $q = $sqs->GetQueue($queue_endpoint);
 
-my $msg = $q->ReceiveMessage();
-if ($msg) {
-    my $body = $msg->MessageBody();
-    my $event = decode_json $body;
-    my $innerMsg = $event->{Message};
-    if ($innerMsg) {
-        my $obj = decode_json $innerMsg;
-        if ($obj->{notificationType} && $obj->{notificationType} eq "Bounce" &&
-            $obj->{bounce} &&
-            $obj->{bounce}->{bounceType} &&
-            $obj->{bounce}->{bounceType} eq "Permanent" &&
-            $obj->{bounce}->{bouncedRecipients}) {
-            my $recip = $obj->{bounce}->{bouncedRecipients}->[0];
-            my $email_address = $recip->{emailAddress};
-            my $bounce_reason = $recip->{diagnosticCode};
-            my $std_reason = "user_disabled";
-            $sth->execute($email_address,$std_reason,$bounce_reason)
-                or die $dbh->errstr;
+my $count = 0;
+my @messages;
+do {
+    @messages = $q->ReceiveMessageBatch;
+    $count += scalar @messages;
+    foreach my $msg (@messages) {
+        my $body = $msg->MessageBody();
+        my $event = decode_json $body;
+        my $innerMsg = $event->{Message};
+        if ($innerMsg) {
+            my $obj = decode_json $innerMsg;
+            if ($obj->{notificationType} && $obj->{notificationType} eq "Bounce" &&
+                $obj->{bounce} &&
+                $obj->{bounce}->{bounceType} &&
+                $obj->{bounce}->{bouncedRecipients}) {
+                my $recip = $obj->{bounce}->{bouncedRecipients}->[0];
+                my $email_address = $recip->{emailAddress};
+                my $bounce_reason = $recip->{diagnosticCode};
+                my $bounce_type = $obj->{bounce}->{bounceType};
+                my $std_reason = $bounce_type eq "Permanent" ? get_std_reason($bounce_reason) : $bounce_type;
+                $sth->execute($email_address,$std_reason,$bounce_reason)
+                    or die $dbh->errstr;
+            }
+        } else {
+            warn "Couldn't find Message in JSON payload";
         }
-    } else {
-        warn "Couldn't find Message in JSON payload";
+        $q->DeleteMessage($msg);
     }
-    $q->DeleteMessage($msg);
-}
+    if (@messages) {
+        $q->DeleteMessageBatch(\@messages);
+    }
+} while (@messages);
 
+#print "Processed $count bounces\n";
 $dbh->disconnect;
 exit(0);
+
+
+# Mail::DeliveryStatus::BounceParser
+sub get_std_reason {
+    my($full_reason) = @_;
+    if ($full_reason && $full_reason =~ /\s(5\.\d\.\d)\s/) {
+        my $status = $1;
+        if ($status =~ /^5\.1\.[01]$/)  {
+            return "user_unknown";
+        } elsif ($status eq "5.1.2") {
+            return "domain_error";
+        } elsif ($status eq "5.2.1") {
+            return "user_disabled";
+        } elsif ($status eq "5.2.2") {
+            return "over_quota";
+        } elsif ($status eq "5.4.4") {
+            return "domain_error";
+        } else {
+            return Mail::DeliveryStatus::BounceParser::_std_reason($full_reason);
+        }
+    } else {
+        return "unknown";        
+    }
+}
