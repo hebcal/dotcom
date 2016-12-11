@@ -499,7 +499,7 @@ sub vcalendar_write_contents {
         } elsif ($lang eq "h") {
             $uclang = "HE";
         }
-        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v6.0//$uclang});
+        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v6.1//$uclang});
         ical_write_line(qq{CALSCALE:GREGORIAN});
         ical_write_line(qq{METHOD:PUBLISH});
         ical_write_line(qq{X-LOTUS-CHARSET:UTF-8});
@@ -514,12 +514,12 @@ sub vcalendar_write_contents {
             }
             else {
                 $desc = "Jewish Holidays from www.hebcal.com";
-                if ( defined $ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/ ) {
-                    my $qs = $1;
-                    $qs =~ s/;/&/g;
-                    my $cache_webpath = Hebcal::get_vcalendar_cache_fn();
-                    ical_write_line(qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs});
-                }
+#                if ( defined $ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/ ) {
+#                    my $qs = $1;
+#                    $qs =~ s/;/&/g;
+#                    my $cache_webpath = Hebcal::get_vcalendar_cache_fn();
+#                    ical_write_line(qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs});
+#                }
             }
             ical_write_line(qq{X-WR-CALDESC:$desc});
         }
