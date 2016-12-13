@@ -1561,19 +1561,22 @@ sub get_geo_args {
     if (defined $q->param('zip') && $q->param('zip') =~ /^\d+$/) {
 	return 'zip=' . $q->param('zip');
     } elsif (defined $q->param('city') && $q->param('city') ne '') {
-	return 'city=' . URI::Escape::uri_escape_utf8($q->param('city'));
+        my $city = $q->param('city');
+        return 'city=' . URI::Escape::uri_escape_utf8($city);
     } elsif (defined $q->param('geonameid') && $q->param('geonameid') =~ /^\d+$/) {
         my $retval = 'geonameid=' . $q->param('geonameid');
-        if ($q->param("city-typeahead")) {
+        my $city_typeahead = $q->param("city-typeahead");
+        if ($city_typeahead) {
             $retval .= join('', $separator, "city-typeahead=",
-                URI::Escape::uri_escape_utf8($q->param("city-typeahead")));
+                URI::Escape::uri_escape_utf8($city_typeahead));
         }
         return $retval;
     } elsif (defined $q->param('geo') && $q->param('geo') eq 'pos') {
 	my $sep = '';
 	my $retval = '';
 	foreach (qw(city-typeahead lodeg lomin ladeg lamin lodir ladir tzid)) {
-	    $retval .= "$sep$_=" . URI::Escape::uri_escape_utf8($q->param($_));
+            my $val = $q->param($_);
+            $retval .= "$sep$_=" . URI::Escape::uri_escape_utf8($val);
 	    $sep = $separator;
 	}
 	return $retval;
