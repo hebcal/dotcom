@@ -358,7 +358,9 @@ sub get_link_and_guid {
     }
 
     my $guid = $link;
-    $guid .= "&amp;dt=" . URI::Escape::uri_escape_utf8($dc_date);
+    if (defined $dc_date) {
+        $guid .= "&amp;dt=" . URI::Escape::uri_escape_utf8($dc_date);
+    }
 
     if ($frag) {
         $link .= "#$frag";
