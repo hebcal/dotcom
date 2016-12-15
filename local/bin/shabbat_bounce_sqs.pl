@@ -96,19 +96,17 @@ do {
                 print LOG $innerMsg, "\n";
             }
             my $obj = decode_json $innerMsg;
-            if ($obj->{notificationType} &&
-                $obj->{notificationType} =~ /^(Bounce|Complaint)$/ &&
-                $obj->{bounce} &&
-                $obj->{bounce}->{bounceType} &&
-                $obj->{bounce}->{bouncedRecipients}) {
+            if (!$obj->{notificationType}) {
+                WARN("MISSING notificationType $innerMsg");
+                next;
+            }
+            if ($obj->{notificationType} eq 'Bounce') {
                 my $recip = $obj->{bounce}->{bouncedRecipients}->[0];
                 my $email_address = $recip->{emailAddress};
                 my $bounce_reason = $recip->{diagnosticCode};
                 my $bounce_type = $obj->{bounce}->{bounceType};
                 my $std_reason;
-                if ($obj->{notificationType} eq "Complaint") {
-                    $std_reason = "amzn_abuse";
-                } elsif ($bounce_type eq "Permanent") {
+                if ($bounce_type eq "Permanent") {
                     $std_reason = get_std_reason($bounce_reason);
                 } else {
                     $std_reason = $bounce_type;
@@ -117,8 +115,16 @@ do {
                 $sth->execute($email_address,$std_reason,$bounce_reason)
                     or LOGDIE($dbh->errstr);
                 $count++;
+            } elsif ($obj->{notificationType} eq 'Complaint') {
+                my $recip = $obj->{complaint}->{complainedRecipients}->[0];
+                my $email_address = $recip->{emailAddress};
+                my $std_reason = "amzn_abuse";
+                INFO("$email_address $std_reason");
+                $sth->execute($email_address,$std_reason,$std_reason)
+                    or LOGDIE($dbh->errstr);
+                $count++;
             } else {
-                INFO("IGNORED $innerMsg");
+                WARN("UNKNOWN notificationType $innerMsg");                
             }
         } else {
             WARN("Couldn't find Message in JSON payload");
