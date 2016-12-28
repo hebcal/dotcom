@@ -26,9 +26,10 @@ acl purge {
 }
 
 sub vcl_recv {
+    set req.http.X-Client-IP = client.ip;
+
     if (std.port(server.ip) == 443) {
         set req.http.X-Forwarded-Proto = "https";
-        set req.http.X-Client-IP = client.ip;
     }
 
     if (req.url ~ "^/ical/.*\.ics" || req.url ~ "^/export/") {
