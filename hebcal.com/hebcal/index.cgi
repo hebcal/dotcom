@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2016  Michael J. Radwin.
+# Copyright (c) 2017  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -126,7 +126,9 @@ push(@benchmarks, Benchmark->new);
 # decide whether this is a results page or a blank form
 form("") unless $q->param("v");
 
+my $g_orig_year_now = 0;
 if (defined $q->param("year") && $q->param("year") eq "now") {
+    $g_orig_year_now = 1;
     my($yy,$mm,$dd) = Date::Calc::Today();
     if (defined $q->param("yt") && $q->param("yt") eq "H") {
         my $hebdate = HebcalGPL::greg2hebrew($this_year,$this_mon,$this_day);
@@ -590,6 +592,9 @@ sub vcalendar_display
 
     my $title = $g_date;
     plus4_events($cmd, \$title, \@events);
+    if ($g_orig_year_now && $q->param("subscribe")) {
+        $title = "";
+    }
     eval("use HebcalExport");
     HebcalExport::vcalendar_write_contents($q, \@events, $title, \%cconfig);
 }

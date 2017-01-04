@@ -1,5 +1,5 @@
 ########################################################################
-# Copyright (c) 2016 Michael J. Radwin.
+# Copyright (c) 2017 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -490,6 +490,8 @@ sub vcalendar_write_contents {
         }
 
         $title =~ s/,/\\,/g;
+        $title =~ s/\s+/ /g;
+        $title =~ s/\s$//;
 
         ical_write_line(qq{VERSION:2.0});
         my $lang = $q->param("lg") || "s";
@@ -504,7 +506,9 @@ sub vcalendar_write_contents {
         ical_write_line(qq{METHOD:PUBLISH});
         ical_write_line(qq{X-LOTUS-CHARSET:UTF-8});
         ical_write_line(qq{X-PUBLISHED-TTL:PT7D});
-        ical_write_line(qq{X-WR-CALNAME:Hebcal $title});
+        if ($title) {
+            ical_write_line(qq{X-WR-CALNAME:Hebcal $title});
+        }
 
         # include an iCal description
         if ( defined $q->param("v") ) {
