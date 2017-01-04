@@ -508,6 +508,8 @@ sub vcalendar_write_contents {
         ical_write_line(qq{X-PUBLISHED-TTL:PT7D});
         if ($title) {
             ical_write_line(qq{X-WR-CALNAME:Hebcal $title});
+        } else {
+            ical_write_line(qq{X-WR-CALNAME:Hebcal});            
         }
 
         # include an iCal description
