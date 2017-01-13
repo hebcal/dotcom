@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2016  Michael J. Radwin.
+# Copyright (c) 2017  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -106,9 +106,8 @@ my $header = <<EOHTML;
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css' rel='stylesheet' type='text/css'>
 <link href='//fonts.googleapis.com/css?family=$font_list' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -122,11 +121,7 @@ my $header = <<EOHTML;
 body {
   font-family: '$font_family', sans-serif;
 }
-#content {
-  font-size: 0.92em;
-  line-height: 1.25;
-}
-h4 {
+h3 {
   font-weight: 600;
   margin:24px 0 0;
 }
@@ -135,6 +130,9 @@ h4 {
 }
 #fridge-table td.leftpad {
   padding: 0 0 0 6px;
+}
+.text-right {
+  text-align: right;
 }
 .yomtov { font-weight:600 }
 .narrow { font-family: 'Open Sans Condensed', sans-serif }
@@ -146,10 +144,6 @@ h4 {
 </style>
 </head>
 <body>
-<div class="container">
-<div id="content">
-<div class="row">
-<div class="col-sm-12">
 <div align="center">
 EOHTML
 ;
@@ -159,8 +153,8 @@ print $header;
 my $numEntries = scalar(@{$evts});
 my $greg_year1 = $evts->[0]->{year};
 my $greg_year2 = $evts->[$numEntries-1]->{year};
-print qq{<h4>Candle Lighting Times for $short_city
-<br>Hebrew Year $hebrew_year ($greg_year1 - $greg_year2)</h4>
+print qq{<h3>Candle Lighting Times for $short_city
+<br>Hebrew Year $hebrew_year ($greg_year1 - $greg_year2)</h3>
 <p style="margin:0 0 4px">www.hebcal.com</p>
 <!-- $cmd_pretty -->
 };
@@ -169,10 +163,6 @@ my $items = filter_events($evts);
 format_items($q,$items);
 
 print qq{</div><!-- align=center -->
-</div><!-- .col-sm-12 -->
-</div><!-- .row -->
-</div><!-- #content -->
-</div><!-- .container -->
 </body>
 </html>
 };
@@ -234,9 +224,9 @@ sub format_items
     my($q,$items) = @_;
 
     my $table_head = <<EOHTML;
-<table style="width:396px" id="fridge-table">
+<table style="width:480px" id="fridge-table">
 <col><col><col><col>
-<col style="border-left:solid;border-width:1px;border-color:#999999"><col><col><col>
+<col style="border-left:1px solid #999 !important"><col><col><col>
 <tbody>
 EOHTML
     ;
