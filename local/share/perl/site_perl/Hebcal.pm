@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2016 Michael J. Radwin.
+# Copyright (c) 2017 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -582,6 +582,13 @@ sub invoke_hebcal_v2 {
             hebrew => $hebrew,
             category => $category,
         };
+        if ($category eq "holiday") {
+            my $subj_copy = $ashk2seph{$subj} || $subj;
+            my $type = $HebcalConst::HOLIDAY_TYPE{$subj_copy};
+            if ($type) {
+                $evt->{subcat} = $type;
+            }
+        }
         push(@events, $evt);
     }
     close(HEBCAL);
@@ -744,6 +751,7 @@ sub event_to_dict {
 
     $item{subj} = $subj;
     $item{"class"} = $evt->{category};
+    $item{subcat} = $evt->{subcat} if $evt->{subcat};
 
     $item{hebrew} = $evt->{hebrew} if $evt->{hebrew};
 
@@ -878,6 +886,8 @@ sub json_transform_items {
         $out->{title_orig} = $item->{title_orig}
             if defined $item->{title_orig};
         $out->{category} = $item->{class};
+        $out->{subcat} = $item->{subcat}
+            if defined $item->{subcat};
         $out->{date} = $item->{"dc:date"};
 	$out->{link} = $item->{"link"}
             if $item->{class} =~ /^(parashat|holiday|dafyomi|roshchodesh)$/;
