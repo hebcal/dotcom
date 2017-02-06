@@ -125,11 +125,15 @@ h3 {
   font-weight: 600;
   margin:24px 0 0;
 }
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
 #fridge-table td {
   padding: 0px 4px;
 }
 #fridge-table td.leftpad {
-  padding: 0 0 0 6px;
+  padding: 0 0 0 12px;
 }
 .text-right {
   text-align: right;
@@ -224,9 +228,12 @@ sub format_items
     my($q,$items) = @_;
 
     my $table_head = <<EOHTML;
-<table style="width:480px" id="fridge-table">
+<table style="width:524px" id="fridge-table">
+<colgroup>
 <col><col><col><col>
-<col style="border-left:1px solid #999 !important"><col><col><col>
+<col>
+<col style="border-left:1px solid #999"><col><col><col>
+</colgroup>
 <tbody>
 EOHTML
     ;
@@ -235,9 +242,10 @@ EOHTML
     my $half = POSIX::ceil(scalar(@{$items}) / 2.0);
     for (my $i = 0; $i < $half; $i++) {
         print "<tr>";
-        format_row($items->[$i]);
+        format_row($items->[$i], 0);
         print "\n";
-        format_row($items->[$i+$half]);
+        print "<td></td>\n";
+        format_row($items->[$i+$half], 1);
         print "</tr>\n";
     }
 
@@ -249,6 +257,7 @@ EOHTML
         $url_base .= sprintf("&amp;%s=%s", $arg, scalar $q->param($arg))
             if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
     }
+    $url_base .= "&amp;lg=$lang";
     $url_base .= "&amp;year=";
 
     print "<p><a class=\"goto\" title=\"Previous\" href=\"",
@@ -262,11 +271,19 @@ EOHTML
         "</p>\n";
 }
 
+sub td_with_class {
+    if (@_) {
+        return qq{<td class="} . join(" ", @_) . qq{">};
+    } else {
+        return "<td>";
+    }
+}
+
 sub format_row {
-    my($item) = @_;
+    my($item,$right) = @_;
 
     unless (defined $item) {
-        print "<td><td><td><td>";
+        print "<td></td><td></td><td></td><td></td>";
         return;
     }
     my($month,$day,$time,$subject,$yom_tov) = @{$item};
@@ -280,14 +297,16 @@ sub format_row {
     } elsif (length($subject) > 14) {
         push(@narrow, "narrow");
     }
-    my $subj_class = join(" ", @class, @narrow);
-    if ($subj_class) {
-        $subj_class = qq{ class="$subj_class"};
+    my @monthClass = @class;
+    my @timeClass = @class;
+    push(@timeClass, "text-right");
+    if ($right) {
+        push(@monthClass, "leftpad");
     }
-    print qq{<td class="}, join(" ", @class, "leftpad"), qq{">}, $month, "</td>",
-         qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $day, "</td>",
-         qq{<td$subj_class>}, $subject, "</td>",
-         qq{<td class="}, join(" ", @class, "text-right"), qq{">}, $time, "</td>";
+    print td_with_class(@monthClass), $month, "</td>",
+        td_with_class(@class, "text-right"), $day, "</td>",
+        td_with_class(@class, @narrow), $subject, "</td>",
+        td_with_class(@timeClass), $time, "</td>";
 }
 
 sub process_args
