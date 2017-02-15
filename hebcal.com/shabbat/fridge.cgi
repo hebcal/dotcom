@@ -258,6 +258,7 @@ EOHTML
             if defined $q->param($arg) && $q->param($arg) =~ /^on|1$/;
     }
     $url_base .= "&amp;lg=$lang";
+    $url_base .= "&amp;m=" . $q->param('m');
     $url_base .= "&amp;year=";
 
     print "<p><a class=\"goto\" title=\"Previous\" href=\"",
