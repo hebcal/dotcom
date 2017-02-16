@@ -116,6 +116,7 @@ runcmd:
   - sysctl net.nf_conntrack_max=524288
   - echo "net.netfilter.nf_conntrack_max = 524288" >> /etc/sysctl.conf
   - echo "net.nf_conntrack_max = 524288" >> /etc/sysctl.conf
+  - echo "nf_conntrack" >> /etc/modules
   - adduser mradwin hebcal
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - systemctl reload ssh.service
