@@ -112,6 +112,8 @@ runcmd:
   - sysctl vm.vfs_cache_pressure=50
   - echo "vm.swappiness = 10" >> /etc/sysctl.conf
   - echo "vm.vfs_cache_pressure = 50" >> /etc/sysctl.conf
+  - sysctl net.netfilter.nf_conntrack_max=524288
+  - sysctl net.nf_conntrack_max=524288
   - echo "net.netfilter.nf_conntrack_max = 524288" >> /etc/sysctl.conf
   - echo "net.nf_conntrack_max = 524288" >> /etc/sysctl.conf
   - adduser mradwin hebcal
