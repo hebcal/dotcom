@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2014  Michael J. Radwin.
+# Copyright (c) 2017  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -42,17 +42,20 @@ use Config::Tiny;
 use Getopt::Long ();
 
 my $COUNT_DEFAULT = 7;
+my $REASONS_DEFAULT = "amzn_abuse,user_unknown,user_disabled,domain_error,spam";
 
 my $PROG = "shabbat_deactivate.pl";
 
 my $opt_help;
 my $opt_dryrun;
 my $opt_quiet;
+my $opt_reasons = $REASONS_DEFAULT;
 my $opt_count = $COUNT_DEFAULT;
 
 if (!Getopt::Long::GetOptions("help|h" => \$opt_help,
                 "count=i" => \$opt_count,
                 "quiet" => \$opt_quiet,
+                "reasons=s" => \$opt_reasons,
                 "dryrun|n" => \$opt_dryrun))
 {
     Usage();
@@ -79,6 +82,7 @@ Options:
                   but does not remove anything
   -quiet        Quiet mode (do not print commands)
   -count <n>    Threshold is <n> for bounces (default $COUNT_DEFAULT)
+  -reasons <r>  Use any of comma-separated list of reasons <r> for bounces (default $REASONS_DEFAULT)
 EOF
 ;
     exit(1);
@@ -102,16 +106,17 @@ sub open_database {
 
 sub get_candidates {
     my($dbh) = @_;
+
+    my @reasons = split(/,/, $opt_reasons);
+    my $reason_sql = join("','", @reasons);
+
     my $sql = qq{
         SELECT b.email_address,std_reason,count(1)
         FROM hebcal_shabbat_email e,
              hebcal_shabbat_bounce b
         WHERE e.email_address = b.email_address
         AND e.email_status = 'active'
-        AND b.std_reason IN('user_unknown',
-                        'user_disabled',
-                        'domain_error',
-                        'amzn_abuse')
+        AND b.std_reason IN('$reason_sql')
         AND b.deactivated = 0
         GROUP by b.email_address,std_reason
     };
