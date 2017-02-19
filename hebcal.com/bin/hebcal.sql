@@ -19,16 +19,6 @@ create table hebcal_shabbat_bounce (
     email_address varchar(200) NOT NULL,
     timestamp timestamp NOT NULL,
     std_reason varchar(16),
-    full_reason varchar(200),
+    full_reason text,
     deactivated tinyint(1) NOT NULL
-);
-
-create table hebcal_zips (
-    zips_zipcode varchar(5) not null primary key,
-    zips_latitude varchar(12) not null,
-    zips_longitude varchar(12) not null,
-    zips_timezone tinyint not null,
-    zips_dst tinyint(1) not null,
-    zips_city varchar(64) not null,
-    zips_state varchar(2) not null
 );
