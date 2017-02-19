@@ -157,6 +157,7 @@ runcmd:
   - rsync -av /tmp/dotcom/procmail/hebcron.procmailrc /home/hebcal/.procmailrc
   - rsync -av /tmp/dotcom/procmail/hebcron.fetchmailrc /home/hebcal/.fetchmailrc
   - chmod 0600 /home/hebcal/.fetchmailrc
+  - mkdir -p /home/hebcal/mail
   - chown -R hebcal:hebcal /home/hebcal
   - rsync -av /tmp/dotcom/hebcal.com/pear/Hebcal/const.inc /var/www/pear/Hebcal/
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt

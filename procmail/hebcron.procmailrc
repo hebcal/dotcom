@@ -15,15 +15,10 @@ MAILDIR=$HOME/mail
 }
 
 
-:0
+:0:
 * ^TO(shabbat-return)
-{
-  :0 c:bounce.lock
-  | $HCBIN/shabbat_bounce.pl
+return-saved
 
-  :0:
-  return-saved
-}
 
 :0
 /dev/null
