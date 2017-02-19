@@ -70,6 +70,7 @@ packages:
   - libjson-xs-perl
   - libemail-valid-perl
   - libmail-deliverystatus-bounceparser-perl
+  - libamazon-sqs-simple-perl
   - nagios-plugins-basic
   - nagios-plugins-common
   - python-magic
