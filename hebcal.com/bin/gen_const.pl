@@ -136,7 +136,7 @@ foreach my $f (@festivals)
 print O ");\n\n";
 
 my $translations = {};
-my @langs = qw(pl ru he);
+my @langs = qw(pl ru he fi);
 foreach my $pofile (@langs) {
     my $infile = "$podir/$pofile.po";
     open(IN, $infile) || die "$infile: $!";

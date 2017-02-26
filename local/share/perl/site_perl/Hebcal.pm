@@ -120,6 +120,7 @@ our %lang_names =
      "h"  => "Hebrew - עברית",
      "ru" => "Russian - ру́сский язы́к",
      "pl" => "Polish - język polski",
+     "fi" => "Finnish - Suomalainen",
      );
 
 our %CONTINENTS =

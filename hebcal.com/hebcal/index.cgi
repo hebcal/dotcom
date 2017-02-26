@@ -551,7 +551,7 @@ sub my_translate_event {
             return $subj;
         }
         return $subj . "\n<br>" . hebrew_span($xsubj);
-    } elsif ($lang eq "ru" || $lang eq "pl") {
+    } elsif ($lang eq "ru" || $lang eq "pl" || $lang eq "fi") {
         return $xsubj || $subj;
     } else {
         warn "unknown lang \"$lang\" for $subj";
