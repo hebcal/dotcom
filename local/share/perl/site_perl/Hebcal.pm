@@ -2184,7 +2184,7 @@ sub translate_event {
         return $subj;
     } elsif ($lang eq "h" || $lang eq "ah" || $lang eq "sh") {
         return $evt->{hebrew};
-    } elsif ($lang eq "ru" || $lang eq "pl") {
+    } elsif ($lang eq "ru" || $lang eq "pl" || $lang eq "fi") {
         if ($evt->{category} eq "parashat") {
             my $s0 = $subj;
             $s0 =~ s/^Parashat //;
