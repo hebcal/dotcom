@@ -1162,7 +1162,7 @@ sub get_holiday_anchor($$$)
 	my $tractate = $DAFYOMI{$1} || $1;
 	my $page = $2;
 	$tractate =~ s/ /_/g;
-	$href = "http://www.sefaria.org/${tractate}.${page}a";
+	$href = "https://www.sefaria.org/${tractate}.${page}a";
     }
     else
     {
@@ -1252,7 +1252,7 @@ sub get_sefaria_url {
     my $sefaria_verses = $verses;
     $sefaria_verses =~ s/:/./g;
 
-    my $sefaria_url = "http://www.sefaria.org/$book.$sefaria_verses?lang=he-en&layout=heLeft&sidebarLang=all";
+    my $sefaria_url = "https://www.sefaria.org/$book.$sefaria_verses?lang=bi";
     return $sefaria_url;
 }
 

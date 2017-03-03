@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2016  Michael J. Radwin.
+# Copyright (c) 2017 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1194,18 +1194,18 @@ EOHTML
 <h3 id="ref">References</h3>
 <dl>
 <dt><em><a class="amzn" id="strassfeld-2"
-href="http://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
+href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dd>Rabbi Michael Strassfeld
 };
 
     if (defined $festivals->{'festival'}->{$f}->{'kriyah'}->{'aliyah'}) {
 	print OUT2 qq{<dt><em><a class="outbound"
-href="http://www.sefaria.org/">Sefaria Tanach</a></em>
+href="https://www.sefaria.org/">Sefaria Tanach</a></em>
 <dd>Sefaria.org
 <dt><em><a class="amzn" id="jps-tanakh-1"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
-href="http://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
+href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
 <dd>Jewish Publication Society
 };
@@ -1510,7 +1510,7 @@ sub amazon_recommended_book {
 
     my $shorttitle = $bktitle;
     $shorttitle =~ s/\s*:.+//;
-    my $link = "http://www.amazon.com/o/ASIN/$asin/hebcal-20";
+    my $link = "https://www.amazon.com/o/ASIN/$asin/hebcal-20";
 
     my $byauthor = $author ? qq{<br>by $author} : "";
     my $html = <<EOHTML

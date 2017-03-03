@@ -10,7 +10,7 @@
 #   A Complete Triennial System for Reading the Torah
 #   http://web.archive.org/web/20160306224926/http://jtsa.edu/prebuilt/parashaharchives/triennial.shtml
 #
-# Copyright (c) 2016  Michael J. Radwin.
+# Copyright (c) 2017  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -935,10 +935,18 @@ EOHTML
 }
 
 sub sefaria_verse_url {
-    my($verse) = @_;
-    $verse =~ s/ - /-/;
-    $verse =~ s/ /\%20/g;
-    return "http://www.sefaria.org/" . $verse;
+    my($bookverse) = @_;
+    if ($bookverse =~ /^([^\d]+)(\d.+)$/) {
+        my $book = $1;
+        my $verses = $2;
+        $book =~ s/\s+$//;
+        $book =~ s/ /_/g;
+        $verses =~ s/\;.+//;  # discard second part of Haftarah
+        $verses =~ s/ - /-/;
+        return Hebcal::get_sefaria_url($book, $verses);
+    } else {
+        die "Can't parse bookverse '$bookverse'";
+    }
 }
 
 sub write_sedra_page
@@ -958,7 +966,8 @@ sub write_sedra_page
 
     if (defined($haftarah_seph) && ($haftarah_seph ne $haftarah))
     {
-	$seph = "\n<br>Haftarah for Sephardim: $haftarah_seph";
+        my $seph_href = sefaria_verse_url($haftarah_seph);
+        $seph = qq{\n<br>Haftarah for Sephardim: <a href="$seph_href">$haftarah_seph</a>};
 	$ashk = " for Ashkenazim";
     }
 
@@ -1005,7 +1014,7 @@ sub write_sedra_page
         $xtra_head, 0, 1);
 
     my $amazon_link2 =
-	"http://www.amazon.com/o/ASIN/0899060145/hebcal-20";
+	"https://www.amazon.com/o/ASIN/0899060145/hebcal-20";
 
 #    write_sedra_sidebar($parshiot,$h);
 
