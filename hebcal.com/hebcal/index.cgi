@@ -700,14 +700,16 @@ sub pdf_display {
         $g->stroke();
         $g->endpath();
 
-        $text->font($pdf_font{'plain'},10);
+        my $dow_font = $pdf_rtl ? 'hebrew' : 'plain';
+        $text->font($pdf_font{$dow_font},10);
         for (my $i = 0; $i < scalar(@Hebcal::DoW_long); $i++) {
             my $edge_offset = $i * ($colwidth + $hspace) + ($colwidth / 2);
             my $x = $pdf_rtl
                 ? PDF_WIDTH - PDF_RMARGIN - $edge_offset
                 : PDF_LMARGIN + $edge_offset;
             $text->translate($x, PDF_HEIGHT - PDF_TMARGIN + 6);
-            $text->text_center($Hebcal::DoW_long[$i]);
+            my $dow_text = $pdf_rtl ? scalar reverse($Hebcal::DoW_hebrew[$i]) : $Hebcal::DoW_long[$i];
+            $text->text_center($dow_text);
         }
 
         # Loop through the columns
