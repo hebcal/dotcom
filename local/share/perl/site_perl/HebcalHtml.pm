@@ -463,9 +463,8 @@ sub header_bootstrap3 {
     $xtra_head = "" unless $xtra_head;
     my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
-    my $alefhebrew = q"@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.ttf) format('truetype')}@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:700;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.ttf) format('truetype')}";
     my $xtra_stylesheet = $hebrew_stylesheet
-        ? "<!-- http://fonts.googleapis.com/earlyaccess/alefhebrew.css -->\n<style type=\"text/css\">\n$alefhebrew\n</style>\n"
+        ? qq{<link href="https://fonts.googleapis.com/css?family=Alef:400,700" rel="stylesheet">\n}
         : "";
 
     my $logo = '<a href="/" class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.2.svg" width="77" height="21" alt="Hebcal"></a>';
@@ -489,8 +488,8 @@ $xtra_stylesheet<script>
 <style type="text/css">
 .label{text-transform:none}
 :lang(he) {
-  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
-  font-size:125%;
+  font-family:'Alef','SBL Hebrew',David,serif;
+/*  font-size:125%; */
   direction:rtl;
 }
 .hebcal-footer {

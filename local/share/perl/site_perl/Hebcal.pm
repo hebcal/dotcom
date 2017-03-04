@@ -95,6 +95,7 @@ our @MoY_hebrew = (
      "נוֹבֶמְבֶּר",
      "דֶּצֶמְבֶּר",
     );
+our @DoW_hebrew = qw(ראשון שני שלישי רביעי חמישי שישי שבת);
 our %MoY_long = (
 	     'x' => '- Entire year -',
 	     1   => 'January',

@@ -476,9 +476,8 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
         $logo = '<a href="/" ' . $logoIdClassTitle . '>' . $logoImage . '</a>';
     }
 
-    $alefhebrew = "@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Regular.ttf) format('truetype')}@font-face{font-family:'Alef Hebrew';font-style:normal;font-weight:700;src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot);src:url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.eot?#iefix) format('embedded-opentype'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff2) format('woff2'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.woff) format('woff'),url(//fonts.gstatic.com/ea/alefhebrew/v4/Alef-Bold.ttf) format('truetype')}";
     $xtra_stylesheet = $hebrew_stylesheet
-        ? "<!-- http://fonts.googleapis.com/earlyaccess/alefhebrew.css -->\n<style type=\"text/css\">\n$alefhebrew\n</style>\n"
+        ? "<link href=\"https://fonts.googleapis.com/css?family=Alef:400,700\" rel=\"stylesheet\">\n"
         : "";
 
     $html = <<<EOD
@@ -524,7 +523,7 @@ $xtra_stylesheet<script>
 .bullet-list-inline li:last-child:after{content:""}
 .label{text-transform:none}
 :lang(he) {
-  font-family:'Alef Hebrew','SBL Hebrew',David,serif;
+  font-family:'Alef','SBL Hebrew',David,serif;
   font-size:125%;
   direction:rtl;
 }

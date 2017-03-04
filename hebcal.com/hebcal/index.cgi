@@ -1938,16 +1938,18 @@ sub html_table_events {
 sub write_html_cal
 {
     my($q,$cals,$cal_ids,$i) = @_;
-    my $lang = $q->param("lg");
+    my $lang = $q->param("lg") || "s";
     my $dir = "";
-    if ($lang && $lang eq "h") {
+    if ($lang eq "h") {
         $dir = qq{ dir="rtl"};
     }
     my $cal = $cals->[$i];
     my $id = $cal_ids->[$i];
     my($year,$month) = split(/-/, $id, 2);
     $month =~ s/^0//;
-    my $header = sprintf("<h3>%s %s</h3>", $Hebcal::MoY_long{$month}, $year);
+    my $header = $lang eq "h"
+        ? sprintf(qq{<h2 lang="he">%s %s</h2>}, $Hebcal::MoY_hebrew[$month-1], $year)
+        : sprintf("<h3>%s %s</h3>", $Hebcal::MoY_long{$month}, $year);
     my $style = "";
     my $class = "cal";
     if ($i != 0) {
@@ -1976,9 +1978,16 @@ sub new_html_cal
 
     my $cal = new HTML::CalendarMonthSimple("year" => $year,
                                             "month" => $month);
-    $cal->saturday('Sat');
-    $cal->sunday('Sun');
-    $cal->weekdays('Mon','Tue','Wed','Thu','Fri');
+    my $lang = $q->param("lg") || "s";
+    if ($lang eq "h") {
+        $cal->saturday($Hebcal::DoW_hebrew[6]);
+        $cal->sunday($Hebcal::DoW_hebrew[0]);
+        $cal->weekdays(@Hebcal::DoW_hebrew[1..5]);
+    } else {
+        $cal->saturday('Sat');
+        $cal->sunday('Sun');
+        $cal->weekdays('Mon','Tue','Wed','Thu','Fri');
+    }
     $cal->border(0);
     $cal->tableclass("table table-bordered fc-emulated-table");
     $cal->header('');
