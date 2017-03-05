@@ -1138,7 +1138,7 @@ EOHTML
     print qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
                    -id => "lg",
-                   -values => ["s", "a", "h", "ru", "pl", "sh", "ah"],
+                   -values => ["s", "a", "h", "ru", "pl", "fi", "sh", "ah"],
                    -default => "s",
                    -class => "form-control",
                    -labels => \%Hebcal::lang_names),
