@@ -551,7 +551,7 @@ sub my_translate_event {
             return $subj;
         }
         return $subj . "\n<br>" . hebrew_span($xsubj);
-    } elsif ($lang eq "ru" || $lang eq "pl" || $lang eq "fi") {
+    } elsif ($Hebcal::lang_european{$lang}) {
         return $xsubj || $subj;
     } else {
         warn "unknown lang \"$lang\" for $subj";
@@ -804,14 +804,14 @@ sub pdf_render_event {
         $text->text($time_formatted . " ");
     }
 
-    if ($lg eq "ru" || $lg eq "pl") {
+    if ($Hebcal::lang_european{$lg}) {
         my $xsubj = Hebcal::translate_event($evt, $lg);
         if ($xsubj) {
             $subj = $xsubj;
         }
     }
 
-    if ($lg =~ /^(a|s|ah|sh|ru|pl)$/) {
+    if ($lg =~ /^(a|s|ah|sh)$/ || $Hebcal::lang_european{$lg}) {
         if ($evt->{yomtov} == 1) {
             $text->font($pdf_font{'bold'}, 8);
             $text->text($subj);
@@ -1138,7 +1138,7 @@ EOHTML
     print qq{<div class="form-group"><label for="lg">Event titles</label>},
     $q->popup_menu(-name => "lg",
                    -id => "lg",
-                   -values => ["s", "a", "h", "ru", "pl", "fi", "sh", "ah"],
+                   -values => ["s", "a", "h", @Hebcal::lang_european, "sh", "ah"],
                    -default => "s",
                    -class => "form-control",
                    -labels => \%Hebcal::lang_names),
