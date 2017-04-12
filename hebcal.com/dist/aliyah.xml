@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-Copyright (c) 2016  Michael J. Radwin.
+Copyright (c) 2017  Michael J. Radwin.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or
@@ -1535,7 +1535,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <aliyah num="4" begin="13:6" end="13:8" />
  <aliyah num="5" begin="13:9" end="13:17" />
  <aliyah num="6" begin="13:18" end="13:23" />
- <aliyah num="7" begin="13:23" end="13:28" />
+ <aliyah num="7" begin="13:24" end="13:28" />
  <aliyah num="M" begin="13:26" end="13:28" />
 </year>
 <year variation="B.2">

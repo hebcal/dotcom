@@ -8,7 +8,7 @@
 #
 # Calculates triennial according to
 #   A Complete Triennial System for Reading the Torah
-#   http://web.archive.org/web/20160306224926/http://jtsa.edu/prebuilt/parashaharchives/triennial.shtml
+#   https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf
 #
 # Copyright (c) 2017  Michael J. Radwin.
 # All rights reserved.
@@ -1222,7 +1222,7 @@ href="$amazon_link2">The
 Chumash: The Stone Edition (Artscroll Series)</a></em>
 <dd>Nosson Scherman, Mesorah Publications, 1993
 <dt><em><a class="outbound"
-href="http://web.archive.org/web/20160306224926/http://jtsa.edu/prebuilt/parashaharchives/triennial.shtml">A
+href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
 </dl>
