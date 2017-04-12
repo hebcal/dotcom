@@ -408,39 +408,40 @@ sub cycle_readings {
         my ( $year, $month, $day ) = Hebcal::event_ymd( $events->[$i] );
         my $stime = sprintf( "%02d %s %04d", $day, $Hebcal::MoY_short[$month-1],
             $year );
+        my $dt = Hebcal::date_format_sql($year, $month, $day);
 
         if ( defined $combined{$h} ) {
             my $variation = $option->{$h} . "." . $yr;
             my $a         = $aliyot->{$h}->{$variation};
             croak unless defined $a;
-            $readings{$h}->[$yr] = [ $a, $stime, $h ];
+            $readings{$h}->[$yr] = [ $a, $stime, $h, $dt ];
         }
         elsif ( defined $aliyot->{$h}->{$yr} ) {
             my $a = $aliyot->{$h}->{$yr};
             croak unless defined $a;
 
-            $readings{$h}->[$yr] = [ $a, $stime, $h ];
+            $readings{$h}->[$yr] = [ $a, $stime, $h, $dt ];
 
             if (   $h =~ /^([^-]+)-(.+)$/
                 && defined $combined{$1}
                 && defined $combined{$2} )
             {
-                $readings{$1}->[$yr] = [ $a, $stime, $h ];
-                $readings{$2}->[$yr] = [ $a, $stime, $h ];
+                $readings{$1}->[$yr] = [ $a, $stime, $h, $dt ];
+                $readings{$2}->[$yr] = [ $a, $stime, $h, $dt ];
             }
         }
         elsif ( defined $aliyot->{$h}->{"Y.$yr"} ) {
             my $a = $aliyot->{$h}->{"Y.$yr"};
             croak unless defined $a;
 
-            $readings{$h}->[$yr] = [ $a, $stime, $h ];
+            $readings{$h}->[$yr] = [ $a, $stime, $h, $dt ];
 
             if (   $h =~ /^([^-]+)-(.+)$/
                 && defined $combined{$1}
                 && defined $combined{$2} )
             {
-                $readings{$1}->[$yr] = [ $a, $stime, $h ];
-                $readings{$2}->[$yr] = [ $a, $stime, $h ];
+                $readings{$1}->[$yr] = [ $a, $stime, $h, $dt ];
+                $readings{$2}->[$yr] = [ $a, $stime, $h, $dt ];
             }
         }
         else {
@@ -913,6 +914,21 @@ sub aliyot_combine_67 {
     return \%out;
 }
 
+# transform an array of aliyot into a hash-oriented object
+# and also handle aliyot 6, 7, 8 and M at the same time
+sub remap_aliyot_special_7maf {
+    my($aliyot,$dt) = @_;
+    my %m = map { $_->{"num"} => $_ } @{$aliyot};
+    if (defined $special{$dt}->{"7"}) {
+        my $aliyot6 = aliyot_combine_67($aliyot);
+        $m{"6"} = $aliyot6->{6};
+    }
+    foreach my $num (qw(7 8 M)) {
+        $m{$num} = $special{$dt}->{$num} if defined $special{$dt}->{$num};
+    }
+    \%m;
+}
+
 sub json_ld_markup {
     my($h,$startDate) = @_;
 
@@ -1332,10 +1348,14 @@ sub print_tri_cell
 	unless defined $triennial->[$yr]->[0];
 
     print OUT2 qq{<ul class="list-unstyled">\n};
-    foreach my $aliyah (sort {$a->{'num'} cmp $b->{'num'}}
-			@{$triennial->[$yr]->[0]})
-    {
-	print OUT2 "<li>", format_aliyah($aliyah,$h,$torah);
+    my $dt = $triennial->[$yr]->[3];
+    my $mapped_aliyot = remap_aliyot_special_7maf($triennial->[$yr]->[0],$dt);
+
+    my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } values %{$mapped_aliyot};
+    foreach my $aliyah (@sorted_aliyot) {
+        my $show_book = defined $aliyah->{'book'} ? 1 : 0;
+        my $torah0 = $show_book ? $aliyah->{'book'} : $torah;
+        print OUT2 "<li>", format_aliyah($aliyah,$h,$torah0,$show_book);
     }
     print OUT2 "</ul>\n";
 }
@@ -1648,16 +1668,9 @@ sub csv_parasha_event_inner
     my $book = $verses;
     $book =~ s/\s+.+$//;
 
-    my %aliyot = map { $_->{"num"} => $_ } @{$aliyot};
-    if (defined $special{$dt}->{"7"}) {
-        my $aliyot6 = aliyot_combine_67($aliyot);
-        $aliyot{"6"} = $aliyot6->{6};
-    }
-    foreach my $num (qw(7 8 M)) {
-        $aliyot{$num} = $special{$dt}->{$num} if defined $special{$dt}->{$num};
-    }
+    my $mapped_aliyot = remap_aliyot_special_7maf($aliyot,$dt);
 
-    my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } values %aliyot;
+    my @sorted_aliyot = sort { $a->{'num'} cmp $b->{'num'} } values %{$mapped_aliyot};
     foreach my $aliyah (@sorted_aliyot) {
 	my $aliyah_text = sprintf("%s %s - %s",
 				  $aliyah->{"book"} || $book,
