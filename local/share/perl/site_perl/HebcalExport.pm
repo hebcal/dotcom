@@ -487,6 +487,11 @@ sub vcalendar_write_contents {
     if ($is_icalendar) {
         if ( defined $cconfig && defined $cconfig->{"city"} ) {
             $title = $cconfig->{"city"} . " " . $title;
+        } elsif (defined $q->param("v") && $q->param("v") ne "yahrzeit") {
+            my $v = $q->param("i");
+            my $israel = ((defined $v) && ($v ne "off") && ($v ne "0") && ($v ne "")) ? 1 : 0;
+            my $loc = $israel ? "Israel" : "Diaspora";
+            $title = $loc . " " . $title;
         }
 
         $title =~ s/,/\\,/g;
@@ -496,12 +501,12 @@ sub vcalendar_write_contents {
         ical_write_line(qq{VERSION:2.0});
         my $lang = $q->param("lg") || "s";
         my $uclang = "EN";
-        if ($lang eq "ru" || $lang eq "pl") {
+        if ($Hebcal::lang_european{$lang}) {
             $uclang = uc($lang);
         } elsif ($lang eq "h") {
             $uclang = "HE";
         }
-        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v6.1//$uclang});
+        ical_write_line(qq{PRODID:-//hebcal.com/NONSGML Hebcal Calendar v6.2//$uclang});
         ical_write_line(qq{CALSCALE:GREGORIAN});
         ical_write_line(qq{METHOD:PUBLISH});
         ical_write_line(qq{X-LOTUS-CHARSET:UTF-8});

@@ -258,7 +258,7 @@ $cmd .= " " . $q->param("year");
 
 my $EXTRA_YEARS = 4;
 my %extra_years_opts = (
-    "D" => 3,
+    "D" => 2,
     "d" => 1,
     "F" => 1,
     "c" => 3,
@@ -272,6 +272,14 @@ if ($q->param("ny") && $q->param("ny") =~ /^\d+$/ && $q->param("ny") >= 1) {
             my $v = $extra_years_opts{$opt};
             $EXTRA_YEARS = $v if $v < $EXTRA_YEARS;
         }
+    }
+    # Shabbat plus Hebrew Event every day can get very big
+    if (param_true("c") && (param_true("d") || param_true("D"))) {
+        $EXTRA_YEARS = 1;
+    }
+    # reduce size of file for truly crazy people who specify both Daf Yomi and Hebrew Date every day
+    if (param_true("F") && (param_true("d") || param_true("D"))) {
+        $EXTRA_YEARS = 0;
     }
 }
 
