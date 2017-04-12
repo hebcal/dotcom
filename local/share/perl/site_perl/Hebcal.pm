@@ -124,6 +124,9 @@ our %lang_names =
      "fi" => "Finnish - Suomalainen",
      );
 
+our @lang_european = ("ru", "pl", "fi");
+our %lang_european = map { $_ => 1 } @lang_european;
+
 our %CONTINENTS =
     (
      'AF' => 'Africa',
@@ -743,7 +746,7 @@ sub event_to_dict {
     $anchor =~ s/_$//g;
     $item{"about"} = $url . "#" . $anchor;
 
-    if ($lang eq "h" || $lang eq "ru" || $lang eq "pl") {
+    if ($lang eq "h" || $lang_european{$lang}) {
         my $xsubj = Hebcal::translate_event($evt, $lang);
         if ($xsubj && $xsubj ne $subj) {
             $item{title_orig} = $subj;
@@ -2185,7 +2188,7 @@ sub translate_event {
         return $subj;
     } elsif ($lang eq "h" || $lang eq "ah" || $lang eq "sh") {
         return $evt->{hebrew};
-    } elsif ($lang eq "ru" || $lang eq "pl" || $lang eq "fi") {
+    } elsif ($lang_european{$lang}) {
         if ($evt->{category} eq "parashat") {
             my $s0 = $subj;
             $s0 =~ s/^Parashat //;

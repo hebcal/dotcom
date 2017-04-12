@@ -15,7 +15,7 @@ debconf_selections: |     # Need to perserve newlines
     postfix postfix/main_mailer_type select Satellite system
     postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
 
-#package_upgrade: true
+package_upgrade: true
 
 packages:
   - git
@@ -51,9 +51,21 @@ runcmd:
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - service ssh reload
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
-  - cp /tmp/dotcom/etc/postfix/main.cf /etc/postfix/main.cf
-  - rsync -av /tmp/dotcom/etc/nagios3/ /etc/nagios3/
+  - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
+  - rsync -av /tmp/dotcom/devops/etc/nagios3/ /etc/nagios3/
   - chmod g+rx /var/lib/nagios3/*
   - adduser www-data nagios
+  - sudo -u nagios mkdir -p ~nagios/.ssh
   - service apache2 restart
   - service nagios3 restart
+  - fallocate -l 1G /swapfile
+  - chmod 600 /swapfile
+  - mkswap /swapfile
+  - swapon /swapfile
+  - swapon -s
+  - free -m
+  - echo "/swapfile   none    swap    sw    0   0" >> /etc/fstab
+  - sysctl vm.swappiness=10
+  - sysctl vm.vfs_cache_pressure=50
+  - echo "vm.swappiness = 10" >> /etc/sysctl.conf
+  - echo "vm.vfs_cache_pressure = 50" >> /etc/sysctl.conf
