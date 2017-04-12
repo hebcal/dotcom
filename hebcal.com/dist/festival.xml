@@ -1591,10 +1591,15 @@ with the verse
  'fiftieth day.'
  </wikipedia>
  <books>
-  <book ASIN="1935604007"/>
-  <book ASIN="0877288550"/>
-  <book ASIN="1470083221"/>
-  <book ASIN="1508715157"/>
+  <book ASIN="1935604007" author="Min Kantrowitz">
+    Counting the Omer: A Kabbalistic Meditation Guide
+  </book>
+  <book ASIN="0877288550" author="Aryeh Kaplan">Sefer Yetzirah: The Book of Creation</book>
+  <book ASIN="1470083221" author="Rabbi Yael Levy">
+    Journey Through the Wilderness: A Mindfulness Approach to the
+    Ancient Jewish Practice of Counting the Omer
+  </book>
+  <book ASIN="1508715157" author="Rachel Barenblat">Toward Sinai: Omer poems</book>
  </books>
 </festival>
 <festival id="Erev Pesach" hebrew="עֶרֶב פֶּסַח"/>
