@@ -175,3 +175,4 @@ runcmd:
   - sudo -u hebcal /var/www/bin/gen_current.pl
   - sudo -u hebcal /var/www/bin/create_shabbat_browse.pl -v /var/www/shabbat/browse
   - chown -R www-data:www-data /tmp/hebcal-cache
+  - cd /var/www/holidays && sudo -u hebcal /var/www/bin/fetch_pdf.sh
