@@ -3,7 +3,8 @@ package_upgrade: true
 
 packages:
   - strongswan
-  - strongswan-plugin-eap-mschapv2
+  - strongswan-starter
+  - strongswan-pki
   - moreutils
   - iptables-persistent
   - unattended-upgrades
