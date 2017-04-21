@@ -3,7 +3,7 @@
 /***********************************************************************
  * Hebcal PHP helper functions
  *
- * Copyright (c) 2016  Michael J. Radwin.
+ * Copyright (c) 2017  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -693,7 +693,7 @@ function html_form_select($name, $entries, $default = '', $size = 1,
 }
 
 function hebcal_js_app_url() {
-    return "/i/hebcal-app-1.6.min.js";
+    return "/i/hebcal-app-1.7.min.js";
 }
 
 function hebcal_js_typeahead_bundle_url() {

@@ -3,7 +3,7 @@
  *
  * requries jQuery, Moment.js, and FullCalendar.io
  *
- * Copyright (c) 2015  Michael J. Radwin.
+ * Copyright (c) 2017  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -118,9 +118,9 @@ window['hebcal'].renderCalendar = function(lang, singleMonth) {
     });
     if (!singleMonth) {
         $("body").keydown(function(e) {
-            if (e.keyCode == 37) {
+            if (e.keyCode === 37) {
                 $('#full-calendar').fullCalendar('prev');
-            } else if (e.keyCode == 39) {
+            } else if (e.keyCode === 39) {
                 $('#full-calendar').fullCalendar('next');
             }
         });
@@ -152,13 +152,31 @@ window['hebcal'].tableRow = function(evt) {
         dateStr = m.format('ddd DD MMM'),
         allDay = evt.date.indexOf('T') == -1,
         lang = window['hebcal'].lang || 's',
-        subj = allDay ? evt.title : evt.title.substring(0, evt.title.indexOf(':')),
-        timeStr = allDay ? '' : evt.title.substring(evt.title.indexOf(':') + 2),
-        timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<td>' + timeStr + '</td>',
+        subj = evt.title,
+        timeStr = '',
+        timeTd,
         className = window['hebcal'].getEventClassName(evt);
-    if (subj.startsWith('Daf Yomi: ')) {
-        subj = subj.substring(10);
+    if (evt.category === 'dafyomi') {
+        subj = subj.substring(subj.indexOf(':') + 1);
+    } else if (evt.category === 'candles' || evt.category === 'havdalah') {
+        // "Candle lighting: foo" or "Havdalah (42 min): foo"
+        subj = evt.title.substring(0, evt.title.indexOf(':'));
     }
+    if (!allDay) {
+        var timeMatch = evt.title.match(/\d+:\d+\w*$/);
+        if (timeMatch && timeMatch.length) {
+            timeStr = timeMatch[0];
+        }
+        if (subj.startsWith('Chanukah: ') ||
+            (typeof evt.title_orig === 'string' && evt.title_orig.startsWith('Chanukah: '))) {
+            var colon = subj.lastIndexOf(':'),
+                colon2 = subj.lastIndexOf(':', colon - 1);
+            if (colon2 > 0) {
+                subj = subj.substring(0, colon2);
+            }
+        }
+    }
+    timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<td>' + timeStr + '</td>';
     if (evt.hebrew) {
         var hebrewHtml = '<span lang="he" dir="rtl">' + evt.hebrew + '</span>';
         if (lang == 'h') {
