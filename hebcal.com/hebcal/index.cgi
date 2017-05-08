@@ -139,7 +139,8 @@ if (defined $q->param("year") && $q->param("year") eq "now") {
         $q->param("month", $this_mon)
             if defined $q->param("month") && $q->param("month") eq "now";        
     }
-    $http_cache_control = "max-age=2592000";
+    my $age_str = $cfg eq "json" ? "86400" : "2592000";
+    $http_cache_control = "max-age=$age_str";
 }
 
 if ($cfg eq "fc") {
