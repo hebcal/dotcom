@@ -1121,17 +1121,20 @@ EOHTML
 		  }
 		}
 #		print OUT2 "<br>\n" if $count++;
-		print OUT2 <<EOHTML;
-On <b>$reason</b><br>
-$info<ul class="gtl">
+
+                my @sp_date_html = map {
+                    my($year,$month,$day) = split(/-/);
+                    format_html_date($year,$month,$day);
+                } @{$sp_dates{$reason}};
+                my $sp_date_html_comma_list = join(", ", @sp_date_html);
+                print OUT2 <<EOHTML;
+<p>On <strong>$reason</strong> -
+<small>$sp_date_html_comma_list</small>
+<br>
+$info
+</p>
 EOHTML
 ;
-		foreach my $dt (@{$sp_dates{$reason}}) {
-		    my($year,$month,$day) = split(/-/, $dt);
-		    print OUT2 "<li>", format_html_date($year,$month,$day), "\n";
-		}
-
-		print OUT2 "</ul>\n";
 	    }
             print OUT2 qq{</div><!-- .col-sm-12 -->\n</div><!-- .row -->\n};
 	}
