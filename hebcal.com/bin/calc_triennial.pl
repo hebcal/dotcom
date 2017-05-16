@@ -1123,8 +1123,9 @@ EOHTML
 #		print OUT2 "<br>\n" if $count++;
 
                 my @sp_date_html = map {
-                    my($year,$month,$day) = split(/-/);
-                    format_html_date($year,$month,$day);
+                    my $dt0 = $_;
+                    my $dt1 = date_sql_to_dd_MMM_yyyy($dt0);
+                    qq{<time datetime="$dt0" class="text-muted">$dt1</time>};
                 } @{$sp_dates{$reason}};
                 my $sp_date_html_comma_list = join(", ", @sp_date_html);
                 print OUT2 <<EOHTML;
