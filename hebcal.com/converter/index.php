@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2015  Michael J. Radwin.
+ * Copyright (c) 2017  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -36,6 +36,12 @@
 
 require("../pear/Hebcal/hebnum.inc");
 require("../pear/Hebcal/common.inc");
+
+$in_israel = false;
+if (isset($_SERVER['MM_COUNTRY_CODE']) && $_SERVER['MM_COUNTRY_CODE'] == 'IL') {
+    date_default_timezone_set('Asia/Jerusalem');
+    $in_israel = true;
+}
 
 $calinf = cal_info(CAL_GREGORIAN);
 $MoY_long = $calinf["months"];

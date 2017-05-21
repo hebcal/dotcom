@@ -2,7 +2,7 @@
 /***********************************************************************
  * Hebcal homepage
  *
- * Copyright (c) 2016  Michael J. Radwin.
+ * Copyright (c) 2017  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -33,14 +33,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **********************************************************************/
 
-/*
+require("./pear/Hebcal/common.inc");
+
 if (isset($_COOKIE["C"])) {
     header("Cache-Control: private");
-    parse_str($_COOKIE["C"], $param);
+//    parse_str($_COOKIE["C"], $param);
 }
-*/
 
-require("./pear/Hebcal/common.inc");
+$in_israel = false;
+if (isset($_SERVER['MM_COUNTRY_CODE']) && $_SERVER['MM_COUNTRY_CODE'] == 'IL') {
+    date_default_timezone_set('Asia/Jerusalem');
+    $in_israel = true;
+}
 
 // Determine today's holidays (if any)
 if (isset($_GET["gm"]) && isset($_GET["gd"]) && isset($_GET["gy"])) {
@@ -366,7 +370,7 @@ and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a>
+<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=<?php echo $in_israel ? "on" : "off"; ?>&amp;lg=s&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a>
 <br><small><a href="/hebcal/">Customize calendar settings</a></small></p>
 </div>
 </div><!-- .row -->
