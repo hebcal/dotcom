@@ -52,7 +52,7 @@ echo html_header_bootstrap3($page_title, $xtra_head);
 <h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
 
 <p class="lead">Free Jewish holidays for Microsoft
-Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar),
+Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files.</p>
 
@@ -73,8 +73,8 @@ function cal_item($path,$title,$subtitle,$feed_length,$suppress_outlook=false) {
 <p><?php echo $subtitle ?>. <small><?php echo $feed_length ?>-year perpetual feed.</small></p>
 <div class="btn-toolbar">
 <a class="btn btn-default btn-sm download" id="quick-ical-<?php echo $path ?>"
-title="Subscribe to <?php echo $title ?> for iPhone, iPad, Mac OS X Desktop"
-href="<?php echo $webcal ?>"><i class="glyphicon glyphicon-download-alt"></i> iPhone, iPad, Mac OS X</a>
+title="Subscribe to <?php echo $title ?> for iPhone, iPad, macOS Desktop"
+href="<?php echo $webcal ?>"><i class="glyphicon glyphicon-download-alt"></i> iPhone, iPad, macOS</a>
 <a class="btn btn-default btn-sm download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
 href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i class="glyphicon glyphicon-download-alt"></i> Google Calendar</a>
