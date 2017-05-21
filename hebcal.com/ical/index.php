@@ -108,7 +108,7 @@ cal_divider();
 cal_item("torah-readings-diaspora", "Torah Readings (Diaspora)",
   "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.",
   3);
-cal_item("torah-readings-israel-he", "פרשת השבוע (ישראל)",
+cal_item("torah-readings-israel-he", "פרשת השבוע - ישראל",
   "Parashat ha-Shavua - Weekly Torah Portion such as בראשית, נח, לך־לך. Israel schedule.",
   3);
 cal_divider();
