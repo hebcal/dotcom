@@ -67,7 +67,13 @@ update_ics_name $FILE \
 FILE="torah-readings-israel"
 fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;s=on;i=on;lg=s;c=off;geo=none;ny=3"
 update_ics_name $FILE \
-    "Torah Readings (Israel)" \
+    "Torah Readings (Israel English)" \
+    "Parashat ha-Shavua - Weekly Torah Portion from Hebcal"
+
+FILE="torah-readings-israel-he"
+fetch_urls $FILE "year=${YEAR};month=x;yt=G;v=1;s=on;i=on;lg=h;c=off;geo=none;ny=3"
+update_ics_name $FILE \
+    "Torah Readings (Israel Hebrew)" \
     "Parashat ha-Shavua - Weekly Torah Portion from Hebcal"
 
 FILE="daf-yomi"

@@ -2,7 +2,7 @@
 /***********************************************************************
  * Jewish Holiday downloads for desktop, mobile and web calendars
  *
- * Copyright (c) 2016  Michael J. Radwin.
+ * Copyright (c) 2017  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -101,6 +101,31 @@ function cal_divider() {
 cal_item("jewish-holidays", "Jewish Holidays",
   "Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).",
   10);
+cal_item("jewish-holidays-all", "Jewish Holidays (all)",
+  "Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.",
+  10);
+cal_divider();
+cal_item("torah-readings-diaspora", "Torah Readings (Diaspora)",
+  "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.",
+  3);
+cal_item("torah-readings-israel-he", "פרשת השבוע (ישראל)",
+  "Parashat ha-Shavua - Weekly Torah Portion such as בראשית, נח, לך־לך. Israel schedule.",
+  3);
+cal_divider();
+cal_item("omer", "Days of the Omer",
+  "7 weeks from the second night of Pesach to the day before Shavuot.",
+  2);
+cal_item("daf-yomi", "Daf Yomi",
+  "Daily regimen of learning the Talmud",
+  2);
+cal_divider();
+cal_item("hdate-en", "Hebrew calendar dates (English)",
+  "Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.",
+  2);
+cal_item("hdate-he", "Hebrew calendar dates (Hebrew)",
+  "Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
+  2);
+cal_divider();
 ?>
 <div class="col-sm-6">
 <h3>Advanced Settings</h3>
@@ -110,27 +135,6 @@ Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Isra
 </div>
 </div><!-- .col-sm-6 -->
 <?php
-cal_divider();
-cal_item("jewish-holidays-all", "Jewish Holidays (all)",
-  "Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.",
-  10);
-cal_item("torah-readings-diaspora", "Torah Readings",
-  "Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.",
-  3);
-cal_divider();
-cal_item("hdate-en", "Hebrew calendar dates (English)",
-  "Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.",
-  2);
-cal_item("hdate-he", "Hebrew calendar dates (Hebrew)",
-  "Displays the Hebrew date (such as <strong>י״ח בטבת תש״ע</strong>) every day of the week.",
-  2);
-cal_divider();
-cal_item("omer", "Days of the Omer",
-  "7 weeks from the second night of Pesach to the day before Shavuot.",
-  2);
-cal_item("daf-yomi", "Daf Yomi",
-  "Daily regimen of learning the Talmud",
-  2);
 cal_divider();
 ?>
 <div class="col-sm-12">
