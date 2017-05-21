@@ -46,6 +46,7 @@ packages:
   - rcs
   - mysql-client
   - apache2
+  - apache2-dev
   - php7.0
   - php-mysql
   - php-pear
@@ -71,6 +72,7 @@ packages:
   - libemail-valid-perl
   - libmail-deliverystatus-bounceparser-perl
   - libamazon-sqs-simple-perl
+  - libmaxminddb-dev
   - nagios-plugins-basic
   - nagios-plugins-common
   - python-magic
@@ -136,6 +138,9 @@ runcmd:
   - adduser mradwin hebcal
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - systemctl reload ssh.service
+  - git clone https://github.com/maxmind/mod_maxminddb.git /tmp/mod_maxminddb
+  - cd /tmp/mod_maxminddb && aclocal && autoconf && automake --foreign --add-missing && ./configure && make install
+  - mkdir -p /usr/share/GeoIP
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/cron.d/hebcal /etc/cron.d/hebcal
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
