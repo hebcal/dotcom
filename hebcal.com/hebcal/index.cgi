@@ -55,14 +55,6 @@ use HebcalHtml ();
 use POSIX qw(strftime);
 use Benchmark qw(:hireswallclock :all);
 
-if (defined $ENV{'REQUEST_METHOD'} && $ENV{'REQUEST_METHOD'} eq "POST" && $ENV{'QUERY_STRING'}) {
-    print STDOUT "Allow: GET\n";
-    print STDOUT $q->header(-type => "text/plain",
-                            -status => "405 Method Not Allowed");
-    print STDOUT "POST not allowed; try using GET instead.\n";
-    exit(0);
-}
-
 my @benchmarks;
 push(@benchmarks, Benchmark->new);
 
@@ -72,6 +64,14 @@ my($this_year,$this_mon,$this_day) = Date::Calc::Today();
 
 # process form params
 my $q = new CGI;
+
+if (defined $ENV{'REQUEST_METHOD'} && $ENV{'REQUEST_METHOD'} eq "POST" && $ENV{'QUERY_STRING'}) {
+    print STDOUT "Allow: GET\n";
+    print STDOUT $q->header(-type => "text/plain",
+                            -status => "405 Method Not Allowed");
+    print STDOUT "POST not allowed; try using GET instead.\n";
+    exit(0);
+}
 
 $q->delete(".s");               # we don't care about submit button
 
