@@ -4,7 +4,7 @@
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times
 # and Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2016  Michael J. Radwin.
+# Copyright (c) 2017  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -56,6 +56,15 @@ my $t0 = Benchmark->new;
 
 # process form params
 my($q) = new CGI;
+
+if (defined $ENV{'REQUEST_METHOD'} && $ENV{'REQUEST_METHOD'} eq "POST" && $ENV{'QUERY_STRING'}) {
+    print STDOUT "Allow: GET\n";
+    print STDOUT $q->header(-type => "text/plain",
+                            -status => "405 Method Not Allowed");
+    print STDOUT "POST not allowed; try using GET instead.\n";
+    exit(0);
+}
+
 my($script_name) = $q->script_name();
 $script_name =~ s,/[^/]+$,/,;
 my $is_legacy_js = (defined $ENV{'QUERY_STRING'}
@@ -608,6 +617,11 @@ sub json_ld_markup {
       "\@type" : "PostalAddress",
       "addressLocality" : "$cconfig{city}",$admin1
       "addressCountry" : "$cconfig{country}"
+    },
+    "geo" : {
+      "\@type" : "GeoCoordinates",
+      "latitude" : $latitude,
+      "longitude" : $longitude
     }
   }
 }
