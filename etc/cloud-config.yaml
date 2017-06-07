@@ -141,6 +141,10 @@ runcmd:
   - git clone https://github.com/maxmind/mod_maxminddb.git /tmp/mod_maxminddb
   - cd /tmp/mod_maxminddb && aclocal && autoconf && automake --foreign --add-missing && ./configure && make install
   - mkdir -p /usr/share/GeoIP
+  - cd /tmp
+  - curl -O http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz
+  - tar xvfz GeoLite2-Country.tar.gz
+  - rsync -av /tmp/GeoLite2-Country_*/GeoLite2-Country.mmdb /usr/share/GeoIP/GeoIP2-Country.mmdb
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/cron.d/hebcal /etc/cron.d/hebcal
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
