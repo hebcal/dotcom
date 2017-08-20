@@ -140,14 +140,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <group>Rosh Chodesh Av</group>
  <group>Shabbat Chazon</group>
  <group>Tish'a B'Av</group>
+ <group>Tu B'Av</group>
  <group>Shabbat Nachamu</group>
  <group>Rosh Chodesh Elul</group>
  <group>Leil Selichot</group>
  <group>Shabbat Rosh Chodesh</group>
  <group>Shabbat Machar Chodesh</group>
- <group>Sigd</group>
  <group>Yom HaAliyah</group>
- <group>Tu B'Av</group>
+ <group>Sigd</group>
 </groups>
 
 <!--
