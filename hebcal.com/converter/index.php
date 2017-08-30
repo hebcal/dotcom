@@ -54,6 +54,12 @@ if (isset($_GET["h2g"]) && $_GET["h2g"] &&
     $hy = $_GET["hy"];
     $hm = $_GET["hm"];
 
+    # if they specify "Sh'vat" or "Adar II", convert to "Shvat" or "Adar2"
+    $hmstr_reverse = array_flip($hmstr_to_hebcal);
+    if (isset($hmstr_reverse[$hm])) {
+        $hm = $hmstr_reverse[$hm];
+    }
+
     $always29 = array(
             "Iyyar" => true,
             "Tamuz" => true,
