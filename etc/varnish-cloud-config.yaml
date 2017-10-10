@@ -20,6 +20,8 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkIbumcez+ggabZq5wJwgA226Q09hG2AT45+epPdXL4KpEn46kb3ZF1Gk1QTUQhMUiDQaoHUGwUSAxGUcC/dOfDkBPHfpDLNZylvGzDMjLg8lvw1/IQC2XbCmDTqZ13Dqc2dnex9hN+N7NimnqaaGW0rvIDjlz27r0tr7N66oXTvPsWItahBQowSkr+agoCLeWxzjKUAabZJ38yp6TNFjU53WadiFGSF7gVjBhGId7F8ukSu2yYl/0i6isU3VK72q7AfKcp/n0dcm1t+BsQKJjH6AY1lmf5R6ZO2qAlRorzpYMzlK5A5VYcp4ILgKSTWKnFNHoP508/4UjD9Pt7uoL nagios@hebcalmonitor
 
 debconf_selections: |     # Need to perserve newlines
+    debconf debconf/frontend select readline
+    debconf debconf/frontend seen false
     sysstat sysstat/enable boolean true
     unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
     postfix postfix/mailname string hebcal.com
@@ -87,7 +89,14 @@ write_files:
       backend        = "[127.0.0.1]:6086"
       write-proxy-v2 = on
       # List of PEM files, each with key, certificates and dhparams
-      pem-file = "/var/lib/acme/live/download.hebcal.com/haproxy"
+      pem-file = "/var/lib/acme/live/hebcal.com/haproxy"
+  - path: /var/lib/acme/desired/hebcal.com
+    permissions: '0644'
+    content: |
+      satisfy:
+        names:
+        - hebcal.com
+        - www.hebcal.com
 
 runcmd:
   - service netfilter-persistent flush
@@ -132,8 +141,10 @@ runcmd:
   - systemctl enable varnish.service
   - systemctl daemon-reload
   - systemctl start varnish.service
+  - systemctl stop hitch.service
   - add-apt-repository ppa:hlandau/rhea
   - apt-get update
   - apt-get install acmetool
   - mkdir -p /var/lib/acme/conf
   - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
+  - acmetool reconcile --batch
