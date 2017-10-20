@@ -130,7 +130,7 @@ if (defined $hebcal_cookies->{"C"}) {
 my $evts = get_events($city_descr,$cmd,$fri_year,$sat_year);
 
 my $ignore_tz = (defined $cfg && ($cfg eq "r" || $cfg eq "json")) ? 0 : 1;
-my $include_leyning = (defined $cfg && $cfg eq "json") ? 1 : 0;
+my $include_leyning = (defined $cfg && $cfg eq "json" && !$leyning eq "n") ? 1 : 0;
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
     $cconfig{"tzid"},$ignore_tz,
     $include_leyning,
