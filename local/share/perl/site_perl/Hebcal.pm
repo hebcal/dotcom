@@ -345,7 +345,7 @@ my %monthnames =
      );
 
 my %monthnames_inprefix = (
-    "Iyyar"     => "בְּאִיָּר",
+    "Iyyar"     => "בְּאִייָר",
     "Tamuz"     => "בְּתַמּוּז",
     "Elul"      => "בֶּאֱלוּל",
     "Tishrei"   => "בְּתִשְׁרֵי",
