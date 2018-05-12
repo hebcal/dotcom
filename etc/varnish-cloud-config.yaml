@@ -35,7 +35,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - mailutils
+  - bsd-mailx
   - nagios-plugins-basic
   - nagios-plugins-common
   - apt-transport-https

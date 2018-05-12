@@ -27,7 +27,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - mailutils
+  - bsd-mailx
   - apache2
   - nagios-plugins-basic
   - nagios-plugins-common

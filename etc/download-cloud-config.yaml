@@ -35,7 +35,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - mailutils
+  - bsd-mailx
   - apache2
   - libcgi-pm-perl
   - libdate-calc-perl
