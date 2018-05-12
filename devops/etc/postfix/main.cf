@@ -17,6 +17,10 @@ append_dot_mydomain = no
 
 readme_directory = no
 
+# See http://www.postfix.org/COMPATIBILITY_README.html -- default to 2 on
+# fresh installs.
+compatibility_level = 2
+
 # TLS parameters
 smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
 smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
@@ -32,19 +36,18 @@ myhostname = localhost
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 myorigin = /etc/mailname
-mydestination = localhost, localhost.localdomain, localhost
+mydestination = hebcal.com, localhost.localdomain, localhost
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
 mailbox_size_limit = 0
 recipient_delimiter = +
 inet_interfaces = loopback-only
+inet_protocols = all
 
+relayhost = [email-smtp.us-east-1.amazonaws.com]:25
 smtp_sasl_auth_enable = yes
-smtp_sasl_security_options =
+smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_use_tls = yes
 smtp_tls_security_level = encrypt
 smtp_tls_note_starttls_offer = yes
-relayhost = [email-smtp.us-east-1.amazonaws.com]:25
-
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
-inet_protocols = all
