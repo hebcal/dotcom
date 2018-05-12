@@ -37,7 +37,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - heirloom-mailx
+  - mailutils
   - nagios-plugins-basic
   - nagios-plugins-common
   - apt-transport-https
@@ -50,6 +50,7 @@ packages:
   - libvarnishapi-dev
   - unattended-upgrades
   - hitch
+  - acmetool
 
 write_files:
   - path: /etc/systemd/system/varnish.service.d/customexec.conf
@@ -142,9 +143,6 @@ runcmd:
   - systemctl daemon-reload
   - systemctl start varnish.service
   - systemctl stop hitch.service
-  - add-apt-repository ppa:hlandau/rhea
-  - apt-get update
-  - apt-get install acmetool
   - mkdir -p /var/lib/acme/conf
   - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
   - acmetool reconcile --batch

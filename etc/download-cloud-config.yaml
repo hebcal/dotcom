@@ -35,7 +35,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - heirloom-mailx
+  - mailutils
   - apache2
   - libcgi-pm-perl
   - libdate-calc-perl
@@ -57,6 +57,7 @@ packages:
   - make
   - unattended-upgrades
   - hitch
+  - acmetool
 
 write_files:
     - path: /etc/cron.d/hebcal
@@ -198,8 +199,6 @@ runcmd:
   - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
   - /tmp/dotcom/local/bin/update_zoneinfo.sh
-  - add-apt-repository ppa:hlandau/rhea
-  - apt-get update
-  - apt-get install acmetool
   - mkdir -p /var/lib/acme/conf
   - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
+  - acmetool want download.hebcal.com
