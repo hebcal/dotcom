@@ -328,7 +328,7 @@ EOD;
 echo html_header_bootstrap3("Hebrew Date Converter - $hebdate", $xtra_head, true, true);
 ?>
 <div class="row">
-<div class="col-sm-9">
+<div class="col-sm-12">
 <?php
 }
 
@@ -420,6 +420,21 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-co
 
 function my_footer() {
 ?>
+'<hr class="hidden-print">
+<div class="row hidden-print">
+<div class="col-sm-6 col-sm-offset-3">
+<h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- banner-320x100 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:320px;height:100px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1867606375"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .col-sm-6 -->
+</div><!-- .row -->
 <hr class="hidden-print">
 <div class="row hidden-print">
 <div class="col-sm-6">
@@ -443,20 +458,7 @@ alt="Today's Hebrew Date in Hebrew RSS">
 Hebrew feed &raquo;</a></p>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
-</div><!-- .col-sm-9 -->
-<div class="col-sm-3 hidden-print" role="complementary">
-<h5>Advertisement</h5>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- responsive textonly -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7687563417622459"
-     data-ad-slot="5981467974"
-     data-ad-format="auto"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .col-sm-3 -->
+</div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <?php
 

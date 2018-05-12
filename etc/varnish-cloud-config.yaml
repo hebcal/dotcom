@@ -22,9 +22,7 @@ users:
 debconf_selections: |     # Need to perserve newlines
     debconf debconf/frontend select readline
     debconf debconf/frontend seen false
-    sysstat sysstat/enable boolean true
     unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
-    postfix postfix/mailname string hebcal.com
     postfix postfix/main_mailer_type select Satellite system
     postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
 
@@ -91,6 +89,14 @@ write_files:
       write-proxy-v2 = on
       # List of PEM files, each with key, certificates and dhparams
       pem-file = "/var/lib/acme/live/hebcal.com/haproxy"
+  - path: /etc/mailname
+    permissions: '0644'
+    content: |
+      hebcal.com
+  - path: /etc/default/sysstat
+    permissions: '0644'
+    content: |
+      ENABLED="true"
   - path: /var/lib/acme/desired/hebcal.com
     permissions: '0644'
     content: |
@@ -145,4 +151,5 @@ runcmd:
   - systemctl stop hitch.service
   - mkdir -p /var/lib/acme/conf
   - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
-  - acmetool reconcile --batch
+  - acmetool reconcile --batch || exit 0
+  - systemctl reload postfix.service

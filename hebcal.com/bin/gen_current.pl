@@ -145,7 +145,7 @@ sub rss_parasha {
     $cmd .= " -i" unless $diaspora;
     $cmd .= " $syear";
 
-    my $title = "Hebcal Parsahat ha-Shavua";
+    my $title = "Hebcal Parashat ha-Shavua";
     my $description = "Torah reading of the week from Hebcal.com";
     if ($diaspora) {
 	$title .= " (Diaspora)";

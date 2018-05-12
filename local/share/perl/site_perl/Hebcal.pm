@@ -345,7 +345,7 @@ my %monthnames =
      );
 
 my %monthnames_inprefix = (
-    "Iyyar"     => "בְּאִיָּר",
+    "Iyyar"     => "בְּאִייָר",
     "Tamuz"     => "בְּתַמּוּז",
     "Elul"      => "בֶּאֱלוּל",
     "Tishrei"   => "בְּתִשְׁרֵי",
@@ -1082,10 +1082,10 @@ sub get_holiday_basename {
 sub shorten_anchor {
     my($href) = @_;
     if ( $href =~ m,/sedrot/(.+)$, ) {
-        $href = "http://hebcal.com/s/$1";
+        $href = "https://hebcal.com/s/$1";
     }
     elsif ( $href =~ m,/holidays/(.+)$, ) {
-        $href = "http://hebcal.com/h/$1";
+        $href = "https://hebcal.com/h/$1";
     }
     $href;
 }
@@ -1113,7 +1113,7 @@ sub get_holiday_anchor($$$)
 	    $anchor = lc($anchor);
 	    $anchor =~ s/[^\w]//g;
 
-	    $href = 'http://www.hebcal.com'
+	    $href = 'https://www.hebcal.com'
 		if ($q);
 	    $href .= "/sedrot/$anchor";
 
@@ -1134,7 +1134,7 @@ sub get_holiday_anchor($$$)
 	    $anchor = lc($anchor);
 	    $anchor =~ s/[^\w]//g;
 
-	    $href = 'http://www.hebcal.com'
+	    $href = 'https://www.hebcal.com'
 		if ($q);
 	    $href .= "/sedrot/$anchor";
 
@@ -1196,7 +1196,7 @@ sub get_holiday_anchor($$$)
         if ($subj ne 'Candle lighting' && $subj !~ /^Havdalah/)
 	{
             $subj_copy = get_holiday_basename($subj_copy);
-	    $href = 'http://www.hebcal.com'
+	    $href = 'https://www.hebcal.com'
 		if ($q);
 	    $href .= "/holidays/" . make_anchor($subj_copy);
 	}
