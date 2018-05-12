@@ -9,6 +9,8 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoHvNAA5UBj4DpCZsTtjjX82mM2eBECmc6wGXtZeaeqxyBdJBkkDfPmZwwL6OfCceoGHvU4zPEvonFFkjgDwRQYItVnYA4LolgbAjTVf0Bi+dv7Ny8B4fuMin0GvdrCs3BiX018Dw0za5UlopHESPHTKyAOAovR0tftQ+AzAFzae6ac/zZHK0odvoqWROlxSxOJZZl61EVM42ExYOSKm5tsc3g/ObW4wtaMOKUFHGFHfeeSRzYy1kacPVwIbEKTRCh8gLrL3yfOW/un6XF0U9eB+cqE0mVASWTOY59V7EWMJnUZaQcB8yZDeSF/iNEnB2e6ewUMo5X4nqYTaofTUjv mradwin@MTVL12027dd2a
 
 debconf_selections: |     # Need to perserve newlines
+    debconf debconf/frontend select readline
+    debconf debconf/frontend seen false
     sysstat sysstat/enable boolean true
     unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
     postfix postfix/mailname string hebcal.com
@@ -25,7 +27,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - heirloom-mailx
+  - mailutils
   - apache2
   - nagios-plugins-basic
   - nagios-plugins-common
