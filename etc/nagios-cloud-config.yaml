@@ -55,6 +55,10 @@ runcmd:
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
   - rsync -av /tmp/dotcom/devops/etc/nagios3/ /etc/nagios3/
+  - cd /tmp
+  - wget https://raw.github.com/tinyspeck/services-examples/master/nagios.pl
+  - cp nagios.pl /usr/local/bin/slack_nagios.pl
+  - chmod 755 /usr/local/bin/slack_nagios.pl
   - chmod g+rx /var/lib/nagios3/*
   - adduser www-data nagios
   - sudo -u nagios mkdir -p ~nagios/.ssh
