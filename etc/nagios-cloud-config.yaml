@@ -32,6 +32,8 @@ packages:
   - nagios-plugins-basic
   - nagios-plugins-common
   - unattended-upgrades
+  - libwww-perl
+  - libcrypt-ssleay-perl
 
 write_files:
   - path: /etc/nagios3/htpasswd.users
