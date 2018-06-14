@@ -28,7 +28,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - heirloom-mailx
+  - bsd-mailx
   - mysql-server
   - nagios-plugins-basic
   - nagios-plugins-common
