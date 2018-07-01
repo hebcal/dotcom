@@ -60,7 +60,7 @@ packages:
   - acmetool
 
 write_files:
-    - path: /etc/cron.d/hebcal
+  - path: /etc/cron.d/hebcal
     permissions: '0644'
     content: |
       # Creted by Hebcal cloud-config.yaml
