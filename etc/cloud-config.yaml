@@ -121,9 +121,10 @@ runcmd:
   - perl -pi -e 's/MinSpareServers\s+\d+/MinSpareServers 30/' /etc/apache2/mods-available/mpm_prefork.conf
   - perl -pi -e 's/MaxSpareServers\s+\d+/MaxSpareServers 30/' /etc/apache2/mods-available/mpm_prefork.conf
   - perl -pi -e 's/MaxRequestWorkers\s+\d+/MaxRequestWorkers 60/' /etc/apache2/mods-available/mpm_prefork.conf
-  - pear install Mail
-  - pear install Net_SMTP
-  - pear install Auth_SASL
+  - pear channel-update pear.php.net
+  - pear install --alldeps Mail
+  - pear install --alldeps Net_SMTP
+  - pear install --alldeps Auth_SASL
   - fallocate -l 2G /swapfile
   - chmod 600 /swapfile
   - mkswap /swapfile
