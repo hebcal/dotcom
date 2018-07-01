@@ -39,7 +39,7 @@ packages:
   - iptables-persistent
   - libsasl2-modules
   - postfix
-  - heirloom-mailx
+  - bsd-mailx
   - s3cmd
   - fetchmail
   - procmail
@@ -47,14 +47,14 @@ packages:
   - mysql-client
   - apache2
   - apache2-dev
-  - php7.0
+  - php7.2
   - php-mysql
   - php-pear
   - php-sqlite3
   - php-json
   - php-curl
   - php-imagick
-  - libapache2-mod-php7.0
+  - libapache2-mod-php7.2
   - libcgi-pm-perl
   - libdate-calc-perl
   - libdatetime-perl
@@ -82,7 +82,7 @@ packages:
   - unattended-upgrades
 
 write_files:
-  - path: /etc/php/7.0/apache2/conf.d/50-hebcal.ini
+  - path: /etc/php/7.2/apache2/conf.d/50-hebcal.ini
     permissions: '0644'
     content: |
         ; configuration for php Hebcal
