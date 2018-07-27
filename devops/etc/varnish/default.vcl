@@ -26,6 +26,10 @@ acl purge {
 }
 
 sub vcl_recv {
+    if (std.port(server.ip) == 80) {
+        return(synth(752, "Moved Permanently"));
+    }
+
     set req.http.X-Client-IP = client.ip;
 
     if (std.port(server.ip) == 443) {
@@ -105,6 +109,12 @@ sub vcl_synth {
     if (resp.status == 751) {
         set resp.status = 404;
 	synthetic("Not Found.");
+        return(deliver);
+    }
+    if (resp.status == 752) {
+        set resp.http.Location = "https://www.hebcal.com" + req.url;
+        set resp.status = 301;
+        synthetic("Moved.");
         return(deliver);
     }
 }
