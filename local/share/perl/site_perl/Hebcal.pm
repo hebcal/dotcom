@@ -1589,10 +1589,12 @@ sub get_geo_args {
     } elsif (defined $q->param('geo') && $q->param('geo') eq 'pos') {
 	my $sep = '';
 	my $retval = '';
-	foreach (qw(city-typeahead lodeg lomin ladeg lamin lodir ladir tzid)) {
+	foreach (qw(city-typeahead lodeg lomin ladeg lamin lodir ladir tzid latitude longitude)) {
             my $val = $q->param($_);
-            $retval .= "$sep$_=" . URI::Escape::uri_escape_utf8($val);
-	    $sep = $separator;
+            if (defined $val) {
+                $retval .= "$sep$_=" . URI::Escape::uri_escape_utf8($val);
+                $sep = $separator;
+            }
 	}
 	return $retval;
     }
