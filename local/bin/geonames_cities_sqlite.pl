@@ -94,23 +94,25 @@ population int, latitude real, longitude real, timezone text
 );
 });
 
-do_sql($dbh, qq{INSERT INTO geoname_fulltext
-SELECT g.geonameid, g.asciiname||', '||a.asciiname||', '||c.Country,
-g.asciiname, a.asciiname, c.Country,
+foreach my $namekey (qw(asciiname name)) {
+    do_sql($dbh, qq{INSERT INTO geoname_fulltext
+SELECT g.geonameid, g.${namekey}||', '||a.${namekey}||', '||c.Country,
+g.${namekey}, a.${namekey}, c.Country,
 g.population, g.latitude, g.longitude, g.timezone
 FROM geoname g, admin1 a, country c
 WHERE g.country = c.ISO
 AND g.country||'.'||g.admin1 = a.key
-});
+    });
 
-do_sql($dbh, qq{INSERT INTO geoname_fulltext
-SELECT g.geonameid, g.asciiname||', '||c.Country,
-g.asciiname, '', c.Country,
+    do_sql($dbh, qq{INSERT INTO geoname_fulltext
+SELECT g.geonameid, g.${namekey}||', '||c.Country,
+g.${namekey}, '', c.Country,
 g.population, g.latitude, g.longitude, g.timezone
 FROM geoname g, country c
 WHERE g.country = c.ISO
 AND (g.admin1 = '' OR g.admin1 = '00')
-});
+    });
+}
 
 $dbh->commit;
 $dbh->disconnect();
