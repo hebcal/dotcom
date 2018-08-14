@@ -2,7 +2,7 @@
 
 ########################################################################
 #
-# Copyright (c) 2016  Michael J. Radwin.
+# Copyright (c) 2018  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -604,11 +604,11 @@ WHERE g.geonameid = ?
         my($name,$asciiname,$country,$admin1);
         ($name,$asciiname,$country,$admin1,$latitude,$longitude,$tzid) = $sth->fetchrow_array;
         $sth->finish;
-        unless (defined $name) {
+        unless (defined $asciiname) {
             WARN("unknown geonameid=$cfg->{geonameid} for to=$to, id=$cfg->{id}");
             return undef;
         }
-        $city_descr = Hebcal::geoname_city_descr($name,$admin1,$country);
+        $city_descr = Hebcal::geoname_city_descr($asciiname,$admin1,$country);
         $is_israel = 1 if $country eq "Israel";
         $is_jerusalem = 1 if $is_israel && $admin1 && (index($admin1, "Jerusalem") == 0 || index($name, "Jerusalem") == 0);
     } else {
