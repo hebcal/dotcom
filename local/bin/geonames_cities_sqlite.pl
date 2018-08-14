@@ -94,25 +94,37 @@ population int, latitude real, longitude real, timezone text
 );
 });
 
-foreach my $namekey (qw(asciiname name)) {
-    do_sql($dbh, qq{INSERT INTO geoname_fulltext
-SELECT g.geonameid, g.${namekey}||', '||a.${namekey}||', '||c.Country,
-g.${namekey}, a.${namekey}, c.Country,
+do_sql($dbh, qq{CREATE TABLE geoname_non_ascii AS
+  SELECT geonameid FROM geoname WHERE asciiname <> name});
+
+do_sql($dbh, qq{INSERT INTO geoname_fulltext
+SELECT g.geonameid, g.asciiname||', '||a.asciiname||', '||c.Country,
+g.asciiname, a.asciiname, c.Country,
 g.population, g.latitude, g.longitude, g.timezone
 FROM geoname g, admin1 a, country c
 WHERE g.country = c.ISO
 AND g.country||'.'||g.admin1 = a.key
-    });
+});
 
-    do_sql($dbh, qq{INSERT INTO geoname_fulltext
-SELECT g.geonameid, g.${namekey}||', '||c.Country,
-g.${namekey}, '', c.Country,
+do_sql($dbh, qq{INSERT INTO geoname_fulltext
+SELECT g.geonameid, g.asciiname||', '||c.Country,
+g.asciiname, '', c.Country,
 g.population, g.latitude, g.longitude, g.timezone
 FROM geoname g, country c
 WHERE g.country = c.ISO
 AND (g.admin1 = '' OR g.admin1 = '00')
-    });
-}
+});
+
+do_sql($dbh, qq{INSERT INTO geoname_fulltext
+SELECT g.geonameid, g.name||', '||a.name||', '||c.Country,
+g.name, a.name, c.Country,
+g.population, g.latitude, g.longitude, g.timezone
+FROM geoname_non_ascii gna, geoname g, admin1 a, country c
+WHERE gna.geonameid = g.geonameid
+AND g.country = c.ISO
+AND g.country||'.'||g.admin1 = a.key
+});
+
 
 $dbh->commit;
 $dbh->disconnect();
