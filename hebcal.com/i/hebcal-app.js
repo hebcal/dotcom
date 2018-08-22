@@ -48,7 +48,7 @@ window['hebcal'].getEventClassName = function(evt) {
     }
     if (typeof evt.link === 'string' &&
         evt.link.substring(0, 4) === 'http' &&
-        evt.link.substring(0, 21) !== 'http://www.hebcal.com') {
+        evt.link.substring(0, 22) !== 'https://www.hebcal.com') {
         className += ' outbound';
     }
     return className;
