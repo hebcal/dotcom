@@ -153,6 +153,7 @@ runcmd:
   - systemctl restart apache2.service
   - rsync -a /tmp/dotcom/hebcal.com/ /var/www/
   - git clone https://github.com/hebcal/hebcal.git /tmp/hebcal-cli
+  - rsync -av /tmp/hebcal-cli/ /var/hebcal/
   - cd /tmp/hebcal-cli && ./configure && make
   - rsync -av /tmp/hebcal-cli/hebcal /var/www/bin/
   - mkdir -p /home/hebcal/local/share/perl/site_perl
