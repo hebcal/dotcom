@@ -290,7 +290,7 @@ sub special_note {
                            $Hebcal::MoY_long{$erev_rh->{"mm"}},
                            $erev_rh->{"dd"});
 
-        my $url = "http://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year";
+        my $url = "https://www.hebcal.com/shabbat/fridge.cgi?$fridge_loc&amp;year=$next_year";
         $url .= "&amp;m=" . $cfg->{m}
             if defined $cfg->{m} && $cfg->{m} =~ /^\d+$/;
         $url .= "&amp;$UTM_PARAM";
@@ -374,9 +374,9 @@ $unsub_url
 </div>
 </div>
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to $to by <a href="http://www.hebcal.com/?$UTM_PARAM">Hebcal.com</a></div>
+<div>This email was sent to $to by <a href="https://www.hebcal.com/?$UTM_PARAM">Hebcal.com</a></div>
 <div>&nbsp;</div>
-<div><a href="$unsub_url&amp;unsubscribe=1&amp;$UTM_PARAM">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1&amp;$UTM_PARAM">Update Settings</a> | <a href="http://www.hebcal.com/home/about/privacy-policy?$UTM_PARAM">Privacy Policy</a></div>
+<div><a href="$unsub_url&amp;unsubscribe=1&amp;$UTM_PARAM">Unsubscribe</a> | <a href="$unsub_url&amp;modify=1&amp;$UTM_PARAM">Update Settings</a> | <a href="https://www.hebcal.com/home/about/privacy-policy?$UTM_PARAM">Privacy Policy</a></div>
 </div>
 };
 
