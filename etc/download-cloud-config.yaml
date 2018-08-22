@@ -201,4 +201,6 @@ runcmd:
   - /tmp/dotcom/local/bin/update_zoneinfo.sh
   - mkdir -p /var/lib/acme/conf
   - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
-  - acmetool want download.hebcal.com
+  - acmetool want download.hebcal.com --batch || exit 0
+  - acmetool reconcile --batch || exit 0
+

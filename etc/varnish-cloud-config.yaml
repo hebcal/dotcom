@@ -97,13 +97,6 @@ write_files:
     permissions: '0644'
     content: |
       ENABLED="true"
-  - path: /var/lib/acme/desired/hebcal.com
-    permissions: '0644'
-    content: |
-      satisfy:
-        names:
-        - hebcal.com
-        - www.hebcal.com
 
 runcmd:
   - service netfilter-persistent flush
@@ -151,5 +144,6 @@ runcmd:
   - systemctl stop hitch.service
   - mkdir -p /var/lib/acme/conf
   - nice openssl dhparam -out /var/lib/acme/conf/dhparams 2048
+  - acmetool want hebcal.com www.hebcal.com --batch || exit 0
   - acmetool reconcile --batch || exit 0
   - systemctl reload postfix.service
