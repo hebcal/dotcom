@@ -113,7 +113,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $hmonth =~ s/[^A-Za-z0-9]+//g;
 
-    my $url = "http://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_medium=rss";
+    my $url = "https://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_medium=rss";
     $outfile = "$Hebcal::WEBDIR/etc/hdate-en.xml";
     DEBUG("Creating $outfile");
     open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
@@ -234,8 +234,8 @@ sub rss_parasha_inner {
     my $dt = sprintf("%d%02d%02d", $syear, $smonth, $sday);
     DEBUG("Creating $outfile");
     open(RSS,">$outfile.$$") || LOGDIE "$outfile: $!";
-    my $link = "http://$HOSTNAME$href?utm_medium=rss&amp;utm_source=rss-parasha";
-    my $channel_link = "http://$HOSTNAME/sedrot/";
+    my $link = "https://$HOSTNAME$href?utm_medium=rss&amp;utm_source=rss-parasha";
+    my $channel_link = "https://$HOSTNAME/sedrot/";
     my $memo = Hebcal::torah_calendar_memo($dbh, $sth, $syear, $smonth, $sday);
     $memo =~ s/\\n/<\/p>\n<p>/g;
     $memo = "<![CDATA[<p>" . $memo . "</p>]]>";
@@ -272,7 +272,7 @@ sub rss_hebdate {
 <rss version="2.0">
 <channel>
 <title>Hebrew Date</title>
-<link>http://$HOSTNAME/converter/</link>
+<link>https://$HOSTNAME/converter/</link>
 <description>Today\'s Hebrew Date from Hebcal.com</description>
 <language>$language</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>
