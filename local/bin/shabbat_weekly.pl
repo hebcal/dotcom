@@ -591,7 +591,7 @@ sub parse_config {
         $city_descr = "$CityMixedCase, $State " . $cfg->{zip};
     } elsif (defined $cfg->{geonameid}) {
         my $sql = qq{
-SELECT g.name, g.asciiname, c.country, a.name, g.latitude, g.longitude, g.timezone
+SELECT g.name, g.asciiname, c.country, a.asciiname, g.latitude, g.longitude, g.timezone
 FROM geoname g
 LEFT JOIN country c on g.country = c.iso
 LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
