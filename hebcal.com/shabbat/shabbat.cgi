@@ -131,6 +131,10 @@ my $evts = get_events($city_descr,$cmd,$fri_year,$sat_year);
 
 my $ignore_tz = (defined $cfg && ($cfg eq "r" || $cfg eq "json")) ? 0 : 1;
 my $include_leyning = (defined $cfg && $cfg eq "json") ? 1 : 0;
+my $param_leyning = $q->param("leyning");
+if (defined $param_leyning && ($param_leyning eq "0" || $param_leyning eq "off")) {
+    $include_leyning = 0;
+}
 my $items = Hebcal::events_to_dict($evts,$cfg,$q,$friday,$saturday,
     $cconfig{"tzid"},$ignore_tz,
     $include_leyning,
