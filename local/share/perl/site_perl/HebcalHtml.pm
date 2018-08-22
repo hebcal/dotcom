@@ -53,7 +53,7 @@ $HebcalHtml::indiana_warning = qq{<div class="alert alert-warning alert-dismissi
 <strong>Warning!</strong>
 Indiana has confusing time zone &amp; Daylight Saving Time
 rules.<br>Please check <a
-href="http://en.wikipedia.org/wiki/Time_in_Indiana">What time is it in
+href="https://en.wikipedia.org/wiki/Time_in_Indiana">What time is it in
 Indiana?</a> to make sure the above settings are correct.
 </div><!-- .alert -->
 };
@@ -63,7 +63,7 @@ $HebcalHtml::arizona_warning = qq{<div class="alert alert-warning alert-dismissi
 <strong>Warning!</strong>
 These candle lighting times are for an Arizona county that observes
 Daylight Saving Time rules. Please see <a
-href="http://www.timeanddate.com/time/us/arizona-no-dst.html">No
+href="https://www.timeanddate.com/time/us/arizona-no-dst.html">No
 DST in most of Arizona</a> to learn more.
 </div><!-- .alert -->
 };
@@ -100,7 +100,7 @@ sub download_button_html {
         (($filename =~ /\.(dba|vcs)$/) || (defined $q->param("month") && $q->param("month") =~ /^\d+$/))
         ? qq{ rel="nofollow"} : "";
 
-    my $html5download = ($href =~ m,^(webcal://|http://calendar\.live\.com),) ? "" : qq{ download="$filename"};
+    my $html5download = ($href =~ m,^(webcal://|https://outlook\.live\.com),) ? "" : qq{ download="$filename"};
 
     my $class = $button_and_icon ? "btn btn-default download" : "download";
     my $icon = $button_and_icon ? qq{<span class="glyphicon glyphicon-download-alt"></span> } : "";
@@ -259,7 +259,7 @@ EOHTML
         $gcal = <<EOHTML;
 <p><a title="Add $ics_title to Google Calendar"
 class="download" id="dl-gcal-sub" rel="nofollow"
-href="http://www.google.com/calendar/render?cid=${gcal_href}"><img
+href="https://www.google.com/calendar/render?cid=${gcal_href}"><img
 src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
 <p>Alternate option:
 $gcal_btn
@@ -279,12 +279,12 @@ EOHTML
     my $wlive_http_href = "http://" . $vhost . $wlive_subical_href;
     my $wlive_href = URI::Escape::uri_escape_utf8($wlive_http_href);
     my $wlive_btn = download_button_html($q, $ics_title,
-                                         "http://calendar.live.com/calendar/calendar.aspx?rru=addsubscription&url=${wlive_href}&name=${title_esc}",
+                                         "https://outlook.live.com/calendar/calendar.aspx?rru=addsubscription&url=${wlive_href}&name=${title_esc}",
                                          "dl-wlive", "to Outlook.com Calendar", 1);
     my $wlive = <<EOHTML;
 <p>$wlive_btn</p>
 <p>Step-by-step: <a
-href="http://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe">Import
+href="https://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe">Import
 or subscribe to a calendar in Outlook.com</a></p>
 EOHTML
 ;
@@ -349,7 +349,7 @@ EOHTML
         ["Outlook", $ol_ics_title, "ol-ics", $ol_ics],
         ["Google", $gcal_title, "gcal", $gcal],
         ["macOS", $ical_title, "ical", $ical],
-        ["Outlook.com", $wlive_title, "wlive", $wlive],
+#        ["Outlook.com", $wlive_title, "wlive", $wlive],
         ["Outlook Mac", $ol_mac_title, "ol-mac", $ol_mac],
         ["iCalendar", $ycal_title, "ycal", $ycal],
         ["CSV", $ol_csv_title, "ol-csv", $ol_csv],
@@ -605,7 +605,7 @@ sub footer_bootstrap3 {
 <div class="row">
 <div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
-rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+rel="license" href="https://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
 <p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
 also under a cc-by license.</small></p>
 <ul class="bullet-list-inline">
