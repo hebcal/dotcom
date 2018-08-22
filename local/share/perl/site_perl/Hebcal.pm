@@ -800,7 +800,7 @@ sub events_to_dict
 {
     my($events,$cfg,$q,$friday,$saturday,$tzid,$ignore_tz,$include_leyning,$israel) = @_;
 
-    my $url = "http://" . $q->virtual_host() .
+    my $url = "https://" . $q->virtual_host() .
 	self_url($q, {"cfg" => undef,
 		      "c" => undef,
 		      "nh" => undef,
@@ -861,7 +861,7 @@ sub items_to_json {
     }
 
     my $out = { title => $city_descr,
-		link => "http://" . $q->virtual_host() . self_url($q, {"cfg" => undef}),
+		link => "https://" . $q->virtual_host() . self_url($q, {"cfg" => undef}),
 		date => strftime("%Y-%m-%dT%H:%M:%S", gmtime(time())) . "-00:00",
 		items => json_transform_items($items),
 	      };
