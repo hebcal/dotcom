@@ -77,6 +77,10 @@ do_file($dbh,$in_cities,"geoname",19);
 do_file($dbh,$in_admin1,"admin1",4);
 do_file($dbh,$in_israel,"geoname",19,\&filter_places);
 
+do_sql($dbh, qq{DROP TABLE IF EXISTS geoname_he});
+do_sql($dbh, qq{CREATE TABLE geoname_he AS SELECT * FROM geoname LIMIT 0});
+do_file($dbh,$in_israel,"geoname_he",19,\&filter_places_he);
+
 $dbh->commit;
 
 do_sql($dbh, qq{update admin1 set name='',asciiname='' where key like 'PS.%';});
@@ -93,6 +97,8 @@ asciiname text, admin1 text, country text,
 population int, latitude real, longitude real, timezone text
 );
 });
+
+do_sql($dbh, qq{DROP TABLE IF EXISTS geoname_non_ascii});
 
 do_sql($dbh, qq{CREATE TABLE geoname_non_ascii AS
   SELECT geonameid FROM geoname WHERE asciiname <> name});
@@ -125,6 +131,15 @@ AND g.country = c.ISO
 AND g.country||'.'||g.admin1 = a.key
 });
 
+do_sql($dbh, qq{INSERT INTO geoname_fulltext
+SELECT g.geonameid, g.name||', ישראל',
+g.name, '', 'ישראל',
+g.population, g.latitude, g.longitude, g.timezone
+FROM geoname_he g, admin1 a, country c
+WHERE g.country = c.ISO
+AND g.country||'.'||g.admin1 = a.key
+});
+
 
 $dbh->commit;
 $dbh->disconnect();
@@ -143,6 +158,20 @@ sub do_sql {
 sub filter_places {
     my($a) = @_;
     return $a->[6] eq "P" && $a->[7] =~ /^(PPL|STLMT)$/; #  && $a->[14] ne "0";
+}
+
+sub filter_places_he {
+    my($a) = @_;
+    return 0 if $a->[6] ne "P" || $a->[7] !~ /^(PPL|STLMT)$/;
+    my @alternatenames = split(/,/, $a->[3]);
+    foreach my $name (@alternatenames) {
+      my $firstchar = substr($name, 0, 1);
+      if ($firstchar ge "\x{5D0}" && $firstchar le "\x{5EA}") {
+        $a->[1] = $name; # replace 'name' field with Hebrew
+        return 1;
+      }
+    }
+    return 0;
 }
 
 sub do_file {
