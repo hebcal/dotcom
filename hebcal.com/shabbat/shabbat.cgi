@@ -275,7 +275,7 @@ sub url_html {
 sub self_url
 {
     my $url = join('',
-                   "http://", $q->virtual_host(), $script_name,
+                   "https://", $q->virtual_host(), $script_name,
                    "?geo=", scalar $q->param('geo'), "&", get_link_args($q));
     $url;
 }
@@ -750,7 +750,7 @@ EOHTML
 
 sub my_head {
     my($title,$xtra_head) = @_;
-    my $rss_href2 = "http://" . $q->virtual_host() . $rss_href;
+    my $rss_href2 = "https://" . $q->virtual_host() . $rss_href;
     my $xtra_head2 = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href2">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
