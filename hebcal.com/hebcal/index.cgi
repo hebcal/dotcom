@@ -496,13 +496,13 @@ EOJS
         {
             if ($evt->{category} eq "candles")
             {
-                $img_url = "http://www.hebcal.com/i/sm_candles.gif";
+                $img_url = "https://www.hebcal.com/i/sm_candles.gif";
                 $img_w = 40;
                 $img_h = 69;
             }
             elsif ($evt->{category} eq "havdalah")
             {
-                $img_url = "http://www.hebcal.com/i/havdalah.gif";
+                $img_url = "https://www.hebcal.com/i/havdalah.gif";
                 $img_w = 46;
                 $img_h = 59;
             }
@@ -524,7 +524,7 @@ EOJS
             $year, $mon, $mday, $subj;
             if ($href) {
                 my $href2 = $href;
-                $href2 =~ s,^http://www.hebcal.com/,,;
+                $href2 =~ s,^https://www.hebcal.com/,,;
                 print STDOUT ",a:\"$href2\"";
             }
             if ($img_url) {
@@ -544,7 +544,7 @@ EOJS
 HEBCAL.jec2events=[];
 for (var i=0;i<HEBCAL.eraw.length;i++){
 var e=HEBCAL.eraw[i],f={eventDate:e.d,eventDescription:e.s};
-if(e.a){f.eventLink="http://www.hebcal.com/"+e.a}
+if(e.a){f.eventLink="https://www.hebcal.com/"+e.a}
 HEBCAL.jec2events.push(f);}
 EOJS
 ;
@@ -1842,8 +1842,8 @@ EOHTML
             my $memo = $evt->{memo};
             my $atitle = $memo ? qq{ title="$memo"} : "";
             my $aclass = "";
-            if (index($href, "http://www.hebcal.com/") == 0) {
-                $href = substr($href, 21);
+            if (index($href, "https://www.hebcal.com/") == 0) {
+                $href = substr($href, 22);
             }
             if ($href =~ /^http/) {
               $aclass = qq{ class="outbound"};
