@@ -112,7 +112,7 @@ do {
                     $std_reason = $bounce_type;
                 }
                 if ($bounce_reason eq "unknown" && $bounce_type eq "Transient") {
-                    $bounce_reason = $bounce_type;
+                    $std_reason = $bounce_type;
                 }
                 INFO("$email_address $std_reason");
                 $sth->execute($email_address,$std_reason,$bounce_reason)
