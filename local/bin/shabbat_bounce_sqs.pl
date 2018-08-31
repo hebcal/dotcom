@@ -111,7 +111,7 @@ do {
                 } else {
                     $std_reason = $bounce_type;
                 }
-                if ($bounce_reason eq "unknown" && $bounce_type eq "Transient") {
+                if ($std_reason eq "unknown" && $bounce_type eq "Transient") {
                     $std_reason = $bounce_type;
                 }
                 INFO("$email_address $std_reason");
