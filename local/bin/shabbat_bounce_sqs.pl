@@ -106,7 +106,7 @@ do {
                 my $bounce_reason = $recip->{diagnosticCode};
                 my $bounce_type = $obj->{bounce}->{bounceType};
                 my $std_reason;
-                if ($bounce_type eq "Permanent") {
+                if ($bounce_reason) {
                     $std_reason = get_std_reason($bounce_reason);
                 } else {
                     $std_reason = $bounce_type;
