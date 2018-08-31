@@ -111,6 +111,9 @@ do {
                 } else {
                     $std_reason = $bounce_type;
                 }
+                if ($bounce_reason eq "unknown" && $bounce_type eq "Transient") {
+                    $bounce_reason = $bounce_type;
+                }
                 INFO("$email_address $std_reason");
                 $sth->execute($email_address,$std_reason,$bounce_reason)
                     or LOGDIE($dbh->errstr);
@@ -154,7 +157,7 @@ sub usage {
 sub get_std_reason {
     my($full_reason) = @_;
     return "unknown" unless defined $full_reason;
-    if ($full_reason =~ /\s(5\.\d\.\d)\s/) {
+    if ($full_reason =~ /\s(5\.\d+\.\d+)\s/) {
         my $status = $1;
         if ($status =~ /^5\.1\.[01]$/)  {
             return "user_unknown";
