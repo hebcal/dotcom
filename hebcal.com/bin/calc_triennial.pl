@@ -1359,18 +1359,21 @@ sub print_tri_cell
     foreach my $aliyah (@sorted_aliyot) {
         my $show_book = defined $aliyah->{'book'} ? 1 : 0;
         my $torah0 = $show_book ? $aliyah->{'book'} : $torah;
-        print OUT2 "<li>", format_aliyah($aliyah,$h,$torah0,$show_book);
+        print OUT2 "<li>", format_aliyah($aliyah,$h,$torah0,$show_book,1);
     }
     print OUT2 "</ul>\n";
 }
 
 sub format_aliyah
 {
-    my($aliyah,$h,$torah,$show_book) = @_;
+    my($aliyah,$h,$torah,$show_book,$is_triennial) = @_;
 
     my($book,$verses) = Hebcal::get_book_and_verses($aliyah, $torah);
     my $sefaria_url = Hebcal::get_sefaria_url($book,$verses);
     $sefaria_url =~ s/&/&amp;/g;
+
+    my $tri_sefaria = $is_triennial ? "0" : "1";
+    $sefaria_url .= "&amp;aliyot=$tri_sefaria";
 
     my $info = $verses;
 
