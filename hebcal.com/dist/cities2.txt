@@ -184,7 +184,7 @@ IL-Holon|294751
 IL-Jerusalem|281184
 IL-Kfar Saba|294514
 IL-Lod|294421
-IL-Modiin|6693679
+IL-Modiin|282926
 IL-Nazareth|294098
 IL-Netanya|294071
 IL-Petach Tikvah|293918
