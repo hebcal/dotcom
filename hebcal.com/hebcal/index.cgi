@@ -807,10 +807,9 @@ sub pdf_render_event {
 
     my $color = "#000000";
     my $subj = $evt->{subj};
-    if (($subj =~ /^\d+\w+.+, \d{4,}$/) || ($subj =~ /^\d+\w+ day of the Omer$/)) {
-        $color = "#666666";
-    } elsif ($subj =~ /^Daf Yomi: (.+)$/) {
-        $subj = $1;
+    if ($evt->{category} eq "dafyomi" ||
+        $evt->{category} eq "hebdate" ||
+        $evt->{category} eq "omer") {
         $color = "#666666";
     }
     $text->fillcolor($color);
@@ -826,6 +825,10 @@ sub pdf_render_event {
         if ($xsubj) {
             $subj = $xsubj;
         }
+    }
+
+    if ($evt->{category} eq "dafyomi") {
+        $subj =~ s/^[^:]:\s+//; # strip the "Daf Yomi: " prefix
     }
 
     if ($lg =~ /^(a|s|ah|sh)$/ || $Hebcal::lang_european{$lg}) {
