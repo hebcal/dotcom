@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2017 Michael J. Radwin.
+# Copyright (c) 2018 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -119,12 +119,13 @@ our %lang_names =
      "a"  => "Ashkenazis transliterations",
      "ah" => "Ashkenazis translit. + Hebrew",
      "h"  => "Hebrew - עברית",
+     "fr" => "French - français",
      "ru" => "Russian - ру́сский язы́к",
      "pl" => "Polish - język polski",
      "fi" => "Finnish - Suomalainen",
      );
 
-our @lang_european = ("ru", "pl", "fi");
+our @lang_european = ("fr", "ru", "pl", "fi");
 our %lang_european = map { $_ => 1 } @lang_european;
 
 our %CONTINENTS =

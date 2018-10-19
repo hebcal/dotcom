@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
+use File::Basename;
 use XML::Simple;
 
 die "usage: $0 outfile.pm outfile.php outfile.js\n" unless @ARGV == 3;
@@ -136,9 +137,10 @@ foreach my $f (@festivals)
 print O ");\n\n";
 
 my $translations = {};
-my @langs = qw(pl ru he fi);
-foreach my $pofile (@langs) {
-    my $infile = "$podir/$pofile.po";
+my @pofiles = <$podir/??.po>;
+my @langs;
+foreach my $infile (@pofiles) {
+    my $pofile = basename($infile, ".po");
     open(IN, $infile) || die "$infile: $!";
     binmode(IN, ":utf8");
     my $msgid;
@@ -152,6 +154,7 @@ foreach my $pofile (@langs) {
         }
     }
     close(IN);
+    push(@langs, $pofile);
 }
 
 print O "\$HebcalConst::TRANSLATIONS = {\n";
