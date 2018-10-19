@@ -828,7 +828,7 @@ sub pdf_render_event {
     }
 
     if ($evt->{category} eq "dafyomi") {
-        $subj =~ s/^[^:]:\s+//; # strip the "Daf Yomi: " prefix
+        $subj =~ s/^[^:]+:\s+//; # strip the "Daf Yomi: " prefix
     }
 
     if ($lg =~ /^(a|s|ah|sh)$/ || $Hebcal::lang_european{$lg}) {
