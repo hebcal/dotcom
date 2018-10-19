@@ -638,8 +638,8 @@ sub pdf_display {
     $pdf->info("Author" => "Hebcal Jewish Calendar (www.hebcal.com)",
                "Title" => $title);
 
-    $pdf_font{'plain'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Regular.ttf');
-    $pdf_font{'bold'} = $pdf->ttfont('./fonts/Open_Sans/OpenSans-Bold.ttf');
+    $pdf_font{'plain'} = $pdf->ttfont('./fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
+    $pdf_font{'bold'} = $pdf->ttfont('./fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
     my $lg = $q->param("lg") || "s";
     if ($lg =~ /h/) {
         $pdf_font{'hebrew'} = $pdf->ttfont('./fonts/SBL_Hebrew/SBL_Hbrw.ttf');
@@ -833,13 +833,12 @@ sub pdf_render_event {
             $text->font($pdf_font{'bold'}, 8);
             $text->text($subj);
         }
-        elsif (length($subj) >= 25) {
+        elsif (length($subj) >= 24) {
             # lazy load this font if we haven't used it yet
             if (!defined $pdf_font{'condensed'}) {
-                $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Open_Sans_Condensed/OpenSans-CondLight.ttf');
+                $pdf_font{'condensed'} = $pdf->ttfont('./fonts/Source_Sans_Pro/SourceSansPro-Light.ttf');
             }
-            $text->font($pdf_font{'condensed'}, 9);
-            $text->fillcolor("#000000");
+            $text->font($pdf_font{'condensed'}, 7);
             $text->text($subj);
         }
         elsif ($subj =~ /^Havdalah \((\d+) min\)$/) {
