@@ -26,10 +26,6 @@ acl purge {
 }
 
 sub vcl_recv {
-    if (std.port(server.ip) == 80) {
-        return(synth(752, "Moved Permanently"));
-    }
-
     set req.http.X-Client-IP = client.ip;
 
     if (std.port(server.ip) == 443) {
@@ -97,24 +93,33 @@ sub vcl_recv {
         # Client has exceeded 90 reqs per 10s
         return (synth(429, "Too Many Requests"));
     }
+
+    if (std.port(server.ip) == 80) {
+        return(synth(752, "HTTPS Required"));
+    }
 }
 
 sub vcl_synth {
+    # force redirect to dedicated download server
     if (resp.status == 750) {
         set resp.http.Location = "http://download.hebcal.com" + req.url;
         set resp.status = 301;
-	synthetic("Moved.");
+        set resp.http.Content-Type = "application/json";
+        synthetic( {"{ "err": ""} + resp.reason + {"" } "} );
         return(deliver);
     }
     if (resp.status == 751) {
         set resp.status = 404;
-	synthetic("Not Found.");
+        set resp.http.Content-Type = "application/json";
+        synthetic( {"{ "err": ""} + resp.reason + {"" } "} );
         return(deliver);
     }
+    # force https redirect
     if (resp.status == 752) {
         set resp.http.Location = "https://www.hebcal.com" + req.url;
         set resp.status = 301;
-        synthetic("Moved.");
+        set resp.http.Content-Type = "application/json";
+        synthetic( {"{ "err": "HTTPS Required" } "} );
         return(deliver);
     }
 }
@@ -131,6 +136,9 @@ sub vcl_deliver {
     # response to the client.
     #
     # You can do accounting or modifying the final object here.
+    if (req.url ~ "\?.*cfg=") {
+        set resp.http.Access-Control-Allow-Origin = "*";
+    }
 }
 
 include "/etc/varnish/acmetool.vcl";
