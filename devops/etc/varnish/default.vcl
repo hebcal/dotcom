@@ -94,7 +94,7 @@ sub vcl_recv {
         return (synth(429, "Too Many Requests"));
     }
 
-    if (std.port(server.ip) == 80) {
+    if (! (req.url ~ "\?.*cfg=") && std.port(server.ip) == 80) {
         return(synth(752, "HTTPS Required"));
     }
 }
