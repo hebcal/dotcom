@@ -210,6 +210,10 @@ form("Please select at least one event option.")
         (!defined $q->param("F") || $q->param("F") eq "off") &&
         (!defined $q->param("s") || $q->param("s") eq "off"));
 
+form("Sorry, invalid language <strong>" . $q->param("lg") . "</strong>.")
+    if (defined $q->param("lg") &&
+        $q->param("lg") ne "" &&
+        ! defined $Hebcal::lang_names{$q->param("lg")});
 
 my %cconfig;
 my $cmd = "./hebcal";
