@@ -497,6 +497,60 @@ $xtra_stylesheet<script>
   ga('send', 'pageview');
 </script>
 <style type="text/css">
+@font-face {
+  font-family: 'Glyphicons Regular';
+  src: url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot');
+  src: url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'),
+    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.woff') format('woff'),
+    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.ttf') format('truetype'),
+    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.glyphicons {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Regular';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.glyphicons.glyphicons-calendar:before {
+  content: "\E046";
+}
+.glyphicons.glyphicons-download-alt:before {
+  content: "\E182";
+}
+.glyphicons.glyphicons-envelope:before {
+  content: "\E011";
+}
+.glyphicons.glyphicons-refresh:before {
+  content: "\E082";
+}
+.glyphicons.glyphicons-candle:before {
+  content: "\E335";
+}
+.glyphicons.glyphicons-book_open:before {
+  content: "\E352";
+}
+.glyphicons.glyphicons-parents:before {
+  content: "\E025";
+}
+.glyphicons.glyphicons-cogwheels:before {
+  content: "\E138";
+}
+.glyphicons.glyphicons-settings:before {
+  content: "\E281";
+}
+.glyphicons.glyphicons-embed-close:before {
+  content: "\E119";
+}
+.glyphicons.glyphicons-git-branch:before {
+  content: "\E423";
+}
 .hebcal-footer {
   padding-top: 40px;
   padding-bottom: 40px;

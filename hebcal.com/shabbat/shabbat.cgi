@@ -907,7 +907,7 @@ EOHTML
 <div class="col-sm-3" role="complementary">
 $more_from_hebcal
 <h5>Advertisement</h5>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- responsive textonly -->
 <ins class="adsbygoogle"
      style="display:block"

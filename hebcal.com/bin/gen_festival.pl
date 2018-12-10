@@ -162,7 +162,7 @@ foreach my $f (@FESTIVALS)
 }
 
 my $pagead_300x250=<<EOHTML;
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
  style="display:inline-block;width:300px;height:250px"
@@ -1232,7 +1232,7 @@ $pager
 </div><!-- .col-sm-10 -->
 <div class="col-sm-2 hidden-print">
 <h5>Advertisement</h5>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:160px;height:600px"

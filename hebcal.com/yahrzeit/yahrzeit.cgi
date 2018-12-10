@@ -559,12 +559,12 @@ and then come back to this page.</p>
         show_row($q,$i,\%Hebcal::MoY_long);
     }
 
-    print qq{<div class="checkbox">\n<label>},
+    print qq{<div class="form-check">\n<label>},
     $q->checkbox(-name => "hebdate",
                  -checked => "checked",
                  -label => "Include Hebrew dates"),
     "</label></div>\n",
-    qq{<div class="checkbox"><label>},
+    qq{<div class="form-check"><label>},
     $q->checkbox(-name => "yizkor",
                  -label => "Include Yizkor dates"),
     "</label></div>\n",

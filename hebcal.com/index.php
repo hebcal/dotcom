@@ -2,7 +2,7 @@
 /***********************************************************************
  * Hebcal homepage
  *
- * Copyright (c) 2017  Michael J. Radwin.
+ * Copyright (c) 2018  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -172,48 +172,6 @@ $xtra_head = <<<EOD
 <style type="text/css">
 ul.list-inline li:after{content:"\\00a0\\00b7"}
 ul.list-inline li:last-child:after{content:""}
-@font-face {
-  font-family: 'Glyphicons Regular';
-  src: url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot');
-  src: url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot?#iefix') format('embedded-opentype'),
-    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.woff') format('woff'),
-    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.ttf') format('truetype'),
-    url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.svg#glyphiconsregular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-.glyphicons {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Regular';
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.glyphicons.glyphicons-candle:before {
-  content: "\E335";
-}
-.glyphicons.glyphicons-book_open:before {
-  content: "\E352";
-}
-.glyphicons.glyphicons-parents:before {
-  content: "\E025";
-}
-.glyphicons.glyphicons-cogwheels:before {
-  content: "\E138";
-}
-.glyphicons.glyphicons-settings:before {
-  content: "\E281";
-}
-.glyphicons.glyphicons-embed-close:before {
-  content: "\E119";
-}
-.glyphicons.glyphicons-git-branch:before {
-  content: "\E423";
-}
 .h1, .h2, .h3, h1, h2, h3 {
   font-family: 'Merriweather', serif;
   font-weight: 400;
@@ -260,16 +218,16 @@ echo $header;
 <div class="container">
 <ul class="list-inline">
 <?php
-echo "<li><time datetime=\"", date("Y-m-d"), "\">", date("D, j F Y"), "</time>\n";
+echo "<li class=\"list-inline-item\"><time datetime=\"", date("Y-m-d"), "\">", date("D, j F Y"), "</time>\n";
 $hm = $hnum_to_str[$hmnum];
-echo "<li>", format_hebrew_date($hd, $hm, $hy), "\n";
+echo "<li class=\"list-inline-item\">", format_hebrew_date($hd, $hm, $hy), "\n";
 
 // holidays today
 if (isset($events)) {
     foreach ($events as $h) {
 	if (strncmp($h, "Parashat ", 9) != 0) {
 	    $anchor = hebcal_make_anchor($h);
-	    echo "<li><a href=\"", $anchor, "\">", $h, "</a>\n";
+	    echo "<li class=\"list-inline-item\"><a href=\"", $anchor, "\">", $h, "</a>\n";
 	}
     }
 }
@@ -293,7 +251,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 
 function holiday_greeting($blurb, $long_text) { ?>
 <div class="row">
-<div class="col-sm-8 col-sm-offset-2">
+<div class="col-sm-8 offset-sm-2">
 <div class="alert alert-success">
  <strong><?php echo $blurb ?>!</strong>
  <?php echo $long_text ?>.
@@ -370,7 +328,7 @@ and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=<?php echo $in_israel ? "on" : "off"; ?>&amp;lg=s&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicon glyphicon-calendar"></i> Get calendar</a>
+<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=<?php echo $in_israel ? "on" : "off"; ?>&amp;lg=s&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicons glyphicons-calendar"></i> Get calendar</a>
 <br><small><a href="/hebcal/">Customize calendar settings</a></small></p>
 </div>
 </div><!-- .row -->
@@ -379,7 +337,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 <p class="lead">Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-default btn-lg" href="/converter/"><i class="glyphicon glyphicon-refresh"></i> Date Converter</a></p>
+<p><a class="btn btn-secondary btn-lg" href="/converter/"><i class="glyphicons glyphicons-refresh"></i> Date Converter</a></p>
 </div>
 </div><!-- .row -->
 
@@ -419,7 +377,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <div class="row">
 <div class="col-sm-4">
 <a class="icon-block" href="/holidays/">
- <span class="glyphicon glyphicon-calendar icon-lg"></span>
+ <span class="glyphicons glyphicons-calendar icon-lg"></span>
 </a>
 <h3 class="text-center">Holidays</h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
@@ -428,7 +386,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 
 <div class="col-sm-4">
 <a class="icon-block" href="/ical/">
- <span class="glyphicon glyphicon-download-alt icon-lg"></span>
+ <span class="glyphicons glyphicons-download-alt icon-lg"></span>
 </a>
 <h3 class="text-center">Download</h3>
 <p>Download Jewish holidays and Hebrew dates for Microsoft Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar), or to any desktop program that supports iCalendar (.ics) files
@@ -437,7 +395,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 
 <div class="col-sm-4">
 <a class="icon-block" href="https://www.hebcal.com/email/">
- <span class="glyphicon glyphicon-envelope icon-lg"></span>
+ <span class="glyphicons glyphicons-envelope icon-lg"></span>
 </a>
 <h3 class="text-center">Email</h3>
 <p>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.
