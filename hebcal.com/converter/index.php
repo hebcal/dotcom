@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2017  Michael J. Radwin.
+ * Copyright (c) 2018  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -388,7 +388,7 @@ After sunset</label>
 </div><!-- .checkbox -->
 </div><!-- .clearfix -->
 <div class="form-group">
-<button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Hebrew</button>
+<button type="button" name="g2h" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Hebrew</button>
 </div><!-- .form-group -->
 </form>
 </div><!-- .col-sm-6 -->
@@ -405,7 +405,7 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-co
 </div><!-- .form-group -->
 <div class="clearfix">
 <div class="form-group">
-<button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Gregorian</button>
+<button type="button" name="h2g" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Gregorian</button>
 </div><!-- .form-group -->
 </div><!-- .clearfix -->
 </form>
@@ -441,17 +441,17 @@ function my_footer() {
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
-<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicon glyphicon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+<p><a class="btn btn-secondary" href="/yahrzeit/" role="button"><i class="glyphicon glyphicon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col-sm-6 -->
 <div class="col-sm-6">
 <h5>Hebrew Date Feeds</h5>
 <p>Today's Hebrew date for your RSS reader.</p>
-<p><a class="btn btn-default" href="/etc/hdate-en.xml"
+<p><a class="btn btn-secondary" href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in English Transliteration RSS">
 English transliteration feed &raquo;</a></p>
-<p><a class="btn btn-default" href="/etc/hdate-he.xml"
+<p><a class="btn btn-secondary" href="/etc/hdate-he.xml"
 title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS">
