@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2017  Michael J. Radwin.
+# Copyright (c) 2018  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1085,51 +1085,51 @@ EOHTML
 
     print qq{<fieldset>\n},
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "maj",
+    HebcalHtml::checkbox($q, -name => "maj",
                  -id => "maj",
                  -checked => 1,
                  -label => "Major Holidays"),
     "</label></div>\n",
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "min",
+    HebcalHtml::checkbox($q, -name => "min",
          -id => "min",
          -checked => 1,
          -label => "Minor Holidays"),
     qq{\n<small class="text-muted">(Tu BiShvat, Lag BaOmer, ...)</small></label></div>\n},
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "nx",
+    HebcalHtml::checkbox($q, -name => "nx",
                  -id => "nx",
                  -checked => 0,
                  -label => "Rosh Chodesh"),
     "</label></div>\n",
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "mf",
+    HebcalHtml::checkbox($q, -name => "mf",
                  -id => "mf",
                  -checked => 0,
                  -label => "Minor Fasts"),
     qq{\n<small class="text-muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label></div>\n},
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "ss",
+    HebcalHtml::checkbox($q, -name => "ss",
                  -id => "ss",
                  -checked => 0,
                  -label => "Special Shabbatot"),
     qq{\n<small class="text-muted">(Shabbat Shekalim, Zachor, ...)</small></label></div>\n},
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "mod",
+    HebcalHtml::checkbox($q, -name => "mod",
          -id => "mod",
          -checked => 0,
          -label => "Modern Holidays"),
     qq{\n<small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label></div>\n},
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "o",
+    HebcalHtml::checkbox($q, -name => "o",
                  -label => "Days of the Omer"),
     "</label></div>\n",
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "F",
+    HebcalHtml::checkbox($q, -name => "F",
                  -label => "Daf Yomi"),
     "</label></div>\n",
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "s",
+    HebcalHtml::checkbox($q, -name => "s",
                  -label => "Weekly Torah portion on Saturdays"),
     "</label></div>\n";
 
@@ -1167,12 +1167,12 @@ EOHTML
                    -labels => \%Hebcal::lang_names),
     "</div>\n",
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "D",
+    HebcalHtml::checkbox($q, -name => "D",
                  -id => "d1",
                  -label => "Show Hebrew date for dates with some event"),
     "</label></div>",
     qq{<div class="form-check"><label>},
-    $q->checkbox(-name => "d",
+    HebcalHtml::checkbox($q, -name => "d",
                  -id => "d2",
                  -label => "Show Hebrew date every day of the year"),
     "</label></div>\n";
@@ -1521,7 +1521,7 @@ sub results_page_toolbar {
 
     my $html = <<EOHTML;
 <div class="btn-toolbar hidden-print">
-  <div class="btn-group" data-toggle="buttons">
+  <div class="btn-group mr-2" role="group" data-toggle="buttons">
    <label class="btn btn-secondary btn-sm active">
     <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
     <span class="glyphicons glyphicons-calendar"></span> Month
@@ -1534,7 +1534,9 @@ sub results_page_toolbar {
 EOHTML
 ;
 
+    $html .= qq{<div class="btn-group mr-1" role="group">};
     $html .= HebcalHtml::download_html_modal_button(" btn-sm");
+    $html .= qq{</div>\n};
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     $pdf_url =~ s/&/&amp;/g;
@@ -1560,15 +1562,15 @@ EOHTML
 #            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
         $html .= <<EOHTML;
-  <div class="btn-group">
+  <div class="btn-group mr-2" role="group">
     $btn_print_html
     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu">
-      <li><a class="download" id="pdf" href="$pdf_url">Monthly calendar</a></li>
-      <li><a href="$url">Candle-lighting times only</a></li>
+      <li><a class="dropdown-item download" id="pdf" href="$pdf_url">Monthly calendar</a></li>
+      <li><a class="dropdown-item" href="$url">Candle-lighting times only</a></li>
     </ul>
   </div>
 EOHTML

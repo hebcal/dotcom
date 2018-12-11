@@ -647,10 +647,18 @@ sub html_entify($)
     $_;
 }
 
+sub checkbox {
+    my($q,@p) = @_;
+    my $s = $q->checkbox(@p);
+    $s =~ s/<input([^>]+)>([^<]+)/<div class="form-check"><label><input class="form-check-input"$1>$2<\/label><\/div>/g;
+    $s;
+}
+
+
 sub radio_group {
     my($q,@p) = @_;
     my $s = $q->radio_group(@p);
-    $s =~ s/<input([^>]+)>([^<]+)/<div class="radio"><label><input$1>$2<\/label><\/div>/g;
+    $s =~ s/<input([^>]+)>([^<]+)/<div class="form-check"><label><input class="form-check-input"$1>$2<\/label><\/div>/g;
     $s;
 }
 
