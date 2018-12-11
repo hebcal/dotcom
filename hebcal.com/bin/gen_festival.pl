@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2017 Michael J. Radwin.
+# Copyright (c) 2018 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -552,9 +552,9 @@ EOHTML
 
     $str .= <<EOHTML;
 <div class="btn-toolbar hidden-print">
-  <a class="btn btn-default btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><span class="glyphicon glyphicon-print"></span> Print</a>
-  <a class="btn btn-default btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
-  <a class="btn btn-default btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><span class="glyphicon glyphicon-pencil"></span> Customize</a>
+  <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><span class="glyphicons glyphicons-print"></span> Print</a>
+  <a class="btn btn-secondary btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><span class="glyphicons glyphicons-download-alt"></span> Download</a>
+  <a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><span class="glyphicons glyphicons-pencil"></span> Customize</a>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -676,20 +676,20 @@ sub pagination_greg {
     my $s = qq{<nav class="hidden-print"><ul class="pagination pagination-sm" style="margin: 12px 0 0 0">\n};
 
     my $prev_year = $FIRST_GREG_YR - 1;
-    $s .= qq{<li><a title="$prev_year" aria-label="Previous" href="} . pagination_greg_url($prev_year) . qq{"><span aria-hidden="true">&laquo;</span></a></li>\n};
+    $s .= qq{<li class="page-item"><a class="page-link" title="$prev_year" aria-label="Previous" href="} . pagination_greg_url($prev_year) . qq{"><span aria-hidden="true">&laquo;</span></a></li>\n};
 
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $FIRST_GREG_YR + $j;
         if ($current_year == $j) {
-            $s .= qq{<li class="active">};
+            $s .= qq{<li class="page-item active">};
         } else {
-            $s .= qq{<li>};
+            $s .= qq{<li class="page-item">};
         }
-        $s .= qq{<a href="$other_yr">$other_yr</a></li>\n};
+        $s .= qq{<a class="page-link" href="$other_yr">$other_yr</a></li>\n};
     }
 
     my $next_year = $FIRST_GREG_YR + $NUM_YEARS + 1;
-    $s .= qq{<li><a title="$next_year" aria-label="Next" href="} . pagination_greg_url($next_year) . qq{"><span aria-hidden="true">&raquo;</span></a></li>\n};
+    $s .= qq{<li class="page-item"><a class="page-link" title="$next_year" aria-label="Next" href="} . pagination_greg_url($next_year) . qq{"><span aria-hidden="true">&raquo;</span></a></li>\n};
 
     $s .= qq{</ul></nav>\n};
 
@@ -1010,11 +1010,13 @@ sub breadcrumb {
     }
     my $nav_anchor = Hebcal::make_anchor($nav_parent);
     my $html =<<EOHTML
+<nav>
 <ol class="breadcrumb hidden-xs hidden-print">
-  <li><a href="/holidays/">Holidays</a></li>
-  <li><a href="/holidays/#$nav_anchor">$nav_parent</a></li>
-  <li class="active">$f</li>
+  <li class="breadcrumb-item"><a href="/holidays/">Holidays</a></li>
+  <li class="breadcrumb-item"><a href="/holidays/#$nav_anchor">$nav_parent</a></li>
+  <li class="breadcrumb-item active">$f</li>
 </ol>
+</nav>
 EOHTML
 ;
     return $html;
@@ -1096,7 +1098,7 @@ EOHTML
 	print OUT2 qq{<nav class="hidden-print"><ul class="pagination">\n};
 	foreach my $inner (@{$nav_inner}) {
 	    my($slug,$part) = @{$inner};
-	    print OUT2 qq{\t<li><a href="#$slug">$part</a></li>\n};
+	    print OUT2 qq{\t<li class="page-item"><a class="page-link" href="#$slug">$part</a></li>\n};
 	}
 	print OUT2 qq{</ul></nav><!-- .pagination -->\n};
     }
@@ -1514,7 +1516,7 @@ sub amazon_recommended_book {
 
     my $byauthor = $author ? qq{<br>by $author} : "";
     my $html = <<EOHTML
-<div class="col-xs-$thumbnail_width">
+<div class="col-$thumbnail_width">
 <div class="thumbnail">
 <a class="amzn" id="$anchor-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"
 alt="$bktitle" width="$width" height="$height" style="border:none"></a>
@@ -1523,7 +1525,7 @@ alt="$bktitle" width="$width" height="$height" style="border:none"></a>
 $byauthor
 </div><!-- .caption -->
 </div><!-- .thumbnail -->
-</div><!-- .col-xs-$thumbnail_width -->
+</div><!-- .col-$thumbnail_width -->
 EOHTML
 ;
     return $html;

@@ -1242,7 +1242,7 @@ EOHTML
             ),
             "</div>\n",
             qq{<div class="form-group"><label for="m1">Havdalah minutes past sundown
-<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicons glyphicons-info-sign"></span></a>
 </label>},
             $q->textfield(
                 -name      => "m",
@@ -1399,7 +1399,7 @@ sub nav_pagination {
     my $nav_pagination = <<EOHTML;
 <nav class="text-center hidden-print">
 <ul class="pagination">
-<li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
+<li class="page-item"><a class="page-link" href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
     ;
 
@@ -1410,10 +1410,10 @@ EOHTML
         my $mon_long = $Hebcal::MoY_long{$mon};
         my $mon_short = $Hebcal::MoY_short[$mon-1];
         my $cal_id = sprintf("%04d-%02d", $year, $mon);
-        $nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
+        $nav_pagination .= qq{<li class="page-item"><a class="page-link" title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
     }
     $nav_pagination .= <<EOHTML;
-<li><a href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
+<li class="page-item"><a class="page-link" href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
 </ul><!-- .pagination -->
 </nav>
 EOHTML
@@ -1469,42 +1469,6 @@ sub next_and_prev_urls {
     return ($prev_url,$next_url,$prev_title,$next_title);
 }
 
-sub email_form_html {
-    my($q) = @_;
-    my $email_form = <<EOHTML;
-<form class="form-inline" action="https://www.hebcal.com/email/" method="post">
-<fieldset>
-<input type="hidden" name="v" value="1">
-EOHTML
-;
-    if ($q->param("zip")) {
-        $email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
-        $email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
-    } elsif ($q->param("geonameid")) {
-        $email_form .= qq{<input type="hidden" name="geo" value="geoname">\n};
-        $email_form .= qq{<input type="hidden" name="geonameid" value="} . $q->param("geonameid") . qq{">\n};
-    } else {
-        $email_form .= qq{<input type="hidden" name="geo" value="city">\n};
-        $email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
-    }
-
-    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
-        $email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
-    }
-
-    $email_form .= <<EOHTML;
-<p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
-<div class="input-append input-prepend">
-<span class="add-on"><i class="glyphicon glyphicon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
-<button type="submit" class="btn" name="modify" value="1"> Sign up</button>
-</div>
-</fieldset>
-</form>
-EOHTML
-;
-    return $email_form;
-}
-
 sub results_page_warnings {
     my($events) = @_;
 
@@ -1549,7 +1513,7 @@ accurate.
 
 sub settings_button_html {
     my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
-    return qq{<a class="btn btn-default btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicon glyphicon-cog"></i> Settings</a>};
+    return qq{<a class="btn btn-secondary btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicons glyphicons-cog"></i> Settings</a>};
 }
 
 sub results_page_toolbar {
@@ -1558,13 +1522,13 @@ sub results_page_toolbar {
     my $html = <<EOHTML;
 <div class="btn-toolbar hidden-print">
   <div class="btn-group" data-toggle="buttons">
-   <label class="btn btn-default btn-sm active">
+   <label class="btn btn-secondary btn-sm active">
     <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
-    <span class="glyphicon glyphicon-calendar"></span> Month
+    <span class="glyphicons glyphicons-calendar"></span> Month
    </label>
-   <label class="btn btn-default btn-sm">
+   <label class="btn btn-secondary btn-sm">
     <input type="radio" name="view" id="toggle-list" autocomplete="off">
-    <span class="glyphicon glyphicon-list"></span> List
+    <span class="glyphicons glyphicons-list"></span> List
    </label>
   </div><!-- .btn-group -->
 EOHTML
@@ -1574,7 +1538,7 @@ EOHTML
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     $pdf_url =~ s/&/&amp;/g;
-    my $btn_print_html = qq{<a class="btn btn-default btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicon glyphicon-print"></i> Print</a>};
+    my $btn_print_html = qq{<a class="btn btn-secondary btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a>};
 
     if (!param_true("c")) {
         $html .= $btn_print_html;
@@ -1598,7 +1562,7 @@ EOHTML
         $html .= <<EOHTML;
   <div class="btn-group">
     $btn_print_html
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
     </button>

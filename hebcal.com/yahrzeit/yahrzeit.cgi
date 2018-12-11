@@ -443,7 +443,7 @@ EOHTML
 
         print qq{<div class="btn-toolbar hidden-print">\n};
         print HebcalHtml::download_html_modal_button();
-        print qq{<a class="btn btn-default" href="#form"><i class="glyphicon glyphicon-cog"></i> Enter more dates and names</a>\n};
+        print qq{<a class="btn btn-secondary" href="#form"><i class="glyphicons glyphicons-cog"></i> Enter more dates and names</a>\n};
         print qq{</div><!-- .btn-toolbar -->\n};
 
         print qq{<p>Yahrzeit candles should be lit
@@ -484,7 +484,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
 
         my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 
-        printf(qq{<tr><td style="width:130px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
+        printf(qq{<tr><td style="width:170px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
             $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
             HebcalHtml::html_entify($subj));
         $prev_year = $year;

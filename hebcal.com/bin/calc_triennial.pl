@@ -10,7 +10,7 @@
 #   A Complete Triennial System for Reading the Torah
 #   https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf
 #
-# Copyright (c) 2017  Michael J. Radwin.
+# Copyright (c) 2018  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -516,7 +516,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 <div class="btn-toolbar">
 $download_button_diaspora
 $download_button_israel
-<a class="btn btn-default" title="Download aliyah-by-aliyah breakdown"
+<a class="btn btn-secondary" title="Download aliyah-by-aliyah breakdown"
 href="#download"><i
 class="glyphicon glyphicon-download-alt"></i> Leyning spreadsheet</a>
 </div><!-- .btn-toolbar -->
@@ -524,7 +524,7 @@ class="glyphicon glyphicon-download-alt"></i> Leyning spreadsheet</a>
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-xs-4">
+<div class="col-4">
 <h3 id="Genesis">Genesis</h3>
 <ol class="list-unstyled">
 EOHTML
@@ -537,11 +537,11 @@ EOHTML
 	$book =~ s/\s+.+$//;
 
 	if ($prev_book ne $book) {
-	    print OUT1 "</ol>\n</div><!-- .col-xs-4 -->\n";
+	    print OUT1 "</ol>\n</div><!-- .col-4 -->\n";
 	    if ($book_count++ % 3 == 0) {
 		print OUT1 qq{</div><!-- .row -->\n<div class="row">\n};
 	    }
-	    print OUT1 qq{<div class="col-xs-4">\n<h3 id="$book">$book</h3>\n<ol class="list-unstyled">\n};
+	    print OUT1 qq{<div class="col-4">\n<h3 id="$book">$book</h3>\n<ol class="list-unstyled">\n};
 	}
 	$prev_book = $book;
 
@@ -552,8 +552,8 @@ EOHTML
 
     print OUT1 <<EOHTML;
 </ol>
-</div><!-- .col-xs-4 -->
-<div class="col-xs-4">
+</div><!-- .col-4 -->
+<div class="col-4">
 <h3 id="DoubledParshiyot">Doubled Parshiyot</h3>
 <ol class="list-unstyled">
 EOHTML
@@ -567,20 +567,20 @@ EOHTML
 
     print OUT1 <<EOHTML;
 </ol>
-</div><!-- .col-xs-4 -->
+</div><!-- .col-4 -->
 </div><!-- .row -->
 <div class="row">
 <div class="col-sm-12">
 <h3>Parashat ha-Shavua by Hebrew year</h3>
 <nav>
 <ul class="pagination">
-<li class="disabled"><a href="#">Diaspora</a></li>
+<li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
 EOHTML
 ;
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $nofollow = $i > 3 ? qq{ rel="nofollow"} : "";
-	print OUT1 qq{<li><a$nofollow href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
+	print OUT1 qq{<li class="page-item"><a$nofollow class="page-link" href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -588,14 +588,14 @@ EOHTML
 </nav>
 <nav>
 <ul class="pagination">
-<li class="disabled"><a href="#">Israel</a></li>
+<li class="page-item disabled"><a class="page-link" href="#">Israel</a></li>
 EOHTML
 ;
 
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $nofollow = $i > 3 ? qq{ rel="nofollow"} : "";
-	print OUT1 qq{<li><a$nofollow href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
+	print OUT1 qq{<li class="page-item"><a$nofollow class="page-link" href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -605,31 +605,31 @@ EOHTML
 ;
 
     my $full_kriyah_download_html = action_button_download_html("Full Kriyah (Diaspora)");
-    $full_kriyah_download_html .= qq{<li><a href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a>};
-    $full_kriyah_download_html .= qq{<li class="divider"></li>};
+    $full_kriyah_download_html .= qq{<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a>};
+    $full_kriyah_download_html .= qq{<li class="dropdown-divider"></li>};
 
     my $fk_israel_download_html = action_button_download_html("Full Kriyah (Israel)");
-    $fk_israel_download_html .= qq{<li><a href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a>};
-    $fk_israel_download_html .= qq{<li class="divider"></li>};
+    $fk_israel_download_html .= qq{<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a>};
+    $fk_israel_download_html .= qq{<li class="dropdown-divider"></li>};
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $basename = "fullkriyah-$yr.csv";
-        $full_kriyah_download_html .= qq{<li><a class="download" id="leyning-fullkriyah-$yr" href="$basename" download="$basename">$basename</a>};
+        $full_kriyah_download_html .= qq{<li><a class="dropdown-item download" id="leyning-fullkriyah-$yr" href="$basename" download="$basename">$basename</a>};
         $basename = "fullkriyah-il-$yr.csv";
-        $fk_israel_download_html .= qq{<li><a class="download" id="leyning-fullkriyah-il-$yr" href="$basename" download="$basename">$basename</a>};
+        $fk_israel_download_html .= qq{<li><a class="dropdown-item download" id="leyning-fullkriyah-il-$yr" href="$basename" download="$basename">$basename</a>};
     }
     $full_kriyah_download_html .= qq{</ul>\n</div>\n};
     $fk_israel_download_html .= qq{</ul>\n</div>\n};
 
     my $triennial_download_html = action_button_download_html("Triennial (Diaspora)");
-    $triennial_download_html .= qq{<li><a href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a>};    
-    $triennial_download_html .= qq{<li class="divider"></li>};
+    $triennial_download_html .= qq{<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a>};    
+    $triennial_download_html .= qq{<li class="dropdown-divider"></li>};
 
     for (my $i = 0; $i < $max_triennial_cycles; $i++) {
 	my $start_year = $cycle_start_years[$i];
 	my $triennial_range = triennial_csv_range($start_year);
 	my $triennial_basename = triennial_csv_basename($start_year);
-	$triennial_download_html .= qq{<li><a class="download" id="leyning-triennial-$start_year" href="$triennial_basename" download="$triennial_basename"> $triennial_basename</a></li>};
+	$triennial_download_html .= qq{<li><a class="dropdown-item download" id="leyning-triennial-$start_year" href="$triennial_basename" download="$triennial_basename"> $triennial_basename</a></li>};
     }
     $triennial_download_html .= qq{</ul>\n</div>\n};
 
@@ -689,15 +689,15 @@ sub download_torah_button {
     my $feed_title = "Parashat ha-Shavua RSS feed";
     my $rss_html2 = "";
     if ($rss_href2) {
-        $rss_html2 = qq{  <li><a href="$rss_href2">$feed_title (Hebrew)</a></li>};
+        $rss_html2 = qq{  <li><a class="dropdown-item" href="$rss_href2">$feed_title (Hebrew)</a></li>};
         $feed_title .= " (Translit.)";
     }
     $html .= <<EOHTML;
-  <li><a class="download" id="quick-ical-$filename" href="webcal://download.hebcal.com/ical/$filename.ics">iPhone, iPad, Mac OS X</a></li>
-  <li><a class="download" id="quick-gcal-$filename" href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F$filename.ics">Google Calendar</a></li>
-  <li><a class="download" id="quick-csv-$filename" href="http://download.hebcal.com/ical/$filename.csv" download="$filename.csv">Microsoft Outlook CSV</a>
-  <li class="divider"></li>
-  <li><a href="$rss_href">$feed_title</a></li>
+  <li><a class="dropdown-item download" id="quick-ical-$filename" href="webcal://download.hebcal.com/ical/$filename.ics">iPhone, iPad, Mac OS X</a></li>
+  <li><a class="dropdown-item download" id="quick-gcal-$filename" href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F$filename.ics">Google Calendar</a></li>
+  <li><a class="dropdown-item download" id="quick-csv-$filename" href="http://download.hebcal.com/ical/$filename.csv" download="$filename.csv">Microsoft Outlook CSV</a>
+  <li class="dropdown-divider"></li>
+  <li><a class="dropdown-item" href="$rss_href">$feed_title</a></li>
 $rss_html2
  </ul>
 </div><!-- .btn-group -->
@@ -710,7 +710,7 @@ sub action_button_download_html {
     my($button_title) = @_;
     my $action_button_download_html = <<EOHTML;
 <div class="btn-group">
- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+ <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   $button_title <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
@@ -1042,7 +1042,7 @@ sub write_sedra_page
         $url =~ s/&/&amp;/g;
         #my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
         #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
-        $ort_tikkun = qq{<a class="outbound btn btn-default btn-sm hidden-print" rel="nofollow" href="$url"><i class="glyphicon glyphicon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
+        $ort_tikkun = qq{<a class="outbound btn btn-secondary btn-sm hidden-print" rel="nofollow" href="$url"><i class="glyphicon glyphicon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
     }
 
     my($torah_book,undef) = split(/ /, $torah, 2);
@@ -1050,11 +1050,13 @@ sub write_sedra_page
     print OUT2 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
+<nav>
 <ol class="breadcrumb hidden-xs hidden-print">
-  <li><a href="/sedrot/">Torah Readings</a></li>
-  <li><a href="/sedrot/#$torah_book">$torah_book</a></li>
-  <li class="active">$h</li>
+  <li class="breadcrumb-item"><a href="/sedrot/">Torah Readings</a></li>
+  <li class="breadcrumb-item"><a href="/sedrot/#$torah_book">$torah_book</a></li>
+  <li class="breadcrumb-item active">$h</li>
 </ol>
+</nav>
 <h1><span class="hidden-xs">Parashat</span> $h / <bdo dir="rtl"><span class="hidden-xs" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h1>
 $intro_summary
 <h3 id="torah"><span class="hidden-xs">Torah Portion:</span>
@@ -1064,7 +1066,7 @@ $ort_tikkun
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <div class="row">
-<div class="col-xs-12 col-sm-3">
+<div class="col-12 col-sm-3">
 <h4>Full Kriyah</h4>
 <ol class="list-unstyled">
 EOHTML
@@ -1276,7 +1278,7 @@ sub write_sedra_tri_cells {
     foreach my $yr (1 .. 3) {
         my $read_on_html = $tri_date[$yr] ? qq{\n<br><small>$tri_date[$yr]</small>} : "";
 	print OUT2 <<EOHTML;
-<div class="col-xs-4 col-sm-3">
+<div class="col-4 col-sm-3">
 <h4>Triennial Year $yr$read_on_html</h4>
 EOHTML
 ;

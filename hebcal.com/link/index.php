@@ -66,7 +66,7 @@ ul.hebcal-results { list-style-type: none }
   margin-bottom: 80px;
 }
 </style>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 EOD;
 

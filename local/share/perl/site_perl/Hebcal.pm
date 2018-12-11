@@ -69,7 +69,8 @@ our $CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
 my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
 our $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
 our $JS_APP_URL = "/i/hebcal-app-1.7.min.js";
-our $JS_TYPEAHEAD_BUNDLE_URL = "//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js";
+our $JS_TYPEAHEAD_BUNDLE_URL = "https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js";
+#our $JS_TYPEAHEAD_BUNDLE_URL = "/i/typeahead-1.2.1.bundle.js";
 
 my $CONFIG_INI;
 my $HOSTNAME;

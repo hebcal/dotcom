@@ -205,8 +205,8 @@ a.icon-block {
   font-size:44px;
 }
 </style>
-<link rel="dns-prefetch" href="//pagead2.googlesyndication.com">
-<link href='//fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+<link href='https://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
 EOD;
 $header = html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
@@ -244,7 +244,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
     foreach ($sat_events as $h) {
 	if (strncmp($h, "Parashat ", 9) == 0) {
 	    $anchor = hebcal_make_anchor($h);
-	    echo "<li><a href=\"", $anchor, "\">", $h, "</a>\n";
+	    echo "<li class=\"list-inline-item\"><a href=\"", $anchor, "\">", $h, "</a>\n";
 	}
     }
 }

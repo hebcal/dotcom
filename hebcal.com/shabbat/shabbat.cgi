@@ -731,15 +731,15 @@ sub more_from_hebcal {
 <h4>$cconfig{"city"}</h4>
 <ul class="list-unstyled nav-list">
   <li>
-    <span class="glyphicon glyphicon-print"></span>
+    <span class="glyphicons glyphicons-print"></span>
     <a title="Compact candle-lighting times for $hyear" href="$fridge_href"> Print $hyear</a>
   </li>
-  <li><span class="glyphicon glyphicon-calendar"></span> <a href="$full_calendar_href">Monthly calendar</a></li>
-  <li><span class="glyphicon glyphicon-envelope"></span> <a href="$email_url">Email weekly Shabbat times</a></li>
+  <li><span class="glyphicons glyphicons-calendar"></span> <a href="$full_calendar_href">Monthly calendar</a></li>
+  <li><span class="glyphicons glyphicons-envelope"></span> <a href="$email_url">Email weekly Shabbat times</a></li>
   <li>
   <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij4KPGc+CjxwYXRoIGQ9Ik0yMS41LDAgTDIuNSwwIEMxLjEyNSwwIDAsMS4xMjUgMCwyLjUgTDAsMjEuNSBDMCwyMi44NzUgMS4xMjUsMjQgMi41LDI0IEwyMS41LDI0IEMyMi44NzUsMjQgMjQsMjIuODc1IDI0LDIxLjUgTDI0LDIuNSBDMjQsMS4xMjUgMjIuODc1LDAgMjEuNSwwIE02LjE4MiwxOS45OCBDNC45NzcsMTkuOTggNCwxOS4wMDUgNCwxNy44IEM0LDE2LjU5NiA0Ljk3NywxNS42MTkgNi4xODIsMTUuNjE5IEM3LjM4NSwxNS42MTkgOC4zNjQsMTYuNTk2IDguMzY0LDE3LjggQzguMzYzLDE5LjAwNSA3LjM4NSwxOS45OCA2LjE4MiwxOS45OCBNMTEuNjUzLDIwIEMxMS42NTMsMTcuOTQzIDEwLjg1NSwxNi4wMDYgOS40MSwxNC41NTMgQzcuOTY3LDEzLjEwMiA2LjA1NiwxMi4zMDIgNCwxMi4zMDIgTDQsOS4xNTMgQzkuODI2LDkuMTUzIDE0LjgwMywxNC4xNzQgMTQuODAzLDIwLjAwMSBMMTEuNjUzLDIwLjAwMSBMMTEuNjUzLDIwIE0xNy4yMTcsMjAgQzE3LjIxNywxMi42NzcgMTEuMTk4LDYuNzE5IDQsNi43MTkgTDQsMy41NyBDMTIuOTEsMy41NyAyMC4zNjUsMTAuOTQgMjAuMzY1LDIwIEwxNy4yMTcsMjAgWiIvPgo8L2c+Cjwvc3ZnPgo=" width="14" height="14">
   <a title="RSS feed of candle lighting times" href="$rss_href">RSS feed</a></li>
-  <li><span class="glyphicon glyphicon-wrench"></span> <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="$developer_api_href">Developer API</a></li>
+  <li><span class="glyphicons glyphicons-wrench"></span> <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="$developer_api_href">Developer API</a></li>
 </ul>
 </div>
 EOHTML
@@ -865,7 +865,7 @@ $form_hidden
   <div class="form-group">
     <label for="m1">
       Havdalah minutes past sundown
-      <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+      <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicons glyphicons-info-sign"></span></a>
     </label>
     $form_havdalah_min
   </div>
