@@ -318,7 +318,7 @@ value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?
 </div>
 <div class="form-group">
 <label for="m">Havdalah minutes past sundown
-<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicons glyphicons-info-sign"></span></a>
 </label>
 <input type="text" name="m" id="m" class="form-control" pattern="\d*" value="<?php
   echo htmlspecialchars($param["m"]) ?>" maxlength="3">
@@ -326,8 +326,8 @@ value="<?php if (isset($param["em"])) { echo htmlspecialchars($param["em"]); } ?
 <?php } /* !$default_unsubscribe */ ?>
 <input type="hidden" name="v" value="1">
 <?php
-    $modify_class = $default_unsubscribe ? "btn btn-default" : "btn btn-primary";
-    $unsub_class = $default_unsubscribe ? "btn btn-primary" : "btn btn-default";
+    $modify_class = $default_unsubscribe ? "btn btn-secondary" : "btn btn-primary";
+    $unsub_class = $default_unsubscribe ? "btn btn-primary" : "btn btn-secondary";
     if ($is_update) { ?>
 <input type="hidden" name="prev"
 value="<?php echo htmlspecialchars($param["em"]) ?>">
