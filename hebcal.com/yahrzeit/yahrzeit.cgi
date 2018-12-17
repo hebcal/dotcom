@@ -561,19 +561,18 @@ and then come back to this page.</p>
         show_row($q,$i,\%Hebcal::MoY_long);
     }
 
-    print qq{<div class="form-check">\n<label>},
+    print "",
     HebcalHtml::checkbox($q,
                  -name => "hebdate",
                  -id => "hebdate",
                  -checked => "checked",
                  -label => "Include Hebrew dates"),
-    "</label></div>\n",
-    qq{<div class="form-check"><label>},
+    "\n",
     HebcalHtml::checkbox($q,
                  -name => "yizkor",
                  -id => "yizkor",
                  -label => "Include Yizkor dates"),
-    "</label></div>\n",
+    "\n",
     qq{<div class="form-group form-inline"><label for="years" class="mr-1">Number of years: </label>},
     $q->textfield(-name => "years",
                     -id => "years",

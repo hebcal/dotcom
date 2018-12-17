@@ -649,9 +649,16 @@ sub html_entify($)
 
 sub checkbox {
     my($q,@p) = @_;
+    my %p = @p;
     my $s = $q->checkbox(@p);
-    $s =~ s/<input([^>]+)>([^<]+)/<div class="form-check"><label><input class="form-check-input"$1>$2<\/label><\/div>/g;
-    $s;
+    if (defined $p{"-id"} && defined $p{"-label"} && $s =~ /<input([^>]+)>/) {
+        my $attrs = $1;
+        my $id = $p{"-id"};
+        my $label = $p{"-label"};
+        return qq{<div class="form-check">\n<input class="form-check-input" $attrs>\n<label class="form-check-label" for="$id">$label</label>\n</div>};
+    } else {
+        return $s;
+    }
 }
 
 
