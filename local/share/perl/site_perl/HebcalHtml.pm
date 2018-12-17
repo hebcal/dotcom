@@ -598,7 +598,7 @@ sub footer_bootstrap3 {
     my $str = <<EOHTML;
 </div><!-- #content -->
 
-<footer role="contentinfo" class="hebcal-footer hidden-print">
+<footer role="contentinfo" class="hebcal-footer d-print-none">
 <div class="row">
 <div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
