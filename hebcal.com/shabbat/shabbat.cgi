@@ -775,7 +775,7 @@ EOHTML
     my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-9">
-<h1>Shabbat Times <small>$city_descr</small></h1>
+<h1>Shabbat Times <small class="text-muted">$city_descr</small></h1>
 EOHTML
 ;
 

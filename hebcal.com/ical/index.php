@@ -49,7 +49,7 @@ echo html_header_bootstrap3($page_title, $xtra_head);
 ?>
 <div class="row">
 <div class="col-sm-12">
-<h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
+<h1>Jewish Holiday downloads <small class="text-muted">for desktop, mobile and web calendars</small></h1>
 
 <p class="lead">Free Jewish holidays for Microsoft
 Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar),

@@ -1707,10 +1707,10 @@ EOHTML
 
     my $h1_extra = "";
     if (param_true("c")) {
-        $h1_extra = "<br><small>" . $cconfig{"title"} . "</small>";
+        $h1_extra = "<br><small class=\"text-muted\">" . $cconfig{"title"} . "</small>";
     } else {
         my $where = param_true("i") ? "Israel" : "Diaspora";
-        $h1_extra = " <small>$where</small>";
+        $h1_extra = " <small class=\"text-muted\">$where</small>";
     }
 
     my $head_divs = <<EOHTML;

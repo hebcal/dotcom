@@ -193,7 +193,7 @@ ORDER BY g.asciiname};
     print $fh <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<h1>$country <small>Shabbat Candle Lighting Times</small></h1>
+<h1>$country <small class="text-muted">Shabbat Candle Lighting Times</small></h1>
 <p class="lead">$shabbat_formatted</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->

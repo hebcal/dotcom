@@ -709,7 +709,7 @@ EOHTML
 sub action_button_download_html {
     my($button_title) = @_;
     my $action_button_download_html = <<EOHTML;
-<div class="btn-group">
+<div class="btn-group mr-1">
  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   $button_title <span class="caret"></span>
  </button>
