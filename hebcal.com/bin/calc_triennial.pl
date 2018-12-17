@@ -634,7 +634,7 @@ EOHTML
     $triennial_download_html .= qq{</ul>\n</div>\n};
 
     print OUT1 <<EOHTML;
-<h3 id="download">Download leyning spreadsheet <small>aliyah-by-aliyah breakdown of Torah readings</small></h3>
+<h3 id="download">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h3>
 <p class="lead">Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
@@ -1280,7 +1280,7 @@ sub write_sedra_tri_cells {
 	}
     }
     foreach my $yr (1 .. 3) {
-        my $read_on_html = $tri_date[$yr] ? qq{\n<br><small>$tri_date[$yr]</small>} : "";
+        my $read_on_html = $tri_date[$yr] ? qq{\n<br><small class="text-muted">$tri_date[$yr]</small>} : "";
 	print OUT2 <<EOHTML;
 <div class="col-4 col-sm-3">
 <h4>Triennial Year $yr$read_on_html</h4>
