@@ -365,22 +365,22 @@ function form($head, $message, $help = "") {
 	$action = substr($action, 0, $pos);
     }
 ?>
-<div id="converter-form" class="hidden-print">
+<div id="converter-form" class="d-print-none">
 <div class="row">
 <div class="col-sm-6">
 <h5>Convert from Gregorian to Hebrew date</h5>
 <form method="get" action="<?php echo $action ?>">
 <div class="form-row">
-<div class="form-group">
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:48px" name="gd" placeholder="day" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
 </div><!-- .form-group -->
-<div class="form-group">
+<div class="form-group mr-1">
 <?php
 global $MoY_long;
 echo html_form_select("gm", $MoY_long, $gm, 0, "", false, 'class="form-control" style="width:120px"');
 ?>
 </div><!-- .form-group -->
-<div class="form-group">
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:66px" name="gy" placeholder="year" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
 </div><!-- .form-group -->
 <div class="form-group">
@@ -400,15 +400,15 @@ echo html_form_select("gm", $MoY_long, $gm, 0, "", false, 'class="form-control" 
 <h5>Convert from Hebrew to Gregorian date</h5>
 <form method="get" action="<?php echo $action ?>">
 <div class="form-row">
-<div class="form-group">
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:48px" name="hd" placeholder="day" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
 </div><!-- .form-group -->
-<div class="form-group">
+<div class="form-group mr-1">
 <?php
 echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-control" style="width:120px"');
 ?>
 </div><!-- .form-group -->
-<div class="form-group">
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .form-group -->
 <div class="form-group">
@@ -427,8 +427,8 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-co
 
 function my_footer() {
 ?>
-<hr class="hidden-print">
-<div class="row hidden-print">
+<hr class="d-print-none">
+<div class="row d-print-none">
 <div class="col-sm-6 col-sm-offset-3">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -442,8 +442,8 @@ function my_footer() {
 </script>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
-<hr class="hidden-print">
-<div class="row hidden-print">
+<hr class="d-print-none">
+<div class="row d-print-none">
 <div class="col-sm-6">
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the

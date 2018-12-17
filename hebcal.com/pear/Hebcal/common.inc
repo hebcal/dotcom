@@ -486,7 +486,10 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+-->
+<link rel="stylesheet" href="/i/bootstrap-4.1.3/css/bootstrap.min.css">
 $xtra_stylesheet<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

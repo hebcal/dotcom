@@ -1397,7 +1397,7 @@ sub nav_pagination {
             ) ? " nofollow" : "";
 
     my $nav_pagination = <<EOHTML;
-<nav class="text-center hidden-print">
+<nav class="text-center d-print-none">
 <ul class="pagination">
 <li class="page-item"><a class="page-link" href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
@@ -1520,7 +1520,7 @@ sub results_page_toolbar {
     my($filename) = @_;
 
     my $html = <<EOHTML;
-<div class="btn-toolbar hidden-print">
+<div class="d-print-none">
   <div class="btn-group mr-2" role="group" data-toggle="buttons">
    <label class="btn btn-secondary btn-sm active">
     <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
@@ -1540,7 +1540,7 @@ EOHTML
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     $pdf_url =~ s/&/&amp;/g;
-    my $btn_print_html = qq{<a class="btn btn-secondary btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a>};
+    my $btn_print_html = qq{<div class="btn-group" role="group"><a class="btn btn-secondary btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a></div>};
 
     if (!param_true("c")) {
         $html .= $btn_print_html;
@@ -1755,7 +1755,7 @@ EOHTML
     print "</div><!-- .col-sm-8 -->\n";
 
     my $header_ad = <<EOHTML;
-<div class="col-sm-4 hidden-print">
+<div class="col-sm-4 d-print-none">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- banner-320x100 -->

@@ -19,6 +19,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.glyphicons.glyphicons-volume-up:before {
+  content: "\E185";
+}
 .glyphicons.glyphicons-pencil:before {
   content: "\E031";
 }

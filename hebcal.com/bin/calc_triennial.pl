@@ -518,7 +518,7 @@ $download_button_diaspora
 $download_button_israel
 <a class="btn btn-secondary" title="Download aliyah-by-aliyah breakdown"
 href="#download"><i
-class="glyphicon glyphicon-download-alt"></i> Leyning spreadsheet</a>
+class="glyphicons glyphicons-download-alt"></i> Leyning spreadsheet</a>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
@@ -816,7 +816,7 @@ sub write_sedra_sidebar {
     my($parshiot,$current) = @_;
 
     print OUT2 <<EOHTML;
-<div class="col-sm-2 hidden-xs">
+<div class="col-sm-2 d-none d-sm-block">
 <div class="sidebar-nav">
 <ul class="nav nav-list">
 EOHTML
@@ -871,7 +871,7 @@ sub write_drash_links {
     }
     return 0 unless $count;
 
-    print OUT2 qq{<div class="hidden-print">\n<h3 id="drash">Commentary</h3>\n<ul class="bullet-list-inline">\n};
+    print OUT2 qq{<div class="d-print-none">\n<h3 id="drash">Commentary</h3>\n<ul class="bullet-list-inline">\n};
 
     my %site_name = (
         "ou" => "Orthodox Union",
@@ -889,7 +889,7 @@ sub write_drash_links {
         }
     }
 
-    print OUT2 qq{</ul>\n</div><!-- .hidden-print -->\n};
+    print OUT2 qq{</ul>\n</div><!-- .d-print-none -->\n};
 
     return $count;
 }
@@ -1042,7 +1042,7 @@ sub write_sedra_page
         $url =~ s/&/&amp;/g;
         #my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
         #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
-        $ort_tikkun = qq{<a class="outbound btn btn-secondary btn-sm hidden-print" rel="nofollow" href="$url"><i class="glyphicon glyphicon-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
+        $ort_tikkun = qq{<a class="outbound btn btn-secondary btn-sm d-print-none" rel="nofollow" href="$url"><i class="glyphicons glyphicons-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
     }
 
     my($torah_book,undef) = split(/ /, $torah, 2);
@@ -1050,16 +1050,20 @@ sub write_sedra_page
     print OUT2 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
+<div class="d-print-none">
+<div class="d-none d-sm-block">
 <nav>
-<ol class="breadcrumb hidden-xs hidden-print">
+<ol class="breadcrumb">
   <li class="breadcrumb-item"><a href="/sedrot/">Torah Readings</a></li>
   <li class="breadcrumb-item"><a href="/sedrot/#$torah_book">$torah_book</a></li>
   <li class="breadcrumb-item active">$h</li>
 </ol>
 </nav>
-<h1><span class="hidden-xs">Parashat</span> $h / <bdo dir="rtl"><span class="hidden-xs" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h1>
+</div><!-- .d-none d-sm-block -->
+</div><!-- .d-print-none -->
+<h1><span class="d-none d-sm-inline">Parashat</span> $h / <bdo dir="rtl"><span class="d-none d-sm-inline" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h1>
 $intro_summary
-<h3 id="torah"><span class="hidden-xs">Torah Portion:</span>
+<h3 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="$torah_href"
 title="English translation from JPS Tanakh">$torah</a></h3>
 $ort_tikkun
