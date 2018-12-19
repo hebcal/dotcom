@@ -300,7 +300,11 @@ foreach my $h (@parashah_list) {
 # init global vars needed for html
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
-my $html_footer = HebcalHtml::footer_bootstrap3(undef, undef, 0);
+my $html_footer = HebcalHtml::footer_bootstrap3(undef, undef, 0, qq{
+<script type="text/javascript">
+\$('#ort-audio').tooltip();
+</script>
+});
 
 foreach my $h (@parashah_list) {
     write_sedra_page($axml,$h,$prev{$h},$next{$h},
@@ -1042,7 +1046,7 @@ sub write_sedra_page
         $url =~ s/&/&amp;/g;
         #my $img = qq{<img src="/i/glyphicons_pro_1.7/glyphicons/png/glyphicons_184_volume_up.png" width="24" height="26" alt="Audio from ORT">};
         #my $img = qq{<i class="icon-volume-up icon-large"></i> Audio from ORT &raquo;};
-        $ort_tikkun = qq{<a class="outbound btn btn-secondary btn-sm d-print-none" rel="nofollow" href="$url"><i class="glyphicons glyphicons-volume-up"></i> Tikkun &amp; audio from World ORT &raquo;</a>};
+        $ort_tikkun = qq{ &nbsp;<small><a class="outbound d-print-none" data-toggle="tooltip" id="ort-audio" rel="nofollow" href="$url" title="Tikkun &amp; audio from World ORT"><i class="glyphicons glyphicons-volume-up"></i></a></small>};
     }
 
     my($torah_book,undef) = split(/ /, $torah, 2);
@@ -1065,8 +1069,7 @@ sub write_sedra_page
 $intro_summary
 <h3 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="$torah_href"
-title="English translation from JPS Tanakh">$torah</a></h3>
-$ort_tikkun
+title="English translation from JPS Tanakh">$torah</a>$ort_tikkun</h3>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <div class="row">
