@@ -1261,7 +1261,7 @@ EOHTML
     my $xtra_html=<<JSCRIPT_END;
 <script src="$Hebcal::JS_TYPEAHEAD_BUNDLE_URL"></script>
 <script src="$Hebcal::JS_APP_URL"></script>
-<script type="text/javascript">
+<script>
 var d=document;
 function s6(val){
 d.f1.month.value='x';
@@ -1507,11 +1507,11 @@ sub results_page_toolbar {
 <div class="d-print-none">
   <div class="btn-group mr-2" role="group" data-toggle="buttons">
    <label class="btn btn-secondary btn-sm active">
-    <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
+    <input type="radio" name="view" id="toggle-month" checked>
     <span class="glyphicons glyphicons-calendar"></span> Month
    </label>
    <label class="btn btn-secondary btn-sm">
-    <input type="radio" name="view" id="toggle-list" autocomplete="off">
+    <input type="radio" name="view" id="toggle-list">
     <span class="glyphicons glyphicons-list"></span> List
    </label>
   </div><!-- .btn-group -->
@@ -1524,7 +1524,7 @@ EOHTML
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     $pdf_url =~ s/&/&amp;/g;
-    my $btn_print_html = qq{<div class="btn-group" role="group"><a class="btn btn-secondary btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a></div>};
+    my $btn_print_html = qq{<div class="btn-group" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a></div>};
 
     if (!param_true("c")) {
         $html .= $btn_print_html;
@@ -1603,7 +1603,7 @@ sub results_page
                             -charset => "UTF-8");
 
     my $xtra_head = <<EOHTML;
-<style type="text/css">
+<style>
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
 \@media print { div.pbba { page-break-before: always } }
@@ -1853,7 +1853,7 @@ EOHTML
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="$Hebcal::JS_APP_URL"></script>
-<script type="text/javascript">
+<script>
 \$(document).ready(function() {
     \$('#toggle-month').on('change', function() {
         \$('div.agenda').hide();

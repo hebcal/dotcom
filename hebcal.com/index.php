@@ -169,7 +169,7 @@ if ($hmnum == 13 && $hd >= 1) {
 $xtra_head = <<<EOD
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
-<style type="text/css">
+<style>
 ul.list-inline li:after{content:"\\00a0\\00b7"}
 ul.list-inline li:last-child:after{content:""}
 .h1, .h2, .h3, h1, h2, h3 {

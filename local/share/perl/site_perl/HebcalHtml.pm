@@ -487,7 +487,7 @@ $xtra_stylesheet<script>
   ga('send', 'pageview');
 </script>
 <link rel="stylesheet" href="/i/hc-gip-1.0.css">
-<style type="text/css">
+<style>
 .label{text-transform:none}
 :lang(he) {
   font-family:'Alef','SBL Hebrew',David,serif;
@@ -541,9 +541,7 @@ $xtra_head</head>
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
     $menu
-    </ul>
     <form class="form-inline my-2 my-lg-0" role="search" method="get" id="searchform" action="/home/">
      <input name="s" id="s" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
     </form>
@@ -557,7 +555,7 @@ EOHTML
     return $str;
 }
 
-my $URCHIN = q{<script type="text/javascript">
+my $URCHIN = q{<script>
 $(document).ready(function(){
   $('a.amzn').click(function(){
     var x = $(this).attr('id');
@@ -598,7 +596,7 @@ sub footer_bootstrap3 {
     my $str = <<EOHTML;
 </div><!-- #content -->
 
-<footer role="contentinfo" class="hebcal-footer d-print-none">
+<footer class="hebcal-footer d-print-none">
 <div class="row">
 <div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a

@@ -301,7 +301,7 @@ foreach my $h (@parashah_list) {
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
 my $html_footer = HebcalHtml::footer_bootstrap3(undef, undef, 0, qq{
-<script type="text/javascript">
+<script>
 \$('#ort-audio').tooltip();
 </script>
 });

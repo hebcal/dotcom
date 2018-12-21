@@ -482,7 +482,7 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
 
     $html = <<<EOD
 <!DOCTYPE html>
-<html><head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -500,7 +500,7 @@ $xtra_stylesheet<script>
   ga('send', 'pageview');
 </script>
 <link rel="stylesheet" href="/i/hc-gip-1.0.css">
-<style type="text/css">
+<style>
 .hebcal-footer {
   padding-top: 40px;
   padding-bottom: 40px;
@@ -548,14 +548,11 @@ $xtra_head</head>
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
     $menu
-    </ul>
     <form class="form-inline my-2 my-lg-0" role="search" method="get" id="searchform" action="/home/">
      <input name="s" id="s" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
     </form>
-    </div><!--/.navbar-collapse -->
-  </div>
+  </div><!--/.navbar-collapse -->
 </nav>
 
 <div class="container">
@@ -576,7 +573,7 @@ function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
     $html = <<<EOD
 </div><!-- #content -->
 
-<footer role="contentinfo" class="hebcal-footer d-print-none">
+<footer class="hebcal-footer d-print-none">
 <div class="row">
 <div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
@@ -600,7 +597,7 @@ $last_updated_text
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 $xtra_html
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
   $('a.amzn').click(function(){
     var x = $(this).attr('id');

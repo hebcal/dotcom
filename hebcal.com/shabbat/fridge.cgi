@@ -117,7 +117,7 @@ my $header = <<EOHTML;
   ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 </script>
-<style type="text/css">
+<style>
 body {
   font-family: '$font_family', sans-serif;
 }

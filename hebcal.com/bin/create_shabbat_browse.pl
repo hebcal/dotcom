@@ -344,7 +344,7 @@ EOHTML
     my $xtra_html=<<JSCRIPT_END;
 <script src="$Hebcal::JS_TYPEAHEAD_BUNDLE_URL"></script>
 <script src="$Hebcal::JS_APP_URL"></script>
-<script type="text/javascript">
+<script>
 window['hebcal'].createCityTypeahead(true);
 </script>
 JSCRIPT_END

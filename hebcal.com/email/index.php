@@ -360,7 +360,7 @@ $js_hebcal_app_url = hebcal_js_app_url();
 $xtra_html = <<<EOD
 <script src="$js_typeahead_url"></script>
 <script src="$js_hebcal_app_url"></script>
-<script type="text/javascript">
+<script>
 window['hebcal'].createCityTypeahead(false);
 $('#havdalahInfo').click(function(e){
  e.preventDefault();
