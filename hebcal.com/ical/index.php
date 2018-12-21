@@ -2,7 +2,7 @@
 /***********************************************************************
  * Jewish Holiday downloads for desktop, mobile and web calendars
  *
- * Copyright (c) 2017  Michael J. Radwin.
+ * Copyright (c) 2018  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -49,7 +49,7 @@ echo html_header_bootstrap3($page_title, $xtra_head);
 ?>
 <div class="row">
 <div class="col-sm-12">
-<h1>Jewish Holiday downloads <small>for desktop, mobile and web calendars</small></h1>
+<h1>Jewish Holiday downloads <small class="text-muted">for desktop, mobile and web calendars</small></h1>
 
 <p class="lead">Free Jewish holidays for Microsoft
 Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar),
@@ -72,16 +72,16 @@ function cal_item($path,$title,$subtitle,$feed_length,$suppress_outlook=false) {
 <h3><?php echo $title ?></h3>
 <p><?php echo $subtitle ?>. <small><?php echo $feed_length ?>-year perpetual feed.</small></p>
 <div class="btn-toolbar">
-<a class="btn btn-default btn-sm download" id="quick-ical-<?php echo $path ?>"
+<a class="btn btn-secondary btn-sm mr-1 download" id="quick-ical-<?php echo $path ?>"
 title="Subscribe to <?php echo $title ?> for iPhone, iPad, macOS Desktop"
-href="<?php echo $webcal ?>"><i class="glyphicon glyphicon-download-alt"></i> iPhone, iPad, macOS</a>
-<a class="btn btn-default btn-sm download" id="quick-gcal-<?php echo $path ?>"
+href="<?php echo $webcal ?>"><i class="glyphicons glyphicons-download-alt"></i> iPhone, iPad, macOS</a>
+<a class="btn btn-secondary btn-sm mr-1 download" id="quick-gcal-<?php echo $path ?>"
 title="Add <?php echo $title ?> to Google Calendar"
-href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i class="glyphicon glyphicon-download-alt"></i> Google Calendar</a>
+href="http://www.google.com/calendar/render?cid=<?php echo $http_esc ?>"><i class="glyphicons glyphicons-download-alt"></i> Google Calendar</a>
 <?php if (!$suppress_outlook) { ?>
-<a class="btn btn-default btn-sm download" id="quick-csv-<?php echo $path ?>"
+<a class="btn btn-secondary btn-sm mr-1 download" id="quick-csv-<?php echo $path ?>"
 title="Download <?php echo $title ?> to Microsoft Outlook"
-href="<?php echo $csv_url ?>" download="<?php echo $path ?>.csv"><i class="glyphicon glyphicon-download-alt"></i> Outlook CSV</a>
+href="<?php echo $csv_url ?>" download="<?php echo $path ?>.csv"><i class="glyphicons glyphicons-download-alt"></i> Outlook CSV</a>
 <?php
     } // suppress_outlook
 ?>
@@ -131,7 +131,7 @@ cal_divider();
 <h3>Advanced Settings</h3>
 Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc.
 <div class="btn-toolbar">
-  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicon glyphicon-pencil glyphicon glyphicon-white"></i> Customize your calendar &raquo;</a>
+  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicons glyphicons-pencil glyphicons glyphicons-white"></i> Customize your calendar &raquo;</a>
 </div>
 </div><!-- .col-sm-6 -->
 <?php

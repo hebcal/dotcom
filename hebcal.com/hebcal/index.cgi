@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2017  Michael J. Radwin.
+# Copyright (c) 2018  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1084,54 +1084,40 @@ EOHTML
     qq{<div class="col-sm-6">\n};
 
     print qq{<fieldset>\n},
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "maj",
+    HebcalHtml::checkbox($q, -name => "maj",
                  -id => "maj",
                  -checked => 1,
                  -label => "Major Holidays"),
-    "</label></div>\n",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "min",
-         -id => "min",
-         -checked => 1,
-         -label => "Minor Holidays"),
-    qq{\n<small class="text-muted">(Tu BiShvat, Lag BaOmer, ...)</small></label></div>\n},
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "nx",
+    HebcalHtml::checkbox($q, -name => "min",
+                 -id => "min",
+                 -checked => 1,
+                 -label => qq{Minor Holidays <small class="text-muted">(Tu BiShvat, Lag BaOmer, ...)</small>}),
+    HebcalHtml::checkbox($q, -name => "nx",
                  -id => "nx",
                  -checked => 0,
                  -label => "Rosh Chodesh"),
-    "</label></div>\n",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "mf",
+    HebcalHtml::checkbox($q, -name => "mf",
                  -id => "mf",
                  -checked => 0,
-                 -label => "Minor Fasts"),
-    qq{\n<small class="text-muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label></div>\n},
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "ss",
+                 -label => qq{Minor Fasts <small class="text-muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small>}),
+    HebcalHtml::checkbox($q, -name => "ss",
                  -id => "ss",
                  -checked => 0,
-                 -label => "Special Shabbatot"),
-    qq{\n<small class="text-muted">(Shabbat Shekalim, Zachor, ...)</small></label></div>\n},
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "mod",
-         -id => "mod",
-         -checked => 0,
-         -label => "Modern Holidays"),
-    qq{\n<small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label></div>\n},
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "o",
+                 -label => qq{Special Shabbatot <small class="text-muted">(Shabbat Shekalim, Zachor, ...)</small>}),
+    HebcalHtml::checkbox($q, -name => "mod",
+                 -id => "mod",
+                 -checked => 0,
+                 -label => qq{Modern Holidays <small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small>}),
+    HebcalHtml::checkbox($q, -name => "o",
+                 -id => "o",
                  -label => "Days of the Omer"),
-    "</label></div>\n",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "F",
+    HebcalHtml::checkbox($q, -name => "F",
+                 -id => "F",
                  -label => "Daf Yomi"),
-    "</label></div>\n",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "s",
+    HebcalHtml::checkbox($q, -name => "s",
+                 -id => "s",
                  -label => "Weekly Torah portion on Saturdays"),
-    "</label></div>\n";
+    "\n";
 
     print $diaspora_israel_radio;
 
@@ -1166,16 +1152,13 @@ EOHTML
                    -class => "form-control",
                    -labels => \%Hebcal::lang_names),
     "</div>\n",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "D",
+    HebcalHtml::checkbox($q, -name => "D",
                  -id => "d1",
                  -label => "Show Hebrew date for dates with some event"),
-    "</label></div>",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "d",
+    HebcalHtml::checkbox($q, -name => "d",
                  -id => "d2",
                  -label => "Show Hebrew date every day of the year"),
-    "</label></div>\n";
+    "\n";
 
     print qq{</fieldset>\n};
 
@@ -1242,10 +1225,11 @@ EOHTML
             ),
             "</div>\n",
             qq{<div class="form-group"><label for="m1">Havdalah minutes past sundown
-<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicon glyphicon-info-sign"></span></a>
+<a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicons glyphicons-info-sign"></span></a>
 </label>},
             $q->textfield(
                 -name      => "m",
+                -id        => "m1",
                 -pattern   => '\d*',
                 -class     => "form-control",
                 -style     => "width:60px",
@@ -1277,7 +1261,7 @@ EOHTML
     my $xtra_html=<<JSCRIPT_END;
 <script src="$Hebcal::JS_TYPEAHEAD_BUNDLE_URL"></script>
 <script src="$Hebcal::JS_APP_URL"></script>
-<script type="text/javascript">
+<script>
 var d=document;
 function s6(val){
 d.f1.month.value='x';
@@ -1397,9 +1381,9 @@ sub nav_pagination {
             ) ? " nofollow" : "";
 
     my $nav_pagination = <<EOHTML;
-<nav class="text-center hidden-print">
+<nav class="text-center d-print-none">
 <ul class="pagination">
-<li><a href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
+<li class="page-item"><a class="page-link" href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
     ;
 
@@ -1410,10 +1394,10 @@ EOHTML
         my $mon_long = $Hebcal::MoY_long{$mon};
         my $mon_short = $Hebcal::MoY_short[$mon-1];
         my $cal_id = sprintf("%04d-%02d", $year, $mon);
-        $nav_pagination .= qq{<li><a title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
+        $nav_pagination .= qq{<li class="page-item"><a class="page-link" title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
     }
     $nav_pagination .= <<EOHTML;
-<li><a href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
+<li class="page-item"><a class="page-link" href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>
 </ul><!-- .pagination -->
 </nav>
 EOHTML
@@ -1469,42 +1453,6 @@ sub next_and_prev_urls {
     return ($prev_url,$next_url,$prev_title,$next_title);
 }
 
-sub email_form_html {
-    my($q) = @_;
-    my $email_form = <<EOHTML;
-<form class="form-inline" action="https://www.hebcal.com/email/" method="post">
-<fieldset>
-<input type="hidden" name="v" value="1">
-EOHTML
-;
-    if ($q->param("zip")) {
-        $email_form .= qq{<input type="hidden" name="geo" value="zip">\n};
-        $email_form .= qq{<input type="hidden" name="zip" value="} . $q->param("zip") . qq{">\n};
-    } elsif ($q->param("geonameid")) {
-        $email_form .= qq{<input type="hidden" name="geo" value="geoname">\n};
-        $email_form .= qq{<input type="hidden" name="geonameid" value="} . $q->param("geonameid") . qq{">\n};
-    } else {
-        $email_form .= qq{<input type="hidden" name="geo" value="city">\n};
-        $email_form .= qq{<input type="hidden" name="city" value="} . $q->param("city") . qq{">\n};
-    }
-
-    if (defined $q->param("m") && $q->param("m") =~ /^\d+$/) {
-        $email_form .= qq{<input type="hidden" name="m" value="} . $q->param("m") . qq{">\n};
-    }
-
-    $email_form .= <<EOHTML;
-<p><small>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</small></p>
-<div class="input-append input-prepend">
-<span class="add-on"><i class="glyphicon glyphicon-envelope"></i></span><input type="email" name="em" placeholder="Email address">
-<button type="submit" class="btn" name="modify" value="1"> Sign up</button>
-</div>
-</fieldset>
-</form>
-EOHTML
-;
-    return $email_form;
-}
-
 sub results_page_warnings {
     my($events) = @_;
 
@@ -1549,32 +1497,34 @@ accurate.
 
 sub settings_button_html {
     my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
-    return qq{<a class="btn btn-default btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicon glyphicon-cog"></i> Settings</a>};
+    return qq{<a class="btn btn-secondary btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicons glyphicons-cog"></i> Settings</a>};
 }
 
 sub results_page_toolbar {
     my($filename) = @_;
 
     my $html = <<EOHTML;
-<div class="btn-toolbar hidden-print">
-  <div class="btn-group" data-toggle="buttons">
-   <label class="btn btn-default btn-sm active">
-    <input type="radio" name="view" id="toggle-month" autocomplete="off" checked>
-    <span class="glyphicon glyphicon-calendar"></span> Month
+<div class="d-print-none">
+  <div class="btn-group mr-2" role="group" data-toggle="buttons">
+   <label class="btn btn-secondary btn-sm active">
+    <input type="radio" name="view" id="toggle-month" checked>
+    <span class="glyphicons glyphicons-calendar"></span> Month
    </label>
-   <label class="btn btn-default btn-sm">
-    <input type="radio" name="view" id="toggle-list" autocomplete="off">
-    <span class="glyphicon glyphicon-list"></span> List
+   <label class="btn btn-secondary btn-sm">
+    <input type="radio" name="view" id="toggle-list">
+    <span class="glyphicons glyphicons-list"></span> List
    </label>
   </div><!-- .btn-group -->
 EOHTML
 ;
 
+    $html .= qq{<div class="btn-group mr-1" role="group">};
     $html .= HebcalHtml::download_html_modal_button(" btn-sm");
+    $html .= qq{</div>\n};
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
     $pdf_url =~ s/&/&amp;/g;
-    my $btn_print_html = qq{<a class="btn btn-default btn-sm download" id="pdf" href="$pdf_url"><i class="glyphicon glyphicon-print"></i> Print</a>};
+    my $btn_print_html = qq{<div class="btn-group" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a></div>};
 
     if (!param_true("c")) {
         $html .= $btn_print_html;
@@ -1596,15 +1546,15 @@ EOHTML
 #            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
         $html .= <<EOHTML;
-  <div class="btn-group">
+  <div class="btn-group mr-2" role="group">
     $btn_print_html
-    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul class="dropdown-menu">
-      <li><a class="download" id="pdf" href="$pdf_url">Monthly calendar</a></li>
-      <li><a href="$url">Candle-lighting times only</a></li>
+      <li><a class="dropdown-item download" id="pdf" href="$pdf_url">Monthly calendar</a></li>
+      <li><a class="dropdown-item" href="$url">Candle-lighting times only</a></li>
     </ul>
   </div>
 EOHTML
@@ -1653,7 +1603,7 @@ sub results_page
                             -charset => "UTF-8");
 
     my $xtra_head = <<EOHTML;
-<style type="text/css">
+<style>
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
 \@media print { div.pbba { page-break-before: always } }
@@ -1757,10 +1707,10 @@ EOHTML
 
     my $h1_extra = "";
     if (param_true("c")) {
-        $h1_extra = "<br><small>" . $cconfig{"title"} . "</small>";
+        $h1_extra = "<br><small class=\"text-muted\">" . $cconfig{"title"} . "</small>";
     } else {
         my $where = param_true("i") ? "Israel" : "Diaspora";
-        $h1_extra = " <small>$where</small>";
+        $h1_extra = " <small class=\"text-muted\">$where</small>";
     }
 
     my $head_divs = <<EOHTML;
@@ -1789,9 +1739,9 @@ EOHTML
     print "</div><!-- .col-sm-8 -->\n";
 
     my $header_ad = <<EOHTML;
-<div class="col-sm-4 hidden-print">
+<div class="col-sm-4 d-print-none">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- banner-320x100 -->
 <ins class="adsbygoogle"
  style="display:inline-block;width:320px;height:100px"
@@ -1903,7 +1853,7 @@ EOHTML
     my $xtra_html=<<JSCRIPT_END;
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script src="$Hebcal::JS_APP_URL"></script>
-<script type="text/javascript">
+<script>
 \$(document).ready(function() {
     \$('#toggle-month').on('change', function() {
         \$('div.agenda').hide();

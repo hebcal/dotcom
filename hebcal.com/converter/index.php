@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert between hebrew and gregorian calendar dates.
  *
- * Copyright (c) 2017  Michael J. Radwin.
+ * Copyright (c) 2018  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -303,7 +303,7 @@ function my_header($hebdate, $result = false) {
 $xtra_head = <<<EOD
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates.$description">
-<style type="text/css">
+<style>
 #converter-results {
  margin-top: 32px;
  margin-bottom: 32px;
@@ -319,9 +319,6 @@ $xtra_head = <<<EOD
   font-size: 37px;
 }
 .nobr { white-space: nowrap }
-#converter-form .form-inline .form-control {
-  display: inline-block;
-}
 </style>
 EOD;
 
@@ -368,46 +365,56 @@ function form($head, $message, $help = "") {
 	$action = substr($action, 0, $pos);
     }
 ?>
-<div id="converter-form" class="hidden-print">
+<div id="converter-form" class="d-print-none">
 <div class="row">
 <div class="col-sm-6">
 <h5>Convert from Gregorian to Hebrew date</h5>
-<form class="form-inline" action="<?php echo $action ?>">
-<div class="form-group">
+<form method="get" action="<?php echo $action ?>">
+<div class="form-row">
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:48px" name="gd" placeholder="day" value="<?php echo $gd ?>" size="2" maxlength="2" id="gd" pattern="\d*">
+</div><!-- .form-group -->
+<div class="form-group mr-1">
 <?php
 global $MoY_long;
 echo html_form_select("gm", $MoY_long, $gm, 0, "", false, 'class="form-control" style="width:120px"');
 ?>
+</div><!-- .form-group -->
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:66px" name="gy" placeholder="year" value="<?php echo $gy ?>" size="4" maxlength="4" id="gy" pattern="\d*">
 </div><!-- .form-group -->
-<div class="clearfix">
-<div class="checkbox">
-<label class="checkbox" for="gs"><input type="checkbox" name="gs" value="on" id="gs">
-After sunset</label>
-</div><!-- .checkbox -->
-</div><!-- .clearfix -->
 <div class="form-group">
-<button name="g2h" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Hebrew</button>
+<div class="form-check">
+    <input type="checkbox" name="gs" value="on" id="gs">
+    <label class="checkbox" for="gs">After sunset</label>
+</div><!-- .form-check -->
+</div><!-- .form-group -->
+</div><!-- .form-row -->
+<div class="form-group">
+<button type="submit" name="g2h" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Hebrew</button>
 </div><!-- .form-group -->
 </form>
 </div><!-- .col-sm-6 -->
 
 <div class="col-sm-6">
 <h5>Convert from Hebrew to Gregorian date</h5>
-<form class="form-inline" action="<?php echo $action ?>">
-<div class="form-group">
+<form method="get" action="<?php echo $action ?>">
+<div class="form-row">
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:48px" name="hd" placeholder="day" value="<?php echo $hd ?>" size="2" maxlength="2" id="hd" pattern="\d*">
+</div><!-- .form-group -->
+<div class="form-group mr-1">
 <?php
 echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-control" style="width:120px"');
 ?>
+</div><!-- .form-group -->
+<div class="form-group mr-1">
 <input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .form-group -->
-<div class="clearfix">
 <div class="form-group">
-<button name="h2g" type="submit" value="1" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Convert to Gregorian</button>
+<button type="submit" name="h2g" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Gregorian</button>
 </div><!-- .form-group -->
-</div><!-- .clearfix -->
+</div><!-- .form-row -->
 </form>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
@@ -420,11 +427,11 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-co
 
 function my_footer() {
 ?>
-'<hr class="hidden-print">
-<div class="row hidden-print">
+<hr class="d-print-none">
+<div class="row d-print-none">
 <div class="col-sm-6 col-sm-offset-3">
 <h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- banner-320x100 -->
 <ins class="adsbygoogle"
  style="display:inline-block;width:320px;height:100px"
@@ -435,23 +442,23 @@ function my_footer() {
 </script>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
-<hr class="hidden-print">
-<div class="row hidden-print">
+<hr class="d-print-none">
+<div class="row d-print-none">
 <div class="col-sm-6">
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
-<p><a class="btn btn-default" href="/yahrzeit/"><i class="glyphicon glyphicon-user"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+<p><a class="btn btn-secondary" href="/yahrzeit/" role="button"><i class="glyphicons glyphicons-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col-sm-6 -->
 <div class="col-sm-6">
 <h5>Hebrew Date Feeds</h5>
 <p>Today's Hebrew date for your RSS reader.</p>
-<p><a class="btn btn-default" href="/etc/hdate-en.xml"
+<p><a class="btn btn-secondary" href="/etc/hdate-en.xml"
 title="Today's Hebrew Date in English Transliteration RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in English Transliteration RSS">
 English transliteration feed &raquo;</a></p>
-<p><a class="btn btn-default" href="/etc/hdate-he.xml"
+<p><a class="btn btn-secondary" href="/etc/hdate-he.xml"
 title="Today's Hebrew Date in Hebrew RSS"><img
 src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
 alt="Today's Hebrew Date in Hebrew RSS">

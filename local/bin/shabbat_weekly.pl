@@ -190,9 +190,16 @@ sub exit_if_yomtov {
 
 sub parse_all_configs {
     INFO("Parsing all configs");
+    my $warnings = 0;
     while(my($to,$cfg) = each(%SUBS)) {
         my $status = parse_config($to,$cfg);
-        delete $SUBS{$to} unless $status;
+        unless ($status) {
+            delete $SUBS{$to};
+            $warnings++;
+        }
+    }
+    if ($warnings) {
+        WARN("Skipped $warnings subscribers due to config failures");
     }
 }
 

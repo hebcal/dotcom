@@ -3,7 +3,7 @@
 ########################################################################
 # Refrigerator candle-lighting times.  1 page for entire year.
 #
-# Copyright (c) 2017  Michael J. Radwin.
+# Copyright (c) 2018  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -106,7 +106,7 @@ my $header = <<EOHTML;
 <html><head>
 <meta charset="UTF-8">
 <title>$title</title>
-<link href='//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css' rel='stylesheet' type='text/css'>
+<link href='/i/normalize-8.0.1.min.css' rel='stylesheet' type='text/css'>
 <link href='//fonts.googleapis.com/css?family=$font_list' rel='stylesheet' type='text/css'>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -117,7 +117,7 @@ my $header = <<EOHTML;
   ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 </script>
-<style type="text/css">
+<style>
 body {
   font-family: '$font_family', sans-serif;
 }

@@ -3,7 +3,7 @@
 /***********************************************************************
  * Hebcal PHP helper functions
  *
- * Copyright (c) 2017  Michael J. Radwin.
+ * Copyright (c) 2018  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -425,30 +425,30 @@ function html_menu_item_bootstrap($path, $title, $tooltip, $selected) {
     if ($path != "/" && $path == $selected) {
 	$class = "active";
     }
-    $str = "<li";
+    $str = "<li class=\"nav-item";
     if ($class !== false) {
-	$str .= " class=\"$class\"";
+	$str .= " $class";
     }
-    $str .= "><a href=\"$path\" title=\"$tooltip\">$title</a>";
+    $str .= "\"><a class=\"nav-link\" href=\"$path\" title=\"$tooltip\">$title</a>";
     return $str;
 }
 
 function html_menu_bootstrap3($selected) {
     global $HTML_MENU_ITEMS_V2;
-    $str = "<ul class=\"nav navbar-nav\">";
+    $str = "<ul class=\"navbar-nav mr-auto\">";
     foreach ($HTML_MENU_ITEMS_V2 as $item) {
         $path = $item[0];
         $title = $item[1];
         $tooltip = $item[2];
         if (isset($item[3])) {
-            $str .= "<li class=\"dropdown\">";
-            $str .= "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">$title <span class=\"caret\"></span></a>";
-            $str .= "<ul class=\"dropdown-menu\" role=\"menu\">";
+            $str .= "<li class=\"nav-item dropdown\">";
+            $str .= "<a href=\"#\" class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">$title <span class=\"caret\"></span></a>";
+            $str .= "<div class=\"dropdown-menu\" role=\"menu\">";
             for ($i = 3; isset($item[$i]); $i++) {
                 $str .= html_menu_item_bootstrap($item[$i][0], $item[$i][1], $item[$i][2], $selected);
                 $str .= "</li>";
             }
-            $str .= "</ul>";
+            $str .= "</div>";
         } else {
             $str .= html_menu_item_bootstrap($path, $title, $tooltip, $selected);
         }
@@ -482,12 +482,14 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
 
     $html = <<<EOD
 <!DOCTYPE html>
-<html><head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <title>$title</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!--
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+-->
+<link rel="stylesheet" href="/i/bootstrap-4.1.3/css/bootstrap.min.css">
 $xtra_stylesheet<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -497,7 +499,8 @@ $xtra_stylesheet<script>
   ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 </script>
-<style type="text/css">
+<link rel="stylesheet" href="/i/hc-gip-1.0.css">
+<style>
 .hebcal-footer {
   padding-top: 40px;
   padding-bottom: 40px;
@@ -539,25 +542,18 @@ $xtra_stylesheet<script>
 </style>
 $xtra_head</head>
 <body>
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      $logo
-    </div>
-    <div class="navbar-collapse collapse">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  $logo
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     $menu
-    <form class="navbar-form navbar-right" role="search" method="get" id="searchform" action="/home/">
-     <input name="s" id="s" type="text" class="form-control" placeholder="Search">
+    <form class="form-inline my-2 my-lg-0" role="search" method="get" id="searchform" action="/home/">
+     <input name="s" id="s" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
     </form>
-    </div><!--/.navbar-collapse -->
-  </div>
-</div><!-- .navbar -->
+  </div><!--/.navbar-collapse -->
+</nav>
 
 <div class="container">
 <div id="content">
@@ -577,11 +573,11 @@ function html_footer_bootstrap3($last_updated = true, $xtra_html = "") {
     $html = <<<EOD
 </div><!-- #content -->
 
-<footer role="contentinfo" class="hebcal-footer hidden-print">
+<footer class="hebcal-footer d-print-none">
 <div class="row">
 <div class="col-sm-12">
 <p><small>Except where otherwise noted, content on this site is licensed under a <a
-rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+rel="license" href="https://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
 <p><small>Some location data comes from <a href="http://www.geonames.org/">GeoNames</a>,
 also under a cc-by license.</small></p>
 <ul class="bullet-list-inline">
@@ -597,10 +593,11 @@ $last_updated_text
 </footer>
 </div> <!-- .container -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 $xtra_html
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
   $('a.amzn').click(function(){
     var x = $(this).attr('id');

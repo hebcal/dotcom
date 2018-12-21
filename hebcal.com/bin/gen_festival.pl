@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2017 Michael J. Radwin.
+# Copyright (c) 2018 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -162,7 +162,7 @@ foreach my $f (@FESTIVALS)
 }
 
 my $pagead_300x250=<<EOHTML;
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
  style="display:inline-block;width:300px;height:250px"
@@ -476,7 +476,7 @@ sub table_row_one_year_only {
         print $fh "<br>";
         print $fh table_cell_observed($f, $evt2, $show_year);
     }
-    print $fh qq{</td>\n<td class="hidden-xs">$short_descr</td>\n};
+    print $fh qq{</td>\n<td class="d-none d-sm-block">$short_descr</td>\n};
     print $fh "</tr>\n";
 }
 
@@ -485,14 +485,14 @@ sub table_header_one_year_only {
     my $col2width = $show_year ? 180 : 156;
     print $fh <<EOHTML;
 <table class="table table-striped table-condensed">
-<col style="width:180px"><col style="width:${col2width}px"><col class="hidden-xs">
+<col style="width:180px"><col style="width:${col2width}px"><col class="d-none d-sm-block">
 <tbody>
 EOHTML
 ;
 
     print $fh "<tr><th>Holiday</th>";
     print $fh "<th>Dates</th>";
-    print $fh qq{<th class="hidden-xs">Description</th>};
+    print $fh qq{<th class="d-none d-sm-block">Description</th>};
     print $fh "</tr>\n";
 }
 
@@ -536,7 +536,7 @@ sub get_index_body_preamble {
     my $str = <<EOHTML;
 <div class="$div_class">
 <h1>$page_title</h1>
-<p class="lead hidden-print">Dates of major and minor Jewish holidays$when. Each
+<p class="lead d-print-none">Dates of major and minor Jewish holidays$when. Each
 holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
@@ -551,10 +551,16 @@ EOHTML
     my $pdf_heb_year = $current_year || $HEB_YR;
 
     $str .= <<EOHTML;
-<div class="btn-toolbar hidden-print">
-  <a class="btn btn-default btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><span class="glyphicon glyphicon-print"></span> Print</a>
-  <a class="btn btn-default btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
-  <a class="btn btn-default btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><span class="glyphicon glyphicon-pencil"></span> Customize</a>
+<div class="btn-toolbar d-print-none">
+ <div class="btn-group mr-1" role="group">
+  <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-${pdf_heb_year}" href="hebcal-${pdf_heb_year}.pdf"><span class="glyphicons glyphicons-print"></span> Print</a>
+ </div>
+ <div class="btn-group mr-1" role="group">
+  <a class="btn btn-secondary btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><span class="glyphicons glyphicons-download-alt"></span> Download</a>
+ </div>
+ <div class="btn-group mr-1" role="group">
+  <a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="$custom_link"><span class="glyphicons glyphicons-pencil"></span> Customize</a>
+ </div>
 </div><!-- .btn-toolbar -->
 EOHTML
 ;
@@ -630,7 +636,7 @@ EOHTML
     print OUT3 get_index_body_preamble($page_title, 1, undef, undef, "col-sm-8");
     print OUT3 <<EOHTML;
 </div><!-- .col-sm-8 -->
-<div class="col-sm-4 hidden-print">
+<div class="col-sm-4 d-print-none">
 <h5>Advertisement</h5>
 $pagead_300x250
 </div><!-- .col-sm-4 -->
@@ -673,23 +679,23 @@ sub pagination_greg_url {
 sub pagination_greg {
     my($current_year) = @_;
 
-    my $s = qq{<nav class="hidden-print"><ul class="pagination pagination-sm" style="margin: 12px 0 0 0">\n};
+    my $s = qq{<nav class="d-print-none"><ul class="pagination pagination-sm" style="margin: 12px 0 0 0">\n};
 
     my $prev_year = $FIRST_GREG_YR - 1;
-    $s .= qq{<li><a title="$prev_year" aria-label="Previous" href="} . pagination_greg_url($prev_year) . qq{"><span aria-hidden="true">&laquo;</span></a></li>\n};
+    $s .= qq{<li class="page-item"><a class="page-link" title="$prev_year" aria-label="Previous" href="} . pagination_greg_url($prev_year) . qq{"><span aria-hidden="true">&laquo;</span></a></li>\n};
 
     foreach my $j (0 .. $NUM_YEARS) {
         my $other_yr = $FIRST_GREG_YR + $j;
         if ($current_year == $j) {
-            $s .= qq{<li class="active">};
+            $s .= qq{<li class="page-item active">};
         } else {
-            $s .= qq{<li>};
+            $s .= qq{<li class="page-item">};
         }
-        $s .= qq{<a href="$other_yr">$other_yr</a></li>\n};
+        $s .= qq{<a class="page-link" href="$other_yr">$other_yr</a></li>\n};
     }
 
     my $next_year = $FIRST_GREG_YR + $NUM_YEARS + 1;
-    $s .= qq{<li><a title="$next_year" aria-label="Next" href="} . pagination_greg_url($next_year) . qq{"><span aria-hidden="true">&raquo;</span></a></li>\n};
+    $s .= qq{<li class="page-item"><a class="page-link" title="$next_year" aria-label="Next" href="} . pagination_greg_url($next_year) . qq{"><span aria-hidden="true">&raquo;</span></a></li>\n};
 
     $s .= qq{</ul></nav>\n};
 
@@ -722,7 +728,7 @@ EOHTML
     print $fh get_index_body_preamble($page_title, 0, "G", $greg_year, "col-sm-8");
     print $fh <<EOHTML;
 </div><!-- .col-sm-8 -->
-<div class="col-sm-4 hidden-print">
+<div class="col-sm-4 d-print-none">
 <h5>Advertisement</h5>
 $pagead_300x250
 </div><!-- .col-sm-4 -->
@@ -800,7 +806,7 @@ EOHTML
     print $fh get_index_body_preamble($page_title, 0, "H", $heb_year, "col-sm-8");
     print $fh <<EOHTML;
 </div><!-- .col-sm-8 -->
-<div class="col-sm-4 hidden-print">
+<div class="col-sm-4 d-print-none">
 <h5>Advertisement</h5>
 $pagead_300x250
 </div><!-- .col-sm-4 -->
@@ -1010,11 +1016,17 @@ sub breadcrumb {
     }
     my $nav_anchor = Hebcal::make_anchor($nav_parent);
     my $html =<<EOHTML
-<ol class="breadcrumb hidden-xs hidden-print">
-  <li><a href="/holidays/">Holidays</a></li>
-  <li><a href="/holidays/#$nav_anchor">$nav_parent</a></li>
-  <li class="active">$f</li>
+<div class="d-print-none">
+<div class="d-none d-sm-block">
+<nav>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/holidays/">Holidays</a></li>
+  <li class="breadcrumb-item"><a href="/holidays/#$nav_anchor">$nav_parent</a></li>
+  <li class="breadcrumb-item active">$f</li>
 </ol>
+</nav>
+</div><!-- .d-none d-sm-block -->
+</div><!-- .d-print-none -->
 EOHTML
 ;
     return $html;
@@ -1093,10 +1105,10 @@ EOHTML
     my $observed = observed_event_list($f);
     my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
-	print OUT2 qq{<nav class="hidden-print"><ul class="pagination">\n};
+	print OUT2 qq{<nav class="d-print-none"><ul class="pagination">\n};
 	foreach my $inner (@{$nav_inner}) {
 	    my($slug,$part) = @{$inner};
-	    print OUT2 qq{\t<li><a href="#$slug">$part</a></li>\n};
+	    print OUT2 qq{\t<li class="page-item"><a class="page-link" href="#$slug">$part</a></li>\n};
 	}
 	print OUT2 qq{</ul></nav><!-- .pagination -->\n};
     }
@@ -1230,9 +1242,9 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
     print OUT2 <<EOHTML;
 $pager
 </div><!-- .col-sm-10 -->
-<div class="col-sm-2 hidden-print">
+<div class="col-sm-2 d-print-none">
 <h5>Advertisement</h5>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:160px;height:600px"
@@ -1284,7 +1296,7 @@ sub read_more_from {
     $wikipedia_href = $wikipedia->{'href'};
   }
   if ($about_href || $wikipedia_href) {
-    $html = qq{\n<p class="hidden-print"><em>Read more from };
+    $html = qq{\n<p class="d-print-none"><em>Read more from };
     if ($about_href) {
       $html .= read_more_hyperlink($f,$about_href, $primary_source);
       $html .= " or " if ($wikipedia_href && $primary_source ne "Wikipedia");
@@ -1514,7 +1526,7 @@ sub amazon_recommended_book {
 
     my $byauthor = $author ? qq{<br>by $author} : "";
     my $html = <<EOHTML
-<div class="col-xs-$thumbnail_width">
+<div class="col-$thumbnail_width">
 <div class="thumbnail">
 <a class="amzn" id="$anchor-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"
 alt="$bktitle" width="$width" height="$height" style="border:none"></a>
@@ -1523,7 +1535,7 @@ alt="$bktitle" width="$width" height="$height" style="border:none"></a>
 $byauthor
 </div><!-- .caption -->
 </div><!-- .thumbnail -->
-</div><!-- .col-xs-$thumbnail_width -->
+</div><!-- .col-$thumbnail_width -->
 EOHTML
 ;
     return $html;

@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2018  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -441,9 +441,11 @@ EOHTML
     if (scalar(@events) > 0) {
         $q->param("v", "yahrzeit");
 
-        print qq{<div class="btn-toolbar hidden-print">\n};
+        print qq{<div class="btn-toolbar d-print-none">\n};
+        print qq{<div class="mr-1">\n};
         print HebcalHtml::download_html_modal_button();
-        print qq{<a class="btn btn-default" href="#form"><i class="glyphicon glyphicon-cog"></i> Enter more dates and names</a>\n};
+        print qq{</div>\n};
+        print qq{<a class="btn btn-secondary" href="#form"><i class="glyphicons glyphicons-cog"></i> Enter more dates and names</a>\n};
         print qq{</div><!-- .btn-toolbar -->\n};
 
         print qq{<p>Yahrzeit candles should be lit
@@ -484,7 +486,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
 
         my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 
-        printf(qq{<tr><td style="width:130px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
+        printf(qq{<tr><td style="width:170px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
             $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
             HebcalHtml::html_entify($subj));
         $prev_year = $year;
@@ -508,7 +510,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
         $xtra_html = HebcalHtml::download_html_modal($q, $filename, \@events, $title, 1, 1);
     }
 
-    print qq{<h3 id="form" class="hidden-print">Enter more dates and names</h3>\n};
+    print qq{<h3 id="form" class="d-print-none">Enter more dates and names</h3>\n};
 
     form(0,$xtra_html);
 }
@@ -542,7 +544,7 @@ sub form
 {
     my($head,$xtra_html) = @_;
 
-    print qq{<div class="hidden-print">
+    print qq{<div class="d-print-none">
 <p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>20 October 1994 (after
@@ -551,34 +553,37 @@ yahrzeit.</p>
 <p>If you know the Hebrew but not the Gregorian date, use the <a
 href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
-</div><!-- .hidden-print -->
-<form class="yahrzeit-form hidden-print" method="post" action="/yahrzeit/">
+</div><!-- .d-print-none -->
+<form class="yahrzeit-form d-print-none" method="post" action="/yahrzeit/">
 };
 
     for (my $i = 1; $i <= $count; $i++) {
         show_row($q,$i,\%Hebcal::MoY_long);
     }
 
-    print qq{<div class="checkbox">\n<label>},
-    $q->checkbox(-name => "hebdate",
+    print "",
+    HebcalHtml::checkbox($q,
+                 -name => "hebdate",
+                 -id => "hebdate",
                  -checked => "checked",
                  -label => "Include Hebrew dates"),
-    "</label></div>\n",
-    qq{<div class="checkbox"><label>},
-    $q->checkbox(-name => "yizkor",
+    "\n",
+    HebcalHtml::checkbox($q,
+                 -name => "yizkor",
+                 -id => "yizkor",
                  -label => "Include Yizkor dates"),
-    "</label></div>\n",
-    qq{<div class="form-group form-inline"><label>Number of years: },
+    "\n",
+    qq{<div class="form-group form-inline"><label for="years" class="mr-1">Number of years: </label>},
     $q->textfield(-name => "years",
+                    -id => "years",
                   -class => "form-control",
                   -default => $num_years,
                   -pattern => '\d*',
                   -min => "1",
                   -max => "99",
-                  -style => "width:auto",
                   -maxlength => 2,
                   -size => 2),
-    "</label></div>\n",
+    "</div>\n",
     $q->hidden(-name => "ref_url"), "\n",
     $q->hidden(-name => "ref_text"), "\n",
     $q->hidden(-name => ".cgifields",
@@ -587,7 +592,7 @@ and then come back to this page.</p>
     qq{<input type="submit" class=\"btn btn-primary\" value="Create Calendar"></form>\n};
 
     print qq{
-<p class="hidden-print">Would you like to use this calendar for your website? See
+<p class="d-print-none">Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
 </div><!-- .col-sm-12 -->
@@ -603,14 +608,15 @@ sub show_row {
     my($q,$i,$months) = @_;
 
     print qq{<div class="form-inline yahrzeit-row">\n},
+         qq{<div class="form-group mr-1">},
          $q->popup_menu(-name => "t$i",
                         -class => "form-control",
                         -values => ["Yahrzeit","Birthday","Anniversary"]),
-         "\n",
+         qq{</div>\n<div class="form-group mr-1">},
          $q->textfield(-name => "n$i",
                        -placeholder => "Name (optional)",
                        -class => "form-control"),
-         "\n",
+         qq{</div>\n<div class="form-group mr-1">},
          $q->textfield(-name => "d$i",
                        -class => "form-control",
                        -placeholder => "Day",
@@ -620,12 +626,12 @@ sub show_row {
                        -style => "width:auto",
                        -maxlength => 2,
                        -size => 2),
-         "\n",
+         qq{</div>\n<div class="form-group mr-1">},
          $q->popup_menu(-name => "m$i",
                         -class => "form-control",
                         -values => [1..12],
                         -labels => $months),
-         "\n",
+         qq{</div>\n<div class="form-group mr-1">},
          $q->textfield(-name => "y$i",
                         -class => "form-control",
                        -placeholder => "Year",
@@ -633,13 +639,14 @@ sub show_row {
                        -style => "width:auto",
                        -maxlength => 4,
                        -size => 4),
-         "\n",
+         qq{</div>\n<div class="form-group mr-1">},
          HebcalHtml::radio_group($q,
             -name => "s$i",
             -values => ["off", "on"],
             -default => "off",
             -labels => {"off" => " Before sunset",
                         "on" => " After sunset"}),
+         qq{</div>\n},
          qq{</div><!-- .form-inline -->\n};
 }
 

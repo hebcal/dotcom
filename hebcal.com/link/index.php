@@ -66,7 +66,7 @@ ul.hebcal-results { list-style-type: none }
   margin-bottom: 80px;
 }
 </style>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
 EOD;
 
@@ -89,7 +89,7 @@ the appropriate place in your HTML:</p>
 <?php
 $script_tag = <<<EOHTML
 <script type="text/javascript" charset="utf-8"
-src="//$_SERVER[HTTP_HOST]/shabbat/?geo=${geo}&amp;${geo_link}&amp;m=${m}&amp;cfg=j&amp;tgt=_top">
+src="https://$_SERVER[HTTP_HOST]/shabbat/?geo=${geo}&amp;${geo_link}&amp;m=${m}&amp;cfg=j&amp;tgt=_top">
 </script>
 EOHTML;
 $script_tag_double = htmlentities($script_tag);
@@ -147,7 +147,7 @@ page:</p>
 <script src="https://gist.github.com/mjradwin/fc4f38384a6335ab9963.js"></script>
 
 <p>Those fonts and colors are just an example.  <a
-href="http://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
+href="https://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
