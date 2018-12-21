@@ -391,7 +391,7 @@ echo html_form_select("gm", $MoY_long, $gm, 0, "", false, 'class="form-control" 
 </div><!-- .form-group -->
 </div><!-- .form-row -->
 <div class="form-group">
-<button type="button" name="g2h" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Hebrew</button>
+<button type="submit" name="g2h" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Hebrew</button>
 </div><!-- .form-group -->
 </form>
 </div><!-- .col-sm-6 -->
@@ -412,7 +412,7 @@ echo html_form_select("hm", $hmstr_to_hebcal, $hm, 0, "", false, 'class="form-co
 <input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<?php echo $hy ?>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .form-group -->
 <div class="form-group">
-<button type="button" name="h2g" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Gregorian</button>
+<button type="submit" name="h2g" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Gregorian</button>
 </div><!-- .form-group -->
 </div><!-- .form-row -->
 </form>
