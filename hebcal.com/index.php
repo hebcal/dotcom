@@ -196,7 +196,7 @@ a.icon-block {
   text-align: center;
 }
 .first-row {
-  padding-top: 40px;
+  padding-top: 24px;
 }
 .pad-bot {
   padding-bottom: 32px;
@@ -262,7 +262,7 @@ function holiday_greeting($blurb, $long_text) { ?>
 }
 
 ?></ul>
-<h1>Jewish holiday calendars &amp; Hebrew date converter</h1>
+<h2>Jewish holiday calendars &amp; Hebrew date converter</h2>
 <?php
 if (isset($rosh_chodesh)) {
     $anchor = hebcal_make_anchor("Rosh Chodesh $rosh_chodesh");
@@ -346,7 +346,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 <a class="icon-block" href="/shabbat/">
  <span class="glyphicons glyphicons-candle icon-lg"></span>
 </a>
-<h3 class="text-center">Candle lighting</h3>
+<h3 class="text-center"><a class="text-dark" href="/shabbat/">Candle lighting</a></h3>
 <p>Shabbat and holiday candle-lighting and Havdalah times for over 50,000 world cities.
 <br><a href="/shabbat/?geonameid=281184">Jerusalem</a> &middot;
 <a href="/shabbat/?geonameid=5128581">New York</a> &middot;
@@ -358,7 +358,7 @@ Download to Outlook, iPhone, Google Calendar, and more.</p>
 <a class="icon-block" href="/yahrzeit/">
  <span class="glyphicons glyphicons-parents icon-lg"></span>
 </a>
-<h3 class="text-center">Yahrzeits and Birthdays</h3>
+<h3 class="text-center"><a class="text-dark" href="/yahrzeit/">Yahrzeits and Birthdays</a></h3>
 <p>Generate a list of Yahrzeit (memorial) and Yizkor dates, or
 Hebrew Birthdays and Anniversaries for the next 20 years.
 <br><a href="/yahrzeit/">Get started &raquo;</a></p>
@@ -368,7 +368,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="/sedrot/">
  <span class="glyphicons glyphicons-book_open icon-lg"></span>
 </a>
-<h3 class="text-center">Torah readings</h3>
+<h3 class="text-center"><a class="text-dark" href="/sedrot/">Torah readings</a></h3>
 <p>An aliyah-by-aliyah breakdown. Full kriyah and triennial system.
 <br><a href="/sedrot/">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->
@@ -379,7 +379,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="/holidays/">
  <span class="glyphicons glyphicons-calendar icon-lg"></span>
 </a>
-<h3 class="text-center">Holidays</h3>
+<h3 class="text-center"><a class="text-dark" href="/holidays/">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
 <br><a href="/holidays/">Get started &raquo;</a></p>
 </div><!-- .col-sm-4 -->
@@ -388,16 +388,16 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 <a class="icon-block" href="/ical/">
  <span class="glyphicons glyphicons-download-alt icon-lg"></span>
 </a>
-<h3 class="text-center">Download</h3>
+<h3 class="text-center"><a class="text-dark" href="/ical/">Download</a></h3>
 <p>Download Jewish holidays and Hebrew dates for Microsoft Outlook, iPhone, iPad, Mac OS X Desktop Calendar, Android (via Google Calendar), or to any desktop program that supports iCalendar (.ics) files
 <br><a href="/ical/">Get started &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4">
-<a class="icon-block" href="https://www.hebcal.com/email/">
+<a class="icon-block" href="/email/">
  <span class="glyphicons glyphicons-envelope icon-lg"></span>
 </a>
-<h3 class="text-center">Email</h3>
+<h3 class="text-center"><a class="text-dark" href="/email/">Email</a></h3>
 <p>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.
 <br><a href="https://www.hebcal.com/email/">Sign up &raquo;</a></p>
 </div><!-- .col-sm-4 -->
@@ -411,7 +411,7 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 </a>
 </div><!-- .col-sm-2 -->
 <div class="col-sm-10">
-<h3>Developer APIs</h3>
+<h3><a class="text-dark" href="/home/developer-apis">Developer APIs</a></h3>
 <p>We're part of the Open Source Judaism movement. Embed Hebcal.com content directly onto your synagogue website with our JavaScript, JSON and RSS APIs, available under a Creative Commons Attribution 3.0 License. <a href="/home/developer-apis">Learn more &raquo;</a></p>
 </div><!-- .col-sm-10 -->
 
