@@ -198,8 +198,8 @@ window['hebcal'].monthHtml = function(month) {
         divBegin = '<div class="month-table">',
         divEnd = '</div><!-- .month-table -->',
         heading = '<h3>' + m.format('MMMM YYYY') + '</h3>',
-        timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:24px">',
-        tableHead = '<table class="table table-striped"><col style="width:120px">' + timeColumn + '<col><tbody>',
+        timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">',
+        tableHead = '<table class="table table-striped"><col style="width:116px">' + timeColumn + '<col><tbody>',
         tableFoot = '</tbody></table>',
         tableContents = month.events.map(window['hebcal'].tableRow);
     return divBegin + heading + tableHead + tableContents.join('') + tableFoot + divEnd;
