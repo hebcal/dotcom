@@ -1505,12 +1505,12 @@ sub results_page_toolbar {
 
     my $html = <<EOHTML;
 <div class="d-print-none">
-  <div class="btn-group mr-2" role="group" data-toggle="buttons">
-   <label class="btn btn-secondary btn-sm active">
+  <div class="btn-group mr-1" role="group" data-toggle="buttons">
+   <label class="btn btn-secondary btn-sm active mb-0">
     <input type="radio" name="view" id="toggle-month" checked>
     <span class="glyphicons glyphicons-calendar"></span> Month
    </label>
-   <label class="btn btn-secondary btn-sm">
+   <label class="btn btn-secondary btn-sm mb-0">
     <input type="radio" name="view" id="toggle-list">
     <span class="glyphicons glyphicons-list"></span> List
    </label>
@@ -1546,7 +1546,7 @@ EOHTML
 #            if defined $q->param("m") && $q->param("m") =~ /^\d+$/;
 
         $html .= <<EOHTML;
-  <div class="btn-group mr-2" role="group">
+  <div class="btn-group mr-1" role="group">
     $btn_print_html
     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
