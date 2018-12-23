@@ -1594,10 +1594,11 @@ sub special_readings
 	    && Hebcal::event_dates_equal($events->[$i], $events->[$i+1])) {
 	    $h = "Shabbat Rosh Chodesh Chanukah"; # don't set $chanukah_day = 6
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/
-            && $events->[$i+1]->{subj} =~ /^Shabbat HaChodesh/
-	    && defined $events->[$i+1]
+        && defined $events->[$i+1]
+        && ($events->[$i+1]->{subj} =~ /^Shabbat HaChodesh/
+            || $events->[$i+1]->{subj} =~ /^Shabbat Shekalim/)
 	    && Hebcal::event_dates_equal($events->[$i], $events->[$i+1])) {
-	    $h = "Shabbat HaChodesh (on Rosh Chodesh)";
+	    $h = $events->[$i+1]->{subj} . " (on Rosh Chodesh)";
 	} elsif ($dow == 6 && $h =~ /^Rosh Chodesh/) {
 	    $h = 'Shabbat Rosh Chodesh';
 	} elsif ($dow == 7 && $h =~ /^Rosh Chodesh/) {
