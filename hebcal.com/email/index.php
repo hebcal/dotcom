@@ -341,6 +341,7 @@ value="<?php echo htmlspecialchars($param["em"]) ?>">
 </form>
 </div><!-- #email-form -->
 
+<?php if (!$default_unsubscribe) { ?>
 <hr>
 <p>You&apos;ll receive a maximum of one message per week, typically on Thursday morning.</p>
 
@@ -352,6 +353,7 @@ offers.</p>
 <p>To unsubscribe, send an email to <a
 href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 </div><!-- #privacy-policy -->
+<?php } /* !$default_unsubscribe */ ?>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <?php
