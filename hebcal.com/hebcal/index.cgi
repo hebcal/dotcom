@@ -1716,7 +1716,7 @@ EOHTML
     my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-8">
-<h1>Jewish Calendar $date$h1_extra</h1>
+<h2>Jewish Calendar $date$h1_extra</h2>
 <!-- $cmd -->
 EOHTML
 ;

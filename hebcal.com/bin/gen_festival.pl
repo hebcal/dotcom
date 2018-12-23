@@ -1105,12 +1105,14 @@ EOHTML
     my $observed = observed_event_list($f);
     my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
-	print OUT2 qq{<nav class="d-print-none"><ul class="pagination">\n};
+	print OUT2 qq{<div class="d-print-none">
+<div class="d-none d-sm-block">
+<ul class="pagination">\n};
 	foreach my $inner (@{$nav_inner}) {
 	    my($slug,$part) = @{$inner};
 	    print OUT2 qq{\t<li class="page-item"><a class="page-link" href="#$slug">$part</a></li>\n};
 	}
-	print OUT2 qq{</ul></nav><!-- .pagination -->\n};
+	print OUT2 qq{</ul><!-- .pagination -->\n</div></div>\n};
     }
 
     if (scalar(@{$observed})) {

@@ -311,9 +311,13 @@ $greg_range = $greg_yr1 . "-" . $greg_yr2;
 $year_get_args = "&amp;yt=H&amp;year=$hebyear&amp;month=x";
 
 // for the first 7 months of the year, just show the current Gregorian year
-if ($gm < 8) {
-    $year_get_args = "&amp;yt=G&amp;year=$gy&amp;month=x";
-    $greg_range = $gy;
+if ($gm < 8 || $gm == 12 && $gd >= 10) {
+    $gytmp = $gy;
+    if ($gm == 12) {
+        $gytmp++;
+    }
+    $year_get_args = "&amp;yt=G&amp;year=$gytmp&amp;month=x";
+    $greg_range = $gytmp;
 }
 ?>
 </div><!-- .container -->

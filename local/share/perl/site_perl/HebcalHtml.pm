@@ -653,6 +653,7 @@ sub checkbox {
         my $attrs = $1;
         my $id = $p{"-id"};
         my $label = $p{"-label"};
+        $attrs =~ s/value="on"/value="on" /;
         return qq{<div class="form-check mb-2">\n<input class="form-check-input" $attrs>\n<label class="form-check-label" for="$id">$label</label>\n</div>};
     } else {
         return $s;
