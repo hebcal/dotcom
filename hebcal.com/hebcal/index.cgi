@@ -1117,11 +1117,12 @@ EOHTML
     HebcalHtml::checkbox($q, -name => "s",
                  -id => "s",
                  -label => "Weekly Torah portion on Saturdays"),
+    qq{</fieldset>},
     "\n";
 
-    print $diaspora_israel_radio;
+    print qq{<div class="mt-2">}, $diaspora_israel_radio, qq{</div>\n};
 
-    print qq{<div class="form-group"><label for="year" class="sr-only">Year</label>},
+    print qq{<div class="form-group mt-3"><label for="year" class="sr-only">Year</label>},
     $q->textfield(-name => "year",
                   -id => "year",
                   -pattern => '\d*',
@@ -1139,7 +1140,6 @@ EOHTML
 
     print $year_type_radio;
 
-    print qq{</fieldset>\n};
     print qq{</div><!-- .col-sm-6 -->\n},
     qq{<div class="col-sm-6">\n};
     print qq{<fieldset>\n};
@@ -1203,7 +1203,7 @@ EOHTML
     if (defined $q->param("geo") && $q->param("geo") eq "pos") {
         print latlong_form_html();
     } else {
-        print qq{<div class="form-group"><label for="city-typeahead">Candle lighting times</label>
+        print qq{<div class="form-group mt-2"><label for="city-typeahead">Candle lighting times</label>
 <div class="city-typeahead" style="margin-bottom:12px">},
             $q->textfield(-value => $city_typeahead_value,
                   -id => "city-typeahead",

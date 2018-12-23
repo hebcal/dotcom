@@ -535,7 +535,7 @@ $xtra_stylesheet<script>
  .sidebar-nav{display:none}
 }
 @media (min-width: 768px) {
-  input#s {
+  input#sitesearch {
     width: 132px;
   }
 }
@@ -550,7 +550,7 @@ $xtra_head</head>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     $menu
     <form class="form-inline my-2 my-lg-0" role="search" method="get" id="searchform" action="/home/">
-     <input name="s" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
+     <input name="s" id="sitesearch" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
     </form>
   </div><!--/.navbar-collapse -->
 </nav>
