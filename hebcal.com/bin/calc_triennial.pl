@@ -529,7 +529,7 @@ class="glyphicons glyphicons-download-alt"></i> Leyning spreadsheet</a>
 
 <div class="row">
 <div class="col-4">
-<h3 id="Genesis">Genesis</h3>
+<h4 id="Genesis">Genesis</h4>
 <ol class="list-unstyled">
 EOHTML
     ;
@@ -545,7 +545,7 @@ EOHTML
 	    if ($book_count++ % 3 == 0) {
 		print OUT1 qq{</div><!-- .row -->\n<div class="row">\n};
 	    }
-	    print OUT1 qq{<div class="col-4">\n<h3 id="$book">$book</h3>\n<ol class="list-unstyled">\n};
+	    print OUT1 qq{<div class="col-4">\n<h4 id="$book">$book</h4>\n<ol class="list-unstyled">\n};
 	}
 	$prev_book = $book;
 
@@ -558,7 +558,7 @@ EOHTML
 </ol>
 </div><!-- .col-4 -->
 <div class="col-4">
-<h3 id="DoubledParshiyot">Doubled Parshiyot</h3>
+<h4 id="DoubledParshiyot">Doubled Parshiyot</h4>
 <ol class="list-unstyled">
 EOHTML
 ;
@@ -575,7 +575,7 @@ EOHTML
 </div><!-- .row -->
 <div class="row">
 <div class="col-sm-12">
-<h3>Parashat ha-Shavua by Hebrew year</h3>
+<h4>Parashat ha-Shavua by Hebrew year</h4>
 <nav>
 <ul class="pagination">
 <li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
@@ -638,7 +638,7 @@ EOHTML
     $triennial_download_html .= qq{</ul>\n</div>\n};
 
     print OUT1 <<EOHTML;
-<h3 id="download">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h3>
+<h4 id="download">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h4>
 <p>Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
@@ -875,7 +875,7 @@ sub write_drash_links {
     }
     return 0 unless $count;
 
-    print OUT2 qq{<div class="d-print-none">\n<h3 id="drash">Commentary</h3>\n<ul class="bullet-list-inline">\n};
+    print OUT2 qq{<div class="d-print-none">\n<h4 id="drash">Commentary</h4>\n<ul class="bullet-list-inline">\n};
 
     my %site_name = (
         "ou" => "Orthodox Union",
@@ -1067,14 +1067,14 @@ sub write_sedra_page
 </div><!-- .d-print-none -->
 <h2><span class="d-none d-sm-inline">Parashat</span> $h / <bdo dir="rtl"><span class="d-none d-sm-inline" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h2>
 $intro_summary
-<h3 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
+<h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="$torah_href"
-title="English translation from JPS Tanakh">$torah</a>$ort_tikkun</h3>
+title="English translation from JPS Tanakh">$torah</a>$ort_tikkun</h4>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 <div class="row">
 <div class="col-12 col-sm-3">
-<h4>Full Kriyah</h4>
+<h5>Full Kriyah</h5>
 <ol class="list-unstyled">
 EOHTML
 ;
@@ -1107,7 +1107,7 @@ EOHTML
 
 	if (keys %sp_dates) {
             print OUT2 qq{<div class="row">\n<div class="col-sm-12">\n};
-	    print OUT2 qq{<h4>Special Readings</h4>\n};
+	    print OUT2 qq{<h5>Special Readings</h5>\n};
 	    foreach my $reason (sort keys %sp_dates) {
 		my $info = "";
 		my $count = 0;
@@ -1153,9 +1153,9 @@ EOHTML
     print OUT2 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<h3 id="haftarah">Haftarah$ashk: <a class="outbound"
+<h4 id="haftarah">Haftarah$ashk: <a class="outbound"
 href="$haftarah_href"
-title="English translation from JPS Tanakh">$haftarah</a>$seph</h3>
+title="English translation from JPS Tanakh">$haftarah</a>$seph</h4>
 EOHTML
 ;
 
@@ -1203,7 +1203,7 @@ EOHTML
     if (defined $parashah_date_sql{$h}) {
         my $list_style = $combined{$h} ? "list-unstyled" : "bullet-list-inline";
 	print OUT2 <<EOHTML;
-<h3 id="dates">List of Dates</h3>
+<h4 id="dates">List of Dates</h4>
 Parashat $h is read in the Diaspora on:
 <ul class="$list_style">
 EOHTML
@@ -1234,7 +1234,7 @@ EOHTML
 
     # if this is a combined parashah or one half of one that's sometimes combined
     if ($combined{$h} || index($h, "-") != -1) {
-	print OUT2 qq{<h3>Triennial readings for previous and future cycles</h3>\n};
+	print OUT2 qq{<h4>Triennial readings for previous and future cycles</h4>\n};
 	print OUT2 qq{<div class="row">\n};
 	write_sedra_tri_cells($h,$torah,$triennial_readings->[0]);
 	print OUT2 qq{</div><!-- .row -->\n};
@@ -1244,7 +1244,7 @@ EOHTML
     }
 
     print OUT2 <<EOHTML;
-<h3 id="ref">References</h3>
+<h4 id="ref">References</h4>
 <dl>
 <dt><em><a class="amzn" id="chumash-2"
 href="$amazon_link2">The
@@ -1286,7 +1286,7 @@ sub write_sedra_tri_cells {
         my $read_on_html = $tri_date[$yr] ? qq{\n<br><small class="text-muted">$tri_date[$yr]</small>} : "";
 	print OUT2 <<EOHTML;
 <div class="col-4 col-sm-3">
-<h4>Triennial Year $yr$read_on_html</h4>
+<h5>Triennial Year&nbsp;$yr$read_on_html</h5>
 EOHTML
 ;
 	print_tri_cell($triennial_readings,$h,$yr,$torah);
