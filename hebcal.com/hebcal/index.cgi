@@ -1382,7 +1382,7 @@ sub nav_pagination {
 
     my $nav_pagination = <<EOHTML;
 <nav class="text-center d-print-none">
-<ul class="pagination">
+<ul class="pagination pagination-sm">
 <li class="page-item"><a class="page-link" href="$prev_url" rel="prev$prev_nofollow">&laquo; $prev_title</a></li>
 EOHTML
     ;
@@ -1394,7 +1394,7 @@ EOHTML
         my $mon_long = $Hebcal::MoY_long{$mon};
         my $mon_short = $Hebcal::MoY_short[$mon-1];
         my $cal_id = sprintf("%04d-%02d", $year, $mon);
-        $nav_pagination .= qq{<li class="page-item"><a class="page-link" title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
+        $nav_pagination .= qq{<li class="page-item d-none d-sm-inline"><a class="page-link" title="$mon_long $year" href="#cal-$cal_id">$mon_short</a></li>\n};
     }
     $nav_pagination .= <<EOHTML;
 <li class="page-item"><a class="page-link" href="$next_url" rel="next$next_nofollow">$next_title &raquo;</a></li>

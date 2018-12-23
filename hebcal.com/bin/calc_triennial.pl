@@ -520,7 +520,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 <div class="btn-toolbar">
 $download_button_diaspora
 $download_button_israel
-<a class="btn btn-secondary" title="Download aliyah-by-aliyah breakdown"
+<a class="btn btn-sm btn-secondary" title="Download aliyah-by-aliyah breakdown"
 href="#download"><i
 class="glyphicons glyphicons-download-alt"></i> Leyning spreadsheet</a>
 </div><!-- .btn-toolbar -->
@@ -577,7 +577,7 @@ EOHTML
 <div class="col-sm-12">
 <h4>Parashat ha-Shavua by Hebrew year</h4>
 <nav>
-<ul class="pagination">
+<ul class="pagination pagination-sm">
 <li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
 EOHTML
 ;
@@ -591,7 +591,7 @@ EOHTML
 </ul><!-- .pagination -->
 </nav>
 <nav>
-<ul class="pagination">
+<ul class="pagination pagination-sm">
 <li class="page-item disabled"><a class="page-link" href="#">Israel</a></li>
 EOHTML
 ;
@@ -714,7 +714,7 @@ sub action_button_download_html {
     my($button_title) = @_;
     my $action_button_download_html = <<EOHTML;
 <div class="btn-group mr-1">
- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+ <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   $button_title <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
