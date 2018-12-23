@@ -535,8 +535,8 @@ sub get_index_body_preamble {
     }
     my $str = <<EOHTML;
 <div class="$div_class">
-<h1>$page_title</h1>
-<p class="lead d-print-none">Dates of major and minor Jewish holidays$when. Each
+<h2>$page_title</h2>
+<p class="d-print-none">Dates of major and minor Jewish holidays$when. Each
 holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
@@ -1069,7 +1069,7 @@ sub write_festival_page
     my $next_observed_para = "";
     if ($next_observed) {
         $next_observed_meta = ", $next_observed. ";
-        $next_observed_para = qq{<p class="lead">$f $next_observed.</p>};
+        $next_observed_para = qq{<p>$f $next_observed.</p>};
     }
 
     my $meta = <<EOHTML;
@@ -1094,8 +1094,8 @@ EOHTML
 <div class="row">
 <div class="col-sm-10">
 $pager
-<h1>$f / <span lang="he" dir="rtl">$hebrew</span></h1>
-<p class="lead">$long_descr.</p>
+<h2>$f / <span lang="he" dir="rtl">$hebrew</span></h2>
+<p>$long_descr.</p>
 $next_observed_para
 EOHTML
 ;
@@ -1267,7 +1267,7 @@ EOHTML
 
 sub read_more_hyperlink {
   my($f,$href,$title) = @_;
-  return qq{<a class="outbound" title="More about $f from $title" href="$href">$title &rarr;</a>};
+  return qq{<a class="outbound" title="More about $f from $title" href="$href">$title&nbsp;&rarr;</a>};
 }
 
 sub read_more_from {
