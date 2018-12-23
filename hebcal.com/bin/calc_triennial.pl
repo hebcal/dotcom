@@ -476,8 +476,8 @@ EOHTML
     print OUT1 <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<h1>Torah Readings</h1>
-<p class="lead">Weekly Torah readings (Parashat ha-Shavua) including
+<h2>Torah Readings</h2>
+<p>Weekly Torah readings (Parashat ha-Shavua) including
 verses for each aliyah and accompanying Haftarah. Includes
 both traditional (full kriyah) and <a
 href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading schemes.</p>
@@ -505,7 +505,7 @@ if (isset($sedra) && isset($sedra[$saturday_iso])) {
 	if (strncmp($h, "Parashat ", 9) == 0) {
 	    $anchor = hebcal_make_anchor($h);
 	    $sat_timestamp = mktime(12, 34, 56, $saturday_gm, $saturday_gd, $saturday_gy);
-	    echo "<p class=\"lead\">This week&apos;s Torah Portion is <a href=\"", $anchor, "\">", $h, "</a> (read in the Diaspora on ", date("j F Y", $sat_timestamp), ").</p>\n";
+	    echo "<p>This week&apos;s Torah Portion is <a href=\"", $anchor, "\">", $h, "</a> (read in the Diaspora on ", date("j F Y", $sat_timestamp), ").</p>\n";
 	    break;
 	}
     }
@@ -639,7 +639,7 @@ EOHTML
 
     print OUT1 <<EOHTML;
 <h3 id="download">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h3>
-<p class="lead">Leyning coordinators can download these Comma Separated
+<p>Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
 <div class="btn-toolbar">
@@ -1001,7 +1001,7 @@ sub write_sedra_page
     $keyword .= ",$seph2ashk{$h}" if defined $seph2ashk{$h};
 
     my $description = "Parashat $h ($torah). ";
-    my $default_intro_summary = qq{<p class="lead">};
+    my $default_intro_summary = qq{<p>};
     my $intro_summary = $default_intro_summary;
     if ($next_reading{$h}) {
 	my $dt = date_sql_to_dd_MMM_yyyy($next_reading{$h});
@@ -1065,7 +1065,7 @@ sub write_sedra_page
 </nav>
 </div><!-- .d-none d-sm-block -->
 </div><!-- .d-print-none -->
-<h1><span class="d-none d-sm-inline">Parashat</span> $h / <bdo dir="rtl"><span class="d-none d-sm-inline" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h1>
+<h2><span class="d-none d-sm-inline">Parashat</span> $h / <bdo dir="rtl"><span class="d-none d-sm-inline" lang="he" dir="rtl">$parashat_hebrew</span> <span lang="he" dir="rtl">$hebrew</span></bdo></h2>
 $intro_summary
 <h3 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="$torah_href"
