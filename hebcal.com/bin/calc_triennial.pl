@@ -1283,7 +1283,7 @@ sub write_sedra_tri_cells {
 	}
     }
     foreach my $yr (1 .. 3) {
-        my $read_on_html = $tri_date[$yr] ? qq{\n<br><small class="text-muted">$tri_date[$yr]</small>} : "";
+        my $read_on_html = $tri_date[$yr] ? qq{\n<br><span class="h6 small text-muted">$tri_date[$yr]</span>} : "";
 	print OUT2 <<EOHTML;
 <div class="col-4 col-sm-3">
 <h5>Triennial Year&nbsp;$yr$read_on_html</h5>
