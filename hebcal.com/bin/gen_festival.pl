@@ -1106,7 +1106,7 @@ EOHTML
     my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
 	print OUT2 qq{<div class="d-print-none">
-<div class="d-none d-sm-block">
+<div class="d-none d-md-block">
 <ul class="pagination">\n};
 	foreach my $inner (@{$nav_inner}) {
 	    my($slug,$part) = @{$inner};
