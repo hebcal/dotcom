@@ -166,6 +166,10 @@ elsif ($q->path_info() =~ /[^\/]+\.[vi]cs$/)
     # text/x-vCalendar
     vcalendar_display();
 }
+elsif (defined $q->param("cfg") && $q->param("cfg") eq "json")
+{
+    json_display();
+}
 else
 {
     results_page();
@@ -174,10 +178,8 @@ else
 close(STDOUT);
 exit(0);
 
-sub vcalendar_display
-{
-    my @events = my_invoke_hebcal();
-
+sub get_title {
+    my($escape_comma) = @_;
     my $title;
     my @types = keys %input_types;
     if (scalar(@types) == 1) {
@@ -191,8 +193,29 @@ sub vcalendar_display
         @names = @names[0 .. 2];
         push(@names, "...");
     }
-    $title .= " for " . join('\, ', @names);
+    my $sep = $escape_comma ? '\, ' : ', ';
+    $title .= " for " . join($sep, @names);
+    return $title;
+}
 
+sub json_display {
+    my @events = my_invoke_hebcal();
+    my $items = Hebcal::events_to_dict(\@events,"json",$q,0,0);
+
+    print STDOUT $q->header(-type => "application/json",
+                            -charset => "UTF-8",
+                            -cache_control => "private",
+                            -access_control_allow_origin => '*',
+                            );
+    my $title = get_title(0);
+    Hebcal::items_to_json($items,$q,$title);
+}
+
+sub vcalendar_display
+{
+    my @events = my_invoke_hebcal();
+
+    my $title = get_title(1);
     eval("use HebcalExport");
     HebcalExport::vcalendar_write_contents($q, \@events, $title, undef);
 }
@@ -334,6 +357,7 @@ sub my_invoke_hebcal {
                 dur => 0,
                 memo => "",
                 yomtov => 0,
+                category => "hebrew-" . lc($type),
             };
             push(@events2, $evt);
         }
@@ -369,6 +393,7 @@ sub my_invoke_hebcal {
                     dur => 0,
                     memo => "",
                     yomtov => 0,
+                    category => "yahrzeit",
                 };
                 push(@events2, $evt2);
             }
