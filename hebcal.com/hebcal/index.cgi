@@ -892,32 +892,10 @@ sub pdf_render_event {
 
 sub dba_display
 {
-    eval("use Palm::DBA");
-    eval("use HebcalExport");
-
-    my @events = my_invoke_hebcal();
-    my @palm_events;
-    foreach my $evt (@events) {
-        my $pevt = [
-            $evt->{subj},
-            $evt->{untimed},
-            $evt->{min},
-            $evt->{hour},
-            $evt->{mday},
-            $evt->{mon},
-            $evt->{year},
-            $evt->{dur},
-            $evt->{memo},
-        ];
-        push(@palm_events, $pevt);
-    }
-
-    HebcalExport::export_http_header($q, $content_type);
-
-    my $basename = basename($q->path_info());
-
-    Palm::DBA::write_header($basename);
-    Palm::DBA::write_contents(\@palm_events, $cconfig{"tzid"} || 'America/New_York');
+    print STDOUT $q->header(-type => "text/plain",
+                            -status => "410 Gone");
+    print STDOUT "Palm DBA download support removed.\n";
+    exit(0);
 }
 
 sub csv_display
