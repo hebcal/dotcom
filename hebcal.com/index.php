@@ -41,9 +41,26 @@ if (isset($_COOKIE["C"])) {
 }
 
 $in_israel = false;
-if (isset($_SERVER['MM_COUNTRY_CODE']) && $_SERVER['MM_COUNTRY_CODE'] == 'IL') {
-    date_default_timezone_set('Asia/Jerusalem');
-    $in_israel = true;
+$default_lg = "s";
+
+if (isset($_SERVER['MM_COUNTRY_CODE'])) {
+  $cc = $_SERVER['MM_COUNTRY_CODE'];
+  $cc_defaults = [
+    'US' => ['s', 'America/New_York'],
+    'IL' => ['h', 'Asia/Jerusalem'],
+    'FR' => ['fr', 'Europe/Paris'],
+    'RU' => ['ru', 'Europe/Moscow'],
+    'PL' => ['pl', 'Europe/Warsaw'],
+    'FI' => ['fi', 'Europe/Helsinki'],
+  ];
+  if (isset($cc_defaults[$cc])) {
+    $ccinfo = $cc_defaults[$cc];
+    $default_lg = $ccinfo[0];
+    date_default_timezone_set($ccinfo[1]);
+    if ($cc == 'IL') {
+      $in_israel = true;
+    }
+  }
 }
 
 // Determine today's holidays (if any)
@@ -332,7 +349,7 @@ and any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;i=<?php echo $in_israel ? "on" : "off"; ?>&amp;lg=s&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicons glyphicons-calendar"></i> Get calendar</a>
+<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;<?php echo $in_israel ? "i=on&amp;mod=on" : "i=off"; ?>&amp;lg=<?php echo $default_lg; ?>&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicons glyphicons-calendar"></i> Get calendar</a>
 <br><small><a href="/hebcal/">Customize calendar settings</a></small></p>
 </div>
 </div><!-- .row -->
