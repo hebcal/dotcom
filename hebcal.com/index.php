@@ -66,6 +66,9 @@ if (isset($_SERVER['MM_COUNTRY_CODE'])) {
       $in_israel = true;
     }
   }
+  if ($cc != "US") {
+    header("Cache-Control: private");
+  }
 }
 
 // Determine today's holidays (if any)
