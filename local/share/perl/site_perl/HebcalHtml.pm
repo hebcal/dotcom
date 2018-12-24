@@ -171,7 +171,6 @@ sub download_html_bootstrap {
     my $gcal_title = "Google Calendar";
     my $wlive_title = "Outlook.com Calendar";
     my $ycal_title = "iCalendar (Blackbaud, Yahoo!, etc)";
-    my $palm_title = "Palm Desktop (Windows-only)";
 
     my $ol_ics_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ol-ics",
                                           "Outlook Internet Calendar Subscription", 1);
@@ -310,34 +309,6 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></li>
 EOHTML
 ;
 
-    #############################################################
-    # Palm
-
-    # only offer DBA export when we know timegm() will work
-    my $palm_dba = "";
-    if ($greg_year1 > 1969 && $greg_year2 < 2038) {
-        my $dba_href = Hebcal::download_href($q, $filename, 'dba');
-        my $palm_dba_btn = download_button_html($q, "$filename.dba", $dba_href, "dl-dba", "$filename.dba", 1);
-        $palm_dba = <<EOHTML;
-<h5>Palm Desktop 4.1.4 - Date Book Archive</h5>
-<p>$palm_dba_btn</p>
-<p>Step-by-step: <a title="Palm Desktop - import Hebcal Jewish calendar"
-href="/home/87/palm-desktop-import-hebcal-jewish-calendar">Import DBA file into Palm Desktop 4.1.4</a></p>
-EOHTML
-;
-    }
-
-    my $href_vcs = Hebcal::download_href($q, $filename, "vcs");
-    my $palm_vcs_btn = download_button_html($q, "$filename.vcs", $href_vcs, "dl-vcs", "$filename.vcs", 1);
-    my $palm = <<EOHTML;
-<h5>Palm Desktop 6.2 by ACCESS - vCal (.vcs format)</h5>
-<p>$palm_vcs_btn</p>
-<p>Step-by-step: <a title="Palm Desktop 6.2 - import Hebcal Jewish calendar"
-href="/home/188/palm-desktop-62">Import VCS file into Palm Desktop 6.2 for Windows</a></p>
-$palm_dba
-EOHTML
-;
-
     my $pdf_title = "Print PDF (formatted for 8.5\"x11\" paper)";
     my $href_pdf = Hebcal::download_href($q, $filename, "pdf");
     my $pdf_btn = download_button_html($q, "$filename.pdf", $href_pdf, "dl-pdf", "PDF Calendar", 1);
@@ -353,7 +324,6 @@ EOHTML
         ["Outlook Mac", $ol_mac_title, "ol-mac", $ol_mac],
         ["iCalendar", $ycal_title, "ycal", $ycal],
         ["CSV", $ol_csv_title, "ol-csv", $ol_csv],
-        ["Palm", $palm_title, "palm", $palm],
     );
 
     unless ($yahrzeit_mode) {
@@ -380,11 +350,11 @@ sub download_html_modal {
 
     my $html = download_html_bootstrap($q,$filename,$events,$title,$yahrzeit_mode);
     my $s = <<EOHTML;
-<div class="modal fade" id="hcdl-modal" tabindex="-1" role="dialog" aria-labelledby="hcdl-modalLabel" aria-hidden="true">
+<div class="modal fade" id="hcdl-modal" tabindex="-1" role="dialog" aria-hidden="true">
  <div class="modal-dialog" role="document">
   <div class="modal-content">
  <div class="modal-header">
-  <h3 class="modal-title" id="hcdl-modalLabel">Download</h3>
+  <h5 class="modal-title">Download</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
