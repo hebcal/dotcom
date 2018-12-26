@@ -1614,7 +1614,8 @@ sub process_b64_download_pathinfo {
         my $decoded = MIME::Base64::decode_base64url($b64);
         my $q2 = CGI->new($decoded);
         foreach my $key ($q2->param()) {
-            $q->param($key, $q2->param($key));
+            my $val = $q2->param($key);
+            $q->param($key, $val);
         }
      }
 }
