@@ -83,7 +83,7 @@ sub tab_body {
     my $class_xtra = $slug eq "ios" ? " active" : "";
     my $s = <<EOHTML;
 <div id="${slug}-body" class="tab-pane$class_xtra">
-<p class="lead">$long_title</p>
+<p>$long_title</p>
 <div>
 $content
 </div>
@@ -170,12 +170,22 @@ sub download_html_bootstrap {
     my $ios_title = "Apple iOS, iPhone &amp; iPad";
     my $gcal_title = "Google Calendar";
     my $wlive_title = "Outlook.com Calendar";
-    my $ycal_title = "iCalendar (Blackbaud, Yahoo!, etc)";
+    my $ycal_title = "iCalendar feed URL";
 
+    my $ol_ics_btn_suffix = $yahrzeit_mode ? "" : " Subscription";
     my $ol_ics_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ol-ics",
-                                          "Outlook Internet Calendar Subscription", 1);
+                                          "Outlook Internet Calendar$ol_ics_btn_suffix", 1);
+    my $ol_preamble = "";
+    if (!$yahrzeit_mode) {
+        $ol_preamble = <<EOHTML;
+<p><small>To keep the imported calendar up-to-date, subscribe to the
+Hebcal calendar in Outlook. Our calendar subscription feeds include
+2+ years of events.</small></p>
+EOHTML
+;
+    }
     my $ol_ics = <<EOHTML;
-<p>$ol_ics_btn</p>
+$ol_preamble<p>$ol_ics_btn</p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
@@ -192,10 +202,10 @@ EOHTML
 
     my $href_ol_usa = Hebcal::download_href($q, "${filename}_usa", "csv");
     my $ol_csv_btn_usa = download_button_html($q, "${filename}_usa.csv", $href_ol_usa, "dl-ol-csv-usa",
-                                              "Outlook CSV - USA date format (month/day/year)", 1);
+                                              "CSV - USA (month/day/year)", 1);
     my $href_ol_eur = Hebcal::download_href($q, "${filename}_eur", "csv") . ";euro=1";
     my $ol_csv_btn_eur = download_button_html($q, "${filename}_eur.csv", $href_ol_eur, "dl-ol-csv-eur",
-                                              "Outlook CSV - European date format (day/month/year)", 1);
+                                              "CSV - Europe (day/month/year)", 1);
     my $ol_csv = <<EOHTML;
 Select one of:
 <ul class="list-unstyled">
@@ -206,7 +216,7 @@ Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 9
 href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 EOHTML
 ;
-    my $ical_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ical-sub", "to Mac Calendar", 1);
+    my $ical_btn = download_button_html($q, $ics_title, $webcal_href, "dl-ical-sub", "to macOS Calendar.app", 1);
     my $ical = <<EOHTML;
 <p>$ical_btn</p>
 <p>Step-by-step: <a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
@@ -247,7 +257,7 @@ EOHTML
     my $gcal_href = URI::Escape::uri_escape_utf8($full_http_href);
     my $gcal;
     if ($yahrzeit_mode) {
-        my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", "$ics_title for Google Calendar", 1);
+        my $gcal_btn = download_button_html($q, $ics_title, $ical_href, "dl-gcal-alt", $ics_title, 1);
         $gcal = <<EOHTML;
 <p>$gcal_btn</p>
 <p>Step-by-step: <a href="/home/59/google-calendar-alternative-instructions">Import into Google Calendar</a></p>
@@ -295,17 +305,27 @@ EOHTML
     $ampersand_subical_href =~ s/;/&amp;/g;
     my $ampersand_http_href = "http://" . $vhost . $ampersand_subical_href;
     my $ycal = <<EOHTML;
-<form id="GrabLinkForm" action="#">
-<ol>
-<li>Copy the entire iCalendar URL here:
-<label for="iCalUrl"><small><input type="text" size="80" id="iCalUrl" name="iCalUrl"
+<p><small>The iCalendar format is used by Outlook 365, Yahoo!, Blackbaud, and
+many desktop and web calendar applications.</small></p>
+<p>Copy the entire iCalendar URL here:</p>
+<form class="form-inline" id="GrabLinkForm" action="#">
+<!--
+<div class="btn-group">
+<button type="button" class="btn btn-light btn-copy js-tooltip js-copy" 
+data-toggle="tooltip" data-placement="bottom" data-copy="${ampersand_http_href}"
+title="Copy to clipboard">
+<i class="glyphicons glyphicons-copy"></i>
+</button>
+-->
+<div class="input-group input-group-sm mb-3">
+<input type="text" class="form-control" size="60" id="iCalUrl" name="iCalUrl"
 onfocus="this.select();" onKeyPress="return false;"
-value="${ampersand_http_href}"></small></label>
-<li>Follow additional instructions for 
-<a href="home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
-or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></li>
-</ol>
+value="${ampersand_http_href}">
+</div>
 </form>
+<p>Follow additional instructions for 
+<a href="home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
+or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 EOHTML
 ;
 
@@ -336,7 +356,7 @@ EOHTML
         my $active = $slug eq "ios" ? " active" : "";
         $s .= qq{<li class="nav-item"><a class="nav-link$active" href="#${slug}-body" data-toggle="tab">$short_title</a></li>\n};
     }
-    $s .= qq{</ul><!-- #download-tabs -->\n<hr style="margin:0 0 12px 0">\n<div class="tab-content">\n};
+    $s .= qq{</ul><!-- #download-tabs -->\n<div class="tab-content mt-2">\n};
     foreach my $tab (@nav_tabs) {
         $s .= tab_body($tab);
     }
@@ -354,13 +374,13 @@ sub download_html_modal {
  <div class="modal-dialog" role="document">
   <div class="modal-content">
  <div class="modal-header">
-  <h5 class="modal-title">Download</h5>
+  <h5 class="modal-title">Download $title calendar</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
  </div>
  <div class="modal-body">
-<p>Export <strong>$title Calendar</strong> to your calendar app.</p>
+<p>First, select your calendar app:</p>
 $html
  </div><!-- .modal-body -->
  <div class="modal-footer">
