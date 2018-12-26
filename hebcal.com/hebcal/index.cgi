@@ -54,6 +54,7 @@ use HebcalGPL ();
 use HebcalHtml ();
 use POSIX qw(strftime);
 use Benchmark qw(:hireswallclock :all);
+use MIME::Base64 qw();
 
 my @benchmarks;
 push(@benchmarks, Benchmark->new);
@@ -72,6 +73,8 @@ if (defined $ENV{'REQUEST_METHOD'} && $ENV{'REQUEST_METHOD'} eq "POST" && $ENV{'
     print STDOUT "POST not allowed; try using GET instead.\n";
     exit(0);
 }
+
+Hebcal::process_b64_download_pathinfo($q);
 
 $q->delete(".s");               # we don't care about submit button
 
@@ -1475,7 +1478,7 @@ accurate.
 
 sub settings_button_html {
     my $settings_url = Hebcal::self_url($q, {"v" => "0"}, "&amp;");
-    return qq{<a class="btn btn-secondary btn-sm" href="$settings_url" title="Change calendar options"><i class="glyphicons glyphicons-cog"></i> Settings</a>};
+    return qq{<a class="btn btn-secondary btn-sm mb-1" href="$settings_url" title="Change calendar options"><i class="glyphicons glyphicons-cog"></i> Settings</a>};
 }
 
 sub results_page_toolbar {
@@ -1484,11 +1487,11 @@ sub results_page_toolbar {
     my $html = <<EOHTML;
 <div class="d-print-none">
   <div class="btn-group mr-1" role="group" data-toggle="buttons">
-   <label class="btn btn-secondary btn-sm active mb-0">
+   <label class="btn btn-secondary btn-sm active mb-1">
     <input type="radio" name="view" id="toggle-month" checked>
     <span class="glyphicons glyphicons-calendar"></span> Month
    </label>
-   <label class="btn btn-secondary btn-sm mb-0">
+   <label class="btn btn-secondary btn-sm mb-1">
     <input type="radio" name="view" id="toggle-list">
     <span class="glyphicons glyphicons-list"></span> List
    </label>
@@ -1496,13 +1499,12 @@ sub results_page_toolbar {
 EOHTML
 ;
 
-    $html .= qq{<div class="btn-group mr-1" role="group">};
+    $html .= qq{<div class="btn-group mr-1 mb-1" role="group">};
     $html .= HebcalHtml::download_html_modal_button(" btn-sm");
     $html .= qq{</div>\n};
 
     my $pdf_url = Hebcal::download_href($q, $filename, "pdf");
-    $pdf_url =~ s/&/&amp;/g;
-    my $btn_print_html = qq{<div class="btn-group" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a></div>};
+    my $btn_print_html = qq{<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="$pdf_url"><i class="glyphicons glyphicons-print"></i> Print</a></div>};
 
     if (!param_true("c")) {
         $html .= $btn_print_html;
@@ -1526,7 +1528,7 @@ EOHTML
         $html .= <<EOHTML;
   <div class="btn-group mr-1" role="group">
     $btn_print_html
-    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle mb-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
         <span class="sr-only">Toggle Dropdown</span>
     </button>

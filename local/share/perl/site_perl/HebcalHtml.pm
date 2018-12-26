@@ -102,34 +102,13 @@ sub download_button_html {
 
     my $html5download = ($href =~ m,^(webcal://|https://outlook\.live\.com),) ? "" : qq{ download="$filename"};
 
-    my $class = $button_and_icon ? "btn btn-secondary download" : "download";
+    my $class = $button_and_icon ? "btn btn-secondary download mb-1" : "download";
     my $icon = $button_and_icon ? qq{<span class="glyphicons glyphicons-download-alt"></span> } : "";
 
     my $href_amp = $href;
     $href_amp =~ s/&/&amp;/g;
 
     return qq{<a class="$class" id="$id" title="$filename" href="$href_amp"${nofollow}${html5download}>${icon}Download $button_text</a>};
-}
-
-# replace download URL with a subscribe URL.
-# uses year=now and recalculates md5 cache URLs
-sub get_subscribe_href {
-    my($q,$filename) = @_;
-
-    my $year_orig = $q->param("year");
-    $q->param("year", "now");
-
-    my $ical1 = Hebcal::download_href($q, $filename, "ics");
-    $ical1 =~ /\?(.+)$/;
-    my $args = $1;
-    my $ical_href = Hebcal::get_vcalendar_cache_fn($args) . "?" . $args;
-    my $subical_href = $ical_href;
-    $subical_href =~ s/\?dl=1/\?subscribe=1/;
-
-    # restore to orig
-    $q->param("year", $year_orig);
-
-    $subical_href;
 }
 
 sub download_html_bootstrap {
@@ -142,23 +121,20 @@ sub download_html_bootstrap {
         $greg_year2 = $events->[$numEntries - 1]->{year};
     }
 
-    my $ical1 = Hebcal::download_href($q, $filename, "ics");
-    $ical1 =~ /\?(.+)$/;
-    my $args = $1;
-    my $ical_href = Hebcal::get_vcalendar_cache_fn($args) . "?" . $args;
-    my $subical_href = get_subscribe_href($q,$filename);
-    my $vhost = "download.hebcal.com";
-    if ($q->virtual_host() eq "localhost") {
-        $vhost = "localhost:8888";
-    }
-    $ical_href = join("", "http://", $vhost, $ical_href);
+    my $ical_href = Hebcal::download_href($q, $filename, "ics");
+    my $subical_href;
     my $webcal_href;
     if ($yahrzeit_mode) {
-        $webcal_href = $ical1;
-        $ical_href = $ical1;
+        $subical_href = $ical_href;
+        $webcal_href = $ical_href;
     } else {
-        $webcal_href = join("", "webcal://", $vhost, $subical_href);
+        $subical_href = Hebcal::download_href($q, $filename, "ics", {
+            "year" => "now",
+            "subscribe" => 1,
+        });
+        $webcal_href = $subical_href;
     }
+    $webcal_href =~ s/^http/webcal/;
     my $title_esc = $title ? URI::Escape::uri_escape_utf8("Hebcal $title")
         : URI::Escape::uri_escape_utf8("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
@@ -203,7 +179,7 @@ EOHTML
     my $href_ol_usa = Hebcal::download_href($q, "${filename}_usa", "csv");
     my $ol_csv_btn_usa = download_button_html($q, "${filename}_usa.csv", $href_ol_usa, "dl-ol-csv-usa",
                                               "CSV - USA (month/day/year)", 1);
-    my $href_ol_eur = Hebcal::download_href($q, "${filename}_eur", "csv") . ";euro=1";
+    my $href_ol_eur = Hebcal::download_href($q, "${filename}_eur", "csv", {"euro" => 1});
     my $ol_csv_btn_eur = download_button_html($q, "${filename}_eur.csv", $href_ol_eur, "dl-ol-csv-eur",
                                               "CSV - Europe (day/month/year)", 1);
     my $ol_csv = <<EOHTML;
@@ -251,9 +227,7 @@ EOHTML
     #############################################################
     # Google Calendar
 
-    my $gcal_subical_href = $subical_href;
-    $gcal_subical_href =~ s/;/&/g;
-    my $full_http_href = "http://" . $vhost . $gcal_subical_href;
+    my $full_http_href = $subical_href;
     my $gcal_href = URI::Escape::uri_escape_utf8($full_http_href);
     my $gcal;
     if ($yahrzeit_mode) {
@@ -283,10 +257,7 @@ EOHTML
     #############################################################
     # Windows Live Calendar
 
-    my $wlive_subical_href = $subical_href;
-    $wlive_subical_href =~ s/&/;/g;
-    my $wlive_http_href = "http://" . $vhost . $wlive_subical_href;
-    my $wlive_href = URI::Escape::uri_escape_utf8($wlive_http_href);
+    my $wlive_href = URI::Escape::uri_escape_utf8($subical_href);
     my $wlive_btn = download_button_html($q, $ics_title,
                                          "https://outlook.live.com/calendar/calendar.aspx?rru=addsubscription&url=${wlive_href}&name=${title_esc}",
                                          "dl-wlive", "to Outlook.com Calendar", 1);
@@ -301,9 +272,6 @@ EOHTML
     ############################################################
     # Yahoo! Calendar
 
-    my $ampersand_subical_href = $subical_href;
-    $ampersand_subical_href =~ s/;/&amp;/g;
-    my $ampersand_http_href = "http://" . $vhost . $ampersand_subical_href;
     my $ycal = <<EOHTML;
 <p><small>The iCalendar format is used by Outlook 365, Yahoo!, Blackbaud, and
 many desktop and web calendar applications.</small></p>
@@ -312,7 +280,7 @@ many desktop and web calendar applications.</small></p>
 <!--
 <div class="btn-group">
 <button type="button" class="btn btn-light btn-copy js-tooltip js-copy" 
-data-toggle="tooltip" data-placement="bottom" data-copy="${ampersand_http_href}"
+data-toggle="tooltip" data-placement="bottom" data-copy="${subical_href}"
 title="Copy to clipboard">
 <i class="glyphicons glyphicons-copy"></i>
 </button>
@@ -320,7 +288,7 @@ title="Copy to clipboard">
 <div class="input-group input-group-sm mb-3">
 <input type="text" class="form-control" size="60" id="iCalUrl" name="iCalUrl"
 onfocus="this.select();" onKeyPress="return false;"
-value="${ampersand_http_href}">
+value="${subical_href}">
 </div>
 </form>
 <p>Follow additional instructions for 

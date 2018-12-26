@@ -46,7 +46,7 @@ use Date::Calc ();
 use Time::Local ();		# needed for Hebcal::event_to_time
 use URI::Escape;
 use HebcalConst;
-use Digest::MD5 ();
+use MIME::Base64 qw();
 use HebcalGPL;
 
 our $eval_use_DBI;
@@ -357,6 +357,9 @@ my %monthnames_inprefix = (
     "Adar I"    => "בַּאֲדָר א׳",
     "Adar II"   => "בַּאֲדָר ב׳",
 );
+
+my @download_ignore_param = qw(tag utm_source utm_campaign set vis subscribe dl .cgifields);
+my %download_ignore_param = map { $_ => 1 } @download_ignore_param;
 
 my $ZONE_TAB = "/usr/share/zoneinfo/zone.tab";
 my @TIMEZONES;
@@ -1603,16 +1606,46 @@ sub get_geo_args {
     '';
 }
 
-sub download_href
-{
-    my($q,$filename,$ext) = @_;
+sub process_b64_download_pathinfo {
+    my($q) = @_;
+    my $pi = $q->path_info();
+    if (defined $pi && $pi =~ /^\/v2\/([^\/]+)/) {
+        my $b64 = $1;
+        my $decoded = MIME::Base64::decode_base64url($b64);
+        my $q2 = CGI->new($decoded);
+        foreach my $key ($q2->param()) {
+            $q->param($key, $q2->param($key));
+        }
+     }
+}
 
-    my $cgi;
+sub download_href {
+    my($q,$filename,$ext,$override) = @_;
+
+    my $args = "";
+    $override ||= {};
+
+    foreach my $key (sort $q->param()) {
+        next if defined $download_ignore_param{$key};
+        my $val = defined $override->{$key} ? $override->{$key}
+            : (defined $q->param($key) ? $q->param($key) : "");
+        $args .= join('', '&', $key, '=', URI::Escape::uri_escape_utf8($val));
+    }
+
+    foreach my $key (keys %{$override}) {
+        unless (defined $q->param($key)) {
+            my $val = $override->{$key};
+            $args .= join('', '&', $key, '=', URI::Escape::uri_escape_utf8($val));
+        }
+    }
+
+    my $encoded = MIME::Base64::encode_base64url($args);
+
+    my $cgi = "";
     my $script_name = $q->script_name();
-    if ($script_name =~ /(\w+\.cgi)$/)
-    {
-	$cgi = $1;
-	$script_name =~ s,/\w+\.cgi$,/,;
+    if ($script_name =~ /(\w+\.cgi)$/) {
+        $cgi = $1;
+        $script_name =~ s,/\w+\.cgi$,/,;
     }
 
     my $vhost = "download.hebcal.com";
@@ -1620,15 +1653,7 @@ sub download_href
         $vhost = "localhost:8888";
     }
 
-    my $href = "http://" . $vhost . $script_name;
-    $href .= $cgi if $cgi;
-    $href .= "/$filename.$ext?dl=1";
-    foreach my $key ($q->param()) {
-	my $val = defined $q->param($key) ? $q->param($key) : "";
-        $href .= "&$key=" . URI::Escape::uri_escape_utf8($val);
-    }
-
-    $href;
+    return join('', "http://", $vhost, $script_name, $cgi, '/v2/', $encoded, '/', $filename, '.', $ext);
 }
 
 # Zip-Codes.com TimeZone IDs
@@ -2105,50 +2130,6 @@ sub get_usa_tzid {
 	return $ZIPCODES_TZ_MAP{$tz};
     }
 }
-
-
-sub get_munged_qs
-{
-    my($args) = @_;
-
-    my $qs;
-    if ($args) {
-	$qs = $args;
-    } elsif ($ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/) {
-	$qs = $1;
-    } else {
-	$qs = "bogus";
-    }
-
-    # first translate all ampersands and semicolons into commas
-    $qs =~ s/&amp;/,/g;
-    $qs =~ s/&/,/g;
-    $qs =~ s/;/,/g;
-
-    # now delete selected parameters
-    $qs =~ s/,?(tag|utm_source|utm_campaign|set|vis|subscribe|dl)=[^,]+//g;
-    $qs =~ s/,?\.(from|cgifields|s)=[^,]+//g;
-    $qs =~ s/^,+//g;
-    $qs =~ s/\./_/g;
-    $qs =~ s/\//-/g;
-    $qs =~ s/\%20/+/g;
-    $qs =~ s/[\<\>\s\"\'\`\?\*\$\|\[\]\{\}\\\~]//g; # unsafe chars
-
-    return $qs;
-}
-
-sub get_vcalendar_cache_fn
-{
-    my($args) = @_;
-
-    my $qs = get_munged_qs($args);
-    my $digest = Digest::MD5::md5_hex($qs);
-    my $dir = substr($digest, 0, 2);
-    my $fn = substr($digest, 2) . ".ics";
-
-    return "/export/$dir/$fn";
-}
-
 
 sub torah_calendar_memo_inner {
     my($dbh,$sth,$gy,$gm,$gd) = @_;

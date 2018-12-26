@@ -69,6 +69,8 @@ my @HEB_MONTH_NAME =
 # process form params
 my $q = new CGI;
 
+Hebcal::process_b64_download_pathinfo($q);
+
 my $script_name = $q->script_name();
 $script_name =~ s,/[^/]+$,/,;
 

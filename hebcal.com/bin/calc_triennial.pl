@@ -698,7 +698,7 @@ sub download_torah_button {
     }
     $html .= <<EOHTML;
   <li><a class="dropdown-item download" id="quick-ical-$filename" href="webcal://download.hebcal.com/ical/$filename.ics">iPhone, iPad, Mac OS X</a></li>
-  <li><a class="dropdown-item download" id="quick-gcal-$filename" href="http://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F$filename.ics">Google Calendar</a></li>
+  <li><a class="dropdown-item download" id="quick-gcal-$filename" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F$filename.ics">Google Calendar</a></li>
   <li><a class="dropdown-item download" id="quick-csv-$filename" href="http://download.hebcal.com/ical/$filename.csv" download="$filename.csv">Microsoft Outlook CSV</a>
   <li class="dropdown-divider"></li>
   <li><a class="dropdown-item" href="$rss_href">$feed_title</a></li>

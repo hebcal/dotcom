@@ -525,12 +525,6 @@ sub vcalendar_write_contents {
             }
             else {
                 $desc = "Jewish Holidays from www.hebcal.com";
-#                if ( defined $ENV{"REQUEST_URI"} && $ENV{"REQUEST_URI"} =~ /\?(.+)$/ ) {
-#                    my $qs = $1;
-#                    $qs =~ s/;/&/g;
-#                    my $cache_webpath = Hebcal::get_vcalendar_cache_fn();
-#                    ical_write_line(qq{X-ORIGINAL-URL:http://download.hebcal.com$cache_webpath?$qs});
-#                }
             }
             ical_write_line(qq{X-WR-CALDESC:$desc});
         }
