@@ -338,7 +338,13 @@ sub process_args
     $cmd .= " -c -s -x";
 
     if (defined $q->param('year') && $q->param('year') =~ /^\d+$/) {
-        $cmd .= " -H " . $q->param('year');
+        my $hyear = $q->param('year');
+        if ($hyear < 3762) {
+            print "Status: 400 Bad Request\r\n", "Content-Type: text/html\r\n\r\n",
+                "Can't handle Hebrew dates before common era.", "\n";
+            exit(0);          
+        }
+        $cmd .= " -H " . $hyear;
     } else {
         my($yy,$mm,$dd) = Date::Calc::Today();
         my $HEB_YR = Hebcal::get_default_hebrew_year($yy,$mm,$dd);
