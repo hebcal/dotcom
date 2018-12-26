@@ -112,7 +112,7 @@ synagogue's web page.</p>
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="get">
 <input type="hidden" name="geo" id="geo" value="geoname">
 <input type="hidden" name="zip" id="zip" value="">
-<input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($param["geonameid"]) ?>">
+<input type="hidden" name="geonameid" id="geonameid" value="<?php echo htmlspecialchars($geonameid) ?>">
 
 <div class="form-group">
   <label for="city-typeahead">City</label>
