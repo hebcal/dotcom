@@ -54,7 +54,6 @@ use HebcalGPL ();
 use HebcalHtml ();
 use POSIX qw(strftime);
 use Benchmark qw(:hireswallclock :all);
-use MIME::Base64 qw();
 
 my @benchmarks;
 push(@benchmarks, Benchmark->new);
@@ -1551,6 +1550,12 @@ EOHTML
     return $html;
 }
 
+sub to_filename {
+    my($tmp) = @_;
+    $tmp =~ s/[^A-Za-z0-9]/_/g;
+    return $tmp;
+}
+
 sub results_page
 {
     my($date,$filename) = @_;
@@ -1563,11 +1568,13 @@ sub results_page
         {
             $filename .= "_" . $q->param("zip");
         }
+        elsif (defined $cconfig{"asciiname"} && $cconfig{"asciiname"} ne "")
+        {
+            $filename .= "_" . to_filename($cconfig{"asciiname"});
+        }
         elsif (defined $cconfig{"city"} && $cconfig{"city"} ne "")
         {
-            my $tmp = $cconfig{"city"};
-            $tmp =~ s/[^A-Za-z0-9]/_/g;
-            $filename .= "_" . $tmp;
+            $filename .= "_" . to_filename($cconfig{"city"});
         }
     }
 

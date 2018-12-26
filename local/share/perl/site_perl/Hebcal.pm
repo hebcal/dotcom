@@ -358,7 +358,7 @@ my %monthnames_inprefix = (
     "Adar II"   => "בַּאֲדָר ב׳",
 );
 
-my @download_ignore_param = qw(tag utm_source utm_campaign set vis subscribe dl .cgifields);
+my @download_ignore_param = qw(tag utm_source utm_campaign set vis subscribe dl .cgifields city-typeahead);
 my %download_ignore_param = map { $_ => 1 } @download_ignore_param;
 
 my $ZONE_TAB = "/usr/share/zoneinfo/zone.tab";
@@ -1609,7 +1609,7 @@ sub get_geo_args {
 sub process_b64_download_pathinfo {
     my($q) = @_;
     my $pi = $q->path_info();
-    if (defined $pi && $pi =~ /^\/v2\/([^\/]+)/) {
+    if (defined $pi && $pi =~ /^\/v2\/[hy]\/([^\/]+)/) {
         my $b64 = $1;
         my $decoded = MIME::Base64::decode_base64url($b64);
         my $q2 = CGI->new($decoded);
@@ -1623,6 +1623,7 @@ sub download_href {
     my($q,$filename,$ext,$override) = @_;
 
     my $args = "";
+    my $dltype = 'h';
     $override ||= {};
 
     foreach my $key (sort $q->param()) {
@@ -1630,30 +1631,27 @@ sub download_href {
         my $val = defined $override->{$key} ? $override->{$key}
             : (defined $q->param($key) ? $q->param($key) : "");
         $args .= join('', '&', $key, '=', URI::Escape::uri_escape_utf8($val));
+        if ($key eq 'v' && $val eq 'yahrzeit') {
+            $dltype = 'y';
+        }
     }
 
-    foreach my $key (keys %{$override}) {
+    foreach my $key (sort keys %{$override}) {
         unless (defined $q->param($key)) {
             my $val = $override->{$key};
             $args .= join('', '&', $key, '=', URI::Escape::uri_escape_utf8($val));
         }
     }
 
-    my $encoded = MIME::Base64::encode_base64url($args);
+    my $encoded = MIME::Base64::encode_base64url(substr($args, 1));
 
-    my $cgi = "";
-    my $script_name = $q->script_name();
-    if ($script_name =~ /(\w+\.cgi)$/) {
-        $cgi = $1;
-        $script_name =~ s,/\w+\.cgi$,/,;
-    }
-
-    my $vhost = "download.hebcal.com";
+    my $script_name = $q->script_name(); # /full/path/to/script.cgi
+    my $url_prefix = 'http://download.hebcal.com';
     if ($q->virtual_host() eq "localhost") {
-        $vhost = "localhost:8888";
+        $url_prefix = "http://localhost:8888$script_name";
     }
 
-    return join('', "http://", $vhost, $script_name, $cgi, '/v2/', $encoded, '/', $filename, '.', $ext);
+    return join('', $url_prefix, '/v2/', $dltype, '/', $encoded, '/', $filename, '.', $ext);
 }
 
 # Zip-Codes.com TimeZone IDs
@@ -1797,6 +1795,7 @@ sub process_args_common_geoname {
         $cconfig->{"geonameid"} = int($geonameid0);
         $cconfig->{"country"} = $country;
         $cconfig->{"admin1"} = $admin1;
+        $cconfig->{"asciiname"} = $asciiname;
     }
     (1,$cmd,$latitude,$longitude,$city_descr);
 }
