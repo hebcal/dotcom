@@ -4,7 +4,7 @@
 #
 # Generates pages for http://www.hebcal.com/shabbat/browse/
 #
-# Copyright (c) 2015  Michael J. Radwin.
+# Copyright (c) 2019  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -193,7 +193,7 @@ ORDER BY g.asciiname};
     print $fh <<EOHTML;
 <div class="row">
 <div class="col-sm-12">
-<h1>$country <small class="text-muted">Shabbat Candle Lighting Times</small></h1>
+<h2>$country<br><span class="h4 small text-muted">Shabbat Candle Lighting Times</span></h2>
 <p class="lead">$shabbat_formatted</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
