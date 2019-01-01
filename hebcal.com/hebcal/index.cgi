@@ -6,7 +6,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your ZIP code or closest city).
 #
-# Copyright (c) 2018  Michael J. Radwin.
+# Copyright (c) 2019  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -1727,7 +1727,7 @@ EOHTML
 
     my $header_ad = <<EOHTML;
 <div class="col-sm-4 d-print-none">
-<h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
+<h5 class="mb-4">Advertisement</h5>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- banner-320x100 -->
 <ins class="adsbygoogle"

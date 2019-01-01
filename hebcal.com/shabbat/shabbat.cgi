@@ -4,7 +4,7 @@
 # Hebcal Shabbat Times generates weekly Shabbat candle lighting times
 # and Parsha HaShavua from Hebcal information.
 #
-# Copyright (c) 2017  Michael J. Radwin.
+# Copyright (c) 2019  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -728,7 +728,7 @@ sub more_from_hebcal {
 
     my $html = <<EOHTML;
 <div style="padding-bottom:16px">
-<h4>$cconfig{"city"}</h4>
+<h5>$cconfig{"city"}</h5>
 <ul class="list-unstyled nav-list">
   <li>
     <span class="glyphicons glyphicons-print"></span>
@@ -751,6 +751,8 @@ EOHTML
 sub my_head {
     my($title,$xtra_head) = @_;
     my $rss_href2 = "https://" . $q->virtual_host() . $rss_href;
+#    my $canonical = url_html(self_url());
+## <link rel="canonical" href="$canonical">
     my $xtra_head2 = <<EOHTML;
 <link rel="alternate" type="application/rss+xml" title="RSS" href="$rss_href2">
 <link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
@@ -775,7 +777,7 @@ EOHTML
     my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-9">
-<h1>Shabbat Times <small class="text-muted">$city_descr</small></h1>
+<h2>Shabbat Times <span class="h4 small text-muted">$city_descr</span></h2>
 EOHTML
 ;
 
@@ -906,7 +908,7 @@ EOHTML
 </div><!-- .col-sm-9 -->
 <div class="col-sm-3" role="complementary">
 $more_from_hebcal
-<h5>Advertisement</h5>
+<h5 class="mb-4">Advertisement</h5>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- responsive textonly -->
 <ins class="adsbygoogle"
