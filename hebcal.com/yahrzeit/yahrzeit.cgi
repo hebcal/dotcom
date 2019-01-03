@@ -3,7 +3,7 @@
 ########################################################################
 # compute yahrzeit dates based on gregorian calendar based on Hebcal
 #
-# Copyright (c) 2018  Michael J. Radwin.
+# Copyright (c) 2019  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -288,6 +288,7 @@ sub get_birthday_or_anniversary {
 
 sub my_invoke_hebcal {
     my %yahrzeits;
+    my %date_of_death;
     my($fh,$tmpfile) = File::Temp::tempfile();
     binmode( $fh, ":utf8" );
     foreach my $input (@inputs) {
@@ -296,6 +297,7 @@ sub my_invoke_hebcal {
             my $hebcal_name = "YahrzeitPerson" . $key;
             printf $fh "%02d %02d %4d %s\n", $gm, $gd, $gy, $hebcal_name;
             $yahrzeits{$hebcal_name} = $name;
+            $date_of_death{$hebcal_name} = Date::Calc::Date_to_Days($gy, $gm, $gd);
         }
     }
     close($fh);
@@ -317,6 +319,10 @@ sub my_invoke_hebcal {
             next if $type eq "Yahrzeit";
             my $hdate = get_birthday_or_anniversary($gy,$gm,$gd,$hyear);
             my $gregdate = HebcalGPL::abs2greg(HebcalGPL::hebrew2abs($hdate));
+
+            # ignore events before or on the actual anniversary.
+            my $orig_days = Date::Calc::Date_to_Days($gy, $gm, $gd);
+            next if $orig_days >= Date::Calc::Date_to_Days($gregdate->{"yy"}, $gregdate->{"mm"}, $gregdate->{"dd"});
 
             my $subj = "${name}'s Hebrew ${type}";
             if ($q->param("hebdate")) {
@@ -354,6 +360,9 @@ sub my_invoke_hebcal {
 
             if (defined $yahrzeits{$subj})
             {
+                # ignore events before or on the actual anniversary.
+                next if $date_of_death{$subj} >= Date::Calc::Date_to_Days($year, $mon, $mday);
+
                 my $name = $yahrzeits{$subj};
                 my $subj2 = "${name}'s Yahrzeit";
                 my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
