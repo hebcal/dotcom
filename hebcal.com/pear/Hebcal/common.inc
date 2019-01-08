@@ -3,7 +3,7 @@
 /***********************************************************************
  * Hebcal PHP helper functions
  *
- * Copyright (c) 2018  Michael J. Radwin.
+ * Copyright (c) 2019  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -486,9 +486,6 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
 <meta charset="UTF-8">
 <title>$title</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!--
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
--->
 <link rel="stylesheet" href="/i/bootstrap-4.1.3/css/bootstrap.min.css">
 $xtra_stylesheet<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -499,7 +496,6 @@ $xtra_stylesheet<script>
   ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 </script>
-<link rel="stylesheet" href="/i/hc-gip-1.0.css">
 <style>
 .hebcal-footer {
   padding-top: 40px;
@@ -539,6 +535,7 @@ $xtra_stylesheet<script>
     width: 132px;
   }
 }
+@font-face{font-family:'Glyphicons Regular';src:url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot');src:url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot?#iefix')format('embedded-opentype'),url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.woff')format('woff'),url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.ttf')format('truetype'),url('/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.svg#glyphiconsregular')format('svg');font-weight:normal;font-style:normal;}.glyphicons{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Regular';font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}.glyphicons.glyphicons-copy:before{content:"\E512";}.glyphicons.glyphicons-volume-up:before{content:"\E185";}.glyphicons.glyphicons-pencil:before{content:"\E031";}.glyphicons.glyphicons-list:before{content:"\E115";}.glyphicons.glyphicons-cog:before{content:"\E137";}.glyphicons.glyphicons-info-sign:before{content:"\E196";}.glyphicons.glyphicons-wrench:before{content:"\E440";}.glyphicons.glyphicons-print:before{content:"\E016";}.glyphicons.glyphicons-calendar:before{content:"\E046";}.glyphicons.glyphicons-download-alt:before{content:"\E182";}.glyphicons.glyphicons-envelope:before{content:"\E011";}.glyphicons.glyphicons-refresh:before{content:"\E082";}.glyphicons.glyphicons-candle:before{content:"\E335";}.glyphicons.glyphicons-book_open:before{content:"\E352";}.glyphicons.glyphicons-parents:before{content:"\E025";}.glyphicons.glyphicons-cogwheels:before{content:"\E138";}.glyphicons.glyphicons-settings:before{content:"\E281";}.glyphicons.glyphicons-embed-close:before{content:"\E119";}.glyphicons.glyphicons-git-branch:before{content:"\E423";}
 </style>
 $xtra_head</head>
 <body>
@@ -594,8 +591,7 @@ $last_updated_text
 </div> <!-- .container -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="/i/bootstrap-4.1.3/js/bootstrap.bundle.min.js"></script>
 $xtra_html
 <script>
 $(document).ready(function(){
