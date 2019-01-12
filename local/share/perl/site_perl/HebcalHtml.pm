@@ -424,7 +424,18 @@ sub header_bootstrap3 {
     my $menu = html_menu_bootstrap($base_href,$HTML_MENU_ITEMS_V2);
     my $title2 = $suppress_site_title ? $title : "$title | Hebcal Jewish Calendar";
     my $xtra_stylesheet = $hebrew_stylesheet
-        ? qq{<link href="https://fonts.googleapis.com/css?family=Alef:400,700" rel="stylesheet">\n}
+        ? qq{<script>
+  WebFontConfig = {
+    google: { families: [ 'Alef' ] }
+  };
+  (function(d) {
+    var wf = d.createElement('script'), s = d.scripts[0];
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+    wf.async = true;
+    s.parentNode.insertBefore(wf, s);
+  })(document);
+</script>
+}
         : "";
 
     my $logo = '<a href="/" class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"><img src="/i/hebcal-logo-1.2.svg" width="77" height="21" alt="Hebcal"></a>';

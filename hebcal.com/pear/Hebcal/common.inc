@@ -476,8 +476,21 @@ function html_header_bootstrap3($title, $xtra_head="", $title_append_suffix=true
         $logo = '<a href="/" ' . $logoIdClassTitle . '>' . $logoImage . '</a>';
     }
 
+    $alef_stylesheet = <<<EOD
+<script>
+  WebFontConfig = {
+    google: { families: [ 'Alef' ] }
+  };
+  (function(d) {
+    var wf = d.createElement('script'), s = d.scripts[0];
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+    wf.async = true;
+    s.parentNode.insertBefore(wf, s);
+  })(document);
+</script>
+EOD;
     $xtra_stylesheet = $hebrew_stylesheet
-        ? "<link href=\"https://fonts.googleapis.com/css?family=Alef:400,700\" rel=\"stylesheet\">\n"
+        ? $alef_stylesheet
         : "";
 
     $html = <<<EOD

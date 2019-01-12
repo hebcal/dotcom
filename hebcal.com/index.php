@@ -2,7 +2,7 @@
 /***********************************************************************
  * Hebcal homepage
  *
- * Copyright (c) 2018  Michael J. Radwin.
+ * Copyright (c) 2019  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -231,7 +231,18 @@ a.icon-block {
 }
 </style>
 <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
-<link href='https://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+<script>
+  WebFontConfig = {
+    google: { families: [ 'Merriweather:400:latin' ] }
+  };
+  (function(d) {
+    var wf = d.createElement('script'), s = d.scripts[0];
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+    wf.async = true;
+    s.parentNode.insertBefore(wf, s);
+  })(document);
+</script>
+
 EOD;
 $header = html_header_bootstrap3("Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com",
 		     $xtra_head,
