@@ -1531,11 +1531,12 @@ sub amazon_recommended_book {
 <div class="col-$thumbnail_width">
 <div class="thumbnail">
 <a class="amzn" id="$anchor-$asin-1" title="$bktitle" href="$link"><img src="/i/$img"
+class="img-fluid img-thumbnail"
 alt="$bktitle" width="$width" height="$height" style="border:none"></a>
-<div class="caption">
+<div class="figure-caption">
 <a class="amzn" id="$anchor-$asin-2" title="$bktitle" href="$link">$shorttitle</a>
 $byauthor
-</div><!-- .caption -->
+</div><!-- .figure-caption -->
 </div><!-- .thumbnail -->
 </div><!-- .col-$thumbnail_width -->
 EOHTML
