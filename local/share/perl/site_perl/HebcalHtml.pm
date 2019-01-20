@@ -445,7 +445,7 @@ sub header_bootstrap3 {
 <meta charset="UTF-8">
 <title>$title2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="/i/bootstrap-4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="/i/bootstrap-4.2.1/css/bootstrap.min.css">
 $xtra_stylesheet<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -585,7 +585,7 @@ $last_updated_text
 </div> <!-- .container -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="/i/bootstrap-4.1.3/js/bootstrap.bundle.min.js"></script>
+<script src="/i/bootstrap-4.2.1/js/bootstrap.bundle.min.js"></script>
 EOHTML
 ;
 
