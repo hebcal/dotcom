@@ -363,13 +363,12 @@ if ($gm < 8 || $gm == 12 && $gd >= 10) {
 <div class="row">
 <div class="col-sm-8">
 <p class="lead">Holidays, candle lighting times, and Torah readings for
-<a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?></a>
-and any year, past or present.
+any year, past or present.
 Download to Outlook, iPhone, Google Calendar, and more.</p>
 </div>
 <div class="col-sm-4 text-center pad-bot">
-<p><a class="btn btn-primary btn-lg" title="Hebcal Custom Calendar" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;<?php echo $in_israel ? "i=on&amp;mod=on" : "i=off"; ?>&amp;lg=<?php echo $default_lg; ?>&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicons glyphicons-calendar"></i> Get calendar</a>
-<br><small><a href="/hebcal/">Customize calendar settings</a></small></p>
+<p><a class="btn btn-primary btn-lg" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;<?php echo $in_israel ? "i=on&amp;mod=on" : "i=off"; ?>&amp;lg=<?php echo $default_lg; ?>&amp;c=off&amp;set=off<?php echo $year_get_args ?>"><i class="glyphicons glyphicons-calendar"></i> <?php echo $greg_range ?> Calendar</a>
+<br><small><a title="Hebcal Custom Calendar" href="/hebcal/">Customize calendar settings</a></small></p>
 </div>
 </div><!-- .row -->
 <div class="row">
@@ -421,7 +420,8 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
 </a>
 <h3 class="text-center"><a class="text-dark" href="/holidays/">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
-<br><a href="/holidays/">Get started &raquo;</a></p>
+<br><a href="/holidays/<?php echo $greg_range ?>"><?php echo $greg_range ?> holidays</a> &middot;
+<a href="/holidays/"><?php echo $greg_yr1, '-', ($greg_yr1 + 5) ?> table</a></p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4">
