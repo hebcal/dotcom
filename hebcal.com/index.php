@@ -41,33 +41,11 @@ if (isset($_COOKIE["C"])) {
 }
 
 $in_israel = false;
-$default_lg = "s";
-
-if (isset($_SERVER['MM_COUNTRY_CODE'])) {
-  $cc = $_SERVER['MM_COUNTRY_CODE'];
-  $cc_defaults = [
-    'US' => ['s', 'America/New_York'],
-    'IL' => ['h', 'Asia/Jerusalem'],
-    'GB' => ['s', 'Europe/London'],
-    'CA' => ['s', 'America/Toronto'],
-    'AU' => ['s', 'Australia/Sydney'],
-    'ZA' => ['s', 'Africa/Johannesburg'],
-    'BR' => ['s', 'America/Sao_Paulo'],
-    'FR' => ['fr', 'Europe/Paris'],
-    'RU' => ['ru', 'Europe/Moscow'],
-    'PL' => ['pl', 'Europe/Warsaw'],
-    'FI' => ['fi', 'Europe/Helsinki'],
-  ];
-  if (isset($cc_defaults[$cc])) {
-    $ccinfo = $cc_defaults[$cc];
-    $default_lg = $ccinfo[0];
-    date_default_timezone_set($ccinfo[1]);
-    if ($cc == 'IL') {
-      $in_israel = true;
-    }
-  }
-  if ($cc != "US") {
-    header("Cache-Control: private");
+list($cc, $default_lg) = hebcal_set_timezone_lang();
+if ($cc != false && $cc != 'US') {
+  header("Cache-Control: private");
+  if ($cc == 'IL') {
+    $in_israel = true;
   }
 }
 

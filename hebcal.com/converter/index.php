@@ -37,11 +37,7 @@
 require("../pear/Hebcal/hebnum.inc");
 require("../pear/Hebcal/common.inc");
 
-$in_israel = false;
-if (isset($_SERVER['MM_COUNTRY_CODE']) && $_SERVER['MM_COUNTRY_CODE'] == 'IL') {
-    date_default_timezone_set('Asia/Jerusalem');
-    $in_israel = true;
-}
+list($cc, $default_lg) = hebcal_set_timezone_lang();
 
 $calinf = cal_info(CAL_GREGORIAN);
 $MoY_long = $calinf["months"];

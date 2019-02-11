@@ -150,6 +150,33 @@ function get_usa_tzid($tz,$state,$dst) {
     }
 }
 
+function hebcal_set_timezone_lang() {
+    $cc = false;
+    $default_lg = 's';
+    if (isset($_SERVER['MM_COUNTRY_CODE'])) {
+        $cc = $_SERVER['MM_COUNTRY_CODE'];
+        $cc_defaults = [
+            'US' => ['s', 'America/New_York'],
+            'IL' => ['h', 'Asia/Jerusalem'],
+            'GB' => ['s', 'Europe/London'],
+            'CA' => ['s', 'America/Toronto'],
+            'AU' => ['s', 'Australia/Sydney'],
+            'ZA' => ['s', 'Africa/Johannesburg'],
+            'BR' => ['s', 'America/Sao_Paulo'],
+            'FR' => ['fr', 'Europe/Paris'],
+            'RU' => ['ru', 'Europe/Moscow'],
+            'PL' => ['pl', 'Europe/Warsaw'],
+            'FI' => ['fi', 'Europe/Helsinki'],
+        ];
+        if (isset($cc_defaults[$cc])) {
+            $ccinfo = $cc_defaults[$cc];
+            $default_lg = $ccinfo[0];
+            date_default_timezone_set($ccinfo[1]);
+        }
+    }
+    return array($cc, $default_lg);
+}
+
 $hmstr_to_num = array(
     "Nisan" => 8,
     "Iyyar" => 9,
