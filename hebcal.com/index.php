@@ -170,6 +170,7 @@ if ($hmnum == 13 && $hd >= 1) {
 		$chanukah_cal["year"]);
 }
 $xtra_head = <<<EOD
+<meta name="description" content="Hebcal makes calendars of Jewish holidays. Convert Hebrew and Gregorian dates, get Shabbat candle-lighting times, Torah readings for Diaspora + Israel, Yahrzeit dates and more.">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style>
