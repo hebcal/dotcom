@@ -124,9 +124,10 @@ our %lang_names =
      "ru" => "Russian - ру́сский язы́к",
      "pl" => "Polish - język polski",
      "fi" => "Finnish - Suomalainen",
+     "hu" => "Hungarian - Magyar nyelv",
      );
 
-our @lang_european = ("fr", "ru", "pl", "fi");
+our @lang_european = ("fr", "ru", "pl", "fi", "hu");
 our %lang_european = map { $_ => 1 } @lang_european;
 
 our %CONTINENTS =
