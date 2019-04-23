@@ -966,6 +966,12 @@ sub get_saturday
         $dow = $wday;
     }
 
+    # back up to Friday if today is Saturday (include last night's candle-lighting times)
+    if ($dow == 6) {
+        ($gy,$gm,$gd) = Date::Calc::Add_Delta_Days($gy,$gm,$gd,-1);
+        $dow = 5;
+    }
+
     my $friday = Time::Local::timelocal(0,0,0,$gd,$gm-1,$gy);
 
     my $saturday = ($dow == 6)
