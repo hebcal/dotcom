@@ -726,7 +726,7 @@ function html_form_select($name, $entries, $default = '', $size = 1,
 }
 
 function hebcal_js_app_url() {
-    return "/i/hebcal-app-1.8.min.js";
+    return "/i/hebcal-app-1.9.min.js";
 }
 
 function hebcal_js_typeahead_bundle_url() {
