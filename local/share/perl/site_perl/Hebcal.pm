@@ -2211,6 +2211,14 @@ sub translate_event {
             if (defined $s0) {
                 return $s0 . " " . $hyear;
             }
+        } elsif ($evt->{category} eq "hebdate" && $subj =~ /^(\d+)\w+ of ([^,]+), (\d+)$/) {
+            my $hday = $1;
+            my $hmon = $2;
+            my $hyear = $3;
+            my $s0 = $HebcalConst::TRANSLATIONS->{$lang}->{$hmon};
+            if (defined $s0) {
+                return "$hday $s0 $hyear";
+            }
         } else {
             my $s0 = $HebcalConst::TRANSLATIONS->{$lang}->{$subj};
             if (defined $s0) {
