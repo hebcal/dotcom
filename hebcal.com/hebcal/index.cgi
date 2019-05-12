@@ -158,10 +158,10 @@ if ($cfg eq "fc") {
         form("Please specify required parameter '$param'")
             unless defined $q->param($param);
         form("Parameter '$param' must match format YYYY-MM-DD")
-            unless $q->param($param) =~ /^\d{4}-\d{2}-\d{2}$/;
+            unless $q->param($param) =~ /^\d{4}-\d{2}-\d{2}/;
     }
-    my($sy,$sm,$sd) = split(/-/, $q->param("start"), 3);
-    my($ey,$em,$ed) = split(/-/, $q->param("end"), 3);
+    my($sy,$sm,$sd) = split(/-/, substr($q->param("start"), 0, 10), 3);
+    my($ey,$em,$ed) = split(/-/, substr($q->param("end"),   0, 10), 3);
     $q->param("year", $sy);
     $q->param("month", "x");
     $q->param("yt", "G");
@@ -391,9 +391,9 @@ sub fullcalendar_event {
 
 sub fullcalendar_filter_events {
     my($events) = @_;
-    my($sy,$sm,$sd) = split(/-/, $q->param("start"), 3);
+    my($sy,$sm,$sd) = split(/-/, substr($q->param("start"), 0, 10), 3);
+    my($ey,$em,$ed) = split(/-/, substr($q->param("end"),   0, 10), 3);
     my $start_julian = Date::Calc::Date_to_Days($sy,$sm,$sd);
-    my($ey,$em,$ed) = split(/-/, $q->param("end"), 3);
     my $end_julian = Date::Calc::Date_to_Days($ey,$em,$ed);
     my @out;
     foreach my $evt (@{$events}) {
