@@ -1648,7 +1648,8 @@ sub download_href {
     my $encoded = MIME::Base64::encode_base64url(substr($args, 1));
 
     my $script_name = $q->script_name(); # /full/path/to/script.cgi
-    my $url_prefix = 'http://download.hebcal.com';
+    my $proto = $ext eq 'pdf' ? 'https' : 'http';
+    my $url_prefix = "$proto://download.hebcal.com";
     if ($q->virtual_host() eq "localhost") {
         $url_prefix = "http://localhost:8888$script_name";
     }
