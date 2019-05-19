@@ -80,6 +80,7 @@ if (! -d $outdir) {
     die "$outdir: $!\n";
 }
 
+DEBUG("Opening $Hebcal::GEONAME_SQLITE_FILE");
 my $dbh = Hebcal::zipcode_open_db($Hebcal::GEONAME_SQLITE_FILE);
 $dbh->{sqlite_unicode} = 1;
 
@@ -138,10 +139,11 @@ sub get_countries {
     }
     my $sql = qq{SELECT Continent, ISO, Country FROM country};
     if (@opt_country) {
-        my $s = join("','", @opt_country);
+        my $s = uc(join("','", @opt_country));
         $sql .= qq{ WHERE ISO IN ('$s')};
     }
     $sql .= qq{ ORDER BY Continent, Country};
+    DEBUG($sql);
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
     $sth->execute() or die $dbh->errstr;
     while (my($continent,$iso,$country) = $sth->fetchrow_array) {
@@ -152,6 +154,49 @@ sub get_countries {
     return \%countries;
 }
 
+sub write_country_admin1_page {
+    my($filename,$iso,$country,$admin1,$title_date,$shabbat_formatted,$results) = @_;
+
+    INFO("$country - $admin1");
+
+    my $fn = "$outdir/$filename";
+    open(my $fh, ">$fn.$$") || die "$fn.$$: $!\n";
+
+    my $page_title = "$admin1, $country Shabbat Times - $title_date";
+    print $fh HebcalHtml::header_bootstrap3($page_title,
+        "/shabbat/browse/$filename", "ignored");
+
+    print $fh <<EOHTML;
+<div class="row">
+<div class="col-sm-12">
+<h2>$admin1, $country<br><span class="h4 small text-muted">Shabbat Candle Lighting Times</span></h2>
+<p class="lead">$shabbat_formatted</p>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+<div class="row">
+<div class="col-sm-12">
+<ul class="list-unstyled">
+EOHTML
+    ;
+
+    foreach my $res (@{$results}) {
+        write_candle_lighting($fh,$res,$iso,0);
+    }
+
+    print $fh <<EOHTML;
+</ul>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+EOHTML
+    ;
+
+    print $fh HebcalHtml::footer_bootstrap3(undef, undef);
+
+    close($fh);
+    rename("$fn.$$", $fn) || die "$fn: $!\n";
+
+}
+
 sub write_country_page {
     my($iso,$anchor,$country) = @_;
 
@@ -160,6 +205,7 @@ FROM geoname g
 LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
 WHERE g.country = ?
 ORDER BY g.asciiname};
+    DEBUG($sql);
     my $sth = $dbh->prepare($sql) or die $dbh->errstr;
     $sth->execute($iso) or die $dbh->errstr;
 
@@ -210,6 +256,35 @@ EOHTML
         }
         print $fh qq{</ul>\n};
         print $fh qq{</div><!-- .col-sm-12 -->\n};
+    } elsif ($#results > 499) {
+        my $sql = qq{SELECT key,name,asciiname FROM admin1 WHERE key LIKE '$iso.%' ORDER BY key};
+        DEBUG($sql);
+        my $sth = $dbh->prepare($sql) or die $dbh->errstr;
+        $sth->execute() or die $dbh->errstr;
+        my %a1s;
+        while (my($key,$name,$asciiname) = $sth->fetchrow_array) {
+            my $anchor2 = Hebcal::make_anchor($asciiname);
+            $a1s{$key} = [$name, $asciiname, $anchor2];
+        }
+        $sth->finish;
+
+        # write index
+        print $fh qq{<div class="col-sm-12">\n};
+        print $fh qq{<ul class="list-unstyled">\n};
+        foreach my $key (sort keys %a1s) {
+            my($name,$asciiname,$anchor2) = @{$a1s{$key}};
+            print $fh qq{<li><a href="$anchor-$anchor2">$name</a></li>\n};
+        }
+        print $fh qq{</ul>\n};
+        print $fh qq{</div><!-- .col-sm-12 -->\n};
+
+        # write each page
+        foreach my $key (sort keys %a1s) {
+            my($name,$asciiname,$anchor2) = @{$a1s{$key}};
+            write_country_admin1_page("$anchor-$anchor2",
+                $iso,$country,$name,$title_date,$shabbat_formatted,
+                $admin1{$name});
+        }
     } else {
         foreach my $admin1 (sort keys %admin1) {
             my $anchor = Hebcal::make_anchor($admin1);
