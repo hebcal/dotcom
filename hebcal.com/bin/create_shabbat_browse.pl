@@ -257,30 +257,30 @@ EOHTML
         print $fh qq{</ul>\n};
         print $fh qq{</div><!-- .col-sm-12 -->\n};
     } elsif ($#results > 499) {
-        my $sql = qq{SELECT key,name,asciiname FROM admin1 WHERE key LIKE '$iso.%' ORDER BY key};
+        my $sql = qq{SELECT name,asciiname FROM admin1 WHERE key LIKE '$iso.%'};
         DEBUG($sql);
         my $sth = $dbh->prepare($sql) or die $dbh->errstr;
         $sth->execute() or die $dbh->errstr;
         my %a1s;
-        while (my($key,$name,$asciiname) = $sth->fetchrow_array) {
+        while (my($name,$asciiname) = $sth->fetchrow_array) {
             my $anchor2 = Hebcal::make_anchor($asciiname);
-            $a1s{$key} = [$name, $asciiname, $anchor2];
+            $a1s{$name} = [$asciiname, $anchor2];
         }
         $sth->finish;
 
         # write index
         print $fh qq{<div class="col-sm-12">\n};
         print $fh qq{<ul class="list-unstyled">\n};
-        foreach my $key (sort keys %a1s) {
-            my($name,$asciiname,$anchor2) = @{$a1s{$key}};
+        foreach my $name (sort keys %a1s) {
+            my($asciiname,$anchor2) = @{$a1s{$name}};
             print $fh qq{<li><a href="$anchor-$anchor2">$name</a></li>\n};
         }
         print $fh qq{</ul>\n};
         print $fh qq{</div><!-- .col-sm-12 -->\n};
 
         # write each page
-        foreach my $key (sort keys %a1s) {
-            my($name,$asciiname,$anchor2) = @{$a1s{$key}};
+        foreach my $name (sort keys %a1s) {
+            my($asciiname,$anchor2) = @{$a1s{$name}};
             write_country_admin1_page("$anchor-$anchor2",
                 $iso,$country,$name,$title_date,$shabbat_formatted,
                 $admin1{$name});
