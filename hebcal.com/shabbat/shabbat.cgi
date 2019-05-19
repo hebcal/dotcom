@@ -763,8 +763,8 @@ ul.hebcal-results {
 }
 ul.hebcal-results li {
   margin-bottom: 11px;
-  font-size: 21px;
-  font-weight: 200;
+  font-size: 1.15rem;
+  font-weight: 300;
   line-height: normal;
 }
 ul.list-unstyled.nav-list li {
@@ -777,7 +777,7 @@ EOHTML
     my $head_divs = <<EOHTML;
 <div class="row">
 <div class="col-sm-9">
-<h2>Shabbat Times <span class="h4 small text-muted">$city_descr</span></h2>
+<h2>Shabbat <span class="d-none d-sm-inline">Times</span> <span class="h4 small text-muted">$city_descr</span></h2>
 EOHTML
 ;
 
