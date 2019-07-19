@@ -489,7 +489,7 @@ sub get_invoke_hebcal_cache {
 }
 
 sub filter_event {
-    my($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays) = @_;
+    my($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays,$no_erev) = @_;
     if ($no_special_shabbat || $no_minor_fasts || $no_minor_holidays || $no_modern_holidays) {
         my $subj_copy = $subj;
         $subj_copy = $ashk2seph{$subj_copy}
@@ -500,6 +500,7 @@ sub filter_event {
             return 1 if $no_minor_fasts && $type eq 'fast';
             return 1 if $no_minor_holidays && $type eq 'minor';
             return 1 if $no_modern_holidays && $type eq 'modern';
+            return 1 if $no_erev && $type eq 'erev';
         }
     }
     return 0;
@@ -508,7 +509,7 @@ sub filter_event {
 sub invoke_hebcal_v2 {
     my($cmd,$memo,$want_sephardic,$month_filter,
         $no_minor_fasts,$no_special_shabbat,
-        $no_minor_holidays,$no_modern_holidays,$no_havdalah) = @_;
+        $no_minor_holidays,$no_modern_holidays,$no_havdalah,$no_erev) = @_;
     local($_);
     local(*HEBCAL);
 
@@ -550,7 +551,7 @@ sub invoke_hebcal_v2 {
         my($subj,$untimed,$min,$hour,$mday,$mon,$year,$dur,$yomtov) =
             parse_date_descr($date,$descr);
 
-        next if filter_event($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays);
+        next if filter_event($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays,$no_erev);
 
         if ($subj =~ /^Havdalah/) {
             next if $no_havdalah;
@@ -1945,7 +1946,7 @@ sub process_args_common_geopos {
     if ($tzid eq 'Asia/Jerusalem' && ! defined $q->param('i')) {
         $q->param('i','on');
     }
- 
+
     foreach (qw(city zip tz dst geonameid)) {
 	$q->delete($_);
     }

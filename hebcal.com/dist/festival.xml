@@ -553,7 +553,7 @@ the readings for the third, fourth, and fifth days are moved ahead.
  </kriyah>
 </festival>
 
-<festival id="Erev Tish'a B'Av" hebrew="עֶרֶב תִּשְׁעָה בְּאָב" yomtov="0" type="major"/>
+<festival id="Erev Tish'a B'Av" hebrew="עֶרֶב תִּשְׁעָה בְּאָב" yomtov="0" type="erev"/>
 <festival id="Tish'a B'Av" hebrew="תִּשְׁעָה בְּאָב" yomtov="0" type="major">
  <about href="http://www.jewfaq.org/holidayd.htm">
  The Ninth of Av, fast commemorating the destruction of the two Temples
@@ -951,7 +951,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
  </kriyah>
 </festival>
 
-<festival id="Erev Simchat Torah" hebrew="עֶרֶב שִׂמְחַת תּוֹרָה" yomtov="1" type="major">
+<festival id="Erev Simchat Torah" hebrew="עֶרֶב שִׂמְחַת תּוֹרָה" yomtov="1" type="erev">
  <about href="http://www.jewfaq.org/holiday6.htm">
  Day of Celebrating the Torah
  </about>
@@ -1143,7 +1143,7 @@ the second, Num. 29:20-25; the third, Num. 29:23-28; the fourth, Num. 29:26-31.
 </festival>
 
 <!--  Strassfeld p. 232 -->
-<festival id="Erev Purim" hebrew="עֶרֶב פּוּרִים" yomtov="0" type="major"/>
+<festival id="Erev Purim" hebrew="עֶרֶב פּוּרִים" yomtov="0" type="erev"/>
 <festival id="Purim" hebrew="פּוּרִים" yomtov="0" type="major">
  <about href="http://www.jewfaq.org/holiday9.htm">
  Purim is one of the most joyous and fun holidays on the Jewish
@@ -1602,11 +1602,11 @@ with the verse
   <book ASIN="1508715157" author="Rachel Barenblat">Toward Sinai: Omer poems</book>
  </books>
 </festival>
-<festival id="Erev Pesach" hebrew="עֶרֶב פֶּסַח"/>
-<festival id="Erev Shavuot" hebrew="עֶרֶב שָׁבוּעוֹת"/>
-<festival id="Erev Rosh Hashana" hebrew="עֶרֶב רֹאשׁ הַשָּׁנָה"/>
-<festival id="Erev Sukkot" hebrew="עֶרֶב סוּכּוֹת"/>
-<festival id="Erev Yom Kippur" hebrew="עֶרֶב יוֹם כִּפּוּר"/>
+<festival id="Erev Pesach" hebrew="עֶרֶב פֶּסַח" type="erev"/>
+<festival id="Erev Shavuot" hebrew="עֶרֶב שָׁבוּעוֹת" type="erev"/>
+<festival id="Erev Rosh Hashana" hebrew="עֶרֶב רֹאשׁ הַשָּׁנָה" type="erev"/>
+<festival id="Erev Sukkot" hebrew="עֶרֶב סוּכּוֹת" type="erev"/>
+<festival id="Erev Yom Kippur" hebrew="עֶרֶב יוֹם כִּפּוּר" type="erev"/>
 <festival id="Candle lighting" hebrew="הדלקת נרות"/>
 <festival id="Havdalah" hebrew="הַבדָלָה"/>
 <!-- for Israel -->
