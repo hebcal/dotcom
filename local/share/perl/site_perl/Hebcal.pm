@@ -500,8 +500,8 @@ sub filter_event {
             return 1 if $no_minor_fasts && $type eq 'fast';
             return 1 if $no_minor_holidays && $type eq 'minor';
             return 1 if $no_modern_holidays && $type eq 'modern';
-            return 1 if $no_erev && $type eq 'erev';
         }
+        return 1 if $no_erev && $subj =~ /^Erev /;
     }
     return 0;
 }
