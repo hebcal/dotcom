@@ -490,7 +490,7 @@ sub get_invoke_hebcal_cache {
 
 sub filter_event {
     my($subj,$no_minor_fasts,$no_special_shabbat,$no_minor_holidays,$no_modern_holidays,$no_erev) = @_;
-    if ($no_special_shabbat || $no_minor_fasts || $no_minor_holidays || $no_modern_holidays) {
+    if ($no_special_shabbat || $no_minor_fasts || $no_minor_holidays || $no_modern_holidays || $no_erev) {
         my $subj_copy = $subj;
         $subj_copy = $ashk2seph{$subj_copy}
             if defined $ashk2seph{$subj_copy};

@@ -321,7 +321,7 @@ my $g_nmf = (defined $q->param("mf") && $q->param("mf") =~ /^on|1$/) ? 0 : 1;
 my $g_nss = (defined $q->param("ss") && $q->param("ss") =~ /^on|1$/) ? 0 : 1;
 my $g_nminor = (defined $q->param("min") && $q->param("min") =~ /^on|1$/) ? 0 : 1;
 my $g_nmodern = (defined $q->param("mod") && $q->param("mod") =~ /^on|1$/) ? 0 : 1;
-my $g_nerev = (defined $q->param("erev") && $q->param("erev") =~ /^on|1$/) ? 0 : 1;
+my $g_nerev = (defined $q->param("erev") && $q->param("erev") =~ /^off|0$/) ? 1 : 0;
 
 if ($cfg eq "html") {
     results_page($g_date, $g_filename);
@@ -413,7 +413,7 @@ sub my_invoke_hebcal_inner {
     my @events = Hebcal::invoke_hebcal_v2(
         $cmd0, "", $g_seph, $month,
         $g_nmf, $g_nss, $g_nminor, $g_nmodern,
-        $no_havdalah, $no_erev);
+        $no_havdalah, $g_nerev);
     return @events;
 }
 
