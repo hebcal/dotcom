@@ -128,3 +128,4 @@ runcmd:
   - cd /tmp && unzip cities5000.zip
   - cd /tmp && unzip IL.zip
   - /tmp/dotcom/local/bin/geonames_cities_sqlite.pl /var/www/html/hebcal/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
+  - cd /var/www/html/ical && /tmp/dotcom/local/bin/gen_10yr.sh
