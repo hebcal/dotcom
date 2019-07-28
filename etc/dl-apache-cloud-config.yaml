@@ -31,6 +31,7 @@ packages:
   - git
   - gcc
   - sqlite3
+  - unzip
   - sysstat
   - netfilter-persistent
   - iptables-persistent
@@ -119,3 +120,10 @@ runcmd:
   - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
   - /tmp/dotcom/local/bin/update_zoneinfo.sh
+  - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt
+  - curl -o /tmp/admin1CodesASCII.txt http://download.geonames.org/export/dump/admin1CodesASCII.txt
+  - curl -o /tmp/cities5000.zip http://download.geonames.org/export/dump/cities5000.zip
+  - curl -o /tmp/IL.zip http://download.geonames.org/export/dump/IL.zip
+  - cd /tmp && unzip cities5000.zip
+  - cd /tmp && unzip IL.zip
+  - /tmp/dotcom/local/bin/geonames_cities_sqlite.pl /var/www/html/hebcal/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
