@@ -60,10 +60,10 @@ write_files:
       vcl 4.0;
       import directors;
       backend server1 {
-          .host = "10.132.63.122";
+          .host = "dl17-internal.hebcal.com";
           .port = "8080";
           .probe = {
-              .url = "/robots.txt";
+              .url = "/ical/omer.csv";
               .timeout = 1s;
               .interval = 5s;
               .window = 5;
@@ -71,10 +71,10 @@ write_files:
           }
       }
       backend server2 {
-          .host = "10.132.254.231";
+          .host = "dl18-internal.hebcal.com";
           .port = "8080";
           .probe = {
-              .url = "/robots.txt";
+              .url = "/ical/omer.csv";
               .timeout = 1s;
               .interval = 5s;
               .window = 5;
