@@ -286,6 +286,14 @@ sub get_birthday_or_anniversary {
     $res;
 }
 
+sub format_hdate {
+    my($hdate) = @_;
+    return sprintf("%d%s of %s",
+        $hdate->{"dd"},
+        HebcalGPL::numSuffix($hdate->{"dd"}),
+        $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}]);
+}
+
 sub my_invoke_hebcal {
     my %yahrzeits;
     my %date_of_death;
@@ -302,21 +310,14 @@ sub my_invoke_hebcal {
     }
     close($fh);
 
-    my %greg2heb = ();
     my @events2 = ();
 
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
-    my $cmd = "./hebcal -D -x -Y $tmpfile --years $num_years $this_year";
+    my $cmd = "./hebcal -x -Y $tmpfile --years $num_years $this_year";
     my @events = Hebcal::invoke_hebcal_v2($cmd, "", undef);
     foreach my $evt (@events) {
         my $subj = $evt->{subj};
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
-
-        if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
-        {
-            $greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $1;
-            next;
-        }
 
         if (defined $yahrzeits{$subj}) {
             # ignore events before or on the actual anniversary.
@@ -324,10 +325,10 @@ sub my_invoke_hebcal {
 
             my $name = $yahrzeits{$subj};
             my $subj2 = "${name}'s Yahrzeit";
-            my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
-
-            $subj2 .= " ($greg2heb{$isodate})"
-                if ($q->param("hebdate") && defined $greg2heb{$isodate});
+            if ($q->param("hebdate")) {
+                my $hdate = HebcalGPL::greg2hebrew($year,$mon,$mday);
+                $subj2 .= " (" . format_hdate($hdate) . ")";
+            }
 
             my $evt2 = {
                 subj => $subj2,
@@ -374,9 +375,7 @@ sub my_invoke_hebcal {
 
             my $subj = "${name}'s Hebrew ${type}";
             if ($q->param("hebdate")) {
-                $subj .= sprintf(" (%d%s of %s)",
-                                 $hdate->{"dd"}, HebcalGPL::numSuffix($hdate->{"dd"}),
-                                 $HEB_MONTH_NAME[HebcalGPL::LEAP_YR_HEB($hdate->{"yy"})][$hdate->{"mm"}]);
+                $subj .= " (" . format_hdate($hdate) . ")";
             }
 
             my $evt = {
