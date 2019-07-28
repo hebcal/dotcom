@@ -302,13 +302,61 @@ sub my_invoke_hebcal {
     }
     close($fh);
 
-    my $cmd = "./hebcal -D -x -Y $tmpfile";
-
     my %greg2heb = ();
     my @events2 = ();
 
-    my $this_year = (localtime)[5];
-    $this_year += 1900;
+    my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $cmd = "./hebcal -D -x -Y $tmpfile --years $num_years $this_year";
+    my @events = Hebcal::invoke_hebcal_v2($cmd, "", undef);
+    foreach my $evt (@events) {
+        my $subj = $evt->{subj};
+        my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+
+        if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
+        {
+            $greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $1;
+            next;
+        }
+
+        if (defined $yahrzeits{$subj}) {
+            # ignore events before or on the actual anniversary.
+            next if $date_of_death{$subj} >= Date::Calc::Date_to_Days($year, $mon, $mday);
+
+            my $name = $yahrzeits{$subj};
+            my $subj2 = "${name}'s Yahrzeit";
+            my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
+
+            $subj2 .= " ($greg2heb{$isodate})"
+                if ($q->param("hebdate") && defined $greg2heb{$isodate});
+
+            my $evt2 = {
+                subj => $subj2,
+                untimed => 1,
+                min => 0,
+                hour => 0,
+                mday => $evt->{mday},
+                mon => $evt->{mon},
+                year => $evt->{year},
+                dur => 0,
+                memo => "",
+                yomtov => 0,
+                category => "yahrzeit",
+            };
+            push(@events2, $evt2);
+        }
+        elsif ($subj eq "Pesach VIII" || $subj eq "Shavuot II" ||
+                $subj eq "Yom Kippur" || $subj eq "Shmini Atzeret")
+        {
+            next unless defined $q->param("yizkor") &&
+                ($q->param("yizkor") eq "on" ||
+                    $q->param("yizkor") eq "1");
+
+            my %evt_copy = map { $_, $evt->{$_} } keys %{$evt};
+            $evt_copy{subj} = "Yizkor ($subj)";
+            push(@events2, \%evt_copy);
+        }
+    }
+    unlink($tmpfile);
 
     foreach my $year ($this_year .. ($this_year + $num_years))
     {
@@ -347,59 +395,8 @@ sub my_invoke_hebcal {
             push(@events2, $evt);
         }
 
-        my @events = Hebcal::invoke_hebcal_v2("$cmd $year", "", undef);
-        foreach my $evt (@events) {
-            my $subj = $evt->{subj};
-            my($year,$mon,$mday) = Hebcal::event_ymd($evt);
-
-            if ($subj =~ /^(\d+\w+\s+of\s+.+),\s+\d{4}\s*$/)
-            {
-                $greg2heb{sprintf("%04d%02d%02d", $year, $mon, $mday)} = $1;
-                next;
-            }
-
-            if (defined $yahrzeits{$subj})
-            {
-                # ignore events before or on the actual anniversary.
-                next if $date_of_death{$subj} >= Date::Calc::Date_to_Days($year, $mon, $mday);
-
-                my $name = $yahrzeits{$subj};
-                my $subj2 = "${name}'s Yahrzeit";
-                my $isodate = sprintf("%04d%02d%02d", $year, $mon, $mday);
-
-                $subj2 .= " ($greg2heb{$isodate})"
-                    if ($q->param("hebdate") && defined $greg2heb{$isodate});
-
-                my $evt2 = {
-                    subj => $subj2,
-                    untimed => 1,
-                    min => 0,
-                    hour => 0,
-                    mday => $evt->{mday},
-                    mon => $evt->{mon},
-                    year => $evt->{year},
-                    dur => 0,
-                    memo => "",
-                    yomtov => 0,
-                    category => "yahrzeit",
-                };
-                push(@events2, $evt2);
-            }
-            elsif ($subj eq "Pesach VIII" || $subj eq "Shavuot II" ||
-                   $subj eq "Yom Kippur" || $subj eq "Shmini Atzeret")
-            {
-                next unless defined $q->param("yizkor") &&
-                    ($q->param("yizkor") eq "on" ||
-                     $q->param("yizkor") eq "1");
-
-                my %evt_copy = map { $_, $evt->{$_} } keys %{$evt};
-                $evt_copy{subj} = "Yizkor ($subj)";
-                push(@events2, \%evt_copy);
-            }
-        }
     }
 
-    unlink($tmpfile);
     sort { Hebcal::event_to_time($a) <=> Hebcal::event_to_time($b) } @events2;
 }
 
