@@ -313,15 +313,18 @@ sub my_invoke_hebcal {
     my @events2 = ();
 
     my($this_year,$this_mon,$this_day) = Date::Calc::Today();
+    my $this_abs_days = Date::Calc::Date_to_Days($this_year,$this_mon,$this_day);
     my $cmd = "./hebcal -x -Y $tmpfile --years $num_years $this_year";
     my @events = Hebcal::invoke_hebcal_v2($cmd, "", undef);
     foreach my $evt (@events) {
         my $subj = $evt->{subj};
         my($year,$mon,$mday) = Hebcal::event_ymd($evt);
+        my $abs_days = Date::Calc::Date_to_Days($year, $mon, $mday);
+        next if $abs_days < $this_abs_days;
 
         if (defined $yahrzeits{$subj}) {
             # ignore events before or on the actual anniversary.
-            next if $date_of_death{$subj} >= Date::Calc::Date_to_Days($year, $mon, $mday);
+            next if $date_of_death{$subj} >= $abs_days;
 
             my $name = $yahrzeits{$subj};
             my $subj2 = "${name}'s Yahrzeit";
@@ -371,7 +374,9 @@ sub my_invoke_hebcal {
 
             # ignore events before or on the actual anniversary.
             my $orig_days = Date::Calc::Date_to_Days($gy, $gm, $gd);
-            next if $orig_days >= Date::Calc::Date_to_Days($gregdate->{"yy"}, $gregdate->{"mm"}, $gregdate->{"dd"});
+            my $abs_days  = Date::Calc::Date_to_Days($gregdate->{"yy"}, $gregdate->{"mm"}, $gregdate->{"dd"});
+            next if $orig_days >= $abs_days;
+            next if $abs_days < $this_abs_days;
 
             my $subj = "${name}'s Hebrew ${type}";
             if ($q->param("hebdate")) {
