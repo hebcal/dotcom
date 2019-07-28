@@ -106,6 +106,12 @@ write_files:
       sub vcl_deliver {
       }
       include "/etc/varnish/acmetool.vcl";
+  - path: /etc/default/acme-reload
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      SERVICES="$SERVICES"
+      HAPROXY_ALWAYS_GENERATE=yes
   - path: /etc/varnish/acmetool.vcl
     permissions: '0644'
     content: |
