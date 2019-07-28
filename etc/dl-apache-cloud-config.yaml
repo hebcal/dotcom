@@ -1,0 +1,121 @@
+#cloud-config
+users:
+  - name: hebcal
+    gecos: Hebcal
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - ssh-dss AAAAB3NzaC1kc3MAAAEBAKCDECinh9zUhHeKibZAumzTqk9MA0VVJJ4EH2Uf2wc1qXZlEA5d6k8LLc7FUZWQ8bn+4BjDEtXlzxAS/t3SmdFJCwaRhzu/5FDZi9usLCCbWsYgUos//uOD37Wpg0fkgIMVi/Jc0L8KceoHACuA9ORV9EIzmvvIFiz8ONKurRilGyL2QMncEN52MQgShv6nhAdFHk99/JAYY7SLhzy8UNBUQunpBJfNNGCHN+IPLMo7hiq5AfQxSHpo6dYeSLRJdWg76CMCf//VC7E/i+6ucHGsO/ZpZ3XVCP7dvt/U1j6qLcm0LWO0n3JrlrEOx9pwGgqyEopoeAaOrXgpydBxm/MAAAAVAIjvZ2FF09u4SQ+LuyQlIMfLB3HVAAABADR6tZndAMf/1p88jwc+Bo5wTglcPkktEXCxPMwrM5/WB6GCFsVGAZsn4/yOq8/Bijgy+RzKZT1is678Jk6Y+Ux1jTv8fjvKzSXn5G6/PT71ayElyKxo3WUTP5m0tnbwLXGBSJz1FfAGv7LHLC7+Crn+1Mlu0N4+JAoxd/C2xK/A1UdeeCwdfHOTuHB0wYEvf0vBSv+6qCv3aKC8cu6kstemijMCCXLPnK0uwls/1lgseeZCz2fOcW1N6kQgrSddHfyqQrQS1Zw22fRYepAYKPUmx3AcFJ6pWp3nZq7eboTRqzcJ8WL1LTrBnArZ/H7u974AuWE2u5hF50k38J8zvJEAAAEAZg9HmKsR/tEGah899pMSCpuTxrVcI3P969qbNq6i4na7S8UE2jd36Vs+bseibHlH+cTm9Fdtey990RuKklBoXlDovOKrmQ2dpzcIDUDyrAs/uRxVHqeZ8KKg9VDsf6xf0kHMX5sCFlge085o8c3AS+bu/pYLRlUpx8LGmshy9HNbHSoU4iAsB/EdRtSnor3vaZozHurPiVM7UwgW9w+C4aK5eQoHL45tTrDefDRCHn+b1w7ZTnEqM/vpHtpBvsN3FErnPVPmTuWl+EBNFRoNE5TzMcBJMa3p80t23VGaa+0mbNPE6VlIzbkXP1jZdw2sEpvE/UxdOnTnN9QAY8g9UA== mradwin@michael-radwins-computer.local
+  - name: mradwin
+    gecos: Michael J. Radwin
+    groups: sudo
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - ssh-dss AAAAB3NzaC1kc3MAAAEBAKCDECinh9zUhHeKibZAumzTqk9MA0VVJJ4EH2Uf2wc1qXZlEA5d6k8LLc7FUZWQ8bn+4BjDEtXlzxAS/t3SmdFJCwaRhzu/5FDZi9usLCCbWsYgUos//uOD37Wpg0fkgIMVi/Jc0L8KceoHACuA9ORV9EIzmvvIFiz8ONKurRilGyL2QMncEN52MQgShv6nhAdFHk99/JAYY7SLhzy8UNBUQunpBJfNNGCHN+IPLMo7hiq5AfQxSHpo6dYeSLRJdWg76CMCf//VC7E/i+6ucHGsO/ZpZ3XVCP7dvt/U1j6qLcm0LWO0n3JrlrEOx9pwGgqyEopoeAaOrXgpydBxm/MAAAAVAIjvZ2FF09u4SQ+LuyQlIMfLB3HVAAABADR6tZndAMf/1p88jwc+Bo5wTglcPkktEXCxPMwrM5/WB6GCFsVGAZsn4/yOq8/Bijgy+RzKZT1is678Jk6Y+Ux1jTv8fjvKzSXn5G6/PT71ayElyKxo3WUTP5m0tnbwLXGBSJz1FfAGv7LHLC7+Crn+1Mlu0N4+JAoxd/C2xK/A1UdeeCwdfHOTuHB0wYEvf0vBSv+6qCv3aKC8cu6kstemijMCCXLPnK0uwls/1lgseeZCz2fOcW1N6kQgrSddHfyqQrQS1Zw22fRYepAYKPUmx3AcFJ6pWp3nZq7eboTRqzcJ8WL1LTrBnArZ/H7u974AuWE2u5hF50k38J8zvJEAAAEAZg9HmKsR/tEGah899pMSCpuTxrVcI3P969qbNq6i4na7S8UE2jd36Vs+bseibHlH+cTm9Fdtey990RuKklBoXlDovOKrmQ2dpzcIDUDyrAs/uRxVHqeZ8KKg9VDsf6xf0kHMX5sCFlge085o8c3AS+bu/pYLRlUpx8LGmshy9HNbHSoU4iAsB/EdRtSnor3vaZozHurPiVM7UwgW9w+C4aK5eQoHL45tTrDefDRCHn+b1w7ZTnEqM/vpHtpBvsN3FErnPVPmTuWl+EBNFRoNE5TzMcBJMa3p80t23VGaa+0mbNPE6VlIzbkXP1jZdw2sEpvE/UxdOnTnN9QAY8g9UA== mradwin@michael-radwins-computer.local
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoHvNAA5UBj4DpCZsTtjjX82mM2eBECmc6wGXtZeaeqxyBdJBkkDfPmZwwL6OfCceoGHvU4zPEvonFFkjgDwRQYItVnYA4LolgbAjTVf0Bi+dv7Ny8B4fuMin0GvdrCs3BiX018Dw0za5UlopHESPHTKyAOAovR0tftQ+AzAFzae6ac/zZHK0odvoqWROlxSxOJZZl61EVM42ExYOSKm5tsc3g/ObW4wtaMOKUFHGFHfeeSRzYy1kacPVwIbEKTRCh8gLrL3yfOW/un6XF0U9eB+cqE0mVASWTOY59V7EWMJnUZaQcB8yZDeSF/iNEnB2e6ewUMo5X4nqYTaofTUjv mradwin@MTVL12027dd2a
+  - name: nagios
+    gecos: Nagios
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkIbumcez+ggabZq5wJwgA226Q09hG2AT45+epPdXL4KpEn46kb3ZF1Gk1QTUQhMUiDQaoHUGwUSAxGUcC/dOfDkBPHfpDLNZylvGzDMjLg8lvw1/IQC2XbCmDTqZ13Dqc2dnex9hN+N7NimnqaaGW0rvIDjlz27r0tr7N66oXTvPsWItahBQowSkr+agoCLeWxzjKUAabZJ38yp6TNFjU53WadiFGSF7gVjBhGId7F8ukSu2yYl/0i6isU3VK72q7AfKcp/n0dcm1t+BsQKJjH6AY1lmf5R6ZO2qAlRorzpYMzlK5A5VYcp4ILgKSTWKnFNHoP508/4UjD9Pt7uoL nagios@hebcalmonitor
+
+debconf_selections: |     # Need to perserve newlines
+    sysstat sysstat/enable boolean true
+    unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
+    postfix postfix/mailname string hebcal.com
+    postfix postfix/main_mailer_type select Satellite system
+    postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
+
+package_upgrade: true
+
+packages:
+  - git
+  - gcc
+  - sqlite3
+  - sysstat
+  - netfilter-persistent
+  - iptables-persistent
+  - libsasl2-modules
+  - postfix
+  - bsd-mailx
+  - apache2
+  - libcgi-pm-perl
+  - libdate-calc-perl
+  - libdatetime-perl
+  - libpdf-api2-perl
+  - libnet-smtp-ssl-perl
+  - libmime-lite-perl
+  - libxml-simple-perl
+  - libconfig-tiny-perl
+  - liblog-log4perl-perl
+  - libdbd-sqlite3-perl
+  - libhtml-calendarmonthsimple-perl
+  - libjson-perl
+  - libjson-xs-perl
+  - nagios-plugins-basic
+  - nagios-plugins-common
+  - make
+  - unattended-upgrades
+
+write_files:
+  - path: /etc/cron.d/hebcal
+    permissions: '0644'
+    content: |
+      # Creted by Hebcal cloud-config.yaml
+      SHELL=/bin/sh
+      MAILTO="mradwin@hebcal.com"
+      0 0 1 * * root mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
+
+runcmd:
+  - service netfilter-persistent flush
+  - iptables -F
+  - iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  - iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+  - iptables -A INPUT -p tcp --dport http -j ACCEPT
+  - iptables -A INPUT -p tcp --dport https -j ACCEPT
+  - iptables -A INPUT -p icmp -j ACCEPT
+  - iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT
+  - iptables -A INPUT -j DROP
+  - iptables -I INPUT 1 -i lo -j ACCEPT
+  - service netfilter-persistent save
+  - a2enmod rewrite
+  - a2enmod headers
+  - a2enmod expires
+  - a2enmod cgi
+  - a2enmod remoteip
+  - a2dismod -f autoindex
+  - a2dismod -f ssl
+  - perl -pi -e 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
+  - fallocate -l 2G /swapfile
+  - chmod 600 /swapfile
+  - mkswap /swapfile
+  - swapon /swapfile
+  - swapon -s
+  - free -m
+  - echo "/swapfile   none    swap    sw    0   0" >> /etc/fstab
+  - sysctl vm.swappiness=10
+  - sysctl vm.vfs_cache_pressure=50
+  - echo "vm.swappiness = 10" >> /etc/sysctl.conf
+  - echo "vm.vfs_cache_pressure = 50" >> /etc/sysctl.conf
+  - adduser mradwin hebcal
+  - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - systemctl reload ssh.service
+  - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
+  - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
+  - cp /tmp/dotcom/devops/etc/apache2/sites-available/download.hebcal.com.conf /etc/apache2/sites-available/download.hebcal.com.conf
+  - ln -s ../sites-available/download.hebcal.com.conf /etc/apache2/sites-enabled
+  - rm -f /etc/apache2/sites-enabled/000-default.conf
+  - service apache2 restart
+  - rsync -av /tmp/dotcom/download.hebcal.com/ /var/www/html/
+  - rsync -av /tmp/dotcom/hebcal.com/hebcal/ /var/www/html/hebcal/
+  - rsync -av /tmp/dotcom/hebcal.com/yahrzeit/ /var/www/html/yahrzeit/
+  - rsync -av /tmp/dotcom/hebcal.com/zoneinfo/ /var/www/html/zoneinfo/
+  - git clone https://github.com/hebcal/hebcal.git /tmp/hebcal-cli
+  - cd /tmp/hebcal-cli && ./configure && make
+  - rsync -av /tmp/hebcal-cli/hebcal /var/www/html/bin/
+  - mkdir -p /home/hebcal/local/share/perl/site_perl
+  - rsync -av /tmp/dotcom/local/share/perl/site_perl/ /home/hebcal/local/share/perl/site_perl/
+  - rm -rf /tmp/dotcom/hebcal
+  - ln -s /tmp/hebcal-cli /tmp/dotcom/hebcal
+  - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
+  - make -C /tmp/dotcom/hebcal.com/bin xml2perl
+  - /tmp/dotcom/local/bin/update_zoneinfo.sh
