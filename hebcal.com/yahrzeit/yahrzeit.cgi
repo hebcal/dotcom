@@ -500,7 +500,7 @@ does Hebcal determine an anniversary occurring in Adar?</a>
 
         my $dow = $Hebcal::DoW[Hebcal::get_dow($year, $mon, $mday)] . " ";
 
-        printf(qq{<tr><td style="width:170px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
+        printf(qq{<tr><td style="width:174px"><strong>%s%02d-%s-%04d</strong></td><td>%s</td></tr>\n},
             $dow, $mday, $Hebcal::MoY_short[$mon-1], $year,
             HebcalHtml::html_entify($subj));
         $prev_year = $year;
