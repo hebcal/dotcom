@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2018 Michael J. Radwin.
+# Copyright (c) 2019 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -65,6 +65,8 @@ our $WEBDIR = $ENV{"DOCUMENT_ROOT"} || "/var/www";
 our $HEBCAL_BIN = "$WEBDIR/bin/hebcal";
 our $LUACH_SQLITE_FILE = "$WEBDIR/hebcal/luach.sqlite3";
 our $CONFIG_INI_PATH = "/home/hebcal/local/etc/hebcal-dot-com.ini";
+
+my $CACHE_SQLITE_FILE = "/tmp/hebcal-cache.sqlite3";
 
 my $ZIP_SQLITE_FILE = "$WEBDIR/hebcal/zips.sqlite3";
 our $GEONAME_SQLITE_FILE = "$WEBDIR/hebcal/geonames.sqlite3";
@@ -471,21 +473,21 @@ sub get_invoke_hebcal_cache {
     # don't bother to cache if we're generating user Yahrzeit dates
     return undef if index( $cmd, " -Y" ) != -1;
 
-    my $cmd_smashed = $cmd;
-    $cmd_smashed =~ s/^\S+//;
-    $cmd_smashed =~ s/\s+-([A-Za-z])/$1/g;
-    $cmd_smashed =~ s/\s+//g;
-    $cmd_smashed =~ s/\'//g;
-    $cmd_smashed =~ s/\//_/g;
-
-    my $hccache_dir = "/tmp/hebcal-cache/cmd";
-
-    unless ( -d $hccache_dir ) {
-        system( "/bin/mkdir", "-p", $hccache_dir );
-        chmod 01777, $hccache_dir;
+    unless ($eval_use_DBI) {
+        eval("use DBI");
+        $eval_use_DBI = 1;
     }
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$CACHE_SQLITE_FILE", "", "",
+                           { RaiseError => 1, AutoCommit => 0 })
+      or die $DBI::errstr;
+    $dbh->do(qq{CREATE TABLE IF NOT EXISTS hebcal_cache (
+        cmd TEXT PRIMARY KEY,
+        timestamp INT NOT NULL,
+        contents BLOB NOT NULL
+        );});
+    $dbh->commit;
 
-    return "$hccache_dir/$cmd_smashed";
+    return $dbh;
 }
 
 sub filter_event {
@@ -518,26 +520,23 @@ sub invoke_hebcal_v2 {
         $cmd =~ s/ -c/ -E -c/;
     }
 
-    my $hccache;
-    my $hccache_file = get_invoke_hebcal_cache($cmd);
-    my $hccache_tmpfile = $hccache_file ? "$hccache_file.$$" : undef;
-
-    my @events;
-    if (! defined $hccache_file) {
-        open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
-    } elsif (open(HEBCAL,"<$hccache_file")) {
-        # will read data from cachefile, not pipe
-    } else {
-        open(HEBCAL,"$cmd |") || die "Can't exec '$cmd': $!\n";
-        $hccache = open(HCCACHE,">$hccache_tmpfile");
+    my $dbh = get_invoke_hebcal_cache($cmd);
+    my $cached_contents;
+    if ($dbh) {
+      my $sth = $dbh->prepare("SELECT contents FROM hebcal_cache WHERE cmd = ?");
+      $sth->execute($cmd) or die $dbh->errstr;
+      ($cached_contents) = $sth->fetchrow_array;
+      $sth->finish;
     }
 
+    my @events;
+    my $contents = $cached_contents ? $cached_contents : qx/$cmd/;
+    my @lines = split(/\n/, $contents);
     my $prev = '';
-    while (<HEBCAL>) {
-        print HCCACHE $_ if $hccache;
+    foreach (@lines) {
         next if $_ eq $prev;
         $prev = $_;
-        chop;
+        chomp;
 
         my($date,$descr) = split(/ /, $_, 2);
 
@@ -603,17 +602,15 @@ sub invoke_hebcal_v2 {
         }
         push(@events, $evt);
     }
-    close(HEBCAL);
 
-    if ($hccache) {
-        close(HCCACHE);
-        my $fsize = (stat($hccache_tmpfile))[7];
-        if ($fsize) {
-            rename($hccache_tmpfile, $hccache_file);
-        } else {
-            warn "Ignoring empty cachefile $hccache_tmpfile";
-            unlink($hccache_tmpfile);
-        }
+    if ($dbh) {
+      if (!$cached_contents) {
+        my $sth = $dbh->prepare("INSERT OR IGNORE INTO hebcal_cache VALUES (?,?,?)");
+        $sth->execute($cmd,time(),$contents) or die $dbh->errstr;
+        $sth->finish;
+        $dbh->commit;
+      }
+      $dbh->disconnect();
     }
 
     @events;
