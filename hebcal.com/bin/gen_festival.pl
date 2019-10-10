@@ -1264,6 +1264,7 @@ in <em>Wikipedia: The Free Encyclopedia</em></a>
 $pager
 </div><!-- .col-sm-10 -->
 <div class="col-sm-2 d-print-none">
+<div class="d-none d-sm-block">
 <h5>Advertisement</h5>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- skyscraper text only -->
@@ -1274,6 +1275,7 @@ $pager
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+</div><!-- .d-sm-block -->
 </div><!-- .col-sm-2 -->
 </div><!-- .row -->
 EOHTML
