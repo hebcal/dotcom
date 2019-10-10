@@ -951,7 +951,9 @@ sub get_saturday
     if (defined $q->param("gy") && $q->param("gy") =~ /^\d+$/
         && defined $q->param("gm") && $q->param("gm") =~ /^\d+$/
         && defined $q->param("gd") && $q->param("gd") =~ /^\d+$/) {
-        ($gy,$gm,$gd) = ($q->param("gy"),$q->param("gm"),$q->param("gd"));
+        $gy = $q->param("gy");
+        $gm = $q->param("gm");
+        $gd = $q->param("gd");
         $dow = Hebcal::get_dow($gy,$gm,$gd);
     } else {
         my $now;
