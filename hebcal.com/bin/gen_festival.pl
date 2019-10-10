@@ -1102,6 +1102,25 @@ EOHTML
 
     print OUT2 read_more_from($f,$about,$wikipedia);
 
+    print OUT2 <<EOHTML
+<div class="d-print-none">
+<!-- Visible only on xs -->
+<div class="d-block d-sm-none">
+<h5>Advertisement</h5>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- banner-320x100 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:320px;height:100px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1867606375"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .d-sm-none -->
+</div><!-- .d-print-none -->
+EOHTML
+;
+
     my $observed = observed_event_list($f);
     my $nav_inner = get_nav_inner($festivals, $f, $observed);
     if ($nav_inner) {
