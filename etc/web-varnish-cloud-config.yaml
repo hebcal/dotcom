@@ -58,12 +58,6 @@ write_files:
       [Service]
       ExecStart=
       ExecStart=/usr/sbin/varnishd -j unix,user=vcache -F -a :80 -a '127.0.0.1:6086,PROXY' -T localhost:6082 -f /etc/varnish/default.vcl -S /etc/varnish/secret -s malloc,768m
-  - path: /etc/default/acme-reload
-    permissions: '0644'
-    content: |
-      # Creted by Hebcal cloud-config.yaml
-      SERVICES="$SERVICES"
-      HAPROXY_ALWAYS_GENERATE=yes
   - path: /etc/varnish/letsencrypt.vcl
     permissions: '0644'
     content: |
