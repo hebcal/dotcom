@@ -1,16 +1,8 @@
-#
-# This is an example VCL file for Varnish.
-#
-# It does not do anything by default, delegating control to the
-# builtin VCL. The builtin VCL is called when there is no explicit
-# return statement.
-#
-# See the VCL chapters in the Users Guide at https://www.varnish-cache.org/docs/
-# and http://varnish-cache.org/trac/wiki/VCLExamples for more examples.
-
-# Marker to tell the VCL compiler that this VCL has been adapted to the
-# new 4.0 format.
+# Varnish config for www.hebcal.com
 vcl 4.0;
+
+# Load Let's Encrypt config before other rules
+include "/etc/varnish/letsencrypt.vcl";
 
 import std;
 import vsthrottle;
@@ -140,5 +132,3 @@ sub vcl_deliver {
         set resp.http.Access-Control-Allow-Origin = "*";
     }
 }
-
-include "/etc/varnish/acmetool.vcl";
