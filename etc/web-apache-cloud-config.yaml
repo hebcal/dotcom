@@ -19,9 +19,7 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkIbumcez+ggabZq5wJwgA226Q09hG2AT45+epPdXL4KpEn46kb3ZF1Gk1QTUQhMUiDQaoHUGwUSAxGUcC/dOfDkBPHfpDLNZylvGzDMjLg8lvw1/IQC2XbCmDTqZ13Dqc2dnex9hN+N7NimnqaaGW0rvIDjlz27r0tr7N66oXTvPsWItahBQowSkr+agoCLeWxzjKUAabZJ38yp6TNFjU53WadiFGSF7gVjBhGId7F8ukSu2yYl/0i6isU3VK72q7AfKcp/n0dcm1t+BsQKJjH6AY1lmf5R6ZO2qAlRorzpYMzlK5A5VYcp4ILgKSTWKnFNHoP508/4UjD9Pt7uoL nagios@hebcalmonitor
 
 debconf_selections: |     # Need to perserve newlines
-    sysstat sysstat/enable boolean true
     unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
-    postfix postfix/mailname string hebcal.com
     postfix postfix/main_mailer_type select Satellite system
     postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
 
@@ -96,6 +94,14 @@ write_files:
         opcache.enable_cli=1
         opcache.save_comments=0
         opcache.enable_file_override=1
+  - path: /etc/mailname
+    permissions: '0644'
+    content: |
+      hebcal.com
+  - path: /etc/default/sysstat
+    permissions: '0644'
+    content: |
+      ENABLED="true"
 
 runcmd:
   - service netfilter-persistent flush
@@ -184,6 +190,6 @@ runcmd:
   - sudo -u hebcal make -C /var/www/bin holidays
   - sudo -u hebcal make -C /var/www/bin sedrot
   - sudo -u hebcal /var/www/bin/gen_current.pl
-  - sudo -u hebcal /var/www/bin/create_shabbat_browse.pl -v /var/www/shabbat/browse
   - chown -R www-data:www-data /tmp/hebcal-cache
   - cd /var/www/holidays && sudo -u hebcal /var/www/bin/fetch_pdf.sh
+  - sudo -u hebcal nice /var/www/bin/create_shabbat_browse.pl -v /var/www/shabbat/browse
