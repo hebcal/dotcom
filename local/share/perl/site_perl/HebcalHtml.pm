@@ -100,7 +100,7 @@ sub download_button_html {
         (($filename =~ /\.(dba|vcs)$/) || (defined $q->param("month") && $q->param("month") =~ /^\d+$/))
         ? qq{ rel="nofollow"} : "";
 
-    my $html5download = ($href =~ m,^(webcal://|https://outlook\.live\.com),) ? "" : qq{ download="$filename"};
+    my $html5download = qq{ download="$filename"};
 
     my $class = $button_and_icon ? "btn btn-secondary download mb-1" : "download";
     my $icon = $button_and_icon ? qq{<span class="glyphicons glyphicons-download-alt"></span> } : "";
@@ -139,13 +139,12 @@ sub download_html_bootstrap {
         : URI::Escape::uri_escape_utf8("Hebcal $filename");
     my $ics_title = $title ? "Jewish Calendar $title.ics" : "$filename.ics";
 
-    my $ol_ics_title = "Outlook 2007, 2010, 2013 (Windows)";
+    my $ol_ics_title = "Outlook 365 Internet Calendar Subscription (Windows)";
     my $ol_csv_title = "Outlook 97, 98, 2000, 2002, 2003 (Windows)";
     my $ical_title = "Apple macOS Calendar (desktop)";
     my $ol_mac_title = "Outlook for Mac";
     my $ios_title = "Apple iOS, iPhone &amp; iPad";
     my $gcal_title = "Google Calendar";
-    my $wlive_title = "Outlook.com Calendar";
     my $ycal_title = "iCalendar feed URL";
 
     my $ol_ics_btn_suffix = $yahrzeit_mode ? "" : " Subscription";
@@ -254,21 +253,6 @@ EOHTML
 ;
     }
 
-    #############################################################
-    # Windows Live Calendar
-
-    my $wlive_href = URI::Escape::uri_escape_utf8($subical_href);
-    my $wlive_btn = download_button_html($q, $ics_title,
-                                         "https://outlook.live.com/calendar/calendar.aspx?rru=addsubscription&url=${wlive_href}&name=${title_esc}",
-                                         "dl-wlive", "to Outlook.com Calendar", 1);
-    my $wlive = <<EOHTML;
-<p>$wlive_btn</p>
-<p>Step-by-step: <a
-href="https://windows.microsoft.com/en-us/windows/outlook/calendar-import-vs-subscribe">Import
-or subscribe to a calendar in Outlook.com</a></p>
-EOHTML
-;
-
     ############################################################
     # Yahoo! Calendar
 
@@ -308,7 +292,6 @@ EOHTML
         ["Outlook", $ol_ics_title, "ol-ics", $ol_ics],
         ["Google", $gcal_title, "gcal", $gcal],
         ["macOS", $ical_title, "ical", $ical],
-#        ["Outlook.com", $wlive_title, "wlive", $wlive],
         ["Outlook Mac", $ol_mac_title, "ol-mac", $ol_mac],
         ["iCalendar", $ycal_title, "ycal", $ycal],
         ["CSV", $ol_csv_title, "ol-csv", $ol_csv],
