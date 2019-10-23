@@ -1167,10 +1167,15 @@ sub get_holiday_anchor($$$)
     }
     elsif ($subj =~ /^Daf Yomi:\s+(.+)\s+(\d+)\s*$/)
     {
-	my $tractate = $DAFYOMI{$1} || $1;
-	my $page = $2;
-	$tractate =~ s/ /_/g;
-	$href = "https://www.sefaria.org/${tractate}.${page}a";
+        my $tractate = $1;
+        my $page = $2;
+        if ($tractate eq "Kinnim" || $tractate eq "Midot") {
+            $href = "https://www.dafyomi.org/index.php?masechta=meilah&daf=${page}a"
+        } else {
+            $tractate ||= $DAFYOMI{$tractate};
+            $tractate =~ s/ /_/g;
+            $href = "https://www.sefaria.org/${tractate}.${page}a";
+        }
     }
     else
     {
