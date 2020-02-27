@@ -3,7 +3,7 @@
 /***********************************************************************
  * Convert decimal dates to Hebrew
  *
- * Copyright (c) 2013  Michael J. Radwin.
+ * Copyright (c) 2020  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -77,7 +77,6 @@ $hebnum_months = array(
     );
 
 $hebnum_months_inprefix = array(
-    "Iyyar"     => "בְּאִיָּר",
     "Tamuz"     => "בְּתַמּוּז",
     "Elul"      => "בֶּאֱלוּל",
     "Tishrei"   => "בְּתִשְׁרֵי",

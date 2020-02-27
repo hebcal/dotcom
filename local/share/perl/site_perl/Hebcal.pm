@@ -4,7 +4,7 @@
 # times are calculated from your latitude and longitude (which can
 # be determined by your zip code or closest city).
 #
-# Copyright (c) 2019 Michael J. Radwin.
+# Copyright (c) 2020 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -348,7 +348,6 @@ my %monthnames =
      );
 
 my %monthnames_inprefix = (
-    "Iyyar"     => "בְּאִייָר",
     "Tamuz"     => "בְּתַמּוּז",
     "Elul"      => "בֶּאֱלוּל",
     "Tishrei"   => "בְּתִשְׁרֵי",
