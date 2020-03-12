@@ -9,9 +9,14 @@ LEFT JOIN ZIPCodes_Primary cur ON old.ZipCode = cur.ZipCode
 WHERE cur.ZipCode IS NULL
 ;
 
-SELECT * FROM delta_zips;
+SELECT COUNT(1) FROM delta_zips;
+
+SELECT ZipCode,CityMixedCase,State,Latitude,Longitude,TimeZone,DayLightSaving
+FROM delta_zips
+LIMIT 30;
 
 INSERT INTO ZIPCodes_Primary
-SELECT * FROM delta_zips;
+SELECT dz.*,NULL
+FROM delta_zips dz;
 
 DROP TABLE delta_zips;

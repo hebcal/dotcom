@@ -32,7 +32,8 @@ CREATE TABLE ZIPCodes (
 	CityDeliveryIndicator varchar(1) NULL,
 	CarrierRouteRateSortation varchar(1) NULL,
 	FinanceNumber varchar(6) NULL,
-	UniqueZIPName varchar(1) NULL
+	UniqueZIPName varchar(1) NULL,
+	CountyMixedCase varchar(45) NULL
 );
 
 CREATE TABLE ZIPCodes_Primary (
@@ -65,7 +66,8 @@ CREATE TABLE ZIPCodes_Primary (
  CityDeliveryIndicator varchar(1) NULL,
  CarrierRouteRateSortation varchar(1) NULL,
  FinanceNumber varchar(6) NULL,
- UniqueZIPName varchar(1) NULL
+ UniqueZIPName varchar(1) NULL,
+ CountyMixedCase varchar(45) NULL
 );
 
 CREATE VIRTUAL TABLE ZIPCodes_CityFullText USING fts3(ZipCode,CityMixedCase);
