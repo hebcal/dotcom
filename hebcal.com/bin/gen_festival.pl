@@ -4,7 +4,7 @@
 #
 # Generates the festival pages for http://www.hebcal.com/holidays/
 #
-# Copyright (c) 2018 Michael J. Radwin.
+# Copyright (c) 2020 Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -138,12 +138,11 @@ my %seph2ashk = reverse %Hebcal::ashk2seph;
 
 # Set up the amazon request signing helper
 my $helper;
-my $AWS_HOST;
+my $AWS_HOST = "webservices.amazon.com";
 my $ua;
 my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
 my $DO_AMAZON = 1;
-if ($Config && $Config->{_}->{"hebcal.aws.product-api.host"}) {
-    $AWS_HOST = $Config->{_}->{"hebcal.aws.product-api.host"};
+if ($Config && $Config->{_}->{"hebcal.aws.product-api.id"}) {
     $helper = new RequestSignatureHelper (
     +RequestSignatureHelper::kAWSAccessKeyId => $Config->{_}->{"hebcal.aws.product-api.id"},
     +RequestSignatureHelper::kAWSSecretKey => $Config->{_}->{"hebcal.aws.product-api.secret"},
@@ -1468,7 +1467,7 @@ sub aws_bookinfo {
                   "Operation" => "ItemLookup",
                   "ItemId" => $asin,
                   "ResponseGroup" => "ItemAttributes",
-                  "Version" => "2009-01-06",
+                  "Version" => "2013-08-01",
                   "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
                   "AssociateTag" => "hebcal-20",
                  );
