@@ -610,10 +610,12 @@ sub json_ld_markup {
             my $s = <<EOHTML;
 <script type="application/ld+json">
 {
-  "\@context" : "http://schema.org",
+  "\@context" : "https://schema.org",
   "\@type" : "Event",
   "name" : "Candle Lighting for $cconfig{city} at $item->{time}",
   "startDate" : "$startDate",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
   "location" : {
     "\@type" : "Place",
     "name" : "$city_descr",
