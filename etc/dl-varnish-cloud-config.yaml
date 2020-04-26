@@ -36,8 +36,7 @@ packages:
   - libsasl2-modules
   - postfix
   - bsd-mailx
-  - nagios-plugins-basic
-  - nagios-plugins-common
+  - monitoring-plugins-basic
   - libvarnishapi-dev
   - varnish
   - make

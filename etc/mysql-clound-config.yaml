@@ -30,8 +30,7 @@ packages:
   - postfix
   - bsd-mailx
   - mysql-server
-  - nagios-plugins-basic
-  - nagios-plugins-common
+  - monitoring-plugins-basic
   - unattended-upgrades
 
 write_files:

@@ -45,14 +45,14 @@ packages:
   - mysql-client
   - apache2
   - apache2-dev
-  - php7.2
+  - php7.4
   - php-mysql
   - php-pear
   - php-sqlite3
   - php-json
   - php-curl
   - php-imagick
-  - libapache2-mod-php7.2
+  - libapache2-mod-php7.4
   - libcgi-pm-perl
   - libdate-calc-perl
   - libdatetime-perl
@@ -71,8 +71,7 @@ packages:
   - libmail-deliverystatus-bounceparser-perl
   - libamazon-sqs-simple-perl
   - libmaxminddb-dev
-  - nagios-plugins-basic
-  - nagios-plugins-common
+  - monitoring-plugins-basic
   - python-magic
   - python-tweepy
   - perlmagick
@@ -80,7 +79,7 @@ packages:
   - unattended-upgrades
 
 write_files:
-  - path: /etc/php/7.2/apache2/conf.d/50-hebcal.ini
+  - path: /etc/php/7.4/apache2/conf.d/50-hebcal.ini
     permissions: '0644'
     content: |
         ; configuration for php Hebcal

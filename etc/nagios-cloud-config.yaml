@@ -21,7 +21,7 @@ package_upgrade: true
 
 packages:
   - git
-  - nagios3
+  - nagios4
   - sysstat
   - netfilter-persistent
   - iptables-persistent
@@ -29,14 +29,13 @@ packages:
   - postfix
   - bsd-mailx
   - apache2
-  - nagios-plugins-basic
-  - nagios-plugins-common
+  - monitoring-plugins-basic
   - unattended-upgrades
   - libwww-perl
   - libcrypt-ssleay-perl
 
 write_files:
-  - path: /etc/nagios3/htpasswd.users
+  - path: /etc/nagios4/htpasswd.users
     permissions: '0644'
     content: |
         nagiosadmin:$apr1$H4sHTtOJ$Ep5KR/DQk6LlEguwX3HOv1
@@ -56,16 +55,16 @@ runcmd:
   - service ssh reload
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
-  - rsync -av /tmp/dotcom/devops/etc/nagios3/ /etc/nagios3/
+  - rsync -av /tmp/dotcom/devops/etc/nagios4/ /etc/nagios4/
   - cd /tmp
   - wget https://raw.github.com/tinyspeck/services-examples/master/nagios.pl
   - cp nagios.pl /usr/local/bin/slack_nagios.pl
   - chmod 755 /usr/local/bin/slack_nagios.pl
-  - chmod g+rx /var/lib/nagios3/*
+  - chmod g+rx /var/lib/nagios4/*
   - adduser www-data nagios
   - sudo -u nagios mkdir -p ~nagios/.ssh
   - service apache2 restart
-  - service nagios3 restart
+  - service nagios4 restart
   - fallocate -l 1G /swapfile
   - chmod 600 /swapfile
   - mkswap /swapfile

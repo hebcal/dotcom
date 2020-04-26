@@ -36,14 +36,12 @@ packages:
   - libsasl2-modules
   - postfix
   - bsd-mailx
-  - nagios-plugins-basic
-  - nagios-plugins-common
+  - monitoring-plugins-basic
   - apt-transport-https
   - automake
   - libtool
   - pkg-config
   - make
-  - python-docutils
   - varnish
   - libvarnishapi-dev
   - unattended-upgrades

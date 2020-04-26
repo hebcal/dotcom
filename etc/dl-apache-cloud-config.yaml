@@ -53,8 +53,7 @@ packages:
   - libhtml-calendarmonthsimple-perl
   - libjson-perl
   - libjson-xs-perl
-  - nagios-plugins-basic
-  - nagios-plugins-common
+  - monitoring-plugins-basic
   - make
   - unattended-upgrades
 
