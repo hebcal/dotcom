@@ -64,7 +64,7 @@ write_files:
       # Creted by Hebcal cloud-config.yaml
       SHELL=/bin/sh
       MAILTO="mradwin@hebcal.com"
-      0 0 1 * * root mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$
+      0 0 1 * * root if [ -d /tmp/hebcal-cache ]; then mv -f /tmp/hebcal-cache /tmp/hebcal-cache.$$ && rm -rf /tmp/hebcal-cache.$$; fi
 
 runcmd:
   - service netfilter-persistent flush
@@ -119,6 +119,8 @@ runcmd:
   - ln -s /tmp/hebcal-cli /tmp/dotcom/hebcal
   - ln -s /tmp/hebcal-cli/hebcal /tmp/dotcom/hebcal.com/bin/hebcal
   - make -C /tmp/dotcom/hebcal.com/bin xml2perl
+  - make -C /tmp/dotcom/hebcal.com/bin sedrot
+  - rsync -av /tmp/dotcom/hebcal.com/hebcal/luach.sqlite3 /var/www/html/hebcal/luach.sqlite3
   - /tmp/dotcom/local/bin/update_zoneinfo.sh
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt
   - curl -o /tmp/admin1CodesASCII.txt http://download.geonames.org/export/dump/admin1CodesASCII.txt
