@@ -47,8 +47,19 @@ write_files:
         read_rnd_buffer_size = 256K
         thread_stack         = 128K
         thread_cache_size    = 4
-        query_cache_limit    = 256K
-        query_cache_size     = 4M
+  - path: /var/tmp/hebcal-create.sql
+    permissions: '0644'
+    content: |
+        create database hebcal5;
+        create database wordpress;
+        CREATE USER 'mradwin_hebcal'@'localhost' IDENTIFIED BY RANDOM PASSWORD;
+        CREATE USER 'mradwin_wp'@'localhost' IDENTIFIED BY RANDOM PASSWORD;
+        GRANT ALL ON hebcal5.* TO 'mradwin_hebcal'@'localhost';
+        GRANT ALL ON wordpress.* TO 'mradwin_wp'@'localhost';
+        CREATE USER 'mradwin_hebcal'@'10.%' IDENTIFIED BY RANDOM PASSWORD;
+        CREATE USER 'mradwin_wp'@'10.%' IDENTIFIED BY RANDOM PASSWORD;
+        GRANT ALL ON hebcal5.* TO 'mradwin_hebcal'@'10.%';
+        GRANT ALL ON wordpress.* TO 'mradwin_wp'@'10.%';
 
 runcmd:
   - service netfilter-persistent flush
@@ -70,3 +81,4 @@ runcmd:
   - curl -O https://raw.githubusercontent.com/hebcal/dotcom/master/devops/etc/postfix/main.cf
   - cp main.cf /etc/postfix/main.cf
   - systemctl reload postfix.service
+  - mysql -v < /var/tmp/hebcal-create.sql
