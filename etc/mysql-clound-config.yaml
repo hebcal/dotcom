@@ -52,12 +52,12 @@ write_files:
     content: |
         create database hebcal5;
         create database wordpress;
-        CREATE USER 'mradwin_hebcal'@'localhost' IDENTIFIED BY RANDOM PASSWORD;
-        CREATE USER 'mradwin_wp'@'localhost' IDENTIFIED BY RANDOM PASSWORD;
+        CREATE USER 'mradwin_hebcal'@'localhost' IDENTIFIED WITH mysql_native_password BY RANDOM PASSWORD;
+        CREATE USER 'mradwin_wp'@'localhost' IDENTIFIED WITH mysql_native_password BY RANDOM PASSWORD;
         GRANT ALL ON hebcal5.* TO 'mradwin_hebcal'@'localhost';
         GRANT ALL ON wordpress.* TO 'mradwin_wp'@'localhost';
-        CREATE USER 'mradwin_hebcal'@'10.%' IDENTIFIED BY RANDOM PASSWORD;
-        CREATE USER 'mradwin_wp'@'10.%' IDENTIFIED BY RANDOM PASSWORD;
+        CREATE USER 'mradwin_hebcal'@'10.%' IDENTIFIED WITH mysql_native_password BY RANDOM PASSWORD;
+        CREATE USER 'mradwin_wp'@'10.%' IDENTIFIED WITH mysql_native_password BY RANDOM PASSWORD;
         GRANT ALL ON hebcal5.* TO 'mradwin_hebcal'@'10.%';
         GRANT ALL ON wordpress.* TO 'mradwin_wp'@'10.%';
 
