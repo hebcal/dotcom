@@ -156,8 +156,9 @@ runcmd:
   - mv /etc/varnish/default.vcl /etc/varnish/default.vcl.orig
   - cp /tmp/dotcom/devops/etc/default/varnish /etc/default/varnish
   - cp /tmp/dotcom/devops/etc/varnish/default.vcl /etc/varnish/default.vcl
-  - git clone -b master https://github.com/varnish/libvmod-vsthrottle.git /tmp/libvmod-vsthrottle
-  - cd /tmp/libvmod-vsthrottle && ./autogen.sh && ./configure && make all install
+  - git clone -b 6.2 https://github.com/varnish/varnish-modules.git /tmp/varnish-modules
+  - cd /tmp/varnish-modules && ./bootstrap && ./configure && make
+  - cd /tmp/varnish-modules && make -k install || exit 0
   - systemctl enable varnish.service
   - systemctl daemon-reload
   - systemctl start varnish.service
