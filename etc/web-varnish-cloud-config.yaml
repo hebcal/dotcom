@@ -158,7 +158,7 @@ runcmd:
   - cp /tmp/dotcom/devops/etc/varnish/default.vcl /etc/varnish/default.vcl
   - git clone -b 6.2 https://github.com/varnish/varnish-modules.git /tmp/varnish-modules
   - cd /tmp/varnish-modules && ./bootstrap && ./configure && make
-  - cd /tmp/varnish-modules && make -k install || exit 0
+  - cd /tmp/varnish-modules && make -k install || echo "Continuing anyway..."
   - systemctl enable varnish.service
   - systemctl daemon-reload
   - systemctl start varnish.service
