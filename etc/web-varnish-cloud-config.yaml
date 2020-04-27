@@ -46,6 +46,7 @@ packages:
   - libvarnishapi-dev
   - unattended-upgrades
   - hitch
+  - certbot
   - software-properties-common
 
 write_files:
@@ -161,10 +162,6 @@ runcmd:
   - systemctl daemon-reload
   - systemctl start varnish.service
   - systemctl stop hitch.service
-  - add-apt-repository universe
-  - add-apt-repository ppa:certbot/certbot
-  - apt-get update
-  - apt-get install -y certbot
   - nice openssl dhparam 2048 | tee /etc/hitch/dhparams.pem
   - certbot certonly -m mradwin@hebcal.com --agree-tos --non-interactive --standalone --preferred-challenges http --http-01-port 8080 -d hebcal.com -d www.hebcal.com --deploy-hook="/usr/local/bin/hitch-deploy-hook" --post-hook="systemctl reload hitch"
   - systemctl reload postfix.service
