@@ -58,6 +58,8 @@ runcmd:
   - rsync -av /tmp/dotcom/devops/etc/nagios4/ /etc/nagios4/
   - cd /tmp
   - wget https://raw.github.com/tinyspeck/services-examples/master/nagios.pl
+  - perl -pi -e 's/^my \$opt_domain = "foo.slack.com"/my \$opt_domain = "hebcal.slack.com"/' nagios.pl
+  - perl -pi -e 's/^my \$opt_token = ""/my \$opt_token = "XXXXXXXXXXXXXXXXXXXXXXXX"/' nagios.pl
   - cp nagios.pl /usr/local/bin/slack_nagios.pl
   - chmod 755 /usr/local/bin/slack_nagios.pl
   - chmod g+rx /var/lib/nagios4/*
