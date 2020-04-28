@@ -46,12 +46,14 @@ packages:
   - apache2
   - apache2-dev
   - php7.4
+  - php-mbstring
   - php-mysql
   - php-pear
   - php-sqlite3
   - php-json
   - php-curl
   - php-imagick
+  - php-zip
   - libapache2-mod-php7.4
   - libcgi-pm-perl
   - libdate-calc-perl
@@ -76,7 +78,6 @@ packages:
   - perlmagick
   - unzip
   - unattended-upgrades
-  - geoipupdate
 
 write_files:
   - path: /etc/php/7.4/apache2/conf.d/50-hebcal.ini
@@ -101,6 +102,13 @@ write_files:
     permissions: '0644'
     content: |
       ENABLED="true"
+  - path: /usr/local/etc/GeoIP.conf
+    permissions: '0644'
+    content: |
+      # GeoIP.conf file for `geoipupdate` program, for versions >= 3.1.1.
+      AccountID 122909
+      LicenseKey YOUR_LICENSE_KEY_HERE
+      EditionIDs GeoLite2-Country
 
 runcmd:
   - service netfilter-persistent flush
@@ -146,11 +154,10 @@ runcmd:
   - systemctl reload ssh.service
   - git clone https://github.com/maxmind/mod_maxminddb.git /tmp/mod_maxminddb
   - cd /tmp/mod_maxminddb && aclocal && autoconf && automake --foreign --add-missing && ./configure && make install
-  - echo DISABLED mkdir -p /usr/share/GeoIP
-  - cd /tmp
-  - echo DISABLED curl -O http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz
-  - echo DISABLED tar xvfz GeoLite2-Country.tar.gz
-  - echo DISABLED rsync -av /tmp/GeoLite2-Country_*/GeoLite2-Country.mmdb /usr/share/GeoIP/GeoIP2-Country.mmdb
+  - mkdir -p /usr/share/GeoIP
+  - curl -o /tmp/GeoLite2-Country.tar.gz 'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=j4Jxf3gL5qXqbcUA&suffix=tar.gz'
+  - cd /tmp && tar xvfz GeoLite2-Country.tar.gz
+  - rsync -av /tmp/GeoLite2-Country_*/GeoLite2-Country.mmdb /usr/share/GeoIP/GeoIP2-Country.mmdb
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
   - cp /tmp/dotcom/devops/etc/cron.d/hebcal /etc/cron.d/hebcal
   - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
