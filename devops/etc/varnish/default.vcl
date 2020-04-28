@@ -47,6 +47,7 @@ sub vcl_recv {
         || req.url ~ "^/home/wp-content/themes/wordpress-bootstrap-.*/"
         || req.url ~ "^/home/wp-content/plugins/syntaxhighlighter/"
         || req.url ~ "^/home/wp-content/uploads/"
+        || req.url ~ "^/home/wp-includes/css/"
         || req.url ~ "^/home/wp-includes/js/") {
         unset req.http.cookie;
     }
