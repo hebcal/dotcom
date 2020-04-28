@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2019  Michael J. Radwin.
+Copyright (c) 2020  Michael J. Radwin.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or
@@ -1507,10 +1507,18 @@ with the verse
  one of four "New Years" mentioned in the Mishnah.
  </wikipedia>
  <books>
-  <book ASIN="0827607172"/>
-  <book ASIN="0881230081"/>
-  <book ASIN="0930494393"/>
-  <book ASIN="1580130658"/>
+  <book ASIN="0827607172" author="Adam Fisher">
+  Trees, Earth, and Torah: A Tu B'Shvat Anthology
+  </book>
+  <book ASIN="0881230081" author="">
+  Seder Tu Bishevat: The Festival of Trees
+  </book>
+  <book ASIN="0930494393" author="Harlene Winnick Appelman">
+  A Seder for Tu B Shevat (English and Hebrew Edition)
+  </book>
+  <book ASIN="1580130658" author="Sylvia A. Rouss">
+  Sammy Spider's First Tu B'Shevat
+  </book>
  </books>
 </festival>
 
@@ -1525,7 +1533,9 @@ with the verse
  HaZikaron, which always preceeds it) would conflict with Shabbat
  </about>
  <books>
-  <book ASIN="0822576686"/>
+  <book ASIN="0822576686" author="Ellen Dietrick">
+  It's Israel's Birthday!
+  </book>
  </books>
 </festival>
 <festival id="Yom HaShoah" hebrew="יוֹם הַשּׁוֹאָה" yomtov="0" type="modern">
@@ -1548,7 +1558,9 @@ with the verse
  which case the date is shifted by a day.
  </wikipedia>
  <books>
-  <book ASIN="1550652893"/>
+  <book ASIN="1550652893" author="Irene Lilienheim Angelico">
+  The Third Seder: A Haggadah for Yom Hashoah
+  </book>
  </books>
 </festival>
 <festival id="Yom HaZikaron" hebrew="יוֹם הַזִּכָּרוֹן" yomtov="0" type="modern">

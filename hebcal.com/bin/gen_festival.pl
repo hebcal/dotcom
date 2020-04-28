@@ -50,7 +50,6 @@ use Hebcal ();
 use HebcalHtml ();
 use HebcalConst;
 use Date::Calc;
-use RequestSignatureHelper;
 use Config::Tiny;
 use DBI;
 use Carp;
@@ -136,21 +135,7 @@ holidays_observed();
 
 my %seph2ashk = reverse %Hebcal::ashk2seph;
 
-# Set up the amazon request signing helper
-my $helper;
-my $AWS_HOST = "webservices.amazon.com";
 my $ua;
-my $Config = Config::Tiny->read($Hebcal::CONFIG_INI_PATH);
-my $DO_AMAZON = 1;
-if ($Config && $Config->{_}->{"hebcal.aws.product-api.id"}) {
-    $helper = new RequestSignatureHelper (
-    +RequestSignatureHelper::kAWSAccessKeyId => $Config->{_}->{"hebcal.aws.product-api.id"},
-    +RequestSignatureHelper::kAWSSecretKey => $Config->{_}->{"hebcal.aws.product-api.secret"},
-    +RequestSignatureHelper::kEndPoint => $AWS_HOST,
-					 );
-} else {
-    $DO_AMAZON = 0;
-}
 
 # write_wordpress_export();
 
@@ -993,7 +978,7 @@ sub get_nav_inner {
 
     my @nav_inner;
     push(@nav_inner, ["dates", "Dates"]) if scalar(@{$observed});
-    push(@nav_inner, ["books", "Books"]) if $DO_AMAZON && $festivals->{"festival"}->{$SUBFESTIVALS{$f}->[0]}->{"books"}->{"book"};
+    push(@nav_inner, ["books", "Books"]) if $festivals->{"festival"}->{$SUBFESTIVALS{$f}->[0]}->{"books"}->{"book"};
     push(@nav_inner, @subfest_nav);
     push(@nav_inner, ["ref", "References"]);
 
@@ -1176,7 +1161,7 @@ EOHTML
     ;
     }
 
-    amazon_recommended_books($festivals,$f) if $DO_AMAZON;
+    amazon_recommended_books($festivals,$f);
 
     if (@{$SUBFESTIVALS{$f}} == 1)
     {
@@ -1457,53 +1442,6 @@ sub get_next_observed_str {
     $next_observed;
 }
 
-sub aws_bookinfo {
-    my($asin) = @_;
-
-    $ua = LWP::UserAgent->new unless $ua;
-    $ua->timeout(10);
-    my %params = (
-                  "Service" => "AWSECommerceService",
-                  "Operation" => "ItemLookup",
-                  "ItemId" => $asin,
-                  "ResponseGroup" => "ItemAttributes",
-                  "Version" => "2013-08-01",
-                  "Timestamp" => strftime("%Y-%m-%dT%TZ", gmtime()),
-                  "AssociateTag" => "hebcal-20",
-                 );
-    my $signedRequest = $helper->sign(\%params);
-    my $queryString = $helper->canonicalize($signedRequest);
-    my $url = "http://" . $AWS_HOST . "/onca/xml?" . $queryString;
-    my $request = HTTP::Request->new("GET", $url);
-    my $response = $ua->request($request);
-    my $rxml = XML::Simple::XMLin($response->content);
-    if (!$response->is_success()) {
-        my $error = findError($rxml);
-        if (defined $error) {
-            print STDERR "Error: " . $error->{Code} . ": " . $error->{Message} . "\n";
-        } else {
-            print STDERR "Unknown Error!\n";
-        }
-        return undef;
-    }
-
-    if (defined $rxml->{"Items"}->{"Item"}->{"ASIN"}
-        && $rxml->{"Items"}->{"Item"}->{"ASIN"} eq $asin) {
-        my $attrs = $rxml->{"Items"}->{"Item"}->{"ItemAttributes"};
-        my $bktitle = $attrs->{"Title"};
-        my $author;
-        if (ref($attrs->{"Author"}) eq "ARRAY") {
-            $author = $attrs->{"Author"}->[0];
-        } elsif (defined $attrs->{"Author"}) {
-            $author = $attrs->{"Author"};
-        }
-        return ($bktitle,$author);
-    } else {
-        print STDERR "*** can't get Items/Item/ASIN from XML from ", $response->content, "\n";
-        return undef;
-    }
-}
-
 sub amazon_recommended_book {
     my($book,$anchor,$thumbnail_width) = @_;
     my $asin = $book->{"ASIN"};
@@ -1533,7 +1471,8 @@ sub amazon_recommended_book {
     my $author = $book->{"author"};
 
     if (!$bktitle) {
-        ($bktitle,$author) = aws_bookinfo($asin);
+        WARN("ASIN $asin: missing book title");
+        $author = $bktitle = "";
     }
     else {
         $author = trim($author) if $author;
