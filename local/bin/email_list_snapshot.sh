@@ -4,7 +4,7 @@
 #
 # $Id: email_list_snapshot.sh 2780 2008-11-28 07:12:27Z mradwin $
 #
-# Copyright (c) 2008  Michael J. Radwin.
+# Copyright (c) 2020  Michael J. Radwin.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or
@@ -60,5 +60,5 @@ nice /usr/bin/ci -q -m'daily checkin' -u $BACKUP
 rm -f /tmp/hebcalsubs.sql /tmp/hebcalsubs.sql.bz2 && \
   cp $BACKUP /tmp && \
   bzip2 -9 /tmp/hebcalsubs.sql && \
-  s3cmd put /tmp/hebcalsubs.sql.bz2 s3://hebcal > /dev/null && \
+  aws s3 cp /tmp/hebcalsubs.sql.bz2 s3://hebcal > /dev/null && \
   rm -f /tmp/hebcalsubs.sql.bz2

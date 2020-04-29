@@ -38,7 +38,6 @@ packages:
   - libsasl2-modules
   - postfix
   - bsd-mailx
-  - s3cmd
   - fetchmail
   - procmail
   - rcs
@@ -78,6 +77,7 @@ packages:
   - perlmagick
   - unzip
   - unattended-upgrades
+  - awscli
 
 write_files:
   - path: /etc/php/7.4/apache2/conf.d/50-hebcal.ini
