@@ -161,10 +161,10 @@ else
 }
 
 // remove leading zeros, if any
-if (strlen($gm) > 1 && $gm[0] == "0") {
+if (is_string($gm) && strlen($gm) > 1 && $gm[0] == "0") {
     $gm = $gm[1];
 }
-if (strlen($gd) > 1 && $gd[0] == "0") {
+if (is_string($gd) && strlen($gd) > 1 && $gd[0] == "0") {
     $gd = $gd[1];
 }
 
