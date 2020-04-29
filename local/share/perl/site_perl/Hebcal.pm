@@ -1366,7 +1366,7 @@ sub zipcode_get_zip_fields($$)
 	zipcode_get_v2_zip($dbh,$zipcode);
 
     if (! defined $State) {
-	warn "zipcode_get_zip_fields: $zipcode Not Found";
+#        warn "zipcode_get_zip_fields: $zipcode Not Found";
 	return undef;
     }
 
