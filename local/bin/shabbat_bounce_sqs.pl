@@ -75,10 +75,16 @@ my $sth = $dbh->prepare($sql);
 my $access_key = $Config->{_}->{"hebcal.aws.access_key"};
 my $secret_key = $Config->{_}->{"hebcal.aws.secret_key"};
 
-my $queue_endpoint = $Config->{_}->{"hebcal.aws.sns.email-bounce.url"};
-DEBUG("Connecting to $queue_endpoint");
+my $SNS_INI = "hebcal.aws.sns.email-bounce.url";
+my $queue_endpoint = $Config->{_}->{$SNS_INI};
+if (!$queue_endpoint) {
+    LOGDIE("Required key '$SNS_INI' missing from $ini_path");
+}
+
+INFO("Fetching bounces from $queue_endpoint");
 my $sqs = new Amazon::SQS::Simple($access_key, $secret_key, Version => '2012-11-05');
-my $q = $sqs->GetQueue($queue_endpoint);
+my $q = $sqs->GetQueue($queue_endpoint)
+    or LOGDIE("SQS GetQueue failed: $!");
 
 my $total = 0;
 my $count = 0;
