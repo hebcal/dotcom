@@ -203,7 +203,7 @@ do {
                     }
                 }
                 INFO("unsub $source $destination");
-                if ($destination =~ /^shabbat-unsubscribe+(\w+)\@hebcal.com$/) {
+                if ($destination =~ /^shabbat-unsubscribe\+(\w+)\@hebcal.com$/) {
                     my $email_id = $1;
                     unsubscribe($dbh,$source,$destination,$email_id);
                 } else {
