@@ -1,2 +1,0 @@
-poll pop.gmail.com proto POP3
-  user "shabbat@hebcal.com" password "xxxxxxxxxxxxxx" mda "/usr/bin/procmail -d %T" ssl

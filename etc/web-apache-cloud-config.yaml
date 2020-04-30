@@ -38,8 +38,6 @@ packages:
   - libsasl2-modules
   - postfix
   - bsd-mailx
-  - fetchmail
-  - procmail
   - rcs
   - mysql-client
   - apache2
@@ -177,10 +175,6 @@ runcmd:
   - cd /home/hebcal/local
   - mkdir -p bin etc var/log
   - rsync -av /tmp/dotcom/local/bin/ /home/hebcal/local/bin/
-  - rsync -av /tmp/dotcom/procmail/hebcron.procmailrc /home/hebcal/.procmailrc
-  - rsync -av /tmp/dotcom/procmail/hebcron.fetchmailrc /home/hebcal/.fetchmailrc
-  - chmod 0600 /home/hebcal/.fetchmailrc
-  - mkdir -p /home/hebcal/mail
   - chown -R hebcal:hebcal /home/hebcal
   - rsync -av /tmp/dotcom/hebcal.com/pear/Hebcal/const.inc /var/www/pear/Hebcal/
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt

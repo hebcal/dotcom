@@ -1,10 +1,15 @@
 #!/usr/bin/perl -w
 
+use lib "/home/hebcal/local/share/perl";
+use lib "/home/hebcal/local/share/perl/site_perl";
+
 use strict;
 use DBI ();
+use Hebcal ();
 use Config::Tiny;
 use Amazon::SQS::Simple;
 use Mail::DeliveryStatus::BounceParser;
+use Email::Valid;
 use JSON;
 use Getopt::Long ();
 use Carp;
@@ -44,6 +49,8 @@ if (!flock($lockfile, LOCK_EX)) {
     exit(1);
 }
 
+my $site = "hebcal.com";
+
 if ($opt_log) {
     my $HOME = "/home/hebcal";
     my $now = time;
@@ -75,16 +82,22 @@ my $sth = $dbh->prepare($sql);
 my $access_key = $Config->{_}->{"hebcal.aws.access_key"};
 my $secret_key = $Config->{_}->{"hebcal.aws.secret_key"};
 
-my $SNS_INI = "hebcal.aws.sns.email-bounce.url";
-my $queue_endpoint = $Config->{_}->{$SNS_INI};
+my $SNS_BOUNCE_INI = "hebcal.aws.sns.email-bounce.url";
+my $queue_endpoint = $Config->{_}->{$SNS_BOUNCE_INI};
 if (!$queue_endpoint) {
-    LOGDIE("Required key '$SNS_INI' missing from $ini_path");
+    LOGDIE("Required key '$SNS_BOUNCE_INI' missing from $ini_path");
+}
+
+my $SNS_UNSUB_INI = "hebcal.aws.sns.email-unsub.url";
+my $unsub_endpoint = $Config->{_}->{$SNS_UNSUB_INI};
+if (!$unsub_endpoint) {
+    LOGDIE("Required key '$SNS_UNSUB_INI' missing from $ini_path");
 }
 
 INFO("Fetching bounces from $queue_endpoint");
 my $sqs = new Amazon::SQS::Simple($access_key, $secret_key, Version => '2012-11-05');
 my $q = $sqs->GetQueue($queue_endpoint)
-    or LOGDIE("SQS GetQueue failed: $!");
+    or LOGDIE("SQS GetQueue $queue_endpoint failed: $!");
 
 my $total = 0;
 my $count = 0;
@@ -143,8 +156,73 @@ do {
         $q->DeleteMessageBatch(\@messages);
     }
 } while (@messages);
-
+undef $q;
 INFO("Processed $count of $total bounces");
+
+INFO("Fetching unsubs from $unsub_endpoint");
+$q = $sqs->GetQueue($unsub_endpoint)
+    or LOGDIE("SQS GetQueue $unsub_endpoint failed: $!");
+$total = 0;
+$count = 0;
+do {
+    @messages = $q->ReceiveMessageBatch;
+    $total += scalar @messages;
+    foreach my $msg (@messages) {
+        my $body = $msg->MessageBody();
+        DEBUG($body);
+        my $event = decode_json $body;
+        my $innerMsg = $event->{Message};
+        if ($innerMsg) {
+            if ($opt_log) {
+                print LOG $innerMsg, "\n";
+            }
+            my $obj = decode_json $innerMsg;
+            if (!$obj->{notificationType}) {
+                WARN("MISSING notificationType $innerMsg");
+                next;
+            }
+            if ($obj->{notificationType} eq 'Received') {
+                my $source = $obj->{mail}->{source};
+                my $destination = $obj->{mail}->{destination}->[0];
+                my $commonHeaders = $obj->{mail}->{commonHeaders};
+                if ($commonHeaders) {
+                    my $from = $commonHeaders->{from};
+                    if ($from && $from->[0]) {
+                        $from = $from->[0];
+                        if ($from =~ /^[^<]*<([^>]+)>/) {
+                            $from = $1;
+                        }
+                        my $addr = Email::Valid->address($from);
+                        if ($addr) {
+                            $addr = lc($addr);
+                            DEBUG("Replacing $source with actual $addr");
+                            $source = $addr;
+                        } else {
+                            WARN("Invalid address '$from': $Email::Valid::Details");
+                        }
+                    }
+                }
+                INFO("unsub $source $destination");
+                if ($destination =~ /^shabbat-unsubscribe+(\w+)\@hebcal.com$/) {
+                    my $email_id = $1;
+                    unsubscribe($dbh,$source,$destination,$email_id);
+                } else {
+                    unsubscribe($dbh,$source,$destination,undef);
+                }
+                $count++;
+            }
+        } else {
+            WARN("MISSING Message");
+            next;
+        }
+    }
+    if (@messages) {
+        $q->DeleteMessageBatch(\@messages);
+    }
+} while (@messages);
+INFO("Processed $count of $total unsubscribes");
+
+
 $dbh->disconnect;
 
 close(LOG) if $opt_log;
@@ -184,3 +262,99 @@ sub get_std_reason {
         return "unknown";
     }
 }
+
+sub shabbat_log {
+    my($status,$code,$from,$to) = @_;
+    if (open(LOG2, ">>/home/hebcal/local/var/log/subscribers.log")) {
+        my $t = time();
+        print LOG2 "status=$status from=$from to=$to code=$code time=$t\n";
+        close(LOG2);
+    }
+}
+
+sub unsubscribe {
+    my($dbh,$email,$to,$email_id) = @_;
+
+    my $sql = "SELECT email_status,email_id FROM hebcal_shabbat_email";
+    if ($email_id) {
+        $sql .= " WHERE email_id = '$email_id'";
+    } else {
+        $sql .= " WHERE email_address = '$email'";
+    }
+    my $sth = $dbh->prepare($sql);
+    my $rv = $sth->execute
+        or die "can't execute the query: " . $sth->errstr;
+    my($status,$encoded) = $sth->fetchrow_array;
+    $sth->finish;
+
+    unless ($status) {
+        shabbat_log(0, "unsub_notfound", $email, $to);
+        error_email($email, $to);
+        return 0;
+    }
+
+    if ($status eq "unsubscribed") {
+        shabbat_log(0, "unsub_twice", $email, $to);
+        error_email($email, $to);
+        return 0;
+    }
+
+    shabbat_log(1, "unsub", $email, $to);
+
+    $sql = <<EOD
+UPDATE hebcal_shabbat_email
+SET email_status='unsubscribed'
+WHERE email_id = '$encoded'
+EOD
+;
+    $dbh->do($sql);
+
+    my $body = qq{Hello,
+
+Per your request, you have been removed from the weekly
+Shabbat candle lighting time list.
+
+Regards,
+$site};
+
+    my %headers = (
+     "From" =>
+     "Hebcal <shabbat-owner\@$site>",
+     "To" => $email,
+     "Content-Type" => "text/plain",
+     "Subject" => "You have been unsubscribed from hebcal",
+     );
+
+    Hebcal::sendmail_v2(Hebcal::shabbat_return_path($email),\%headers,$body,$opt_verbose)
+        or LOGWARN("Mail to $email failed: $@");
+
+}
+
+sub error_email {
+    my($email,$to) = @_;
+
+    my $addr = $to || "shabbat-unsubscribe\@$site";
+
+    my $body = qq{Sorry,
+
+We are unable to process the message from <$email>
+to <$addr>.
+
+The email address used to send your message is not subscribed
+to the Shabbat candle lighting time list.
+
+Regards,
+$site};
+
+    my %headers = (
+     "From" =>
+     "Hebcal <shabbat-owner\@$site>",
+     "To" => $email,
+     "Content-Type" => "text/plain",
+     "Subject" => "Unable to process your message",
+     );
+
+    Hebcal::sendmail_v2(Hebcal::shabbat_return_path($email),\%headers,$body,$opt_verbose)
+        or LOGWARN("Mail to $email failed: $@");
+}
+

@@ -42,8 +42,5 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # MySQL backups
 30 0 * * * hebcal $HEBCAL_BIN/email_list_snapshot.sh
 
-# don't run fetchmail as a daemon, run it from cron
-*/5 * * * * hebcal /usr/bin/fetchmail >> /home/hebcal/.fetchmail.log 2>&1
-
-# process Amazon SQS email bounces every hour
-13 * * * * hebcal $HEBCAL_BIN/shabbat_bounce_sqs.pl
+# process Amazon SQS email bounces every 5 minutes
+*/5 * * * * hebcal $HEBCAL_BIN/shabbat_bounce_sqs.pl
