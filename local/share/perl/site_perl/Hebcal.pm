@@ -2263,7 +2263,8 @@ sub sendmail_v2
     $headers->{"X-Mailer"} ||= "Hebcal.pm mail v5.3";
     $headers->{"Message-ID"} ||= "<HEBCAL." . time() . ".$$\@$HOSTNAME>";
 
-    my $msg = MIME::Lite->new(Type => $headers->{'Content-Type'});
+    my $msg = MIME::Lite->new(Type => $headers->{'Content-Type'},
+                              Data => $body);
     while (my($key,$val) = each %{$headers}) {
         next if $key eq 'Content-Type';
         while (chomp($val)) {}
@@ -2272,7 +2273,7 @@ sub sendmail_v2
 
     $msg->replace("Return-Path" => $return_path);
 
-    eval { $msg->send("smtp", "localhost", Timeout => 20); };
+    eval { $msg->send("smtp", "localhost", Timeout => 10); };
     if ($@) {
         warn $@ if $verbose;
         return 0;
