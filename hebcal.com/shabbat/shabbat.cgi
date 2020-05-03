@@ -604,7 +604,7 @@ sub json_ld_markup {
     my($items) = @_;
 
     foreach my $item (@{$items}) {
-        if ($item->{"class"} eq "candles") {
+        if ($item->{"class"} eq "candles" && defined $cconfig{city}) {
             my $startDate = $item->{"dc:date"};
             my $admin1 = get_json_ld_admin1();
             my $s = <<EOHTML;
