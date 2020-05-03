@@ -275,7 +275,7 @@ sub shabbat_log {
 sub unsubscribe {
     my($dbh,$email,$to,$email_id) = @_;
 
-    my $sql = "SELECT email_status,email_id FROM hebcal_shabbat_email";
+    my $sql = "SELECT email_status,email_id,email_address FROM hebcal_shabbat_email";
     if ($email_id) {
         $sql .= " WHERE email_id = '$email_id'";
     } else {
@@ -284,7 +284,7 @@ sub unsubscribe {
     my $sth = $dbh->prepare($sql);
     my $rv = $sth->execute
         or die "can't execute the query: " . $sth->errstr;
-    my($status,$encoded) = $sth->fetchrow_array;
+    my($status,$encoded,$orig_email) = $sth->fetchrow_array;
     $sth->finish;
 
     unless ($status) {
@@ -292,6 +292,8 @@ sub unsubscribe {
         error_email($email, $to);
         return 0;
     }
+
+    $email = $orig_email; # if the unsub request came from an alternate addr
 
     if ($status eq "unsubscribed") {
         shabbat_log(0, "unsub_twice", $email, $to);
@@ -311,8 +313,7 @@ EOD
 
     my $body = qq{Hello,
 
-Per your request, you have been removed from the weekly
-Shabbat candle lighting time list.
+Per your request, you have been removed from the weekly Shabbat candle lighting time list.
 
 Regards,
 $site};
@@ -337,11 +338,9 @@ sub error_email {
 
     my $body = qq{Sorry,
 
-We are unable to process the message from <$email>
-to <$addr>.
+We are unable to process the message from <$email> to <$addr>.
 
-The email address used to send your message is not subscribed
-to the Shabbat candle lighting time list.
+The email address used to send your message is not subscribed to the Shabbat candle lighting time list.
 
 Regards,
 $site};
