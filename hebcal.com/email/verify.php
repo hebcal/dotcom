@@ -118,6 +118,8 @@ Hello,
 
 Your subscription request for hebcal is complete.
 
+You'll receive a maximum of one message per week, typically on Thursday morning.
+
 Regards,
 hebcal.com
 
