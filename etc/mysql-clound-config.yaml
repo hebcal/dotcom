@@ -45,7 +45,7 @@ write_files:
         sort_buffer_size     = 64K
         read_buffer_size     = 256K
         read_rnd_buffer_size = 256K
-        thread_stack         = 128K
+        thread_stack         = 256K
         thread_cache_size    = 4
   - path: /var/tmp/hebcal-create.sql
     permissions: '0644'
