@@ -1,20 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import sys
 import tweepy
-import ConfigParser
-import StringIO
+import configparser
+import io
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 
 f = open('/home/hebcal/local/etc/hebcal-dot-com.ini', 'r')
 
-output = StringIO.StringIO()
+output = io.StringIO()
 output.write('[DEFAULT]\n')
 output.write(f.read())
 output.seek(0,0)
 
-config.readfp(output)
+contents = output.getvalue()
+
+config.read_string(contents)
 
 CONSUMER_KEY = config.get('DEFAULT', 'hebcal.twitter.consumer_key')
 CONSUMER_SECRET = config.get('DEFAULT', 'hebcal.twitter.consumer_secret')
