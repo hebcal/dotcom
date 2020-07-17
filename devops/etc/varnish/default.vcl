@@ -13,6 +13,11 @@ backend default {
     .port = "8080";
 }
 
+backend js {
+    .host = "js1-internal.hebcal.com";
+    .port = "8080";
+}
+
 acl purge {
     "localhost";
 }
@@ -90,6 +95,15 @@ sub vcl_recv {
     if (! (req.url ~ "\?.*cfg=") && std.port(server.ip) == 80) {
         return(synth(752, "HTTPS Required"));
     }
+
+    if (req.url ~ "^/converter/"
+        || req.url ~ "^/complete"
+        || req.url ~ "^/shabbat") {
+        set req.backend_hint = js;
+    } else {
+        set req.backend_hint = default;
+    }
+
 }
 
 sub vcl_synth {
