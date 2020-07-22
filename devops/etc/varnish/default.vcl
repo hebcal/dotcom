@@ -96,7 +96,10 @@ sub vcl_recv {
         return(synth(752, "HTTPS Required"));
     }
 
-    if (req.url ~ "^/converter/"
+    if (req.url ~ "^/shabbat/browse") {
+        set req.backend_hint = default;
+    } elsif (req.url == "/"
+        || req.url ~ "^/converter/"
         || req.url ~ "^/complete"
         || req.url ~ "^/shabbat") {
         set req.backend_hint = js;
