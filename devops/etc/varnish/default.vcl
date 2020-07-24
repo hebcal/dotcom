@@ -62,7 +62,7 @@ sub vcl_recv {
         unset req.http.cookie;
     }
 
-    if (req.url ~ "^/shabbat/\?" || req.url ~ "\?.*cfg=") {
+    if (req.url ~ "^/shabbat\?" || req.url ~ "\?.*cfg=") {
         unset req.http.cookie;
     }
 
@@ -106,7 +106,7 @@ sub vcl_recv {
     } elsif (req.url ~ "^/debug") {
         set req.backend_hint = js1;
     } elsif (req.url == "/"
-        || req.url ~ "^/converter/"
+        || req.url ~ "^/converter"
         || req.url ~ "^/complete"
         || req.url ~ "^/hebcal"
         || req.url ~ "^/geo"

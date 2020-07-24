@@ -131,7 +131,7 @@ cal_divider();
 <h3>Advanced Settings</h3>
 Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc.
 <div class="btn-toolbar">
-  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal/"><i class="glyphicons glyphicons-pencil glyphicons glyphicons-white"></i> Customize your calendar &raquo;</a>
+  <a class="btn btn-success" title="Hebcal Custom Calendar" href="/hebcal"><i class="glyphicons glyphicons-pencil glyphicons glyphicons-white"></i> Customize your calendar &raquo;</a>
 </div>
 </div><!-- .col-sm-6 -->
 <?php

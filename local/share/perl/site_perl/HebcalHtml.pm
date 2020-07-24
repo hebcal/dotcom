@@ -354,8 +354,8 @@ sub download_html_modal_button {
 my $HTML_MENU_ITEMS_V2 =
     [
      [ "/holidays/",    "Holidays",     "Jewish Holidays" ],
-     [ "/converter/",   "Date Converter", "Hebrew Date Converter" ],
-     [ "/shabbat/",     "Shabbat",      "Shabbat Times" ],
+     [ "/converter",   "Date Converter", "Hebrew Date Converter" ],
+     [ "/shabbat",     "Shabbat",      "Shabbat Times" ],
      [ "/sedrot/",      "Torah",        "Torah Readings" ],
      [ "/home/about",      "About",        "About" ],
      [ "/home/help",       "Help",         "Help" ],

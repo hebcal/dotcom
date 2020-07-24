@@ -113,7 +113,7 @@ if ($hdate =~ /^(\d+)\w+ of ([^,]+), (\d+)$/)
 
     $hmonth =~ s/[^A-Za-z0-9]+//g;
 
-    my $url = "https://$HOSTNAME/converter/?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_medium=rss";
+    my $url = "https://$HOSTNAME/converter?hd=$hd&amp;hm=$hmonth&amp;hy=$hy&amp;h2g=1&amp;utm_medium=rss";
     $outfile = "$Hebcal::WEBDIR/etc/hdate-en.xml";
     DEBUG("Creating $outfile");
     open(RSS,">$outfile.$$") || LOGDIE "$outfile.$$: $!";
@@ -272,7 +272,7 @@ sub rss_hebdate {
 <rss version="2.0">
 <channel>
 <title>Hebrew Date</title>
-<link>https://$HOSTNAME/converter/</link>
+<link>https://$HOSTNAME/converter</link>
 <description>Today\'s Hebrew Date from Hebcal.com</description>
 <language>$language</language>
 <copyright>Copyright (c) $syear Michael J. Radwin. All rights reserved.</copyright>

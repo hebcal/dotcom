@@ -333,7 +333,7 @@ sub write_candle_lighting {
     my $hour_min = get_candle_lighting($latitude,$longitude,$tzid,$iso,$asciiname,$admin1);
     if ($hour_min) {
         my $comma_admin1 = $show_admin1 && $admin1 && index($admin1, $name) != 0 ? "<small>, $admin1</small>" : "";
-        print $fh qq{<li><a href="/shabbat/?geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
+        print $fh qq{<li><a href="/shabbat?geonameid=$geonameid">$name</a>$comma_admin1 $hour_min</li>\n};
     } else {
         INFO("No candle-lighting on $shabbat_formatted for $asciiname, $iso");
     }
@@ -382,7 +382,7 @@ sub write_index_page {
 </div><!-- .row -->
 <div class="row">
 <div class="col-sm-10 col-sm-offset-1">
-<form action="/shabbat/" method="get" role="form" id="shabbat-form">
+<form action="/shabbat" method="get" role="form" id="shabbat-form">
   <input type="hidden" name="geo" id="geo" value="geoname">
   <input type="hidden" name="geonameid" id="geonameid">
   <input type="hidden" name="zip" id="zip">

@@ -440,8 +440,8 @@ function hebcal_make_anchor($str)
 $HTML_MENU_ITEMS_V2 =
     array(
 	array( "/holidays/",	"Holidays",	"Jewish Holidays" ),
-	array( "/converter/",	"Date Converter", "Hebrew Date Converter" ),
-	array( "/shabbat/",	"Shabbat",	"Shabbat Times" ),
+	array( "/converter",	"Date Converter", "Hebrew Date Converter" ),
+	array( "/shabbat",	"Shabbat",	"Shabbat Times" ),
 	array( "/sedrot/",	"Torah",	"Torah Readings" ),
 	array( "/home/about",	"About",	"About" ),
 	array( "/home/help",	"Help",		"Help" ),

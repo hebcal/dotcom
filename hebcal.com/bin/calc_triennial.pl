@@ -584,7 +584,7 @@ EOHTML
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $nofollow = $i > 3 ? qq{ rel="nofollow"} : "";
-	print OUT1 qq{<li class="page-item"><a$nofollow class="page-link" href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
+	print OUT1 qq{<li class="page-item"><a$nofollow class="page-link" href="/hebcal?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -599,7 +599,7 @@ EOHTML
     foreach my $i (0 .. $extra_years) {
 	my $yr = $hebrew_year - 1 + $i;
 	my $nofollow = $i > 3 ? qq{ rel="nofollow"} : "";
-	print OUT1 qq{<li class="page-item"><a$nofollow class="page-link" href="/hebcal/?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
+	print OUT1 qq{<li class="page-item"><a$nofollow class="page-link" href="/hebcal?year=$yr&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">$yr</a></li>\n};
     }
 
     print OUT1 <<EOHTML;
@@ -1304,7 +1304,7 @@ sub format_html_date {
   foreach my $opt (qw(s maj min mod mf ss nx)) {
     $args .= join("", "&amp;", $opt, "=on");
   }
-  sprintf "<a title=\"%s %d holiday calendar\"%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
+  sprintf "<a title=\"%s %d holiday calendar\"%s href=\"/hebcal?v=1&amp;year=%d&amp;month=%d" .
     $args . "&amp;set=off#hebcal-results\">%02d %s %d</a>",
     $Hebcal::MoY_long{$gm}, $gy,
     $nofollow,

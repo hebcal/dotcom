@@ -531,7 +531,7 @@ EOHTML
 ;
 
     my $custom_link =
-        $current_year ? "/hebcal/?v=0&amp;year=$current_year&amp;yt=$year_type" : "/hebcal/";
+        $current_year ? "/hebcal?v=0&amp;year=$current_year&amp;yt=$year_type" : "/hebcal";
     my $pdf_heb_year = $current_year || $HEB_YR;
 
     $str .= <<EOHTML;
@@ -657,7 +657,7 @@ EOHTML
 
 sub pagination_greg_url {
     my($year) = @_;
-    return "/hebcal/?year=$year&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on";
+    return "/hebcal?year=$year&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on";
 }
 
 sub pagination_greg {
@@ -1147,7 +1147,7 @@ EOHTML
         foreach my $opt (qw(s maj min mod mf ss nx)) {
             $args .= join("", "&amp;", $opt, "=on");
         }
-	    printf OUT2 "<li><a%s href=\"/hebcal/?v=1&amp;year=%d&amp;month=%d" .
+	    printf OUT2 "<li><a%s href=\"/hebcal?v=1&amp;year=%d&amp;month=%d" .
 		$args . "&amp;set=off\"$style>" .
 		"<time datetime=\"%s\">%s, %02d %s %04d</time></a> $rise_or_set (%s)\n",
 		$nofollow,
