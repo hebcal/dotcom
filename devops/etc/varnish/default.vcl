@@ -13,7 +13,12 @@ backend default {
     .port = "8080";
 }
 
-backend js {
+backend js3 {
+    .host = "js3-internal.hebcal.com";
+    .port = "8080";
+}
+
+backend js1 {
     .host = "js1-internal.hebcal.com";
     .port = "8080";
 }
@@ -98,11 +103,15 @@ sub vcl_recv {
 
     if (req.url ~ "^/shabbat/browse") {
         set req.backend_hint = default;
+    } elsif (req.url ~ "^/debug") {
+        set req.backend_hint = js1;
     } elsif (req.url == "/"
         || req.url ~ "^/converter/"
         || req.url ~ "^/complete"
+        || req.url ~ "^/hebcal"
+        || req.url ~ "^/geo"
         || req.url ~ "^/shabbat") {
-        set req.backend_hint = js;
+        set req.backend_hint = js3;
     } else {
         set req.backend_hint = default;
     }
