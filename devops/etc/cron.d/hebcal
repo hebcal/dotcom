@@ -18,29 +18,5 @@ HEBCAL_BIN=/home/hebcal/local/bin
 # update Shabbat browse pages at 12:03am on Sundays
 0 3 * * 0 hebcal $HEBCAL_WEB/bin/create_shabbat_browse.pl $HEBCAL_WEB/shabbat/browse
 
-# shabbat: regular emails at 8:53am and 2:53pm Eastern on Thursdays
-53 8,14 * * 4 hebcal $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
-
-# shabbat: post to Facebook wall on Thursday between 1:17-1:37pm Eastern
-# Sleep a random amount, not greater than 30 minutes
-17 13 * * 4 hebcal $HEBCAL_BIN/post_facebook.pl --shabbat --randsleep=1800 --twitter --nofacebook
-
-# post to Facebook wall Sunday-Friday between 11:03-11:33am Eastern
-3 11 * * 0-5 hebcal $HEBCAL_BIN/post_facebook.pl --daily --randsleep=1800 --twitter --nofacebook
-
-# special RH - 23 Sep 2014 at 14:56pm
-#54 15 23 9 * hebcal $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
-# special Sukkot - 7 Oct 2014 at 11:56am
-#56 11  7 10 * hebcal $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
-# special SimchatTorah - 14 Oct 2014 at 11:56am
-#56 11 14 10 * hebcal $HEBCAL_BIN/shabbat_weekly.pl -all -verbose
-
-# clear bounces at 8:50am Thu and 1:03pm on friday
-50 8 * * 4 hebcal $HEBCAL_BIN/shabbat_deactivate.pl -count 2
-3 13 * * 5 hebcal $HEBCAL_BIN/shabbat_deactivate.pl -count 2
-
 # MySQL backups
 30 0 * * * hebcal $HEBCAL_BIN/email_list_snapshot.sh
-
-# process Amazon SQS email bounces every 5 minutes
-*/5 * * * * hebcal $HEBCAL_BIN/shabbat_bounce_sqs.pl
