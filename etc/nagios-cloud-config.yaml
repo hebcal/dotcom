@@ -9,13 +9,11 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoHvNAA5UBj4DpCZsTtjjX82mM2eBECmc6wGXtZeaeqxyBdJBkkDfPmZwwL6OfCceoGHvU4zPEvonFFkjgDwRQYItVnYA4LolgbAjTVf0Bi+dv7Ny8B4fuMin0GvdrCs3BiX018Dw0za5UlopHESPHTKyAOAovR0tftQ+AzAFzae6ac/zZHK0odvoqWROlxSxOJZZl61EVM42ExYOSKm5tsc3g/ObW4wtaMOKUFHGFHfeeSRzYy1kacPVwIbEKTRCh8gLrL3yfOW/un6XF0U9eB+cqE0mVASWTOY59V7EWMJnUZaQcB8yZDeSF/iNEnB2e6ewUMo5X4nqYTaofTUjv mradwin@MTVL12027dd2a
 
 debconf_selections: |     # Need to perserve newlines
-    debconf debconf/frontend select readline
-    debconf debconf/frontend seen false
     sysstat sysstat/enable boolean true
     unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
     postfix postfix/mailname string hebcal.com
     postfix postfix/main_mailer_type select Satellite system
-    postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
+    postfix postfix/relayhost string [email-smtp.us-east-1.amazonaws.com]:25
 
 package_upgrade: true
 
@@ -35,10 +33,49 @@ packages:
   - libcrypt-ssleay-perl
 
 write_files:
+  - path: /etc/mailname
+    permissions: '0644'
+    content: |
+      hebcal.com
+  - path: /etc/default/sysstat
+    permissions: '0644'
+    content: |
+      ENABLED="true"
   - path: /etc/nagios4/htpasswd.users
     permissions: '0644'
     content: |
         nagiosadmin:$apr1$H4sHTtOJ$Ep5KR/DQk6LlEguwX3HOv1
+  - path: /etc/postfix/main.cf
+    permissions: '0644'
+    content: |
+      smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+      biff = no
+      append_dot_mydomain = no
+      readme_directory = no
+      compatibility_level = 2
+      smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+      smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+      smtpd_tls_security_level=may
+      smtp_use_tls = yes
+      smtp_tls_security_level = encrypt
+      smtp_tls_note_starttls_offer = yes
+      smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+      smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+      smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+      myhostname = localhost
+      alias_maps = hash:/etc/aliases
+      alias_database = hash:/etc/aliases
+      myorigin = /etc/mailname
+      mydestination = 
+      mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+      mailbox_size_limit = 0
+      recipient_delimiter = +
+      inet_interfaces = loopback-only
+      inet_protocols = all
+      relayhost = [email-smtp.us-east-1.amazonaws.com]:25
+      smtp_sasl_auth_enable = yes
+      smtp_sasl_security_options = noanonymous
+      smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 
 runcmd:
   - service netfilter-persistent flush
@@ -54,7 +91,6 @@ runcmd:
   - perl -pi -e 's/^.*PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
   - service ssh reload
   - git clone https://github.com/hebcal/dotcom.git /tmp/dotcom
-  - cp /tmp/dotcom/devops/etc/postfix/main.cf /etc/postfix/main.cf
   - rsync -av /tmp/dotcom/devops/etc/nagios4/ /etc/nagios4/
   - cd /tmp
   - wget https://raw.github.com/tinyspeck/services-examples/master/nagios.pl

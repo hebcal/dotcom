@@ -24,7 +24,7 @@ debconf_selections: |     # Need to perserve newlines
     unattended-upgrades unattended-upgrades/enable_auto_updates boolean true
     postfix postfix/mailname string hebcal.com
     postfix postfix/main_mailer_type select Satellite system
-    postfix postfix/relayhost string email-smtp.us-east-1.amazonaws.com
+    postfix postfix/relayhost string [email-smtp.us-east-1.amazonaws.com]:25
 
 package_upgrade: true
 
