@@ -110,6 +110,7 @@ sub vcl_recv {
         || req.url ~ "^/complete"
         || req.url ~ "^/hebcal"
         || req.url ~ "^/geo"
+        || req.url ~ "^/yahrzeit"
         || req.url ~ "^/shabbat") {
         set req.backend_hint = js3;
     } else {
