@@ -76,6 +76,7 @@ packages:
   - unzip
   - unattended-upgrades
   - awscli
+  - brotli
 
 write_files:
   - path: /etc/php/7.4/apache2/conf.d/50-hebcal.ini
@@ -125,6 +126,7 @@ runcmd:
   - a2enmod expires
   - a2enmod cgi
   - a2enmod remoteip
+  - a2enmod brotli
   - a2dismod -f autoindex
   - a2dismod -f ssl
   - perl -pi -e 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
