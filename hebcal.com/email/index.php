@@ -150,8 +150,7 @@ UPDATE hebcal_shabbat_email
 SET email_status='active',
     $geo_sql,
     email_candles_havdalah='$param[m]',
-    email_ip='$remoteAddr',
-    email_optin_announce='0'
+    email_ip='$remoteAddr'
 WHERE email_address = '$param[em]'
 EOD;
 
@@ -250,7 +249,7 @@ function write_staging_info($param, $old_encoded)
     $sql = <<<EOD
 REPLACE INTO hebcal_shabbat_email
 (email_id, email_address, email_status, email_created,
- email_candles_havdalah, email_optin_announce,
+ email_candles_havdalah,
  $location_name, email_ip)
 VALUES ('$encoded', '$param[em]', 'pending', NOW(),
 	'$param[m]', '0',

@@ -17,7 +17,7 @@ function get_sub_info($id) {
 SELECT email_id, email_address, email_status, email_created,
        email_candles_zipcode, email_candles_city,
        email_candles_geonameid,
-       email_candles_havdalah, email_optin_announce
+       email_candles_havdalah
 FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_id = '$id'
 EOD;
@@ -32,14 +32,13 @@ EOD;
 
     list($id,$address,$status,$created,$zip,$city,
 	 $geonameid,
-	 $havdalah,$optin_announce) = mysqli_fetch_row($result);
+	 $havdalah) = mysqli_fetch_row($result);
 
     $val = array(
 	"id" => $id,
 	"status" => $status,
 	"em" => $address,
 	"m" => $havdalah,
-	"upd" => $optin_announce,
 	"zip" => $zip,
 	"city" => $city,
 	"geonameid" => $geonameid,
