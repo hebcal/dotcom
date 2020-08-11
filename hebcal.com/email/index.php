@@ -252,7 +252,7 @@ REPLACE INTO hebcal_shabbat_email
  email_candles_havdalah,
  $location_name, email_ip)
 VALUES ('$encoded', '$param[em]', 'pending', NOW(),
-	'$param[m]', '0',
+	'$param[m]',
 	'$location_value', '$remoteAddr')
 EOD;
 
