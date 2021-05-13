@@ -1256,9 +1256,6 @@ d.getElementById("maj").onclick=function(){
   });
  }
 };
-["nx","mf","ss","min","mod"].forEach(function(x){
- d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
-});
 d.getElementById("d1").onclick=function(){
   if (this.checked) {
     d.getElementById("d2").checked = false;
