@@ -1,7 +1,0 @@
-DirectoryIndex yahrzeit.cgi
-
-Redirect /yahrzeit/yahrzeit.html https://www.hebcal.com/yahrzeit/
-Redirect /yahrzeit/yahrzeit.htm https://www.hebcal.com/yahrzeit/
-Redirect /yahrzeit/yahrzeit.pl https://www.hebcal.com/yahrzeit/
-Redirect /yahrzeit/index.html https://www.hebcal.com/yahrzeit/
-Redirect /yahrzeit/index.pl https://www.hebcal.com/yahrzeit/

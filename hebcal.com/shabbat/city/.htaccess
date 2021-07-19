@@ -1,4 +1,0 @@
-RewriteEngine On
-RewriteBase /shabbat/city/
-
-RewriteRule ^(.*)$ "/shabbat/?city=$1" [QSA,R=301,L]

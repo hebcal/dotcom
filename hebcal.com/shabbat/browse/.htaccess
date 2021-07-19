@@ -1,6 +1,0 @@
-DirectoryIndex index.html
-ForceType text/html
-<IfModule mod_deflate.c>
-SetOutputFilter DEFLATE
-</IfModule>
-
